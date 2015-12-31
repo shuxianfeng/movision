@@ -1,0 +1,35 @@
+/*validate.css*/
+input.error{border:1px solid red!important;}
+input.valid{border:1px solid green!important;}
+label.error,span.error{background:url("../img/error.png") no-repeat 0 0;padding-left:16px;margin-left:1em;padding-bottom:2px;font-size:9pt;font-family:"Microsoft YaHei",serif;color:red;}
+label.valid,span.valid{background:url("../img/success.png") no-repeat 0 0;padding-left:16px;margin-left:1em;}
+.display-inline{display:inline!important;}
+/*modal.css*/
+.modal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:1050;display:none;overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;}
+.fade{opacity:0;-webkit-transition:opacity .15s linear;-o-transition:opacity .15s linear;transition:opacity .15s linear;}
+.modal.fade .modal-dialog{-webkit-transition:-webkit-transform .3s ease-out;-o-transition:-o-transform .3s ease-out;transition:transform .3s ease-out;-webkit-transform:translate(0,-25%);-ms-transform:translate(0,-25%);-o-transform:translate(0,-25%);transform:translate(0,-25%);}
+.modal-dialog{position:relative;width:auto;margin:10px;}
+.modal-content{position:relative;background-color:#fff;-webkit-background-clip:padding-box;background-clip:padding-box;border:1px solid #999;border:1px solid rgba(0,0,0,.2);border-radius:6px;outline:0;-webkit-box-shadow:0 3px 9px rgba(0,0,0,.5);box-shadow:0 3px 9px rgba(0,0,0,.5);}
+.modal-header{min-height:16.43px;padding:15px;border-bottom:1px solid #e5e5e5;}
+.modal-body{position:relative;padding:15px;}
+.modal-footer{padding:15px;text-align:right;border-top:1px solid #e5e5e5;}
+.btn{display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px;}
+.btn-default{color:#333;background-color:#fff;border-color:#ccc;}
+button,
+input,
+select,
+textarea{font-family:inherit;font-size:inherit;line-height:inherit;}
+button,
+html input[type=button],
+input[type=reset],
+input[type=submit]{-webkit-appearance:button;cursor:pointer;}
+button,
+select{text-transform:none;}
+button{overflow:visible;}
+button,
+input,
+optgroup,
+select,
+textarea{margin:0;font:inherit;color:inherit;}
+.btn-default{color:#333;background-color:#fff;border-color:#ccc;}
+.btn-primary{color:#fff;background-color:#337ab7;border-color:#2e6da4;}

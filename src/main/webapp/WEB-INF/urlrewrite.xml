@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 3.2//EN"
+        "http://tuckey.org/res/dtds/urlrewrite3.2.dtd">
+<urlrewrite>
+
+	<rule>
+		<from>/index.html</from>
+		<to>/index</to>
+	</rule>
+	<rule>
+		<from>/signin.html</from>
+		<to>/login</to>
+	</rule>
+
+	<rule>
+		<from>/signup.html</from>
+		<to>/register</to>
+	</rule>
+	
+	<!--<rule>-->
+		<!--<from>/product/([0-9]+).html$</from>-->
+		<!--<to>/product?id=$1</to>-->
+	<!--</rule>-->
+	<!-- -->
+	<!--<rule>-->
+		<!--<from>/enquiry/([0-9]+).html$</from>-->
+		<!--<to>/enquiry?id=$1</to>-->
+	<!--</rule>-->
+	<!-- -->
+	<!--<rule>-->
+		<!--<from>/store/([0-9]+).html$</from>-->
+		<!--<to>/store?id=$1</to>-->
+	<!--</rule>-->
+	<!-- -->
+	<!--<rule>-->
+		<!--<from>/news/([0-9]+).html$</from>-->
+		<!--<to>/news?id=$1</to>-->
+	<!--</rule>-->
+	<!-- -->
+	<!--<rule>-->
+		<!--<from>/exhibition/([0-9]+).html$</from>-->
+		<!--<to>/exhibition?id=$1</to>-->
+	<!--</rule>-->
+	
+	
+</urlrewrite>

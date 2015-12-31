@@ -1,0 +1,30 @@
+<ehcache updateCheck="false" name="memCache">
+
+   <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            overflowToDisk="false"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"
+            />
+    <!--缓存菜单-->
+    <cache name="menuCache"
+           maxElementsOnDisk="20000"
+           maxElementsInMemory="10000"
+           eternal="false"
+           timeToIdleSeconds="300000"
+           timeToLiveSeconds="600000"
+           overflowToDisk="true"
+           diskPersistent="true"/>
+    <!-- 用户缓存-->
+    <cache name="userCache"
+           maxElementsOnDisk="20000"
+           maxElementsInMemory="10000"
+           eternal="false"
+           timeToIdleSeconds="300000"
+           timeToLiveSeconds="600000"
+           overflowToDisk="true"
+           diskPersistent="true"/>
+</ehcache>

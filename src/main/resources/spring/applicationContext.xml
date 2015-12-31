@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd"
+       default-lazy-init="true" default-autowire="byName">
+
+    <description>Spring公共配置</description>
+
+    <!-- 扫描注解Bean -->
+    <context:component-scan base-package="com.zhuhuibao">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:/mybatis/mybatis-configuration.xml"/>
+        <property name="mapperLocations" value="classpath*:/mapper/*.xml"/>
+
+        <property name="plugins">
+            <list>
+                <ref bean="pageConfig"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="pageConfig" class="com.zhuhuibao.utils.pagination.PaginationInterceptor">
+        <property name="properties">
+            <props>
+                <prop key="dbms">MYSQL</prop>
+                <prop key="sqlRegex">.*findAll.*</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 使用annotation定义事务 -->
+    <tx:annotation-driven transaction-manager="transactionManager"
+                          proxy-target-class="true"/>
+
+    <!-- mybatis -->
+    <mybatis:scan base-package="com.zhuhuibao.mybatis.mapper"/>
+
+    <context:property-placeholder
+            ignore-unresolvable="true" location="classpath*:/spring/application.properties"/>
+
+    <!-- 数据源配置, 使用c3p0数据库连接池 -->
+    <!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"-->
+          <!--destroy-method="close">-->
+
+        <!--<property name="driverClass" value="${jdbc.driver}"></property>-->
+        <!--<property name="jdbcUrl" value="${jdbc.url}"></property>-->
+        <!--<property name="user" value="${jdbc.username}"></property>-->
+        <!--<property name="password" value="${jdbc.password}"></property>-->
+        <!--<property name="initialPoolSize" value="${jdbc.initialPoolSize}"></property>-->
+        <!--<property name="minPoolSize" value="${jdbc.minPoolSize}"></property>-->
+        <!--<property name="maxPoolSize" value="${jdbc.maxPoolSize}"></property>-->
+        <!--<property name="maxIdleTime" value="${jdbc.maxIdleTime}"></property>-->
+        <!--<property name="acquireIncrement" value="${jdbc.acquireIncrement}"></property>-->
+        <!--<property name="checkoutTimeout" value="${jdbc.checkoutTimeout}"></property>-->
+    <!--</bean>-->
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 基本属性 url、user、password -->
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="${druid.initialSize}"/>
+        <property name="minIdle" value="${druid.minIdle}"/>
+        <property name="maxActive" value="${druid.maxActive}"/>
+
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${druid.maxWait}"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}" />
+
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${druid.minEvictableIdleTimeMillis}" />
+
+        <property name="validationQuery" value="${druid.validationQuery}" />
+        <property name="testWhileIdle" value="${druid.testWhileIdle}" />
+        <property name="testOnBorrow" value="${druid.testOnBorrow}" />
+        <property name="testOnReturn" value="${druid.testOnReturn}" />
+
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小  如果用Oracle，则把poolPreparedStatements配置为true，mysql可以配置为false。-->
+        <property name="poolPreparedStatements" value="${druid.poolPreparedStatements}" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${druid.maxPoolPreparedStatementPerConnectionSize}" />
+
+        <!-- 配置监控统计拦截的filters -->
+        <property name="filters" value="${druid.filters}" />
+
+    </bean>
+
+
+
+    <!-- 启用缓存注解功能(请将其配置在Spring主配置文件中) -->
+    <!-- redis缓存配置-->
+    <!--<cache:annotation-driven cache-manager="redisCacheManager"/>-->
+
+    <!--redis配置 用于缓存
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <property name="maxWaitMillis" value="${redis.maxWait}"/>
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+    </bean>
+
+    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="hostName" value="${redis.host}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="database" value="${redis.database}"/>
+        <property name="usePool" value="true"/>
+        <property name="poolConfig" ref="poolConfig"/>
+    </bean>
+
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="jedisConnectionFactory"/>
+    </bean>
+
+    <bean id="redisCacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
+        <constructor-arg ref="redisTemplate"/>
+    </bean>
+    -->
+
+    <!--ehcache缓存配置-->
+    <!-- 若只想使用Spring自身提供的缓存器,则注释掉下面的两个关于Ehcache配置的bean,并启用上面的SimpleCacheManager即可 -->
+    <!--<cache:annotation-driven cache-manager="ehCacheCacheManager"/>-->
+    <!--Spring提供的基于的Ehcache实现的缓存管理器-->
+    <!-- 缓存用于服务层Service-->
+    <!--<bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">-->
+    <!--<property name="configLocation" value="classpath:ehcache/cache.xml"/>-->
+    <!--</bean>-->
+    <!--<bean id="ehCacheCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">-->
+    <!--<property name="cacheManager" ref="cacheManagerFactory"/>-->
+    <!--</bean>-->
+</beans>
