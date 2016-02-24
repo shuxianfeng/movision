@@ -1,7 +1,6 @@
 package com.zhuhuibao.mybatis.mapper;
 
 import com.zhuhuibao.mybatis.entity.User;
-import com.zhuhuibao.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -24,4 +23,5 @@ public interface UserMapper {
     List<User> findAll();
 
     List<User> findAllByPager(RowBounds rowBounds);
+    
 }

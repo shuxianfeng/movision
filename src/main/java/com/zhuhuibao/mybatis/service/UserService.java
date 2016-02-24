@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.service;
 
 import com.zhuhuibao.utils.pagination.model.Paging;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,11 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
 import com.zhuhuibao.mybatis.entity.User;
+import com.zhuhuibao.mybatis.entity.member.Member;
 import com.zhuhuibao.mybatis.mapper.UserMapper;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -25,7 +29,6 @@ public class UserService {
 
     @Autowired
     private UserMapper userMapper;
-
 
     /**
      * 手机号码查询用户 {缓存}
@@ -86,7 +89,7 @@ public class UserService {
             userMapper.insert(user);
         }
     }
-
+    
     /**
      * 通过ID删除用户  {清除缓存}
      *

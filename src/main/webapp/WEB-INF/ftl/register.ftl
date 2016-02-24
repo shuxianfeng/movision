@@ -1,4 +1,5 @@
 <#assign form=JspTaglibs["http://www.springframework.org/tags/form"]>
+<#assign ctx=rc.contextPath>
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -37,16 +38,16 @@
         <p>通天下,走四方</p>
     </div>
     <hr/>
-</div>
+</div>	
 <div class="am-g">
     <div class="am-u-sm-centered am-u-lg-7">
         <h1 style="width: 100px;margin: 10px auto;color:#0e90d2;">注册</h1>
-    <@form.form class="am-form am-form-horizontal" id="register-form" action="/register" method="post">
+    <@form.form class="am-form am-form-horizontal" id="register-form" action="${ctx}/rest/register" method="post">
         <div class="am-form-group">
-            <label for="doc-ipt-3" class="am-u-sm-2 am-form-label">手机号码</label>
+            <label for="doc-ipt-3" class="am-u-sm-2 am-form-label">手机/邮箱</label>
             <div class="am-u-sm-10">
-                <input type="text" id="doc-ipt-3" name="username" class="required mobileZH display-inline" style="width: 70%"
-                       placeholder="输入你的手机号码">
+                <input type="text" id="email" name="email" class="required display-inline" style="width: 70%"
+                       placeholder="输入手机号码/邮箱">
             </div>
         </div>
 
@@ -64,10 +65,29 @@
                        placeholder="请输入确认密码">
             </div>
         </div>
+        
+        <div class="am-form-group">
+            <label for="confirm_password" class="am-u-sm-2 am-form-label">会员身份</label>
+            <div class="am-u-sm-10">
+                <input type="radio" id="identify"  name="identify" value="1" class="required display-inline" style="width: 20%">企业</input>
+                <input type="radio" id="identify"  name="identify" value="2" class="required display-inline" style="width: 20%">个人</input>
+            </div>
+        </div>
+         <div class="am-form-group">
+                <label for="doc-ipt-pwd-2" class="am-u-sm-2 am-form-label">验证码</label>
+                <div class="am-u-sm-10">
+                    <input type="text" id="authCode" name="authCode" class="required display-inline" style="width: 70%"
+                           placeholder="请输入验证码">
+                    <img id="authCodeImg" class="yanzheng" alt="验证码" src="/rest/imgCode"  width="0" height="0" onclick="randomImg()" 
+	                    	style="margin-left: -20px;margin-top: 5px;height: 22px;width: 66px;"/>
+	                <span style="font-size: 12px;"><a class="" href="javascript:;" onclick="randomImg()" >点击换一张</a></span>
+	                <span id="codeResult"></span>
+                </div>
+            </div>
 
         <div class="am-form-group">
             <div class="am-u-sm-10 am-u-sm-offset-2">
-                <button type="submit" class="am-btn am-btn-primary">注册</button>
+                <button id="btnreg" type="submit" class="am-btn am-btn-primary">注册</button>
                 <!--<span style="color:red;font-size: 13px;margin-left: 20px;">用户名已存在</span>-->
             </div>
         </div>
@@ -119,6 +139,34 @@
             }
         });
     })
+    
+    function randomImg()
+    {
+		$("#authCodeImg").attr("src", "/zhuhuibao/code");
+    }
+    
+    $("#authCode").on("keyup", function(){
+			//checkCode();
+		});
+    function checkCode() {  
+       var mcode = $('#authCode').val(); 
+       if(mcode.length >= 4)
+       {
+	       $.ajax({
+			url : "${ctx}/checkCode",
+			type : "POST",
+			dataType : "json",
+			data : {"mcode":mcode},
+			success: function (d, textStatus, jqXHR) {
+	            console.log(d);
+	        }
+			});
+	    } 
+    } 
+    function backfunc(data)
+    {
+    	$("#codeResult").html(data);
+    }
 </script>
 </body>
 </html>

@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.crypto.hash.Md5Hash;
+
 /**
  * 校验签名
  * 调用verify方法
@@ -156,4 +158,8 @@ public class DigestUtils {
                 .md5Hex(getContentBytes(preSignStr, "utf-8"));
         return mysign.equals(sign);
     }
+    
+    public static void main(String[] args) {
+		System.out.println(md5Hex("123456".getBytes()));
+	}
 }

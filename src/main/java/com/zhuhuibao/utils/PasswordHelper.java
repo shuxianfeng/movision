@@ -2,6 +2,7 @@ package com.zhuhuibao.utils;
 
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -85,10 +86,11 @@ public class PasswordHelper {
         String salt = ph.randomNumberGenerator.nextBytes().toHex();//"cd38925fcb400292b4e823b1baa455f8";//
         System.out.println(salt);
         String s = new SimpleHash("md5", "123456",
-                salt, 2)
+                null, 2)
                 .toHex();
         System.out.println(s);
-
+        System.out.println(new Md5Hash("123456","aaa0af3b28f8376cb7263a6e2cefdefe",2).toString());
+//4280d89a5a03f812751f504cc10ee8a5
 //        String s1 = DigestUtils.shaHex("`!@#123456,.`/");
 //        System.out.println(s1);
     }

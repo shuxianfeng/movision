@@ -12,6 +12,8 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
+import com.zhuhuibao.mybatis.entity.JsonResult;
+
 public class JsonUtils {
 
     private static final ObjectMapper om = new ObjectMapper();
@@ -50,5 +52,25 @@ public class JsonUtils {
         }
         return om.writeValueAsString(paramMap);
     }
+    
+    /**
+     * 对象转换成json字符串
+     * @param obj
+     * @return
+     * @throws JsonGenerationException
+     * @throws JsonMappingException
+     * @throws IOException
+     */
+    public static String getJsonStringFromObj(Object obj) throws JsonGenerationException, JsonMappingException, IOException
+    {
+    	return om.writeValueAsString(obj);
+    }
 
+    public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
+    	JsonResult result = new JsonResult();
+    	result.setCode(200);
+    	result.setData("123");
+    	System.out.println(om.writeValueAsString(result));
+    }
+    	
 }

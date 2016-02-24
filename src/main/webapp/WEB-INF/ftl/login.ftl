@@ -1,4 +1,5 @@
 <#assign form=JspTaglibs["http://www.springframework.org/tags/form"]>
+<#assign ctx=rc.contextPath>
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -41,11 +42,11 @@
 <div class="am-g">
     <div class="am-u-sm-centered am-u-lg-7">
         <h1 style="width: 100px;margin: 10px auto;color:#0e90d2;">登录</h1>
-        <@form.form class="am-form am-form-horizontal" id="login-form" action="/login" method="post">
+        <@form.form class="am-form am-form-horizontal" id="login-form" action="${ctx}/login" method="post">
             <div class="am-form-group">
                 <label for="doc-ipt-3" class="am-u-sm-2 am-form-label">手机号码</label>
                 <div class="am-u-sm-10">
-                    <input type="text" id="doc-ipt-3" name="username" class="required mobileZH display-inline" style="width: 70%"
+                    <input type="text" id="doc-ipt-3" name="mobile" class="required mobileZH display-inline" style="width: 70%"
                            placeholder="输入你的手机号码">
                 </div>
             </div>
@@ -57,7 +58,7 @@
                            placeholder="请输入密码">
                 </div>
             </div>
-
+            
             <div class="am-form-group">
                 <div class="am-u-sm-offset-2 am-u-sm-10">
                     <div class="checkbox">

@@ -331,6 +331,16 @@
 			<version>2.5.2</version>
 		</dependency>
 
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>ccp.rest.sms.sdk.java</groupId>
+			<artifactId>ccp-sms-sdk</artifactId>
+			<version>2.6.3r</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>

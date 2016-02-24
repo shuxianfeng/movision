@@ -5,11 +5,12 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.zhuhuibao.mybatis.entity.User;
+
+import com.zhuhuibao.mybatis.entity.member.Member;
+import com.zhuhuibao.mybatis.service.MemberService;
 import com.zhuhuibao.mybatis.service.UserService;
 
 import java.io.Serializable;
@@ -23,6 +24,9 @@ public class ShiroRealm extends AuthorizingRealm {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private MemberService memberService;
 
     /**
      * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
@@ -41,21 +45,28 @@ public class ShiroRealm extends AuthorizingRealm {
             AuthenticationToken token) throws AuthenticationException {
         log.info("登录认证");
         String loginname = (String) token.getPrincipal();
-        User user = userService.findByMobile(loginname);
-
-        if(user != null){
-            if (!"1".equals(user.getStatus())) {
+        //User user = userService.findByMobile(loginname);
+        Member member = memberService.findMemberByAccount(loginname);
+        if(member != null){
+            /*if (!"1".equals(member.getStatus())) {
+                throw new LockedAccountException(); // 帐号不正常状态
+            }*/
+            if ("0".equals(member.getStatus())) {
                 throw new LockedAccountException(); // 帐号不正常状态
             }
         }  else{
             throw new UnknownAccountException();//  用户名不存在
         }
-
         // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
+        /*return new SimpleAuthenticationInfo(
+                new ShiroUser(member.getId(), member.getMobile(), member.getEmail(), member.getStatus()), // 用户
+                member.getPassword(), // 密码
+                ByteSource.Util.bytes("123"),
+                getName() // realm name
+        );*/
         return new SimpleAuthenticationInfo(
-                new ShiroUser(user.getId(), user.getName(), user.getMobile(), user.getStatus()), // 用户
-                user.getPassword(), // 密码
-                ByteSource.Util.bytes(user.getSalt()),
+                member.getMobile(), // 用户
+                member.getPassword(), // 密码
                 getName() // realm name
         );
     }
@@ -77,22 +88,22 @@ public class ShiroRealm extends AuthorizingRealm {
     public static class ShiroUser implements Serializable {
         private static final long serialVersionUID = -1373760761780840081L;
         private Integer id;
-        private String name;
+        private String email;
         private String mobile;
-        private String status;
+        private int status;
 
-        public ShiroUser(Integer id, String name, String mobile, String status) {
+        public ShiroUser(Integer id, String name, String mobile, int status) {
             this.id = id;
-            this.name = name;
+            this.email = name;
             this.mobile = mobile;
             this.status = status;
         }
 
-        public String getStatus() {
+        public int getStatus() {
             return status;
         }
 
-        public void setStatus(String status) {
+        public void setStatus(int status) {
             this.status = status;
         }
 
@@ -104,15 +115,15 @@ public class ShiroRealm extends AuthorizingRealm {
             this.mobile = mobile;
         }
 
-        public String getName() {
-            return name;
-        }
+        public String getEmail() {
+			return email;
+		}
 
-        public void setName(String name) {
-            this.name = name;
-        }
+		public void setEmail(String email) {
+			this.email = email;
+		}
 
-        public Integer getId() {
+		public Integer getId() {
             return id;
         }
 
@@ -133,10 +144,10 @@ public class ShiroRealm extends AuthorizingRealm {
                 return false;
             ShiroUser other = (ShiroUser) obj;
 
-            if (id == null || name == null) {
+            if (id == null || mobile == null) {
                 return false;
             } else if (id.equals(other.id)
-                    && name.equals(other.name))
+                    && mobile.equals(other.mobile))
                 return true;
             return false;
         }

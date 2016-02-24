@@ -9,7 +9,7 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!-- 开启controller注解支持 -->
-    <context:component-scan base-package="com.zhuhuibao.web"
+    <context:component-scan base-package="com.zhuhuibao"
                             use-default-filters="false">
         <context:include-filter type="annotation"
                                 expression="org.springframework.stereotype.Controller"/>
@@ -42,11 +42,11 @@
     </mvc:annotation-driven>
 
     <mvc:default-servlet-handler/>
-    <!-- CSRF -->
+    <!-- CSRF 
     <bean name="requestDataValueProcessor" class="com.zhuhuibao.security.csrf.CSRFRequestDataValueProcessor"/>
     <mvc:interceptors>
         <bean class="com.zhuhuibao.security.csrf.CSRFHandlerInterceptor"/>
-    </mvc:interceptors>
+    </mvc:interceptors>-->
 
     <!-- Freemarker配置 -->
     <!-- org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer -->
@@ -87,10 +87,22 @@
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
         <property name="suffix" value=".ftl"/>
+        <!-- 此变量值为pageContext.request, 页面使用方法：rc.contextPath -->  
         <property name="requestContextAttribute" value="rc"/>
         <property name="contentType" value="text/html;charset=UTF-8"/>
+        <property name="order" value="0" />
         <!--<property name="viewClass" value="com.zhuhuibao.common.view.StaticFreeMarkerView"/>-->
     </bean>
+    
+     <bean id="viewResolverCommon" class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+        <property name="prefix">
+            <value>/WEB-INF/pages/</value>
+        </property>
+        <property name="suffix">
+            <value>.jsp</value>
+        </property>
+        <property name="order" value="1" />
+    </bean> 
 
     <bean
             class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">

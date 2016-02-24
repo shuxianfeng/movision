@@ -54,7 +54,7 @@
     </filter-mapping>
 
     <!--XSS攻击过滤器-->
-    <filter>
+    <!-- <filter>
         <filter-name>XSSFilter</filter-name>
         <filter-class>com.zhuhuibao.filter.XSSFilter</filter-class>
     </filter>
@@ -62,7 +62,7 @@
         <filter-name>XSSFilter</filter-name>
         <url-pattern>/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
-    </filter-mapping>
+    </filter-mapping> -->
 
     <!-- shiro 安全过滤器   -->
     <filter>

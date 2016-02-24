@@ -1,12 +1,18 @@
 package com.zhuhuibao.web.controller;
 
+import com.zhuhuibao.mybatis.entity.member.Member;
+import com.zhuhuibao.mybatis.service.MemberService;
+import com.zhuhuibao.security.DigestUtils;
 import com.zhuhuibao.utils.captcha.util.CaptchaException;
 import com.zhuhuibao.utils.exception.SmsException;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +29,9 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
+    @Autowired
+    MemberService memberService;
+    
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String index(HttpServletRequest req,  Model model) {
         log.debug("登录");
@@ -32,13 +41,15 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(HttpServletRequest req, Model model) {
+    public String login(HttpServletRequest req,Member member, Model model) {
         log.info("login post 登录校验");
         HttpSession session = req.getSession(true);
-        String username = req.getParameter("username");
+       /* String username = req.getParameter("username");
         String password = req.getParameter("password");
+        String rememberMe = req.getParameter("rememberMe");*/
+        String username = member.getMobile();
+        String password = member.getPassword();
         String rememberMe = req.getParameter("rememberMe");
-
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         if(rememberMe!=null && rememberMe.equals("1"))
             token.setRememberMe(true);
@@ -48,7 +59,8 @@ public class LoginController {
         String result;
         try {
             currentUser.login(token);
-            result = "index";
+//            result = "index";
+            result = "memberInfo";
         } catch (UnknownAccountException e) {
             e.printStackTrace();
             model.addAttribute("error", "用户名不存在");

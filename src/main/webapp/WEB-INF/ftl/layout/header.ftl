@@ -10,7 +10,7 @@
         </div>
         </@shiro.user>
         <@shiro.guest>
-            <div class="navbar-header"><a href="${ctx}/signin.html" class="hh">请登录</a> <a href="${ctx}/signup.html"> 免费注册</a></div>
+            <div class="navbar-header"><a href="${ctx}/login" class="hh">请登录</a> <a href="${ctx}/register"> 免费注册</a></div>
         </@shiro.guest>
         <!-- top-bar-nav-->
         <div class="navbar-collapse collapse">

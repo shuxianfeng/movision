@@ -23,7 +23,7 @@
         <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache.xml"/>
     </bean>
 
-    <!-- 安全管理器 -->
+    <!-- 安全管理器 配置权限管理器 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="userRealm"/>
         <property name="cacheManager" ref="ehcacheManager"/>
@@ -63,11 +63,13 @@
                 /pagination = anon
                 /logout = logout
                 /register/** = anon
+                /checkCode = anon
                 /admin/** = roles[admin]
                 <!--/** = user-->
                 /static/** = anon
                 /css/** =anon
                 /js/** =anon
+                <!--/** = authc-->
             </value>
         </property>
 

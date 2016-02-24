@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.mapper.MemberMapper">
+	<resultMap id="MemberResultMap" type="com.zhuhuibao.mybatis.entity.member.Member" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="mobile" property="mobile" />
+    <result column="email" property="email" />
+    <result column="password" property="password"/>
+    <result column="registerTime" property="registerTime" />
+    <result column="status" property="status"/>
+    <result column="identify" property="identify"/>
+    <result column="companyName" property="companyName" />
+    <!-- <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="registerTime" property="registerTime" jdbcTyper="VARCHAR"/>
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="identify" property="identify" jdbcType="INTEGER" />
+    <result column="companyName" property="companyName" jdbcType="VARCHAR" /> -->
+  </resultMap>
+  
+  <insert id="registerMember" parameterType="com.zhuhuibao.mybatis.entity.member.Member" useGeneratedKeys="true" keyProperty="id">
+  	insert into t_m_member(mobile,email,password,registerTime,status,identify) values
+  	(#{mobile},#{email},#{password},date_format(now(),'%Y-%m-%d %h:%i:%s'),#{status},#{identify})
+  </insert>
+  <sql id="Base_Column_List" >
+    id, mobile, email,password, registerTime, status,identify 
+  </sql>
+  
+  <select id="findMemberByAccount" parameterType="com.zhuhuibao.mybatis.entity.member.Member" resultType="com.zhuhuibao.mybatis.entity.member.Member">
+    select
+    <include refid="Base_Column_List" />
+    from t_m_member WHERE status != 0
+   	<if test="mobile != null" >
+   		AND mobile = #{mobile}
+   	</if>
+   	<if test="email != null" >
+   		AND email = #{email}
+   	</if>
+  </select>
+  
+   <select id="findMemberById" resultType="com.zhuhuibao.mybatis.entity.member.Member">
+    select
+    <include refid="Base_Column_List" />
+    from t_m_member
+    where id = #{id}
+   </select>
+  
+  <update id="addMemberBaseInfo" parameterType="com.zhuhuibao.mybatis.entity.member.Member">
+    update t_m_member 
+    <set>
+	    <if test="companyName != null" >
+	    	companyName = #{companyName},
+	    </if>
+	    <if test="companyCorporationName != null" >
+	    	companyCorporationName = #{companyCorporationName},
+	    </if>
+	    <if test="companyTelephone != null" >
+	    	companyTelephone = #{companyTelephone},
+	    </if>
+	    <if test="enterpriseMemberType != null" >
+	    	enterpriseMemberType = #{enterpriseMemberType},
+	    </if>
+	    <if test="address != null" >
+	    	address = #{address},
+	    </if>
+	    <if test="enterpriseQualification != null" >
+	    	enterpriseQualification = #{enterpriseQualification},
+	    </if>
+	    <if test="enterpriseLogo != null" >
+	    	enterpriseLogo = #{enterpriseLogo},
+	    </if>
+	    <if test="enterpriseDesc != null" >
+	    	enterpriseDesc = #{enterpriseDesc},
+	    </if>
+    </set>
+    where id = #{id}
+  </update>
+  
+  <update id="updateMemberStatus" parameterType="com.zhuhuibao.mybatis.entity.member.Member">
+  	update t_m_member
+  	<set>
+  		 <if test="status != null" >
+	    	status = #{status},
+	    </if>
+  	</set>
+  	where email = #{email} and id = #{id}
+  </update>
+  <update id="updateMemberPwdByMobile" parameterType="com.zhuhuibao.mybatis.entity.member.Member">
+  	update t_m_member
+  	<set>
+  		password = #{password}
+  	</set>
+  	where mobile = #{mobile} and status != 0
+  </update>
+  
+  <update id="updateMemberPwdByMail" parameterType="com.zhuhuibao.mybatis.entity.member.Member">
+  	update t_m_member
+  	<set>
+  		password = #{password}
+  	</set>
+  	where email = #{email} and status != 0
+  </update>
+  
+  <select id="isValidatePass" resultType="Integer">
+  	select isValidatePass from t_m_member
+    where (email = #{account} or mobile = #{account}) and status != 0
+  </select>
+</mapper>
