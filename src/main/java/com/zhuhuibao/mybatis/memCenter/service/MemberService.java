@@ -18,7 +18,7 @@ import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 @Transactional
 public class MemberService {
 	private static final Logger log = LoggerFactory.getLogger(MemberService.class);
-	
+
 	@Autowired
 	private MemberMapper memberMapper;
 
