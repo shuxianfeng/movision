@@ -10,8 +10,9 @@ import org.springframework.web.servlet.support.RequestDataValueProcessor;
 public class CSRFRequestDataValueProcessor implements RequestDataValueProcessor {
 
     @Override
-    public String processAction(HttpServletRequest request, String action) {
-        return action;
+    public String processAction(HttpServletRequest arg0, String arg1,
+			String arg2) {
+        return arg1;
     }
 
     @Override

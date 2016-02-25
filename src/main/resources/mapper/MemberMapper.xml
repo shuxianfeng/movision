@@ -31,7 +31,7 @@
     select
     <include refid="Base_Column_List" />
     from t_m_member WHERE status != 0
-   	<if test="mobile != null" >
+   	<if test="mobile != null and mobile != '' " >
    		AND mobile = #{mobile}
    	</if>
    	<if test="email != null" >

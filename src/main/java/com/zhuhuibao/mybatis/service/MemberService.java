@@ -108,18 +108,23 @@ public class MemberService {
      */
     public int modifyPwd(Member member)
     {
-    	log.debug("find by member account = "+member.getMobile() == null ? member.getEmail():member.getMobile());
+    	log.info("modify account password account = "+member.getAccount());
     	int result = 0;
     	String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
 		String md5Pwd = new Md5Hash(pwd,null,2).toString();
 		member.setPassword(md5Pwd);
-		if(member.getEmail() != null && member.getEmail().indexOf("@") > 0)
+		if(member.getAccount() != null)
 		{
-			result = memberMapper.updateMemberPwdByMail(member);
-		}
-		else
-		{
-			result = memberMapper.updateMemberPwdByMobile(member);
+			if(member.getAccount().indexOf("@") > 0)
+			{
+				member.setEmail(member.getAccount());
+				result = memberMapper.updateMemberPwdByMail(member);
+			}
+			else
+			{
+				member.setMobile(member.getAccount());
+				result = memberMapper.updateMemberPwdByMobile(member);
+			}
 		}
     	return result;
     }
@@ -135,42 +140,46 @@ public class MemberService {
     	JsonResult result = new JsonResult();
     	String data = "";
     	//手机
-    	if(member.getMobile() != null && member.getMobileCheckCode() != null)
+    	if(member.getAccount() != null && member.getCheckCode() != null)
 		{
-    		data = member.getMobile();
-			if(member.getMobileCheckCode().equals(seekPwdCode))
-			{
-				Member dbmember = memberMapper.findMemberByAccount(member);
-		    	if(dbmember == null)
-		    	{
-		    		result.setCode(400);
-		    		result.setMessage("账户不存在");
-		    	}
-			}
-			else
-			{
-				result.setCode(400);
-				result.setMessage("验证码错误");
-			}
-		}
-		//邮箱
-		if(member.getEmail()!=null && member.getEmail().indexOf("@")>0)
-		{
-			data = member.getEmail();
-			if(member.getMobileCheckCode().equals(seekPwdCode))
-			{
-				Member dbmember = memberMapper.findMemberByAccount(member);
-		    	if(dbmember == null)
-		    	{
-		    		result.setCode(400);
-		    		result.setMessage("账户不存在");
-		    	}
-			}
-			else
-			{
-				result.setCode(400);
-				result.setMessage("验证码错误");
-			}
+    		if(member.getAccount().indexOf("@") == -1)
+    		{
+	    		data = member.getMobile();
+				if(member.getCheckCode().equals(seekPwdCode))
+				{
+					member.setMobile(member.getAccount());
+					Member dbmember = memberMapper.findMemberByAccount(member);
+			    	if(dbmember == null)
+			    	{
+			    		result.setCode(400);
+			    		result.setMessage("账户不存在");
+			    	}
+				}
+				else
+				{
+					result.setCode(400);
+					result.setMessage("验证码错误");
+				}
+    		}
+    		else
+    		{
+    			data = member.getEmail();
+    			if(member.getMobileCheckCode().equals(seekPwdCode))
+    			{
+    				member.setEmail(member.getAccount());
+    				Member dbmember = memberMapper.findMemberByAccount(member);
+    		    	if(dbmember == null)
+    		    	{
+    		    		result.setCode(400);
+    		    		result.setMessage("账户不存在");
+    		    	}
+    			}
+    			else
+    			{
+    				result.setCode(400);
+    				result.setMessage("验证码错误");
+    			}
+    		}
 		}
 		result.setData(data);
     	return result;

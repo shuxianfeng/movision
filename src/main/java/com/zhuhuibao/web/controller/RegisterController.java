@@ -188,19 +188,19 @@ public class RegisterController {
 
 	@RequestMapping(value = "/checkCode")
 	@ResponseBody
-	public ModelAndView checkCode(HttpServletRequest req, HttpServletResponse response) {
+	public void checkCode(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		/*
 		 * System.out.println("要校验的验证码:"+user); return new
 		 * Gson().toJson("true");
 		 */
-		//response.setContentType("application/json;charset=utf-8");
-		/*String jsonData = "{\"result\":\"ok\"}";
-		response.getWriter().write(jsonData);*/
-		ModelAndView modelAndView = new ModelAndView();  
+		response.setContentType("application/json;charset=utf-8");
+		String jsonData = "{\"result\":\"ok\"}";
+		response.getWriter().write(jsonData);
+		/*ModelAndView modelAndView = new ModelAndView();  
         modelAndView.addObject("name", "xxx");  
 //        modelAndView.setViewName("redirect:/register");  
         modelAndView.setViewName("/register");  
-        return modelAndView;
+        return modelAndView;*/
 	}
 
     /**

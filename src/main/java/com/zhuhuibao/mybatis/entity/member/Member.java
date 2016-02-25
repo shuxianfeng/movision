@@ -2,11 +2,14 @@ package com.zhuhuibao.mybatis.entity.member;
 
 import java.io.Serializable;
 
+import org.apache.ibatis.type.Alias;
+
 /**
  * 会员信息结构
  * @author penglong
  *
  */
+@Alias("member")
 public class Member implements Serializable{
 
 	/**
@@ -16,7 +19,10 @@ public class Member implements Serializable{
 	
 	private int id;
 	
-	private String userName;
+	/**
+	 * 账户名
+	 */
+	private String account;
 	
 	/**
 	 * 会员手机号，登录账户
@@ -37,6 +43,11 @@ public class Member implements Serializable{
 	 * 邮箱图形验证码
 	 */
 	private String emailCheckCode;
+	
+	/**
+	 * 找回密码的图片验证码
+	 */
+	private String checkCode;
 	
 	/**
 	 * 密码
@@ -106,12 +117,12 @@ public class Member implements Serializable{
 		this.id = id;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getAccount() {
+		return account;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setAccount(String account) {
+		this.account = account;
 	}
 
 	public String getMobile() {
@@ -241,6 +252,14 @@ public class Member implements Serializable{
 
 	public void setEmailCheckCode(String emailCheckCode) {
 		this.emailCheckCode = emailCheckCode;
+	}
+
+	public String getCheckCode() {
+		return checkCode;
+	}
+
+	public void setCheckCode(String checkCode) {
+		this.checkCode = checkCode;
 	}
 	
 }

@@ -8,7 +8,7 @@
 	<name>zhuhuibao</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<spring.version>3.2.4.RELEASE</spring.version>
+		<spring.version>4.2.4.RELEASE</spring.version>
 		<jackson.version>1.9.13</jackson.version>
 		<alibaba.fastjson.version>1.1.40</alibaba.fastjson.version>
 		<druid.version>0.2.23</druid.version>
@@ -122,6 +122,22 @@
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>${jackson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.4.4</version>
 		</dependency>
 
 		<dependency>
@@ -341,6 +357,13 @@
 			<artifactId>ccp-sms-sdk</artifactId>
 			<version>2.6.3r</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.mangofactory</groupId>
+			<artifactId>swagger-springmvc</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
@@ -420,4 +443,12 @@
 
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<id>releases</id>
+			<name>releases</name>
+			<url>http://139.196.189.100:8081/nexus/content/repositories/releases</url>
+		</repository>
+	</repositories>
 </project>

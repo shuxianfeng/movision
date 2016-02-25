@@ -35,12 +35,14 @@
                 <constructor-arg value="UTF-8"/>
             </bean>
 
-            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="supportedMediaTypes" value="*/*"/>
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
 
+
+    <mvc:resources mapping="/**" location="/"/>
     <mvc:default-servlet-handler/>
     <!-- CSRF 
     <bean name="requestDataValueProcessor" class="com.zhuhuibao.security.csrf.CSRFRequestDataValueProcessor"/>
@@ -48,68 +50,23 @@
         <bean class="com.zhuhuibao.security.csrf.CSRFHandlerInterceptor"/>
     </mvc:interceptors>-->
 
-    <!-- Freemarker配置 -->
-    <!-- org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer -->
-    <bean id="freemarkerConfig"
-          class="com.zhuhuibao.shiro.freemarker.ShiroTagFreeMarkerConfigurer">
-        <property name="templateLoaderPath" value="/WEB-INF/ftl/"/>
-        <property name="freemarkerSettings">
-            <props>
-                <prop key="template_update_delay">0</prop>
-                <prop key="default_encoding">UTF-8</prop>
-                <prop key="number_format">0.##########</prop>
-                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
-                <prop key="classic_compatible">true</prop>
-                <prop key="template_exception_handler">ignore</prop>
-            </props>
-        </property>
-        <property name="freemarkerVariables">
-            <map>
-                <entry key="xml_escape" value-ref="fmXmlEscape"/>
-                <entry key="html_escape" value-ref="fmHtmlEscape"/>
-                <entry key="e" value-ref="commonTag"/>
-            </map>
-        </property>
-    </bean>
-
-    <bean id="commonTag" class="com.zhuhuibao.utils.ftl.CommonTag">
-        <property name="hostRes" value="${host.res}"/>
-        <property name="hostRoot" value="${host.root}"/>
-    </bean>
-
-    <bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape"/>
-    <bean id="fmHtmlEscape" class="freemarker.template.utility.HtmlEscape"/>
 
     <context:property-placeholder
             ignore-unresolvable="true" location="classpath*:/spring/application.properties"/>
 
-    <!--视图解释器 -->
-    <bean id="viewResolver"
-          class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
-        <property name="suffix" value=".ftl"/>
-        <!-- 此变量值为pageContext.request, 页面使用方法：rc.contextPath -->  
-        <property name="requestContextAttribute" value="rc"/>
-        <property name="contentType" value="text/html;charset=UTF-8"/>
-        <property name="order" value="0" />
-        <!--<property name="viewClass" value="com.zhuhuibao.common.view.StaticFreeMarkerView"/>-->
+    <!--视图解释器-->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/views"/>
+        <property name="suffix" value=".jsp"/>
     </bean>
-    
-     <bean id="viewResolverCommon" class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
-        <property name="prefix">
-            <value>/WEB-INF/pages/</value>
-        </property>
-        <property name="suffix">
-            <value>.jsp</value>
-        </property>
-        <property name="order" value="1" />
-    </bean> 
 
     <bean
             class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">
             <list>
                 <bean
-                        class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                        class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                     <property name="supportedMediaTypes" value="*/*"/>
                 </bean>
             </list>
@@ -132,6 +89,8 @@
                     p:defaultContentType="text/html">
                 <property name="mediaTypes">
                     <map>
+                        <entry key="html" value="text/html"/>
+                        <entry key="pdf" value="application/pdf"/>
                         <entry key="json" value="application/json"/>
                         <entry key="xml" value="application/xml"/>
                         <entry key="xls" value="application/vnd.ms-excel"/>
@@ -156,7 +115,7 @@
         </property>
     </bean>
     <bean id="mappingJacksonJsonView"
-          class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/>
+          class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
 
     <bean id="xlsExcelView" class="com.zhuhuibao.common.view.XlsExcelView">
     </bean>
