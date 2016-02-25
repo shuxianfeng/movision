@@ -1,7 +1,7 @@
 package com.zhuhuibao.test;
 
 import com.google.gson.Gson;
-import com.zhuhuibao.mybatis.entity.User;
+//import com.zhuhuibao.mybatis.memCenter.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class Test extends BaseSpringContext {
 
     }
 
-    public static void main(String[] args) {
+/*    public static void main(String[] args) {
 //        for (int i = 0;i<10;i++) {
 //            if(i > 3)  break;
 //
@@ -52,7 +52,7 @@ public class Test extends BaseSpringContext {
         list.add(user);
         Gson gson = new Gson();
         System.out.println(gson.toJson(list));
-    }
+    }*/
 
 
 }
