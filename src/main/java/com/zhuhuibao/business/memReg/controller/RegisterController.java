@@ -1,4 +1,4 @@
-package com.zhuhuibao.web.controller;
+package com.zhuhuibao.business.memReg.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.crypto.hash.Md5Hash;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.zhuhuibao.mybatis.entity.JsonResult;
-import com.zhuhuibao.mybatis.entity.member.Member;
-import com.zhuhuibao.mybatis.service.MemberService;
-import com.zhuhuibao.mybatis.service.RegisterValidateService;
-import com.zhuhuibao.mybatis.service.UserService;
+import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.mybatis.memberReg.entity.Member;
+import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
+import com.zhuhuibao.mybatis.memberReg.service.RegisterValidateService;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
@@ -43,10 +44,7 @@ public class RegisterController {
 			.getLogger(RegisterController.class);
 
 	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private MemberService memberService;
+	private MemberRegService memberService;
 	
 	/**
 	 * 注册验证码业务类
@@ -151,10 +149,13 @@ public class RegisterController {
 	 * @param req
 	 * @param response
 	 * @param model
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 */
 	@RequestMapping(value = "/rest/mobileCode", method = RequestMethod.GET)
 	public void getMobileCode(HttpServletRequest req, HttpServletResponse response,
-			Model model) {
+			Model model) throws JsonGenerationException, JsonMappingException, IOException {
 		String mobile = req.getParameter("mobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
 		HttpSession sess = req.getSession(true);
@@ -164,6 +165,9 @@ public class RegisterController {
 		//发送验证码到手机
 //		SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
 		sess.setAttribute("mobile", verifyCode);
+		JsonResult jsonResult = new JsonResult();
+		jsonResult.setData(verifyCode);
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 	
 	/**

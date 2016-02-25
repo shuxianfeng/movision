@@ -1,4 +1,4 @@
-package com.zhuhuibao.mybatis.service;
+package com.zhuhuibao.mybatis.memberReg.service;
 
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.slf4j.Logger;
@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zhuhuibao.mybatis.entity.JsonResult;
-import com.zhuhuibao.mybatis.entity.member.Member;
-import com.zhuhuibao.mybatis.mapper.MemberMapper;
+import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.mybatis.memberReg.entity.Member;
+import com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper;
 import com.zhuhuibao.security.EncodeUtil;
 
 /**
@@ -19,11 +19,11 @@ import com.zhuhuibao.security.EncodeUtil;
  */
 @Service
 @Transactional
-public class MemberService {
-	private static final Logger log = LoggerFactory.getLogger(MemberService.class);
+public class MemberRegService {
+	private static final Logger log = LoggerFactory.getLogger(MemberRegService.class);
 	
 	@Autowired
-	private MemberMapper memberMapper;
+	private MemberRegMapper memberRegMapper;
 	
 	/**
      * 注册用户
@@ -43,7 +43,7 @@ public class MemberService {
     			//默认状态为“0”
     			member.setStatus(1);
     		}
-    		memberId = memberMapper.registerMember(member);
+    		memberId = memberRegMapper.registerMember(member);
     	}
     	return memberId;
     }
@@ -64,7 +64,7 @@ public class MemberService {
     	{
     		member.setMobile(memberAccount);
     	}
-    	return memberMapper.findMemberByAccount(member);
+    	return memberRegMapper.findMemberByAccount(member);
     }
     
     /**
@@ -75,7 +75,7 @@ public class MemberService {
     public Member findMemberById(String memberId)
     {
     	log.debug("find memberinfo by memberId = "+memberId);
-    	return memberMapper.findMemberById(memberId);
+    	return memberRegMapper.findMemberById(memberId);
     }
     
     /**
@@ -86,7 +86,7 @@ public class MemberService {
     public int isValidatePass(String account)
     {
     	log.debug("find password validate account = "+account);
-    	Integer obj = memberMapper.isValidatePass(account);
+    	Integer obj = memberRegMapper.isValidatePass(account);
     	return 1;
     }
     
@@ -98,7 +98,7 @@ public class MemberService {
     public int addMemberBaseInfo(Member member)
     {
     	log.info("add member base info memeberId = "+member.getId());
-    	return memberMapper.addMemberBaseInfo(member);
+    	return memberRegMapper.addMemberBaseInfo(member);
     }
     
     /**
@@ -118,12 +118,12 @@ public class MemberService {
 			if(member.getAccount().indexOf("@") > 0)
 			{
 				member.setEmail(member.getAccount());
-				result = memberMapper.updateMemberPwdByMail(member);
+				result = memberRegMapper.updateMemberPwdByMail(member);
 			}
 			else
 			{
 				member.setMobile(member.getAccount());
-				result = memberMapper.updateMemberPwdByMobile(member);
+				result = memberRegMapper.updateMemberPwdByMobile(member);
 			}
 		}
     	return result;
@@ -148,7 +148,7 @@ public class MemberService {
 				if(member.getCheckCode().equals(seekPwdCode))
 				{
 					member.setMobile(member.getAccount());
-					Member dbmember = memberMapper.findMemberByAccount(member);
+					Member dbmember = memberRegMapper.findMemberByAccount(member);
 			    	if(dbmember == null)
 			    	{
 			    		result.setCode(400);
@@ -167,7 +167,7 @@ public class MemberService {
     			if(member.getMobileCheckCode().equals(seekPwdCode))
     			{
     				member.setEmail(member.getAccount());
-    				Member dbmember = memberMapper.findMemberByAccount(member);
+    				Member dbmember = memberRegMapper.findMemberByAccount(member);
     		    	if(dbmember == null)
     		    	{
     		    		result.setCode(400);

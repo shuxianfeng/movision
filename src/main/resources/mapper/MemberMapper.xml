@@ -1,109 +1,159 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.mapper.MemberMapper">
-	<resultMap id="MemberResultMap" type="com.zhuhuibao.mybatis.entity.member.Member" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="mobile" property="mobile" />
-    <result column="email" property="email" />
-    <result column="password" property="password"/>
-    <result column="registerTime" property="registerTime" />
-    <result column="status" property="status"/>
-    <result column="identify" property="identify"/>
-    <result column="companyName" property="companyName" />
-    <!-- <result column="mobile" property="mobile" jdbcType="VARCHAR" />
-    <result column="email" property="email" jdbcType="VARCHAR" />
-    <result column="password" property="password" jdbcType="VARCHAR" />
-    <result column="registerTime" property="registerTime" jdbcTyper="VARCHAR"/>
-    <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="identify" property="identify" jdbcType="INTEGER" />
-    <result column="companyName" property="companyName" jdbcType="VARCHAR" /> -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper">
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Member">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="emailCode" jdbcType="INTEGER" property="emailcode" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="registerTime" jdbcType="VARCHAR" property="registertime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="identify" jdbcType="INTEGER" property="identify" />
+    <result column="isValidatePass" jdbcType="INTEGER" property="isvalidatepass" />
+    <result column="companyName" jdbcType="VARCHAR" property="companyname" />
+    <result column="employeeType" jdbcType="INTEGER" property="employeetype" />
+    <result column="enterpriseEmployeeParentId" jdbcType="BIGINT" property="enterpriseemployeeparentid" />
+    <result column="enterpriseMemberType" jdbcType="INTEGER" property="enterprisemembertype" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="enterpriseLogo" jdbcType="VARCHAR" property="enterpriselogo" />
+    <result column="enterpriseDesc" jdbcType="VARCHAR" property="enterprisedesc" />
+    <result column="enterpriseHeadShot" jdbcType="VARCHAR" property="enterpriseheadshot" />
+    <result column="saleProductDesc" jdbcType="VARCHAR" property="saleproductdesc" />
+    <result column="enterpriseQualification" jdbcType="INTEGER" property="enterprisequalification" />
+    <result column="enterpriseQLevel" jdbcType="INTEGER" property="enterpriseqlevel" />
+    <result column="fcateid" jdbcType="INTEGER" property="fcateid" />
+    <result column="scateid" jdbcType="INTEGER" property="scateid" />
+    <result column="companyCorporationName" jdbcType="VARCHAR" property="companycorporationname" />
+    <result column="cpyCommericalRegNum" jdbcType="VARCHAR" property="cpycommericalregnum" />
+    <result column="companyCreaterTime" jdbcType="VARCHAR" property="companycreatertime" />
+    <result column="registerCapital" jdbcType="VARCHAR" property="registercapital" />
+    <result column="registerAddress" jdbcType="VARCHAR" property="registeraddress" />
+    <result column="companyBusinessScope" jdbcType="VARCHAR" property="companybusinessscope" />
+    <result column="companyBusinessLicenseImg" jdbcType="VARCHAR" property="companybusinesslicenseimg" />
+    <result column="supplierCertificateType" jdbcType="INTEGER" property="suppliercertificatetype" />
+    <result column="supplierCertificateName" jdbcType="VARCHAR" property="suppliercertificatename" />
+    <result column="supplierCertificateOrganization" jdbcType="VARCHAR" property="suppliercertificateorganization" />
+    <result column="supplierCertificateUrl" jdbcType="VARCHAR" property="suppliercertificateurl" />
+    <result column="engineerQualityType" jdbcType="VARCHAR" property="engineerqualitytype" />
+    <result column="engineerQualityName" jdbcType="VARCHAR" property="engineerqualityname" />
+    <result column="engineerQualityOrganization" jdbcType="VARCHAR" property="engineerqualityorganization" />
+    <result column="engineerQualityUrl" jdbcType="VARCHAR" property="engineerqualityurl" />
+    <result column="enterpriseTel" jdbcType="INTEGER" property="enterprisetel" />
+    <result column="enterpriseFox" jdbcType="INTEGER" property="enterprisefox" />
+    <result column="enterpriseWebSite" jdbcType="VARCHAR" property="enterprisewebsite" />
+    <result column="enterpriseLinkman" jdbcType="VARCHAR" property="enterpriselinkman" />
+    <result column="enterpriseLMSex" jdbcType="INTEGER" property="enterpriselmsex" />
+    <result column="enterpriseLMDep" jdbcType="VARCHAR" property="enterpriselmdep" />
+    <result column="enterpriseLMTel" jdbcType="INTEGER" property="enterpriselmtel" />
+    <result column="enterpriseLMMobile" jdbcType="INTEGER" property="enterpriselmmobile" />
+    <result column="enterpriseQQ" jdbcType="INTEGER" property="enterpriseqq" />
+    <result column="personRealName" jdbcType="VARCHAR" property="personrealname" />
+    <result column="personID" jdbcType="INTEGER" property="personid" />
+    <result column="personSex" jdbcType="INTEGER" property="personsex" />
+    <result column="personPosition" jdbcType="INTEGER" property="personposition" />
+    <result column="personProvince" jdbcType="VARCHAR" property="personprovince" />
+    <result column="personCity" jdbcType="VARCHAR" property="personcity" />
+    <result column="personArea" jdbcType="VARCHAR" property="personarea" />
+    <result column="personAddress" jdbcType="VARCHAR" property="personaddress" />
+    <result column="personMobile" jdbcType="INTEGER" property="personmobile" />
+    <result column="personTel" jdbcType="INTEGER" property="persontel" />
+    <result column="personQQ" jdbcType="INTEGER" property="personqq" />
+    <result column="personHeadShot" jdbcType="VARCHAR" property="personheadshot" />
+    <result column="personIDFrontImgUrl" jdbcType="VARCHAR" property="personidfrontimgurl" />
+    <result column="personIDBackImgUrl" jdbcType="VARCHAR" property="personidbackimgurl" />
+    <result column="personCertificateName" jdbcType="VARCHAR" property="personcertificatename" />
+    <result column="personCertificateOrg" jdbcType="VARCHAR" property="personcertificateorg" />
+    <result column="personCertificateUrl" jdbcType="VARCHAR" property="personcertificateurl" />
   </resultMap>
-  
-  <insert id="registerMember" parameterType="com.zhuhuibao.mybatis.entity.member.Member" useGeneratedKeys="true" keyProperty="id">
-  	insert into t_m_member(mobile,email,password,registerTime,status,identify) values
-  	(#{mobile},#{email},#{password},date_format(now(),'%Y-%m-%d %h:%i:%s'),#{status},#{identify})
-  </insert>
-  <sql id="Base_Column_List" >
-    id, mobile, email,password, registerTime, status,identify 
+  <sql id="Base_Column_List">
+    id, mobile, email, emailCode, password, registerTime, status, identify, isValidatePass, 
+    companyName, employeeType, enterpriseEmployeeParentId, enterpriseMemberType, province, 
+    city, area, address, enterpriseLogo, enterpriseDesc, enterpriseHeadShot, saleProductDesc, 
+    enterpriseQualification, enterpriseQLevel, fcateid, scateid, companyCorporationName, 
+    cpyCommericalRegNum, companyCreaterTime, registerCapital, registerAddress, companyBusinessScope, 
+    companyBusinessLicenseImg, supplierCertificateType, supplierCertificateName, supplierCertificateOrganization, 
+    supplierCertificateUrl, engineerQualityType, engineerQualityName, engineerQualityOrganization, 
+    engineerQualityUrl, enterpriseTel, enterpriseFox, enterpriseWebSite, enterpriseLinkman, 
+    enterpriseLMSex, enterpriseLMDep, enterpriseLMTel, enterpriseLMMobile, enterpriseQQ, 
+    personRealName, personID, personSex, personPosition, personProvince, personCity, 
+    personArea, personAddress, personMobile, personTel, personQQ, personHeadShot, personIDFrontImgUrl, 
+    personIDBackImgUrl, personCertificateName, personCertificateOrg, personCertificateUrl
   </sql>
-  
-  <select id="findMemberByAccount" parameterType="com.zhuhuibao.mybatis.entity.member.Member" resultType="com.zhuhuibao.mybatis.entity.member.Member">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from t_m_member WHERE status != 0
-   	<if test="mobile != null and mobile != '' " >
-   		AND mobile = #{mobile}
-   	</if>
-   	<if test="email != null" >
-   		AND email = #{email}
-   	</if>
+    from t_m_member
+    where id = #{id,jdbcType=BIGINT}
   </select>
-  
-   <select id="findMemberById" resultType="com.zhuhuibao.mybatis.entity.member.Member">
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_m_member
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <select id="findMemById" resultType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     select
     <include refid="Base_Column_List" />
     from t_m_member
     where id = #{id}
-   </select>
-  
-  <update id="addMemberBaseInfo" parameterType="com.zhuhuibao.mybatis.entity.member.Member">
-    update t_m_member 
+  </select>
+
+  <update id="updateMemBasicInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+    update t_m_member
     <set>
-	    <if test="companyName != null" >
-	    	companyName = #{companyName},
-	    </if>
-	    <if test="companyCorporationName != null" >
-	    	companyCorporationName = #{companyCorporationName},
-	    </if>
-	    <if test="companyTelephone != null" >
-	    	companyTelephone = #{companyTelephone},
-	    </if>
-	    <if test="enterpriseMemberType != null" >
-	    	enterpriseMemberType = #{enterpriseMemberType},
-	    </if>
-	    <if test="address != null" >
-	    	address = #{address},
-	    </if>
-	    <if test="enterpriseQualification != null" >
-	    	enterpriseQualification = #{enterpriseQualification},
-	    </if>
-	    <if test="enterpriseLogo != null" >
-	    	enterpriseLogo = #{enterpriseLogo},
-	    </if>
-	    <if test="enterpriseDesc != null" >
-	    	enterpriseDesc = #{enterpriseDesc},
-	    </if>
+      <if test="personRealName != null" >
+        personRealName = #{personRealName},
+      </if>
+      <if test="personSex != null" >
+        personSex = #{personSex},
+      </if>
+      <if test="personPosition != null" >
+        personPosition = #{personPosition},
+      </if>
+      <if test="personProvince != null" >
+        personProvince = #{personProvince},
+      </if>
+      <if test="personCity != null" >
+        personCity = #{personCity},
+      </if>
+      <if test="personArea != null" >
+        personArea = #{personArea},
+      </if>
+      <if test="personAddress != null" >
+        personAddress = #{personAddress},
+      </if>
+      <if test="personMobile != null" >
+        personMobile = #{personMobile},
+      </if>
+      <if test="personTel != null" >
+        personTel = #{personTel},
+      </if>
+      <if test="personQQ != null" >
+        personQQ = #{personQQ},
+      </if>
+      <if test="personHeadShot != null" >
+        personHeadShot = #{personHeadShot},
+      </if>
+      <if test="personIDFrontImgUrl != null" >
+        personIDFrontImgUrl = #{personIDFrontImgUrl},
+      </if>
+      <if test="personIDBackImgUrl != null" >
+        personIDBackImgUrl = #{personIDBackImgUrl},
+      </if>
+      <if test="personCertificateName != null" >
+        personCertificateName = #{personCertificateName},
+      </if>
+      <if test="personCertificateOrg != null" >
+        personCertificateOrg = #{personCertificateOrg},
+      </if>
+      <if test="personCertificateUrl != null" >
+        personCertificateUrl = #{personCertificateUrl},
+      </if>
     </set>
     where id = #{id}
   </update>
-  
-  <update id="updateMemberStatus" parameterType="com.zhuhuibao.mybatis.entity.member.Member">
-  	update t_m_member
-  	<set>
-  		 <if test="status != null" >
-	    	status = #{status},
-	    </if>
-  	</set>
-  	where email = #{email} and id = #{id}
-  </update>
-  <update id="updateMemberPwdByMobile" parameterType="com.zhuhuibao.mybatis.entity.member.Member">
-  	update t_m_member
-  	<set>
-  		password = #{password}
-  	</set>
-  	where mobile = #{mobile} and status != 0
-  </update>
-  
-  <update id="updateMemberPwdByMail" parameterType="com.zhuhuibao.mybatis.entity.member.Member">
-  	update t_m_member
-  	<set>
-  		password = #{password}
-  	</set>
-  	where email = #{email} and status != 0
-  </update>
-  
-  <select id="isValidatePass" resultType="Integer">
-  	select isValidatePass from t_m_member
-    where (email = #{account} or mobile = #{account}) and status != 0
-  </select>
 </mapper>

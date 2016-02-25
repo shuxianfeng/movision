@@ -1,8 +1,6 @@
 package com.zhuhuibao.test;
 
 import com.google.gson.Gson;
-import com.zhuhuibao.mybatis.entity.User;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,13 +43,6 @@ public class Test extends BaseSpringContext {
 //        String s = "localhost:8080/index";
 //        int index = s.lastIndexOf("/");
 //        System.out.print(index);
-        User user = new User();
-        user.setId(1);
-        user.setMobile("112313");
-        List<User> list = new ArrayList<User>();
-        list.add(user);
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(list));
     }
 
 

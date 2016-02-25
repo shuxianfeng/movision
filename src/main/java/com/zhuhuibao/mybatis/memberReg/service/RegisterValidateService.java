@@ -1,4 +1,4 @@
-package com.zhuhuibao.mybatis.service;
+package com.zhuhuibao.mybatis.memberReg.service;
 
 import java.util.Date;
 
@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zhuhuibao.mybatis.entity.JsonResult;
-import com.zhuhuibao.mybatis.entity.member.Member;
-import com.zhuhuibao.mybatis.mapper.MemberMapper;
+import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.mybatis.memberReg.entity.Member;
+import com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.SendEmail;
@@ -25,7 +25,7 @@ public class RegisterValidateService {
 	private static final Logger log = LoggerFactory.getLogger(RegisterValidateService.class);
 	
 	@Autowired
-	private MemberService memberService;
+	private MemberRegService memberService;
 	
 	/**
 	 * 发送邮件激活验证码

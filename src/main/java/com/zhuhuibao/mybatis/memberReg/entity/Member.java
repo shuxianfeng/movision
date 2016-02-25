@@ -1,4 +1,4 @@
-package com.zhuhuibao.mybatis.entity.member;
+package com.zhuhuibao.mybatis.memberReg.entity;
 
 import java.io.Serializable;
 

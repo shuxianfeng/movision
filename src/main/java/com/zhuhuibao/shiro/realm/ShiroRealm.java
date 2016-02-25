@@ -9,9 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.zhuhuibao.mybatis.entity.member.Member;
-import com.zhuhuibao.mybatis.service.MemberService;
-import com.zhuhuibao.mybatis.service.UserService;
+import com.zhuhuibao.mybatis.memberReg.entity.Member;
+import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 
 import java.io.Serializable;
 
@@ -23,10 +22,7 @@ public class ShiroRealm extends AuthorizingRealm {
     private static final Logger log = LoggerFactory.getLogger(ShiroRealm.class);
 
     @Autowired
-    private UserService userService;
-    
-    @Autowired
-    private MemberService memberService;
+    private MemberRegService memberRegService;
 
     /**
      * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
@@ -46,7 +42,7 @@ public class ShiroRealm extends AuthorizingRealm {
         log.info("登录认证");
         String loginname = (String) token.getPrincipal();
         //User user = userService.findByMobile(loginname);
-        Member member = memberService.findMemberByAccount(loginname);
+        Member member = memberRegService.findMemberByAccount(loginname);
         if(member != null){
             /*if (!"1".equals(member.getStatus())) {
                 throw new LockedAccountException(); // 帐号不正常状态

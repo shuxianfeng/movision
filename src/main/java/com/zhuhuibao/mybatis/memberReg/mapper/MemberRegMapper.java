@@ -1,8 +1,8 @@
-package com.zhuhuibao.mybatis.mapper;
+package com.zhuhuibao.mybatis.memberReg.mapper;
 
-import com.zhuhuibao.mybatis.entity.member.Member;
+import com.zhuhuibao.mybatis.memberReg.entity.Member;
 
-public interface MemberMapper {
+public interface MemberRegMapper {
 	//注册会员
 	int registerMember(Member member);
 	

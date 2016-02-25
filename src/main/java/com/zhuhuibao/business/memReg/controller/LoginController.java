@@ -1,14 +1,10 @@
-package com.zhuhuibao.web.controller;
+package com.zhuhuibao.business.memReg.controller;
 
-import com.zhuhuibao.mybatis.entity.member.Member;
-import com.zhuhuibao.mybatis.service.MemberService;
-import com.zhuhuibao.security.DigestUtils;
-import com.zhuhuibao.utils.captcha.util.CaptchaException;
-import com.zhuhuibao.utils.exception.SmsException;
+import com.zhuhuibao.mybatis.memberReg.entity.Member;
+import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +26,7 @@ public class LoginController {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
-    MemberService memberService;
+    MemberRegService memberService;
     
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String index(HttpServletRequest req,  Model model) {
