@@ -9,9 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.zhuhuibao.mybatis.entity.member.Member;
-import com.zhuhuibao.mybatis.service.MemberService;
-import com.zhuhuibao.mybatis.service.UserService;
+//import com.zhuhuibao.mybatis.memCenter.entity.member.Member;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+//import com.zhuhuibao.mybatis.memCenter.service.UserService;
 
 import java.io.Serializable;
 
@@ -19,8 +19,8 @@ import java.io.Serializable;
 /**
  * @author jianglz
  */
-public class ShiroRealm extends AuthorizingRealm {
-    private static final Logger log = LoggerFactory.getLogger(ShiroRealm.class);
+/*public class ShiroRealm extends AuthorizingRealm {
+*//*    private static final Logger log = LoggerFactory.getLogger(ShiroRealm.class);
 
     @Autowired
     private UserService userService;
@@ -28,18 +28,18 @@ public class ShiroRealm extends AuthorizingRealm {
     @Autowired
     private MemberService memberService;
 
-    /**
+    *//**//**
      * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
-     */
+     *//**//*
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(
             PrincipalCollection principals) {
         return null;
     }
 
-    /**
+    *//**//**
      * 认证回调函数,登录时调用.
-     */
+     *//**//*
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(
             AuthenticationToken token) throws AuthenticationException {
@@ -48,9 +48,9 @@ public class ShiroRealm extends AuthorizingRealm {
         //User user = userService.findByMobile(loginname);
         Member member = memberService.findMemberByAccount(loginname);
         if(member != null){
-            /*if (!"1".equals(member.getStatus())) {
+            *//**//*if (!"1".equals(member.getStatus())) {
                 throw new LockedAccountException(); // 帐号不正常状态
-            }*/
+            }*//**//*
             if ("0".equals(member.getStatus())) {
                 throw new LockedAccountException(); // 帐号不正常状态
             }
@@ -58,12 +58,12 @@ public class ShiroRealm extends AuthorizingRealm {
             throw new UnknownAccountException();//  用户名不存在
         }
         // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
-        /*return new SimpleAuthenticationInfo(
+        *//**//*return new SimpleAuthenticationInfo(
                 new ShiroUser(member.getId(), member.getMobile(), member.getEmail(), member.getStatus()), // 用户
                 member.getPassword(), // 密码
                 ByteSource.Util.bytes("123"),
                 getName() // realm name
-        );*/
+        );*//**//*
         return new SimpleAuthenticationInfo(
                 member.getMobile(), // 用户
                 member.getPassword(), // 密码
@@ -72,9 +72,9 @@ public class ShiroRealm extends AuthorizingRealm {
     }
 
 
-    /**
+    *//**//**
      * 更新用户授权信息缓存.
-     */
+     *//**//*
     public void clearCachedAuthorizationInfo(Object principal) {
         SimplePrincipalCollection principals = new SimplePrincipalCollection(
                 principal, getName());
@@ -82,9 +82,9 @@ public class ShiroRealm extends AuthorizingRealm {
     }
 
 
-    /**
+    *//**//**
      * 自定义Authentication对象，使得Subject除了携带用户的登录名外还可以携带更多信息.
-     */
+     *//**//*
     public static class ShiroUser implements Serializable {
         private static final long serialVersionUID = -1373760761780840081L;
         private Integer id;
@@ -131,9 +131,9 @@ public class ShiroRealm extends AuthorizingRealm {
             this.id = id;
         }
 
-        /**
+        *//**//**
          * 重载equals,只计算userid+username;
-         */
+         *//**//*
         @Override
         public boolean equals(Object obj) {
             if (this == obj)
@@ -152,6 +152,6 @@ public class ShiroRealm extends AuthorizingRealm {
             return false;
         }
 
-    }
+    }*//*
 
-}
+}*/
