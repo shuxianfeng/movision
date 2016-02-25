@@ -108,26 +108,50 @@
     <if test="personRealName != null" >
       personRealName = #{personRealName},
     </if>
-    <if test="companyCorporationName != null" >
-      companyCorporationName = #{companyCorporationName},
+    <if test="personSex != null" >
+      personSex = #{personSex},
     </if>
-    <if test="companyTelephone != null" >
-      companyTelephone = #{companyTelephone},
+    <if test="personPosition != null" >
+      personPosition = #{personPosition},
     </if>
-    <if test="enterpriseMemberType != null" >
-      enterpriseMemberType = #{enterpriseMemberType},
+    <if test="personProvince != null" >
+      personProvince = #{personProvince},
     </if>
-    <if test="address != null" >
-      address = #{address},
+    <if test="personCity != null" >
+      personCity = #{personCity},
     </if>
-    <if test="enterpriseQualification != null" >
-      enterpriseQualification = #{enterpriseQualification},
+    <if test="personArea != null" >
+      personArea = #{personArea},
     </if>
-    <if test="enterpriseLogo != null" >
-      enterpriseLogo = #{enterpriseLogo},
+    <if test="personAddress != null" >
+      personAddress = #{personAddress},
     </if>
-    <if test="enterpriseDesc != null" >
-      enterpriseDesc = #{enterpriseDesc},
+    <if test="personMobile != null" >
+      personMobile = #{personMobile},
+    </if>
+    <if test="personTel != null" >
+      personTel = #{personTel},
+    </if>
+    <if test="personQQ != null" >
+      personQQ = #{personQQ},
+    </if>
+    <if test="personHeadShot != null" >
+      personHeadShot = #{personHeadShot},
+    </if>
+    <if test="personIDFrontImgUrl != null" >
+      personIDFrontImgUrl = #{personIDFrontImgUrl},
+    </if>
+    <if test="personIDBackImgUrl != null" >
+      personIDBackImgUrl = #{personIDBackImgUrl},
+    </if>
+    <if test="personCertificateName != null" >
+      personCertificateName = #{personCertificateName},
+    </if>
+    <if test="personCertificateOrg != null" >
+      personCertificateOrg = #{personCertificateOrg},
+    </if>
+    <if test="personCertificateUrl != null" >
+      personCertificateUrl = #{personCertificateUrl},
     </if>
   </set>
     where id = #{id}
