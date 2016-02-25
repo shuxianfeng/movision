@@ -1,13 +1,13 @@
-package com.zhuhuibao.mybatis.service;
+package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.mybatis.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zhuhuibao.mybatis.mapper.MemberMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 
 /**
  * 会员中心业务处理
@@ -30,6 +30,7 @@ public class MemberService {
 		log.debug("个人基本信息完善");
 		String memId = member.getId().toString();
 		Member mem = findMemberById(memId);
+
 
 	}
 

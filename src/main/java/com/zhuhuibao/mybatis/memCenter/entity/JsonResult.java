@@ -1,4 +1,4 @@
-package com.zhuhuibao.mybatis.entity;
+package com.zhuhuibao.mybatis.memCenter.entity;
 
 import java.io.Serializable;
 /**

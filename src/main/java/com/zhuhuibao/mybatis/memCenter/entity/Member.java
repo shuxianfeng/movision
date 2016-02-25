@@ -1,4 +1,4 @@
-package com.zhuhuibao.mybatis.entity;
+package com.zhuhuibao.mybatis.memCenter.entity;
 
 public class Member {
     private Long id;

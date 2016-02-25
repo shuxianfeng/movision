@@ -1,6 +1,6 @@
-package com.zhuhuibao.mybatis.mapper;
+package com.zhuhuibao.mybatis.memCenter.mapper;
 
-import com.zhuhuibao.mybatis.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
 
 public interface MemberMapper {
     //根据会员ID找到会员信息
