@@ -1,7 +1,7 @@
 package com.zhuhuibao.business.memCenter.memManage.controller;
 
-import com.zhuhuibao.mybatis.entity.Member;
-import com.zhuhuibao.mybatis.service.MemberService;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

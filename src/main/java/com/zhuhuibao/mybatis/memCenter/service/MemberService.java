@@ -25,13 +25,16 @@ public class MemberService {
 	/**
 	 * 个人基本信息完善
 	 */
-	public void updateMemBasicInfo(Member member)
+	public int updateMemBasicInfo(Member member)
 	{
 		log.debug("个人基本信息完善");
 		String memId = member.getId().toString();
 		Member mem = findMemberById(memId);
-
-
+		int result = 0;
+		if(mem!=null){
+			result = memberMapper.updateMemBasicInfo(mem);
+		}
+		return result;
 	}
 
 	/**
