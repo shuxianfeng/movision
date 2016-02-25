@@ -102,7 +102,7 @@
     where id = #{id}
   </select>
 
-  <update id="updateMemBasicInfo" parameterType="com.zhuhuibao.mybatis.entity.Member">
+  <update id="updateMemBasicInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     update t_m_member
     <set>
       <if test="personRealName != null" >
