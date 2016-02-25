@@ -101,4 +101,35 @@
     from t_m_member
     where id = #{id}
   </select>
+
+  <update id="updateMemBasicInfo" parameterType="com.zhuhuibao.mybatis.entity.Member">
+    update t_m_member
+  <set>
+    <if test="personRealName != null" >
+      personRealName = #{personRealName},
+    </if>
+    <if test="companyCorporationName != null" >
+      companyCorporationName = #{companyCorporationName},
+    </if>
+    <if test="companyTelephone != null" >
+      companyTelephone = #{companyTelephone},
+    </if>
+    <if test="enterpriseMemberType != null" >
+      enterpriseMemberType = #{enterpriseMemberType},
+    </if>
+    <if test="address != null" >
+      address = #{address},
+    </if>
+    <if test="enterpriseQualification != null" >
+      enterpriseQualification = #{enterpriseQualification},
+    </if>
+    <if test="enterpriseLogo != null" >
+      enterpriseLogo = #{enterpriseLogo},
+    </if>
+    <if test="enterpriseDesc != null" >
+      enterpriseDesc = #{enterpriseDesc},
+    </if>
+  </set>
+    where id = #{id}
+  </update>
 </mapper>
