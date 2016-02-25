@@ -48,7 +48,7 @@
                           proxy-target-class="true"/>
 
     <!-- mybatis -->
-    <mybatis:scan base-package="com.zhuhuibao.mybatis.mapper"/>
+    <mybatis:scan base-package="com.zhuhuibao.mybatis"/>
 
     <context:property-placeholder
             ignore-unresolvable="true" location="classpath*:/spring/application.properties"/>

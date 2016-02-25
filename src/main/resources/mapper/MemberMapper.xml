@@ -102,56 +102,32 @@
     where id = #{id}
   </select>
 
-  <update id="updateMemBasicInfo" parameterType="com.zhuhuibao.mybatis.entity.Member">
+  <update id="updateMemBasicInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     update t_m_member
   <set>
     <if test="personRealName != null" >
       personRealName = #{personRealName},
     </if>
-    <if test="personSex != null" >
-      personSex = #{personSex},
+    <if test="companyCorporationName != null" >
+      companyCorporationName = #{companyCorporationName},
     </if>
-    <if test="personPosition != null" >
-      personPosition = #{personPosition},
+    <if test="companyTelephone != null" >
+      companyTelephone = #{companyTelephone},
     </if>
-    <if test="personProvince != null" >
-      personProvince = #{personProvince},
+    <if test="enterpriseMemberType != null" >
+      enterpriseMemberType = #{enterpriseMemberType},
     </if>
-    <if test="personCity != null" >
-      personCity = #{personCity},
+    <if test="address != null" >
+      address = #{address},
     </if>
-    <if test="personArea != null" >
-      personArea = #{personArea},
+    <if test="enterpriseQualification != null" >
+      enterpriseQualification = #{enterpriseQualification},
     </if>
-    <if test="personAddress != null" >
-      personAddress = #{personAddress},
+    <if test="enterpriseLogo != null" >
+      enterpriseLogo = #{enterpriseLogo},
     </if>
-    <if test="personMobile != null" >
-      personMobile = #{personMobile},
-    </if>
-    <if test="personTel != null" >
-      personTel = #{personTel},
-    </if>
-    <if test="personQQ != null" >
-      personQQ = #{personQQ},
-    </if>
-    <if test="personHeadShot != null" >
-      personHeadShot = #{personHeadShot},
-    </if>
-    <if test="personIDFrontImgUrl != null" >
-      personIDFrontImgUrl = #{personIDFrontImgUrl},
-    </if>
-    <if test="personIDBackImgUrl != null" >
-      personIDBackImgUrl = #{personIDBackImgUrl},
-    </if>
-    <if test="personCertificateName != null" >
-      personCertificateName = #{personCertificateName},
-    </if>
-    <if test="personCertificateOrg != null" >
-      personCertificateOrg = #{personCertificateOrg},
-    </if>
-    <if test="personCertificateUrl != null" >
-      personCertificateUrl = #{personCertificateUrl},
+    <if test="enterpriseDesc != null" >
+      enterpriseDesc = #{enterpriseDesc},
     </if>
   </set>
     where id = #{id}
