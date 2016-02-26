@@ -160,7 +160,7 @@ public class RegisterController {
 		log.debug("获得手机验证码  mobile=="+mobile);
 		HttpSession sess = req.getSession(true);
 		// 生成随机字串
-		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
+		String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
 		log.debug("verifyCode == " + verifyCode);
 		//发送验证码到手机
 //		SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
@@ -175,19 +175,25 @@ public class RegisterController {
 	 * @param req
 	 * @param response
 	 * @param model
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 */
 	@RequestMapping(value = "/rest/getSeekPwdMobileCode", method = RequestMethod.GET)
 	public void getSeekPwdMobileCode(HttpServletRequest req, HttpServletResponse response,
-			Model model) {
+			Model model) throws JsonGenerationException, JsonMappingException, IOException {
 		String mobile = req.getParameter("seekmobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
 		HttpSession sess = req.getSession(true);
 		// 生成随机字串
-		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
+		String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
 		log.debug("verifyCode == " + verifyCode);
 		//发送验证码到手机
 //		SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
 		sess.setAttribute("seekPwdMobile", verifyCode);
+		JsonResult jsonResult = new JsonResult();
+		jsonResult.setData(verifyCode);
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 
 	@RequestMapping(value = "/checkCode")
@@ -223,20 +229,20 @@ public class RegisterController {
 		//校验手机验证码是否正确
 		if(member.getMobileCheckCode() != null )
 		{
-			/*String verifyCode = (String) req.getSession().getAttribute("mobile");
+			String verifyCode = (String) req.getSession().getAttribute("mobile");
 			if(verifyCode != null && verifyCode.equals(member.getMobileCheckCode()))
 			{
-				result.setResultCode(200);
+				result.setCode(200);
 			}
 			else
 			{
-				result.setResultCode(400);
-			}*/
+				result.setCode(400);
+			}
 			log.debug("mobile verifyCode == " + member.getMobileCheckCode());
 		}
 		if(member.getEmailCheckCode() != null )
 		{
-			/*String verifyCode = (String) req.getSession().getAttribute("email");
+			String verifyCode = (String) req.getSession().getAttribute("email");
 			if(verifyCode != null && verifyCode.equals(member.getMobileCheckCode()))
 			{
 				result.setData(200);
@@ -245,7 +251,7 @@ public class RegisterController {
 			{
 				result.setData(400);
 				result.setMessage("验证码输入");
-			}*/
+			}
 			log.debug("email verifyCode == " + member.getEmailCheckCode());
 		}
 		int memberId = memberService.registerMember(member);

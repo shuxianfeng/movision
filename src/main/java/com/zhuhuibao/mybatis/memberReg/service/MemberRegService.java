@@ -175,7 +175,7 @@ public class MemberRegService {
     		else
     		{
     			data = member.getEmail();
-    			if(member.getMobileCheckCode().equals(seekPwdCode))
+    			if(member.getCheckCode().equals(seekPwdCode))
     			{
     				member.setEmail(member.getAccount());
     				Member dbmember = memberRegMapper.findMemberByAccount(member);
