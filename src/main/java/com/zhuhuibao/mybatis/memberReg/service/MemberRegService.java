@@ -1,5 +1,7 @@
 package com.zhuhuibao.mybatis.memberReg.service;
 
+import java.util.List;
+
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,14 +70,14 @@ public class MemberRegService {
     }
     
     /**
-     * 根据ID查询会员信息
+     * 根据邮箱查询会员信息
      * @param memberId 会员id
      * @return
      */
-    public Member findMemberById(String memberId)
+    public List<Member> findMemberByMail(String email)
     {
-    	log.debug("find memberinfo by memberId = "+memberId);
-    	return memberRegMapper.findMemberById(memberId);
+    	log.debug("find memberinfo by email = "+email);
+    	return memberRegMapper.findMemberByMail(email);
     }
     
     /**
@@ -181,7 +183,7 @@ public class MemberRegService {
     		    	else
     		    	{
     		    		member.setEmailCheckCode(member.getCheckCode());
-    		    		memberRegMapper.updateEmailCode(dbmember);
+    		    		memberRegMapper.updateEmailCode(member);
     		    	}
     			}
     			else

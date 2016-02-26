@@ -1,5 +1,7 @@
 package com.zhuhuibao.mybatis.memberReg.mapper;
 
+import java.util.*;
+
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 
 public interface MemberRegMapper {
@@ -13,7 +15,7 @@ public interface MemberRegMapper {
 	Member findMemberByAccount(Member member);
 	
 	//根据会员ID找到会员信息
-	Member findMemberById(String memberId);
+	List<Member> findMemberByMail(String email);
 	
 	//更新会员注册状态
 	int updateMemberStatus(Member member);

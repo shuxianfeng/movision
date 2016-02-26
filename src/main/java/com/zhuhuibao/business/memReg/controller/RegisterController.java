@@ -309,21 +309,28 @@ public class RegisterController {
 	public ModelAndView activateEmail(HttpServletRequest req, Model model) throws UnsupportedEncodingException {
 		log.debug("email activate start.....");
 		JsonResult jsonResult = new JsonResult();
-		String action = request.getParameter("action");
-		String vm = request.getParameter("vm");//获取email
-		String decodeVM = new String (EncodeUtil.decodeBase64(vm));
-        try
+		ModelAndView modelAndView = new ModelAndView(); 
+		try
         {
+			String vm = request.getParameter("vm");//获取email
+			String decodeVM = new String (EncodeUtil.decodeBase64(vm));
         	jsonResult = rvService.processActivate(decodeVM);
+        	if(jsonResult.getCode() == 200)
+        	{
+        		
+        	}
+        	else
+        	{
+    	        modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(jsonResult.getData()).getBytes()));  
+    	        RedirectView rv = new RedirectView("http://localhost:1234/forgot.html");
+    	        modelAndView.setView(rv);
+        	}
         }
         catch(Exception e)
         {
         	log.error("email activate member error!",e);
         }
-        ModelAndView modelAndView = new ModelAndView();  
-        modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(jsonResult.getData()).getBytes()));  
-        RedirectView rv = new RedirectView("http://localhost:1234/forgot.html");
-        modelAndView.setView(rv);
+       
         return modelAndView; 
 	}
 	

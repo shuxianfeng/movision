@@ -49,11 +49,11 @@
    	</if>
   </select>
   
-   <select id="findMemberById" resultType="com.zhuhuibao.mybatis.memberReg.entity.Member">
+   <select id="findMemberByMail" resultType="com.zhuhuibao.mybatis.memberReg.entity.Member">
     select
     <include refid="Base_Column_List" />
     from t_m_member
-    where id = #{id}
+    where email = #{email}
    </select>
   
   <update id="updateEmailCode" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">

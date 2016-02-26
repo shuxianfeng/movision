@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.memberReg.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,7 @@ public class RegisterValidateService {
 	public void sendMailActivateCode(Member member){
 
         ///邮件的内容
-        StringBuffer sb=new StringBuffer("点击下面链接激活账号，48小时生效，否则重新注册账号，链接只能使用一次，请尽快激活！</br>");
+        StringBuffer sb=new StringBuffer("点击下面链接激活账号，24小时生效，否则重新注册账号，链接只能使用一次，请尽快激活！</br>");
         sb.append("<a href=\"http://192.168.1.100:8080/zhuhuibao/activateEmail?action=activate&vm=");
         sb.append(new String(EncodeUtil.encodeBase64(member.getId()+","+member.getEmail())));
         sb.append("\">http://192.168.1.100:8080/zhuhuibao/activateEmail?action=activate&vm="); 
@@ -52,49 +53,63 @@ public class RegisterValidateService {
 	public JsonResult processActivate(String decodeVM){  
         //数据访问层，通过email获取用户信息
 		String[] array = decodeVM.split(",");
-		String id = array[0];
+		int id = Integer.parseInt(array[0]);
 		String email = array[1];
-        Member user =memberService.findMemberById(id);
-        JsonResult result = new JsonResult();
-        int code = 200;
+		JsonResult result = new JsonResult();
+	    int code = 200;
         String message = "";
-        String data = id;
-        //验证用户是否存在 
-        if(user!=null) {  
-           //验证用户激活状态  
-           if(user.getStatus()==0) { 
-               ///没激活
-               Date currentTime = new Date();//获取当前时间  
-               //验证链接是否过期 48小时
-               Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(user.getRegisterTime(),"yyyy-MM-dd HH:mm:ss"),5,2);
-               if(currentTime.before(registerDate)) {  
-                   //验证激活码是否正确  
-                   if(email.equals(user.getEmail())) {  
-                       data = id;
-                   } else {  
-                	   //激活码不正确
-                	   message = "激活码不正确";
-                	   code = 400;
-                   }  
-               } else { 
-            	   //激活码已过期
-            	   message = "激活码已过期";
-            	   code = 400;
-               }  
-           } else {
-        	  //邮箱已激活，请登录！
-        	   code = 200;
-        	   message = "邮箱已激活请登录";
-           }  
-       } else {
+        List<Member> memberList =memberService.findMemberByMail(email);
+        if(!memberList.isEmpty())
+        {
+	       for(Member user : memberList)
+	       {
+	           //验证用户激活状态  
+	           if(user.getStatus()==0) { 
+	               ///没激活
+	               Date currentTime = new Date();//获取当前时间  
+	               //验证链接是否过期 24小时
+	               Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(user.getRegisterTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
+	               if(currentTime.before(registerDate)) {  
+	                   //验证激活码是否正确  
+	                   if(id == user.getId()) {  
+	                       message = "激活成功请登录";
+	                       break;
+	                   } else {  
+	                	   //激活码不正确
+	                	   message = "激活码不正确";
+	                	   code = 400;
+	                   }  
+	               } else { 
+	            	   //激活码已过期
+	            	   message = "激活码已过期";
+	            	   code = 400;
+	               }  
+	           } else {
+	        	   if(id == user.getId())
+	        	   {
+	        		   //邮箱已激活，请登录！
+		        	   code = 400;
+		        	   message = "邮箱已激活请登录";
+	        	   }
+	        	   else
+	        	   {
+	        		   //邮箱已激活，请登录！
+		        	   code = 400;
+		        	   message = "邮箱已注册";
+	        	   }
+	           }  
+	       }
+        }
+        else {
     	   //该邮箱未注册（邮箱地址不存在）！
     	   code = 400;
     	   message = "该邮箱未注册";
-       }  
+	   }  
         result.setCode(code);
         result.setMessage(message);
-        result.setData(data);
+        result.setData(email);
         return result;
+       
    }
 	
 	/**
@@ -104,7 +119,7 @@ public class RegisterValidateService {
 	public void sendValidateMail(Member member){
 
         ///邮件的内容
-        StringBuffer sb=new StringBuffer("点击下面链接重置密码，48小时生效，否则重新发送邮件重置密码，链接只能使用一次，请尽快重置！</br>");
+        StringBuffer sb=new StringBuffer("点击下面链接重置密码，24小时生效，否则重新发送邮件重置密码，链接只能使用一次，请尽快重置！</br>");
         sb.append("<a href=\"http://192.168.1.100:8080/zhuhuibao/validateMail?action=validate&vm=");
         sb.append(new String(EncodeUtil.encodeBase64(member.getEmail())));
         sb.append("\">http://192.168.1.100:8080/zhuhuibao/validateMail?action=validate&vm="); 
@@ -132,8 +147,8 @@ public class RegisterValidateService {
            if(user.getStatus()==0) { 
                ///没激活
                Date currentTime = new Date();//获取当前时间  
-               //验证链接是否过期 48小时
-               Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(user.getRegisterTime(),"yyyy-MM-dd HH:mm:ss"),5,2);
+               //验证链接是否过期 24小时
+               Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(user.getRegisterTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
                if(currentTime.before(registerDate)) {  
                    //验证身份是否正确  
                    if(email.equals(user.getEmail())) {  
