@@ -87,6 +87,11 @@ public class MemberRegService {
     {
     	log.debug("find password validate account = "+account);
     	Integer obj = memberRegMapper.isValidatePass(account);
+    	int result = 0;
+    	if(obj != null)
+    	{
+    		result = 0;
+    	}
     	return 1;
     }
     
@@ -99,17 +104,6 @@ public class MemberRegService {
     {
     	int result = memberRegMapper.isExistAccount(member);
     	return result;
-    }
-    
-    /**
-     * 完善会员基本信息
-     * @param member
-     * @return
-     */
-    public int addMemberBaseInfo(Member member)
-    {
-    	log.info("add member base info memeberId = "+member.getId());
-    	return memberRegMapper.addMemberBaseInfo(member);
     }
     
     /**
@@ -183,6 +177,11 @@ public class MemberRegService {
     		    	{
     		    		result.setCode(400);
     		    		result.setMessage("账户不存在");
+    		    	}
+    		    	else
+    		    	{
+    		    		member.setEmailCheckCode(member.getCheckCode());
+    		    		int dbresult = memberRegMapper.updateEmailCode(dbmember);
     		    	}
     			}
     			else

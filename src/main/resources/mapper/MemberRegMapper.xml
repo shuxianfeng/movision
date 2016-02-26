@@ -56,35 +56,14 @@
     where id = #{id}
    </select>
   
-  <update id="addMemberBaseInfo" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
+  <update id="updateEmailCode" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
     update t_m_member 
     <set>
-	    <if test="companyName != null" >
-	    	companyName = #{companyName},
-	    </if>
-	    <if test="companyCorporationName != null" >
-	    	companyCorporationName = #{companyCorporationName},
-	    </if>
-	    <if test="companyTelephone != null" >
-	    	companyTelephone = #{companyTelephone},
-	    </if>
-	    <if test="enterpriseMemberType != null" >
-	    	enterpriseMemberType = #{enterpriseMemberType},
-	    </if>
-	    <if test="address != null" >
-	    	address = #{address},
-	    </if>
-	    <if test="enterpriseQualification != null" >
-	    	enterpriseQualification = #{enterpriseQualification},
-	    </if>
-	    <if test="enterpriseLogo != null" >
-	    	enterpriseLogo = #{enterpriseLogo},
-	    </if>
-	    <if test="enterpriseDesc != null" >
-	    	enterpriseDesc = #{enterpriseDesc},
+	    <if test="emailCode != null" >
+	    	emailCode = #{emailCheckCode}
 	    </if>
     </set>
-    where id = #{id}
+    where email = #{email} and status != 0
   </update>
   
   <update id="updateMemberStatus" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">

@@ -55,13 +55,6 @@ public class RegisterController {
 	@Autowired
     private HttpServletRequest request;
 	
-	 @RequestMapping(value = "/register", method = RequestMethod.GET)
-	public String index(HttpServletRequest req, Model model) {
-		log.debug("进入注册页面");
-		HttpSession sess = req.getSession(true);
-		return "register";
-	}
-
 	 /**
 	  * 邮箱注册时的图形验证码
 	  * @param req
@@ -73,48 +66,6 @@ public class RegisterController {
 			Model model) {
 		log.debug("获得验证码");
 		getImageVerifyCode(req, response,100,40,4,"email");
-	}
-
-	/**
-	 * 生成图片验证码
-	 * @param req
-	 * @param response
-	 * @param imgWidth  图片的宽度
-	 * @param imgheight 图片的高度
-	 * @param verifySize 验证码的长度
-	 * @param key session存储的关键字
-	 */
-	private void getImageVerifyCode(HttpServletRequest req,
-			HttpServletResponse response,int imgWidth,int imgheight,int verifySize,String key) {
-		response.setDateHeader("Expires", 0);
-		response.setHeader("Cache-Control",
-				"no-store, no-cache, must-revalidate");
-		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		response.setHeader("Pragma", "no-cache");
-		response.setContentType("image/jpeg");
-		HttpSession sess = req.getSession(true);
-		// 生成随机字串
-		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
-		log.debug("verifyCode == " + verifyCode);
-		sess.setAttribute(key, verifyCode);
-		ServletOutputStream out = null;
-		try {
-			out = response.getOutputStream();
-			int w = 100;// 定义图片的width
-			int h = 40;// 定义图片的height
-			VerifyCodeUtils.outputImage1(w, h, out, verifyCode);
-			out.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				out.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 	}
 	
 	/**
@@ -334,20 +285,6 @@ public class RegisterController {
 	}
 	
 	/**
-	 * 完善会员基本信息
-	 * @param req
-	 * @param member
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "/addMemberBaseInfo", method = RequestMethod.POST)
-	public String addMemberBaseInfo(HttpServletRequest req, Member member,Model model) {
-		log.debug("完善会员基本信息"+member.getMobile());
-		memberService.addMemberBaseInfo(member);
-		return "index";
-	}
-	
-	/**
 	 * 邮件激活账户
 	 * @param req
 	 * @param model
@@ -423,5 +360,47 @@ public class RegisterController {
 		int result = memberService.isValidatePass(account);
 		jsonResult.setData(result);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+	}
+	
+	/**
+	 * 生成图片验证码
+	 * @param req
+	 * @param response
+	 * @param imgWidth  图片的宽度
+	 * @param imgheight 图片的高度
+	 * @param verifySize 验证码的长度
+	 * @param key session存储的关键字
+	 */
+	private void getImageVerifyCode(HttpServletRequest req,
+			HttpServletResponse response,int imgWidth,int imgheight,int verifySize,String key) {
+		response.setDateHeader("Expires", 0);
+		response.setHeader("Cache-Control",
+				"no-store, no-cache, must-revalidate");
+		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		response.setHeader("Pragma", "no-cache");
+		response.setContentType("image/jpeg");
+		HttpSession sess = req.getSession(true);
+		// 生成随机字串
+		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
+		log.debug("verifyCode == " + verifyCode);
+		sess.setAttribute(key, verifyCode);
+		ServletOutputStream out = null;
+		try {
+			out = response.getOutputStream();
+			int w = 100;// 定义图片的width
+			int h = 40;// 定义图片的height
+			VerifyCodeUtils.outputImage1(w, h, out, verifyCode);
+			out.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				out.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }

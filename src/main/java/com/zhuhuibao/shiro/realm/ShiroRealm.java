@@ -43,7 +43,16 @@ public class ShiroRealm extends AuthorizingRealm {
         String loginname = (String) token.getPrincipal();
         //User user = userService.findByMobile(loginname);
         Member member = memberRegService.findMemberByAccount(loginname);
+        String account = "";
         if(member != null){
+            if(member.getEmail() != null && member.getEmail().indexOf("@") >= 0)
+            {
+            	account = member.getEmail();
+            }
+            else
+            {
+            	account = member.getMobile();
+            }
             /*if (!"1".equals(member.getStatus())) {
                 throw new LockedAccountException(); // 帐号不正常状态
             }*/
@@ -61,7 +70,7 @@ public class ShiroRealm extends AuthorizingRealm {
                 getName() // realm name
         );*/
         return new SimpleAuthenticationInfo(
-                member.getMobile(), // 用户
+        		account, // 用户
                 member.getPassword(), // 密码
                 getName() // realm name
         );

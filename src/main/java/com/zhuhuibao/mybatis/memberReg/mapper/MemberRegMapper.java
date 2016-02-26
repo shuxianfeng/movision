@@ -6,8 +6,8 @@ public interface MemberRegMapper {
 	//注册会员
 	int registerMember(Member member);
 	
-	//完善会员基本信息
-	int addMemberBaseInfo(Member member);
+	//更新邮箱验证码
+	int updateEmailCode(Member member);
 	
 	//根据账号查询
 	Member findMemberByAccount(Member member);
@@ -29,4 +29,5 @@ public interface MemberRegMapper {
 	
 	//账号名是否存在
 	int isExistAccount(Member member);
+	
 }
