@@ -40,30 +40,28 @@ public class InformationController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/memBasicInfo", method = RequestMethod.POST)
-	public void register(HttpServletRequest req, HttpServletResponse response, Member member, Model model) throws IOException {
+	public void memBasicInfo(HttpServletRequest req, HttpServletResponse response, Member member, Model model) throws IOException {
 		JsonResult result = new JsonResult();
-		if(member.getPersonrealname()==null || StringUtils.isEmpty(member.getPersonrealname())){
+		if(member.getPersonRealName()==null || StringUtils.isEmpty(member.getPersonRealName())){
 			result.setCode(400);
 			result.setMessage("姓名为必填项");
-			result.setData(member.getMobile());
-		}else if(member.getPersonsex()==null){
+		}else if(member.getPersonSex()==null){
 			result.setCode(400);
 			result.setMessage("性别为必填项");
-			result.setData(member.getMobile());
-		}else if(member.getPersonposition()==null){
+		}else if(member.getPersonPosition()==null){
 			result.setCode(400);
 			result.setMessage("个人工作类别职位为必填项");
-			result.setData(member.getMobile());
-		}else if(member.getPersonprovince() == null || member.getPersoncity() == null || member.getPersonarea() == null){
+		}else if(member.getPersonProvince() == null || member.getPersonCity() == null || member.getPersonArea() == null){
 			result.setCode(400);
 			result.setMessage("省市区/县为必填项");
-			result.setData(member.getMobile());
+		}else if(member.getPersonAddress() == null){
+			result.setCode(400);
+			result.setMessage("地址为必填项");
 		}else{
 			int isUpdate = memberService.updateMemBasicInfo(member);
 			if (isUpdate == 0) {
 				result.setCode(400);
 				result.setMessage("保存失败");
-				result.setData(member.getMobile());
 			} else {
 				result.setCode(200);
 			}

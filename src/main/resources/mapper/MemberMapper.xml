@@ -5,69 +5,69 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="emailCode" jdbcType="INTEGER" property="emailcode" />
+    <result column="emailCode" jdbcType="INTEGER" property="emailCode" />
     <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="registerTime" jdbcType="VARCHAR" property="registertime" />
+    <result column="registerTime" jdbcType="VARCHAR" property="registerTime" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="identify" jdbcType="INTEGER" property="identify" />
-    <result column="isValidatePass" jdbcType="INTEGER" property="isvalidatepass" />
-    <result column="companyName" jdbcType="VARCHAR" property="companyname" />
-    <result column="employeeType" jdbcType="INTEGER" property="employeetype" />
-    <result column="enterpriseEmployeeParentId" jdbcType="BIGINT" property="enterpriseemployeeparentid" />
-    <result column="enterpriseMemberType" jdbcType="INTEGER" property="enterprisemembertype" />
+    <result column="isValidatePass" jdbcType="INTEGER" property="isValidatePass" />
+    <result column="companyName" jdbcType="VARCHAR" property="companyName" />
+    <result column="employeeType" jdbcType="INTEGER" property="employeeType" />
+    <result column="enterpriseEmployeeParentId" jdbcType="BIGINT" property="enterpriseEmployeeParentId" />
+    <result column="enterpriseMemberType" jdbcType="INTEGER" property="enterpriseMemberType" />
     <result column="province" jdbcType="VARCHAR" property="province" />
     <result column="city" jdbcType="VARCHAR" property="city" />
     <result column="area" jdbcType="VARCHAR" property="area" />
     <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="enterpriseLogo" jdbcType="VARCHAR" property="enterpriselogo" />
-    <result column="enterpriseDesc" jdbcType="VARCHAR" property="enterprisedesc" />
-    <result column="enterpriseHeadShot" jdbcType="VARCHAR" property="enterpriseheadshot" />
-    <result column="saleProductDesc" jdbcType="VARCHAR" property="saleproductdesc" />
-    <result column="enterpriseQualification" jdbcType="INTEGER" property="enterprisequalification" />
-    <result column="enterpriseQLevel" jdbcType="INTEGER" property="enterpriseqlevel" />
+    <result column="enterpriseLogo" jdbcType="VARCHAR" property="enterpriseLogo" />
+    <result column="enterpriseDesc" jdbcType="VARCHAR" property="enterpriseDesc" />
+    <result column="enterpriseHeadShot" jdbcType="VARCHAR" property="enterpriseHeadShot" />
+    <result column="saleProductDesc" jdbcType="VARCHAR" property="saleProductDesc" />
+    <result column="enterpriseQualification" jdbcType="INTEGER" property="enterpriseQualification" />
+    <result column="enterpriseQLevel" jdbcType="INTEGER" property="enterpriseQLevel" />
     <result column="fcateid" jdbcType="INTEGER" property="fcateid" />
     <result column="scateid" jdbcType="INTEGER" property="scateid" />
-    <result column="companyCorporationName" jdbcType="VARCHAR" property="companycorporationname" />
-    <result column="cpyCommericalRegNum" jdbcType="VARCHAR" property="cpycommericalregnum" />
-    <result column="companyCreaterTime" jdbcType="VARCHAR" property="companycreatertime" />
-    <result column="registerCapital" jdbcType="VARCHAR" property="registercapital" />
-    <result column="registerAddress" jdbcType="VARCHAR" property="registeraddress" />
-    <result column="companyBusinessScope" jdbcType="VARCHAR" property="companybusinessscope" />
-    <result column="companyBusinessLicenseImg" jdbcType="VARCHAR" property="companybusinesslicenseimg" />
-    <result column="supplierCertificateType" jdbcType="INTEGER" property="suppliercertificatetype" />
-    <result column="supplierCertificateName" jdbcType="VARCHAR" property="suppliercertificatename" />
-    <result column="supplierCertificateOrganization" jdbcType="VARCHAR" property="suppliercertificateorganization" />
-    <result column="supplierCertificateUrl" jdbcType="VARCHAR" property="suppliercertificateurl" />
-    <result column="engineerQualityType" jdbcType="VARCHAR" property="engineerqualitytype" />
-    <result column="engineerQualityName" jdbcType="VARCHAR" property="engineerqualityname" />
-    <result column="engineerQualityOrganization" jdbcType="VARCHAR" property="engineerqualityorganization" />
-    <result column="engineerQualityUrl" jdbcType="VARCHAR" property="engineerqualityurl" />
-    <result column="enterpriseTel" jdbcType="INTEGER" property="enterprisetel" />
-    <result column="enterpriseFox" jdbcType="INTEGER" property="enterprisefox" />
-    <result column="enterpriseWebSite" jdbcType="VARCHAR" property="enterprisewebsite" />
-    <result column="enterpriseLinkman" jdbcType="VARCHAR" property="enterpriselinkman" />
-    <result column="enterpriseLMSex" jdbcType="INTEGER" property="enterpriselmsex" />
-    <result column="enterpriseLMDep" jdbcType="VARCHAR" property="enterpriselmdep" />
-    <result column="enterpriseLMTel" jdbcType="INTEGER" property="enterpriselmtel" />
-    <result column="enterpriseLMMobile" jdbcType="INTEGER" property="enterpriselmmobile" />
-    <result column="enterpriseQQ" jdbcType="INTEGER" property="enterpriseqq" />
-    <result column="personRealName" jdbcType="VARCHAR" property="personrealname" />
-    <result column="personID" jdbcType="INTEGER" property="personid" />
-    <result column="personSex" jdbcType="INTEGER" property="personsex" />
-    <result column="personPosition" jdbcType="INTEGER" property="personposition" />
-    <result column="personProvince" jdbcType="VARCHAR" property="personprovince" />
-    <result column="personCity" jdbcType="VARCHAR" property="personcity" />
-    <result column="personArea" jdbcType="VARCHAR" property="personarea" />
-    <result column="personAddress" jdbcType="VARCHAR" property="personaddress" />
-    <result column="personMobile" jdbcType="INTEGER" property="personmobile" />
-    <result column="personTel" jdbcType="INTEGER" property="persontel" />
-    <result column="personQQ" jdbcType="INTEGER" property="personqq" />
-    <result column="personHeadShot" jdbcType="VARCHAR" property="personheadshot" />
-    <result column="personIDFrontImgUrl" jdbcType="VARCHAR" property="personidfrontimgurl" />
-    <result column="personIDBackImgUrl" jdbcType="VARCHAR" property="personidbackimgurl" />
-    <result column="personCertificateName" jdbcType="VARCHAR" property="personcertificatename" />
-    <result column="personCertificateOrg" jdbcType="VARCHAR" property="personcertificateorg" />
-    <result column="personCertificateUrl" jdbcType="VARCHAR" property="personcertificateurl" />
+    <result column="companyCorporationName" jdbcType="VARCHAR" property="companyCorporationName" />
+    <result column="cpyCommericalRegNum" jdbcType="VARCHAR" property="cpyCommericalRegNum" />
+    <result column="companyCreaterTime" jdbcType="VARCHAR" property="companyCreaterTime" />
+    <result column="registerCapital" jdbcType="VARCHAR" property="registerCapital" />
+    <result column="registerAddress" jdbcType="VARCHAR" property="registerAddress" />
+    <result column="companyBusinessScope" jdbcType="VARCHAR" property="companyBusinessScope" />
+    <result column="companyBusinessLicenseImg" jdbcType="VARCHAR" property="companyBusinessLicenseImg" />
+    <result column="supplierCertificateType" jdbcType="INTEGER" property="supplierCertificateType" />
+    <result column="supplierCertificateName" jdbcType="VARCHAR" property="supplierCertificateName" />
+    <result column="supplierCertificateOrganization" jdbcType="VARCHAR" property="supplierCertificateOrganization" />
+    <result column="supplierCertificateUrl" jdbcType="VARCHAR" property="supplierCertificateUrl" />
+    <result column="engineerQualityType" jdbcType="VARCHAR" property="engineerQualityType" />
+    <result column="engineerQualityName" jdbcType="VARCHAR" property="engineerQualityName" />
+    <result column="engineerQualityOrganization" jdbcType="VARCHAR" property="engineerQualityOrganization" />
+    <result column="engineerQualityUrl" jdbcType="VARCHAR" property="engineerQualityUrl" />
+    <result column="enterpriseTel" jdbcType="INTEGER" property="enterpriseTel" />
+    <result column="enterpriseFox" jdbcType="INTEGER" property="enterpriseFox" />
+    <result column="enterpriseWebSite" jdbcType="VARCHAR" property="enterpriseWebSite" />
+    <result column="enterpriseLinkman" jdbcType="VARCHAR" property="enterpriseLinkman" />
+    <result column="enterpriseLMSex" jdbcType="INTEGER" property="enterpriseLMSex" />
+    <result column="enterpriseLMDep" jdbcType="VARCHAR" property="enterpriseLMDep" />
+    <result column="enterpriseLMTel" jdbcType="INTEGER" property="enterpriseLMTel" />
+    <result column="enterpriseLMMobile" jdbcType="INTEGER" property="enterpriseLMMobile" />
+    <result column="enterpriseQQ" jdbcType="INTEGER" property="enterpriseQQ" />
+    <result column="personRealName" jdbcType="VARCHAR" property="personRealName" />
+    <result column="personID" jdbcType="INTEGER" property="personID" />
+    <result column="personSex" jdbcType="INTEGER" property="personSex" />
+    <result column="personPosition" jdbcType="INTEGER" property="personPosition" />
+    <result column="personProvince" jdbcType="VARCHAR" property="personProvince" />
+    <result column="personCity" jdbcType="VARCHAR" property="personCity" />
+    <result column="personArea" jdbcType="VARCHAR" property="personArea" />
+    <result column="personAddress" jdbcType="VARCHAR" property="personAddress" />
+    <result column="personMobile" jdbcType="INTEGER" property="personMobile" />
+    <result column="personTel" jdbcType="INTEGER" property="personTel" />
+    <result column="personQQ" jdbcType="INTEGER" property="personQQ" />
+    <result column="personHeadShot" jdbcType="VARCHAR" property="personHeadShot" />
+    <result column="personIDFrontImgUrl" jdbcType="VARCHAR" property="personIDFrontImgUrl" />
+    <result column="personIDBackImgUrl" jdbcType="VARCHAR" property="personIDBackImgUrl" />
+    <result column="personCertificateName" jdbcType="VARCHAR" property="personCertificateName" />
+    <result column="personCertificateOrg" jdbcType="VARCHAR" property="personCertificateOrg" />
+    <result column="personCertificateUrl" jdbcType="VARCHAR" property="personCertificateUrl" />
   </resultMap>
   <sql id="Base_Column_List">
     id, mobile, email, emailCode, password, registerTime, status, identify, isValidatePass, 
@@ -105,6 +105,9 @@
   <update id="updateMemBasicInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     update t_m_member
     <set>
+      <if test="mobile != null" >
+        mobile = #{mobile},
+      </if>
       <if test="personRealName != null" >
         personRealName = #{personRealName},
       </if>

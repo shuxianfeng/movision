@@ -26,4 +26,7 @@ public interface MemberRegMapper {
 	
 	//找回密码是否验证通过
 	Integer isValidatePass(String account);
+	
+	//账号名是否存在
+	int isExistAccount(Member member);
 }

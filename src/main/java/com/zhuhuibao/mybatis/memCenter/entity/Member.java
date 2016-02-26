@@ -7,25 +7,25 @@ public class Member {
 
     private String email;
 
-    private Integer emailcode;
+    private Integer emailCode;
 
     private String password;
 
-    private String registertime;
+    private String registerTime;
 
     private Integer status;
 
     private Integer identify;
 
-    private Integer isvalidatepass;
+    private Integer isValidatePass;
 
-    private String companyname;
+    private String companyName;
 
-    private Integer employeetype;
+    private Integer employeeType;
 
-    private Long enterpriseemployeeparentid;
+    private Long enterpriseEmployeeParentId;
 
-    private Integer enterprisemembertype;
+    private Integer enterpriseMemberType;
 
     private String province;
 
@@ -35,103 +35,103 @@ public class Member {
 
     private String address;
 
-    private String enterpriselogo;
+    private String enterpriseLogo;
 
-    private String enterprisedesc;
+    private String enterpriseDesc;
 
-    private String enterpriseheadshot;
+    private String enterpriseHeadShot;
 
-    private String saleproductdesc;
+    private String saleProductDesc;
 
-    private Integer enterprisequalification;
+    private Integer enterpriseQualification;
 
-    private Integer enterpriseqlevel;
+    private Integer enterpriseQLevel;
 
     private Integer fcateid;
 
     private Integer scateid;
 
-    private String companycorporationname;
+    private String companyCorporationName;
 
-    private String cpycommericalregnum;
+    private String cpyCommericalRegNum;
 
-    private String companycreatertime;
+    private String companyCreaterTime;
 
-    private String registercapital;
+    private String registerCapital;
 
-    private String registeraddress;
+    private String registerAddress;
 
-    private String companybusinessscope;
+    private String companyBusinessScope;
 
-    private String companybusinesslicenseimg;
+    private String companyBusinessLicenseImg;
 
-    private Integer suppliercertificatetype;
+    private Integer supplierCertificateType;
 
-    private String suppliercertificatename;
+    private String supplierCertificateName;
 
-    private String suppliercertificateorganization;
+    private String supplierCertificateOrganization;
 
-    private String suppliercertificateurl;
+    private String supplierCertificateUrl;
 
-    private String engineerqualitytype;
+    private String engineerQualityType;
 
-    private String engineerqualityname;
+    private String engineerQualityName;
 
-    private String engineerqualityorganization;
+    private String engineerQualityOrganization;
 
-    private String engineerqualityurl;
+    private String engineerQualityUrl;
 
-    private Integer enterprisetel;
+    private Integer enterpriseTel;
 
-    private Integer enterprisefox;
+    private Integer enterpriseFox;
 
-    private String enterprisewebsite;
+    private String enterpriseWebSite;
 
-    private String enterpriselinkman;
+    private String enterpriseLinkman;
 
-    private Integer enterpriselmsex;
+    private Integer enterpriseLMSex;
 
-    private String enterpriselmdep;
+    private String enterpriseLMDep;
 
-    private Integer enterpriselmtel;
+    private Integer enterpriseLMTel;
 
-    private Integer enterpriselmmobile;
+    private Integer enterpriseLMMobile;
 
-    private Integer enterpriseqq;
+    private Integer enterpriseQQ;
 
-    private String personrealname;
+    private String personRealName;
 
-    private Integer personid;
+    private Integer personID;
 
-    private Integer personsex;
+    private Integer personSex;
 
-    private Integer personposition;
+    private Integer personPosition;
 
-    private String personprovince;
+    private String personProvince;
 
-    private String personcity;
+    private String personCity;
 
-    private String personarea;
+    private String personArea;
 
-    private String personaddress;
+    private String personAddress;
 
-    private Integer personmobile;
+    private Integer personMobile;
 
-    private Integer persontel;
+    private Integer personTel;
 
-    private Integer personqq;
+    private Integer personQQ;
 
-    private String personheadshot;
+    private String personHeadShot;
 
-    private String personidfrontimgurl;
+    private String personIDFrontImgUrl;
 
-    private String personidbackimgurl;
+    private String personIDBackImgUrl;
 
-    private String personcertificatename;
+    private String personCertificateName;
 
-    private String personcertificateorg;
+    private String personCertificateOrg;
 
-    private String personcertificateurl;
+    private String personCertificateUrl;
 
     public Long getId() {
         return id;
@@ -157,12 +157,12 @@ public class Member {
         this.email = email == null ? null : email.trim();
     }
 
-    public Integer getEmailcode() {
-        return emailcode;
+    public Integer getEmailCode() {
+        return emailCode;
     }
 
-    public void setEmailcode(Integer emailcode) {
-        this.emailcode = emailcode;
+    public void setEmailCode(Integer emailCode) {
+        this.emailCode = emailCode;
     }
 
     public String getPassword() {
@@ -173,12 +173,12 @@ public class Member {
         this.password = password == null ? null : password.trim();
     }
 
-    public String getRegistertime() {
-        return registertime;
+    public String getRegisterTime() {
+        return registerTime;
     }
 
-    public void setRegistertime(String registertime) {
-        this.registertime = registertime == null ? null : registertime.trim();
+    public void setRegisterTime(String registerTime) {
+        this.registerTime = registerTime == null ? null : registerTime.trim();
     }
 
     public Integer getStatus() {
@@ -197,44 +197,44 @@ public class Member {
         this.identify = identify;
     }
 
-    public Integer getIsvalidatepass() {
-        return isvalidatepass;
+    public Integer getIsValidatePass() {
+        return isValidatePass;
     }
 
-    public void setIsvalidatepass(Integer isvalidatepass) {
-        this.isvalidatepass = isvalidatepass;
+    public void setIsValidatePass(Integer isValidatePass) {
+        this.isValidatePass = isValidatePass;
     }
 
-    public String getCompanyname() {
-        return companyname;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setCompanyname(String companyname) {
-        this.companyname = companyname == null ? null : companyname.trim();
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName == null ? null : companyName.trim();
     }
 
-    public Integer getEmployeetype() {
-        return employeetype;
+    public Integer getEmployeeType() {
+        return employeeType;
     }
 
-    public void setEmployeetype(Integer employeetype) {
-        this.employeetype = employeetype;
+    public void setEmployeeType(Integer employeeType) {
+        this.employeeType = employeeType;
     }
 
-    public Long getEnterpriseemployeeparentid() {
-        return enterpriseemployeeparentid;
+    public Long getEnterpriseEmployeeParentId() {
+        return enterpriseEmployeeParentId;
     }
 
-    public void setEnterpriseemployeeparentid(Long enterpriseemployeeparentid) {
-        this.enterpriseemployeeparentid = enterpriseemployeeparentid;
+    public void setEnterpriseEmployeeParentId(Long enterpriseEmployeeParentId) {
+        this.enterpriseEmployeeParentId = enterpriseEmployeeParentId;
     }
 
-    public Integer getEnterprisemembertype() {
-        return enterprisemembertype;
+    public Integer getEnterpriseMemberType() {
+        return enterpriseMemberType;
     }
 
-    public void setEnterprisemembertype(Integer enterprisemembertype) {
-        this.enterprisemembertype = enterprisemembertype;
+    public void setEnterpriseMemberType(Integer enterpriseMemberType) {
+        this.enterpriseMemberType = enterpriseMemberType;
     }
 
     public String getProvince() {
@@ -269,52 +269,52 @@ public class Member {
         this.address = address == null ? null : address.trim();
     }
 
-    public String getEnterpriselogo() {
-        return enterpriselogo;
+    public String getEnterpriseLogo() {
+        return enterpriseLogo;
     }
 
-    public void setEnterpriselogo(String enterpriselogo) {
-        this.enterpriselogo = enterpriselogo == null ? null : enterpriselogo.trim();
+    public void setEnterpriseLogo(String enterpriseLogo) {
+        this.enterpriseLogo = enterpriseLogo == null ? null : enterpriseLogo.trim();
     }
 
-    public String getEnterprisedesc() {
-        return enterprisedesc;
+    public String getEnterpriseDesc() {
+        return enterpriseDesc;
     }
 
-    public void setEnterprisedesc(String enterprisedesc) {
-        this.enterprisedesc = enterprisedesc == null ? null : enterprisedesc.trim();
+    public void setEnterpriseDesc(String enterpriseDesc) {
+        this.enterpriseDesc = enterpriseDesc == null ? null : enterpriseDesc.trim();
     }
 
-    public String getEnterpriseheadshot() {
-        return enterpriseheadshot;
+    public String getEnterpriseHeadShot() {
+        return enterpriseHeadShot;
     }
 
-    public void setEnterpriseheadshot(String enterpriseheadshot) {
-        this.enterpriseheadshot = enterpriseheadshot == null ? null : enterpriseheadshot.trim();
+    public void setEnterpriseHeadShot(String enterpriseHeadShot) {
+        this.enterpriseHeadShot = enterpriseHeadShot == null ? null : enterpriseHeadShot.trim();
     }
 
-    public String getSaleproductdesc() {
-        return saleproductdesc;
+    public String getSaleProductDesc() {
+        return saleProductDesc;
     }
 
-    public void setSaleproductdesc(String saleproductdesc) {
-        this.saleproductdesc = saleproductdesc == null ? null : saleproductdesc.trim();
+    public void setSaleProductDesc(String saleProductDesc) {
+        this.saleProductDesc = saleProductDesc == null ? null : saleProductDesc.trim();
     }
 
-    public Integer getEnterprisequalification() {
-        return enterprisequalification;
+    public Integer getEnterpriseQualification() {
+        return enterpriseQualification;
     }
 
-    public void setEnterprisequalification(Integer enterprisequalification) {
-        this.enterprisequalification = enterprisequalification;
+    public void setEnterpriseQualification(Integer enterpriseQualification) {
+        this.enterpriseQualification = enterpriseQualification;
     }
 
-    public Integer getEnterpriseqlevel() {
-        return enterpriseqlevel;
+    public Integer getEnterpriseQLevel() {
+        return enterpriseQLevel;
     }
 
-    public void setEnterpriseqlevel(Integer enterpriseqlevel) {
-        this.enterpriseqlevel = enterpriseqlevel;
+    public void setEnterpriseQLevel(Integer enterpriseQLevel) {
+        this.enterpriseQLevel = enterpriseQLevel;
     }
 
     public Integer getFcateid() {
@@ -333,331 +333,331 @@ public class Member {
         this.scateid = scateid;
     }
 
-    public String getCompanycorporationname() {
-        return companycorporationname;
+    public String getCompanyCorporationName() {
+        return companyCorporationName;
     }
 
-    public void setCompanycorporationname(String companycorporationname) {
-        this.companycorporationname = companycorporationname == null ? null : companycorporationname.trim();
+    public void setCompanyCorporationName(String companyCorporationName) {
+        this.companyCorporationName = companyCorporationName == null ? null : companyCorporationName.trim();
     }
 
-    public String getCpycommericalregnum() {
-        return cpycommericalregnum;
+    public String getCpyCommericalRegNum() {
+        return cpyCommericalRegNum;
     }
 
-    public void setCpycommericalregnum(String cpycommericalregnum) {
-        this.cpycommericalregnum = cpycommericalregnum == null ? null : cpycommericalregnum.trim();
+    public void setCpyCommericalRegNum(String cpyCommericalRegNum) {
+        this.cpyCommericalRegNum = cpyCommericalRegNum == null ? null : cpyCommericalRegNum.trim();
     }
 
-    public String getCompanycreatertime() {
-        return companycreatertime;
+    public String getCompanyCreaterTime() {
+        return companyCreaterTime;
     }
 
-    public void setCompanycreatertime(String companycreatertime) {
-        this.companycreatertime = companycreatertime == null ? null : companycreatertime.trim();
+    public void setCompanyCreaterTime(String companyCreaterTime) {
+        this.companyCreaterTime = companyCreaterTime == null ? null : companyCreaterTime.trim();
     }
 
-    public String getRegistercapital() {
-        return registercapital;
+    public String getRegisterCapital() {
+        return registerCapital;
     }
 
-    public void setRegistercapital(String registercapital) {
-        this.registercapital = registercapital == null ? null : registercapital.trim();
+    public void setRegisterCapital(String registerCapital) {
+        this.registerCapital = registerCapital == null ? null : registerCapital.trim();
     }
 
-    public String getRegisteraddress() {
-        return registeraddress;
+    public String getRegisterAddress() {
+        return registerAddress;
     }
 
-    public void setRegisteraddress(String registeraddress) {
-        this.registeraddress = registeraddress == null ? null : registeraddress.trim();
+    public void setRegisterAddress(String registerAddress) {
+        this.registerAddress = registerAddress == null ? null : registerAddress.trim();
     }
 
-    public String getCompanybusinessscope() {
-        return companybusinessscope;
+    public String getCompanyBusinessScope() {
+        return companyBusinessScope;
     }
 
-    public void setCompanybusinessscope(String companybusinessscope) {
-        this.companybusinessscope = companybusinessscope == null ? null : companybusinessscope.trim();
+    public void setCompanyBusinessScope(String companyBusinessScope) {
+        this.companyBusinessScope = companyBusinessScope == null ? null : companyBusinessScope.trim();
     }
 
-    public String getCompanybusinesslicenseimg() {
-        return companybusinesslicenseimg;
+    public String getCompanyBusinessLicenseImg() {
+        return companyBusinessLicenseImg;
     }
 
-    public void setCompanybusinesslicenseimg(String companybusinesslicenseimg) {
-        this.companybusinesslicenseimg = companybusinesslicenseimg == null ? null : companybusinesslicenseimg.trim();
+    public void setCompanyBusinessLicenseImg(String companyBusinessLicenseImg) {
+        this.companyBusinessLicenseImg = companyBusinessLicenseImg == null ? null : companyBusinessLicenseImg.trim();
     }
 
-    public Integer getSuppliercertificatetype() {
-        return suppliercertificatetype;
+    public Integer getSupplierCertificateType() {
+        return supplierCertificateType;
     }
 
-    public void setSuppliercertificatetype(Integer suppliercertificatetype) {
-        this.suppliercertificatetype = suppliercertificatetype;
+    public void setSupplierCertificateType(Integer supplierCertificateType) {
+        this.supplierCertificateType = supplierCertificateType;
     }
 
-    public String getSuppliercertificatename() {
-        return suppliercertificatename;
+    public String getSupplierCertificateName() {
+        return supplierCertificateName;
     }
 
-    public void setSuppliercertificatename(String suppliercertificatename) {
-        this.suppliercertificatename = suppliercertificatename == null ? null : suppliercertificatename.trim();
+    public void setSupplierCertificateName(String supplierCertificateName) {
+        this.supplierCertificateName = supplierCertificateName == null ? null : supplierCertificateName.trim();
     }
 
-    public String getSuppliercertificateorganization() {
-        return suppliercertificateorganization;
+    public String getSupplierCertificateOrganization() {
+        return supplierCertificateOrganization;
     }
 
-    public void setSuppliercertificateorganization(String suppliercertificateorganization) {
-        this.suppliercertificateorganization = suppliercertificateorganization == null ? null : suppliercertificateorganization.trim();
+    public void setSupplierCertificateOrganization(String supplierCertificateOrganization) {
+        this.supplierCertificateOrganization = supplierCertificateOrganization == null ? null : supplierCertificateOrganization.trim();
     }
 
-    public String getSuppliercertificateurl() {
-        return suppliercertificateurl;
+    public String getSupplierCertificateUrl() {
+        return supplierCertificateUrl;
     }
 
-    public void setSuppliercertificateurl(String suppliercertificateurl) {
-        this.suppliercertificateurl = suppliercertificateurl == null ? null : suppliercertificateurl.trim();
+    public void setSupplierCertificateUrl(String supplierCertificateUrl) {
+        this.supplierCertificateUrl = supplierCertificateUrl == null ? null : supplierCertificateUrl.trim();
     }
 
-    public String getEngineerqualitytype() {
-        return engineerqualitytype;
+    public String getEngineerQualityType() {
+        return engineerQualityType;
     }
 
-    public void setEngineerqualitytype(String engineerqualitytype) {
-        this.engineerqualitytype = engineerqualitytype == null ? null : engineerqualitytype.trim();
+    public void setEngineerQualityType(String engineerQualityType) {
+        this.engineerQualityType = engineerQualityType == null ? null : engineerQualityType.trim();
     }
 
-    public String getEngineerqualityname() {
-        return engineerqualityname;
+    public String getEngineerQualityName() {
+        return engineerQualityName;
     }
 
-    public void setEngineerqualityname(String engineerqualityname) {
-        this.engineerqualityname = engineerqualityname == null ? null : engineerqualityname.trim();
+    public void setEngineerQualityName(String engineerQualityName) {
+        this.engineerQualityName = engineerQualityName == null ? null : engineerQualityName.trim();
     }
 
-    public String getEngineerqualityorganization() {
-        return engineerqualityorganization;
+    public String getEngineerQualityOrganization() {
+        return engineerQualityOrganization;
     }
 
-    public void setEngineerqualityorganization(String engineerqualityorganization) {
-        this.engineerqualityorganization = engineerqualityorganization == null ? null : engineerqualityorganization.trim();
+    public void setEngineerQualityOrganization(String engineerQualityOrganization) {
+        this.engineerQualityOrganization = engineerQualityOrganization == null ? null : engineerQualityOrganization.trim();
     }
 
-    public String getEngineerqualityurl() {
-        return engineerqualityurl;
+    public String getEngineerQualityUrl() {
+        return engineerQualityUrl;
     }
 
-    public void setEngineerqualityurl(String engineerqualityurl) {
-        this.engineerqualityurl = engineerqualityurl == null ? null : engineerqualityurl.trim();
+    public void setEngineerQualityUrl(String engineerQualityUrl) {
+        this.engineerQualityUrl = engineerQualityUrl == null ? null : engineerQualityUrl.trim();
     }
 
-    public Integer getEnterprisetel() {
-        return enterprisetel;
+    public Integer getEnterpriseTel() {
+        return enterpriseTel;
     }
 
-    public void setEnterprisetel(Integer enterprisetel) {
-        this.enterprisetel = enterprisetel;
+    public void setEnterpriseTel(Integer enterpriseTel) {
+        this.enterpriseTel = enterpriseTel;
     }
 
-    public Integer getEnterprisefox() {
-        return enterprisefox;
+    public Integer getEnterpriseFox() {
+        return enterpriseFox;
     }
 
-    public void setEnterprisefox(Integer enterprisefox) {
-        this.enterprisefox = enterprisefox;
+    public void setEnterpriseFox(Integer enterpriseFox) {
+        this.enterpriseFox = enterpriseFox;
     }
 
-    public String getEnterprisewebsite() {
-        return enterprisewebsite;
+    public String getEnterpriseWebSite() {
+        return enterpriseWebSite;
     }
 
-    public void setEnterprisewebsite(String enterprisewebsite) {
-        this.enterprisewebsite = enterprisewebsite == null ? null : enterprisewebsite.trim();
+    public void setEnterpriseWebSite(String enterpriseWebSite) {
+        this.enterpriseWebSite = enterpriseWebSite == null ? null : enterpriseWebSite.trim();
     }
 
-    public String getEnterpriselinkman() {
-        return enterpriselinkman;
+    public String getEnterpriseLinkman() {
+        return enterpriseLinkman;
     }
 
-    public void setEnterpriselinkman(String enterpriselinkman) {
-        this.enterpriselinkman = enterpriselinkman == null ? null : enterpriselinkman.trim();
+    public void setEnterpriseLinkman(String enterpriseLinkman) {
+        this.enterpriseLinkman = enterpriseLinkman == null ? null : enterpriseLinkman.trim();
     }
 
-    public Integer getEnterpriselmsex() {
-        return enterpriselmsex;
+    public Integer getEnterpriseLMSex() {
+        return enterpriseLMSex;
     }
 
-    public void setEnterpriselmsex(Integer enterpriselmsex) {
-        this.enterpriselmsex = enterpriselmsex;
+    public void setEnterpriseLMSex(Integer enterpriseLMSex) {
+        this.enterpriseLMSex = enterpriseLMSex;
     }
 
-    public String getEnterpriselmdep() {
-        return enterpriselmdep;
+    public String getEnterpriseLMDep() {
+        return enterpriseLMDep;
     }
 
-    public void setEnterpriselmdep(String enterpriselmdep) {
-        this.enterpriselmdep = enterpriselmdep == null ? null : enterpriselmdep.trim();
+    public void setEnterpriseLMDep(String enterpriseLMDep) {
+        this.enterpriseLMDep = enterpriseLMDep == null ? null : enterpriseLMDep.trim();
     }
 
-    public Integer getEnterpriselmtel() {
-        return enterpriselmtel;
+    public Integer getEnterpriseLMTel() {
+        return enterpriseLMTel;
     }
 
-    public void setEnterpriselmtel(Integer enterpriselmtel) {
-        this.enterpriselmtel = enterpriselmtel;
+    public void setEnterpriseLMTel(Integer enterpriseLMTel) {
+        this.enterpriseLMTel = enterpriseLMTel;
     }
 
-    public Integer getEnterpriselmmobile() {
-        return enterpriselmmobile;
+    public Integer getEnterpriseLMMobile() {
+        return enterpriseLMMobile;
     }
 
-    public void setEnterpriselmmobile(Integer enterpriselmmobile) {
-        this.enterpriselmmobile = enterpriselmmobile;
+    public void setEnterpriseLMMobile(Integer enterpriseLMMobile) {
+        this.enterpriseLMMobile = enterpriseLMMobile;
     }
 
-    public Integer getEnterpriseqq() {
-        return enterpriseqq;
+    public Integer getEnterpriseQQ() {
+        return enterpriseQQ;
     }
 
-    public void setEnterpriseqq(Integer enterpriseqq) {
-        this.enterpriseqq = enterpriseqq;
+    public void setEnterpriseQQ(Integer enterpriseQQ) {
+        this.enterpriseQQ = enterpriseQQ;
     }
 
-    public String getPersonrealname() {
-        return personrealname;
+    public String getPersonRealName() {
+        return personRealName;
     }
 
-    public void setPersonrealname(String personrealname) {
-        this.personrealname = personrealname == null ? null : personrealname.trim();
+    public void setPersonRealName(String personRealName) {
+        this.personRealName = personRealName == null ? null : personRealName.trim();
     }
 
-    public Integer getPersonid() {
-        return personid;
+    public Integer getPersonID() {
+        return personID;
     }
 
-    public void setPersonid(Integer personid) {
-        this.personid = personid;
+    public void setPersonID(Integer personID) {
+        this.personID = personID;
     }
 
-    public Integer getPersonsex() {
-        return personsex;
+    public Integer getPersonSex() {
+        return personSex;
     }
 
-    public void setPersonsex(Integer personsex) {
-        this.personsex = personsex;
+    public void setPersonSex(Integer personSex) {
+        this.personSex = personSex;
     }
 
-    public Integer getPersonposition() {
-        return personposition;
+    public Integer getPersonPosition() {
+        return personPosition;
     }
 
-    public void setPersonposition(Integer personposition) {
-        this.personposition = personposition;
+    public void setPersonPosition(Integer personPosition) {
+        this.personPosition = personPosition;
     }
 
-    public String getPersonprovince() {
-        return personprovince;
+    public String getPersonProvince() {
+        return personProvince;
     }
 
-    public void setPersonprovince(String personprovince) {
-        this.personprovince = personprovince == null ? null : personprovince.trim();
+    public void setPersonProvince(String personProvince) {
+        this.personProvince = personProvince == null ? null : personProvince.trim();
     }
 
-    public String getPersoncity() {
-        return personcity;
+    public String getPersonCity() {
+        return personCity;
     }
 
-    public void setPersoncity(String personcity) {
-        this.personcity = personcity == null ? null : personcity.trim();
+    public void setPersonCity(String personCity) {
+        this.personCity = personCity == null ? null : personCity.trim();
     }
 
-    public String getPersonarea() {
-        return personarea;
+    public String getPersonArea() {
+        return personArea;
     }
 
-    public void setPersonarea(String personarea) {
-        this.personarea = personarea == null ? null : personarea.trim();
+    public void setPersonArea(String personArea) {
+        this.personArea = personArea == null ? null : personArea.trim();
     }
 
-    public String getPersonaddress() {
-        return personaddress;
+    public String getPersonAddress() {
+        return personAddress;
     }
 
-    public void setPersonaddress(String personaddress) {
-        this.personaddress = personaddress == null ? null : personaddress.trim();
+    public void setPersonAddress(String personAddress) {
+        this.personAddress = personAddress == null ? null : personAddress.trim();
     }
 
-    public Integer getPersonmobile() {
-        return personmobile;
+    public Integer getPersonMobile() {
+        return personMobile;
     }
 
-    public void setPersonmobile(Integer personmobile) {
-        this.personmobile = personmobile;
+    public void setPersonMobile(Integer personMobile) {
+        this.personMobile = personMobile;
     }
 
-    public Integer getPersontel() {
-        return persontel;
+    public Integer getPersonTel() {
+        return personTel;
     }
 
-    public void setPersontel(Integer persontel) {
-        this.persontel = persontel;
+    public void setPersonTel(Integer personTel) {
+        this.personTel = personTel;
     }
 
-    public Integer getPersonqq() {
-        return personqq;
+    public Integer getPersonQQ() {
+        return personQQ;
     }
 
-    public void setPersonqq(Integer personqq) {
-        this.personqq = personqq;
+    public void setPersonQQ(Integer personQQ) {
+        this.personQQ = personQQ;
     }
 
-    public String getPersonheadshot() {
-        return personheadshot;
+    public String getPersonHeadShot() {
+        return personHeadShot;
     }
 
-    public void setPersonheadshot(String personheadshot) {
-        this.personheadshot = personheadshot == null ? null : personheadshot.trim();
+    public void setPersonHeadShot(String personHeadShot) {
+        this.personHeadShot = personHeadShot == null ? null : personHeadShot.trim();
     }
 
-    public String getPersonidfrontimgurl() {
-        return personidfrontimgurl;
+    public String getPersonIDFrontImgUrl() {
+        return personIDFrontImgUrl;
     }
 
-    public void setPersonidfrontimgurl(String personidfrontimgurl) {
-        this.personidfrontimgurl = personidfrontimgurl == null ? null : personidfrontimgurl.trim();
+    public void setPersonIDFrontImgUrl(String personIDFrontImgUrl) {
+        this.personIDFrontImgUrl = personIDFrontImgUrl == null ? null : personIDFrontImgUrl.trim();
     }
 
-    public String getPersonidbackimgurl() {
-        return personidbackimgurl;
+    public String getPersonIDBackImgUrl() {
+        return personIDBackImgUrl;
     }
 
-    public void setPersonidbackimgurl(String personidbackimgurl) {
-        this.personidbackimgurl = personidbackimgurl == null ? null : personidbackimgurl.trim();
+    public void setPersonIDBackImgUrl(String personIDBackImgUrl) {
+        this.personIDBackImgUrl = personIDBackImgUrl == null ? null : personIDBackImgUrl.trim();
     }
 
-    public String getPersoncertificatename() {
-        return personcertificatename;
+    public String getPersonCertificateName() {
+        return personCertificateName;
     }
 
-    public void setPersoncertificatename(String personcertificatename) {
-        this.personcertificatename = personcertificatename == null ? null : personcertificatename.trim();
+    public void setPersonCertificateName(String personCertificateName) {
+        this.personCertificateName = personCertificateName == null ? null : personCertificateName.trim();
     }
 
-    public String getPersoncertificateorg() {
-        return personcertificateorg;
+    public String getPersonCertificateOrg() {
+        return personCertificateOrg;
     }
 
-    public void setPersoncertificateorg(String personcertificateorg) {
-        this.personcertificateorg = personcertificateorg == null ? null : personcertificateorg.trim();
+    public void setPersonCertificateOrg(String personCertificateOrg) {
+        this.personCertificateOrg = personCertificateOrg == null ? null : personCertificateOrg.trim();
     }
 
-    public String getPersoncertificateurl() {
-        return personcertificateurl;
+    public String getPersonCertificateUrl() {
+        return personCertificateUrl;
     }
 
-    public void setPersoncertificateurl(String personcertificateurl) {
-        this.personcertificateurl = personcertificateurl == null ? null : personcertificateurl.trim();
+    public void setPersonCertificateUrl(String personCertificateUrl) {
+        this.personCertificateUrl = personCertificateUrl == null ? null : personCertificateUrl.trim();
     }
 }

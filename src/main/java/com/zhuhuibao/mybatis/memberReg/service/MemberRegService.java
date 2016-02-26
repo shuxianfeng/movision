@@ -91,6 +91,17 @@ public class MemberRegService {
     }
     
     /**
+     * 注册的账户名是否存在 
+     * @param memberId 会员id
+     * @return result 0:不存在，1:存在
+     */
+    public int isExistAccount(Member member)
+    {
+    	int result = memberRegMapper.isExistAccount(member);
+    	return result;
+    }
+    
+    /**
      * 完善会员基本信息
      * @param member
      * @return
@@ -164,7 +175,7 @@ public class MemberRegService {
     		else
     		{
     			data = member.getEmail();
-    			if(member.getMobileCheckCode().equals(seekPwdCode))
+    			if(member.getCheckCode().equals(seekPwdCode))
     			{
     				member.setEmail(member.getAccount());
     				Member dbmember = memberRegMapper.findMemberByAccount(member);
