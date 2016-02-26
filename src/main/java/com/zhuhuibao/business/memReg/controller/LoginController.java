@@ -1,11 +1,18 @@
 package com.zhuhuibao.business.memReg.controller;
 
+import java.io.IOException;
+
+import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
+import com.zhuhuibao.security.EncodeUtil;
+import com.zhuhuibao.utils.JsonUtils;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +20,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -36,39 +45,39 @@ public class LoginController {
         return "login";
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(HttpServletRequest req,Member member, Model model) {
+    @RequestMapping(value = "/rest/login", method = RequestMethod.POST)
+    @ResponseBody
+    public void login(HttpServletRequest req,HttpServletResponse response,Member member, Model model) throws JsonGenerationException, JsonMappingException, IOException {
         log.info("login post 登录校验");
-        HttpSession session = req.getSession(true);
-       /* String username = req.getParameter("username");
-        String password = req.getParameter("password");
-        String rememberMe = req.getParameter("rememberMe");*/
-        String username = member.getMobile();
-        String password = member.getPassword();
+        JsonResult jsonResult = new JsonResult();
+        String username = member.getAccount();
+        String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
+        member.setPassword(pwd);
         String rememberMe = req.getParameter("rememberMe");
-        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+        UsernamePasswordToken token = new UsernamePasswordToken(username, pwd);
         if(rememberMe!=null && rememberMe.equals("1"))
             token.setRememberMe(true);
 
         Subject currentUser = SecurityUtils.getSubject();
-
-        String result;
         try {
             currentUser.login(token);
-//            result = "index";
-            result = "memberInfo";
+            jsonResult.setData(username);
         } catch (UnknownAccountException e) {
-            e.printStackTrace();
-            model.addAttribute("error", "用户名不存在");
-            result = "login";
+//            e.printStackTrace();
+            jsonResult.setCode(400);
+            jsonResult.setData("用户名不存在");
         }catch (LockedAccountException e){
-            e.printStackTrace();
+            /*e.printStackTrace();
             model.addAttribute("error", "帐户状态异常");
-            result = "login";
+            result = "login";*/
+		    jsonResult.setCode(400);
+		    jsonResult.setData("帐户状态异常");
         } catch (AuthenticationException e){
-            e.printStackTrace();
+            /*e.printStackTrace();
             model.addAttribute("error", "用户名或密码错误");
-            result = "login";
+            result = "login";*/
+        	jsonResult.setCode(400);
+		    jsonResult.setData("用户名或密码错误");
         }
 
         if(currentUser.isAuthenticated()){
@@ -76,6 +85,17 @@ public class LoginController {
         }else{
             token.clear();
         }
-        return result;
+        response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+    
+    @RequestMapping(value = "/rest/logout", method = RequestMethod.GET)
+    @ResponseBody
+    public void logout(HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException
+    {
+        SecurityUtils.getSubject().logout();
+        JsonResult jsonResult = new JsonResult();
+        response.setContentType("application/json;charset=utf-8");
+      	response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
 }

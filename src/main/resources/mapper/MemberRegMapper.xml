@@ -39,6 +39,16 @@
    	</if>
   </select>
   
+  <select id="isExistAccount" parameterType="memberReg" resultType="int">
+    select count(1) from t_m_member WHERE status != 0
+   	<if test="mobile != null and mobile != '' " >
+   		AND mobile = #{mobile}
+   	</if>
+   	<if test="email != null and email != '' " >
+   		AND email = #{email}
+   	</if>
+  </select>
+  
    <select id="findMemberById" resultType="com.zhuhuibao.mybatis.memberReg.entity.Member">
     select
     <include refid="Base_Column_List" />
