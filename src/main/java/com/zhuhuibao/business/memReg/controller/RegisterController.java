@@ -63,7 +63,7 @@ public class RegisterController {
 	}
 
 	 /**
-	  * 邮件的图形验证码
+	  * 邮箱注册时的图形验证码
 	  * @param req
 	  * @param response
 	  * @param model
@@ -72,6 +72,20 @@ public class RegisterController {
 	public void getCode(HttpServletRequest req, HttpServletResponse response,
 			Model model) {
 		log.debug("获得验证码");
+		getImageVerifyCode(req, response,100,40,4,"email");
+	}
+
+	/**
+	 * 生成图片验证码
+	 * @param req
+	 * @param response
+	 * @param imgWidth  图片的宽度
+	 * @param imgheight 图片的高度
+	 * @param verifySize 验证码的长度
+	 * @param key session存储的关键字
+	 */
+	private void getImageVerifyCode(HttpServletRequest req,
+			HttpServletResponse response,int imgWidth,int imgheight,int verifySize,String key) {
 		response.setDateHeader("Expires", 0);
 		response.setHeader("Cache-Control",
 				"no-store, no-cache, must-revalidate");
@@ -82,12 +96,12 @@ public class RegisterController {
 		// 生成随机字串
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
 		log.debug("verifyCode == " + verifyCode);
-		sess.setAttribute("email", verifyCode);
+		sess.setAttribute(key, verifyCode);
 		ServletOutputStream out = null;
 		try {
 			out = response.getOutputStream();
-			int w = 200;// 定义图片的width
-			int h = 80;// 定义图片的height
+			int w = 100;// 定义图片的width
+			int h = 40;// 定义图片的height
 			VerifyCodeUtils.outputImage1(w, h, out, verifyCode);
 			out.flush();
 		} catch (IOException e) {
@@ -113,35 +127,7 @@ public class RegisterController {
 	public void getSeekPwdImgCode(HttpServletRequest req, HttpServletResponse response,
 			Model model) {
 		log.debug("找回密码的图形验证码");
-		response.setDateHeader("Expires", 0);
-		response.setHeader("Cache-Control",
-				"no-store, no-cache, must-revalidate");
-		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		response.setHeader("Pragma", "no-cache");
-		response.setContentType("image/jpeg");
-		HttpSession sess = req.getSession(true);
-		// 生成随机字串
-		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
-		log.debug("verifyCode == " + verifyCode);
-		sess.setAttribute("seekPwdCode", verifyCode);
-		ServletOutputStream out = null;
-		try {
-			out = response.getOutputStream();
-			int w = 200;// 定义图片的width
-			int h = 80;// 定义图片的height
-			VerifyCodeUtils.outputImage1(w, h, out, verifyCode);
-			out.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				out.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		getImageVerifyCode(req, response,100,40,4,"seekPwdCode");
 	}
 	
 	/**
