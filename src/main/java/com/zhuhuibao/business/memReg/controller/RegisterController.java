@@ -169,11 +169,21 @@ public class RegisterController {
 			String verifyCode = (String) req.getSession().getAttribute("mobile");
 			if(verifyCode != null && verifyCode.equals(member.getMobileCheckCode()))
 			{
-				result.setCode(200);
+				int isExist = memberService.isExistAccount(member);
+				if(isExist == 0)
+				{
+					memberService.registerMember(member);
+				}
+				else
+				{
+					result.setCode(400);
+					result.setMessage("账户名已经存在");
+				}
 			}
 			else
 			{
 				result.setCode(400);
+				result.setMessage("验证码不正确");
 			}
 			log.debug("mobile verifyCode == " + member.getMobileCheckCode());
 		}
@@ -182,23 +192,30 @@ public class RegisterController {
 			String verifyCode = (String) req.getSession().getAttribute("email");
 			if(verifyCode != null && verifyCode.equals(member.getMobileCheckCode()))
 			{
-				result.setData(200);
+				int isExist = memberService.isExistAccount(member);
+				if(isExist == 0)
+				{
+					member.setEmailCode(verifyCode);
+					memberService.registerMember(member);
+					if(member.getEmail()!=null && member.getEmail().indexOf("@")>0)
+					{
+						//发送激活链接给此邮件
+						rvService.sendMailActivateCode(member);
+					}
+				}
+				else
+				{
+					result.setCode(400);
+					result.setMessage("账户名已经存在");
+				}
 			}
 			else
 			{
-				result.setData(400);
-				result.setMessage("验证码输入");
+				result.setCode(400);
+				result.setMessage("验证码不正确");
 			}
 			log.debug("email verifyCode == " + member.getEmailCheckCode());
 		}
-		int memberId = memberService.registerMember(member);
-		//会员账户号
-		if(member.getEmail()!=null && member.getEmail().indexOf("@")>0)
-		{
-			//发送激活链接给此邮件
-			rvService.sendMailActivateCode(member);
-		}
-		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 	
@@ -217,7 +234,6 @@ public class RegisterController {
 		JsonResult result = new JsonResult();
 		String seekCode = (String) req.getSession().getAttribute("seekPwdCode");
 		result = memberService.writeAccount(member, seekCode);
-		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	} 
 	
@@ -242,7 +258,6 @@ public class RegisterController {
 			result.setMessage("手机验证码错误");
 			result.setData(member.getMobile());
 		}
-		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 	
@@ -261,7 +276,6 @@ public class RegisterController {
 		log.debug("找回密码  email =="+member.getEmail());
 		JsonResult result = new JsonResult();
 		rvService.sendValidateMail(member);
-		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 	

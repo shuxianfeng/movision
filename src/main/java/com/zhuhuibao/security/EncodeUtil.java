@@ -28,7 +28,8 @@ public class EncodeUtil {
     }
     
     public static void main(String[] args) throws UnsupportedEncodingException {
-    	System.out.println(encodeBase64ToString("123456".getBytes()));
+    	//123456 MTIzNDU2  123 MTIz
+    	System.out.println(encodeBase64ToString("123".getBytes()));
 		System.out.println(decodeBase64ToString("5Li65Lq65rCR5pyN5Yqh"));
 	}
 }

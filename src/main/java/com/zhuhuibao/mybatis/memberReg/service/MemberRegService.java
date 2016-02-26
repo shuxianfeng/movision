@@ -88,11 +88,11 @@ public class MemberRegService {
     	log.debug("find password validate account = "+account);
     	Integer obj = memberRegMapper.isValidatePass(account);
     	int result = 0;
-    	if(obj != null)
+    	if(obj != null && obj == 1)
     	{
-    		result = 0;
+    		result = 1;
     	}
-    	return 1;
+    	return result;
     }
     
     /**
@@ -181,7 +181,7 @@ public class MemberRegService {
     		    	else
     		    	{
     		    		member.setEmailCheckCode(member.getCheckCode());
-    		    		int dbresult = memberRegMapper.updateEmailCode(dbmember);
+    		    		memberRegMapper.updateEmailCode(dbmember);
     		    	}
     			}
     			else
