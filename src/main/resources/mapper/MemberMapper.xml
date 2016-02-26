@@ -5,7 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="emailCode" jdbcType="INTEGER" property="emailCode" />
+    <result column="emailCheckCode" jdbcType="INTEGER" property="emailCheckCode" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="registerTime" jdbcType="VARCHAR" property="registerTime" />
     <result column="status" jdbcType="INTEGER" property="status" />
@@ -70,7 +70,7 @@
     <result column="personCertificateUrl" jdbcType="VARCHAR" property="personCertificateUrl" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, mobile, email, emailCode, password, registerTime, status, identify, isValidatePass, 
+    id, mobile, email, emailCheckCode, password, registerTime, status, identify, isValidatePass,
     companyName, employeeType, enterpriseEmployeeParentId, enterpriseMemberType, province, 
     city, area, address, enterpriseLogo, enterpriseDesc, enterpriseHeadShot, saleProductDesc, 
     enterpriseQualification, enterpriseQLevel, fcateid, scateid, companyCorporationName, 
@@ -102,9 +102,111 @@
     where id = #{id}
   </select>
 
-  <update id="updateMemBasicInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+  <update id="updateMemInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     update t_m_member
     <set>
+      <if test="companyName != null" >
+        companyName = #{companyName},
+      </if>
+      <if test="enterpriseMemberType != null" >
+        enterpriseMemberType = #{enterpriseMemberType},
+      </if>
+      <if test="province != null" >
+        province = #{province},
+      </if>
+      <if test="city != null" >
+        city = #{city},
+      </if>
+      <if test="area != null" >
+        area = #{area},
+      </if>
+      <if test="address != null" >
+        address = #{address},
+      </if>
+      <if test="enterpriseLogo != null" >
+        enterpriseLogo = #{enterpriseLogo},
+      </if>
+      <if test="enterpriseHeadShot != null" >
+        enterpriseHeadShot = #{enterpriseHeadShot},
+      </if>
+      <if test="saleProductDesc != null" >
+        saleProductDesc = #{saleProductDesc},
+      </if>
+      <if test="enterpriseDesc != null" >
+        enterpriseDesc = #{enterpriseDesc},
+      </if>
+      <if test="companyCorporationName != null" >
+        companyCorporationName = #{companyCorporationName},
+      </if>
+      <if test="cpyCommericalRegNum != null" >
+        cpyCommericalRegNum = #{cpyCommericalRegNum},
+      </if>
+      <if test="companyCreaterTime != null" >
+        companyCreaterTime = #{companyCreaterTime},
+      </if>
+      <if test="registerCapital != null" >
+        registerCapital = #{registerCapital},
+      </if>
+      <if test="registerAddress != null" >
+        registerAddress = #{registerAddress},
+      </if>
+      <if test="companyBusinessScope != null" >
+        companyBusinessScope = #{companyBusinessScope},
+      </if>
+      <if test="companyBusinessLicenseImg != null" >
+        companyBusinessLicenseImg = #{companyBusinessLicenseImg},
+      </if>
+      <if test="supplierCertificateType != null" >
+        supplierCertificateType = #{supplierCertificateType},
+      </if>
+      <if test="supplierCertificateName != null" >
+        supplierCertificateName = #{supplierCertificateName},
+      </if>
+      <if test="supplierCertificateOrganization != null" >
+        supplierCertificateOrganization = #{supplierCertificateOrganization},
+      </if>
+      <if test="supplierCertificateUrl != null" >
+        supplierCertificateUrl = #{supplierCertificateUrl},
+      </if>
+      <if test="engineerQualityType != null" >
+        engineerQualityType = #{engineerQualityType},
+      </if>
+      <if test="engineerQualityName != null" >
+        engineerQualityName = #{engineerQualityName},
+      </if>
+      <if test="engineerQualityOrganization != null" >
+        engineerQualityOrganization = #{engineerQualityOrganization},
+      </if>
+      <if test="engineerQualityUrl != null" >
+        engineerQualityUrl = #{engineerQualityUrl},
+      </if>
+      <if test="enterpriseTel != null" >
+        enterpriseTel = #{enterpriseTel},
+      </if>
+      <if test="enterpriseFox != null" >
+        enterpriseFox = #{enterpriseFox},
+      </if>
+      <if test="enterpriseWebSite != null" >
+        enterpriseWebSite = #{enterpriseWebSite},
+      </if>
+      <if test="enterpriseLinkman != null" >
+        enterpriseLinkman = #{enterpriseLinkman},
+      </if>
+      <if test="enterpriseLMSex != null" >
+        enterpriseLMSex = #{enterpriseLMSex},
+      </if>
+      <if test="enterpriseLMDep != null" >
+        enterpriseLMDep = #{enterpriseLMDep},
+      </if>
+      <if test="enterpriseLMTel != null" >
+        enterpriseLMTel = #{enterpriseLMTel},
+      </if>
+      <if test="enterpriseLMMobile != null" >
+        enterpriseLMMobile = #{enterpriseLMMobile},
+      </if>
+      <if test="enterpriseQQ != null" >
+        enterpriseQQ = #{enterpriseQQ},
+      </if>
       <if test="mobile != null" >
         mobile = #{mobile},
       </if>

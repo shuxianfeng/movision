@@ -11,7 +11,7 @@ import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 
 /**
  * 会员中心业务处理
- * @author cuixiaoxiao
+ * @author cxx
  *
  */
 @Service
@@ -23,13 +23,13 @@ public class MemberService {
 	private MemberMapper memberMapper;
 
 	/**
-	 * 个人基本信息完善
+	 * 会员信息完善
 	 */
-	public int updateMemBasicInfo(Member member)
+	public int updateMemInfo(Member member)
 	{
-		log.debug("个人基本信息完善");
+		log.debug("会员信息完善");
 		int result = 0;
-		result = memberMapper.updateMemBasicInfo(member);
+		result = memberMapper.updateMemInfo(member);
 		return result;
 	}
 
