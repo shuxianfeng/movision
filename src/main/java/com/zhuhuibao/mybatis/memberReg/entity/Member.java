@@ -44,10 +44,6 @@ public class Member implements Serializable{
 	 */
 	private String emailCheckCode;
 	
-	/**
-	 * 
-	 */
-	private String emailCode;
 	
 	/**
 	 * 找回密码的图片验证码
@@ -265,14 +261,6 @@ public class Member implements Serializable{
 
 	public void setCheckCode(String checkCode) {
 		this.checkCode = checkCode;
-	}
-
-	public String getEmailCode() {
-		return emailCode;
-	}
-
-	public void setEmailCode(String emailCode) {
-		this.emailCode = emailCode;
 	}
 	
 }

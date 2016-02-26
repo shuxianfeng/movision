@@ -20,8 +20,8 @@
   </resultMap>
   
   <insert id="registerMember" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member" useGeneratedKeys="true" keyProperty="id">
-  	insert into t_m_member(mobile,email,password,registerTime,status,identify,emailCode) values
-  	(#{mobile},#{email},#{password},date_format(now(),'%Y-%m-%d %h:%i:%s'),#{status},#{identify},#{emailCode})
+  	insert into t_m_member(mobile,email,password,registerTime,status,identify,emailCheckCode) values
+  	(#{mobile},#{email},#{password},date_format(now(),'%Y-%m-%d %h:%i:%s'),#{status},#{identify},#{emailCheckCode})
   </insert>
   <sql id="Base_Column_List" >
     id, mobile, email,password, registerTime, status,identify 
@@ -59,8 +59,8 @@
   <update id="updateEmailCode" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
     update t_m_member 
     <set>
-	    <if test="emailCode != null" >
-	    	emailCode = #{emailCheckCode}
+	    <if test="emailCheckCode != null" >
+	    	emailCheckCode = #{emailCheckCode}
 	    </if>
     </set>
     where email = #{email} and status != 0

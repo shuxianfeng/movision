@@ -190,12 +190,12 @@ public class RegisterController {
 		if(member.getEmailCheckCode() != null )
 		{
 			String verifyCode = (String) req.getSession().getAttribute("email");
-			if(verifyCode != null && verifyCode.equals(member.getMobileCheckCode()))
+			if(verifyCode != null && verifyCode.equals(member.getEmailCheckCode()))
 			{
 				int isExist = memberService.isExistAccount(member);
 				if(isExist == 0)
 				{
-					member.setEmailCode(verifyCode);
+					member.setEmailCheckCode(verifyCode);
 					memberService.registerMember(member);
 					if(member.getEmail()!=null && member.getEmail().indexOf("@")>0)
 					{
