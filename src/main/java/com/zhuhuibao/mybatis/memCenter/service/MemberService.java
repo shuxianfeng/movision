@@ -28,24 +28,11 @@ public class MemberService {
 	public int updateMemBasicInfo(Member member)
 	{
 		log.debug("个人基本信息完善");
-		String memId = member.getId().toString();
-		Member mem = findMemberById(memId);
 		int result = 0;
-		if(mem!=null){
-			result = memberMapper.updateMemBasicInfo(mem);
-		}
+		result = memberMapper.updateMemBasicInfo(member);
 		return result;
 	}
 
-	/**
-	 * 根据ID查询会员信息
-	 * @param memberId 会员id
-	 * @return
-	 */
-	public Member findMemberById(String memberId)
-	{
-		log.debug("find memberinfo by memberId = "+memberId);
-		return memberMapper.findMemById(memberId);
-	}
+
 
 }
