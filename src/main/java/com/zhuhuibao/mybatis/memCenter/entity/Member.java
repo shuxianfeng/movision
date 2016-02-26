@@ -7,7 +7,7 @@ public class Member {
 
     private String email;
 
-    private Integer emailCode;
+    private Integer emailCheckCode;
 
     private String password;
 
@@ -157,12 +157,12 @@ public class Member {
         this.email = email == null ? null : email.trim();
     }
 
-    public Integer getEmailCode() {
-        return emailCode;
+    public Integer getEmailCheckCode() {
+        return emailCheckCode;
     }
 
-    public void setEmailCode(Integer emailCode) {
-        this.emailCode = emailCode;
+    public void setEmailCheckCode(Integer emailCheckCode) {
+        this.emailCheckCode = emailCheckCode;
     }
 
     public String getPassword() {
