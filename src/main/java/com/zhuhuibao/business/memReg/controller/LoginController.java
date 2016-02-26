@@ -65,19 +65,19 @@ public class LoginController {
         } catch (UnknownAccountException e) {
 //            e.printStackTrace();
             jsonResult.setCode(400);
-            jsonResult.setData("用户名不存在");
+            jsonResult.setMessage("用户名不存在");
         }catch (LockedAccountException e){
             /*e.printStackTrace();
             model.addAttribute("error", "帐户状态异常");
             result = "login";*/
 		    jsonResult.setCode(400);
-		    jsonResult.setData("帐户状态异常");
+		    jsonResult.setMessage("帐户状态异常");
         } catch (AuthenticationException e){
             /*e.printStackTrace();
             model.addAttribute("error", "用户名或密码错误");
             result = "login";*/
         	jsonResult.setCode(400);
-		    jsonResult.setData("用户名或密码错误");
+		    jsonResult.setMessage("用户名或密码错误");
         }
 
         if(currentUser.isAuthenticated()){
