@@ -152,7 +152,7 @@ public class MemberRegService {
     		if(member.getAccount().indexOf("@") == -1)
     		{
 	    		data = member.getMobile();
-				if(member.getCheckCode().equals(seekPwdCode))
+				if(member.getCheckCode().equalsIgnoreCase(seekPwdCode))
 				{
 					member.setMobile(member.getAccount());
 					Member dbmember = memberRegMapper.findMemberByAccount(member);
@@ -171,7 +171,7 @@ public class MemberRegService {
     		else
     		{
     			data = member.getEmail();
-    			if(member.getCheckCode().equals(seekPwdCode))
+    			if(member.getCheckCode().equalsIgnoreCase(seekPwdCode))
     			{
     				member.setEmail(member.getAccount());
     				Member dbmember = memberRegMapper.findMemberByAccount(member);

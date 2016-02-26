@@ -65,7 +65,36 @@ public class RegisterController {
 	public void getCode(HttpServletRequest req, HttpServletResponse response,
 			Model model) {
 		log.debug("获得验证码");
-		getImageVerifyCode(req, response,100,40,4,"email");
+//		getImageVerifyCode(req, response,100,40,4,"email");
+		response.setDateHeader("Expires", 0);
+		response.setHeader("Cache-Control",
+				"no-store, no-cache, must-revalidate");
+		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		response.setHeader("Pragma", "no-cache");
+		response.setContentType("image/jpeg");
+		HttpSession sess = req.getSession(true);
+		// 生成随机字串
+		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
+		log.debug("verifyCode == " + verifyCode);
+		sess.setAttribute("email", verifyCode);
+		ServletOutputStream out = null;
+		try {
+			out = response.getOutputStream();
+			int w = 100;// 定义图片的width
+			int h = 40;// 定义图片的height
+			VerifyCodeUtils.outputImage1(w, h, out, verifyCode);
+			out.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				out.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
@@ -78,7 +107,36 @@ public class RegisterController {
 	public void getSeekPwdImgCode(HttpServletRequest req, HttpServletResponse response,
 			Model model) {
 		log.debug("找回密码的图形验证码");
-		getImageVerifyCode(req, response,100,40,4,"seekPwdCode");
+//		getImageVerifyCode(req, response,100,40,4,"seekPwdCode");
+		response.setDateHeader("Expires", 0);
+		response.setHeader("Cache-Control",
+				"no-store, no-cache, must-revalidate");
+		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		response.setHeader("Pragma", "no-cache");
+		response.setContentType("image/jpeg");
+		HttpSession sess = req.getSession(true);
+		// 生成随机字串
+		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
+		log.debug("verifyCode == " + verifyCode);
+		sess.setAttribute("seekPwdCode", verifyCode);
+		ServletOutputStream out = null;
+		try {
+			out = response.getOutputStream();
+			int w = 100;// 定义图片的width
+			int h = 40;// 定义图片的height
+			VerifyCodeUtils.outputImage1(w, h, out, verifyCode);
+			out.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				out.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
@@ -167,7 +225,7 @@ public class RegisterController {
 		if(member.getMobileCheckCode() != null )
 		{
 			String verifyCode = (String) req.getSession().getAttribute("mobile");
-			if(verifyCode != null && verifyCode.equals(member.getMobileCheckCode()))
+			if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getMobileCheckCode()))
 			{
 				int isExist = memberService.isExistAccount(member);
 				if(isExist == 0)
@@ -190,7 +248,7 @@ public class RegisterController {
 		if(member.getEmailCheckCode() != null )
 		{
 			String verifyCode = (String) req.getSession().getAttribute("email");
-			if(verifyCode != null && verifyCode.equals(member.getEmailCheckCode()))
+			if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getEmailCheckCode()))
 			{
 				int isExist = memberService.isExistAccount(member);
 				if(isExist == 0)
@@ -233,6 +291,7 @@ public class RegisterController {
 		log.debug("seek pwd write account");
 		JsonResult result = new JsonResult();
 		String seekCode = (String) req.getSession().getAttribute("seekPwdCode");
+		log.info("writeAccount seekCode === "+seekCode);
 		result = memberService.writeAccount(member, seekCode);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	} 
@@ -315,16 +374,19 @@ public class RegisterController {
 			String vm = request.getParameter("vm");//获取email
 			String decodeVM = new String (EncodeUtil.decodeBase64(vm));
         	jsonResult = rvService.processActivate(decodeVM);
+        	 modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(jsonResult.getData()).getBytes())); 
         	if(jsonResult.getCode() == 200)
         	{
-        		
+        		//跳转到会员中心页面
+        		RedirectView rv = new RedirectView("http://localhost:1234/forgot.html");
+        		modelAndView.setView(rv);
         	}
         	else
         	{
-    	        modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(jsonResult.getData()).getBytes()));  
     	        RedirectView rv = new RedirectView("http://localhost:1234/forgot.html");
     	        modelAndView.setView(rv);
         	}
+        	
         }
         catch(Exception e)
         {
