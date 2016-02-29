@@ -108,6 +108,12 @@ public class MemberRegService {
     	return result;
     }
     
+    public int updateMemberStatus(Member member)
+    {
+    	int result = memberRegMapper.updateMemberStatus(member);
+    	return result;
+    }
+    
     /**
      * 找回密码，重置密码
      * @param member 会员信息

@@ -62,42 +62,37 @@ public class RegisterValidateService {
         if(!memberList.isEmpty())
         {
 	       for(Member user : memberList)
-	       {
-	           //验证用户激活状态  
-	           if(user.getStatus()==0) { 
-	               ///没激活
-	               Date currentTime = new Date();//获取当前时间  
-	               //验证链接是否过期 24小时
-	               Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(user.getRegisterTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
-	               if(currentTime.before(registerDate)) {  
-	                   //验证激活码是否正确  
-	                   if(id == user.getId()) {  
+	       { 
+	    	   if(user.getId() == id)
+	    	   {
+	    		 //验证用户激活状态  
+		           if(user.getStatus()==0) { 
+		               ///没激活
+		               Date currentTime = new Date();//获取当前时间  
+		               //验证链接是否过期 24小时
+		               Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(user.getRegisterTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
+		               if(currentTime.before(registerDate)) {  
+	                	   user.setStatus(1);
+	                	   memberService.updateMemberStatus(user);
 	                       message = "激活成功请登录";
 	                       break;
-	                   } else {  
-	                	   //激活码不正确
-	                	   message = "激活码不正确";
-	                	   code = 400;
-	                   }  
-	               } else { 
-	            	   //激活码已过期
-	            	   message = "激活码已过期";
-	            	   code = 400;
-	               }  
-	           } else {
-	        	   if(id == user.getId())
-	        	   {
+		               } else { 
+		            	   //激活码已过期
+		            	   message = "激活码已过期";
+		            	   code = 400;
+		               }  
+		           } else {
 	        		   //邮箱已激活，请登录！
 		        	   code = 400;
 		        	   message = "邮箱已激活请登录";
-	        	   }
-	        	   else
-	        	   {
-	        		   //邮箱已激活，请登录！
-		        	   code = 400;
-		        	   message = "邮箱已注册";
-	        	   }
-	           }  
+		           }
+	    	   }
+	    	   else
+	    	   {
+	    		   //邮箱已被注册
+	        	   code = 400;
+	        	   message = "邮箱已被注册";
+	    	   }
 	       }
         }
         else {
@@ -142,30 +137,16 @@ public class RegisterValidateService {
         int code = 200;
         String message = "";
         //验证用户是否存在 
-        if(user!=null) {  
-           //验证用户激活状态  
-           if(user.getStatus()==0) { 
-               ///没激活
-               Date currentTime = new Date();//获取当前时间  
-               //验证链接是否过期 24小时
-               Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(user.getRegisterTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
-               if(currentTime.before(registerDate)) {  
-                   //验证身份是否正确  
-                   if(email.equals(user.getEmail())) {  
-                   } else {  
-                	   //验证不正确
-                	   message = "验证身份不正确";
-                	   code = 400;
-                   }  
-               } else { 
-            	   //验证已过期
-            	   message = "验证身份已过期";
-            	   code = 400;
-               }  
-           } else {
-        	  //验证身份通过请重置密码
-        	   code = 200;
-        	   message = " 验证身份通过请重置密码";
+        if(user!=null && user.getStatus() == 1) {  
+           Date currentTime = new Date();//获取当前时间  
+           //验证链接是否过期 24小时
+           Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(user.getRegisterTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
+           if(currentTime.before(registerDate)) {  
+        	   message = "通过身份验证";
+           } else { 
+        	   //验证已过期
+        	   message = "验证身份已过期";
+        	   code = 400;
            }  
        } else {
     	   //该邮箱未注册（邮箱地址不存在）！

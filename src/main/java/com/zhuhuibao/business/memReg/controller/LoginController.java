@@ -51,15 +51,18 @@ public class LoginController {
         log.info("login post 登录校验");
         JsonResult jsonResult = new JsonResult();
         String username = member.getAccount();
-        String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
-        member.setPassword(pwd);
-        String rememberMe = req.getParameter("rememberMe");
-        UsernamePasswordToken token = new UsernamePasswordToken(username, pwd);
-        if(rememberMe!=null && rememberMe.equals("1"))
-            token.setRememberMe(true);
-
-        Subject currentUser = SecurityUtils.getSubject();
+        UsernamePasswordToken token = null;
+        Subject currentUser = null;
         try {
+	        String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
+	        member.setPassword(pwd);
+	        String rememberMe = req.getParameter("rememberMe");
+	        token = new UsernamePasswordToken(username, pwd);
+	        if(rememberMe!=null && rememberMe.equals("1"))
+	        {
+	            token.setRememberMe(true);
+	        }
+	        currentUser = SecurityUtils.getSubject();
             currentUser.login(token);
             jsonResult.setData(username);
         } catch (UnknownAccountException e) {
