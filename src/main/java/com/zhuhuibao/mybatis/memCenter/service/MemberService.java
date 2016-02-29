@@ -33,6 +33,15 @@ public class MemberService {
 		return result;
 	}
 
+	/**
+	 * 根据会员ID查询会员信息
+	 */
+	public Member findMemById(String id)
+	{
+		log.debug("根据会员ID查询会员信息");
+		Member member = memberMapper.findMemById(id);
+		return member;
+	}
 
 
 }

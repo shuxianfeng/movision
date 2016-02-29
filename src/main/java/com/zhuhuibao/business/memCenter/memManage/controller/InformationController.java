@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +35,20 @@ public class InformationController {
 	private HttpServletRequest request;
 
 	/**
+	 * 个人基本信息页面
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/rest/info", method = RequestMethod.GET)
+	public void info(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		String memId = req.getParameter("id");
+		Member member = memberService.findMemById(memId);
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(member));
+	}
+
+	/**
 	 * 个人基本信息完善
 	 * @param req
 	 * @param member
@@ -44,19 +60,16 @@ public class InformationController {
 		JsonResult result = new JsonResult();
 		if(member.getPersonRealName()==null){
 			result.setCode(400);
-			result.setMessage("姓名为必填项");
+			result.setMessage("真实姓名为必填项");
 		}else if(member.getPersonSex()==null){
 			result.setCode(400);
 			result.setMessage("性别为必填项");
 		}else if(member.getPersonPosition()==null){
 			result.setCode(400);
-			result.setMessage("个人工作类别职位为必填项");
+			result.setMessage("工作类型为必填项");
 		}else if(member.getPersonProvince() == null || member.getPersonCity() == null || member.getPersonArea() == null){
 			result.setCode(400);
-			result.setMessage("省市区/县为必填项");
-		}else if(member.getPersonAddress() == null){
-			result.setCode(400);
-			result.setMessage("地址为必填项");
+			result.setMessage("所在地为必填项");
 		}else{
 			int isUpdate = memberService.updateMemInfo(member);
 			if (isUpdate == 0) {
@@ -88,10 +101,7 @@ public class InformationController {
 			result.setMessage("经营方式为必填项");
 		}else if(member.getProvince()==null||member.getCity()==null||member.getArea()==null){
 			result.setCode(400);
-			result.setMessage("所在地省市区/县为必填项");
-		}else if(member.getAddress()==null){
-			result.setCode(400);
-			result.setMessage("所在地地址为必填项");
+			result.setMessage("所在地为必填项");
 		}else{
 			int isUpdate = memberService.updateMemInfo(member);
 			if (isUpdate == 0) {
