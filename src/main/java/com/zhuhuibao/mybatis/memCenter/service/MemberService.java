@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 
+import java.io.IOException;
+
 /**
  * 会员中心业务处理
  * @author cxx
@@ -43,5 +45,36 @@ public class MemberService {
 		return member;
 	}
 
+	/**
+	 * 新建员工
+	 */
+	public int addMember(Member member)
+	{
+		log.debug("新建员工");
+		int result = 0;
+		result = memberMapper.addMember(member);
+		return result;
+	}
 
+	/**
+	 * 修改员工
+	 */
+	public int updateMember(Member member)
+	{
+		log.debug("修改员工");
+		int result = 0;
+		result = memberMapper.updateMember(member);
+		return result;
+	}
+
+	/**
+	 * 禁用员工
+	 */
+	public int disableMember(Member member)
+	{
+		log.debug("修改员工");
+		int result = 0;
+		result = memberMapper.disableMember(member);
+		return result;
+	}
 }
