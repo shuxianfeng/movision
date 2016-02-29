@@ -1,10 +1,11 @@
 package com.zhuhuibao.business.memCenter.memManage.controller;
 
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.mybatis.memCenter.entity.Certificate;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.mapper.CertificateMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.JsonUtils;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +13,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author cxx
@@ -34,19 +34,74 @@ public class InformationController {
 	@Autowired
 	private HttpServletRequest request;
 
+	@Autowired
+	private CertificateMapper certificateMapper;
+
 	/**
 	 * 个人基本信息页面
 	 * @param req
 	 * @return
 	 * @throws IOException
 	 */
+
 	@RequestMapping(value = "/rest/info", method = RequestMethod.GET)
-	public void info(HttpServletRequest req, HttpServletResponse response) throws IOException {
+	public void companyInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		String memId = req.getParameter("id");
 		Member member = memberService.findMemById(memId);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(member));
 	}
+	/*@RequestMapping(value = "/rest/info", method = RequestMethod.GET)
+	public void info(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		String memId = req.getParameter("id");
+		Member member = memberService.findMemById(memId);
+		Map<String, String> map=new HashMap<String,String>();
+		map.put("personRealName",member.getPersonRealName());
+		if(member.getPersonSex()!=null){
+			map.put("personSex",member.getPersonSex().toString());
+		}else{
+			map.put("personSex",null);
+		}
+		if(member.getPersonPosition()!=null){
+			map.put("personPosition",member.getPersonPosition().toString());
+		}else{
+			map.put("personPosition",null);
+		}
+
+		map.put("personProvince",member.getPersonProvince());
+		map.put("personCity",member.getPersonCity());
+		map.put("personArea",member.getPersonArea());
+		map.put("personAddress",member.getPersonAddress());
+		if(member.getPersonMobile()!=null){
+			map.put("personMobile",member.getPersonMobile().toString());
+		}else{
+			map.put("personMobile",null);
+		}
+		if(member.getPersonTel()!=null){
+			map.put("personTel",member.getPersonTel().toString());
+		}else{
+			map.put("personTel",null);
+		}
+		if(member.getPersonQQ()!=null){
+			map.put("personQQ",member.getPersonQQ().toString());
+		}else{
+			map.put("personQQ",null);
+		}
+		map.put("personHeadShot",member.getPersonHeadShot());
+		if(member.getPersonID()!=null){
+			map.put("personID",member.getPersonID().toString());
+		}else{
+			map.put("personID",null);
+		}
+
+		map.put("personIDFrontImgUrl",member.getPersonIDFrontImgUrl());
+		map.put("personIDBackImgUrl",member.getPersonIDBackImgUrl());
+		map.put("personCertificateName",member.getPersonCertificateName());
+		map.put("personCertificateOrg",member.getPersonCertificateOrg());
+		map.put("personCertificateUrl",member.getPersonCertificateUrl());
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(map));
+	}*/
 
 	/**
 	 * 个人基本信息完善
@@ -139,4 +194,17 @@ public class InformationController {
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 
+	/**
+	 * 资质类型
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+
+	@RequestMapping(value = "/rest/certificateList", method = RequestMethod.GET)
+	public void certificateList(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		List<Certificate> certificate = certificateMapper.findCertificateList();
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(certificate));
+	}
 }

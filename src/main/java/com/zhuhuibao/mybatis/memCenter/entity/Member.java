@@ -33,6 +33,8 @@ public class Member {
 
     private String area;
 
+    private Integer enterpriseType;
+
     private String address;
 
     private String enterpriseLogo;
@@ -659,5 +661,13 @@ public class Member {
 
     public void setPersonCertificateUrl(String personCertificateUrl) {
         this.personCertificateUrl = personCertificateUrl == null ? null : personCertificateUrl.trim();
+    }
+
+    public Integer getEnterpriseType() {
+        return enterpriseType;
+    }
+
+    public void setEnterpriseType(Integer enterpriseType) {
+        this.enterpriseType = enterpriseType;
     }
 }
