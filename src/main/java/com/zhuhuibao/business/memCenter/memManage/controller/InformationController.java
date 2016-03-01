@@ -48,6 +48,15 @@ public class InformationController {
 	@Autowired
 	private CompanyIdentityMapper companyIdentityMapper;
 
+	@Autowired
+	private ProvinceMapper provinceMapper;
+
+	@Autowired
+	private CityMapper cityMapper;
+
+	@Autowired
+	private AreaMapper areaMapper;
+
 	/**
 	 * 根据ID查询会员所有信息
 	 * @param req
@@ -222,5 +231,47 @@ public class InformationController {
 		List<CompanyIdentity> companyIdentity = companyIdentityMapper.findCompanyIdentityList();
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(companyIdentity));
+	}
+
+	/**
+	 * 查询省
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+
+	@RequestMapping(value = "/rest/searchProvince", method = RequestMethod.GET)
+	public void searchProvince(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		List<Province> province = provinceMapper.findProvince();
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(province));
+	}
+
+	/**
+	 * 根据省Code查询市
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/rest/searchCity", method = RequestMethod.GET)
+	public void searchCity(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		String provincecode = req.getParameter("provincecode");
+		List<City> city = cityMapper.findCity(provincecode);
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(city));
+	}
+
+	/**
+	 * 根据市Code查询县区
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/rest/searchArea", method = RequestMethod.GET)
+	public void searchArea(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		String cityCode = req.getParameter("cityCode");
+		List<Area> area = areaMapper.findArea(cityCode);
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(area));
 	}
 }
