@@ -25,11 +25,11 @@ public class MemberService {
 	private MemberMapper memberMapper;
 
 	/**
-	 * 会员信息完善
+	 * 会员信息保存
 	 */
 	public int updateMemInfo(Member member)
 	{
-		log.debug("会员信息完善");
+		log.debug("会员信息保存");
 		int result = 0;
 		result = memberMapper.updateMemInfo(member);
 		return result;
@@ -86,6 +86,17 @@ public class MemberService {
 		log.debug("修改员工");
 		int result = 0;
 		result = memberMapper.deleteMember(member);
+		return result;
+	}
+
+	/**
+	 * 员工密码重置
+	 */
+	public int resetPwd(Member member)
+	{
+		log.debug("密码重置");
+		int result = 0;
+		result = memberMapper.resetPwd(member);
 		return result;
 	}
 }
