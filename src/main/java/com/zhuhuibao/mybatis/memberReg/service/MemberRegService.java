@@ -36,19 +36,26 @@ public class MemberRegService {
     {
     	log.debug("注册会员");
     	int memberId = 0;
-    	if(member != null && member.getIdentify() != 0)
+    	try
     	{
-    		//前台传过来的base64密码解密
-    		String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
-    		String md5Pwd = new Md5Hash(pwd,null,2).toString();
-			member.setPassword(md5Pwd);
-    		if(member.getMobile() != null)
-    		{
-    			//默认状态为“0”
-    			member.setStatus(1);
-    		}
-    		member.setRegisterTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
-    		memberId = memberRegMapper.registerMember(member);
+	    	if(member != null && member.getIdentify() != 0)
+	    	{
+	    		//前台传过来的base64密码解密
+	    		String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
+	    		String md5Pwd = new Md5Hash(pwd,null,2).toString();
+				member.setPassword(md5Pwd);
+	    		if(member.getMobile() != null)
+	    		{
+	    			//默认状态为“0”
+	    			member.setStatus(1);
+	    		}
+	    		member.setRegisterTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+	    		memberId = memberRegMapper.registerMember(member);
+	    	}
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("register member error",e);
     	}
     	return memberId;
     }
@@ -61,7 +68,7 @@ public class MemberRegService {
     public Member findMemberByAccount(String memberAccount)
     {
     	Member member = new Member();
-    	if(memberAccount != null && memberAccount.indexOf("@") > 0)
+    	if(memberAccount != null && memberAccount.indexOf("@") >= 0)
     	{
     		member.setEmail(memberAccount);
     	}
@@ -142,7 +149,7 @@ public class MemberRegService {
 		member.setPassword(md5Pwd);
 		if(member.getAccount() != null)
 		{
-			if(member.getAccount().indexOf("@") > 0)
+			if(member.getAccount().indexOf("@") >= 0)
 			{
 				member.setEmail(member.getAccount());
 				result = memberRegMapper.updateMemberPwd(member);

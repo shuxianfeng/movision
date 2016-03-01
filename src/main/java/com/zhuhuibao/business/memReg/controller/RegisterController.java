@@ -2,6 +2,7 @@ package com.zhuhuibao.business.memReg.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -244,23 +245,30 @@ public class RegisterController {
 		if(member.getEmailCheckCode() != null )
 		{
 			String verifyCode = (String) req.getSession().getAttribute("email");
-			if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getEmailCheckCode()))
-			{
-				int isExist = memberService.isExistAccount(member);
-				if(isExist == 0)
+			if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getEmailCheckCode()) )			{
+				if(member.getEmail().indexOf("@")>=0)
 				{
-					member.setEmailCheckCode(verifyCode);
-					memberService.registerMember(member);
-					if(member.getEmail()!=null && member.getEmail().indexOf("@")>0)
+					int isExist = memberService.isExistAccount(member);
+					if(isExist == 0)
 					{
+						member.setEmailCheckCode(verifyCode);
+						memberService.registerMember(member);
 						//发送激活链接给此邮件
 						rvService.sendMailActivateCode(member,req.getServerName());
+						//是否显示“立即激活按钮”
+						String mail = ds.findMailAddress(member.getEmail());
+						if(mail != null && !mail.equals(""))
+						{
+							Map<String,String> map = new HashMap<String,String>();
+							map.put("activateButton", "true");
+							result.setData(map);
+						}
 					}
-				}
-				else
-				{
-					result.setCode(400);
-					result.setMessage("账户名已经存在");
+					else
+					{
+						result.setCode(400);
+						result.setMessage("账户名已经存在");
+					}
 				}
 			}
 			else
@@ -331,6 +339,13 @@ public class RegisterController {
 		log.debug("找回密码  email =="+member.getEmail());
 		JsonResult result = new JsonResult();
 		rvService.sendValidateMail(member,req.getServerName());
+		String mail = ds.findMailAddress(member.getEmail());
+		if(mail != null && !mail.equals(""))
+		{
+			Map<String,String> map = new HashMap<String,String>();
+			map.put("button", "true");
+			result.setData(map);
+		}
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 	
