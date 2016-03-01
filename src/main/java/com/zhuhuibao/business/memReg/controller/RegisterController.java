@@ -241,12 +241,16 @@ public class RegisterController {
 						rvService.sendMailActivateCode(member,ResourcePropertiesUtils.getValue("host.ip"));
 						//是否显示“立即激活按钮”
 						String mail = ds.findMailAddress(member.getEmail());
+						Map<String,String> map = new HashMap<String,String>();
 						if(mail != null && !mail.equals(""))
 						{
-							Map<String,String> map = new HashMap<String,String>();
-							map.put("activateButton", "true");
-							result.setData(map);
+							map.put("button", "true");
 						}
+						else
+						{
+							map.put("button", "false");
+						}
+						result.setData(map);
 					}
 					else
 					{
@@ -324,12 +328,16 @@ public class RegisterController {
 		JsonResult result = new JsonResult();
 		rvService.sendValidateMail(member,ResourcePropertiesUtils.getValue("host.ip"));
 		String mail = ds.findMailAddress(member.getEmail());
+		Map<String,String> map = new HashMap<String,String>();
 		if(mail != null && !mail.equals(""))
 		{
-			Map<String,String> map = new HashMap<String,String>();
-			map.put("button", "true");
-			result.setData(map);
+			map.put("k", "true");
 		}
+		else
+		{
+			map.put("button", "false");
+		}
+		result.setData(map);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 	
