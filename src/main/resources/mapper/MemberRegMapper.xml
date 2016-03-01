@@ -21,7 +21,7 @@
   
   <insert id="registerMember" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member" useGeneratedKeys="true" keyProperty="id">
   	insert into t_m_member(mobile,email,password,registerTime,status,identify,emailCheckCode) values
-  	(#{mobile},#{email},#{password},date_format(now(),'%Y-%m-%d %h:%i:%s'),#{status},#{identify},#{emailCheckCode})
+  	(#{mobile},#{email},#{password},date_format(now(),'%Y-%m-%d %H:%i:%s'),#{status},#{identify},#{emailCheckCode})
   </insert>
   <sql id="Base_Column_List" >
     id, mobile, email,password, registerTime, status,identify 

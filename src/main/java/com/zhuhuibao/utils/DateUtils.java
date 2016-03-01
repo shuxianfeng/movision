@@ -81,8 +81,10 @@ public class DateUtils {
     }
 
     public static void main(String[] args) {
-    	Date date = DateUtils.str2Date("2016-02-01 14:21:34","yyyy-MM-dd HH:mm:ss");
+    	Date date = DateUtils.date2Sub(DateUtils.str2Date("2016-02-29 10:23:21","yyyy-MM-dd HH:mm:ss"),5,1);
+    	System.out.println(date);
     	Date date1 = new Date();
+    	System.out.println(date1);
     	System.out.println(date1.before(date));
 	}
 }

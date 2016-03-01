@@ -8,4 +8,13 @@ public interface MemberMapper {
 
     //更新会员信息
     int updateMemInfo(Member member);
+
+    //新建会员
+    int addMember(Member member);
+
+    //修改会员
+    int updateMember(Member member);
+
+    //禁用会员
+    int disableMember(Member member);
 }

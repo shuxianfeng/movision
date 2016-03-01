@@ -5,6 +5,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,17 +64,17 @@ public class ShiroRealm extends AuthorizingRealm {
             throw new UnknownAccountException();//  用户名不存在
         }
         // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
-        /*return new SimpleAuthenticationInfo(
+        return new SimpleAuthenticationInfo(
                 new ShiroUser(member.getId(), member.getMobile(), member.getEmail(), member.getStatus()), // 用户
                 member.getPassword(), // 密码
-                ByteSource.Util.bytes("123"),
-                getName() // realm name
-        );*/
-        return new SimpleAuthenticationInfo(
-        		account, // 用户
-                member.getPassword(), // 密码
+//                ByteSource.Util.bytes("123"),
                 getName() // realm name
         );
+//        return new SimpleAuthenticationInfo(
+//        		account, // 用户
+//                member.getPassword(), // 密码
+//                getName() // realm name
+//        );
     }
 
 
