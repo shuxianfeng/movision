@@ -378,7 +378,7 @@ public class RegisterController {
         	}
         	else
         	{
-    	        RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+ResourcePropertiesUtils.getValue("active.mail.page"));
+        		RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page"));
     	        modelAndView.setView(rv);
         	}
         	
