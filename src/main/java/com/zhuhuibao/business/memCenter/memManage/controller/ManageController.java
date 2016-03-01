@@ -57,7 +57,7 @@ public class ManageController {
 		member.setPassword(md5Pwd);
 		//先判断账号是否已经存在
 		Member mem = memberMapper.findMem(member);
-		if(mem!=null){
+		if(mem==null){
 			int isAdd = memberService.addMember(member);
 			if(isAdd==0){
 				result.setCode(400);
@@ -88,19 +88,13 @@ public class ManageController {
 		String md5Pwd = new Md5Hash(pwd,null,2).toString();
 		member.setPassword(md5Pwd);
 		JsonResult result = new JsonResult();
-		//先判断账号是否已经存在
-		Member mem = memberMapper.findMem(member);
-		if(mem!=null){
-			int isUpdate = memberService.updateMember(member);
-			if(isUpdate==0){
-				result.setCode(400);
-				result.setMessage("修改失败");
-			}else{
-				result.setCode(200);
-			}
-		}else{
+
+		int isUpdate = memberService.updateMember(member);
+		if(isUpdate==0){
 			result.setCode(400);
-			result.setMessage("账号已经存在");
+			result.setMessage("修改失败");
+		}else{
+			result.setCode(200);
 		}
 
 		response.setContentType("application/json;charset=utf-8");
@@ -163,4 +157,27 @@ public class ManageController {
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(memberList));
 	}
 
+	/**
+	 * 员工密码重置
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+
+	@RequestMapping(value = "/rest/resetPwd", method = RequestMethod.POST)
+	public void resetPwd(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
+		String md5Pwd = new Md5Hash(123456,null,2).toString();
+		member.setPassword(md5Pwd);
+
+		JsonResult result = new JsonResult();
+		int isReset = memberService.resetPwd(member);
+		if(isReset==0){
+			result.setCode(400);
+			result.setMessage("重置失败");
+		}else{
+			result.setCode(200);
+		}
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+	}
 }

@@ -29,4 +29,6 @@ public interface MemberMapper {
     //根据会员账号查询会员
     Member findMem(Member member);
 
+    //删除会员
+    int resetPwd(Member member);
 }
