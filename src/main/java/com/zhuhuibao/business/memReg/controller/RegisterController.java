@@ -29,6 +29,7 @@ import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.mybatis.memberReg.service.RegisterValidateService;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.JsonUtils;
+import com.zhuhuibao.utils.ResourcePropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 
 /**
@@ -188,23 +189,6 @@ public class RegisterController {
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 
-	@RequestMapping(value = "/checkCode")
-	@ResponseBody
-	public void checkCode(HttpServletRequest req, HttpServletResponse response) throws IOException {
-		/*
-		 * System.out.println("要校验的验证码:"+user); return new
-		 * Gson().toJson("true");
-		 */
-		response.setContentType("application/json;charset=utf-8");
-		String jsonData = "{\"result\":\"ok\"}";
-		response.getWriter().write(jsonData);
-		/*ModelAndView modelAndView = new ModelAndView();  
-        modelAndView.addObject("name", "xxx");  
-//        modelAndView.setViewName("redirect:/register");  
-        modelAndView.setViewName("/register");  
-        return modelAndView;*/
-	}
-
     /**
      * 会员简单注册
      * @param req
@@ -254,7 +238,7 @@ public class RegisterController {
 						member.setEmailCheckCode(verifyCode);
 						memberService.registerMember(member);
 						//发送激活链接给此邮件
-						rvService.sendMailActivateCode(member,req.getServerName());
+						rvService.sendMailActivateCode(member,ResourcePropertiesUtils.getValue("host.ip"));
 						//是否显示“立即激活按钮”
 						String mail = ds.findMailAddress(member.getEmail());
 						if(mail != null && !mail.equals(""))
@@ -338,7 +322,7 @@ public class RegisterController {
 	public void sendValidateMail(HttpServletRequest req,HttpServletResponse response, Member member,Model model) throws IOException {
 		log.debug("找回密码  email =="+member.getEmail());
 		JsonResult result = new JsonResult();
-		rvService.sendValidateMail(member,req.getServerName());
+		rvService.sendValidateMail(member,ResourcePropertiesUtils.getValue("host.ip"));
 		String mail = ds.findMailAddress(member.getEmail());
 		if(mail != null && !mail.equals(""))
 		{
@@ -389,12 +373,12 @@ public class RegisterController {
         	if(jsonResult.getCode() == 200)
         	{
         		//跳转到会员中心页面
-        		RedirectView rv = new RedirectView("http://"+req.getServerName()+"/login.html");
+        		RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page"));
         		modelAndView.setView(rv);
         	}
         	else
         	{
-    	        RedirectView rv = new RedirectView("http://"+req.getServerName()+"/login.html");
+    	        RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+ResourcePropertiesUtils.getValue("active.mail.page"));
     	        modelAndView.setView(rv);
         	}
         	
@@ -429,7 +413,7 @@ public class RegisterController {
         }
         ModelAndView modelAndView = new ModelAndView();  
         modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(email.getBytes()));  
-        RedirectView rv = new RedirectView("http://"+req.getServerName()+"/forgot.html");
+        RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.page"));
         modelAndView.setView(rv);
         return modelAndView;
 	}
