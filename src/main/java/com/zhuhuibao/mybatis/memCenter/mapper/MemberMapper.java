@@ -2,6 +2,8 @@ package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 
+import java.util.List;
+
 public interface MemberMapper {
     //根据会员ID找到会员信息
     Member findMemById(String memberId);
@@ -20,4 +22,8 @@ public interface MemberMapper {
 
     //删除会员
     int deleteMember(Member member);
+
+    //根据父类ID查询公司下属员工
+    List<Member> findStaffByParentId(Member member);
+
 }

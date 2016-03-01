@@ -52,7 +52,7 @@
 		<!-- 配置表信息 -->
 		
 		<table tableName="t_m_member"
-			   domainObjectName="MemberDemo" enableCountByExample="false"
+			   domainObjectName="Member" enableCountByExample="false"
 			   enableSelectByExample="false" enableUpdateByExample="false"
 			   enableDeleteByExample="false">
 			<property name="useActualColumnNames" value="true"/>

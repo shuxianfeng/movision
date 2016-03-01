@@ -3,6 +3,7 @@ package com.zhuhuibao.business.memCenter.memManage.controller;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.CertificateMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.JsonUtils;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author cxx
@@ -33,6 +35,9 @@ public class ManageController {
 
 	@Autowired
 	private CertificateMapper certificateMapper;
+
+	@Autowired
+	private MemberMapper memberMapper;
 
 	/**
 	 * 新建会员
@@ -117,4 +122,19 @@ public class ManageController {
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
+
+	/**
+	 * 员工搜索
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+
+	@RequestMapping(value = "/rest/staffSearch", method = RequestMethod.GET)
+	public void staffSearch(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
+		List<Member> memberList = memberMapper.findStaffByParentId(member);
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(memberList));
+	}
+
 }
