@@ -26,4 +26,7 @@ public interface MemberMapper {
     //根据父类ID查询公司下属员工
     List<Member> findStaffByParentId(Member member);
 
+    //根据会员账号查询会员
+    Member findMem(Member member);
+
 }

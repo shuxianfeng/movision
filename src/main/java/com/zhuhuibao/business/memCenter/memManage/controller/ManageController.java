@@ -5,7 +5,9 @@ import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.CertificateMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.JsonUtils;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,13 +51,25 @@ public class ManageController {
 	@RequestMapping(value = "/rest/addMember", method = RequestMethod.POST)
 	public void addMember(HttpServletRequest req, HttpServletResponse response, Member member) throws IOException {
 		JsonResult result = new JsonResult();
-		int isAdd = memberService.addMember(member);
-		if(isAdd==0){
-			result.setCode(400);
-			result.setMessage("新增失败");
+		//前台传过来的base64密码解密
+		String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
+		String md5Pwd = new Md5Hash(pwd,null,2).toString();
+		member.setPassword(md5Pwd);
+		//先判断账号是否已经存在
+		Member mem = memberMapper.findMem(member);
+		if(mem!=null){
+			int isAdd = memberService.addMember(member);
+			if(isAdd==0){
+				result.setCode(400);
+				result.setMessage("新增失败");
+			}else{
+				result.setCode(200);
+			}
 		}else{
-			result.setCode(200);
+			result.setCode(400);
+			result.setMessage("账号已经存在");
 		}
+
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -69,14 +83,26 @@ public class ManageController {
 
 	@RequestMapping(value = "/rest/updateMember", method = RequestMethod.POST)
 	public void updateMember(HttpServletRequest req, HttpServletResponse response, Member member) throws IOException {
+		//前台传过来的base64密码解密
+		String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
+		String md5Pwd = new Md5Hash(pwd,null,2).toString();
+		member.setPassword(md5Pwd);
 		JsonResult result = new JsonResult();
-		int isUpdate = memberService.updateMember(member);
-		if(isUpdate==0){
-			result.setCode(400);
-			result.setMessage("修改失败");
+		//先判断账号是否已经存在
+		Member mem = memberMapper.findMem(member);
+		if(mem!=null){
+			int isUpdate = memberService.updateMember(member);
+			if(isUpdate==0){
+				result.setCode(400);
+				result.setMessage("修改失败");
+			}else{
+				result.setCode(200);
+			}
 		}else{
-			result.setCode(200);
+			result.setCode(400);
+			result.setMessage("账号已经存在");
 		}
+
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}

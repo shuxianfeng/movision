@@ -207,4 +207,6 @@ public class InformationController {
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(certificate));
 	}
+
+	//上传图片
 }

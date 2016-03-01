@@ -320,4 +320,17 @@
       and email = #{email}
     </if>
   </select>
+  <select id="findMem" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_m_member
+    where
+      is_deleted = 0
+    <if test="mobile != null and mobile != '' " >
+      and mobile = #{mobile}
+    </if>
+    <if test="email != null" >
+      and email = #{email}
+    </if>
+  </select>
 </mapper>
