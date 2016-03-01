@@ -1,6 +1,5 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
-import com.zhuhuibao.mybatis.memCenter.entity.UnitType;
 import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
 
 import java.util.List;

@@ -51,8 +51,8 @@
 
 		<!-- 配置表信息 -->
 		
-		<table tableName="t_dictionary_workType"
-			   domainObjectName="WorkType" enableCountByExample="false"
+		<table tableName="t_dictionary_companyIdentity"
+			   domainObjectName="CompanyIdentity" enableCountByExample="false"
 			   enableSelectByExample="false" enableUpdateByExample="false"
 			   enableDeleteByExample="false">
 			<property name="useActualColumnNames" value="true"/>

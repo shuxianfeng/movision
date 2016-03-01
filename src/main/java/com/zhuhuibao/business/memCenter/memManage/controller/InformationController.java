@@ -1,13 +1,8 @@
 package com.zhuhuibao.business.memCenter.memManage.controller;
 
 import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.mybatis.memCenter.entity.Certificate;
-import com.zhuhuibao.mybatis.memCenter.entity.Member;
-import com.zhuhuibao.mybatis.memCenter.entity.UnitType;
-import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
-import com.zhuhuibao.mybatis.memCenter.mapper.CertificateMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.UnitTypeMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.WorkTypeMapper;
+import com.zhuhuibao.mybatis.memCenter.entity.*;
+import com.zhuhuibao.mybatis.memCenter.mapper.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.JsonUtils;
 import org.slf4j.Logger;
@@ -46,6 +41,12 @@ public class InformationController {
 
 	@Autowired
 	private WorkTypeMapper workTypeMapper;
+
+	@Autowired
+	private EnterpriseTypeMapper enterpriseTypeMapper;
+
+	@Autowired
+	private CompanyIdentityMapper companyIdentityMapper;
 
 	/**
 	 * 根据ID查询会员所有信息
@@ -193,5 +194,33 @@ public class InformationController {
 		List<WorkType> workType = workTypeMapper.findWorkTypeList();
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(workType));
+	}
+
+	/**
+	 * 企业类别
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+
+	@RequestMapping(value = "/rest/enterpriseTypeList", method = RequestMethod.GET)
+	public void enterpriseTypeList(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		List<EnterpriseType> enterpriseType = enterpriseTypeMapper.findEnterpriseTypeList();
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(enterpriseType));
+	}
+
+	/**
+	 * 企业身份
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+
+	@RequestMapping(value = "/rest/companyIdentityList", method = RequestMethod.GET)
+	public void companyIdentityList(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		List<CompanyIdentity> companyIdentity = companyIdentityMapper.findCompanyIdentityList();
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(companyIdentity));
 	}
 }
