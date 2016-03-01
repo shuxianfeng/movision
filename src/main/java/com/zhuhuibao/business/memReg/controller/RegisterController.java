@@ -331,7 +331,7 @@ public class RegisterController {
 		Map<String,String> map = new HashMap<String,String>();
 		if(mail != null && !mail.equals(""))
 		{
-			map.put("k", "true");
+			map.put("button", "true");
 		}
 		else
 		{
