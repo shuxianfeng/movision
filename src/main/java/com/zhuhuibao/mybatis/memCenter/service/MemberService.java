@@ -77,4 +77,15 @@ public class MemberService {
 		result = memberMapper.disableMember(member);
 		return result;
 	}
+
+	/**
+	 * 删除员工
+	 */
+	public int deleteMember(Member member)
+	{
+		log.debug("修改员工");
+		int result = 0;
+		result = memberMapper.deleteMember(member);
+		return result;
+	}
 }

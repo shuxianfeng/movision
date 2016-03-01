@@ -17,4 +17,7 @@ public interface MemberMapper {
 
     //禁用会员
     int disableMember(Member member);
+
+    //删除会员
+    int deleteMember(Member member);
 }

@@ -96,4 +96,25 @@ public class ManageController {
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
+
+	/**
+	 * 删除会员
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+
+	@RequestMapping(value = "/rest/deleteMember", method = RequestMethod.POST)
+	public void deleteMember(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
+		JsonResult result = new JsonResult();
+		int isdelete = memberService.deleteMember(member);
+		if(isdelete==0){
+			result.setCode(400);
+			result.setMessage("删除失败");
+		}else{
+			result.setCode(200);
+		}
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+	}
 }
