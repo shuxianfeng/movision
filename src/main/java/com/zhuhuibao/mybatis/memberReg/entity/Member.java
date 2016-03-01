@@ -66,49 +66,14 @@ public class Member implements Serializable{
 	private int status;
 	
 	/**
-	 * 公司名称
-	 */
-	private String companyName;
-	
-	/**
 	 * 会员身份 1：企业，2：个人
 	 */
 	private int identify;
 	
 	/**
-	 * 公司法定代表人姓名
+	 * 找回密码时邮箱是否验证通过
 	 */
-	private String companyCorporationName;
-	
-	/**
-	 * 公司电话
-	 */
-	private String companyTelephone;
-	
-	/**
-	 * 企业会员类型 1-厂家，2-代理商，3-工程商，4-渠道商户，5：事业单位，6：行业协会，7：政府机构，8：其他企业
-	 */
-	private int enterpriseMemberType;
-
-	/**
-	 * 地址
-	 */
-	private String address;
-	
-	/**
-	 * 企业资质
-	 */
-	private String enterpriseQualification;
-	
-	/**
-	 * 企业LOGO
-	 */
-	private String enterpriseLogo;
-	
-	/**
-	 * 企业介绍
-	 */
-	private String enterpriseDesc;
+	private int isValidatePass;
 
 	public int getId() {
 		return id;
@@ -166,77 +131,8 @@ public class Member implements Serializable{
 		this.status = status;
 	}
 
-	public String getCompanyName() {
-		return companyName;
-	}
-
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
-
 	public int getIdentify() {
 		return identify;
-	}
-
-	public void setIdentify(int identify) {
-		this.identify = identify;
-	}
-
-	public String getCompanyCorporationName() {
-		return companyCorporationName;
-	}
-
-	public void setCompanyCorporationName(String companyCorporationName) {
-		this.companyCorporationName = companyCorporationName;
-	}
-
-	public String getCompanyTelephone() {
-		return companyTelephone;
-	}
-
-	public void setCompanyTelephone(String companyTelephone) {
-		this.companyTelephone = companyTelephone;
-	}
-
-
-	public int getEnterpriseMemberType() {
-		return enterpriseMemberType;
-	}
-
-	public void setEnterpriseMemberType(int enterpriseMemberType) {
-		this.enterpriseMemberType = enterpriseMemberType;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getEnterpriseQualification() {
-		return enterpriseQualification;
-	}
-
-	public void setEnterpriseQualification(String enterpriseQualification) {
-		this.enterpriseQualification = enterpriseQualification;
-	}
-
-	public String getEnterpriseLogo() {
-		return enterpriseLogo;
-	}
-
-	public void setEnterpriseLogo(String enterpriseLogo) {
-		this.enterpriseLogo = enterpriseLogo;
-	}
-
-	public String getEnterpriseDesc() {
-		return enterpriseDesc;
-	}
-
-	public void setEnterpriseDesc(String enterpriseDesc) {
-		this.enterpriseDesc = enterpriseDesc;
 	}
 
 	public String getMobileCheckCode() {
@@ -262,5 +158,18 @@ public class Member implements Serializable{
 	public void setCheckCode(String checkCode) {
 		this.checkCode = checkCode;
 	}
+
+	public int getIsValidatePass() {
+		return isValidatePass;
+	}
+
+	public void setIsValidatePass(int isValidatePass) {
+		this.isValidatePass = isValidatePass;
+	}
+
+	public void setIdentify(int identify) {
+		this.identify = identify;
+	}
+	
 	
 }

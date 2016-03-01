@@ -1,5 +1,6 @@
 package com.zhuhuibao.mybatis.memberReg.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -13,6 +14,7 @@ import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper;
 import com.zhuhuibao.security.EncodeUtil;
+import com.zhuhuibao.utils.DateUtils;
 
 /**
  * 会员业务处理
@@ -45,6 +47,7 @@ public class MemberRegService {
     			//默认状态为“0”
     			member.setStatus(1);
     		}
+    		member.setRegisterTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
     		memberId = memberRegMapper.registerMember(member);
     	}
     	return memberId;
@@ -115,6 +118,17 @@ public class MemberRegService {
     }
     
     /**
+     * 更新找回密码邮箱验证是否通过
+     * @param member
+     * @return
+     */
+    public int updateMemberValidatePass(Member member)
+    {
+    	int result = memberRegMapper.updateMemberValidatePass(member);
+    	return result;
+    }
+    
+    /**
      * 找回密码，重置密码
      * @param member 会员信息
      * @return
@@ -131,12 +145,12 @@ public class MemberRegService {
 			if(member.getAccount().indexOf("@") > 0)
 			{
 				member.setEmail(member.getAccount());
-				result = memberRegMapper.updateMemberPwdByMail(member);
+				result = memberRegMapper.updateMemberPwd(member);
 			}
 			else
 			{
 				member.setMobile(member.getAccount());
-				result = memberRegMapper.updateMemberPwdByMobile(member);
+				result = memberRegMapper.updateMemberPwd(member);
 			}
 		}
     	return result;

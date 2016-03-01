@@ -21,7 +21,7 @@
   
   <insert id="registerMember" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member" useGeneratedKeys="true" keyProperty="id">
   	insert into t_m_member(mobile,email,password,registerTime,status,identify,emailCheckCode) values
-  	(#{mobile},#{email},#{password},date_format(now(),'%Y-%m-%d %H:%i:%s'),#{status},#{identify},#{emailCheckCode})
+  	(#{mobile},#{email},#{password},#{registerTime},#{status},#{identify},#{emailCheckCode})
   </insert>
   <sql id="Base_Column_List" >
     id, mobile, email,password, registerTime, status,identify 
@@ -72,23 +72,34 @@
   		 <if test="status != null" >
 	    	status = #{status},
 	    </if>
+	    <if test="isValidatePass != 0">
+	    	isValidatePass = #{isValidatePass},
+	    </if>
   	</set>
   	where email = #{email} and id = #{id}
   </update>
-  <update id="updateMemberPwdByMobile" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
-  	update t_m_member
-  	<set>
-  		password = #{password}
-  	</set>
-  	where mobile = #{mobile} and status != 0
+  
+  <update id="updateMemberValidatePass" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
+  	update t_m_member set isValidatePass = #{isValidatePass}
+  	where email = #{email} and id = #{id}
   </update>
   
-  <update id="updateMemberPwdByMail" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
+  <update id="updateMemberPwd" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
   	update t_m_member
   	<set>
-  		password = #{password}
+  		<if test="password != null">
+  			password = #{password}
+  		</if>
   	</set>
-  	where email = #{email} and status != 0
+  	<where>
+  		<if test="mobile != null">
+  			mobile = #{mobile}
+  		</if>
+  		<if test="email != null">
+  			email = #{email}
+  		</if>
+  	</where> 
+  	and status != 0
   </update>
   
   <select id="isValidatePass" resultType="Integer">
