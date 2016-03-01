@@ -173,7 +173,7 @@ public class RegisterController {
 	@RequestMapping(value = "/rest/getSeekPwdMobileCode", method = RequestMethod.GET)
 	public void getSeekPwdMobileCode(HttpServletRequest req, HttpServletResponse response,
 			Model model) throws JsonGenerationException, JsonMappingException, IOException {
-		String mobile = req.getParameter("seekmobile");
+		String mobile = req.getParameter("mobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
 		HttpSession sess = req.getSession(true);
 		// 生成随机字串
@@ -181,7 +181,7 @@ public class RegisterController {
 		log.debug("verifyCode == " + verifyCode);
 		//发送验证码到手机
 //		SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-		sess.setAttribute("seekPwdMobile", verifyCode);
+		sess.setAttribute(mobile, verifyCode);
 		JsonResult jsonResult = new JsonResult();
 		jsonResult.setData(verifyCode);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
@@ -306,7 +306,7 @@ public class RegisterController {
 	public void mobileValidate(HttpServletRequest req,HttpServletResponse response, Member member,Model model) throws IOException {
 		log.debug("找回密码  mobile =="+member.getMobile());
 		JsonResult result = new JsonResult();
-		String seekMobileCode = (String) req.getSession().getAttribute("seekPwdMobile");
+		String seekMobileCode = (String) req.getSession().getAttribute(member.getMobile());
 		if(member.getMobileCheckCode() == null || !member.getMobileCheckCode().equals(seekMobileCode))
 		{
 			result.setCode(400);
