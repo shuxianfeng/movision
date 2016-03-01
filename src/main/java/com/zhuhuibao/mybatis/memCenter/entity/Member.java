@@ -7,7 +7,7 @@ public class Member {
 
     private String email;
 
-    private Integer emailCheckCode;
+    private String emailCheckCode;
 
     private String password;
 
@@ -67,21 +67,15 @@ public class Member {
 
     private String companyBusinessLicenseImg;
 
-    private Integer supplierCertificateType;
+    private Integer certificateType;
 
-    private String supplierCertificateName;
+    private Integer certificateGrade;
 
-    private String supplierCertificateOrganization;
+    private String certificateName;
 
-    private String supplierCertificateUrl;
+    private String certificateOrganization;
 
-    private String engineerQualityType;
-
-    private String engineerQualityName;
-
-    private String engineerQualityOrganization;
-
-    private String engineerQualityUrl;
+    private String certificateUrl;
 
     private Integer enterpriseTel;
 
@@ -135,6 +129,8 @@ public class Member {
 
     private String personCertificateUrl;
 
+    private Integer is_deleted;
+
     public Long getId() {
         return id;
     }
@@ -159,12 +155,12 @@ public class Member {
         this.email = email == null ? null : email.trim();
     }
 
-    public Integer getEmailCheckCode() {
+    public String getEmailCheckCode() {
         return emailCheckCode;
     }
 
-    public void setEmailCheckCode(Integer emailCheckCode) {
-        this.emailCheckCode = emailCheckCode;
+    public void setEmailCheckCode(String emailCheckCode) {
+        this.emailCheckCode = emailCheckCode == null ? null : emailCheckCode.trim();
     }
 
     public String getPassword() {
@@ -261,6 +257,14 @@ public class Member {
 
     public void setArea(String area) {
         this.area = area == null ? null : area.trim();
+    }
+
+    public Integer getEnterpriseType() {
+        return enterpriseType;
+    }
+
+    public void setEnterpriseType(Integer enterpriseType) {
+        this.enterpriseType = enterpriseType;
     }
 
     public String getAddress() {
@@ -391,68 +395,44 @@ public class Member {
         this.companyBusinessLicenseImg = companyBusinessLicenseImg == null ? null : companyBusinessLicenseImg.trim();
     }
 
-    public Integer getSupplierCertificateType() {
-        return supplierCertificateType;
+    public Integer getCertificateType() {
+        return certificateType;
     }
 
-    public void setSupplierCertificateType(Integer supplierCertificateType) {
-        this.supplierCertificateType = supplierCertificateType;
+    public void setCertificateType(Integer certificateType) {
+        this.certificateType = certificateType;
     }
 
-    public String getSupplierCertificateName() {
-        return supplierCertificateName;
+    public Integer getCertificateGrade() {
+        return certificateGrade;
     }
 
-    public void setSupplierCertificateName(String supplierCertificateName) {
-        this.supplierCertificateName = supplierCertificateName == null ? null : supplierCertificateName.trim();
+    public void setCertificateGrade(Integer certificateGrade) {
+        this.certificateGrade = certificateGrade;
     }
 
-    public String getSupplierCertificateOrganization() {
-        return supplierCertificateOrganization;
+    public String getCertificateName() {
+        return certificateName;
     }
 
-    public void setSupplierCertificateOrganization(String supplierCertificateOrganization) {
-        this.supplierCertificateOrganization = supplierCertificateOrganization == null ? null : supplierCertificateOrganization.trim();
+    public void setCertificateName(String certificateName) {
+        this.certificateName = certificateName == null ? null : certificateName.trim();
     }
 
-    public String getSupplierCertificateUrl() {
-        return supplierCertificateUrl;
+    public String getCertificateOrganization() {
+        return certificateOrganization;
     }
 
-    public void setSupplierCertificateUrl(String supplierCertificateUrl) {
-        this.supplierCertificateUrl = supplierCertificateUrl == null ? null : supplierCertificateUrl.trim();
+    public void setCertificateOrganization(String certificateOrganization) {
+        this.certificateOrganization = certificateOrganization == null ? null : certificateOrganization.trim();
     }
 
-    public String getEngineerQualityType() {
-        return engineerQualityType;
+    public String getCertificateUrl() {
+        return certificateUrl;
     }
 
-    public void setEngineerQualityType(String engineerQualityType) {
-        this.engineerQualityType = engineerQualityType == null ? null : engineerQualityType.trim();
-    }
-
-    public String getEngineerQualityName() {
-        return engineerQualityName;
-    }
-
-    public void setEngineerQualityName(String engineerQualityName) {
-        this.engineerQualityName = engineerQualityName == null ? null : engineerQualityName.trim();
-    }
-
-    public String getEngineerQualityOrganization() {
-        return engineerQualityOrganization;
-    }
-
-    public void setEngineerQualityOrganization(String engineerQualityOrganization) {
-        this.engineerQualityOrganization = engineerQualityOrganization == null ? null : engineerQualityOrganization.trim();
-    }
-
-    public String getEngineerQualityUrl() {
-        return engineerQualityUrl;
-    }
-
-    public void setEngineerQualityUrl(String engineerQualityUrl) {
-        this.engineerQualityUrl = engineerQualityUrl == null ? null : engineerQualityUrl.trim();
+    public void setCertificateUrl(String certificateUrl) {
+        this.certificateUrl = certificateUrl == null ? null : certificateUrl.trim();
     }
 
     public Integer getEnterpriseTel() {
@@ -663,11 +643,11 @@ public class Member {
         this.personCertificateUrl = personCertificateUrl == null ? null : personCertificateUrl.trim();
     }
 
-    public Integer getEnterpriseType() {
-        return enterpriseType;
+    public Integer getIs_deleted() {
+        return is_deleted;
     }
 
-    public void setEnterpriseType(Integer enterpriseType) {
-        this.enterpriseType = enterpriseType;
+    public void setIs_deleted(Integer is_deleted) {
+        this.is_deleted = is_deleted;
     }
 }

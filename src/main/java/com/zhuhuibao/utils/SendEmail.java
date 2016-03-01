@@ -14,6 +14,8 @@ import javax.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zhuhuibao.security.EncodeUtil;
+
 
 public class SendEmail {
 	private static final Logger log = LoggerFactory.getLogger(SendEmail.class);
@@ -46,7 +48,7 @@ public class SendEmail {
         return session;
     }
     
-    public static void send(String toEmail , String content) {
+    public static void send(String toEmail , String content,String title) {
         Session session = getSession();
         try {
             log.info("--send--"+content);
@@ -57,7 +59,7 @@ public class SendEmail {
             msg.setFrom(new InternetAddress(FROM));
             InternetAddress[] address = {new InternetAddress(toEmail)};
             msg.setRecipients(Message.RecipientType.TO, address);
-            msg.setSubject("筑慧宝账号激活");
+            msg.setSubject(title);
             msg.setSentDate(new Date());
             msg.setContent(content , "text/html;charset=utf-8");
 
@@ -68,7 +70,7 @@ public class SendEmail {
             mex.printStackTrace();
         }
     }
+    
     public static void main(String[] args) {
-		send("19630759@qq.com","hello world!!");
 	}
 }

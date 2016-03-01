@@ -2,16 +2,13 @@ package com.zhuhuibao.business.memReg.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.shiro.crypto.hash.Md5Hash;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
@@ -19,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,11 +23,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.mybatis.memberReg.service.RegisterValidateService;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.JsonUtils;
+import com.zhuhuibao.utils.ResourcePropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 
 /**
@@ -46,14 +44,14 @@ public class RegisterController {
 	@Autowired
 	private MemberRegService memberService;
 	
+	@Autowired
+	private DictionaryService ds;
+	
 	/**
 	 * 注册验证码业务类
 	 */
 	@Autowired
 	private RegisterValidateService rvService;
-	
-	@Autowired
-    private HttpServletRequest request;
 	
 	 /**
 	  * 邮箱注册时的图形验证码
@@ -159,7 +157,7 @@ public class RegisterController {
 		log.debug("verifyCode == " + verifyCode);
 		//发送验证码到手机
 //		SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-		sess.setAttribute("mobile", verifyCode);
+		sess.setAttribute(mobile, verifyCode);
 		JsonResult jsonResult = new JsonResult();
 		jsonResult.setData(verifyCode);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
@@ -177,7 +175,7 @@ public class RegisterController {
 	@RequestMapping(value = "/rest/getSeekPwdMobileCode", method = RequestMethod.GET)
 	public void getSeekPwdMobileCode(HttpServletRequest req, HttpServletResponse response,
 			Model model) throws JsonGenerationException, JsonMappingException, IOException {
-		String mobile = req.getParameter("seekmobile");
+		String mobile = req.getParameter("mobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
 		HttpSession sess = req.getSession(true);
 		// 生成随机字串
@@ -185,27 +183,10 @@ public class RegisterController {
 		log.debug("verifyCode == " + verifyCode);
 		//发送验证码到手机
 //		SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-		sess.setAttribute("seekPwdMobile", verifyCode);
+		sess.setAttribute(mobile, verifyCode);
 		JsonResult jsonResult = new JsonResult();
 		jsonResult.setData(verifyCode);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
-	}
-
-	@RequestMapping(value = "/checkCode")
-	@ResponseBody
-	public void checkCode(HttpServletRequest req, HttpServletResponse response) throws IOException {
-		/*
-		 * System.out.println("要校验的验证码:"+user); return new
-		 * Gson().toJson("true");
-		 */
-		response.setContentType("application/json;charset=utf-8");
-		String jsonData = "{\"result\":\"ok\"}";
-		response.getWriter().write(jsonData);
-		/*ModelAndView modelAndView = new ModelAndView();  
-        modelAndView.addObject("name", "xxx");  
-//        modelAndView.setViewName("redirect:/register");  
-        modelAndView.setViewName("/register");  
-        return modelAndView;*/
 	}
 
     /**
@@ -224,7 +205,7 @@ public class RegisterController {
 		//校验手机验证码是否正确
 		if(member.getMobileCheckCode() != null )
 		{
-			String verifyCode = (String) req.getSession().getAttribute("mobile");
+			String verifyCode = (String) req.getSession().getAttribute(member.getMobile());
 			if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getMobileCheckCode()))
 			{
 				int isExist = memberService.isExistAccount(member);
@@ -248,23 +229,30 @@ public class RegisterController {
 		if(member.getEmailCheckCode() != null )
 		{
 			String verifyCode = (String) req.getSession().getAttribute("email");
-			if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getEmailCheckCode()))
-			{
-				int isExist = memberService.isExistAccount(member);
-				if(isExist == 0)
+			if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getEmailCheckCode()) )			{
+				if(member.getEmail().indexOf("@")>=0)
 				{
-					member.setEmailCheckCode(verifyCode);
-					memberService.registerMember(member);
-					if(member.getEmail()!=null && member.getEmail().indexOf("@")>0)
+					int isExist = memberService.isExistAccount(member);
+					if(isExist == 0)
 					{
+						member.setEmailCheckCode(verifyCode);
+						memberService.registerMember(member);
 						//发送激活链接给此邮件
-						rvService.sendMailActivateCode(member);
+						rvService.sendMailActivateCode(member,ResourcePropertiesUtils.getValue("host.ip"));
+						//是否显示“立即激活按钮”
+						String mail = ds.findMailAddress(member.getEmail());
+						if(mail != null && !mail.equals(""))
+						{
+							Map<String,String> map = new HashMap<String,String>();
+							map.put("activateButton", "true");
+							result.setData(map);
+						}
 					}
-				}
-				else
-				{
-					result.setCode(400);
-					result.setMessage("账户名已经存在");
+					else
+					{
+						result.setCode(400);
+						result.setMessage("账户名已经存在");
+					}
 				}
 			}
 			else
@@ -310,7 +298,7 @@ public class RegisterController {
 	public void mobileValidate(HttpServletRequest req,HttpServletResponse response, Member member,Model model) throws IOException {
 		log.debug("找回密码  mobile =="+member.getMobile());
 		JsonResult result = new JsonResult();
-		String seekMobileCode = (String) request.getSession().getAttribute("seekPwdMobile");
+		String seekMobileCode = (String) req.getSession().getAttribute(member.getMobile());
 		if(member.getMobileCheckCode() == null || !member.getMobileCheckCode().equals(seekMobileCode))
 		{
 			result.setCode(400);
@@ -334,7 +322,14 @@ public class RegisterController {
 	public void sendValidateMail(HttpServletRequest req,HttpServletResponse response, Member member,Model model) throws IOException {
 		log.debug("找回密码  email =="+member.getEmail());
 		JsonResult result = new JsonResult();
-		rvService.sendValidateMail(member);
+		rvService.sendValidateMail(member,ResourcePropertiesUtils.getValue("host.ip"));
+		String mail = ds.findMailAddress(member.getEmail());
+		if(mail != null && !mail.equals(""))
+		{
+			Map<String,String> map = new HashMap<String,String>();
+			map.put("button", "true");
+			result.setData(map);
+		}
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 	
@@ -364,26 +359,26 @@ public class RegisterController {
 	 * @return
 	 * @throws UnsupportedEncodingException 
 	 */
-	@RequestMapping(value = "/activateEmail", method = RequestMethod.GET)
+	@RequestMapping(value = "/rest/activateEmail", method = RequestMethod.GET)
 	public ModelAndView activateEmail(HttpServletRequest req, Model model) throws UnsupportedEncodingException {
 		log.debug("email activate start.....");
 		JsonResult jsonResult = new JsonResult();
 		ModelAndView modelAndView = new ModelAndView(); 
 		try
         {
-			String vm = request.getParameter("vm");//获取email
+			String vm = req.getParameter("vm");//获取email
 			String decodeVM = new String (EncodeUtil.decodeBase64(vm));
         	jsonResult = rvService.processActivate(decodeVM);
         	 modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(jsonResult.getData()).getBytes())); 
         	if(jsonResult.getCode() == 200)
         	{
         		//跳转到会员中心页面
-        		RedirectView rv = new RedirectView("http://localhost:1234/forgot.html");
+        		RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page"));
         		modelAndView.setView(rv);
         	}
         	else
         	{
-    	        RedirectView rv = new RedirectView("http://localhost:1234/forgot.html");
+        		RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page"));
     	        modelAndView.setView(rv);
         	}
         	
@@ -403,16 +398,14 @@ public class RegisterController {
 	 * @return
 	 * @throws UnsupportedEncodingException 
 	 */
-	@RequestMapping(value = "/validateMail", method = RequestMethod.GET)
+	@RequestMapping(value = "/rest/validateMail", method = RequestMethod.GET)
 	public ModelAndView validateMail(HttpServletRequest req, Model model) throws UnsupportedEncodingException {
 		log.debug("validate mail start.....");
-		JsonResult jsonResult = new JsonResult();
-		String action = request.getParameter("action");
-		String vm = request.getParameter("vm");//获取email
+		String vm = req.getParameter("vm");//获取email
 		String email = new String (EncodeUtil.decodeBase64(vm));
         try
         {
-        	jsonResult = rvService.processValidate(email);
+        	JsonResult jsonResult = rvService.processValidate(email);
         }
         catch(Exception e)
         {
@@ -420,7 +413,7 @@ public class RegisterController {
         }
         ModelAndView modelAndView = new ModelAndView();  
         modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(email.getBytes()));  
-        RedirectView rv = new RedirectView("http://localhost:1234/forgot.html");
+        RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.page"));
         modelAndView.setView(rv);
         return modelAndView;
 	}
@@ -439,8 +432,25 @@ public class RegisterController {
 	public void isValidatePass(HttpServletRequest req,HttpServletResponse response) throws IOException {
 		log.debug("找回密码是否验证");
 		JsonResult jsonResult = new JsonResult();
-		String account = request.getParameter("account");
+		String account = req.getParameter("account");
 		int result = memberService.isValidatePass(account);
+		jsonResult.setData(result);
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+	}
+	
+	/**
+	 * 查看激活邮件
+	 * @param req
+	 * @param response
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/rest/watchMail", method = RequestMethod.GET)
+	@ResponseBody
+	public void watchMail(HttpServletRequest req,HttpServletResponse response) throws IOException {
+		log.debug("找回密码是否验证");
+		JsonResult jsonResult = new JsonResult();
+		String account = req.getParameter("email");
+		String result = ds.findMailAddress(account);
 		jsonResult.setData(result);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}

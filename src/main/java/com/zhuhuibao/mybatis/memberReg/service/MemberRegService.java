@@ -1,5 +1,6 @@
 package com.zhuhuibao.mybatis.memberReg.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -13,6 +14,7 @@ import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper;
 import com.zhuhuibao.security.EncodeUtil;
+import com.zhuhuibao.utils.DateUtils;
 
 /**
  * 会员业务处理
@@ -34,18 +36,26 @@ public class MemberRegService {
     {
     	log.debug("注册会员");
     	int memberId = 0;
-    	if(member != null && member.getIdentify() != 0)
+    	try
     	{
-    		//前台传过来的base64密码解密
-    		String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
-    		String md5Pwd = new Md5Hash(pwd,null,2).toString();
-			member.setPassword(md5Pwd);
-    		if(member.getMobile() != null)
-    		{
-    			//默认状态为“0”
-    			member.setStatus(1);
-    		}
-    		memberId = memberRegMapper.registerMember(member);
+	    	if(member != null && member.getIdentify() != 0)
+	    	{
+	    		//前台传过来的base64密码解密
+	    		String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
+	    		String md5Pwd = new Md5Hash(pwd,null,2).toString();
+				member.setPassword(md5Pwd);
+	    		if(member.getMobile() != null)
+	    		{
+	    			//默认状态为“0”
+	    			member.setStatus(1);
+	    		}
+	    		member.setRegisterTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+	    		memberId = memberRegMapper.registerMember(member);
+	    	}
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("register member error",e);
     	}
     	return memberId;
     }
@@ -58,7 +68,7 @@ public class MemberRegService {
     public Member findMemberByAccount(String memberAccount)
     {
     	Member member = new Member();
-    	if(memberAccount != null && memberAccount.indexOf("@") > 0)
+    	if(memberAccount != null && memberAccount.indexOf("@") >= 0)
     	{
     		member.setEmail(memberAccount);
     	}
@@ -115,6 +125,17 @@ public class MemberRegService {
     }
     
     /**
+     * 更新找回密码邮箱验证是否通过
+     * @param member
+     * @return
+     */
+    public int updateMemberValidatePass(Member member)
+    {
+    	int result = memberRegMapper.updateMemberValidatePass(member);
+    	return result;
+    }
+    
+    /**
      * 找回密码，重置密码
      * @param member 会员信息
      * @return
@@ -128,15 +149,15 @@ public class MemberRegService {
 		member.setPassword(md5Pwd);
 		if(member.getAccount() != null)
 		{
-			if(member.getAccount().indexOf("@") > 0)
+			if(member.getAccount().indexOf("@") >= 0)
 			{
 				member.setEmail(member.getAccount());
-				result = memberRegMapper.updateMemberPwdByMail(member);
+				result = memberRegMapper.updateMemberPwd(member);
 			}
 			else
 			{
 				member.setMobile(member.getAccount());
-				result = memberRegMapper.updateMemberPwdByMobile(member);
+				result = memberRegMapper.updateMemberPwd(member);
 			}
 		}
     	return result;

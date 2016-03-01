@@ -33,6 +33,6 @@ public class DictionaryService {
 		{
 			log.error("find mail address",ex);
 		}
-		return mail;
+		return mail != null ? mail : "";
 	}
 }

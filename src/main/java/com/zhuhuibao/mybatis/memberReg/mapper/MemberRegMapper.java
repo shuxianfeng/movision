@@ -20,16 +20,16 @@ public interface MemberRegMapper {
 	//更新会员注册状态
 	int updateMemberStatus(Member member);
 	
-	//手机账号会员更新密码
-	int updateMemberPwdByMobile(Member member);
-	
-	//邮箱账号会员更新密码
-	int updateMemberPwdByMail(Member member);
+	//会员更新密码
+	int updateMemberPwd(Member member);
 	
 	//找回密码是否验证通过
 	Integer isValidatePass(String account);
 	
 	//账号名是否存在
 	int isExistAccount(Member member);
+	
+	//更新找回密码邮箱验证是否通过
+	int updateMemberValidatePass(Member member);
 	
 }

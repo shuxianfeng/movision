@@ -1,9 +1,8 @@
 package com.zhuhuibao.business.memCenter.memManage.controller;
 
 import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.mybatis.memCenter.entity.Certificate;
-import com.zhuhuibao.mybatis.memCenter.entity.Member;
-import com.zhuhuibao.mybatis.memCenter.mapper.CertificateMapper;
+import com.zhuhuibao.mybatis.memCenter.entity.*;
+import com.zhuhuibao.mybatis.memCenter.mapper.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.JsonUtils;
 import org.slf4j.Logger;
@@ -37,74 +36,35 @@ public class InformationController {
 	@Autowired
 	private CertificateMapper certificateMapper;
 
+	@Autowired
+	private UnitTypeMapper unitTypeMapper;
+
+	@Autowired
+	private WorkTypeMapper workTypeMapper;
+
+	@Autowired
+	private EnterpriseTypeMapper enterpriseTypeMapper;
+
+	@Autowired
+	private CompanyIdentityMapper companyIdentityMapper;
+
 	/**
-	 * 个人基本信息页面
+	 * 根据ID查询会员所有信息
 	 * @param req
 	 * @return
 	 * @throws IOException
 	 */
 
 	@RequestMapping(value = "/rest/info", method = RequestMethod.GET)
-	public void companyInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
+	public void info(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		String memId = req.getParameter("id");
 		Member member = memberService.findMemById(memId);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(member));
 	}
-	/*@RequestMapping(value = "/rest/info", method = RequestMethod.GET)
-	public void info(HttpServletRequest req, HttpServletResponse response) throws IOException {
-		String memId = req.getParameter("id");
-		Member member = memberService.findMemById(memId);
-		Map<String, String> map=new HashMap<String,String>();
-		map.put("personRealName",member.getPersonRealName());
-		if(member.getPersonSex()!=null){
-			map.put("personSex",member.getPersonSex().toString());
-		}else{
-			map.put("personSex",null);
-		}
-		if(member.getPersonPosition()!=null){
-			map.put("personPosition",member.getPersonPosition().toString());
-		}else{
-			map.put("personPosition",null);
-		}
-
-		map.put("personProvince",member.getPersonProvince());
-		map.put("personCity",member.getPersonCity());
-		map.put("personArea",member.getPersonArea());
-		map.put("personAddress",member.getPersonAddress());
-		if(member.getPersonMobile()!=null){
-			map.put("personMobile",member.getPersonMobile().toString());
-		}else{
-			map.put("personMobile",null);
-		}
-		if(member.getPersonTel()!=null){
-			map.put("personTel",member.getPersonTel().toString());
-		}else{
-			map.put("personTel",null);
-		}
-		if(member.getPersonQQ()!=null){
-			map.put("personQQ",member.getPersonQQ().toString());
-		}else{
-			map.put("personQQ",null);
-		}
-		map.put("personHeadShot",member.getPersonHeadShot());
-		if(member.getPersonID()!=null){
-			map.put("personID",member.getPersonID().toString());
-		}else{
-			map.put("personID",null);
-		}
-
-		map.put("personIDFrontImgUrl",member.getPersonIDFrontImgUrl());
-		map.put("personIDBackImgUrl",member.getPersonIDBackImgUrl());
-		map.put("personCertificateName",member.getPersonCertificateName());
-		map.put("personCertificateOrg",member.getPersonCertificateOrg());
-		map.put("personCertificateUrl",member.getPersonCertificateUrl());
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(map));
-	}*/
 
 	/**
-	 * 个人基本信息完善
+	 * 个人基本信息保存
 	 * @param req
 	 * @param member
 	 * @return
@@ -139,7 +99,7 @@ public class InformationController {
 	}
 
 	/**
-	 * 企业基本信息完善
+	 * 企业基本信息保存
 	 * @param req
 	 * @param member
 	 * @return
@@ -172,7 +132,7 @@ public class InformationController {
 
 
 	/**
-	 * 详细信息，联系方式完善（个人，企业）
+	 * 详细信息，联系方式保存（个人，企业）
 	 * @param req
 	 * @param member
 	 * @return
@@ -206,5 +166,61 @@ public class InformationController {
 		List<Certificate> certificate = certificateMapper.findCertificateList();
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(certificate));
+	}
+
+	/**
+	 * 工作单位类别
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+
+	@RequestMapping(value = "/rest/unitTypeList", method = RequestMethod.GET)
+	public void unitTypeList(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		List<UnitType> unitType = unitTypeMapper.findUnitTypeList();
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(unitType));
+	}
+
+	/**
+	 * 工作类别
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+
+	@RequestMapping(value = "/rest/workTypeList", method = RequestMethod.GET)
+	public void workTypeList(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		List<WorkType> workType = workTypeMapper.findWorkTypeList();
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(workType));
+	}
+
+	/**
+	 * 企业类别
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+
+	@RequestMapping(value = "/rest/enterpriseTypeList", method = RequestMethod.GET)
+	public void enterpriseTypeList(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		List<EnterpriseType> enterpriseType = enterpriseTypeMapper.findEnterpriseTypeList();
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(enterpriseType));
+	}
+
+	/**
+	 * 企业身份
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+
+	@RequestMapping(value = "/rest/companyIdentityList", method = RequestMethod.GET)
+	public void companyIdentityList(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		List<CompanyIdentity> companyIdentity = companyIdentityMapper.findCompanyIdentityList();
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(companyIdentity));
 	}
 }
