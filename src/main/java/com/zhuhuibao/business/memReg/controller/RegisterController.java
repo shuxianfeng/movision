@@ -235,7 +235,6 @@ public class RegisterController {
 					int isExist = memberService.isExistAccount(member);
 					if(isExist == 0)
 					{
-						member.setEmailCheckCode(verifyCode);
 						memberService.registerMember(member);
 						//发送激活链接给此邮件
 						rvService.sendMailActivateCode(member,ResourcePropertiesUtils.getValue("host.ip"));
@@ -411,9 +410,10 @@ public class RegisterController {
 		log.debug("validate mail start.....");
 		String vm = req.getParameter("vm");//获取email
 		String email = new String (EncodeUtil.decodeBase64(vm));
+		JsonResult jsonResult = new JsonResult();
         try
         {
-        	JsonResult jsonResult = rvService.processValidate(email);
+        	jsonResult = rvService.processValidate(email);
         }
         catch(Exception e)
         {
@@ -421,7 +421,15 @@ public class RegisterController {
         }
         ModelAndView modelAndView = new ModelAndView();  
         modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(email.getBytes()));  
-        RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.page"));
+        RedirectView rv = null;
+        if(jsonResult.getCode() == 200)
+        {
+	        rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.page"));
+        }
+        else
+        {
+        	rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.invalid.page"));
+        }
         modelAndView.setView(rv);
         return modelAndView;
 	}
