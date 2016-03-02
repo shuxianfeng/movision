@@ -1,5 +1,6 @@
 package com.zhuhuibao.business.memCenter.memManage.controller;
 
+import com.mysql.jdbc.StringUtils;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.*;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,6 +58,9 @@ public class InformationController {
 
 	@Autowired
 	private AreaMapper areaMapper;
+
+	@Autowired
+	private CertificateRecordMapper certificateRecordMapper;
 
 	/**
 	 * 根据ID查询会员所有信息
@@ -172,7 +177,8 @@ public class InformationController {
 
 	@RequestMapping(value = "/rest/certificateList", method = RequestMethod.GET)
 	public void certificateList(HttpServletRequest req, HttpServletResponse response) throws IOException {
-		List<Certificate> certificate = certificateMapper.findCertificateList();
+		String type = req.getParameter("type");
+		List<Certificate> certificate = certificateMapper.findCertificateList(type);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(certificate));
 	}
@@ -273,5 +279,155 @@ public class InformationController {
 		List<Area> area = areaMapper.findArea(cityCode);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(area));
+	}
+
+	/**
+	 * 判断是否绑定手机
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/rest/isBindMobile", method = RequestMethod.GET)
+	public void isBindMobile(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		String memId = req.getParameter("id");
+		Member member = memberService.findMemById(memId);
+		JsonResult result = new JsonResult();
+		if(member.getMobile()!=null || !StringUtils.isNullOrEmpty(member.getMobile())){
+			result.setCode(200);
+			result.setMessage("手机已绑定");
+		}else{
+			result.setCode(400);
+			result.setMessage("手机未绑定");
+		}
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+	}
+
+	/**
+	 * 判断是否绑定邮箱
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/rest/isBindEmail", method = RequestMethod.GET)
+	public void isBindEmail(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		String memId = req.getParameter("id");
+		Member member = memberService.findMemById(memId);
+		JsonResult result = new JsonResult();
+		if(member.getEmail()!=null || !StringUtils.isNullOrEmpty(member.getEmail())){
+			result.setCode(200);
+			result.setMessage("邮箱已绑定");
+		}else{
+			result.setCode(400);
+			result.setMessage("邮箱未绑定");
+		}
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+	}
+
+	/**
+	 * 会员头像
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/rest/memberLogo", method = RequestMethod.GET)
+	public void memberLogo(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		String memId = req.getParameter("id");
+		Member member = memberService.findMemById(memId);
+		String headshot = "";
+		if(member!=null){
+			if(member.getIdentify()==1){
+				headshot = member.getEnterpriseHeadShot();
+			}else{
+				headshot = member.getPersonHeadShot();
+			}
+		}
+		response.getWriter().write(headshot);
+	}
+
+	/**
+	 * 资质保存
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/rest/certificateSave", method = RequestMethod.POST)
+	public void certificateSave(HttpServletRequest req, HttpServletResponse response,CertificateRecord record) throws IOException {
+		JsonResult result = new JsonResult();
+		String certificate_grade = record.getCertificate_grade().toString();
+		if("1".equals(certificate_grade)){
+			record.setCertificate_grade_name("一级");
+		}else if("2".equals(certificate_grade)){
+			record.setCertificate_grade_name("二级");
+		}else{
+			record.setCertificate_grade_name("三级");
+		}
+		record.setTime(new Date());
+		int isSave = certificateRecordMapper.saveCertificate(record);
+		if(isSave==1){
+			result.setCode(200);
+		}else{
+			result.setCode(400);
+			result.setMessage("资质保存失败");
+		}
+
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+	}
+
+	/**
+	 * 资质编辑
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/rest/certificateUpdate", method = RequestMethod.POST)
+	public void certificateUpdate(HttpServletRequest req, HttpServletResponse response,CertificateRecord record) throws IOException {
+		JsonResult result = new JsonResult();
+		String certificate_grade = record.getCertificate_grade().toString();
+		if("1".equals(certificate_grade)){
+			record.setCertificate_grade_name("一级");
+		}else if("2".equals(certificate_grade)){
+			record.setCertificate_grade_name("二级");
+		}else{
+			record.setCertificate_grade_name("三级");
+		}
+		record.setTime(new Date());
+		int isUpdate = certificateRecordMapper.updateCertificate(record);
+		if(isUpdate==1){
+			result.setCode(200);
+		}else{
+			result.setCode(400);
+			result.setMessage("资质编辑失败");
+		}
+
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+	}
+
+	/**
+	 * 资质删除
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/rest/certificateDelete", method = RequestMethod.POST)
+	public void certificateDelete(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		JsonResult result = new JsonResult();
+		int id = Integer.parseInt(req.getParameter("id"));
+		int isDelete = certificateRecordMapper.deleteCertificate(id);
+		if(isDelete==1){
+			result.setCode(200);
+		}else{
+			result.setCode(400);
+			result.setMessage("资质删除失败");
+		}
+
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
 	}
 }
