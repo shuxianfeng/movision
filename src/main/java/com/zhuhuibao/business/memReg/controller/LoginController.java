@@ -3,6 +3,7 @@ package com.zhuhuibao.business.memReg.controller;
 import java.io.IOException;
 
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.security.EncodeUtil;
@@ -69,18 +70,22 @@ public class LoginController {
 //            e.printStackTrace();
             jsonResult.setCode(400);
             jsonResult.setMessage("用户名不存在");
+            jsonResult.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
+            
         }catch (LockedAccountException e){
             /*e.printStackTrace();
             model.addAttribute("error", "帐户状态异常");
             result = "login";*/
 		    jsonResult.setCode(400);
 		    jsonResult.setMessage("帐户状态异常");
+		    jsonResult.setMsgCode(MsgCodeConstant.member_mcode_account_status_exception);
         } catch (AuthenticationException e){
             /*e.printStackTrace();
             model.addAttribute("error", "用户名或密码错误");
             result = "login";*/
         	jsonResult.setCode(400);
 		    jsonResult.setMessage("用户名或密码错误");
+		    jsonResult.setMsgCode(MsgCodeConstant.member_mcode_usernameorpwd_error);
         }
 
         if(currentUser.isAuthenticated()){
