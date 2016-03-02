@@ -153,6 +153,9 @@ public class MemberRegService {
 			{
 				member.setEmail(member.getAccount());
 				result = memberRegMapper.updateMemberPwd(member);
+				Member dbmember = memberRegMapper.findMemberByAccount(member);
+				dbmember.setIsValidatePass(0);
+				memberRegMapper.updateMemberValidatePass(dbmember);
 			}
 			else
 			{
