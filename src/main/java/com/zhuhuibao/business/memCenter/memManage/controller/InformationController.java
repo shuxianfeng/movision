@@ -2,6 +2,7 @@ package com.zhuhuibao.business.memCenter.memManage.controller;
 
 import com.mysql.jdbc.StringUtils;
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
@@ -18,7 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author cxx
@@ -248,7 +251,7 @@ public class InformationController {
 
 	@RequestMapping(value = "/rest/searchProvince", method = RequestMethod.GET)
 	public void searchProvince(HttpServletRequest req, HttpServletResponse response) throws IOException {
-		List<Province> province = provinceMapper.findProvince();
+		List<ResultBean> province = provinceMapper.findProvince();
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(province));
 	}
@@ -262,7 +265,7 @@ public class InformationController {
 	@RequestMapping(value = "/rest/searchCity", method = RequestMethod.GET)
 	public void searchCity(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		String provincecode = req.getParameter("provincecode");
-		List<City> city = cityMapper.findCity(provincecode);
+		List<ResultBean> city = cityMapper.findCity(provincecode);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(city));
 	}
@@ -276,7 +279,7 @@ public class InformationController {
 	@RequestMapping(value = "/rest/searchArea", method = RequestMethod.GET)
 	public void searchArea(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		String cityCode = req.getParameter("cityCode");
-		List<Area> area = areaMapper.findArea(cityCode);
+		List<ResultBean> area = areaMapper.findArea(cityCode);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(area));
 	}
