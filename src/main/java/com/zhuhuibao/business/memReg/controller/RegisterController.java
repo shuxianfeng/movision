@@ -386,7 +386,7 @@ public class RegisterController {
         	}
         	else
         	{
-        		RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page"));
+        		RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.replay.page"));
     	        modelAndView.setView(rv);
         	}
         	
@@ -441,7 +441,7 @@ public class RegisterController {
 		log.debug("找回密码是否验证");
 		JsonResult jsonResult = new JsonResult();
 		String account = req.getParameter("account");
-		int result = memberService.isValidatePass(account);
+		int result = memberService.isValidatePass(EncodeUtil.decodeBase64ToString(account));
 		jsonResult.setData(result);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
@@ -458,7 +458,7 @@ public class RegisterController {
 		log.debug("找回密码是否验证");
 		JsonResult jsonResult = new JsonResult();
 		String account = req.getParameter("email");
-		String result = ds.findMailAddress(account);
+		String result = ds.findMailAddress(EncodeUtil.decodeBase64ToString(account));
 		jsonResult.setData(result);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
