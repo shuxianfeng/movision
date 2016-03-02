@@ -14,6 +14,7 @@ import javax.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.security.EncodeUtil;
 
 
@@ -72,5 +73,42 @@ public class SendEmail {
     }
     
     public static void main(String[] args) {
+    	String serverIp = "192.168.1.100";
+    	Member member = new Member();
+    	member.setEmail("19630759@qq.com");
+    	StringBuffer sb=new StringBuffer("");
+        sb.append("<div style=\"line-height:40px;height:40px\">");
+        sb.append("</div>");
+        sb.append("<p style=\"padding:0px\"");
+        sb.append("<strong style=\"font-size:14px;line-height:24px;color:#333333;font-family:arial,sans-serif\"");
+        sb.append("亲爱的用户：");
+        sb.append("</strong>");
+        sb.append("<p>您好！");
+        sb.append("</p>");
+        sb.append("<p>您收到这封电子邮件是因为您 (也可能是某人冒充您的名义) 申请了一个新的密码。假如这不是您本人所申请, 请不用理会这封电子邮件, 但是如果您持续收到这类的信件骚扰, 请您尽快联络管理员。</p>");
+        sb.append("<p>请使用以下链接修改密码：</p>");
+        sb.append("<p style=\"padding:0px\">");
+        sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"http://");
+        sb.append(serverIp);
+        sb.append("/rest/validateMail?action=validate&vm=");
+        sb.append(new String(EncodeUtil.encodeBase64(member.getEmail())));
+        sb.append("\">http://");
+        sb.append(serverIp);
+        sb.append("/rest/validateMail?action=validate&vm="+new String(EncodeUtil.encodeBase64(member.getEmail()))+"</a>"); 
+        //sb.append(new String(EncodeUtil.encodeBase64(member.getEmail())));
+        sb.append("</a>");
+        sb.append("</p>");
+        sb.append("<p style=\"padding:0px;line-height:24px;font-size:12px;color:#979797;font-family:arial,sans-serif\">");
+        sb.append("(如果您无法点击此链接，请将它复制到浏览器地址栏后访问)");
+        sb.append("</p>");
+        sb.append("</p>为了保障您帐号的安全性，请在24小时内完成密码重置！</p>");
+        sb.append("<div style=\"line-height:80px;height:80px\" </div>");
+        sb.append("<p>筑慧宝团队</p>");
+        sb.append("<p>");
+        sb.append(DateUtils.date2Str(new Date(), "yyyy-MM-dd"));
+        sb.append("</p>");
+        log.info("send email link == "+sb.toString());
+        //发送邮件
+        SendEmail.send(member.getEmail(), sb.toString(),"筑慧宝-找回账户密码");
 	}
 }

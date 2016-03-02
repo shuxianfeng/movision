@@ -23,7 +23,7 @@ public class ResourcePropertiesUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(ResourcePropertiesUtils.getValue("admin.cookie.name"));
+        System.out.println(ResourcePropertiesUtils.getValue("host.ip"));
     }
 
 }

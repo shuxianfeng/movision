@@ -22,6 +22,19 @@ public class JsonResult implements Serializable{
 	 * 返回的数据
 	 */
 	private Object data;
+	
+	/**
+	 * 平台返回的消息码
+	 * @return
+	 */
+	private int msgCode;
+	
+	public int getMsgCode() {
+		return msgCode;
+	}
+	public void setMsgCode(int msgCode) {
+		this.msgCode = msgCode;
+	}
 	public int getCode() {
 		return code;
 	}

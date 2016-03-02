@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memberReg.mapper.ValidateinfoMapper">
+
+  <insert id="insertValidateInfo" parameterType="validateInfo" useGeneratedKeys="true" keyProperty="id">
+  	insert into t_m_member(memberId,mailUrl,valid,createTime,mobileCheckCode) values
+  	(#{memberId},#{mailUrl},#{valid},#{createTime}},#{emailCheckCode})
+  </insert>
+  
+  <select id="findMemberValidateInfo" parameterType="validateInfo" resultType="validateInfo">
+	  select * from t_m_validateinfo 
+	  <where>
+	  	<if test="memberId != null"> 
+	  		AND memberId = #{memberId}
+	  	</if>
+	  	<if test="mailUrl">
+	  		AND mailUrl = #{mailUrl}
+	  	</if>
+	  	<if test="valid">
+	  		AND valid = #{valid}
+	  	</if>
+	  	<if test="mobileCheckCode">
+	  		AND mobileCheckCode = #{mobileCheckCode}
+	  	</if>
+	  </where>
+  </select>
+  
+  <update id="updateValidateInfo" parameterType="validateInfo">
+  	<set>
+	    <if test="valid!= null" >
+	    	valid = #{valid}
+	    </if>
+    </set>
+    where mailUrl = #{mailUrl}
+  </update>
+</mapper>
