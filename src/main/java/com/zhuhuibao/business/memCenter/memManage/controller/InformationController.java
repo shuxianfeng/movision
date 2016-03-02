@@ -93,13 +93,13 @@ public class InformationController {
 		if(member.getPersonRealName()==null){
 			result.setCode(400);
 			result.setMessage("真实姓名为必填项");
-		}else if(member.getPersonSex()==null){
+		}else if(member.getSex()==null){
 			result.setCode(400);
 			result.setMessage("性别为必填项");
 		}else if(member.getPersonPosition()==null){
 			result.setCode(400);
 			result.setMessage("工作类型为必填项");
-		}else if(member.getPersonProvince() == null || member.getPersonCity() == null || member.getPersonArea() == null){
+		}else if(member.getProvince() == null || member.getCity() == null || member.getArea() == null){
 			result.setCode(400);
 			result.setMessage("所在地为必填项");
 		}else{
@@ -125,12 +125,12 @@ public class InformationController {
 	@RequestMapping(value = "/rest/companyBasicInfo", method = RequestMethod.POST)
 	public void companyBasicInfo(HttpServletRequest req, HttpServletResponse response, Member member, Model model) throws IOException {
 		JsonResult result = new JsonResult();
-		if(member.getCompanyName()==null){
+		if(member.getEnterpriseName()==null){
 			result.setCode(400);
 			result.setMessage("企业名称为必填项");
-		}else if(member.getEnterpriseMemberType()==null){
+		}else if(member.getCompanyIdentify()==null){
 			result.setCode(400);
-			result.setMessage("经营方式为必填项");
+			result.setMessage("企业身份为必填项");
 		}else if(member.getProvince()==null||member.getCity()==null||member.getArea()==null){
 			result.setCode(400);
 			result.setMessage("所在地为必填项");
@@ -338,15 +338,7 @@ public class InformationController {
 	public void memberLogo(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		String memId = req.getParameter("id");
 		Member member = memberService.findMemById(memId);
-		String headshot = "";
-		if(member!=null){
-			if(member.getIdentify()==1){
-				headshot = member.getEnterpriseHeadShot();
-			}else{
-				headshot = member.getPersonHeadShot();
-			}
-		}
-		response.getWriter().write(headshot);
+		response.getWriter().write(member.getHeadShot());
 	}
 
 	/**
