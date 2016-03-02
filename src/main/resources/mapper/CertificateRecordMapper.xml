@@ -183,11 +183,18 @@
     </set>
     where id = #{id}
   </update>
-  <update id="deleteCertificate" parameterType="java.lang.Integer">
+  <update id="deleteCertificate" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord">
     update t_certificate_record
     <set>
         is_deleted = 1
     </set>
     where id = #{id}
   </update>
+  <select id="certificateSearch" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from t_certificate_record
+    where
+      mem_id = #{mem_id} and type = #{type} and is_deleted = 0
+  </select>
 </mapper>

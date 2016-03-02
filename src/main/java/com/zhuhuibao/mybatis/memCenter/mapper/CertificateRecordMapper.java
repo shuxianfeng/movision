@@ -2,6 +2,8 @@ package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
 
+import java.util.List;
+
 public interface CertificateRecordMapper {
     //资质保存
     int saveCertificate(CertificateRecord record);
@@ -10,5 +12,8 @@ public interface CertificateRecordMapper {
     int updateCertificate(CertificateRecord record);
 
     //资质删除
-    int deleteCertificate(int id);
+    int deleteCertificate(CertificateRecord record);
+
+    //资质查询
+    List<CertificateRecord> certificateSearch(CertificateRecord record);
 }

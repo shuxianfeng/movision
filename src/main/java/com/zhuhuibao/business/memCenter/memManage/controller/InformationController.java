@@ -415,10 +415,9 @@ public class InformationController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/certificateDelete", method = RequestMethod.POST)
-	public void certificateDelete(HttpServletRequest req, HttpServletResponse response) throws IOException {
+	public void certificateDelete(HttpServletRequest req, HttpServletResponse response,CertificateRecord record) throws IOException {
 		JsonResult result = new JsonResult();
-		int id = Integer.parseInt(req.getParameter("id"));
-		int isDelete = certificateRecordMapper.deleteCertificate(id);
+		int isDelete = certificateRecordMapper.deleteCertificate(record);
 		if(isDelete==1){
 			result.setCode(200);
 		}else{
@@ -428,6 +427,21 @@ public class InformationController {
 
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+	}
+
+	/**
+	 * 查询资质
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/rest/certificateSearch", method = RequestMethod.GET)
+	public void certificateSearch(HttpServletRequest req, HttpServletResponse response,CertificateRecord record) throws IOException {
+		List<CertificateRecord> list = certificateRecordMapper.certificateSearch(record);
+
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(list));
 
 	}
 }
