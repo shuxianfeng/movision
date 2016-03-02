@@ -3,8 +3,8 @@
 <mapper namespace="com.zhuhuibao.mybatis.memberReg.mapper.ValidateinfoMapper">
 
   <insert id="insertValidateInfo" parameterType="validateInfo" useGeneratedKeys="true" keyProperty="id">
-  	insert into t_m_member(memberId,mailUrl,valid,createTime,mobileCheckCode) values
-  	(#{memberId},#{mailUrl},#{valid},#{createTime}},#{emailCheckCode})
+  	insert into t_m_validateinfo(memberId,mailUrl,valid,createTime,mobileCheckCode) values
+  	(#{memberId},#{mailUrl},#{valid},#{createTime},#{mobileCheckCode})
   </insert>
   
   <select id="findMemberValidateInfo" parameterType="validateInfo" resultType="validateInfo">
@@ -26,6 +26,7 @@
   </select>
   
   <update id="updateValidateInfo" parameterType="validateInfo">
+  update t_m_validateinfo 
   	<set>
 	    <if test="valid!= null" >
 	    	valid = #{valid}
