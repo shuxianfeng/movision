@@ -99,6 +99,7 @@ public class RegisterValidateService {
 	                	   user.setStatus(1);
 	                	   memberService.updateMemberStatus(user);
 	                       message = "激活成功请登录";
+	                       code = 200;
 	                       break;
 		               } else { 
 		            	   //激活码已过期
