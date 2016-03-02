@@ -7,7 +7,7 @@ public class CertificateRecord {
 
     private Integer mem_id;
 
-    private String organization;
+    private String certificate_number;
 
     private String certificate_name;
 
@@ -39,12 +39,12 @@ public class CertificateRecord {
         this.mem_id = mem_id;
     }
 
-    public String getOrganization() {
-        return organization;
+    public String getCertificate_number() {
+        return certificate_number;
     }
 
-    public void setOrganization(String organization) {
-        this.organization = organization == null ? null : organization.trim();
+    public void setCertificate_number(String certificate_number) {
+        this.certificate_number = certificate_number == null ? null : certificate_number.trim();
     }
 
     public String getCertificate_name() {

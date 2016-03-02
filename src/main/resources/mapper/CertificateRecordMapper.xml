@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="mem_id" property="mem_id" jdbcType="INTEGER" />
-    <result column="organization" property="organization" jdbcType="VARCHAR" />
+    <result column="certificate_number" property="certificate_number" jdbcType="VARCHAR" />
     <result column="certificate_name" property="certificate_name" jdbcType="VARCHAR" />
     <result column="certificate_grade" property="certificate_grade" jdbcType="INTEGER" />
     <result column="certificate_grade_name" property="certificate_grade_name" jdbcType="VARCHAR" />
@@ -14,7 +14,7 @@
     <result column="is_deleted" property="is_deleted" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, mem_id, organization, certificate_name, certificate_grade, certificate_grade_name, 
+    id, mem_id, certificate_number, certificate_name, certificate_grade, certificate_grade_name,
     certificate_url,type, time, is_deleted
   </sql>
   <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -141,11 +141,11 @@
     where id = #{id,jdbcType=BIGINT}
   </update>-->
   <insert id="saveCertificate" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord" >
-    insert into t_certificate_record (id, mem_id, organization,
+    insert into t_certificate_record (id, mem_id, certificate_number,
     certificate_name, certificate_grade, certificate_grade_name,
     certificate_url,type, time, is_deleted
     )
-    values (#{id,jdbcType=BIGINT}, #{mem_id}, #{organization},
+    values (#{id,jdbcType=BIGINT}, #{mem_id}, #{certificate_number},
     #{certificate_name}, #{certificate_grade}, #{certificate_grade_name},
     #{certificate_url}, #{type},#{time}, 0
     )
@@ -156,8 +156,8 @@
       <if test="mem_id != null">
         mem_id = #{mem_id},
       </if>
-      <if test="organization != null">
-        organization = #{organization},
+      <if test="certificate_number != null">
+        certificate_number = #{certificate_number},
       </if>
       <if test="certificate_name != null">
         certificate_name = #{certificate_name},
