@@ -194,7 +194,7 @@ public class MemberRegService {
 			    	{
 			    		result.setCode(400);
 			    		result.setMessage("账户不存在");
-			    		result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+			    		result.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
 			    	}
 				}
 				else
@@ -215,7 +215,7 @@ public class MemberRegService {
     		    	{
     		    		result.setCode(400);
     		    		result.setMessage("账户不存在");
-    		    		result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+    		    		result.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
     		    	}
     		    	else
     		    	{
