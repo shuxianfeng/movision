@@ -424,8 +424,8 @@ public class RegisterController {
 			JsonResult jsonResult = new JsonResult();
 	        try
 	        {
-	        	String email = (String) jsonResult.getData();
 	        	jsonResult = rvService.processValidate(vm);
+	        	String email = (String) jsonResult.getData();
 	        	modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(email.getBytes()));  
 	        	if(jsonResult.getCode() == 200)
 	 	        {
