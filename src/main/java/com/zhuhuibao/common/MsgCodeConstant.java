@@ -58,5 +58,20 @@ public interface MsgCodeConstant {
 	 */
 	int member_mcode_mail_url_invalid = 10009;
 	
+	/**
+	 * 用户名不存在
+	 */
+	int member_mcode_username_not_exist = 10010;
+	
+	/**
+	 * 帐户状态异常
+	 */
+	int member_mcode_account_status_exception = 10011;
+	
+	/**
+	 * 用户名或密码错误
+	 */
+	int member_mcode_usernameorpwd_error = 10012;
+	
 	
 }
