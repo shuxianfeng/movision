@@ -99,6 +99,7 @@ public class RegisterValidateService {
 	                	   user.setStatus(1);
 	                	   memberService.updateMemberStatus(user);
 	                       message = "激活成功请登录";
+	                       code = 200;
 	                       break;
 		               } else { 
 		            	   //激活码已过期
@@ -176,7 +177,7 @@ public class RegisterValidateService {
         SendEmail.send(member.getEmail(), sb.toString(),"筑慧宝-找回账户密码");
         Validateinfo vinfo = new Validateinfo();
         vinfo.setCreateTime(currentTime);
-        vinfo.setMailUrl(url);
+        vinfo.setCheckCode(url);
         vinfo.setValid(0);
         memberService.inserValidateInfo(vinfo);
     }
@@ -200,16 +201,16 @@ public class RegisterValidateService {
         //验证用户是否存在 
         if(user!=null && user.getStatus() == 1) {
         	Validateinfo vinfo = new Validateinfo();
-        	vinfo.setMailUrl(url);
-        	Validateinfo validateResult = memberService.findMemberValidateInfo(vinfo);
-        	if(validateResult != null && validateResult.getValid() == 0)
+        	vinfo.setCheckCode(url);
+        	vinfo = memberService.findMemberValidateInfo(vinfo);
+        	if(vinfo != null && vinfo.getValid() == 0)
         	{
 	            Date currentTime = new Date();//获取当前时间  
 	            //验证链接是否过期 24小时
 	            Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(user.getRegisterTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
 	            if(currentTime.before(registerDate)) {
 	        	    user.setIsValidatePass(1);
-	        	    validateResult.setValid(1);
+	        	    vinfo.setValid(1);
 	        	    memberService.updateValidateInfo(vinfo);
 	        	    memberService.updateMemberValidatePass(user);
 	        	    message = "通过身份验证";

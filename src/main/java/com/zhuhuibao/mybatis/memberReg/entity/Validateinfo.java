@@ -15,15 +15,13 @@ public class Validateinfo implements Serializable{
 
 	private int id;
 	
-	private int memberId;
-	
-	private String mailUrl;
+	private String account;
 	
 	private int valid;
 	
 	private String createTime;
 	
-	private String mobileCheckCode;
+	private String checkCode;
 
 	public int getId() {
 		return id;
@@ -31,22 +29,6 @@ public class Validateinfo implements Serializable{
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public int getMemberId() {
-		return memberId;
-	}
-
-	public void setMemberId(int memberId) {
-		this.memberId = memberId;
-	}
-
-	public String getMailUrl() {
-		return mailUrl;
-	}
-
-	public void setMailUrl(String mailUrl) {
-		this.mailUrl = mailUrl;
 	}
 
 	public int getValid() {
@@ -65,19 +47,27 @@ public class Validateinfo implements Serializable{
 		this.createTime = createTime;
 	}
 
-	public String getMobileCheckCode() {
-		return mobileCheckCode;
+	public String getAccount() {
+		return account;
 	}
 
-	public void setMobileCheckCode(String mobileCheckCode) {
-		this.mobileCheckCode = mobileCheckCode;
+	public void setAccount(String account) {
+		this.account = account;
+	}
+
+	public String getCheckCode() {
+		return checkCode;
+	}
+
+	public void setCheckCode(String checkCode) {
+		this.checkCode = checkCode;
 	}
 
 	@Override
 	public String toString() {
-		return "Validateinfo [id=" + id + ", memberId=" + memberId
-				+ ", mailUrl=" + mailUrl + ", valid=" + valid + ", createTime="
-				+ createTime + ", mobileCheckCode=" + mobileCheckCode + "]";
+		return "Validateinfo [id=" + id + ", account=" + account + ", valid="
+				+ valid + ", createTime=" + createTime + ", checkCode="
+				+ checkCode + "]";
 	}
 	
 }
