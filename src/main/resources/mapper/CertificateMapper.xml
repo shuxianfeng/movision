@@ -59,5 +59,6 @@
     select
     <include refid="Base_Column_List" />
     from t_dictionary_certificate
+    where type = #{type}
   </select>
 </mapper>

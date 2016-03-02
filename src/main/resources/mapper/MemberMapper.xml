@@ -1,968 +1,186 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper">
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Member">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="emailCheckCode" jdbcType="VARCHAR" property="emailCheckCode" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="registerTime" jdbcType="VARCHAR" property="registerTime" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="identify" jdbcType="INTEGER" property="identify" />
-    <result column="isValidatePass" jdbcType="INTEGER" property="isValidatePass" />
-    <result column="companyName" jdbcType="VARCHAR" property="companyName" />
-    <result column="employeeType" jdbcType="INTEGER" property="employeeType" />
-    <result column="enterpriseEmployeeParentId" jdbcType="BIGINT" property="enterpriseEmployeeParentId" />
-    <result column="enterpriseMemberType" jdbcType="INTEGER" property="enterpriseMemberType" />
-    <result column="province" jdbcType="VARCHAR" property="province" />
-    <result column="city" jdbcType="VARCHAR" property="city" />
-    <result column="area" jdbcType="VARCHAR" property="area" />
-    <result column="enterpriseType" jdbcType="INTEGER" property="enterpriseType" />
-    <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="enterpriseLogo" jdbcType="VARCHAR" property="enterpriseLogo" />
-    <result column="enterpriseDesc" jdbcType="VARCHAR" property="enterpriseDesc" />
-    <result column="enterpriseHeadShot" jdbcType="VARCHAR" property="enterpriseHeadShot" />
-    <result column="saleProductDesc" jdbcType="VARCHAR" property="saleProductDesc" />
-    <result column="enterpriseQualification" jdbcType="INTEGER" property="enterpriseQualification" />
-    <result column="enterpriseQLevel" jdbcType="INTEGER" property="enterpriseQLevel" />
-    <result column="fcateid" jdbcType="INTEGER" property="fcateid" />
-    <result column="scateid" jdbcType="INTEGER" property="scateid" />
-    <result column="companyCorporationName" jdbcType="VARCHAR" property="companyCorporationName" />
-    <result column="cpyCommericalRegNum" jdbcType="VARCHAR" property="cpyCommericalRegNum" />
-    <result column="companyCreaterTime" jdbcType="VARCHAR" property="companyCreaterTime" />
-    <result column="registerCapital" jdbcType="VARCHAR" property="registerCapital" />
-    <result column="registerAddress" jdbcType="VARCHAR" property="registerAddress" />
-    <result column="companyBusinessScope" jdbcType="VARCHAR" property="companyBusinessScope" />
-    <result column="companyBusinessLicenseImg" jdbcType="VARCHAR" property="companyBusinessLicenseImg" />
-    <result column="certificateType" jdbcType="INTEGER" property="certificateType" />
-    <result column="certificateGrade" jdbcType="INTEGER" property="certificateGrade" />
-    <result column="certificateName" jdbcType="VARCHAR" property="certificateName" />
-    <result column="certificateOrganization" jdbcType="VARCHAR" property="certificateOrganization" />
-    <result column="certificateUrl" jdbcType="VARCHAR" property="certificateUrl" />
-    <result column="enterpriseTel" jdbcType="INTEGER" property="enterpriseTel" />
-    <result column="enterpriseFox" jdbcType="INTEGER" property="enterpriseFox" />
-    <result column="enterpriseWebSite" jdbcType="VARCHAR" property="enterpriseWebSite" />
-    <result column="enterpriseLinkman" jdbcType="VARCHAR" property="enterpriseLinkman" />
-    <result column="enterpriseLMSex" jdbcType="INTEGER" property="enterpriseLMSex" />
-    <result column="enterpriseLMDep" jdbcType="VARCHAR" property="enterpriseLMDep" />
-    <result column="enterpriseLMTel" jdbcType="INTEGER" property="enterpriseLMTel" />
-    <result column="enterpriseLMMobile" jdbcType="INTEGER" property="enterpriseLMMobile" />
-    <result column="enterpriseQQ" jdbcType="INTEGER" property="enterpriseQQ" />
-    <result column="personRealName" jdbcType="VARCHAR" property="personRealName" />
-    <result column="personID" jdbcType="INTEGER" property="personID" />
-    <result column="personSex" jdbcType="INTEGER" property="personSex" />
-    <result column="personPosition" jdbcType="INTEGER" property="personPosition" />
-    <result column="personProvince" jdbcType="VARCHAR" property="personProvince" />
-    <result column="personCity" jdbcType="VARCHAR" property="personCity" />
-    <result column="personArea" jdbcType="VARCHAR" property="personArea" />
-    <result column="personAddress" jdbcType="VARCHAR" property="personAddress" />
-    <result column="personMobile" jdbcType="INTEGER" property="personMobile" />
-    <result column="personTel" jdbcType="INTEGER" property="personTel" />
-    <result column="personQQ" jdbcType="INTEGER" property="personQQ" />
-    <result column="personHeadShot" jdbcType="VARCHAR" property="personHeadShot" />
-    <result column="personIDFrontImgUrl" jdbcType="VARCHAR" property="personIDFrontImgUrl" />
-    <result column="personIDBackImgUrl" jdbcType="VARCHAR" property="personIDBackImgUrl" />
-    <result column="personCertificateName" jdbcType="VARCHAR" property="personCertificateName" />
-    <result column="personCertificateOrg" jdbcType="VARCHAR" property="personCertificateOrg" />
-    <result column="personCertificateUrl" jdbcType="VARCHAR" property="personCertificateUrl" />
-    <result column="is_deleted" jdbcType="INTEGER" property="is_deleted" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Member" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="emailCheckCode" property="emailCheckCode" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="registerTime" property="registerTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="identify" property="identify" jdbcType="INTEGER" />
+    <result column="isValidatePass" property="isValidatePass" jdbcType="INTEGER" />
+    <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
+    <result column="employeeType" property="employeeType" jdbcType="INTEGER" />
+    <result column="enterpriseEmployeeParentId" property="enterpriseEmployeeParentId" jdbcType="BIGINT" />
+    <result column="companyIdentify" property="companyIdentify" jdbcType="INTEGER" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="enterpriseType" property="enterpriseType" jdbcType="INTEGER" />
+    <result column="enterpriseLogo" property="enterpriseLogo" jdbcType="VARCHAR" />
+    <result column="enterpriseDesc" property="enterpriseDesc" jdbcType="VARCHAR" />
+    <result column="headShot" property="headShot" jdbcType="VARCHAR" />
+    <result column="saleProductDesc" property="saleProductDesc" jdbcType="VARCHAR" />
+    <result column="enterpriseCreaterTime" property="enterpriseCreaterTime" jdbcType="VARCHAR" />
+    <result column="registerCapital" property="registerCapital" jdbcType="VARCHAR" />
+    <result column="employeeNumber" property="employeeNumber" jdbcType="VARCHAR" />
+    <result column="companyBusinessLicenseImg" property="companyBusinessLicenseImg" jdbcType="VARCHAR" />
+    <result column="enterpriseTelephone" property="enterpriseTelephone" jdbcType="INTEGER" />
+    <result column="enterpriseFox" property="enterpriseFox" jdbcType="INTEGER" />
+    <result column="enterpriseWebSite" property="enterpriseWebSite" jdbcType="VARCHAR" />
+    <result column="enterpriseLinkman" property="enterpriseLinkman" jdbcType="VARCHAR" />
+    <result column="enterpriseLMDep" property="enterpriseLMDep" jdbcType="VARCHAR" />
+    <result column="fixedTelephone" property="fixedTelephone" jdbcType="INTEGER" />
+    <result column="fixedMobile" property="fixedMobile" jdbcType="INTEGER" />
+    <result column="QQ" property="QQ" jdbcType="INTEGER" />
+    <result column="personRealName" property="personRealName" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="personCompanyType" property="personCompanyType" jdbcType="INTEGER" />
+    <result column="personPosition" property="personPosition" jdbcType="INTEGER" />
+    <result column="personIdentifyCard" property="personIdentifyCard" jdbcType="INTEGER" />
+    <result column="personIDFrontImgUrl" property="personIDFrontImgUrl" jdbcType="VARCHAR" />
+    <result column="personIDBackImgUrl" property="personIDBackImgUrl" jdbcType="VARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List">
+  <sql id="Base_Column_List" >
     id, mobile, email, emailCheckCode, password, registerTime, status, identify, isValidatePass,
-    companyName, employeeType, enterpriseEmployeeParentId, enterpriseMemberType, province,
-    city, area, enterpriseType, address, enterpriseLogo, enterpriseDesc, enterpriseHeadShot,
-    saleProductDesc, enterpriseQualification, enterpriseQLevel, fcateid, scateid, companyCorporationName,
-    cpyCommericalRegNum, companyCreaterTime, registerCapital, registerAddress, companyBusinessScope,
-    companyBusinessLicenseImg, certificateType, certificateGrade, certificateName, certificateOrganization,
-    certificateUrl, enterpriseTel, enterpriseFox, enterpriseWebSite, enterpriseLinkman,
-    enterpriseLMSex, enterpriseLMDep, enterpriseLMTel, enterpriseLMMobile, enterpriseQQ,
-    personRealName, personID, personSex, personPosition, personProvince, personCity,
-    personArea, personAddress, personMobile, personTel, personQQ, personHeadShot, personIDFrontImgUrl,
-    personIDBackImgUrl, personCertificateName, personCertificateOrg, personCertificateUrl,
-    is_deleted
+    enterpriseName, employeeType, enterpriseEmployeeParentId, companyIdentify, province,
+    city, area, address, enterpriseType, enterpriseLogo, enterpriseDesc, headShot, saleProductDesc,
+    enterpriseCreaterTime, registerCapital, employeeNumber, companyBusinessLicenseImg,
+    enterpriseTelephone, enterpriseFox, enterpriseWebSite, enterpriseLinkman, enterpriseLMDep,
+    fixedTelephone, fixedMobile, QQ, personRealName, sex, personCompanyType, personPosition,
+    personIdentifyCard, personIDFrontImgUrl, personIDBackImgUrl
   </sql>
-  <!--<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">-->
-    <!--select -->
-    <!--<include refid="Base_Column_List" />-->
-    <!--from t_m_member-->
-    <!--where id = #{id,jdbcType=BIGINT}-->
-  <!--</select>-->
-  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">-->
-    <!--delete from t_m_member-->
-    <!--where id = #{id,jdbcType=BIGINT}-->
-  <!--</delete>-->
-  <insert id="insert" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
-    insert into t_m_member (id, mobile, email, 
-      emailCheckCode, password, registerTime, 
-      status, identify, isValidatePass, 
-      companyName, employeeType, enterpriseEmployeeParentId, 
-      enterpriseMemberType, province, city, 
-      area, enterpriseType, address, 
-      enterpriseLogo, enterpriseDesc, enterpriseHeadShot, 
-      saleProductDesc, enterpriseQualification, 
-      enterpriseQLevel, fcateid, scateid, 
-      companyCorporationName, cpyCommericalRegNum, 
-      companyCreaterTime, registerCapital, registerAddress, 
-      companyBusinessScope, companyBusinessLicenseImg, 
-      certificateType, certificateGrade, certificateName, 
-      certificateOrganization, certificateUrl, 
-      enterpriseTel, enterpriseFox, enterpriseWebSite, 
-      enterpriseLinkman, enterpriseLMSex, enterpriseLMDep, 
-      enterpriseLMTel, enterpriseLMMobile, enterpriseQQ, 
-      personRealName, personID, personSex, 
-      personPosition, personProvince, personCity, 
-      personArea, personAddress, personMobile, 
-      personTel, personQQ, personHeadShot, 
-      personIDFrontImgUrl, personIDBackImgUrl, 
-      personCertificateName, personCertificateOrg, 
-      personCertificateUrl, is_deleted)
-    values (#{id,jdbcType=BIGINT}, #{mobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{emailCheckCode,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{registerTime,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{identify,jdbcType=INTEGER}, #{isValidatePass,jdbcType=INTEGER}, 
-      #{companyName,jdbcType=VARCHAR}, #{employeeType,jdbcType=INTEGER}, #{enterpriseEmployeeParentId,jdbcType=BIGINT}, 
-      #{enterpriseMemberType,jdbcType=INTEGER}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
-      #{area,jdbcType=VARCHAR}, #{enterpriseType,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
-      #{enterpriseLogo,jdbcType=VARCHAR}, #{enterpriseDesc,jdbcType=VARCHAR}, #{enterpriseHeadShot,jdbcType=VARCHAR}, 
-      #{saleProductDesc,jdbcType=VARCHAR}, #{enterpriseQualification,jdbcType=INTEGER}, 
-      #{enterpriseQLevel,jdbcType=INTEGER}, #{fcateid,jdbcType=INTEGER}, #{scateid,jdbcType=INTEGER}, 
-      #{companyCorporationName,jdbcType=VARCHAR}, #{cpyCommericalRegNum,jdbcType=VARCHAR}, 
-      #{companyCreaterTime,jdbcType=VARCHAR}, #{registerCapital,jdbcType=VARCHAR}, #{registerAddress,jdbcType=VARCHAR}, 
-      #{companyBusinessScope,jdbcType=VARCHAR}, #{companyBusinessLicenseImg,jdbcType=VARCHAR}, 
-      #{certificateType,jdbcType=INTEGER}, #{certificateGrade,jdbcType=INTEGER}, #{certificateName,jdbcType=VARCHAR}, 
-      #{certificateOrganization,jdbcType=VARCHAR}, #{certificateUrl,jdbcType=VARCHAR}, 
-      #{enterpriseTel,jdbcType=INTEGER}, #{enterpriseFox,jdbcType=INTEGER}, #{enterpriseWebSite,jdbcType=VARCHAR}, 
-      #{enterpriseLinkman,jdbcType=VARCHAR}, #{enterpriseLMSex,jdbcType=INTEGER}, #{enterpriseLMDep,jdbcType=VARCHAR}, 
-      #{enterpriseLMTel,jdbcType=INTEGER}, #{enterpriseLMMobile,jdbcType=INTEGER}, #{enterpriseQQ,jdbcType=INTEGER}, 
-      #{personRealName,jdbcType=VARCHAR}, #{personID,jdbcType=INTEGER}, #{personSex,jdbcType=INTEGER}, 
-      #{personPosition,jdbcType=INTEGER}, #{personProvince,jdbcType=VARCHAR}, #{personCity,jdbcType=VARCHAR}, 
-      #{personArea,jdbcType=VARCHAR}, #{personAddress,jdbcType=VARCHAR}, #{personMobile,jdbcType=INTEGER}, 
-      #{personTel,jdbcType=INTEGER}, #{personQQ,jdbcType=INTEGER}, #{personHeadShot,jdbcType=VARCHAR}, 
-      #{personIDFrontImgUrl,jdbcType=VARCHAR}, #{personIDBackImgUrl,jdbcType=VARCHAR}, 
-      #{personCertificateName,jdbcType=VARCHAR}, #{personCertificateOrg,jdbcType=VARCHAR}, 
-      #{personCertificateUrl,jdbcType=VARCHAR}, #{is_deleted,jdbcType=INTEGER})
-  </insert>
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
-    insert into t_m_member
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="mobile != null">
-        mobile,
-      </if>
-      <if test="email != null">
-        email,
-      </if>
-      <if test="emailCheckCode != null">
-        emailCheckCode,
-      </if>
-      <if test="password != null">
-        password,
-      </if>
-      <if test="registerTime != null">
-        registerTime,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="identify != null">
-        identify,
-      </if>
-      <if test="isValidatePass != null">
-        isValidatePass,
-      </if>
-      <if test="companyName != null">
-        companyName,
-      </if>
-      <if test="employeeType != null">
-        employeeType,
-      </if>
-      <if test="enterpriseEmployeeParentId != null">
-        enterpriseEmployeeParentId,
-      </if>
-      <if test="enterpriseMemberType != null">
-        enterpriseMemberType,
-      </if>
-      <if test="province != null">
-        province,
-      </if>
-      <if test="city != null">
-        city,
-      </if>
-      <if test="area != null">
-        area,
-      </if>
-      <if test="enterpriseType != null">
-        enterpriseType,
-      </if>
-      <if test="address != null">
-        address,
-      </if>
-      <if test="enterpriseLogo != null">
-        enterpriseLogo,
-      </if>
-      <if test="enterpriseDesc != null">
-        enterpriseDesc,
-      </if>
-      <if test="enterpriseHeadShot != null">
-        enterpriseHeadShot,
-      </if>
-      <if test="saleProductDesc != null">
-        saleProductDesc,
-      </if>
-      <if test="enterpriseQualification != null">
-        enterpriseQualification,
-      </if>
-      <if test="enterpriseQLevel != null">
-        enterpriseQLevel,
-      </if>
-      <if test="fcateid != null">
-        fcateid,
-      </if>
-      <if test="scateid != null">
-        scateid,
-      </if>
-      <if test="companyCorporationName != null">
-        companyCorporationName,
-      </if>
-      <if test="cpyCommericalRegNum != null">
-        cpyCommericalRegNum,
-      </if>
-      <if test="companyCreaterTime != null">
-        companyCreaterTime,
-      </if>
-      <if test="registerCapital != null">
-        registerCapital,
-      </if>
-      <if test="registerAddress != null">
-        registerAddress,
-      </if>
-      <if test="companyBusinessScope != null">
-        companyBusinessScope,
-      </if>
-      <if test="companyBusinessLicenseImg != null">
-        companyBusinessLicenseImg,
-      </if>
-      <if test="certificateType != null">
-        certificateType,
-      </if>
-      <if test="certificateGrade != null">
-        certificateGrade,
-      </if>
-      <if test="certificateName != null">
-        certificateName,
-      </if>
-      <if test="certificateOrganization != null">
-        certificateOrganization,
-      </if>
-      <if test="certificateUrl != null">
-        certificateUrl,
-      </if>
-      <if test="enterpriseTel != null">
-        enterpriseTel,
-      </if>
-      <if test="enterpriseFox != null">
-        enterpriseFox,
-      </if>
-      <if test="enterpriseWebSite != null">
-        enterpriseWebSite,
-      </if>
-      <if test="enterpriseLinkman != null">
-        enterpriseLinkman,
-      </if>
-      <if test="enterpriseLMSex != null">
-        enterpriseLMSex,
-      </if>
-      <if test="enterpriseLMDep != null">
-        enterpriseLMDep,
-      </if>
-      <if test="enterpriseLMTel != null">
-        enterpriseLMTel,
-      </if>
-      <if test="enterpriseLMMobile != null">
-        enterpriseLMMobile,
-      </if>
-      <if test="enterpriseQQ != null">
-        enterpriseQQ,
-      </if>
-      <if test="personRealName != null">
-        personRealName,
-      </if>
-      <if test="personID != null">
-        personID,
-      </if>
-      <if test="personSex != null">
-        personSex,
-      </if>
-      <if test="personPosition != null">
-        personPosition,
-      </if>
-      <if test="personProvince != null">
-        personProvince,
-      </if>
-      <if test="personCity != null">
-        personCity,
-      </if>
-      <if test="personArea != null">
-        personArea,
-      </if>
-      <if test="personAddress != null">
-        personAddress,
-      </if>
-      <if test="personMobile != null">
-        personMobile,
-      </if>
-      <if test="personTel != null">
-        personTel,
-      </if>
-      <if test="personQQ != null">
-        personQQ,
-      </if>
-      <if test="personHeadShot != null">
-        personHeadShot,
-      </if>
-      <if test="personIDFrontImgUrl != null">
-        personIDFrontImgUrl,
-      </if>
-      <if test="personIDBackImgUrl != null">
-        personIDBackImgUrl,
-      </if>
-      <if test="personCertificateName != null">
-        personCertificateName,
-      </if>
-      <if test="personCertificateOrg != null">
-        personCertificateOrg,
-      </if>
-      <if test="personCertificateUrl != null">
-        personCertificateUrl,
-      </if>
-      <if test="is_deleted != null">
-        is_deleted,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="mobile != null">
-        #{mobile,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null">
-        #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="emailCheckCode != null">
-        #{emailCheckCode,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null">
-        #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="registerTime != null">
-        #{registerTime,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="identify != null">
-        #{identify,jdbcType=INTEGER},
-      </if>
-      <if test="isValidatePass != null">
-        #{isValidatePass,jdbcType=INTEGER},
-      </if>
-      <if test="companyName != null">
-        #{companyName,jdbcType=VARCHAR},
-      </if>
-      <if test="employeeType != null">
-        #{employeeType,jdbcType=INTEGER},
-      </if>
-      <if test="enterpriseEmployeeParentId != null">
-        #{enterpriseEmployeeParentId,jdbcType=BIGINT},
-      </if>
-      <if test="enterpriseMemberType != null">
-        #{enterpriseMemberType,jdbcType=INTEGER},
-      </if>
-      <if test="province != null">
-        #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null">
-        #{city,jdbcType=VARCHAR},
-      </if>
-      <if test="area != null">
-        #{area,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseType != null">
-        #{enterpriseType,jdbcType=INTEGER},
-      </if>
-      <if test="address != null">
-        #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseLogo != null">
-        #{enterpriseLogo,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseDesc != null">
-        #{enterpriseDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseHeadShot != null">
-        #{enterpriseHeadShot,jdbcType=VARCHAR},
-      </if>
-      <if test="saleProductDesc != null">
-        #{saleProductDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseQualification != null">
-        #{enterpriseQualification,jdbcType=INTEGER},
-      </if>
-      <if test="enterpriseQLevel != null">
-        #{enterpriseQLevel,jdbcType=INTEGER},
-      </if>
-      <if test="fcateid != null">
-        #{fcateid,jdbcType=INTEGER},
-      </if>
-      <if test="scateid != null">
-        #{scateid,jdbcType=INTEGER},
-      </if>
-      <if test="companyCorporationName != null">
-        #{companyCorporationName,jdbcType=VARCHAR},
-      </if>
-      <if test="cpyCommericalRegNum != null">
-        #{cpyCommericalRegNum,jdbcType=VARCHAR},
-      </if>
-      <if test="companyCreaterTime != null">
-        #{companyCreaterTime,jdbcType=VARCHAR},
-      </if>
-      <if test="registerCapital != null">
-        #{registerCapital,jdbcType=VARCHAR},
-      </if>
-      <if test="registerAddress != null">
-        #{registerAddress,jdbcType=VARCHAR},
-      </if>
-      <if test="companyBusinessScope != null">
-        #{companyBusinessScope,jdbcType=VARCHAR},
-      </if>
-      <if test="companyBusinessLicenseImg != null">
-        #{companyBusinessLicenseImg,jdbcType=VARCHAR},
-      </if>
-      <if test="certificateType != null">
-        #{certificateType,jdbcType=INTEGER},
-      </if>
-      <if test="certificateGrade != null">
-        #{certificateGrade,jdbcType=INTEGER},
-      </if>
-      <if test="certificateName != null">
-        #{certificateName,jdbcType=VARCHAR},
-      </if>
-      <if test="certificateOrganization != null">
-        #{certificateOrganization,jdbcType=VARCHAR},
-      </if>
-      <if test="certificateUrl != null">
-        #{certificateUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseTel != null">
-        #{enterpriseTel,jdbcType=INTEGER},
-      </if>
-      <if test="enterpriseFox != null">
-        #{enterpriseFox,jdbcType=INTEGER},
-      </if>
-      <if test="enterpriseWebSite != null">
-        #{enterpriseWebSite,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseLinkman != null">
-        #{enterpriseLinkman,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseLMSex != null">
-        #{enterpriseLMSex,jdbcType=INTEGER},
-      </if>
-      <if test="enterpriseLMDep != null">
-        #{enterpriseLMDep,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseLMTel != null">
-        #{enterpriseLMTel,jdbcType=INTEGER},
-      </if>
-      <if test="enterpriseLMMobile != null">
-        #{enterpriseLMMobile,jdbcType=INTEGER},
-      </if>
-      <if test="enterpriseQQ != null">
-        #{enterpriseQQ,jdbcType=INTEGER},
-      </if>
-      <if test="personRealName != null">
-        #{personRealName,jdbcType=VARCHAR},
-      </if>
-      <if test="personID != null">
-        #{personID,jdbcType=INTEGER},
-      </if>
-      <if test="personSex != null">
-        #{personSex,jdbcType=INTEGER},
-      </if>
-      <if test="personPosition != null">
-        #{personPosition,jdbcType=INTEGER},
-      </if>
-      <if test="personProvince != null">
-        #{personProvince,jdbcType=VARCHAR},
-      </if>
-      <if test="personCity != null">
-        #{personCity,jdbcType=VARCHAR},
-      </if>
-      <if test="personArea != null">
-        #{personArea,jdbcType=VARCHAR},
-      </if>
-      <if test="personAddress != null">
-        #{personAddress,jdbcType=VARCHAR},
-      </if>
-      <if test="personMobile != null">
-        #{personMobile,jdbcType=INTEGER},
-      </if>
-      <if test="personTel != null">
-        #{personTel,jdbcType=INTEGER},
-      </if>
-      <if test="personQQ != null">
-        #{personQQ,jdbcType=INTEGER},
-      </if>
-      <if test="personHeadShot != null">
-        #{personHeadShot,jdbcType=VARCHAR},
-      </if>
-      <if test="personIDFrontImgUrl != null">
-        #{personIDFrontImgUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="personIDBackImgUrl != null">
-        #{personIDBackImgUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="personCertificateName != null">
-        #{personCertificateName,jdbcType=VARCHAR},
-      </if>
-      <if test="personCertificateOrg != null">
-        #{personCertificateOrg,jdbcType=VARCHAR},
-      </if>
-      <if test="personCertificateUrl != null">
-        #{personCertificateUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="is_deleted != null">
-        #{is_deleted,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
-    update t_m_member
-    <set>
-      <if test="mobile != null">
-        mobile = #{mobile,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null">
-        email = #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="emailCheckCode != null">
-        emailCheckCode = #{emailCheckCode,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null">
-        password = #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="registerTime != null">
-        registerTime = #{registerTime,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="identify != null">
-        identify = #{identify,jdbcType=INTEGER},
-      </if>
-      <if test="isValidatePass != null">
-        isValidatePass = #{isValidatePass,jdbcType=INTEGER},
-      </if>
-      <if test="companyName != null">
-        companyName = #{companyName,jdbcType=VARCHAR},
-      </if>
-      <if test="employeeType != null">
-        employeeType = #{employeeType,jdbcType=INTEGER},
-      </if>
-      <if test="enterpriseEmployeeParentId != null">
-        enterpriseEmployeeParentId = #{enterpriseEmployeeParentId,jdbcType=BIGINT},
-      </if>
-      <if test="enterpriseMemberType != null">
-        enterpriseMemberType = #{enterpriseMemberType,jdbcType=INTEGER},
-      </if>
-      <if test="province != null">
-        province = #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null">
-        city = #{city,jdbcType=VARCHAR},
-      </if>
-      <if test="area != null">
-        area = #{area,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseType != null">
-        enterpriseType = #{enterpriseType,jdbcType=INTEGER},
-      </if>
-      <if test="address != null">
-        address = #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseLogo != null">
-        enterpriseLogo = #{enterpriseLogo,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseDesc != null">
-        enterpriseDesc = #{enterpriseDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseHeadShot != null">
-        enterpriseHeadShot = #{enterpriseHeadShot,jdbcType=VARCHAR},
-      </if>
-      <if test="saleProductDesc != null">
-        saleProductDesc = #{saleProductDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseQualification != null">
-        enterpriseQualification = #{enterpriseQualification,jdbcType=INTEGER},
-      </if>
-      <if test="enterpriseQLevel != null">
-        enterpriseQLevel = #{enterpriseQLevel,jdbcType=INTEGER},
-      </if>
-      <if test="fcateid != null">
-        fcateid = #{fcateid,jdbcType=INTEGER},
-      </if>
-      <if test="scateid != null">
-        scateid = #{scateid,jdbcType=INTEGER},
-      </if>
-      <if test="companyCorporationName != null">
-        companyCorporationName = #{companyCorporationName,jdbcType=VARCHAR},
-      </if>
-      <if test="cpyCommericalRegNum != null">
-        cpyCommericalRegNum = #{cpyCommericalRegNum,jdbcType=VARCHAR},
-      </if>
-      <if test="companyCreaterTime != null">
-        companyCreaterTime = #{companyCreaterTime,jdbcType=VARCHAR},
-      </if>
-      <if test="registerCapital != null">
-        registerCapital = #{registerCapital,jdbcType=VARCHAR},
-      </if>
-      <if test="registerAddress != null">
-        registerAddress = #{registerAddress,jdbcType=VARCHAR},
-      </if>
-      <if test="companyBusinessScope != null">
-        companyBusinessScope = #{companyBusinessScope,jdbcType=VARCHAR},
-      </if>
-      <if test="companyBusinessLicenseImg != null">
-        companyBusinessLicenseImg = #{companyBusinessLicenseImg,jdbcType=VARCHAR},
-      </if>
-      <if test="certificateType != null">
-        certificateType = #{certificateType,jdbcType=INTEGER},
-      </if>
-      <if test="certificateGrade != null">
-        certificateGrade = #{certificateGrade,jdbcType=INTEGER},
-      </if>
-      <if test="certificateName != null">
-        certificateName = #{certificateName,jdbcType=VARCHAR},
-      </if>
-      <if test="certificateOrganization != null">
-        certificateOrganization = #{certificateOrganization,jdbcType=VARCHAR},
-      </if>
-      <if test="certificateUrl != null">
-        certificateUrl = #{certificateUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseTel != null">
-        enterpriseTel = #{enterpriseTel,jdbcType=INTEGER},
-      </if>
-      <if test="enterpriseFox != null">
-        enterpriseFox = #{enterpriseFox,jdbcType=INTEGER},
-      </if>
-      <if test="enterpriseWebSite != null">
-        enterpriseWebSite = #{enterpriseWebSite,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseLinkman != null">
-        enterpriseLinkman = #{enterpriseLinkman,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseLMSex != null">
-        enterpriseLMSex = #{enterpriseLMSex,jdbcType=INTEGER},
-      </if>
-      <if test="enterpriseLMDep != null">
-        enterpriseLMDep = #{enterpriseLMDep,jdbcType=VARCHAR},
-      </if>
-      <if test="enterpriseLMTel != null">
-        enterpriseLMTel = #{enterpriseLMTel,jdbcType=INTEGER},
-      </if>
-      <if test="enterpriseLMMobile != null">
-        enterpriseLMMobile = #{enterpriseLMMobile,jdbcType=INTEGER},
-      </if>
-      <if test="enterpriseQQ != null">
-        enterpriseQQ = #{enterpriseQQ,jdbcType=INTEGER},
-      </if>
-      <if test="personRealName != null">
-        personRealName = #{personRealName,jdbcType=VARCHAR},
-      </if>
-      <if test="personID != null">
-        personID = #{personID,jdbcType=INTEGER},
-      </if>
-      <if test="personSex != null">
-        personSex = #{personSex,jdbcType=INTEGER},
-      </if>
-      <if test="personPosition != null">
-        personPosition = #{personPosition,jdbcType=INTEGER},
-      </if>
-      <if test="personProvince != null">
-        personProvince = #{personProvince,jdbcType=VARCHAR},
-      </if>
-      <if test="personCity != null">
-        personCity = #{personCity,jdbcType=VARCHAR},
-      </if>
-      <if test="personArea != null">
-        personArea = #{personArea,jdbcType=VARCHAR},
-      </if>
-      <if test="personAddress != null">
-        personAddress = #{personAddress,jdbcType=VARCHAR},
-      </if>
-      <if test="personMobile != null">
-        personMobile = #{personMobile,jdbcType=INTEGER},
-      </if>
-      <if test="personTel != null">
-        personTel = #{personTel,jdbcType=INTEGER},
-      </if>
-      <if test="personQQ != null">
-        personQQ = #{personQQ,jdbcType=INTEGER},
-      </if>
-      <if test="personHeadShot != null">
-        personHeadShot = #{personHeadShot,jdbcType=VARCHAR},
-      </if>
-      <if test="personIDFrontImgUrl != null">
-        personIDFrontImgUrl = #{personIDFrontImgUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="personIDBackImgUrl != null">
-        personIDBackImgUrl = #{personIDBackImgUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="personCertificateName != null">
-        personCertificateName = #{personCertificateName,jdbcType=VARCHAR},
-      </if>
-      <if test="personCertificateOrg != null">
-        personCertificateOrg = #{personCertificateOrg,jdbcType=VARCHAR},
-      </if>
-      <if test="personCertificateUrl != null">
-        personCertificateUrl = #{personCertificateUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="is_deleted != null">
-        is_deleted = #{is_deleted,jdbcType=INTEGER},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
-    update t_m_member
-    set mobile = #{mobile,jdbcType=VARCHAR},
-      email = #{email,jdbcType=VARCHAR},
-      emailCheckCode = #{emailCheckCode,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      registerTime = #{registerTime,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER},
-      identify = #{identify,jdbcType=INTEGER},
-      isValidatePass = #{isValidatePass,jdbcType=INTEGER},
-      companyName = #{companyName,jdbcType=VARCHAR},
-      employeeType = #{employeeType,jdbcType=INTEGER},
-      enterpriseEmployeeParentId = #{enterpriseEmployeeParentId,jdbcType=BIGINT},
-      enterpriseMemberType = #{enterpriseMemberType,jdbcType=INTEGER},
-      province = #{province,jdbcType=VARCHAR},
-      city = #{city,jdbcType=VARCHAR},
-      area = #{area,jdbcType=VARCHAR},
-      enterpriseType = #{enterpriseType,jdbcType=INTEGER},
-      address = #{address,jdbcType=VARCHAR},
-      enterpriseLogo = #{enterpriseLogo,jdbcType=VARCHAR},
-      enterpriseDesc = #{enterpriseDesc,jdbcType=VARCHAR},
-      enterpriseHeadShot = #{enterpriseHeadShot,jdbcType=VARCHAR},
-      saleProductDesc = #{saleProductDesc,jdbcType=VARCHAR},
-      enterpriseQualification = #{enterpriseQualification,jdbcType=INTEGER},
-      enterpriseQLevel = #{enterpriseQLevel,jdbcType=INTEGER},
-      fcateid = #{fcateid,jdbcType=INTEGER},
-      scateid = #{scateid,jdbcType=INTEGER},
-      companyCorporationName = #{companyCorporationName,jdbcType=VARCHAR},
-      cpyCommericalRegNum = #{cpyCommericalRegNum,jdbcType=VARCHAR},
-      companyCreaterTime = #{companyCreaterTime,jdbcType=VARCHAR},
-      registerCapital = #{registerCapital,jdbcType=VARCHAR},
-      registerAddress = #{registerAddress,jdbcType=VARCHAR},
-      companyBusinessScope = #{companyBusinessScope,jdbcType=VARCHAR},
-      companyBusinessLicenseImg = #{companyBusinessLicenseImg,jdbcType=VARCHAR},
-      certificateType = #{certificateType,jdbcType=INTEGER},
-      certificateGrade = #{certificateGrade,jdbcType=INTEGER},
-      certificateName = #{certificateName,jdbcType=VARCHAR},
-      certificateOrganization = #{certificateOrganization,jdbcType=VARCHAR},
-      certificateUrl = #{certificateUrl,jdbcType=VARCHAR},
-      enterpriseTel = #{enterpriseTel,jdbcType=INTEGER},
-      enterpriseFox = #{enterpriseFox,jdbcType=INTEGER},
-      enterpriseWebSite = #{enterpriseWebSite,jdbcType=VARCHAR},
-      enterpriseLinkman = #{enterpriseLinkman,jdbcType=VARCHAR},
-      enterpriseLMSex = #{enterpriseLMSex,jdbcType=INTEGER},
-      enterpriseLMDep = #{enterpriseLMDep,jdbcType=VARCHAR},
-      enterpriseLMTel = #{enterpriseLMTel,jdbcType=INTEGER},
-      enterpriseLMMobile = #{enterpriseLMMobile,jdbcType=INTEGER},
-      enterpriseQQ = #{enterpriseQQ,jdbcType=INTEGER},
-      personRealName = #{personRealName,jdbcType=VARCHAR},
-      personID = #{personID,jdbcType=INTEGER},
-      personSex = #{personSex,jdbcType=INTEGER},
-      personPosition = #{personPosition,jdbcType=INTEGER},
-      personProvince = #{personProvince,jdbcType=VARCHAR},
-      personCity = #{personCity,jdbcType=VARCHAR},
-      personArea = #{personArea,jdbcType=VARCHAR},
-      personAddress = #{personAddress,jdbcType=VARCHAR},
-      personMobile = #{personMobile,jdbcType=INTEGER},
-      personTel = #{personTel,jdbcType=INTEGER},
-      personQQ = #{personQQ,jdbcType=INTEGER},
-      personHeadShot = #{personHeadShot,jdbcType=VARCHAR},
-      personIDFrontImgUrl = #{personIDFrontImgUrl,jdbcType=VARCHAR},
-      personIDBackImgUrl = #{personIDBackImgUrl,jdbcType=VARCHAR},
-      personCertificateName = #{personCertificateName,jdbcType=VARCHAR},
-      personCertificateOrg = #{personCertificateOrg,jdbcType=VARCHAR},
-      personCertificateUrl = #{personCertificateUrl,jdbcType=VARCHAR},
-      is_deleted = #{is_deleted,jdbcType=INTEGER}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-
-
-
-
-
   <select id="findMemById" resultType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     select
     <include refid="Base_Column_List" />
     from t_m_member
     where id = #{id}
   </select>
-
   <update id="updateMemInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     update t_m_member
     <set>
-      <if test="companyName != null">
-        companyName = #{companyName},
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
       </if>
-      <if test="enterpriseMemberType != null">
-        enterpriseMemberType = #{enterpriseMemberType},
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
       </if>
-      <if test="province != null">
-        province = #{province},
+      <if test="emailCheckCode != null" >
+        emailCheckCode = #{emailCheckCode,jdbcType=VARCHAR},
       </if>
-      <if test="city != null">
-        city = #{city},
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
       </if>
-      <if test="area != null">
-        area = #{area},
+      <if test="registerTime != null" >
+        registerTime = #{registerTime,jdbcType=VARCHAR},
       </if>
-      <if test="address != null">
-        address = #{address},
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
       </if>
-      <if test="enterpriseLogo != null">
-        enterpriseLogo = #{enterpriseLogo},
+      <if test="identify != null" >
+        identify = #{identify,jdbcType=INTEGER},
       </if>
-      <if test="enterpriseHeadShot != null">
-        enterpriseHeadShot = #{enterpriseHeadShot},
+      <if test="isValidatePass != null" >
+        isValidatePass = #{isValidatePass,jdbcType=INTEGER},
       </if>
-      <if test="saleProductDesc != null">
-        saleProductDesc = #{saleProductDesc},
+      <if test="enterpriseName != null" >
+        enterpriseName = #{enterpriseName,jdbcType=VARCHAR},
       </if>
-      <if test="enterpriseDesc != null">
-        enterpriseDesc = #{enterpriseDesc},
+      <if test="employeeType != null" >
+        employeeType = #{employeeType,jdbcType=INTEGER},
       </if>
-      <if test="companyCorporationName != null">
-        companyCorporationName = #{companyCorporationName},
+      <if test="enterpriseEmployeeParentId != null" >
+        enterpriseEmployeeParentId = #{enterpriseEmployeeParentId,jdbcType=BIGINT},
       </if>
-      <if test="cpyCommericalRegNum != null">
-        cpyCommericalRegNum = #{cpyCommericalRegNum},
+      <if test="companyIdentify != null" >
+        companyIdentify = #{companyIdentify,jdbcType=INTEGER},
       </if>
-      <if test="companyCreaterTime != null">
-        companyCreaterTime = #{companyCreaterTime},
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
       </if>
-      <if test="registerCapital != null">
-        registerCapital = #{registerCapital},
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
       </if>
-      <if test="registerAddress != null">
-        registerAddress = #{registerAddress},
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
       </if>
-      <if test="companyBusinessScope != null">
-        companyBusinessScope = #{companyBusinessScope},
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
       </if>
-      <if test="companyBusinessLicenseImg != null">
-        companyBusinessLicenseImg = #{companyBusinessLicenseImg},
+      <if test="enterpriseType != null" >
+        enterpriseType = #{enterpriseType,jdbcType=INTEGER},
       </if>
-      <if test="certificateType != null">
-        certificateType = #{certificateType},
+      <if test="enterpriseLogo != null" >
+        enterpriseLogo = #{enterpriseLogo,jdbcType=VARCHAR},
       </if>
-      <if test="certificateGrade != null">
-        certificateGrade = #{certificateGrade},
+      <if test="enterpriseDesc != null" >
+        enterpriseDesc = #{enterpriseDesc,jdbcType=VARCHAR},
       </if>
-      <if test="certificateName != null">
-        certificateName = #{certificateName},
+      <if test="headShot != null" >
+        headShot = #{headShot,jdbcType=VARCHAR},
       </if>
-      <if test="certificateOrganization != null">
-        certificateOrganization = #{certificateOrganization},
+      <if test="saleProductDesc != null" >
+        saleProductDesc = #{saleProductDesc,jdbcType=VARCHAR},
       </if>
-      <if test="certificateUrl != null">
-        certificateUrl = #{certificateUrl},
+      <if test="enterpriseCreaterTime != null" >
+        enterpriseCreaterTime = #{enterpriseCreaterTime,jdbcType=VARCHAR},
       </if>
-      <if test="enterpriseTel != null">
-        enterpriseTel = #{enterpriseTel},
+      <if test="registerCapital != null" >
+        registerCapital = #{registerCapital,jdbcType=VARCHAR},
       </if>
-      <if test="enterpriseFox != null">
-        enterpriseFox = #{enterpriseFox},
+      <if test="employeeNumber != null" >
+        employeeNumber = #{employeeNumber,jdbcType=VARCHAR},
       </if>
-      <if test="enterpriseWebSite != null">
-        enterpriseWebSite = #{enterpriseWebSite},
+      <if test="companyBusinessLicenseImg != null" >
+        companyBusinessLicenseImg = #{companyBusinessLicenseImg,jdbcType=VARCHAR},
       </if>
-      <if test="enterpriseLinkman != null">
-        enterpriseLinkman = #{enterpriseLinkman},
+      <if test="enterpriseTelephone != null" >
+        enterpriseTelephone = #{enterpriseTelephone,jdbcType=INTEGER},
       </if>
-      <if test="enterpriseLMSex != null">
-        enterpriseLMSex = #{enterpriseLMSex},
+      <if test="enterpriseFox != null" >
+        enterpriseFox = #{enterpriseFox,jdbcType=INTEGER},
       </if>
-      <if test="enterpriseLMDep != null">
-        enterpriseLMDep = #{enterpriseLMDep},
+      <if test="enterpriseWebSite != null" >
+        enterpriseWebSite = #{enterpriseWebSite,jdbcType=VARCHAR},
       </if>
-      <if test="enterpriseLMTel != null">
-        enterpriseLMTel = #{enterpriseLMTel},
+      <if test="enterpriseLinkman != null" >
+        enterpriseLinkman = #{enterpriseLinkman,jdbcType=VARCHAR},
       </if>
-      <if test="enterpriseLMMobile != null">
-        enterpriseLMMobile = #{enterpriseLMMobile},
+      <if test="enterpriseLMDep != null" >
+        enterpriseLMDep = #{enterpriseLMDep,jdbcType=VARCHAR},
       </if>
-      <if test="enterpriseQQ != null">
-        enterpriseQQ = #{enterpriseQQ},
+      <if test="fixedTelephone != null" >
+        fixedTelephone = #{fixedTelephone,jdbcType=INTEGER},
       </if>
-      <if test="mobile != null">
-        mobile = #{mobile},
+      <if test="fixedMobile != null" >
+        fixedMobile = #{fixedMobile,jdbcType=INTEGER},
       </if>
-      <if test="personRealName != null">
-        personRealName = #{personRealName},
+      <if test="QQ != null" >
+        QQ = #{QQ,jdbcType=INTEGER},
       </if>
-      <if test="personSex != null">
-        personSex = #{personSex},
+      <if test="personRealName != null" >
+        personRealName = #{personRealName,jdbcType=VARCHAR},
       </if>
-      <if test="personPosition != null">
-        personPosition = #{personPosition},
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=INTEGER},
       </if>
-      <if test="personProvince != null">
-        personProvince = #{personProvince},
+      <if test="personCompanyType != null" >
+        personCompanyType = #{personCompanyType,jdbcType=INTEGER},
       </if>
-      <if test="personCity != null">
-        personCity = #{personCity},
+      <if test="personPosition != null" >
+        personPosition = #{personPosition,jdbcType=INTEGER},
       </if>
-      <if test="personArea != null">
-        personArea = #{personArea},
+      <if test="personIdentifyCard != null" >
+        personIdentifyCard = #{personIdentifyCard,jdbcType=INTEGER},
       </if>
-      <if test="personAddress != null">
-        personAddress = #{personAddress},
+      <if test="personIDFrontImgUrl != null" >
+        personIDFrontImgUrl = #{personIDFrontImgUrl,jdbcType=VARCHAR},
       </if>
-      <if test="personMobile != null">
-        personMobile = #{personMobile},
-      </if>
-      <if test="personTel != null">
-        personTel = #{personTel},
-      </if>
-      <if test="personQQ != null">
-        personQQ = #{personQQ},
-      </if>
-      <if test="personHeadShot != null">
-        personHeadShot = #{personHeadShot},
-      </if>
-      <if test="personIDFrontImgUrl != null">
-        personIDFrontImgUrl = #{personIDFrontImgUrl},
-      </if>
-      <if test="personIDBackImgUrl != null">
-        personIDBackImgUrl = #{personIDBackImgUrl},
-      </if>
-      <if test="personCertificateName != null">
-        personCertificateName = #{personCertificateName},
-      </if>
-      <if test="personCertificateOrg != null">
-        personCertificateOrg = #{personCertificateOrg},
-      </if>
-      <if test="personCertificateUrl != null">
-        personCertificateUrl = #{personCertificateUrl},
+      <if test="personIDBackImgUrl != null" >
+        personIDBackImgUrl = #{personIDBackImgUrl,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id}
@@ -1013,7 +231,7 @@
   <update id="deleteMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     update t_m_member
     <set>
-        is_deleted = 1,
+      is_deleted = 1,
     </set>
     where 1=1
     <if test="mobile != null and mobile != '' ">
@@ -1041,7 +259,7 @@
     <include refid="Base_Column_List" />
     from t_m_member
     where
-      is_deleted = 0
+    is_deleted = 0
     <if test="mobile != null and mobile != '' ">
       and mobile = #{mobile}
     </if>

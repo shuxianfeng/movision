@@ -1,5 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
+import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Province;
 
 import java.util.List;
@@ -17,5 +18,5 @@ public interface ProvinceMapper {
 
     int updateByPrimaryKey(Province record);
 
-    List<Province> findProvince();
+    List<ResultBean> findProvince();
 }

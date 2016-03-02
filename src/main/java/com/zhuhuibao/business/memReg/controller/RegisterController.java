@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
@@ -217,12 +218,14 @@ public class RegisterController {
 				{
 					result.setCode(400);
 					result.setMessage("账户名已经存在");
+					result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
 				}
 			}
 			else
 			{
 				result.setCode(400);
 				result.setMessage("验证码不正确");
+				result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 			}
 			log.debug("mobile verifyCode == " + member.getMobileCheckCode());
 		}
@@ -235,7 +238,6 @@ public class RegisterController {
 					int isExist = memberService.isExistAccount(member);
 					if(isExist == 0)
 					{
-						member.setEmailCheckCode(verifyCode);
 						memberService.registerMember(member);
 						//发送激活链接给此邮件
 						rvService.sendMailActivateCode(member,ResourcePropertiesUtils.getValue("host.ip"));
@@ -256,13 +258,15 @@ public class RegisterController {
 					{
 						result.setCode(400);
 						result.setMessage("账户名已经存在");
+						result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
 					}
 				}
 			}
 			else
 			{
 				result.setCode(400);
-				result.setMessage("验证码不正确");
+				result.setMessage("邮件验证码不正确");
+				result.setMsgCode(MsgCodeConstant.member_mcode_mail_validate_error);
 			}
 			log.debug("email verifyCode == " + member.getEmailCheckCode());
 		}
@@ -308,6 +312,7 @@ public class RegisterController {
 			result.setCode(400);
 			result.setMessage("手机验证码错误");
 			result.setData(member.getMobile());
+			result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 		}
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -375,21 +380,23 @@ public class RegisterController {
 		try
         {
 			String vm = req.getParameter("vm");//获取email
-			String decodeVM = new String (EncodeUtil.decodeBase64(vm));
-        	jsonResult = rvService.processActivate(decodeVM);
-        	 modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(jsonResult.getData()).getBytes())); 
-        	if(jsonResult.getCode() == 200)
-        	{
-        		//跳转到会员中心页面
-        		RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page"));
-        		modelAndView.setView(rv);
-        	}
-        	else
-        	{
-        		RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.replay.page"));
-    	        modelAndView.setView(rv);
-        	}
-        	
+			if(vm != null & !vm.equals(""))
+			{
+				String decodeVM = new String (EncodeUtil.decodeBase64(vm));
+	        	jsonResult = rvService.processActivate(decodeVM);
+	        	 modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(jsonResult.getData()).getBytes())); 
+	        	if(jsonResult.getCode() == 200)
+	        	{
+	        		//跳转到会员中心页面
+	        		RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page"));
+	        		modelAndView.setView(rv);
+	        	}
+	        	else
+	        	{
+	        		RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.replay.page"));
+	    	        modelAndView.setView(rv);
+	        	}
+			}
         }
         catch(Exception e)
         {
@@ -410,19 +417,31 @@ public class RegisterController {
 	public ModelAndView validateMail(HttpServletRequest req, Model model) throws UnsupportedEncodingException {
 		log.debug("validate mail start.....");
 		String vm = req.getParameter("vm");//获取email
-		String email = new String (EncodeUtil.decodeBase64(vm));
-        try
-        {
-        	JsonResult jsonResult = rvService.processValidate(email);
-        }
-        catch(Exception e)
-        {
-        	log.error("email activate member error!",e);
-        }
-        ModelAndView modelAndView = new ModelAndView();  
-        modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(email.getBytes()));  
-        RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.page"));
-        modelAndView.setView(rv);
+		 ModelAndView modelAndView = new ModelAndView();  
+		if(vm != null & !vm.equals(""))
+		{
+			RedirectView rv = null;
+			JsonResult jsonResult = new JsonResult();
+	        try
+	        {
+	        	String email = (String) jsonResult.getData();
+	        	jsonResult = rvService.processValidate(vm);
+	        	modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(email.getBytes()));  
+	        	if(jsonResult.getCode() == 200)
+	 	        {
+	 		        rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.page"));
+	 	        }
+	 	        else
+	 	        {
+	 	        	rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.invalid.page"));
+	 	        }
+	 	        modelAndView.setView(rv);
+	        }
+	        catch(Exception e)
+	        {
+	        	log.error("email activate member error!",e);
+	        }
+		}
         return modelAndView;
 	}
 	

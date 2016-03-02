@@ -17,5 +17,5 @@ public interface CertificateMapper {
 
     int updateByPrimaryKey(Certificate record);
 
-    List<Certificate> findCertificateList();
+    List<Certificate> findCertificateList(String type);
 }

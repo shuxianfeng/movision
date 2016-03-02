@@ -19,13 +19,13 @@ public class Member {
 
     private Integer isValidatePass;
 
-    private String companyName;
+    private String enterpriseName;
 
     private Integer employeeType;
 
     private Long enterpriseEmployeeParentId;
 
-    private Integer enterpriseMemberType;
+    private Integer companyIdentify;
 
     private String province;
 
@@ -33,51 +33,27 @@ public class Member {
 
     private String area;
 
-    private Integer enterpriseType;
-
     private String address;
+
+    private Integer enterpriseType;
 
     private String enterpriseLogo;
 
     private String enterpriseDesc;
 
-    private String enterpriseHeadShot;
+    private String headShot;
 
     private String saleProductDesc;
 
-    private Integer enterpriseQualification;
-
-    private Integer enterpriseQLevel;
-
-    private Integer fcateid;
-
-    private Integer scateid;
-
-    private String companyCorporationName;
-
-    private String cpyCommericalRegNum;
-
-    private String companyCreaterTime;
+    private String enterpriseCreaterTime;
 
     private String registerCapital;
 
-    private String registerAddress;
-
-    private String companyBusinessScope;
+    private String employeeNumber;
 
     private String companyBusinessLicenseImg;
 
-    private Integer certificateType;
-
-    private Integer certificateGrade;
-
-    private String certificateName;
-
-    private String certificateOrganization;
-
-    private String certificateUrl;
-
-    private Integer enterpriseTel;
+    private Integer enterpriseTelephone;
 
     private Integer enterpriseFox;
 
@@ -85,51 +61,27 @@ public class Member {
 
     private String enterpriseLinkman;
 
-    private Integer enterpriseLMSex;
-
     private String enterpriseLMDep;
 
-    private Integer enterpriseLMTel;
+    private Integer fixedTelephone;
 
-    private Integer enterpriseLMMobile;
+    private Integer fixedMobile;
 
-    private Integer enterpriseQQ;
+    private Integer QQ;
 
     private String personRealName;
 
-    private Integer personID;
+    private Integer sex;
 
-    private Integer personSex;
+    private Integer personCompanyType;
 
     private Integer personPosition;
 
-    private String personProvince;
-
-    private String personCity;
-
-    private String personArea;
-
-    private String personAddress;
-
-    private Integer personMobile;
-
-    private Integer personTel;
-
-    private Integer personQQ;
-
-    private String personHeadShot;
+    private Integer personIdentifyCard;
 
     private String personIDFrontImgUrl;
 
     private String personIDBackImgUrl;
-
-    private String personCertificateName;
-
-    private String personCertificateOrg;
-
-    private String personCertificateUrl;
-
-    private Integer is_deleted;
 
     public Long getId() {
         return id;
@@ -203,12 +155,12 @@ public class Member {
         this.isValidatePass = isValidatePass;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public String getEnterpriseName() {
+        return enterpriseName;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName == null ? null : companyName.trim();
+    public void setEnterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName == null ? null : enterpriseName.trim();
     }
 
     public Integer getEmployeeType() {
@@ -227,12 +179,12 @@ public class Member {
         this.enterpriseEmployeeParentId = enterpriseEmployeeParentId;
     }
 
-    public Integer getEnterpriseMemberType() {
-        return enterpriseMemberType;
+    public Integer getCompanyIdentify() {
+        return companyIdentify;
     }
 
-    public void setEnterpriseMemberType(Integer enterpriseMemberType) {
-        this.enterpriseMemberType = enterpriseMemberType;
+    public void setCompanyIdentify(Integer companyIdentify) {
+        this.companyIdentify = companyIdentify;
     }
 
     public String getProvince() {
@@ -259,20 +211,20 @@ public class Member {
         this.area = area == null ? null : area.trim();
     }
 
-    public Integer getEnterpriseType() {
-        return enterpriseType;
-    }
-
-    public void setEnterpriseType(Integer enterpriseType) {
-        this.enterpriseType = enterpriseType;
-    }
-
     public String getAddress() {
         return address;
     }
 
     public void setAddress(String address) {
         this.address = address == null ? null : address.trim();
+    }
+
+    public Integer getEnterpriseType() {
+        return enterpriseType;
+    }
+
+    public void setEnterpriseType(Integer enterpriseType) {
+        this.enterpriseType = enterpriseType;
     }
 
     public String getEnterpriseLogo() {
@@ -291,12 +243,12 @@ public class Member {
         this.enterpriseDesc = enterpriseDesc == null ? null : enterpriseDesc.trim();
     }
 
-    public String getEnterpriseHeadShot() {
-        return enterpriseHeadShot;
+    public String getHeadShot() {
+        return headShot;
     }
 
-    public void setEnterpriseHeadShot(String enterpriseHeadShot) {
-        this.enterpriseHeadShot = enterpriseHeadShot == null ? null : enterpriseHeadShot.trim();
+    public void setHeadShot(String headShot) {
+        this.headShot = headShot == null ? null : headShot.trim();
     }
 
     public String getSaleProductDesc() {
@@ -307,60 +259,12 @@ public class Member {
         this.saleProductDesc = saleProductDesc == null ? null : saleProductDesc.trim();
     }
 
-    public Integer getEnterpriseQualification() {
-        return enterpriseQualification;
+    public String getEnterpriseCreaterTime() {
+        return enterpriseCreaterTime;
     }
 
-    public void setEnterpriseQualification(Integer enterpriseQualification) {
-        this.enterpriseQualification = enterpriseQualification;
-    }
-
-    public Integer getEnterpriseQLevel() {
-        return enterpriseQLevel;
-    }
-
-    public void setEnterpriseQLevel(Integer enterpriseQLevel) {
-        this.enterpriseQLevel = enterpriseQLevel;
-    }
-
-    public Integer getFcateid() {
-        return fcateid;
-    }
-
-    public void setFcateid(Integer fcateid) {
-        this.fcateid = fcateid;
-    }
-
-    public Integer getScateid() {
-        return scateid;
-    }
-
-    public void setScateid(Integer scateid) {
-        this.scateid = scateid;
-    }
-
-    public String getCompanyCorporationName() {
-        return companyCorporationName;
-    }
-
-    public void setCompanyCorporationName(String companyCorporationName) {
-        this.companyCorporationName = companyCorporationName == null ? null : companyCorporationName.trim();
-    }
-
-    public String getCpyCommericalRegNum() {
-        return cpyCommericalRegNum;
-    }
-
-    public void setCpyCommericalRegNum(String cpyCommericalRegNum) {
-        this.cpyCommericalRegNum = cpyCommericalRegNum == null ? null : cpyCommericalRegNum.trim();
-    }
-
-    public String getCompanyCreaterTime() {
-        return companyCreaterTime;
-    }
-
-    public void setCompanyCreaterTime(String companyCreaterTime) {
-        this.companyCreaterTime = companyCreaterTime == null ? null : companyCreaterTime.trim();
+    public void setEnterpriseCreaterTime(String enterpriseCreaterTime) {
+        this.enterpriseCreaterTime = enterpriseCreaterTime == null ? null : enterpriseCreaterTime.trim();
     }
 
     public String getRegisterCapital() {
@@ -371,20 +275,12 @@ public class Member {
         this.registerCapital = registerCapital == null ? null : registerCapital.trim();
     }
 
-    public String getRegisterAddress() {
-        return registerAddress;
+    public String getEmployeeNumber() {
+        return employeeNumber;
     }
 
-    public void setRegisterAddress(String registerAddress) {
-        this.registerAddress = registerAddress == null ? null : registerAddress.trim();
-    }
-
-    public String getCompanyBusinessScope() {
-        return companyBusinessScope;
-    }
-
-    public void setCompanyBusinessScope(String companyBusinessScope) {
-        this.companyBusinessScope = companyBusinessScope == null ? null : companyBusinessScope.trim();
+    public void setEmployeeNumber(String employeeNumber) {
+        this.employeeNumber = employeeNumber == null ? null : employeeNumber.trim();
     }
 
     public String getCompanyBusinessLicenseImg() {
@@ -395,52 +291,12 @@ public class Member {
         this.companyBusinessLicenseImg = companyBusinessLicenseImg == null ? null : companyBusinessLicenseImg.trim();
     }
 
-    public Integer getCertificateType() {
-        return certificateType;
+    public Integer getEnterpriseTelephone() {
+        return enterpriseTelephone;
     }
 
-    public void setCertificateType(Integer certificateType) {
-        this.certificateType = certificateType;
-    }
-
-    public Integer getCertificateGrade() {
-        return certificateGrade;
-    }
-
-    public void setCertificateGrade(Integer certificateGrade) {
-        this.certificateGrade = certificateGrade;
-    }
-
-    public String getCertificateName() {
-        return certificateName;
-    }
-
-    public void setCertificateName(String certificateName) {
-        this.certificateName = certificateName == null ? null : certificateName.trim();
-    }
-
-    public String getCertificateOrganization() {
-        return certificateOrganization;
-    }
-
-    public void setCertificateOrganization(String certificateOrganization) {
-        this.certificateOrganization = certificateOrganization == null ? null : certificateOrganization.trim();
-    }
-
-    public String getCertificateUrl() {
-        return certificateUrl;
-    }
-
-    public void setCertificateUrl(String certificateUrl) {
-        this.certificateUrl = certificateUrl == null ? null : certificateUrl.trim();
-    }
-
-    public Integer getEnterpriseTel() {
-        return enterpriseTel;
-    }
-
-    public void setEnterpriseTel(Integer enterpriseTel) {
-        this.enterpriseTel = enterpriseTel;
+    public void setEnterpriseTelephone(Integer enterpriseTelephone) {
+        this.enterpriseTelephone = enterpriseTelephone;
     }
 
     public Integer getEnterpriseFox() {
@@ -467,14 +323,6 @@ public class Member {
         this.enterpriseLinkman = enterpriseLinkman == null ? null : enterpriseLinkman.trim();
     }
 
-    public Integer getEnterpriseLMSex() {
-        return enterpriseLMSex;
-    }
-
-    public void setEnterpriseLMSex(Integer enterpriseLMSex) {
-        this.enterpriseLMSex = enterpriseLMSex;
-    }
-
     public String getEnterpriseLMDep() {
         return enterpriseLMDep;
     }
@@ -483,28 +331,28 @@ public class Member {
         this.enterpriseLMDep = enterpriseLMDep == null ? null : enterpriseLMDep.trim();
     }
 
-    public Integer getEnterpriseLMTel() {
-        return enterpriseLMTel;
+    public Integer getFixedTelephone() {
+        return fixedTelephone;
     }
 
-    public void setEnterpriseLMTel(Integer enterpriseLMTel) {
-        this.enterpriseLMTel = enterpriseLMTel;
+    public void setFixedTelephone(Integer fixedTelephone) {
+        this.fixedTelephone = fixedTelephone;
     }
 
-    public Integer getEnterpriseLMMobile() {
-        return enterpriseLMMobile;
+    public Integer getFixedMobile() {
+        return fixedMobile;
     }
 
-    public void setEnterpriseLMMobile(Integer enterpriseLMMobile) {
-        this.enterpriseLMMobile = enterpriseLMMobile;
+    public void setFixedMobile(Integer fixedMobile) {
+        this.fixedMobile = fixedMobile;
     }
 
-    public Integer getEnterpriseQQ() {
-        return enterpriseQQ;
+    public Integer getQQ() {
+        return QQ;
     }
 
-    public void setEnterpriseQQ(Integer enterpriseQQ) {
-        this.enterpriseQQ = enterpriseQQ;
+    public void setQQ(Integer QQ) {
+        this.QQ = QQ;
     }
 
     public String getPersonRealName() {
@@ -515,20 +363,20 @@ public class Member {
         this.personRealName = personRealName == null ? null : personRealName.trim();
     }
 
-    public Integer getPersonID() {
-        return personID;
+    public Integer getSex() {
+        return sex;
     }
 
-    public void setPersonID(Integer personID) {
-        this.personID = personID;
+    public void setSex(Integer sex) {
+        this.sex = sex;
     }
 
-    public Integer getPersonSex() {
-        return personSex;
+    public Integer getPersonCompanyType() {
+        return personCompanyType;
     }
 
-    public void setPersonSex(Integer personSex) {
-        this.personSex = personSex;
+    public void setPersonCompanyType(Integer personCompanyType) {
+        this.personCompanyType = personCompanyType;
     }
 
     public Integer getPersonPosition() {
@@ -539,68 +387,12 @@ public class Member {
         this.personPosition = personPosition;
     }
 
-    public String getPersonProvince() {
-        return personProvince;
+    public Integer getPersonIdentifyCard() {
+        return personIdentifyCard;
     }
 
-    public void setPersonProvince(String personProvince) {
-        this.personProvince = personProvince == null ? null : personProvince.trim();
-    }
-
-    public String getPersonCity() {
-        return personCity;
-    }
-
-    public void setPersonCity(String personCity) {
-        this.personCity = personCity == null ? null : personCity.trim();
-    }
-
-    public String getPersonArea() {
-        return personArea;
-    }
-
-    public void setPersonArea(String personArea) {
-        this.personArea = personArea == null ? null : personArea.trim();
-    }
-
-    public String getPersonAddress() {
-        return personAddress;
-    }
-
-    public void setPersonAddress(String personAddress) {
-        this.personAddress = personAddress == null ? null : personAddress.trim();
-    }
-
-    public Integer getPersonMobile() {
-        return personMobile;
-    }
-
-    public void setPersonMobile(Integer personMobile) {
-        this.personMobile = personMobile;
-    }
-
-    public Integer getPersonTel() {
-        return personTel;
-    }
-
-    public void setPersonTel(Integer personTel) {
-        this.personTel = personTel;
-    }
-
-    public Integer getPersonQQ() {
-        return personQQ;
-    }
-
-    public void setPersonQQ(Integer personQQ) {
-        this.personQQ = personQQ;
-    }
-
-    public String getPersonHeadShot() {
-        return personHeadShot;
-    }
-
-    public void setPersonHeadShot(String personHeadShot) {
-        this.personHeadShot = personHeadShot == null ? null : personHeadShot.trim();
+    public void setPersonIdentifyCard(Integer personIdentifyCard) {
+        this.personIdentifyCard = personIdentifyCard;
     }
 
     public String getPersonIDFrontImgUrl() {
@@ -617,37 +409,5 @@ public class Member {
 
     public void setPersonIDBackImgUrl(String personIDBackImgUrl) {
         this.personIDBackImgUrl = personIDBackImgUrl == null ? null : personIDBackImgUrl.trim();
-    }
-
-    public String getPersonCertificateName() {
-        return personCertificateName;
-    }
-
-    public void setPersonCertificateName(String personCertificateName) {
-        this.personCertificateName = personCertificateName == null ? null : personCertificateName.trim();
-    }
-
-    public String getPersonCertificateOrg() {
-        return personCertificateOrg;
-    }
-
-    public void setPersonCertificateOrg(String personCertificateOrg) {
-        this.personCertificateOrg = personCertificateOrg == null ? null : personCertificateOrg.trim();
-    }
-
-    public String getPersonCertificateUrl() {
-        return personCertificateUrl;
-    }
-
-    public void setPersonCertificateUrl(String personCertificateUrl) {
-        this.personCertificateUrl = personCertificateUrl == null ? null : personCertificateUrl.trim();
-    }
-
-    public Integer getIs_deleted() {
-        return is_deleted;
-    }
-
-    public void setIs_deleted(Integer is_deleted) {
-        this.is_deleted = is_deleted;
     }
 }

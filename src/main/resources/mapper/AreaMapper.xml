@@ -7,6 +7,10 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="cityCode" property="cityCode" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.ResultBean" >
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     id, code, name, cityCode
   </sql>
@@ -79,9 +83,9 @@
       cityCode = #{cityCode,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="findArea" resultMap="BaseResultMap">
+  <select id="findArea" resultMap="ResultMap">
     select
-    <include refid="Base_Column_List" />
+    code,name
     from t_dictionary_area
     where cityCode = #{cityCode}
   </select>

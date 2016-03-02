@@ -11,8 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
+import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper;
+import com.zhuhuibao.mybatis.memberReg.mapper.ValidateinfoMapper;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.DateUtils;
 
@@ -28,6 +31,10 @@ public class MemberRegService {
 	
 	@Autowired
 	private MemberRegMapper memberRegMapper;
+	
+	@Autowired
+	private ValidateinfoMapper viMapper;
+	
 	
 	/**
      * 注册用户
@@ -187,12 +194,14 @@ public class MemberRegService {
 			    	{
 			    		result.setCode(400);
 			    		result.setMessage("账户不存在");
+			    		result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
 			    	}
 				}
 				else
 				{
 					result.setCode(400);
 					result.setMessage("验证码错误");
+					result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 				}
     		}
     		else
@@ -206,6 +215,7 @@ public class MemberRegService {
     		    	{
     		    		result.setCode(400);
     		    		result.setMessage("账户不存在");
+    		    		result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
     		    	}
     		    	else
     		    	{
@@ -217,10 +227,68 @@ public class MemberRegService {
     			{
     				result.setCode(400);
     				result.setMessage("验证码错误");
+    				result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
     			}
     		}
 		}
 		result.setData(data);
+    	return result;
+    }
+    
+    /**
+     * 插入会员验证信息
+     * @param info
+     * @return
+     */
+    public JsonResult inserValidateInfo(Validateinfo info)
+    {
+    	JsonResult result = new JsonResult();
+    	try
+    	{
+    		viMapper.insertValidateInfo(info);
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("insert validate info error",e);
+    	}
+    	return result;
+    }
+    
+    /**
+     * 查找会员验证相关的信息
+     * @param info
+     * @return
+     */
+    public Validateinfo findMemberValidateInfo(Validateinfo info)
+    {
+    	Validateinfo vinfo = new Validateinfo();
+    	try
+    	{
+    		vinfo = viMapper.findMemberValidateInfo(info);
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("find member validate info",e);
+    	}
+    	return vinfo;
+    }
+    
+    /**
+     * 更新会员验证信息
+     * @param info
+     * @return
+     */
+    public JsonResult updateValidateInfo(Validateinfo info)
+    {
+    	JsonResult result = new JsonResult();
+    	try
+    	{
+    		viMapper.updateValidateInfo(info);
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("insert validate info error",e);
+    	}
     	return result;
     }
 }

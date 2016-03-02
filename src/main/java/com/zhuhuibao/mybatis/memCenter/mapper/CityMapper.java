@@ -1,7 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
+import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.City;
-
 import java.util.List;
 
 public interface CityMapper {
@@ -17,5 +17,5 @@ public interface CityMapper {
 
     int updateByPrimaryKey(City record);
 
-    List<City> findCity(String provincecode);
+    List<ResultBean> findCity(String provincecode);
 }
