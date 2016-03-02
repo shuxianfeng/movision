@@ -227,7 +227,7 @@ public class MemberRegService {
     			{
     				result.setCode(400);
     				result.setMessage("验证码错误");
-    				result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+    				result.setMsgCode(MsgCodeConstant.member_mcode_mail_validate_error);
     			}
     		}
 		}

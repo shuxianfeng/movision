@@ -176,7 +176,7 @@ public class RegisterValidateService {
         SendEmail.send(member.getEmail(), sb.toString(),"筑慧宝-找回账户密码");
         Validateinfo vinfo = new Validateinfo();
         vinfo.setCreateTime(currentTime);
-        vinfo.setMailUrl(url);
+        vinfo.setCheckCode(url);
         vinfo.setValid(0);
         memberService.inserValidateInfo(vinfo);
     }
@@ -200,7 +200,7 @@ public class RegisterValidateService {
         //验证用户是否存在 
         if(user!=null && user.getStatus() == 1) {
         	Validateinfo vinfo = new Validateinfo();
-        	vinfo.setMailUrl(url);
+        	vinfo.setCheckCode(url);
         	vinfo = memberService.findMemberValidateInfo(vinfo);
         	if(vinfo != null && vinfo.getValid() == 0)
         	{

@@ -3,24 +3,21 @@
 <mapper namespace="com.zhuhuibao.mybatis.memberReg.mapper.ValidateinfoMapper">
 
   <insert id="insertValidateInfo" parameterType="validateInfo" useGeneratedKeys="true" keyProperty="id">
-  	insert into t_m_validateinfo(memberId,mailUrl,valid,createTime,mobileCheckCode) values
-  	(#{memberId},#{mailUrl},#{valid},#{createTime},#{mobileCheckCode})
+  	insert into t_m_validateinfo(account,valid,createTime,checkCode) values
+  	(#{account},#{valid},#{createTime},#{checkCode})
   </insert>
   
   <select id="findMemberValidateInfo" parameterType="validateInfo" resultType="validateInfo">
 	  select * from t_m_validateinfo 
 	  <where>
-	  	<if test="memberId != null"> 
-	  		AND memberId = #{memberId}
+	  	<if test="account != null"> 
+	  		AND account = #{account}
 	  	</if>
-	  	<if test="mailUrl">
-	  		AND mailUrl = #{mailUrl}
+	  	<if test="checkCode">
+	  		AND checkCode = #{checkCode}
 	  	</if>
 	  	<if test="valid">
 	  		AND valid = #{valid}
-	  	</if>
-	  	<if test="mobileCheckCode">
-	  		AND mobileCheckCode = #{mobileCheckCode}
 	  	</if>
 	  </where>
   </select>
@@ -32,6 +29,6 @@
 	    	valid = #{valid}
 	    </if>
     </set>
-    where mailUrl = #{mailUrl}
+    where checkCode = #{checkCode}
   </update>
 </mapper>

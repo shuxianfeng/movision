@@ -26,12 +26,15 @@ import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
+import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.mybatis.memberReg.service.RegisterValidateService;
 import com.zhuhuibao.security.EncodeUtil;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
+import com.zhuhuibao.utils.sms.SDKSendTemplateSMS;
 
 /**
  * @author jianglz
@@ -157,8 +160,13 @@ public class RegisterController {
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
 		log.debug("verifyCode == " + verifyCode);
 		//发送验证码到手机
-//		SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-		sess.setAttribute(mobile, verifyCode);
+		SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
+		Validateinfo info = new Validateinfo();
+		info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+		info.setCheckCode(verifyCode);
+		info.setAccount(mobile);
+		memberService.inserValidateInfo(info);
+		sess.setAttribute("r"+mobile, verifyCode);
 		JsonResult jsonResult = new JsonResult();
 		jsonResult.setData(verifyCode);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
@@ -183,8 +191,13 @@ public class RegisterController {
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
 		log.debug("verifyCode == " + verifyCode);
 		//发送验证码到手机
-//		SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-		sess.setAttribute(mobile, verifyCode);
+		SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
+		Validateinfo info = new Validateinfo();
+		info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+		info.setCheckCode(verifyCode);
+		info.setAccount(mobile);
+		memberService.inserValidateInfo(info);
+		sess.setAttribute("s"+mobile, verifyCode);
 		JsonResult jsonResult = new JsonResult();
 		jsonResult.setData(verifyCode);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
@@ -206,28 +219,44 @@ public class RegisterController {
 		//校验手机验证码是否正确
 		if(member.getMobileCheckCode() != null )
 		{
-			String verifyCode = (String) req.getSession().getAttribute(member.getMobile());
-			if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getMobileCheckCode()))
-			{
-				int isExist = memberService.isExistAccount(member);
-				if(isExist == 0)
+			String verifyCode = (String) req.getSession().getAttribute("r"+member.getMobile());
+			Validateinfo info = new Validateinfo();
+			info.setAccount(member.getMobile());
+			info.setValid(0);
+			info.setCheckCode(verifyCode);
+			info = memberService.findMemberValidateInfo(info);
+			Date currentTime = new Date();
+			Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
+			if(currentTime.before(sendSMStime)) 
+			{ 
+				if(info != null &&  info.getCheckCode().equalsIgnoreCase(member.getMobileCheckCode()))
 				{
-					memberService.registerMember(member);
+					int isExist = memberService.isExistAccount(member);
+					if(isExist == 0)
+					{
+						memberService.registerMember(member);
+					}
+					else
+					{
+						result.setCode(400);
+						result.setMessage("账户名已经存在");
+						result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+					}
 				}
 				else
 				{
 					result.setCode(400);
-					result.setMessage("账户名已经存在");
-					result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+					result.setMessage("验证码不正确");
+					result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 				}
+				log.debug("mobile verifyCode == " + member.getMobileCheckCode());
 			}
 			else
 			{
 				result.setCode(400);
-				result.setMessage("验证码不正确");
-				result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+				result.setMessage("短信验证超时");
+				result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
 			}
-			log.debug("mobile verifyCode == " + member.getMobileCheckCode());
 		}
 		if(member.getEmailCheckCode() != null )
 		{
@@ -306,13 +335,32 @@ public class RegisterController {
 	public void mobileValidate(HttpServletRequest req,HttpServletResponse response, Member member,Model model) throws IOException {
 		log.debug("找回密码  mobile =="+member.getMobile());
 		JsonResult result = new JsonResult();
-		String seekMobileCode = (String) req.getSession().getAttribute(member.getMobile());
-		if(member.getMobileCheckCode() == null || !member.getMobileCheckCode().equals(seekMobileCode))
+		String seekMobileCode = (String) req.getSession().getAttribute("s"+member.getMobile());
+		Validateinfo info = new Validateinfo();
+		info.setAccount(member.getMobile());
+		info.setValid(0);
+		info.setCheckCode(seekMobileCode);
+		info = memberService.findMemberValidateInfo(info);
+		Date currentTime = new Date();
+		Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
+		if(currentTime.before(sendSMStime)) 
+		{
+			if(info != null)
+			{
+				if(member.getMobileCheckCode() == null || !member.getMobileCheckCode().equals(info.getCheckCode()))
+				{
+					result.setCode(400);
+					result.setMessage("手机验证码错误");
+					result.setData(member.getMobile());
+					result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+				}
+			}
+		}
+		else
 		{
 			result.setCode(400);
-			result.setMessage("手机验证码错误");
-			result.setData(member.getMobile());
-			result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+			result.setMessage("短信验证超时");
+			result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
 		}
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
