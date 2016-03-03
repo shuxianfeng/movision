@@ -363,6 +363,12 @@
 			<artifactId>swagger-springmvc</artifactId>
 			<version>1.0.2</version>
 		</dependency>
+		<dependency>
+			<groupId>cos</groupId>
+			<artifactId>cos</artifactId>
+			<version>05Nov2002</version>
+		</dependency>
+
 
 	</dependencies>
 	<build>
