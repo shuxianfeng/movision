@@ -179,6 +179,7 @@ public class RegisterValidateService {
         vinfo.setCreateTime(currentTime);
         vinfo.setCheckCode(url);
         vinfo.setValid(0);
+        vinfo.setAccount(member.getEmail());
         memberService.inserValidateInfo(vinfo);
     }
 	

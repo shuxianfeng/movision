@@ -220,43 +220,52 @@ public class RegisterController {
 		if(member.getMobileCheckCode() != null )
 		{
 			String verifyCode = (String) req.getSession().getAttribute("r"+member.getMobile());
-			Validateinfo info = new Validateinfo();
-			info.setAccount(member.getMobile());
-			info.setValid(0);
-			info.setCheckCode(verifyCode);
-			info = memberService.findMemberValidateInfo(info);
-			Date currentTime = new Date();
-			Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
-			if(currentTime.before(sendSMStime)) 
-			{ 
-				if(verifyCode != null && info != null &&  info.getCheckCode().equalsIgnoreCase(member.getMobileCheckCode()))
-				{
-					int isExist = memberService.isExistAccount(member);
-					if(isExist == 0)
+			if(verifyCode != null)
+			{
+				Validateinfo info = new Validateinfo();
+				info.setAccount(member.getMobile());
+				info.setValid(0);
+				info.setCheckCode(verifyCode);
+				info = memberService.findMemberValidateInfo(info);
+				Date currentTime = new Date();
+				Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
+				if(currentTime.before(sendSMStime)) 
+				{ 
+					if(info != null &&  info.getCheckCode().equalsIgnoreCase(member.getMobileCheckCode()))
 					{
-						memberService.registerMember(member);
+						int isExist = memberService.isExistAccount(member);
+						if(isExist == 0)
+						{
+							memberService.registerMember(member);
+						}
+						else
+						{
+							result.setCode(400);
+							result.setMessage("账户名已经存在");
+							result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+						}
 					}
 					else
 					{
 						result.setCode(400);
-						result.setMessage("账户名已经存在");
-						result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+						result.setMessage("验证码不正确");
+						result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 					}
+					log.debug("mobile verifyCode == " + member.getMobileCheckCode());
 				}
 				else
 				{
+					memberService.deleteValidateInfo(info);
 					result.setCode(400);
-					result.setMessage("验证码不正确");
-					result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+					result.setMessage("短信验证超时");
+					result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
 				}
-				log.debug("mobile verifyCode == " + member.getMobileCheckCode());
 			}
 			else
 			{
-				memberService.deleteValidateInfo(info);
 				result.setCode(400);
-				result.setMessage("短信验证超时");
-				result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
+				result.setMessage("验证码不正确");
+				result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 			}
 		}
 		if(member.getEmailCheckCode() != null )
@@ -337,32 +346,42 @@ public class RegisterController {
 		log.debug("找回密码  mobile =="+member.getMobile());
 		JsonResult result = new JsonResult();
 		String seekMobileCode = (String) req.getSession().getAttribute("s"+member.getMobile());
-		Validateinfo info = new Validateinfo();
-		info.setAccount(member.getMobile());
-		info.setValid(0);
-		info.setCheckCode(seekMobileCode);
-		info = memberService.findMemberValidateInfo(info);
-		Date currentTime = new Date();
-		Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
-		if(currentTime.before(sendSMStime)) 
+		if(seekMobileCode != null)
 		{
-			if(info != null)
+			Validateinfo info = new Validateinfo();
+			info.setAccount(member.getMobile());
+			info.setValid(0);
+			info.setCheckCode(seekMobileCode);
+			info = memberService.findMemberValidateInfo(info);
+			Date currentTime = new Date();
+			Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
+			if(currentTime.before(sendSMStime)) 
 			{
-				if(seekMobileCode == null || member.getMobileCheckCode() == null || !member.getMobileCheckCode().equals(info.getCheckCode()))
+				if(info != null)
 				{
-					result.setCode(400);
-					result.setMessage("手机验证码错误");
-					result.setData(member.getMobile());
-					result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+					if(seekMobileCode == null || member.getMobileCheckCode() == null || !member.getMobileCheckCode().equals(info.getCheckCode()))
+					{
+						result.setCode(400);
+						result.setMessage("手机验证码错误");
+						result.setData(member.getMobile());
+						result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+					}
 				}
+			}
+			else
+			{
+				memberService.deleteValidateInfo(info);
+				result.setCode(400);
+				result.setMessage("短信验证超时");
+				result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
 			}
 		}
 		else
 		{
-			memberService.deleteValidateInfo(info);
 			result.setCode(400);
-			result.setMessage("短信验证超时");
-			result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
+			result.setMessage("手机验证码错误");
+			result.setData(member.getMobile());
+			result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 		}
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
