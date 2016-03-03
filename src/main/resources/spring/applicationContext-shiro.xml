@@ -29,9 +29,9 @@
 
     <!-- shiro redisManager -->
     <bean id="redisManager" class="org.crazycake.shiro.RedisManager">
-        <property name="host" value="127.0.0.1"/>
-        <property name="port" value="6379"/>
-        <property name="expire" value="1800"/>
+        <property name="host" value="${redis.host}}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="expire" value="${redis.expire}"/>
     </bean>
 
     <!-- redisSessionDAO -->
