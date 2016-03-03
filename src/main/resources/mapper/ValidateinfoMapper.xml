@@ -31,4 +31,8 @@
     </set>
     where checkCode = #{checkCode}
   </update>
+  
+  <delete id="deleteValidateInfo" parameterType="validateInfo">
+  delete from t_m_validateinfo where account = #{account}
+  </delete>
 </mapper>

@@ -207,7 +207,7 @@ public class RegisterValidateService {
         	{
 	            Date currentTime = new Date();//获取当前时间  
 	            //验证链接是否过期 24小时
-	            Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(user.getRegisterTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
+	            Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(vinfo.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
 	            if(currentTime.before(registerDate)) {
 	        	    user.setIsValidatePass(1);
 	        	    vinfo.setValid(1);
@@ -223,6 +223,7 @@ public class RegisterValidateService {
         	}
         	else
         	{
+        		memberService.deleteValidateInfo(vinfo);
         		message="密码找回链接已经失效";
         		code = 400;
         		msgCode = MsgCodeConstant.member_mcode_mail_url_invalid;

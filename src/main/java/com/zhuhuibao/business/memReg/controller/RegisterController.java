@@ -229,7 +229,7 @@ public class RegisterController {
 			Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
 			if(currentTime.before(sendSMStime)) 
 			{ 
-				if(info != null &&  info.getCheckCode().equalsIgnoreCase(member.getMobileCheckCode()))
+				if(verifyCode != null && info != null &&  info.getCheckCode().equalsIgnoreCase(member.getMobileCheckCode()))
 				{
 					int isExist = memberService.isExistAccount(member);
 					if(isExist == 0)
@@ -253,6 +253,7 @@ public class RegisterController {
 			}
 			else
 			{
+				memberService.deleteValidateInfo(info);
 				result.setCode(400);
 				result.setMessage("短信验证超时");
 				result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
@@ -347,7 +348,7 @@ public class RegisterController {
 		{
 			if(info != null)
 			{
-				if(member.getMobileCheckCode() == null || !member.getMobileCheckCode().equals(info.getCheckCode()))
+				if(seekMobileCode == null || member.getMobileCheckCode() == null || !member.getMobileCheckCode().equals(info.getCheckCode()))
 				{
 					result.setCode(400);
 					result.setMessage("手机验证码错误");
@@ -358,6 +359,7 @@ public class RegisterController {
 		}
 		else
 		{
+			memberService.deleteValidateInfo(info);
 			result.setCode(400);
 			result.setMessage("短信验证超时");
 			result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);

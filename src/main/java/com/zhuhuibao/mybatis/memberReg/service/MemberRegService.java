@@ -1,7 +1,6 @@
 package com.zhuhuibao.mybatis.memberReg.service;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.slf4j.Logger;
@@ -74,16 +73,25 @@ public class MemberRegService {
      */
     public Member findMemberByAccount(String memberAccount)
     {
+    	log.info("findMemberByAccount accunt =="+memberAccount);
     	Member member = new Member();
-    	if(memberAccount != null && memberAccount.indexOf("@") >= 0)
+    	try
     	{
-    		member.setEmail(memberAccount);
+	    	if(memberAccount != null && memberAccount.indexOf("@") >= 0)
+	    	{
+	    		member.setEmail(memberAccount);
+	    	}
+	    	else
+	    	{
+	    		member.setMobile(memberAccount);
+	    	}
+	    	member = memberRegMapper.findMemberByAccount(member);
     	}
-    	else
+    	catch(Exception e)
     	{
-    		member.setMobile(memberAccount);
+    		log.error("find memeber by account error",e);
     	}
-    	return memberRegMapper.findMemberByAccount(member);
+    	return member;
     }
     
     /**
@@ -94,7 +102,16 @@ public class MemberRegService {
     public List<Member> findMemberByMail(String email)
     {
     	log.debug("find memberinfo by email = "+email);
-    	return memberRegMapper.findMemberByMail(email);
+    	List<Member> memberList = new ArrayList<Member>();
+    	try
+    	{
+    		memberList = memberRegMapper.findMemberByMail(email);
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("find memeber list by mail ");
+    	}
+    	return memberList;
     }
     
     /**
@@ -105,11 +122,18 @@ public class MemberRegService {
     public int isValidatePass(String account)
     {
     	log.debug("find password validate account = "+account);
-    	Integer obj = memberRegMapper.isValidatePass(account);
     	int result = 0;
-    	if(obj != null && obj == 1)
+    	try
     	{
-    		result = 1;
+	    	Integer obj = memberRegMapper.isValidatePass(account);
+	    	if(obj != null && obj == 1)
+	    	{
+	    		result = 1;
+	    	}
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("is validate pass error",e);
     	}
     	return result;
     }
@@ -121,13 +145,29 @@ public class MemberRegService {
      */
     public int isExistAccount(Member member)
     {
-    	int result = memberRegMapper.isExistAccount(member);
+    	int result = 0;
+    	try
+    	{
+    		result = memberRegMapper.isExistAccount(member);
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("is exist account ",e);
+    	}
     	return result;
     }
     
     public int updateMemberStatus(Member member)
     {
-    	int result = memberRegMapper.updateMemberStatus(member);
+    	int result = 0;
+    	try
+    	{
+    		result = memberRegMapper.updateMemberStatus(member);
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("update member status",e);
+    	}
     	return result;
     }
     
@@ -138,7 +178,15 @@ public class MemberRegService {
      */
     public int updateMemberValidatePass(Member member)
     {
-    	int result = memberRegMapper.updateMemberValidatePass(member);
+    	int result = 0;
+    	try
+    	{
+    		result = memberRegMapper.updateMemberValidatePass(member);
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("update member validatePass error",e);
+    	}
     	return result;
     }
     
@@ -151,22 +199,29 @@ public class MemberRegService {
     {
     	log.info("modify account password account = "+member.getAccount());
     	int result = 0;
-    	String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
-		String md5Pwd = new Md5Hash(pwd,null,2).toString();
-		member.setPassword(md5Pwd);
-		if(member.getAccount() != null)
-		{
-			if(member.getAccount().indexOf("@") >= 0)
+    	try
+    	{
+	    	String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
+			String md5Pwd = new Md5Hash(pwd,null,2).toString();
+			member.setPassword(md5Pwd);
+			if(member.getAccount() != null)
 			{
-				member.setEmail(member.getAccount());
-				result = memberRegMapper.updateMemberPwd(member);
+				if(member.getAccount().indexOf("@") >= 0)
+				{
+					member.setEmail(member.getAccount());
+					result = memberRegMapper.updateMemberPwd(member);
+				}
+				else
+				{
+					member.setMobile(member.getAccount());
+					result = memberRegMapper.updateMemberPwd(member);
+				}
 			}
-			else
-			{
-				member.setMobile(member.getAccount());
-				result = memberRegMapper.updateMemberPwd(member);
-			}
-		}
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("modify password error!",e);
+    	}
     	return result;
     }
     
@@ -179,59 +234,66 @@ public class MemberRegService {
     public JsonResult writeAccount(Member member,String seekPwdCode)
     {
     	JsonResult result = new JsonResult();
-    	String data = "";
-    	//手机
-    	if(member.getAccount() != null && member.getCheckCode() != null)
-		{
-    		if(member.getAccount().indexOf("@") == -1)
-    		{
-	    		data = member.getMobile();
-				if(member.getCheckCode().equalsIgnoreCase(seekPwdCode))
-				{
-					member.setMobile(member.getAccount());
-					Member dbmember = memberRegMapper.findMemberByAccount(member);
-			    	if(dbmember == null)
-			    	{
-			    		result.setCode(400);
-			    		result.setMessage("账户不存在");
-			    		result.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
-			    	}
-				}
-				else
-				{
-					result.setCode(400);
-					result.setMessage("验证码错误");
-					result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
-				}
-    		}
-    		else
-    		{
-    			data = member.getEmail();
-    			if(member.getCheckCode().equalsIgnoreCase(seekPwdCode))
-    			{
-    				member.setEmail(member.getAccount());
-    				Member dbmember = memberRegMapper.findMemberByAccount(member);
-    		    	if(dbmember == null)
-    		    	{
-    		    		result.setCode(400);
-    		    		result.setMessage("账户不存在");
-    		    		result.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
-    		    	}
-    		    	else
-    		    	{
-    		    		member.setEmailCheckCode(member.getCheckCode());
-    		    		memberRegMapper.updateEmailCode(member);
-    		    	}
-    			}
-    			else
-    			{
-    				result.setCode(400);
-    				result.setMessage("验证码错误");
-    				result.setMsgCode(MsgCodeConstant.member_mcode_mail_validate_error);
-    			}
-    		}
-		}
-		result.setData(data);
+    	try
+    	{
+	    	String data = "";
+	    	//手机
+	    	if(member.getAccount() != null && member.getCheckCode() != null)
+			{
+	    		if(member.getAccount().indexOf("@") == -1)
+	    		{
+		    		data = member.getMobile();
+					if(member.getCheckCode().equalsIgnoreCase(seekPwdCode))
+					{
+						member.setMobile(member.getAccount());
+						Member dbmember = memberRegMapper.findMemberByAccount(member);
+				    	if(dbmember == null)
+				    	{
+				    		result.setCode(400);
+				    		result.setMessage("账户不存在");
+				    		result.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
+				    	}
+					}
+					else
+					{
+						result.setCode(400);
+						result.setMessage("验证码错误");
+						result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+					}
+	    		}
+	    		else
+	    		{
+	    			data = member.getEmail();
+	    			if(member.getCheckCode().equalsIgnoreCase(seekPwdCode))
+	    			{
+	    				member.setEmail(member.getAccount());
+	    				Member dbmember = memberRegMapper.findMemberByAccount(member);
+	    		    	if(dbmember == null)
+	    		    	{
+	    		    		result.setCode(400);
+	    		    		result.setMessage("账户不存在");
+	    		    		result.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
+	    		    	}
+	    		    	else
+	    		    	{
+	    		    		member.setEmailCheckCode(member.getCheckCode());
+	    		    		memberRegMapper.updateEmailCode(member);
+	    		    	}
+	    			}
+	    			else
+	    			{
+	    				result.setCode(400);
+	    				result.setMessage("验证码错误");
+	    				result.setMsgCode(MsgCodeConstant.member_mcode_mail_validate_error);
+	    			}
+	    		}
+			}
+			result.setData(data);
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("write account error!");
+    	}
     	return result;
     }
     
@@ -278,12 +340,31 @@ public class MemberRegService {
      * @param info
      * @return
      */
-    public JsonResult updateValidateInfo(Validateinfo info)
+    public int updateValidateInfo(Validateinfo info)
     {
-    	JsonResult result = new JsonResult();
+    	int result = 0;
     	try
     	{
-    		viMapper.updateValidateInfo(info);
+    		result = viMapper.updateValidateInfo(info);
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("insert validate info error",e);
+    	}
+    	return result;
+    }
+    
+    /**
+     * 删除会员验证信息
+     * @param info
+     * @return
+     */
+    public int deleteValidateInfo(Validateinfo info)
+    {
+    	int result = 0;
+    	try
+    	{
+    		result = viMapper.deleteValidateInfo(info);
     	}
     	catch(Exception e)
     	{
