@@ -9,34 +9,15 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ApiConstants {
-    @Value("${apiUrl}")
-    private String apiUrl;
-    @Value("${apiToken}")
-    private String apiToken;
-    @Value("${appkey}")
-    private String appKey;
 
-    public String getApiUrl() {
-        return apiUrl;
+    @Value("${upload.dir}")
+    private String uploadDir;
+
+    public String getUploadDir() {
+        return uploadDir;
     }
 
-    public void setApiUrl(String apiUrl) {
-        this.apiUrl = apiUrl;
-    }
-
-    public String getApiToken() {
-        return apiToken;
-    }
-
-    public void setApiToken(String apiToken) {
-        this.apiToken = apiToken;
-    }
-
-    public String getAppKey() {
-        return appKey;
-    }
-
-    public void setAppKey(String appKey) {
-        this.appKey = appKey;
+    public void setUploadDir(String uploadDir) {
+        this.uploadDir = uploadDir;
     }
 }
