@@ -344,45 +344,8 @@ public class RegisterController {
 	@ResponseBody
 	public void mobileValidate(HttpServletRequest req,HttpServletResponse response, Member member,Model model) throws IOException {
 		log.debug("找回密码  mobile =="+member.getMobile());
-		JsonResult result = new JsonResult();
 		String seekMobileCode = (String) req.getSession().getAttribute("s"+member.getMobile());
-		if(seekMobileCode != null)
-		{
-			Validateinfo info = new Validateinfo();
-			info.setAccount(member.getMobile());
-			info.setValid(0);
-			info.setCheckCode(seekMobileCode);
-			info = memberService.findMemberValidateInfo(info);
-			Date currentTime = new Date();
-			Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
-			if(currentTime.before(sendSMStime)) 
-			{
-				if(info != null)
-				{
-					if(seekMobileCode == null || member.getMobileCheckCode() == null || !member.getMobileCheckCode().equals(info.getCheckCode()))
-					{
-						result.setCode(400);
-						result.setMessage("手机验证码错误");
-						result.setData(member.getMobile());
-						result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
-					}
-				}
-			}
-			else
-			{
-				memberService.deleteValidateInfo(info);
-				result.setCode(400);
-				result.setMessage("短信验证超时");
-				result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
-			}
-		}
-		else
-		{
-			result.setCode(400);
-			result.setMessage("手机验证码错误");
-			result.setData(member.getMobile());
-			result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
-		}
+		JsonResult result = memberService.mobileValidate(member, seekMobileCode);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 	
@@ -451,29 +414,10 @@ public class RegisterController {
 			String vm = req.getParameter("vm");//获取email
 			if(vm != null & !vm.equals(""))
 			{
-				String redirectUrl = "";
 				String decodeVM = new String (EncodeUtil.decodeBase64(vm));
 	        	jsonResult = rvService.processActivate(decodeVM);
-	        	 modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(jsonResult.getData()).getBytes())); 
-	        	if(jsonResult.getCode() == 200)
-	        	{
-	        		//跳转到会员中心页面
-	        		redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page");
-	        	}
-	        	else
-	        	{
-	        		if(MsgCodeConstant.member_mcode_active_code_expire == jsonResult.getMsgCode())
-	        		{
-	        			//激活邮件超过24小时
-	        			redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email.expire.page");
-	        		}
-	        		else
-	        		{
-	        			//点击重复激活
-	        			redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.replay.page");
-	        		}
-	        	}
-	        	RedirectView rv = new RedirectView(redirectUrl);
+	        	modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(jsonResult.getData()).getBytes())); 
+	        	RedirectView rv = new RedirectView(rvService.getRedirectUrl(jsonResult, "active"));
 	        	modelAndView.setView(rv);
 			}
         }
@@ -496,34 +440,16 @@ public class RegisterController {
 	public ModelAndView validateMail(HttpServletRequest req, Model model) throws UnsupportedEncodingException {
 		log.debug("validate mail start.....");
 		String vm = req.getParameter("vm");//获取email
-		 ModelAndView modelAndView = new ModelAndView();  
+		ModelAndView modelAndView = new ModelAndView();  
 		if(vm != null & !vm.equals(""))
 		{
 			JsonResult jsonResult = new JsonResult();
 	        try
 	        {
-	        	String redirectUrl = "";
 	        	jsonResult = rvService.processValidate(vm);
 	        	String email = (String) jsonResult.getData();
 	        	modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(email.getBytes()));  
-	        	if(jsonResult.getCode() == 200)
-	 	        {
-	        		redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.page");
-	 	        }
-	 	        else
-	 	        {
-	 	        	if(MsgCodeConstant.member_mcode_mail_validate_expire == jsonResult.getMsgCode())
-	 	        	{
-	 	        		//验证邮件过期
-	 	        		redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email.expire.page");
-	 	        	}
-	 	        	else
-	 	        	{
-	 	        		//多次点击链接失效
-	 	        		redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.invalid.page");
-	 	        	}
-	 	        }
-	        	RedirectView rv = new RedirectView(redirectUrl);
+	        	RedirectView rv = new RedirectView(rvService.getRedirectUrl(jsonResult,"validate"));
 	 	        modelAndView.setView(rv);
 	        }
 	        catch(Exception e)
@@ -533,7 +459,7 @@ public class RegisterController {
 		}
         return modelAndView;
 	}
-	
+
 	/**
 	 * 找回密码是否验证通过
 	 * @param req

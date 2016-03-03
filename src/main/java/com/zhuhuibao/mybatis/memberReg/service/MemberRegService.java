@@ -372,4 +372,52 @@ public class MemberRegService {
     	}
     	return result;
     }
+    
+    /**
+     * 邮件验证
+     * @param member  会员信息
+     * @param seekMobileCode 图形验证码
+     * @return
+     */
+    public JsonResult mobileValidate(Member member, String seekMobileCode) {
+		JsonResult result = new JsonResult();
+		if(seekMobileCode != null)
+		{
+			Validateinfo info = new Validateinfo();
+			info.setAccount(member.getMobile());
+			info.setValid(0);
+			info.setCheckCode(seekMobileCode);
+			info = this.findMemberValidateInfo(info);
+			Date currentTime = new Date();
+			Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
+			if(currentTime.before(sendSMStime)) 
+			{
+				if(info != null)
+				{
+					if(seekMobileCode == null || member.getMobileCheckCode() == null || !member.getMobileCheckCode().equals(info.getCheckCode()))
+					{
+						result.setCode(400);
+						result.setMessage("手机验证码错误");
+						result.setData(member.getMobile());
+						result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+					}
+				}
+			}
+			else
+			{
+				this.deleteValidateInfo(info);
+				result.setCode(400);
+				result.setMessage("短信验证超时");
+				result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
+			}
+		}
+		else
+		{
+			result.setCode(400);
+			result.setMessage("手机验证码错误");
+			result.setData(member.getMobile());
+			result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+		}
+		return result;
+	}
 }

@@ -241,6 +241,57 @@ public class RegisterValidateService {
         result.setMsgCode(msgCode);
         return result;
    }
+		
+	/**
+	 * 获得跳转页面的URL
+	 * @param jsonResult
+	 * @return
+	 */
+    public String getRedirectUrl(JsonResult jsonResult,String type) {
+		String redirectUrl;
+		if(type.equals("validate"))
+		{
+			if(jsonResult.getCode() == 200)
+			{
+				redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.page");
+			}
+			else
+			{
+				if(MsgCodeConstant.member_mcode_mail_validate_expire == jsonResult.getMsgCode())
+				{
+					//验证邮件过期
+					redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email.validate.expire.page");
+				}
+				else
+				{
+					//多次点击链接失效
+					redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.invalid.page");
+				}
+			}
+		}
+		else
+		{
+			if(jsonResult.getCode() == 200)
+	    	{
+	    		//跳转到会员中心页面
+	    		redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page");
+	    	}
+	    	else
+	    	{
+	    		if(MsgCodeConstant.member_mcode_active_code_expire == jsonResult.getMsgCode())
+	    		{
+	    			//激活邮件超过24小时
+	    			redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email.active.expire.page");
+	    		}
+	    		else
+	    		{
+	    			//点击重复激活
+	    			redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.replay.page");
+	    		}
+	    	}
+		}
+		return redirectUrl;
+	}
 	
 	public static void main(String[] args) {
 		Date currentTime = new Date();//获取当前时间  
