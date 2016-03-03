@@ -9,4 +9,7 @@ public interface ValidateinfoMapper {
 	Validateinfo findMemberValidateInfo(Validateinfo info);
 	
 	int updateValidateInfo(Validateinfo info);
+	
+	int deleteValidateInfo(Validateinfo info);
+	
 }

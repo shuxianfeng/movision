@@ -355,8 +355,12 @@ public class InformationController {
 			record.setCertificate_grade_name("一级");
 		}else if("2".equals(certificate_grade)){
 			record.setCertificate_grade_name("二级");
-		}else{
+		}else if("3".equals(certificate_grade)){
 			record.setCertificate_grade_name("三级");
+		}else if("4".equals(certificate_grade)){
+			record.setCertificate_grade_name("甲级");
+		}else{
+			record.setCertificate_grade_name("乙级");
 		}
 		record.setTime(new Date());
 		int isSave = certificateRecordMapper.saveCertificate(record);
@@ -386,8 +390,12 @@ public class InformationController {
 			record.setCertificate_grade_name("一级");
 		}else if("2".equals(certificate_grade)){
 			record.setCertificate_grade_name("二级");
-		}else{
+		}else if("3".equals(certificate_grade)){
 			record.setCertificate_grade_name("三级");
+		}else if("4".equals(certificate_grade)){
+			record.setCertificate_grade_name("甲级");
+		}else{
+			record.setCertificate_grade_name("乙级");
 		}
 		record.setTime(new Date());
 		int isUpdate = certificateRecordMapper.updateCertificate(record);

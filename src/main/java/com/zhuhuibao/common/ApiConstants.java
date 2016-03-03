@@ -9,34 +9,25 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ApiConstants {
-    @Value("${apiUrl}")
-    private String apiUrl;
-    @Value("${apiToken}")
-    private String apiToken;
-    @Value("${appkey}")
-    private String appKey;
+    @Value("${uploadDir}")
+    private  String uploadDir;
 
-    public String getApiUrl() {
-        return apiUrl;
+    @Value("${uploadMaxPostSize}")
+    private int uploadMaxPostSize;
+
+    public String getUploadDir() {
+        return uploadDir;
     }
 
-    public void setApiUrl(String apiUrl) {
-        this.apiUrl = apiUrl;
+    public void setUploadDir(String uploadDir) {
+        this.uploadDir = uploadDir;
     }
 
-    public String getApiToken() {
-        return apiToken;
+    public int getUploadMaxPostSize() {
+        return uploadMaxPostSize;
     }
 
-    public void setApiToken(String apiToken) {
-        this.apiToken = apiToken;
-    }
-
-    public String getAppKey() {
-        return appKey;
-    }
-
-    public void setAppKey(String appKey) {
-        this.appKey = appKey;
+    public void setUploadMaxPostSize(int uploadMaxPostSize) {
+        this.uploadMaxPostSize = uploadMaxPostSize;
     }
 }
