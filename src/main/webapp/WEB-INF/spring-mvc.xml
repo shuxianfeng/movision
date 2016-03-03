@@ -133,4 +133,18 @@
           class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
     </bean>
 
+    <!-- token拦截器-->
+    <!--<bean id="tokenInterceptor" class="com.zhuhuibao.security.dupsubmit.TokenInterceptor"/>-->
+    <!--<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">-->
+        <!--<property name="interceptors">-->
+            <!--<list>-->
+                <!--<ref bean="tokenInterceptor"/>-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+    <mvc:interceptors>
+        <bean class="com.zhuhuibao.security.resubmit.TokenInterceptor"/>
+    </mvc:interceptors>
+
+
 </beans>
