@@ -224,7 +224,7 @@ public class RegisterValidateService {
         	}
         	else
         	{
-        		//memberService.deleteValidateInfo(vinfo);
+        		memberService.deleteValidateInfo(vinfo);
         		message="密码找回链接已经失效";
         		code = 400;
         		msgCode = MsgCodeConstant.member_mcode_mail_url_invalid;
