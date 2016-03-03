@@ -10,6 +10,9 @@
   <select id="findMemberValidateInfo" parameterType="validateInfo" resultType="validateInfo">
 	  select * from t_m_validateinfo 
 	  <where>
+	  	<if test="id != null"> 
+	  		AND id = #{id}
+	  	</if>
 	  	<if test="account != null"> 
 	  		AND account = #{account}
 	  	</if>
@@ -26,7 +29,7 @@
 	    	valid = #{valid}
 	    </if>
     </set>
-    where checkCode = #{checkCode}
+    where id = #{id}
   </update>
   
   <delete id="deleteValidateInfo" parameterType="validateInfo">

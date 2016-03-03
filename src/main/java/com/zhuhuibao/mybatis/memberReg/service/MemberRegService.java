@@ -119,14 +119,14 @@ public class MemberRegService {
      * @param memberId 会员id
      * @return
      */
-    public int isValidatePass(String account)
+    public int isValidatePass(int id)
     {
-    	log.debug("find password validate account = "+account);
+    	log.debug("find password validate account = "+id);
     	int result = 0;
     	try
     	{
     		Validateinfo info = new Validateinfo();
-    		info.setCheckCode(account);
+    		info.setId(id);
     		info = this.findMemberValidateInfo(info);
 	    	if(info != null && info.getValid() == 0)
 	    	{
