@@ -363,18 +363,12 @@
 			<artifactId>swagger-springmvc</artifactId>
 			<version>1.0.2</version>
 		</dependency>
-		
+
 		<dependency>
             <groupId>org.crazycake</groupId>
             <artifactId>shiro-redis</artifactId>
             <version>2.4.2.1-RELEASE</version>
         </dependency>
-        
-		<dependency>
-			<groupId>cos</groupId>
-			<artifactId>cos</artifactId>
-			<version>05Nov2002</version>
-		</dependency>
 
 		<dependency>
 			<groupId>cos</groupId>
