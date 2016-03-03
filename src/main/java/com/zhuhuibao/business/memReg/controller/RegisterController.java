@@ -476,6 +476,13 @@ public class RegisterController {
 		JsonResult jsonResult = new JsonResult();
 		String account = req.getParameter("account");
 		int result = memberService.isValidatePass(EncodeUtil.decodeBase64ToString(account));
+		if(result == 1)
+		{
+			Validateinfo vinfo = new Validateinfo();
+	    	vinfo.setCheckCode(EncodeUtil.decodeBase64ToString(account));
+		    vinfo.setValid(1);
+		    memberService.updateValidateInfo(vinfo);
+		}
 		jsonResult.setData(result);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}

@@ -125,8 +125,10 @@ public class MemberRegService {
     	int result = 0;
     	try
     	{
-	    	Integer obj = memberRegMapper.isValidatePass(account);
-	    	if(obj != null && obj == 1)
+    		Validateinfo info = new Validateinfo();
+    		info.setCheckCode(account);
+    		info = this.findMemberValidateInfo(info);
+	    	if(info != null && info.getValid() == 0)
 	    	{
 	    		result = 1;
 	    	}

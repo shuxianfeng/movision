@@ -89,6 +89,7 @@ public class RegisterValidateService {
 	        {
 	        	for(Member user : memberList)
 	        	{
+	        		//同一个邮箱多次注册
 	        		if(user.getStatus() == 1)
 	        		{
 	        			if(id == user.getId())
@@ -245,9 +246,6 @@ public class RegisterValidateService {
 	            //验证链接是否过期 24小时
 	            Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(vinfo.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
 	            if(currentTime.before(registerDate)) {
-	        	    user.setIsValidatePass(1);
-	        	    vinfo.setValid(1);
-	        	    memberService.updateValidateInfo(vinfo);
 	        	    memberService.updateMemberValidatePass(user);
 	        	    message = "通过身份验证";
 	            } else { 
@@ -272,7 +270,7 @@ public class RegisterValidateService {
        }  
         result.setCode(code);
         result.setMessage(message);
-        result.setData(email);
+        result.setData(url);
         result.setMsgCode(msgCode);
         return result;
    }

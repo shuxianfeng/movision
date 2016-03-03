@@ -13,11 +13,8 @@
 	  	<if test="account != null"> 
 	  		AND account = #{account}
 	  	</if>
-	  	<if test="checkCode">
+	  	<if test="checkCode != null">
 	  		AND checkCode = #{checkCode}
-	  	</if>
-	  	<if test="valid">
-	  		AND valid = #{valid}
 	  	</if>
 	  </where>
   </select>

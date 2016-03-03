@@ -29,8 +29,8 @@ public class EncodeUtil {
     
     public static void main(String[] args) throws UnsupportedEncodingException {
     	//123456 MTIzNDU2  123 MTIz  19630759@qq.com MTk2MzA3NTlAcXEuY29t
-    	System.out.println(encodeBase64ToString("19630759@qq.com".getBytes()));
-		System.out.println(decodeBase64ToString("5Li65Lq65rCR5pyN5Yqh"));
+    	System.out.println(encodeBase64ToString("http://139.196.189.100/rest/validateMail?vm=dmFsaWRhdGUseXhkX3podWh1aThAc29odS5jb20sMjAxNi0wMy0wNCAwOTo1ODo0Mw==".getBytes()));
+		System.out.println(decodeBase64ToString(encodeBase64ToString("MTIzNDU2".getBytes())));
 	}
 }
 
