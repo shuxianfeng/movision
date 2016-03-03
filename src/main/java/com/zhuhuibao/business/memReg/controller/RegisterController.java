@@ -447,8 +447,9 @@ public class RegisterController {
 	        try
 	        {
 	        	jsonResult = rvService.processValidate(vm);
-	        	String email = (String) jsonResult.getData();
-	        	modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(email.getBytes()));  
+	        	String[] array = (String[]) jsonResult.getData();
+	        	modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(array[0].getBytes()));
+	        	modelAndView.addObject("id",EncodeUtil.encodeBase64ToString(array[1].getBytes()));
 	        	RedirectView rv = new RedirectView(rvService.getRedirectUrl(jsonResult,"validate"));
 	 	        modelAndView.setView(rv);
 	        }
@@ -474,8 +475,16 @@ public class RegisterController {
 	public void isValidatePass(HttpServletRequest req,HttpServletResponse response) throws IOException {
 		log.debug("找回密码是否验证");
 		JsonResult jsonResult = new JsonResult();
-		String account = req.getParameter("account");
-		int result = memberService.isValidatePass(EncodeUtil.decodeBase64ToString(account));
+		String id = req.getParameter("account");
+		int int_id = Integer.parseInt(EncodeUtil.decodeBase64ToString(id));
+		int result = memberService.isValidatePass(int_id);
+		if(result == 1)
+		{
+			Validateinfo vinfo = new Validateinfo();
+	    	vinfo.setId(int_id);
+		    vinfo.setValid(1);
+		    memberService.updateValidateInfo(vinfo);
+		}
 		jsonResult.setData(result);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
