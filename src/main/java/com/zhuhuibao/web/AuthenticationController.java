@@ -7,6 +7,7 @@ import java.util.Map;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.security.EncodeUtil;
+import com.zhuhuibao.security.resubmit.TokenHelper;
 import com.zhuhuibao.utils.JsonUtils;
 
 import org.apache.shiro.SecurityUtils;
