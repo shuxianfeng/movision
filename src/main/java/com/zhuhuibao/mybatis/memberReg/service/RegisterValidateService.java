@@ -204,7 +204,7 @@ public class RegisterValidateService {
         	Validateinfo vinfo = new Validateinfo();
         	vinfo.setCheckCode(url);
         	vinfo = memberService.findMemberValidateInfo(vinfo);
-        	if(vinfo != null && vinfo.getValid() == 0)
+        	if(vinfo != null && vinfo.getValid() == 0 && vinfo.getCreateTime() != null)
         	{
 	            Date currentTime = new Date();//获取当前时间  
 	            //验证链接是否过期 24小时
@@ -224,7 +224,7 @@ public class RegisterValidateService {
         	}
         	else
         	{
-        		memberService.deleteValidateInfo(vinfo);
+        		//memberService.deleteValidateInfo(vinfo);
         		message="密码找回链接已经失效";
         		code = 400;
         		msgCode = MsgCodeConstant.member_mcode_mail_url_invalid;
