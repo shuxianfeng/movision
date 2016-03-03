@@ -75,7 +75,7 @@ public class SendEmail {
     public static void main(String[] args) {
     	String serverIp = "192.168.1.100";
     	Member member = new Member();
-    	member.setEmail("19630759@qq.com");
+    	member.setEmail("penglong@zhuhui8.com");
     	StringBuffer sb=new StringBuffer("");
         sb.append("<div style=\"line-height:40px;height:40px\">");
         sb.append("</div>");
