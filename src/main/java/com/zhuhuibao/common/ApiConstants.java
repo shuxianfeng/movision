@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ApiConstants {
+    @Value("${uploadDir}")
+    private  String uploadDir;
 
-    @Value("${upload.dir}")
-    private String uploadDir;
+    @Value("${uploadMaxPostSize}")
+    private int uploadMaxPostSize;
 
     public String getUploadDir() {
         return uploadDir;
@@ -19,5 +21,13 @@ public class ApiConstants {
 
     public void setUploadDir(String uploadDir) {
         this.uploadDir = uploadDir;
+    }
+
+    public int getUploadMaxPostSize() {
+        return uploadMaxPostSize;
+    }
+
+    public void setUploadMaxPostSize(int uploadMaxPostSize) {
+        this.uploadMaxPostSize = uploadMaxPostSize;
     }
 }

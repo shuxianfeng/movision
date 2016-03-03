@@ -220,42 +220,52 @@ public class RegisterController {
 		if(member.getMobileCheckCode() != null )
 		{
 			String verifyCode = (String) req.getSession().getAttribute("r"+member.getMobile());
-			Validateinfo info = new Validateinfo();
-			info.setAccount(member.getMobile());
-			info.setValid(0);
-			info.setCheckCode(verifyCode);
-			info = memberService.findMemberValidateInfo(info);
-			Date currentTime = new Date();
-			Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
-			if(currentTime.before(sendSMStime)) 
-			{ 
-				if(info != null &&  info.getCheckCode().equalsIgnoreCase(member.getMobileCheckCode()))
-				{
-					int isExist = memberService.isExistAccount(member);
-					if(isExist == 0)
+			if(verifyCode != null)
+			{
+				Validateinfo info = new Validateinfo();
+				info.setAccount(member.getMobile());
+				info.setValid(0);
+				info.setCheckCode(verifyCode);
+				info = memberService.findMemberValidateInfo(info);
+				Date currentTime = new Date();
+				Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
+				if(currentTime.before(sendSMStime)) 
+				{ 
+					if(info != null &&  info.getCheckCode().equalsIgnoreCase(member.getMobileCheckCode()))
 					{
-						memberService.registerMember(member);
+						int isExist = memberService.isExistAccount(member);
+						if(isExist == 0)
+						{
+							memberService.registerMember(member);
+						}
+						else
+						{
+							result.setCode(400);
+							result.setMessage("账户名已经存在");
+							result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+						}
 					}
 					else
 					{
 						result.setCode(400);
-						result.setMessage("账户名已经存在");
-						result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+						result.setMessage("验证码不正确");
+						result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 					}
+					log.debug("mobile verifyCode == " + member.getMobileCheckCode());
 				}
 				else
 				{
+					memberService.deleteValidateInfo(info);
 					result.setCode(400);
-					result.setMessage("验证码不正确");
-					result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+					result.setMessage("短信验证超时");
+					result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
 				}
-				log.debug("mobile verifyCode == " + member.getMobileCheckCode());
 			}
 			else
 			{
 				result.setCode(400);
-				result.setMessage("短信验证超时");
-				result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
+				result.setMessage("验证码不正确");
+				result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 			}
 		}
 		if(member.getEmailCheckCode() != null )
@@ -336,31 +346,42 @@ public class RegisterController {
 		log.debug("找回密码  mobile =="+member.getMobile());
 		JsonResult result = new JsonResult();
 		String seekMobileCode = (String) req.getSession().getAttribute("s"+member.getMobile());
-		Validateinfo info = new Validateinfo();
-		info.setAccount(member.getMobile());
-		info.setValid(0);
-		info.setCheckCode(seekMobileCode);
-		info = memberService.findMemberValidateInfo(info);
-		Date currentTime = new Date();
-		Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
-		if(currentTime.before(sendSMStime)) 
+		if(seekMobileCode != null)
 		{
-			if(info != null)
+			Validateinfo info = new Validateinfo();
+			info.setAccount(member.getMobile());
+			info.setValid(0);
+			info.setCheckCode(seekMobileCode);
+			info = memberService.findMemberValidateInfo(info);
+			Date currentTime = new Date();
+			Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
+			if(currentTime.before(sendSMStime)) 
 			{
-				if(member.getMobileCheckCode() == null || !member.getMobileCheckCode().equals(info.getCheckCode()))
+				if(info != null)
 				{
-					result.setCode(400);
-					result.setMessage("手机验证码错误");
-					result.setData(member.getMobile());
-					result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+					if(seekMobileCode == null || member.getMobileCheckCode() == null || !member.getMobileCheckCode().equals(info.getCheckCode()))
+					{
+						result.setCode(400);
+						result.setMessage("手机验证码错误");
+						result.setData(member.getMobile());
+						result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+					}
 				}
+			}
+			else
+			{
+				memberService.deleteValidateInfo(info);
+				result.setCode(400);
+				result.setMessage("短信验证超时");
+				result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
 			}
 		}
 		else
 		{
 			result.setCode(400);
-			result.setMessage("短信验证超时");
-			result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
+			result.setMessage("手机验证码错误");
+			result.setData(member.getMobile());
+			result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 		}
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -430,20 +451,30 @@ public class RegisterController {
 			String vm = req.getParameter("vm");//获取email
 			if(vm != null & !vm.equals(""))
 			{
+				String redirectUrl = "";
 				String decodeVM = new String (EncodeUtil.decodeBase64(vm));
 	        	jsonResult = rvService.processActivate(decodeVM);
 	        	 modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(jsonResult.getData()).getBytes())); 
 	        	if(jsonResult.getCode() == 200)
 	        	{
 	        		//跳转到会员中心页面
-	        		RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page"));
-	        		modelAndView.setView(rv);
+	        		redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page");
 	        	}
 	        	else
 	        	{
-	        		RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.replay.page"));
-	    	        modelAndView.setView(rv);
+	        		if(MsgCodeConstant.member_mcode_active_code_expire == jsonResult.getMsgCode())
+	        		{
+	        			//激活邮件超过24小时
+	        			redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email.expire.page");
+	        		}
+	        		else
+	        		{
+	        			//点击重复激活
+	        			redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.replay.page");
+	        		}
 	        	}
+	        	RedirectView rv = new RedirectView(redirectUrl);
+	        	modelAndView.setView(rv);
 			}
         }
         catch(Exception e)
@@ -468,21 +499,31 @@ public class RegisterController {
 		 ModelAndView modelAndView = new ModelAndView();  
 		if(vm != null & !vm.equals(""))
 		{
-			RedirectView rv = null;
 			JsonResult jsonResult = new JsonResult();
 	        try
 	        {
+	        	String redirectUrl = "";
 	        	jsonResult = rvService.processValidate(vm);
 	        	String email = (String) jsonResult.getData();
 	        	modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(email.getBytes()));  
 	        	if(jsonResult.getCode() == 200)
 	 	        {
-	 		        rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.page"));
+	        		redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.page");
 	 	        }
 	 	        else
 	 	        {
-	 	        	rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.invalid.page"));
+	 	        	if(MsgCodeConstant.member_mcode_mail_validate_expire == jsonResult.getMsgCode())
+	 	        	{
+	 	        		//验证邮件过期
+	 	        		redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email.expire.page");
+	 	        	}
+	 	        	else
+	 	        	{
+	 	        		//多次点击链接失效
+	 	        		redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.invalid.page");
+	 	        	}
 	 	        }
+	        	RedirectView rv = new RedirectView(redirectUrl);
 	 	        modelAndView.setView(rv);
 	        }
 	        catch(Exception e)

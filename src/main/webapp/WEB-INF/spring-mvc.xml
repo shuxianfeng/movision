@@ -73,10 +73,10 @@
         </property>
     </bean>
 
-    <!--<bean id="multipartResolver"-->
-          <!--class="org.springframework.web.multipart.commons.CommonsMultipartResolver"-->
-          <!--p:maxUploadSize="104857600" p:maxInMemorySize="4096"-->
-          <!--p:defaultEncoding="UTF-8"/>-->
+<!--    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+          p:maxUploadSize="104857600" p:maxInMemorySize="4096"
+          p:defaultEncoding="UTF-8"/>-->
 
     <!-- json配置 -->
     <bean

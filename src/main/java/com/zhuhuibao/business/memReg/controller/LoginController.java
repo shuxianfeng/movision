@@ -12,6 +12,7 @@ import com.zhuhuibao.utils.JsonUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.session.*;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
@@ -89,6 +90,8 @@ public class LoginController {
         }
 
         if(currentUser.isAuthenticated()){
+        	Session session = currentUser.getSession();
+        	session.setAttribute("member", currentUser.getPrincipal());
             System.out.println("用户[" + username + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
         }else{
             token.clear();
