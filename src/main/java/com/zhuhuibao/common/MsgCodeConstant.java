@@ -13,6 +13,11 @@ public interface MsgCodeConstant {
 	int mcode_common_success = 1000;
 	
 	/**
+	 * 通用错误
+	 */
+	int mcode_common_failure = 1001;
+	
+	/**
 	 * 会员错误信息码：100开头
 	 * 账户名已经存在
 	 */

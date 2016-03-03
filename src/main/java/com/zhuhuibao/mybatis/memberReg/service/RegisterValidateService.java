@@ -75,65 +75,100 @@ public class RegisterValidateService {
 	 */
 	public JsonResult processActivate(String decodeVM){  
         //数据访问层，通过email获取用户信息
-		String[] array = decodeVM.split(",");
-		int id = Integer.parseInt(array[0]);
-		String email = array[1];
 		JsonResult result = new JsonResult();
-	    int code = 200;
+		int code = 200;
 	    int msgCode = MsgCodeConstant.mcode_common_success;
-        String message = "";
-        List<Member> memberList =memberService.findMemberByMail(email);
-        if(!memberList.isEmpty())
-        {
-	       for(Member user : memberList)
-	       { 
-	    	   if(user.getId() == id)
-	    	   {
-	    		 //验证用户激活状态  
-		           if(user.getStatus()==0) { 
-		               ///没激活
-		               Date currentTime = new Date();//获取当前时间  
-		               //验证链接是否过期 24小时
-		               Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(user.getRegisterTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
-		               if(currentTime.before(registerDate)) {  
-	                	   user.setStatus(1);
-	                	   memberService.updateMemberStatus(user);
-	                       message = "激活成功请登录";
-	                       code = 200;
-	                       break;
-		               } else { 
-		            	   //激活码已过期
-		            	   message = "激活码已过期";
-		            	   code = 400;
-		            	   msgCode = MsgCodeConstant.member_mcode_active_code_expire;
-		            	   
-		               }  
-		           } else {
-	        		   //邮箱已激活，请登录！
+		try
+		{
+			String[] array = decodeVM.split(",");
+			int id = Integer.parseInt(array[0]);
+			String email = array[1];
+	        String message = "";
+	        List<Member> memberList =memberService.findMemberByMail(email);
+	        if(!memberList.isEmpty())
+	        {
+	        	for(Member user : memberList)
+	        	{
+	        		if(user.getStatus() == 1)
+	        		{
+	        			if(id == user.getId())
+	        			{
+	        				code = 400;
+				        	message = "邮箱已激活请登录";
+				        	msgCode = MsgCodeConstant.member_mcode_mail_actived;
+	        			}
+	        			else
+	        			{
+	        				code = 400;
+	 		        	    message = "邮箱已被注册";
+	 		        	    msgCode = MsgCodeConstant.member_mcode_mail_registered;
+	        			}
+			        	result.setCode(code);
+				        result.setMessage(message);
+				        result.setData(email);
+				        result.setMsgCode(msgCode);
+				        return result;
+	        		}
+	        	}
+		       for(Member user : memberList)
+		       { 
+		    	   if(user.getId() == id)
+		    	   {
+		    		 //验证用户激活状态  
+			           if(user.getStatus()==0) { 
+			               ///没激活
+			               Date currentTime = new Date();//获取当前时间  
+			               //验证链接是否过期 24小时
+			               Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(user.getRegisterTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
+			               if(currentTime.before(registerDate)) {  
+		                	   user.setStatus(1);
+		                	   memberService.updateMemberStatus(user);
+		                       message = "激活成功请登录";
+		                       code = 200;
+		                       break;
+			               } else { 
+			            	   //激活码已过期
+			            	   message = "激活码已过期";
+			            	   code = 400;
+			            	   msgCode = MsgCodeConstant.member_mcode_active_code_expire;
+			            	   
+			               }  
+			           } else {
+		        		   //邮箱已激活，请登录！
+			        	   code = 400;
+			        	   message = "邮箱已激活请登录";
+			        	   msgCode = MsgCodeConstant.member_mcode_mail_actived;
+			           }
+		    	   }
+		    	   else
+		    	   {
+		    		   //邮箱已被注册
 		        	   code = 400;
-		        	   message = "邮箱已激活请登录";
-		        	   msgCode = MsgCodeConstant.member_mcode_mail_actived;
-		           }
-	    	   }
-	    	   else
-	    	   {
-	    		   //邮箱已被注册
-	        	   code = 400;
-	        	   message = "邮箱已被注册";
-	        	   msgCode = MsgCodeConstant.member_mcode_mail_registered;
-	    	   }
-	       }
-        }
-        else {
-    	   //该邮箱未注册（邮箱地址不存在）！
-    	   code = 400;
-    	   message = "该邮箱未注册";
-    	   msgCode = MsgCodeConstant.member_mcode_mail_unregister;
-	   }  
-        result.setCode(code);
-        result.setMessage(message);
-        result.setData(email);
-        result.setMsgCode(msgCode);
+		        	   message = "邮箱已被注册";
+		        	   msgCode = MsgCodeConstant.member_mcode_mail_registered;
+		    	   }
+		       }
+	        }
+	        else {
+	    	   //该邮箱未注册（邮箱地址不存在）！
+	    	   code = 400;
+	    	   message = "该邮箱未注册";
+	    	   msgCode = MsgCodeConstant.member_mcode_mail_unregister;
+		   }  
+	        result.setCode(code);
+	        result.setMessage(message);
+	        result.setData(email);
+	        result.setMsgCode(msgCode);
+		}
+		catch(Exception ex)
+		{
+			log.error("process activate mail error",ex);
+			code = 400;
+     	    msgCode = MsgCodeConstant.mcode_common_failure;
+     	    result.setCode(code);
+	        result.setMsgCode(msgCode);
+	        return result;
+		}
         return result;
        
    }
