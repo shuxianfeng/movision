@@ -220,12 +220,12 @@ public class RegisterController {
 		if(member.getMobileCheckCode() != null )
 		{
 			String verifyCode = (String) req.getSession().getAttribute("r"+member.getMobile());
-			memberService.registerMobileMember(member, verifyCode);
+			result = memberService.registerMobileMember(member, verifyCode);
 		}
 		if(member.getEmailCheckCode() != null )
 		{
 			String verifyCode = (String) req.getSession().getAttribute("email");
-			memberService.registerMailMember(member, verifyCode);
+			result =memberService.registerMailMember(member, verifyCode);
 		}
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
