@@ -41,23 +41,23 @@ public class AuthenticationController {
     public void isLogin(HttpServletRequest req,HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException{
         JsonResult jsonResult = new JsonResult();
         jsonResult.setCode(200);
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, Boolean> map = new HashMap<String, Boolean>();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null == session){
         	jsonResult.setMsgCode(0);
             jsonResult.setMessage("you are rejected!");
-            map.put("authorized", "false");
+            map.put("authorized", false);
         }else{
         	Object principal = session.getAttribute("member");
         	if(null == principal){
             	jsonResult.setMsgCode(0);
                 jsonResult.setMessage("you are rejected!");
-                map.put("authorized", "false");
+                map.put("authorized", false);
         	}else{
             	jsonResult.setMsgCode(1);
                 jsonResult.setMessage("welcome you!");
-                map.put("authorized", "true");
+                map.put("authorized", true);
         	}
         }
         jsonResult.setData(map);
