@@ -430,20 +430,30 @@ public class RegisterController {
 			String vm = req.getParameter("vm");//获取email
 			if(vm != null & !vm.equals(""))
 			{
+				String redirectUrl = "";
 				String decodeVM = new String (EncodeUtil.decodeBase64(vm));
 	        	jsonResult = rvService.processActivate(decodeVM);
 	        	 modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(jsonResult.getData()).getBytes())); 
 	        	if(jsonResult.getCode() == 200)
 	        	{
 	        		//跳转到会员中心页面
-	        		RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page"));
-	        		modelAndView.setView(rv);
+	        		redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page");
 	        	}
 	        	else
 	        	{
-	        		RedirectView rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.replay.page"));
-	    	        modelAndView.setView(rv);
+	        		if(MsgCodeConstant.member_mcode_active_code_expire == jsonResult.getMsgCode())
+	        		{
+	        			//激活邮件超过24小时
+	        			redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email.expire.page");
+	        		}
+	        		else
+	        		{
+	        			//点击重复激活
+	        			redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.replay.page");
+	        		}
 	        	}
+	        	RedirectView rv = new RedirectView(redirectUrl);
+	        	modelAndView.setView(rv);
 			}
         }
         catch(Exception e)
@@ -468,21 +478,31 @@ public class RegisterController {
 		 ModelAndView modelAndView = new ModelAndView();  
 		if(vm != null & !vm.equals(""))
 		{
-			RedirectView rv = null;
 			JsonResult jsonResult = new JsonResult();
 	        try
 	        {
+	        	String redirectUrl = "";
 	        	jsonResult = rvService.processValidate(vm);
 	        	String email = (String) jsonResult.getData();
 	        	modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(email.getBytes()));  
 	        	if(jsonResult.getCode() == 200)
 	 	        {
-	 		        rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.page"));
+	        		redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.page");
 	 	        }
 	 	        else
 	 	        {
-	 	        	rv = new RedirectView("http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.invalid.page"));
+	 	        	if(MsgCodeConstant.member_mcode_mail_validate_expire == jsonResult.getMsgCode())
+	 	        	{
+	 	        		//验证邮件过期
+	 	        		redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email.expire.page");
+	 	        	}
+	 	        	else
+	 	        	{
+	 	        		//多次点击链接失效
+	 	        		redirectUrl = "http://"+ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.invalid.page");
+	 	        	}
 	 	        }
+	        	RedirectView rv = new RedirectView(redirectUrl);
 	 	        modelAndView.setView(rv);
 	        }
 	        catch(Exception e)
