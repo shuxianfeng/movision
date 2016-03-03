@@ -1,6 +1,8 @@
 package com.zhuhuibao.web;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.MsgCodeConstant;
@@ -39,22 +41,26 @@ public class AuthenticationController {
     public void isLogin(HttpServletRequest req,HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException{
         JsonResult jsonResult = new JsonResult();
         jsonResult.setCode(200);
+		Map<String,String> map = new HashMap<String,String>();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null == session){
         	jsonResult.setMsgCode(0);
             jsonResult.setMessage("you are rejected!");
-            
+            map.put("authorized", "false");
         }else{
         	Object principal = session.getAttribute("member");
         	if(null == principal){
             	jsonResult.setMsgCode(0);
                 jsonResult.setMessage("you are rejected!");
+                map.put("authorized", "false");
         	}else{
             	jsonResult.setMsgCode(1);
                 jsonResult.setMessage("welcome you!");
+                map.put("authorized", "true");
         	}
         }
+        jsonResult.setData(map);
         response.setContentType("application/json;charset=utf-8");
       	response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
       	log.debug("caijl:/rest/web/authc is called,msgcode=["+jsonResult.getMsgCode()+"],Message=["+jsonResult.getMessage()+"].");
