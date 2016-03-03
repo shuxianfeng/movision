@@ -10,7 +10,7 @@
   <select id="findMemberValidateInfo" parameterType="validateInfo" resultType="validateInfo">
 	  select * from t_m_validateinfo 
 	  <where>
-	  	<if test="id != null"> 
+	  	<if test="id != 0"> 
 	  		AND id = #{id}
 	  	</if>
 	  	<if test="account != null"> 

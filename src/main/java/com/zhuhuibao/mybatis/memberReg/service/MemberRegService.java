@@ -126,7 +126,7 @@ public class MemberRegService {
     	try
     	{
     		Validateinfo info = new Validateinfo();
-    		info.setId(id);
+    		info.setId(id == 0 ? -1 : id);
     		info = this.findMemberValidateInfo(info);
 	    	if(info != null && info.getValid() == 0)
 	    	{

@@ -475,7 +475,7 @@ public class RegisterController {
 	public void isValidatePass(HttpServletRequest req,HttpServletResponse response) throws IOException {
 		log.debug("找回密码是否验证");
 		JsonResult jsonResult = new JsonResult();
-		String id = req.getParameter("id");
+		String id = req.getParameter("account");
 		int int_id = Integer.parseInt(EncodeUtil.decodeBase64ToString(id));
 		int result = memberService.isValidatePass(int_id);
 		if(result == 1)
