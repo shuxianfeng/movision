@@ -11,34 +11,34 @@
         <property name="hashAlgorithmName" value="${password.algorithmName}"/>
         <property name="hashIterations" value="${password.hashIterations}"/>
     </bean>
-    
     <!-- Realm实现 -->
     <bean id="userRealm" class="com.zhuhuibao.shiro.realm.ShiroRealm">
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
         <property name="cachingEnabled" value="true"/>
     </bean>
 
+
     <!-- 用户授权信息Cache, 采用EhCache -->
     <bean id="ehcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
         <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache.xml"/>
     </bean>
-    
-    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">  
+
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
         <property name="sessionDAO" ref="redisSessionDAO" />
     </bean>
-    
+
     <!-- shiro redisManager -->
     <bean id="redisManager" class="org.crazycake.shiro.RedisManager">
-        <property name="host" value="127.0.0.1"/>
-        <property name="port" value="6379"/>
-        <property name="expire" value="1800"/>
+        <property name="host" value="${redis.host}}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="expire" value="${redis.expire}"/>
     </bean>
-    
+
     <!-- redisSessionDAO -->
     <bean id="redisSessionDAO" class="org.crazycake.shiro.RedisSessionDAO">
         <property name="redisManager" ref="redisManager" />
     </bean>
-    
+
     <!-- cacheManager -->
     <bean id="cacheManager" class="org.crazycake.shiro.RedisCacheManager">
         <property name="redisManager" ref="redisManager" />
