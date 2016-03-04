@@ -53,14 +53,14 @@ public class AuthenticationController {
             jsonResult.setMessage("you are rejected!");
             map.put("authorized", false);
         }else{
-        	Object principal = session.getAttribute("member");
+        	ShiroUser principal = (ShiroUser)session.getAttribute("member");
         	if(null == principal){
             	jsonResult.setMsgCode(0);
                 jsonResult.setMessage("you are rejected!");
                 map.put("authorized", false);
         	}else{
         		LoginMember member = new LoginMember();
-        		member.setAccount(principal.toString());
+        		member.setAccount(principal.getAccount());
             	jsonResult.setMsgCode(1);
                 jsonResult.setMessage("welcome you!");
                 map.put("authorized", true);

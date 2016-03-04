@@ -42,22 +42,9 @@ public class ShiroRealm extends AuthorizingRealm {
             AuthenticationToken token) throws AuthenticationException {
         log.info("登录认证");
         String loginname = (String) token.getPrincipal();
-        //User user = userService.findByMobile(loginname);
         Member member = memberRegService.findMemberByAccount(loginname);
-        String account = "";
         if(member != null){
-            if(member.getEmail() != null && member.getEmail().indexOf("@") >= 0)
-            {
-            	account = member.getEmail();
-            }
-            else
-            {
-            	account = member.getMobile();
-            }
-            /*if (!"1".equals(member.getStatus())) {
-                throw new LockedAccountException(); // 帐号不正常状态
-            }*/
-            if ("0".equals(member.getStatus())) {
+            if (!"1".equals(member.getStatus())) {
                 throw new LockedAccountException(); // 帐号不正常状态
             }
         }  else{
@@ -65,16 +52,11 @@ public class ShiroRealm extends AuthorizingRealm {
         }
         // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(
-                new ShiroUser(member.getId(), member.getMobile(), member.getEmail(), member.getStatus()), // 用户
+                new ShiroUser(member.getId(), loginname, member.getStatus()), // 用户
                 member.getPassword(), // 密码
 //                ByteSource.Util.bytes("123"),
                 getName() // realm name
         );
-//        return new SimpleAuthenticationInfo(
-//        		account, // 用户
-//                member.getPassword(), // 密码
-//                getName() // realm name
-//        );
     }
 
 
@@ -94,14 +76,12 @@ public class ShiroRealm extends AuthorizingRealm {
     public static class ShiroUser implements Serializable {
         private static final long serialVersionUID = -1373760761780840081L;
         private Integer id;
-        private String email;
-        private String mobile;
+        private String account;
         private int status;
 
-        public ShiroUser(Integer id, String name, String mobile, int status) {
+        public ShiroUser(Integer id, String account, int status) {
             this.id = id;
-            this.email = name;
-            this.mobile = mobile;
+            this.account = account;
             this.status = status;
         }
 
@@ -113,21 +93,13 @@ public class ShiroRealm extends AuthorizingRealm {
             this.status = status;
         }
 
-        public String getMobile() {
-            return mobile;
+        public String getAccount() {
+            return account;
         }
 
-        public void setMobile(String mobile) {
-            this.mobile = mobile;
+        public void setAccount(String account) {
+            this.account = account;
         }
-
-        public String getEmail() {
-			return email;
-		}
-
-		public void setEmail(String email) {
-			this.email = email;
-		}
 
 		public Integer getId() {
             return id;
@@ -138,7 +110,7 @@ public class ShiroRealm extends AuthorizingRealm {
         }
 
         /**
-         * 重载equals,只计算userid+username;
+         * 重载equals,只计算id+account;
          */
         @Override
         public boolean equals(Object obj) {
@@ -150,10 +122,10 @@ public class ShiroRealm extends AuthorizingRealm {
                 return false;
             ShiroUser other = (ShiroUser) obj;
 
-            if (id == null || mobile == null) {
+            if (id == null || account == null) {
                 return false;
             } else if (id.equals(other.id)
-                    && mobile.equals(other.mobile))
+                    && account.equals(other.account))
                 return true;
             return false;
         }
