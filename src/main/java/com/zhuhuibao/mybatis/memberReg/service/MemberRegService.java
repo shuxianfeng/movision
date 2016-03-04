@@ -18,6 +18,7 @@ import com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper;
 import com.zhuhuibao.mybatis.memberReg.mapper.ValidateinfoMapper;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.DateUtils;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
 
 /**
@@ -266,14 +267,14 @@ public class MemberRegService {
 				    	if(dbmember == null)
 				    	{
 				    		result.setCode(400);
-				    		result.setMessage("账户不存在");
+				    		result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
 				    		result.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
 				    	}
 					}
 					else
 					{
 						result.setCode(400);
-						result.setMessage("验证码错误");
+						result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
 						result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 					}
 	    		}
@@ -287,7 +288,7 @@ public class MemberRegService {
 	    		    	if(dbmember == null)
 	    		    	{
 	    		    		result.setCode(400);
-	    		    		result.setMessage("账户不存在");
+	    		    		result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
 	    		    		result.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
 	    		    	}
 	    		    	else
@@ -299,7 +300,7 @@ public class MemberRegService {
 	    			else
 	    			{
 	    				result.setCode(400);
-	    				result.setMessage("验证码错误");
+	    				result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_error)));
 	    				result.setMsgCode(MsgCodeConstant.member_mcode_mail_validate_error);
 	    			}
 	    		}
@@ -413,7 +414,7 @@ public class MemberRegService {
 					if(seekMobileCode == null || member.getMobileCheckCode() == null || !member.getMobileCheckCode().equals(info.getCheckCode()))
 					{
 						result.setCode(400);
-						result.setMessage("手机验证码错误");
+						result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
 						result.setData(member.getMobile());
 						result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 					}
@@ -423,14 +424,14 @@ public class MemberRegService {
 			{
 				this.deleteValidateInfo(info);
 				result.setCode(400);
-				result.setMessage("短信验证码超时");
+				result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_sms_timeout)));
 				result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
 			}
 		}
 		else
 		{
 			result.setCode(400);
-			result.setMessage("手机验证码错误");
+			result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
 			result.setData(member.getMobile());
 			result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 		}
@@ -467,14 +468,14 @@ public class MemberRegService {
 					else
 					{
 						result.setCode(400);
-						result.setMessage("账户名已经存在");
+						result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
 						result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
 					}
 				}
 				else
 				{
 					result.setCode(400);
-					result.setMessage("验证码不正确");
+					result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
 					result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 				}
 				log.debug("mobile verifyCode == " + member.getMobileCheckCode());
@@ -483,14 +484,14 @@ public class MemberRegService {
 			{
 				this.deleteValidateInfo(info);
 				result.setCode(400);
-				result.setMessage("短信验证码超时");
+				result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_sms_timeout)));
 				result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
 			}
 		}
 		else
 		{
 			result.setCode(400);
-			result.setMessage("验证码不正确");
+			result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
 			result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 		}
 		return result;
@@ -529,7 +530,7 @@ public class MemberRegService {
 				else
 				{
 					result.setCode(400);
-					result.setMessage("账户名已经存在");
+					result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
 					result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
 				}
 			}
@@ -537,7 +538,7 @@ public class MemberRegService {
 		else
 		{
 			result.setCode(400);
-			result.setMessage("邮件验证码不正确");
+			result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_error)));
 			result.setMsgCode(MsgCodeConstant.member_mcode_mail_validate_error);
 		}
 		log.debug("email verifyCode == " + member.getEmailCheckCode());

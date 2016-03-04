@@ -15,6 +15,7 @@ import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.DateUtils;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
 import com.zhuhuibao.utils.SendEmail;
 
@@ -95,13 +96,13 @@ public class RegisterValidateService {
 	        			if(id == user.getId())
 	        			{
 	        				code = 400;
-				        	message = "邮箱已激活请登录";
+				        	message = MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_actived));
 				        	msgCode = MsgCodeConstant.member_mcode_mail_actived;
 	        			}
 	        			else
 	        			{
 	        				code = 400;
-	 		        	    message = "邮箱已被注册";
+	 		        	    message = MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_registered));
 	 		        	    msgCode = MsgCodeConstant.member_mcode_mail_registered;
 	        			}
 			        	result.setCode(code);
@@ -129,7 +130,7 @@ public class RegisterValidateService {
 		                       break;
 			               } else { 
 			            	   //激活码已过期
-			            	   message = "激活码已过期";
+			            	   message = MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_active_code_expire));
 			            	   code = 400;
 			            	   msgCode = MsgCodeConstant.member_mcode_active_code_expire;
 			            	   
@@ -137,7 +138,7 @@ public class RegisterValidateService {
 			           } else {
 		        		   //邮箱已激活，请登录！
 			        	   code = 400;
-			        	   message = "邮箱已激活请登录";
+			        	   message = MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_actived));
 			        	   msgCode = MsgCodeConstant.member_mcode_mail_actived;
 			           }
 		    	   }
@@ -145,7 +146,7 @@ public class RegisterValidateService {
 		    	   {
 		    		   //邮箱已被注册
 		        	   code = 400;
-		        	   message = "邮箱已被注册";
+		        	   message = MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_registered));
 		        	   msgCode = MsgCodeConstant.member_mcode_mail_registered;
 		    	   }
 		       }
@@ -153,7 +154,7 @@ public class RegisterValidateService {
 	        else {
 	    	   //该邮箱未注册（邮箱地址不存在）！
 	    	   code = 400;
-	    	   message = "该邮箱未注册";
+	    	   message = MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_unregister));
 	    	   msgCode = MsgCodeConstant.member_mcode_mail_unregister;
 		   }  
 	        result.setCode(code);
@@ -251,7 +252,7 @@ public class RegisterValidateService {
 	        	    id=String.valueOf(vinfo.getId());
 	            } else { 
 	        	    //验证已过期
-	        	    message = "验证身份已过期";
+	        	    message = MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_expire));
 	        	    code = 400;
 	        	    msgCode = MsgCodeConstant.member_mcode_mail_validate_expire;
 	            }  
@@ -259,14 +260,14 @@ public class RegisterValidateService {
         	else
         	{
         		memberService.deleteValidateInfo(vinfo);
-        		message="密码找回链接已经失效";
+        		message= MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_url_invalid));
         		code = 400;
         		msgCode = MsgCodeConstant.member_mcode_mail_url_invalid;
         	}
        } else {
     	   //该邮箱未注册（邮箱地址不存在）！
     	   code = 400;
-    	   message = "该邮箱未注册";
+    	   message = MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_unregister));
     	   msgCode = MsgCodeConstant.member_mcode_mail_unregister;
        }  
         result.setCode(code);
@@ -328,9 +329,4 @@ public class RegisterValidateService {
 		return redirectUrl;
 	}
 	
-	public static void main(String[] args) {
-		Date currentTime = new Date();//获取当前时间  
-		Date registerDate = DateUtils.date2Sub(DateUtils.str2Date("2016-02-02 11:13:30","yyyy-MM-dd HH:mm:ss"),5,1);
-		System.out.println(currentTime.before(registerDate));
-	}
 }
