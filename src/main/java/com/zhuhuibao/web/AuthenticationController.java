@@ -7,6 +7,7 @@ import java.util.Map;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.security.EncodeUtil;
+import com.zhuhuibao.security.resubmit.TokenHelper;
 import com.zhuhuibao.utils.JsonUtils;
 
 import org.apache.shiro.SecurityUtils;
@@ -66,5 +67,14 @@ public class AuthenticationController {
       	log.debug("caijl:/rest/web/authc is called,msgcode=["+jsonResult.getMsgCode()+"],Message=["+jsonResult.getMessage()+"].");
       	log.debug("caijl:/rest/web/authc is called,msgcode=["+jsonResult.getMsgCode()+"],Message=["+jsonResult.getMessage()+"].");
     }
-    
+
+
+    @RequestMapping(value="/rest/getToken",method = RequestMethod.GET)
+    @ResponseBody
+    public JsonResult getToken(HttpServletRequest req, HttpServletResponse rsp) {
+        JsonResult result = new JsonResult();
+        String  token = TokenHelper.setToken(req);
+        result.setData(token);
+        return result;
+    }
 }

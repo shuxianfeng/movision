@@ -11,12 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.MsgCodeConstant;
+import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper;
 import com.zhuhuibao.mybatis.memberReg.mapper.ValidateinfoMapper;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.DateUtils;
+import com.zhuhuibao.utils.ResourcePropertiesUtils;
 
 /**
  * 会员业务处理
@@ -33,6 +35,15 @@ public class MemberRegService {
 	
 	@Autowired
 	private ValidateinfoMapper viMapper;
+	
+	@Autowired
+	private DictionaryService ds;
+	
+	/**
+	 * 注册验证码业务类
+	 */
+	@Autowired
+	private RegisterValidateService rvService;
 	
 	
 	/**
@@ -119,14 +130,16 @@ public class MemberRegService {
      * @param memberId 会员id
      * @return
      */
-    public int isValidatePass(String account)
+    public int isValidatePass(int id)
     {
-    	log.debug("find password validate account = "+account);
+    	log.debug("find password validate account = "+id);
     	int result = 0;
     	try
     	{
-	    	Integer obj = memberRegMapper.isValidatePass(account);
-	    	if(obj != null && obj == 1)
+    		Validateinfo info = new Validateinfo();
+    		info.setId(id == 0 ? -1 : id);
+    		info = this.findMemberValidateInfo(info);
+	    	if(info != null && info.getValid() == 0)
 	    	{
 	    		result = 1;
 	    	}
@@ -216,6 +229,9 @@ public class MemberRegService {
 					member.setMobile(member.getAccount());
 					result = memberRegMapper.updateMemberPwd(member);
 				}
+				Validateinfo info = new Validateinfo();
+				info.setAccount(member.getAccount());
+				this.deleteValidateInfo(info);
 			}
     	}
     	catch(Exception e)
@@ -407,7 +423,7 @@ public class MemberRegService {
 			{
 				this.deleteValidateInfo(info);
 				result.setCode(400);
-				result.setMessage("短信验证超时");
+				result.setMessage("短信验证码超时");
 				result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
 			}
 		}
@@ -418,6 +434,113 @@ public class MemberRegService {
 			result.setData(member.getMobile());
 			result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 		}
+		return result;
+	}
+    
+    /**
+     * 注册手机会员
+     * @param member
+     * @param verifyCode
+     * @return
+     */
+    public JsonResult registerMobileMember(Member member,String verifyCode) {
+		JsonResult result = new JsonResult();
+		if(verifyCode != null)
+		{
+			Validateinfo info = new Validateinfo();
+			info.setAccount(member.getMobile());
+			info.setValid(0);
+			info.setCheckCode(verifyCode);
+			info = this.findMemberValidateInfo(info);
+			Date currentTime = new Date();
+			Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
+			if(currentTime.before(sendSMStime)) 
+			{ 
+				if(info != null &&  info.getCheckCode().equalsIgnoreCase(member.getMobileCheckCode()))
+				{
+					int isExist = this.isExistAccount(member);
+					if(isExist == 0)
+					{
+						this.registerMember(member);
+						this.deleteValidateInfo(info);
+					}
+					else
+					{
+						result.setCode(400);
+						result.setMessage("账户名已经存在");
+						result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+					}
+				}
+				else
+				{
+					result.setCode(400);
+					result.setMessage("验证码不正确");
+					result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+				}
+				log.debug("mobile verifyCode == " + member.getMobileCheckCode());
+			}
+			else
+			{
+				this.deleteValidateInfo(info);
+				result.setCode(400);
+				result.setMessage("短信验证码超时");
+				result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
+			}
+		}
+		else
+		{
+			result.setCode(400);
+			result.setMessage("验证码不正确");
+			result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+		}
+		return result;
+	}
+    
+    /**
+     * 邮件账号会员注册
+     * @param member
+     * @param verifyCode
+     * @return
+     */
+    public JsonResult registerMailMember(Member member, String verifyCode) {
+    	JsonResult result = new JsonResult();
+		if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getEmailCheckCode()) )			{
+			if(member.getEmail().indexOf("@")>=0)
+			{
+				int isExist = this.isExistAccount(member);
+				if(isExist == 0)
+				{
+					this.registerMember(member);
+					//发送激活链接给此邮件
+					rvService.sendMailActivateCode(member,ResourcePropertiesUtils.getValue("host.ip"));
+					//是否显示“立即激活按钮”
+					String mail = ds.findMailAddress(member.getEmail());
+					Map<String,String> map = new HashMap<String,String>();
+					if(mail != null && !mail.equals(""))
+					{
+						map.put("button", "true");
+					}
+					else
+					{
+						map.put("button", "false");
+					}
+					result.setData(map);
+				}
+				else
+				{
+					result.setCode(400);
+					result.setMessage("账户名已经存在");
+					result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+				}
+			}
+		}
+		else
+		{
+			result.setCode(400);
+			result.setMessage("邮件验证码不正确");
+			result.setMsgCode(MsgCodeConstant.member_mcode_mail_validate_error);
+		}
+		log.debug("email verifyCode == " + member.getEmailCheckCode());
 		return result;
 	}
 }

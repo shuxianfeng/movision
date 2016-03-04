@@ -89,6 +89,7 @@ public class RegisterValidateService {
 	        {
 	        	for(Member user : memberList)
 	        	{
+	        		//同一个邮箱多次注册
 	        		if(user.getStatus() == 1)
 	        		{
 	        			if(id == user.getId())
@@ -233,6 +234,7 @@ public class RegisterValidateService {
         JsonResult result = new JsonResult();
         int code = 200;
         int msgCode = MsgCodeConstant.mcode_common_success;
+        String id = "0";
         String message = "";
         //验证用户是否存在 
         if(user!=null && user.getStatus() == 1) {
@@ -245,11 +247,8 @@ public class RegisterValidateService {
 	            //验证链接是否过期 24小时
 	            Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(vinfo.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
 	            if(currentTime.before(registerDate)) {
-	        	    user.setIsValidatePass(1);
-	        	    vinfo.setValid(1);
-	        	    memberService.updateValidateInfo(vinfo);
-	        	    memberService.updateMemberValidatePass(user);
 	        	    message = "通过身份验证";
+	        	    id=String.valueOf(vinfo.getId());
 	            } else { 
 	        	    //验证已过期
 	        	    message = "验证身份已过期";
@@ -272,7 +271,8 @@ public class RegisterValidateService {
        }  
         result.setCode(code);
         result.setMessage(message);
-        result.setData(email);
+        String[] str = {email,id};
+        result.setData(str);
         result.setMsgCode(msgCode);
         return result;
    }

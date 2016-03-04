@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
@@ -74,11 +77,13 @@ public class RegisterController {
 		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
 		response.setHeader("Pragma", "no-cache");
 		response.setContentType("image/jpeg");
-		HttpSession sess = req.getSession(true);
+		Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
 		// 生成随机字串
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
 		log.debug("verifyCode == " + verifyCode);
 		sess.setAttribute("email", verifyCode);
+		
 		ServletOutputStream out = null;
 		try {
 			out = response.getOutputStream();
@@ -116,7 +121,8 @@ public class RegisterController {
 		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
 		response.setHeader("Pragma", "no-cache");
 		response.setContentType("image/jpeg");
-		HttpSession sess = req.getSession(true);
+		Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
 		// 生成随机字串
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
 		log.debug("verifyCode == " + verifyCode);
@@ -155,7 +161,8 @@ public class RegisterController {
 			Model model) throws JsonGenerationException, JsonMappingException, IOException {
 		String mobile = req.getParameter("mobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
-		HttpSession sess = req.getSession(true);
+		Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
 		// 生成随机字串
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
 		log.debug("verifyCode == " + verifyCode);
@@ -186,7 +193,8 @@ public class RegisterController {
 			Model model) throws JsonGenerationException, JsonMappingException, IOException {
 		String mobile = req.getParameter("mobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
-		HttpSession sess = req.getSession(true);
+		Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
 		// 生成随机字串
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
 		log.debug("verifyCode == " + verifyCode);
@@ -204,7 +212,7 @@ public class RegisterController {
 	}
 
     /**
-     * 会员简单注册
+     * 会员注册
      * @param req
      * @param member
      * @param model
@@ -216,98 +224,18 @@ public class RegisterController {
 	public void register(HttpServletRequest req,HttpServletResponse response, Member member,Model model) throws IOException {
 		log.debug("注册  mobile=="+member.getMobile()+" email =="+member.getEmail());
 		JsonResult result = new JsonResult();
+		Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
 		//校验手机验证码是否正确
 		if(member.getMobileCheckCode() != null )
 		{
-			String verifyCode = (String) req.getSession().getAttribute("r"+member.getMobile());
-			if(verifyCode != null)
-			{
-				Validateinfo info = new Validateinfo();
-				info.setAccount(member.getMobile());
-				info.setValid(0);
-				info.setCheckCode(verifyCode);
-				info = memberService.findMemberValidateInfo(info);
-				Date currentTime = new Date();
-				Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
-				if(currentTime.before(sendSMStime)) 
-				{ 
-					if(info != null &&  info.getCheckCode().equalsIgnoreCase(member.getMobileCheckCode()))
-					{
-						int isExist = memberService.isExistAccount(member);
-						if(isExist == 0)
-						{
-							memberService.registerMember(member);
-						}
-						else
-						{
-							result.setCode(400);
-							result.setMessage("账户名已经存在");
-							result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
-						}
-					}
-					else
-					{
-						result.setCode(400);
-						result.setMessage("验证码不正确");
-						result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
-					}
-					log.debug("mobile verifyCode == " + member.getMobileCheckCode());
-				}
-				else
-				{
-					memberService.deleteValidateInfo(info);
-					result.setCode(400);
-					result.setMessage("短信验证超时");
-					result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
-				}
-			}
-			else
-			{
-				result.setCode(400);
-				result.setMessage("验证码不正确");
-				result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
-			}
+			String verifyCode = (String) sess.getAttribute("r"+member.getMobile());
+			result = memberService.registerMobileMember(member, verifyCode);
 		}
 		if(member.getEmailCheckCode() != null )
 		{
-			String verifyCode = (String) req.getSession().getAttribute("email");
-			if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getEmailCheckCode()) )			{
-				if(member.getEmail().indexOf("@")>=0)
-				{
-					int isExist = memberService.isExistAccount(member);
-					if(isExist == 0)
-					{
-						memberService.registerMember(member);
-						//发送激活链接给此邮件
-						rvService.sendMailActivateCode(member,ResourcePropertiesUtils.getValue("host.ip"));
-						//是否显示“立即激活按钮”
-						String mail = ds.findMailAddress(member.getEmail());
-						Map<String,String> map = new HashMap<String,String>();
-						if(mail != null && !mail.equals(""))
-						{
-							map.put("button", "true");
-						}
-						else
-						{
-							map.put("button", "false");
-						}
-						result.setData(map);
-					}
-					else
-					{
-						result.setCode(400);
-						result.setMessage("账户名已经存在");
-						result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
-					}
-				}
-			}
-			else
-			{
-				result.setCode(400);
-				result.setMessage("邮件验证码不正确");
-				result.setMsgCode(MsgCodeConstant.member_mcode_mail_validate_error);
-			}
-			log.debug("email verifyCode == " + member.getEmailCheckCode());
+			String verifyCode = (String) sess.getAttribute("email");
+			result =memberService.registerMailMember(member, verifyCode);
 		}
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -325,7 +253,9 @@ public class RegisterController {
 	public void writeAccount(HttpServletRequest req,HttpServletResponse response,Member member,Model model) throws IOException {
 		log.debug("seek pwd write account");
 		JsonResult result = new JsonResult();
-		String seekCode = (String) req.getSession().getAttribute("seekPwdCode");
+		Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
+		String seekCode = (String) sess.getAttribute("seekPwdCode");
 		log.info("writeAccount seekCode === "+seekCode);
 		result = memberService.writeAccount(member, seekCode);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
@@ -344,7 +274,9 @@ public class RegisterController {
 	@ResponseBody
 	public void mobileValidate(HttpServletRequest req,HttpServletResponse response, Member member,Model model) throws IOException {
 		log.debug("找回密码  mobile =="+member.getMobile());
-		String seekMobileCode = (String) req.getSession().getAttribute("s"+member.getMobile());
+		Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
+		String seekMobileCode = (String) sess.getAttribute("s"+member.getMobile());
 		JsonResult result = memberService.mobileValidate(member, seekMobileCode);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -393,6 +325,9 @@ public class RegisterController {
 		log.debug("重置密码");
 		JsonResult jsonResult = new JsonResult();
 		int result = memberService.modifyPwd(member);
+		Validateinfo info = new Validateinfo();
+		info.setAccount(member.getAccount());
+		memberService.deleteValidateInfo(info);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
@@ -447,8 +382,9 @@ public class RegisterController {
 	        try
 	        {
 	        	jsonResult = rvService.processValidate(vm);
-	        	String email = (String) jsonResult.getData();
-	        	modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(email.getBytes()));  
+	        	String[] array = (String[]) jsonResult.getData();
+	        	modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(array[0].getBytes()));
+	        	modelAndView.addObject("id",EncodeUtil.encodeBase64ToString(array[1].getBytes()));
 	        	RedirectView rv = new RedirectView(rvService.getRedirectUrl(jsonResult,"validate"));
 	 	        modelAndView.setView(rv);
 	        }
@@ -474,8 +410,16 @@ public class RegisterController {
 	public void isValidatePass(HttpServletRequest req,HttpServletResponse response) throws IOException {
 		log.debug("找回密码是否验证");
 		JsonResult jsonResult = new JsonResult();
-		String account = req.getParameter("account");
-		int result = memberService.isValidatePass(EncodeUtil.decodeBase64ToString(account));
+		String id = req.getParameter("account");
+		int int_id = Integer.parseInt(EncodeUtil.decodeBase64ToString(id));
+		int result = memberService.isValidatePass(int_id);
+		if(result == 1)
+		{
+			Validateinfo vinfo = new Validateinfo();
+	    	vinfo.setId(int_id);
+		    vinfo.setValid(1);
+		    memberService.updateValidateInfo(vinfo);
+		}
 		jsonResult.setData(result);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
