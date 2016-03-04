@@ -1,6 +1,7 @@
 package com.zhuhuibao.web;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.security.resubmit.TokenHelper;
+import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
 import com.zhuhuibao.utils.JsonUtils;
 
 import org.apache.shiro.SecurityUtils;
@@ -40,31 +42,35 @@ public class AuthenticationController {
     @RequestMapping(value = "/rest/web/authc", method = RequestMethod.GET)
     @ResponseBody
     public void isLogin(HttpServletRequest req,HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException{
-        JsonResult jsonResult = new JsonResult();
-        jsonResult.setCode(200);
-		Map<String, Boolean> map = new HashMap<String, Boolean>();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
+        JsonResult jsonResult = new JsonResult();
+        jsonResult.setCode(200);
+		Map<String, Object> map = new HashMap<String, Object>();
+
         if(null == session){
         	jsonResult.setMsgCode(0);
             jsonResult.setMessage("you are rejected!");
             map.put("authorized", false);
         }else{
-        	Object principal = session.getAttribute("member");
-        	if(null == principal){
+        	Subject loginMember = (Subject)session.getAttribute("member");
+        	if(null == loginMember){
             	jsonResult.setMsgCode(0);
                 jsonResult.setMessage("you are rejected!");
                 map.put("authorized", false);
         	}else{
+        		LoginMember member = new LoginMember();
+        		member.setAccount(loginMember.getPrincipal().toString());
             	jsonResult.setMsgCode(1);
                 jsonResult.setMessage("welcome you!");
                 map.put("authorized", true);
+                map.put("member", member);
         	}
         }
+        
         jsonResult.setData(map);
         response.setContentType("application/json;charset=utf-8");
       	response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
-      	log.debug("caijl:/rest/web/authc is called,msgcode=["+jsonResult.getMsgCode()+"],Message=["+jsonResult.getMessage()+"].");
       	log.debug("caijl:/rest/web/authc is called,msgcode=["+jsonResult.getMsgCode()+"],Message=["+jsonResult.getMessage()+"].");
     }
 
@@ -76,5 +82,50 @@ public class AuthenticationController {
         String  token = TokenHelper.setToken(req);
         result.setData(token);
         return result;
+    }
+    
+    public static class LoginMember {
+        private String account;
+        private int ordercount;
+        private int msgcount;
+
+		public String getAccount() {
+			return account;
+		}
+		public void setAccount(String account) {
+			this.account = account;
+		}
+		public int getOrdercount() {
+			return ordercount;
+		}
+		public void setOrdercount(int ordercount) {
+			this.ordercount = ordercount;
+		}
+		public int getMsgcount() {
+			return msgcount;
+		}
+		public void setMsgcount(int msgcount) {
+			this.msgcount = msgcount;
+		}
+
+        /**
+         * 重载equals,只计算account;
+         */
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            LoginMember other = (LoginMember) obj;
+
+            if (account == null) {
+                return false;
+            } else if (account.equals(other.account))
+                return true;
+            return false;
+        }
     }
 }
