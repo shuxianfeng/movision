@@ -78,7 +78,7 @@ public class RegisterController {
 		response.setHeader("Pragma", "no-cache");
 		response.setContentType("image/jpeg");
 		Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(false);
+        Session sess = currentUser.getSession(true);
 		// 生成随机字串
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
 		log.debug("verifyCode == " + verifyCode);
@@ -122,7 +122,7 @@ public class RegisterController {
 		response.setHeader("Pragma", "no-cache");
 		response.setContentType("image/jpeg");
 		Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(false);
+        Session sess = currentUser.getSession(true);
 		// 生成随机字串
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
 		log.debug("verifyCode == " + verifyCode);
@@ -162,7 +162,7 @@ public class RegisterController {
 		String mobile = req.getParameter("mobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
 		Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(false);
+        Session sess = currentUser.getSession(true);
 		// 生成随机字串
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
 		log.debug("verifyCode == " + verifyCode);
@@ -194,7 +194,7 @@ public class RegisterController {
 		String mobile = req.getParameter("mobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
 		Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(false);
+        Session sess = currentUser.getSession(true);
 		// 生成随机字串
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
 		log.debug("verifyCode == " + verifyCode);
