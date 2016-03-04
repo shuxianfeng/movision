@@ -53,14 +53,14 @@ public class AuthenticationController {
             jsonResult.setMessage("you are rejected!");
             map.put("authorized", false);
         }else{
-        	Subject loginMember = (Subject)session.getAttribute("member");
-        	if(null == loginMember){
+        	String principal = (String)session.getAttribute("member");
+        	if(null == principal){
             	jsonResult.setMsgCode(0);
                 jsonResult.setMessage("you are rejected!");
                 map.put("authorized", false);
         	}else{
         		LoginMember member = new LoginMember();
-        		member.setAccount(loginMember.getPrincipal().toString());
+        		member.setAccount(principal);
             	jsonResult.setMsgCode(1);
                 jsonResult.setMessage("welcome you!");
                 map.put("authorized", true);
