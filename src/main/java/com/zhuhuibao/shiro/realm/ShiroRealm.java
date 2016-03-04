@@ -44,7 +44,7 @@ public class ShiroRealm extends AuthorizingRealm {
         String loginname = (String) token.getPrincipal();
         Member member = memberRegService.findMemberByAccount(loginname);
         if(member != null){
-            if (!"1".equals(member.getStatus())) {
+            if (1 != member.getStatus() ) {
                 throw new LockedAccountException(); // 帐号不正常状态
             }
         }  else{
