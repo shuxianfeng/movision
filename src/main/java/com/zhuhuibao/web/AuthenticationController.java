@@ -64,6 +64,7 @@ public class AuthenticationController {
         response.setContentType("application/json;charset=utf-8");
       	response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
       	log.debug("caijl:/rest/web/authc is called,msgcode=["+jsonResult.getMsgCode()+"],Message=["+jsonResult.getMessage()+"].");
+      	log.debug("caijl:/rest/web/authc is called,msgcode=["+jsonResult.getMsgCode()+"],Message=["+jsonResult.getMessage()+"].");
     }
     
 }
