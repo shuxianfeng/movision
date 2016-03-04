@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
@@ -74,11 +77,13 @@ public class RegisterController {
 		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
 		response.setHeader("Pragma", "no-cache");
 		response.setContentType("image/jpeg");
-		HttpSession sess = req.getSession(true);
+		Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
 		// 生成随机字串
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
 		log.debug("verifyCode == " + verifyCode);
 		sess.setAttribute("email", verifyCode);
+		
 		ServletOutputStream out = null;
 		try {
 			out = response.getOutputStream();
@@ -116,7 +121,8 @@ public class RegisterController {
 		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
 		response.setHeader("Pragma", "no-cache");
 		response.setContentType("image/jpeg");
-		HttpSession sess = req.getSession(true);
+		Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
 		// 生成随机字串
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
 		log.debug("verifyCode == " + verifyCode);
@@ -155,7 +161,8 @@ public class RegisterController {
 			Model model) throws JsonGenerationException, JsonMappingException, IOException {
 		String mobile = req.getParameter("mobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
-		HttpSession sess = req.getSession(true);
+		Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
 		// 生成随机字串
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
 		log.debug("verifyCode == " + verifyCode);
@@ -186,7 +193,8 @@ public class RegisterController {
 			Model model) throws JsonGenerationException, JsonMappingException, IOException {
 		String mobile = req.getParameter("mobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
-		HttpSession sess = req.getSession(true);
+		Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
 		// 生成随机字串
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
 		log.debug("verifyCode == " + verifyCode);
@@ -216,15 +224,17 @@ public class RegisterController {
 	public void register(HttpServletRequest req,HttpServletResponse response, Member member,Model model) throws IOException {
 		log.debug("注册  mobile=="+member.getMobile()+" email =="+member.getEmail());
 		JsonResult result = new JsonResult();
+		Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
 		//校验手机验证码是否正确
 		if(member.getMobileCheckCode() != null )
 		{
-			String verifyCode = (String) req.getSession().getAttribute("r"+member.getMobile());
+			String verifyCode = (String) sess.getAttribute("r"+member.getMobile());
 			result = memberService.registerMobileMember(member, verifyCode);
 		}
 		if(member.getEmailCheckCode() != null )
 		{
-			String verifyCode = (String) req.getSession().getAttribute("email");
+			String verifyCode = (String) sess.getAttribute("email");
 			result =memberService.registerMailMember(member, verifyCode);
 		}
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
@@ -243,7 +253,9 @@ public class RegisterController {
 	public void writeAccount(HttpServletRequest req,HttpServletResponse response,Member member,Model model) throws IOException {
 		log.debug("seek pwd write account");
 		JsonResult result = new JsonResult();
-		String seekCode = (String) req.getSession().getAttribute("seekPwdCode");
+		Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
+		String seekCode = (String) sess.getAttribute("seekPwdCode");
 		log.info("writeAccount seekCode === "+seekCode);
 		result = memberService.writeAccount(member, seekCode);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
@@ -262,7 +274,9 @@ public class RegisterController {
 	@ResponseBody
 	public void mobileValidate(HttpServletRequest req,HttpServletResponse response, Member member,Model model) throws IOException {
 		log.debug("找回密码  mobile =="+member.getMobile());
-		String seekMobileCode = (String) req.getSession().getAttribute("s"+member.getMobile());
+		Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
+		String seekMobileCode = (String) sess.getAttribute("s"+member.getMobile());
 		JsonResult result = memberService.mobileValidate(member, seekMobileCode);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}

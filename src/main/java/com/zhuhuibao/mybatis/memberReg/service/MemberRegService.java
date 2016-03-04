@@ -423,7 +423,7 @@ public class MemberRegService {
 			{
 				this.deleteValidateInfo(info);
 				result.setCode(400);
-				result.setMessage("短信验证超时");
+				result.setMessage("短信验证码超时");
 				result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
 			}
 		}
@@ -483,7 +483,7 @@ public class MemberRegService {
 			{
 				this.deleteValidateInfo(info);
 				result.setCode(400);
-				result.setMessage("短信验证超时");
+				result.setMessage("短信验证码超时");
 				result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
 			}
 		}
