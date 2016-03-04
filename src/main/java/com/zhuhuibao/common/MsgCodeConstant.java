@@ -79,7 +79,7 @@ public interface MsgCodeConstant {
 	int member_mcode_usernameorpwd_error = 10012;
 	
 	/**
-	 * 短信验证超时
+	 * 短信验证码超时
 	 */
 	int member_mcode_sms_timeout = 10013;
 	

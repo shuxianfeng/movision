@@ -8,6 +8,7 @@ import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.JsonUtils;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -70,7 +71,7 @@ public class LoginController {
         } catch (UnknownAccountException e) {
 //            e.printStackTrace();
             jsonResult.setCode(400);
-            jsonResult.setMessage("用户名不存在");
+            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
             jsonResult.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
             
         }catch (LockedAccountException e){
@@ -78,14 +79,14 @@ public class LoginController {
             model.addAttribute("error", "帐户状态异常");
             result = "login";*/
 		    jsonResult.setCode(400);
-		    jsonResult.setMessage("帐户状态异常");
+		    jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_status_exception)));
 		    jsonResult.setMsgCode(MsgCodeConstant.member_mcode_account_status_exception);
         } catch (AuthenticationException e){
             /*e.printStackTrace();
             model.addAttribute("error", "用户名或密码错误");
             result = "login";*/
         	jsonResult.setCode(400);
-		    jsonResult.setMessage("用户名或密码错误");
+		    jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_usernameorpwd_error)));
 		    jsonResult.setMsgCode(MsgCodeConstant.member_mcode_usernameorpwd_error);
         }
 
