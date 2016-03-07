@@ -69,11 +69,6 @@ public class Member implements Serializable{
 	 * 会员身份 1：企业，2：个人
 	 */
 	private int identify;
-	
-	/**
-	 * 找回密码时邮箱是否验证通过
-	 */
-	private int isValidatePass;
 
 	public int getId() {
 		return id;
@@ -158,15 +153,7 @@ public class Member implements Serializable{
 	public void setCheckCode(String checkCode) {
 		this.checkCode = checkCode;
 	}
-
-	public int getIsValidatePass() {
-		return isValidatePass;
-	}
-
-	public void setIsValidatePass(int isValidatePass) {
-		this.isValidatePass = isValidatePass;
-	}
-
+	
 	public void setIdentify(int identify) {
 		this.identify = identify;
 	}

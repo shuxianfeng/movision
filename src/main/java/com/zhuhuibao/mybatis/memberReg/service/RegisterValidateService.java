@@ -124,7 +124,6 @@ public class RegisterValidateService {
 			               Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(user.getRegisterTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
 			               if(currentTime.before(registerDate)) {  
 		                	   user.setStatus(1);
-		                	   memberService.updateMemberStatus(user);
 		                       message = "激活成功请登录";
 		                       code = 200;
 		                       break;

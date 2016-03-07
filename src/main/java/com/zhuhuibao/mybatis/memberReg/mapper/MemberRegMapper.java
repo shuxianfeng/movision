@@ -17,14 +17,8 @@ public interface MemberRegMapper {
 	//根据会员ID找到会员信息
 	List<Member> findMemberByMail(String email);
 	
-	//更新会员注册状态
-	int updateMemberStatus(Member member);
-	
 	//会员更新密码
 	int updateMemberPwd(Member member);
-	
-	//找回密码是否验证通过
-	Integer isValidatePass(String account);
 	
 	//账号名是否存在
 	int isExistAccount(Member member);

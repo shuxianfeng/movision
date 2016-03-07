@@ -171,20 +171,6 @@ public class MemberRegService {
     	return result;
     }
     
-    public int updateMemberStatus(Member member)
-    {
-    	int result = 0;
-    	try
-    	{
-    		result = memberRegMapper.updateMemberStatus(member);
-    	}
-    	catch(Exception e)
-    	{
-    		log.error("update member status",e);
-    	}
-    	return result;
-    }
-    
     /**
      * 更新找回密码邮箱验证是否通过
      * @param member
