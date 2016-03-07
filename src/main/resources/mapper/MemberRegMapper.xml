@@ -12,7 +12,7 @@
   <select id="findMemberByAccount" parameterType="memberReg" resultType="memberReg">
     select
     <include refid="Base_Column_List" />
-    from t_m_member WHERE status == 1
+    from t_m_member WHERE status = 1
    	<if test="mobile != null and mobile != '' " >
    		AND mobile = #{mobile}
    	</if>
@@ -22,7 +22,7 @@
   </select>
   
   <select id="isExistAccount" parameterType="memberReg" resultType="int">
-    select count(1) from t_m_member WHERE status == 1
+    select count(1) from t_m_member WHERE status = 1
    	<if test="mobile != null and mobile != '' " >
    		AND mobile = #{mobile}
    	</if>
@@ -45,7 +45,7 @@
 	    	emailCheckCode = #{emailCheckCode}
 	    </if>
     </set>
-    where email = #{email} and status == 1
+    where email = #{email} and status = 1
   </update>
   
   <update id="updateMemberValidatePass" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
@@ -68,6 +68,6 @@
   			email = #{email}
   		</if>
   	</where> 
-  	and status == 1
+  	and status = 1
   </update>
 </mapper>
