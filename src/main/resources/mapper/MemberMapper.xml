@@ -280,4 +280,20 @@
       and email = #{email}
     </if>
   </update>
+  <update id="uploadHeadShot" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+    update t_m_member
+    <set>
+      headShot = #{headShot},
+    </set>
+    where
+      id = #{id}
+  </update>
+  <update id="uploadLogo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+    update t_m_member
+    <set>
+      enterpriseLogo = #{enterpriseLogo},
+    </set>
+    where
+    id = #{id}
+  </update>
 </mapper>

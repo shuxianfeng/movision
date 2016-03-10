@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Brand" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="brandCNName" property="brandCNName" jdbcType="VARCHAR" />
+    <result column="brandENName" property="brandENName" jdbcType="VARCHAR" />
+    <result column="views" property="views" jdbcType="BIGINT" />
+    <result column="weight" property="weight" jdbcType="INTEGER" />
+    <result column="logourl" property="logourl" jdbcType="VARCHAR" />
+    <result column="createid" property="createid" jdbcType="BIGINT" />
+    <result column="branddesc" property="branddesc" jdbcType="VARCHAR" />
+    <result column="imgurl" property="imgurl" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="brandOwer" property="brandOwer" jdbcType="VARCHAR" />
+    <result column="brandCertificate" property="brandCertificate" jdbcType="VARCHAR" />
+    <result column="brandWebSite" property="brandWebSite" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP" />
+    <result column="checkTime" property="checkTime" jdbcType="TIMESTAMP" />
+    <result column="lastModifyTime" property="lastModifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, brandCNName, brandENName, views, weight, logourl, createid, branddesc, imgurl, 
+    status, brandOwer, brandCertificate, brandWebSite, publishTime, checkTime, lastModifyTime
+  </sql>
+  <insert id="addBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" >
+    insert into t_p_brand (id, brandCNName, brandENName, logourl,
+    createid, branddesc, imgurl,
+    status, brandOwer, brandCertificate,
+    brandWebSite, publishTime)
+    values (#{id}, #{brandCNName}, #{brandENName}, #{logourl},
+    #{createid}, #{branddesc}, #{imgurl},
+    2, #{brandOwer}, #{brandCertificate},
+    #{brandWebSite}, date_format(now(),'%Y-%m-%d %H:%i:%s')
+  </insert>
+  <update id="updateBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" >
+    update t_p_brand
+    <set >
+      <if test="brandCNName != null" >
+        brandCNName = #{brandCNName},
+      </if>
+      <if test="brandENName != null" >
+        brandENName = #{brandENName},
+      </if>
+      <if test="logourl != null" >
+        logourl = #{logourl},
+      </if>
+      <if test="branddesc != null" >
+        branddesc = #{branddesc},
+      </if>
+      <if test="imgurl != null" >
+        imgurl = #{imgurl},
+      </if>
+      <if test="brandOwer != null" >
+        brandOwer = #{brandOwer},
+      </if>
+      <if test="brandCertificate != null" >
+        brandCertificate = #{brandCertificate},
+      </if>
+      <if test="brandWebSite != null" >
+        brandWebSite = #{brandWebSite},
+      </if>
+      lastModifyTime = date_format(now(),'%Y-%m-%d %H:%i:%s'),
+    </set>
+    where id = #{id}
+  </update>
+  <select id="searchBrandByStatus" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from t_p_brand
+    where createid = #{createid} and status !=3
+    <if test="status != null" >
+      and status = #{status}
+    </if>
+  </select>
+  <select id="searchBrandSize" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand"  >
+    select
+    COUNT (*)
+    from t_p_brand
+    where createid = #{createid} and status !=3
+    <if test="status != null" >
+      and status = #{status}
+    </if>
+  </select>
+  <select id="brandDetails" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from t_p_brand
+    where id = #{id}
+  </select>
+  <update id="deleteBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" >
+    update t_p_brand
+    <set >
+      status = 3
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

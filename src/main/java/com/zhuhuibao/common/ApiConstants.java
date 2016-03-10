@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 接口平台调用参数
- * Created by jianglz on 2014/5/17.
+ * Created by cxx
  */
 @Component
 public class ApiConstants {
