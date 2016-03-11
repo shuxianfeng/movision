@@ -135,7 +135,7 @@ public class BrandController {
     @RequestMapping(value = "/rest/uploadImg", method = RequestMethod.POST)
     public void uploadImg(HttpServletRequest req, HttpServletResponse response) throws IOException {
         //指定所上传的文件，上传成功后，在服务器的保存位置
-        String saveDirectory = ApiConstants.getUploadDir()+"/img";
+        String saveDirectory = ApiConstants.getUploadDir();
 
         //指定所上传的文件最大上传文件大小
         int maxPostSize = ApiConstants.getUploadMaxPostSize();
@@ -143,18 +143,27 @@ public class BrandController {
         //指定所上传的文件命名规则
         RandomFileNamePolicy rfnp = new RandomFileNamePolicy();
 
-        //完成文件上传
-        MultipartRequest multi = new MultipartRequest(req, saveDirectory, maxPostSize, "UTF-8", rfnp);
-
-        Enumeration fileNames = multi.getFileNames();
         String url = "";
-        while(fileNames.hasMoreElements()){
-            String fileName = (String)fileNames.nextElement();
-            if(null != multi.getFile(fileName)){
-                String lastFileName = multi.getFilesystemName(fileName);
-                url = saveDirectory + "/" + lastFileName;
+        //完成文件上传
+        JsonResult result = new JsonResult();
+        try {
+            MultipartRequest multi = new MultipartRequest(req, saveDirectory, maxPostSize, "UTF-8", rfnp);
+            Enumeration fileNames = multi.getFileNames();
+
+            while(fileNames.hasMoreElements()){
+                String fileName = (String)fileNames.nextElement();
+                if(null != multi.getFile(fileName)){
+                    String lastFileName = multi.getFilesystemName(fileName);
+                    url =  "http://192.168.1.119:8080/upload/" + lastFileName;
+                }
             }
+        }catch (Exception e){
+            e.printStackTrace();
+            result.setCode(400);
+            result.setMessage("文件大小超限");
         }
-        response.getWriter().write(url);
+        result.setCode(200);
+        result.setData(url);
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
 }

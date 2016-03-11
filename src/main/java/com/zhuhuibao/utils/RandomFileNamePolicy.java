@@ -14,7 +14,7 @@ public class RandomFileNamePolicy implements FileRenamePolicy {
         * 假设，我们上传了一个同名文件，文件名为【abcd.ccc】
         */
         int index = file.getName().lastIndexOf("."); //获取文件名中【.】的下标
-        String body = file.getName().substring(0, index); //表示文件名的主题，即【abcd】
+        String body = VerifyCodeUtils.generateVerifyCode(4); //生成随机字串
         String postfix = ""; //表示文件名的后缀，即【.ccc】
         String timer = ""; //代表当前系统时间的数字
 

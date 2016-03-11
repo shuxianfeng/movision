@@ -382,18 +382,6 @@ public class InformationController {
 	@RequestMapping(value = "/rest/certificateSave", method = RequestMethod.POST)
 	public void certificateSave(HttpServletRequest req, HttpServletResponse response,CertificateRecord record) throws IOException {
 		JsonResult result = new JsonResult();
-		String certificate_grade = record.getCertificate_grade().toString();
-		if("1".equals(certificate_grade)){
-			record.setCertificate_grade_name("一级");
-		}else if("2".equals(certificate_grade)){
-			record.setCertificate_grade_name("二级");
-		}else if("3".equals(certificate_grade)){
-			record.setCertificate_grade_name("三级");
-		}else if("4".equals(certificate_grade)){
-			record.setCertificate_grade_name("甲级");
-		}else{
-			record.setCertificate_grade_name("乙级");
-		}
 		record.setTime(new Date());
 		int isSave = certificateRecordMapper.saveCertificate(record);
 		if(isSave==1){
@@ -417,18 +405,6 @@ public class InformationController {
 	@RequestMapping(value = "/rest/certificateUpdate", method = RequestMethod.POST)
 	public void certificateUpdate(HttpServletRequest req, HttpServletResponse response,CertificateRecord record) throws IOException {
 		JsonResult result = new JsonResult();
-		String certificate_grade = record.getCertificate_grade().toString();
-		if("1".equals(certificate_grade)){
-			record.setCertificate_grade_name("一级");
-		}else if("2".equals(certificate_grade)){
-			record.setCertificate_grade_name("二级");
-		}else if("3".equals(certificate_grade)){
-			record.setCertificate_grade_name("三级");
-		}else if("4".equals(certificate_grade)){
-			record.setCertificate_grade_name("甲级");
-		}else{
-			record.setCertificate_grade_name("乙级");
-		}
 		record.setTime(new Date());
 		int isUpdate = certificateRecordMapper.updateCertificate(record);
 		if(isUpdate==1){
@@ -474,10 +450,11 @@ public class InformationController {
 	@RequestMapping(value = "/rest/certificateSearch", method = RequestMethod.GET)
 	public void certificateSearch(HttpServletRequest req, HttpServletResponse response,CertificateRecord record) throws IOException {
 		List<CertificateRecord> list = certificateRecordMapper.certificateSearch(record);
-
+		JsonResult result = new JsonResult();
+		result.setCode(200);
+		result.setData(list);
 		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(list));
-
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 
 	/**
