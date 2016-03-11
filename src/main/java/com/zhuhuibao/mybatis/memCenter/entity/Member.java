@@ -63,11 +63,11 @@ public class Member {
 
     private String enterpriseLMDep;
 
-    private Integer fixedTelephone;
+    private String fixedTelephone;
 
-    private Integer fixedMobile;
+    private String fixedMobile;
 
-    private Integer QQ;
+    private String QQ;
 
     private String personRealName;
 
@@ -77,7 +77,7 @@ public class Member {
 
     private Integer personPosition;
 
-    private Integer personIdentifyCard;
+    private String personIdentifyCard;
 
     private String personIDFrontImgUrl;
 
@@ -331,27 +331,27 @@ public class Member {
         this.enterpriseLMDep = enterpriseLMDep == null ? null : enterpriseLMDep.trim();
     }
 
-    public Integer getFixedTelephone() {
+    public String getFixedTelephone() {
         return fixedTelephone;
     }
 
-    public void setFixedTelephone(Integer fixedTelephone) {
+    public void setFixedTelephone(String fixedTelephone) {
         this.fixedTelephone = fixedTelephone;
     }
 
-    public Integer getFixedMobile() {
+    public String getFixedMobile() {
         return fixedMobile;
     }
 
-    public void setFixedMobile(Integer fixedMobile) {
+    public void setFixedMobile(String fixedMobile) {
         this.fixedMobile = fixedMobile;
     }
 
-    public Integer getQQ() {
+    public String getQQ() {
         return QQ;
     }
 
-    public void setQQ(Integer QQ) {
+    public void setQQ(String QQ) {
         this.QQ = QQ;
     }
 
@@ -387,11 +387,11 @@ public class Member {
         this.personPosition = personPosition;
     }
 
-    public Integer getPersonIdentifyCard() {
+    public String getPersonIdentifyCard() {
         return personIdentifyCard;
     }
 
-    public void setPersonIdentifyCard(Integer personIdentifyCard) {
+    public void setPersonIdentifyCard(String personIdentifyCard) {
         this.personIdentifyCard = personIdentifyCard;
     }
 

@@ -109,6 +109,7 @@ public class InformationController {
 			result.setCode(400);
 			result.setMessage("所在地为必填项");
 		}else{
+
 			int isUpdate = memberService.updateMemInfo(member);
 			if (isUpdate == 0) {
 				result.setCode(400);
@@ -357,6 +358,7 @@ public class InformationController {
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
+
 
 	/**
 	 * 会员头像

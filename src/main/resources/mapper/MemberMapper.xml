@@ -33,14 +33,14 @@
     <result column="enterpriseWebSite" property="enterpriseWebSite" jdbcType="VARCHAR" />
     <result column="enterpriseLinkman" property="enterpriseLinkman" jdbcType="VARCHAR" />
     <result column="enterpriseLMDep" property="enterpriseLMDep" jdbcType="VARCHAR" />
-    <result column="fixedTelephone" property="fixedTelephone" jdbcType="INTEGER" />
-    <result column="fixedMobile" property="fixedMobile" jdbcType="INTEGER" />
-    <result column="QQ" property="QQ" jdbcType="INTEGER" />
+    <result column="fixedTelephone" property="fixedTelephone" jdbcType="VARCHAR" />
+    <result column="fixedMobile" property="fixedMobile" jdbcType="VARCHAR" />
+    <result column="QQ" property="QQ" jdbcType="VARCHAR" />
     <result column="personRealName" property="personRealName" jdbcType="VARCHAR" />
     <result column="sex" property="sex" jdbcType="INTEGER" />
     <result column="personCompanyType" property="personCompanyType" jdbcType="INTEGER" />
     <result column="personPosition" property="personPosition" jdbcType="INTEGER" />
-    <result column="personIdentifyCard" property="personIdentifyCard" jdbcType="INTEGER" />
+    <result column="personIdentifyCard" property="personIdentifyCard" jdbcType="VARCHAR" />
     <result column="personIDFrontImgUrl" property="personIDFrontImgUrl" jdbcType="VARCHAR" />
     <result column="personIDBackImgUrl" property="personIDBackImgUrl" jdbcType="VARCHAR" />
   </resultMap>
@@ -63,124 +63,124 @@
     update t_m_member
     <set>
       <if test="mobile != null" >
-        mobile = #{mobile,jdbcType=VARCHAR},
+        mobile = #{mobile},
       </if>
       <if test="email != null" >
-        email = #{email,jdbcType=VARCHAR},
+        email = #{email},
       </if>
       <if test="emailCheckCode != null" >
-        emailCheckCode = #{emailCheckCode,jdbcType=VARCHAR},
+        emailCheckCode = #{emailCheckCode},
       </if>
       <if test="password != null" >
-        password = #{password,jdbcType=VARCHAR},
+        password = #{password},
       </if>
       <if test="registerTime != null" >
-        registerTime = #{registerTime,jdbcType=VARCHAR},
+        registerTime = #{registerTime},
       </if>
       <if test="status != null" >
-        status = #{status,jdbcType=INTEGER},
+        status = #{status},
       </if>
       <if test="identify != null" >
-        identify = #{identify,jdbcType=INTEGER},
+        identify = #{identify},
       </if>
       <if test="isValidatePass != null" >
-        isValidatePass = #{isValidatePass,jdbcType=INTEGER},
+        isValidatePass = #{isValidatePass},
       </if>
       <if test="enterpriseName != null" >
-        enterpriseName = #{enterpriseName,jdbcType=VARCHAR},
+        enterpriseName = #{enterpriseName},
       </if>
       <if test="employeeType != null" >
-        employeeType = #{employeeType,jdbcType=INTEGER},
+        employeeType = #{employeeType},
       </if>
       <if test="enterpriseEmployeeParentId != null" >
-        enterpriseEmployeeParentId = #{enterpriseEmployeeParentId,jdbcType=BIGINT},
+        enterpriseEmployeeParentId = #{enterpriseEmployeeParentId},
       </if>
       <if test="companyIdentify != null" >
-        companyIdentify = #{companyIdentify,jdbcType=INTEGER},
+        companyIdentify = #{companyIdentify},
       </if>
       <if test="province != null" >
-        province = #{province,jdbcType=VARCHAR},
+        province = #{province},
       </if>
       <if test="city != null" >
-        city = #{city,jdbcType=VARCHAR},
+        city = #{city},
       </if>
       <if test="area != null" >
-        area = #{area,jdbcType=VARCHAR},
+        area = #{area},
       </if>
       <if test="address != null" >
-        address = #{address,jdbcType=VARCHAR},
+        address = #{address},
       </if>
       <if test="enterpriseType != null" >
-        enterpriseType = #{enterpriseType,jdbcType=INTEGER},
+        enterpriseType = #{enterpriseType},
       </if>
       <if test="enterpriseLogo != null" >
-        enterpriseLogo = #{enterpriseLogo,jdbcType=VARCHAR},
+        enterpriseLogo = #{enterpriseLogo},
       </if>
       <if test="enterpriseDesc != null" >
-        enterpriseDesc = #{enterpriseDesc,jdbcType=VARCHAR},
+        enterpriseDesc = #{enterpriseDesc},
       </if>
       <if test="headShot != null" >
-        headShot = #{headShot,jdbcType=VARCHAR},
+        headShot = #{headShot},
       </if>
       <if test="saleProductDesc != null" >
-        saleProductDesc = #{saleProductDesc,jdbcType=VARCHAR},
+        saleProductDesc = #{saleProductDesc},
       </if>
       <if test="enterpriseCreaterTime != null" >
-        enterpriseCreaterTime = #{enterpriseCreaterTime,jdbcType=VARCHAR},
+        enterpriseCreaterTime = #{enterpriseCreaterTime},
       </if>
       <if test="registerCapital != null" >
-        registerCapital = #{registerCapital,jdbcType=VARCHAR},
+        registerCapital = #{registerCapital},
       </if>
       <if test="employeeNumber != null" >
-        employeeNumber = #{employeeNumber,jdbcType=VARCHAR},
+        employeeNumber = #{employeeNumber},
       </if>
       <if test="companyBusinessLicenseImg != null" >
-        companyBusinessLicenseImg = #{companyBusinessLicenseImg,jdbcType=VARCHAR},
+        companyBusinessLicenseImg = #{companyBusinessLicenseImg},
       </if>
       <if test="enterpriseTelephone != null" >
-        enterpriseTelephone = #{enterpriseTelephone,jdbcType=INTEGER},
+        enterpriseTelephone = #{enterpriseTelephone},
       </if>
       <if test="enterpriseFox != null" >
-        enterpriseFox = #{enterpriseFox,jdbcType=INTEGER},
+        enterpriseFox = #{enterpriseFox},
       </if>
       <if test="enterpriseWebSite != null" >
-        enterpriseWebSite = #{enterpriseWebSite,jdbcType=VARCHAR},
+        enterpriseWebSite = #{enterpriseWebSite},
       </if>
       <if test="enterpriseLinkman != null" >
-        enterpriseLinkman = #{enterpriseLinkman,jdbcType=VARCHAR},
+        enterpriseLinkman = #{enterpriseLinkman},
       </if>
       <if test="enterpriseLMDep != null" >
-        enterpriseLMDep = #{enterpriseLMDep,jdbcType=VARCHAR},
+        enterpriseLMDep = #{enterpriseLMDep},
       </if>
       <if test="fixedTelephone != null" >
-        fixedTelephone = #{fixedTelephone,jdbcType=INTEGER},
+        fixedTelephone = #{fixedTelephone},
       </if>
       <if test="fixedMobile != null" >
-        fixedMobile = #{fixedMobile,jdbcType=INTEGER},
+        fixedMobile = #{fixedMobile},
       </if>
       <if test="QQ != null" >
-        QQ = #{QQ,jdbcType=INTEGER},
+        QQ = #{QQ},
       </if>
       <if test="personRealName != null" >
-        personRealName = #{personRealName,jdbcType=VARCHAR},
+        personRealName = #{personRealName},
       </if>
       <if test="sex != null" >
-        sex = #{sex,jdbcType=INTEGER},
+        sex = #{sex},
       </if>
       <if test="personCompanyType != null" >
-        personCompanyType = #{personCompanyType,jdbcType=INTEGER},
+        personCompanyType = #{personCompanyType},
       </if>
       <if test="personPosition != null" >
-        personPosition = #{personPosition,jdbcType=INTEGER},
+        personPosition = #{personPosition},
       </if>
       <if test="personIdentifyCard != null" >
-        personIdentifyCard = #{personIdentifyCard,jdbcType=INTEGER},
+        personIdentifyCard = #{personIdentifyCard},
       </if>
       <if test="personIDFrontImgUrl != null" >
-        personIDFrontImgUrl = #{personIDFrontImgUrl,jdbcType=VARCHAR},
+        personIDFrontImgUrl = #{personIDFrontImgUrl},
       </if>
       <if test="personIDBackImgUrl != null" >
-        personIDBackImgUrl = #{personIDBackImgUrl,jdbcType=VARCHAR},
+        personIDBackImgUrl = #{personIDBackImgUrl},
       </if>
     </set>
     where id = #{id}

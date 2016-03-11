@@ -62,6 +62,10 @@ public class BrandController {
     @RequestMapping(value = "/rest/updateBrand", method = RequestMethod.POST)
     public void updateBrand(HttpServletRequest req, HttpServletResponse response, Brand brand) throws IOException {
         JsonResult result = new JsonResult();
+        //如果是未通过的品牌进行更新，则状态变为待审核
+        if(brand.getStatus()==0){
+            brand.setStatus(2);
+        }
         int isUpdate = brandMapper.updateBrand(brand);
         if(isUpdate==0){
             result.setCode(400);
