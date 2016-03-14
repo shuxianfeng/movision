@@ -6,7 +6,7 @@
   	(#{mobile},#{email},#{password},#{registerTime},#{status},#{identify},#{emailCheckCode})
   </insert>
   <sql id="Base_Column_List" >
-    id, mobile, email,password, registerTime, status,identify 
+    id, mobile, email,password, date_format(registerTime,'%Y-%m-%d %H-%i-%s') registerTime, status,identify 
   </sql>
   
   <select id="findMemberByAccount" parameterType="memberReg" resultType="memberReg">

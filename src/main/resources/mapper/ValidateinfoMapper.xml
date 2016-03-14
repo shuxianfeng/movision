@@ -8,7 +8,7 @@
   </insert>
   
   <select id="findMemberValidateInfo" parameterType="validateInfo" resultType="validateInfo">
-	  select * from t_m_validateinfo 
+	  select id,account,valid,date_format(createTime,'%Y-%m-%d %H-%i-%s') createTime,checkCode from t_m_validateinfo  
 	  <where>
 	  	<if test="id != 0"> 
 	  		AND id = #{id}
