@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.memCenter.memManage.controller;
+package com.zhuhuibao.business.memCenter.BrandManage;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.zhuhuibao.common.ApiConstants;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class BrandController {
     @RequestMapping(value = "/rest/addBrand", method = RequestMethod.POST)
     public void upload(HttpServletRequest req, HttpServletResponse response, Brand brand) throws IOException {
         JsonResult result = new JsonResult();
+        brand.setPublishTime(new Date());
         int isAdd = brandMapper.addBrand(brand);
         if(isAdd==0){
             result.setCode(400);
@@ -66,6 +68,7 @@ public class BrandController {
         if(brand.getStatus()==0){
             brand.setStatus(2);
         }
+        brand.setLastModifyTime(new Date());
         int isUpdate = brandMapper.updateBrand(brand);
         if(isUpdate==0){
             result.setCode(400);
@@ -106,8 +109,11 @@ public class BrandController {
     @RequestMapping(value = "/rest/searchBrand", method = RequestMethod.GET)
     public void searchBrand(HttpServletRequest req, HttpServletResponse response, Brand brand) throws IOException {
         List<Brand> brandList = brandMapper.searchBrandByStatus(brand);
+        JsonResult result = new JsonResult();
+        result.setCode(200);
+        result.setData(brandList);
         response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(brandList));
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
 
     /**
@@ -125,8 +131,11 @@ public class BrandController {
     @RequestMapping(value = "/rest/brandDetails", method = RequestMethod.GET)
     public void brandDetails(HttpServletRequest req, HttpServletResponse response,int id) throws IOException {
         Brand brand = brandMapper.brandDetails(id);
+        JsonResult result = new JsonResult();
+        result.setCode(200);
+        result.setData(brand);
         response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(brand));
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.zhuhuibao.business.memCenter.BrandManage.JsonDateSerializer;
 import java.util.Date;
 
 public class Brand {
@@ -138,7 +140,7 @@ public class Brand {
     public void setBrandWebSite(String brandWebSite) {
         this.brandWebSite = brandWebSite == null ? null : brandWebSite.trim();
     }
-
+    @JsonSerialize(using = JsonDateSerializer.class)
     public Date getPublishTime() {
         return publishTime;
     }
@@ -146,7 +148,7 @@ public class Brand {
     public void setPublishTime(Date publishTime) {
         this.publishTime = publishTime;
     }
-
+    @JsonSerialize(using = JsonDateSerializer.class)
     public Date getCheckTime() {
         return checkTime;
     }
@@ -154,7 +156,7 @@ public class Brand {
     public void setCheckTime(Date checkTime) {
         this.checkTime = checkTime;
     }
-
+    @JsonSerialize(using = JsonDateSerializer.class)
     public Date getLastModifyTime() {
         return lastModifyTime;
     }

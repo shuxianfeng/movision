@@ -31,7 +31,7 @@
     values (#{id}, #{brandCNName}, #{brandENName}, #{logourl},
     #{createid}, #{branddesc}, #{imgurl},
     2, #{brandOwer}, #{brandCertificate},
-    #{brandWebSite}, date_format(now(),'%Y-%m-%d %H:%i:%s')
+    #{brandWebSite}, #{publishTime})
   </insert>
   <update id="updateBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" >
     update t_p_brand
@@ -60,7 +60,7 @@
       <if test="brandWebSite != null" >
         brandWebSite = #{brandWebSite},
       </if>
-      lastModifyTime = date_format(now(),'%Y-%m-%d %H:%i:%s'),
+      lastModifyTime = #{lastModifyTime},
     </set>
     where id = #{id}
   </update>

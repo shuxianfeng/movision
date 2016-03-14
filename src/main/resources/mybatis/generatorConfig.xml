@@ -18,7 +18,7 @@
 		<!-- jdbc连接 -->
 		<!--<jdbcConnection driverClass="${jdbc_driver}"-->
 			<!--connectionURL="${jdbc_url}" userId="${jdbc_user}" password="${jdbc_password}" />-->
-		<jdbcConnection driverClass="${jdbc_driver}"
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
 						connectionURL="jdbc:mysql://139.196.189.100:3306/zhb_dev?useUnicode=true&amp;characterEncoding=utf-8"
 						userId="root" password="zhb!216OK" />
 
@@ -29,7 +29,7 @@
 		</javaTypeResolver>
 
 		<!-- 生成实体类地址 -->
-		<javaModelGenerator targetPackage="com.zhuhuibao.mybatis.entity"
+		<javaModelGenerator targetPackage="com.zhuhuibao.mybatis.memCenter.entity"
 			targetProject="${project}">
 			<!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
 			<property name="enableSubPackages" value="false" />
@@ -45,7 +45,7 @@
 		</sqlMapGenerator>
 
 		<!-- 生成mapxml对应client，也就是接口dao -->
-		<javaClientGenerator targetPackage="com.zhuhuibao.mybatis.mapper"
+		<javaClientGenerator targetPackage="com.zhuhuibao.mybatis.memCenter.mapper"
 			targetProject="${project}" type="XMLMAPPER">
 			<!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
 			<property name="enableSubPackages" value="false" />
@@ -53,8 +53,8 @@
 
 		<!-- 配置表信息 -->
 		
-		<table tableName="user"
-			domainObjectName="User" enableCountByExample="false"
+		<table tableName="t_p_brand"
+			domainObjectName="Brand" enableCountByExample="false"
 			enableSelectByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" >
 			<!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 enable*ByExample 

@@ -1,7 +1,6 @@
-package com.zhuhuibao.business.memCenter.memManage.controller;
+package com.zhuhuibao.business.memCenter.AccountManage;
 
 import com.mysql.jdbc.StringUtils;
-import com.oreilly.servlet.MultipartRequest;
 import com.zhuhuibao.common.ApiConstants;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.ResultBean;
@@ -10,7 +9,6 @@ import com.zhuhuibao.mybatis.memCenter.mapper.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.utils.JsonUtils;
-import com.zhuhuibao.utils.RandomFileNamePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
