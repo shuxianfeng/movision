@@ -122,7 +122,11 @@ public class BrandController {
     @RequestMapping(value = "/rest/searchBrandSize", method = RequestMethod.GET)
     public void searchBrandSize(HttpServletRequest req, HttpServletResponse response, Brand brand) throws IOException {
         int size = brandMapper.searchBrandSize(brand);
-        response.getWriter().write(size);
+        JsonResult result = new JsonResult();
+        result.setCode(200);
+        result.setData(size);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
 
     /**

@@ -7,7 +7,7 @@
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="emailCheckCode" property="emailCheckCode" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
-    <result column="registerTime" property="registerTime" jdbcType="VARCHAR" />
+    <result column="registerTime" property="registerTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="identify" property="identify" jdbcType="INTEGER" />
     <result column="isValidatePass" property="isValidatePass" jdbcType="INTEGER" />
@@ -24,7 +24,7 @@
     <result column="enterpriseDesc" property="enterpriseDesc" jdbcType="VARCHAR" />
     <result column="headShot" property="headShot" jdbcType="VARCHAR" />
     <result column="saleProductDesc" property="saleProductDesc" jdbcType="VARCHAR" />
-    <result column="enterpriseCreaterTime" property="enterpriseCreaterTime" jdbcType="VARCHAR" />
+    <result column="enterpriseCreaterTime" property="enterpriseCreaterTime" jdbcType="TIMESTAMP" />
     <result column="registerCapital" property="registerCapital" jdbcType="VARCHAR" />
     <result column="employeeNumber" property="employeeNumber" jdbcType="VARCHAR" />
     <result column="companyBusinessLicenseImg" property="companyBusinessLicenseImg" jdbcType="VARCHAR" />
@@ -187,7 +187,7 @@
   </update>
   <insert id="addMember" keyProperty="id" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" useGeneratedKeys="true">
     insert into t_m_member(mobile,email,password,registerTime,status,identify,enterpriseEmployeeParentId,employeeType) values
-    (#{mobile},#{email},#{password},date_format(now(),'%Y-%m-%d %H:%i:%s'),#{status},2,#{enterpriseEmployeeParentId},#{employeeType})
+    (#{mobile},#{email},#{password},now(),#{status},2,#{enterpriseEmployeeParentId},#{employeeType})
   </insert>
   <update id="updateMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     update t_m_member

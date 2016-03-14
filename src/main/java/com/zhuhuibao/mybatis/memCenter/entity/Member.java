@@ -1,5 +1,10 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
+import com.zhuhuibao.business.memCenter.BrandManage.JsonDateSerializer;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import java.util.Date;
+
 public class Member {
     private Long id;
 
@@ -11,7 +16,7 @@ public class Member {
 
     private String password;
 
-    private String registerTime;
+    private Date registerTime;
 
     private Integer status;
 
@@ -45,7 +50,7 @@ public class Member {
 
     private String saleProductDesc;
 
-    private String enterpriseCreaterTime;
+    private Date enterpriseCreaterTime;
 
     private String registerCapital;
 
@@ -123,12 +128,13 @@ public class Member {
         this.password = password == null ? null : password.trim();
     }
 
-    public String getRegisterTime() {
+    @JsonSerialize(using = JsonDateSerializer.class)
+    public Date getRegisterTime() {
         return registerTime;
     }
 
-    public void setRegisterTime(String registerTime) {
-        this.registerTime = registerTime == null ? null : registerTime.trim();
+    public void setRegisterTime(Date registerTime) {
+        this.registerTime = registerTime;
     }
 
     public Integer getStatus() {
@@ -259,12 +265,13 @@ public class Member {
         this.saleProductDesc = saleProductDesc == null ? null : saleProductDesc.trim();
     }
 
-    public String getEnterpriseCreaterTime() {
+    @JsonSerialize(using = JsonDateSerializer.class)
+    public Date getEnterpriseCreaterTime() {
         return enterpriseCreaterTime;
     }
 
-    public void setEnterpriseCreaterTime(String enterpriseCreaterTime) {
-        this.enterpriseCreaterTime = enterpriseCreaterTime == null ? null : enterpriseCreaterTime.trim();
+    public void setEnterpriseCreaterTime(Date enterpriseCreaterTime) {
+        this.enterpriseCreaterTime = enterpriseCreaterTime;
     }
 
     public String getRegisterCapital() {
