@@ -3,16 +3,16 @@
 <mapper namespace="com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper">
   <insert id="registerMember" parameterType="memberReg" useGeneratedKeys="true" keyProperty="id">
   	insert into t_m_member(mobile,email,password,registerTime,status,identify,emailCheckCode) values
-  	(#{mobile},#{email},#{password},#{registerTime},#{status},#{identify},#{emailCheckCode})
+  	(#{mobile},#{email},#{password},str_to_date(#{registerTime},'%Y-%m-%d %H:%i:%s'),#{status},#{identify},#{emailCheckCode})
   </insert>
   <sql id="Base_Column_List" >
-    id, mobile, email,password, date_format(registerTime,'%Y-%m-%d %H-%i-%s') registerTime, status,identify 
+    id, mobile, email,password, date_format(registerTime,'%Y-%m-%d %H:%i:%s') registerTime, status,identify 
   </sql>
   
   <select id="findMemberByAccount" parameterType="memberReg" resultType="memberReg">
     select
     <include refid="Base_Column_List" />
-    from t_m_member WHERE status == 1
+    from t_m_member WHERE status = 1
    	<if test="mobile != null and mobile != '' " >
    		AND mobile = #{mobile}
    	</if>
@@ -22,7 +22,7 @@
   </select>
   
   <select id="isExistAccount" parameterType="memberReg" resultType="int">
-    select count(1) from t_m_member WHERE status == 1
+    select count(1) from t_m_member WHERE status = 1
    	<if test="mobile != null and mobile != '' " >
    		AND mobile = #{mobile}
    	</if>
@@ -45,7 +45,7 @@
 	    	emailCheckCode = #{emailCheckCode}
 	    </if>
     </set>
-    where email = #{email} and status == 1
+    where email = #{email} and status = 1
   </update>
   
   <update id="updateMemberValidatePass" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
@@ -68,6 +68,6 @@
   			email = #{email}
   		</if>
   	</where> 
-  	and status == 1
+  	and status = 1
   </update>
 </mapper>
