@@ -4,11 +4,11 @@
 
   <insert id="insertValidateInfo" parameterType="validateInfo" useGeneratedKeys="true" keyProperty="id">
   	insert into t_m_validateinfo(account,valid,createTime,checkCode) values
-  	(#{account},#{valid},#{createTime},#{checkCode})
+  	(#{account},#{valid},str_to_date(#{createTime},'%Y-%m-%d %H:%i:%s'),#{checkCode})
   </insert>
   
   <select id="findMemberValidateInfo" parameterType="validateInfo" resultType="validateInfo">
-	  select * from t_m_validateinfo 
+	  select id,account,valid,date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,checkCode from t_m_validateinfo  
 	  <where>
 	  	<if test="id != 0"> 
 	  		AND id = #{id}

@@ -7,6 +7,10 @@ package com.zhuhuibao.common;
  */
 public interface MsgCodeConstant {
 	
+	int response_status_200 = 200;
+	
+	int response_status_400 = 400;
+	
 	/**
 	 * 统一定义成功返回1000
 	 */
