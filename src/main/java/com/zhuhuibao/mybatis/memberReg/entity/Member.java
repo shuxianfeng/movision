@@ -69,6 +69,8 @@ public class Member implements Serializable{
 	 * 会员身份 1：企业，2：个人
 	 */
 	private int identify;
+	
+	private int employeeType;
 
 	public int getId() {
 		return id;
@@ -157,6 +159,13 @@ public class Member implements Serializable{
 	public void setIdentify(int identify) {
 		this.identify = identify;
 	}
-	
+
+	public int getEmployeeType() {
+		return employeeType;
+	}
+
+	public void setEmployeeType(int employeeType) {
+		this.employeeType = employeeType;
+	}
 	
 }

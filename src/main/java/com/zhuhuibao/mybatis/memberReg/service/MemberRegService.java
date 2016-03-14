@@ -68,6 +68,8 @@ public class MemberRegService {
 	    			member.setStatus(1);
 	    		}
 	    		member.setRegisterTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+	    		//注册成功的默认为“管理员”类型
+	    		member.setEmployeeType(1);
 	    		memberId = memberRegMapper.registerMember(member);
 	    	}
     	}
@@ -167,6 +169,20 @@ public class MemberRegService {
     	catch(Exception e)
     	{
     		log.error("is exist account ",e);
+    	}
+    	return result;
+    }
+    
+    public int updateMemberStatus(Member member)
+    {
+    	int result = 0;
+    	try
+    	{
+    		result = memberRegMapper.updateMemberStatus(member);
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("update member status",e);
     	}
     	return result;
     }
