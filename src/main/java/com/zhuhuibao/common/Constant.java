@@ -7,7 +7,7 @@ public interface Constant {
 	String sms_time = "10";
 	
 	/**
-	 * 图片存放路径  upload/img
+	 * 图片存放路径  upload/img/
 	 */
 	String upload_img_prifix = "upload/img/";
 }

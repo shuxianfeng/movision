@@ -97,7 +97,15 @@ public class ProductService {
 				String imgUrl =  product.getImgUrl();
 				if(imgUrl != null && imgUrl.length() > 0)
 				{
-					product.setImgUrl(Constant.upload_img_prifix + imgUrl);
+					String[] arr_str = imgUrl.split(";");
+					StringBuilder sb = new StringBuilder();
+					for(String img : arr_str)
+					{
+						sb.append(Constant.upload_img_prifix);
+						sb.append(img);
+						sb.append(";");
+					}
+					product.setImgUrl(sb.delete(sb.lastIndexOf(";"),sb.length()).toString());
 				}
 				productId = productMapper.insertSelective(product);
 			}
