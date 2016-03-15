@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by cxx on 2016/3/4 0004.
  */
-@RestController
+@RestController("omsProductController")
 public class ProductController {
     private static final Logger log = LoggerFactory
             .getLogger(ProductController.class);
