@@ -94,6 +94,6 @@
       status = 3
     </set>
     where id = #{id}
->>>>>>> zhuhuibao_cuixiaoxiao_20160310
+
   </update>
 </mapper>
