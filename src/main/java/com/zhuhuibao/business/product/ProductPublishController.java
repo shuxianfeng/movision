@@ -34,9 +34,9 @@ import com.zhuhuibao.utils.pagination.util.StringUtils;
  *
  */
 @Controller
-public class ProductController {
+public class ProductPublishController {
 	
-	private static final Logger log = LoggerFactory.getLogger(ProductController.class);
+	private static final Logger log = LoggerFactory.getLogger(ProductPublishController.class);
 	
 	@Autowired
 	ProductService productService;
