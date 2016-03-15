@@ -57,7 +57,7 @@ public class ProductController {
 	@RequestMapping(value="/rest/addProduct", method = RequestMethod.POST)
 	public void addProduct(HttpServletRequest req,HttpServletResponse response,ProductWithBLOBs product) throws JsonGenerationException, JsonMappingException, IOException
 	{
-		productService.constructProduct(product);
+		//productService.constructProduct(product);
 		JsonResult jsonResult = new JsonResult();
 		productService.insertProduct(product);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
