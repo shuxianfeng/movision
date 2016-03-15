@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.product.entity.ComplainSuggest;
@@ -34,6 +35,7 @@ import com.zhuhuibao.utils.pagination.util.StringUtils;
  *
  */
 @Controller
+@RestController("ProductPublishController")
 public class ProductPublishController {
 	
 	private static final Logger log = LoggerFactory.getLogger(ProductPublishController.class);
