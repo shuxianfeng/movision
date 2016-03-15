@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.memCenter.memManage.controller;
+package com.zhuhuibao.business.memCenter.AccountManage;
 
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
@@ -25,9 +25,9 @@ import java.util.List;
  * @since 16/2/25.
  */
 @RestController
-public class ManageController {
+public class StaffManageController {
 	private static final Logger log = LoggerFactory
-			.getLogger(ManageController.class);
+			.getLogger(StaffManageController.class);
 
 	@Autowired
 	private MemberService memberService;

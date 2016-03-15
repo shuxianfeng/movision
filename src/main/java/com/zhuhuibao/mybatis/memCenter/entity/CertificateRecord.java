@@ -13,8 +13,6 @@ public class CertificateRecord {
 
     private Integer certificate_grade;
 
-    private String certificate_grade_name;
-
     private String certificate_url;
 
     private String type;
@@ -61,14 +59,6 @@ public class CertificateRecord {
 
     public void setCertificate_grade(Integer certificate_grade) {
         this.certificate_grade = certificate_grade;
-    }
-
-    public String getCertificate_grade_name() {
-        return certificate_grade_name;
-    }
-
-    public void setCertificate_grade_name(String certificate_grade_name) {
-        this.certificate_grade_name = certificate_grade_name == null ? null : certificate_grade_name.trim();
     }
 
     public String getCertificate_url() {

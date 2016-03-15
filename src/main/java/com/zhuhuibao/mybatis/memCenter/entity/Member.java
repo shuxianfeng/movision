@@ -1,5 +1,10 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
+import com.zhuhuibao.business.memCenter.BrandManage.JsonDateSerializer;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import java.util.Date;
+
 public class Member {
     private Long id;
 
@@ -11,7 +16,7 @@ public class Member {
 
     private String password;
 
-    private String registerTime;
+    private Date registerTime;
 
     private Integer status;
 
@@ -45,7 +50,7 @@ public class Member {
 
     private String saleProductDesc;
 
-    private String enterpriseCreaterTime;
+    private Date enterpriseCreaterTime;
 
     private String registerCapital;
 
@@ -63,11 +68,11 @@ public class Member {
 
     private String enterpriseLMDep;
 
-    private Integer fixedTelephone;
+    private String fixedTelephone;
 
-    private Integer fixedMobile;
+    private String fixedMobile;
 
-    private Integer QQ;
+    private String QQ;
 
     private String personRealName;
 
@@ -77,7 +82,7 @@ public class Member {
 
     private Integer personPosition;
 
-    private Integer personIdentifyCard;
+    private String personIdentifyCard;
 
     private String personIDFrontImgUrl;
 
@@ -123,12 +128,13 @@ public class Member {
         this.password = password == null ? null : password.trim();
     }
 
-    public String getRegisterTime() {
+    @JsonSerialize(using = JsonDateSerializer.class)
+    public Date getRegisterTime() {
         return registerTime;
     }
 
-    public void setRegisterTime(String registerTime) {
-        this.registerTime = registerTime == null ? null : registerTime.trim();
+    public void setRegisterTime(Date registerTime) {
+        this.registerTime = registerTime;
     }
 
     public Integer getStatus() {
@@ -259,12 +265,13 @@ public class Member {
         this.saleProductDesc = saleProductDesc == null ? null : saleProductDesc.trim();
     }
 
-    public String getEnterpriseCreaterTime() {
+    @JsonSerialize(using = JsonDateSerializer.class)
+    public Date getEnterpriseCreaterTime() {
         return enterpriseCreaterTime;
     }
 
-    public void setEnterpriseCreaterTime(String enterpriseCreaterTime) {
-        this.enterpriseCreaterTime = enterpriseCreaterTime == null ? null : enterpriseCreaterTime.trim();
+    public void setEnterpriseCreaterTime(Date enterpriseCreaterTime) {
+        this.enterpriseCreaterTime = enterpriseCreaterTime;
     }
 
     public String getRegisterCapital() {
@@ -331,27 +338,27 @@ public class Member {
         this.enterpriseLMDep = enterpriseLMDep == null ? null : enterpriseLMDep.trim();
     }
 
-    public Integer getFixedTelephone() {
+    public String getFixedTelephone() {
         return fixedTelephone;
     }
 
-    public void setFixedTelephone(Integer fixedTelephone) {
+    public void setFixedTelephone(String fixedTelephone) {
         this.fixedTelephone = fixedTelephone;
     }
 
-    public Integer getFixedMobile() {
+    public String getFixedMobile() {
         return fixedMobile;
     }
 
-    public void setFixedMobile(Integer fixedMobile) {
+    public void setFixedMobile(String fixedMobile) {
         this.fixedMobile = fixedMobile;
     }
 
-    public Integer getQQ() {
+    public String getQQ() {
         return QQ;
     }
 
-    public void setQQ(Integer QQ) {
+    public void setQQ(String QQ) {
         this.QQ = QQ;
     }
 
@@ -387,11 +394,11 @@ public class Member {
         this.personPosition = personPosition;
     }
 
-    public Integer getPersonIdentifyCard() {
+    public String getPersonIdentifyCard() {
         return personIdentifyCard;
     }
 
-    public void setPersonIdentifyCard(Integer personIdentifyCard) {
+    public void setPersonIdentifyCard(String personIdentifyCard) {
         this.personIdentifyCard = personIdentifyCard;
     }
 
