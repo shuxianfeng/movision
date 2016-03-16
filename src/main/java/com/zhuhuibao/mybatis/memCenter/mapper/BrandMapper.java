@@ -23,4 +23,6 @@ public interface BrandMapper {
     List<ResultBean> searchAllBrand(Product product);
 
     List<ResultBean> searchAllBrandByNumber(Product product);
+
+    List<ResultBean> searchSuggestBrand();
 }

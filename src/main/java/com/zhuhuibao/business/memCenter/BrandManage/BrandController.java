@@ -137,6 +137,8 @@ public class BrandController {
     @RequestMapping(value = "/rest/brandDetails", method = RequestMethod.GET)
     public void brandDetails(HttpServletRequest req, HttpServletResponse response,int id) throws IOException {
         Brand brand = brandMapper.brandDetails(id);
+        brand.setViews(brand.getViews()+1);
+        int isUpdate = brandMapper.updateBrand(brand);
         JsonResult result = new JsonResult();
         result.setCode(200);
         result.setData(brand);
@@ -193,7 +195,7 @@ public class BrandController {
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
 
-    @RequestMapping(value = "/rest/searchAllBrandByNumber", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/searchSuggestBrandByNumber", method = RequestMethod.GET)
     public void searchAllBrandByNumber(HttpServletRequest req, HttpServletResponse response, Product product) throws IOException {
         List<ResultBean> brandList = brandMapper.searchAllBrandByNumber(product);
         JsonResult result = new JsonResult();
@@ -204,7 +206,12 @@ public class BrandController {
     }
 
     @RequestMapping(value = "/rest/searchSuggestBrand", method = RequestMethod.GET)
-    public void searchSuggestBrand(HttpServletRequest req, HttpServletResponse response, Product product) throws IOException {
-
+    public void searchSuggestBrand(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        List<ResultBean> brandList = brandMapper.searchSuggestBrand();
+        JsonResult result = new JsonResult();
+        result.setCode(200);
+        result.setData(brandList);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
 }
