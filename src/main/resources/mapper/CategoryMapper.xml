@@ -58,4 +58,10 @@
     </set>
     where id = #{id}
   </update>
+  <select id="findSystem" resultMap="BaseResultMap">
+    select
+    *
+    from t_p_category
+    where id = #{parentId}
+  </select>
 </mapper>

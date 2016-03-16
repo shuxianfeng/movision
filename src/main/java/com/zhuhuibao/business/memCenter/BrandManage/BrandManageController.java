@@ -29,9 +29,9 @@ import java.util.List;
  * Created by cxx on 2016/3/7 0007.
  */
 @RestController
-public class BrandController {
+public class BrandManageController {
     private static final Logger log = LoggerFactory
-            .getLogger(BrandController.class);
+            .getLogger(BrandManageController.class);
 
     @Autowired
     private BrandMapper brandMapper;
@@ -186,52 +186,4 @@ public class BrandController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
-
-    @RequestMapping(value = "/rest/findAllBrand", method = RequestMethod.GET)
-    public void findAllBrand(HttpServletRequest req, HttpServletResponse response, Product product,String pageNo,String pageSize) throws IOException {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<ResultBean> pager = new Paging<ResultBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-        List<ResultBean> brandList = brandMapper.findAllBrand(pager.getRowBounds(),product);
-        pager.result(brandList);
-        JsonResult result = new JsonResult();
-        result.setCode(200);
-        result.setData(pager);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
-    }
-
-    @RequestMapping(value = "/rest/searchSuggestBrandByNumber", method = RequestMethod.GET)
-    public void searchAllBrandByNumber(HttpServletRequest req, HttpServletResponse response, Product product) throws IOException {
-        List<ResultBean> brandList = brandMapper.searchAllBrandByNumber(product);
-        JsonResult result = new JsonResult();
-        result.setCode(200);
-        result.setData(brandList);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
-    }
-
-    @RequestMapping(value = "/rest/searchSuggestBrand", method = RequestMethod.GET)
-    public void searchSuggestBrand(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        List<ResultBean> brandList = brandMapper.searchSuggestBrand();
-        JsonResult result = new JsonResult();
-        result.setCode(200);
-        result.setData(brandList);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
-    }
-
-    /*@RequestMapping(value = "/rest/search", method = RequestMethod.GET)
-    public void search(HttpServletRequest req, HttpServletResponse response) throws IOException {
-
-        JsonResult result = new JsonResult();
-        result.setCode(200);
-        result.setData();
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
-    }*/
 }

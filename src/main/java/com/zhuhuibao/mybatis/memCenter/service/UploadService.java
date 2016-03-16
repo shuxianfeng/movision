@@ -37,7 +37,7 @@ public class UploadService {
     public String upload(HttpServletRequest req)throws IOException
     {
         //指定所上传的文件，上传成功后，在服务器的保存位置
-        String saveDirectory = ApiConstants.getUploadDir()+"/img";
+        String saveDirectory = ApiConstants.getUploadDir();
 
         //指定所上传的文件最大上传文件大小
         int maxPostSize = ApiConstants.getUploadMaxPostSize();
@@ -54,7 +54,7 @@ public class UploadService {
             String fileName = (String)fileNames.nextElement();
             if(null != multi.getFile(fileName)){
                 String lastFileName = multi.getFilesystemName(fileName);
-                url = saveDirectory + "/" + lastFileName;
+                url =  "http://192.168.1.119:8080/upload/" + lastFileName;
             }
         }
 

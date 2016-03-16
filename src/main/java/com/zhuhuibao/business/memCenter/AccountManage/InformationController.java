@@ -463,7 +463,11 @@ public class InformationController {
 		String url = uploadService.upload(req);
 		member.setHeadShot(url);
 		memberService.uploadHeadShot(member);
-		response.getWriter().write(url);
+		JsonResult result = new JsonResult();
+		result.setCode(200);
+		result.setData(url);
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 
 	/**
@@ -474,6 +478,10 @@ public class InformationController {
 		String url = uploadService.upload(req);
 		member.setEnterpriseLogo(url);
 		memberService.uploadLogo(member);
-		response.getWriter().write(url);
+		JsonResult result = new JsonResult();
+		result.setCode(200);
+		result.setData(url);
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 }

@@ -16,4 +16,6 @@ public interface CategoryMapper {
     int updateSystem(Category category);
 
     int deleteSystem(Category category);
+
+    Category findSystem(String parentId);
 }

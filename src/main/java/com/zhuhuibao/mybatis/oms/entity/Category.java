@@ -9,6 +9,10 @@ public class Category {
 
     private Integer sort;
 
+    private String smallIcon;
+
+    private String bigIcon;
+
     private Integer is_deleted;
 
     public Integer getId() {
@@ -51,4 +55,19 @@ public class Category {
         this.is_deleted = is_deleted;
     }
 
+    public String getSmallIcon() {
+        return smallIcon;
+    }
+
+    public void setSmallIcon(String smallIcon) {
+        this.smallIcon = smallIcon;
+    }
+
+    public String getBigIcon() {
+        return bigIcon;
+    }
+
+    public void setBigIcon(String bigIcon) {
+        this.bigIcon = bigIcon;
+    }
 }
