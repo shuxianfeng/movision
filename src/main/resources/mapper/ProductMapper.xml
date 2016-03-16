@@ -268,7 +268,7 @@
 	  b.brandCNName  
 	  from t_p_product t  
 	  left join t_p_brand b on t.brandid = b.id
-      where t.status != 2 and t.status = 1 and t.paramIDs = #{paramIDs} and t.paramValues = #{paramValues}
+      where t.status = 1 and t.paramIDs = #{paramIDs} and t.paramValues = #{paramValues}
 
   </select>
 </mapper>

@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.mybatis.memCenter.entity.Brand;
+import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
+import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
 import com.zhuhuibao.mybatis.product.entity.ComplainSuggest;
 import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs;
@@ -35,17 +39,20 @@ import com.zhuhuibao.utils.pagination.util.StringUtils;
  *
  */
 @Controller
-@RestController("ProductPublishController")
 public class ProductPublishController {
 	
 	private static final Logger log = LoggerFactory.getLogger(ProductPublishController.class);
 	
 	@Autowired
-	ProductService productService;
+	private ProductService productService;
 	@Autowired
-	ComplainSuggestService suggestService;
+	private ComplainSuggestService suggestService;
 	@Autowired
-	ProductParamService paramService;
+	private ProductParamService paramService;
+	@Autowired
+    private CategoryMapper categoryMapper;
+	@Autowired
+	private BrandMapper brandMapper;
 	
 	/**
 	 * 新增产品
@@ -134,4 +141,43 @@ public class ProductPublishController {
         jsonResult.setData(pager);
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
+	
+	  @RequestMapping(value = "/rest/getProductFirstCategory", method = RequestMethod.GET)
+	    public void getProductFirstCategory(HttpServletRequest req, HttpServletResponse response) throws IOException {
+	        List<ResultBean> systemList = categoryMapper.findSystemList();
+	        response.setContentType("application/json;charset=utf-8");
+	        response.getWriter().write(JsonUtils.getJsonStringFromObj(systemList));
+	    }
+
+	    /**
+	     * 查询大系统下所有子系统类目
+	     * @param req
+	     * @return
+	     * @throws IOException
+	     */
+
+	    @RequestMapping(value = "/rest/getProductSecondCategory", method = RequestMethod.GET)
+	    public void getProductSecondCategory(HttpServletRequest req, HttpServletResponse response) throws IOException {
+	        String parentId = req.getParameter("parentID");
+	        List<ResultBean> subSystemList = categoryMapper.findSubSystemList(parentId);
+	        response.setContentType("application/json;charset=utf-8");
+	        response.getWriter().write(JsonUtils.getJsonStringFromObj(subSystemList));
+	    }
+	    
+	    /**
+	     * 查询品牌
+	     * @param req
+	     * @return
+	     * @throws IOException
+	     */
+	    @RequestMapping(value = "/rest/getBrandList", method = RequestMethod.GET)
+	    public void getBrandList(HttpServletRequest req, HttpServletResponse response, Brand brand) throws IOException {
+	    	brand.setStatus(1);
+	        List<Brand> brandList = brandMapper.searchBrandByStatus(brand);
+	        JsonResult result = new JsonResult();
+	        result.setCode(200);
+	        result.setData(brandList);
+	        response.setContentType("application/json;charset=utf-8");
+	        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+	    }
 }
