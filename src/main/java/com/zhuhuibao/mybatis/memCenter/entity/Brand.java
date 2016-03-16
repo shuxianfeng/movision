@@ -1,10 +1,13 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
+import com.zhuhuibao.mybatis.product.entity.Product;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.zhuhuibao.business.memCenter.BrandManage.JsonDateSerializer;
 import java.util.Date;
 
 public class Brand {
+    private Product product;
+
     private Long id;
 
     private String brandCNName;
@@ -163,5 +166,13 @@ public class Brand {
 
     public void setLastModifyTime(Date lastModifyTime) {
         this.lastModifyTime = lastModifyTime;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

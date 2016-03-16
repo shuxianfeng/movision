@@ -39,6 +39,8 @@ public class Product {
 
     private String paramValues;
 
+    private Integer num;
+
     public Long getId() {
         return id;
     }
@@ -182,5 +184,12 @@ public class Product {
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
-    
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
 }

@@ -1,6 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-import com.zhuhuibao.business.memCenter.BrandManage.JsonDateSerializer;
+import  com.zhuhuibao.business.memCenter.AccountManage.JsonDateSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.Date;
@@ -50,7 +50,7 @@ public class Member {
 
     private String saleProductDesc;
 
-    private Date enterpriseCreaterTime;
+    private String enterpriseCreaterTime;
 
     private String registerCapital;
 
@@ -266,11 +266,11 @@ public class Member {
     }
 
     @JsonSerialize(using = JsonDateSerializer.class)
-    public Date getEnterpriseCreaterTime() {
+    public String getEnterpriseCreaterTime() {
         return enterpriseCreaterTime;
     }
 
-    public void setEnterpriseCreaterTime(Date enterpriseCreaterTime) {
+    public void setEnterpriseCreaterTime(String enterpriseCreaterTime) {
         this.enterpriseCreaterTime = enterpriseCreaterTime;
     }
 

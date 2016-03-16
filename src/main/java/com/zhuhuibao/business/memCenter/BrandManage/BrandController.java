@@ -3,8 +3,10 @@ package com.zhuhuibao.business.memCenter.BrandManage;
 import com.oreilly.servlet.MultipartRequest;
 import com.zhuhuibao.common.ApiConstants;
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
+import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.RandomFileNamePolicy;
 import org.slf4j.Logger;
@@ -177,6 +179,32 @@ public class BrandController {
         }
         result.setCode(200);
         result.setData(url);
+        response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    @RequestMapping(value = "/rest/searchAllBrand", method = RequestMethod.GET)
+    public void searchAllBrand(HttpServletRequest req, HttpServletResponse response, Product product) throws IOException {
+        List<ResultBean> brandList = brandMapper.searchAllBrand(product);
+        JsonResult result = new JsonResult();
+        result.setCode(200);
+        result.setData(brandList);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    @RequestMapping(value = "/rest/searchAllBrandByNumber", method = RequestMethod.GET)
+    public void searchAllBrandByNumber(HttpServletRequest req, HttpServletResponse response, Product product) throws IOException {
+        List<ResultBean> brandList = brandMapper.searchAllBrandByNumber(product);
+        JsonResult result = new JsonResult();
+        result.setCode(200);
+        result.setData(brandList);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    @RequestMapping(value = "/rest/searchSuggestBrand", method = RequestMethod.GET)
+    public void searchSuggestBrand(HttpServletRequest req, HttpServletResponse response, Product product) throws IOException {
+
     }
 }

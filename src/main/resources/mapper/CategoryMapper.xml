@@ -27,6 +27,12 @@
     from t_p_category
     where parentId = #{parentId}
   </select>
+  <select id="findSubSystemListByNumber" resultMap="ResultMap">
+    select
+    id,name
+    from t_p_category
+    where parentId = #{parentId} limit 0,#{num}
+  </select>
   <insert id="addSystem" parameterType="com.zhuhuibao.mybatis.oms.entity.Category" >
     insert into t_p_category (id, name, parentId,
     sort,is_deleted)
