@@ -224,4 +224,14 @@ public class BrandController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
+
+    /*@RequestMapping(value = "/rest/search", method = RequestMethod.GET)
+    public void search(HttpServletRequest req, HttpServletResponse response) throws IOException {
+
+        JsonResult result = new JsonResult();
+        result.setCode(200);
+        result.setData();
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }*/
 }
