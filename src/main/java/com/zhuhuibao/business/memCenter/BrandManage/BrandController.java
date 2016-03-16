@@ -9,6 +9,8 @@ import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
 import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.RandomFileNamePolicy;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -185,12 +187,20 @@ public class BrandController {
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
 
-    @RequestMapping(value = "/rest/searchAllBrand", method = RequestMethod.GET)
-    public void searchAllBrand(HttpServletRequest req, HttpServletResponse response, Product product) throws IOException {
-        List<ResultBean> brandList = brandMapper.searchAllBrand(product);
+    @RequestMapping(value = "/rest/findAllBrand", method = RequestMethod.GET)
+    public void findAllBrand(HttpServletRequest req, HttpServletResponse response, Product product,String pageNo,String pageSize) throws IOException {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<ResultBean> pager = new Paging<ResultBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        List<ResultBean> brandList = brandMapper.findAllBrand(pager.getRowBounds(),product);
+        pager.result(brandList);
         JsonResult result = new JsonResult();
         result.setCode(200);
-        result.setData(brandList);
+        result.setData(pager);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }

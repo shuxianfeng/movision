@@ -3,6 +3,7 @@ package com.zhuhuibao.mybatis.memCenter.mapper;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.product.entity.Product;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface BrandMapper {
 
     Brand brandDetails(int id);
 
-    List<ResultBean> searchAllBrand(Product product);
+    List<ResultBean> findAllBrand(RowBounds rowBounds, Product product);
 
     List<ResultBean> searchAllBrandByNumber(Product product);
 

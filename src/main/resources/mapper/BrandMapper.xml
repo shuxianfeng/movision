@@ -103,7 +103,7 @@
     where id = #{id}
 
   </update>
-  <select id="searchAllBrand" resultMap="ResultMap" >
+  <select id="findAllBrand" resultMap="ResultMap" >
     select
     distinct t.brandid,b.logourl
     from t_p_product t
