@@ -99,4 +99,22 @@ public class MemberService {
 		result = memberMapper.resetPwd(member);
 		return result;
 	}
+
+	/**
+	 * 会员头像修改
+	 */
+	public void uploadHeadShot(Member member)
+	{
+		log.debug("会员头像修改");
+		memberMapper.uploadHeadShot(member);
+	}
+
+	/**
+	 * 公司logo修改
+	 */
+	public void uploadLogo(Member member)
+	{
+		log.debug("公司logo修改");
+		memberMapper.uploadLogo(member);
+	}
 }

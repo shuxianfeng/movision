@@ -31,4 +31,8 @@ public interface MemberMapper {
 
     //删除会员
     int resetPwd(Member member);
+
+    int uploadHeadShot(Member member);
+
+    int uploadLogo(Member member);
 }

@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.taobao.api.internal.util.StringUtils;
+import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.product.entity.ParamPrice;
@@ -70,15 +72,41 @@ public class ProductService {
 					product.setPrice(pp.getPrice());
 					product.setRepository(pp.getRepository());
 					//用上传的参数图片
-					if(pp.getImgUrl() != null && pp.getImgUrl().length() > 0)
+					String imgUrl =  pp.getImgUrl();
+					if(imgUrl != null && imgUrl.length() > 0)
 					{
-						product.setImgUrl(pp.getImgUrl());
+						String[] arr_str = imgUrl.split(";");
+						StringBuilder sb = new StringBuilder();
+						for(String img : arr_str)
+						{
+							sb.append(Constant.upload_img_prifix);
+							sb.append(img);
+							sb.append(";");
+						}
+						product.setImgUrl(sb.delete(sb.lastIndexOf(";"),sb.length()).toString());
+					}
+					else
+					{
+						product.setImgUrl(null);
 					}
 					productId = productMapper.insertSelective(product);
 				}
 			}
 			else
 			{
+				String imgUrl =  product.getImgUrl();
+				if(imgUrl != null && imgUrl.length() > 0)
+				{
+					String[] arr_str = imgUrl.split(";");
+					StringBuilder sb = new StringBuilder();
+					for(String img : arr_str)
+					{
+						sb.append(Constant.upload_img_prifix);
+						sb.append(img);
+						sb.append(";");
+					}
+					product.setImgUrl(sb.delete(sb.lastIndexOf(";"),sb.length()).toString());
+				}
 				productId = productMapper.insertSelective(product);
 			}
 		}
@@ -170,7 +198,7 @@ public class ProductService {
 		pp.setSvalue("屏蔽");
 		pp.setPrice(3.0);
 		pp.setRepository(300.0);
-		pp.setImgUrl("123.png");
+		pp.setImgUrl("网线.png;234.png;345.png");
 		ParamPrice pp2 = new ParamPrice();
 		pp2.setFname("材质");
 		pp2.setFvalue("无氧铜线");
@@ -178,7 +206,7 @@ public class ProductService {
 		pp2.setSvalue("非屏蔽");
 		pp2.setPrice(3.0);
 		pp2.setRepository(300.0);
-		pp2.setImgUrl("123.png");
+		pp2.setImgUrl("光缆.png;234.png;345.png");
 		paramPriceList.add(pp);
 		paramPriceList.add(pp2);
 		
@@ -190,7 +218,7 @@ public class ProductService {
 		pp3.setSvalue("屏蔽");
 		pp3.setPrice(3.0);
 		pp3.setRepository(30.00);
-		pp3.setImgUrl("123.png");
+		pp3.setImgUrl("");
 		ParamPrice pp4 = new ParamPrice();
 		pp4.setFname("材质");
 		pp4.setFvalue("紫铜线");
@@ -198,7 +226,7 @@ public class ProductService {
 		pp4.setSvalue("非屏蔽");
 		pp4.setPrice(3.0);
 		pp4.setRepository(300.00);
-		pp4.setImgUrl("123.png");
+		pp4.setImgUrl("电线.png;234.png;345.png");
 		paramPriceList.add(pp3);
 		paramPriceList.add(pp4);
 		

@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.taobao.api.ApiException;
+import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
@@ -37,6 +39,7 @@ import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
+import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
 import com.zhuhuibao.utils.sms.SDKSendTemplateSMS;
 
 /**
@@ -155,10 +158,11 @@ public class RegisterController {
 	 * @throws IOException 
 	 * @throws JsonMappingException 
 	 * @throws JsonGenerationException 
+	 * @throws ApiException 
 	 */
 	@RequestMapping(value = "/rest/mobileCode", method = RequestMethod.GET)
 	public void getMobileCode(HttpServletRequest req, HttpServletResponse response,
-			Model model) throws JsonGenerationException, JsonMappingException, IOException {
+			Model model) throws JsonGenerationException, JsonMappingException, IOException, ApiException {
 		String mobile = req.getParameter("mobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
 		Subject currentUser = SecurityUtils.getSubject();
@@ -167,7 +171,8 @@ public class RegisterController {
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
 		log.debug("verifyCode == " + verifyCode);
 		//发送验证码到手机
-		SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
+		//SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
+		SDKSendTaoBaoSMS.sendRegisterSMS(mobile, verifyCode, Constant.sms_time);
 		Validateinfo info = new Validateinfo();
 		info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
 		info.setCheckCode(verifyCode);
@@ -187,10 +192,11 @@ public class RegisterController {
 	 * @throws IOException 
 	 * @throws JsonMappingException 
 	 * @throws JsonGenerationException 
+	 * @throws ApiException 
 	 */
 	@RequestMapping(value = "/rest/getSeekPwdMobileCode", method = RequestMethod.GET)
 	public void getSeekPwdMobileCode(HttpServletRequest req, HttpServletResponse response,
-			Model model) throws JsonGenerationException, JsonMappingException, IOException {
+			Model model) throws JsonGenerationException, JsonMappingException, IOException, ApiException {
 		String mobile = req.getParameter("mobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
 		Subject currentUser = SecurityUtils.getSubject();
@@ -199,7 +205,8 @@ public class RegisterController {
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
 		log.debug("verifyCode == " + verifyCode);
 		//发送验证码到手机
-		SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
+		//SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
+		SDKSendTaoBaoSMS.sendFindPwdSMS(mobile, verifyCode, Constant.sms_time);
 		Validateinfo info = new Validateinfo();
 		info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
 		info.setCheckCode(verifyCode);

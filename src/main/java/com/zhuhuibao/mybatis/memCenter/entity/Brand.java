@@ -1,6 +1,13 @@
-package com.zhuhuibao.mybatis.brand.entity;
+package com.zhuhuibao.mybatis.memCenter.entity;
+
+import com.zhuhuibao.mybatis.product.entity.Product;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.zhuhuibao.business.memCenter.BrandManage.JsonDateSerializer;
+import java.util.Date;
 
 public class Brand {
+    private Product product;
+
     private Long id;
 
     private String brandCNName;
@@ -27,11 +34,11 @@ public class Brand {
 
     private String brandWebSite;
 
-    private String publishTime;
+    private Date publishTime;
 
-    private String checkTime;
+    private Date checkTime;
 
-    private String lastModifyTime;
+    private Date lastModifyTime;
 
     public Long getId() {
         return id;
@@ -136,28 +143,36 @@ public class Brand {
     public void setBrandWebSite(String brandWebSite) {
         this.brandWebSite = brandWebSite == null ? null : brandWebSite.trim();
     }
-
-    public String getPublishTime() {
+    @JsonSerialize(using = JsonDateSerializer.class)
+    public Date getPublishTime() {
         return publishTime;
     }
 
-    public void setPublishTime(String publishTime) {
-        this.publishTime = publishTime == null ? null : publishTime.trim();
+    public void setPublishTime(Date publishTime) {
+        this.publishTime = publishTime;
     }
-
-    public String getCheckTime() {
+    @JsonSerialize(using = JsonDateSerializer.class)
+    public Date getCheckTime() {
         return checkTime;
     }
 
-    public void setCheckTime(String checkTime) {
-        this.checkTime = checkTime == null ? null : checkTime.trim();
+    public void setCheckTime(Date checkTime) {
+        this.checkTime = checkTime;
     }
-
-    public String getLastModifyTime() {
+    @JsonSerialize(using = JsonDateSerializer.class)
+    public Date getLastModifyTime() {
         return lastModifyTime;
     }
 
-    public void setLastModifyTime(String lastModifyTime) {
-        this.lastModifyTime = lastModifyTime == null ? null : lastModifyTime.trim();
+    public void setLastModifyTime(Date lastModifyTime) {
+        this.lastModifyTime = lastModifyTime;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

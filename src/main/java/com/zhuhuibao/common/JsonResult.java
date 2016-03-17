@@ -3,8 +3,7 @@ package com.zhuhuibao.common;
 import java.io.Serializable;
 /**
  * 返回前台的json数据
- * @author coding云
- * @date 2014-5-29 15:36:59
+ * @author pl
  */
 public class JsonResult implements Serializable{
 
