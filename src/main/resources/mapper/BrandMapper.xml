@@ -108,12 +108,13 @@
     distinct t.brandid,b.logourl
     from t_p_product t
     LEFT JOIN t_p_brand b ON t.brandid = b.id
-    WHERE t.scateid = #{scateid}
+    WHERE t.scateid = #{scateid} and b.status!=3
   </select>
   <select id="searchSuggestBrand" resultMap="BaseResultMap" >
     select
     <include refid="Base_Column_List" />
     from t_p_brand
+    where status!=3
     order by views desc limit 0,#{num}
   </select>
 </mapper>
