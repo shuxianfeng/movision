@@ -56,12 +56,6 @@ public class ProductController {
         response.getWriter().write(JsonUtils.getJsonStringFromObj(subSystemList));
     }
 
-    @RequestMapping(value = "/rest/subSystemSearchByNumber", method = RequestMethod.GET)
-    public void subSystemSearchByNumber(HttpServletRequest req, HttpServletResponse response,Category category) throws IOException {
-        List<ResultBean> subSystemList = categoryMapper.findSubSystemListByNumber(category);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(subSystemList));
-    }
     /**
      * 添加类目
      * @param req

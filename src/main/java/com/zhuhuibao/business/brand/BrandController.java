@@ -36,62 +36,17 @@ public class BrandController {
 
     @Autowired
     private CategoryMapper categoryMapper;
+
     /**
-     * 查询二级系统下所有品牌，分页
+     * 查询大系统，子系统，品牌（首页）
      * @param req
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/findAllBrand", method = RequestMethod.GET)
-    public void findAllBrand(HttpServletRequest req, HttpServletResponse response, Product product, String pageNo, String pageSize) throws IOException {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<ResultBean> pager = new Paging<ResultBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-        List<ResultBean> brandList = brandMapper.findAllBrand(pager.getRowBounds(),product);
-        pager.result(brandList);
-        JsonResult result = new JsonResult();
-        result.setCode(200);
-        result.setData(pager);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    @RequestMapping(value = "/rest/findAll", method = RequestMethod.GET)
+    public void findAll(HttpServletRequest req, HttpServletResponse response) throws IOException {
+
     }
-
-    /**
-     * 查询二级系统下num个推荐品牌
-     * @param req
-     * @return
-     * @throws IOException
-     *//*
-    @RequestMapping(value = "/rest/searchSuggestBrandByNumber", method = RequestMethod.GET)
-    public void searchAllBrandByNumber(HttpServletRequest req, HttpServletResponse response, Product product) throws IOException {
-        List<ResultBean> brandList = brandMapper.searchAllBrandByNumber(product);
-        JsonResult result = new JsonResult();
-        result.setCode(200);
-        result.setData(brandList);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
-    }*/
-
-    /**
-     * 查询num个推荐品牌
-     * @param req
-     * @return
-     * @throws IOException
-     */
-    @RequestMapping(value = "/rest/searchSuggestBrand", method = RequestMethod.GET)
-    public void searchSuggestBrand(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        List<ResultBean> brandList = brandMapper.searchSuggestBrand();
-        JsonResult result = new JsonResult();
-        result.setCode(200);
-        result.setData(brandList);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
-    }
-
     /**
      * 查询大系统下的子系统
      * @param req
@@ -113,4 +68,57 @@ public class BrandController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
+
+    /**
+     * 查询二级系统下所有品牌，分页
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/findAllBrand", method = RequestMethod.GET)
+    public void findAllBrand(HttpServletRequest req, HttpServletResponse response, Product product, String pageNo, String pageSize) throws IOException {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "16";
+        }
+        Paging<ResultBean> pager = new Paging<ResultBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        List<ResultBean> brandList = brandMapper.findAllBrand(pager.getRowBounds(),product);
+        pager.result(brandList);
+        JsonResult result = new JsonResult();
+        result.setCode(200);
+        result.setData(pager);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 查询二级系统下推荐品牌
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/findSuggestBrand", method = RequestMethod.GET)
+    public void findSuggestBrand(HttpServletRequest req, HttpServletResponse response, Product product) throws IOException {
+
+    }
+
+    /**
+     * 查询num个推荐品牌
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/searchSuggestBrand", method = RequestMethod.GET)
+    public void searchSuggestBrand(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        List<ResultBean> brandList = brandMapper.searchSuggestBrand();
+        JsonResult result = new JsonResult();
+        result.setCode(200);
+        result.setData(brandList);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+
 }

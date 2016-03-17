@@ -110,13 +110,6 @@
     LEFT JOIN t_p_brand b ON t.brandid = b.id
     WHERE t.scateid = #{scateid}
   </select>
-  <select id="searchAllBrandByNumber" resultMap="ResultMap" >
-    select
-    distinct t.brandid,b.logourl
-    from t_p_product t
-    LEFT JOIN t_p_brand b ON t.brandid = b.id
-    WHERE t.scateid = #{scateid} order by b.views desc limit 0,#{num}
-  </select>
   <select id="searchSuggestBrand" resultMap="BaseResultMap" >
     select
     <include refid="Base_Column_List" />

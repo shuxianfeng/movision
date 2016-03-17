@@ -23,7 +23,5 @@ public interface BrandMapper {
 
     List<ResultBean> findAllBrand(RowBounds rowBounds, Product product);
 
-    List<ResultBean> searchAllBrandByNumber(Product product);
-
     List<ResultBean> searchSuggestBrand();
 }
