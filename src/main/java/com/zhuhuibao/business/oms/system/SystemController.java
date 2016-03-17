@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.oms.product;
+package com.zhuhuibao.business.oms.system;
 
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.ResultBean;
@@ -20,10 +20,10 @@ import java.util.List;
 /**
  * Created by cxx on 2016/3/4 0004.
  */
-@RestController("omsProductController")
-public class ProductController {
+@RestController()
+public class SystemController {
     private static final Logger log = LoggerFactory
-            .getLogger(ProductController.class);
+            .getLogger(SystemController.class);
 
     @Autowired
     private CategoryMapper categoryMapper;
