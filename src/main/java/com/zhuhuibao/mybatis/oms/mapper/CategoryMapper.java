@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.oms.mapper;
 
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.oms.entity.Category;
+import com.zhuhuibao.mybatis.oms.entity.CategoryAssemble;
 
 import java.util.List;
 
@@ -16,4 +17,8 @@ public interface CategoryMapper {
     int updateSystem(Category category);
 
     int deleteSystem(Category category);
+    
+    List<CategoryAssemble> findCategoryAssemble();
+    
+    List<Category> findSecondSystemList(Integer parentId);
 }

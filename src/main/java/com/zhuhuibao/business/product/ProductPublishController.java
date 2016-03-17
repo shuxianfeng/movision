@@ -1,8 +1,7 @@
 package com.zhuhuibao.business.product;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
@@ -64,9 +65,10 @@ public class ProductPublishController {
 	 * @throws JsonGenerationException 
 	 */
 	@RequestMapping(value="/rest/addProduct", method = RequestMethod.POST)
-	public void addProduct(HttpServletRequest req,HttpServletResponse response,ProductWithBLOBs product) throws JsonGenerationException, JsonMappingException, IOException
+	public void addProduct(HttpServletRequest req,HttpServletResponse response,String json) throws JsonGenerationException, JsonMappingException, IOException
 	{
-		//productService.constructProduct(product);
+		Gson gson = new Gson();
+		ProductWithBLOBs product = gson.fromJson(json, ProductWithBLOBs.class);
 		JsonResult jsonResult = new JsonResult();
 		productService.insertProduct(product);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
@@ -136,18 +138,21 @@ public class ProductPublishController {
             pageSize = "10";
         }
         Paging<Product> pager = new Paging<Product>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-        List<Product>  users = productService.findAllByPager(pager,product);
-        pager.result(users);
+        List<Product>  productList = productService.findAllByPager(pager,product);
+        pager.result(productList);
         jsonResult.setData(pager);
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 	
-	  @RequestMapping(value = "/rest/getProductFirstCategory", method = RequestMethod.GET)
-	    public void getProductFirstCategory(HttpServletRequest req, HttpServletResponse response) throws IOException {
-	        List<ResultBean> systemList = categoryMapper.findSystemList();
-	        response.setContentType("application/json;charset=utf-8");
-	        response.getWriter().write(JsonUtils.getJsonStringFromObj(systemList));
-	    }
+	@RequestMapping(value = "/rest/getProductFirstCategory", method = RequestMethod.GET)
+	public void getProductFirstCategory(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		JsonResult jsonResult = new JsonResult();
+		List<ResultBean> systemList = categoryMapper.findSystemList();
+		productService.aaaaa();
+		response.setContentType("application/json;charset=utf-8");
+		jsonResult.setData(systemList);
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+	}
 
 	    /**
 	     * 查询大系统下所有子系统类目
@@ -159,9 +164,11 @@ public class ProductPublishController {
 	    @RequestMapping(value = "/rest/getProductSecondCategory", method = RequestMethod.GET)
 	    public void getProductSecondCategory(HttpServletRequest req, HttpServletResponse response) throws IOException {
 	        String parentId = req.getParameter("parentID");
+	        JsonResult jsonResult = new JsonResult();
 	        List<ResultBean> subSystemList = categoryMapper.findSubSystemList(parentId);
+	        jsonResult.setData(subSystemList);
 	        response.setContentType("application/json;charset=utf-8");
-	        response.getWriter().write(JsonUtils.getJsonStringFromObj(subSystemList));
+	        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	    }
 	    
 	    /**
@@ -180,4 +187,71 @@ public class ProductPublishController {
 	        response.setContentType("application/json;charset=utf-8");
 	        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	    }
+	    
+	    /**
+	     * 品牌详情页面查询二级系统
+	     * @param req
+	     * @return
+	     * @throws IOException
+	     */
+	    @RequestMapping(value = "/rest/productDetail/querySCateListByBrandId", method = RequestMethod.GET)
+	    public void querySCateListByBrandId(HttpServletRequest req, HttpServletResponse response, Product product) throws IOException {
+	    	JsonResult jsonResult = new JsonResult();
+	        jsonResult = productService.querySCateListByBrandId(product);
+	        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+	    }
+	    
+	    /**
+		 * 查询产品分页
+		 * @param req
+		 * @param response
+		 * @param product
+		 * @param pageNo
+		 * @param pageSize
+		 * @throws IOException 
+		 * @throws JsonMappingException 
+		 * @throws JsonGenerationException 
+		 */
+		@RequestMapping(value="/rest/productDetail/queryProductInfoBySCategory")
+		@ResponseBody
+		public void queryProductInfoBySCategory(HttpServletRequest req,HttpServletResponse response,ProductWithBLOBs product,String count) throws JsonGenerationException, JsonMappingException, IOException
+		{
+			JsonResult jsonResult = new JsonResult();
+			Map<String,Object> productMap = new HashMap<String,Object>();
+			productMap.put("scateid",product.getScateid());
+			productMap.put("brandid",product.getBrandid());
+			productMap.put("status",Constant.product_status_publish);
+			productMap.put("count",Constant.brand_page_product_count);
+	        jsonResult = productService.queryProductInfoBySCategory(productMap);
+	        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+		}
+		
+		/**
+		 * 产品列表页面
+		 * @param req
+		 * @param response
+		 * @param product
+		 * @param pageNo
+		 * @param pageSize
+		 * @throws IOException 
+		 * @throws JsonMappingException 
+		 * @throws JsonGenerationException 
+		 */
+		@RequestMapping(value="/rest/productDetail/findAllProductList")
+		@ResponseBody
+		public void findAllProductList(HttpServletRequest req,HttpServletResponse response,ProductWithBLOBs product,String pageNo,String pageSize) throws JsonGenerationException, JsonMappingException, IOException
+		{
+			JsonResult jsonResult = new JsonResult();
+			if (StringUtils.isEmpty(pageNo)) {
+	            pageNo = "1";
+	        }
+	        if (StringUtils.isEmpty(pageSize)) {
+	            pageSize = "10";
+	        }
+	        Paging<Product> pager = new Paging<Product>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+	        List<Product>  users = productService.findAllByPager(pager,product);
+	        pager.result(users);
+	        jsonResult.setData(pager);
+	        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+		}
 }

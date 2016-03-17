@@ -10,8 +10,28 @@ public class Category {
     private Integer sort;
 
     private Integer is_deleted;
+    
+    private String smallIcon;
+    
+    private String bigIcon;
 
-    public Integer getId() {
+    public String getSmallIcon() {
+		return smallIcon;
+	}
+
+	public void setSmallIcon(String smallIcon) {
+		this.smallIcon = smallIcon;
+	}
+
+	public String getBigIcon() {
+		return bigIcon;
+	}
+
+	public void setBigIcon(String bigIcon) {
+		this.bigIcon = bigIcon;
+	}
+
+	public Integer getId() {
         return id;
     }
 

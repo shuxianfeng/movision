@@ -17,4 +17,5 @@ public interface BrandMapper {
     int searchBrandSize(Brand brand);
 
     Brand brandDetails(int id);
+    
 }
