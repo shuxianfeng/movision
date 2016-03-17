@@ -103,7 +103,18 @@
 
     </bean>
 
-
+    <bean id="transactionAwareDataSource"
+        class="org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy">
+        <constructor-arg ref="dataSource" />
+    </bean>
+    <bean id="jdbcTemplate" class="com.zhuhuibao.repository.db.JdbcTemplate">
+        <constructor-arg ref="transactionAwareDataSource" />
+    </bean>
+    
+    <bean id="jdbcTM"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="transactionAwareDataSource" />
+    </bean>
 
     <!-- 启用缓存注解功能(请将其配置在Spring主配置文件中) -->
     <!-- redis缓存配置-->
