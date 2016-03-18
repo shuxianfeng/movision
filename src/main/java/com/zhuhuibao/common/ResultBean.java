@@ -5,6 +5,8 @@ public class ResultBean {
 
     private String name;
 
+    private String smallIcon;
+
     public String getCode() {
         return code;
     }
@@ -19,5 +21,13 @@ public class ResultBean {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public String getSmallIcon() {
+        return smallIcon;
+    }
+
+    public void setSmallIcon(String smallIcon) {
+        this.smallIcon = smallIcon;
     }
 }

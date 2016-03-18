@@ -14,7 +14,7 @@
     <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
     <result column="employeeType" property="employeeType" jdbcType="INTEGER" />
     <result column="enterpriseEmployeeParentId" property="enterpriseEmployeeParentId" jdbcType="BIGINT" />
-    <result column="companyIdentify" property="companyIdentify" jdbcType="INTEGER" />
+    <result column="companyIdentify" property="companyIdentify" jdbcType="VARCHAR" />
     <result column="province" property="province" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
     <result column="area" property="area" jdbcType="VARCHAR" />

@@ -30,7 +30,7 @@ public class Member {
 
     private Long enterpriseEmployeeParentId;
 
-    private Integer companyIdentify;
+    private String companyIdentify;
 
     private String province;
 
@@ -185,11 +185,11 @@ public class Member {
         this.enterpriseEmployeeParentId = enterpriseEmployeeParentId;
     }
 
-    public Integer getCompanyIdentify() {
+    public String getCompanyIdentify() {
         return companyIdentify;
     }
 
-    public void setCompanyIdentify(Integer companyIdentify) {
+    public void setCompanyIdentify(String companyIdentify) {
         this.companyIdentify = companyIdentify;
     }
 

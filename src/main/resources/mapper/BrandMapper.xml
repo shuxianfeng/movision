@@ -23,6 +23,17 @@
     <result column="brandid" property="code" jdbcType="VARCHAR" />
     <result column="logourl" property="name" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="ResultMap1" type="com.zhuhuibao.common.BrandBean" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="brandCNName" property="brandCNName" jdbcType="VARCHAR" />
+    <result column="scateid" property="scateid" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMap2" type="com.zhuhuibao.common.SuggestBrand" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="brandCNName" property="brandCNName" jdbcType="VARCHAR" />
+    <result column="logoUrl" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="scateid" property="scateid" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     id, brandCNName, brandENName, views, weight, logourl, createid, branddesc, imgurl, 
     status, brandOwer, brandCertificate, brandWebSite, publishTime, checkTime, lastModifyTime
@@ -115,6 +126,19 @@
     <include refid="Base_Column_List" />
     from t_p_brand
     where status!=3
-    order by views desc limit 0,#{num}
+    order by views desc limit 0,5
+  </select>
+  <select id="searchAll" resultMap="ResultMap1" >
+    SELECT DISTINCT b.id,b.brandCNName,p.scateid
+    FROM t_p_product p
+    LEFT JOIN t_p_brand b ON b.id = p.brandid
+    where b.status!=3
+  </select>
+  <select id="SuggestBrand" resultMap="ResultMap2" >
+    SELECT DISTINCT b.id,b.brandCNName,p.scateid,b.logourl
+    FROM t_p_product p
+    LEFT JOIN t_p_brand b ON b.id = p.brandid
+    where b.status!=3
+    ORDER by b.views desc
   </select>
 </mapper>

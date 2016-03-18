@@ -11,13 +11,20 @@
   <resultMap id="ResultMap" type="com.zhuhuibao.common.ResultBean" >
     <result column="id" property="code" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="smallIcon" property="smallIcon" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMap1" type="com.zhuhuibao.common.SystemBean" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="systemName" property="systemName" jdbcType="VARCHAR" />
+    <result column="subSystemName" property="subSystemName" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, name, parentId, sort, is_deleted
   </sql>
   <select id="findSystemList" resultMap="ResultMap">
     select
-    id,name
+    id,name,smallIcon
     from t_p_category
     where parentId = 0
   </select>
@@ -63,5 +70,10 @@
     *
     from t_p_category
     where id = #{parentId}
+  </select>
+  <select id="searchAll" resultMap="ResultMap1">
+    SELECT t.id as id,t.name as systemName,p.id as code,p.name as subSystemName
+    FROM t_p_category t
+    inner join t_p_category p on t.id = p.parentId
   </select>
 </mapper>
