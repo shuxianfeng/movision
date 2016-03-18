@@ -96,6 +96,7 @@ public class ProductPublishController {
 	{
 		JsonResult jsonResult = new JsonResult();
 		jsonResult = productService.selectByPrimaryKey(id);
+		productService.updateHit(id);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 	
@@ -201,7 +202,7 @@ public class ProductPublishController {
 	    }
 	    
 	    /**
-		 * 查询产品分页
+		 * 品牌详细页面根据二级系统查询产品
 		 * @param req
 		 * @param response
 		 * @param product
@@ -213,7 +214,7 @@ public class ProductPublishController {
 		 */
 		@RequestMapping(value="/rest/productDetail/queryProductInfoBySCategory")
 		@ResponseBody
-		public void queryProductInfoBySCategory(HttpServletRequest req,HttpServletResponse response,ProductWithBLOBs product,String count) throws JsonGenerationException, JsonMappingException, IOException
+		public void queryProductInfoBySCategory(HttpServletRequest req,HttpServletResponse response,ProductWithBLOBs product) throws JsonGenerationException, JsonMappingException, IOException
 		{
 			JsonResult jsonResult = new JsonResult();
 			Map<String,Object> productMap = new HashMap<String,Object>();
@@ -221,6 +222,55 @@ public class ProductPublishController {
 			productMap.put("brandid",product.getBrandid());
 			productMap.put("status",Constant.product_status_publish);
 			productMap.put("count",Constant.brand_page_product_count);
+			productMap.put("order", "publishTime");
+	        jsonResult = productService.queryProductInfoBySCategory(productMap);
+	        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+		}
+		
+		/**
+		 * 产品推荐信息，根据点击率排序
+		 * @param req
+		 * @param response
+		 * @param product
+		 * @param pageNo
+		 * @param pageSize
+		 * @throws IOException 
+		 * @throws JsonMappingException 
+		 * @throws JsonGenerationException 
+		 */
+		@RequestMapping(value="/rest/productDetail/queryRecommendProduct")
+		@ResponseBody
+		public void queryRecommendProduct(HttpServletRequest req,HttpServletResponse response,ProductWithBLOBs product,String count) throws JsonGenerationException, JsonMappingException, IOException
+		{
+			JsonResult jsonResult = new JsonResult();
+			Map<String,Object> productMap = new HashMap<String,Object>();
+			productMap.put("status",Constant.product_status_publish);
+			productMap.put("count",Constant.recommend_product_count);
+			productMap.put("order", "hit");
+	        jsonResult = productService.queryProductInfoBySCategory(productMap);
+	        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+		}
+		
+		/**
+		 * 查询热点产品
+		 * @param req
+		 * @param response
+		 * @param product
+		 * @param pageNo
+		 * @param pageSize
+		 * @throws IOException 
+		 * @throws JsonMappingException 
+		 * @throws JsonGenerationException 
+		 */
+		@RequestMapping(value="/rest/productDetail/queryHotProduct")
+		@ResponseBody
+		public void queryHotProduct(HttpServletRequest req,HttpServletResponse response,ProductWithBLOBs product,String count) throws JsonGenerationException, JsonMappingException, IOException
+		{
+			JsonResult jsonResult = new JsonResult();
+			Map<String,Object> productMap = new HashMap<String,Object>();
+			productMap.put("status",Constant.product_status_publish);
+			productMap.put("count",Constant.hot_product_count);
+			productMap.put("order", "hit");
 	        jsonResult = productService.queryProductInfoBySCategory(productMap);
 	        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 		}

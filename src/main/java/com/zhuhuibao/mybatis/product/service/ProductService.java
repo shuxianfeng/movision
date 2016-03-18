@@ -130,6 +130,30 @@ public class ProductService {
     	return jsonResult;
     }
     
+    /**
+     * 点击数加+1
+     * @param id
+     * @return
+     */
+    public JsonResult updateHit(Long id)
+    {
+    	JsonResult jsonResult = new JsonResult();
+    	log.info("update product");
+    	try
+    	{
+    		productMapper.updateHit(id);
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("update product error",e);
+    		jsonResult.setCode(MsgCodeConstant.response_status_400);
+    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return jsonResult;
+    	}
+    	return jsonResult;
+    }
+    
     public JsonResult selectByPrimaryKey(Long id)
     {
     	JsonResult jsonResult = new JsonResult();
@@ -137,6 +161,41 @@ public class ProductService {
     	try
     	{
     		product = productMapper.selectByPrimaryKey(id);
+    		if(product.getParamIDs() != null && product.getParamIDs().length() > 0)
+    		{
+    			List<ProductParam> params = new ArrayList<ProductParam>();
+    			String param = product.getParamIDs();
+    			String paramValues = product.getParamValues();
+    			Map<String,String> paramMap = null;
+    			if(param.indexOf(",") > 0)
+    			{
+    				String[] arr_param = param.split(",");
+    				String[] arr_paramValues = paramValues.split(",");
+    				for(int i=0;i<arr_param.length;i++)
+    				{
+    					paramMap = new TreeMap<String,String>();
+    					ProductParam pp = paramService.queryParamById(Long.parseLong(arr_param[i]));
+    					if(pp != null)
+    					{
+    						pp.setPvalue(arr_paramValues[i]);
+    						params.add(pp);
+    					}
+    				}
+    			}
+    			else
+    			{
+    				paramMap = new TreeMap<String,String>();
+					ProductParam pp = paramService.queryParamById(Long.parseLong(param));
+					if(pp != null)
+					{
+						paramMap.put("pvalue", paramValues);
+						pp.setPvalue(paramValues);
+						params.add(pp);
+					}
+    			}
+    			product.setParams(params);
+    		}
+    		
     		jsonResult.setData(product);
     	}
     	catch(Exception e)

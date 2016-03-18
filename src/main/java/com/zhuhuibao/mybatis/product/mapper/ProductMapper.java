@@ -29,9 +29,10 @@ public interface ProductMapper {
     
     List<ProductWithBLOBs> queryProductInfoBySCategory(Map<String,Object> map);
     
-    List<Brand> queryBrandBySecondCategory(Integer scateid);
-    
     List<CategoryAssemble> findSecondCategoryBrand();
     
     List<CategoryAssemble> findCategoryAssemble();
+    
+    int updateHit(Long id);
+    
 }

@@ -30,4 +30,13 @@ public interface Constant {
 	 * 品牌详情页面展示产品的数量 10
 	 */
 	Integer brand_page_product_count = 10;
+	
+	/**
+	 * 产品列表页面推荐产品的数量 40
+	 */
+	Integer recommend_product_count = 40;
+	/**
+	 * 产品列表页面热点产品的数量 5
+	 */
+	Integer hot_product_count = 5;
 }
