@@ -22,8 +22,6 @@ public class Member {
 
     private Integer identify;
 
-    private Integer isValidatePass;
-
     private String enterpriseName;
 
     private Integer employeeType;
@@ -153,14 +151,6 @@ public class Member {
         this.identify = identify;
     }
 
-    public Integer getIsValidatePass() {
-        return isValidatePass;
-    }
-
-    public void setIsValidatePass(Integer isValidatePass) {
-        this.isValidatePass = isValidatePass;
-    }
-
     public String getEnterpriseName() {
         return enterpriseName;
     }
@@ -265,7 +255,6 @@ public class Member {
         this.saleProductDesc = saleProductDesc == null ? null : saleProductDesc.trim();
     }
 
-    @JsonSerialize(using = JsonDateSerializer.class)
     public String getEnterpriseCreaterTime() {
         return enterpriseCreaterTime;
     }

@@ -10,7 +10,6 @@
     <result column="registerTime" property="registerTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="identify" property="identify" jdbcType="INTEGER" />
-    <result column="isValidatePass" property="isValidatePass" jdbcType="INTEGER" />
     <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
     <result column="employeeType" property="employeeType" jdbcType="INTEGER" />
     <result column="enterpriseEmployeeParentId" property="enterpriseEmployeeParentId" jdbcType="BIGINT" />
@@ -24,7 +23,7 @@
     <result column="enterpriseDesc" property="enterpriseDesc" jdbcType="VARCHAR" />
     <result column="headShot" property="headShot" jdbcType="VARCHAR" />
     <result column="saleProductDesc" property="saleProductDesc" jdbcType="VARCHAR" />
-    <result column="enterpriseCreaterTime" property="enterpriseCreaterTime" jdbcType="TIMESTAMP" />
+    <result column="enterpriseCreaterTime" property="enterpriseCreaterTime" jdbcType="VARCHAR" />
     <result column="registerCapital" property="registerCapital" jdbcType="VARCHAR" />
     <result column="employeeNumber" property="employeeNumber" jdbcType="VARCHAR" />
     <result column="companyBusinessLicenseImg" property="companyBusinessLicenseImg" jdbcType="VARCHAR" />
@@ -45,7 +44,7 @@
     <result column="personIDBackImgUrl" property="personIDBackImgUrl" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, mobile, email, emailCheckCode, password, registerTime, status, identify, isValidatePass,
+    id, mobile, email, emailCheckCode, password, registerTime, status, identify, emailCheckCode,
     enterpriseName, employeeType, enterpriseEmployeeParentId, companyIdentify, province,
     city, area, address, enterpriseType, enterpriseLogo, enterpriseDesc, headShot, saleProductDesc,
     enterpriseCreaterTime, registerCapital, employeeNumber, companyBusinessLicenseImg,
@@ -82,9 +81,6 @@
       </if>
       <if test="identify != null" >
         identify = #{identify},
-      </if>
-      <if test="isValidatePass != null" >
-        isValidatePass = #{isValidatePass},
       </if>
       <if test="enterpriseName != null" >
         enterpriseName = #{enterpriseName},
