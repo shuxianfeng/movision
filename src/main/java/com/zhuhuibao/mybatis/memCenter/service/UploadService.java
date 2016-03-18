@@ -7,6 +7,7 @@ package com.zhuhuibao.mybatis.memCenter.service;
 import com.oreilly.servlet.MultipartRequest;
 import com.zhuhuibao.common.ApiConstants;
 import com.zhuhuibao.utils.RandomFileNamePolicy;
+import com.zhuhuibao.utils.ResourcePropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,8 @@ public class UploadService {
         //指定所上传的文件，上传成功后，在服务器的保存位置
         String saveDirectory = ApiConstants.getUploadDir();
 
+        String ip_address = ResourcePropertiesUtils.getValue("host.ip");
+
         //指定所上传的文件最大上传文件大小
         int maxPostSize = ApiConstants.getUploadMaxPostSize();
 
@@ -54,7 +57,7 @@ public class UploadService {
             String fileName = (String)fileNames.nextElement();
             if(null != multi.getFile(fileName)){
                 String lastFileName = multi.getFilesystemName(fileName);
-                url =  "http://192.168.1.119:8080/upload/" + lastFileName;
+                url =  ip_address + "/upload/" + lastFileName;
             }
         }
 

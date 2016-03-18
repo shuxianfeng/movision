@@ -21,7 +21,8 @@
   </resultMap>
   <resultMap id="ResultMap" type="com.zhuhuibao.common.ResultBean" >
     <result column="brandid" property="code" jdbcType="VARCHAR" />
-    <result column="logourl" property="name" jdbcType="VARCHAR" />
+    <result column="brandCNName" property="name" jdbcType="VARCHAR" />
+    <result column="logourl" property="smallIcon" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMap1" type="com.zhuhuibao.common.BrandBean" >
     <result column="id" property="id" jdbcType="VARCHAR" />
@@ -116,7 +117,7 @@
   </update>
   <select id="findAllBrand" resultMap="ResultMap" >
     select
-    distinct t.brandid,b.logourl
+    distinct t.brandid,b.brandCNName,b.logourl
     from t_p_product t
     LEFT JOIN t_p_brand b ON t.brandid = b.id
     WHERE t.scateid = #{scateid} and b.status!=3
