@@ -173,6 +173,8 @@ public class BrandManageController {
                 if(null != multi.getFile(fileName)){
                     String lastFileName = multi.getFilesystemName(fileName);
                     url =  ip_address+"/upload/" + lastFileName;
+                    result.setCode(200);
+                    result.setData(url);
                 }
             }
         }catch (Exception e){
@@ -180,8 +182,6 @@ public class BrandManageController {
             result.setCode(400);
             result.setMessage("文件大小超限");
         }
-        result.setCode(200);
-        result.setData(url);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
