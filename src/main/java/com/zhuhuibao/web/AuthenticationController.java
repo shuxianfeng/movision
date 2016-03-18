@@ -61,6 +61,7 @@ public class AuthenticationController {
         	}else{
         		LoginMember member = new LoginMember();
         		member.setAccount(principal.getAccount());
+                member.setId(principal.getId());
             	jsonResult.setMsgCode(1);
                 jsonResult.setMessage("welcome you!");
                 map.put("authorized", true);
@@ -86,10 +87,19 @@ public class AuthenticationController {
     
     public static class LoginMember {
         private String account;
+        private int id;
         private int ordercount;
         private int msgcount;
 
-		public String getAccount() {
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getAccount() {
 			return account;
 		}
 		public void setAccount(String account) {
