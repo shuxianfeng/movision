@@ -2,7 +2,10 @@ package com.zhuhuibao.mybatis.memberReg.service;
 
 import java.util.*;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper;
 import com.zhuhuibao.mybatis.memberReg.mapper.ValidateinfoMapper;
 import com.zhuhuibao.security.EncodeUtil;
+import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
 import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
@@ -466,6 +470,11 @@ public class MemberRegService {
 					{
 						this.registerMember(member);
 						this.deleteValidateInfo(info);
+						
+						ShiroUser shrioUser = new ShiroUser(member.getId(), member.getMobile(), member.getStatus());
+						Subject currentUser = SecurityUtils.getSubject();
+						Session session = currentUser.getSession();
+						session.setAttribute("member", shrioUser);
 					}
 					else
 					{
