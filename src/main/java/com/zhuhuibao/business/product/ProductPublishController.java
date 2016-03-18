@@ -148,7 +148,6 @@ public class ProductPublishController {
 	public void getProductFirstCategory(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		JsonResult jsonResult = new JsonResult();
 		List<ResultBean> systemList = categoryMapper.findSystemList();
-		productService.aaaaa();
 		response.setContentType("application/json;charset=utf-8");
 		jsonResult.setData(systemList);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));

@@ -18,7 +18,4 @@ public interface CategoryMapper {
 
     int deleteSystem(Category category);
     
-    List<CategoryAssemble> findCategoryAssemble();
-    
-    List<Category> findSecondSystemList(Integer parentId);
 }

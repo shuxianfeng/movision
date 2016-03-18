@@ -45,9 +45,6 @@ public class ProductService {
 	ProductMapper productMapper;
 	
 	@Autowired
-    private CategoryMapper categoryMapper;
-	
-	@Autowired
 	ProductParamService paramService;
 	
 	/**
@@ -222,124 +219,16 @@ public class ProductService {
     	}
     	return jsonResult;
     }
-    /**
-     * //二级分类
-    			Map<String,Object> scateMap = new HashMap<String,Object>();
-    			scateMap.put("scateid", cate.getScateid());
-    			scateMap.put("sname",cate.getSname());
-    			List<Map<String,Object>> sCateList = new ArrayList<Map<String,Object>>();
-    			//品牌
-    			if(cate.getBrandid() != null)
-    			{
-	    			Map<String,Object> brandMap = new HashMap<String,Object>();
-	    			brandMap.put("brandid", cate.getBrandid());
-	    			brandMap.put("brandCNName", cate.getBrandCNName());
-	    			brandMap.put("brandENName", cate.getBrandENName());
-    			}
-     * @return
-     * @throws JsonGenerationException
-     * @throws JsonMappingException
-     * @throws IOException
-     */
+    
     public JsonResult assembleSysCategory() throws JsonGenerationException, JsonMappingException, IOException
     {
     	JsonResult result = new JsonResult();
-    	List<CategoryAssemble> categoryAssembleList = categoryMapper.findCategoryAssemble();
+    	List<CategoryAssemble> categoryAssembleList = productMapper.findCategoryAssemble();
     	//List<Map<String,Object>> categroyList = new ArrayList<Map<String,Object>>();
     	Map<String,Object> categoryMap = new TreeMap<String,Object>();
+    	List<Map<String,Object>> fcateList = new ArrayList<Map<String,Object>>();
     	if(!categoryAssembleList.isEmpty())
     	{
-    		Map<String,Object> fcateMap = new TreeMap<String,Object>();
-    		Map<String,Object> allScateMap = new TreeMap<String,Object>();
-    		
-    		Map<String,Object> scateMap = new TreeMap<String,Object>();
-    		Map<String,Object> brandMap = new TreeMap<String,Object>();
-    		for(CategoryAssemble cate : categoryAssembleList)
-    		{
-    			if(fcateMap.get("fcateid")!= null && fcateMap.get("fcateid").equals(cate.getFcateid()))
-    			{
-	    			fcateMap.put("fcateid", cate.getFcateid());
-	    			fcateMap.put("fname", cate.getFname());
-	    			fcateMap.put("smallIcon", cate.getSmallIcon());
-    				if(scateMap.get("scateid").equals(cate.getScateid()))
-    				{
-    					if(cate.getBrandid() != null)
-    	    			{
-    						brandMap = new TreeMap<String,Object>();
-    		    			brandMap.put("brandid", cate.getBrandid());
-    		    			brandMap.put("brandCNName", cate.getBrandCNName());
-    		    			brandMap.put("brandENName", cate.getBrandENName());
-    		    			scateMap.put("brand", brandMap);
-    	    			}
-    				}
-    				else
-    				{
-    					scateMap.put("scateid", cate.getScateid());
-            			scateMap.put("sname",cate.getSname());
-    					if(cate.getBrandid() != null)
-    	    			{
-    						brandMap = new TreeMap<String,Object>();
-    		    			brandMap.put("brandid", cate.getBrandid());
-    		    			brandMap.put("brandCNName", cate.getBrandCNName());
-    		    			brandMap.put("brandENName", cate.getBrandENName());
-    		    			scateMap.put("brand", brandMap);
-    	    			}
-    					
-    					
-    				}
-    			}
-    			else
-    			{
-    				if(fcateMap.size() > 0)
-    				{
-    					categoryMap.put(cate.getFcateid(), fcateMap);
-    				}
-    				if(scateMap.size() > 0)
-    				{
-    					fcateMap.put("second",scateMap );
-    				}
-    				fcateMap = new TreeMap<String,Object>();
-    				fcateMap.put("fcateid", cate.getFcateid());
-        			fcateMap.put("fname", cate.getFname());
-        			fcateMap.put("smallIcon", cate.getSmallIcon());
-        			
-        			scateMap = new TreeMap<String,Object>();
-    				scateMap.put("scateid", cate.getScateid());
-        			scateMap.put("sname",cate.getSname());
-    				
-					if(cate.getBrandid() != null)
-	    			{
-						brandMap = new TreeMap<String,Object>();
-		    			brandMap.put("brandid", cate.getBrandid());
-		    			brandMap.put("brandCNName", cate.getBrandCNName());
-		    			brandMap.put("brandENName", cate.getBrandENName());
-		    			scateMap.put("brand", brandMap);
-	    			}
-    			}
-    		}
-    		/*if(fcateMap.size() > 0)
-			{
-				categoryMap.put(cate.getFcateid(), fcateMap);
-			}
-			if(scateMap.size() > 0)
-			{
-				fcateMap.put("second",scateMap );
-			}*/
-    		log.info(JsonUtils.getJsonStringFromObj(categoryMap));
-    		result.setData(categoryMap);
-    	}
-    	return result;
-    }
-    
-    public JsonResult aaaaa() throws JsonGenerationException, JsonMappingException, IOException
-    {
-    	JsonResult result = new JsonResult();
-    	List<CategoryAssemble> categoryAssembleList = categoryMapper.findCategoryAssemble();
-    	//List<Map<String,Object>> categroyList = new ArrayList<Map<String,Object>>();
-    	Map<String,Object> categoryMap = new TreeMap<String,Object>();
-    	if(!categoryAssembleList.isEmpty())
-    	{
-    		List<Map<String,Object>> fcateList = new ArrayList<Map<String,Object>>();
     		List<Map<String,Object>> scateList = new ArrayList<Map<String,Object>>();
     		Map<String,Object> fcateMap = new TreeMap<String,Object>();
     		for(CategoryAssemble cate : categoryAssembleList)
@@ -376,114 +265,37 @@ public class ProductService {
     			fcateMap.put("list",scateList);
 				fcateList.add(fcateMap);
 			}
-    		log.info(JsonUtils.getJsonStringFromObj(fcateList));
-    		result.setData(categoryMap);
     	}
+    	List<CategoryAssemble> sencondCategoryList = productMapper.findSecondCategoryBrand();
+    	if(!sencondCategoryList.isEmpty())
+    	{
+    		for(Map<String,Object> fmap : fcateList)
+    		{
+    			List<Map<String,Object>> scateList = (List<Map<String, Object>>) fmap.get("list");
+    			for(Map<String,Object> smap : scateList)
+    			{
+    				List<Map<String,Object>> brandMapList = new ArrayList<Map<String,Object>>();
+    				for(CategoryAssemble sbrand: sencondCategoryList)
+    				{
+    					if(smap.get("scateid").equals(sbrand.getScateid()))
+    					{
+    						Map<String,Object> brandMap = new TreeMap<String,Object>();
+    						brandMap.put("brandid", sbrand.getBrandid());
+    						brandMap.put("brandCNName", sbrand.getBrandCNName());
+    						brandMap.put("brandENName", sbrand.getBrandENName());
+    						brandMapList.add(brandMap);
+    					}
+    				}
+    				smap.put("brand", brandMapList);
+    			}
+    		}
+    	}
+    	log.info(JsonUtils.getJsonStringFromObj(fcateList));
+		result.setData(categoryMap);
     	return result;
-    }
-    
-    /**
-     * 系统频道获得推荐品牌
-     * @return
-     * @throws IOException 
-     * @throws JsonMappingException 
-     * @throws JsonGenerationException 
-     */
-    public JsonResult systemRecommentdBrand(Integer fcateid) throws JsonGenerationException, JsonMappingException, IOException
-    {
-    	JsonResult result = new JsonResult();
-		List<Category> secondCategoryList = categoryMapper.findSecondSystemList(fcateid);
-		List<Map<String,Object>> sCateList = new ArrayList<Map<String,Object>>();
-		for(Category sCate : secondCategoryList)
-		{
-			Map<String,Object> sCateMap = new HashMap<String,Object>();
-			List<Map<String,Object>> brandMapList = new ArrayList<Map<String,Object>>();
-			List<Brand> brandList = productMapper.queryBrandBySecondCategory(sCate.getId());
-			if(!brandList.isEmpty())
-			{
-				for(Brand brand : brandList)
-				{
-					Map<String,Object> brandMap = new HashMap<String,Object>();
-					brandMap.put("id",brand.getId());
-					brandMap.put("brandCNName", brand.getBrandCNName());
-					brandMap.put("brandENName", brand.getBrandENName());
-					brandMapList.add(brandMap);
-				}
-			}
-			sCateMap.put("id", sCate.getId());
-			sCateMap.put("name", sCate.getName());
-			sCateMap.put("brand",brandMapList);
-			sCateList.add(sCateMap);
-		}
-		log.info(JsonUtils.getJsonStringFromObj(sCateList));
-		result.setData(sCateList);
-    	return result;
-    
     }
 	
-	public void constructProduct(ProductWithBLOBs product)
+	public static void main(String[] args) throws JsonGenerationException, JsonMappingException, IOException 
 	{
-		List<ParamPrice> paramPriceList = new ArrayList<ParamPrice>();
-		
-		ParamPrice pp = new ParamPrice();
-		pp.setFname("材质");
-		pp.setFvalue("无氧铜线");
-		pp.setSname("是否屏蔽");
-		pp.setSvalue("屏蔽");
-		pp.setPrice(3.0);
-		pp.setRepository(300.0);
-		pp.setImgUrl("网线.png;234.png;345.png");
-		ParamPrice pp2 = new ParamPrice();
-		pp2.setFname("材质");
-		pp2.setFvalue("无氧铜线");
-		pp2.setSname("是否屏蔽");
-		pp2.setSvalue("非屏蔽");
-		pp2.setPrice(3.0);
-		pp2.setRepository(300.0);
-		pp2.setImgUrl("光缆.png;234.png;345.png");
-		paramPriceList.add(pp);
-		paramPriceList.add(pp2);
-		
-		
-		ParamPrice pp3 = new ParamPrice();
-		pp3.setFname("材质");
-		pp3.setFvalue("紫铜线");
-		pp3.setSname("是否屏蔽");
-		pp3.setSvalue("屏蔽");
-		pp3.setPrice(3.0);
-		pp3.setRepository(30.00);
-		pp3.setImgUrl("");
-		ParamPrice pp4 = new ParamPrice();
-		pp4.setFname("材质");
-		pp4.setFvalue("紫铜线");
-		pp4.setSname("是否屏蔽");
-		pp4.setSvalue("非屏蔽");
-		pp4.setPrice(3.0);
-		pp4.setRepository(300.00);
-		pp4.setImgUrl("电线.png;234.png;345.png");
-		paramPriceList.add(pp3);
-		paramPriceList.add(pp4);
-		
-		
-		product.setParamPrice(paramPriceList);
-		
-		List<ProductParam> params = new ArrayList<ProductParam>();
-		ProductParam param = new ProductParam();
-		param.setPname("材质");
-		param.setPvalue("无氧铜线,紫铜线");
-		ProductParam param1 = new ProductParam();
-		param1.setPname("是否屏蔽");
-		param1.setPvalue("屏蔽,非屏蔽");
-		params.add(param);
-		params.add(param1);
-		product.setParams(params);
-	}
-	
-	public static void main(String[] args) throws JsonGenerationException, JsonMappingException, IOException {
-		 String json = "{\"createid\":1,\"name\":\"1\",\"unit\":\"1\",\"number\":\"1\",\"price\":\"1\",\"repository\":\"1\",\"imgUrl\":\"\",\"detailDesc\":\"<p>11</p>\",\"paras\":\"<p>22</p>\",\"service\":\"<p>33</p>\",\"params\":[{\"pname\":\"A\",\"pvalue\":\"A1，A2\"}],\"paramPrice\":[{\"fname\":\"A\",\"fvalue\":\"A1\",\"sname\":\"\",\"svalue\":\"\",\"price\":\"1\",\"repository\":\"11\",\"imgUrl\":\"\"},{\"fname\":\"A\",\"fvalue\":\"A2\",\"sname\":\"\",\"svalue\":\"\",\"price\":\"2\",\"repository\":\"22\",\"imgUrl\":\"\"}]}";
-		 
-		 Gson gson = new Gson();
-			ProductWithBLOBs product = gson.fromJson(json, ProductWithBLOBs.class);
-			System.out.println(product.getParamPrice().get(0).getFname());
 	}
 }

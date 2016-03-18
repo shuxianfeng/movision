@@ -58,19 +58,4 @@
     </set>
     where id = #{id}
   </update>
-   <select id="findCategoryAssemble" resultType="com.zhuhuibao.mybatis.oms.entity.CategoryAssemble">
-    SELECT * FROM
-	(
-	SELECT P.ID fcateid,T.ID scateid,P.NAME fname,P.smallIcon,T.NAME sname FROM 
-	(SELECT T.id,T.NAME,T.smallIcon FROM t_p_category T WHERE T.parentId=0 ) P LEFT JOIN t_p_category T ON P.ID=T.parentId 
-	) P LEFT JOIN
-	(SELECT distinct(B.id) brandid,B.brandCNName,B.brandENName,P.fcateid,P.scateid FROM  t_p_product P  LEFT JOIN t_p_brand  B ON P.brandid=B.ID) B
-	  ON (P.fcateid=B.fcateid AND P.scateid=B.scateid)
-  </select>
-  <select id="findSecondSystemList" resultType="com.zhuhuibao.mybatis.oms.entity.Category">
-    select
-    <include refid="Base_Column_List" />
-    from t_p_category
-    where parentId = #{parentId}
-  </select>
 </mapper>
