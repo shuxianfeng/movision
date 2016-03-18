@@ -6,8 +6,6 @@ import com.zhuhuibao.mybatis.oms.entity.Category;
 import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
 import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.utils.JsonUtils;
-import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +45,7 @@ public class BrandController {
     public void findAll(HttpServletRequest req, HttpServletResponse response) throws IOException {
         JsonResult result = new JsonResult();
         List<ResultBean> sysList = categoryMapper.findSystemList();
-        List<SystemBean> allList = categoryMapper.searchAll();
+        List<SysBean> allList = categoryMapper.searchAll();
         List<BrandBean> brandList = brandMapper.searchAll();
         List list = new ArrayList();
         for(int i=0;i<sysList.size();i++){
@@ -59,7 +57,7 @@ public class BrandController {
             map1.put("icon",a.getSmallIcon());
             for(int y=0;y<allList.size();y++){
                 Map map2 = new HashMap();
-                SystemBean b = allList.get(y);
+                SysBean b = allList.get(y);
                 if(a.getCode().equals(b.getId())){
                     map2.put("id",b.getCode());
                     map2.put("name",b.getSubSystemName());

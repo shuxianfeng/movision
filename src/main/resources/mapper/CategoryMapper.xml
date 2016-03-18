@@ -13,7 +13,7 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="smallIcon" property="smallIcon" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMap1" type="com.zhuhuibao.common.SystemBean" >
+  <resultMap id="ResultMap1" type="com.zhuhuibao.common.SysBean" >
     <result column="id" property="id" jdbcType="VARCHAR" />
     <result column="systemName" property="systemName" jdbcType="VARCHAR" />
     <result column="subSystemName" property="subSystemName" jdbcType="VARCHAR" />
