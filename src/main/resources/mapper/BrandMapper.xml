@@ -34,6 +34,11 @@
     <result column="logoUrl" property="logoUrl" jdbcType="VARCHAR" />
     <result column="scateid" property="scateid" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="ResultMap3" type="com.zhuhuibao.common.ResultBean" >
+    <result column="id" property="code" jdbcType="VARCHAR" />
+    <result column="brandCNName" property="name" jdbcType="VARCHAR" />
+    <result column="logourl" property="smallIcon" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     id, brandCNName, brandENName, views, weight, logourl, createid, branddesc, imgurl, 
     status, brandOwer, brandCertificate, brandWebSite, publishTime, checkTime, lastModifyTime
@@ -121,9 +126,9 @@
     LEFT JOIN t_p_brand b ON t.brandid = b.id
     WHERE t.scateid = #{scateid} and b.status!=3
   </select>
-  <select id="searchSuggestBrand" resultMap="BaseResultMap" >
+  <select id="searchSuggestBrand" resultMap="ResultMap3" >
     select
-    <include refid="Base_Column_List" />
+    id,brandCNName,logourl
     from t_p_brand
     where status!=3
     order by views desc limit 0,5
