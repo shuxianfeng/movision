@@ -25,16 +25,13 @@
     <result column="paras" jdbcType="LONGVARCHAR" property="paras" />
     <result column="service" jdbcType="LONGVARCHAR" property="service" />
   </resultMap>
-  <sql id="Base_Column_List">
-    id, name, createid, fcateid, scateid, brandid, status, publishTime, lastmodified, 
-    price, unit, repository, number, hit, imgUrl, paramIDs, paramValues
-  </sql>
-  <sql id="Blob_Column_List">
-    detailDesc, paras, service
-  </sql>
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.ResultBean" >
+    <result column="id" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
-	  t.price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,concat(c.name,'>',c1.name) categoryName,
+	  cast(t.price as SIGNED) price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,c.name fcateName ,c1.name scateName,
 	  b.brandCNName  
 	  from t_p_product t left join t_p_category c on t.fcateid = c.id
 	  left join t_p_category c1 on t.scateid = c1.id 
@@ -242,8 +239,8 @@
   
   <select id="findAllByPager" parameterType="com.zhuhuibao.mybatis.product.entity.Product" resultType="com.zhuhuibao.mybatis.product.entity.Product">
       select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
-	  t.price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,concat(c.name,'>',c1.name) categoryName,
-	  b.brandCNName  
+	  cast(t.price as SIGNED) price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,c.name fcateName ,c1.name scateName,
+	  b.brandCNName,b.brandENName  
 	  from t_p_product t left join t_p_category c on t.fcateid = c.id
 	  left join t_p_category c1 on t.scateid = c1.id 
 	  left join t_p_brand b on t.brandid = b.id
@@ -264,11 +261,53 @@
   </select>
    <select id="queryProductByParam" parameterType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs" resultType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
       select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, 
-	  t.price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,
+	  cast(t.price as SIGNED) price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,
 	  b.brandCNName  
 	  from t_p_product t  
 	  left join t_p_brand b on t.brandid = b.id
-      where t.status != 2 and t.status = 1 and t.paramIDs = #{paramIDs} and t.paramValues = #{paramValues}
-
+      where t.status = 1 and t.paramIDs = #{paramIDs} and t.paramValues = #{paramValues}
+  </select>
+  
+  <select id="getSCateListByBrandId" parameterType="com.zhuhuibao.mybatis.product.entity.Product" resultMap="ResultMap">
+    select distinct(c.id),c.name from t_p_product t left join t_p_category c on t.scateid = c.id 
+    <where>
+    	<if test="fcateid != null">
+        and t.fcateid = #{fcateid,jdbcType=INTEGER}
+      </if>
+      <if test="brandid != null">
+        and t.brandid = #{brandid,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+  
+  <select id="queryProductInfoBySCategory" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
+      select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
+	  cast(t.price as SIGNED) price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service from t_p_product t 
+      <where>
+	      <if test="scateid != null">
+	        and t.scateid = #{scateid,jdbcType=INTEGER}
+	      </if>
+	      <if test="status != null">
+	        and t.status = #{status,jdbcType=INTEGER}
+	      </if>
+	       <if test="brandid != null">
+	        and t.brandid = #{brandid,jdbcType=BIGINT}
+	      </if>
+      </where>
+      order by publishTime desc
+      limit 0,#{count}
+  </select>
+  
+  <select id="queryBrandBySecondCategory" resultType="com.zhuhuibao.mybatis.memCenter.entity.Brand">
+    select distinct(p.id),p.brandCNName,p.brandENName from t_p_product t left join t_p_brand p on t.brandid = p.id 
+    where  t.scateid = #{scateid}
+  </select>
+  
+  <select id="findSecondCategoryBrand" resultType="com.zhuhuibao.mybatis.oms.entity.CategoryAssemble">
+  	SELECT distinct(B.id) brandid,B.brandCNName,B.brandENName,P.fcateid,P.scateid FROM  t_p_product P  LEFT JOIN t_p_brand  B ON P.brandid=B.ID
+  </select>
+  <select id="findCategoryAssemble" resultType="com.zhuhuibao.mybatis.oms.entity.CategoryAssemble">
+	  SELECT P.ID fcateid,T.ID scateid,P.NAME fname,P.smallIcon,T.NAME sname FROM 
+	(SELECT T.id,T.NAME,T.smallIcon FROM t_p_category T WHERE T.parentId=0 ) P LEFT JOIN t_p_category T ON P.ID=T.parentId 
   </select>
 </mapper>

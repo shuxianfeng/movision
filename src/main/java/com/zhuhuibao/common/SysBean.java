@@ -3,7 +3,7 @@ package com.zhuhuibao.common;
 /**
  * Created by cxx on 2016/3/17 0017.
  */
-public class SystemBean {
+public class SysBean {
     private String id;
 
     private String systemName;

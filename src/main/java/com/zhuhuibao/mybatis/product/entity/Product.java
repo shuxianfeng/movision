@@ -10,10 +10,18 @@ public class Product {
     private Long createid;
 
     private Integer fcateid;
+    
+    /**
+     * 一级分类名称
+     */
+    private String fcateName;
 
     private Integer scateid;
     
-    private String categoryName;
+    /**
+     * 二级分类名称
+     */
+    private String scateName;
 
     private Integer brandid;
 
@@ -38,8 +46,6 @@ public class Product {
     private String paramIDs;
 
     private String paramValues;
-
-    private Integer num;
 
     public Long getId() {
         return id;
@@ -177,19 +183,19 @@ public class Product {
         this.paramValues = paramValues == null ? null : paramValues.trim();
     }
 
-	public String getCategoryName() {
-		return categoryName;
+	public String getFcateName() {
+		return fcateName;
 	}
 
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
+	public void setFcateName(String fcateName) {
+		this.fcateName = fcateName;
 	}
 
-    public Integer getNum() {
-        return num;
-    }
+	public String getScateName() {
+		return scateName;
+	}
 
-    public void setNum(Integer num) {
-        this.num = num;
-    }
+	public void setScateName(String scateName) {
+		this.scateName = scateName;
+	}
 }

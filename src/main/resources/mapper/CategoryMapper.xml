@@ -20,7 +20,7 @@
     <result column="code" property="code" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, parentId, sort, is_deleted
+    id, name, parentId, sort,smallIcon,bigIcon
   </sql>
   <select id="findSystemList" resultMap="ResultMap">
     select

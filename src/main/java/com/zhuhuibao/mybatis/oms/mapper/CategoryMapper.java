@@ -1,7 +1,7 @@
 package com.zhuhuibao.mybatis.oms.mapper;
 
 import com.zhuhuibao.common.ResultBean;
-import com.zhuhuibao.common.SystemBean;
+import com.zhuhuibao.common.SysBean;
 import com.zhuhuibao.mybatis.oms.entity.Category;
 
 import java.util.List;
@@ -20,5 +20,5 @@ public interface CategoryMapper {
 
     Category findSystem(String parentId);
 
-    List<SystemBean> searchAll();
+    List<SysBean> searchAll();
 }

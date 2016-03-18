@@ -169,7 +169,7 @@ public class BrandManageController {
                 String fileName = (String)fileNames.nextElement();
                 if(null != multi.getFile(fileName)){
                     String lastFileName = multi.getFilesystemName(fileName);
-                    url =  "http://192.168.1.119:8080/upload/" + lastFileName;
+                    url =  "http://192.168.1.100:8080/upload/" + lastFileName;
                 }
             }
         }catch (Exception e){
