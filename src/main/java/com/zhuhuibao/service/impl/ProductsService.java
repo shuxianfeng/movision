@@ -15,7 +15,6 @@ import com.zhuhuibao.utils.search.JSONUtil;
 import com.zhuhuibao.utils.search.Pagination;
 import com.zhuhuibao.utils.search.StringUtil;
 import com.zhuhuibao.pojo.Product;
-
 import com.zhuhuibao.pojo.ProductSearchSpec;
 import com.zhuhuibao.service.IProductsService;
 import com.zhuhuibao.service.IWordService;
@@ -47,9 +46,9 @@ public class ProductsService implements IProductsService {
 		if(brandid>0){
 			Searcher.wrapEqualQuery(query, "brandid", brandid);
 		}
-		int member_companyIdentify = spec.getMember_companyIdentify();
-		if(member_companyIdentify>0){
-			Searcher.wrapEqualQuery(query, "member_companyIdentify", member_companyIdentify);
+		int member_identify = spec.getMember_identify();
+		if(member_identify>0){
+			Searcher.wrapEqualQuery(query, "member_identify", member_identify);
 		}
 
 		spec.setQ(StringUtil.emptyToNull(spec.getQ()));
@@ -131,7 +130,9 @@ public class ProductsService implements IProductsService {
 					FormatUtil.parseInteger(psAsMap.get("limit")));
 		}
 		result.put("ps", ps);
+		
+		
+		
 		return result;
 	}
-
 }

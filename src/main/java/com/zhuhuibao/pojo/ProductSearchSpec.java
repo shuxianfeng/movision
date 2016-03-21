@@ -4,7 +4,7 @@ public class ProductSearchSpec {
 	private int fcateid;
 	private int scateid;
 	private int brandid;
-	private int member_companyIdentify;
+	private int member_identify;
 	private String q;
 	private String sort;
 	private String sortorder;
@@ -35,12 +35,12 @@ public class ProductSearchSpec {
 		this.brandid = brandid;
 	}
 	
-	public int getMember_companyIdentify() {
-		return member_companyIdentify;
+	public int getMember_identify() {
+		return member_identify;
 	}
 
-	public void setMember_companyIdentify(int member_companyIdentify) {
-		this.member_companyIdentify = member_companyIdentify;
+	public void setMember_identify(int member_identify) {
+		this.member_identify = member_identify;
 	}
 
 	public String getQ() {
