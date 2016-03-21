@@ -27,8 +27,8 @@
     <result column="registerCapital" property="registerCapital" jdbcType="VARCHAR" />
     <result column="employeeNumber" property="employeeNumber" jdbcType="VARCHAR" />
     <result column="companyBusinessLicenseImg" property="companyBusinessLicenseImg" jdbcType="VARCHAR" />
-    <result column="enterpriseTelephone" property="enterpriseTelephone" jdbcType="INTEGER" />
-    <result column="enterpriseFox" property="enterpriseFox" jdbcType="INTEGER" />
+    <result column="enterpriseTelephone" property="enterpriseTelephone" jdbcType="VARCHAR" />
+    <result column="enterpriseFox" property="enterpriseFox" jdbcType="VARCHAR" />
     <result column="enterpriseWebSite" property="enterpriseWebSite" jdbcType="VARCHAR" />
     <result column="enterpriseLinkman" property="enterpriseLinkman" jdbcType="VARCHAR" />
     <result column="enterpriseLMDep" property="enterpriseLMDep" jdbcType="VARCHAR" />

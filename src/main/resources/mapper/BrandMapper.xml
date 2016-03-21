@@ -39,6 +39,18 @@
     <result column="brandCNName" property="name" jdbcType="VARCHAR" />
     <result column="logourl" property="smallIcon" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="ResultMap4" type="com.zhuhuibao.common.BrandDetailBean" >
+    <result column="enterpriseName" property="company" jdbcType="VARCHAR" />
+    <result column="brandWebSite" property="webSite" jdbcType="VARCHAR" />
+    <result column="enterpriseTelephone" property="phone" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="brandDesc" property="brandDesc" jdbcType="VARCHAR" />
+    <result column="imgurl" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="logourl" property="logo" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     id, brandCNName, brandENName, views, weight, logourl, createid, branddesc, imgurl, 
     status, brandOwer, brandCertificate, brandWebSite, publishTime, checkTime, lastModifyTime
@@ -145,5 +157,12 @@
     LEFT JOIN t_p_brand b ON b.id = p.brandid
     where b.status!=3
     ORDER by b.views desc
+  </select>
+  <select id="details"  resultMap="ResultMap4">
+    select
+    m.enterpriseName,m.address,m.province,m.city,m.area,m.enterpriseTelephone,b.brandWebSite,b.imgurl,b.branddesc,b.logourl
+    from t_p_brand b
+    LEFT JOIN t_m_member m on b.createid = m.id
+    where b.id = #{id}
   </select>
 </mapper>

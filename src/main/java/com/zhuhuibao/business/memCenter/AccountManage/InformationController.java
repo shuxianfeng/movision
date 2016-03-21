@@ -78,10 +78,13 @@ public class InformationController {
 
 	@RequestMapping(value = "/rest/info", method = RequestMethod.GET)
 	public void info(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		JsonResult result = new JsonResult();
 		String memId = req.getParameter("id");
 		Member member = memberService.findMemById(memId);
+		result.setCode(200);
+		result.setData(member);
 		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(member));
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 
 	/**
@@ -107,14 +110,18 @@ public class InformationController {
 			result.setCode(400);
 			result.setMessage("所在地为必填项");
 		}else{
-
-			int isUpdate = memberService.updateMemInfo(member);
-			if (isUpdate == 0) {
-				result.setCode(400);
-				result.setMessage("个人基本信息保存失败");
-			} else {
-				result.setCode(200);
+			try{
+				int isUpdate = memberService.updateMemInfo(member);
+				if (isUpdate == 0) {
+					result.setCode(400);
+					result.setMessage("个人基本信息保存失败");
+				} else {
+					result.setCode(200);
+				}
+			}catch (Exception e){
+				log.error("update info error!",e);
 			}
+
 		}
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
@@ -140,13 +147,18 @@ public class InformationController {
 			result.setCode(400);
 			result.setMessage("所在地为必填项");
 		}else{
-			int isUpdate = memberService.updateMemInfo(member);
-			if (isUpdate == 0) {
-				result.setCode(400);
-				result.setMessage("企业基本信息保存失败");
-			} else {
-				result.setCode(200);
+			try{
+				int isUpdate = memberService.updateMemInfo(member);
+				if (isUpdate == 0) {
+					result.setCode(400);
+					result.setMessage("企业基本信息保存失败");
+				} else {
+					result.setCode(200);
+				}
+			}catch (Exception e){
+				log.error("update info error!",e);
 			}
+
 		}
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
@@ -163,14 +175,18 @@ public class InformationController {
 	@RequestMapping(value = "/rest/detailInfo", method = RequestMethod.POST)
 	public void detailInfo(HttpServletRequest req, HttpServletResponse response, Member member, Model model) throws IOException {
 		JsonResult result = new JsonResult();
-
-		int isUpdate = memberService.updateMemInfo(member);
-		if (isUpdate == 0) {
-			result.setCode(400);
-			result.setMessage("保存失败");
-		} else {
-			result.setCode(200);
+		try {
+			int isUpdate = memberService.updateMemInfo(member);
+			if (isUpdate == 0) {
+				result.setCode(400);
+				result.setMessage("保存失败");
+			} else {
+				result.setCode(200);
+			}
+		}catch (Exception e){
+			log.error("update info error!",e);
 		}
+
 
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
@@ -187,9 +203,13 @@ public class InformationController {
 	public void certificateList(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		String type = req.getParameter("type");
 		JsonResult result = new JsonResult();
-		List<Certificate> certificate = certificateMapper.findCertificateList(type);
-		result.setCode(200);
-		result.setData(certificate);
+		try {
+			List<Certificate> certificate = certificateMapper.findCertificateList(type);
+			result.setCode(200);
+			result.setData(certificate);
+		}catch (Exception e){
+			log.error("sql error",e);
+		}
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -204,9 +224,13 @@ public class InformationController {
 	@RequestMapping(value = "/rest/unitTypeList", method = RequestMethod.GET)
 	public void unitTypeList(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		JsonResult result = new JsonResult();
-		List<UnitType> unitType = unitTypeMapper.findUnitTypeList();
-		result.setCode(200);
-		result.setData(unitType);
+		try{
+			List<UnitType> unitType = unitTypeMapper.findUnitTypeList();
+			result.setCode(200);
+			result.setData(unitType);
+		}catch (Exception e){
+			log.error("sql error",e);
+		}
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -221,9 +245,13 @@ public class InformationController {
 	@RequestMapping(value = "/rest/workTypeList", method = RequestMethod.GET)
 	public void workTypeList(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		JsonResult result = new JsonResult();
-		List<WorkType> workType = workTypeMapper.findWorkTypeList();
-		result.setCode(200);
-		result.setData(workType);
+		try{
+			List<WorkType> workType = workTypeMapper.findWorkTypeList();
+			result.setCode(200);
+			result.setData(workType);
+		}catch (Exception e){
+			log.error("sql error",e);
+		}
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -238,9 +266,13 @@ public class InformationController {
 	@RequestMapping(value = "/rest/enterpriseTypeList", method = RequestMethod.GET)
 	public void enterpriseTypeList(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		JsonResult result = new JsonResult();
-		List<EnterpriseType> enterpriseType = enterpriseTypeMapper.findEnterpriseTypeList();
-		result.setCode(200);
-		result.setData(enterpriseType);
+		try{
+			List<EnterpriseType> enterpriseType = enterpriseTypeMapper.findEnterpriseTypeList();
+			result.setCode(200);
+			result.setData(enterpriseType);
+		}catch (Exception e){
+			log.error("sql error",e);
+		}
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -255,9 +287,13 @@ public class InformationController {
 	@RequestMapping(value = "/rest/companyIdentityList", method = RequestMethod.GET)
 	public void companyIdentityList(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		JsonResult result = new JsonResult();
-		List<CompanyIdentity> companyIdentity = companyIdentityMapper.findCompanyIdentityList();
-		result.setCode(200);
-		result.setData(companyIdentity);
+		try{
+			List<CompanyIdentity> companyIdentity = companyIdentityMapper.findCompanyIdentityList();
+			result.setCode(200);
+			result.setData(companyIdentity);
+		}catch (Exception e){
+			log.error("sql error",e);
+		}
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -272,9 +308,13 @@ public class InformationController {
 	@RequestMapping(value = "/rest/searchProvince", method = RequestMethod.GET)
 	public void searchProvince(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		JsonResult result = new JsonResult();
-		List<ResultBean> province = provinceMapper.findProvince();
-		result.setCode(200);
-		result.setData(province);
+		try{
+			List<ResultBean> province = provinceMapper.findProvince();
+			result.setCode(200);
+			result.setData(province);
+		}catch (Exception e){
+			log.error("sql error",e);
+		}
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -289,9 +329,14 @@ public class InformationController {
 	public void searchCity(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		JsonResult result = new JsonResult();
 		String provincecode = req.getParameter("provincecode");
-		List<ResultBean> city = cityMapper.findCity(provincecode);
-		result.setCode(200);
-		result.setData(city);
+		try{
+			List<ResultBean> city = cityMapper.findCity(provincecode);
+			result.setCode(200);
+			result.setData(city);
+		}catch (Exception e){
+			log.error("sql error",e);
+		}
+
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -306,9 +351,14 @@ public class InformationController {
 	public void searchArea(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		JsonResult result = new JsonResult();
 		String cityCode = req.getParameter("cityCode");
-		List<ResultBean> area = areaMapper.findArea(cityCode);
-		result.setCode(200);
-		result.setData(area);
+		try{
+			List<ResultBean> area = areaMapper.findArea(cityCode);
+			result.setCode(200);
+			result.setData(area);
+		}catch (Exception e){
+			log.error("sql error",e);
+		}
+
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -322,15 +372,20 @@ public class InformationController {
 	@RequestMapping(value = "/rest/isBindMobile", method = RequestMethod.POST)
 	public void isBindMobile(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		String memId = req.getParameter("id");
-		Member member = memberService.findMemById(memId);
 		JsonResult result = new JsonResult();
-		if(member.getMobile()!=null || !StringUtils.isNullOrEmpty(member.getMobile())){
-			result.setCode(200);
-			result.setMessage("手机已绑定");
-		}else{
-			result.setCode(400);
-			result.setMessage("手机未绑定");
+		try{
+			Member member = memberService.findMemById(memId);
+			if(member.getMobile()!=null || !StringUtils.isNullOrEmpty(member.getMobile())){
+				result.setCode(200);
+				result.setMessage("手机已绑定");
+			}else{
+				result.setCode(400);
+				result.setMessage("手机未绑定");
+			}
+		}catch (Exception e){
+			log.error("sql error",e);
 		}
+
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -344,15 +399,21 @@ public class InformationController {
 	@RequestMapping(value = "/rest/isBindEmail", method = RequestMethod.POST)
 	public void isBindEmail(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		String memId = req.getParameter("id");
-		Member member = memberService.findMemById(memId);
 		JsonResult result = new JsonResult();
-		if(member.getEmail()!=null || !StringUtils.isNullOrEmpty(member.getEmail())){
-			result.setCode(200);
-			result.setMessage("邮箱已绑定");
-		}else{
-			result.setCode(400);
-			result.setMessage("邮箱未绑定");
+		try{
+			Member member = memberService.findMemById(memId);
+
+			if(member.getEmail()!=null || !StringUtils.isNullOrEmpty(member.getEmail())){
+				result.setCode(200);
+				result.setMessage("邮箱已绑定");
+			}else{
+				result.setCode(400);
+				result.setMessage("邮箱未绑定");
+			}
+		}catch (Exception e){
+			log.error("sql error",e);
 		}
+
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -366,9 +427,17 @@ public class InformationController {
 	 */
 	@RequestMapping(value = "/rest/memberLogo", method = RequestMethod.GET)
 	public void memberLogo(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		JsonResult result = new JsonResult();
 		String memId = req.getParameter("id");
-		Member member = memberService.findMemById(memId);
-		response.getWriter().write(member.getHeadShot());
+		try{
+			Member member = memberService.findMemById(memId);
+			result.setCode(200);
+			result.setData(member.getHeadShot());
+		}catch (Exception e){
+			log.error("sql error",e);
+		}
+
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 
 	/**
@@ -381,14 +450,17 @@ public class InformationController {
 	public void certificateSave(HttpServletRequest req, HttpServletResponse response,CertificateRecord record) throws IOException {
 		JsonResult result = new JsonResult();
 		record.setTime(new Date());
-		int isSave = certificateRecordMapper.saveCertificate(record);
-		if(isSave==1){
-			result.setCode(200);
-		}else{
-			result.setCode(400);
-			result.setMessage("资质保存失败");
+		try{
+			int isSave = certificateRecordMapper.saveCertificate(record);
+			if(isSave==1){
+				result.setCode(200);
+			}else{
+				result.setCode(400);
+				result.setMessage("资质保存失败");
+			}
+		}catch (Exception e){
+			log.error("save certificate error!",e);
 		}
-
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 
@@ -404,14 +476,17 @@ public class InformationController {
 	public void certificateUpdate(HttpServletRequest req, HttpServletResponse response,CertificateRecord record) throws IOException {
 		JsonResult result = new JsonResult();
 		record.setTime(new Date());
-		int isUpdate = certificateRecordMapper.updateCertificate(record);
-		if(isUpdate==1){
-			result.setCode(200);
-		}else{
-			result.setCode(400);
-			result.setMessage("资质编辑失败");
+		try{
+			int isUpdate = certificateRecordMapper.updateCertificate(record);
+			if(isUpdate==1){
+				result.setCode(200);
+			}else{
+				result.setCode(400);
+				result.setMessage("资质编辑失败");
+			}
+		}catch (Exception e){
+			log.error("Update certificate error!",e);
 		}
-
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 
@@ -426,14 +501,17 @@ public class InformationController {
 	@RequestMapping(value = "/rest/certificateDelete", method = RequestMethod.POST)
 	public void certificateDelete(HttpServletRequest req, HttpServletResponse response,CertificateRecord record) throws IOException {
 		JsonResult result = new JsonResult();
-		int isDelete = certificateRecordMapper.deleteCertificate(record);
-		if(isDelete==1){
-			result.setCode(200);
-		}else{
-			result.setCode(400);
-			result.setMessage("资质删除失败");
+		try{
+			int isDelete = certificateRecordMapper.deleteCertificate(record);
+			if(isDelete==1){
+				result.setCode(200);
+			}else{
+				result.setCode(400);
+				result.setMessage("资质删除失败");
+			}
+		}catch (Exception e){
+			log.error("Delete certificate error!",e);
 		}
-
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 
@@ -447,10 +525,15 @@ public class InformationController {
 	 */
 	@RequestMapping(value = "/rest/certificateSearch", method = RequestMethod.GET)
 	public void certificateSearch(HttpServletRequest req, HttpServletResponse response,CertificateRecord record) throws IOException {
-		List<CertificateRecord> list = certificateRecordMapper.certificateSearch(record);
 		JsonResult result = new JsonResult();
-		result.setCode(200);
-		result.setData(list);
+		try{
+			List<CertificateRecord> list = certificateRecordMapper.certificateSearch(record);
+			result.setCode(200);
+			result.setData(list);
+		}catch (Exception e){
+			log.error("Search certificate error!",e);
+		}
+
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}

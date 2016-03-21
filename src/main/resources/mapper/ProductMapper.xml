@@ -310,4 +310,10 @@
 	  SELECT P.ID fcateid,T.ID scateid,P.NAME fname,P.smallIcon,T.NAME sname FROM 
 	(SELECT T.id,T.NAME,T.smallIcon FROM t_p_category T WHERE T.parentId=0 ) P LEFT JOIN t_p_category T ON P.ID=T.parentId 
   </select>
+  <select id="findSubSystem" resultType="com.zhuhuibao.common.ResultBean">
+    SELECT distinct c.id as code,c.name as name
+    FROM  t_p_product p
+    LEFT JOIN t_p_category c ON p.scateid = c.id
+    where p.brandid = #{id}
+  </select>
 </mapper>

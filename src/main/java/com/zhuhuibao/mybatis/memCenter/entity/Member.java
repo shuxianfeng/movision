@@ -56,9 +56,9 @@ public class Member {
 
     private String companyBusinessLicenseImg;
 
-    private Integer enterpriseTelephone;
+    private String enterpriseTelephone;
 
-    private Integer enterpriseFox;
+    private String enterpriseFox;
 
     private String enterpriseWebSite;
 
@@ -287,19 +287,19 @@ public class Member {
         this.companyBusinessLicenseImg = companyBusinessLicenseImg == null ? null : companyBusinessLicenseImg.trim();
     }
 
-    public Integer getEnterpriseTelephone() {
+    public String getEnterpriseTelephone() {
         return enterpriseTelephone;
     }
 
-    public void setEnterpriseTelephone(Integer enterpriseTelephone) {
+    public void setEnterpriseTelephone(String enterpriseTelephone) {
         this.enterpriseTelephone = enterpriseTelephone;
     }
 
-    public Integer getEnterpriseFox() {
+    public String getEnterpriseFox() {
         return enterpriseFox;
     }
 
-    public void setEnterpriseFox(Integer enterpriseFox) {
+    public void setEnterpriseFox(String enterpriseFox) {
         this.enterpriseFox = enterpriseFox;
     }
 

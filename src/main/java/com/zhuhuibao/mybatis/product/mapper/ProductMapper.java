@@ -34,4 +34,6 @@ public interface ProductMapper {
     List<CategoryAssemble> findSecondCategoryBrand();
     
     List<CategoryAssemble> findCategoryAssemble();
+
+    List<ResultBean> findSubSystem(String id);
 }
