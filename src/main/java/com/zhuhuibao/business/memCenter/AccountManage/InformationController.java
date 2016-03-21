@@ -41,16 +41,13 @@ public class InformationController {
 	private CertificateMapper certificateMapper;
 
 	@Autowired
-	private UnitTypeMapper unitTypeMapper;
-
-	@Autowired
 	private WorkTypeMapper workTypeMapper;
 
 	@Autowired
 	private EnterpriseTypeMapper enterpriseTypeMapper;
 
 	@Autowired
-	private CompanyIdentityMapper companyIdentityMapper;
+	private IdentityMapper identityMapper;
 
 	@Autowired
 	private ProvinceMapper provinceMapper;
@@ -103,7 +100,7 @@ public class InformationController {
 		}else if(member.getSex()==null){
 			result.setCode(400);
 			result.setMessage("性别为必填项");
-		}else if(member.getPersonPosition()==null){
+		}else if(member.getWorkType()==null){
 			result.setCode(400);
 			result.setMessage("工作类型为必填项");
 		}else if(member.getProvince() == null || member.getCity() == null || member.getArea() == null){
@@ -140,7 +137,7 @@ public class InformationController {
 		if(member.getEnterpriseName()==null){
 			result.setCode(400);
 			result.setMessage("企业名称为必填项");
-		}else if(member.getCompanyIdentify()==null){
+		}else if(member.getIdentify()==null){
 			result.setCode(400);
 			result.setMessage("企业身份为必填项");
 		}else if(member.getProvince()==null||member.getCity()==null||member.getArea()==null){
@@ -215,27 +212,6 @@ public class InformationController {
 	}
 
 	/**
-	 * 工作单位类别
-	 * @param req
-	 * @return
-	 * @throws IOException
-	 */
-
-	@RequestMapping(value = "/rest/unitTypeList", method = RequestMethod.GET)
-	public void unitTypeList(HttpServletRequest req, HttpServletResponse response) throws IOException {
-		JsonResult result = new JsonResult();
-		try{
-			List<UnitType> unitType = unitTypeMapper.findUnitTypeList();
-			result.setCode(200);
-			result.setData(unitType);
-		}catch (Exception e){
-			log.error("sql error",e);
-		}
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
-	}
-
-	/**
 	 * 工作类别
 	 * @param req
 	 * @return
@@ -257,7 +233,7 @@ public class InformationController {
 	}
 
 	/**
-	 * 企业类别
+	 * 企业性质
 	 * @param req
 	 * @return
 	 * @throws IOException
@@ -284,13 +260,13 @@ public class InformationController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/rest/companyIdentityList", method = RequestMethod.GET)
-	public void companyIdentityList(HttpServletRequest req, HttpServletResponse response) throws IOException {
+	@RequestMapping(value = "/rest/identityList", method = RequestMethod.GET)
+	public void identityList(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		JsonResult result = new JsonResult();
 		try{
-			List<CompanyIdentity> companyIdentity = companyIdentityMapper.findCompanyIdentityList();
+			List<Identity> identity = identityMapper.findIdentityList();
 			result.setCode(200);
-			result.setData(companyIdentity);
+			result.setData(identity);
 		}catch (Exception e){
 			log.error("sql error",e);
 		}
