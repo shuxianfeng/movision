@@ -5,11 +5,11 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="CNName" property="CNName" jdbcType="VARCHAR" />
     <result column="ENName" property="ENName" jdbcType="VARCHAR" />
-    <result column="views" property="views" jdbcType="BIGINT" />
+    <result column="views" property="views" jdbcType="INTEGER" />
     <result column="weight" property="weight" jdbcType="INTEGER" />
     <result column="logourl" property="logourl" jdbcType="VARCHAR" />
     <result column="createid" property="createid" jdbcType="BIGINT" />
-    <result column="desc" property="desc" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="imgurl" property="imgurl" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="owner" property="owner" jdbcType="VARCHAR" />
@@ -44,7 +44,7 @@
     <result column="webSite" property="webSite" jdbcType="VARCHAR" />
     <result column="enterpriseTelephone" property="phone" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
-    <result column="desc" property="brandDesc" jdbcType="VARCHAR" />
+    <result column="description" property="brandDesc" jdbcType="VARCHAR" />
     <result column="imgurl" property="imgUrl" jdbcType="VARCHAR" />
     <result column="province" property="province" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
@@ -52,16 +52,16 @@
     <result column="logourl" property="logo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, CNName, ENName, views, weight, logourl, createid, desc, imgurl,
+    id, CNName, ENName, views, weight, logourl, createid, description, imgurl,
     status, owner, certificate, webSite, publishTime, checkTime, lastModifyTime
   </sql>
   <insert id="addBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" >
     insert into t_p_brand (id, CNName, ENName, logourl,
-    createid, desc, imgurl,
+    createid, description, imgurl,
     status, owner, certificate,
     webSite, publishTime)
     values (#{id}, #{CNName}, #{ENName}, #{logourl},
-    #{createid}, #{desc}, #{imgurl},
+    #{createid}, #{description}, #{imgurl},
     2, #{owner}, #{certificate},
     #{webSite}, #{publishTime})
   </insert>
@@ -80,8 +80,8 @@
       <if test="logourl != null" >
         logourl = #{logourl},
       </if>
-      <if test="desc != null" >
-        desc = #{desc},
+      <if test="description != null" >
+        description = #{description},
       </if>
       <if test="imgurl != null" >
         imgurl = #{imgurl},
@@ -94,6 +94,9 @@
       </if>
       <if test="webSite != null" >
         webSite = #{webSite},
+      </if>
+      <if test="status != null" >
+        status = #{status},
       </if>
       lastModifyTime = #{lastModifyTime},
     </set>
@@ -131,36 +134,43 @@
     where id = #{id}
 
   </update>
+  <update id="batchDeleteBrand" >
+    update t_p_brand
+    <set >
+      status = 3
+    </set>
+    where id = #{id}
+  </update>
   <select id="findAllBrand" resultMap="ResultMap" >
     select
     distinct t.brandid,b.logourl
     from t_p_product t
     LEFT JOIN t_p_brand b ON t.brandid = b.id
-    WHERE t.scateid = #{scateid} and b.status!=3
+    WHERE t.scateid = #{scateid} and b.status = 1 and t.status = 1
   </select>
   <select id="searchSuggestBrand" resultMap="ResultMap3" >
     select
     id,CNName,logourl
     from t_p_brand
-    where status!=3
+    where status = 1 and t.status = 1
     order by views desc limit 0,5
   </select>
   <select id="searchAll" resultMap="ResultMap1" >
     SELECT DISTINCT b.id,b.CNName,p.scateid
     FROM t_p_product p
     LEFT JOIN t_p_brand b ON b.id = p.brandid
-    where b.status!=3
+    where b.status = 1 and p.status = 1
   </select>
   <select id="SuggestBrand" resultMap="ResultMap2" >
     SELECT DISTINCT b.id,b.CNName,p.scateid,b.logourl
     FROM t_p_product p
     LEFT JOIN t_p_brand b ON b.id = p.brandid
-    where b.status!=3
+    where b.status = 1
     ORDER by b.views desc
   </select>
   <select id="details"  resultMap="ResultMap4">
     select
-    m.enterpriseName,m.address,m.province,m.city,m.area,m.enterpriseTelephone,b.webSite,b.imgurl,b.desc,b.logourl
+    m.enterpriseName,m.address,m.province,m.city,m.area,m.enterpriseTelephone,b.webSite,b.imgurl,b.description,b.logourl
     from t_p_brand b
     LEFT JOIN t_m_member m on b.createid = m.id
     where b.id = #{id}

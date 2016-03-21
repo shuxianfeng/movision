@@ -18,6 +18,8 @@ public interface BrandMapper {
 
     int deleteBrand(Brand brand);
 
+    int batchDeleteBrand(String id);
+
     List<Brand> searchBrandByStatus(Brand brand);
 
     int searchBrandSize(Brand brand);
