@@ -10,9 +10,9 @@ public class Brand {
 
     private Long id;
 
-    private String brandCNName;
+    private String CNName;
 
-    private String brandENName;
+    private String ENName;
 
     private Long views;
 
@@ -22,17 +22,17 @@ public class Brand {
 
     private Long createid;
 
-    private String branddesc;
+    private String desc;
 
     private String imgurl;
 
     private Integer status;
 
-    private String brandOwer;
+    private String owner;
 
-    private String brandCertificate;
+    private String certificate;
 
-    private String brandWebSite;
+    private String webSite;
 
     private Date publishTime;
 
@@ -49,19 +49,19 @@ public class Brand {
     }
 
     public String getBrandCNName() {
-        return brandCNName;
+        return CNName;
     }
 
     public void setBrandCNName(String brandCNName) {
-        this.brandCNName = brandCNName == null ? null : brandCNName.trim();
+        this.CNName = brandCNName == null ? null : brandCNName.trim();
     }
 
     public String getBrandENName() {
-        return brandENName;
+        return ENName;
     }
 
     public void setBrandENName(String brandENName) {
-        this.brandENName = brandENName == null ? null : brandENName.trim();
+        this.ENName = brandENName == null ? null : brandENName.trim();
     }
 
     public Long getViews() {
@@ -97,11 +97,11 @@ public class Brand {
     }
 
     public String getBranddesc() {
-        return branddesc;
+        return desc;
     }
 
     public void setBranddesc(String branddesc) {
-        this.branddesc = branddesc == null ? null : branddesc.trim();
+        this.desc = branddesc == null ? null : branddesc.trim();
     }
 
     public String getImgurl() {
@@ -121,27 +121,27 @@ public class Brand {
     }
 
     public String getBrandOwer() {
-        return brandOwer;
+        return owner;
     }
 
     public void setBrandOwer(String brandOwer) {
-        this.brandOwer = brandOwer == null ? null : brandOwer.trim();
+        this.owner = brandOwer == null ? null : brandOwer.trim();
     }
 
     public String getBrandCertificate() {
-        return brandCertificate;
+        return certificate;
     }
 
     public void setBrandCertificate(String brandCertificate) {
-        this.brandCertificate = brandCertificate == null ? null : brandCertificate.trim();
+        this.certificate = brandCertificate == null ? null : brandCertificate.trim();
     }
 
     public String getBrandWebSite() {
-        return brandWebSite;
+        return webSite;
     }
 
     public void setBrandWebSite(String brandWebSite) {
-        this.brandWebSite = brandWebSite == null ? null : brandWebSite.trim();
+        this.webSite = brandWebSite == null ? null : brandWebSite.trim();
     }
     @JsonSerialize(using = JsonDateSerializer.class)
     public Date getPublishTime() {

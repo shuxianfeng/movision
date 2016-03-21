@@ -9,11 +9,10 @@
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="registerTime" property="registerTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="identify" property="identify" jdbcType="INTEGER" />
+    <result column="identify" property="identify" jdbcType="VARCHAR" />
     <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
-    <result column="employeeType" property="employeeType" jdbcType="INTEGER" />
+    <result column="workType" property="workType" jdbcType="INTEGER" />
     <result column="enterpriseEmployeeParentId" property="enterpriseEmployeeParentId" jdbcType="BIGINT" />
-    <result column="companyIdentify" property="companyIdentify" jdbcType="VARCHAR" />
     <result column="province" property="province" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
     <result column="area" property="area" jdbcType="VARCHAR" />
@@ -38,18 +37,17 @@
     <result column="personRealName" property="personRealName" jdbcType="VARCHAR" />
     <result column="sex" property="sex" jdbcType="INTEGER" />
     <result column="personCompanyType" property="personCompanyType" jdbcType="INTEGER" />
-    <result column="personPosition" property="personPosition" jdbcType="INTEGER" />
     <result column="personIdentifyCard" property="personIdentifyCard" jdbcType="VARCHAR" />
     <result column="personIDFrontImgUrl" property="personIDFrontImgUrl" jdbcType="VARCHAR" />
     <result column="personIDBackImgUrl" property="personIDBackImgUrl" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, mobile, email, emailCheckCode, password, registerTime, status, identify, emailCheckCode,
-    enterpriseName, employeeType, enterpriseEmployeeParentId, companyIdentify, province,
+    enterpriseName, workType, enterpriseEmployeeParentId, province,
     city, area, address, enterpriseType, enterpriseLogo, enterpriseDesc, headShot, saleProductDesc,
     enterpriseCreaterTime, registerCapital, employeeNumber, companyBusinessLicenseImg,
     enterpriseTelephone, enterpriseFox, enterpriseWebSite, enterpriseLinkman, enterpriseLMDep,
-    fixedTelephone, fixedMobile, QQ, personRealName, sex, personCompanyType, personPosition,
+    fixedTelephone, fixedMobile, QQ, personRealName, sex, personCompanyType,
     personIdentifyCard, personIDFrontImgUrl, personIDBackImgUrl
   </sql>
   <select id="findMemById" resultType="com.zhuhuibao.mybatis.memCenter.entity.Member">
@@ -86,7 +84,7 @@
         enterpriseName = #{enterpriseName},
       </if>
       <if test="employeeType != null" >
-        employeeType = #{employeeType},
+        workType = #{workType},
       </if>
       <if test="enterpriseEmployeeParentId != null" >
         enterpriseEmployeeParentId = #{enterpriseEmployeeParentId},
@@ -166,9 +164,6 @@
       <if test="personCompanyType != null" >
         personCompanyType = #{personCompanyType},
       </if>
-      <if test="personPosition != null" >
-        personPosition = #{personPosition},
-      </if>
       <if test="personIdentifyCard != null" >
         personIdentifyCard = #{personIdentifyCard},
       </if>
@@ -182,8 +177,8 @@
     where id = #{id}
   </update>
   <insert id="addMember" keyProperty="id" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" useGeneratedKeys="true">
-    insert into t_m_member(mobile,email,password,registerTime,status,identify,enterpriseEmployeeParentId,employeeType) values
-    (#{mobile},#{email},#{password},now(),#{status},2,#{enterpriseEmployeeParentId},#{employeeType})
+    insert into t_m_member(mobile,email,password,registerTime,status,identify,enterpriseEmployeeParentId,workType) values
+    (#{mobile},#{email},#{password},now(),#{status},2,#{enterpriseEmployeeParentId},#{workType})
   </insert>
   <update id="updateMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     update t_m_member
@@ -197,8 +192,8 @@
       <if test="password != null">
         password = #{password},
       </if>
-      <if test="employeeType != null">
-        employeeType = #{employeeType},
+      <if test="workType != null">
+        workType = #{workType},
       </if>
       <if test="personRealName != null">
         personRealName = #{personRealName},
