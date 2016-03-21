@@ -1,5 +1,7 @@
 package com.zhuhuibao.mybatis.product.mapper;
 
+import java.util.*;
+
 import com.zhuhuibao.mybatis.product.entity.ProductParam;
 
 public interface ProductParamMapper {
@@ -14,4 +16,6 @@ public interface ProductParamMapper {
     int updateByPrimaryKeySelective(ProductParam record);
 
     int updateByPrimaryKey(ProductParam record);
+    
+    List<ProductParam> selectParamByIds(List<Integer> list);
 }

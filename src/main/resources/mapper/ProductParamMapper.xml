@@ -108,4 +108,13 @@
       removed = #{removed,jdbcType=BIT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="selectParamByIds" parameterType="java.util.List" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_p_product_params
+    where id in
+    <foreach collection="list" item="item" index="index" open="(" separator="," close=")" >  
+        #{item}  
+    </foreach> 
+  </select>
 </mapper>

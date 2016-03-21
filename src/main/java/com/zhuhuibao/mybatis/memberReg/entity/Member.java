@@ -70,7 +70,7 @@ public class Member implements Serializable{
 	 */
 	private int identify;
 	
-	private int employeeType;
+	private int workType;
 
 	public int getId() {
 		return id;
@@ -160,12 +160,11 @@ public class Member implements Serializable{
 		this.identify = identify;
 	}
 
-	public int getEmployeeType() {
-		return employeeType;
+	public int getWorkType() {
+		return workType;
 	}
 
-	public void setEmployeeType(int employeeType) {
-		this.employeeType = employeeType;
+	public void setWorkType(int workType) {
+		this.workType = workType;
 	}
-	
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper">
   <insert id="registerMember" parameterType="memberReg" useGeneratedKeys="true" keyProperty="id">
-  	insert into t_m_member(mobile,email,password,registerTime,status,identify,emailCheckCode,employeeType) values
+  	insert into t_m_member(mobile,email,password,registerTime,status,identify,emailCheckCode,workType) values
   	(#{mobile},#{email},#{password},str_to_date(#{registerTime},'%Y-%m-%d %H:%i:%s'),#{status},#{identify},#{emailCheckCode},#{employeeType})
   </insert>
   <sql id="Base_Column_List" >

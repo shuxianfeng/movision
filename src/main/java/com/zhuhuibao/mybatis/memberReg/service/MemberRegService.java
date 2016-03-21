@@ -73,7 +73,7 @@ public class MemberRegService {
 	    		}
 	    		member.setRegisterTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
 	    		//注册成功的默认为“管理员”类型
-	    		member.setEmployeeType(1);
+	    		member.setWorkType(100);
 	    		memberId = memberRegMapper.registerMember(member);
 	    	}
     	}

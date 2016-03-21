@@ -47,9 +47,9 @@ public class Product {
 
     private String paramValues;
     
-    private String brandCNName;
+    private String CNName;
     
-    private String brandENName;
+    private String ENName;
 
     public Long getId() {
         return id;
@@ -203,20 +203,20 @@ public class Product {
 		this.scateName = scateName;
 	}
 
-	public String getBrandCNName() {
-		return brandCNName;
+	public String getCNName() {
+		return CNName;
 	}
 
-	public void setBrandCNName(String brandCNName) {
-		this.brandCNName = brandCNName;
+	public void setCNName(String cNName) {
+		CNName = cNName;
 	}
 
-	public String getBrandENName() {
-		return brandENName;
+	public String getENName() {
+		return ENName;
 	}
 
-	public void setBrandENName(String brandENName) {
-		this.brandENName = brandENName;
+	public void setENName(String eNName) {
+		ENName = eNName;
 	}
 	
 }

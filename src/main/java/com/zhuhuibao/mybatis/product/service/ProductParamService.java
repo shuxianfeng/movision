@@ -76,41 +76,22 @@ public class ProductParamService {
 	}
 	
 	/**
-	 * 产品详情页面查询参数信息
-	 * @param Ids
+	 * 查询参数查询所有产品 
+	 * @param paramId
 	 * @return
 	 */
-	public JsonResult queryParam(String paramIDs)
+	public List<ProductParam> selectParamByIds(List<Integer> list)
 	{
-		JsonResult jsonResult = new JsonResult();
-		List<ProductParam> paramList = new ArrayList<ProductParam>();
+		List<ProductParam> params = null;
 		try
 		{
-			if(paramIDs != null)
-			{
-				String[] str_arr = paramIDs.split(",");
-				if(str_arr != null && str_arr.length > 0)
-				{
-					for(String param : str_arr)
-					{
-						ProductParam productParam = this.queryParamById(Long.parseLong(param));
-						if(productParam != null)
-						{
-							paramList.add(this.queryParamById(Long.parseLong(param)));
-						}
-					}
-				}
-			}
+			params = paramMapper.selectParamByIds(list);
 		}
 		catch(Exception e)
 		{
-			log.error("qurey param error!",e);
-			jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+			log.error("qurey param by id error!",e);
+			return params;
 		}
-		jsonResult.setData(paramList);
-		return jsonResult;
+		return params;
 	}
 }
