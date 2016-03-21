@@ -289,7 +289,7 @@ public final class JdbcTemplate {
 		if (index != 0 || records == count) {
 			records = this.count(count_sql, params);
 		}
-		return new Pagination<T>(items, records, index, count);
+		return new Pagination<T>(items, null, records, index, count);
 	}
 
 	public <T> List<T> findList(String sql, Object[] params, final int offset,

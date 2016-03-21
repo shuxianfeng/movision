@@ -14,6 +14,8 @@ import com.zhuhuibao.utils.search.FormatUtil;
 import com.zhuhuibao.utils.search.JSONUtil;
 import com.zhuhuibao.utils.search.Pagination;
 import com.zhuhuibao.utils.search.StringUtil;
+import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.mybatis.category.service.CategoryService;
 import com.zhuhuibao.pojo.Product;
 import com.zhuhuibao.pojo.ProductSearchSpec;
 import com.zhuhuibao.service.IProductsService;
@@ -26,6 +28,8 @@ public class ProductsService implements IProductsService {
 
 	@Autowired
 	private IWordService wordService;
+    @Autowired
+    private CategoryService categoryService;
 
 	@Override
 	public Map<String, Object> search(ProductSearchSpec spec)
@@ -35,19 +39,19 @@ public class ProductsService implements IProductsService {
 		result.put("spec", spec);
 
 		int fcateid = spec.getFcateid();
-		if(fcateid>0){
+		if(fcateid > 0){
 			Searcher.wrapEqualQuery(query, "fcateid", fcateid);
 		}
 		int scateid = spec.getScateid();
-		if(scateid>0){
+		if(scateid > 0){
 			Searcher.wrapEqualQuery(query, "scateid", scateid);
 		}
 		int brandid = spec.getBrandid();
-		if(brandid>0){
+		if(brandid > 0){
 			Searcher.wrapEqualQuery(query, "brandid", brandid);
 		}
 		int member_identify = spec.getMember_identify();
-		if(member_identify>0){
+		if(member_identify > 0){
 			Searcher.wrapEqualQuery(query, "member_identify", member_identify);
 		}
 
@@ -124,15 +128,18 @@ public class ProductsService implements IProductsService {
 				}
 				products.add(product);
 			}
-			ps = new Pagination<Product>(products,
+			 @SuppressWarnings("unchecked")
+			Map<String, Object> groups = (Map<String, Object>)psAsMap.get("groups");
+			ps = new Pagination<Product>(products,groups,
 					FormatUtil.parseInteger(psAsMap.get("total")),
 					FormatUtil.parseInteger(psAsMap.get("offset")),
 					FormatUtil.parseInteger(psAsMap.get("limit")));
+			if(scateid > 0){
+				ResultBean fcate = categoryService.getFcateByScate(scateid);
+				result.put("fcate", fcate);
+			}
 		}
 		result.put("ps", ps);
-		
-		
-		
 		return result;
 	}
 }
