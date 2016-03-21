@@ -83,7 +83,7 @@
       <if test="enterpriseName != null" >
         enterpriseName = #{enterpriseName},
       </if>
-      <if test="employeeType != null" >
+      <if test="workType != null" >
         workType = #{workType},
       </if>
       <if test="enterpriseEmployeeParentId != null" >
