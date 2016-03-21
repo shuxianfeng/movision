@@ -43,4 +43,6 @@ public interface ProductMapper {
     int batchUnpublish(List<String> list);
     
     ProductWithBLOBs queryPrdDescParamService(Long id);
+    
+    List<ResultBean> findSubSystem(String id);
 }

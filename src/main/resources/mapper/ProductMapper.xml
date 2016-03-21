@@ -344,4 +344,10 @@
     select t.id,t.detailDesc,t.paras,t.service from t_p_product t
     where t.id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="findSubSystem" resultType="com.zhuhuibao.common.ResultBean">
+    SELECT distinct c.id as code,c.name as name
+    FROM  t_p_product p
+    LEFT JOIN t_p_category c ON p.scateid = c.id
+    where p.brandid = #{id}
+  </select>
 </mapper>
