@@ -67,38 +67,46 @@ public class ProductsService implements IProductsService {
 			}
 		}
 
-		List<Map<String, Object>> sortFields = new ArrayList<Map<String, Object>>(1);
-		Map<String, Object> sortField = new HashMap<String, Object>(3);
+		List<Map<String, Object>> sortFields = null;
 		if (StringUtil.isNotEmpty(spec.getSort())) {
-			String sort = spec.getSort();
+			List<String> sorts = StringUtil.split(spec.getSort(), ",");
+			if (CollectionUtil.isNotEmpty(sorts)) {
+				sortFields = new ArrayList<Map<String, Object>>(sorts.size());
+				for (String sortStr : sorts) {
+					try {
+						List<String> kv = StringUtil.split(sortStr, ":");
+						String key = FormatUtil.parseString(kv.get(0));
+						String value = FormatUtil.parseString(kv.get(1));
+						Map<String, Object> sortField = new HashMap<String, Object>(
+								3);
+						sortField.put("field", key);
+						if (key.equals("price1")) {
+							sortField.put("type", "FLOAT");
+							sortField.put("reverse",
+									FormatUtil.parseBoolean(value));
+							sortFields.add(sortField);
+						}else if(key.equals("publishTime1")){
+							sortField.put("type", "LONG");
+							sortField.put("reverse",
+									FormatUtil.parseBoolean(value));
+							sortFields.add(sortField);
+						}
+					} catch (Exception e) {
+					}
+				}
+			}
 			result.put("sort", spec.getSort());
-			String sortorder = "true";
 			if(StringUtil.isNotEmpty(spec.getSortorder())){
-				sortorder = spec.getSortorder();
 				result.put("sortorder", spec.getSortorder());
 			}
-			if (sort.equals("price1")) {
-				sortField.put("field", sort);
-				sortField.put("type", "FLOAT");
-				sortField.put("reverse",
-						FormatUtil.parseBoolean(sortorder));
-			}else if(sort.equals("publishTime1")){
-				sortField.put("field", sort);
-				sortField.put("type", "LONG");
-				sortField.put("reverse",
-						FormatUtil.parseBoolean(sortorder));
-			}else {
-				sortField.put("field", "id");
-				sortField.put("type", "INT");
-				sortField.put("reverse",FormatUtil.parseBoolean(true));
-			}
-		}else {
+		} else {
+			Map<String, Object> sortField = new HashMap<String, Object>(3);
 			sortField.put("field", "id");
 			sortField.put("type", "INT");
 			sortField.put("reverse",FormatUtil.parseBoolean(true));
+			sortFields = new ArrayList<Map<String, Object>>(1);
+			sortFields.add(sortField);
 		}
-		
-		sortFields.add(sortField);
 
 		Map<?, ?> psAsMap = (Map<?, ?>) Searcher.request(
 				"search",
