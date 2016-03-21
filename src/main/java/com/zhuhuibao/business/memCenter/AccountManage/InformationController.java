@@ -519,12 +519,21 @@ public class InformationController {
 	 */
 	@RequestMapping(value = "/rest/uploadHeadShot", method = RequestMethod.POST)
 	public void uploadHeadShot(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
+		JsonResult result = new JsonResult();
 		String url = uploadService.upload(req);
 		member.setHeadShot(url);
-		memberService.uploadHeadShot(member);
-		JsonResult result = new JsonResult();
-		result.setCode(200);
-		result.setData(url);
+		try{
+			int isUpdate = memberService.uploadHeadShot(member);
+			if(isUpdate==0){
+				result.setCode(400);
+				result.setMessage("头像保存失败");
+			}else{
+				result.setCode(200);
+				result.setData(url);
+			}
+		}catch (Exception e){
+			log.error("update headShot error!");
+		}
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
@@ -534,12 +543,22 @@ public class InformationController {
 	 */
 	@RequestMapping(value = "/rest/uploadLogo", method = RequestMethod.POST)
 	public void uploadLogo(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
+		JsonResult result = new JsonResult();
 		String url = uploadService.upload(req);
 		member.setEnterpriseLogo(url);
-		memberService.uploadLogo(member);
-		JsonResult result = new JsonResult();
-		result.setCode(200);
-		result.setData(url);
+		try{
+			int isUpdate =  memberService.uploadLogo(member);
+			if(isUpdate==0){
+				result.setCode(400);
+				result.setMessage("logo保存失败");
+			}else{
+				result.setCode(200);
+				result.setData(url);
+			}
+		}catch (Exception e){
+			log.error("update logo error!");
+		}
+
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}

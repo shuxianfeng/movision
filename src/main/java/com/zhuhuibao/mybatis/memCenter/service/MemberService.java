@@ -103,18 +103,20 @@ public class MemberService {
 	/**
 	 * 会员头像修改
 	 */
-	public void uploadHeadShot(Member member)
+	public int uploadHeadShot(Member member)
 	{
 		log.debug("会员头像修改");
-		memberMapper.uploadHeadShot(member);
+		int isUpdate = memberMapper.uploadHeadShot(member);
+		return isUpdate;
 	}
 
 	/**
 	 * 公司logo修改
 	 */
-	public void uploadLogo(Member member)
+	public int uploadLogo(Member member)
 	{
 		log.debug("公司logo修改");
-		memberMapper.uploadLogo(member);
+		int isUpdate = memberMapper.uploadLogo(member);
+		return isUpdate;
 	}
 }
