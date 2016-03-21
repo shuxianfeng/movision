@@ -89,9 +89,6 @@
       <if test="enterpriseEmployeeParentId != null" >
         enterpriseEmployeeParentId = #{enterpriseEmployeeParentId},
       </if>
-      <if test="companyIdentify != null" >
-        companyIdentify = #{companyIdentify},
-      </if>
       <if test="province != null" >
         province = #{province},
       </if>
