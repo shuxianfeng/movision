@@ -60,6 +60,7 @@ public class ProductService {
 		{
 			Map<String,Long> paramMap = paramService.insertParam(product);
 			List<ParamPrice> paramPrice = product.getParamPrice();
+			product.setStatus(0);
 			if(paramPrice!= null && !paramPrice.isEmpty())
 			{
 				String productName = product.getName();
@@ -80,7 +81,6 @@ public class ProductService {
 						value_sb.append(",");
 						value_sb.append(pp.getSvalue());
 					}
-					product.setStatus(0);
 					product.setName(productName+" "+pp.getFvalue()+" "+pp.getSvalue());
 					product.setParamIDs(ids_sb.toString());
 					product.setParamValues(value_sb.toString());
