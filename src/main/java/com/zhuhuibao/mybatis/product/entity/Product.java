@@ -51,9 +51,6 @@ public class Product {
     
     private String ENName;
 
-    //test11
-
-
     public Long getId() {
         return id;
     }
