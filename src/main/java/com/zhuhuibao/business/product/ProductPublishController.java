@@ -297,34 +297,4 @@ public class ProductPublishController {
 	        response.setContentType("application/json;charset=utf-8");
 	        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 		}
-		
-		/**
-		 * 产品列表页面
-		 * @param req
-		 * @param response
-		 * @param product
-		 * @param pageNo
-		 * @param pageSize
-		 * @throws IOException 
-		 * @throws JsonMappingException 
-		 * @throws JsonGenerationException 
-		 */
-		@RequestMapping(value="/rest/productDetail/findAllProductList")
-		@ResponseBody
-		public void findAllProductList(HttpServletRequest req,HttpServletResponse response,ProductWithBLOBs product,String pageNo,String pageSize) throws JsonGenerationException, JsonMappingException, IOException
-		{
-			JsonResult jsonResult = new JsonResult();
-			if (StringUtils.isEmpty(pageNo)) {
-	            pageNo = "1";
-	        }
-	        if (StringUtils.isEmpty(pageSize)) {
-	            pageSize = "10";
-	        }
-	        Paging<Product> pager = new Paging<Product>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-	        List<Product>  users = productService.findAllByPager(pager,product);
-	        pager.result(users);
-	        jsonResult.setData(pager);
-	        response.setContentType("application/json;charset=utf-8");
-	        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
-		}
 }
