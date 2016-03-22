@@ -76,4 +76,9 @@
     FROM t_p_category t
     inner join t_p_category p on t.id = p.parentId
   </select>
+  <select id="getFcateByScate" resultMap="ResultMap">
+    select b.id,b.name,b.smallIcon
+    from t_p_category a,t_p_category b
+    where a.id=#{scateid} and a.parentId=b.id;
+  </select>
 </mapper>

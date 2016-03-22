@@ -21,4 +21,6 @@ public interface CategoryMapper {
     Category findSystem(String parentId);
 
     List<SysBean> searchAll();
+    
+    List<ResultBean> getFcateByScate(int scateid);
 }
