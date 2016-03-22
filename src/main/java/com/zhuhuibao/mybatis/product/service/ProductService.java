@@ -306,20 +306,27 @@ public class ProductService {
     				List<Map<String,Object>> imgList = new ArrayList<Map<String,Object>>();
     				for(Product prd : productList)
     				{
-    					/*for(Map<String,Object> img : imgList)
+    					boolean flag = true;
+    					for(Map<String,Object> img : imgList)
     					{
-    						if(img.get("imgUrl")==(prd.getImgUrl()))
+    						if(img.get("imgUrl").equals(prd.getImgUrl()))
     						{
     							Long[] arr_skuid = (Long[]) img.get("skuid");
-    							arr_skuid[arr_skuid.length] = prd.getId(); 
-    							img.put("skuid", arr_skuid);
+    							Long[] s_arr_skuid = new Long[arr_skuid.length+1];
+    							System.arraycopy(arr_skuid, 0, s_arr_skuid, 0, arr_skuid.length);
+    							s_arr_skuid[s_arr_skuid.length-1] = prd.getId();
+    							img.put("skuid", s_arr_skuid);
+    							flag = false;
     						}
-    					}*/
-    					Map<String,Object> imgsMap = new TreeMap<String,Object>();
-    					Long[]  skuid = {prd.getId()};
-    					imgsMap.put("skuid", skuid);
-    					imgsMap.put("imgUrl",prd.getImgUrl());
-    					imgList.add(imgsMap);
+    					}
+    					if(flag)
+    					{
+	    					Map<String,Object> imgsMap = new TreeMap<String,Object>();
+	    					Long[]  skuid = {prd.getId()};
+	    					imgsMap.put("skuid", skuid);
+	    					imgsMap.put("imgUrl",prd.getImgUrl());
+	    					imgList.add(imgsMap);
+    					}
     				}
     				productMap.put("imgs", imgList);
     				//产品列表

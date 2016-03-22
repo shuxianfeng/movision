@@ -32,6 +32,8 @@
   <resultMap id="ProductMap" type="com.zhuhuibao.mybatis.product.entity.ProductMap" >
     <result column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+     <result column="imgUrl" property="imgUrl" jdbcType="VARCHAR" />
+     <result column="price" property="price" jdbcType="DOUBLE" />
   </resultMap>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
@@ -306,7 +308,9 @@
   </select>
   
     <select id="queryRecommendHotProduct" parameterType="java.util.Map" resultMap="ProductMap">
-      select t.id, t.name from t_p_product t 
+      select t.id, t.name,t.price,
+      case when (locate(',',imgUrl) > 0) then substring(imgUrl,1,locate(',',imgUrl)-1) when locate(',',imgUrl) = 0 then imgUrl end as imgUrl
+      from t_p_product t 
       <where>
 	      <if test="scateid != null">
 	        and t.scateid = #{scateid,jdbcType=INTEGER}

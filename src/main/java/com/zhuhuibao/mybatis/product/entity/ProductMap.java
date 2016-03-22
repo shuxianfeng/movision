@@ -11,6 +11,10 @@ public class ProductMap implements Serializable{
 	private Integer id;
 	
 	private String name;
+	
+	private String imgUrl;
+	
+	private String price;
 
 	public Integer getId() {
 		return id;
@@ -27,6 +31,21 @@ public class ProductMap implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+
+	public String getPrice() {
+		return price;
+	}
+
+	public void setPrice(String price) {
+		this.price = price;
+	}
 	
 }
