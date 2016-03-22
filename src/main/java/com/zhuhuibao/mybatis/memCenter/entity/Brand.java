@@ -10,11 +10,11 @@ public class Brand {
 
     private Long id;
 
-    private String brandCNName;
+    private String CNName;
 
-    private String brandENName;
+    private String ENName;
 
-    private Long views;
+    private Integer views;
 
     private Integer weight;
 
@@ -22,23 +22,31 @@ public class Brand {
 
     private Long createid;
 
-    private String branddesc;
+    private String description;
 
     private String imgurl;
 
     private Integer status;
 
-    private String brandOwer;
+    private String owner;
 
-    private String brandCertificate;
+    private String certificate;
 
-    private String brandWebSite;
+    private String webSite;
 
     private Date publishTime;
 
     private Date checkTime;
 
     private Date lastModifyTime;
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public Long getId() {
         return id;
@@ -48,27 +56,27 @@ public class Brand {
         this.id = id;
     }
 
-    public String getBrandCNName() {
-        return brandCNName;
+    public String getCNName() {
+        return CNName;
     }
 
-    public void setBrandCNName(String brandCNName) {
-        this.brandCNName = brandCNName == null ? null : brandCNName.trim();
+    public void setCNName(String CNName) {
+        this.CNName = CNName;
     }
 
-    public String getBrandENName() {
-        return brandENName;
+    public String getENName() {
+        return ENName;
     }
 
-    public void setBrandENName(String brandENName) {
-        this.brandENName = brandENName == null ? null : brandENName.trim();
+    public void setENName(String ENName) {
+        this.ENName = ENName;
     }
 
-    public Long getViews() {
+    public Integer getViews() {
         return views;
     }
 
-    public void setViews(Long views) {
+    public void setViews(Integer views) {
         this.views = views;
     }
 
@@ -85,7 +93,7 @@ public class Brand {
     }
 
     public void setLogourl(String logourl) {
-        this.logourl = logourl == null ? null : logourl.trim();
+        this.logourl = logourl;
     }
 
     public Long getCreateid() {
@@ -96,12 +104,12 @@ public class Brand {
         this.createid = createid;
     }
 
-    public String getBranddesc() {
-        return branddesc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setBranddesc(String branddesc) {
-        this.branddesc = branddesc == null ? null : branddesc.trim();
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getImgurl() {
@@ -109,7 +117,7 @@ public class Brand {
     }
 
     public void setImgurl(String imgurl) {
-        this.imgurl = imgurl == null ? null : imgurl.trim();
+        this.imgurl = imgurl;
     }
 
     public Integer getStatus() {
@@ -120,28 +128,28 @@ public class Brand {
         this.status = status;
     }
 
-    public String getBrandOwer() {
-        return brandOwer;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setBrandOwer(String brandOwer) {
-        this.brandOwer = brandOwer == null ? null : brandOwer.trim();
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
-    public String getBrandCertificate() {
-        return brandCertificate;
+    public String getCertificate() {
+        return certificate;
     }
 
-    public void setBrandCertificate(String brandCertificate) {
-        this.brandCertificate = brandCertificate == null ? null : brandCertificate.trim();
+    public void setCertificate(String certificate) {
+        this.certificate = certificate;
     }
 
-    public String getBrandWebSite() {
-        return brandWebSite;
+    public String getWebSite() {
+        return webSite;
     }
 
-    public void setBrandWebSite(String brandWebSite) {
-        this.brandWebSite = brandWebSite == null ? null : brandWebSite.trim();
+    public void setWebSite(String webSite) {
+        this.webSite = webSite;
     }
     @JsonSerialize(using = JsonDateSerializer.class)
     public Date getPublishTime() {
@@ -166,13 +174,5 @@ public class Brand {
 
     public void setLastModifyTime(Date lastModifyTime) {
         this.lastModifyTime = lastModifyTime;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 }

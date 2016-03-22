@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by cxx on 2016/3/7 0007.
@@ -102,6 +103,33 @@ public class BrandManageController {
     }
 
     /**
+     * 批量删除品牌
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/batchDeleteBrand", method = RequestMethod.POST)
+    public void batchDeleteBrand(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        String ids[] = req.getParameterValues("id");
+        JsonResult result = new JsonResult();
+        int isDelete = 0;
+        for(int i = 0; i < ids.length; i++){
+            String id = ids[i];
+            isDelete = brandMapper.batchDeleteBrand(id);
+            if(isDelete==0){
+                result.setCode(400);
+                result.setMessage("批量删除失败");
+                break;
+            }else{
+                result.setCode(200);
+            }
+        }
+
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
      * 查询品牌
      * @param req
      * @return
@@ -134,15 +162,20 @@ public class BrandManageController {
      * 查看品牌详情
      */
     @RequestMapping(value = "/rest/brandDetails", method = RequestMethod.GET)
-    public void brandDetails(HttpServletRequest req, HttpServletResponse response,int id) throws IOException {
+    public JsonResult brandDetails(HttpServletRequest req, HttpServletResponse response,int id) throws IOException {
         Brand brand = brandMapper.brandDetails(id);
-        brand.setViews(brand.getViews()+1);
+        if(brand.getViews()==null){
+            brand.setViews(1);
+        }else{
+            brand.setViews(brand.getViews()+1);
+        }
         int isUpdate = brandMapper.updateBrand(brand);
         JsonResult result = new JsonResult();
         result.setCode(200);
         result.setData(brand);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+//        response.setContentType("application/json;charset=utf-8");
+//        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+        return result;
     }
 
     /**
@@ -172,7 +205,7 @@ public class BrandManageController {
                 String fileName = (String)fileNames.nextElement();
                 if(null != multi.getFile(fileName)){
                     String lastFileName = multi.getFilesystemName(fileName);
-                    url =  ip_address+"/upload/" + lastFileName;
+                    url =  ip_address + "/upload/" + lastFileName;
                     result.setCode(200);
                     result.setData(url);
                 }

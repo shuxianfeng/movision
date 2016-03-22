@@ -1,6 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-public class CompanyIdentity {
+public class Identity {
     private Integer id;
 
     private String name;

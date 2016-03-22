@@ -3,18 +3,18 @@
 <mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper" >
   <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Brand" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="brandCNName" property="brandCNName" jdbcType="VARCHAR" />
-    <result column="brandENName" property="brandENName" jdbcType="VARCHAR" />
-    <result column="views" property="views" jdbcType="BIGINT" />
+    <result column="CNName" property="CNName" jdbcType="VARCHAR" />
+    <result column="ENName" property="ENName" jdbcType="VARCHAR" />
+    <result column="views" property="views" jdbcType="INTEGER" />
     <result column="weight" property="weight" jdbcType="INTEGER" />
     <result column="logourl" property="logourl" jdbcType="VARCHAR" />
     <result column="createid" property="createid" jdbcType="BIGINT" />
-    <result column="branddesc" property="branddesc" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="imgurl" property="imgurl" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="brandOwer" property="brandOwer" jdbcType="VARCHAR" />
-    <result column="brandCertificate" property="brandCertificate" jdbcType="VARCHAR" />
-    <result column="brandWebSite" property="brandWebSite" jdbcType="VARCHAR" />
+    <result column="owner" property="owner" jdbcType="VARCHAR" />
+    <result column="certificate" property="certificate" jdbcType="VARCHAR" />
+    <result column="webSite" property="webSite" jdbcType="VARCHAR" />
     <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP" />
     <result column="checkTime" property="checkTime" jdbcType="TIMESTAMP" />
     <result column="lastModifyTime" property="lastModifyTime" jdbcType="TIMESTAMP" />
@@ -25,42 +25,54 @@
   </resultMap>
   <resultMap id="ResultMap1" type="com.zhuhuibao.common.BrandBean" >
     <result column="id" property="id" jdbcType="VARCHAR" />
-    <result column="brandCNName" property="brandCNName" jdbcType="VARCHAR" />
+    <result column="CNName" property="brandCNName" jdbcType="VARCHAR" />
     <result column="scateid" property="scateid" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMap2" type="com.zhuhuibao.common.SuggestBrand" >
     <result column="id" property="id" jdbcType="VARCHAR" />
-    <result column="brandCNName" property="brandCNName" jdbcType="VARCHAR" />
+    <result column="CNName" property="brandCNName" jdbcType="VARCHAR" />
     <result column="logoUrl" property="logoUrl" jdbcType="VARCHAR" />
     <result column="scateid" property="scateid" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMap3" type="com.zhuhuibao.common.ResultBean" >
     <result column="id" property="code" jdbcType="VARCHAR" />
-    <result column="brandCNName" property="name" jdbcType="VARCHAR" />
+    <result column="CNName" property="name" jdbcType="VARCHAR" />
     <result column="logourl" property="smallIcon" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="ResultMap4" type="com.zhuhuibao.common.BrandDetailBean" >
+    <result column="enterpriseName" property="company" jdbcType="VARCHAR" />
+    <result column="webSite" property="webSite" jdbcType="VARCHAR" />
+    <result column="enterpriseTelephone" property="phone" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="description" property="brandDesc" jdbcType="VARCHAR" />
+    <result column="imgurl" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="logourl" property="logo" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
-    id, brandCNName, brandENName, views, weight, logourl, createid, branddesc, imgurl, 
-    status, brandOwer, brandCertificate, brandWebSite, publishTime, checkTime, lastModifyTime
+    id, CNName, ENName, views, weight, logourl, createid, description, imgurl,
+    status, owner, certificate, webSite, publishTime, checkTime, lastModifyTime
   </sql>
   <insert id="addBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" >
-    insert into t_p_brand (id, brandCNName, brandENName, logourl,
-    createid, branddesc, imgurl,
-    status, brandOwer, brandCertificate,
-    brandWebSite, publishTime)
-    values (#{id}, #{brandCNName}, #{brandENName}, #{logourl},
-    #{createid}, #{branddesc}, #{imgurl},
-    2, #{brandOwer}, #{brandCertificate},
-    #{brandWebSite}, #{publishTime})
+    insert into t_p_brand (id, CNName, ENName, logourl,
+    createid, description, imgurl,
+    status, owner, certificate,
+    webSite, publishTime)
+    values (#{id}, #{CNName}, #{ENName}, #{logourl},
+    #{createid}, #{description}, #{imgurl},
+    2, #{owner}, #{certificate},
+    #{webSite}, #{publishTime})
   </insert>
   <update id="updateBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" >
     update t_p_brand
     <set >
-      <if test="brandCNName != null" >
-        brandCNName = #{brandCNName},
+      <if test="CNName != null" >
+        CNName = #{CNName},
       </if>
-      <if test="brandENName != null" >
-        brandENName = #{brandENName},
+      <if test="ENName != null" >
+        ENName = #{ENName},
       </if>
       <if test="views != null" >
         views = #{views},
@@ -68,20 +80,23 @@
       <if test="logourl != null" >
         logourl = #{logourl},
       </if>
-      <if test="branddesc != null" >
-        branddesc = #{branddesc},
+      <if test="description != null" >
+        description = #{description},
       </if>
       <if test="imgurl != null" >
         imgurl = #{imgurl},
       </if>
-      <if test="brandOwer != null" >
-        brandOwer = #{brandOwer},
+      <if test="owner != null" >
+        owner = #{owner},
       </if>
-      <if test="brandCertificate != null" >
-        brandCertificate = #{brandCertificate},
+      <if test="certificate != null" >
+        certificate = #{certificate},
       </if>
-      <if test="brandWebSite != null" >
-        brandWebSite = #{brandWebSite},
+      <if test="webSite != null" >
+        webSite = #{webSite},
+      </if>
+      <if test="status != null" >
+        status = #{status},
       </if>
       lastModifyTime = #{lastModifyTime},
     </set>
@@ -119,31 +134,45 @@
     where id = #{id}
 
   </update>
+  <update id="batchDeleteBrand" >
+    update t_p_brand
+    <set >
+      status = 3
+    </set>
+    where id = #{id}
+  </update>
   <select id="findAllBrand" resultMap="ResultMap" >
     select
     distinct t.brandid,b.logourl
     from t_p_product t
     LEFT JOIN t_p_brand b ON t.brandid = b.id
-    WHERE t.scateid = #{scateid} and b.status!=3
+    WHERE t.scateid = #{scateid} and b.status = 1 and t.status = 1
   </select>
   <select id="searchSuggestBrand" resultMap="ResultMap3" >
     select
-    id,brandCNName,logourl
+    id,CNName,logourl
     from t_p_brand
-    where status!=3
+    where status = 1 and t.status = 1
     order by views desc limit 0,5
   </select>
   <select id="searchAll" resultMap="ResultMap1" >
-    SELECT DISTINCT b.id,b.brandCNName,p.scateid
+    SELECT DISTINCT b.id,b.CNName,p.scateid
     FROM t_p_product p
     LEFT JOIN t_p_brand b ON b.id = p.brandid
-    where b.status!=3
+    where b.status = 1 and p.status = 1
   </select>
   <select id="SuggestBrand" resultMap="ResultMap2" >
-    SELECT DISTINCT b.id,b.brandCNName,p.scateid,b.logourl
+    SELECT DISTINCT b.id,b.CNName,p.scateid,b.logourl
     FROM t_p_product p
     LEFT JOIN t_p_brand b ON b.id = p.brandid
-    where b.status!=3
+    where b.status = 1
     ORDER by b.views desc
+  </select>
+  <select id="details"  resultMap="ResultMap4">
+    select
+    m.enterpriseName,m.address,m.province,m.city,m.area,m.enterpriseTelephone,b.webSite,b.imgurl,b.description,b.logourl
+    from t_p_brand b
+    LEFT JOIN t_m_member m on b.createid = m.id
+    where b.id = #{id}
   </select>
 </mapper>

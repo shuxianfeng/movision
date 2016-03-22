@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.common.BrandBean;
+import com.zhuhuibao.common.BrandDetailBean;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.common.SuggestBrand;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
@@ -17,6 +18,8 @@ public interface BrandMapper {
 
     int deleteBrand(Brand brand);
 
+    int batchDeleteBrand(String id);
+
     List<Brand> searchBrandByStatus(Brand brand);
 
     int searchBrandSize(Brand brand);
@@ -30,4 +33,6 @@ public interface BrandMapper {
     List<BrandBean> searchAll();
 
     List<SuggestBrand> SuggestBrand();
+
+    BrandDetailBean details(String id);
 }

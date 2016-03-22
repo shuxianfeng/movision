@@ -1,10 +1,12 @@
 package com.zhuhuibao.business.brand;
 
 import com.zhuhuibao.common.*;
+import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
 import com.zhuhuibao.mybatis.oms.entity.Category;
 import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
 import com.zhuhuibao.mybatis.product.entity.Product;
+import com.zhuhuibao.mybatis.product.mapper.ProductMapper;
 import com.zhuhuibao.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,9 @@ public class BrandController {
 
     @Autowired
     private BrandMapper brandMapper;
+
+    @Autowired
+    private ProductMapper productMapper;
 
     @Autowired
     private CategoryMapper categoryMapper;
@@ -176,5 +181,33 @@ public class BrandController {
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
 
-
+    /**
+     * 查询推荐品牌
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/brand/details", method = RequestMethod.GET)
+    public void details(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+        Map map1 = new HashMap();
+        Map map2 = new HashMap();
+        //品牌详情
+        BrandDetailBean brand = brandMapper.details(id);
+        map2.put("company",brand.getCompany());
+        map2.put("webSite",brand.getWebSite());
+        map2.put("phone",brand.getPhone());
+        map2.put("address",brand.getAddress());
+        map2.put("introduce",brand.getBrandDesc());
+        map2.put("imgUrl",brand.getImgUrl());
+        map2.put("logo",brand.getLogo());
+        map1.put("brandDesc",map2);
+        //品牌对应的子系统
+        List<ResultBean> list = productMapper.findSubSystem(id);
+        map1.put("subSystem",list);
+        JsonResult result = new JsonResult();
+        result.setCode(200);
+        result.setData(map1);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
 }

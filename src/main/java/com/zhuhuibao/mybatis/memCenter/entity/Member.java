@@ -20,17 +20,13 @@ public class Member {
 
     private Integer status;
 
-    private Integer identify;
-
-    private Integer isValidatePass;
+    private String identify;
 
     private String enterpriseName;
 
-    private Integer employeeType;
+    private Integer workType;
 
     private Long enterpriseEmployeeParentId;
-
-    private String companyIdentify;
 
     private String province;
 
@@ -58,9 +54,9 @@ public class Member {
 
     private String companyBusinessLicenseImg;
 
-    private Integer enterpriseTelephone;
+    private String enterpriseTelephone;
 
-    private Integer enterpriseFox;
+    private String enterpriseFox;
 
     private String enterpriseWebSite;
 
@@ -79,8 +75,6 @@ public class Member {
     private Integer sex;
 
     private Integer personCompanyType;
-
-    private Integer personPosition;
 
     private String personIdentifyCard;
 
@@ -145,20 +139,12 @@ public class Member {
         this.status = status;
     }
 
-    public Integer getIdentify() {
+    public String getIdentify() {
         return identify;
     }
 
-    public void setIdentify(Integer identify) {
+    public void setIdentify(String identify) {
         this.identify = identify;
-    }
-
-    public Integer getIsValidatePass() {
-        return isValidatePass;
-    }
-
-    public void setIsValidatePass(Integer isValidatePass) {
-        this.isValidatePass = isValidatePass;
     }
 
     public String getEnterpriseName() {
@@ -169,28 +155,12 @@ public class Member {
         this.enterpriseName = enterpriseName == null ? null : enterpriseName.trim();
     }
 
-    public Integer getEmployeeType() {
-        return employeeType;
-    }
-
-    public void setEmployeeType(Integer employeeType) {
-        this.employeeType = employeeType;
-    }
-
     public Long getEnterpriseEmployeeParentId() {
         return enterpriseEmployeeParentId;
     }
 
     public void setEnterpriseEmployeeParentId(Long enterpriseEmployeeParentId) {
         this.enterpriseEmployeeParentId = enterpriseEmployeeParentId;
-    }
-
-    public String getCompanyIdentify() {
-        return companyIdentify;
-    }
-
-    public void setCompanyIdentify(String companyIdentify) {
-        this.companyIdentify = companyIdentify;
     }
 
     public String getProvince() {
@@ -265,7 +235,6 @@ public class Member {
         this.saleProductDesc = saleProductDesc == null ? null : saleProductDesc.trim();
     }
 
-    @JsonSerialize(using = JsonDateSerializer.class)
     public String getEnterpriseCreaterTime() {
         return enterpriseCreaterTime;
     }
@@ -298,19 +267,19 @@ public class Member {
         this.companyBusinessLicenseImg = companyBusinessLicenseImg == null ? null : companyBusinessLicenseImg.trim();
     }
 
-    public Integer getEnterpriseTelephone() {
+    public String getEnterpriseTelephone() {
         return enterpriseTelephone;
     }
 
-    public void setEnterpriseTelephone(Integer enterpriseTelephone) {
+    public void setEnterpriseTelephone(String enterpriseTelephone) {
         this.enterpriseTelephone = enterpriseTelephone;
     }
 
-    public Integer getEnterpriseFox() {
+    public String getEnterpriseFox() {
         return enterpriseFox;
     }
 
-    public void setEnterpriseFox(Integer enterpriseFox) {
+    public void setEnterpriseFox(String enterpriseFox) {
         this.enterpriseFox = enterpriseFox;
     }
 
@@ -386,14 +355,6 @@ public class Member {
         this.personCompanyType = personCompanyType;
     }
 
-    public Integer getPersonPosition() {
-        return personPosition;
-    }
-
-    public void setPersonPosition(Integer personPosition) {
-        this.personPosition = personPosition;
-    }
-
     public String getPersonIdentifyCard() {
         return personIdentifyCard;
     }
@@ -416,5 +377,13 @@ public class Member {
 
     public void setPersonIDBackImgUrl(String personIDBackImgUrl) {
         this.personIDBackImgUrl = personIDBackImgUrl == null ? null : personIDBackImgUrl.trim();
+    }
+
+    public Integer getWorkType() {
+        return workType;
+    }
+
+    public void setWorkType(Integer workType) {
+        this.workType = workType;
     }
 }
