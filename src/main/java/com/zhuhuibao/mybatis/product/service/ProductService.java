@@ -576,4 +576,14 @@ public class ProductService {
 		String[] arr = str.split(",");
 //		System.out.println(gson.toJson(a));
 	}
+
+	/**
+	 * 查询品牌对应的子系统
+	 */
+	public List<ResultBean> findSubSystem(String id)
+	{
+		log.debug("查询品牌对应的子系统");
+		List<ResultBean> list = productMapper.findSubSystem(id);
+		return list;
+	}
 }

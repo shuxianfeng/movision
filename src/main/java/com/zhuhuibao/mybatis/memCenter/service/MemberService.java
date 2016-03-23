@@ -1,5 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
+import com.zhuhuibao.common.AccountBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 会员中心业务处理
@@ -118,5 +120,15 @@ public class MemberService {
 		log.debug("公司logo修改");
 		int isUpdate = memberMapper.uploadLogo(member);
 		return isUpdate;
+	}
+
+	/**
+	 * 查询代理商
+	 */
+	public List<AccountBean> findAgentMember(String account)
+	{
+		log.debug("查询代理商");
+		List<AccountBean> memList = memberMapper.findAgentMember(account);
+		return memList;
 	}
 }

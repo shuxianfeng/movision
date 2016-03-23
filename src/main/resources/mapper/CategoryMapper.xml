@@ -81,4 +81,24 @@
     from t_p_category a,t_p_category b
     where a.id=#{scateid} and a.parentId=b.id;
   </select>
+  <select id="findCategoryByBrand" resultMap="ResultMap1">
+    SELECT DISTINCT p.fcateid as id,p.scateid as code,(
+    SELECT name
+    FROM t_p_category
+    WHERE id= p.fcateid) AS systemName,(
+    SELECT name
+    FROM t_p_category
+    WHERE id= p.scateid) AS subSystemName
+    FROM t_p_product p
+    LEFT JOIN t_p_category c ON c.id = p.fcateid
+    WHERE p.brandid = #{id}
+    ORDER BY p.fcateid ,p.scateid
+  </select>
+  <select id="findSystemByBrand" resultMap="ResultMap">
+    SELECT DISTINCT p.fcateid as id,c.name
+    FROM t_p_product p
+    LEFT JOIN t_p_category c ON c.id = p.fcateid
+    WHERE p.brandid = #{id}
+    ORDER BY p.fcateid,p.scateid
+  </select>
 </mapper>
