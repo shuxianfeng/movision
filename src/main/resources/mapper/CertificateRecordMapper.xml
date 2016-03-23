@@ -6,6 +6,7 @@
     <result column="mem_id" property="mem_id" jdbcType="INTEGER" />
     <result column="certificate_number" property="certificate_number" jdbcType="VARCHAR" />
     <result column="certificate_name" property="certificate_name" jdbcType="VARCHAR" />
+    <result column="certificate_id" property="certificate_id" jdbcType="VARCHAR" />
     <result column="certificate_grade" property="certificate_grade" jdbcType="INTEGER" />
     <result column="certificate_url" property="certificate_url" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="VARCHAR" />
@@ -13,14 +14,14 @@
     <result column="is_deleted" property="is_deleted" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, mem_id, certificate_number, certificate_name, certificate_grade,
+    id, mem_id, certificate_number, certificate_name, certificate_grade,certificate_id,
     certificate_url,type, time, is_deleted
   </sql>
   <insert id="saveCertificate" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord" >
-    insert into t_certificate_record (id, mem_id, certificate_number,
+    insert into t_certificate_record (id, mem_id, certificate_number,certificate_id,
     certificate_name, certificate_grade, certificate_url,type, time, is_deleted
     )
-    values (#{id,jdbcType=BIGINT}, #{mem_id}, #{certificate_number},
+    values (#{id,jdbcType=BIGINT}, #{mem_id}, #{certificate_number},#{certificate_id},
     #{certificate_name}, #{certificate_grade},  #{certificate_url}, #{type},#{time}, 0
     )
   </insert>
@@ -35,6 +36,9 @@
       </if>
       <if test="certificate_name != null">
         certificate_name = #{certificate_name},
+      </if>
+      <if test="certificate_id != null">
+        certificate_id = #{certificate_id},
       </if>
       <if test="certificate_grade != null">
         certificate_grade = #{certificate_grade},

@@ -11,6 +11,8 @@ public class CertificateRecord {
 
     private String certificate_name;
 
+    private String certificate_id;
+
     private Integer certificate_grade;
 
     private String certificate_url;
@@ -91,5 +93,13 @@ public class CertificateRecord {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getCertificate_id() {
+        return certificate_id;
+    }
+
+    public void setCertificate_id(String certificate_id) {
+        this.certificate_id = certificate_id;
     }
 }

@@ -4,7 +4,11 @@ import com.zhuhuibao.common.AccountBean;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.common.SysBean;
+import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
+import com.zhuhuibao.mybatis.memCenter.entity.Agent;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
+import com.zhuhuibao.mybatis.memCenter.service.AccountService;
+import com.zhuhuibao.mybatis.memCenter.service.AgentService;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.CategoryService;
@@ -25,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 代理商管理
  * Created by cxx on 2016/3/22 0022.
  */
 @RestController
@@ -41,6 +46,14 @@ public class AgentMamageController {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private AgentService agentService;
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private DictionaryService ds;
     /**
      * 根据品牌查询它所属的大系统，子系统
      * @param req
@@ -128,5 +141,150 @@ public class AgentMamageController {
         }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 关联代理商保存
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/agent/agentSave", method = RequestMethod.POST)
+    public void agentSave(HttpServletRequest req, HttpServletResponse response, Agent agent) throws IOException {
+        JsonResult result = new JsonResult();
+        try{
+            int isSave = agentService.agentSave(agent);
+            if(isSave==0){
+                result.setCode(400);
+                result.setMessage("关联代理商保存成功");
+            }else{
+                result.setCode(200);
+            }
+        }catch (Exception e){
+            log.error("save agent error!");
+        }
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 关联代理商编辑更新
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/agent/agentUpdate", method = RequestMethod.POST)
+    public void agentUpdate(HttpServletRequest req, HttpServletResponse response, Agent agent) throws IOException {
+        JsonResult result = new JsonResult();
+        try{
+            int isUpdate = agentService.agentUpdate(agent);
+            if(isUpdate==0){
+                result.setCode(400);
+                result.setMessage("关联代理商编辑更新成功");
+            }else{
+                result.setCode(200);
+            }
+        }catch (Exception e){
+            log.error("update agent error!");
+        }
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 取消关联代理商
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/agent/cancelAgent", method = RequestMethod.POST)
+    public void cancelAgent(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult result = new JsonResult();
+        Agent agent = new Agent();
+        agent.setStatus("1");
+        try{
+            int isUpdate = agentService.agentUpdate(agent);
+            if(isUpdate==0){
+                result.setCode(400);
+                result.setMessage("取消关联代理商成功");
+            }else{
+                result.setCode(200);
+            }
+        }catch (Exception e){
+            log.error("cancel agent error!");
+        }
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 区域按首拼分类
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/agent/province", method = RequestMethod.GET)
+    public void province(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult result = new JsonResult();
+        Map map = new HashMap();
+        List list1 = new ArrayList();
+        List list2 = new ArrayList();
+        List list3 = new ArrayList();
+        List list4 = new ArrayList();
+        try{
+            List<ResultBean> list = agentService.searchProvinceByPinYin();
+            for(int i=0;i<8;i++){
+                list1.add(list.get(i));
+            }
+            list1.add(list.get(33));
+            for(int j=8;j<17;j++){
+                list2.add(list.get(j));
+            }
+            for(int k=17;k<26;k++){
+                list3.add(list.get(k));
+            }
+            for(int l=27;l<33;l++){
+                list4.add(list.get(l));
+            }
+            map.put("A_G",list1);
+            map.put("H-K",list2);
+            map.put("L-S",list3);
+            map.put("T-Z",list4);
+            result.setCode(200);
+            result.setData(map);
+        }catch (Exception e){
+            log.error("searchProvinceByPinYin error!");
+        }
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 邀请代理商入驻
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/agent/inviteAgent", method = RequestMethod.POST)
+    public void inviteAgent(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult result = new JsonResult();
+        String title = req.getParameter("title");
+        String content = req.getParameter("content");
+        String emails[] = req.getParameterValues("emails");
+        try{
+            for(int i = 0; i < emails.length; i++){
+                String email = emails[i];
+                String mail = ds.findMailAddress(email);
+                if(mail == null && mail.equals("")){
+                    result.setCode(400);
+                    result.setData(email);
+                    result.setMessage("邮箱格式不正确！");
+                }else{
+                    accountService.sendInviteEmail(title,content,email);
+                }
+            }
+        }catch (Exception e){
+            log.error("send inviteEmail error!");
+        }
     }
 }

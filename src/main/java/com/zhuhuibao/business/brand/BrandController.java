@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 品牌业务管理
  * Created by cxx on 2016/3/16 0016.
  */
 @RestController

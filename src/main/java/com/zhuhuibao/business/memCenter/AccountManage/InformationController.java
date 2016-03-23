@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
+ * 会员中心资料维护
  * @author cxx
  * @since 16/2/25.
  */

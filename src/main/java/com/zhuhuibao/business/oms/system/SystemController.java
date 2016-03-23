@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
+ * 运营中心类目管理
  * Created by cxx on 2016/3/4 0004.
  */
 @RestController()

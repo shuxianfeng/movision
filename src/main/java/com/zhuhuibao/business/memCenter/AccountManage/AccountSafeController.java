@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 会员中心账户安全管理
  * Created by cxx on 2016/3/11 0011.
  */
 @RestController

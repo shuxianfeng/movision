@@ -58,4 +58,13 @@ public class AccountService {
         //发送邮件
         SendEmail.send(member.getEmail(), sb.toString(),"筑慧宝-邮箱修改");
     }
+
+    /**
+     * 发送邀请代理商邮件
+     */
+    public void sendInviteEmail(String title,String content,String email){
+        log.info("发送邀请代理商邮件");
+        //发送邮件
+        SendEmail.send(email, content,title);
+    }
 }
