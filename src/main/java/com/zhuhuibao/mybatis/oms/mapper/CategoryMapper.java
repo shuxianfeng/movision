@@ -23,4 +23,8 @@ public interface CategoryMapper {
     List<SysBean> searchAll();
     
     List<ResultBean> getFcateByScate(int scateid);
+
+    List<SysBean> findCategoryByBrand(String id);
+
+    List<ResultBean> findSystemByBrand(String id);
 }

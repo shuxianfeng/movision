@@ -41,6 +41,12 @@
     <result column="personIDFrontImgUrl" property="personIDFrontImgUrl" jdbcType="VARCHAR" />
     <result column="personIDBackImgUrl" property="personIDBackImgUrl" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.AccountBean" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     id, mobile, email, emailCheckCode, password, registerTime, status, identify, emailCheckCode,
     enterpriseName, workType, enterpriseEmployeeParentId, province,
@@ -284,4 +290,12 @@
     where
     id = #{id}
   </update>
+  <select id="findAgentMember" resultMap="ResultMap">
+    select
+    id,mobile,email,enterpriseName
+    from t_m_member
+    where
+    identify like '%4%' and
+    (email like CONCAT('%',#{account},'%') or mobile like CONCAT('%',#{account},'%') or enterpriseName like CONCAT('%',#{account},'%'))
+  </select>
 </mapper>
