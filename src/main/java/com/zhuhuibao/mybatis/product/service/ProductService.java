@@ -60,7 +60,6 @@ public class ProductService {
 		{
 			Map<String,Long> paramMap = paramService.insertParam(product);
 			List<ParamPrice> paramPrice = product.getParamPrice();
-			product.setStatus(0);
 			if(paramPrice!= null && !paramPrice.isEmpty())
 			{
 				String productName = product.getName();
