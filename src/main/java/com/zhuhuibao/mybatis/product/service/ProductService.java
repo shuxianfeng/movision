@@ -86,6 +86,7 @@ public class ProductService {
 					product.setParamValues(value_sb.toString());
 					product.setPrice(pp.getPrice());
 					product.setRepository(pp.getRepository());
+					product.setImgUrl(pp.getImgUrl());
 					//用上传的参数图片
 					productId = productMapper.insertSelective(product);
 				}
