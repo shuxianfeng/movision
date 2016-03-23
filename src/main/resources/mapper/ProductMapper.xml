@@ -309,7 +309,7 @@
   
     <select id="queryRecommendHotProduct" parameterType="java.util.Map" resultMap="ProductMap">
       select t.id, t.name,t.price,
-      case when (locate(',',imgUrl) > 0) then substring(imgUrl,1,locate(',',imgUrl)-1) when locate(',',imgUrl) = 0 then imgUrl end as imgUrl
+      case when (locate(';',imgUrl) > 0) then substring(imgUrl,1,locate(';',imgUrl)-1) when locate(';',imgUrl) = 0 then imgUrl end as imgUrl
       from t_p_product t 
       <where>
 	      <if test="scateid != null">
