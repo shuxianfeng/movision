@@ -4,6 +4,7 @@ import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.oms.entity.Category;
 import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
+import com.zhuhuibao.mybatis.oms.service.CategoryService;
 import com.zhuhuibao.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ public class SystemController {
             .getLogger(SystemController.class);
 
     @Autowired
-    private CategoryMapper categoryMapper;
+    private CategoryService categoryService;
     /**
      * 查询大系统类目
      * @param req
@@ -36,7 +37,7 @@ public class SystemController {
 
     @RequestMapping(value = "/rest/systemSearch", method = RequestMethod.GET)
     public void systemSearch(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        List<ResultBean> systemList = categoryMapper.findSystemList();
+        List<ResultBean> systemList = categoryService.findSystemList();
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(systemList));
     }
@@ -51,7 +52,7 @@ public class SystemController {
     @RequestMapping(value = "/rest/subSystemSearch", method = RequestMethod.GET)
     public void subSystemSearch(HttpServletRequest req, HttpServletResponse response) throws IOException {
         String parentId = req.getParameter("parentId");
-        List<ResultBean> subSystemList = categoryMapper.findSubSystemList(parentId);
+        List<ResultBean> subSystemList = categoryService.findSubSystemList(parentId);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(subSystemList));
     }
@@ -66,7 +67,7 @@ public class SystemController {
     @RequestMapping(value = "/rest/addSystem", method = RequestMethod.POST)
     public void addSystem(HttpServletRequest req, HttpServletResponse response,Category category) throws IOException {
         JsonResult result = new JsonResult();
-        int isAdd = categoryMapper.addSystem(category);
+        int isAdd = categoryService.addSystem(category);
         if(isAdd==0){
             result.setCode(400);
             result.setMessage("添加失败");
@@ -87,7 +88,7 @@ public class SystemController {
     @RequestMapping(value = "/rest/updateSystem", method = RequestMethod.POST)
     public void updateSystem(HttpServletRequest req, HttpServletResponse response,Category category) throws IOException {
         JsonResult result = new JsonResult();
-        int isUpdate = categoryMapper.updateSystem(category);
+        int isUpdate = categoryService.updateSystem(category);
         if(isUpdate==0){
             result.setCode(400);
             result.setMessage("更新失败");
@@ -108,7 +109,7 @@ public class SystemController {
     @RequestMapping(value = "/rest/deleteSystem", method = RequestMethod.POST)
     public void deleteSystem(HttpServletRequest req, HttpServletResponse response,Category category) throws IOException {
         JsonResult result = new JsonResult();
-        int isDelete = categoryMapper.deleteSystem(category);
+        int isDelete = categoryService.deleteSystem(category);
         if(isDelete==0){
             result.setCode(400);
             result.setMessage("删除失败");

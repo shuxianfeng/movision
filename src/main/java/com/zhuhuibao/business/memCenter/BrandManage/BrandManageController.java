@@ -5,6 +5,7 @@ import com.zhuhuibao.common.ApiConstants;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
+import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.RandomFileNamePolicy;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
@@ -32,7 +33,7 @@ public class BrandManageController {
             .getLogger(BrandManageController.class);
 
     @Autowired
-    private BrandMapper brandMapper;
+    private BrandService brandService;
 
     @Autowired
     ApiConstants ApiConstants;
@@ -46,7 +47,7 @@ public class BrandManageController {
     public void upload(HttpServletRequest req, HttpServletResponse response, Brand brand) throws IOException {
         JsonResult result = new JsonResult();
         brand.setPublishTime(new Date());
-        int isAdd = brandMapper.addBrand(brand);
+        int isAdd = brandService.addBrand(brand);
         if(isAdd==0){
             result.setCode(400);
             result.setMessage("添加失败");
@@ -71,7 +72,7 @@ public class BrandManageController {
             brand.setStatus(2);
         }
         brand.setLastModifyTime(new Date());
-        int isUpdate = brandMapper.updateBrand(brand);
+        int isUpdate = brandService.updateBrand(brand);
         if(isUpdate==0){
             result.setCode(400);
             result.setMessage("更新失败");
@@ -89,9 +90,9 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/deleteBrand", method = RequestMethod.POST)
-    public void deleteBrand(HttpServletRequest req, HttpServletResponse response, Brand brand) throws IOException {
+    public void deleteBrand(HttpServletRequest req, HttpServletResponse response, String id) throws IOException {
         JsonResult result = new JsonResult();
-        int isDelete = brandMapper.deleteBrand(brand);
+        int isDelete = brandService.deleteBrand(id);
         if(isDelete==0){
             result.setCode(400);
             result.setMessage("删除失败");
@@ -115,7 +116,7 @@ public class BrandManageController {
         int isDelete = 0;
         for(int i = 0; i < ids.length; i++){
             String id = ids[i];
-            isDelete = brandMapper.batchDeleteBrand(id);
+            isDelete = brandService.deleteBrand(id);
             if(isDelete==0){
                 result.setCode(400);
                 result.setMessage("批量删除失败");
@@ -137,7 +138,7 @@ public class BrandManageController {
      */
     @RequestMapping(value = "/rest/searchBrand", method = RequestMethod.GET)
     public void searchBrand(HttpServletRequest req, HttpServletResponse response, Brand brand) throws IOException {
-        List<Brand> brandList = brandMapper.searchBrandByStatus(brand);
+        List<Brand> brandList = brandService.searchBrandByStatus(brand);
         JsonResult result = new JsonResult();
         result.setCode(200);
         result.setData(brandList);
@@ -150,7 +151,7 @@ public class BrandManageController {
      */
     @RequestMapping(value = "/rest/searchBrandSize", method = RequestMethod.GET)
     public void searchBrandSize(HttpServletRequest req, HttpServletResponse response, Brand brand) throws IOException {
-        int size = brandMapper.searchBrandSize(brand);
+        int size = brandService.searchBrandSize(brand);
         JsonResult result = new JsonResult();
         result.setCode(200);
         result.setData(size);
@@ -163,13 +164,13 @@ public class BrandManageController {
      */
     @RequestMapping(value = "/rest/brandDetails", method = RequestMethod.GET)
     public JsonResult brandDetails(HttpServletRequest req, HttpServletResponse response,int id) throws IOException {
-        Brand brand = brandMapper.brandDetails(id);
+        Brand brand = brandService.brandDetails(id);
         if(brand.getViews()==null){
             brand.setViews(1);
         }else{
             brand.setViews(brand.getViews()+1);
         }
-        int isUpdate = brandMapper.updateBrand(brand);
+        int isUpdate = brandService.updateBrand(brand);
         JsonResult result = new JsonResult();
         result.setCode(200);
         result.setData(brand);
@@ -205,7 +206,7 @@ public class BrandManageController {
                 String fileName = (String)fileNames.nextElement();
                 if(null != multi.getFile(fileName)){
                     String lastFileName = multi.getFilesystemName(fileName);
-                    url =  ip_address + "/upload/" + lastFileName;
+                    url =  ip_address + "/upload/" + lastFileName;//http://192.168.1.119:8080
                     result.setCode(200);
                     result.setData(url);
                 }

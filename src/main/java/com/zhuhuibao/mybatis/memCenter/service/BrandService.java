@@ -28,7 +28,7 @@ public class BrandService {
     private BrandMapper brandMapper;
 
     /**
-     * 根据会员id，状态status查询品牌
+     * 根据会员id，状态status(可以为空)查询品牌
      */
     public List<Brand> searchBrandByStatus(Brand brand)
     {
@@ -84,6 +84,56 @@ public class BrandService {
     {
         log.debug("查询品牌详情");
         BrandDetailBean brand = brandMapper.details(id);
+        return brand;
+    }
+
+    /**
+     * 新建品牌
+     */
+    public int addBrand(Brand brand)
+    {
+        log.debug("新建品牌");
+        int isAdd = brandMapper.addBrand(brand);
+        return isAdd;
+    }
+
+    /**
+     * 更新品牌
+     */
+    public int updateBrand(Brand brand)
+    {
+        log.debug("更新品牌");
+        int isUpdate = brandMapper.updateBrand(brand);
+        return isUpdate;
+    }
+
+    /**
+     * 删除品牌
+     */
+    public int deleteBrand(String id)
+    {
+        log.debug("删除品牌");
+        int isDelete = brandMapper.deleteBrand(id);
+        return isDelete;
+    }
+
+    /**
+     * 品牌数量
+     */
+    public int searchBrandSize(Brand brand)
+    {
+        log.debug("品牌数量");
+        int size = brandMapper.searchBrandSize(brand);
+        return size;
+    }
+
+    /**
+     * 查询品牌详情
+     */
+    public Brand brandDetails(int id)
+    {
+        log.debug("查询品牌详情");
+        Brand brand = brandMapper.brandDetails(id);
         return brand;
     }
 }

@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- *
+ * 类目管理
  * @author cxx
  *
  */
@@ -80,5 +80,33 @@ public class CategoryService {
         log.debug("根据大系统id查询大系统信息");
         Category category = categoryMapper.findSystem(id);
         return category;
+    }
+
+
+    /**
+     * 添加类目
+     */
+    public int addSystem(Category category){
+        log.debug("添加类目");
+        int isAdd = categoryMapper.addSystem(category);
+        return isAdd;
+    }
+
+    /**
+     * 更新类目
+     */
+    public int updateSystem(Category category){
+        log.debug("更新类目");
+        int isUpdate = categoryMapper.updateSystem(category);
+        return isUpdate;
+    }
+
+    /**
+     * 删除类目
+     */
+    public int deleteSystem(Category category){
+        log.debug("删除类目");
+        int isDelete = categoryMapper.deleteSystem(category);
+        return isDelete;
     }
 }

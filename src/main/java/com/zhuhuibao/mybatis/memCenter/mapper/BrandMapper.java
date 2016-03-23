@@ -16,9 +16,7 @@ public interface BrandMapper {
 
     int updateBrand(Brand brand);
 
-    int deleteBrand(Brand brand);
-
-    int batchDeleteBrand(String id);
+    int deleteBrand(String id);
 
     List<Brand> searchBrandByStatus(Brand brand);
 

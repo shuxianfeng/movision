@@ -126,15 +126,7 @@
     from t_p_brand
     where id = #{id}
   </select>
-  <update id="deleteBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" >
-    update t_p_brand
-    <set >
-      status = 3
-    </set>
-    where id = #{id}
-
-  </update>
-  <update id="batchDeleteBrand" >
+  <update id="deleteBrand">
     update t_p_brand
     <set >
       status = 3
