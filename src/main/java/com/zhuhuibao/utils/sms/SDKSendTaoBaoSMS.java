@@ -14,7 +14,7 @@ public class SDKSendTaoBaoSMS {
 	private static Logger log = LoggerFactory.getLogger(SDKSendTaoBaoSMS.class);
 	
 	/**
-	 * 用户注册时发送的短信验证码
+	 * * 用户注册时发送的短信验证码    支持，一次最多可提交200个手机号码；（温馨提示：手机号以英文逗号分开）
 	 * @param mobile  手机号
 	 * @param checkCode 验证码
 	 * @param time  过期时间
@@ -36,7 +36,7 @@ public class SDKSendTaoBaoSMS {
 	}
 	
 	/**
-	 * 找回密码时发送的短信验证码
+	 * 找回密码时发送的短信验证码  一次最多可提交200个手机号码；（温馨提示：手机号以英文逗号分开）
 	 * @param mobile
 	 * @param checkCode
 	 * @param time
@@ -58,7 +58,7 @@ public class SDKSendTaoBaoSMS {
 	}
 	
 	/**
-	 * 修改绑定的手机短信验证码
+	 * 修改绑定的手机短信验证码 一次最多可提交200个手机号码；（温馨提示：手机号以英文逗号分开）
 	 * @param mobile
 	 * @param checkCode
 	 * @param time

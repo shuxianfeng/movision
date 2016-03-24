@@ -35,7 +35,7 @@ public class SendEmail {
         props.put("mail.smtp.host", HOST);//设置服务器地址
         props.put("mail.store.protocol" , PROTOCOL);//设置协议
         props.put("mail.smtp.port", PORT);//设置端口
-        props.put("mail.smtp.auth" , "true");
+        props.put("mail.smtp.auth" , "true");//通过验证
 
         Authenticator authenticator = new Authenticator() {
             @Override
@@ -72,8 +72,44 @@ public class SendEmail {
         }
     }
     
+    /**
+     * 邮件群发，发送个多个用户
+     * @param toEmail  收件人数组集合
+     * @param content  发送邮件内容
+     * @param title  邮件标题
+     */
+    public static void sendMutilMail(String[] toEmail , String content,String title) {
+        Session session = getSession();
+        try {
+            log.info("--send--"+content);
+            // Instantiate a message
+            Message msg = new MimeMessage(session);
+
+            //Set message attributes
+            msg.setFrom(new InternetAddress(FROM));
+            if(toEmail != null && toEmail.length > 0)
+            {
+            	InternetAddress[] address = new InternetAddress[toEmail.length];  
+                for (int i = 0; i < toEmail.length; i++) {  
+                    address[i] = new InternetAddress(toEmail[i]);  
+                }  
+                msg.setRecipients(Message.RecipientType.TO, address);
+                msg.setSubject(title);
+                msg.setSentDate(new Date());
+                msg.setContent(content , "text/html;charset=utf-8");
+
+                //Send the message
+                Transport.send(msg);
+            }
+            
+        }
+        catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
+    }
+    
     public static void main(String[] args) {
-    	String serverIp = "192.168.1.100";
+    	/*String serverIp = "192.168.1.100";
     	Member member = new Member();
     	member.setEmail("penglong@zhuhui8.com");
     	StringBuffer sb=new StringBuffer("");
@@ -109,6 +145,8 @@ public class SendEmail {
         sb.append("</p>");
         log.info("send email link == "+sb.toString());
         //发送邮件
-        SendEmail.send(member.getEmail(), sb.toString(),"筑慧宝-找回账户密码");
+        SendEmail.send(member.getEmail(), sb.toString(),"筑慧宝-找回账户密码");*/
+        String[] toEmail = {"19630759@qq.com","23915054@qq.com"};        		
+        SendEmail.sendMutilMail(toEmail, "ceshi", "测试");
 	}
 }
