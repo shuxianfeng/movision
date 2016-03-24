@@ -52,11 +52,11 @@ public class RegisterValidateService {
         sb.append(member.getRegisterTime());
         sb.append(" 注册了筑慧宝账号，请在24小时内点击以下链接，激活该账号：");
         sb.append("</p>");
-        sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"http://");
+        sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"");
         sb.append(serverIp);
         sb.append("/rest/activateEmail?action=activate&vm=");
         sb.append(new String(EncodeUtil.encodeBase64(member.getId()+","+member.getEmail())));
-        sb.append("\">http://");
+        sb.append("\">");
         sb.append(serverIp);
         sb.append("/rest/activateEmail?action=activate&vm="); 
         sb.append(new String(EncodeUtil.encodeBase64(member.getId()+","+member.getEmail())));
@@ -181,7 +181,7 @@ public class RegisterValidateService {
 	 */
 	public void sendValidateMail(Member member,String serverIp){
 		String currentTime = DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss");
-		String url = "http://"+serverIp+"/rest/validateMail?vm="+new String(EncodeUtil.encodeBase64("validate,"+member.getEmail()+","+currentTime));
+		String url = serverIp+"/rest/validateMail?vm="+new String(EncodeUtil.encodeBase64("validate,"+member.getEmail()+","+currentTime));
 		StringBuffer sb=new StringBuffer("");
         sb.append("<div style=\"line-height:40px;height:40px\">");
         sb.append("</div>");

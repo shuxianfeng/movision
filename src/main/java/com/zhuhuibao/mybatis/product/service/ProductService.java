@@ -348,9 +348,14 @@ public class ProductService {
     					if(id == prd.getId())
     					{
     						prdMap.put("defalut", new Boolean(true));
-    						productMap.put("fcateName",prd.getFcateName());
-    						productMap.put("scateName",prd.getScateName());
-    						productMap.put("brandName", prd.getCNName());
+    						Map<String,Object> navigationMap = new TreeMap<String,Object>();
+    						navigationMap.put("fcateid", prd.getFcateid());
+    						navigationMap.put("fcateName",prd.getFcateName());
+    						navigationMap.put("scateid", prd.getScateid());
+    						navigationMap.put("scateName",prd.getScateName());
+    						navigationMap.put("brandid", prd.getBrandid());
+    						navigationMap.put("brandName", prd.getCNName());
+    						productMap.put("navigation", navigationMap);
     					}
     					String prdParamsIDS = prd.getParamIDs();
     					String prdParamValues = prd.getParamValues();

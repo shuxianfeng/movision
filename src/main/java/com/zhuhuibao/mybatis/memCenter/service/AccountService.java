@@ -6,7 +6,9 @@ package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.security.EncodeUtil;
+import com.zhuhuibao.utils.ResourcePropertiesUtils;
 import com.zhuhuibao.utils.SendEmail;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -41,11 +43,11 @@ public class AccountService {
         sb.append("您收到这封电子邮件是因为您 (也可能是某人冒充您的名义) 申请修改了绑定邮箱。假如这不是您本人所申请, 请不用理会这封电子邮件, 但是如果您持续收到这类的信件骚扰, 请您尽快联络管理员。");
         sb.append("</p>");
         sb.append("<p>请使用以下链接激活该邮箱：</p>");
-        sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"http://");
+        sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"");
         sb.append(serverIp);
         sb.append("/rest/activateEmail?action=activate&vm=");
         sb.append(new String(EncodeUtil.encodeBase64(member.getId()+","+member.getEmail())));
-        sb.append("\">http://");
+        sb.append("\">");
         sb.append(serverIp);
         sb.append("/rest/activateEmail?action=activate&vm=");
         sb.append(new String(EncodeUtil.encodeBase64(member.getId()+","+member.getEmail())));
@@ -85,8 +87,8 @@ public class AccountService {
                 "筑慧宝是优秀的Icity一站式服务平台，我司已入驻筑慧宝，期待着你们的加入！");
         sb.append("</p>");
         sb.append("<p>注册地址：</p>");
-        sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"http://139.196.189.100/register.html");
-        sb.append("\">http://139.196.189.100/register.html");
+        sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\""+ResourcePropertiesUtils.getValue("host.ip")+"/register.html");
+        sb.append("\">"+ResourcePropertiesUtils.getValue("host.ip")+"/register.html");
         sb.append("</a>");
         log.info("send email link == "+sb.toString());
         //发送邮件
