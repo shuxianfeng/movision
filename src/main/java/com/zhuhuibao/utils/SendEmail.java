@@ -23,8 +23,8 @@ public class SendEmail {
  	public static final String HOST = "smtp.exmail.qq.com";
     public static final String PROTOCOL = "smtp";   
     public static final int PORT = 465;
-    public static final String FROM = "penglong@zhuhui8.com";//发件人的email
-    public static final String PWD = "Pl@123456";//发件人密码
+    public static final String FROM = "zhuhuibao@zhuhui8.com";//发件人的email
+    public static final String PWD = "Zhb@D503";//发件人密码
     
     /**
      * 获取Session
@@ -36,6 +36,7 @@ public class SendEmail {
         props.put("mail.store.protocol" , PROTOCOL);//设置协议
         props.put("mail.smtp.port", PORT);//设置端口
         props.put("mail.smtp.auth" , "true");//通过验证
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
         Authenticator authenticator = new Authenticator() {
             @Override
@@ -109,9 +110,9 @@ public class SendEmail {
     }
     
     public static void main(String[] args) {
-    	/*String serverIp = "192.168.1.100";
+    	String serverIp = "139.196.189.100";
     	Member member = new Member();
-    	member.setEmail("penglong@zhuhui8.com");
+    	member.setEmail("19630759@qq.com");
     	StringBuffer sb=new StringBuffer("");
         sb.append("<div style=\"line-height:40px;height:40px\">");
         sb.append("</div>");
@@ -145,8 +146,8 @@ public class SendEmail {
         sb.append("</p>");
         log.info("send email link == "+sb.toString());
         //发送邮件
-        SendEmail.send(member.getEmail(), sb.toString(),"筑慧宝-找回账户密码");*/
-        String[] toEmail = {"19630759@qq.com","23915054@qq.com"};        		
-        SendEmail.sendMutilMail(toEmail, "ceshi", "测试");
+        SendEmail.send(member.getEmail(), sb.toString(),"筑慧宝-找回账户密码");
+        /*String[] toEmail = {"19630759@qq.com","23915054@qq.com"};        		
+        SendEmail.sendMutilMail(toEmail, "ceshi", "测试");*/
 	}
 }
