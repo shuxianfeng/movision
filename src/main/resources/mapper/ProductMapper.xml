@@ -215,7 +215,7 @@
       <if test="repository != null">
         repository = #{repository,jdbcType=DOUBLE},
       </if>
-      <if test="number != null and number != ''">
+      <if test="number != null">
         number = #{number,jdbcType=DOUBLE},
       </if>
       <if test="hit != null">

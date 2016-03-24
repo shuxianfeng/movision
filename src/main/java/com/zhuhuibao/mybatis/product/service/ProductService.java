@@ -118,6 +118,10 @@ public class ProductService {
     	log.info("update product");
     	try
     	{
+    		if(product.getNumber() == null)
+    		{
+    			product.setNumber(new Double(1));
+    		}
     		productMapper.updateByPrimaryKeySelective(product);
     	}
     	catch(Exception e)
