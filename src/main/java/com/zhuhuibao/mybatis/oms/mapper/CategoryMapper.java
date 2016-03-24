@@ -27,4 +27,6 @@ public interface CategoryMapper {
     List<SysBean> findCategoryByBrand(String id);
 
     List<ResultBean> findSystemByBrand(String id);
+
+    ResultBean querySystem(String id);
 }

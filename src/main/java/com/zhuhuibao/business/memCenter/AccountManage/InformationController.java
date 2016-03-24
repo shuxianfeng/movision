@@ -250,6 +250,28 @@ public class InformationController {
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 
+
+	/**
+	 * 人员规模
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+
+	@RequestMapping(value = "/rest/employeeSizeList", method = RequestMethod.GET)
+	public void employeeSizeList(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		JsonResult result = new JsonResult();
+		try{
+			List<EmployeeSize> employeeSizeList = memberService.findEmployeeSizeList();
+			result.setCode(200);
+			result.setData(employeeSizeList);
+		}catch (Exception e){
+			log.error("sql error",e);
+		}
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+	}
+
 	/**
 	 * 查询省
 	 * @param req

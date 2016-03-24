@@ -109,4 +109,13 @@ public class CategoryService {
         int isDelete = categoryMapper.deleteSystem(category);
         return isDelete;
     }
+
+    /**
+     * 查询系统信息
+     */
+    public ResultBean querySystem(String id){
+        log.debug("查询系统信息");
+        ResultBean result = categoryMapper.querySystem(id);
+        return result;
+    }
 }
