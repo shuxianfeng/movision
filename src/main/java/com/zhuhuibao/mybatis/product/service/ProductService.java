@@ -118,9 +118,9 @@ public class ProductService {
     	log.info("update product");
     	try
     	{
-    		if(product.getNumber() == null)
+    		if(product.getNumber() == null || product.getNumber().trim().equals(""))
     		{
-    			product.setNumber(new Double(1));
+    			product.setNumber("1");
     		}
     		productMapper.updateByPrimaryKeySelective(product);
     	}

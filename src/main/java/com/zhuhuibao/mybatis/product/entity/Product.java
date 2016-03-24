@@ -37,7 +37,7 @@ public class Product {
 
     private Double repository;
 
-    private Double number;
+    private String number;
 
     private Integer hit;
 
@@ -147,11 +147,11 @@ public class Product {
         this.repository = repository;
     }
 
-    public Double getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Double number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 

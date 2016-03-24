@@ -98,7 +98,7 @@
       <if test="repository != null">
         repository,
       </if>
-      <if test="number != null">
+      <if test="number != null and number != ''">
         number,
       </if>
       <if test="hit != null">
@@ -155,7 +155,7 @@
       <if test="repository != null">
         #{repository,jdbcType=DOUBLE},
       </if>
-      <if test="number != null">
+      <if test="number != null and number != ''">
         #{number,jdbcType=DOUBLE},
       </if>
       <if test="hit != null">
@@ -215,7 +215,7 @@
       <if test="repository != null">
         repository = #{repository,jdbcType=DOUBLE},
       </if>
-      <if test="number != null">
+      <if test="number != null and number != ''">
         number = #{number,jdbcType=DOUBLE},
       </if>
       <if test="hit != null">
