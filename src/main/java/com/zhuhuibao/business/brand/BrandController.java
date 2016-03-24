@@ -192,9 +192,10 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/details", method = RequestMethod.GET)
-    public void details(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+    public void details(HttpServletRequest req, HttpServletResponse response,String id,String scateid) throws IOException {
         Map map1 = new HashMap();
         Map map2 = new HashMap();
+        Map map3 = new HashMap();
         //品牌详情
         BrandDetailBean brand = brandService.details(id);
         map2.put("company",brand.getCompany());
@@ -203,14 +204,37 @@ public class BrandController {
         map2.put("address",brand.getAddress());
         map2.put("introduce",brand.getBrandDesc());
         map2.put("imgUrl",brand.getImgUrl());
-        map2.put("logo",brand.getLogo());
+
+        ResultBean  result = categoryService.querySystem(scateid);
+        map3.put("brandid",id);
+        map3.put("brandName",brand.getCnName());
+        map3.put("scateid",scateid);
+        map3.put("scateName",result.getName());
+        ResultBean  result1 = categoryService.querySystem(result.getSmallIcon());
+        map3.put("fcateid",result1.getCode());
+        map3.put("fcateName",result1.getName());
         map1.put("brandDesc",map2);
+        map1.put("navigation",map3);
+        JsonResult jsonResult = new JsonResult();
+        jsonResult.setCode(200);
+        jsonResult.setData(map1);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+
+    /**
+     * 品牌对应的子系统
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/brand/findSubSystemByBrand", method = RequestMethod.GET)
+    public void findSubSystemByBrand(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
         //品牌对应的子系统
         List<ResultBean> list = productService.findSubSystem(id);
-        map1.put("subSystem",list);
         JsonResult result = new JsonResult();
         result.setCode(200);
-        result.setData(map1);
+        result.setData(list);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }

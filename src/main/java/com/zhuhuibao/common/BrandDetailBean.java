@@ -22,7 +22,9 @@ public class BrandDetailBean {
 
     String area;
 
-    String logo;
+    String cnName;
+
+    String id;
 
     public String getCompany() {
         return company;
@@ -96,11 +98,19 @@ public class BrandDetailBean {
         this.area = area;
     }
 
-    public String getLogo() {
-        return logo;
+    public String getCnName() {
+        return cnName;
     }
 
-    public void setLogo(String logo) {
-        this.logo = logo;
+    public void setCnName(String cnName) {
+        this.cnName = cnName;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

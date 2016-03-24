@@ -49,6 +49,9 @@ public class MemberService {
 
 	@Autowired
 	private CertificateRecordMapper certificateRecordMapper;
+
+	@Autowired
+	private EmployeeSizeMapper employeeSizeMapper;
 	/**
 	 * 会员信息保存
 	 */
@@ -183,6 +186,16 @@ public class MemberService {
 		log.debug("工作类别");
 		List<WorkType> workType = workTypeMapper.findWorkTypeList();
 		return workType;
+	}
+
+	/**
+	 * 人员规模
+	 */
+	public List<EmployeeSize> findEmployeeSizeList()
+	{
+		log.debug("人员规模");
+		List<EmployeeSize> employeeSize = employeeSizeMapper.findEmployeeSizeList();
+		return employeeSize;
 	}
 
 	/**

@@ -62,9 +62,34 @@ public class AccountService {
     /**
      * 发送邀请代理商邮件
      */
-    public void sendInviteEmail(String title,String content,String email){
+    public void sendInviteEmail(Member member,String emails[]){
+        String companyName = member.getEnterpriseName();
+        String linkman = member.getEnterpriseLinkman();
+        if(linkman==null){
+            linkman="";
+        }
         log.info("发送邀请代理商邮件");
+        StringBuffer sb=new StringBuffer("");
+        sb.append("<div style=\"line-height:40px;height:40px\">");
+        sb.append("</div>");
+        sb.append("<p style=\"padding:0px\"");
+        sb.append("<strong style=\"font-size:14px;line-height:24px;color:#333333;font-family:arial,sans-serif\"");
+        sb.append("筑慧宝代理商邀请：");
+        sb.append("</strong>");
+        sb.append("</p>");
+        sb.append("<p style=\"margin:0; padding:20px 0 12px 0; color:#555555;\">");
+        sb.append("您好，我是");
+        sb.append(companyName);
+        sb.append(linkman);
+        sb.append(",现邀请你们入驻筑慧宝平台，共创大业！\n" +
+                "筑慧宝是优秀的Icity一站式服务平台，我司已入驻筑慧宝，期待着你们的加入！");
+        sb.append("</p>");
+        sb.append("<p>注册地址：</p>");
+        sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"http://139.196.189.100/register.html");
+        sb.append("\">http://139.196.189.100/register.html");
+        sb.append("</a>");
+        log.info("send email link == "+sb.toString());
         //发送邮件
-        SendEmail.send(email, content,title);
+        SendEmail.sendMutilMail(emails, sb.toString(),"筑慧宝-代理商邀请");
     }
 }

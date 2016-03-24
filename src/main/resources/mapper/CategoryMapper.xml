@@ -13,6 +13,11 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="smallIcon" property="smallIcon" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="ResultMap2" type="com.zhuhuibao.common.ResultBean" >
+    <result column="id" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="parentId" property="smallIcon" jdbcType="VARCHAR" />
+  </resultMap>
   <resultMap id="ResultMap1" type="com.zhuhuibao.common.SysBean" >
     <result column="id" property="id" jdbcType="VARCHAR" />
     <result column="systemName" property="systemName" jdbcType="VARCHAR" />
@@ -100,5 +105,10 @@
     LEFT JOIN t_p_category c ON c.id = p.fcateid
     WHERE p.brandid = #{id}
     ORDER BY p.fcateid,p.scateid
+  </select>
+  <select id="querySystem" resultMap="ResultMap2">
+    SELECT id,name,parentId
+    FROM t_p_category
+    WHERE id = #{id}
   </select>
 </mapper>

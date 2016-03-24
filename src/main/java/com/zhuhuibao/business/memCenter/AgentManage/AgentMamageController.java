@@ -7,6 +7,7 @@ import com.zhuhuibao.common.SysBean;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memCenter.entity.Agent;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.service.AccountService;
 import com.zhuhuibao.mybatis.memCenter.service.AgentService;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
@@ -266,25 +267,31 @@ public class AgentMamageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/agent/inviteAgent", method = RequestMethod.POST)
-    public void inviteAgent(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public void inviteAgent(HttpServletRequest req, HttpServletResponse response, String id) throws IOException {
         JsonResult result = new JsonResult();
-        String title = req.getParameter("title");
-        String content = req.getParameter("content");
+        Member member = memberService.findMemById(id);
         String emails[] = req.getParameterValues("emails");
         try{
             for(int i = 0; i < emails.length; i++){
                 String email = emails[i];
                 String mail = ds.findMailAddress(email);
-                if(mail == null && mail.equals("")){
+                if(mail == null || mail.equals("")){
                     result.setCode(400);
                     result.setData(email);
                     result.setMessage("邮箱格式不正确！");
-                }else{
-                    accountService.sendInviteEmail(title,content,email);
+                    response.setContentType("application/json;charset=utf-8");
+                    response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
                 }
+            }
+
+            if(result.getCode()!=400){
+                accountService.sendInviteEmail(member,emails);
+                result.setCode(200);
             }
         }catch (Exception e){
             log.error("send inviteEmail error!");
         }
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
 }
