@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
+ * 会员中心资料维护
  * @author cxx
  * @since 16/2/25.
  */
@@ -34,32 +35,7 @@ public class InformationController {
 	@Autowired
 	private MemberService memberService;
 
-	@Autowired
-	private HttpServletRequest request;
 
-	@Autowired
-	private CertificateMapper certificateMapper;
-
-	@Autowired
-	private WorkTypeMapper workTypeMapper;
-
-	@Autowired
-	private EnterpriseTypeMapper enterpriseTypeMapper;
-
-	@Autowired
-	private IdentityMapper identityMapper;
-
-	@Autowired
-	private ProvinceMapper provinceMapper;
-
-	@Autowired
-	private CityMapper cityMapper;
-
-	@Autowired
-	private AreaMapper areaMapper;
-
-	@Autowired
-	private CertificateRecordMapper certificateRecordMapper;
 
 	@Autowired
 	ApiConstants ApiConstants;
@@ -201,7 +177,7 @@ public class InformationController {
 		String type = req.getParameter("type");
 		JsonResult result = new JsonResult();
 		try {
-			List<Certificate> certificate = certificateMapper.findCertificateList(type);
+			List<Certificate> certificate = memberService.findCertificateList(type);
 			result.setCode(200);
 			result.setData(certificate);
 		}catch (Exception e){
@@ -222,7 +198,7 @@ public class InformationController {
 	public void workTypeList(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		JsonResult result = new JsonResult();
 		try{
-			List<WorkType> workType = workTypeMapper.findWorkTypeList();
+			List<WorkType> workType = memberService.findWorkTypeList();
 			result.setCode(200);
 			result.setData(workType);
 		}catch (Exception e){
@@ -243,7 +219,7 @@ public class InformationController {
 	public void enterpriseTypeList(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		JsonResult result = new JsonResult();
 		try{
-			List<EnterpriseType> enterpriseType = enterpriseTypeMapper.findEnterpriseTypeList();
+			List<EnterpriseType> enterpriseType = memberService.findEnterpriseTypeList();
 			result.setCode(200);
 			result.setData(enterpriseType);
 		}catch (Exception e){
@@ -264,7 +240,7 @@ public class InformationController {
 	public void identityList(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		JsonResult result = new JsonResult();
 		try{
-			List<Identity> identity = identityMapper.findIdentityList();
+			List<Identity> identity = memberService.findIdentityList();
 			result.setCode(200);
 			result.setData(identity);
 		}catch (Exception e){
@@ -285,7 +261,7 @@ public class InformationController {
 	public void searchProvince(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		JsonResult result = new JsonResult();
 		try{
-			List<ResultBean> province = provinceMapper.findProvince();
+			List<ResultBean> province = memberService.findProvince();
 			result.setCode(200);
 			result.setData(province);
 		}catch (Exception e){
@@ -306,7 +282,7 @@ public class InformationController {
 		JsonResult result = new JsonResult();
 		String provincecode = req.getParameter("provincecode");
 		try{
-			List<ResultBean> city = cityMapper.findCity(provincecode);
+			List<ResultBean> city = memberService.findCity(provincecode);
 			result.setCode(200);
 			result.setData(city);
 		}catch (Exception e){
@@ -328,7 +304,7 @@ public class InformationController {
 		JsonResult result = new JsonResult();
 		String cityCode = req.getParameter("cityCode");
 		try{
-			List<ResultBean> area = areaMapper.findArea(cityCode);
+			List<ResultBean> area = memberService.findArea(cityCode);
 			result.setCode(200);
 			result.setData(area);
 		}catch (Exception e){
@@ -427,7 +403,7 @@ public class InformationController {
 		JsonResult result = new JsonResult();
 		record.setTime(new Date());
 		try{
-			int isSave = certificateRecordMapper.saveCertificate(record);
+			int isSave = memberService.saveCertificate(record);
 			if(isSave==1){
 				result.setCode(200);
 			}else{
@@ -453,7 +429,7 @@ public class InformationController {
 		JsonResult result = new JsonResult();
 		record.setTime(new Date());
 		try{
-			int isUpdate = certificateRecordMapper.updateCertificate(record);
+			int isUpdate = memberService.updateCertificate(record);
 			if(isUpdate==1){
 				result.setCode(200);
 			}else{
@@ -478,7 +454,7 @@ public class InformationController {
 	public void certificateDelete(HttpServletRequest req, HttpServletResponse response,CertificateRecord record) throws IOException {
 		JsonResult result = new JsonResult();
 		try{
-			int isDelete = certificateRecordMapper.deleteCertificate(record);
+			int isDelete = memberService.deleteCertificate(record);
 			if(isDelete==1){
 				result.setCode(200);
 			}else{
@@ -503,7 +479,7 @@ public class InformationController {
 	public void certificateSearch(HttpServletRequest req, HttpServletResponse response,CertificateRecord record) throws IOException {
 		JsonResult result = new JsonResult();
 		try{
-			List<CertificateRecord> list = certificateRecordMapper.certificateSearch(record);
+			List<CertificateRecord> list = memberService.certificateSearch(record);
 			result.setCode(200);
 			result.setData(list);
 		}catch (Exception e){

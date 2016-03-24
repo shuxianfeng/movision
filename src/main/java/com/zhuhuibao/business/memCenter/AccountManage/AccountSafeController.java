@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 会员中心账户安全管理
  * Created by cxx on 2016/3/11 0011.
  */
 @RestController
@@ -33,9 +34,6 @@ public class AccountSafeController {
 
     @Autowired
     private MemberService memberService;
-
-    @Autowired
-    private MemberMapper memberMapper;
 
     @Autowired
     private DictionaryService ds;
@@ -96,7 +94,7 @@ public class AccountSafeController {
         }else{
             member.setMobile("account");
         }
-        Member mem = memberMapper.findMem(member);
+        Member mem = memberService.findMem(member);
 
         //对比密码是否正确
         JsonResult result = new JsonResult();
@@ -132,7 +130,7 @@ public class AccountSafeController {
         member.setId(Long.parseLong(id));
 
         JsonResult result = new JsonResult();
-        int isUpdate = memberMapper.updateMember(member);
+        int isUpdate = memberService.updateMember(member);
         if(isUpdate==1){
             result.setCode(200);
         }else{

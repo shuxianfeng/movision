@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.AgentMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Agent" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="brandid" property="brandid" jdbcType="BIGINT" />
+    <result column="scateid" property="scateid" jdbcType="VARCHAR" />
+    <result column="agentid" property="agentid" jdbcType="BIGINT" />
+    <result column="proviceid" property="proviceid" jdbcType="VARCHAR" />
+    <result column="creatid" property="creatid" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, brandid, scateid, agentid, proviceid, creatid, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_p_brand_agent
+    where id = #{id}
+  </select>
+  <insert id="agentSave" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Agent" >
+    insert into t_p_brand_agent (id, brandid, scateid, agentid, proviceid, creatid, status)
+    values (#{id}, #{brandid}, #{scateid}, #{agentid}, #{proviceid}, #{creatid}, #{status})
+  </insert>
+  <update id="agentUpdate" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Agent" >
+    update t_p_brand_agent
+    <set >
+      <if test="brandid != null" >
+        brandid = #{brandid},
+      </if>
+      <if test="scateid != null" >
+        scateid = #{scateid},
+      </if>
+      <if test="agentid != null" >
+        agentid = #{agentid},
+      </if>
+      <if test="proviceid != null" >
+        proviceid = #{proviceid},
+      </if>
+      <if test="creatid != null" >
+        creatid = #{creatid},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

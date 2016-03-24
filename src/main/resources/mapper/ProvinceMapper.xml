@@ -13,68 +13,15 @@
   <sql id="Base_Column_List" >
     id, code, name
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_dictionary_province
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from t_dictionary_province
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Province" >
-    insert into t_dictionary_province (id, code, name
-      )
-    values (#{id,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Province" >
-    insert into t_dictionary_province
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="code != null" >
-        code,
-      </if>
-      <if test="name != null" >
-        name,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="code != null" >
-        #{code,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Province" >
-    update t_dictionary_province
-    <set >
-      <if test="code != null" >
-        code = #{code,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Province" >
-    update t_dictionary_province
-    set code = #{code,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
   <select id="findProvince" resultMap="ResultMap">
     select
     code,name
     from t_dictionary_province
+  </select>
+  <select id="searchProvinceByPinYin" resultMap="ResultMap">
+    select
+    code,name
+    from t_dictionary_province
+    order by convert(name USING gbk) COLLATE gbk_chinese_ci
   </select>
 </mapper>

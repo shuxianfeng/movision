@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
 
-@Service
+@Service("cs")
 @Transactional
 public class CategoryService {
 	

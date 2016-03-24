@@ -60,7 +60,6 @@ public class ProductService {
 		{
 			Map<String,Long> paramMap = paramService.insertParam(product);
 			List<ParamPrice> paramPrice = product.getParamPrice();
-			product.setStatus(0);
 			if(paramPrice!= null && !paramPrice.isEmpty())
 			{
 				String productName = product.getName();
@@ -86,6 +85,7 @@ public class ProductService {
 					product.setParamValues(value_sb.toString());
 					product.setPrice(pp.getPrice());
 					product.setRepository(pp.getRepository());
+					product.setImgUrl(pp.getImgUrl());
 					//用上传的参数图片
 					productId = productMapper.insertSelective(product);
 				}
@@ -575,5 +575,15 @@ public class ProductService {
 		String str ="72";
 		String[] arr = str.split(",");
 //		System.out.println(gson.toJson(a));
+	}
+
+	/**
+	 * 查询品牌对应的子系统
+	 */
+	public List<ResultBean> findSubSystem(String id)
+	{
+		log.debug("查询品牌对应的子系统");
+		List<ResultBean> list = productMapper.findSubSystem(id);
+		return list;
 	}
 }

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
+ * 会员中心员工管理
  * @author cxx
  * @since 16/2/25.
  */
@@ -31,15 +32,6 @@ public class StaffManageController {
 
 	@Autowired
 	private MemberService memberService;
-
-	@Autowired
-	private HttpServletRequest request;
-
-	@Autowired
-	private CertificateMapper certificateMapper;
-
-	@Autowired
-	private MemberMapper memberMapper;
 
 	/**
 	 * 新建会员
@@ -56,7 +48,7 @@ public class StaffManageController {
 		String md5Pwd = new Md5Hash(pwd,null,2).toString();
 		member.setPassword(md5Pwd);
 		//先判断账号是否已经存在
-		Member mem = memberMapper.findMem(member);
+		Member mem = memberService.findMem(member);
 		if(mem==null){
 			int isAdd = memberService.addMember(member);
 			if(isAdd==0){
@@ -152,7 +144,7 @@ public class StaffManageController {
 
 	@RequestMapping(value = "/rest/staffSearch", method = RequestMethod.GET)
 	public void staffSearch(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
-		List<Member> memberList = memberMapper.findStaffByParentId(member);
+		List<Member> memberList = memberService.findStaffByParentId(member);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(memberList));
 	}
