@@ -144,7 +144,7 @@
     select
     id,CNName,logourl
     from t_p_brand
-    where status = 1 and t.status = 1
+    where status = 1
     order by views desc limit 0,5
   </select>
   <select id="searchAll" resultMap="ResultMap1" >
