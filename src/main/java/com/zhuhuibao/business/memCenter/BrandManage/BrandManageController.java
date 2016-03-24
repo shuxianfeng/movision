@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by cxx on 2016/3/7 0007.
@@ -142,6 +139,30 @@ public class BrandManageController {
         JsonResult result = new JsonResult();
         result.setCode(200);
         result.setData(brandList);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 查询品牌code,name
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/searchBrandSelect", method = RequestMethod.GET)
+    public void searchBrandSelect(HttpServletRequest req, HttpServletResponse response, Brand brand) throws IOException {
+        List<Brand> brandList = brandService.searchBrandByStatus(brand);
+        List list = new ArrayList();
+        for(int i=0;i<brandList.size();i++){
+            Map map = new HashMap();
+            Brand brand1 = brandList.get(i);
+            map.put("code",brand1.getId());
+            map.put("name",brand1.getCNName());
+            list.add(map);
+        }
+        JsonResult result = new JsonResult();
+        result.setCode(200);
+        result.setData(list);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
