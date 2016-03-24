@@ -17,6 +17,8 @@ import com.zhuhuibao.utils.search.StringUtil;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.category.service.CategoryService;
 import com.zhuhuibao.pojo.Product;
+import com.zhuhuibao.pojo.ProductGroup;
+import com.zhuhuibao.pojo.GroupValue;
 import com.zhuhuibao.pojo.ProductSearchSpec;
 import com.zhuhuibao.service.IProductsService;
 import com.zhuhuibao.service.IWordService;
@@ -107,7 +109,7 @@ public class ProductsService implements IProductsService {
 						JSONUtil.toJSONString(sortFields), "offset",
 						spec.getOffset(), "limit", spec.getLimit()));
 		List<?> list = (List<?>) psAsMap.get("items");
-		Pagination<Product> ps = null;
+		Pagination<Product,ProductGroup> ps = null;
 		if (list.isEmpty()) {
 			ps = Pagination.getEmptyInstance();
 		} else {
@@ -128,16 +130,17 @@ public class ProductsService implements IProductsService {
 				}
 				products.add(product);
 			}
-			 @SuppressWarnings("unchecked")
-			Map<String, Object> groups = (Map<String, Object>)psAsMap.get("groups");
-			ps = new Pagination<Product>(products,groups,
+			@SuppressWarnings("unchecked")
+			List<ProductGroup> productGroups = (List<ProductGroup>) psAsMap.get("groups");
+			
+			ps = new Pagination<Product,ProductGroup>(products,productGroups,
 					FormatUtil.parseInteger(psAsMap.get("total")),
 					FormatUtil.parseInteger(psAsMap.get("offset")),
 					FormatUtil.parseInteger(psAsMap.get("limit")));
-			if(scateid > 0){
+			/*if(scateid > 0){
 				ResultBean fcate = categoryService.getFcateByScate(scateid);
 				result.put("fcate", fcate);
-			}
+			}*/
 		}
 		result.put("ps", ps);
 		return result;

@@ -277,19 +277,19 @@ public final class JdbcTemplate {
 		return find(getPageDialect(sql, 0, 1), params, handler);
 	}
 
-	public <T> Pagination<T> findPaged(String sql, String count_sql,
+	public <T1,T2> Pagination<T1,T2> findPaged(String sql, String count_sql,
 			Object[] params, final int index, final int count,
-			ListHandler<T> handler) throws RepositoryException {
-		List<T> items = this.find(this.getPageDialect(sql, index, count),
+			ListHandler<T1> handler) throws RepositoryException {
+		List<T1> items = this.find(this.getPageDialect(sql, index, count),
 				params, handler);
 		int records = items.size();
 		if (records == 0) {
-			return new Pagination<T>();
+			return new Pagination<T1,T2>();
 		}
 		if (index != 0 || records == count) {
 			records = this.count(count_sql, params);
 		}
-		return new Pagination<T>(items, null, records, index, count);
+		return new Pagination<T1,T2>(items, null, records, index, count);
 	}
 
 	public <T> List<T> findList(String sql, Object[] params, final int offset,
