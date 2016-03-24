@@ -3,7 +3,7 @@
 <mapper namespace="com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper">
   <insert id="registerMember" parameterType="memberReg" useGeneratedKeys="true" keyProperty="id">
   	insert into t_m_member(mobile,email,password,registerTime,status,identify,emailCheckCode,workType) values
-  	(#{mobile},#{email},#{password},str_to_date(#{registerTime},'%Y-%m-%d %H:%i:%s'),#{status},#{identify},#{emailCheckCode},#{employeeType})
+  	(#{mobile},#{email},#{password},str_to_date(#{registerTime},'%Y-%m-%d %H:%i:%s'),#{status},#{identify},#{emailCheckCode},#{workType})
   </insert>
   <sql id="Base_Column_List" >
     id, mobile, email,password, date_format(registerTime,'%Y-%m-%d %H:%i:%s') registerTime, status,identify 
