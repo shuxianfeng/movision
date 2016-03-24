@@ -127,11 +127,11 @@ public class SendEmail {
         sb.append("<p>您收到这封电子邮件是因为您 (也可能是某人冒充您的名义) 申请了一个新的密码。假如这不是您本人所申请, 请不用理会这封电子邮件, 但是如果您持续收到这类的信件骚扰, 请您尽快联络管理员。</p>");
         sb.append("<p>请使用以下链接修改密码：</p>");
         sb.append("<p style=\"padding:0px\">");
-        sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"http://");
+        sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"");
         sb.append(serverIp);
         sb.append("/rest/validateMail?action=validate&vm=");
         sb.append(new String(EncodeUtil.encodeBase64(member.getEmail())));
-        sb.append("\">http://");
+        sb.append("\">");
         sb.append(serverIp);
         sb.append("/rest/validateMail?action=validate&vm="+new String(EncodeUtil.encodeBase64(member.getEmail()))+"</a>"); 
         //sb.append(new String(EncodeUtil.encodeBase64(member.getEmail())));
