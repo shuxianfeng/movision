@@ -233,6 +233,21 @@ public class ProductService {
     	return jsonResult;
     }
     
+    
+    private void addToImg(Map a, String k, long v) {
+    	List arr = (List)a.get(k);
+    	if (arr == null) {
+    		arr = new ArrayList();
+    		a.put(k, arr);
+    	}
+    	for (Object i : arr) {
+    		if ((long)i == v) {
+    			return;
+    		}
+    	}
+    	arr.add(v);
+    }
+    
     /**
      * 产品详情页面中查询产品信息
      * @param id
@@ -301,6 +316,16 @@ public class ProductService {
     			}
     			productMap.put("params", paramList);
     			List<Product> productList = productMapper.queryProductByParamIDs(product.getParamIDs());
+    			
+    			Map a = new HashMap();
+    			for (Product p : productList) {
+    				
+    				for (String s : p.getImgUrl().split(";")) {
+    					addToImg(a, s, p.getId());
+    					a.put(s, p);
+    				}
+    			}
+    			
     			if(!productList.isEmpty())
     			{
     				//产品图片
@@ -342,7 +367,7 @@ public class ProductService {
     					prdMap.put("name", prd.getName());
     					prdMap.put("price", prd.getPrice());
     					prdMap.put("number", prd.getNumber());
-    					if(id == prd.getId())
+    					if(id.equals(prd.getId()))
     					{
     						prdMap.put("defalut", new Boolean(true));
     						Map<String,Object> navigationMap = new TreeMap<String,Object>();
@@ -613,6 +638,12 @@ public class ProductService {
 		String str ="72";
 		String[] arr = str.split(",");
 //		System.out.println(gson.toJson(a));
+		Long l1 = new Long(1234);
+		Long l2 = new Long(1234);
+		if(l1.equals(l2))
+		{
+			System.out.println(111);
+		}
 	}
 
 	/**
