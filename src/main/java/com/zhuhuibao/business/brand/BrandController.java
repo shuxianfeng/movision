@@ -198,6 +198,13 @@ public class BrandController {
         Map map3 = new HashMap();
         //品牌详情
         BrandDetailBean brand = brandService.details(id);
+        Brand brand1 = brandService.brandDetails(Integer.parseInt(id));
+        if(brand1.getViews()==null){
+            brand1.setViews(1);
+        }else{
+            brand1.setViews(brand1.getViews()+1);
+        }
+        brandService.updateBrand(brand1);
         map2.put("company",brand.getCompany());
         map2.put("webSite",brand.getWebSite());
         map2.put("phone",brand.getPhone());
