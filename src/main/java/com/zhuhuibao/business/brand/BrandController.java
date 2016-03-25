@@ -211,10 +211,12 @@ public class BrandController {
         map2.put("address",brand.getAddress());
         map2.put("introduce",brand.getBrandDesc());
         map2.put("imgUrl",brand.getImgUrl());
+        map2.put("logo",brand.getLogo());
 
         ResultBean  result = categoryService.querySystem(scateid);
         map3.put("brandid",id);
         map3.put("brandName",brand.getCnName());
+        map2.put("brandName",brand.getCnName());
         map3.put("scateid",scateid);
         map3.put("scateName",result.getName());
         ResultBean  result1 = categoryService.querySystem(result.getSmallIcon());

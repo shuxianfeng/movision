@@ -26,6 +26,8 @@ public class BrandDetailBean {
 
     String id;
 
+    String logo;
+
     public String getCompany() {
         return company;
     }
@@ -112,5 +114,13 @@ public class BrandDetailBean {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 }

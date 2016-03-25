@@ -51,6 +51,7 @@
     <result column="area" property="area" jdbcType="VARCHAR" />
     <result column="CNName" property="cnName" jdbcType="VARCHAR" />
     <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="logourl" property="logo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, CNName, ENName, views, weight, logourl, createid, description, imgurl,
@@ -163,7 +164,7 @@
   </select>
   <select id="details"  resultMap="ResultMap4">
     select
-    m.enterpriseName,m.address,m.province,m.city,m.area,m.enterpriseTelephone,b.webSite,b.imgurl,b.description,b.CNName,b.id
+    m.enterpriseName,m.address,m.province,m.city,m.area,m.enterpriseTelephone,b.webSite,b.imgurl,b.description,b.CNName,b.id,b.logourl
     from t_p_brand b
     LEFT JOIN t_m_member m on b.createid = m.id
     where b.id = #{id}
