@@ -300,9 +300,6 @@ public class ProductService {
     				}
     			}
     			productMap.put("params", paramList);
-    		}
-    		if(product.getParamIDs() != null && product.getParamIDs().length() > 0)
-    		{
     			List<Product> productList = productMapper.queryProductByParamIDs(product.getParamIDs());
     			if(!productList.isEmpty())
     			{
@@ -388,7 +385,29 @@ public class ProductService {
     				productMap.put("products", prdList);
     			}
     		}
-    		
+    		else
+    		{
+    			Map<String,Object> navigationMap = new TreeMap<String,Object>();
+				navigationMap.put("fcateid", product.getFcateid());
+				navigationMap.put("fcateName",product.getFcateName());
+				navigationMap.put("scateid", product.getScateid());
+				navigationMap.put("scateName",product.getScateName());
+				navigationMap.put("brandid", product.getBrandid());
+				navigationMap.put("brandName", product.getCNName());
+				productMap.put("navigation", navigationMap);
+				List<Map<String,Object>> imgList = new ArrayList<Map<String,Object>>();
+				Map<String,Object> imgsMap = new TreeMap<String,Object>();
+				Long[]  skuid = {product.getId()};
+				imgsMap.put("skuid", skuid);
+				imgsMap.put("imgUrl",product.getImgUrl());
+				imgList.add(imgsMap);
+				productMap.put("imgs", imgList);
+				List<Map<String,Object>> prdList = new ArrayList<Map<String,Object>>();
+				productMap.put("products", prdList);
+				List<Map<String,Object>> paramList = new ArrayList<Map<String,Object>>();
+				productMap.put("params", paramList);
+				
+    		}
     		jsonResult.setData(productMap);
     	}
     	catch(Exception e)
