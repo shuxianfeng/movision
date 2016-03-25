@@ -158,7 +158,7 @@
     SELECT DISTINCT b.id,b.CNName,p.scateid,b.logourl
     FROM t_p_product p
     LEFT JOIN t_p_brand b ON b.id = p.brandid
-    where b.status = 1
+    where b.status = 1 and p.status = 1
     ORDER by b.views desc
   </select>
   <select id="details"  resultMap="ResultMap4">
