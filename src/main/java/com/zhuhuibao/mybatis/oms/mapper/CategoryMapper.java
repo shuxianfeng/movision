@@ -12,6 +12,8 @@ public interface CategoryMapper {
 
     List<ResultBean> findSubSystemList(String parentId);
 
+    List<ResultBean> findSubSystemListLimit(String parentId);
+
     int addSystem(Category category);
 
     int updateSystem(Category category);

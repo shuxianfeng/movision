@@ -74,6 +74,15 @@ public class CategoryService {
     }
 
     /**
+     * 根据大系统id查询子系统(limit 8)
+     */
+    public List<ResultBean> findSubSystemListLimit(String id){
+        log.debug("根据大系统id查询子系统(limit 8)");
+        List<ResultBean> SubSystemList = categoryMapper.findSubSystemListLimit(id);
+        return SubSystemList;
+    }
+
+    /**
      * 根据大系统id查询大系统信息
      */
     public Category findSystem(String id){

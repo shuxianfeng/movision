@@ -102,7 +102,7 @@ public class BrandController {
     @RequestMapping(value = "/rest/brand/findSuggestBrand", method = RequestMethod.GET)
     public void findSuggestBrand(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
         JsonResult result = new JsonResult();
-        List<ResultBean> SubSystemList = categoryService.findSubSystemList(id);
+        List<ResultBean> SubSystemList = categoryService.findSubSystemListLimit(id);
         List<SuggestBrand> brandList = brandService.SuggestBrand();
         List list = new ArrayList();
         for(int i=0;i<SubSystemList.size();i++){
