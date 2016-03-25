@@ -403,6 +403,15 @@ public class ProductService {
 				imgList.add(imgsMap);
 				productMap.put("imgs", imgList);
 				List<Map<String,Object>> prdList = new ArrayList<Map<String,Object>>();
+				Map<String,Object> prdMap = new TreeMap<String,Object>();
+				Map<String,Object> prdInfoMap = new TreeMap<String,Object>();
+				prdMap.put("skuid", product.getId());
+				prdMap.put("name", product.getName());
+				prdMap.put("price", product.getPrice());
+				prdMap.put("number", product.getNumber());
+				prdInfoMap.put("k", "");
+				prdInfoMap.put("v", prdMap);
+				prdList.add(prdInfoMap);
 				productMap.put("products", prdList);
 				List<Map<String,Object>> paramList = new ArrayList<Map<String,Object>>();
 				productMap.put("params", paramList);
