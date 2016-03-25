@@ -409,6 +409,7 @@ public class ProductService {
 				prdMap.put("name", product.getName());
 				prdMap.put("price", product.getPrice());
 				prdMap.put("number", product.getNumber());
+				prdMap.put("defalut", new Boolean(true));
 				prdInfoMap.put("k", "");
 				prdInfoMap.put("v", prdMap);
 				prdList.add(prdInfoMap);
