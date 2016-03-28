@@ -435,12 +435,23 @@ public class ProductService {
 				navigationMap.put("brandid", product.getBrandid());
 				navigationMap.put("brandName", product.getCNName());
 				productMap.put("navigation", navigationMap);
+				//图片
 				List<Map<String,Object>> imgList = new ArrayList<Map<String,Object>>();
-				Map<String,Object> imgsMap = new TreeMap<String,Object>();
-				Long[]  skuid = {product.getId()};
-				imgsMap.put("skuid", skuid);
-				imgsMap.put("imgUrl",product.getImgUrl());
-				imgList.add(imgsMap);
+				Map<String,List<Integer>> imgsMap = new HashMap<String,List<Integer>>();
+				for (String s : product.getImgUrl().split(";")) {
+					addToImg(imgsMap, s, product.getId());
+					//a.put(s, p);
+				}
+    			if(!imgsMap.isEmpty())
+    			{
+    				for(Map.Entry<String,List<Integer>> entry:imgsMap.entrySet())
+        			{
+    					Map<String,Object> imgMap = new TreeMap<String,Object>();
+    					imgMap.put("skuid", entry.getValue());
+    					imgMap.put("imgUrl",entry.getKey());
+    					imgList.add(imgMap);
+        			}
+    			}
 				productMap.put("imgs", imgList);
 				List<Map<String,Object>> prdList = new ArrayList<Map<String,Object>>();
 				Map<String,Object> prdMap = new TreeMap<String,Object>();
