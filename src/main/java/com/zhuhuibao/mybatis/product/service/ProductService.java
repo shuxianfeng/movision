@@ -238,14 +238,19 @@ public class ProductService {
     	List arr = (List)a.get(k);
     	if (arr == null) {
     		arr = new ArrayList();
+    		arr.add(v);
     		a.put(k, arr);
     	}
-    	for (Object i : arr) {
+    	/*for (Object i : arr) {
     		if ((long)i == v) {
     			return;
     		}
+    	}*/
+    	else
+    	{
+    		arr.add(v);
+    		a.put(k,arr);
     	}
-    	arr.add(v);
     }
     
     /**
@@ -317,18 +322,28 @@ public class ProductService {
     			productMap.put("params", paramList);
     			List<Product> productList = productMapper.queryProductByParamIDs(product.getParamIDs());
     			
-    			Map a = new HashMap();
-    			for (Product p : productList) {
-    				
-    				for (String s : p.getImgUrl().split(";")) {
-    					addToImg(a, s, p.getId());
-    					a.put(s, p);
-    				}
-    			}
-    			
     			if(!productList.isEmpty())
     			{
-    				//产品图片
+    				Map<String,List<Integer>> a = new HashMap<String,List<Integer>>();
+        			for (Product p : productList) {
+        				
+        				for (String s : p.getImgUrl().split(";")) {
+        					addToImg(a, s, p.getId());
+        					//a.put(s, p);
+        				}
+        			}
+        			List<Map<String,Object>> imgList = new ArrayList<Map<String,Object>>();
+        			if(!a.isEmpty())
+        			{
+        				for(Map.Entry<String,List<Integer>> entry:a.entrySet())
+            			{
+        					Map<String,Object> imgsMap = new TreeMap<String,Object>();
+        					imgsMap.put("skuid", entry.getValue());
+        					imgsMap.put("imgUrl",entry.getKey());
+        					imgList.add(imgsMap);
+            			}
+        			}
+    				/*//产品图片
     				List<Map<String,Object>> imgList = new ArrayList<Map<String,Object>>();
     				for(Product prd : productList)
     				{
@@ -353,7 +368,7 @@ public class ProductService {
 	    					imgsMap.put("imgUrl",prd.getImgUrl());
 	    					imgList.add(imgsMap);
     					}
-    				}
+    				}*/
     				productMap.put("imgs", imgList);
     				//产品列表
     				List<Map<String,Object>> prdList = new ArrayList<Map<String,Object>>();
