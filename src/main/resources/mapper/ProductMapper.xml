@@ -323,7 +323,7 @@
 	      </if>
       </where>
       <if test="order != null"> 
-          order by #{order} desc
+          order by ${order} desc
       </if>
       limit 0,#{count}
   </select>
