@@ -39,4 +39,129 @@ public interface Constant {
 	 * 产品列表页面热点产品的数量 5
 	 */
 	Integer hot_product_count = 5;
+	
+	/**
+	 * 产品信息表 字段名 fcateid
+	 */
+	String product_field_fcateid = "fcateid";
+	
+	/**
+	 * 产品信息表 字段名 fcateName
+	 */
+	String product_field_fcateName = "fcateName";
+	
+	/**
+	 * 产品信息表 字段名 scateid
+	 */
+	String product_field_scateid = "scateid";
+	
+	/**
+	 * 产品信息表 字段名 scateName
+	 */
+	String product_field_scateName = "scateName";
+	
+	/**
+	 * 产品信息表 字段名 brandid
+	 */
+	String product_field_brandid = "brandid";
+	
+	/**
+	 * 产品信息表 字段名 brandName
+	 */
+	String product_field_brandName = "brandName";
+	
+	/**
+	 * 产品信息表 字段名 navigation
+	 */
+	String product_field_navigation = "navigation";
+	
+	/**
+	 * 产品信息表 字段名 defalut
+	 */
+	String product_field_defalut = "defalut";
+	
+	/**
+	 * 产品信息表 字段名 skuid
+	 */
+	String product_field_skuid = "skuid";
+	
+	/**
+	 * 产品信息表 字段名 imgUrl
+	 */
+	String product_field_imgUrl = "imgUrl";
+	
+	/**
+	 * 产品信息表 字段名 imgs
+	 */
+	String product_field_imgs = "imgs";
+	
+	/**
+	 * 产品信息表 字段名 name
+	 */
+	String product_field_name = "name";
+	
+	/**
+	 * 产品信息表 字段名 price
+	 */
+	String product_field_price = "price";
+	
+	/**
+	 * 产品信息表 字段名 number
+	 */
+	String product_field_number = "number";
+	
+	/**
+	 * 产品信息表 字段名 k
+	 */
+	String product_field_k = "k";
+	
+	/**
+	 * 产品信息表 字段名 v
+	 */
+	String product_field_v = "v";
+	
+	/**
+	 * 产品信息表 字段名 products
+	 */
+	String product_field_products = "products";
+	
+	/**
+	 * 产品信息表 字段名 params
+	 */
+	String product_field_params = "params";
+	
+	/**
+	 * 产品信息表 字段名 key
+	 */
+	String product_field_key = "key";
+	
+	/**
+	 * 产品信息表 字段名 value
+	 */
+	String product_field_value = "value";
+	
+	/**
+	 * 产品信息表 字段名 values
+	 */
+	String product_field_values = "values";
+	
+	/**
+	 * 产品信息表 字段名 id
+	 */
+	String product_field_id = "id";
+	
+	/**
+	 * 产品信息表 字段名 detailDesc
+	 */
+	String product_field_detailDesc = "detailDesc";
+	
+	/**
+	 * 产品信息表 字段名 paras
+	 */
+	String product_field_paras = "paras";
+	
+	/**
+	 * 产品信息表 字段名 service
+	 */
+	String product_field_service = "service";
 }
