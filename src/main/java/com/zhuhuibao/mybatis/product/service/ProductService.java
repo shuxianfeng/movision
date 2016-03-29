@@ -135,6 +135,30 @@ public class ProductService {
     	return jsonResult;
     }
     
+    /**
+     * 产品上下架
+     * @param product
+     * @return
+     */
+    public JsonResult updateProductStatus(ProductWithBLOBs product)
+    {
+    	JsonResult jsonResult = new JsonResult();
+    	log.info("update product");
+    	try
+    	{
+    		productMapper.updateProductStatus(product);
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("update product error",e);
+    		jsonResult.setCode(MsgCodeConstant.response_status_400);
+    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return jsonResult;
+    	}
+    	return jsonResult;
+    }
+    
     public JsonResult batchUnpublish(List<String> list)
     {
     	JsonResult jsonResult = new JsonResult();

@@ -21,6 +21,8 @@ public interface ProductMapper {
     ProductWithBLOBs selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(ProductWithBLOBs record);
+    
+    int updateProductStatus(ProductWithBLOBs record);
 
     List<Product> findAllByPager(RowBounds rowBounds,Product product);
     

@@ -95,6 +95,17 @@ public class ProductPublishController {
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 	
+	@RequestMapping(value="/rest/updateProductStatus", method = RequestMethod.POST)
+	public void updateProductStatus(HttpServletRequest req,HttpServletResponse response,ProductWithBLOBs product) throws JsonGenerationException, JsonMappingException, IOException
+	{
+		JsonResult jsonResult = new JsonResult();
+	/*	String json = "{\"id\": 335,\"createid\": 1,\"status\": \"1\",\"name\": \"产品A\",\"number\": \"\",\"fcateid\": \"2\",\"scateid\": \"16\",\"brandid\": \"1\",\"unit\": \"件\",\"price\": \"1\",\"repository\": \"11\",\"imgUrl\":\"http: //sandbox.zhuhui8.com/upload/SBLJ1458735583101.png;http: //sandbox.zhuhui8.com/upload/GKQF1458735586855.png\",     \"detailDesc\": \"<p>1</p>\",     \"paras\": \"<p>2</p>\",     \"service\": \"<p>3</p>\",     \"params\": [              ],     \"paramPrice\": [              ] }";
+		Gson gson = new Gson();
+		product = gson.fromJson(json, ProductWithBLOBs.class);*/
+		jsonResult = productService.updateProductStatus(product);
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+	}
+	
 	@RequestMapping(value="/rest/batchUnpublish", method = RequestMethod.POST)
 	public void batchUnpublish(HttpServletRequest req,HttpServletResponse response,String[] ids) throws JsonGenerationException, JsonMappingException, IOException
 	{
