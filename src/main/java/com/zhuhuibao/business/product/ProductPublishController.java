@@ -6,6 +6,9 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
@@ -30,6 +33,7 @@ import com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs;
 import com.zhuhuibao.mybatis.product.service.ComplainSuggestService;
 import com.zhuhuibao.mybatis.product.service.ProductParamService;
 import com.zhuhuibao.mybatis.product.service.ProductService;
+import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -319,6 +323,22 @@ public class ProductPublishController {
 			productMap.put("count",Constant.hot_product_count);
 			productMap.put("order", "hit");
 	        jsonResult = productService.queryRecommendHotProduct(productMap);
+	        response.setContentType("application/json;charset=utf-8");
+	        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+		}
+		
+		@RequestMapping(value="/rest/findMemberInfoById")
+		@ResponseBody
+		public void findMemberInfoById(HttpServletRequest req,HttpServletResponse response,ProductWithBLOBs product,String count) throws JsonGenerationException, JsonMappingException, IOException
+		{
+			JsonResult jsonResult = new JsonResult();
+			Subject currentUser = SecurityUtils.getSubject();
+	        Session session = currentUser.getSession(false);
+	        ShiroUser principal = (ShiroUser)session.getAttribute("member");
+	        if(null != principal)
+	        {
+	        	jsonResult = productService.findMemberInfoById(principal.getId());
+	        }
 	        response.setContentType("application/json;charset=utf-8");
 	        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 		}

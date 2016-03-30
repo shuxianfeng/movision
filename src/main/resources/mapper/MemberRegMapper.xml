@@ -37,6 +37,13 @@
     from t_m_member
     where email = #{email}
    </select>
+   
+   <select id="findMemberInfoById" resultType="com.zhuhuibao.mybatis.memberReg.entity.Member">
+    select
+    <include refid="Base_Column_List" />
+    from t_m_member
+    where id = #{id}
+   </select>
   
   <update id="updateEmailCode" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
     update t_m_member 
