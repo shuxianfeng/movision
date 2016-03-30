@@ -111,6 +111,11 @@ public interface Constant {
 	String product_field_number = "number";
 	
 	/**
+	 * 产品信息表 字段名 unit
+	 */
+	String product_field_unit = "unit";
+	
+	/**
 	 * 产品信息表 字段名 k
 	 */
 	String product_field_k = "k";

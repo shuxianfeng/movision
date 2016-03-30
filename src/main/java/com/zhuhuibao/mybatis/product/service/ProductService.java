@@ -361,6 +361,7 @@ public class ProductService {
 		prdMap.put(Constant.product_field_name, product.getName());
 		prdMap.put(Constant.product_field_price, product.getPrice());
 		prdMap.put(Constant.product_field_number, product.getNumber());
+		prdMap.put(Constant.product_field_unit, product.getUnit());
 		prdMap.put(Constant.product_field_defalut, new Boolean(true));
 		prdInfoMap.put(Constant.product_field_k, "");
 		prdInfoMap.put(Constant.product_field_v, prdMap);
@@ -391,6 +392,7 @@ public class ProductService {
 			prdMap.put(Constant.product_field_name, prd.getName());
 			prdMap.put(Constant.product_field_price, prd.getPrice());
 			prdMap.put(Constant.product_field_number, prd.getNumber());
+			prdMap.put(Constant.product_field_unit, prd.getUnit());
 			if(id.equals(prd.getId()))
 			{
 				setNavigation(productMap, prdMap, prd);

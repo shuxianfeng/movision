@@ -37,7 +37,7 @@
   </resultMap>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
-	  cast(t.price as SIGNED) price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,c.name fcateName ,c1.name scateName,
+	  price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,c.name fcateName ,c1.name scateName,
 	  b.CNName,b.ENName  
 	  from t_p_product t left join t_p_category c on t.fcateid = c.id
 	  left join t_p_category c1 on t.scateid = c1.id 
@@ -249,7 +249,7 @@
   
   <select id="findAllByPager" parameterType="com.zhuhuibao.mybatis.product.entity.Product" resultType="com.zhuhuibao.mybatis.product.entity.Product">
       select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
-	  cast(t.price as SIGNED) price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,c.name fcateName ,c1.name scateName,
+	  price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,c.name fcateName ,c1.name scateName,
 	  b.CNName,b.ENName  
 	  from t_p_product t left join t_p_category c on t.fcateid = c.id
 	  left join t_p_category c1 on t.scateid = c1.id 
@@ -271,7 +271,7 @@
   </select>
    <select id="queryProductByParamIDs" parameterType="java.lang.String" resultType="com.zhuhuibao.mybatis.product.entity.Product">
       select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
-	  cast(t.price as SIGNED) price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,c.name fcateName ,c1.name scateName,
+	  price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,c.name fcateName ,c1.name scateName,
 	  b.CNName,b.ENName  
 	  from t_p_product t left join t_p_category c on t.fcateid = c.id
 	  left join t_p_category c1 on t.scateid = c1.id 
@@ -293,7 +293,7 @@
   
   <select id="queryProductInfoBySCategory" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
       select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
-	  cast(t.price as SIGNED) price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service from t_p_product t 
+	   price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service from t_p_product t 
       <where>
 	      <if test="scateid != null">
 	        and t.scateid = #{scateid,jdbcType=INTEGER}
