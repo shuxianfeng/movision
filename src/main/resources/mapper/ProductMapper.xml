@@ -276,7 +276,7 @@
 	  from t_p_product t left join t_p_category c on t.fcateid = c.id
 	  left join t_p_category c1 on t.scateid = c1.id 
 	  left join t_p_brand b on t.brandid = b.id
-      where t.status = 1 and t.paramIDs = #{paramIDs}
+      where t.status != 2 and t.paramIDs = #{paramIDs}
   </select>
   
   <select id="getSCateListByBrandId" parameterType="com.zhuhuibao.mybatis.product.entity.Product" resultMap="ResultMap">
