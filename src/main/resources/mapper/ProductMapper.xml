@@ -356,6 +356,6 @@
     SELECT distinct c.id as code,c.name as name
     FROM  t_p_product p
     LEFT JOIN t_p_category c ON p.scateid = c.id
-    where p.brandid = #{id}
+    where p.brandid = #{id} and p.status = 1
   </select>
 </mapper>
