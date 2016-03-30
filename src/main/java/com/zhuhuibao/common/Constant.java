@@ -169,4 +169,9 @@ public interface Constant {
 	 * 产品信息表 字段名 service
 	 */
 	String product_field_service = "service";
+	
+	/**
+	 * 产品计件单位”件“
+	 */
+	String product_unit = "件";
 }
