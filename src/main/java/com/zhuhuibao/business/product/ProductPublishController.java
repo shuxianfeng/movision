@@ -327,9 +327,9 @@ public class ProductPublishController {
 	        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 		}
 		
-		@RequestMapping(value="/rest/findMemberInfoById")
+		@RequestMapping(value="/rest/findMemberInfoById",method = RequestMethod.GET)
 		@ResponseBody
-		public void findMemberInfoById(HttpServletRequest req,HttpServletResponse response,ProductWithBLOBs product,String count) throws JsonGenerationException, JsonMappingException, IOException
+		public void findMemberInfoById(HttpServletRequest req,HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException
 		{
 			JsonResult jsonResult = new JsonResult();
 			Subject currentUser = SecurityUtils.getSubject();

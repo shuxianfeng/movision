@@ -68,7 +68,7 @@ public class Member implements Serializable{
 	/**
 	 * 会员身份 1：企业，2：个人
 	 */
-	private int identify;
+	private String identify;
 	
 	private int workType;
 
@@ -128,10 +128,6 @@ public class Member implements Serializable{
 		this.status = status;
 	}
 
-	public int getIdentify() {
-		return identify;
-	}
-
 	public String getMobileCheckCode() {
 		return mobileCheckCode;
 	}
@@ -156,10 +152,6 @@ public class Member implements Serializable{
 		this.checkCode = checkCode;
 	}
 	
-	public void setIdentify(int identify) {
-		this.identify = identify;
-	}
-
 	public int getWorkType() {
 		return workType;
 	}
@@ -167,4 +159,13 @@ public class Member implements Serializable{
 	public void setWorkType(int workType) {
 		this.workType = workType;
 	}
+
+	public String getIdentify() {
+		return identify;
+	}
+
+	public void setIdentify(String identify) {
+		this.identify = identify;
+	}
+	
 }

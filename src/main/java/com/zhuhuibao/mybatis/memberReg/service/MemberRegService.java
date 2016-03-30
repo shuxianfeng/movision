@@ -60,7 +60,7 @@ public class MemberRegService {
     	int memberId = 0;
     	try
     	{
-	    	if(member != null && member.getIdentify() != 0)
+	    	if(member != null)
 	    	{
 	    		//前台传过来的base64密码解密
 	    		String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
