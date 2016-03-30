@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -148,11 +150,12 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/sendChangeEmail", method = RequestMethod.POST)
-    public void sendChangeEmail(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
-        log.debug("更改邮箱  email =="+member.getEmail());
+    public void sendChangeEmail(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        String email = req.getParameter("email");
+        log.debug("更改邮箱  email =="+ email);
         JsonResult result = new JsonResult();
-        as.sendChangeEmail(member,ResourcePropertiesUtils.getValue("host.ip"));
-        String mail = ds.findMailAddress(member.getEmail());
+        as.sendChangeEmail(email);
+        String mail = ds.findMailAddress(email);
         Map<String,String> map = new HashMap<String,String>();
         if(mail != null && !mail.equals(""))
         {
@@ -164,5 +167,65 @@ public class AccountSafeController {
         }
         result.setData(map);
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 更改手机号
+     * @param req
+     * @param response
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/updateMobile", method = RequestMethod.POST)
+    public void updateMobile(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
+        JsonResult result = new JsonResult();
+        try{
+            int isUpdate = memberService.updateMember(member);
+            if(isUpdate==1){
+                result.setCode(200);
+            }else{
+                result.setCode(400);
+                result.setMessage("更改失败");
+            }
+        }catch (Exception e){
+            log.error("updateMobile error");
+        }
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 点击邮箱链接更改邮箱
+     * @param req
+     * @param response
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/updateEmail", method = RequestMethod.POST)
+    public ModelAndView updateEmail(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult result = new JsonResult();
+        ModelAndView modelAndView = new ModelAndView();
+        Member member = new Member();
+        try
+        {
+            String email = req.getParameter("email");//获取email
+            if(email != null & !email.equals(""))
+            {
+                String decodeVM = new String (EncodeUtil.decodeBase64(email));
+                member.setEmail(decodeVM);
+                int isUpdate = memberService.updateMember(member);
+                String redirectUrl ="";
+                if(isUpdate==1){
+                    redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-bind.page");
+                }else{
+                    redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-error.page");
+                }
+                RedirectView rv = new RedirectView(redirectUrl);
+                modelAndView.setView(rv);
+            }
+        }
+        catch(Exception e)
+        {
+            log.error("email updateEmail error!",e);
+        }
+        return modelAndView;
     }
 }

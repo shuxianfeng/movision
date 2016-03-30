@@ -98,33 +98,33 @@ public class MemberService {
 	/**
 	 * 禁用员工
 	 */
-	public int disableMember(Member member)
+	/*public int disableMember(Member member)
 	{
 		log.debug("修改员工");
 		int result = 0;
 		result = memberMapper.disableMember(member);
 		return result;
-	}
+	}*/
 
 	/**
 	 * 删除员工
 	 */
-	public int deleteMember(Member member)
+	public int deleteMember(String id)
 	{
 		log.debug("修改员工");
 		int result = 0;
-		result = memberMapper.deleteMember(member);
+		result = memberMapper.deleteMember(id);
 		return result;
 	}
 
 	/**
 	 * 员工密码重置
 	 */
-	public int resetPwd(Member member)
+	public int resetPwd(String id)
 	{
 		log.debug("密码重置");
 		int result = 0;
-		result = memberMapper.resetPwd(member);
+		result = memberMapper.resetPwd(id);
 		return result;
 	}
 
@@ -185,6 +185,16 @@ public class MemberService {
 	{
 		log.debug("工作类别");
 		List<WorkType> workType = workTypeMapper.findWorkTypeList();
+		return workType;
+	}
+
+	/**
+	 * 根据id查询工作类别
+	 */
+	public WorkType findWorkTypeById(String id)
+	{
+		log.debug("根据id查询工作类别");
+		WorkType workType = workTypeMapper.findWorkTypeById(id);
 		return workType;
 	}
 
@@ -297,4 +307,6 @@ public class MemberService {
 		List<Member> memberList = memberMapper.findStaffByParentId(member);
 		return memberList;
 	}
+
+
 }

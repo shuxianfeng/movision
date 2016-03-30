@@ -26,7 +26,7 @@ public class Member {
 
     private Integer workType;
 
-    private Long enterpriseEmployeeParentId;
+    private String enterpriseEmployeeParentId;
 
     private String province;
 
@@ -81,6 +81,8 @@ public class Member {
     private String personIDFrontImgUrl;
 
     private String personIDBackImgUrl;
+
+    private String account;
 
     public Long getId() {
         return id;
@@ -155,11 +157,11 @@ public class Member {
         this.enterpriseName = enterpriseName == null ? null : enterpriseName.trim();
     }
 
-    public Long getEnterpriseEmployeeParentId() {
+    public String getEnterpriseEmployeeParentId() {
         return enterpriseEmployeeParentId;
     }
 
-    public void setEnterpriseEmployeeParentId(Long enterpriseEmployeeParentId) {
+    public void setEnterpriseEmployeeParentId(String enterpriseEmployeeParentId) {
         this.enterpriseEmployeeParentId = enterpriseEmployeeParentId;
     }
 
@@ -385,5 +387,13 @@ public class Member {
 
     public void setWorkType(Integer workType) {
         this.workType = workType;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
     }
 }

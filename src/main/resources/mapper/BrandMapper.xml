@@ -142,6 +142,13 @@
     LEFT JOIN t_p_brand b ON t.brandid = b.id
     WHERE t.scateid = #{scateid} and b.status = 1 and t.status = 1
   </select>
+  <select id="findBrandByScateid" resultMap="ResultMap3" >
+    select
+    distinct t.brandid as id,b.CNName
+    from t_p_product t
+    LEFT JOIN t_p_brand b ON t.brandid = b.id
+    WHERE t.scateid = #{scateid} and b.status = 1 and t.status = 1
+  </select>
   <select id="searchSuggestBrand" resultMap="ResultMap3" >
     select
     id,CNName,logourl

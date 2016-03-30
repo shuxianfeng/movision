@@ -19,10 +19,10 @@ public interface MemberMapper {
     int updateMember(Member member);
 
     //禁用会员
-    int disableMember(Member member);
+    //int disableMember(Member member);
 
     //删除会员
-    int deleteMember(Member member);
+    int deleteMember(String id);
 
     /* 根据父类ID查询公司下属员工 */
     List<Member> findStaffByParentId(Member member);
@@ -30,12 +30,15 @@ public interface MemberMapper {
     //根据会员账号查询会员
     Member findMem(Member member);
 
-    //删除会员
-    int resetPwd(Member member);
+    //重置密码
+    int resetPwd(String id);
 
     int uploadHeadShot(Member member);
 
     int uploadLogo(Member member);
 
     List<AccountBean> findAgentMember(String account);
+
+    //代理商邮件注册
+    int agentRegister(Member member);
 }

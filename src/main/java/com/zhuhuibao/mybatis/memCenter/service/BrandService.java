@@ -58,12 +58,22 @@ public class BrandService {
     }
 
     /**
-     * 查询二级系统下所有品牌
+     * 查询二级系统下所有品牌,返回id,品牌logo
      */
     public List<ResultBean> findAllBrand(Product product)
     {
         log.debug("查询二级系统下所有品牌");
         List<ResultBean> brandList = brandMapper.findAllBrand(product);
+        return brandList;
+    }
+
+    /**
+     * 查询二级系统下所有品牌，返回id，name
+     */
+    public List<ResultBean> findBrandByScateid(Product product)
+    {
+        log.debug("查询二级系统下所有品牌");
+        List<ResultBean> brandList = brandMapper.findBrandByScateid(product);
         return brandList;
     }
 

@@ -1,9 +1,6 @@
 package com.zhuhuibao.business.memCenter.AgentManage;
 
-import com.zhuhuibao.common.AccountBean;
-import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.ResultBean;
-import com.zhuhuibao.common.SysBean;
+import com.zhuhuibao.common.*;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memCenter.entity.Agent;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
@@ -13,6 +10,7 @@ import com.zhuhuibao.mybatis.memCenter.service.AgentService;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.CategoryService;
+import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -227,27 +227,29 @@ public class AgentMamageController {
     @RequestMapping(value = "/rest/agent/province", method = RequestMethod.GET)
     public void province(HttpServletRequest req, HttpServletResponse response) throws IOException {
         JsonResult result = new JsonResult();
-        Map map = new HashMap();
         List list1 = new ArrayList();
         List list2 = new ArrayList();
         List list3 = new ArrayList();
         List list4 = new ArrayList();
+        Map map = new HashMap();
         try{
-            List<ResultBean> list = agentService.searchProvinceByPinYin();
-            for(int i=0;i<8;i++){
-                list1.add(list.get(i));
+            List<ResultBean> ResultList = agentService.searchProvinceByPinYin();
+            for(int i=0;i<ResultList.size();i++){
+                Map map1 = new HashMap();
+                ResultBean resultBean1 = ResultList.get(i);
+                map1.put("id",resultBean1.getCode());
+                map1.put("name",resultBean1.getName());
+                if("A-G".equals(resultBean1.getSmallIcon())){
+                    list1.add(map1);
+                }else if("H-K".equals(resultBean1.getSmallIcon())){
+                    list2.add(map1);
+                }else if("L-S".equals(resultBean1.getSmallIcon())){
+                    list3.add(map1);
+                }else{
+                    list4.add(map1);
+                }
             }
-            list1.add(list.get(33));
-            for(int j=8;j<17;j++){
-                list2.add(list.get(j));
-            }
-            for(int k=17;k<26;k++){
-                list3.add(list.get(k));
-            }
-            for(int l=27;l<33;l++){
-                list4.add(list.get(l));
-            }
-            map.put("A_G",list1);
+            map.put("A-G",list1);
             map.put("H-K",list2);
             map.put("L-S",list3);
             map.put("T-Z",list4);
@@ -270,10 +272,8 @@ public class AgentMamageController {
     public void inviteAgent(HttpServletRequest req, HttpServletResponse response, String id) throws IOException {
         JsonResult result = new JsonResult();
         Member member = memberService.findMemById(id);
-        String emails[] = req.getParameterValues("emails");
+        String email = req.getParameter("email");
         try{
-            for(int i = 0; i < emails.length; i++){
-                String email = emails[i];
                 String mail = ds.findMailAddress(email);
                 if(mail == null || mail.equals("")){
                     result.setCode(400);
@@ -281,17 +281,65 @@ public class AgentMamageController {
                     result.setMessage("邮箱格式不正确！");
                     response.setContentType("application/json;charset=utf-8");
                     response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+                }else{
+                    accountService.sendInviteEmail(member,email);
+                    result.setCode(200);
                 }
-            }
-
-            if(result.getCode()!=400){
-                accountService.sendInviteEmail(member,emails);
-                result.setCode(200);
-            }
         }catch (Exception e){
             log.error("send inviteEmail error!");
         }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 查询我的代理商
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/agent/myAgent", method = RequestMethod.GET)
+    public void myAgent(HttpServletRequest req, HttpServletResponse response, String id) throws IOException {
+        JsonResult result = new JsonResult();
+        try{
+            List<AgentBean> list = agentService.findAgentByMemId(id);
+            result.setData(list);
+            result.setCode(200);
+        }catch (Exception e){
+            log.error("findAgentByMemId error!");
+        }
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 代理商邀请邮件点击注册
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/agent/agentRegister", method = RequestMethod.GET)
+    public ModelAndView agentRegister(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        log.debug("email agentRegister start.....");
+        JsonResult result = new JsonResult();
+        ModelAndView modelAndView = new ModelAndView();
+        try
+        {
+            String vm = req.getParameter("vm");//获取email
+            if(vm != null & !vm.equals(""))
+            {
+                String decodeVM = new String (EncodeUtil.decodeBase64(vm));
+                result = accountService.agentRegister(decodeVM);
+                RedirectView rv = new RedirectView(accountService.getRedirectUrl(result));
+                modelAndView.setView(rv);
+            }
+        }
+        catch(Exception e)
+        {
+            log.error("email agentRegister error!",e);
+        }
+
+        return modelAndView;
+
     }
 }

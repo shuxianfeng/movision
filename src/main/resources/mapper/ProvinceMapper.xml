@@ -7,21 +7,30 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMap" type="com.zhuhuibao.common.ResultBean" >
+    <result column="ASCII" property="smallIcon" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMap1" type="com.zhuhuibao.common.ResultBean" >
+    <result column="id" property="smallIcon" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, code, name
   </sql>
-  <select id="findProvince" resultMap="ResultMap">
+  <select id="findProvince" resultMap="ResultMap1">
     select
-    code,name
+    id,code,name
     from t_dictionary_province
   </select>
   <select id="searchProvinceByPinYin" resultMap="ResultMap">
-    select
-    code,name
-    from t_dictionary_province
-    order by convert(name USING gbk) COLLATE gbk_chinese_ci
+    SELECT CASE
+    WHEN ASCII(LEFT(pinyin,1)) &gt; 96 and ASCII(LEFT(pinyin,1)) &lt; 104 THEN 'A-G'
+    WHEN ASCII(LEFT(pinyin,1)) &gt; 103 and ASCII(LEFT(pinyin,1)) &lt; 108 THEN 'H-K'
+    WHEN ASCII(LEFT(pinyin,1)) &gt; 107 and ASCII(LEFT(pinyin,1)) &lt; 116 THEN 'L-S'
+    WHEN ASCII(LEFT(pinyin,1)) &gt; 115 THEN 'T-Z'
+    END AS ASCII,code,name
+    FROM t_dictionary_province order by ASCII;
   </select>
 </mapper>

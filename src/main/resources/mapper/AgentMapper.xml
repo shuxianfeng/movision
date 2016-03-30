@@ -10,6 +10,18 @@
     <result column="creatid" property="creatid" jdbcType="BIGINT" />
     <result column="status" property="status" jdbcType="TINYINT" />
   </resultMap>
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.AgentBean" >
+    <id column="account" property="account" jdbcType="BIGINT" />
+    <result column="company" property="company" jdbcType="BIGINT" />
+    <result column="brand" property="brand" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="BIGINT" />
+    <result column="agentRange" property="agentRange" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMap1" type="com.zhuhuibao.common.ResultBean" >
+    <id column="agentid" property="code" jdbcType="VARCHAR" />
+    <result column="enterpriseName" property="name" jdbcType="VARCHAR" />
+    <result column="proviceid" property="smallIcon" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     id, brandid, scateid, agentid, proviceid, creatid, status
   </sql>
@@ -47,4 +59,19 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="findAgentByMemId" resultMap="ResultMap">
+    SELECT CASE WHEN m.mobile IS NOT NULL THEN m.mobile WHEN m.email IS NOT NULL THEN m.email END AS account,
+    m.enterpriseName AS company,concat(ca.name,'>',c.name)as agentRange,b.CNName AS brand,
+    (select GROUP_CONCAT(t.name)name from t_dictionary_province t where find_in_set(t.id,a.proviceid))as province
+    FROM t_p_brand_agent a
+    LEFT JOIN t_m_member m ON a.agentid = m.id
+    LEFT JOIN t_p_category c ON a.scateid = c.id
+    LEFT JOIN t_p_category ca ON c.parentId = ca.id
+    LEFT JOIN t_p_brand b ON a.brandid = b.id
+    WHERE a.creatid = #{id}
+  </select>
+  <select id="findAgent" resultMap="ResultMap1">
+    select distinct a.agentid,m.enterpriseName,a.proviceid from t_p_brand_agent a
+    left join t_m_member m on a.agentid = m.id
+  </select>
 </mapper>

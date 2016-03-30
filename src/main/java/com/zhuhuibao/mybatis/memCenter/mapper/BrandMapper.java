@@ -26,6 +26,8 @@ public interface BrandMapper {
 
     List<ResultBean> findAllBrand(Product product);
 
+    List<ResultBean> findBrandByScateid(Product product);
+
     List<ResultBean> searchSuggestBrand();
 
     List<BrandBean> searchAll();

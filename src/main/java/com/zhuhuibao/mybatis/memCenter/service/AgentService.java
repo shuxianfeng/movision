@@ -1,5 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
+import com.zhuhuibao.common.AgentBean;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Agent;
 import com.zhuhuibao.mybatis.memCenter.mapper.AgentMapper;
@@ -55,8 +56,28 @@ public class AgentService {
      * @return
      */
     public List<ResultBean> searchProvinceByPinYin(){
-        log.debug("");
+        log.debug("区域按首拼分类");
         List<ResultBean> list = provinceMapper.searchProvinceByPinYin();
+        return list;
+    }
+
+    /**
+     * 根据会员id查询代理商
+     * @param
+     * @return
+     */
+    public List<AgentBean> findAgentByMemId(String id){
+        log.debug("根据会员id查询代理商");
+        List<AgentBean> list = agentMapper.findAgentByMemId(id);
+        return list;
+    }
+
+    /**
+     * 获得代理商信息
+     */
+    public List<ResultBean> findAgent(){
+        log.debug("获得代理商信息");
+        List<ResultBean> list = agentMapper.findAgent();
         return list;
     }
 }

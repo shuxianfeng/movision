@@ -4,13 +4,18 @@ package com.zhuhuibao.mybatis.memCenter.service;
  * Created by cxx on 2016/3/14 0014.
  */
 
+import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.security.EncodeUtil;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
 import com.zhuhuibao.utils.SendEmail;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,14 +29,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountService {
     private static final Logger log = LoggerFactory.getLogger(AccountService.class);
 
+    @Autowired
+    private MemberMapper memberMapper;
     /**
      * 发送邮件
-     * @param member 会员信息
-     * @param serverIp 服务器IP
      */
-    public void sendChangeEmail(Member member, String serverIp){
+    public void sendChangeEmail(String email){
         ///邮件的内容
         StringBuffer sb=new StringBuffer("");
+        String serverIp = ResourcePropertiesUtils.getValue("host.ip");
         sb.append("<div style=\"line-height:40px;height:40px\">");
         sb.append("</div>");
         sb.append("<p style=\"padding:0px\"");
@@ -45,12 +51,12 @@ public class AccountService {
         sb.append("<p>请使用以下链接激活该邮箱：</p>");
         sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"");
         sb.append(serverIp);
-        sb.append("/rest/activateEmail?action=activate&vm=");
-        sb.append(new String(EncodeUtil.encodeBase64(member.getId()+","+member.getEmail())));
+        sb.append("/rest/updateEmail?email=");
+        sb.append(new String(EncodeUtil.encodeBase64(email)));
         sb.append("\">");
         sb.append(serverIp);
-        sb.append("/rest/activateEmail?action=activate&vm=");
-        sb.append(new String(EncodeUtil.encodeBase64(member.getId()+","+member.getEmail())));
+        sb.append("/rest/updateEmail?email=");
+        sb.append(new String(EncodeUtil.encodeBase64(email)));
         sb.append("</a>");
         sb.append("</p>");
         sb.append("<p style=\"padding:0px;line-height:24px;font-size:12px;color:#979797;font-family:arial,sans-serif\">");
@@ -58,13 +64,13 @@ public class AccountService {
         sb.append("</p>");
         log.info("send email link == "+sb.toString());
         //发送邮件
-        SendEmail.send(member.getEmail(), sb.toString(),"筑慧宝-邮箱修改");
+        SendEmail.send(email, sb.toString(),"筑慧宝-邮箱修改");
     }
 
     /**
      * 发送邀请代理商邮件
      */
-    public void sendInviteEmail(Member member,String emails[]){
+    public void sendInviteEmail(Member member,String email){
         String companyName = member.getEnterpriseName();
         String linkman = member.getEnterpriseLinkman();
         if(linkman==null){
@@ -83,15 +89,56 @@ public class AccountService {
         sb.append("您好，我是");
         sb.append(companyName);
         sb.append(linkman);
-        sb.append(",现邀请你们入驻筑慧宝平台，共创大业！\n" +
-                "筑慧宝是优秀的Icity一站式服务平台，我司已入驻筑慧宝，期待着你们的加入！");
+        sb.append(",现邀请你入驻筑慧宝平台，共创大业！\n" +
+                "筑慧宝是优秀的Icity一站式服务平台，我司已入驻筑慧宝，期待着你的加入！");
         sb.append("</p>");
-        sb.append("<p>注册地址：</p>");
-        sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\""+ResourcePropertiesUtils.getValue("host.ip")+"/register.html");
-        sb.append("\">"+ResourcePropertiesUtils.getValue("host.ip")+"/register.html");
+        sb.append("<p>点击下面链接完成账号一键注册激活（账号默认该邮箱，密码默认123456，请登陆后修改密码）：</p>");
+        sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\""+ResourcePropertiesUtils.getValue("host.ip")+"/rest/agent/agentRegister?vm=");
+        sb.append(new String(EncodeUtil.encodeBase64(email)));
+        sb.append("\">"+ResourcePropertiesUtils.getValue("host.ip")+"/rest/agent/agentRegister");
+        sb.append(new String(EncodeUtil.encodeBase64(email)));
         sb.append("</a>");
         log.info("send email link == "+sb.toString());
         //发送邮件
-        SendEmail.sendMutilMail(emails, sb.toString(),"筑慧宝-代理商邀请");
+        SendEmail.send(email, sb.toString(),"筑慧宝-代理商邀请");
+
+    }
+
+    /**
+     * 代理商邮件注册
+     */
+    public JsonResult agentRegister(String email){
+        JsonResult result = new JsonResult();
+        Member member = new Member();
+        member.setEmail(email);
+        try{
+            Member member1 = memberMapper.findMem(member);
+            if(member1!=null){
+                result.setCode(400);
+                result.setMsgCode(MsgCodeConstant.member_mcode_mail_registered);
+                result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_registered)));
+            }else{
+                memberMapper.agentRegister(member);
+                result.setCode(200);
+            }
+        }catch (Exception e){
+            log.error("agentRegister error");
+        }
+        return result;
+    }
+
+    /**
+     * 获得跳转页面的URL
+     * @param jsonResult
+     * @return
+     */
+    public String getRedirectUrl(JsonResult jsonResult) {
+        String redirectUrl;
+        if(jsonResult.getCode()==200){
+            redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page");
+        }else{
+            redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.replay.page");
+        }
+        return redirectUrl;
     }
 }

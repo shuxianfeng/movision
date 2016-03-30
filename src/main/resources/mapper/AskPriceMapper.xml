@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.AskPriceMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.AskPrice" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="createid" property="createid" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP" />
+    <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="provinceCode" property="provinceCode" jdbcType="VARCHAR" />
+    <result column="cityCode" property="cityCode" jdbcType="VARCHAR" />
+    <result column="areaCode" property="areaCode" jdbcType="VARCHAR" />
+    <result column="productName" property="productName" jdbcType="VARCHAR" />
+    <result column="supplierid" property="supplierid" jdbcType="VARCHAR" />
+    <result column="isTax" property="isTax" jdbcType="CHAR" />
+    <result column="period" property="period" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="isShow" property="isShow" jdbcType="BIT" />
+    <result column="companyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="linkMan" property="linkMan" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, createid, title, status, type, content, publishTime, endTime, provinceCode, cityCode, 
+    areaCode, fcateid, productName, supplierid, isTax,
+    period, description, isShow, companyName, linkMan, telephone, email
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from t_p_ask_price
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="saveAskPrice" parameterType="com.zhuhuibao.mybatis.memCenter.entity.AskPrice" >
+    insert into t_p_ask_price
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createid != null" >
+        createid,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+        publishTime,
+      <if test="endTime != null" >
+        endTime,
+      </if>
+      <if test="provinceCode != null" >
+        provinceCode,
+      </if>
+      <if test="cityCode != null" >
+        cityCode,
+      </if>
+      <if test="areaCode != null" >
+        areaCode,
+      </if>
+      <if test="fcateid != null" >
+        fcateid,
+      </if>
+      <if test="productName != null" >
+        productName,
+      </if>
+      <if test="supplierid != null" >
+        supplierid,
+      </if>
+      <if test="isTax != null" >
+        isTax,
+      </if>
+      <if test="period != null" >
+        period,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="isShow != null" >
+        isShow,
+      </if>
+      <if test="companyName != null" >
+        companyName,
+      </if>
+      <if test="linkMan != null" >
+        linkMan,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="createid != null" >
+        #{createid,jdbcType=BIGINT},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+        now(),
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="provinceCode != null" >
+        #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fcateid != null" >
+        #{fcateid,jdbcType=INTEGER},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierid != null" >
+        #{supplierid,jdbcType=VARCHAR},
+      </if>
+      <if test="isTax != null" >
+        #{isTax,jdbcType=CHAR},
+      </if>
+      <if test="period != null" >
+        #{period,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        #{isShow,jdbcType=BIT},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="linkMan != null" >
+        #{linkMan,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.AskPrice" >
+    update t_p_ask_price
+    <set >
+      <if test="createid != null" >
+        createid = #{createid,jdbcType=BIGINT},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="publishTime != null" >
+        publishTime = #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        endTime = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="provinceCode != null" >
+        provinceCode = #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        cityCode = #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        areaCode = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fcateid != null" >
+        fcateid = #{fcateid,jdbcType=INTEGER},
+      </if>
+      <if test="productName != null" >
+        productName = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierid != null" >
+        supplierid = #{supplierid,jdbcType=VARCHAR},
+      </if>
+      <if test="isTax != null" >
+        isTax = #{isTax,jdbcType=CHAR},
+      </if>
+      <if test="period != null" >
+        period = #{period,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        isShow = #{isShow,jdbcType=BIT},
+      </if>
+      <if test="companyName != null" >
+        companyName = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="linkMan != null" >
+        linkMan = #{linkMan,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

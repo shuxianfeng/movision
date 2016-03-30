@@ -60,4 +60,10 @@
     <include refid="Base_Column_List" />
     from t_dictionary_workType
   </select>
+  <select id="findWorkTypeById" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_dictionary_workType
+    where id = #{id}
+  </select>
 </mapper>

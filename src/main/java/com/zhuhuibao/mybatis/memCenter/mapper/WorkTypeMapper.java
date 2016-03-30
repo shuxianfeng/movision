@@ -18,4 +18,6 @@ public interface WorkTypeMapper {
     int updateByPrimaryKey(WorkType record);
 
     List<WorkType> findWorkTypeList();
+
+    WorkType findWorkTypeById(String id);
 }

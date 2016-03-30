@@ -3,9 +3,12 @@ package com.zhuhuibao.business.memCenter.BrandManage;
 import com.oreilly.servlet.MultipartRequest;
 import com.zhuhuibao.common.ApiConstants;
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
+import com.zhuhuibao.mybatis.memCenter.service.UploadService;
+import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.RandomFileNamePolicy;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
@@ -34,6 +37,9 @@ public class BrandManageController {
 
     @Autowired
     ApiConstants ApiConstants;
+
+    @Autowired
+    UploadService uploadService;
     /**
      * 新建品牌
      * @param req
@@ -205,38 +211,27 @@ public class BrandManageController {
      */
     @RequestMapping(value = "/rest/uploadImg", method = RequestMethod.POST)
     public void uploadImg(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        //指定所上传的文件，上传成功后，在服务器的保存位置
-        String saveDirectory = ApiConstants.getUploadDir();
-
-        String ip_address = ResourcePropertiesUtils.getValue("host.ip");
-
-        //指定所上传的文件最大上传文件大小
-        int maxPostSize = ApiConstants.getUploadMaxPostSize();
-
-        //指定所上传的文件命名规则
-        RandomFileNamePolicy rfnp = new RandomFileNamePolicy();
-
-        String url = "";
         //完成文件上传
         JsonResult result = new JsonResult();
-        try {
-            MultipartRequest multi = new MultipartRequest(req, saveDirectory, maxPostSize, "UTF-8", rfnp);
-            Enumeration fileNames = multi.getFileNames();
+        String url = uploadService.upload(req,"img");
+        result.setCode(200);
+        result.setData(url);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
 
-            while(fileNames.hasMoreElements()){
-                String fileName = (String)fileNames.nextElement();
-                if(null != multi.getFile(fileName)){
-                    String lastFileName = multi.getFilesystemName(fileName);
-                    url =  ip_address + "/upload/" + lastFileName;//http://192.168.1.119:8080
-                    result.setCode(200);
-                    result.setData(url);
-                }
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            result.setCode(400);
-            result.setMessage("文件大小超限");
-        }
+    /**
+     * 查询二级系统下所有品牌
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/brand/findBrandByScateid", method = RequestMethod.GET)
+    public void findBrandByScateid(HttpServletRequest req, HttpServletResponse response, Product product) throws IOException {
+        List<ResultBean> brandList = brandService.findBrandByScateid(product);
+        JsonResult result = new JsonResult();
+        result.setCode(200);
+        result.setData(brandList);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }

@@ -518,7 +518,7 @@ public class InformationController {
 	@RequestMapping(value = "/rest/uploadHeadShot", method = RequestMethod.POST)
 	public void uploadHeadShot(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
 		JsonResult result = new JsonResult();
-		String url = uploadService.upload(req);
+		String url = uploadService.upload(req,"img");
 		member.setHeadShot(url);
 		try{
 			int isUpdate = memberService.uploadHeadShot(member);
@@ -542,7 +542,7 @@ public class InformationController {
 	@RequestMapping(value = "/rest/uploadLogo", method = RequestMethod.POST)
 	public void uploadLogo(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
 		JsonResult result = new JsonResult();
-		String url = uploadService.upload(req);
+		String url = uploadService.upload(req,"img");
 		member.setEnterpriseLogo(url);
 		try{
 			int isUpdate =  memberService.uploadLogo(member);

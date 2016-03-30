@@ -35,11 +35,15 @@ public class UploadService {
      * 上传图片，返回url
      */
 
-    public String upload(HttpServletRequest req)throws IOException
+    public String upload(HttpServletRequest req,String type)throws IOException
     {
         //指定所上传的文件，上传成功后，在服务器的保存位置
-        String saveDirectory = ApiConstants.getUploadDir();
-
+        String saveDirectory ="";
+        if("img".equals(type)) {
+            saveDirectory = ApiConstants.getUploadDir()+"/img";
+        }else{
+            saveDirectory = ApiConstants.getUploadDir()+"/doc";
+        }
         String ip_address = ResourcePropertiesUtils.getValue("host.ip");
 
         //指定所上传的文件最大上传文件大小
@@ -57,7 +61,12 @@ public class UploadService {
             String fileName = (String)fileNames.nextElement();
             if(null != multi.getFile(fileName)){
                 String lastFileName = multi.getFilesystemName(fileName);
-                url =  ip_address + "/upload/" + lastFileName;
+                if("img".equals(type)){
+                    url =  ip_address + "/upload/img/" + lastFileName;
+                }else{
+                    url =  ip_address + "/upload/doc/" + lastFileName;
+                }
+
             }
         }
 
