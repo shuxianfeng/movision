@@ -19,6 +19,8 @@ import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
+import com.zhuhuibao.mybatis.memberReg.entity.Member;
+import com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper;
 import com.zhuhuibao.mybatis.oms.entity.Category;
 import com.zhuhuibao.mybatis.oms.entity.CategoryAssemble;
 import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
@@ -44,6 +46,9 @@ public class ProductService {
 	
 	@Autowired
 	ProductMapper productMapper;
+	
+	@Autowired
+	MemberRegMapper memberMapper;
 	
 	@Autowired
 	ProductParamService paramService;
@@ -861,8 +866,27 @@ public class ProductService {
 		return list;
 	}
 	
-	public static void main(String[] args) {
-		String str = "1,2";
-		System.out.println(str.indexOf(","));
+	/**
+	 * 会员信息
+	 * @param id
+	 * @return
+	 */
+	public JsonResult findMemberInfoById(Integer id)
+	{
+		JsonResult jsonResult = new JsonResult();
+		try
+		{
+			Member member = memberMapper.findMemberInfoById(id);
+			jsonResult.setData(member);
+		}
+		catch(Exception e)
+		{
+			log.error("find member info error!",e);
+			jsonResult.setCode(MsgCodeConstant.response_status_400);
+    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return jsonResult;
+		}
+		return jsonResult;
 	}
 }
