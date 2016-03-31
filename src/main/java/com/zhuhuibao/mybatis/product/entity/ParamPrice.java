@@ -22,7 +22,7 @@ public class ParamPrice implements Serializable{
 	    
     private String svalue;
     
-    private Double price;
+    private String price;
 
     private Double repository;
     
@@ -60,11 +60,11 @@ public class ParamPrice implements Serializable{
 		this.svalue = svalue;
 	}
 
-	public Double getPrice() {
+	public String getPrice() {
 		return price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(String price) {
 		this.price = price;
 	}
 

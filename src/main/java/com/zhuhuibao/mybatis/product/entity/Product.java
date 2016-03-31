@@ -31,7 +31,7 @@ public class Product {
 
     private Date lastmodified;
 
-    private Double price;
+    private String price;
 
     private String unit;
 
@@ -123,11 +123,11 @@ public class Product {
         this.lastmodified = lastmodified;
     }
 
-    public Double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 

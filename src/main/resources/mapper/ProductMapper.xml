@@ -89,10 +89,10 @@
       <if test="lastmodified != null">
         lastmodified,
       </if>
-      <if test="price != null">
+      <if test="price != null and price != ''">
         price,
       </if>
-      <if test="unit != null">
+      <if test="unit != null and unit != ''">
         unit,
       </if>
       <if test="repository != null">
@@ -146,10 +146,10 @@
       <if test="lastmodified != null">
         #{lastmodified,jdbcType=TIMESTAMP},
       </if>
-      <if test="price != null">
+       <if test="price != null and price != ''">
         #{price,jdbcType=DOUBLE},
       </if>
-      <if test="unit != null">
+      <if test="unit != null and unit != ''">
         #{unit,jdbcType=VARCHAR},
       </if>
       <if test="repository != null">
