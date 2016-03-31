@@ -165,6 +165,9 @@ public class StaffManageController {
 	@RequestMapping(value = "/rest/staffSearch", method = RequestMethod.GET)
 	public void staffSearch(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
 		JsonResult result = new JsonResult();
+		if(member.getAccount().contains("_")){
+			member.setAccount(member.getAccount().replace("_","\\_"));
+		}
 		List<Member> memberList = memberService.findStaffByParentId(member);
 		Map map1 = new HashMap();
 		map1.put("size",memberList.size());
