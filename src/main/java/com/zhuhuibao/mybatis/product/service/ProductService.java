@@ -1,8 +1,17 @@
 package com.zhuhuibao.mybatis.product.service;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
@@ -130,6 +139,10 @@ public class ProductService {
     		if(product.getUnit() == null || product.getUnit().trim().equals(""))
     		{
     			product.setUnit(Constant.product_unit);
+    		}
+    		if(product.getPrice() == null || product.getPrice().trim().equals(""))
+    		{
+    			product.setPrice(Constant.product_price);
     		}
     		productMapper.updateByPrimaryKeySelective(product);
     	}
@@ -888,5 +901,71 @@ public class ProductService {
     		return jsonResult;
 		}
 		return jsonResult;
+	}
+	
+	/**
+     * 查询指定目录中电子表格中所有的数据
+     * @param file 文件完整路径
+     * @return
+     */
+   /* public static List<ProductWithBLOBs> getAllByExcel(String file){
+        List<ProductWithBLOBs> list=new ArrayList<ProductWithBLOBs>();
+        try {
+            Workbook rwb=Workbook.getWorkbook(new File(file));
+            Sheet rs=rwb.getSheet("Test Shee 1");//或者rwb.getSheet(0)
+            int clos=rs.getColumns();//得到所有的列
+            int rows=rs.getRows();//得到所有的行
+            
+            System.out.println(clos+" rows:"+rows);
+            for (int i = 1; i < rows; i++) {
+                for (int j = 0; j < clos; j++) {
+                    //第一个是列数，第二个是行数
+                    String id=rs.getCell(j++, i).getContents();//默认最左边编号也算一列 所以这里得j++
+                    String name=rs.getCell(j++, i).getContents();
+                    String sex=rs.getCell(j++, i).getContents();
+                    String num=rs.getCell(j++, i).getContents();
+                    
+                    System.out.println("id:"+id+" name:"+name+" sex:"+sex+" num:"+num);
+                }
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
+        return list;
+        
+    }*/
+    
+    public static void read(String filePath) throws IOException {
+        String fileType = filePath.substring(filePath.lastIndexOf(".") + 1, filePath.length());
+        InputStream stream = new FileInputStream(filePath);
+        Workbook wb = null;
+        if (fileType.equals("xls")) {
+          wb = new HSSFWorkbook(stream);
+        } else if (fileType.equals("xlsx")) {
+          wb = new XSSFWorkbook(stream);
+        } else {
+          System.out.println("您输入的excel格式不正确");
+        }
+        Sheet rs = wb.getSheetAt(0);
+        for (Row row : rs) {
+          for (Cell cell : row) {
+        	  if(cell.CELL_TYPE_STRING == cell.getCellType())
+        	  {
+        		  System.out.println(cell.getStringCellValue());
+        	  }
+        	  if(cell.CELL_TYPE_NUMERIC == cell.getCellType())
+        	  {
+        		  System.out.println(cell.getNumericCellValue());
+        	  }
+          }
+          System.out.println();
+        }
+      }
+    
+    
+    
+    public static void main(String[] args) throws IOException {
+    	ProductService.read("E://Book2.xlsx");
 	}
 }

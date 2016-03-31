@@ -174,4 +174,13 @@ public interface Constant {
 	 * 产品计件单位”件“
 	 */
 	String product_unit = "件";
+	
+	/**
+	 * 产品价格如果不填的情况下，默认“面议”
+	 */
+	String product_price = "面议";
+	
+	/*************price start **************/
+	
+	/*************price end **************/
 }
