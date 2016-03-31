@@ -43,8 +43,7 @@
   </resultMap>
   <resultMap id="ResultMap" type="com.zhuhuibao.common.AccountBean" >
     <result column="id" property="id" jdbcType="VARCHAR" />
-    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
-    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
     <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -207,15 +206,15 @@
     </set>
     where id = #{id}
   </update>
-<!--  <update id="disableMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
-    update t_m_member
-    <set>
-      <if test="status!= null">
-        status = 3,
-      </if>
-    </set>
-    where id = #{id}
-  </update>-->
+  <!--  <update id="disableMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+      update t_m_member
+      <set>
+        <if test="status!= null">
+          status = 3,
+        </if>
+      </set>
+      where id = #{id}
+    </update>-->
   <update id="deleteMember">
     update t_m_member
     <set>
@@ -258,7 +257,7 @@
       headShot = #{headShot},
     </set>
     where
-      id = #{id}
+    id = #{id}
   </update>
   <update id="uploadLogo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     update t_m_member
@@ -270,11 +269,18 @@
   </update>
   <select id="findAgentMember" resultMap="ResultMap">
     select
-    id,mobile,email,enterpriseName
+    id,
+    CASE WHEN mobile IS NOT NULL THEN mobile WHEN email IS NOT NULL THEN email END AS account,
+    enterpriseName
     from t_m_member
     where
     identify like '%4%' and
-    (email like CONCAT('%',#{account},'%') or mobile like CONCAT('%',#{account},'%') or enterpriseName like CONCAT('%',#{account},'%'))
+    <if test="type = '1'">
+      (email like CONCAT('%',#{account},'%') or mobile like CONCAT('%',#{account},'%'))
+    </if>
+    <if test="type = '2'">
+      enterpriseName like CONCAT('%',#{account},'%')
+    </if>
   </select>
   <insert id="agentRegister" keyProperty="id" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" useGeneratedKeys="true">
    insert into t_m_member(email,password,registerTime,status,identify) values

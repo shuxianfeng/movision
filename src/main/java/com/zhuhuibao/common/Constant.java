@@ -174,4 +174,30 @@ public interface Constant {
 	 * 产品计件单位”件“
 	 */
 	String product_unit = "件";
+
+	/******************price****************/
+
+	/**
+	 * id
+	 */
+	String id = "id";
+
+	/**
+	 * name
+	 */
+	String name = "name";
+	/**
+	 * 公司名称
+	 */
+	String companyName = "companyName";
+	/**
+	 * 公司联系人
+	 */
+	String linkMan = "linkMan";
+	/**
+	 * 公司联系电话
+	 */
+	String telephone = "telephone";
+
+	/******************end****************/
 }

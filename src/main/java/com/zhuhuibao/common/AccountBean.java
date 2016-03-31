@@ -7,9 +7,7 @@ public class AccountBean {
 
     private String id;
 
-    private String mobile;
-
-    private String email;
+    private String account;
 
     private String enterpriseName;
 
@@ -21,27 +19,19 @@ public class AccountBean {
         this.id = id;
     }
 
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getEnterpriseName() {
         return enterpriseName;
     }
 
     public void setEnterpriseName(String enterpriseName) {
         this.enterpriseName = enterpriseName;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
     }
 }

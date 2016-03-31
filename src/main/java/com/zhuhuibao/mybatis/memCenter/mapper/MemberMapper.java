@@ -37,7 +37,7 @@ public interface MemberMapper {
 
     int uploadLogo(Member member);
 
-    List<AccountBean> findAgentMember(String account);
+    List<AccountBean> findAgentMember(String account,String type);
 
     //代理商邮件注册
     int agentRegister(Member member);

@@ -133,8 +133,9 @@ public class AgentMamageController {
     public void searchAgent(HttpServletRequest req, HttpServletResponse response) throws IOException {
         JsonResult result = new JsonResult();
         String account = req.getParameter("account");
+        String type = req.getParameter("type");
         try{
-            List<AccountBean> memList = memberService.findAgentMember(account);
+            List<AccountBean> memList = memberService.findAgentMember(account,type);
             result.setCode(200);
             result.setData(memList);
         }catch (Exception e){

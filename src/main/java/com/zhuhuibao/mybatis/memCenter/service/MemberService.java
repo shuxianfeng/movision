@@ -151,10 +151,10 @@ public class MemberService {
 	/**
 	 * 查询代理商
 	 */
-	public List<AccountBean> findAgentMember(String account)
+	public List<AccountBean> findAgentMember(String account,String type)
 	{
 		log.debug("查询代理商");
-		List<AccountBean> memList = memberMapper.findAgentMember(account);
+		List<AccountBean> memList = memberMapper.findAgentMember(account,type);
 		return memList;
 	}
 

@@ -72,12 +72,4 @@ public class AgentService {
         return list;
     }
 
-    /**
-     * 获得代理商信息
-     */
-    public List<ResultBean> findAgent(){
-        log.debug("获得代理商信息");
-        List<ResultBean> list = agentMapper.findAgent();
-        return list;
-    }
 }
