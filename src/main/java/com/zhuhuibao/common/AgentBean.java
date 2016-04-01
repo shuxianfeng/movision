@@ -4,6 +4,8 @@ package com.zhuhuibao.common;
  * Created by cxx on 2016/3/25 0025.
  */
 public class AgentBean {
+    private String id;
+
     private String account;
 
     private String company;
@@ -52,5 +54,13 @@ public class AgentBean {
 
     public void setAgentRange(String agentRange) {
         this.agentRange = agentRange;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
