@@ -19,6 +19,8 @@ public interface ProductMapper {
     int insertSelective(ProductWithBLOBs record);
 
     ProductWithBLOBs selectByPrimaryKey(Long id);
+    
+    ProductWithBLOBs selectProductByID(Long id);
 
     int updateByPrimaryKeySelective(ProductWithBLOBs record);
     

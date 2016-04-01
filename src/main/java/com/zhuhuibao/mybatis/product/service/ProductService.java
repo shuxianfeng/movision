@@ -313,7 +313,7 @@ public class ProductService {
     	ProductWithBLOBs product = null;
     	try
     	{
-    		product = productMapper.selectByPrimaryKey(id);
+    		product = productMapper.selectProductByID(id);
     		//组成参数列表
     		if(product.getParamIDs() != null && product.getParamIDs().length() > 0)
     		{

@@ -44,6 +44,15 @@
 	  left join t_p_brand b on t.brandid = b.id
     where t.id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectProductByID" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
+	  if(t.price = -1,'面议',t.price) price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,c.name fcateName ,c1.name scateName,
+	  b.CNName,b.ENName  
+	  from t_p_product t left join t_p_category c on t.fcateid = c.id
+	  left join t_p_category c1 on t.scateid = c1.id 
+	  left join t_p_brand b on t.brandid = b.id
+    where t.id = #{id,jdbcType=BIGINT}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_p_product
     where id = #{id,jdbcType=BIGINT}

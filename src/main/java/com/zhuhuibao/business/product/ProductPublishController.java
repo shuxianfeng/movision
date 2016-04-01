@@ -326,20 +326,4 @@ public class ProductPublishController {
 	        response.setContentType("application/json;charset=utf-8");
 	        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 		}
-		
-		@RequestMapping(value="/rest/findMemberInfoById",method = RequestMethod.GET)
-		@ResponseBody
-		public void findMemberInfoById(HttpServletRequest req,HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException
-		{
-			JsonResult jsonResult = new JsonResult();
-			Subject currentUser = SecurityUtils.getSubject();
-	        Session session = currentUser.getSession(false);
-	        ShiroUser principal = (ShiroUser)session.getAttribute("member");
-	        if(null != principal)
-	        {
-	        	jsonResult = productService.findMemberInfoById(principal.getId());
-	        }
-	        response.setContentType("application/json;charset=utf-8");
-	        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
-		}
 }

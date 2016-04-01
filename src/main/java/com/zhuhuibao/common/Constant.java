@@ -176,9 +176,9 @@ public interface Constant {
 	String product_unit = "件";
 	
 	/**
-	 * 产品价格如果不填的情况下，默认“面议”
+	 * 产品价格如果不填的情况下，默认“-1”
 	 */
-	String product_price = "面议";
+	String product_price = "-1";
 
 	/******************price****************/
 
