@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.*;
+import java.util.Map.Entry;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -55,9 +57,6 @@ public class ProductService {
 	
 	@Autowired
 	ProductMapper productMapper;
-	
-	@Autowired
-	MemberRegMapper memberMapper;
 	
 	@Autowired
 	ProductParamService paramService;
@@ -313,7 +312,7 @@ public class ProductService {
     	ProductWithBLOBs product = null;
     	try
     	{
-    		product = productMapper.selectProductByID(id);
+    		product = productMapper.selectByPrimaryKey(id);
     		//组成参数列表
     		if(product.getParamIDs() != null && product.getParamIDs().length() > 0)
     		{
@@ -880,30 +879,6 @@ public class ProductService {
 	}
 	
 	/**
-	 * 会员信息
-	 * @param id
-	 * @return
-	 */
-	public JsonResult findMemberInfoById(Integer id)
-	{
-		JsonResult jsonResult = new JsonResult();
-		try
-		{
-			Member member = memberMapper.findMemberInfoById(id);
-			jsonResult.setData(member);
-		}
-		catch(Exception e)
-		{
-			log.error("find member info error!",e);
-			jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
-		}
-		return jsonResult;
-	}
-	
-	/**
      * 查询指定目录中电子表格中所有的数据
      * @param file 文件完整路径
      * @return
@@ -935,37 +910,4 @@ public class ProductService {
         return list;
         
     }*/
-    
-    public static void read(String filePath) throws IOException {
-        String fileType = filePath.substring(filePath.lastIndexOf(".") + 1, filePath.length());
-        InputStream stream = new FileInputStream(filePath);
-        Workbook wb = null;
-        if (fileType.equals("xls")) {
-          wb = new HSSFWorkbook(stream);
-        } else if (fileType.equals("xlsx")) {
-          wb = new XSSFWorkbook(stream);
-        } else {
-          System.out.println("您输入的excel格式不正确");
-        }
-        Sheet rs = wb.getSheetAt(0);
-        for (Row row : rs) {
-          for (Cell cell : row) {
-        	  if(cell.CELL_TYPE_STRING == cell.getCellType())
-        	  {
-        		  System.out.println(cell.getStringCellValue());
-        	  }
-        	  if(cell.CELL_TYPE_NUMERIC == cell.getCellType())
-        	  {
-        		  System.out.println(cell.getNumericCellValue());
-        	  }
-          }
-          System.out.println();
-        }
-      }
-    
-    
-    
-    public static void main(String[] args) throws IOException {
-    	ProductService.read("E://Book2.xlsx");
-	}
 }

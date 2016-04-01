@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.MsgCodeConstant;
+import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.mybatis.product.service.ProductService;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.security.resubmit.TokenHelper;
@@ -41,7 +42,7 @@ public class AuthenticationController {
     private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
 
     @Autowired
-	private ProductService productService;
+	private MemberRegService memberService;
     
     @RequestMapping(value = "/rest/web/authc", method = RequestMethod.GET)
     @ResponseBody
@@ -99,7 +100,7 @@ public class AuthenticationController {
         ShiroUser principal = (ShiroUser)session.getAttribute("member");
         if(null != principal)
         {
-        	jsonResult = productService.findMemberInfoById(principal.getId());
+        	jsonResult = memberService.findMemberInfoById(principal.getId());
         }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));

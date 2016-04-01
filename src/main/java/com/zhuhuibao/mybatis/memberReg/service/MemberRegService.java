@@ -44,6 +44,9 @@ public class MemberRegService {
 	@Autowired
 	private DictionaryService ds;
 	
+	@Autowired
+	MemberRegMapper memberMapper;
+	
 	/**
 	 * 注册验证码业务类
 	 */
@@ -554,5 +557,29 @@ public class MemberRegService {
 		}
 		log.debug("email verifyCode == " + member.getEmailCheckCode());
 		return result;
+	}
+    
+    /**
+	 * 会员信息
+	 * @param id
+	 * @return
+	 */
+	public JsonResult findMemberInfoById(Integer id)
+	{
+		JsonResult jsonResult = new JsonResult();
+		try
+		{
+			Member member = memberMapper.findMemberInfoById(id);
+			jsonResult.setData(member);
+		}
+		catch(Exception e)
+		{
+			log.error("find member info error!",e);
+			jsonResult.setCode(MsgCodeConstant.response_status_400);
+    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return jsonResult;
+		}
+		return jsonResult;
 	}
 }

@@ -2,14 +2,30 @@ package com.zhuhuibao.utils;
 
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs;
+import com.zhuhuibao.mybatis.product.mapper.ProductMapper;
 
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.*;
+import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 public class XlsUtils {
 
+	@Autowired
+	ProductMapper productMapper;
+	
     private HSSFWorkbook wb = null;
 
     private HSSFSheet sheet = null;
@@ -286,4 +302,61 @@ public class XlsUtils {
         }
     }
 
+    public void read(String filePath) throws IOException {
+        String fileType = filePath.substring(filePath.lastIndexOf(".") + 1, filePath.length());
+        InputStream stream = new FileInputStream(filePath);
+        Workbook wb = null;
+        if (fileType.equals("xls")) {
+          wb = new HSSFWorkbook(stream);
+        } else if (fileType.equals("xlsx")) {
+          wb = new XSSFWorkbook(stream);
+        } else {
+          System.out.println("您输入的excel格式不正确");
+        }
+        Sheet rs = wb.getSheetAt(0);
+        int rowNum = rs.getLastRowNum();
+        Row row = rs.getRow(0);
+        int colNum = row.getPhysicalNumberOfCells();
+        DecimalFormat formatter = new java.text.DecimalFormat();
+//        for (Row row : rs) {
+        for (int i = 1; i <= rowNum; i++) {
+        	row = rs.getRow(i);
+        	 Map<Integer, String> content = new HashMap<Integer, String>();
+        	for(int j = 0;j<colNum;j++)
+        	{
+        		  Cell cell = row.getCell(j);
+	        	  String value = "";
+	        	  if(cell.CELL_TYPE_STRING == cell.getCellType())
+	        	  {
+	        		  value = cell.getStringCellValue();
+	        	  }
+	        	  if(cell.CELL_TYPE_NUMERIC == cell.getCellType())
+	        	  {
+	        		  value = formatter.format(cell.getNumericCellValue());
+	        	  }
+	        	  content.put(j, value);
+	         }
+        	ProductWithBLOBs product = new ProductWithBLOBs();
+        	for( Integer key : content.keySet())
+        	{
+        		System.out.println(key+" "+content.get(key));
+        		product.setBrandid(Integer.parseInt(content.get(0)));
+        		product.setName(content.get(3));
+        		product.setFcateid(Integer.parseInt("1"));
+        		product.setScateid(Integer.parseInt("10"));
+        		product.setService(content.get(8));
+        		product.setDetailDesc(content.get(4));
+        		product.setParas(content.get(5));
+        		product.setUnit(content.get(6));
+        		product.setNumber(content.get(7));
+        		product.setPrice("1000");
+        		product.setCreateid(Long.parseLong("92"));
+        		product.setStatus(1);
+        		product.setRepository(Double.parseDouble("1000"));
+        		product.setImgUrl("http://sandbox.zhuhui8.com/upload/img/KG8H1459409227267.png;http://sandbox.zhuhui8.com/upload/img/4XCQ1459409229306.png;http://sandbox.zhuhui8.com/upload/img/2P7V1459409231180.png");
+        	}
+        	productMapper.insertSelective(product);
+         }
+        
+      }
 }

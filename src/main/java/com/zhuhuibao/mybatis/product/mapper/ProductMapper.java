@@ -20,8 +20,6 @@ public interface ProductMapper {
 
     ProductWithBLOBs selectByPrimaryKey(Long id);
     
-    ProductWithBLOBs selectProductByID(Long id);
-
     int updateByPrimaryKeySelective(ProductWithBLOBs record);
     
     int updateProductStatus(ProductWithBLOBs record);
