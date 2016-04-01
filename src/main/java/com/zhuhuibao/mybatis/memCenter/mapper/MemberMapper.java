@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.common.AccountBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public interface MemberMapper {
 
     int uploadLogo(Member member);
 
-    List<AccountBean> findAgentMember(String account,String type);
+    List<AccountBean> findAgentMember(@Param("account") String account,@Param("type") String type);
 
     //代理商邮件注册
     int agentRegister(Member member);

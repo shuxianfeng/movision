@@ -135,7 +135,7 @@ public class PriceService {
         JsonResult result = new JsonResult();
         Map map = new HashMap();
         Member member = memberMapper.findMemById(id);
-        if(member==null){
+        if(member!=null){
             map.put(Constant.companyName,member.getEnterpriseName());
             map.put(Constant.linkMan,member.getEnterpriseLinkman());
             map.put(Constant.telephone,member.getFixedTelephone());

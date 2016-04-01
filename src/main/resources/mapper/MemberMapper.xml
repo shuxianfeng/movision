@@ -275,10 +275,10 @@
     from t_m_member
     where
     identify like '%4%' and
-    <if test="type = '1'">
+    <if test="type == 1">
       (email like CONCAT('%',#{account},'%') or mobile like CONCAT('%',#{account},'%'))
     </if>
-    <if test="type = '2'">
+    <if test="type == 2">
       enterpriseName like CONCAT('%',#{account},'%')
     </if>
   </select>

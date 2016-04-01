@@ -132,7 +132,7 @@ public class AgentMamageController {
     @RequestMapping(value = "/rest/agent/searchAgent", method = RequestMethod.GET)
     public void searchAgent(HttpServletRequest req, HttpServletResponse response) throws IOException {
         JsonResult result = new JsonResult();
-        String account = req.getParameter("account");
+        String account = new String(req.getParameter("account").getBytes("iso-8859-1"),"utf-8");
         String type = req.getParameter("type");
         try{
             List<AccountBean> memList = memberService.findAgentMember(account,type);
@@ -140,6 +140,7 @@ public class AgentMamageController {
             result.setData(memList);
         }catch (Exception e){
             log.error("query Agent error!");
+            e.printStackTrace();
         }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
