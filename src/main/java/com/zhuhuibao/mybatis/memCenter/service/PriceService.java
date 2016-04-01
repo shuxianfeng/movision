@@ -1,15 +1,14 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.AskPriceBean;
-import com.zhuhuibao.common.Constant;
-import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.common.*;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.AgentMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.AskPriceMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ProvinceMapper;
+import com.zhuhuibao.mybatis.product.entity.Product;
+import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,9 +149,8 @@ public class PriceService {
     /**
      * 根据条件查询询价信息（分页）
      */
-    public JsonResult queryAskPriceInfo(){
-        JsonResult result = new JsonResult();
-
-        return result;
+    public List<AskPriceResultBean> findAllByPager(Paging<AskPriceResultBean> pager, AskPriceSearchBean askPriceSearch){
+        log.debug("查询询价信息（分页）");
+        return askPriceMapper.findAllByPager(pager.getRowBounds(),askPriceSearch);
     }
 }

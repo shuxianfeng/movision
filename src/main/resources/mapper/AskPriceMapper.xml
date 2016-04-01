@@ -271,4 +271,31 @@
     left join t_dictionary_area a on a.code = p.areaCode
     where p.id = #{id}
   </select>
+  <select id="findAllByPager" parameterType="com.zhuhuibao.common.AskPriceSearchBean" resultType="com.zhuhuibao.common.AskPriceResultBean">
+    select p.id,p.title,p.`status`,p.`type`,p.publishTime,concat(pr.name,ci.name,a.name)as area,
+    (select count(*)from t_p_offer_price where enquireId = p.id)as size
+    from t_p_ask_price p
+    left join t_dictionary_province pr on pr.code = p.provinceCode
+    left join t_dictionary_city ci on ci.code = p.cityCode
+    left join t_dictionary_area a on a.code = p.areaCode
+    where 1=1
+    <if test="title != null" >
+      and p.title like CONCAT('%',#{title},'%')
+    </if>
+    <if test="type != null" >
+      and p.type = #{type}
+    </if>
+    <if test="status != null" >
+      and p.status = #{status}
+    </if>
+    <if test="startTime != null and endTime != null" >
+      and p.publishTime &lt; #{endTime} and p.publishTime &gt; #{startTime}
+    </if>
+    <if test="startTime != null and endTime == null" >
+      and p.publishTime &gt; #{startTime}
+    </if>
+    <if test="startTime == null and endTime != null" >
+      and p.publishTime &lt; #{endTime}
+    </if>
+  </select>
 </mapper>

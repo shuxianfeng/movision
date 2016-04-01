@@ -1,10 +1,15 @@
 package com.zhuhuibao.business.memCenter.PriceManage;
 
+import com.zhuhuibao.common.AskPriceResultBean;
+import com.zhuhuibao.common.AskPriceSearchBean;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.service.PriceService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
+import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.utils.JsonUtils;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 询价报价管理
@@ -86,9 +92,19 @@ public class PriceController {
      * 根据条件查询询价信息（分页）
      */
     @RequestMapping(value = "/rest/price/queryAskPriceInfo", method = RequestMethod.GET)
-    public void queryAskPriceInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        JsonResult result = priceService.queryAskPriceInfo();
+    public void queryAskPriceInfo(HttpServletRequest req, HttpServletResponse response, AskPriceSearchBean askPriceSearch,String pageNo,String pageSize) throws IOException {
+        JsonResult jsonResult = new JsonResult();
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<AskPriceResultBean> pager = new Paging<AskPriceResultBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        List<AskPriceResultBean> askPriceList = priceService.findAllByPager(pager,askPriceSearch);
+        pager.result(askPriceList);
+        jsonResult.setData(pager);
         response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
 }
