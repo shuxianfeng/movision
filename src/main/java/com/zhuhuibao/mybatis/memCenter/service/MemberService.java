@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.common.AccountBean;
+import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.*;
@@ -11,7 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 会员中心业务处理
@@ -301,11 +305,42 @@ public class MemberService {
 	/**
 	 * 根据父类ID查询公司下属员工
 	 */
-	public List<Member> findStaffByParentId(Member member)
+	public JsonResult findStaffByParentId(Member member)
 	{
 		log.debug("根据父类ID查询公司下属员工");
+		JsonResult result = new JsonResult();
 		List<Member> memberList = memberMapper.findStaffByParentId(member);
-		return memberList;
+		Map map1 = new HashMap();
+		List list = new ArrayList();
+		for(int i=0;i<memberList.size();i++){
+			Map map = new HashMap();
+			Member member1 = memberList.get(i);
+			map.put("id",member1.getId());
+			if(member1.getMobile()!=null){
+				map.put("account",member1.getMobile());
+			}else{
+				map.put("account",member1.getEmail());
+			}
+			WorkType workType = workTypeMapper.findWorkTypeById(member1.getWorkType().toString());
+			map.put("role",workType.getName());
+			map.put("roleId",member1.getWorkType());
+			map.put("name",member1.getPersonRealName());
+			map.put("status",member1.getStatus());
+			String statusName = "";
+			if(member1.getStatus()==0){
+				statusName = "未激活";
+			}else if(member1.getStatus()==1){
+				statusName = "正常";
+			}else{
+				statusName = "注销";
+			}
+			map.put("statusName",statusName);
+			list.add(map);
+		}
+		map1.put("memInfo",list);
+		result.setCode(200);
+		result.setData(map1);
+		return result;
 	}
 
 

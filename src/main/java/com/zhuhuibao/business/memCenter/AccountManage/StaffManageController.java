@@ -37,6 +37,9 @@ public class StaffManageController {
 	@Autowired
 	private MemberService memberService;
 
+	@Autowired
+	private MemberMapper memberMapper;
+
 	/**
 	 * 新建会员
 	 * @param req
@@ -164,45 +167,31 @@ public class StaffManageController {
 
 	@RequestMapping(value = "/rest/staffSearch", method = RequestMethod.GET)
 	public void staffSearch(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
-		JsonResult result = new JsonResult();
 		if(member.getAccount()!=null){
 			if(member.getAccount().contains("_")){
 				member.setAccount(member.getAccount().replace("_","\\_"));
 			}
 		}
-		List<Member> memberList = memberService.findStaffByParentId(member);
-		Map map1 = new HashMap();
-		map1.put("size",memberList.size());
-		map1.put("leftSize",30-memberList.size());
-		List list = new ArrayList();
-		for(int i=0;i<memberList.size();i++){
-			Map map = new HashMap();
-			Member member1 = memberList.get(i);
-			map.put("id",member1.getId());
-			if(member1.getMobile()!=null){
-				map.put("account",member1.getMobile());
-			}else{
-				map.put("account",member1.getEmail());
-			}
-			WorkType workType = memberService.findWorkTypeById(member1.getWorkType().toString());
-			map.put("role",workType.getName());
-			map.put("roleId",member1.getWorkType());
-			map.put("name",member1.getPersonRealName());
-			map.put("status",member1.getStatus());
-			String statusName = "";
-			if(member1.getStatus()==0){
-				statusName = "未激活";
-			}else if(member1.getStatus()==1){
-				statusName = "正常";
-			}else{
-				statusName = "注销";
-			}
-			map.put("statusName",statusName);
-			list.add(map);
-		}
-		map1.put("memInfo",list);
+		JsonResult result = memberService.findStaffByParentId(member);
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+	}
+
+	/**
+	 * 员工搜索size
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/rest/staffSearchSize", method = RequestMethod.GET)
+	public void staffSearchSize(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
+		JsonResult result = new JsonResult();
+		List<Member> memberList = memberMapper.findStaffByParentId(member);
+		Map map = new HashMap();
+		map.put("size",memberList.size());
+		map.put("leftSize",30-memberList.size());
 		result.setCode(200);
-		result.setData(map1);
+		result.setData(map);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}

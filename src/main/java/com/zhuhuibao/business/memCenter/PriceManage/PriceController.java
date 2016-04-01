@@ -6,7 +6,6 @@ import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.service.PriceService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
-import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;

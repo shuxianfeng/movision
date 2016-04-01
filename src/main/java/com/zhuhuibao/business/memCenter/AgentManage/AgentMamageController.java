@@ -250,10 +250,10 @@ public class AgentMamageController {
                     list4.add(map1);
                 }
             }
-            map.put("A-G",list1);
-            map.put("H-K",list2);
-            map.put("L-S",list3);
-            map.put("T-Z",list4);
+            map.put("AG",list1);
+            map.put("HK",list2);
+            map.put("LS",list3);
+            map.put("TZ",list4);
             result.setCode(200);
             result.setData(map);
         }catch (Exception e){
