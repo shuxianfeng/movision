@@ -14,4 +14,6 @@ public interface AgentMapper {
     List<AgentBean> findAgentByMemId(String id);
 
     List<ResultBean> findAgent();
+
+    AgentBean updateAgentById(String id);
 }

@@ -82,4 +82,17 @@
     select distinct a.agentid,m.enterpriseName,a.proviceid from t_p_brand_agent a
     left join t_m_member m on a.agentid = m.id
   </select>
+  <select id="updateAgentById" resultMap="ResultMap">
+    select brand,province,id,company,account,group_concat(A.agentRange)as agentRange from (
+    select a.brandid as brand,a.proviceid as province,m.id,m.enterpriseName as company,
+    CASE WHEN m.mobile IS NOT NULL THEN m.mobile WHEN m.email IS NOT NULL THEN m.email END AS account,
+    concat(ca.name,'>',c.name)as agentRange
+    from t_p_brand_agent a
+    left join t_m_member m on a.agentid = m.id
+    LEFT JOIN t_p_category c ON find_in_set(c.id,a.scateid)
+    LEFT JOIN t_p_category ca ON c.parentId = ca.id
+    where a.id = #{id}
+    )A
+    group by account
+  </select>
 </mapper>

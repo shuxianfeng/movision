@@ -130,6 +130,7 @@ public class InformationController {
 				}
 			}catch (Exception e){
 				log.error("update info error!",e);
+				e.printStackTrace();
 			}
 
 		}

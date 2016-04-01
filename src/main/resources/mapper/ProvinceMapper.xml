@@ -6,10 +6,11 @@
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMap" type="com.zhuhuibao.common.ResultBean" >
-    <result column="ASCII" property="smallIcon" jdbcType="VARCHAR" />
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.CommonBean" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="ASCII" property="other" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMap1" type="com.zhuhuibao.common.ResultBean" >
     <result column="id" property="smallIcon" jdbcType="VARCHAR" />
@@ -30,7 +31,7 @@
     WHEN ASCII(LEFT(pinyin,1)) &gt; 103 and ASCII(LEFT(pinyin,1)) &lt; 108 THEN 'H-K'
     WHEN ASCII(LEFT(pinyin,1)) &gt; 107 and ASCII(LEFT(pinyin,1)) &lt; 116 THEN 'L-S'
     WHEN ASCII(LEFT(pinyin,1)) &gt; 115 THEN 'T-Z'
-    END AS ASCII,code,name
+    END AS ASCII,id,code,name
     FROM t_dictionary_province order by ASCII;
   </select>
 </mapper>

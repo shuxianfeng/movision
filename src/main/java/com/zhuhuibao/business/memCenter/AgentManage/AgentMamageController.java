@@ -234,17 +234,18 @@ public class AgentMamageController {
         List list4 = new ArrayList();
         Map map = new HashMap();
         try{
-            List<ResultBean> ResultList = agentService.searchProvinceByPinYin();
+            List<CommonBean> ResultList = agentService.searchProvinceByPinYin();
             for(int i=0;i<ResultList.size();i++){
                 Map map1 = new HashMap();
-                ResultBean resultBean1 = ResultList.get(i);
-                map1.put("id",resultBean1.getCode());
-                map1.put("name",resultBean1.getName());
-                if("A-G".equals(resultBean1.getSmallIcon())){
+                CommonBean resultBean = ResultList.get(i);
+                map1.put("id",resultBean.getId());
+                map1.put("code",resultBean.getCode());
+                map1.put("name",resultBean.getName());
+                if("A-G".equals(resultBean.getOther())){
                     list1.add(map1);
-                }else if("H-K".equals(resultBean1.getSmallIcon())){
+                }else if("H-K".equals(resultBean.getOther())){
                     list2.add(map1);
-                }else if("L-S".equals(resultBean1.getSmallIcon())){
+                }else if("L-S".equals(resultBean.getOther())){
                     list3.add(map1);
                 }else{
                     list4.add(map1);
@@ -342,5 +343,18 @@ public class AgentMamageController {
 
         return modelAndView;
 
+    }
+
+    /**
+     * 代理商编辑，参数，id
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/agent/updateAgentById", method = RequestMethod.GET)
+    public void updateAgentById(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+        JsonResult result = agentService.updateAgentById(id);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
 }

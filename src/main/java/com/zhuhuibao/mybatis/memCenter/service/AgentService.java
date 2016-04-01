@@ -1,6 +1,8 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.common.AgentBean;
+import com.zhuhuibao.common.CommonBean;
+import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Agent;
 import com.zhuhuibao.mybatis.memCenter.mapper.AgentMapper;
@@ -11,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 代理商业务处理
@@ -55,9 +59,9 @@ public class AgentService {
      * @param
      * @return
      */
-    public List<ResultBean> searchProvinceByPinYin(){
+    public List<CommonBean> searchProvinceByPinYin(){
         log.debug("区域按首拼分类");
-        List<ResultBean> list = provinceMapper.searchProvinceByPinYin();
+        List<CommonBean> list = provinceMapper.searchProvinceByPinYin();
         return list;
     }
 
@@ -72,4 +76,30 @@ public class AgentService {
         return list;
     }
 
+    /**
+     * 代理商编辑，参数，id
+     * @param
+     * @return
+     */
+    public JsonResult updateAgentById(String id){
+        JsonResult result = new JsonResult();
+        try{
+            AgentBean agent = agentMapper.updateAgentById(id);
+            Map map = new HashMap();
+            Map map1 = new HashMap();
+            map1.put("id",agent.getId());
+            map1.put("account",agent.getAccount());
+            map1.put("name",agent.getCompany());
+            map.put("brandId",agent.getBrand());
+            map.put("province",agent.getProvince());
+            map.put("product",agent.getAgentRange());
+            map.put("agent",map1);
+            result.setCode(200);
+            result.setData(map);
+        }catch (Exception e){
+            log.error("query error ",e);
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
