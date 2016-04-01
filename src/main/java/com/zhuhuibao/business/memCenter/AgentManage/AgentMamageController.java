@@ -201,15 +201,14 @@ public class AgentMamageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/agent/cancelAgent", method = RequestMethod.POST)
-    public void cancelAgent(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public void cancelAgent(HttpServletRequest req, HttpServletResponse response,Agent agent) throws IOException {
         JsonResult result = new JsonResult();
-        Agent agent = new Agent();
         agent.setStatus("1");
         try{
             int isUpdate = agentService.agentUpdate(agent);
             if(isUpdate==0){
                 result.setCode(400);
-                result.setMessage("取消关联代理商成功");
+                result.setMessage("取消关联代理商失败");
             }else{
                 result.setCode(200);
             }
