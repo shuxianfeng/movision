@@ -74,7 +74,7 @@
       LEFT JOIN t_p_category c ON find_in_set(c.id,a.scateid)
       LEFT JOIN t_p_category ca ON c.parentId = ca.id
       LEFT JOIN t_p_brand b ON a.brandid = b.id
-      WHERE a.creatid = #{id}
+      WHERE a.creatid = #{id} and a.status = 0
 	 ) A
     GROUP BY ACCOUNT
   </select>
