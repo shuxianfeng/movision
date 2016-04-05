@@ -156,12 +156,18 @@ public class AgentMamageController {
     public void agentSave(HttpServletRequest req, HttpServletResponse response, Agent agent) throws IOException {
         JsonResult result = new JsonResult();
         try{
-            int isSave = agentService.agentSave(agent);
-            if(isSave==0){
-                result.setCode(400);
-                result.setMessage("关联代理商保存成功");
+            Agent agent1 = agentService.find(agent);
+            if(agent1==null){
+                int isSave = agentService.agentSave(agent);
+                if(isSave==0){
+                    result.setCode(400);
+                    result.setMessage("关联代理商保存成功");
+                }else{
+                    result.setCode(200);
+                }
             }else{
-                result.setCode(200);
+                result.setCode(400);
+                result.setMessage("该品牌该代理商已设置");
             }
         }catch (Exception e){
             log.error("save agent error!");

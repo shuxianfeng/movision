@@ -81,6 +81,7 @@
   <select id="findAgent" resultMap="ResultMap1">
     select distinct a.agentid,m.enterpriseName,a.proviceid from t_p_brand_agent a
     left join t_m_member m on a.agentid = m.id
+    where a.brandid = #{id}
   </select>
   <select id="updateAgentById" resultMap="ResultMap">
     select a.brandid as brand,a.proviceid as province,m.id,m.enterpriseName as company,
@@ -89,5 +90,11 @@
     from t_p_brand_agent a
     left join t_m_member m on a.agentid = m.id
     where a.id = #{id}
+  </select>
+  <select id="find" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_p_brand_agent
+    where brandid = #{brandid} and agentid = #{agentid}
   </select>
 </mapper>

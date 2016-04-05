@@ -15,10 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 询报价业务处理
@@ -72,10 +70,12 @@ public class PriceService {
         JsonResult result = new JsonResult();
         try{
             AskPriceBean bean = askPriceMapper.queryAskPriceByID(id);
-            if("1".equals(bean.getStatus())){
-                bean.setStatusName("报价中");
-            }else{
+            SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = sdf.parse(bean.getEndTime());
+            if(date.before(new Date())){
                 bean.setStatusName("结束");
+            }else{
+                bean.setStatusName("报价中");
             }
 
             if("1".equals(bean.getType())){
@@ -86,6 +86,8 @@ public class PriceService {
 
             if("1".equals(bean.getIsTax())){
                 bean.setIsTaxName("含税报价");
+            }else{
+                bean.setIsTaxName("非含税报价");
             }
             result.setCode(200);
             result.setData(bean);
@@ -99,11 +101,11 @@ public class PriceService {
     /**
      * 获得代理商信息
      */
-    public JsonResult getProxyInfoByProvince(){
+    public JsonResult getProxyInfoByProvince(String id){
         log.debug("获得代理商信息");
         JsonResult result = new JsonResult();
         List<ResultBean> provinceList = provinceMapper.findProvince();
-        List<ResultBean> agentList = agentMapper.findAgent();
+        List<ResultBean> agentList = agentMapper.findAgent(id);
         List list = new ArrayList();
         for(int i=0;i<provinceList.size();i++){
             ResultBean province = provinceList.get(i);

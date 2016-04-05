@@ -118,4 +118,9 @@ public class AgentService {
         }
         return result;
     }
+
+    public Agent find(Agent agent){
+        Agent result = agentMapper.find(agent);
+        return result;
+    }
 }

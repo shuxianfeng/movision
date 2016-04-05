@@ -6,9 +6,13 @@ import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.service.PriceService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +43,15 @@ public class PriceController {
      */
     @RequestMapping(value = "/rest/price/saveAskPrice", method = RequestMethod.POST)
     public void saveAskPrice(HttpServletRequest req, HttpServletResponse response, AskPrice askPrice) throws IOException {
-        JsonResult result = priceService.saveAskPrice(askPrice);
+        JsonResult result = new JsonResult();
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if(null != session) {
+            result = priceService.saveAskPrice(askPrice);
+        }else{
+            result.setCode(401);
+            result.setMessage("请先登录");
+        }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
@@ -48,8 +60,8 @@ public class PriceController {
      * 获得代理商信息
      */
     @RequestMapping(value = "/rest/price/getProxyInfoByProvince", method = RequestMethod.GET)
-    public void getProxyInfoByProvince(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        JsonResult result = priceService.getProxyInfoByProvince();
+    public void getProxyInfoByProvince(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+        JsonResult result = priceService.getProxyInfoByProvince(id);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
@@ -60,9 +72,17 @@ public class PriceController {
     @RequestMapping(value = "/rest/price/uploadAskList", method = RequestMethod.POST)
     public void uploadAskList(HttpServletRequest req, HttpServletResponse response) throws IOException {
         JsonResult result = new JsonResult();
-        String url = uploadService.upload(req,"doc");
-        result.setData(url);
-        result.setCode(200);
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if(null != session){
+            String url = uploadService.upload(req,"doc");
+            result.setData(url);
+            result.setCode(200);
+        }else{
+            result.setCode(401);
+            result.setMessage("请先登录");
+        }
+
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
@@ -72,9 +92,19 @@ public class PriceController {
      */
     @RequestMapping(value = "/rest/price/getLinkInfo", method = RequestMethod.GET)
     public void getLinkInfo(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
-        JsonResult result = priceService.getLinkInfo(id);
+        JsonResult jsonResult = new JsonResult();
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if(null != session)
+        {
+            jsonResult = priceService.getLinkInfo(id);
+        }else{
+            jsonResult.setCode(401);
+            jsonResult.setMessage("请先登录");
+        }
+
         response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
 
     /**
