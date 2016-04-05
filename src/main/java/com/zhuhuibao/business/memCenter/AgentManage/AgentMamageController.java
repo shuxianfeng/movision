@@ -165,6 +165,7 @@ public class AgentMamageController {
             }
         }catch (Exception e){
             log.error("save agent error!");
+            e.printStackTrace();
         }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));

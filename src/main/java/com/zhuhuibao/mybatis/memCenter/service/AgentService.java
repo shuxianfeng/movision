@@ -7,12 +7,15 @@ import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Agent;
 import com.zhuhuibao.mybatis.memCenter.mapper.AgentMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ProvinceMapper;
+import com.zhuhuibao.mybatis.oms.entity.Category;
+import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +34,9 @@ public class AgentService {
 
     @Autowired
     private ProvinceMapper provinceMapper;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     /**
      *关联代理商保存
@@ -92,7 +98,17 @@ public class AgentService {
             map1.put("name",agent.getCompany());
             map.put("brandId",agent.getBrand());
             map.put("province",agent.getProvince());
-            map.put("product",agent.getAgentRange());
+            String agentRange[] = agent.getAgentRange().split(",");
+            List list = new ArrayList();
+            for(int i=0;i<agentRange.length;i++){
+                Map map2 = new HashMap();
+                ResultBean result1 = categoryMapper.querySystem(agentRange[i]);
+                ResultBean result2 = categoryMapper.querySystemByScateid(agentRange[i]);
+                map2.put("id",result1.getCode());
+                map2.put("name",result2.getName()+">"+result1.getName());
+                list.add(map2);
+            }
+            map.put("product",list);
             map.put("agent",map1);
             result.setCode(200);
             result.setData(map);

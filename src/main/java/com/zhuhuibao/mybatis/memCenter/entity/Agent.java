@@ -11,7 +11,7 @@ public class Agent {
 
     private String proviceid;
 
-    private String creatid;
+    private String createid;
 
     private String status;
 
@@ -55,12 +55,12 @@ public class Agent {
         this.proviceid = proviceid == null ? null : proviceid.trim();
     }
 
-    public String getCreatid() {
-        return creatid;
+    public String getCreateid() {
+        return createid;
     }
 
-    public void setCreatid(String creatid) {
-        this.creatid = creatid;
+    public void setCreateid(String createid) {
+        this.createid = createid;
     }
 
     public String getStatus() {

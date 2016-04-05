@@ -7,7 +7,7 @@
     <result column="scateid" property="scateid" jdbcType="VARCHAR" />
     <result column="agentid" property="agentid" jdbcType="BIGINT" />
     <result column="proviceid" property="proviceid" jdbcType="VARCHAR" />
-    <result column="creatid" property="creatid" jdbcType="BIGINT" />
+    <result column="createid" property="createid" jdbcType="BIGINT" />
     <result column="status" property="status" jdbcType="TINYINT" />
   </resultMap>
   <resultMap id="ResultMap" type="com.zhuhuibao.common.AgentBean" >
@@ -24,7 +24,7 @@
     <result column="proviceid" property="smallIcon" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, brandid, scateid, agentid, proviceid, creatid, status
+    id, brandid, scateid, agentid, proviceid, createid, status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap">
     select 
@@ -33,8 +33,8 @@
     where id = #{id}
   </select>
   <insert id="agentSave" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Agent" >
-    insert into t_p_brand_agent (id, brandid, scateid, agentid, proviceid, creatid, status)
-    values (#{id}, #{brandid}, #{scateid}, #{agentid}, #{proviceid}, #{creatid}, #{status})
+    insert into t_p_brand_agent (id, brandid, scateid, agentid, proviceid, createid, status)
+    values (#{id}, #{brandid}, #{scateid}, #{agentid}, #{proviceid}, #{createid}, 0)
   </insert>
   <update id="agentUpdate" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Agent" >
     update t_p_brand_agent
@@ -51,7 +51,7 @@
       <if test="proviceid != null" >
         proviceid = #{proviceid},
       </if>
-      <if test="creatid != null" >
+      <if test="createid != null" >
         creatid = #{creatid},
       </if>
       <if test="status != null" >
@@ -74,7 +74,7 @@
       LEFT JOIN t_p_category c ON find_in_set(c.id,a.scateid)
       LEFT JOIN t_p_category ca ON c.parentId = ca.id
       LEFT JOIN t_p_brand b ON a.brandid = b.id
-      WHERE a.creatid = #{id} and a.status = 0
+      WHERE a.createid = #{id} and a.status = 0
 	 ) A
     GROUP BY ACCOUNT
   </select>
@@ -83,16 +83,11 @@
     left join t_m_member m on a.agentid = m.id
   </select>
   <select id="updateAgentById" resultMap="ResultMap">
-    select brand,province,id,company,account,group_concat(A.agentRange)as agentRange from (
     select a.brandid as brand,a.proviceid as province,m.id,m.enterpriseName as company,
     CASE WHEN m.mobile IS NOT NULL THEN m.mobile WHEN m.email IS NOT NULL THEN m.email END AS account,
-    concat(ca.name,'>',c.name)as agentRange
+    a.scateid as agentRange
     from t_p_brand_agent a
     left join t_m_member m on a.agentid = m.id
-    LEFT JOIN t_p_category c ON find_in_set(c.id,a.scateid)
-    LEFT JOIN t_p_category ca ON c.parentId = ca.id
     where a.id = #{id}
-    )A
-    group by account
   </select>
 </mapper>

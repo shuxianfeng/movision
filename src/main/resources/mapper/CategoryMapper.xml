@@ -117,4 +117,10 @@
     FROM t_p_category
     WHERE id = #{id}
   </select>
+  <select id="querySystemByScateid" resultMap="ResultMap2">
+    SELECT ca.id,ca.name
+    FROM t_p_category c
+    left JOIN t_p_category ca on c.parentId = ca.id
+    WHERE c.id = #{id}
+  </select>
 </mapper>

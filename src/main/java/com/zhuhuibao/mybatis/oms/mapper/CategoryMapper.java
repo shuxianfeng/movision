@@ -31,4 +31,6 @@ public interface CategoryMapper {
     List<ResultBean> findSystemByBrand(String id);
 
     ResultBean querySystem(String id);
+
+    ResultBean querySystemByScateid(String id);
 }
