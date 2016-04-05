@@ -9,9 +9,9 @@ public class AskPrice {
 
     private String title;
 
-    private Byte status;
+    private String status;
 
-    private Byte type;
+    private String type;
 
     private String content;
 
@@ -71,19 +71,19 @@ public class AskPrice {
         this.title = title == null ? null : title.trim();
     }
 
-    public Byte getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public Byte getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Byte type) {
+    public void setType(String type) {
         this.type = type;
     }
 

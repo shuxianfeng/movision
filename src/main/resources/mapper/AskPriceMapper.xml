@@ -51,11 +51,10 @@
     areaCode, fcateid, productName, supplierid, isTax,
     period, description, isShow, companyName, linkMan, telephone, email
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="find" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from t_p_ask_price
-    where id = #{id,jdbcType=BIGINT}
   </select>
   <insert id="saveAskPrice" parameterType="com.zhuhuibao.mybatis.memCenter.entity.AskPrice" >
     insert into t_p_ask_price
@@ -301,4 +300,11 @@
       and p.publishTime &lt; #{endTime}
     </if>
   </select>
+  <update id="updateStatus" >
+    UPDATE t_p_ask_price
+    <set>
+      status = 2
+    </set>
+    where id = #{id}
+  </update>
 </mapper>

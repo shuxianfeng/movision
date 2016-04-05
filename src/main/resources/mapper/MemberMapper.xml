@@ -284,6 +284,6 @@
   </select>
   <insert id="agentRegister" keyProperty="id" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" useGeneratedKeys="true">
    insert into t_m_member(email,password,registerTime,status,identify) values
-    (#{email},'123456',now(),1,1)
+    (#{email},#{password},now(),1,1)
   </insert>
 </mapper>

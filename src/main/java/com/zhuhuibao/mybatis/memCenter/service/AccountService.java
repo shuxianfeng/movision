@@ -13,6 +13,7 @@ import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
 import com.zhuhuibao.utils.SendEmail;
 
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,7 +111,9 @@ public class AccountService {
     public JsonResult agentRegister(String email){
         JsonResult result = new JsonResult();
         Member member = new Member();
+        String md5Pwd = new Md5Hash("123456",null,2).toString();
         member.setEmail(email);
+        member.setPassword(md5Pwd);
         try{
             Member member1 = memberMapper.findMem(member);
             if(member1!=null){

@@ -56,9 +56,8 @@ public class StaffManageController {
 			member.setMobile(account);
 		}
 		JsonResult result = new JsonResult();
-		//前台传过来的base64密码解密
-		String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
-		String md5Pwd = new Md5Hash(pwd,null,2).toString();
+
+		String md5Pwd = new Md5Hash("123456",null,2).toString();
 		member.setPassword(md5Pwd);
 		//先判断账号是否已经存在
 		Member mem = memberService.findMem(member);
@@ -94,10 +93,7 @@ public class StaffManageController {
 		}else{
 			member.setMobile(account);
 		}
-		//前台传过来的base64密码解密
-		String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
-		String md5Pwd = new Md5Hash(pwd,null,2).toString();
-		member.setPassword(md5Pwd);
+
 		JsonResult result = new JsonResult();
 
 		int isUpdate = memberService.updateMember(member);
