@@ -272,10 +272,10 @@
   </select>
   <select id="findAllByPager" parameterType="com.zhuhuibao.common.AskPriceSearchBean" resultType="com.zhuhuibao.common.AskPriceResultBean">
     select p.id,p.title,
-    CASE WHEN p.`status`=1 then '询价中' WHEN p.`status`=2 then '结束' END AS status,
+    CASE WHEN p.endTime &gt; now() then '询价中' WHEN p.endTime &lt; now() then '结束' END AS status,
     CASE WHEN p.`type`=1 THEN '公开询价' WHEN p.`type`=2 THEN '定向询价' END AS type,
     p.publishTime,concat(pr.name,ci.name,a.name)as area,
-    (select count(*)from t_p_offer_price where enquireId = p.id)as size
+    (select count(*)from t_p_offer_price where askid = p.id)as size
     from t_p_ask_price p
     left join t_dictionary_province pr on pr.code = p.provinceCode
     left join t_dictionary_city ci on ci.code = p.cityCode
@@ -287,8 +287,11 @@
     <if test="type != null" >
       and p.type = #{type}
     </if>
-    <if test="status != null" >
-      and p.status = #{status}
+    <if test="status != null and status == 1">
+      and p.endTime &gt; now()
+    </if>
+    <if test="status != null and status == 2">
+      and p.endTime &lt; now()
     </if>
     <if test="startTime != null and endTime != null" >
       and p.publishTime &lt; #{endTime} and p.publishTime &gt; #{startTime}
@@ -300,11 +303,4 @@
       and p.publishTime &lt; #{endTime}
     </if>
   </select>
-  <update id="updateStatus" >
-    UPDATE t_p_ask_price
-    <set>
-      status = 2
-    </set>
-    where id = #{id}
-  </update>
 </mapper>

@@ -18,6 +18,4 @@ public interface AskPriceMapper {
 
     List<AskPrice> find();
 
-    int updateStatus(AskPrice askPrice);
-
 }
