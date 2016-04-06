@@ -5,7 +5,7 @@ import java.util.Date;
 public class AskPrice {
     private Long id;
 
-    private Long createid;
+    private String createid;
 
     private String title;
 
@@ -14,6 +14,8 @@ public class AskPrice {
     private String type;
 
     private String content;
+
+    private String billurl;
 
     private Date publishTime;
 
@@ -55,11 +57,11 @@ public class AskPrice {
         this.id = id;
     }
 
-    public Long getCreateid() {
+    public String getCreateid() {
         return createid;
     }
 
-    public void setCreateid(Long createid) {
+    public void setCreateid(String createid) {
         this.createid = createid;
     }
 
@@ -223,4 +225,11 @@ public class AskPrice {
         this.fcateid = fcateid;
     }
 
+    public String getBillurl() {
+        return billurl;
+    }
+
+    public void setBillurl(String billurl) {
+        this.billurl = billurl;
+    }
 }

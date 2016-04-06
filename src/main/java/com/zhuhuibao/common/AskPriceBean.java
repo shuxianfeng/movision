@@ -11,6 +11,8 @@ public class AskPriceBean {
 
     String content;
 
+    String billurl;
+
     String endTime;
 
     String status;
@@ -203,5 +205,13 @@ public class AskPriceBean {
 
     public void setIsShow(String isShow) {
         this.isShow = isShow;
+    }
+
+    public String getBillurl() {
+        return billurl;
+    }
+
+    public void setBillurl(String billurl) {
+        this.billurl = billurl;
     }
 }

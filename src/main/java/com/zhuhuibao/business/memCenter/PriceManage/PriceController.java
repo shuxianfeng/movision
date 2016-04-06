@@ -46,8 +46,13 @@ public class PriceController {
         JsonResult result = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
+
         if(null != session) {
-            result = priceService.saveAskPrice(askPrice);
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
+            if(null != principal){
+                askPrice.setCreateid(principal.getId().toString());
+                result = priceService.saveAskPrice(askPrice);
+            }
         }else{
             result.setCode(401);
             result.setMessage("请先登录");
@@ -91,13 +96,16 @@ public class PriceController {
      * 获得我的联系方式（询报价者联系方式）
      */
     @RequestMapping(value = "/rest/price/getLinkInfo", method = RequestMethod.GET)
-    public void getLinkInfo(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+    public void getLinkInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session)
         {
-            jsonResult = priceService.getLinkInfo(id);
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
+            if(null != principal){
+                jsonResult = priceService.getLinkInfo(principal.getId().toString());
+            }
         }else{
             jsonResult.setCode(401);
             jsonResult.setMessage("请先登录");
