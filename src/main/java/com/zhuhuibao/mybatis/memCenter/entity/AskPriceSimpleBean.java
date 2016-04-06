@@ -34,6 +34,8 @@ public class AskPriceSimpleBean implements Serializable{
      */
     private String deliveryAddress;
     
+    private String companyName;
+    
 	public Long getId() {
 		return id;
 	}
@@ -80,6 +82,14 @@ public class AskPriceSimpleBean implements Serializable{
 
 	public void setDateTime(String dateTime) {
 		this.dateTime = dateTime;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 
 }

@@ -7,6 +7,7 @@
     <result column="createid" property="createid" jdbcType="BIGINT" />
     <result column="offerTime" property="offerTime" jdbcType="TIMESTAMP" />
     <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="billurl" property="billurl" jdbcType="VARCHAR" />
     <result column="isShow" property="isShow" jdbcType="BIT" />
     <result column="companyName" property="companyName" jdbcType="VARCHAR" />
     <result column="linkMan" property="linkMan" jdbcType="VARCHAR" />
@@ -14,7 +15,7 @@
     <result column="email" property="email" jdbcType="VARCHAR" />
   </resultMap>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, askid, createid,content,companyName, linkMan, telephone, email
+    select id, askid, createid,content,billurl,companyName, linkMan, telephone, email
     from t_p_offer_price
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -29,7 +30,7 @@
         id,
       </if>
       <if test="askid != null" >
-        enquireId,
+        askid,
       </if>
       <if test="createid != null" >
         createid,
@@ -37,6 +38,9 @@
         offerTime,
       <if test="content != null" >
         content,
+      </if>
+      <if test="billurl != null" >
+        billurl,
       </if>
       <if test="isShow != null" >
         isShow,
@@ -59,7 +63,7 @@
         #{id,jdbcType=BIGINT},
       </if>
       <if test="askid != null" >
-        #{enquireId,jdbcType=BIGINT},
+        #{askid,jdbcType=BIGINT},
       </if>
       <if test="createid != null" >
         #{createid,jdbcType=BIGINT},
@@ -67,6 +71,9 @@
         now(),
       <if test="content != null" >
         #{content,jdbcType=VARCHAR},
+      </if>
+       <if test="billurl != null" >
+        #{billurl,jdbcType=VARCHAR},
       </if>
       <if test="isShow != null" >
         #{isShow,jdbcType=BIT},
@@ -89,7 +96,7 @@
     update t_p_offer_price
     <set >
       <if test="askid != null" >
-        enquireId = #{enquireId,jdbcType=BIGINT},
+        askid = #{askid,jdbcType=BIGINT},
       </if>
       <if test="createid != null" >
         createid = #{createid,jdbcType=BIGINT},
@@ -153,5 +160,17 @@
 	 ) t 
 	 left join t_dictionary_province p on t.provinceCode = p.code 
 	 left join t_dictionary_city c on t.cityCode = c.code
+  </select>
+  <select id="queryAllOfferPriceByAskID" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean">
+  	select n.id,n.createid,date_format(n.offerTime,'%Y-%m-%d') dateTime,concat(p.name,c.name) deliveryAddress,n.companyName from (select t.*,m.province,m.city from t_p_offer_price t left join t_m_member m on m.id = t.createid 
+	where t.askid =#{id}) n 
+	left join t_dictionary_province p on n.province = p.code 
+	left join t_dictionary_city c on n.city = c.code
+  </select>
+  <select id="queryOfferPriceByID" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.memCenter.entity.OfferAskPrice">
+  	select t.id, t.askid, t.createid,t.content,t.billurl,t.companyName, t.linkMan, 
+    t.isShow,t.telephone, t.email,a.title
+    from t_p_offer_price t left join t_p_ask_price a on a.id = t.askid
+    where t.id = #{id}
   </select>
 </mapper>

@@ -16,6 +16,7 @@ import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
+import com.zhuhuibao.mybatis.memCenter.entity.OfferAskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferPrice;
 import com.zhuhuibao.mybatis.memCenter.mapper.AskPriceMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.OfferPriceMapper;
@@ -132,6 +133,54 @@ public class OfferPriceService {
 					jsonResult.setData(askPrice.getContent());
 				}
 			}
+		}
+		catch(Exception e)
+		{
+			log.error("add offer price error!",e);
+			jsonResult.setCode(MsgCodeConstant.response_status_400);
+    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return jsonResult;
+		}
+		return jsonResult;
+    }
+    
+    /**
+     * 查看某条询价信息的所有报价信息
+     * @param id
+     * @return
+     */
+    public JsonResult queryAllOfferPriceByAskID(Long id)
+    {
+    	JsonResult jsonResult = new JsonResult();
+		try
+		{
+			List<AskPriceSimpleBean> priceList = priceMapper.queryAllOfferPriceByAskID(id);
+			jsonResult.setData(priceList);
+		}
+		catch(Exception e)
+		{
+			log.error("add offer price error!",e);
+			jsonResult.setCode(MsgCodeConstant.response_status_400);
+    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return jsonResult;
+		}
+		return jsonResult;
+    }
+    
+    /**
+     * 查看回复的具体某条报价信息(清单,单一产品)
+     * @param id
+     * @return
+     */
+    public JsonResult queryOfferPriceByID(Long id)
+    {
+    	JsonResult jsonResult = new JsonResult();
+		try
+		{
+			OfferAskPrice price = priceMapper.queryOfferPriceByID(id);
+			jsonResult.setData(price);
 		}
 		catch(Exception e)
 		{

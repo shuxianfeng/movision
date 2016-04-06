@@ -98,4 +98,20 @@ public class OfferPriceController {
 		JsonResult jsonResult = offerService.downloadBill(id, type);
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
+	
+	@RequestMapping(value="/rest/price/queryAllOfferPriceByAskID", method = RequestMethod.GET)
+	public void queryAllOfferPriceByAskID(HttpServletRequest req,HttpServletResponse response,Long id) throws JsonGenerationException, JsonMappingException, IOException
+	{
+		log.info("query all offer priece by askid ");
+		JsonResult jsonResult = offerService.queryAllOfferPriceByAskID(id);
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+	}
+	
+	@RequestMapping(value="/rest/price/queryOfferPriceByID", method = RequestMethod.GET)
+	public void queryOfferPriceByID(HttpServletRequest req,HttpServletResponse response,Long id) throws JsonGenerationException, JsonMappingException, IOException
+	{
+		log.info("query offer priece info by id ");
+		JsonResult jsonResult = offerService.queryOfferPriceByID(id);
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+	}
 }

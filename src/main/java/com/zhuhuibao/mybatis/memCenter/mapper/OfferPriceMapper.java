@@ -6,6 +6,7 @@ import org.apache.ibatis.session.RowBounds;
 
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
+import com.zhuhuibao.mybatis.memCenter.entity.OfferAskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferPrice;
 
 public interface OfferPriceMapper {
@@ -20,5 +21,8 @@ public interface OfferPriceMapper {
     List<AskPriceSimpleBean> findAllOfferedPriceInfo(RowBounds rowBounds,Map<String,String> priceMap);
 
     int updateByPrimaryKeySelective(OfferPrice record);
-
+    
+    List<AskPriceSimpleBean> queryAllOfferPriceByAskID(Long id);
+    
+    OfferAskPrice queryOfferPriceByID(Long id);
 }

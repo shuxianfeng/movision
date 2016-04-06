@@ -18,6 +18,8 @@ public class OfferPrice implements Serializable{
     private Date offerTime;
 
     private String content;
+    
+    private String billurl;
 
     private Boolean isShow;
 
@@ -69,7 +71,15 @@ public class OfferPrice implements Serializable{
         this.content = content == null ? null : content.trim();
     }
 
-    public Boolean getIsShow() {
+    public String getBillurl() {
+		return billurl;
+	}
+
+	public void setBillurl(String billurl) {
+		this.billurl = billurl;
+	}
+
+	public Boolean getIsShow() {
         return isShow;
     }
 
