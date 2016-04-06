@@ -270,7 +270,7 @@
   <select id="findAgentMember" resultMap="ResultMap">
     select
     id,
-    CASE WHEN mobile IS NOT NULL THEN mobile WHEN email IS NOT NULL THEN email END AS account,
+    CASE WHEN mobile IS NOT NULL and mobile != '' THEN mobile WHEN email IS NOT NULL and email != '' THEN email END AS account,
     enterpriseName
     from t_m_member
     where
