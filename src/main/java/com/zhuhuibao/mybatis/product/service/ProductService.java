@@ -135,10 +135,6 @@ public class ProductService {
     		{
     			product.setNumber("1");
     		}
-    		if(product.getUnit() == null || product.getUnit().trim().equals(""))
-    		{
-    			product.setUnit(Constant.product_unit);
-    		}
     		if(product.getPrice() == null || product.getPrice().trim().equals(""))
     		{
     			product.setPrice(Constant.product_price);

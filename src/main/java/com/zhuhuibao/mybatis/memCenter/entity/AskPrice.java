@@ -5,17 +5,15 @@ import java.util.Date;
 public class AskPrice {
     private Long id;
 
-    private String createid;
+    private Long createid;
 
     private String title;
 
-    private String status;
+    private Byte status;
 
-    private String type;
+    private Byte type;
 
     private String content;
-
-    private String billurl;
 
     private Date publishTime;
 
@@ -48,7 +46,7 @@ public class AskPrice {
     private String telephone;
 
     private String email;
-
+    
     public Long getId() {
         return id;
     }
@@ -57,11 +55,11 @@ public class AskPrice {
         this.id = id;
     }
 
-    public String getCreateid() {
+    public Long getCreateid() {
         return createid;
     }
 
-    public void setCreateid(String createid) {
+    public void setCreateid(Long createid) {
         this.createid = createid;
     }
 
@@ -73,19 +71,19 @@ public class AskPrice {
         this.title = title == null ? null : title.trim();
     }
 
-    public String getStatus() {
+    public Byte getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Byte status) {
         this.status = status;
     }
 
-    public String getType() {
+    public Byte getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Byte type) {
         this.type = type;
     }
 
@@ -223,13 +221,5 @@ public class AskPrice {
 
     public void setFcateid(String fcateid) {
         this.fcateid = fcateid;
-    }
-
-    public String getBillurl() {
-        return billurl;
-    }
-
-    public void setBillurl(String billurl) {
-        this.billurl = billurl;
     }
 }
