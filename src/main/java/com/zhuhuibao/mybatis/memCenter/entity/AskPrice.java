@@ -5,7 +5,7 @@ import java.util.Date;
 public class AskPrice {
     private Long id;
 
-    private Long createid;
+    private String createid;
 
     private String title;
 
@@ -55,11 +55,11 @@ public class AskPrice {
         this.id = id;
     }
 
-    public Long getCreateid() {
+    public String getCreateid() {
         return createid;
     }
 
-    public void setCreateid(Long createid) {
+    public void setCreateid(String createid) {
         this.createid = createid;
     }
 
