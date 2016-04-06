@@ -32,7 +32,7 @@ public interface MemberMapper {
     Member findMem(Member member);
 
     //重置密码
-    int resetPwd(String id);
+    int resetPwd(Member member);
 
     int uploadHeadShot(Member member);
 

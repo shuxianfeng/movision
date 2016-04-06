@@ -208,7 +208,8 @@ public class StaffManageController {
 			Member member = new Member();
 			String md5Pwd = new Md5Hash("123456",null,2).toString();
 			member.setPassword(md5Pwd);
-			int isReset = memberService.resetPwd(id);
+			member.setId(Long.parseLong(id));
+			int isReset = memberService.resetPwd(member);
 			if(isReset==0){
 				result.setCode(400);
 				result.setMessage("重置失败");

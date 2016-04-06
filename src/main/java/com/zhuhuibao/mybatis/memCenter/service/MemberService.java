@@ -124,11 +124,11 @@ public class MemberService {
 	/**
 	 * 员工密码重置
 	 */
-	public int resetPwd(String id)
+	public int resetPwd(Member member)
 	{
 		log.debug("密码重置");
 		int result = 0;
-		result = memberMapper.resetPwd(id);
+		result = memberMapper.resetPwd(member);
 		return result;
 	}
 
@@ -321,8 +321,14 @@ public class MemberService {
 			}else{
 				map.put("account",member1.getEmail());
 			}
-			WorkType workType = workTypeMapper.findWorkTypeById(member1.getWorkType().toString());
-			map.put("role",workType.getName());
+
+			String workTypeName = "";
+			if(member1.getWorkType()!=null){
+				WorkType workType = workTypeMapper.findWorkTypeById(member1.getWorkType().toString());
+				workTypeName = workType.getName();
+			}
+
+			map.put("role",workTypeName);
 			map.put("roleId",member1.getWorkType());
 			map.put("name",member1.getPersonRealName());
 			map.put("status",member1.getStatus());
