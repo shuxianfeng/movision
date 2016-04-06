@@ -46,7 +46,7 @@ public class AskPrice {
     private String telephone;
 
     private String email;
-
+    
     public Long getId() {
         return id;
     }
@@ -222,5 +222,4 @@ public class AskPrice {
     public void setFcateid(String fcateid) {
         this.fcateid = fcateid;
     }
-
 }

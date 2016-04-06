@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.OfferPriceMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.OfferPrice" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="askid" property="askid" jdbcType="BIGINT" />
+    <result column="createid" property="createid" jdbcType="BIGINT" />
+    <result column="offerTime" property="offerTime" jdbcType="TIMESTAMP" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="isShow" property="isShow" jdbcType="BIT" />
+    <result column="companyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="linkMan" property="linkMan" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, askid, createid,content,companyName, linkMan, telephone, email
+    from t_p_offer_price
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_p_offer_price
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.OfferPrice" >
+    insert into t_p_offer_price
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="askid != null" >
+        enquireId,
+      </if>
+      <if test="createid != null" >
+        createid,
+      </if>
+        offerTime,
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="isShow != null" >
+        isShow,
+      </if>
+      <if test="companyName != null" >
+        companyName,
+      </if>
+      <if test="linkMan != null" >
+        linkMan,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="askid != null" >
+        #{enquireId,jdbcType=BIGINT},
+      </if>
+      <if test="createid != null" >
+        #{createid,jdbcType=BIGINT},
+      </if>
+        now(),
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        #{isShow,jdbcType=BIT},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="linkMan != null" >
+        #{linkMan,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.OfferPrice" >
+    update t_p_offer_price
+    <set >
+      <if test="askid != null" >
+        enquireId = #{enquireId,jdbcType=BIGINT},
+      </if>
+      <if test="createid != null" >
+        createid = #{createid,jdbcType=BIGINT},
+      </if>
+      <if test="offerTime != null" >
+        offerTime = #{offerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        isShow = #{isShow,jdbcType=BIT},
+      </if>
+      <if test="companyName != null" >
+        companyName = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="linkMan != null" >
+        linkMan = #{linkMan,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="findAllAskingPriceInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.AskPrice" resultType="com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean">
+  	select t.id,t.createid,t.title,if(t.type = 1,'公开询价','定向询价') typeName,
+	concat(p.name,c.name) deliveryAddress,
+	date_format(t.endTime,'%Y-%m-%d') dateTime from t_p_ask_price t
+	left join t_dictionary_province p on t.provinceCode = p.code 
+	left join t_dictionary_city c on t.cityCode = c.code
+	where t.status = 1
+	<if test="title != null and title != ''">
+		 and t.title like concat('%',#{title},'%')
+	</if>
+	<if test="type != null and type != ''">
+		and t.type = #{type} 
+	</if>
+	<if test="createid != null and createid != ''">
+		and find_in_set(#{createid},t.supplierid) 
+	</if>
+  </select>
+  <select id="findAllOfferedPriceInfo" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean">
+  	 select t.id,t.offerTime dateTime,concat(p.name,c.name) deliveryAddress,if(t.type = 1,'公开询价','定向询价') typeName,t.title,t.createid 
+	 from (select op.id,op.createid,op.askid,date_format(op.offerTime,'%Y-%m-%d') offerTime,ap.provinceCode,ap.cityCode,ap.type,ap.title from t_p_offer_price op
+	 left join t_p_ask_price ap on ap.id = op.askid
+	 <where>
+	 <if test="title != null and title != ''">
+		 and ap.title like concat('%',#{title},'%')
+	 </if>
+	 <if test="createid != null and createid != ''">
+	 	and op.createid = #{createid}
+	 </if>
+	 <if test="startDate != null and endDate != ''">
+	    and date_format(op.offerTime,'%Y-%m-%d') &gt;= date_format(#{startDate},'%Y-%m-%d') and date_format(op.offerTime,'%Y-%m-%d') &lt;= date_format(#{endDate},'%Y-%m-%d')
+	 </if>
+	 </where>
+	 ) t 
+	 left join t_dictionary_province p on t.provinceCode = p.code 
+	 left join t_dictionary_city c on t.cityCode = c.code
+  </select>
+</mapper>
