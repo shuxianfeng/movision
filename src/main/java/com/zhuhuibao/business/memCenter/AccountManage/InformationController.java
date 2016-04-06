@@ -5,14 +5,12 @@ import com.zhuhuibao.common.ApiConstants;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
-import com.zhuhuibao.mybatis.memCenter.mapper.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -34,8 +33,6 @@ public class InformationController {
 
 	@Autowired
 	private MemberService memberService;
-
-
 
 	@Autowired
 	ApiConstants ApiConstants;
@@ -60,94 +57,16 @@ public class InformationController {
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 
-	/**
-	 * 个人基本信息保存
-	 * @param req
-	 * @param member
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping(value = "/rest/memBasicInfo", method = RequestMethod.POST)
-	public void memBasicInfo(HttpServletRequest req, HttpServletResponse response, Member member, Model model) throws IOException {
-		JsonResult result = new JsonResult();
-		if(member.getPersonRealName()==null){
-			result.setCode(400);
-			result.setMessage("真实姓名为必填项");
-		}else if(member.getSex()==null){
-			result.setCode(400);
-			result.setMessage("性别为必填项");
-		}else if(member.getWorkType()==null){
-			result.setCode(400);
-			result.setMessage("工作类型为必填项");
-		}else if(member.getProvince() == null || member.getCity() == null || member.getArea() == null){
-			result.setCode(400);
-			result.setMessage("所在地为必填项");
-		}else{
-			try{
-				int isUpdate = memberService.updateMemInfo(member);
-				if (isUpdate == 0) {
-					result.setCode(400);
-					result.setMessage("个人基本信息保存失败");
-				} else {
-					result.setCode(200);
-				}
-			}catch (Exception e){
-				log.error("update info error!",e);
-			}
-
-		}
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
-	}
 
 	/**
-	 * 企业基本信息保存
-	 * @param req
-	 * @param member
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping(value = "/rest/companyBasicInfo", method = RequestMethod.POST)
-	public void companyBasicInfo(HttpServletRequest req, HttpServletResponse response, Member member, Model model) throws IOException {
-		JsonResult result = new JsonResult();
-		if(member.getEnterpriseName()==null){
-			result.setCode(400);
-			result.setMessage("企业名称为必填项");
-		}else if(member.getIdentify()==null){
-			result.setCode(400);
-			result.setMessage("企业身份为必填项");
-		}else if(member.getProvince()==null||member.getCity()==null||member.getArea()==null){
-			result.setCode(400);
-			result.setMessage("所在地为必填项");
-		}else{
-			try{
-				int isUpdate = memberService.updateMemInfo(member);
-				if (isUpdate == 0) {
-					result.setCode(400);
-					result.setMessage("企业基本信息保存失败");
-				} else {
-					result.setCode(200);
-				}
-			}catch (Exception e){
-				log.error("update info error!",e);
-				e.printStackTrace();
-			}
-
-		}
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
-	}
-
-
-	/**
-	 * 详细信息，联系方式保存（个人，企业）
+	 * 会员资料保存
 	 * @param req
 	 * @param member
 	 * @return
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/detailInfo", method = RequestMethod.POST)
-	public void detailInfo(HttpServletRequest req, HttpServletResponse response, Member member, Model model) throws IOException {
+	public void detailInfo(HttpServletRequest req, HttpServletResponse response, Member member) throws IOException {
 		JsonResult result = new JsonResult();
 		try {
 			int isUpdate = memberService.updateMemInfo(member);
@@ -558,6 +477,17 @@ public class InformationController {
 			log.error("update logo error!");
 		}
 
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+	}
+
+	@RequestMapping(value = "/rest/getNowTime", method = RequestMethod.GET)
+	public void getNowTime(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		JsonResult result = new JsonResult();
+		result.setCode(200);
+		Date date = new Date();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		result.setData(df.format(date));
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
