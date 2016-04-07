@@ -287,7 +287,7 @@ public class AgentMamageController {
                 if(mail == null || mail.equals("")){
                     result.setCode(400);
                     result.setData(email);
-                    result.setMessage("邮箱格式不正确！");
+                    result.setMessage("系统暂不支持此邮箱！");
                 }else{
                     accountService.sendInviteEmail(member,email);
                     result.setCode(200);
