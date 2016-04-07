@@ -126,6 +126,7 @@ public class AccountService {
             }
         }catch (Exception e){
             log.error("agentRegister error");
+            e.printStackTrace();
         }
         return result;
     }

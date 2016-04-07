@@ -288,8 +288,6 @@ public class AgentMamageController {
                     result.setCode(400);
                     result.setData(email);
                     result.setMessage("邮箱格式不正确！");
-                    response.setContentType("application/json;charset=utf-8");
-                    response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
                 }else{
                     accountService.sendInviteEmail(member,email);
                     result.setCode(200);
