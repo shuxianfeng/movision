@@ -24,4 +24,6 @@ public interface AgentMapper {
     ResultBean findManufactor(String id);
 
     List<ResultBean> getGreatAgentByScateid(String id);
+
+    List<ResultBean> getGreatAgentByBrandId(String id);
 }

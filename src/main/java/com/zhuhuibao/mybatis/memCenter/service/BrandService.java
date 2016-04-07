@@ -32,8 +32,13 @@ public class BrandService {
      */
     public List<Brand> searchBrandByStatus(Brand brand)
     {
-        log.debug("根据会员id，状态status查询品牌");
         List<Brand> brands = brandMapper.searchBrandByStatus(brand);
+        return brands;
+    }
+
+    public List<Brand> searchBrand(Brand brand)
+    {
+        List<Brand> brands = brandMapper.searchBrand(brand);
         return brands;
     }
 

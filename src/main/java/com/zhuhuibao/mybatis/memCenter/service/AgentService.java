@@ -164,4 +164,12 @@ public class AgentService {
         result.setData(greatAgentList);
         return result;
     }
+
+    public JsonResult getGreatAgentByBrandId(String id){
+        JsonResult result = new JsonResult();
+        List<ResultBean> greatAgentList = agentMapper.getGreatAgentByBrandId(id);
+        result.setCode(200);
+        result.setData(greatAgentList);
+        return result;
+    }
 }

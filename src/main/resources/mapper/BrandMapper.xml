@@ -115,6 +115,15 @@
       and b.status = #{status}
     </if>
   </select>
+  <select id="searchBrand" resultMap="BaseResultMap" >
+    select
+    *
+    from t_p_brand b
+    where b.createid = #{createid} and b.status !=3
+    <if test="status != null" >
+      and b.status = #{status}
+    </if>
+  </select>
   <select id="searchBrandSize" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand"  >
     select
     COUNT (*)

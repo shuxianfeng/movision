@@ -390,4 +390,17 @@ public class AgentMamageController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
+
+    /**
+     * 根据品牌id查优秀代理商
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/agent/getGreatAgentByBrandId", method = RequestMethod.GET)
+    public void getGreatAgentByBrandId(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+        JsonResult result = agentService.getGreatAgentByBrandId(id);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
 }
