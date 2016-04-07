@@ -1,12 +1,21 @@
 package com.zhuhuibao.business.memCenter.PriceManage;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.*;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+import org.apache.taglibs.standard.lang.jstl.test.PageContextImpl;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
@@ -21,6 +30,7 @@ import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferPrice;
 import com.zhuhuibao.mybatis.memCenter.service.OfferPriceService;
+import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -56,6 +66,7 @@ public class OfferPriceController {
         List<AskPriceSimpleBean>  priceList = offerService.findAllAskingPriceInfo(pager, price);
         pager.result(priceList);
         jsonResult.setData(pager);
+        response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 	
@@ -80,6 +91,7 @@ public class OfferPriceController {
         List<AskPriceSimpleBean>  priceList = offerService.findAllOfferedPriceInfo(pager, priceMap);
         pager.result(priceList);
         jsonResult.setData(pager);
+        response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 	
@@ -88,6 +100,7 @@ public class OfferPriceController {
 	{
 		log.info("query offer priece info by id ");
 		JsonResult jsonResult = offerService.queryOfferPriceInfoByID(id);
+		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 	
@@ -95,8 +108,28 @@ public class OfferPriceController {
 	public void downloadBill(HttpServletRequest req,HttpServletResponse response,Long id,String type) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		log.info("query offer priece info by id ");
-		JsonResult jsonResult = offerService.downloadBill(id, type);
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+		String fileurl = offerService.downloadBill(id, type);
+		response.setDateHeader("Expires", 0);
+		response.setHeader("Cache-Control",
+				"no-store, no-cache, must-revalidate");
+		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		response.setHeader("Content-disposition","attachment;filename="+fileurl.substring(fileurl.lastIndexOf("/")+1,fileurl.length()));
+		response.setContentType("application/octet-stream");
+		
+		File file = new File(fileurl);
+		if(file.exists()){   //如果文件存在
+			FileInputStream inputStream = new FileInputStream(file);
+	        byte[] data = new byte[(int)file.length()];
+	        int length = inputStream.read(data);
+	        inputStream.close();
+
+	        ServletOutputStream stream = response.getOutputStream();
+	        stream.write(data);
+	        stream.flush();
+	        stream.close();
+		}
+//		return null;
+//		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 	
 	@RequestMapping(value="/rest/price/queryAllOfferPriceByAskID", method = RequestMethod.GET)
@@ -104,6 +137,7 @@ public class OfferPriceController {
 	{
 		log.info("query all offer priece by askid ");
 		JsonResult jsonResult = offerService.queryAllOfferPriceByAskID(id);
+		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 	
@@ -112,6 +146,7 @@ public class OfferPriceController {
 	{
 		log.info("query offer priece info by id ");
 		JsonResult jsonResult = offerService.queryOfferPriceByID(id);
+		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 }

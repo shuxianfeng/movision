@@ -112,9 +112,9 @@ public class OfferPriceService {
      * @param id
      * @return
      */
-    public JsonResult downloadBill(Long id,String type)
+    public String downloadBill(Long id,String type)
     {
-    	JsonResult jsonResult = new JsonResult();
+    	String fileurl = "";
 		try
 		{
 			if(type.equals("2"))
@@ -122,7 +122,7 @@ public class OfferPriceService {
 				OfferPrice price = priceMapper.selectByPrimaryKey(id);
 				if(price != null && price.getContent() != null)
 				{
-					jsonResult.setData(price.getContent());
+					fileurl = price.getBillurl();
 				}
 			}
 			else if(type.equals("1"))
@@ -130,19 +130,15 @@ public class OfferPriceService {
 				AskPriceBean askPrice = askPriceMapper.queryAskPriceByID(String.valueOf(id));
 				if(askPrice != null && askPrice.getContent() != null)
 				{
-					jsonResult.setData(askPrice.getContent());
+					fileurl = askPrice.getBillurl();
 				}
 			}
 		}
 		catch(Exception e)
 		{
 			log.error("add offer price error!",e);
-			jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
 		}
-		return jsonResult;
+		return fileurl;
     }
     
     /**
