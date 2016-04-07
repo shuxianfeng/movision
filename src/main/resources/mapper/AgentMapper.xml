@@ -72,7 +72,7 @@
       m.enterpriseName AS company,
        concat(ca.name,'>',c.name)as agentRange,
        b.CNName AS brand,
-      (select GROUP_CONCAT(t.name)name from t_dictionary_province t where find_in_set(t.id,a.proviceid))as province
+      (select GROUP_CONCAT(t.name)name from t_dictionary_province t where find_in_set(t.code,a.proviceid))as province
       FROM t_p_brand_agent a
       LEFT JOIN t_m_member m ON a.agentid = m.id
       LEFT JOIN t_p_category c ON find_in_set(c.id,a.scateid)
