@@ -175,6 +175,16 @@ public class MemberService {
 	}
 
 	/**
+	 * 根据会员账号查询会员
+	 */
+	public Member findMemer(Member member)
+	{
+		log.debug("根据会员账号查询会员");
+		Member mem = memberMapper.findMemer(member);
+		return mem;
+	}
+
+	/**
 	 * 资质类型
 	 */
 	public List<Certificate> findCertificateList(String type)

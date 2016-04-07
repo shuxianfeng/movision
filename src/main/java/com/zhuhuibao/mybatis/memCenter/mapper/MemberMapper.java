@@ -34,6 +34,8 @@ public interface MemberMapper {
     //根据会员账号查询会员
     Member findMem(Member member);
 
+    Member findMemer(Member member);
+
     //重置密码
     int resetPwd(Member member);
 

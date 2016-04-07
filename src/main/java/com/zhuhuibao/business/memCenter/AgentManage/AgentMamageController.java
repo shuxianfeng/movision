@@ -88,6 +88,7 @@ public class AgentMamageController {
             }
         }catch (Exception e){
             log.error("query error!");
+            e.printStackTrace();
         }
         result.setCode(200);
         result.setData(list);
@@ -116,6 +117,7 @@ public class AgentMamageController {
             }
         }catch (Exception e){
             log.error("search brand by memId error!");
+            e.printStackTrace();
         }
         result.setCode(200);
         result.setData(list);
@@ -196,6 +198,7 @@ public class AgentMamageController {
             }
         }catch (Exception e){
             log.error("update agent error!");
+            e.printStackTrace();
         }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
@@ -282,6 +285,9 @@ public class AgentMamageController {
         JsonResult result = new JsonResult();
         Member member = memberService.findMemById(id);
         String email = req.getParameter("email");
+        Member member1 = new Member();
+        member1.setEmail(email);
+        Member member2 = memberService.findMemer(member1);
         try{
                 String mail = ds.findMailAddress(email);
                 if(mail == null || mail.equals("")){
@@ -289,11 +295,14 @@ public class AgentMamageController {
                     result.setData(email);
                     result.setMessage("系统暂不支持此邮箱！");
                 }else{
-                    accountService.sendInviteEmail(member,email);
+                    if(member2 == null){
+                        accountService.sendInviteEmail(member,email);
+                    }
                     result.setCode(200);
                 }
         }catch (Exception e){
             log.error("send inviteEmail error!");
+            e.printStackTrace();
         }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
@@ -314,6 +323,7 @@ public class AgentMamageController {
             result.setCode(200);
         }catch (Exception e){
             log.error("findAgentByMemId error!");
+            e.printStackTrace();
         }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
@@ -344,6 +354,7 @@ public class AgentMamageController {
         catch(Exception e)
         {
             log.error("email agentRegister error!",e);
+            e.printStackTrace();
         }
 
         return modelAndView;

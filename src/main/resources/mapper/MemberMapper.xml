@@ -243,10 +243,22 @@
     </if>
   </select>
   <select id="findMem" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" resultMap="BaseResultMap">
+  select
+  <include refid="Base_Column_List" />
+  from t_m_member
+  where status != 2
+  <if test="mobile != null and mobile != '' ">
+    and mobile = #{mobile}
+  </if>
+  <if test="email != null">
+    and email = #{email}
+  </if>
+</select>
+  <select id="findMemer" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from t_m_member
-    where status != 2
+    where status != 2 and status != 0
     <if test="mobile != null and mobile != '' ">
       and mobile = #{mobile}
     </if>

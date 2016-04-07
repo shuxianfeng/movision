@@ -89,6 +89,7 @@ public class AccountService {
         sb.append("<p style=\"margin:0; padding:20px 0 12px 0; color:#555555;\">");
         sb.append("您好，我是");
         sb.append(companyName);
+        sb.append("销售总监");
         sb.append(linkman);
         sb.append(",现邀请你入驻筑慧宝平台，共创大业！\n" +
                 "筑慧宝是优秀的Icity一站式服务平台，我司已入驻筑慧宝，期待着你的加入！");
