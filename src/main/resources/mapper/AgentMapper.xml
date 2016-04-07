@@ -104,7 +104,7 @@
     select
     <include refid="Base_Column_List" />
     from t_p_brand_agent
-    where brandid = #{brandid} and agentid = #{agentid}
+    where brandid = #{brandid} and agentid = #{agentid} and status = 0
   </select>
   <select id="findAgentByProId" resultMap="ResultMap1">
     select distinct a.agentid,m.enterpriseName,a.proviceid from t_p_brand_agent a
