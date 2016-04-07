@@ -364,4 +364,17 @@ public class AgentMamageController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
+
+    /**
+     * 根据产品id查询代理商跟厂商（区域分组）
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/agent/getAgentByProId", method = RequestMethod.GET)
+    public void getAgentByProId(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+        JsonResult result = agentService.getAgentByProId(id);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
 }

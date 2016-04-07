@@ -274,7 +274,7 @@
     enterpriseName
     from t_m_member
     where
-    identify like '%4%' and
+    identify like '%4%' and status in(1,3,4,5) AND
     <if test="type == 1">
       (email like CONCAT('%',#{account},'%') or mobile like CONCAT('%',#{account},'%'))
     </if>

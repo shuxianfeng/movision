@@ -18,4 +18,8 @@ public interface AgentMapper {
     AgentBean updateAgentById(String id);
 
     Agent find(Agent agent);
+
+    List<ResultBean> findAgentByProId(String id);
+
+    ResultBean findManufactor(String id);
 }
