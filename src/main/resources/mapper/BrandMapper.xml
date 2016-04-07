@@ -106,9 +106,11 @@
   </update>
   <select id="searchBrandByStatus" resultMap="BaseResultMap" >
     select
-    <include refid="Base_Column_List" />
-    from t_p_brand
-    where createid = #{createid} and status !=3
+    distinct b.id,b.CNName,b.ENName, b.views, b.weight, b.logourl, b.createid, b.description, b.imgurl,
+    b.status, b.owner, b.certificate, b.webSite, b.publishTime, b.checkTime, b.lastModifyTime
+    from t_p_brand b
+    left join t_p_product p on b.id = p.brandid
+    where b.createid = #{createid} and b.status !=3 and p.`status`=1
     <if test="status != null" >
       and status = #{status}
     </if>

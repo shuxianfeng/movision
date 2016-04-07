@@ -377,4 +377,17 @@ public class AgentMamageController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
+
+    /**
+     * 根据子系统id查优秀代理商
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/agent/getGreatAgentByScateid", method = RequestMethod.GET)
+    public void getGreatAgentByScateid(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+        JsonResult result = agentService.getGreatAgentByScateid(id);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
 }

@@ -27,6 +27,11 @@
     <id column="code" property="code" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="ResultMap3" type="com.zhuhuibao.common.ResultBean" >
+    <id column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="smallIcon" property="smallIcon" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     id, brandid, scateid, agentid, proviceid, createid, status
   </sql>
@@ -68,7 +73,7 @@
 	 SELECT id,account,GROUP_CONCAT(A.AGENTRANGE)as agentRange,province,brand,company FROM (
        SELECT
        a.id,
-       CASE WHEN m.mobile IS NOT NULL THEN m.mobile WHEN m.email IS NOT NULL THEN m.email END AS account,
+       CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile WHEN m.email IS NOT NULL and m.email != '' THEN m.email END AS account,
       m.enterpriseName AS company,
        concat(ca.name,'>',c.name)as agentRange,
        b.CNName AS brand,
@@ -80,7 +85,7 @@
       LEFT JOIN t_p_brand b ON a.brandid = b.id
       WHERE a.createid = #{id} and a.status = 0
 	 ) A
-    GROUP BY ACCOUNT
+    GROUP BY brand,account
   </select>
   <select id="findAgent" resultMap="ResultMap1">
     select distinct a.agentid,m.enterpriseName,a.proviceid from t_p_brand_agent a
@@ -89,7 +94,7 @@
   </select>
   <select id="updateAgentById" resultMap="ResultMap">
     select a.brandid as brand,a.proviceid as province,m.id,m.enterpriseName as company,
-    CASE WHEN m.mobile IS NOT NULL THEN m.mobile WHEN m.email IS NOT NULL THEN m.email END AS account,
+    CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile WHEN m.email IS NOT NULL and m.email !='' THEN m.email END AS account,
     a.scateid as agentRange
     from t_p_brand_agent a
     left join t_m_member m on a.agentid = m.id
@@ -113,5 +118,10 @@
     left join t_m_member m on a.createid = m.id
     left join t_p_product p on p.brandid = a.brandid
     where p.id = #{id}
+  </select>
+  <select id="getGreatAgentByScateid" resultMap="ResultMap3">
+    select distinct m.id as code,m.enterpriseName as name,m.enterpriseLogo as smallIcon from t_p_brand_agent a
+    left join t_m_member m on a.agentid = m.id
+    where find_in_set(#{id},a.scateid) limit 0,6
   </select>
 </mapper>
