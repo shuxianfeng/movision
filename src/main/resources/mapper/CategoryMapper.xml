@@ -109,7 +109,7 @@
     SELECT DISTINCT p.fcateid as id,c.name
     FROM t_p_product p
     LEFT JOIN t_p_category c ON c.id = p.fcateid
-    WHERE p.brandid = #{id}
+    WHERE p.brandid = #{id} and p.status = 1
     ORDER BY p.fcateid,p.scateid
   </select>
   <select id="querySystem" resultMap="ResultMap2">

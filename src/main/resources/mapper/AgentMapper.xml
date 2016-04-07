@@ -23,6 +23,10 @@
     <result column="enterpriseName" property="name" jdbcType="VARCHAR" />
     <result column="proviceid" property="smallIcon" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="ResultMap2" type="com.zhuhuibao.common.ResultBean" >
+    <id column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     id, brandid, scateid, agentid, proviceid, createid, status
   </sql>
@@ -96,5 +100,18 @@
     <include refid="Base_Column_List" />
     from t_p_brand_agent
     where brandid = #{brandid} and agentid = #{agentid}
+  </select>
+  <select id="findAgentByProId" resultMap="ResultMap1">
+    select distinct a.agentid,m.enterpriseName,a.proviceid from t_p_brand_agent a
+    left join t_m_member m on a.agentid = m.id
+    left join t_p_product p on p.brandid = a.brandid
+    where p.id = #{id}
+  </select>
+  <select id="findManufactor" resultMap="ResultMap2">
+    select distinct a.createid as code,m.enterpriseName as name
+    from t_p_brand_agent a
+    left join t_m_member m on a.createid = m.id
+    left join t_p_product p on p.brandid = a.brandid
+    where p.id = #{id}
   </select>
 </mapper>
