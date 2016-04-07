@@ -47,7 +47,7 @@
     <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, mobile, email, emailCheckCode, password, registerTime, status, identify, emailCheckCode,
+    id, mobile, email, emailCheckCode, password, registerTime, status, identify,
     enterpriseName, workType, enterpriseEmployeeParentId, province,
     city, area, address, enterpriseType, enterpriseLogo, enterpriseDesc, headShot, saleProductDesc,
     enterpriseCreaterTime, registerCapital, employeeNumber, companyBusinessLicenseImg,
@@ -222,6 +222,16 @@
     </set>
     where id = #{id}
   </update>
+  <select id="findAllByPager" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_m_member
+    where
+    enterpriseEmployeeParentId = #{enterpriseEmployeeParentId} and status=1
+    <if test="account != null and account != '' ">
+      and (email like CONCAT('%',#{account},'%') or mobile like CONCAT('%',#{account},'%'))
+    </if>
+  </select>
   <select id="findStaffByParentId" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

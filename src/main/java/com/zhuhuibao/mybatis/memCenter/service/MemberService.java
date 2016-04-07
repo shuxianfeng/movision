@@ -1,10 +1,12 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.common.AccountBean;
+import com.zhuhuibao.common.AskPriceResultBean;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.*;
+import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -305,12 +307,11 @@ public class MemberService {
 	/**
 	 * 根据父类ID查询公司下属员工
 	 */
-	public JsonResult findStaffByParentId(Member member)
+	public JsonResult findStaffByParentId(Paging<Member> pager, Member member)
 	{
 		log.debug("根据父类ID查询公司下属员工");
 		JsonResult result = new JsonResult();
-		List<Member> memberList = memberMapper.findStaffByParentId(member);
-		Map map1 = new HashMap();
+		List<Member> memberList = memberMapper.findAllByPager(pager.getRowBounds(),member);
 		List list = new ArrayList();
 		for(int i=0;i<memberList.size();i++){
 			Map map = new HashMap();
@@ -343,9 +344,9 @@ public class MemberService {
 			map.put("statusName",statusName);
 			list.add(map);
 		}
-		map1.put("memInfo",list);
+		pager.result(list);
 		result.setCode(200);
-		result.setData(map1);
+		result.setData(pager);
 		return result;
 	}
 

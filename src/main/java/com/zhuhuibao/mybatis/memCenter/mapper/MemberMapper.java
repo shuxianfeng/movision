@@ -3,6 +3,7 @@ package com.zhuhuibao.mybatis.memCenter.mapper;
 import com.zhuhuibao.common.AccountBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 
@@ -26,6 +27,8 @@ public interface MemberMapper {
     int deleteMember(String id);
 
     /* 根据父类ID查询公司下属员工 */
+    List<Member> findAllByPager(RowBounds rowBounds, Member member);
+
     List<Member> findStaffByParentId(Member member);
 
     //根据会员账号查询会员
