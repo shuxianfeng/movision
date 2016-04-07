@@ -1,18 +1,31 @@
 package com.zhuhuibao.business.memCenter.AccountManage;
 
+import com.taobao.api.ApiException;
+import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.service.AccountService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
+import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.security.EncodeUtil;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
+import com.zhuhuibao.utils.VerifyCodeUtils;
+import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +35,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +56,9 @@ public class AccountSafeController {
 
     @Autowired
     private AccountService as;
+
+    @Autowired
+    private MemberRegService memberRegService;
 
     /**
      * 根据账号验证会员密码是否正确
@@ -227,5 +244,39 @@ public class AccountSafeController {
             log.error("email updateEmail error!",e);
         }
         return modelAndView;
+    }
+
+    /**
+     * 绑定手机时手机发送的验证码
+     * @param req
+     * @param response
+     * @param model
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
+     * @throws ApiException
+     */
+    @RequestMapping(value = "/rest/getModifyBindMobileSMS", method = RequestMethod.GET)
+    public void getModifyBindMobileSMS(HttpServletRequest req, HttpServletResponse response,
+                                     Model model) throws JsonGenerationException, JsonMappingException, IOException, ApiException {
+        String mobile = req.getParameter("mobile");
+        log.debug("获得手机验证码  mobile=="+mobile);
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(true);
+        // 生成随机字串
+        String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
+        log.debug("verifyCode == " + verifyCode);
+        //发送验证码到手机
+        //SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
+        SDKSendTaoBaoSMS.sendModifyBindMobileSMS(mobile, verifyCode, Constant.sms_time);
+        Validateinfo info = new Validateinfo();
+        info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+        info.setCheckCode(verifyCode);
+        info.setAccount(mobile);
+        memberRegService.inserValidateInfo(info);
+        sess.setAttribute("s"+mobile, verifyCode);
+        JsonResult jsonResult = new JsonResult();
+        jsonResult.setData(verifyCode);
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
 }

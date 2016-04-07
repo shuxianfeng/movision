@@ -12,17 +12,18 @@
     <result column="type" property="type" jdbcType="VARCHAR" />
     <result column="time" property="time" jdbcType="TIMESTAMP" />
     <result column="is_deleted" property="is_deleted" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, mem_id, certificate_number, certificate_name, certificate_grade,certificate_id,
-    certificate_url,type, time, is_deleted
+    certificate_url,type, time, is_deleted,status
   </sql>
   <insert id="saveCertificate" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord" >
     insert into t_certificate_record (id, mem_id, certificate_number,certificate_id,
-    certificate_name, certificate_grade, certificate_url,type, time, is_deleted
+    certificate_name, certificate_grade, certificate_url,type, time, is_deleted,status
     )
     values (#{id,jdbcType=BIGINT}, #{mem_id}, #{certificate_number},#{certificate_id},
-    #{certificate_name}, #{certificate_grade},  #{certificate_url}, #{type},#{time}, 0
+    #{certificate_name}, #{certificate_grade},  #{certificate_url}, #{type},#{time}, 0,0
     )
   </insert>
   <update id="updateCertificate" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord">
@@ -54,6 +55,9 @@
       </if>
       <if test="is_deleted != null">
         is_deleted = #{is_deleted},
+      </if>
+      <if test="status != null">
+        status = #{status},
       </if>
     </set>
     where id = #{id}

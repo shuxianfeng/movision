@@ -23,6 +23,8 @@ public class CertificateRecord {
 
     private Integer is_deleted;
 
+    private String status;
+
     public Long getId() {
         return id;
     }
@@ -101,5 +103,13 @@ public class CertificateRecord {
 
     public void setCertificate_id(String certificate_id) {
         this.certificate_id = certificate_id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

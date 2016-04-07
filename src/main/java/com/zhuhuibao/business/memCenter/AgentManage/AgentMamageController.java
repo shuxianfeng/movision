@@ -88,6 +88,7 @@ public class AgentMamageController {
             }
         }catch (Exception e){
             log.error("query error!");
+            e.printStackTrace();
         }
         result.setCode(200);
         result.setData(list);
@@ -116,6 +117,7 @@ public class AgentMamageController {
             }
         }catch (Exception e){
             log.error("search brand by memId error!");
+            e.printStackTrace();
         }
         result.setCode(200);
         result.setData(list);
@@ -196,6 +198,7 @@ public class AgentMamageController {
             }
         }catch (Exception e){
             log.error("update agent error!");
+            e.printStackTrace();
         }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
@@ -282,20 +285,24 @@ public class AgentMamageController {
         JsonResult result = new JsonResult();
         Member member = memberService.findMemById(id);
         String email = req.getParameter("email");
+        Member member1 = new Member();
+        member1.setEmail(email);
+        Member member2 = memberService.findMemer(member1);
         try{
                 String mail = ds.findMailAddress(email);
                 if(mail == null || mail.equals("")){
                     result.setCode(400);
                     result.setData(email);
-                    result.setMessage("邮箱格式不正确！");
-                    response.setContentType("application/json;charset=utf-8");
-                    response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+                    result.setMessage("系统暂不支持此邮箱！");
                 }else{
-                    accountService.sendInviteEmail(member,email);
+                    if(member2 == null){
+                        accountService.sendInviteEmail(member,email);
+                    }
                     result.setCode(200);
                 }
         }catch (Exception e){
             log.error("send inviteEmail error!");
+            e.printStackTrace();
         }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
@@ -316,6 +323,7 @@ public class AgentMamageController {
             result.setCode(200);
         }catch (Exception e){
             log.error("findAgentByMemId error!");
+            e.printStackTrace();
         }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
@@ -346,6 +354,7 @@ public class AgentMamageController {
         catch(Exception e)
         {
             log.error("email agentRegister error!",e);
+            e.printStackTrace();
         }
 
         return modelAndView;
@@ -374,6 +383,32 @@ public class AgentMamageController {
     @RequestMapping(value = "/rest/agent/getAgentByProId", method = RequestMethod.GET)
     public void getAgentByProId(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
         JsonResult result = agentService.getAgentByProId(id);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 根据子系统id查优秀代理商
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/agent/getGreatAgentByScateid", method = RequestMethod.GET)
+    public void getGreatAgentByScateid(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+        JsonResult result = agentService.getGreatAgentByScateid(id);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 根据品牌id查优秀代理商
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/agent/getGreatAgentByBrandId", method = RequestMethod.GET)
+    public void getGreatAgentByBrandId(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+        JsonResult result = agentService.getGreatAgentByBrandId(id);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }

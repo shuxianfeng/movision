@@ -1,5 +1,6 @@
 package com.zhuhuibao.business.memCenter.AccountManage;
 
+import com.zhuhuibao.common.AskPriceResultBean;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
@@ -8,6 +9,8 @@ import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.JsonUtils;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,13 +165,20 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/staffSearch", method = RequestMethod.GET)
-	public void staffSearch(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
+	public void staffSearch(HttpServletRequest req, HttpServletResponse response,Member member,String pageNo,String pageSize) throws IOException {
 		if(member.getAccount()!=null){
 			if(member.getAccount().contains("_")){
 				member.setAccount(member.getAccount().replace("_","\\_"));
 			}
 		}
-		JsonResult result = memberService.findStaffByParentId(member);
+		if (StringUtils.isEmpty(pageNo)) {
+			pageNo = "1";
+		}
+		if (StringUtils.isEmpty(pageSize)) {
+			pageSize = "10";
+		}
+		Paging<Member> pager = new Paging<Member>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+		JsonResult result = memberService.findStaffByParentId(pager,member);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}

@@ -141,7 +141,7 @@ public class BrandManageController {
      */
     @RequestMapping(value = "/rest/searchBrand", method = RequestMethod.GET)
     public void searchBrand(HttpServletRequest req, HttpServletResponse response, Brand brand) throws IOException {
-        List<Brand> brandList = brandService.searchBrandByStatus(brand);
+        List<Brand> brandList = brandService.searchBrand(brand);
         JsonResult result = new JsonResult();
         result.setCode(200);
         result.setData(brandList);
