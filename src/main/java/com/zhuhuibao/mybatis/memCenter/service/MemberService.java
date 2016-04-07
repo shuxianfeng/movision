@@ -187,11 +187,24 @@ public class MemberService {
 	/**
 	 * 资质类型
 	 */
-	public List<Certificate> findCertificateList(String type)
+	public JsonResult findCertificateList(String type)
 	{
 		log.debug("资质类型");
+		JsonResult result = new JsonResult();
 		List<Certificate> certificate = certificateMapper.findCertificateList(type);
-		return certificate;
+		List list = new ArrayList();
+		for(int i=0;i<certificate.size();i++){
+			Certificate certificate1 = certificate.get(i);
+			String [] stringArr= certificate1.getDegree().split(",");
+			Map map = new HashMap();
+			map.put("id",certificate1.getId());
+			map.put("name",certificate1.getName());
+			map.put("degree",stringArr);
+			list.add(map);
+		}
+		result.setCode(200);
+		result.setData(list);
+		return result;
 	}
 
 	/**

@@ -95,14 +95,7 @@ public class InformationController {
 	@RequestMapping(value = "/rest/certificateList", method = RequestMethod.GET)
 	public void certificateList(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		String type = req.getParameter("type");
-		JsonResult result = new JsonResult();
-		try {
-			List<Certificate> certificate = memberService.findCertificateList(type);
-			result.setCode(200);
-			result.setData(certificate);
-		}catch (Exception e){
-			log.error("sql error",e);
-		}
+		JsonResult result = memberService.findCertificateList(type);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}

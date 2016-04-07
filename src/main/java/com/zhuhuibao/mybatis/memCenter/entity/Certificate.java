@@ -5,6 +5,10 @@ public class Certificate {
 
     private String name;
 
+    private String type;
+
+    private String degree;
+
     public Integer getId() {
         return id;
     }
@@ -19,5 +23,21 @@ public class Certificate {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
     }
 }

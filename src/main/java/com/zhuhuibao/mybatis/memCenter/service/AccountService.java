@@ -116,7 +116,7 @@ public class AccountService {
         member.setEmail(email);
         member.setPassword(md5Pwd);
         try{
-            Member member1 = memberMapper.findMem(member);
+            Member member1 = memberMapper.findMemer(member);
             if(member1!=null){
                 result.setCode(400);
                 result.setMsgCode(MsgCodeConstant.member_mcode_mail_registered);
