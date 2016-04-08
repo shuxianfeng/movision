@@ -20,11 +20,14 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.zhuhuibao.common.ApiConstants;
+import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
@@ -43,11 +46,26 @@ public class OfferPriceController {
 	@Resource
 	private OfferPriceService offerService;
 	
+	@Autowired
+    ApiConstants ApiConstants;
+	
 	@RequestMapping(value="/rest/price/addOfferPrice", method = RequestMethod.POST)
 	public void addOfferPrice(HttpServletRequest req,HttpServletResponse response,OfferPrice price) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		log.info("add offer price");
-		JsonResult jsonResult = offerService.addOfferPrice(price);
+		JsonResult jsonResult = new JsonResult();
+		Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if(session != null)
+        {
+        	ShiroUser principal = (ShiroUser)session.getAttribute("member");
+        	price.setCreateid(new Long(principal.getId()));
+        	if(price.getBillurl() != null && !price.getBillurl().equals(""))
+        	{
+        		price.setBillurl(ApiConstants.getUploadDir()+Constant.upload_price_document_url+"/"+price.getBillurl());
+        	}
+        	jsonResult = offerService.addOfferPrice(price);
+        }
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 	

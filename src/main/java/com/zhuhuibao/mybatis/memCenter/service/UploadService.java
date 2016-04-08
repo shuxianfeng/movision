@@ -6,17 +6,25 @@ package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.zhuhuibao.common.ApiConstants;
+import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.utils.RandomFileNamePolicy;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Enumeration;
+import java.util.StringTokenizer;
 
 /**
  * 上传处理
@@ -41,8 +49,15 @@ public class UploadService {
         String saveDirectory ="";
         if("img".equals(type)) {
             saveDirectory = ApiConstants.getUploadDir()+"/img";
+            log.info("suffix = " +getFileSuffix(req)); 
         }else{
-            saveDirectory = ApiConstants.getUploadDir()+"/doc";
+            saveDirectory = ApiConstants.getUploadDir()+Constant.upload_price_document_url;
+            log.info("suffix = " +getFileSuffix(req)); 
+            File file = new File(saveDirectory);
+            if(!file.exists())
+            {
+            	file.mkdirs();
+            }
         }
         String ip_address = ResourcePropertiesUtils.getValue("host.ip");
 
@@ -54,7 +69,7 @@ public class UploadService {
 
         //完成文件上传
         MultipartRequest multi = new MultipartRequest(req, saveDirectory, maxPostSize, "UTF-8", rfnp);
-
+       
         Enumeration fileNames = multi.getFileNames();
         String url = "";
         while(fileNames.hasMoreElements()){
@@ -64,7 +79,7 @@ public class UploadService {
                 if("img".equals(type)){
                     url =  ip_address + "/upload/img/" + lastFileName;
                 }else{
-                    url =  ip_address + "/upload/doc/" + lastFileName;
+                    url =  lastFileName;
                 }
 
             }
@@ -72,4 +87,48 @@ public class UploadService {
 
         return url;
     }
+
+    /**
+     * 获得文件的后缀
+     * @param req
+     * @throws IOException
+     */
+	private String getFileSuffix(HttpServletRequest req) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader((ServletInputStream) req.getInputStream()));  
+        String line = null;  
+        while ((line = br.readLine()) != null) {  
+            if( line.toLowerCase().indexOf("filename") > -1)
+            {
+            	break;
+            }
+        }  
+        log.info(line);
+        StringTokenizer st = new StringTokenizer(line);
+        String filename = "";
+	     while (st.hasMoreTokens()) {
+	    	 filename = st.nextToken();
+	         if(filename.toLowerCase().indexOf("filename") > -1)
+	         {
+	        	 break;
+	         }
+	     }
+	     log.info(filename);
+	     String[] arr = filename.split("=");
+	     return arr[1].substring(arr[1].lastIndexOf(".")+1);
+	}
+    
+    public static void main(String[] args) {
+		String str = "Content-Disposition: form-data; name=\"\"; filename=\"1.png\"";
+		StringTokenizer st = new StringTokenizer(str);
+		String filename = "";
+	     while (st.hasMoreTokens()) {
+	    	 filename = st.nextToken();
+	    	System.out.println(filename);
+	         if(filename.toLowerCase().indexOf("filename") > -1)
+	         {
+	        	 break;
+	         }
+	     }
+	     System.out.println(filename);
+	}
 }

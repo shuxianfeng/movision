@@ -5,6 +5,8 @@ import com.oreilly.servlet.multipart.FileRenamePolicy;
 import java.io.File;
 import java.util.Date;
 
+import org.apache.shiro.crypto.hash.Md5Hash;
+
 /**
  * 自定义的命名策略文件
  */
@@ -26,8 +28,7 @@ public class RandomFileNamePolicy implements FileRenamePolicy {
             timer = new Date().getTime() + "";
             postfix = ""; //如果lastIndexOf(".")返回-1，说明该文件名中没有【.】即没有后缀
         }
-
-        String newName = body + timer + postfix; //构造新的文件名
+        String newName = new Md5Hash(body + timer,null,2).toString() + postfix; //构造新的文件名
         return new File(file.getParent(), newName); //返回重命名后的文件
     }
 }

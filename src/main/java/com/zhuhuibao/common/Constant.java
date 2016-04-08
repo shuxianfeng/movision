@@ -203,6 +203,11 @@ public interface Constant {
 	 * 公司联系电话
 	 */
 	String telephone = "telephone";
+	
+	/**
+	 * 上传询，报价单的路径  /doc/price
+	 */
+	String upload_price_document_url = "/doc/price";
 
 	/******************end****************/
 

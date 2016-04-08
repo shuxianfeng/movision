@@ -162,7 +162,8 @@
 	 left join t_dictionary_city c on t.cityCode = c.code
   </select>
   <select id="queryAllOfferPriceByAskID" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean">
-  	select n.id,n.createid,date_format(n.offerTime,'%Y-%m-%d') dateTime,concat(p.name,c.name) deliveryAddress,n.companyName from (select t.*,m.province,m.city from t_p_offer_price t left join t_m_member m on m.id = t.createid 
+  	select n.id,n.createid,date_format(n.offerTime,'%Y-%m-%d') dateTime,concat(p.name,c.name) deliveryAddress,n.companyName from 
+  	(select t.id,t.createid,t.offerTime,if(m.identify=3,concat(t.companyName,"(厂商)"),t.companyName) companyName,m.province,m.city from t_p_offer_price t left join t_m_member m on m.id = t.createid 
 	where t.askid =#{id}) n 
 	left join t_dictionary_province p on n.province = p.code 
 	left join t_dictionary_city c on n.city = c.code
