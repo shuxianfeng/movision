@@ -100,7 +100,7 @@ public class AccountService {
         sb.append("<p>点击下面链接完成账号一键注册激活（账号默认该邮箱，密码默认123456，请登陆后修改密码）：</p>");
         sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\""+ResourcePropertiesUtils.getValue("host.ip")+"/rest/agent/agentRegister?vm=");
         sb.append(new String(EncodeUtil.encodeBase64(email)));
-        sb.append("\">"+ResourcePropertiesUtils.getValue("host.ip")+"/rest/agent/agentRegister");
+        sb.append("\">"+ResourcePropertiesUtils.getValue("host.ip")+"/rest/agent/agentRegister?vm=");
         sb.append(new String(EncodeUtil.encodeBase64(email)));
         sb.append("</a>");
         sb.append("<p style=\"padding:0px;line-height:24px;font-size:12px;color:#979797;font-family:arial,sans-serif\">");
