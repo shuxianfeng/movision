@@ -9,6 +9,7 @@ import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.security.EncodeUtil;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
 import com.zhuhuibao.utils.SendEmail;
@@ -19,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 /**
  * 发送邮件
@@ -97,9 +100,17 @@ public class AccountService {
         sb.append("<p>点击下面链接完成账号一键注册激活（账号默认该邮箱，密码默认123456，请登陆后修改密码）：</p>");
         sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\""+ResourcePropertiesUtils.getValue("host.ip")+"/rest/agent/agentRegister?vm=");
         sb.append(new String(EncodeUtil.encodeBase64(email)));
-        sb.append("\">"+ResourcePropertiesUtils.getValue("host.ip")+"/rest/agent/agentRegister");
+        sb.append("\">"+ResourcePropertiesUtils.getValue("host.ip")+"/rest/agent/agentRegister?vm=");
         sb.append(new String(EncodeUtil.encodeBase64(email)));
         sb.append("</a>");
+        sb.append("<p style=\"padding:0px;line-height:24px;font-size:12px;color:#979797;font-family:arial,sans-serif\">");
+        sb.append("(如果您无法点击此链接，请将它复制到浏览器地址栏后访问)");
+        sb.append("</p>");
+        sb.append("<div style=\"line-height:80px;height:80px\" </div>");
+        sb.append("<p>筑慧宝团队</p>");
+        sb.append("<p>");
+        sb.append(DateUtils.date2Str(new Date(), "yyyy-MM-dd"));
+        sb.append("</p>");
         log.info("send email link == "+sb.toString());
         //发送邮件
         SendEmail.send(email, sb.toString(),"筑慧宝-代理商邀请");

@@ -12,6 +12,8 @@ public class AgentBean {
 
     private String brand;
 
+    private String brandName;
+
     private String province;
 
     private String agentRange;
@@ -62,5 +64,13 @@ public class AgentBean {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 }

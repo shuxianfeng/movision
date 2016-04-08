@@ -135,6 +135,9 @@ public class AgentMamageController {
     public void searchAgent(HttpServletRequest req, HttpServletResponse response) throws IOException {
         JsonResult result = new JsonResult();
         String account = req.getParameter("account");
+        if(account.contains("_")){
+            account = account.replace("_","\\_");
+        }
         String type = req.getParameter("type");
         try{
             List<AccountBean> memList = memberService.findAgentMember(account,type);
@@ -190,10 +193,10 @@ public class AgentMamageController {
         JsonResult result = new JsonResult();
         try{
             int isUpdate = agentService.agentUpdate(agent);
-            if(isUpdate==0){
+            if (isUpdate == 0) {
                 result.setCode(400);
                 result.setMessage("关联代理商编辑更新成功");
-            }else{
+            } else {
                 result.setCode(200);
             }
         }catch (Exception e){
@@ -289,17 +292,10 @@ public class AgentMamageController {
         member1.setEmail(email);
         Member member2 = memberService.findMemer(member1);
         try{
-                String mail = ds.findMailAddress(email);
-                if(mail == null || mail.equals("")){
-                    result.setCode(400);
-                    result.setData(email);
-                    result.setMessage("系统暂不支持此邮箱！");
-                }else{
-                    if(member2 == null){
-                        accountService.sendInviteEmail(member,email);
-                    }
-                    result.setCode(200);
-                }
+            if(member2 == null){
+                accountService.sendInviteEmail(member,email);
+            }
+            result.setCode(200);
         }catch (Exception e){
             log.error("send inviteEmail error!");
             e.printStackTrace();
