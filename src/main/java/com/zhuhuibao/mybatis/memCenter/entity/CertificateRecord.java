@@ -13,7 +13,7 @@ public class CertificateRecord {
 
     private String certificate_id;
 
-    private Integer certificate_grade;
+    private String certificate_grade;
 
     private String certificate_url;
 
@@ -57,11 +57,11 @@ public class CertificateRecord {
         this.certificate_name = certificate_name == null ? null : certificate_name.trim();
     }
 
-    public Integer getCertificate_grade() {
+    public String getCertificate_grade() {
         return certificate_grade;
     }
 
-    public void setCertificate_grade(Integer certificate_grade) {
+    public void setCertificate_grade(String certificate_grade) {
         this.certificate_grade = certificate_grade;
     }
 
