@@ -94,6 +94,7 @@ public class AgentService {
             map1.put("account",agent.getAccount());
             map1.put("name",agent.getCompany());
             map.put("brandId",agent.getBrand());
+            map.put("brandName",agent.getBrandName());
             map.put("province",agent.getProvince());
             String agentRange[] = agent.getAgentRange().split(",");
             List list = new ArrayList();
@@ -126,7 +127,7 @@ public class AgentService {
         JsonResult result = new JsonResult();
         List<ResultBean> provinceList = provinceMapper.findProvince();
         List<ResultBean> agentList = agentMapper.findAgentByProId(id);
-        ResultBean resultBean = agentMapper.findManufactor(id);
+        ResultBean resultBean = agentMapper.findManufactorByProId(id);
         List list = new ArrayList();
         Map map = new HashMap();
         Map map3 = new HashMap();

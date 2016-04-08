@@ -99,14 +99,19 @@ public class PriceService {
     }
 
     /**
-     * 获得代理商信息
+     * 根据品牌id查询代理商跟厂商（区域分组）
      */
-    public JsonResult getProxyInfoByProvince(String id){
-        log.debug("获得代理商信息");
+    public JsonResult getAgentByBrandid(String id){
         JsonResult result = new JsonResult();
         List<ResultBean> provinceList = provinceMapper.findProvince();
-        List<ResultBean> agentList = agentMapper.findAgent(id);
+        List<ResultBean> agentList = agentMapper.getAgentByBrandid(id);
+        ResultBean resultBean = agentMapper.findManufactorByBrandid(id);
         List list = new ArrayList();
+        Map map = new HashMap();
+        Map map3 = new HashMap();
+        map3.put(Constant.id,resultBean.getCode());
+        map3.put(Constant.name,resultBean.getName());
+        map.put("manufactor",map3);
         for(int i=0;i<provinceList.size();i++){
             ResultBean province = provinceList.get(i);
             Map map1 = new HashMap();
@@ -125,8 +130,9 @@ public class PriceService {
             map1.put("agentList",list1);
             list.add(map1);
         }
+        map.put("agent",list);
         result.setCode(200);
-        result.setData(list);
+        result.setData(map);
         return result;
     }
 

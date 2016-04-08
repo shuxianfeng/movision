@@ -13,7 +13,7 @@ public interface AgentMapper {
 
     List<AgentBean> findAgentByMemId(String id);
 
-    List<ResultBean> findAgent(String id);
+    List<ResultBean> getAgentByBrandid(String id);
 
     AgentBean updateAgentById(String id);
 
@@ -21,7 +21,9 @@ public interface AgentMapper {
 
     List<ResultBean> findAgentByProId(String id);
 
-    ResultBean findManufactor(String id);
+    ResultBean findManufactorByProId(String id);
+
+    ResultBean findManufactorByBrandid(String id);
 
     List<ResultBean> getGreatAgentByScateid(String id);
 

@@ -62,11 +62,14 @@ public class PriceController {
     }
 
     /**
-     * 获得代理商信息
+     * 根据品牌id查询代理商跟厂商（区域分组）
+     * @param req
+     * @return
+     * @throws IOException
      */
-    @RequestMapping(value = "/rest/price/getProxyInfoByProvince", method = RequestMethod.GET)
-    public void getProxyInfoByProvince(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
-        JsonResult result = priceService.getProxyInfoByProvince(id);
+    @RequestMapping(value = "/rest/agent/getAgentByBrandid", method = RequestMethod.GET)
+    public void getAgentByBrandid(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+        JsonResult result = priceService.getAgentByBrandid(id);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
