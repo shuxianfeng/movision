@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 public class ApiConstants {
     @Value("${uploadDir}")
     private  String uploadDir;
+    @Value("${uploadDoc}")
+    private String uploadDoc;
 
     @Value("${uploadMaxPostSize}")
     private int uploadMaxPostSize;
@@ -29,5 +31,13 @@ public class ApiConstants {
 
     public void setUploadMaxPostSize(int uploadMaxPostSize) {
         this.uploadMaxPostSize = uploadMaxPostSize;
+    }
+
+    public String getUploadDoc() {
+        return uploadDoc;
+    }
+
+    public void setUploadDoc(String uploadDoc) {
+        this.uploadDoc = uploadDoc;
     }
 }
