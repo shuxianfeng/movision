@@ -80,7 +80,7 @@
         registerTime = #{registerTime},
       </if>
       <if test="status != null" >
-        status = #{status},
+        status = (case when status = 4 then 4 else #{status} end ),
       </if>
       <if test="identify != null" >
         identify = #{identify},
