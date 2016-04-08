@@ -189,12 +189,18 @@ public class AgentMamageController {
     public void agentUpdate(HttpServletRequest req, HttpServletResponse response, Agent agent) throws IOException {
         JsonResult result = new JsonResult();
         try{
-            int isUpdate = agentService.agentUpdate(agent);
-            if(isUpdate==0){
-                result.setCode(400);
-                result.setMessage("关联代理商编辑更新成功");
+            Agent agent1 = agentService.find(agent);
+            if(agent1==null) {
+                int isUpdate = agentService.agentUpdate(agent);
+                if (isUpdate == 0) {
+                    result.setCode(400);
+                    result.setMessage("关联代理商编辑更新成功");
+                } else {
+                    result.setCode(200);
+                }
             }else{
-                result.setCode(200);
+                result.setCode(400);
+                result.setMessage("该品牌该代理商已设置");
             }
         }catch (Exception e){
             log.error("update agent error!");
