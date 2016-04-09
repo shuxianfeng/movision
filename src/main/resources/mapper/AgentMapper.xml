@@ -91,7 +91,7 @@
   <select id="getAgentByBrandid" resultMap="ResultMap1">
     select distinct a.agentid,m.enterpriseName,a.proviceid from t_p_brand_agent a
     left join t_m_member m on a.agentid = m.id
-    where a.brandid = #{id}
+    where a.brandid = #{id} and a.status = 0
   </select>
   <select id="updateAgentById" resultMap="ResultMap">
     select a.brandid as brand,b.CNName as brandName,a.proviceid as province,m.id,m.enterpriseName as company,
@@ -112,7 +112,7 @@
     select distinct a.agentid,m.enterpriseName,a.proviceid from t_p_brand_agent a
     left join t_m_member m on a.agentid = m.id
     left join t_p_product p on p.brandid = a.brandid
-    where p.id = #{id}
+    where p.id = #{id} and a.status = 0
   </select>
   <select id="findManufactorByProId" resultMap="ResultMap2">
     select distinct b.createid as code,m.enterpriseName as name
