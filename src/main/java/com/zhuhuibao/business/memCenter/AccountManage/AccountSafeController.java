@@ -169,9 +169,10 @@ public class AccountSafeController {
     @RequestMapping(value = "/rest/sendChangeEmail", method = RequestMethod.POST)
     public void sendChangeEmail(HttpServletRequest req, HttpServletResponse response) throws IOException {
         String email = req.getParameter("email");
+        String id = req.getParameter("id");
         log.debug("更改邮箱  email =="+ email);
         JsonResult result = new JsonResult();
-        as.sendChangeEmail(email);
+        as.sendChangeEmail(email,id);
         String mail = ds.findMailAddress(email);
         Map<String,String> map = new HashMap<String,String>();
         if(mail != null && !mail.equals(""))
@@ -216,28 +217,37 @@ public class AccountSafeController {
      * @param response
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/updateEmail", method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/updateEmail", method = RequestMethod.GET)
     public ModelAndView updateEmail(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        JsonResult result = new JsonResult();
         ModelAndView modelAndView = new ModelAndView();
         Member member = new Member();
         try
         {
             String email = req.getParameter("email");//获取email
-            if(email != null & !email.equals(""))
-            {
-                String decodeVM = new String (EncodeUtil.decodeBase64(email));
-                member.setEmail(decodeVM);
-                int isUpdate = memberService.updateMember(member);
-                String redirectUrl ="";
-                if(isUpdate==1){
-                    redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-bind.page");
-                }else{
-                    redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-error.page");
+            String decodeTime = new String (EncodeUtil.decodeBase64(req.getParameter("time")));
+            String decodeId = new String (EncodeUtil.decodeBase64(req.getParameter("id")));
+            Date currentTime = new Date();//获取当前时间
+            Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(decodeTime,"yyyy-MM-dd HH:mm:ss"),5,1);
+            String redirectUrl ="";
+            if(currentTime.before(registerDate)){
+                if(email != null & !email.equals(""))
+                {
+                    String decodeVM = new String (EncodeUtil.decodeBase64(email));
+                    member.setEmail(decodeVM);
+                    member.setId(Long.parseLong(decodeId));
+                    int isUpdate = memberService.updateMember(member);
+                    if(isUpdate==1){
+                        redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-bind.page");
+                    }else{
+                        redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-error.page");
+                    }
+
                 }
-                RedirectView rv = new RedirectView(redirectUrl);
-                modelAndView.setView(rv);
+            }else{
+                redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email.validate.expire.page");
             }
+            RedirectView rv = new RedirectView(redirectUrl);
+            modelAndView.setView(rv);
         }
         catch(Exception e)
         {

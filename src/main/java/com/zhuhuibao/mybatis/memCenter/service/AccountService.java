@@ -38,10 +38,12 @@ public class AccountService {
     /**
      * 发送邮件
      */
-    public void sendChangeEmail(String email){
+    public void sendChangeEmail(String email,String id){
         ///邮件的内容
+        String currentTime = DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss");
         StringBuffer sb=new StringBuffer("");
         String serverIp = ResourcePropertiesUtils.getValue("host.ip");
+
         sb.append("<div style=\"line-height:40px;height:40px\">");
         sb.append("</div>");
         sb.append("<p style=\"padding:0px\"");
@@ -56,11 +58,13 @@ public class AccountService {
         sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"");
         sb.append(serverIp);
         sb.append("/rest/updateEmail?email=");
-        sb.append(new String(EncodeUtil.encodeBase64(email)));
+        sb.append(new String(EncodeUtil.encodeBase64(email))+"&time="+new String(EncodeUtil.encodeBase64(currentTime)));
+        sb.append("&id="+new String(EncodeUtil.encodeBase64(id)));
         sb.append("\">");
         sb.append(serverIp);
         sb.append("/rest/updateEmail?email=");
-        sb.append(new String(EncodeUtil.encodeBase64(email)));
+        sb.append(new String(EncodeUtil.encodeBase64(email))+"&time="+new String(EncodeUtil.encodeBase64(currentTime)));
+        sb.append("&id="+new String(EncodeUtil.encodeBase64(id)));
         sb.append("</a>");
         sb.append("</p>");
         sb.append("<p style=\"padding:0px;line-height:24px;font-size:12px;color:#979797;font-family:arial,sans-serif\">");
