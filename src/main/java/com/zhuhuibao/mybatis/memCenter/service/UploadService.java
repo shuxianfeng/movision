@@ -71,7 +71,7 @@ public class UploadService {
                 if("img".equals(type)){
                     url =  ip_address + "/upload/img/" + lastFileName;
                 }else{
-                    url =  ip_address + "/uploadDoc/price" + lastFileName;
+                    url =  lastFileName;
                 }
 
             }
