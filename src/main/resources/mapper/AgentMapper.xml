@@ -115,17 +115,17 @@
     where p.id = #{id}
   </select>
   <select id="findManufactorByProId" resultMap="ResultMap2">
-    select distinct a.createid as code,m.enterpriseName as name
-    from t_p_brand_agent a
-    left join t_m_member m on a.createid = m.id
-    left join t_p_product p on p.brandid = a.brandid
+    select distinct b.createid as code,m.enterpriseName as name
+    from t_p_brand b
+    left join t_m_member m on b.createid = m.id
+    left join t_p_product p on p.brandid = b.id
     where p.id = #{id}
   </select>
   <select id="findManufactorByBrandid" resultMap="ResultMap2">
-    select distinct a.createid as code,m.enterpriseName as name
-    from t_p_brand_agent a
-    left join t_m_member m on a.createid = m.id
-    where a.brandid = #{id}
+    select distinct b.createid as code,m.enterpriseName as name
+    from t_p_brand b
+    left join t_m_member m on b.createid = m.id
+    where b.id = #{id}
   </select>
   <select id="getGreatAgentByScateid" resultMap="ResultMap3">
     select distinct m.id as code,m.enterpriseName as name,m.enterpriseLogo as smallIcon from t_p_brand_agent a
