@@ -38,9 +38,12 @@ public class SystemController {
 
     @RequestMapping(value = "/rest/systemSearch", method = RequestMethod.GET)
     public void systemSearch(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult jsonResult = new JsonResult();
         List<ResultBean> systemList = categoryService.findSystemList();
+        jsonResult.setCode(200);
+        jsonResult.setData(systemList);
         response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(systemList));
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
 
     /**
@@ -52,10 +55,13 @@ public class SystemController {
 
     @RequestMapping(value = "/rest/subSystemSearch", method = RequestMethod.GET)
     public void subSystemSearch(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult jsonResult = new JsonResult();
         String parentId = req.getParameter("parentId");
         List<ResultBean> subSystemList = categoryService.findSubSystemList(parentId);
+        jsonResult.setCode(200);
+        jsonResult.setData(subSystemList);
         response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(subSystemList));
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
 
     /**

@@ -168,22 +168,33 @@ public class AccountSafeController {
      */
     @RequestMapping(value = "/rest/sendChangeEmail", method = RequestMethod.POST)
     public void sendChangeEmail(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        String email = req.getParameter("email");
-        String id = req.getParameter("id");
-        log.debug("更改邮箱  email =="+ email);
         JsonResult result = new JsonResult();
-        as.sendChangeEmail(email,id);
-        String mail = ds.findMailAddress(email);
-        Map<String,String> map = new HashMap<String,String>();
-        if(mail != null && !mail.equals(""))
-        {
-            map.put("button", "true");
+        String email = req.getParameter("email");
+        Member member1 = new Member();
+        member1.setEmail(email);
+        Member member = memberService.findMemer(member1);
+        if(member!=null){
+            result.setCode(400);
+            result.setMessage("该邮箱已存在");
+        }else {
+            String id = req.getParameter("id");
+            log.debug("更改邮箱  email =="+ email);
+
+            as.sendChangeEmail(email,id);
+            String mail = ds.findMailAddress(email);
+            Map<String,String> map = new HashMap<String,String>();
+            if(mail != null && !mail.equals(""))
+            {
+                map.put("button", "true");
+            }
+            else
+            {
+                map.put("button", "false");
+            }
+            result.setData(map);
+            result.setCode(200);
         }
-        else
-        {
-            map.put("button", "false");
-        }
-        result.setData(map);
+        response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
 
