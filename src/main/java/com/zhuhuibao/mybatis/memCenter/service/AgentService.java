@@ -143,7 +143,7 @@ public class AgentService {
             for(int j=0;j<agentList.size();j++){
                 ResultBean agent = agentList.get(j);
                 Map map2 = new HashMap();
-                if(agent.getSmallIcon().contains(province.getSmallIcon())){
+                if(agent.getSmallIcon().contains(province.getCode())){
                     map2.put(Constant.id,agent.getCode());
                     map2.put(Constant.name,agent.getName());
                     list1.add(map2);
