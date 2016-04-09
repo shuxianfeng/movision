@@ -207,15 +207,23 @@ public class AccountSafeController {
     @RequestMapping(value = "/rest/updateMobile", method = RequestMethod.POST)
     public void updateMobile(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
         JsonResult result = new JsonResult();
-        try{
-            int isUpdate = memberService.updateMember(member);
-            if(isUpdate==1){
-                result.setCode(200);
-            }else{
+        try {
+            Member member1 = new Member();
+            member1.setMobile(member.getMobile());
+            Member member2 = memberService.findMemer(member1);
+            if (member2 != null) {
                 result.setCode(400);
-                result.setMessage("更改失败");
+                result.setMessage("该邮箱已存在");
+            } else {
+                int isUpdate = memberService.updateMember(member);
+                if (isUpdate == 1) {
+                    result.setCode(200);
+                } else {
+                    result.setCode(400);
+                    result.setMessage("更改失败");
+                }
             }
-        }catch (Exception e){
+        }catch(Exception e){
             log.error("updateMobile error");
         }
         response.setContentType("application/json;charset=utf-8");
