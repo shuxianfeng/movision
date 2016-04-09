@@ -8,6 +8,7 @@ import com.zhuhuibao.mybatis.memCenter.service.PriceService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.JsonUtils;
+import com.zhuhuibao.utils.ResourcePropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -51,6 +52,7 @@ public class PriceController {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
                 askPrice.setCreateid(principal.getId().toString());
+                askPrice.setBillurl(ResourcePropertiesUtils.getValue("host.ip")+ "/uploadDoc/price/" + askPrice.getBillurl());
                 result = priceService.saveAskPrice(askPrice);
             }
         }else{

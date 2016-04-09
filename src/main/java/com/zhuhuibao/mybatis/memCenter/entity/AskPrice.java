@@ -15,6 +15,8 @@ public class AskPrice {
 
     private String content;
 
+    private String billurl;
+
     private Date publishTime;
 
     private String endTime;
@@ -221,5 +223,13 @@ public class AskPrice {
 
     public void setFcateid(String fcateid) {
         this.fcateid = fcateid;
+    }
+
+    public String getBillurl() {
+        return billurl;
+    }
+
+    public void setBillurl(String billurl) {
+        this.billurl = billurl;
     }
 }
