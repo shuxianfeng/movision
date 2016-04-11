@@ -34,6 +34,13 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="smallIcon" property="smallIcon" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="ResultMap4" type="com.zhuhuibao.mybatis.memCenter.entity.Member" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
+    <result column="enterpriseLogo" property="enterpriseLogo" jdbcType="VARCHAR" />
+    <result column="enterpriseWebSite" property="enterpriseWebSite" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     id, brandid, scateid, agentid, proviceid, createid, status
   </sql>
@@ -115,8 +122,8 @@
     left join t_p_product p on p.brandid = a.brandid
     where p.id = #{id} and a.status = 0
   </select>
-  <select id="findManufactorByProId" resultMap="ResultMap2">
-    select distinct p.createid as code,m.enterpriseName as name,m.enterpriseLogo
+  <select id="findManufactorByProId" resultMap="ResultMap4">
+    select distinct p.createid as id,m.enterpriseName,m.enterpriseLogo,m.enterpriseWebSite,m.address
     from t_p_product p
     left join t_m_member m on p.createid = m.id
     where p.id = #{id}

@@ -196,6 +196,14 @@ public interface Constant {
 	 */
 	String logo = "logo";
 	/**
+	 * webSite
+	 */
+	String webSite = "webSite";
+	/**
+	 * address
+	 */
+	String address = "address";
+	/**
 	 * 公司名称
 	 */
 	String companyName = "companyName";

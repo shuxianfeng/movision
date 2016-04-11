@@ -3,8 +3,10 @@ package com.zhuhuibao.mybatis.memCenter.mapper;
 import com.zhuhuibao.common.AgentBean;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Agent;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AgentMapper {
     int agentSave(Agent agent);
@@ -21,7 +23,7 @@ public interface AgentMapper {
 
     List<ResultBean> findAgentByProId(String id);
 
-    ResultBean findManufactorByProId(String id);
+    Member findManufactorByProId(String id);
 
     ResultBean findManufactorByBrandid(String id);
 

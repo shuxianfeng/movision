@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.common.*;
 import com.zhuhuibao.mybatis.memCenter.entity.Agent;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.AgentMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ProvinceMapper;
 import com.zhuhuibao.mybatis.oms.entity.Category;
@@ -127,13 +128,15 @@ public class AgentService {
         JsonResult result = new JsonResult();
         List<ResultBean> provinceList = provinceMapper.findProvince();
         List<ResultBean> agentList = agentMapper.findAgentByProId(id);
-        ResultBean resultBean = agentMapper.findManufactorByProId(id);
+        Member member = agentMapper.findManufactorByProId(id);
         List list = new ArrayList();
         Map map = new HashMap();
         Map map3 = new HashMap();
-        map3.put(Constant.id,resultBean.getCode());
-        map3.put(Constant.name,resultBean.getName());
-        map3.put(Constant.logo,resultBean.getSmallIcon());
+        map3.put(Constant.id,member.getId());
+        map3.put(Constant.name,member.getEnterpriseName());
+        map3.put(Constant.logo,member.getEnterpriseLogo());
+        map3.put(Constant.webSite,member.getEnterpriseWebSite());
+        map3.put(Constant.address,member.getAddress());
         map.put("manufactor",map3);
         for(int i=0;i<provinceList.size();i++){
             ResultBean province = provinceList.get(i);
