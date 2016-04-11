@@ -91,7 +91,7 @@ public class RegisterValidateService {
 	        	for(Member user : memberList)
 	        	{
 	        		//同一个邮箱多次注册
-	        		if(!(user.getStatus() == 0 || user.getStatus() == 2))
+	        		if(user.getStatus() == 1 || user.getStatus() == 3 || user.getStatus()==4 || user.getStatus() == 5)
 	        		{
 	        			if(id == user.getId())
 	        			{
@@ -238,7 +238,7 @@ public class RegisterValidateService {
         String id = "0";
         String message = "";
         //验证用户是否存在 
-        if(user!=null && (user.getStatus() !=0 || user.getStatus() != 2 )) {
+        if(user!=null && (user.getStatus() != 0 || user.getStatus() != 2 )) {
         	Validateinfo vinfo = new Validateinfo();
         	vinfo.setCheckCode(url);
         	vinfo = memberService.findMemberValidateInfo(vinfo);
