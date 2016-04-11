@@ -1,8 +1,9 @@
 package com.zhuhuibao.mybatis.product.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Product {
+public class Product implements Serializable {
     private Long id;
 
     private String name;
