@@ -270,16 +270,11 @@ public class AccountSafeController {
                     String decodeVM = new String (EncodeUtil.decodeBase64(email));
                     member.setEmail(decodeVM);
                     member.setId(Long.parseLong(decodeId));
-                    int isUpdate = memberService.updateMember(member);
-                    if(isUpdate==1){
-                        redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-bind.page");
-                    }else{
-                        redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-error.page");
-                    }
-
+                    memberService.updateMember(member);
+                    redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-bind.page");
                 }
             }else{
-                redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email.validate.expire.page");
+                redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-error.page");
             }
             RedirectView rv = new RedirectView(redirectUrl);
             modelAndView.setView(rv);
