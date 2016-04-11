@@ -222,5 +222,44 @@ public interface Constant {
 	String upload_price_document_url = "/doc/price";
 
 	/******************end****************/
-
+	/**
+	 * 公司性质
+	 */
+	String enterpriseTypeName = "enterpriseTypeName";
+	/**
+	 * 公司注册时间
+	 */
+	String enterpriseCreaterTime = "enterpriseCreaterTime";
+	/**
+	 * 公司注册资本
+	 */
+	String registerCapital = "registerCapital";
+	/**
+	 * 公司人员规模
+	 */
+	String employeeNumber = "employeeNumber";
+	/**
+	 * 企业身份
+	 */
+	String identifyName = "identifyName";
+	/**
+	 * 企业介绍
+	 */
+	String enterpriseDesc = "enterpriseDesc";
+	/**
+	 * 企业主营范围
+	 */
+	String saleProductDesc = "saleProductDesc";
+	/**
+	 * 企业所在地区
+	 */
+	String area = "area";
+	/**
+	 * 传真
+	 */
+	String fox = "fox";
+	/**
+	 * 企业资质
+	 */
+	String certificateRecord = "certificateRecord";
 }

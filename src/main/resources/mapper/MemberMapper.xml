@@ -308,4 +308,20 @@
    insert into t_m_member(email,password,registerTime,status,identify) values
     (#{email},#{password},now(),1,1)
   </insert>
+  <select id="findNewEngineerOrSupplier" resultMap="BaseResultMap">
+    select * FROM t_m_member WHERE
+    <if test="type==1">
+      identify like '%3%'
+    </if>
+    <if test="type == 2">
+      identify like '%4%'
+    </if>
+    <if test="type == 3">
+      identify like '%5%'
+    </if>
+    <if test="type == 4">
+      identify like '%6%'
+    </if>
+    order by registerTime desc
+  </select>
 </mapper>

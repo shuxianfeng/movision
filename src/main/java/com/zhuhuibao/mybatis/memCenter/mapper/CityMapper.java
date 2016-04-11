@@ -18,4 +18,6 @@ public interface CityMapper {
     int updateByPrimaryKey(City record);
 
     List<ResultBean> findCity(String provincecode);
+
+    City getCityInfo(String code);
 }

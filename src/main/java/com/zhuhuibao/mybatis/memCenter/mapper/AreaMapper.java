@@ -19,4 +19,6 @@ public interface AreaMapper {
     int updateByPrimaryKey(Area record);
 
     List<ResultBean> findArea(String cityCode);
+
+    Area getAreaInfo(String code);
 }

@@ -1,9 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.AccountBean;
-import com.zhuhuibao.common.AskPriceResultBean;
-import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.common.*;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.*;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -373,5 +370,82 @@ public class MemberService {
 		return result;
 	}
 
+	/**
+	 *查询最新认证的供应商 工程商
+	 * @return
+     */
+	public JsonResult findNewEngineerOrSupplier(String type){
+		JsonResult result = new JsonResult();
+		List list = memberMapper.findNewEngineerOrSupplier(type);
+		result.setCode(200);
+		result.setData(list);
+		return result;
+	}
 
+	/**
+	 *供应商 工程商简版介绍
+	 * @return
+	 */
+	public JsonResult introduce(String id,String type){
+		JsonResult result = new JsonResult();
+		Member member = memberMapper.findMemById(id);
+		String enterpriseTypeName = "";
+		String provinceName= "";
+		String cityName="";
+		String areaName="";
+		String address = "";
+		String employeeSizeName="";
+		String identifyName = "";
+		if(member.getEnterpriseType()!=null){
+			EnterpriseType enterpriseType = enterpriseTypeMapper.selectByPrimaryKey(member.getEnterpriseType());
+			enterpriseTypeName = enterpriseType.getName();
+		}
+		if(member.getProvince()!=null){
+			Province province = provinceMapper.getProInfo(member.getProvince());
+			provinceName = province.getName();
+		}
+		if(member.getCity()!=null){
+			City city = cityMapper.getCityInfo(member.getCity());
+			cityName = city.getName();
+		}
+		if(member.getArea()!=null){
+			Area area = areaMapper.getAreaInfo(member.getArea());
+			areaName = area.getName();
+		}
+		if(member.getEmployeeNumber()!=null){
+			EmployeeSize employeeSize = employeeSizeMapper.selectByPrimaryKey(Integer.parseInt(member.getEmployeeNumber()));
+			employeeSizeName = employeeSize.getName();
+		}
+		if(member.getIdentify()!=null){
+			String identifys[] = member.getIdentify().split(",");
+			for(int i=0;i<identifys.length;i++){
+				String identify = identifys[i];
+				Identity identityInfo = identityMapper.selectByPrimaryKey(Integer.parseInt(identify));
+				identifyName = identityInfo.getName() + "  " + identifyName;
+			}
+		}
+		address = provinceName + cityName + areaName;
+		CertificateRecord certificateRecord = new CertificateRecord();
+		certificateRecord.setMem_id(Integer.parseInt(id));
+		certificateRecord.setType(type);
+		List<CertificateRecord> certificateRecordList = certificateRecordMapper.certificateSearch(certificateRecord);
+		Map map = new HashMap();
+		map.put(Constant.companyName,member.getEnterpriseName());
+		map.put(Constant.enterpriseTypeName,enterpriseTypeName);
+		map.put(Constant.area,address);
+		map.put(Constant.enterpriseCreaterTime,member.getEnterpriseCreaterTime());
+		map.put(Constant.registerCapital,member.getRegisterCapital());
+		map.put(Constant.employeeNumber,employeeSizeName);
+		map.put(Constant.identifyName,identifyName);
+		map.put(Constant.enterpriseDesc,member.getEnterpriseDesc());
+		map.put(Constant.saleProductDesc,member.getSaleProductDesc());
+		map.put(Constant.address,member.getAddress());
+		map.put(Constant.webSite,member.getEnterpriseWebSite());
+		map.put(Constant.telephone,member.getEnterpriseTelephone());
+		map.put(Constant.fox,member.getEnterpriseFox());
+		map.put(Constant.certificateRecord,certificateRecordList);
+		result.setCode(200);
+		result.setData(map);
+		return result;
+	}
 }

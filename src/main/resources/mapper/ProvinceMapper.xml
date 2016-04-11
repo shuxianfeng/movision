@@ -34,4 +34,10 @@
     END AS ASCII,id,code,name
     FROM t_dictionary_province order by ASCII;
   </select>
+  <select id="getProInfo" resultMap="BaseResultMap">
+    select
+    id,code,name
+    from t_dictionary_province
+    where code = #{code}
+  </select>
 </mapper>

@@ -89,4 +89,10 @@
     from t_dictionary_city
     where provincecode = #{provincecode}
   </select>
+  <select id="getCityInfo" resultMap="BaseResultMap">
+    select
+    id,code,name,provincecode
+    from t_dictionary_city
+    where code = #{code}
+  </select>
 </mapper>

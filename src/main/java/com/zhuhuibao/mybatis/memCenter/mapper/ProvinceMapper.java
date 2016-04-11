@@ -10,4 +10,6 @@ public interface ProvinceMapper {
     List<ResultBean> findProvince();
 
     List<CommonBean> searchProvinceByPinYin();
+
+    Province getProInfo(String code);
 }
