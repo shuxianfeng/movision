@@ -192,6 +192,10 @@ public interface Constant {
 	 */
 	String name = "name";
 	/**
+	 * logo
+	 */
+	String logo = "logo";
+	/**
 	 * 公司名称
 	 */
 	String companyName = "companyName";

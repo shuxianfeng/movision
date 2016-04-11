@@ -133,6 +133,7 @@ public class AgentService {
         Map map3 = new HashMap();
         map3.put(Constant.id,resultBean.getCode());
         map3.put(Constant.name,resultBean.getName());
+        map3.put(Constant.logo,resultBean.getSmallIcon());
         map.put("manufactor",map3);
         for(int i=0;i<provinceList.size();i++){
             ResultBean province = provinceList.get(i);
