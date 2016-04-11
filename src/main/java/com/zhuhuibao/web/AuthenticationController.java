@@ -97,10 +97,14 @@ public class AuthenticationController {
 		JsonResult jsonResult = new JsonResult();
 		Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        ShiroUser principal = (ShiroUser)session.getAttribute("member");
-        if(null != principal)
-        {
-        	jsonResult = memberService.findMemberInfoById(principal.getId());
+        if(null == session){
+            jsonResult.setMessage("you are not login!");
+        }
+        else {
+            ShiroUser principal = (ShiroUser) session.getAttribute("member");
+            if (null != principal) {
+                jsonResult = memberService.findMemberInfoById(principal.getId());
+            }
         }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
