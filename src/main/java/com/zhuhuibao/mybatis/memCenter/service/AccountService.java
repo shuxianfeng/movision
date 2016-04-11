@@ -70,6 +70,11 @@ public class AccountService {
         sb.append("<p style=\"padding:0px;line-height:24px;font-size:12px;color:#979797;font-family:arial,sans-serif\">");
         sb.append("(如果您无法点击此链接，请将它复制到浏览器地址栏后访问)");
         sb.append("</p>");
+        sb.append("</p>为了保障您帐号的安全性，请在24小时内完成邮箱修改！</p>");
+        sb.append("<p>筑慧宝团队</p>");
+        sb.append("<p>");
+        sb.append(DateUtils.date2Str(new Date(), "yyyy-MM-dd"));
+        sb.append("</p>");
         log.info("send email link == "+sb.toString());
         //发送邮件
         SendEmail.send(email, sb.toString(),"筑慧宝-邮箱修改");
