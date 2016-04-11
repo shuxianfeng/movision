@@ -140,7 +140,6 @@ public class OfferPriceController {
 	        byte[] data = new byte[(int)file.length()];
 	        int length = inputStream.read(data);
 	        inputStream.close();
-
 	        ServletOutputStream stream = response.getOutputStream();
 	        stream.write(data);
 	        stream.flush();
