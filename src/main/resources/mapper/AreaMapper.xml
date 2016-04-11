@@ -89,4 +89,10 @@
     from t_dictionary_area
     where cityCode = #{cityCode}
   </select>
+  <select id="getAreaInfo" resultMap="BaseResultMap">
+    select
+    id,code,name,cityCode
+    from t_dictionary_area
+    where code = #{code}
+  </select>
 </mapper>
