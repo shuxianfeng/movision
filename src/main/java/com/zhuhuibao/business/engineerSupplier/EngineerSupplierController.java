@@ -92,4 +92,17 @@ public class EngineerSupplierController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
+
+    /**
+     *名企展示
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/engineerSupplier/greatCompany", method = RequestMethod.GET)
+    public void greatCompany(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult jsonResult = memberService.greatCompany();
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
 }

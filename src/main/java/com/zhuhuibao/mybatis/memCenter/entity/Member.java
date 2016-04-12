@@ -84,6 +84,8 @@ public class Member {
 
     private String account;
 
+    private String isrecommend;
+
     public Long getId() {
         return id;
     }
@@ -395,5 +397,13 @@ public class Member {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getIsrecommend() {
+        return isrecommend;
+    }
+
+    public void setIsrecommend(String isrecommend) {
+        this.isrecommend = isrecommend;
     }
 }

@@ -63,7 +63,7 @@ public class StaffManageController {
 		String md5Pwd = new Md5Hash("123456",null,2).toString();
 		member.setPassword(md5Pwd);
 		//先判断账号是否已经存在
-		Member mem = memberService.findMem(member);
+		Member mem = memberService.findMember(member);
 		if(mem==null){
 			int isAdd = memberService.addMember(member);
 			if(isAdd==0){

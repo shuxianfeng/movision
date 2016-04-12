@@ -113,7 +113,7 @@ public class AccountSafeController {
         }else{
             member.setMobile("account");
         }
-        Member mem = memberService.findMem(member);
+        Member mem = memberService.findMember(member);
 
         //对比密码是否正确
         JsonResult result = new JsonResult();

@@ -164,10 +164,10 @@ public class MemberService {
 	/**
 	 * 根据会员账号查询会员
 	 */
-	public Member findMem(Member member)
+	public Member findMember(Member member)
 	{
 		log.debug("根据会员账号查询会员");
-		Member mem = memberMapper.findMem(member);
+		Member mem = memberMapper.findMember(member);
 		return mem;
 	}
 
@@ -177,7 +177,7 @@ public class MemberService {
 	public Member findMemer(Member member)
 	{
 		log.debug("根据会员账号查询会员");
-		Member mem = memberMapper.findMemer(member);
+		Member mem = memberMapper.findMember(member);
 		return mem;
 	}
 
@@ -459,6 +459,18 @@ public class MemberService {
 		map.put(Constant.certificateRecord,certificateRecordList);
 		result.setCode(200);
 		result.setData(map);
+		return result;
+	}
+
+	/**
+	 *名企展示
+	 * @return
+	 */
+	public JsonResult greatCompany(){
+		JsonResult result = new JsonResult();
+		List<ResultBean> greatCompanyList = memberMapper.findGreatCompany();
+		result.setCode(200);
+		result.setData(greatCompanyList);
 		return result;
 	}
 }
