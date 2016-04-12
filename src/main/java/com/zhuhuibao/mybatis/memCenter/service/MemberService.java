@@ -55,6 +55,9 @@ public class MemberService {
 
 	@Autowired
 	private EmployeeSizeMapper employeeSizeMapper;
+
+	@Autowired
+	private MessageMapper messageMapper;
 	/**
 	 * 会员信息保存
 	 */
@@ -471,6 +474,17 @@ public class MemberService {
 		List<ResultBean> greatCompanyList = memberMapper.findGreatCompany();
 		result.setCode(200);
 		result.setData(greatCompanyList);
+		return result;
+	}
+
+	/**
+	 *留言
+	 * @return
+	 */
+	public JsonResult saveMessage(Message message){
+		JsonResult result = new JsonResult();
+		messageMapper.saveMessage(message);
+		result.setCode(200);
 		return result;
 	}
 }
