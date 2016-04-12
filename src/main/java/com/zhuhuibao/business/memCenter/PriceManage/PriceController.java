@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.List;
 
 /**
@@ -135,6 +136,8 @@ public class PriceController {
      */
     @RequestMapping(value = "/rest/price/queryAskPriceInfo", method = RequestMethod.GET)
     public void queryAskPriceInfo(HttpServletRequest req, HttpServletResponse response, AskPriceSearchBean askPriceSearch,String pageNo,String pageSize) throws IOException {
+        String title = new String(askPriceSearch.getTitle().getBytes("8859_1"), "utf8" );
+        askPriceSearch.setTitle(title);
         JsonResult jsonResult = new JsonResult();
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";

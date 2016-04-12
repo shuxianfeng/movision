@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.MessageMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Message" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="receiveid" property="receiveid" jdbcType="BIGINT" />
+    <result column="receiveName" property="receiveName" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="isShow" property="isShow" jdbcType="BIT" />
+    <result column="companyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="linkman" property="linkman" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, receiveid, receiveName, title, content, isShow, companyName, linkman, telephone, 
+    mobile
+  </sql>
+  <insert id="saveMessage" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Message" >
+    insert into t_sys_message (id, receiveid, receiveName, title, content, isShow,
+      companyName, linkman, telephone, mobile)
+    values (#{id}, #{receiveid}, #{receiveName}, #{title}, #{content}, #{isShow},
+      #{companyName}, #{linkman}, #{telephone}, #{mobile})
+  </insert>
+</mapper>
