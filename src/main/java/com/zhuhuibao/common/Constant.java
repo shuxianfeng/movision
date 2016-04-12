@@ -262,4 +262,8 @@ public interface Constant {
 	 * 企业资质
 	 */
 	String certificateRecord = "certificateRecord";
+	/**
+	 * 状态
+	 */
+	String status = "status";
 }

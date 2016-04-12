@@ -376,7 +376,20 @@ public class MemberService {
      */
 	public JsonResult findNewEngineerOrSupplier(String type){
 		JsonResult result = new JsonResult();
-		List list = memberMapper.findNewEngineerOrSupplier(type);
+		List<Member> memberList = memberMapper.findNewEngineerOrSupplier(type);
+		List list = new ArrayList();
+		for(int i=0;i<memberList.size();i++){
+			Member member = memberList.get(i);
+			Map map = new HashMap();
+			map.put(Constant.id,member.getId());
+			map.put(Constant.companyName,member.getEnterpriseName());
+			map.put(Constant.webSite,member.getEnterpriseWebSite());
+			map.put(Constant.address,member.getAddress());
+			map.put(Constant.saleProductDesc,member.getSaleProductDesc());
+			map.put(Constant.logo,member.getEnterpriseLogo());
+			map.put(Constant.status,member.getStatus());
+			list.add(map);
+		}
 		result.setCode(200);
 		result.setData(list);
 		return result;
@@ -433,7 +446,7 @@ public class MemberService {
 		map.put(Constant.companyName,member.getEnterpriseName());
 		map.put(Constant.enterpriseTypeName,enterpriseTypeName);
 		map.put(Constant.area,address);
-		map.put(Constant.enterpriseCreaterTime,member.getEnterpriseCreaterTime());
+		map.put(Constant.enterpriseCreaterTime,member.getEnterpriseCreaterTime().substring(0,10));
 		map.put(Constant.registerCapital,member.getRegisterCapital());
 		map.put(Constant.employeeNumber,employeeSizeName);
 		map.put(Constant.identifyName,identifyName);

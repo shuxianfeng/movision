@@ -48,5 +48,5 @@ public interface MemberMapper {
     //代理商邮件注册
     int agentRegister(Member member);
 
-    List<Member> findNewEngineerOrSupplier(String type);
+    List<Member> findNewEngineerOrSupplier(@Param("type") String type);
 }
