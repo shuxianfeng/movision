@@ -14,8 +14,11 @@ public class ApiConstants {
     @Value("${uploadDoc}")
     private String uploadDoc;
 
-    @Value("${uploadMaxPostSize}")
-    private int uploadMaxPostSize;
+    @Value("${uploadPicMaxPostSize}")
+    private int uploadPicMaxPostSize;
+
+    @Value("${uploadDocMaxPostSize}")
+    private int uploadDocMaxPostSize;
 
     public String getUploadDir() {
         return uploadDir;
@@ -25,19 +28,27 @@ public class ApiConstants {
         this.uploadDir = uploadDir;
     }
 
-    public int getUploadMaxPostSize() {
-        return uploadMaxPostSize;
-    }
-
-    public void setUploadMaxPostSize(int uploadMaxPostSize) {
-        this.uploadMaxPostSize = uploadMaxPostSize;
-    }
-
     public String getUploadDoc() {
         return uploadDoc;
     }
 
     public void setUploadDoc(String uploadDoc) {
         this.uploadDoc = uploadDoc;
+    }
+
+    public int getUploadPicMaxPostSize() {
+        return uploadPicMaxPostSize;
+    }
+
+    public void setUploadPicMaxPostSize(int uploadPicMaxPostSize) {
+        this.uploadPicMaxPostSize = uploadPicMaxPostSize;
+    }
+
+    public int getUploadDocMaxPostSize() {
+        return uploadDocMaxPostSize;
+    }
+
+    public void setUploadDocMaxPostSize(int uploadDocMaxPostSize) {
+        this.uploadDocMaxPostSize = uploadDocMaxPostSize;
     }
 }
