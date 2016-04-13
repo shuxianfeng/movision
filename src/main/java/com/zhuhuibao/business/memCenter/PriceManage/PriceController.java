@@ -2,11 +2,13 @@ package com.zhuhuibao.business.memCenter.PriceManage;
 
 import com.zhuhuibao.common.AskPriceResultBean;
 import com.zhuhuibao.common.AskPriceSearchBean;
+import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.service.PriceService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.Config;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -25,7 +27,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 询价报价管理
@@ -87,7 +91,9 @@ public class PriceController {
         Session session = currentUser.getSession(false);
         if(null != session){
             String url = uploadService.upload(req,"doc");
-            result.setData(url);
+            Map map = new HashMap();
+            map.put(Constant.name,url);
+            result.setData(map);
             result.setCode(200);
         }else{
             result.setCode(401);
