@@ -14,6 +14,10 @@
     <result column="provinceCode" property="provinceCode" jdbcType="VARCHAR" />
     <result column="cityCode" property="cityCode" jdbcType="VARCHAR" />
     <result column="areaCode" property="areaCode" jdbcType="VARCHAR" />
+    <result column="fcateid" property="fcateid" jdbcType="VARCHAR" />
+    <result column="brandid" property="brandid" jdbcType="VARCHAR" />
+    <result column="brandName" property="brandName" jdbcType="VARCHAR" />
+    <result column="productid" property="productid" jdbcType="VARCHAR" />
     <result column="productName" property="productName" jdbcType="VARCHAR" />
     <result column="supplierid" property="supplierid" jdbcType="VARCHAR" />
     <result column="isTax" property="isTax" jdbcType="CHAR" />
@@ -50,7 +54,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, createid, title, status, type, content,billurl, publishTime, endTime, provinceCode, cityCode,
-    areaCode, fcateid, productName, supplierid, isTax,
+    areaCode, fcateid,brandid,brandName,productid, productName, supplierid, isTax,
     period, description, isShow, companyName, linkMan, telephone, email
   </sql>
   <select id="find" resultMap="BaseResultMap">
@@ -97,6 +101,15 @@
       </if>
       <if test="fcateid != null" >
         fcateid,
+      </if>
+      <if test="brandid != null" >
+        brandid,
+      </if>
+      <if test="brandName != null" >
+        brandName,
+      </if>
+      <if test="productid != null" >
+        productid,
       </if>
       <if test="productName != null" >
         productName,
@@ -165,7 +178,16 @@
         #{areaCode,jdbcType=VARCHAR},
       </if>
       <if test="fcateid != null" >
-        #{fcateid,jdbcType=INTEGER},
+        #{fcateid,jdbcType=VARCHAR},
+      </if>
+      <if test="brandid != null" >
+        #{brandid,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="productid != null" >
+        #{productid,jdbcType=VARCHAR},
       </if>
       <if test="productName != null" >
         #{productName,jdbcType=VARCHAR},
@@ -199,78 +221,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.AskPrice" >
-    update t_p_ask_price
-    <set >
-      <if test="createid != null" >
-        createid = #{createid,jdbcType=BIGINT},
-      </if>
-      <if test="title != null" >
-        title = #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=TINYINT},
-      </if>
-      <if test="type != null" >
-        type = #{type,jdbcType=TINYINT},
-      </if>
-      <if test="content != null" >
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="billurl != null" >
-        billurl = #{billurl,jdbcType=VARCHAR},
-      </if>
-      <if test="publishTime != null" >
-        publishTime = #{publishTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null" >
-        endTime = #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="provinceCode != null" >
-        provinceCode = #{provinceCode,jdbcType=VARCHAR},
-      </if>
-      <if test="cityCode != null" >
-        cityCode = #{cityCode,jdbcType=VARCHAR},
-      </if>
-      <if test="areaCode != null" >
-        areaCode = #{areaCode,jdbcType=VARCHAR},
-      </if>
-      <if test="fcateid != null" >
-        fcateid = #{fcateid,jdbcType=INTEGER},
-      </if>
-      <if test="productName != null" >
-        productName = #{productName,jdbcType=VARCHAR},
-      </if>
-      <if test="supplierid != null" >
-        supplierid = #{supplierid,jdbcType=VARCHAR},
-      </if>
-      <if test="isTax != null" >
-        isTax = #{isTax,jdbcType=CHAR},
-      </if>
-      <if test="period != null" >
-        period = #{period,jdbcType=INTEGER},
-      </if>
-      <if test="description != null" >
-        description = #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="isShow != null" >
-        isShow = #{isShow,jdbcType=BIT},
-      </if>
-      <if test="companyName != null" >
-        companyName = #{companyName,jdbcType=VARCHAR},
-      </if>
-      <if test="linkMan != null" >
-        linkMan = #{linkMan,jdbcType=VARCHAR},
-      </if>
-      <if test="telephone != null" >
-        telephone = #{telephone,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null" >
-        email = #{email,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+
   <select id="queryAskPriceByID" resultMap="ResultMap">
     SELECT p.title,p.productName,p.content,p.billurl,p.endTime,p.status,p.type,p.isTax,p.isShow,
     p.description,p.companyName,p.linkMan,p.telephone,p.email,c.name as fcateName, pr.name as provinceName,ci.name as cityName,a.name as areaName

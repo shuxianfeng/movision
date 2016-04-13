@@ -2,8 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.MessageMapper" >
   <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Message" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="receiveid" property="receiveid" jdbcType="BIGINT" />
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createid" property="createid" jdbcType="VARCHAR" />
+    <result column="receiveid" property="receiveid" jdbcType="VARCHAR" />
     <result column="receiveName" property="receiveName" jdbcType="VARCHAR" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
@@ -15,12 +16,12 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, receiveid, receiveName, title, content, isShow, companyName, linkman, telephone, 
-    mobile
+    mobile,createid
   </sql>
   <insert id="saveMessage" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Message" >
-    insert into t_sys_message (id, receiveid, receiveName, title, content, isShow,
+    insert into t_sys_message (id, receiveid,createid, receiveName, title, content, isShow,
       companyName, linkman, telephone, mobile)
-    values (#{id}, #{receiveid}, #{receiveName}, #{title}, #{content}, #{isShow},
+    values (#{id}, #{receiveid},#{createid} ,#{receiveName}, #{title}, #{content}, #{isShow},
       #{companyName}, #{linkman}, #{telephone}, #{mobile})
   </insert>
 </mapper>
