@@ -117,7 +117,7 @@ public class MemberRegService {
     
     /**
      * 根据邮箱查询会员信息
-     * @param memberId 会员id
+     * @param email 邮箱地址
      * @return
      */
     public List<Member> findMemberByMail(String email)
@@ -137,7 +137,7 @@ public class MemberRegService {
     
     /**
      * 找回密码是否验证通过
-     * @param memberId 会员id
+     * @param id 会员id
      * @return
      */
     public int isValidatePass(int id)
@@ -163,7 +163,7 @@ public class MemberRegService {
     
     /**
      * 注册的账户名是否存在 
-     * @param memberId 会员id
+     * @param member 会员信息
      * @return result 0:不存在，1:存在
      */
     public int isExistAccount(Member member)
@@ -564,7 +564,7 @@ public class MemberRegService {
 	 * @param id
 	 * @return
 	 */
-	public JsonResult findMemberInfoById(Integer id)
+	public JsonResult findMemberInfoById(Long id)
 	{
 		JsonResult jsonResult = new JsonResult();
 		try

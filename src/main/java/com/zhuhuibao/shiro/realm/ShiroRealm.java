@@ -75,11 +75,11 @@ public class ShiroRealm extends AuthorizingRealm {
      */
     public static class ShiroUser implements Serializable {
         private static final long serialVersionUID = -1373760761780840081L;
-        private Integer id;
+        private Long id;
         private String account;
         private int status;
 
-        public ShiroUser(Integer id, String account, int status) {
+        public ShiroUser(Long id, String account, int status) {
             this.id = id;
             this.account = account;
             this.status = status;
@@ -101,11 +101,11 @@ public class ShiroRealm extends AuthorizingRealm {
             this.account = account;
         }
 
-		public Integer getId() {
+		public Long getId() {
             return id;
         }
 
-        public void setId(Integer id) {
+        public void setId(Long id) {
             this.id = id;
         }
 

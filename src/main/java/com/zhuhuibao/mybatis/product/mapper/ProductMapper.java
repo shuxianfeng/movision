@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.product.mapper;
 
 import java.util.*;
 
+import com.zhuhuibao.mybatis.product.entity.ProductWithMember;
 import org.apache.ibatis.session.RowBounds;
 
 import com.zhuhuibao.common.ResultBean;
@@ -19,7 +20,9 @@ public interface ProductMapper {
     int insertSelective(ProductWithBLOBs record);
 
     ProductWithBLOBs selectByPrimaryKey(Long id);
-    
+
+    ProductWithMember selectProductMemberByid(Long id);
+
     int updateByPrimaryKeySelective(ProductWithBLOBs record);
     
     int updateProductStatus(ProductWithBLOBs record);

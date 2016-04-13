@@ -29,6 +29,6 @@ public interface MemberRegMapper {
 	//更新找回密码邮箱验证是否通过
 	int updateMemberValidatePass(Member member);
 	
-	Member findMemberInfoById(Integer id);
+	Member findMemberInfoById(Long id);
 	
 }
