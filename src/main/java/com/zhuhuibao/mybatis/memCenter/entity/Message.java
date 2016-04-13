@@ -1,9 +1,11 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
 public class Message {
-    private Long id;
+    private String id;
 
-    private Long receiveid;
+    private String createid;
+
+    private String receiveid;
 
     private String receiveName;
 
@@ -21,19 +23,19 @@ public class Message {
 
     private String mobile;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Long getReceiveid() {
+    public String getReceiveid() {
         return receiveid;
     }
 
-    public void setReceiveid(Long receiveid) {
+    public void setReceiveid(String receiveid) {
         this.receiveid = receiveid;
     }
 
@@ -99,5 +101,13 @@ public class Message {
 
     public void setMobile(String mobile) {
         this.mobile = mobile == null ? null : mobile.trim();
+    }
+
+    public String getCreateid() {
+        return createid;
+    }
+
+    public void setCreateid(String createid) {
+        this.createid = createid;
     }
 }

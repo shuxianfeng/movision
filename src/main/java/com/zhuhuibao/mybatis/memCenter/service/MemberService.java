@@ -458,7 +458,7 @@ public class MemberService {
 		map.put(Constant.address,member.getAddress());
 		map.put(Constant.webSite,member.getEnterpriseWebSite());
 		map.put(Constant.telephone,member.getEnterpriseTelephone());
-		map.put(Constant.fox,member.getEnterpriseFox());
+		map.put(Constant.fax,member.getEnterpriseFox());
 		map.put(Constant.certificateRecord,certificateRecordList);
 		result.setCode(200);
 		result.setData(map);

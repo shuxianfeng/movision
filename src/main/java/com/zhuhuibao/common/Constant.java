@@ -257,7 +257,7 @@ public interface Constant {
 	/**
 	 * 传真
 	 */
-	String fox = "fox";
+	String fax = "fax";
 	/**
 	 * 企业资质
 	 */
