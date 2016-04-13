@@ -55,6 +55,9 @@ public class MemberService {
 
 	@Autowired
 	private EmployeeSizeMapper employeeSizeMapper;
+
+	@Autowired
+	private MessageMapper messageMapper;
 	/**
 	 * 会员信息保存
 	 */
@@ -164,10 +167,10 @@ public class MemberService {
 	/**
 	 * 根据会员账号查询会员
 	 */
-	public Member findMem(Member member)
+	public Member findMember(Member member)
 	{
 		log.debug("根据会员账号查询会员");
-		Member mem = memberMapper.findMem(member);
+		Member mem = memberMapper.findMember(member);
 		return mem;
 	}
 
@@ -177,7 +180,7 @@ public class MemberService {
 	public Member findMemer(Member member)
 	{
 		log.debug("根据会员账号查询会员");
-		Member mem = memberMapper.findMemer(member);
+		Member mem = memberMapper.findMember(member);
 		return mem;
 	}
 
@@ -455,10 +458,33 @@ public class MemberService {
 		map.put(Constant.address,member.getAddress());
 		map.put(Constant.webSite,member.getEnterpriseWebSite());
 		map.put(Constant.telephone,member.getEnterpriseTelephone());
-		map.put(Constant.fox,member.getEnterpriseFox());
+		map.put(Constant.fax,member.getEnterpriseFox());
 		map.put(Constant.certificateRecord,certificateRecordList);
 		result.setCode(200);
 		result.setData(map);
+		return result;
+	}
+
+	/**
+	 *名企展示
+	 * @return
+	 */
+	public JsonResult greatCompany(){
+		JsonResult result = new JsonResult();
+		List<ResultBean> greatCompanyList = memberMapper.findGreatCompany();
+		result.setCode(200);
+		result.setData(greatCompanyList);
+		return result;
+	}
+
+	/**
+	 *留言
+	 * @return
+	 */
+	public JsonResult saveMessage(Message message){
+		JsonResult result = new JsonResult();
+		messageMapper.saveMessage(message);
+		result.setCode(200);
 		return result;
 	}
 }

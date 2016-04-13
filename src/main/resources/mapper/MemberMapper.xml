@@ -40,11 +40,17 @@
     <result column="personIdentifyCard" property="personIdentifyCard" jdbcType="VARCHAR" />
     <result column="personIDFrontImgUrl" property="personIDFrontImgUrl" jdbcType="VARCHAR" />
     <result column="personIDBackImgUrl" property="personIDBackImgUrl" jdbcType="VARCHAR" />
+    <result column="isrecommend" property="isrecommend" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMap" type="com.zhuhuibao.common.AccountBean" >
     <result column="id" property="id" jdbcType="VARCHAR" />
     <result column="account" property="account" jdbcType="VARCHAR" />
     <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMap1" type="com.zhuhuibao.common.ResultBean" >
+    <result column="id" property="code" jdbcType="VARCHAR" />
+    <result column="enterpriseName" property="name" jdbcType="VARCHAR" />
+    <result column="enterpriseLogo" property="smallIcon" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, mobile, email, emailCheckCode, password, registerTime, status, identify,
@@ -53,7 +59,7 @@
     enterpriseCreaterTime, registerCapital, employeeNumber, companyBusinessLicenseImg,
     enterpriseTelephone, enterpriseFox, enterpriseWebSite, enterpriseLinkman, enterpriseLMDep,
     fixedTelephone, fixedMobile, QQ, personRealName, sex, personCompanyType,
-    personIdentifyCard, personIDFrontImgUrl, personIDBackImgUrl
+    personIdentifyCard, personIDFrontImgUrl, personIDBackImgUrl,isrecommend
   </sql>
   <select id="findMemById" resultType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     select
@@ -175,6 +181,9 @@
       <if test="personIDBackImgUrl != null" >
         personIDBackImgUrl = #{personIDBackImgUrl},
       </if>
+      <if test="isrecommend != null" >
+        isrecommend = #{isrecommend},
+      </if>
     </set>
     where id = #{id}
   </update>
@@ -242,19 +251,7 @@
       and (email like CONCAT('%',#{account},'%') or mobile like CONCAT('%',#{account},'%'))
     </if>
   </select>
-  <select id="findMem" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" resultMap="BaseResultMap">
-  select
-  <include refid="Base_Column_List" />
-  from t_m_member
-  where status != 2
-  <if test="mobile != null and mobile != '' ">
-    and mobile = #{mobile}
-  </if>
-  <if test="email != null">
-    and email = #{email}
-  </if>
-</select>
-  <select id="findMemer" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" resultMap="BaseResultMap">
+  <select id="findMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from t_m_member
@@ -310,6 +307,7 @@
   </insert>
   <select id="findNewEngineerOrSupplier" resultMap="BaseResultMap">
     select * FROM t_m_member WHERE
+    status in(1,3,4,5) and
     <if test="type==1">
       identify like '%3%'
     </if>
@@ -323,5 +321,9 @@
       identify like '%6%'
     </if>
     order by registerTime desc
+  </select>
+  <select id="findGreatCompany" resultMap="ResultMap1">
+    SELECT id,enterpriseName,enterpriseLogo FROM t_m_member
+    where isrecommend = 1 and status in(1,3,4,5)
   </select>
 </mapper>

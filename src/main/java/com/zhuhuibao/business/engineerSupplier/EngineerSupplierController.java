@@ -1,8 +1,13 @@
 package com.zhuhuibao.business.engineerSupplier;
 
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.JsonUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +94,48 @@ public class EngineerSupplierController {
     @RequestMapping(value = "/rest/engineerSupplier/introduce", method = RequestMethod.GET)
     public void introduce(HttpServletRequest req, HttpServletResponse response,String id,String type) throws IOException {
         JsonResult jsonResult = memberService.introduce(id,type);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+
+    /**
+     *名企展示
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/engineerSupplier/greatCompany", method = RequestMethod.GET)
+    public void greatCompany(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult jsonResult = memberService.greatCompany();
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+
+    /**
+     *留言
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/engineerSupplier/message", method = RequestMethod.POST)
+    public void message(HttpServletRequest req, HttpServletResponse response, Message message) throws IOException {
+/*        String title = new String(message.getTitle().getBytes("8859_1"), "utf8" );
+        String receiveName = new String(message.getReceiveName().getBytes("8859_1"), "utf8" );
+        String content = new String(message.getContent().getBytes("8859_1"), "utf8" );*/
+        JsonResult jsonResult = new JsonResult();
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if(null != session)
+        {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
+            if(null != principal){
+                message.setCreateid(principal.getId().toString());
+                jsonResult = memberService.saveMessage(message);
+            }
+        }else{
+            jsonResult.setCode(401);
+            jsonResult.setMessage("请先登录");
+        }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }

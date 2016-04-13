@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.common.AccountBean;
+import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
@@ -32,9 +33,7 @@ public interface MemberMapper {
     List<Member> findStaffByParentId(Member member);
 
     //根据会员账号查询会员
-    Member findMem(Member member);
-
-    Member findMemer(Member member);
+    Member findMember(Member member);
 
     //重置密码
     int resetPwd(Member member);
@@ -49,4 +48,6 @@ public interface MemberMapper {
     int agentRegister(Member member);
 
     List<Member> findNewEngineerOrSupplier(@Param("type") String type);
+
+    List<ResultBean> findGreatCompany();
 }
