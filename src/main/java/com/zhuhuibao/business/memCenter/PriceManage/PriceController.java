@@ -151,6 +151,11 @@ public class PriceController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
+        if(askPriceSearch.getTitle()!=null){
+            if(askPriceSearch.getTitle().contains("_")){
+                askPriceSearch.setTitle(askPriceSearch.getTitle().replace("_","\\_"));
+            }
+        }
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session)
