@@ -64,6 +64,21 @@ public class SystemController {
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
 
+
+    /**
+     * 查询大系统，子系统
+     * @param req
+     * @return
+     * @throws IOException
+     */
+
+    @RequestMapping(value = "/rest/system/findSystem", method = RequestMethod.GET)
+    public void findSystem(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult jsonResult = categoryService.findAllSystem();
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+
     /**
      * 添加类目
      * @param req
@@ -71,7 +86,7 @@ public class SystemController {
      * @throws IOException
      */
 
-    @RequestMapping(value = "/rest/addSystem", method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/system/addSystem", method = RequestMethod.POST)
     public void addSystem(HttpServletRequest req, HttpServletResponse response,Category category) throws IOException {
         JsonResult result = new JsonResult();
         int isAdd = categoryService.addSystem(category);
@@ -92,7 +107,7 @@ public class SystemController {
      * @throws IOException
      */
 
-    @RequestMapping(value = "/rest/updateSystem", method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/system/updateSystem", method = RequestMethod.POST)
     public void updateSystem(HttpServletRequest req, HttpServletResponse response,Category category) throws IOException {
         JsonResult result = new JsonResult();
         int isUpdate = categoryService.updateSystem(category);
@@ -113,7 +128,7 @@ public class SystemController {
      * @throws IOException
      */
 
-    @RequestMapping(value = "/rest/deleteSystem", method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/system/deleteSystem", method = RequestMethod.POST)
     public void deleteSystem(HttpServletRequest req, HttpServletResponse response,Category category) throws IOException {
         JsonResult result = new JsonResult();
         int isDelete = categoryService.deleteSystem(category);
@@ -126,4 +141,5 @@ public class SystemController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
+
 }

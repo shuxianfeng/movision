@@ -270,4 +270,8 @@ public interface Constant {
 	 * 状态
 	 */
 	String status = "status";
+	/**
+	 * 排序
+	 */
+	String sort = "sort";
 }

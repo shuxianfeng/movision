@@ -12,6 +12,7 @@
     <result column="id" property="code" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="smallIcon" property="smallIcon" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMap2" type="com.zhuhuibao.common.ResultBean" >
     <result column="id" property="code" jdbcType="VARCHAR" />
@@ -23,15 +24,16 @@
     <result column="systemName" property="systemName" jdbcType="VARCHAR" />
     <result column="subSystemName" property="subSystemName" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, name, parentId, sort,smallIcon,bigIcon
   </sql>
   <select id="findSystemList" resultMap="ResultMap">
     select
-    id,name,smallIcon
+    id,name,smallIcon,sort
     from t_p_category
-    where parentId = 0
+    where parentId = 0 ORDER  by sort
   </select>
   <select id="findSubSystemList" resultMap="ResultMap">
     select
@@ -83,9 +85,9 @@
     where id = #{parentId}
   </select>
   <select id="searchAll" resultMap="ResultMap1">
-    SELECT t.id as id,t.name as systemName,p.id as code,p.name as subSystemName
+    SELECT t.id as id,t.name as systemName,p.id as code,p.name as subSystemName,p.sort
     FROM t_p_category t
-    inner join t_p_category p on t.id = p.parentId
+    inner join t_p_category p on t.id = p.parentId ORDER by p.sort
   </select>
   <select id="getFcateByScate" resultMap="ResultMap">
     select b.id,b.name,b.smallIcon
@@ -123,4 +125,5 @@
     left JOIN t_p_category ca on c.parentId = ca.id
     WHERE c.id = #{id}
   </select>
+
 </mapper>
