@@ -321,6 +321,35 @@
       identify like '%6%'
     </if>
     order by registerTime desc
+    <if test="type==1">
+      limit 0,4
+    </if>
+    <if test="type == 2">
+      limit 0,2
+    </if>
+    <if test="type == 3">
+      limit 0,2
+    </if>
+    <if test="type == 4">
+      limit 0,2
+    </if>
+  </select>
+  <select id="findnewIdentifyEngineer" resultMap="BaseResultMap">
+    select * FROM t_m_member WHERE
+    status = 5 and
+    <if test="type==1">
+      identify like '%3%'
+    </if>
+    <if test="type == 2">
+      identify like '%4%'
+    </if>
+    <if test="type == 3">
+      identify like '%5%'
+    </if>
+    <if test="type == 4">
+      identify like '%6%'
+    </if>
+    order by registerTime desc limit 0,6
   </select>
   <select id="findGreatCompany" resultMap="ResultMap1">
     SELECT id,enterpriseName,enterpriseLogo FROM t_m_member
@@ -337,5 +366,6 @@
     <if test="type == 4">
       identify like '%6%'
     </if>
+    limit 0,12
   </select>
 </mapper>

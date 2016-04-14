@@ -374,7 +374,7 @@ public class MemberService {
 	}
 
 	/**
-	 *查询最新认证的供应商 工程商
+	 *查询最新供应商 工程商
 	 * @return
      */
 	public JsonResult findNewEngineerOrSupplier(String type){
@@ -398,6 +398,27 @@ public class MemberService {
 		return result;
 	}
 
+
+	/**
+	 *查询最新认证供应商 工程商
+	 * @return
+	 */
+	public JsonResult findnewIdentifyEngineer(String type){
+		JsonResult result = new JsonResult();
+		List<Member> memberList = memberMapper.findnewIdentifyEngineer(type);
+		List list = new ArrayList();
+		for(int i=0;i<memberList.size();i++){
+			Member member = memberList.get(i);
+			Map map = new HashMap();
+			map.put(Constant.id,member.getId());
+			map.put(Constant.companyName,member.getEnterpriseName());
+			map.put(Constant.logo,member.getEnterpriseLogo());
+			list.add(map);
+		}
+		result.setCode(200);
+		result.setData(list);
+		return result;
+	}
 	/**
 	 *供应商 工程商简版介绍
 	 * @return
@@ -475,21 +496,34 @@ public class MemberService {
 	 */
 	public JsonResult greatCompany(String type){
 		JsonResult result = new JsonResult();
+		List list = new ArrayList();
 		if("2".equals(type)){
-			List<ResultBean> list = memberMapper.findGreatCompany("4");
-			result.setCode(200);
-			result.setData(list);
+			List<ResultBean> list1 = memberMapper.findGreatCompany("4");
+			for(int i=0;i<list1.size();i++){
+				ResultBean resultBean = list1.get(i);
+				Map map = new HashMap();
+				map.put(Constant.id,resultBean.getCode());
+				map.put(Constant.companyName,resultBean.getName());
+				list.add(map);
+			}
 		}else{
-			List<ResultBean> list1 = memberMapper.findGreatCompany("2");
-			List<ResultBean> list2 = memberMapper.findGreatCompany("1");
-			List<ResultBean> list3 = memberMapper.findGreatCompany("3");
-			list1.removeAll(list2);
-			list1.addAll(list2);
-			list1.removeAll(list3);
-			list1.addAll(list3);
-			result.setCode(200);
-			result.setData(list1);
+			List<ResultBean> list2 = memberMapper.findGreatCompany("2");
+			List<ResultBean> list3 = memberMapper.findGreatCompany("1");
+			List<ResultBean> list4 = memberMapper.findGreatCompany("3");
+			list2.removeAll(list3);
+			list2.addAll(list3);
+			list2.removeAll(list4);
+			list2.addAll(list4);
+			for(int a=0;a<list2.size();a++){
+				ResultBean resultBean = list2.get(a);
+				Map map1 = new HashMap();
+				map1.put(Constant.id,resultBean.getCode());
+				map1.put(Constant.companyName,resultBean.getName());
+				list.add(map1);
+			}
 		}
+		result.setCode(200);
+		result.setData(list);
 		return result;
 	}
 

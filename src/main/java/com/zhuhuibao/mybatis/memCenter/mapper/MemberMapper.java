@@ -50,4 +50,6 @@ public interface MemberMapper {
     List<Member> findNewEngineerOrSupplier(@Param("type") String type);
 
     List<ResultBean> findGreatCompany(@Param("type") String type);
+
+    List<Member> findnewIdentifyEngineer(@Param("type") String type);
 }
