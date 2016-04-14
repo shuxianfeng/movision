@@ -5,6 +5,7 @@ import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.oms.entity.Category;
 import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
 import com.zhuhuibao.mybatis.oms.service.CategoryService;
+import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

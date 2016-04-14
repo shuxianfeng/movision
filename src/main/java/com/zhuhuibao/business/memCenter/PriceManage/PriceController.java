@@ -151,6 +151,15 @@ public class PriceController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if(null != session)
+        {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
+            if(null != principal){
+                askPriceSearch.setCreateid(principal.getId().toString());
+            }
+        }
         Paging<AskPriceResultBean> pager = new Paging<AskPriceResultBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
         List<AskPriceResultBean> askPriceList = priceService.findAllByPager(pager,askPriceSearch);
         pager.result(askPriceList);

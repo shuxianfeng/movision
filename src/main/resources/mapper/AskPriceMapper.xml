@@ -242,7 +242,7 @@
     left join t_dictionary_province pr on pr.code = p.provinceCode
     left join t_dictionary_city ci on ci.code = p.cityCode
     left join t_dictionary_area a on a.code = p.areaCode
-    where 1=1
+    where createid = #{createid}
     <if test="title != null" >
       and p.title like CONCAT('%',#{title},'%')
     </if>

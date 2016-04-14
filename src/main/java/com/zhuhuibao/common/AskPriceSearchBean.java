@@ -4,6 +4,7 @@ package com.zhuhuibao.common;
  * Created by cxx on 2016/3/31 0031.
  */
 public class AskPriceSearchBean {
+    private String createid;
 
     private String title;
 
@@ -53,5 +54,13 @@ public class AskPriceSearchBean {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getCreateid() {
+        return createid;
+    }
+
+    public void setCreateid(String createid) {
+        this.createid = createid;
     }
 }

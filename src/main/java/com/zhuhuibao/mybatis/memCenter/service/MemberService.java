@@ -446,10 +446,14 @@ public class MemberService {
 		certificateRecord.setType(type);
 		List<CertificateRecord> certificateRecordList = certificateRecordMapper.certificateSearch(certificateRecord);
 		Map map = new HashMap();
+		String createTime = "";
+		if(member.getEnterpriseCreaterTime()!=null){
+			createTime = member.getEnterpriseCreaterTime().substring(0,10);
+		}
 		map.put(Constant.companyName,member.getEnterpriseName());
 		map.put(Constant.enterpriseTypeName,enterpriseTypeName);
 		map.put(Constant.area,address);
-		map.put(Constant.enterpriseCreaterTime,member.getEnterpriseCreaterTime().substring(0,10));
+		map.put(Constant.enterpriseCreaterTime,createTime);
 		map.put(Constant.registerCapital,member.getRegisterCapital());
 		map.put(Constant.employeeNumber,employeeSizeName);
 		map.put(Constant.identifyName,identifyName);
