@@ -49,5 +49,5 @@ public interface MemberMapper {
 
     List<Member> findNewEngineerOrSupplier(@Param("type") String type);
 
-    List<ResultBean> findGreatCompany();
+    List<ResultBean> findGreatCompany(@Param("type") String type);
 }
