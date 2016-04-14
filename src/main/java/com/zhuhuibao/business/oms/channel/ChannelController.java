@@ -88,6 +88,14 @@ public class ChannelController {
         {
             map.put("count", 5);
         }
+        else if (channelNews.getSort() == 2)
+        {
+            map.put("count",2);
+        }
+        else if (channelNews.getSort() == 3)
+        {
+            map.put("count",3);
+        }
         jsonResult = newsService.queryNewsByChannelInfo(map);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
