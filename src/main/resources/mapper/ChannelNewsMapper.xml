@@ -138,7 +138,11 @@
   </update>
 
   <select id="queryNewsByChannelInfo" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
-    select id,title,imgurl,description,sort,content,date_format(createTime,'%Y-%m-%d %H-%i-%s') createTime from t_oms_channel_news
+    select
+      <include refid="Base_Column_List" />
+      ,
+      <include refid="Blob_Column_List" />
+    from t_oms_channel_news
     <where>
       <if test="channelid != null">
         and channelid = #{channelid}
