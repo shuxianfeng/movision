@@ -105,8 +105,8 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/engineerSupplier/greatCompany", method = RequestMethod.GET)
-    public void greatCompany(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        JsonResult jsonResult = memberService.greatCompany();
+    public void greatCompany(HttpServletRequest req, HttpServletResponse response,String type) throws IOException {
+        JsonResult jsonResult = memberService.greatCompany(type);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }

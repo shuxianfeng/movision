@@ -469,11 +469,23 @@ public class MemberService {
 	 *名企展示
 	 * @return
 	 */
-	public JsonResult greatCompany(){
+	public JsonResult greatCompany(String type){
 		JsonResult result = new JsonResult();
-		List<ResultBean> greatCompanyList = memberMapper.findGreatCompany();
-		result.setCode(200);
-		result.setData(greatCompanyList);
+		if("2".equals(type)){
+			List<ResultBean> list = memberMapper.findGreatCompany("4");
+			result.setCode(200);
+			result.setData(list);
+		}else{
+			List<ResultBean> list1 = memberMapper.findGreatCompany("2");
+			List<ResultBean> list2 = memberMapper.findGreatCompany("1");
+			List<ResultBean> list3 = memberMapper.findGreatCompany("3");
+			list1.removeAll(list2);
+			list1.addAll(list2);
+			list1.removeAll(list3);
+			list1.addAll(list3);
+			result.setCode(200);
+			result.setData(list1);
+		}
 		return result;
 	}
 
