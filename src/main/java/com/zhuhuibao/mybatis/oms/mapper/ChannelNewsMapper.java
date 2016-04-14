@@ -17,8 +17,6 @@ public interface ChannelNewsMapper {
 
     List<ChannelNews> findAllNewsList(RowBounds rowBounds, Map<String,Object> channelMap);
 
-    List<ChannelNews> queryPersonByChannelInfo(Map<String,Object> channelMap);
-
     int updateViews(Long id);
 
     List<ChannelNews> queryViewsByChannel(Map<String,Object> channelMap);

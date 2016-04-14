@@ -177,26 +177,4 @@ public class ChannelNewsService {
         return newsList;
     }
 
-    /**
-     * 查询资讯信息根据频道ID
-     * @param channelMap  频道资讯页条件
-     * @return
-     */
-    public JsonResult queryPersonByChannelInfo(Map<String,Object> channelMap )
-    {
-        JsonResult jsonResult = new JsonResult();
-        try
-        {
-            List<ChannelNews> newsList =  channel.queryPersonByChannelInfo(channelMap);
-            jsonResult.setData(newsList);
-        }
-        catch(Exception e)
-        {
-            log.error("select by primary key error!",e);
-            jsonResult.setCode(MsgCodeConstant.response_status_400);
-            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-        }
-        return jsonResult;
-    }
 }

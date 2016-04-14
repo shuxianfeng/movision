@@ -101,21 +101,6 @@ public class ChannelController {
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
 
-    @RequestMapping(value="/rest/oms/queryPersonByChannelInfo", method = RequestMethod.GET)
-    public void queryPersonByChannelInfo(HttpServletRequest req, HttpServletResponse response, ChannelNews channelNews) throws JsonGenerationException, JsonMappingException, IOException {
-        JsonResult jsonResult = new JsonResult();
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("channelid", channelNews.getChannelid());
-        map.put("sortA",2);
-        map.put("sortB",3);
-        map.put("status",1);
-        map.put("countA",2);
-        map.put("countB",3);
-        jsonResult = newsService.queryPersonByChannelInfo(map);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
-    }
-
     /**
      * 查询所有的人物专访
      * @param req

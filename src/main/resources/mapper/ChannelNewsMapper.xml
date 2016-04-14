@@ -138,7 +138,7 @@
   </update>
 
   <select id="queryNewsByChannelInfo" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
-    select id,title,imgurl,sort from t_oms_channel_news
+    select id,title,imgurl,description,sort,content,date_format(createTime,'%Y-%m-%d %H-%i-%s') createTime from t_oms_channel_news
     <where>
       <if test="channelid != null">
         and channelid = #{channelid}
@@ -193,44 +193,6 @@
     </where>
     order by views desc
     limit #{count}
-  </select>
-
-  <select id="queryPersonByChannelInfo" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
-    (select t.id,t.title,t.imgurl,t.sort,date_format(t.createTime,'%Y-%m-%d %H-%i-%s') createTime from t_oms_channel_news t
-    <where>
-      <if test="channelid != null">
-        and channelid = #{channelid}
-      </if>
-      <if test="status != null">
-        and status = #{status}
-      </if>
-      <if test="sortA != null">
-        and sort = #{sortA}
-      </if>
-      <if test="createid != null">
-        and createid = #{createid}
-      </if>
-    </where>
-    order by createTime desc
-    limit #{countA})
-    union ALL
-    (select t.id,t.title,t.imgurl,t.sort,date_format(t.createTime,'%Y-%m-%d %H-%i-%s') createTime from t_oms_channel_news t
-    <where>
-      <if test="channelid != null">
-        and channelid = #{channelid}
-      </if>
-      <if test="status != null">
-        and status = #{status}
-      </if>
-      <if test="sortB != null">
-        and sort = #{sortB}
-      </if>
-      <if test="createid != null">
-        and createid = #{createid}
-      </if>
-    </where>
-    order by createTime desc
-    limit #{countB})
   </select>
 
 </mapper>
