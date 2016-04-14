@@ -139,8 +139,14 @@
 		and t.type = #{type} 
 	</if>
 	<if test="createid != null and createid != ''">
-		and find_in_set(#{createid},t.supplierid) 
-	</if>
+        and case when t.supplierid is NULL then '1=1' when t.supplierid = '' then '1=1' else find_in_set(#{createid},t.supplierid) end
+    </if>
+    <if test="createid != null and createid != ''">
+      and t.id not in (select askid from t_p_offer_price t where createid = #{createid})
+    </if>
+    <if test="createid != null and createid != ''">
+      and t.createid != #{createid}
+    </if>
     order by dateTime desc
   </select>
   <select id="findAllOfferedPriceInfo" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean">
