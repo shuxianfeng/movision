@@ -405,15 +405,34 @@ public class MemberService {
 	 */
 	public JsonResult findnewIdentifyEngineer(String type){
 		JsonResult result = new JsonResult();
-		List<Member> memberList = memberMapper.findnewIdentifyEngineer(type);
 		List list = new ArrayList();
-		for(int i=0;i<memberList.size();i++){
-			Member member = memberList.get(i);
-			Map map = new HashMap();
-			map.put(Constant.id,member.getId());
-			map.put(Constant.companyName,member.getEnterpriseName());
-			map.put(Constant.logo,member.getEnterpriseLogo());
-			list.add(map);
+		if("2".equals(type)){
+			List<Member> list1 = memberMapper.findnewIdentifyEngineer("4");
+			for(int i=0;i<list1.size();i++){
+				Member member = list1.get(i);
+				Map map = new HashMap();
+				map.put(Constant.id,member.getId());
+				map.put(Constant.companyName,member.getEnterpriseName());
+				list.add(map);
+			}
+		}else{
+			List<Member> list2 = memberMapper.findnewIdentifyEngineer("2");
+			List<Member> list3 = memberMapper.findnewIdentifyEngineer("1");
+			List<Member> list4 = memberMapper.findnewIdentifyEngineer("3");
+			list2.removeAll(list3);
+			list2.addAll(list3);
+			list2.removeAll(list4);
+			list2.addAll(list4);
+			for(int a=0;a<list2.size();a++){
+				Member member = list2.get(a);
+				Map map1 = new HashMap();
+				map1.put(Constant.id,member.getId());
+				map1.put(Constant.companyName,member.getEnterpriseName());
+				list.add(map1);
+			}
+		}
+		if(list.size()>=6){
+			list = list.subList(0,6);
 		}
 		result.setCode(200);
 		result.setData(list);
@@ -521,6 +540,9 @@ public class MemberService {
 				map1.put(Constant.companyName,resultBean.getName());
 				list.add(map1);
 			}
+		}
+		if(list.size()>=12){
+			list = list.subList(0,12);
 		}
 		result.setCode(200);
 		result.setData(list);

@@ -322,7 +322,7 @@
     </if>
     order by registerTime desc
     <if test="type==1">
-      limit 0,4
+      limit 0,2
     </if>
     <if test="type == 2">
       limit 0,2
@@ -331,7 +331,7 @@
       limit 0,2
     </if>
     <if test="type == 4">
-      limit 0,2
+      limit 0,4
     </if>
   </select>
   <select id="findnewIdentifyEngineer" resultMap="BaseResultMap">
@@ -349,7 +349,7 @@
     <if test="type == 4">
       identify like '%6%'
     </if>
-    order by registerTime desc limit 0,6
+    order by registerTime desc
   </select>
   <select id="findGreatCompany" resultMap="ResultMap1">
     SELECT id,enterpriseName,enterpriseLogo FROM t_m_member
@@ -366,6 +366,5 @@
     <if test="type == 4">
       identify like '%6%'
     </if>
-    limit 0,12
   </select>
 </mapper>

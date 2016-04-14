@@ -43,19 +43,7 @@ public class EngineerSupplierController {
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
 
-    /**
-     *最新认证工程商(个数后台控制)
-     * @param req
-     * @return
-     * @throws IOException
-     */
-    @RequestMapping(value = "/rest/engineerSupplier/newIdentifyEngineer", method = RequestMethod.GET)
-    public void newIdentifyEngineer(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        String type = "4";
-        JsonResult jsonResult = memberService.findnewIdentifyEngineer(type);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
-    }
+
     /**
      *最新厂商(个数后台控制)
      * @param req
@@ -120,6 +108,19 @@ public class EngineerSupplierController {
     @RequestMapping(value = "/rest/engineerSupplier/greatCompany", method = RequestMethod.GET)
     public void greatCompany(HttpServletRequest req, HttpServletResponse response,String type) throws IOException {
         JsonResult jsonResult = memberService.greatCompany(type);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+
+    /**
+     *最新认证工程商,供应商(个数后台控制)
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/engineerSupplier/newIdentifyEngineer", method = RequestMethod.GET)
+    public void newIdentifyEngineer(HttpServletRequest req, HttpServletResponse response,String type) throws IOException {
+        JsonResult jsonResult = memberService.findnewIdentifyEngineer(type);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
