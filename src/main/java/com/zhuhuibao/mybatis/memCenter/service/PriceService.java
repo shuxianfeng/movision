@@ -147,6 +147,7 @@ public class PriceService {
             map.put(Constant.companyName,member.getEnterpriseName());
             map.put(Constant.linkMan,member.getEnterpriseLinkman());
             map.put(Constant.telephone,member.getFixedTelephone());
+            map.put(Constant.mobile,member.getFixedMobile());
         }
         result.setCode(200);
         result.setData(map);

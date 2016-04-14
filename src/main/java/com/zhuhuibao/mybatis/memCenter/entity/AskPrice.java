@@ -29,6 +29,12 @@ public class AskPrice {
 
     private String fcateid;
 
+    private String brandid;
+
+    private String brandName;
+
+    private String productid;
+
     private String productName;
 
     private String supplierid;
@@ -231,5 +237,29 @@ public class AskPrice {
 
     public void setBillurl(String billurl) {
         this.billurl = billurl;
+    }
+
+    public String getBrandid() {
+        return brandid;
+    }
+
+    public void setBrandid(String brandid) {
+        this.brandid = brandid;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public String getProductid() {
+        return productid;
+    }
+
+    public void setProductid(String productid) {
+        this.productid = productid;
     }
 }

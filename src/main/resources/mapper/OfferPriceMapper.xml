@@ -131,7 +131,7 @@
 	date_format(t.endTime,'%Y-%m-%d') dateTime from t_p_ask_price t
 	left join t_dictionary_province p on t.provinceCode = p.code 
 	left join t_dictionary_city c on t.cityCode = c.code
-	where t.status = 1
+	where date_format(now(),'%Y-%m-%d') &lt;= date_format(t.endTime,'%Y-%m-%d')
 	<if test="title != null and title != ''">
 		 and t.title like concat('%',#{title},'%')
 	</if>
@@ -141,6 +141,7 @@
 	<if test="createid != null and createid != ''">
 		and find_in_set(#{createid},t.supplierid) 
 	</if>
+    order by dateTime desc
   </select>
   <select id="findAllOfferedPriceInfo" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean">
   	 select t.id,t.offerTime dateTime,concat(p.name,c.name) deliveryAddress,if(t.type = 1,'公开询价','定向询价') typeName,t.title,t.createid 

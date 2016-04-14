@@ -407,8 +407,6 @@ public class RegisterController {
 	 * 找回密码是否验证通过
 	 * @param req
 	 * @param response
-	 * @param member
-	 * @param model
 	 * @return
 	 * @throws IOException
 	 */

@@ -126,22 +126,11 @@ public class ProductPublishController {
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 	
-	@RequestMapping(value="/rest/previewProduct", method = RequestMethod.GET)
-	@ResponseBody
-	public void previewProduct(HttpServletRequest req,HttpServletResponse response,Long id) throws JsonGenerationException, JsonMappingException, IOException
-	{
-		JsonResult jsonResult = new JsonResult();
-		jsonResult = productService.previewProduct(id);
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
-	}
-	
 	@RequestMapping(value="/rest/productDetail/queryProductInfoById", method = RequestMethod.GET)
 	@ResponseBody
 	public void queryProductInfoById(HttpServletRequest req,HttpServletResponse response,Long id) throws JsonGenerationException, JsonMappingException, IOException
 	{
-		JsonResult jsonResult = new JsonResult();
-		jsonResult = productService.queryProductInfoById(id);
+		JsonResult jsonResult = productService.queryProductInfoById(id);
 		productService.updateHit(id);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
@@ -151,8 +140,7 @@ public class ProductPublishController {
 	@ResponseBody
 	public void queryPrdDescParamService(HttpServletRequest req,HttpServletResponse response,Long id) throws JsonGenerationException, JsonMappingException, IOException
 	{
-		JsonResult jsonResult = new JsonResult();
-		jsonResult = productService.queryPrdDescParamService(id);
+		JsonResult jsonResult = productService.queryPrdDescParamService(id);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}

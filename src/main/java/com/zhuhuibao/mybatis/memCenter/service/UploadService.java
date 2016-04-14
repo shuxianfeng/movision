@@ -43,18 +43,20 @@ public class UploadService {
     {
         //指定所上传的文件，上传成功后，在服务器的保存位置
         String saveDirectory ="";
+        int maxPostSize = 0 ;
         if("img".equals(type)) {
             saveDirectory = ApiConstants.getUploadDir()+"/img";
+            //指定所上传的文件最大上传文件大小
+            maxPostSize = ApiConstants.getUploadPicMaxPostSize();
         }else{
             saveDirectory = ApiConstants.getUploadDoc()+"/price";
+            //指定所上传的文件最大上传文件大小
+            maxPostSize = ApiConstants.getUploadDocMaxPostSize();
         }
 
         //String a = getFileSuffix(req);
 
         String ip_address = ResourcePropertiesUtils.getValue("host.ip");
-
-        //指定所上传的文件最大上传文件大小
-        int maxPostSize = ApiConstants.getUploadMaxPostSize();
 
         //指定所上传的文件命名规则
         RandomFileNamePolicy rfnp = new RandomFileNamePolicy();

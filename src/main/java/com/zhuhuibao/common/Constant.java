@@ -212,9 +212,13 @@ public interface Constant {
 	 */
 	String linkMan = "linkMan";
 	/**
-	 * 公司联系电话
+	 * 公司座机
 	 */
 	String telephone = "telephone";
+	/**
+	 * 公司联系人手机
+	 */
+	String mobile = "mobile";
 	
 	/**
 	 * 上传询，报价单的路径  /doc/price
@@ -257,7 +261,7 @@ public interface Constant {
 	/**
 	 * 传真
 	 */
-	String fox = "fox";
+	String fax = "fax";
 	/**
 	 * 企业资质
 	 */
@@ -266,4 +270,8 @@ public interface Constant {
 	 * 状态
 	 */
 	String status = "status";
+	/**
+	 * 排序
+	 */
+	String sort = "sort";
 }

@@ -12,6 +12,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.zhuhuibao.common.util.ShiroUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -74,41 +75,47 @@ public class OfferPriceController {
 	public void queryAskingPriceInfo(HttpServletRequest req,HttpServletResponse response,AskPrice price,String pageNo,String pageSize) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		JsonResult jsonResult = new JsonResult();
-		if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<AskPriceSimpleBean> pager = new Paging<AskPriceSimpleBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-        List<AskPriceSimpleBean>  priceList = offerService.findAllAskingPriceInfo(pager, price);
-        pager.result(priceList);
-        jsonResult.setData(pager);
+		Long createID= ShiroUtil.getCreateID();
+		if(createID != null) {
+			price.setCreateid(String.valueOf(createID));
+			if (StringUtils.isEmpty(pageNo)) {
+				pageNo = "1";
+			}
+			if (StringUtils.isEmpty(pageSize)) {
+				pageSize = "10";
+			}
+			Paging<AskPriceSimpleBean> pager = new Paging<AskPriceSimpleBean>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+			List<AskPriceSimpleBean> priceList = offerService.findAllAskingPriceInfo(pager, price);
+			pager.result(priceList);
+			jsonResult.setData(pager);
+		}
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 	
 	@RequestMapping(value="/rest/price/queryOfferedPriceInfo")
 	@ResponseBody
-	public void queryOfferedPriceInfo(HttpServletRequest req,HttpServletResponse response,String title,String createid,
-			String startDate,String endDate,String pageNo,String pageSize) throws JsonGenerationException, JsonMappingException, IOException
+	public void queryOfferedPriceInfo(HttpServletRequest req,HttpServletResponse response,String title,String startDate,String endDate,String pageNo,String pageSize) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		JsonResult jsonResult = new JsonResult();
-		if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<AskPriceSimpleBean> pager = new Paging<AskPriceSimpleBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-        Map<String,String> priceMap = new HashMap<String,String>();
-        priceMap.put("title",title);
-        priceMap.put("startDate",startDate);
-        priceMap.put("endDate",endDate);
-        priceMap.put("createid",createid);
-        List<AskPriceSimpleBean>  priceList = offerService.findAllOfferedPriceInfo(pager, priceMap);
-        pager.result(priceList);
-        jsonResult.setData(pager);
+		Long createID= ShiroUtil.getCreateID();
+		if(createID != null ) {
+			if (StringUtils.isEmpty(pageNo)) {
+				pageNo = "1";
+			}
+			if (StringUtils.isEmpty(pageSize)) {
+				pageSize = "10";
+			}
+			Paging<AskPriceSimpleBean> pager = new Paging<AskPriceSimpleBean>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+			Map<String, String> priceMap = new HashMap<String, String>();
+			priceMap.put("title", title);
+			priceMap.put("startDate", startDate);
+			priceMap.put("endDate", endDate);
+			priceMap.put("createid", String.valueOf(createID));
+			List<AskPriceSimpleBean> priceList = offerService.findAllOfferedPriceInfo(pager, priceMap);
+			pager.result(priceList);
+			jsonResult.setData(pager);
+		}
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}

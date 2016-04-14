@@ -8,6 +8,7 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.Map.Entry;
 
+import com.zhuhuibao.mybatis.product.entity.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -35,11 +36,6 @@ import com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper;
 import com.zhuhuibao.mybatis.oms.entity.Category;
 import com.zhuhuibao.mybatis.oms.entity.CategoryAssemble;
 import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
-import com.zhuhuibao.mybatis.product.entity.ParamPrice;
-import com.zhuhuibao.mybatis.product.entity.Product;
-import com.zhuhuibao.mybatis.product.entity.ProductMap;
-import com.zhuhuibao.mybatis.product.entity.ProductParam;
-import com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs;
 import com.zhuhuibao.mybatis.product.mapper.ProductMapper;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -305,13 +301,14 @@ public class ProductService {
     	//保存参数值信息
     	Map<String,Object> paramValuesMap  = new TreeMap<String,Object>();
     	Map<String,Object> productMap = new TreeMap<String,Object>();
-    	ProductWithBLOBs product = null;
+    	ProductWithMember product = null;
     	try
     	{
-    		product = productMapper.selectByPrimaryKey(id);
+    		product = productMapper.selectProductMemberByid(id);
     		//组成参数列表
     		if(product.getParamIDs() != null && product.getParamIDs().length() > 0)
     		{
+				setMemberInfo(productMap,product);
     			setProductParamInfo(paramValuesMap, productMap, product);
     			List<Product> productList = productMapper.queryProductByParamIDs(product.getParamIDs());
     			
@@ -339,137 +336,13 @@ public class ProductService {
     }
     
     /**
-     * 下架产品预览
-     * @param id
-     * @return
-     */
-    public JsonResult previewProduct(Long id)
-    {
-    	JsonResult jsonResult = new JsonResult();
-    	//保存参数值信息
-    	Map<String,Object> productMap = new TreeMap<String,Object>();
-    	ProductWithBLOBs product = null;
-    	try
-    	{
-    		product = productMapper.selectByPrimaryKey(id);
-    		//组成参数列表
-    		if(product.getParamIDs() != null && product.getParamIDs().length() > 0)
-    		{
-
-    			List<ProductParam> params = getParamsInfo(product);
-    			List<Map<String,Object>> paramList = new ArrayList<Map<String,Object>>();
-    			if(!params.isEmpty())
-    			{
-    				for(ProductParam p : params)
-    				{
-    					Map<String,Object> paramMap  = new TreeMap<String,Object>();
-    					paramMap.put(Constant.product_field_key, p.getId());
-    					paramMap.put(Constant.product_field_value,p.getPname());
-    					String pValue = p.getPvalue();
-    					String[] arr_pValue = null;
-    					String[] arr_paramValue = new String[1];
-    					if(pValue.indexOf(",") > 0)
-    					{
-    						//参数值数组
-    						arr_pValue = pValue.split(",");
-    						for(int i = 0;i<arr_pValue.length;i++)
-    						{
-    							if(product.getParamValues().indexOf(arr_pValue[i]) > -1)
-    							{
-    								arr_paramValue[0] = arr_pValue[i];
-    							}
-    						}
-    					}
-    					else
-    					{
-    						arr_paramValue[0] = pValue;
-    					}
-    					paramMap.put(Constant.product_field_values,arr_paramValue);
-    					paramList.add(paramMap);
-    				}
-    			}
-    			productMap.put(Constant.product_field_params, paramList);
-    		
-    			//图片
-    			List<Map<String,Object>> imgList = new ArrayList<Map<String,Object>>();
-    			Map<String,List<Long>> imgsMap = new HashMap<String,List<Long>>();
-    			for (String s : product.getImgUrl().split(";")) {
-    				addToImg(imgsMap, s, product.getId());
-    				//a.put(s, p);
-    			}
-    			if(!imgsMap.isEmpty())
-    			{
-    				for(Map.Entry<String,List<Long>> entry:imgsMap.entrySet())
-    				{
-    					Map<String,Object> imgMap = new TreeMap<String,Object>();
-    					imgMap.put(Constant.product_field_skuid, entry.getValue());
-    					imgMap.put(Constant.product_field_imgUrl,entry.getKey());
-    					imgList.add(imgMap);
-    				}
-    			}
-    			productMap.put(Constant.product_field_imgs, imgList);
-
-    			//产品列表
-    			List<Map<String,Object>> prdList = new ArrayList<Map<String,Object>>();
-				Map<String,Object> prdInfoMap = new TreeMap<String,Object>();
-				Map<String,Object> prdMap = new TreeMap<String,Object>();
-				StringBuilder sbkey = new StringBuilder();
-				prdMap.put(Constant.product_field_skuid, product.getId());
-				prdMap.put(Constant.product_field_name, product.getName());
-				prdMap.put(Constant.product_field_price, product.getPrice());
-				prdMap.put(Constant.product_field_number, product.getNumber());
-				prdMap.put(Constant.product_field_unit, product.getUnit());
-				setNavigation(productMap, prdMap, product);
-				String prdParamsIDS = product.getParamIDs();
-				if(prdParamsIDS.indexOf(",")>0)
-				{
-					String[] arr_prdParamsIDS  = prdParamsIDS.split(",");
-					for(int n=0;n<arr_prdParamsIDS.length;n++)
-					{
-						sbkey.append(arr_prdParamsIDS[n]);
-						sbkey.append(",");
-						sbkey.append(0);
-						sbkey.append("|");
-					}
-				}
-				else
-				{
-					sbkey.append(prdParamsIDS);
-					sbkey.append(",");
-					sbkey.append(0);
-					sbkey.append("|");
-				}
-				String key = sbkey.delete(sbkey.lastIndexOf("|"), sbkey.length()).toString();
-				prdInfoMap.put(Constant.product_field_k, key);
-				prdInfoMap.put(Constant.product_field_v, prdMap);
-				prdList.add(prdInfoMap);
-    			productMap.put(Constant.product_field_products, prdList);
-    		
-    		}
-    		else
-    		{
-    			setSingleProductInfo(productMap, product);
-    		}
-    		jsonResult.setData(productMap);
-    	}
-    	catch(Exception e)
-    	{
-    		log.error("update product error",e);
-    		jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
-    	}
-    	return jsonResult;
-    }
-
-    /**
      * 设置单个产品的信息，没有产品参数的情况
      * @param productMap
      * @param product
      */
 	private void setSingleProductInfo(Map<String, Object> productMap,
-			ProductWithBLOBs product) {
+			ProductWithMember product) {
+		//面包屑
 		Map<String,Object> navigationMap = new TreeMap<String,Object>();
 		navigationMap.put(Constant.product_field_fcateid, product.getFcateid());
 		navigationMap.put(Constant.product_field_fcateName,product.getFcateName());
@@ -478,6 +351,9 @@ public class ProductService {
 		navigationMap.put(Constant.product_field_brandid, product.getBrandid());
 		navigationMap.put(Constant.product_field_brandName, product.getCNName());
 		productMap.put(Constant.product_field_navigation, navigationMap);
+		setMemberInfo(productMap, product);
+
+
 		//图片
 		List<Map<String,Object>> imgList = new ArrayList<Map<String,Object>>();
 		Map<String,List<Long>> imgsMap = new HashMap<String,List<Long>>();
@@ -513,7 +389,23 @@ public class ProductService {
 		productMap.put(Constant.product_field_params, paramList);
 	}
 
-    /**
+	/**
+	 * 查找会员相关信息
+	 * @param productMap
+	 * @param product
+     */
+	private void setMemberInfo(Map<String, Object> productMap, ProductWithMember product) {
+		//会员信息
+		Map<String,Object> memberMap = new TreeMap<String,Object>();
+		memberMap.put("identify",product.getIdentify());
+		memberMap.put("memberName",product.getMemberName());
+		memberMap.put("enterpriseLogo",product.getEnterpriseLogo());
+		memberMap.put("enterpriseWebSite",product.getEnterpriseWebSite());
+		memberMap.put("address",product.getAddress());
+		productMap.put("member", memberMap);
+	}
+
+	/**
      * 设置由不同参数组成的产品集合
      * @param id
      * @param paramValuesMap

@@ -7,6 +7,8 @@ public class ResultBean {
 
     private String smallIcon;
 
+    private String sort;
+
     public String getCode() {
         return code;
     }
@@ -29,5 +31,13 @@ public class ResultBean {
 
     public void setSmallIcon(String smallIcon) {
         this.smallIcon = smallIcon;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 }

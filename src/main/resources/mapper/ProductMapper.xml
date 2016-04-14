@@ -44,6 +44,19 @@
 	  left join t_p_brand b on t.brandid = b.id
     where t.id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectProductMemberByid" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.product.entity.ProductWithMember">
+    select n.id,n.name,n.createid,n.fcateid,n.scateid,n.brandid,n.status,n.publishTime,n.lastmodified,n.price,n.unit,n.repository,n.number,
+    n.hit,n.imgUrl,n.paramIDs,n.paramValues,n.detailDesc,n.paras,n.service,n.fcateName,n.scateName,n.CNName,n.ENName,n.identify,n.memberName,n.enterpriseLogo,n.enterpriseWebSite,
+    concat(p.name,c.name,ar.name,n.address) address from (select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified,
+	  price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,c.name fcateName ,c1.name scateName,
+	  b.CNName,b.ENName,m.identify,if(m.identify = 2,m.personRealName,m.enterpriseName) memberName,m.province,m.city,m.area,m.address,m.enterpriseLogo,m.enterpriseWebSite
+	  from t_p_product t left join t_p_category c on t.fcateid = c.id
+	  left join t_p_category c1 on t.scateid = c1.id
+	  left join t_p_brand b on t.brandid = b.id
+    left join t_m_member m on m.id = t.createid
+    where t.id = #{id,jdbcType=BIGINT}) n left join t_dictionary_province p on n.province = p.code
+    left join t_dictionary_city c on n.city = c.code left join t_dictionary_area ar on ar.code = n.area
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_p_product
     where id = #{id,jdbcType=BIGINT}

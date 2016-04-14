@@ -17,7 +17,7 @@ public class Member implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private int id;
+	private Long id;
 	
 	/**
 	 * 账户名
@@ -72,11 +72,11 @@ public class Member implements Serializable{
 	
 	private int workType;
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

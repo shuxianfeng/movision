@@ -12,6 +12,8 @@ public class SysBean {
 
     private String subSystemName;
 
+    private String sort;
+
     public String getId() {
         return id;
     }
@@ -42,5 +44,13 @@ public class SysBean {
 
     public void setSubSystemName(String subSystemName) {
         this.subSystemName = subSystemName;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 }
