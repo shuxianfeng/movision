@@ -7,6 +7,8 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
 
     <!-- 开启controller注解支持 -->
     <context:component-scan base-package="com.zhuhuibao"
@@ -137,5 +139,13 @@
     <mvc:interceptors>
         <bean class="com.zhuhuibao.security.resubmit.TokenInterceptor"/>
     </mvc:interceptors>-->
+    
+    <bean id="AspectLog" class="com.zhuhuibao.aop.AspectLog"></bean>
+    <aop:config>
+        <aop:pointcut expression="@annotation(org.springframework.web.bind.annotation.RequestMapping)" id="logPointcut" />
+        <aop:aspect id="zhblog" ref="AspectLog">
+            <aop:around method="aroundLog" pointcut-ref="logPointcut" />
+       </aop:aspect>
+    </aop:config>
 
 </beans>
