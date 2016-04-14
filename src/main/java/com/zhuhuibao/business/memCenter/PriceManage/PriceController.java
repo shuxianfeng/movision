@@ -52,6 +52,7 @@ public class PriceController {
         JsonResult result = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
+        askPrice.setEndTime(askPrice.getEndTime()+" 23:59:59");
 
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
@@ -165,6 +166,7 @@ public class PriceController {
                 askPriceSearch.setCreateid(principal.getId().toString());
             }
         }
+        askPriceSearch.setEndTime(askPriceSearch.getEndTime()+" 23:59:59");
         Paging<AskPriceResultBean> pager = new Paging<AskPriceResultBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
         List<AskPriceResultBean> askPriceList = priceService.findAllByPager(pager,askPriceSearch);
         pager.result(askPriceList);

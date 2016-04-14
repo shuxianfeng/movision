@@ -256,13 +256,13 @@
       and p.endTime &lt; now()
     </if>
     <if test="startTime != null and endTime != null" >
-      and p.publishTime &lt; #{endTime} and p.publishTime &gt; #{startTime}
+      and p.publishTime &lt;= #{endTime} and p.publishTime &gt;= #{startTime}
     </if>
     <if test="startTime != null and endTime == null" >
-      and p.publishTime &gt; #{startTime}
+      and p.publishTime &gt;= #{startTime}
     </if>
     <if test="startTime == null and endTime != null" >
-      and p.publishTime &lt; #{endTime}
+      and p.publishTime &lt;= #{endTime}
     </if>
   </select>
 </mapper>
