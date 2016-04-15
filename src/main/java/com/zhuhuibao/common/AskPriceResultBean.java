@@ -19,6 +19,16 @@ public class AskPriceResultBean {
 
     private String size;
 
+    private String offerid;
+
+    private String askid;
+
+    private String offerTime;
+
+    private String companyName;
+
+    private String address;
+
     public String getId() {
         return id;
     }
@@ -73,5 +83,45 @@ public class AskPriceResultBean {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    public String getOfferid() {
+        return offerid;
+    }
+
+    public void setOfferid(String offerid) {
+        this.offerid = offerid;
+    }
+
+    public String getAskid() {
+        return askid;
+    }
+
+    public void setAskid(String askid) {
+        this.askid = askid;
+    }
+
+    public String getOfferTime() {
+        return offerTime;
+    }
+
+    public void setOfferTime(String offerTime) {
+        this.offerTime = offerTime;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

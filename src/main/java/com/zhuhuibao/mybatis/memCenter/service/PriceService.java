@@ -160,6 +160,32 @@ public class PriceService {
      */
     public List<AskPriceResultBean> findAllByPager(Paging<AskPriceResultBean> pager, AskPriceSearchBean askPriceSearch){
         log.debug("查询询价信息（分页）");
-        return askPriceMapper.findAllByPager(pager.getRowBounds(),askPriceSearch);
+        List<AskPriceResultBean> list = askPriceMapper.findAllByPager(pager.getRowBounds(),askPriceSearch);
+        List list3 = new ArrayList();
+        for(int i=0;i<list.size();i++){
+            AskPriceResultBean resultBean = list.get(i);
+            Map map1 = new HashMap();
+            map1.put(Constant.id,resultBean.getId());
+            map1.put(Constant.title,resultBean.getTitle());
+            map1.put(Constant.status,resultBean.getStatus());
+            map1.put(Constant.type,resultBean.getType());
+            map1.put(Constant.publishTime,resultBean.getPublishTime().substring(0,10));
+            map1.put(Constant.area,resultBean.getArea());
+            List list1 = new ArrayList();
+            for(int y=0;y<list.size();y++){
+                AskPriceResultBean resultBean1 = list.get(y);
+                if(resultBean.getId().equals(resultBean1.getAskid())){
+                    Map map2 = new HashMap();
+                    map2.put(Constant.id,resultBean1.getOfferid());
+                    map2.put(Constant.offerTime,resultBean1.getOfferTime().substring(0,19));
+                    map2.put(Constant.companyName,resultBean1.getCompanyName());
+                    map2.put(Constant.address,resultBean1.getAddress());
+                    list1.add(map2);
+                }
+            }
+            map1.put("offerList",list1);
+            list3.add(map1);
+        }
+        return list3;
     }
 }
