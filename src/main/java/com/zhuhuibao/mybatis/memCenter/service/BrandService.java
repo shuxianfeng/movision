@@ -36,12 +36,6 @@ public class BrandService {
         return brands;
     }
 
-    public List<Brand> searchBrandByStatusAgent(Brand brand)
-    {
-        List<Brand> brands = brandMapper.searchBrandByStatusAgent(brand);
-        return brands;
-    }
-
     public List<Brand> searchBrand(Brand brand)
     {
         List<Brand> brands = brandMapper.searchBrand(brand);

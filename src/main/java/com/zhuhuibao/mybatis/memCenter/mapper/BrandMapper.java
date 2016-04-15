@@ -20,8 +20,6 @@ public interface BrandMapper {
 
     List<Brand> searchBrandByStatus(Brand brand);
 
-    List<Brand> searchBrandByStatusAgent(Brand brand);
-
     List<Brand> searchBrand(Brand brand);
 
     int searchBrandSize(Brand brand);

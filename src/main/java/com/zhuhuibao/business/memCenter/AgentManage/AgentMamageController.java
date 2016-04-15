@@ -107,7 +107,7 @@ public class AgentMamageController {
         JsonResult result = new JsonResult();
         List list = new ArrayList();
         try{
-            List<Brand> brands = brandService.searchBrandByStatusAgent(brand);
+            List<Brand> brands = brandService.searchBrandByStatus(brand);
             for(int i=0;i<brands.size();i++){
                 Brand brand1 = brands.get(i);
                 Map map = new HashMap();
