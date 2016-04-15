@@ -274,4 +274,20 @@ public interface Constant {
 	 * 排序
 	 */
 	String sort = "sort";
+	/**
+	 * 标题
+	 */
+	String title = "title";
+	/**
+	 * 类型
+	 */
+	String type = "type";
+	/**
+	 * 发布时间
+	 */
+	String publishTime = "publishTime";
+	/**
+	 *
+	 */
+	String offerTime = "offerTime";
 }

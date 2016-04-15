@@ -127,10 +127,11 @@
   </update>
   <select id="findAllAskingPriceInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.AskPrice" resultType="com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean">
   	select t.id,t.createid,t.title,if(t.type = 1,'公开询价','定向询价') typeName,
-	concat(p.name,c.name) deliveryAddress,
+	concat(p.name,c.name) deliveryAddress,mm.enterpriseEmployeeParentId,
 	date_format(t.endTime,'%Y-%m-%d') dateTime from t_p_ask_price t
 	left join t_dictionary_province p on t.provinceCode = p.code 
 	left join t_dictionary_city c on t.cityCode = c.code
+    left join t_m_member mm on mm.id = t.createid
 	where date_format(now(),'%Y-%m-%d') &lt;= date_format(t.endTime,'%Y-%m-%d')
 	<if test="title != null and title != ''">
 		 and t.title like concat('%',#{title},'%')
@@ -150,6 +151,13 @@
     <if test="createid != null and createid != ''">
         and t.createid not in (select mc.enterpriseEmployeeParentId from t_m_member mc where id = #{createid})
     </if>
+    <if test="createid != null and createid != ''">
+        and t.createid not in (select id from t_m_member mc where mc.enterpriseEmployeeParentId = #{createid})
+    </if>
+    <if test="createid != null and createid != ''">
+        and (case when mm.enterpriseEmployeeParentId != 0 then (mm.enterpriseEmployeeParentId not in (select mc.enterpriseEmployeeParentId from t_m_member mc where id = #{createid})) else '1=1' end )
+    </if>
+
     order by dateTime desc
   </select>
   <select id="findAllOfferedPriceInfo" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean">
