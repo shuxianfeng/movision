@@ -33,19 +33,19 @@
     select
     id,name,smallIcon,sort
     from t_p_category
-    where parentId = 0 ORDER  by sort
+    where parentId = 0 and is_deleted = 0 ORDER  by sort
   </select>
   <select id="findSubSystemList" resultMap="ResultMap">
     select
     id,name
     from t_p_category
-    where parentId = #{parentId}
+    where parentId = #{parentId} and is_deleted = 0
   </select>
   <select id="findSubSystemListLimit" resultMap="ResultMap">
     select
     id,name
     from t_p_category
-    where parentId = #{parentId} limit 0,8
+    where parentId = #{parentId} and is_deleted = 0 limit 0,8
   </select>
   <insert id="addSystem" parameterType="com.zhuhuibao.mybatis.oms.entity.Category" >
     insert into t_p_category (id, name, parentId,
@@ -87,7 +87,8 @@
   <select id="searchAll" resultMap="ResultMap1">
     SELECT t.id as id,t.name as systemName,p.id as code,p.name as subSystemName,p.sort
     FROM t_p_category t
-    inner join t_p_category p on t.id = p.parentId ORDER by p.sort
+    inner join t_p_category p on t.id = p.parentId
+    where p.is_deleted = 0 and t.is_deleted = 0 ORDER by p.sort
   </select>
   <select id="getFcateByScate" resultMap="ResultMap">
     select b.id,b.name,b.smallIcon
