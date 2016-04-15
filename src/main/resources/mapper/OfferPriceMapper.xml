@@ -150,6 +150,13 @@
     <if test="createid != null and createid != ''">
         and t.createid not in (select mc.enterpriseEmployeeParentId from t_m_member mc where id = #{createid})
     </if>
+    <if test="createid != null and createid != ''">
+        and t.createid not in (select id from t_m_member mc where mc.enterpriseEmployeeParentId = #{createid})
+    </if>
+    <if test="createid != null and createid != ''">
+        and (case when mm.enterpriseEmployeeParentId != 0 then (mm.enterpriseEmployeeParentId not in (select mc.enterpriseEmployeeParentId from t_m_member mc where id = #{createid})) else '1=1' end )
+    </if>
+
     order by dateTime desc
   </select>
   <select id="findAllOfferedPriceInfo" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean">
