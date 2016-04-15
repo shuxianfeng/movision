@@ -84,6 +84,10 @@ public class OfferPriceController {
 			if (StringUtils.isEmpty(pageSize)) {
 				pageSize = "10";
 			}
+			if(price.getTitle() != null && !price.getTitle().equals(""))
+			{
+				price.setTitle(price.getTitle().replace("_","\\_"));
+			}
 			Paging<AskPriceSimpleBean> pager = new Paging<AskPriceSimpleBean>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 			List<AskPriceSimpleBean> priceList = offerService.findAllAskingPriceInfo(pager, price);
 			pager.result(priceList);
@@ -108,7 +112,10 @@ public class OfferPriceController {
 			}
 			Paging<AskPriceSimpleBean> pager = new Paging<AskPriceSimpleBean>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 			Map<String, String> priceMap = new HashMap<String, String>();
-			priceMap.put("title", title);
+			if(title != null && !title.equals(""))
+			{
+				priceMap.put("title", title.replace("_","\\_"));
+			}
 			priceMap.put("startDate", startDate);
 			priceMap.put("endDate", endDate);
 			priceMap.put("createid", String.valueOf(createID));
