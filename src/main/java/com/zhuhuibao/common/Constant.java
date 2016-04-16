@@ -221,9 +221,9 @@ public interface Constant {
 	String mobile = "mobile";
 	
 	/**
-	 * 上传询，报价单的路径  /doc/price
+	 * 上传询，报价单的路径  /price
 	 */
-	String upload_price_document_url = "/doc/price";
+	String upload_price_document_url = "/price";
 
 	/******************end****************/
 	/**

@@ -63,7 +63,7 @@ public class OfferPriceController {
         	price.setCreateid(new Long(principal.getId()));
         	if(price.getBillurl() != null && !price.getBillurl().equals(""))
         	{
-        		price.setBillurl(ApiConstants.getUploadDir()+Constant.upload_price_document_url+"/"+price.getBillurl());
+        		price.setBillurl(ApiConstants.getUploadDoc()+Constant.upload_price_document_url+"/"+price.getBillurl());
         	}
         	jsonResult = offerService.addOfferPrice(price);
         }
@@ -145,9 +145,9 @@ public class OfferPriceController {
 		response.setHeader("Cache-Control",
 				"no-store, no-cache, must-revalidate");
 		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		response.setHeader("Content-disposition","attachment;filename="+fileurl.substring(fileurl.lastIndexOf("/")+1,fileurl.length()));
+		response.setHeader("Content-disposition","attachment;filename="+fileurl);
 		response.setContentType("application/octet-stream");
-		
+		fileurl = ApiConstants.getUploadDoc()+Constant.upload_price_document_url+"/"+fileurl;
 		File file = new File(fileurl);
 		if(file.exists()){   //如果文件存在
 			FileInputStream inputStream = new FileInputStream(file);

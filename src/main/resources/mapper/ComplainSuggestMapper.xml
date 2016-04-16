@@ -10,10 +10,10 @@
     <result column="companyName" jdbcType="VARCHAR" property="companyName" />
     <result column="userName" jdbcType="VARCHAR" property="userName" />
     <result column="telephone" jdbcType="INTEGER" property="telephone" />
-    <result column="EMAIL" jdbcType="VARCHAR" property="EMAIL" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, title, content, createId, time, companyName, userName, telephone, EMAIL
+    id, title, content, createId, time, companyName, userName, telephone, email
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -28,11 +28,11 @@
   <insert id="insert" parameterType="com.zhuhuibao.mybatis.product.entity.ComplainSuggest">
     insert into t_sys_complain_suggest (title, content, 
       createId, time, companyName, 
-      userName, telephone, EMAIL
+      userName, telephone, email
       )
     values (#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
       #{createId,jdbcType=BIGINT}, now(),#{companyName,jdbcType=VARCHAR}, 
-      #{userName,jdbcType=VARCHAR}, #{telephone,jdbcType=INTEGER}, #{EMAIL,jdbcType=VARCHAR}
+      #{userName,jdbcType=VARCHAR}, #{telephone,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.product.entity.ComplainSuggest">
@@ -59,8 +59,8 @@
       <if test="telephone != null">
         telephone,
       </if>
-      <if test="EMAIL != null">
-        EMAIL,
+      <if test="email != null">
+        email,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -85,8 +85,8 @@
       <if test="telephone != null">
         #{telephone,jdbcType=INTEGER},
       </if>
-      <if test="EMAIL != null">
-        #{EMAIL,jdbcType=VARCHAR},
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -114,8 +114,8 @@
       <if test="telephone != null">
         telephone = #{telephone,jdbcType=INTEGER},
       </if>
-      <if test="EMAIL != null">
-        EMAIL = #{EMAIL,jdbcType=VARCHAR},
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}

@@ -19,7 +19,7 @@ public class ComplainSuggest {
 
     private Integer telephone;
 
-    private String EMAIL;
+    private String email;
 
     public Long getId() {
         return id;
@@ -85,11 +85,11 @@ public class ComplainSuggest {
         this.telephone = telephone;
     }
 
-    public String getEMAIL() {
-        return EMAIL;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEMAIL(String EMAIL) {
-        this.EMAIL = EMAIL == null ? null : EMAIL.trim();
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
