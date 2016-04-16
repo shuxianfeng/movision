@@ -523,6 +523,7 @@ public class MemberService {
 				Map map = new HashMap();
 				map.put(Constant.id,resultBean.getCode());
 				map.put(Constant.companyName,resultBean.getName());
+				map.put(Constant.logo,resultBean.getSmallIcon());
 				list.add(map);
 			}
 		}else{
@@ -538,6 +539,7 @@ public class MemberService {
 				Map map1 = new HashMap();
 				map1.put(Constant.id,resultBean.getCode());
 				map1.put(Constant.companyName,resultBean.getName());
+				map1.put(Constant.logo,resultBean.getSmallIcon());
 				list.add(map1);
 			}
 		}
