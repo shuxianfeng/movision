@@ -58,9 +58,6 @@ public class PriceController {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
                 askPrice.setCreateid(principal.getId().toString());
-                if(askPrice.getBillurl()!=null && !"".equals(askPrice.getBillurl())){
-                    askPrice.setBillurl(ResourcePropertiesUtils.getValue("host.ip")+ "/uploadDoc/price/" + askPrice.getBillurl());
-                }
                 result = priceService.saveAskPrice(askPrice);
             }
         }else{
