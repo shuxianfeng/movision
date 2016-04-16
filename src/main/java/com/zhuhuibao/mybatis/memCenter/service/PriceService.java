@@ -160,32 +160,34 @@ public class PriceService {
      */
     public List<AskPriceResultBean> findAllByPager(Paging<AskPriceResultBean> pager, AskPriceSearchBean askPriceSearch){
         log.debug("查询询价信息（分页）");
-        List<AskPriceResultBean> list = askPriceMapper.findAllByPager(pager.getRowBounds(),askPriceSearch);
-        List list3 = new ArrayList();
-        for(int i=0;i<list.size();i++){
-            AskPriceResultBean resultBean = list.get(i);
-            Map map1 = new HashMap();
-            map1.put(Constant.id,resultBean.getId());
-            map1.put(Constant.title,resultBean.getTitle());
-            map1.put(Constant.status,resultBean.getStatus());
-            map1.put(Constant.type,resultBean.getType());
-            map1.put(Constant.publishTime,resultBean.getPublishTime().substring(0,10));
-            map1.put(Constant.area,resultBean.getArea());
-            List list1 = new ArrayList();
-            for(int y=0;y<list.size();y++){
-                AskPriceResultBean resultBean1 = list.get(y);
+        List<AskPriceResultBean> resultBeanList = askPriceMapper.findAllByPager(pager.getRowBounds(),askPriceSearch);
+        List<AskPriceResultBean> resultBeanList1 = askPriceMapper.findAllByPager1(pager.getRowBounds(),askPriceSearch);
+        List askList = new ArrayList();
+        for(int i=0;i<resultBeanList1.size();i++){
+            AskPriceResultBean resultBean = resultBeanList1.get(i);
+            Map askMap = new HashMap();
+            askMap.put(Constant.id,resultBean.getId());
+            askMap.put(Constant.title,resultBean.getTitle());
+            askMap.put(Constant.status,resultBean.getStatus());
+            askMap.put(Constant.type,resultBean.getType());
+            askMap.put(Constant.publishTime,resultBean.getPublishTime().substring(0,10));
+            askMap.put(Constant.area,resultBean.getArea());
+            List offerList = new ArrayList();
+            for(int y=0;y<resultBeanList.size();y++){
+                AskPriceResultBean resultBean1 = resultBeanList.get(y);
                 if(resultBean.getId().equals(resultBean1.getAskid())){
-                    Map map2 = new HashMap();
-                    map2.put(Constant.id,resultBean1.getOfferid());
-                    map2.put(Constant.offerTime,resultBean1.getOfferTime().substring(0,19));
-                    map2.put(Constant.companyName,resultBean1.getCompanyName());
-                    map2.put(Constant.address,resultBean1.getAddress());
-                    list1.add(map2);
+                    Map offerMap = new HashMap();
+                    offerMap.put(Constant.id,resultBean1.getOfferid());
+                    offerMap.put(Constant.offerTime,resultBean1.getOfferTime().substring(0,19));
+                    offerMap.put(Constant.companyName,resultBean1.getCompanyName());
+                    offerMap.put(Constant.address,resultBean1.getAddress());
+                    offerList.add(offerMap);
                 }
             }
-            map1.put("offerList",list1);
-            list3.add(map1);
+            askMap.put("offerList",offerList);
+            askList.add(askMap);
         }
-        return list3;
+
+        return askList;
     }
 }

@@ -16,6 +16,8 @@ public interface AskPriceMapper {
 
     List<AskPriceResultBean> findAllByPager(RowBounds rowBounds, AskPriceSearchBean askPriceSearch);
 
+    List<AskPriceResultBean> findAllByPager1(RowBounds rowBounds, AskPriceSearchBean askPriceSearch);
+
     List<AskPrice> find();
 
 }
