@@ -21,6 +21,7 @@ import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.service.impl.MembersService;
 import com.zhuhuibao.pojo.ContractorSearchSpec;
+import com.zhuhuibao.pojo.SupplierSearchSpec;
 
 /**
  * 会员控制
@@ -36,7 +37,7 @@ public class MembersController {
 	
 	@RequestMapping(value="/rest/searchContractors", method = RequestMethod.GET)
 	@ResponseBody
-	public void searchProducts(HttpServletRequest req,HttpServletResponse response,ContractorSearchSpec spec) throws JsonGenerationException, JsonMappingException, IOException
+	public void searchContractors(HttpServletRequest req,HttpServletResponse response,ContractorSearchSpec spec) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
 			spec.setLimit(12);
@@ -59,4 +60,31 @@ public class MembersController {
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
+	
+	@RequestMapping(value="/rest/searchSuppliers", method = RequestMethod.GET)
+	@ResponseBody
+	public void searchSuppliers(HttpServletRequest req,HttpServletResponse response,SupplierSearchSpec spec) throws JsonGenerationException, JsonMappingException, IOException
+	{
+		if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
+			spec.setLimit(12);
+		}
+		JsonResult jsonResult = new JsonResult();
+		jsonResult.setCode(200);
+		Map<String, Object> ret = null;
+		try{
+			ret = membersService.searchSuppliers(spec);
+		}
+		catch (Exception e) {
+			jsonResult.setMsgCode(0);
+			jsonResult.setMessage("search error!");
+		}
+		
+		jsonResult.setMsgCode(1);
+		jsonResult.setMessage("OK!");
+		jsonResult.setData(ret);
+
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+	}
+	
 }
