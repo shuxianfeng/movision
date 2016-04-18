@@ -25,7 +25,7 @@ public class OfferAskPrice extends OfferPrice {
 
 	private String askLinkMan;
 
-	private String askisShow;
+	private Boolean askisShow;
 
 	private String askTelephone;
 
@@ -101,11 +101,11 @@ public class OfferAskPrice extends OfferPrice {
 		this.askLinkMan = askLinkMan;
 	}
 
-	public String getAskisShow() {
+	public Boolean getAskisShow() {
 		return askisShow;
 	}
 
-	public void setAskisShow(String askisShow) {
+	public void setAskisShow(Boolean askisShow) {
 		this.askisShow = askisShow;
 	}
 

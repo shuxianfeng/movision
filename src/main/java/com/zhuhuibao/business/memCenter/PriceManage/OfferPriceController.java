@@ -131,7 +131,7 @@ public class OfferPriceController {
 	public void queryOfferPriceInfoByID(HttpServletRequest req,HttpServletResponse response,Long id) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		log.info("query offer priece info by id ");
-		JsonResult jsonResult = offerService.queryOfferPriceInfoByID(id);
+		JsonResult jsonResult = offerService.queryOfferPriceByID(id);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
@@ -176,7 +176,7 @@ public class OfferPriceController {
 	public void queryOfferPriceByID(HttpServletRequest req,HttpServletResponse response,Long id) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		log.info("query offer priece info by id ");
-		JsonResult jsonResult = offerService.queryOfferPriceByID(id);
+		JsonResult jsonResult = offerService.queryOfferPriceInfoByID(id);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
