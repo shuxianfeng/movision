@@ -9,7 +9,7 @@
     <result column="time" jdbcType="TIMESTAMP" property="time" />
     <result column="companyName" jdbcType="VARCHAR" property="companyName" />
     <result column="userName" jdbcType="VARCHAR" property="userName" />
-    <result column="telephone" jdbcType="INTEGER" property="telephone" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
     <result column="email" jdbcType="VARCHAR" property="email" />
   </resultMap>
   <sql id="Base_Column_List">

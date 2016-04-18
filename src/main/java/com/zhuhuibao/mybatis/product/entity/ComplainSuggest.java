@@ -17,7 +17,7 @@ public class ComplainSuggest {
 
     private String userName;
 
-    private Integer telephone;
+    private String telephone;
 
     private String email;
 
@@ -77,11 +77,11 @@ public class ComplainSuggest {
         this.userName = userName == null ? null : userName.trim();
     }
 
-    public Integer getTelephone() {
+    public String getTelephone() {
         return telephone;
     }
 
-    public void setTelephone(Integer telephone) {
+    public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
 
