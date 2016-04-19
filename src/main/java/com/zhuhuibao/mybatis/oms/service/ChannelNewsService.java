@@ -90,7 +90,7 @@ public class ChannelNewsService {
     }
 
     /**
-     * 更新频道信息
+     * 查询频道信息
      * @param id  频道信息
      * @return
      */

@@ -120,7 +120,7 @@ public class OfferPriceService {
 			if(type.equals("2"))
 			{
 				OfferPrice price = priceMapper.selectByPrimaryKey(id);
-				if(price != null && price.getContent() != null)
+				if(price != null && price.getBillurl() != null)
 				{
 					fileurl = price.getBillurl();
 				}
@@ -128,7 +128,7 @@ public class OfferPriceService {
 			else if(type.equals("1"))
 			{
 				AskPriceBean askPrice = askPriceMapper.queryAskPriceByID(String.valueOf(id));
-				if(askPrice != null && askPrice.getContent() != null)
+				if(askPrice != null && askPrice.getBillurl() != null)
 				{
 					fileurl = askPrice.getBillurl();
 				}
