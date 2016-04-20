@@ -7,11 +7,13 @@ public class Job {
 
     private Long createid;
 
-    private Date publishTime;
+    private String publishTime;
 
-    private Date updateTime;
+    private String updateTime;
 
     private String name;
+
+    private String enterpriseName;
 
     private Integer salary;
 
@@ -61,19 +63,19 @@ public class Job {
         this.createid = createid;
     }
 
-    public Date getPublishTime() {
+    public String getPublishTime() {
         return publishTime;
     }
 
-    public void setPublishTime(Date publishTime) {
+    public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -211,5 +213,13 @@ public class Job {
 
     public void setWorkArea(String workArea) {
         this.workArea = workArea;
+    }
+
+    public String getEnterpriseName() {
+        return enterpriseName;
+    }
+
+    public void setEnterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName;
     }
 }

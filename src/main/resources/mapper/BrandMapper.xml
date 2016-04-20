@@ -131,6 +131,7 @@
     b.CNName,b.owner,b.id,b.certificate,b.webSite,b.publishTime,b.logourl,b.status,m.enterpriseName
     from t_p_brand b
     LEFT JOIN t_m_member m on b.createid = m.id
+    WHERE 1=1
     <if test="status != null" >
       and b.status = #{status}
     </if>
@@ -142,6 +143,7 @@
     select
     COUNT(*)
     from t_p_brand b
+    where 1=1
     <if test="status != null" >
       and b.status = #{status}
     </if>

@@ -15,6 +15,8 @@ import com.zhuhuibao.utils.RandomFileNamePolicy;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,7 +161,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/searchBrandByPager", method = RequestMethod.GET)
-    public void searchBrandByPager(HttpServletRequest req, HttpServletResponse response, Brand brand,String pageNo,String pageSize) throws IOException {
+    public void searchBrandByPager(HttpServletRequest req, HttpServletResponse response, Brand brand,String pageNo,String pageSize) throws JsonGenerationException, JsonMappingException,IOException {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }

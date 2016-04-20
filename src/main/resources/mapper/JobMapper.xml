@@ -4,9 +4,10 @@
   <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Job" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="createid" property="createid" jdbcType="BIGINT" />
-    <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP" />
-    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
+    <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
     <result column="salary" property="salary" jdbcType="INTEGER" />
     <result column="salaryName" property="salaryName" jdbcType="VARCHAR" />
     <result column="province" property="province" jdbcType="VARCHAR" />
@@ -105,4 +106,24 @@
     </set>
     where id = #{id}
   </update>
+  <select id="searchNewPosition" resultMap="BaseResultMap">
+    select j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,
+    (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
+    from t_i_job j
+    left join t_dictionary_city c on c.code = j.city
+    left join t_dictionary_constant co on co.code = j.salary
+    left join t_m_member m on m.id = j.createid
+    where co.type = 1
+    order by publishTime desc limit 0,6
+  </select>
+  <select id="searchRecommendPosition" resultMap="BaseResultMap">
+    select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,
+    (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
+    from t_i_job j
+    left join t_dictionary_city c on c.code = j.city
+    left join t_dictionary_constant co on co.code = j.salary
+    left join t_m_member m on m.id = j.createid
+    where co.type = 1 and find_in_set(j.positionType,(select post from t_i_resume where createid= #{id} ))
+    order by publishTime desc limit 0,6
+  </select>
 </mapper>

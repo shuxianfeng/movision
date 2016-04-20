@@ -34,7 +34,7 @@ public class JobController {
     /**
      * 发布职位
      */
-    @RequestMapping(value = "rest/job/publishPosition", method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/job/publishPosition", method = RequestMethod.POST)
     public void publishPosition(HttpServletRequest req, HttpServletResponse response, Job job) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -56,7 +56,7 @@ public class JobController {
     /**
      * 查询公司已发布的职位
      */
-    @RequestMapping(value = "rest/job/searchPositionByMemId", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/job/searchPositionByMemId", method = RequestMethod.GET)
     public void searchPositionByMemId(HttpServletRequest req, HttpServletResponse response, Job job,String pageNo,String pageSize) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -84,7 +84,7 @@ public class JobController {
     /**
      * 查询公司发布的某条职位的信息
      */
-    @RequestMapping(value = "rest/job/getPositionByPositionId", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/job/getPositionByPositionId", method = RequestMethod.GET)
     public void getPositionByPositionId(HttpServletRequest req, HttpServletResponse response, String id) throws IOException {
         JsonResult jsonResult = jobService.getPositionByPositionId(id);
         response.setContentType("application/json;charset=utf-8");
@@ -94,7 +94,7 @@ public class JobController {
     /**
      * 删除已发布的职位
      */
-    @RequestMapping(value = "rest/job/deletePosition", method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/job/deletePosition", method = RequestMethod.POST)
     public void deletePosition(HttpServletRequest req, HttpServletResponse response, String id) throws IOException {
         JsonResult jsonResult = jobService.deletePosition(id);
         response.setContentType("application/json;charset=utf-8");
@@ -104,9 +104,38 @@ public class JobController {
     /**
      * 更新编辑已发布的职位
      */
-    @RequestMapping(value = "rest/job/updatePosition", method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/job/updatePosition", method = RequestMethod.POST)
     public void updatePosition(HttpServletRequest req, HttpServletResponse response, Job job) throws IOException {
         JsonResult jsonResult = jobService.updatePosition(job);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+
+    /**
+     * 查询最新招聘职位
+     */
+    @RequestMapping(value = "/rest/job/searchNewPosition", method = RequestMethod.GET)
+    public void searchNewPosition(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult jsonResult = jobService.searchNewPosition();
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+
+    /**
+     * 查询推荐职位
+     */
+    @RequestMapping(value = "/rest/job/searchRecommendPosition", method = RequestMethod.GET)
+    public void searchRecommendPosition(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        JsonResult jsonResult = new JsonResult();
+        if(null != session) {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
+            jsonResult = jobService.searchRecommendPosition(principal.getId().toString());
+        }else{
+                jsonResult.setCode(401);
+                jsonResult.setMessage("请先登录");
+            }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }

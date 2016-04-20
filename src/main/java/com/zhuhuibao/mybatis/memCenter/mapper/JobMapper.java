@@ -21,4 +21,10 @@ public interface JobMapper {
 
     //更新编辑已发布的职位
     int updatePosition(Job job);
+
+    //查询最新招聘职位
+    List<Job> searchNewPosition();
+
+    //查询推荐职位
+    List<Job> searchRecommendPosition(String id);
 }

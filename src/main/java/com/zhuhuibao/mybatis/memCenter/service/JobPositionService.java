@@ -119,4 +119,26 @@ public class JobPositionService {
         }
         return result;
     }
+
+    /**
+     * 查询最新招聘职位
+     */
+    public JsonResult searchNewPosition(){
+        JsonResult result = new JsonResult();
+        List<Job> jobList = jobMapper.searchNewPosition();
+        result.setData(jobList);
+        result.setCode(200);
+        return result;
+    }
+
+    /**
+     * 查询推荐职位
+     */
+    public JsonResult searchRecommendPosition(String id){
+        JsonResult result = new JsonResult();
+        List<Job> jobList = jobMapper.searchRecommendPosition(id);
+        result.setData(jobList);
+        result.setCode(200);
+        return result;
+    }
 }
