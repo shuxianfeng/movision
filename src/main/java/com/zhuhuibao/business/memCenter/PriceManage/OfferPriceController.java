@@ -173,7 +173,6 @@ public class OfferPriceController {
 	{
 		log.info("query offer priece info by id ");
 		JsonResult jsonResult = offerService.queryOfferPriceByID(id);
-		log.info("test!!!!1");
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}

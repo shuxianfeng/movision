@@ -54,11 +54,11 @@ public class OfferPriceService {
 		{
 			if(price.getBillurl() != null && !price.getBillurl().equals(""))
 			{
-				String fileurl = price.getBillurl();
-				fileurl = ApiConstants.getUploadDoc()+ Constant.upload_price_document_url+"/"+fileurl;
-				File file = new File(fileurl);
+				String fileUrl = price.getBillurl();
+				fileUrl = ApiConstants.getUploadDoc()+ Constant.upload_price_document_url+"/"+fileUrl;
+				File file = new File(fileUrl);
 				if(file.exists()){
-					int result = priceMapper.insertSelective(price);
+					priceMapper.insertSelective(price);
 				}
 				else
 				{
@@ -67,7 +67,10 @@ public class OfferPriceService {
 					jsonResult.setMsgCode(MsgCodeConstant.file_not_exist);
 				}
 			}
-
+			else
+			{
+				priceMapper.insertSelective(price);
+			}
 		}
 		catch(Exception e)
 		{
