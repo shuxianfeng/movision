@@ -3,7 +3,9 @@ package com.zhuhuibao.mybatis.memCenter.service;
 import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
+import com.zhuhuibao.mybatis.memCenter.entity.Position;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.PositionMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,9 @@ public class JobPositionService {
 
     @Autowired
     private JobMapper jobMapper;
+
+    @Autowired
+    private PositionMapper positionMapper;
     /**
      * 发布职位
      */
@@ -145,5 +150,36 @@ public class JobPositionService {
         result.setData(jobList);
         result.setCode(200);
         return result;
+    }
+
+    /**
+     * 职位类别
+     */
+    public JsonResult positionType(){
+        JsonResult jsonResult = new JsonResult();
+        List<Position> positionList = positionMapper.findPosition();
+        List<Position> subPositionList = positionMapper.findSubPosition();
+        List list1 = new ArrayList();
+        for(int i=0;i<positionList.size();i++){
+            Position position = positionList.get(i);
+            Map map = new HashMap();
+            map.put(Constant.code,position.getId());
+            map.put(Constant.name,position.getName());
+            List list = new ArrayList();
+            for(int y=0;y<subPositionList.size();y++){
+                Position subPosition = subPositionList.get(y);
+                if(position.getId().equals(subPosition.getParentId())){
+                    Map map1 = new HashMap();
+                    map1.put(Constant.code,subPosition.getId());
+                    map1.put(Constant.name,subPosition.getName());
+                    list.add(map1);
+                }
+            }
+            map.put(Constant.subPositionList,list);
+            list1.add(map);
+        }
+        jsonResult.setCode(200);
+        jsonResult.setData(list1);
+        return jsonResult;
     }
 }

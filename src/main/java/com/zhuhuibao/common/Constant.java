@@ -299,5 +299,7 @@ public interface Constant {
 	 */
 	String salary = "salary";
 
+	String code = "code";
 
+	String subPositionList = "subPositionList";
 }

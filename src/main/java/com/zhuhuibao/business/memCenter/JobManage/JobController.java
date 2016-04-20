@@ -1,6 +1,5 @@
 package com.zhuhuibao.business.memCenter.JobManage;
 
-import com.zhuhuibao.common.AskPriceResultBean;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
@@ -31,6 +30,15 @@ public class JobController {
 
     @Autowired
     private JobPositionService jobService;
+    /**
+     * 职位类别
+     */
+    @RequestMapping(value = "/rest/job/positionType", method = RequestMethod.GET)
+    public void positionType(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult jsonResult = jobService.positionType();
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
     /**
      * 发布职位
      */
