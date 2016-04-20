@@ -24,5 +24,5 @@ public interface OfferPriceMapper {
     
     List<AskPriceSimpleBean> queryAllOfferPriceByAskID(Long id);
     
-    OfferAskPrice queryOfferPriceByID(Long id);
+    OfferAskPrice queryOfferPriceInfoByID(Long id);
 }

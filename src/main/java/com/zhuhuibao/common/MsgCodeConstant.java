@@ -86,6 +86,9 @@ public interface MsgCodeConstant {
 	 * 短信验证码超时
 	 */
 	int member_mcode_sms_timeout = 10013;
-	
-	
+
+	/**
+	 * 文件名不存在
+	 */
+	int file_not_exist = 10210;
 }

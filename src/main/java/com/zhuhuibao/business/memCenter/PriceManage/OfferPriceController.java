@@ -12,11 +12,11 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-import org.apache.taglibs.standard.lang.jstl.test.PageContextImpl;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
@@ -61,11 +61,7 @@ public class OfferPriceController {
         {
         	ShiroUser principal = (ShiroUser)session.getAttribute("member");
         	price.setCreateid(new Long(principal.getId()));
-        	if(price.getBillurl() != null && !price.getBillurl().equals(""))
-        	{
-        		price.setBillurl(ApiConstants.getUploadDoc()+Constant.upload_price_document_url+"/"+price.getBillurl());
-        	}
-        	jsonResult = offerService.addOfferPrice(price);
+			jsonResult = offerService.addOfferPrice(price);
         }
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
@@ -131,7 +127,7 @@ public class OfferPriceController {
 	public void queryOfferPriceInfoByID(HttpServletRequest req,HttpServletResponse response,Long id) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		log.info("query offer priece info by id ");
-		JsonResult jsonResult = offerService.queryOfferPriceByID(id);
+		JsonResult jsonResult = offerService.queryOfferPriceInfoByID(id);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
@@ -176,7 +172,8 @@ public class OfferPriceController {
 	public void queryOfferPriceByID(HttpServletRequest req,HttpServletResponse response,Long id) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		log.info("query offer priece info by id ");
-		JsonResult jsonResult = offerService.queryOfferPriceInfoByID(id);
+		JsonResult jsonResult = offerService.queryOfferPriceByID(id);
+		log.info("test!!!!1");
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}

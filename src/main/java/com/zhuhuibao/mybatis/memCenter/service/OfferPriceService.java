@@ -1,28 +1,27 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.zhuhuibao.common.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zhuhuibao.common.AskPriceBean;
-import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferAskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferPrice;
 import com.zhuhuibao.mybatis.memCenter.mapper.AskPriceMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.OfferPriceMapper;
-import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.common.ApiConstants;
 
 /**
  * 报价业务处理类
@@ -39,18 +38,36 @@ public class OfferPriceService {
 	
 	@Autowired
     AskPriceMapper askPriceMapper;
+
+	@Autowired
+	ApiConstants ApiConstants;
 	
 	/**
 	 * 我要报价
-	 * @param offerPrice
+	 * @param price
 	 * @return
 	 */
-	public JsonResult addOfferPrice(OfferPrice offerPrice)
+	public JsonResult addOfferPrice(OfferPrice price)
 	{
 		JsonResult jsonResult = new JsonResult();
 		try
 		{
-			int result = priceMapper.insertSelective(offerPrice);
+			if(price.getBillurl() != null && !price.getBillurl().equals(""))
+			{
+				String fileurl = price.getBillurl();
+				fileurl = ApiConstants.getUploadDoc()+ Constant.upload_price_document_url+"/"+fileurl;
+				File file = new File(fileurl);
+				if(file.exists()){
+					int result = priceMapper.insertSelective(price);
+				}
+				else
+				{
+					jsonResult.setCode(400);
+					jsonResult.setMessage("文件不存在");
+					jsonResult.setMsgCode(MsgCodeConstant.file_not_exist);
+				}
+			}
+
 		}
 		catch(Exception e)
 		{
@@ -84,7 +101,7 @@ public class OfferPriceService {
     }
     
     /**
-     * 查询报价信息根据ID
+     * 报价查询  询价信息+报价信息
      * @param id
      * @return
      */
@@ -93,7 +110,7 @@ public class OfferPriceService {
     	JsonResult jsonResult = new JsonResult();
 		try
 		{
-			OfferPrice price = priceMapper.selectByPrimaryKey(id);
+			OfferAskPrice price = priceMapper.queryOfferPriceInfoByID(id);
 			jsonResult.setData(price);
 		}
 		catch(Exception e)
@@ -175,7 +192,7 @@ public class OfferPriceService {
     	JsonResult jsonResult = new JsonResult();
 		try
 		{
-			OfferAskPrice price = priceMapper.queryOfferPriceByID(id);
+			OfferPrice price = priceMapper.selectByPrimaryKey(id);
 			jsonResult.setData(price);
 		}
 		catch(Exception e)
