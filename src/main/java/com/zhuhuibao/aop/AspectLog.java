@@ -47,7 +47,8 @@ public class AspectLog {
         	}
         }
         HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-        String clientIP = request.getHeader("X-Real-IP").isEmpty()?"127.0.0.1":request.getHeader("X-Real-IP");
+        String clientIP = request.getHeader("X-Real-IP");
+        clientIP = clientIP == null ? "127.0.0.1":clientIP;
         String httpMethod = request.getMethod();
         String requestURL = request.getRequestURL().toString();
         String queryString = request.getQueryString();
