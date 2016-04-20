@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -39,26 +40,33 @@ public class PriceService {
 
     @Autowired
     MemberMapper memberMapper;
+
+    @Autowired
+    ApiConstants ApiConstants;
     /**
      * 询价保存
      */
     public JsonResult saveAskPrice(AskPrice askPrice){
-
         log.debug("询价保存");
         JsonResult result = new JsonResult();
-        try{
-            int isSave = askPriceMapper.saveAskPrice(askPrice);
-            if(isSave==1){
+        if(askPrice.getBillurl()!=null && !askPrice.getBillurl().equals("")){
+            String fileUrl = askPrice.getBillurl();
+            fileUrl = ApiConstants.getUploadDoc()+ Constant.upload_price_document_url+"/"+fileUrl;
+            File file = new File(fileUrl);
+            if(file.exists()){
+                askPriceMapper.saveAskPrice(askPrice);
                 result.setCode(200);
-            }else{
-                result.setCode(400);
-                result.setMessage("增加产品定向询价失败");
             }
-        }catch (Exception e){
-            log.error("saveAskPrice error!"+e.getMessage());
-            e.printStackTrace();
+            else
+            {
+                result.setCode(400);
+                result.setMessage("文件不存在");
+                result.setMsgCode(MsgCodeConstant.file_not_exist);
+            }
+        }else{
+            askPriceMapper.saveAskPrice(askPrice);
+            result.setCode(200);
         }
-
         return result;
     }
 

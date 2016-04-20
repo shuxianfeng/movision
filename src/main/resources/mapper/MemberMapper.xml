@@ -189,7 +189,7 @@
   </update>
   <insert id="addMember" keyProperty="id" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" useGeneratedKeys="true">
     insert into t_m_member(mobile,email,password,registerTime,status,identify,enterpriseEmployeeParentId,workType,personRealName) values
-    (#{mobile},#{email},#{password},now(),1,2,#{enterpriseEmployeeParentId},#{workType},#{personRealName})
+    (#{mobile},#{email},#{password},now(),1,case when #{identify}==null then 2 else #{identify} end,#{enterpriseEmployeeParentId},#{workType},#{personRealName})
   </insert>
   <update id="updateMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     update t_m_member

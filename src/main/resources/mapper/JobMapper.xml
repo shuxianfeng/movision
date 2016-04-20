@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.JobMapper" >
   <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Job" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="createid" property="createid" jdbcType="BIGINT" />
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createid" property="createid" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
@@ -34,7 +34,7 @@
       )
   </insert>
   <select id="findAllByPager" resultMap="BaseResultMap" parameterType="java.lang.String">
-    SELECT j.id,j.name,co.name as salaryName,concat(p.name,c.name,a.name)as workArea FROM t_i_job j
+    SELECT j.id,j.name,co.name as salaryName,concat(p.name,c.name,a.name)as workArea,j.publishTime FROM t_i_job j
     LEFT JOIN t_dictionary_constant co on j.salary = co.code
     LEFT JOIN t_dictionary_province p on j.province = p.code
     LEFT JOIN t_dictionary_city c on j.city = c.code

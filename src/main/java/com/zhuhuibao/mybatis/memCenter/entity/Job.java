@@ -3,9 +3,9 @@ package com.zhuhuibao.mybatis.memCenter.entity;
 import java.util.Date;
 
 public class Job {
-    private Long id;
+    private String id;
 
-    private Long createid;
+    private String createid;
 
     private String publishTime;
 
@@ -47,19 +47,19 @@ public class Job {
 
     private Integer is_deleted;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Long getCreateid() {
+    public String getCreateid() {
         return createid;
     }
 
-    public void setCreateid(Long createid) {
+    public void setCreateid(String createid) {
         this.createid = createid;
     }
 

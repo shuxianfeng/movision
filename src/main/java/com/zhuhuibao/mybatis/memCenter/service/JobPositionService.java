@@ -61,6 +61,7 @@ public class JobPositionService {
             map.put(Constant.salary,job.getSalaryName());
             map.put(Constant.area,job.getWorkArea());
             map.put(Constant.id,job.getId());
+            map.put(Constant.publishTime,job.getPublishTime());
             list.add(map);
         }
         pager.result(list);
@@ -83,21 +84,25 @@ public class JobPositionService {
     /**
      * 删除已发布的职位
      */
-    public JsonResult deletePosition(String id){
-        JsonResult result = new JsonResult();
-        int is_deleted = jobMapper.deletePosition(id);
-        try{
-            if(is_deleted==1){
-                result.setCode(200);
-            }else {
-                result.setCode(400);
-                result.setMessage("删除失败");
+    public JsonResult deletePosition(String ids[]){
+        JsonResult jsonResult = new JsonResult();
+        int isDelete = 0;
+        for(int i = 0; i < ids.length; i++){
+            String id = ids[i];
+            isDelete = jobMapper.deletePosition(id);
+            try{
+                if(isDelete==1){
+                    jsonResult.setCode(200);
+                }else {
+                    jsonResult.setCode(400);
+                    jsonResult.setMessage("删除失败");
+                }
+            }catch (Exception e){
+                log.error("deletePosition error",e);
+                e.printStackTrace();
             }
-        }catch (Exception e){
-            log.error("deletePosition error",e);
-            e.printStackTrace();
         }
-        return result;
+        return jsonResult;
     }
 
     /**

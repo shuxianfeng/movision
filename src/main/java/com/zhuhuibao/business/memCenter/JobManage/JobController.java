@@ -42,7 +42,7 @@ public class JobController {
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
-                job.setCreateid(principal.getId());
+                job.setCreateid(principal.getId().toString());
                 jsonResult = jobService.publishPosition(job);
             }
         }else{
@@ -95,8 +95,9 @@ public class JobController {
      * 删除已发布的职位
      */
     @RequestMapping(value = "/rest/job/deletePosition", method = RequestMethod.POST)
-    public void deletePosition(HttpServletRequest req, HttpServletResponse response, String id) throws IOException {
-        JsonResult jsonResult = jobService.deletePosition(id);
+    public void deletePosition(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        String ids[] = req.getParameterValues("ids");
+        JsonResult jsonResult = jobService.deletePosition(ids);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
