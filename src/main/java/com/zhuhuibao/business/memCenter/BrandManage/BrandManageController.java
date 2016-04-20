@@ -2,6 +2,7 @@ package com.zhuhuibao.business.memCenter.BrandManage;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.zhuhuibao.common.ApiConstants;
+import com.zhuhuibao.common.AskPriceResultBean;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
@@ -12,6 +13,8 @@ import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.RandomFileNamePolicy;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,7 +137,7 @@ public class BrandManageController {
     }
 
     /**
-     * 查询品牌
+     * 查询品牌（自己发布的品牌）
      * @param req
      * @return
      * @throws IOException
@@ -145,6 +148,30 @@ public class BrandManageController {
         JsonResult result = new JsonResult();
         result.setCode(200);
         result.setData(brandList);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 查询品牌(系统所有的品牌，分页，运营系统用)
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/searchBrandByPager", method = RequestMethod.GET)
+    public void searchBrandByPager(HttpServletRequest req, HttpServletResponse response, Brand brand,String pageNo,String pageSize) throws IOException {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Brand> pager = new Paging<Brand>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        List<Brand> brandList = brandService.searchBrandByPager(pager,brand);
+        pager.result(brandList);
+        JsonResult result = new JsonResult();
+        result.setCode(200);
+        result.setData(pager);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
@@ -174,11 +201,24 @@ public class BrandManageController {
     }
 
     /**
-     * 品牌数量
+     * 品牌数量（自己发布的品牌）
      */
     @RequestMapping(value = "/rest/searchBrandSize", method = RequestMethod.GET)
     public void searchBrandSize(HttpServletRequest req, HttpServletResponse response, Brand brand) throws IOException {
         int size = brandService.searchBrandSize(brand);
+        JsonResult result = new JsonResult();
+        result.setCode(200);
+        result.setData(size);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 品牌数量(运营系统，系统所有品牌)
+     */
+    @RequestMapping(value = "/rest/findBrandSize", method = RequestMethod.GET)
+    public void findBrandSize(HttpServletRequest req, HttpServletResponse response, Brand brand) throws IOException {
+        int size = brandService.findBrandSize(brand);
         JsonResult result = new JsonResult();
         result.setCode(200);
         result.setData(size);

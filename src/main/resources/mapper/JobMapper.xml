@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.JobMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Job" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="createid" property="createid" jdbcType="BIGINT" />
+    <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="salary" property="salary" jdbcType="INTEGER" />
+    <result column="salaryName" property="salaryName" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="workArea" property="workArea" jdbcType="VARCHAR" />
+    <result column="education" property="education" jdbcType="INTEGER" />
+    <result column="experience" property="experience" jdbcType="INTEGER" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="welfare" property="welfare" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="superior" property="superior" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="profession" property="profession" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="is_deleted" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="publishPosition" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Job" >
+    insert into t_i_job (id, createid, publishTime, updateTime, name, salary, province, city, area,
+      education, experience, age, description, welfare, department, superior, number, profession,is_deleted
+      )
+    values (#{id}, #{createid}, now(), now(), #{name}, #{salary}, #{province}, #{city}, #{area}, #{education},
+      #{experience}, #{age}, #{description}, #{welfare}, #{department}, #{superior}, #{number}, #{profession},0
+      )
+  </insert>
+  <select id="findAllByPager" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT j.id,j.name,co.name as salaryName,concat(p.name,c.name,a.name)as workArea FROM t_i_job j
+    LEFT JOIN t_dictionary_constant co on j.salary = co.code
+    LEFT JOIN t_dictionary_province p on j.province = p.code
+    LEFT JOIN t_dictionary_city c on j.city = c.code
+    LEFT JOIN t_dictionary_area a on j.area = a.code
+    WHERE j.createid = #{id} and j.is_deleted = 0 and co.type = 1
+  </select>
+  <select id="getPositionByPositionId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT * FROM t_i_job j
+    WHERE j.id = #{id}
+  </select>
+  <update id="deletePosition" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Job" >
+    UPDATE t_i_job SET is_deleted = 1 WHERE id = #{id}
+  </update>
+  <update id="updatePosition" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Job" >
+    update t_i_job
+    <set >
+      <if test="createid != null" >
+        createid = #{createid},
+      </if>
+      <if test="publishTime != null" >
+        publishTime = #{publishTime},
+      </if>
+        updateTime = now(),
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="salary != null" >
+        salary = #{salary},
+      </if>
+      <if test="province != null" >
+        province = #{province},
+      </if>
+      <if test="city != null" >
+        city = #{city},
+      </if>
+      <if test="area != null" >
+        area = #{area},
+      </if>
+      <if test="education != null" >
+        education = #{education},
+      </if>
+      <if test="experience != null" >
+        experience = #{experience},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        description = #{description},
+      </if>
+      <if test="welfare != null" >
+        welfare = #{welfare},
+      </if>
+      <if test="department != null" >
+        department = #{department},
+      </if>
+      <if test="superior != null" >
+        superior = #{superior},
+      </if>
+      <if test="number != null" >
+        number = #{number},
+      </if>
+      <if test="profession != null" >
+        profession = #{profession},
+      </if>
+      <if test="is_deleted != null" >
+        is_deleted = #{is_deleted}
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

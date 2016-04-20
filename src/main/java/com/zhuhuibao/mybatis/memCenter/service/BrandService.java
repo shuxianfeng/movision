@@ -1,12 +1,10 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.BrandBean;
-import com.zhuhuibao.common.BrandDetailBean;
-import com.zhuhuibao.common.ResultBean;
-import com.zhuhuibao.common.SuggestBrand;
+import com.zhuhuibao.common.*;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
 import com.zhuhuibao.mybatis.product.entity.Product;
+import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +37,12 @@ public class BrandService {
     public List<Brand> searchBrand(Brand brand)
     {
         List<Brand> brands = brandMapper.searchBrand(brand);
+        return brands;
+    }
+
+    public List<Brand> searchBrandByPager(Paging<Brand> pager, Brand brand)
+    {
+        List<Brand> brands = brandMapper.findAllByPager(pager.getRowBounds(),brand);
         return brands;
     }
 
@@ -139,6 +143,16 @@ public class BrandService {
     {
         log.debug("品牌数量");
         int size = brandMapper.searchBrandSize(brand);
+        return size;
+    }
+
+    /**
+     * 品牌数量
+     */
+    public int findBrandSize(Brand brand)
+    {
+        log.debug("品牌数量");
+        int size = brandMapper.findBrandSize(brand);
         return size;
     }
 

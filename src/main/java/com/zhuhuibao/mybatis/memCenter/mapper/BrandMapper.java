@@ -22,7 +22,11 @@ public interface BrandMapper {
 
     List<Brand> searchBrand(Brand brand);
 
+    List<Brand> findAllByPager(RowBounds rowBounds,Brand brand);
+
     int searchBrandSize(Brand brand);
+
+    int findBrandSize(Brand brand);
 
     Brand brandDetails(int id);
 

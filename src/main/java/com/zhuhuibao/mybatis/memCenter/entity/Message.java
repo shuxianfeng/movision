@@ -23,6 +23,8 @@ public class Message {
 
     private String mobile;
 
+    private String postDate;
+
     public String getId() {
         return id;
     }
@@ -109,5 +111,13 @@ public class Message {
 
     public void setCreateid(String createid) {
         this.createid = createid;
+    }
+
+    public String getPostDate() {
+        return postDate;
+    }
+
+    public void setPostDate(String postDate) {
+        this.postDate = postDate;
     }
 }

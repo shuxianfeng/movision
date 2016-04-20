@@ -290,4 +290,14 @@ public interface Constant {
 	 *
 	 */
 	String offerTime = "offerTime";
+	/**
+	 *职位名称
+	 */
+	String position = "position";
+	/**
+	 *月薪
+	 */
+	String salary = "salary";
+
+
 }

@@ -9,6 +9,7 @@
     <result column="weight" property="weight" jdbcType="INTEGER" />
     <result column="logourl" property="logourl" jdbcType="VARCHAR" />
     <result column="createid" property="createid" jdbcType="BIGINT" />
+    <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="imgurl" property="imgurl" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
@@ -125,9 +126,32 @@
       and b.status = #{status}
     </if>
   </select>
-  <select id="searchBrandSize" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand"  >
+  <select id="findAllByPager" resultMap="BaseResultMap" >
     select
-    COUNT (*)
+    b.CNName,b.owner,b.id,b.certificate,b.webSite,b.publishTime,b.logourl,b.status,m.enterpriseName
+    from t_p_brand b
+    LEFT JOIN t_m_member m on b.createid = m.id
+    <if test="status != null" >
+      and b.status = #{status}
+    </if>
+    <if test="CNName != null" >
+      and b.CNName like CONCAT('%',#{CNName},'%')
+    </if>
+  </select>
+  <select id="findBrandSize" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" resultType="java.lang.Integer" >
+    select
+    COUNT(*)
+    from t_p_brand b
+    <if test="status != null" >
+      and b.status = #{status}
+    </if>
+    <if test="CNName != null" >
+      and b.CNName like CONCAT('%',#{CNName},'%')
+    </if>
+  </select>
+  <select id="searchBrandSize" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" resultType="java.lang.Integer">
+    select
+    COUNT(*)
     from t_p_brand
     where createid = #{createid} and status !=3
     <if test="status != null" >

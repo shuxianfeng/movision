@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface MemberMapper {
     //根据会员ID找到会员信息
-    Member findMemById(String memberId);
+    Member findMemById(@Param("id") String id);
 
     //更新会员信息
     int updateMemInfo(Member member);

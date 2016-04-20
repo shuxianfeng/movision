@@ -22,6 +22,8 @@ public class Brand {
 
     private Long createid;
 
+    private String enterpriseName;
+
     private String description;
 
     private String imgurl;
@@ -174,5 +176,13 @@ public class Brand {
 
     public void setLastModifyTime(Date lastModifyTime) {
         this.lastModifyTime = lastModifyTime;
+    }
+
+    public String getEnterpriseName() {
+        return enterpriseName;
+    }
+
+    public void setEnterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName;
     }
 }
