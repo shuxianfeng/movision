@@ -232,7 +232,7 @@
     left join t_dictionary_area a on a.code = p.areaCode
     where p.id = #{id}
   </select>
-  <select id="findAllByPager" parameterType="com.zhuhuibao.common.AskPriceSearchBean" resultType="com.zhuhuibao.common.AskPriceResultBean">
+  <select id="findAll" parameterType="com.zhuhuibao.common.AskPriceSearchBean" resultType="com.zhuhuibao.common.AskPriceResultBean">
     SELECT * FROM (
       select p.id,p.title,
       CASE WHEN p.endTime &gt; now() then '询价中' WHEN p.endTime &lt; now() then '结束' END AS status,

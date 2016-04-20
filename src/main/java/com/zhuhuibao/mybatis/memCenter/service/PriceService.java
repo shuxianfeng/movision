@@ -160,7 +160,7 @@ public class PriceService {
      */
     public List<AskPriceResultBean> findAllByPager(Paging<AskPriceResultBean> pager, AskPriceSearchBean askPriceSearch){
         log.debug("查询询价信息（分页）");
-        List<AskPriceResultBean> resultBeanList = askPriceMapper.findAllByPager(pager.getRowBounds(),askPriceSearch);
+        List<AskPriceResultBean> resultBeanList = askPriceMapper.findAll(askPriceSearch);
         List<AskPriceResultBean> resultBeanList1 = askPriceMapper.findAllByPager1(pager.getRowBounds(),askPriceSearch);
         List askList = new ArrayList();
         for(int i=0;i<resultBeanList1.size();i++){
