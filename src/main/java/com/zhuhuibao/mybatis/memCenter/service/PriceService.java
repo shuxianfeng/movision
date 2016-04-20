@@ -89,6 +89,12 @@ public class PriceService {
             }else{
                 bean.setIsTaxName("非含税报价");
             }
+            if("0".equals(bean.getIsShow())){
+                bean.setCompanyName("");
+                bean.setLinkMan("");
+                bean.setTelephone("");
+                bean.setEmail("");
+            }
             result.setCode(200);
             result.setData(bean);
         }catch (Exception e){
