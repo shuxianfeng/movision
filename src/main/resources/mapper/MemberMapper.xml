@@ -441,5 +441,8 @@
     <if test="status != null and status != '' ">
       and m.status = 5
     </if>
+    <if test="id != null and id != '' ">
+      and r.id = #{id}
+    </if>
   </select>
 </mapper>

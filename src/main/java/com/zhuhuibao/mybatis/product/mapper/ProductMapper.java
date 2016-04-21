@@ -50,4 +50,6 @@ public interface ProductMapper {
     ProductWithBLOBs queryPrdDescParamService(Long id);
     
     List<ResultBean> findSubSystem(String id);
+
+    Product findProductBySystemId(String id);
 }

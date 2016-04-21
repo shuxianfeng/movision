@@ -6,6 +6,7 @@ import com.zhuhuibao.mybatis.oms.entity.Category;
 import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
 import com.zhuhuibao.mybatis.oms.service.CategoryService;
 import com.zhuhuibao.mybatis.product.entity.Product;
+import com.zhuhuibao.mybatis.product.service.ProductService;
 import com.zhuhuibao.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,9 @@ public class SystemController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ProductService productService;
     /**
      * 查询大系统类目
      * @param req
@@ -132,11 +136,12 @@ public class SystemController {
     @RequestMapping(value = "/rest/system/deleteSystem", method = RequestMethod.POST)
     public void deleteSystem(HttpServletRequest req, HttpServletResponse response,Category category) throws IOException {
         JsonResult result = new JsonResult();
-        int isDelete = categoryService.deleteSystem(category);
-        if(isDelete==0){
+        Product product = productService.findProductBySystemId(category.getId().toString());
+        if(product!=null){
             result.setCode(400);
-            result.setMessage("删除失败");
+            result.setMessage("该系统下有产品，无法删除");
         }else{
+            categoryService.deleteSystem(category);
             result.setCode(200);
         }
         response.setContentType("application/json;charset=utf-8");
