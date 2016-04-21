@@ -8,6 +8,7 @@
     <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
     <result column="positionType" property="positionType" jdbcType="VARCHAR" />
+    <result column="parentId" property="parentId" jdbcType="VARCHAR" />
     <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
     <result column="salary" property="salary" jdbcType="INTEGER" />
     <result column="salaryName" property="salaryName" jdbcType="VARCHAR" />
@@ -43,7 +44,8 @@
     WHERE j.createid = #{id} and j.is_deleted = 0 and co.type = 1
   </select>
   <select id="getPositionByPositionId" resultMap="BaseResultMap" parameterType="java.lang.String">
-    SELECT * FROM t_i_job j
+    SELECT j.*,p.parentId FROM t_i_job j
+    LEFT JOIN t_dictionary_position p on j.positionType = p.id
     WHERE j.id = #{id}
   </select>
   <update id="deletePosition" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Job" >

@@ -17,6 +17,8 @@ public class Job {
 
     private String positionType;
 
+    private String parentId;
+
     private Integer salary;
 
     private String salaryName;
@@ -231,5 +233,13 @@ public class Job {
 
     public void setPositionType(String positionType) {
         this.positionType = positionType;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 }

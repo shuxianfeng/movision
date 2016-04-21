@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.common.AccountBean;
+import com.zhuhuibao.common.OmsMemBean;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import org.apache.ibatis.annotations.Param;
@@ -52,4 +53,6 @@ public interface MemberMapper {
     List<ResultBean> findGreatCompany(@Param("type") String type);
 
     List<Member> findnewIdentifyEngineer(@Param("type") String type);
+
+    List<OmsMemBean> findAllMemberByPager(RowBounds rowBounds,OmsMemBean member);
 }

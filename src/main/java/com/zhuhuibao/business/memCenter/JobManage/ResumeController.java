@@ -1,8 +1,10 @@
 package com.zhuhuibao.business.memCenter.JobManage;
 
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
+import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.JsonUtils;
 import org.apache.shiro.SecurityUtils;
@@ -29,6 +31,8 @@ public class ResumeController {
     @Autowired
     private ResumeService resumeService;
 
+    @Autowired
+    private UploadService uploadService;
     /**
      * 发布简历
      */
@@ -76,8 +80,8 @@ public class ResumeController {
      * 更新简历,刷新简历
      */
     @RequestMapping(value = "rest/job/updateResume", method = RequestMethod.GET)
-    public void updateResume(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
-        JsonResult jsonResult = resumeService.updateResume(id);
+    public void updateResume(HttpServletRequest req, HttpServletResponse response,Resume resume) throws IOException {
+        JsonResult jsonResult = resumeService.updateResume(resume);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
@@ -91,4 +95,5 @@ public class ResumeController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
+
 }
