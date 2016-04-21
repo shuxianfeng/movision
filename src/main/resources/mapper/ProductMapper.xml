@@ -371,7 +371,7 @@
     LEFT JOIN t_p_category c ON p.scateid = c.id
     where p.brandid = #{id} and p.status = 1
   </select>
-  <select id="findProductBySystemId" resultType="BaseResultMap">
+  <select id="findProductBySystemId" resultType="com.zhuhuibao.mybatis.product.entity.Product" parameterType="java.lang.String">
     SELECT *
     FROM  t_p_product
     where (fcateid = #{id} or scateid = #{id}) and status != 2
