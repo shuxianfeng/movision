@@ -2,10 +2,12 @@ package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.entity.MemberDetails;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface JobMapper {
     //发布职位
@@ -30,5 +32,11 @@ public interface JobMapper {
     List<Job> searchRecommendPosition(String id);
 
     //查询发布职位企业的信息
-    Member queryCompanyInfo(Long id);
+    MemberDetails queryCompanyInfo(Long id);
+
+    List<MemberDetails> queryAdvertisingPosition(Map<String,Object> map);
+
+    Job queryPositionInfoByID(Long id);
+
+    List<Job> findAllOtherPosition(RowBounds rowBounds,Map<String,Object> map);
 }

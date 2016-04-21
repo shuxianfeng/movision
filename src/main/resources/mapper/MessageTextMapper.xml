@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.sitemail.mapper.MessageTextMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.sitemail.entity.MessageText" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="sendID" property="sendID" jdbcType="BIGINT" />
+    <result column="messageText" property="messageText" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="sendTime" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="typeID" property="typeID" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sendID, messageText, type, sendTime, typeID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_messageText
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_sys_messageText
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageText" >
+    insert into t_sys_messageText (id, sendID, messageText, 
+      type, sendTime, typeID
+      )
+    values (#{id,jdbcType=BIGINT}, #{sendID,jdbcType=BIGINT}, #{messageText,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{sendTime,jdbcType=TIMESTAMP}, #{typeID,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageText" useGeneratedKeys="true" keyProperty="id">
+    insert into t_sys_messageText
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sendID != null" >
+        sendID,
+      </if>
+      <if test="messageText != null" >
+        messageText,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+        sendTime,
+      <if test="typeID != null" >
+        typeID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sendID != null" >
+        #{sendID,jdbcType=BIGINT},
+      </if>
+      <if test="messageText != null" >
+        #{messageText,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+        #{now(),jdbcType=TIMESTAMP},
+      <if test="typeID != null" >
+        #{typeID,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageText" >
+    update t_sys_messageText
+    <set >
+      <if test="sendID != null" >
+        sendID = #{sendID,jdbcType=BIGINT},
+      </if>
+      <if test="messageText != null" >
+        messageText = #{messageText,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="sendTime != null" >
+        sendTime = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="typeID != null" >
+        typeID = #{typeID,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageText" >
+    update t_sys_messageText
+    set sendID = #{sendID,jdbcType=BIGINT},
+      messageText = #{messageText,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      sendTime = #{sendTime,jdbcType=TIMESTAMP},
+      typeID = #{typeID,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

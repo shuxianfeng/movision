@@ -5,6 +5,7 @@ import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.entity.MemberDetails;
 import com.zhuhuibao.mybatis.memCenter.entity.Position;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.PositionMapper;
@@ -196,8 +197,80 @@ public class JobPositionService {
         JsonResult jsonResult = new JsonResult();
         try
         {
-            Member member = jobMapper.queryCompanyInfo(id);
+            MemberDetails member = jobMapper.queryCompanyInfo(id);
             jsonResult.setData(member);
+        }
+        catch(Exception e)
+        {
+            log.error("add offer price error!",e);
+            jsonResult.setCode(MsgCodeConstant.response_status_400);
+            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            return jsonResult;
+        }
+        return jsonResult;
+    }
+
+    /**
+     * 查询招聘栏目的广告位
+     * @param map 查询条件
+     * @return
+     */
+    public JsonResult queryAdvertisingPosition(Map<String,Object> map)
+    {
+        JsonResult jsonResult = new JsonResult();
+        try
+        {
+            List<MemberDetails> memberList = jobMapper.queryAdvertisingPosition(map);
+            jsonResult.setData(memberList);
+        }
+        catch(Exception e)
+        {
+            log.error("add offer price error!",e);
+            jsonResult.setCode(MsgCodeConstant.response_status_400);
+            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            return jsonResult;
+        }
+        return jsonResult;
+    }
+
+    /**
+     * 查询企业发布的职位详情
+     * @param id 职位ID
+     * @return
+     */
+    public JsonResult queryPositionInfoByID(Long id)
+    {
+        JsonResult jsonResult = new JsonResult();
+        try
+        {
+            Job job = jobMapper.queryPositionInfoByID(id);
+            jsonResult.setData(job);
+        }
+        catch(Exception e)
+        {
+            log.error("add offer price error!",e);
+            jsonResult.setCode(MsgCodeConstant.response_status_400);
+            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            return jsonResult;
+        }
+        return jsonResult;
+    }
+
+    /**
+     * 查询企业发布的其它求职位
+     * @param map 查询条件
+     * @return
+     */
+    public JsonResult queryOtherPosition(Paging<Job> pager,Map<String,Object> map)
+    {
+        JsonResult jsonResult = new JsonResult();
+        try
+        {
+            List<Job> jobList = jobMapper.findAllOtherPosition(pager.getRowBounds(),map);
+            jsonResult.setData(jobList);
         }
         catch(Exception e)
         {

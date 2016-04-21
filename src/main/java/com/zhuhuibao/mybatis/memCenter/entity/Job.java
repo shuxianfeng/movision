@@ -15,6 +15,8 @@ public class Job {
 
     private String enterpriseName;
 
+    private String enterpriseDesc;
+
     private String positionType;
 
     private Integer salary;
@@ -31,9 +33,15 @@ public class Job {
 
     private Integer education;
 
+    private String educationName;
+
     private Integer experience;
 
+    private String experienceName;
+
     private Integer age;
+
+    private String ageName;
 
     private String description;
 
@@ -231,5 +239,37 @@ public class Job {
 
     public void setPositionType(String positionType) {
         this.positionType = positionType;
+    }
+
+    public String getEducationName() {
+        return educationName;
+    }
+
+    public void setEducationName(String educationName) {
+        this.educationName = educationName;
+    }
+
+    public String getExperienceName() {
+        return experienceName;
+    }
+
+    public void setExperienceName(String experienceName) {
+        this.experienceName = experienceName;
+    }
+
+    public String getAgeName() {
+        return ageName;
+    }
+
+    public void setAgeName(String ageName) {
+        this.ageName = ageName;
+    }
+
+    public String getEnterpriseDesc() {
+        return enterpriseDesc;
+    }
+
+    public void setEnterpriseDesc(String enterpriseDesc) {
+        this.enterpriseDesc = enterpriseDesc;
     }
 }

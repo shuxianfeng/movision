@@ -3,9 +3,13 @@ package com.zhuhuibao.mybatis.memCenter.entity;
 import  com.zhuhuibao.business.memCenter.AccountManage.JsonDateSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Member {
+public class Member implements Serializable{
+
+    private static final long serialVersionUID = -814949502085519570L;
+
     private Long id;
 
     private String mobile;

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.sitemail.mapper.MessageLogMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.sitemail.entity.MessageLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="recID" property="recID" jdbcType="BIGINT" />
+    <result column="messageID" property="messageID" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, recID, messageID, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_messageLog
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_sys_messageLog
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageLog" >
+    insert into t_sys_messageLog (id, recID, messageID, 
+      status)
+    values (#{id,jdbcType=BIGINT}, #{recID,jdbcType=BIGINT}, #{messageID,jdbcType=BIGINT}, 
+      #{status,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageLog" >
+    insert into t_sys_messageLog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="recID != null" >
+        recID,
+      </if>
+      <if test="messageID != null" >
+        messageID,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="recID != null" >
+        #{recID,jdbcType=BIGINT},
+      </if>
+      <if test="messageID != null" >
+        #{messageID,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageLog" >
+    update t_sys_messageLog
+    <set >
+      <if test="recID != null" >
+        recID = #{recID,jdbcType=BIGINT},
+      </if>
+      <if test="messageID != null" >
+        messageID = #{messageID,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageLog" >
+    update t_sys_messageLog
+    set recID = #{recID,jdbcType=BIGINT},
+      messageID = #{messageID,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
