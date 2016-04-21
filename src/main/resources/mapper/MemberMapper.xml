@@ -407,5 +407,8 @@
     <if test="identify != null and identify != '' ">
       and find_in_set(#{identify},identify)
     </if>
+    <if test="status != null and status != '' ">
+      and status = 5
+    </if>
   </select>
 </mapper>
