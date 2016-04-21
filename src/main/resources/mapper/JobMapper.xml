@@ -127,4 +127,15 @@
     where co.type = 1 and find_in_set(j.positionType,(select post from t_i_resume where createid= #{id} ))
     order by publishTime desc limit 0,6
   </select>
+  <select id="queryCompanyInfo" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+    select t.id,t.enterpriseName,t.enterpriseLogo,t.enterpriseDesc,
+    concat(pv.name,ct.name,ar.name,t.address) address,ep.name enterpriseType,es.name employeeNumber from t_m_member t
+    left join t_i_job jb on jb.createid = t.id
+    left join t_dictionary_province pv on pv.code = t.province
+    left join t_dictionary_city ct on ct.code = t.city
+    left join t_dictionary_area ar on ar.code = t.area
+    left join t_dictionary_enterpriseType ep on ep.id = t.enterpriseType
+    left join t_dictionary_employeeSize es on es.id = t.employeeNumber
+    where t.id =  #{id}
+  </select>
 </mapper>

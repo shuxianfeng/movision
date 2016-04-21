@@ -45,7 +45,7 @@ public class AskPriceBean {
 
     String areaName;
 
-    String isShow;
+    Boolean isShow;
 
     public String getTitle() {
         return title;
@@ -199,11 +199,11 @@ public class AskPriceBean {
         this.areaName = areaName;
     }
 
-    public String getIsShow() {
+    public Boolean getIsShow() {
         return isShow;
     }
 
-    public void setIsShow(String isShow) {
+    public void setIsShow(Boolean isShow) {
         this.isShow = isShow;
     }
 

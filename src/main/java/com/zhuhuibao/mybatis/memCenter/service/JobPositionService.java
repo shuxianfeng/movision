@@ -2,10 +2,13 @@ package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.Position;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.PositionMapper;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -180,6 +183,30 @@ public class JobPositionService {
         }
         jsonResult.setCode(200);
         jsonResult.setData(list1);
+        return jsonResult;
+    }
+
+    /**
+     * 查询发布职位公司信息
+     * @param id
+     * @return
+     */
+    public JsonResult queryCompanyInfo(Long id)
+    {
+        JsonResult jsonResult = new JsonResult();
+        try
+        {
+            Member member = jobMapper.queryCompanyInfo(id);
+            jsonResult.setData(member);
+        }
+        catch(Exception e)
+        {
+            log.error("add offer price error!",e);
+            jsonResult.setCode(MsgCodeConstant.response_status_400);
+            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            return jsonResult;
+        }
         return jsonResult;
     }
 }

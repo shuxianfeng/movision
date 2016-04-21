@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
@@ -27,4 +28,7 @@ public interface JobMapper {
 
     //查询推荐职位
     List<Job> searchRecommendPosition(String id);
+
+    //查询发布职位企业的信息
+    Member queryCompanyInfo(Long id);
 }
