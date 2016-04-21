@@ -19,8 +19,8 @@ import java.io.IOException;
  * Created by Administrator on 2016/4/21 0021.
  */
 @Controller
-public class WorkSiteController {
-    private final static Logger log = LoggerFactory.getLogger(WorkSiteController.class);
+public class JobSiteController {
+    private final static Logger log = LoggerFactory.getLogger(JobSiteController.class);
 
     @Autowired
     JobPositionService job;
