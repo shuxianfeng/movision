@@ -73,13 +73,15 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/updateBrand", method = RequestMethod.POST)
-    public void updateBrand(HttpServletRequest req, HttpServletResponse response, Brand brand) throws IOException {
+    public void updateBrand(HttpServletRequest req, HttpServletResponse response, Brand brand,String type) throws IOException {
         JsonResult result = new JsonResult();
         //如果是未通过的品牌进行更新，则状态变为待审核
-        if(brand.getStatus()==0){
-            brand.setStatus(2);
+        if(type==null && "".equals(type)){
+            if(brand.getStatus()==0){
+                brand.setStatus(2);
+            }
+            brand.setLastModifyTime(new Date());
         }
-        brand.setLastModifyTime(new Date());
         int isUpdate = brandService.updateBrand(brand);
         if(isUpdate==0){
             result.setCode(400);

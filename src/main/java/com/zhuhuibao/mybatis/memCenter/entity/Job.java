@@ -15,6 +15,8 @@ public class Job {
 
     private String enterpriseName;
 
+    private String positionType;
+
     private Integer salary;
 
     private String salaryName;
@@ -221,5 +223,13 @@ public class Job {
 
     public void setEnterpriseName(String enterpriseName) {
         this.enterpriseName = enterpriseName;
+    }
+
+    public String getPositionType() {
+        return positionType;
+    }
+
+    public void setPositionType(String positionType) {
+        this.positionType = positionType;
     }
 }

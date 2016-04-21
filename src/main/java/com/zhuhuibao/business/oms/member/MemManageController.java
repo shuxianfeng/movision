@@ -12,15 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 会员管理
- * @author penglong
+ * @author cxx
  *
  */
-public class MemManage {
+@RestController
+public class MemManageController {
 	
-	private static final Logger log = LoggerFactory.getLogger(MemManage.class);
+	private static final Logger log = LoggerFactory.getLogger(MemManageController.class);
 	
 	/**
 	 * 
@@ -30,7 +32,7 @@ public class MemManage {
 	 * @param model
 	 * @throws IOException
 	 */
-	@RequestMapping(value="/osm/get",method = RequestMethod.POST)
+	@RequestMapping(value="/oms/getAllMemInfo",method = RequestMethod.GET)
 	public void register(HttpServletRequest req,HttpServletResponse response, Member member,Model model) throws IOException
 	{
 		

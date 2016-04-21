@@ -7,6 +7,7 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
+    <result column="positionType" property="positionType" jdbcType="VARCHAR" />
     <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
     <result column="salary" property="salary" jdbcType="INTEGER" />
     <result column="salaryName" property="salaryName" jdbcType="VARCHAR" />
@@ -27,10 +28,10 @@
   </resultMap>
   <insert id="publishPosition" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Job" >
     insert into t_i_job (id, createid, publishTime, updateTime, name, salary, province, city, area,
-      education, experience, age, description, welfare, department, superior, number, profession,is_deleted
+      education, experience, age, description, welfare, department, superior, number, profession,is_deleted,positionType
       )
     values (#{id}, #{createid}, now(), now(), #{name}, #{salary}, #{province}, #{city}, #{area}, #{education},
-      #{experience}, #{age}, #{description}, #{welfare}, #{department}, #{superior}, #{number}, #{profession},0
+      #{experience}, #{age}, #{description}, #{welfare}, #{department}, #{superior}, #{number}, #{profession},0,#{positionType}
       )
   </insert>
   <select id="findAllByPager" resultMap="BaseResultMap" parameterType="java.lang.String">
