@@ -12,7 +12,7 @@ public interface ResumeMapper {
     Resume searchMyResume(@Param("id") String id);
 
     //更新简历,刷新简历
-    int updateResume(@Param("id")String id);
+    int updateResume(Resume resume);
 
     //预览简历
     Resume previewResume(@Param("id")String id);

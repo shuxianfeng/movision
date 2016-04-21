@@ -19,6 +19,8 @@ public class Job {
 
     private String positionType;
 
+    private String parentId;
+
     private Integer salary;
 
     private String salaryName;
@@ -241,6 +243,14 @@ public class Job {
         this.positionType = positionType;
     }
 
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
     public String getEducationName() {
         return educationName;
     }
@@ -271,5 +281,6 @@ public class Job {
 
     public void setEnterpriseDesc(String enterpriseDesc) {
         this.enterpriseDesc = enterpriseDesc;
+
     }
 }

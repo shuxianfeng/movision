@@ -52,6 +52,21 @@
     <result column="enterpriseName" property="name" jdbcType="VARCHAR" />
     <result column="enterpriseLogo" property="smallIcon" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="ResultMap2" type="com.zhuhuibao.common.OmsMemBean" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="registerTime" property="registerTime" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="enterpriseLinkman" property="enterpriseLinkman" jdbcType="VARCHAR" />
+    <result column="memberName" property="memberName" jdbcType="VARCHAR" />
+    <result column="memberType" property="memberType" jdbcType="VARCHAR" />
+    <result column="workType" property="workType" jdbcType="VARCHAR" />
+    <result column="identify" property="identify" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="isrecommend" property="isrecommend" jdbcType="VARCHAR" />
+    <result column="certificate_name" property="certificate_name" jdbcType="VARCHAR" />
+    <result column="certificate_grade" property="certificate_grade" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     id, mobile, email, emailCheckCode, password, registerTime, status, identify,
     enterpriseName, workType, enterpriseEmployeeParentId, province,
@@ -189,7 +204,7 @@
   </update>
   <insert id="addMember" keyProperty="id" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" useGeneratedKeys="true">
     insert into t_m_member(mobile,email,password,registerTime,status,identify,enterpriseEmployeeParentId,workType,personRealName) values
-    (#{mobile},#{email},#{password},now(),1,case when #{identify}==null then 2 else #{identify} end,#{enterpriseEmployeeParentId},#{workType},#{personRealName})
+    (#{mobile},#{email},#{password},now(),1,case when #{identify} is null then 2 else #{identify} end,#{enterpriseEmployeeParentId},#{workType},#{personRealName})
   </insert>
   <update id="updateMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     update t_m_member
@@ -365,6 +380,69 @@
     </if>
     <if test="type == 4">
       identify like '%6%'
+    </if>
+  </select>
+  <select id="findAllMemberByPager" resultMap="ResultMap2" parameterType="com.zhuhuibao.common.OmsMemBean">
+    select m.id,m.registerTime,m.isrecommend,
+    CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile WHEN m.email IS NOT NULL and m.email != '' THEN m.email END AS account,
+    m.enterpriseLinkman,
+    CASE WHEN m.enterpriseName IS NOT NULL and m.enterpriseName != '' THEN m.enterpriseName
+    WHEN m.personRealName IS NOT NULL and m.personRealName != '' THEN m.personRealName END AS memberName,
+    CASE WHEN m.identify = 2 THEN '个人会员' WHEN m.identify != 2 then '企业会员' END AS memberType,
+    CASE WHEN m.workType = 100 then '管理员' when m.workType!=100 then w.name end as worktype,
+    (select group_concat(name) from t_dictionary_identity where find_in_set(id,m.identify))as identify,
+    CASE when m.`status` = 0 then '未激活' when m.status = 2 then '注销' when m.`status` != 0 and m.`status`!=2 then '正常' end as status
+    from t_m_member m
+    left join t_dictionary_workType w on m.workType = w.id
+    WHERE 1=1
+    <if test="account != null and account != '' ">
+      and (m.email like CONCAT('%',#{account},'%') or m.mobile like CONCAT('%',#{account},'%'))
+    </if>
+    <if test="memberName != null and memberName != '' ">
+      and (m.enterpriseName like CONCAT('%',#{memberName},'%') or m.personRealName like CONCAT('%',#{memberName},'%'))
+    </if>
+    <if test="memberType != null and memberType == 2 ">
+      and m.identify = 2
+    </if>
+    <if test="memberType != null and memberType == 1 ">
+      and m.identify != 2
+    </if>
+    <if test="identify != null and identify != '' ">
+      and find_in_set(#{identify},m.identify)
+    </if>
+    <if test="status != null and status != '' ">
+      and m.status = 5
+    </if>
+  </select>
+  <select id="findAllMemCertificateByPager" resultMap="ResultMap2" parameterType="com.zhuhuibao.common.OmsMemBean">
+    select r.certificate_name,r.certificate_grade,r.time,r.status,r.id,
+    CASE WHEN m.enterpriseName IS NOT NULL and m.enterpriseName != '' THEN m.enterpriseName
+    WHEN m.personRealName IS NOT NULL and m.personRealName != '' THEN m.personRealName END AS memberName,
+    CASE WHEN m.identify = 2 THEN '个人会员' WHEN m.identify != 2 then '企业会员' END AS memberType,
+    CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile WHEN m.email IS NOT NULL and m.email != '' THEN m.email END AS account
+    from t_certificate_record r
+    left join t_m_member m on m.id = r.mem_id
+    WHERE 1=1
+    <if test="account != null and account != '' ">
+      and (m.email like CONCAT('%',#{account},'%') or m.mobile like CONCAT('%',#{account},'%'))
+    </if>
+    <if test="memberName != null and memberName != '' ">
+      and (m.enterpriseName like CONCAT('%',#{memberName},'%') or m.personRealName like CONCAT('%',#{memberName},'%'))
+    </if>
+    <if test="memberType != null and memberType == 2 ">
+      and m.identify = 2
+    </if>
+    <if test="memberType != null and memberType == 1 ">
+      and m.identify != 2
+    </if>
+    <if test="identify != null and identify != '' ">
+      and find_in_set(#{identify},m.identify)
+    </if>
+    <if test="status != null and status != '' ">
+      and m.status = 5
+    </if>
+    <if test="id != null and id != '' ">
+      and r.id = #{id}
     </if>
   </select>
 </mapper>

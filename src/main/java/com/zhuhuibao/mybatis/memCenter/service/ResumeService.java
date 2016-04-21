@@ -58,9 +58,9 @@ public class ResumeService {
     /**
      * 更新简历,刷新简历
      */
-    public JsonResult updateResume(String id){
+    public JsonResult updateResume(Resume resume){
         JsonResult jsonResult = new JsonResult();
-        int isUpdate = resumeMapper.updateResume(id);
+        int isUpdate = resumeMapper.updateResume(resume);
         try{
             if(isUpdate==1){
                 jsonResult.setCode(200);

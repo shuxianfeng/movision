@@ -798,4 +798,9 @@ public class ProductService {
         return list;
         
     }*/
+
+	public Product findProductBySystemId(String id){
+		Product product = productMapper.findProductBySystemId(id);
+		return product;
+	}
 }
