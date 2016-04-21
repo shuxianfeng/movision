@@ -67,7 +67,7 @@ public class OfferPriceService {
 					jsonResult.setMsgCode(MsgCodeConstant.file_not_exist);
 				}
 			}
-			else
+			else if(price.getContent() != null && !price.getContent().equals(""))
 			{
 				priceMapper.insertSelective(price);
 			}

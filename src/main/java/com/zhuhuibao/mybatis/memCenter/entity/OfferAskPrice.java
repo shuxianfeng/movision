@@ -37,6 +37,8 @@ public class OfferAskPrice extends OfferPrice {
 
 	private String askContent;
 
+	private String askBillUrl;
+
 	public String getTitle() {
 		return title;
 	}
@@ -147,5 +149,13 @@ public class OfferAskPrice extends OfferPrice {
 
 	public void setAskContent(String askContent) {
 		this.askContent = askContent;
+	}
+
+	public String getAskBillUrl() {
+		return askBillUrl;
+	}
+
+	public void setAskBillUrl(String askBillUrl) {
+		this.askBillUrl = askBillUrl;
 	}
 }

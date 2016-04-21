@@ -192,7 +192,8 @@
     if(t.isShow,t.linkMan,'') linkMan,if(t.isShow,t.telephone,'') telephone,if(t.isShow,t.email,'') email,
     t.isShow,a.title,if(a.type=1,'公开询价','定向询价') typeName,date_format(a.endTime,"%Y-%m-%d") endTime,
     if(a.isTax=1,'含税报价','不含税报价') taxName,concat(p.name,c.name,ar.name) address,ct.name categoryName,if(a.isShow=1,a.companyName,'') askCompanyName,
-    if(a.isShow=1,a.linkMan,'') askLinkMan,a.isShow askisShow,if(a.isShow=1,a.telephone,'') askTelephone,if(a.isShow=1,a.email,'') askEmail,a.description description,a.productName,a.content askContent
+    if(a.isShow=1,a.linkMan,'') askLinkMan,a.isShow askisShow,if(a.isShow=1,a.telephone,'') askTelephone,
+    if(a.isShow=1,a.email,'') askEmail,a.description description,a.productName,a.content askContent,a.billurl askBillUrl
     from t_p_offer_price t left join t_p_ask_price a on a.id = t.askid
     left join t_dictionary_province p on p.code = a.provinceCode
     left join t_dictionary_city c on c.code = a.cityCode
