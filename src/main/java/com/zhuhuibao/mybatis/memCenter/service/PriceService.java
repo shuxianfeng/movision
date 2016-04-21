@@ -158,10 +158,17 @@ public class PriceService {
         Map map = new HashMap();
         Member member = memberMapper.findMemById(id);
         if(member!=null){
-            map.put(Constant.companyName,member.getEnterpriseName());
-            map.put(Constant.linkMan,member.getEnterpriseLinkman());
-            map.put(Constant.telephone,member.getFixedTelephone());
-            map.put(Constant.mobile,member.getFixedMobile());
+            if("2".equals(member.getIdentify())){
+                map.put(Constant.companyName,"");
+                map.put(Constant.linkMan,member.getPersonRealName());
+                map.put(Constant.telephone,member.getFixedTelephone());
+                map.put(Constant.mobile,member.getFixedMobile());
+            }else{
+                map.put(Constant.companyName,member.getEnterpriseName());
+                map.put(Constant.linkMan,member.getEnterpriseLinkman());
+                map.put(Constant.telephone,member.getFixedTelephone());
+                map.put(Constant.mobile,member.getFixedMobile());
+            }
         }
         result.setCode(200);
         result.setData(map);
