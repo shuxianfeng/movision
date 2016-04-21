@@ -32,4 +32,13 @@ public class OmsMemService {
         jsonResult.setData(pager);
         return jsonResult;
     }
+
+    public JsonResult getAllMemCertificate(Paging<OmsMemBean> pager, OmsMemBean member){
+        JsonResult jsonResult = new JsonResult();
+        List<OmsMemBean> memCertificateList = memberMapper.findAllMemCertificateByPager(pager.getRowBounds(),member);
+        pager.result(memCertificateList);
+        jsonResult.setCode(200);
+        jsonResult.setData(pager);
+        return jsonResult;
+    }
 }

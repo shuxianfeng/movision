@@ -1,5 +1,6 @@
 package com.zhuhuibao.business.memCenter.JobManage;
 
+import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by cxx on 2016/4/19 0019.
@@ -96,4 +99,25 @@ public class ResumeController {
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
 
+    /**
+     * 上传简历附件
+     */
+    @RequestMapping(value = "/rest/price/uploadResume", method = RequestMethod.POST)
+    public void uploadResume(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult result = new JsonResult();
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if(null != session){
+            String url = uploadService.upload(req,"job");
+            Map map = new HashMap();
+            map.put(Constant.name,url);
+            result.setData(map);
+            result.setCode(200);
+        }else{
+            result.setCode(401);
+            result.setMessage("请先登录");
+        }
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
 }

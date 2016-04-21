@@ -25,6 +25,12 @@ public class OmsMemBean {
 
     private String isrecommend;
 
+    private String certificate_name;
+
+    private String certificate_grade;
+
+    private String publishTime;
+
     public String getId() {
         return id;
     }
@@ -103,5 +109,29 @@ public class OmsMemBean {
 
     public void setIsrecommend(String isrecommend) {
         this.isrecommend = isrecommend;
+    }
+
+    public String getCertificate_name() {
+        return certificate_name;
+    }
+
+    public void setCertificate_name(String certificate_name) {
+        this.certificate_name = certificate_name;
+    }
+
+    public String getCertificate_grade() {
+        return certificate_grade;
+    }
+
+    public void setCertificate_grade(String certificate_grade) {
+        this.certificate_grade = certificate_grade;
+    }
+
+    public String getPublishTime() {
+        return publishTime;
+    }
+
+    public void setPublishTime(String publishTime) {
+        this.publishTime = publishTime;
     }
 }

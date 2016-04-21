@@ -32,7 +32,7 @@ public class MemManageController {
 	@Autowired
 	private OmsMemService omsMemService;
 	/**
-	 * 
+	 * 查询全部会员（分页）
 	 * @param req
 	 * @param response
 	 * @param member
@@ -49,6 +49,28 @@ public class MemManageController {
 		}
 		Paging<OmsMemBean> pager = new Paging<OmsMemBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
 		JsonResult result = omsMemService.getAllMemInfo(pager,member);
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+	}
+
+	/**
+	 * 查询全部会员资质（分页）
+	 * @param req
+	 * @param response
+	 * @param member
+	 * @throws IOException
+	 */
+	@RequestMapping(value="/rest/oms/getAllMemCertificate",method = RequestMethod.GET)
+	public void getAllMemCertificate(HttpServletRequest req,HttpServletResponse response, OmsMemBean member,String pageNo,String pageSize) throws IOException
+	{
+		if (StringUtils.isEmpty(pageNo)) {
+			pageNo = "1";
+		}
+		if (StringUtils.isEmpty(pageSize)) {
+			pageSize = "10";
+		}
+		Paging<OmsMemBean> pager = new Paging<OmsMemBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+		JsonResult result = omsMemService.getAllMemCertificate(pager,member);
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}

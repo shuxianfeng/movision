@@ -55,4 +55,6 @@ public interface MemberMapper {
     List<Member> findnewIdentifyEngineer(@Param("type") String type);
 
     List<OmsMemBean> findAllMemberByPager(RowBounds rowBounds,OmsMemBean member);
+
+    List<OmsMemBean> findAllMemCertificateByPager(RowBounds rowBounds,OmsMemBean member);
 }
