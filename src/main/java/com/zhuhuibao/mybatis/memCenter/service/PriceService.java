@@ -159,8 +159,8 @@ public class PriceService {
         Member member = memberMapper.findMemById(id);
         if(member!=null){
             if("2".equals(member.getIdentify())){
-                map.put(Constant.companyName,"");
-                map.put(Constant.linkMan,member.getPersonRealName());
+                map.put(Constant.companyName,member.getPersonRealName());
+                map.put(Constant.linkMan,"");
                 map.put(Constant.telephone,member.getFixedTelephone());
                 map.put(Constant.mobile,member.getFixedMobile());
             }else{

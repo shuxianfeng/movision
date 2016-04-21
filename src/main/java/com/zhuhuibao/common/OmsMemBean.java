@@ -23,6 +23,8 @@ public class OmsMemBean {
 
     private String status;
 
+    private String isrecommend;
+
     public String getId() {
         return id;
     }
@@ -93,5 +95,13 @@ public class OmsMemBean {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getIsrecommend() {
+        return isrecommend;
+    }
+
+    public void setIsrecommend(String isrecommend) {
+        this.isrecommend = isrecommend;
     }
 }

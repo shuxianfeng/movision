@@ -62,6 +62,7 @@
     <result column="workType" property="workType" jdbcType="VARCHAR" />
     <result column="identify" property="identify" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="isrecommend" property="isrecommend" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, mobile, email, emailCheckCode, password, registerTime, status, identify,
@@ -379,7 +380,7 @@
     </if>
   </select>
   <select id="findAllMemberByPager" resultMap="ResultMap2" parameterType="com.zhuhuibao.common.OmsMemBean">
-    select m.id,m.registerTime,
+    select m.id,m.registerTime,m.isrecommend,
     CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile WHEN m.email IS NOT NULL and m.email != '' THEN m.email END AS account,
     m.enterpriseLinkman,
     CASE WHEN m.enterpriseName IS NOT NULL and m.enterpriseName != '' THEN m.enterpriseName
