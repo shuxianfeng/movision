@@ -127,15 +127,15 @@ public class ProductService {
     	log.info("update product");
     	try
     	{
-    		if(product.getNumber() == null || product.getNumber().trim().equals(""))
-    		{
-    			product.setNumber("1");
-    		}
-    		if(product.getPrice() == null || product.getPrice().trim().equals(""))
-    		{
-    			product.setPrice(Constant.product_price);
-    		}
-    		productMapper.updateByPrimaryKeySelective(product);
+			if(product != null) {
+				if (product.getNumber() == null || product.getNumber().trim().equals("")) {
+					product.setNumber("1");
+				}
+				if (product.getPrice() == null || product.getPrice().trim().equals("")) {
+					product.setPrice(Constant.product_price);
+				}
+				productMapper.updateByPrimaryKeySelective(product);
+			}
     	}
     	catch(Exception e)
     	{
@@ -222,7 +222,7 @@ public class ProductService {
     	try
     	{
     		product = productMapper.selectByPrimaryKey(id);
-    		if(product.getParamIDs() != null && product.getParamIDs().length() > 0)
+    		if(product != null && product.getParamIDs() != null && product.getParamIDs().length() > 0)
     		{
     			List<ProductParam> params = new ArrayList<ProductParam>();
     			String param = product.getParamIDs();

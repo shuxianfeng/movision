@@ -77,11 +77,13 @@ public class BrandManageController {
         JsonResult result = new JsonResult();
         //如果是未通过的品牌进行更新，则状态变为待审核
         if(type==null || "".equals(type)){
-            Brand brand1 = brandService.brandDetails(brand.getId());
-            if(brand1.getStatus()==0){
-                brand.setStatus(2);
+            if(brand != null && brand.getId() != null) {
+                Brand brand1 = brandService.brandDetails(brand.getId());
+                if (brand1.getStatus() == 0) {
+                    brand.setStatus(2);
+                }
+                brand.setLastModifyTime(new Date());
             }
-            brand.setLastModifyTime(new Date());
         }
         int isUpdate = brandService.updateBrand(brand);
         if(isUpdate==0){
