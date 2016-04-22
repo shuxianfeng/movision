@@ -1,8 +1,11 @@
 package com.zhuhuibao.business.job;
 
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
+import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
+import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.utils.DateUtils;
@@ -34,6 +37,9 @@ public class JobSiteController {
 
     @Autowired
     JobPositionService job;
+
+    @Autowired
+    ResumeService resume;
 
     @Autowired
     SiteMailService smService;
@@ -135,4 +141,35 @@ public class JobSiteController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
+
+    @RequestMapping(value="/rest/job/findAllResume", method = RequestMethod.GET)
+    public void findAllResume(HttpServletRequest req, HttpServletResponse response,
+                              Long jobID,Long createID,String pageNo,String pageSize) throws JsonGenerationException, JsonMappingException, IOException
+    {
+        log.info("find all resume!!");
+        JsonResult jsonResult = new JsonResult();
+        Long createId = ShiroUtil.getCreateID();
+        if(createId == null) {
+            if (StringUtils.isEmpty(pageNo)) {
+                pageNo = "1";
+            }
+            if (StringUtils.isEmpty(pageSize)) {
+                pageSize = "10";
+            }
+            Paging<Resume> pager = new Paging<Resume>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("createID", createID);
+            map.put("jobID", jobID);
+            jsonResult = resume.findAllResume(pager, map);
+            jsonResult.setData(pager);
+        }
+        else
+        {
+            jsonResult.setCode(400);
+            jsonResult.setMessage("you are not login!!!!");
+        }
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+
 }

@@ -181,7 +181,7 @@
     group by a.parentId
   </select>
   <select id="previewResume" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select r.id,r.title,r.realName,r.birthYear,
+    select r.id,r.title,r.realName,r.birthYear,dc.name education,
     case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,
     case WHEN r.marriage =0 then '未婚' WHEN r.marriage =1 THEN '已婚' WHEN r.marriage =2 THEN '保密' END AS marriage,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
@@ -197,6 +197,17 @@
     left join t_dictionary_area ar on r.jobArea = ar.code
     left join t_dictionary_constant co on co.code = r.hopeSalary
     left join t_dictionary_constant con on con.code = r.status
-    where r.createid = #{id} and co.type =1 and con.type = 6
+    left join t_dictionary_constant dc on dc.code = r.education
+    where r.id = #{id} and co.type =1 and con.type = 6 and dc.type = 2
+  </select>
+  <select id="findAllResume" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select t.id,t.title,ct.name jobCity,dc.name hopeSalary,t.photo,
+    period_diff(date_format(now(),'%Y'),date_format(concat(workYear,'-01-01'),'%Y')) workYear,
+    (select Group_concat(name) from t_dictionary_constant where find_in_set(code,t.jobNature) and type=7)AS jobNature,
+    (select Group_concat(name) from t_dictionary_position where find_in_set(id,t.post))AS post
+    from t_i_resume t
+    left join t_dictionary_city ct on ct.code = t.jobCity
+    left join t_dictionary_constant dc on dc.code = t.hopeSalary
+    where dc.type = 1 order by t.publishTime desc
   </select>
 </mapper>

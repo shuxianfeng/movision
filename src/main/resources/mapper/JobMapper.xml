@@ -168,10 +168,11 @@
   </select>
 
   <select id="findAllOtherPosition" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select t.name,date_format(t.publishTime,'%Y-%m-%d') publishTime,mb.enterpriseName,
+    select t.id,t.name,date_format(t.publishTime,'%Y-%m-%d') publishTime,mb.enterpriseName,
     (select cs.name from t_dictionary_constant cs where cs.code = t.salary and cs.type = 1)  salaryName,
     (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=2) as educationName,
     (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=3) as experienceName,
+    (select group_concat(name) from t_dictionary_constant where find_in_set(code,t.welfare) and type=5 ) as welfare,
     concat(ct.name,ar.name) workArea
     from t_i_job t
     left join t_dictionary_city ct on ct.code = t.city
@@ -179,31 +180,31 @@
     left join t_m_member mb on mb.id = t.createid
     <where>
       <if test="createID != null">
-        t.createid = #{createID}
+        and t.createid = #{createID}
       </if>
       <if test="jobID != null">
-        t.id != #{jobID}
+        and t.id != #{jobID}
       </if>
-      <if test="name != null">
-        t.name like concat('%',#{name},'%')
+      <if test="name != null and name != ''">
+        and t.name like concat('%',#{name},'%')
       </if>
-      <if test="enterpriseName != null">
-        mb.enterpriseName like concat('%',#{enterpriseName},'%')
+      <if test="enterpriseName != null and enterpriseName != ''">
+        and mb.enterpriseName like concat('%',#{enterpriseName},'%')
       </if>
-      <if test="province != null">
-        t.province = #{province}
+      <if test="city != null and city != ''">
+        and t.city = #{city}
       </if>
-      <if test="city != null">
-        t.city = #{city}
+      <if test="employeeNumber != null and employeeNumber != ''">
+        and mb.employeeNumber = #{employeeNumber}
       </if>
-      <if test="area != null">
-        t.area = #{area}
+      <if test="enterpriseType != null and enterpriseType != ''">
+        and mb.enterpriseType = #{enterpriseType}
       </if>
-      <if test="employeeNumber != null">
-        mb.employeeNumber = #{employeeNumber}
+      <if test="publishTime != null and publishTime != ''">
+        and date_format(#{publishTime},'%Y-%m-%d') &lt;= date_format(t.publishTime,'%Y-%m-%d')
       </if>
-      <if test="enterpriseType != null">
-        mb.enterpriseType = #{enterpriseType}
+      <if test="salary != null and salary != ''">
+        and salary = #{salary}
       </if>
     </where>
     order by publishTime desc

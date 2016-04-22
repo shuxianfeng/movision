@@ -1,14 +1,16 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.common.*;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.zhuhuibao.common.ApiConstants;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +26,9 @@ public class ResumeService {
 
     @Autowired
     private ResumeMapper resumeMapper;
+
+    @Autowired
+    ApiConstants apiConstants;
 
     /**
      * 发布简历
@@ -131,8 +136,33 @@ public class ResumeService {
     public JsonResult previewResume(String id){
         JsonResult jsonResult = new JsonResult();
         Resume resume = resumeMapper.previewResume(id);
+        if(resume != null && resume.getAttach() != null)
+        {
+            String url = apiConstants.getUploadDoc()+"/job/"+resume.getAttach();
+            resume.setAttach(url);
+        }
         jsonResult.setCode(200);
         jsonResult.setData(resume);
+        return jsonResult;
+    }
+
+    public JsonResult findAllResume(Paging<Resume> pager, Map<String,Object> map)
+    {
+        JsonResult jsonResult = new JsonResult();
+        try
+        {
+            List<Resume> resumeList = resumeMapper.findAllResume(pager.getRowBounds(),map);
+            pager.result(resumeList);
+            jsonResult.setData(pager);
+        }
+        catch(Exception e)
+        {
+            log.error("find all resume error!",e);
+            jsonResult.setCode(MsgCodeConstant.response_status_400);
+            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            return jsonResult;
+        }
         return jsonResult;
     }
 }

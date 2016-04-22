@@ -3,8 +3,10 @@ package com.zhuhuibao.mybatis.memCenter.mapper;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ResumeMapper {
 
@@ -22,4 +24,6 @@ public interface ResumeMapper {
 
     //预览简历
     Resume previewResume(@Param("id")String id);
+
+    List<Resume> findAllResume(RowBounds rowBounds, Map<String,Object> map);
 }
