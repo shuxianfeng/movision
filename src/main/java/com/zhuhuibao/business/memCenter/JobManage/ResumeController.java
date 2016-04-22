@@ -39,7 +39,7 @@ public class ResumeController {
     /**
      * 发布简历
      */
-    @RequestMapping(value = "rest/job/setUpResume", method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/job/setUpResume", method = RequestMethod.POST)
     public void setUpResume(HttpServletRequest req, HttpServletResponse response, Resume resume) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -61,7 +61,7 @@ public class ResumeController {
     /**
      * 查询我创建的简历
      */
-    @RequestMapping(value = "rest/job/searchMyResume", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/job/searchMyResume", method = RequestMethod.GET)
     public void searchMyResume(HttpServletRequest req, HttpServletResponse response) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -82,7 +82,7 @@ public class ResumeController {
     /**
      * 更新简历,刷新简历
      */
-    @RequestMapping(value = "rest/job/updateResume", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/job/updateResume", method = RequestMethod.GET)
     public void updateResume(HttpServletRequest req, HttpServletResponse response,Resume resume) throws IOException {
         JsonResult jsonResult = resumeService.updateResume(resume);
         response.setContentType("application/json;charset=utf-8");
@@ -92,7 +92,7 @@ public class ResumeController {
     /**
      * 预览简历
      */
-    @RequestMapping(value = "rest/job/previewResume", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/job/previewResume", method = RequestMethod.GET)
     public void previewResume(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
         JsonResult jsonResult = resumeService.previewResume(id);
         response.setContentType("application/json;charset=utf-8");
@@ -124,7 +124,7 @@ public class ResumeController {
     /**
      * 查询我创建的简历的全部信息
      */
-    @RequestMapping(value = "rest/job/searchMyResumeAllInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/job/searchMyResumeAllInfo", method = RequestMethod.GET)
     public void searchMyResumeAllInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);

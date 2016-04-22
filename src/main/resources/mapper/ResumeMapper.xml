@@ -163,7 +163,7 @@
   </update>
   <select id="searchMyResume" parameterType="java.lang.String" resultMap="BaseResultMap">
     select r.id,r.title,r.realName,(DATE_FORMAT( current_timestamp(),'%Y' )-r.birthYear)as birthYear,
-    case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,r.updateTime
+    case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,r.updateTime,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,concat(c.name,a.name)AS liveArea,r.photo
     from t_i_resume r
     left join t_dictionary_city c on r.liveCity = c.code

@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by cxx on 2016/4/19 0019.
@@ -48,9 +50,43 @@ public class ResumeService {
     public JsonResult searchMyResume(String id){
         JsonResult jsonResult = new JsonResult();
         Resume resume = resumeMapper.searchMyResume(id);
-        if(resume!=null){
+        Resume resume1 = resumeMapper.searchMyResumeAllInfo(id);
+        if(resume1!=null){
+            Integer i = 0;
+            if(resume1.getJobExperience()!=null){
+                i = i+1;
+            }
+            if(resume1.getEduExperience()!=null){
+                i=i+1;
+            }
+            if(resume1.getProjectExperience()!=null){
+                i=i+1;
+            }
+            if(resume1.getAttach()!=null){
+                i=i+1;
+            }
+            if(resume1.getPhoto()!=null){
+                i=i+1;
+            }
+            if(resume1.getPhoto()!=null){
+                i=i+1;
+            }
+            if(resume1.getExperienceYear()!=null){
+                i=i+1;
+            }
+            if(resume1.getCompany()!=null){
+                i=i+1;
+            }
+            if(resume1.getPositionName()!=null){
+                i=i+1;
+            }
+            Integer a = (i+16)/24;
+            String b = Integer.toString(a*100)+"%";
+            Map map = new HashMap();
+            map.put("info",resume);
+            map.put("percent",b);
             jsonResult.setCode(200);
-            jsonResult.setData(resume);
+            jsonResult.setData(map);
         }else{
             jsonResult.setCode(400);
             jsonResult.setMessage("暂无简历");

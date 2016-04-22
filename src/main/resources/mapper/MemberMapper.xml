@@ -437,11 +437,8 @@
     <if test="memberType != null and memberType == 1 ">
       and m.identify != 2
     </if>
-    <if test="identify != null and identify != '' ">
-      and find_in_set(#{identify},m.identify)
-    </if>
     <if test="status != null and status != '' ">
-      and m.status = 5
+      and r.status = #{status}
     </if>
     <if test="id != null and id != '' ">
       and r.id = #{id}
