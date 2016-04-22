@@ -264,22 +264,18 @@ public class JobPositionService {
      * @param map 查询条件
      * @return
      */
-    public JsonResult queryOtherPosition(Paging<Job> pager,Map<String,Object> map)
+    public List<Job> findAllOtherPosition(Paging<Job> pager,Map<String,Object> map)
     {
-        JsonResult jsonResult = new JsonResult();
+        List<Job> jobList = new ArrayList<Job>();
         try
         {
-            List<Job> jobList = jobMapper.findAllOtherPosition(pager.getRowBounds(),map);
-            jsonResult.setData(jobList);
+            jobList = jobMapper.findAllOtherPosition(pager.getRowBounds(),map);
         }
         catch(Exception e)
         {
             log.error("add offer price error!",e);
-            jsonResult.setCode(MsgCodeConstant.response_status_400);
-            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return jsonResult;
+
         }
-        return jsonResult;
+        return jobList;
     }
 }
