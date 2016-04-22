@@ -31,6 +31,10 @@ public class OmsMemBean {
 
     private String publishTime;
 
+    private String certificate_url;
+
+    private String certificate_number;
+
     public String getId() {
         return id;
     }
@@ -133,5 +137,21 @@ public class OmsMemBean {
 
     public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
+    }
+
+    public String getCertificate_url() {
+        return certificate_url;
+    }
+
+    public void setCertificate_url(String certificate_url) {
+        this.certificate_url = certificate_url;
+    }
+
+    public String getCertificate_number() {
+        return certificate_number;
+    }
+
+    public void setCertificate_number(String certificate_number) {
+        this.certificate_number = certificate_number;
     }
 }

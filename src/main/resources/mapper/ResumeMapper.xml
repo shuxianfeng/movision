@@ -2,29 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper" >
   <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
-    <id column="id" property="id" jdbcType="BIGINT" />
+    <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="createid" property="createid" jdbcType="BIGINT" />
-    <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP" />
-    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="jobNature" property="jobNature" jdbcType="INTEGER" />
+    <result column="createid" property="createid" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
+    <result column="jobNature" property="jobNature" jdbcType="VARCHAR" />
     <result column="post" property="post" jdbcType="VARCHAR" />
+    <result column="parentId" property="parentId" jdbcType="VARCHAR" />
     <result column="jobProvince" property="jobProvince" jdbcType="VARCHAR" />
     <result column="jobCity" property="jobCity" jdbcType="VARCHAR" />
     <result column="jobArea" property="jobArea" jdbcType="VARCHAR" />
-    <result column="hopeSalary" property="hopeSalary" jdbcType="INTEGER" />
-    <result column="curSalary" property="curSalary" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="hopeSalary" property="hopeSalary" jdbcType="VARCHAR" />
+    <result column="curSalary" property="curSalary" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="realName" property="realName" jdbcType="VARCHAR" />
     <result column="userName" property="userName" jdbcType="VARCHAR" />
-    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
     <result column="workYear" property="workYear" jdbcType="VARCHAR" />
-    <result column="education" property="education" jdbcType="INTEGER" />
-    <result column="experienceYear" property="experienceYear" jdbcType="INTEGER" />
+    <result column="education" property="education" jdbcType="VARCHAR" />
+    <result column="experienceYear" property="experienceYear" jdbcType="VARCHAR" />
     <result column="company" property="company" jdbcType="VARCHAR" />
     <result column="positionName" property="positionName" jdbcType="VARCHAR" />
     <result column="birthYear" property="birthYear" jdbcType="VARCHAR" />
-    <result column="marriage" property="marriage" jdbcType="INTEGER" />
+    <result column="marriage" property="marriage" jdbcType="VARCHAR" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="liveProvince" property="liveProvince" jdbcType="VARCHAR" />
@@ -35,6 +36,10 @@
     <result column="projectExperience" property="projectExperience" jdbcType="VARCHAR" />
     <result column="eduExperience" property="eduExperience" jdbcType="VARCHAR" />
     <result column="attach" property="attach" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.ResultBean" >
+    <id column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, title, createid, publishTime, updateTime, jobNature, post, jobProvince, jobCity, 
@@ -164,6 +169,16 @@
     left join t_dictionary_city c on r.liveCity = c.code
     left join t_dictionary_area a on r.liveArea = a.code
     where r.createid = #{id}
+  </select>
+  <select id="searchMyResumeAllInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select r.*,(select parentId from t_dictionary_position where find_in_set(id,r.post) group by parentId) as parentId
+    FROM t_i_resume r
+    where r.createid = #{id}
+  </select>
+  <select id="searchMyResumeJobType" parameterType="java.lang.String" resultMap="ResultMap">
+    select group_concat(id) as code,parentId as name from(
+    select id,parentId from t_dictionary_position where find_in_set(id,#{post}) )a
+    group by a.parentId
   </select>
   <select id="previewResume" parameterType="java.lang.String" resultMap="BaseResultMap">
     select r.id,r.title,r.realName,r.birthYear,

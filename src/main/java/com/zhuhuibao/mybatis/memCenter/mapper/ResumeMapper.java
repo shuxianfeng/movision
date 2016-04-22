@@ -1,7 +1,10 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
+import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface ResumeMapper {
 
@@ -10,6 +13,9 @@ public interface ResumeMapper {
 
     //查询我创建的简历
     Resume searchMyResume(@Param("id") String id);
+
+    //查询我创建的简历的全部信息
+    Resume searchMyResumeAllInfo(@Param("id") String id);
 
     //更新简历,刷新简历
     int updateResume(Resume resume);

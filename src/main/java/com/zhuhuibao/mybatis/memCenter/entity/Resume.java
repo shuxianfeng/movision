@@ -9,13 +9,15 @@ public class Resume {
 
     private String createid;
 
-    private Date publishTime;
+    private String publishTime;
 
-    private Date updateTime;
+    private String updateTime;
 
     private String jobNature;
 
     private String post;
+
+    private String parentId;
 
     private String jobProvince;
 
@@ -93,19 +95,19 @@ public class Resume {
         this.createid = createid;
     }
 
-    public Date getPublishTime() {
+    public String getPublishTime() {
         return publishTime;
     }
 
-    public void setPublishTime(Date publishTime) {
+    public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -331,5 +333,13 @@ public class Resume {
 
     public void setAttach(String attach) {
         this.attach = attach == null ? null : attach.trim();
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 }

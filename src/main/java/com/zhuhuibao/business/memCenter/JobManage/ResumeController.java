@@ -120,4 +120,25 @@ public class ResumeController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
+
+    /**
+     * 查询我创建的简历的全部信息
+     */
+    @RequestMapping(value = "rest/job/searchMyResumeAllInfo", method = RequestMethod.GET)
+    public void searchMyResumeAllInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        JsonResult jsonResult = new JsonResult();
+        if(null != session) {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
+            if(null != principal){
+                jsonResult = resumeService.searchMyResumeAllInfo(principal.getId().toString());
+            }
+        }else{
+            jsonResult.setCode(401);
+            jsonResult.setMessage("请先登录");
+        }
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
 }
