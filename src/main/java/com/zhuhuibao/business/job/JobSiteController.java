@@ -5,6 +5,7 @@ import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -19,7 +20,9 @@ import org.codehaus.jackson.map.JsonMappingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -87,16 +90,21 @@ public class JobSiteController {
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("createID",createID);
         map.put("jobID",jobID);
-        JsonResult jsonResult = job.queryOtherPosition(pager,map);
+        JsonResult jsonResult = new JsonResult();
+        List<Job> jobList = job.findAllOtherPosition(pager,map);
+        pager.result(jobList);
+        jsonResult.setData(pager);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
 
     @RequestMapping(value="/rest/job/queryAllPosition", method = RequestMethod.GET)
     public void queryAllPosition(HttpServletRequest req, HttpServletResponse response,
-                                 String name,String enterpriseName,String province,String city,String area,String employeeNumber,String enterpriseType,
+                                 String name,String enterpriseName,String province,String city,String area,String employeeNumber,
+                                 String enterpriseType,String days,String salary,
                                  String pageNo,String pageSize) throws JsonGenerationException, JsonMappingException, IOException
     {
+        JsonResult jsonResult = new JsonResult();
         log.info("query position info by id");
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -104,16 +112,26 @@ public class JobSiteController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String,Object> map = new HashMap<String,Object>();
-        map.put("name",name);
+        if(name != null && !"".equals(name))
+        {
+            map.put("name",name.replace("_","\\_"));
+        }
         map.put("enterpriseName",enterpriseName);
-        map.put("province",province);
         map.put("city",city);
-        map.put("area",area);
         map.put("employeeNumber",employeeNumber);
         map.put("enterpriseType",enterpriseType);
-        JsonResult jsonResult = job.queryOtherPosition(pager,map);
+        //发布时间一周内，一天内
+        if(days != null && !"".equals(days)) {
+            Date date = DateUtils.date2Sub(new Date(), 5, -Integer.parseInt(days));
+            String publishTime = DateUtils.date2Str(date, "yyyy-MM-dd");
+            map.put("publishTime", publishTime);
+        }
+        map.put("salary",salary);
+        Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Job> jobList = job.findAllOtherPosition(pager,map);
+        pager.result(jobList);
+        jsonResult.setData(pager);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
