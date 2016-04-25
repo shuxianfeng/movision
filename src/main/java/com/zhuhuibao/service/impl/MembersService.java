@@ -100,6 +100,8 @@ public class MembersService implements IMembersService {
 							.get("enterpriseName")));
 					member.setAuthinfo(FormatUtil.parseString(itemAsMap
 							.get("authinfo")));
+					member.setEnterpriseLogo(FormatUtil.parseString(itemAsMap
+							.get("enterpriseLogo")));
 					member.setEnterpriseWebSite(FormatUtil.parseString(itemAsMap
 							.get("enterpriseWebSite")));
 					member.setAddress(FormatUtil.parseString(itemAsMap
@@ -206,6 +208,8 @@ public class MembersService implements IMembersService {
 							.get("enterpriseName")));
 					member.setAuthinfo(FormatUtil.parseString(itemAsMap
 							.get("authinfo")));
+					member.setEnterpriseLogo(FormatUtil.parseString(itemAsMap
+							.get("enterpriseLogo")));
 					member.setEnterpriseWebSite(FormatUtil.parseString(itemAsMap
 							.get("enterpriseWebSite")));
 					member.setAddress(FormatUtil.parseString(itemAsMap
