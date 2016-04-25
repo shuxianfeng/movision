@@ -302,4 +302,8 @@ public interface Constant {
 	String code = "code";
 
 	String subPositionList = "subPositionList";
+
+	String realName = "realName";
+
+	String experienceYear = "experienceYear";
 }

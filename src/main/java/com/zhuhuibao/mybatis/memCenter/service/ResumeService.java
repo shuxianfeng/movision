@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.common.*;
+import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.zhuhuibao.common.ApiConstants;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -163,6 +165,28 @@ public class ResumeService {
             jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
             return jsonResult;
         }
+        return jsonResult;
+    }
+
+    /**
+     * 我收到的简历
+     */
+    public JsonResult receiveResume(String id){
+        JsonResult jsonResult = new JsonResult();
+        List<Resume> resumeList = resumeMapper.receiveResume(id);
+        List list = new ArrayList();
+        for(int i=0;i<resumeList.size();i++){
+            Resume resume = resumeList.get(i);
+            Map map = new HashMap();
+            map.put(Constant.id,resume.getId());
+            map.put(Constant.name,resume.getName());
+            map.put(Constant.publishTime,resume.getPublishTime());
+            map.put(Constant.realName,resume.getRealName());
+            map.put(Constant.experienceYear,resume.getExperienceYear());
+            list.add(map);
+        }
+        jsonResult.setCode(200);
+        jsonResult.setData(list);
         return jsonResult;
     }
 }

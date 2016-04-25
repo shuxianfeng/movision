@@ -278,4 +278,27 @@ public class JobPositionService {
         }
         return jobList;
     }
+
+    /**
+     * 我申请的职位
+     */
+    public JsonResult myApplyPosition(String id){
+        JsonResult jsonResult = new JsonResult();
+        List<Job> jobList = jobMapper.myApplyPosition(id);
+        List list = new ArrayList();
+        for(int i=0;i<jobList.size();i++){
+            Job job = jobList.get(i);
+            Map map = new HashMap();
+            map.put(Constant.id,job.getId());
+            map.put(Constant.name,job.getName());
+            map.put(Constant.companyName,job.getEnterpriseName());
+            map.put(Constant.salary,job.getSalaryName());
+            map.put(Constant.publishTime,job.getPublishTime());
+            map.put(Constant.area,job.getWorkArea());
+            list.add(map);
+        }
+        jsonResult.setCode(200);
+        jsonResult.setData(list);
+        return jsonResult;
+    }
 }

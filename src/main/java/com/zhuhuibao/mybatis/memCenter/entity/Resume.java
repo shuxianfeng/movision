@@ -7,6 +7,8 @@ public class Resume {
 
     private String title;
 
+    private String name;
+
     private String createid;
 
     private String publishTime;
@@ -341,5 +343,13 @@ public class Resume {
 
     public void setParentId(String parentId) {
         this.parentId = parentId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

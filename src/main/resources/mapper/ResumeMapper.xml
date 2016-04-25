@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="createid" property="createid" jdbcType="VARCHAR" />
     <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
@@ -209,5 +210,12 @@
     left join t_dictionary_city ct on ct.code = t.jobCity
     left join t_dictionary_constant dc on dc.code = t.hopeSalary
     where dc.type = 1 order by t.publishTime desc
+  </select>
+  <select id="receiveResume" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select r.id,j.name,r.realName,re.publishDate as publishTime ,c.name as experienceYear from t_i_resume r
+    left join t_i_jobRelresume re on re.resumeID = r.id
+    left join t_i_job j on j.id = re.jobID
+    left join t_dictionary_constant c on c.code = r.experienceYear
+    where re.jobID in (select id from t_i_job where createid=#{id}) and c.type = 3
   </select>
 </mapper>
