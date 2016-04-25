@@ -140,7 +140,9 @@ public class JobController {
         JsonResult jsonResult = new JsonResult();
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            jsonResult = jobService.searchRecommendPosition(principal.getId().toString());
+            if(null != principal) {
+                jsonResult = jobService.searchRecommendPosition(principal.getId().toString());
+            }
         }else{
                 jsonResult.setCode(401);
                 jsonResult.setMessage("请先登录");
