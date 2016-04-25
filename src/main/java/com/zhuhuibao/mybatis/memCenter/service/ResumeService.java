@@ -173,7 +173,7 @@ public class ResumeService {
      */
     public JsonResult receiveResume(Paging<Resume> pager,String id){
         JsonResult jsonResult = new JsonResult();
-        List<Resume> resumeList = resumeMapper.receiveResume(pager.getRowBounds(),id);
+        List<Resume> resumeList = resumeMapper.findALLReceiveResume(pager.getRowBounds(),id);
         List list = new ArrayList();
         for(int i=0;i<resumeList.size();i++){
             Resume resume = resumeList.get(i);

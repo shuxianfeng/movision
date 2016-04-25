@@ -284,7 +284,7 @@ public class JobPositionService {
      */
     public JsonResult myApplyPosition(Paging<Job> pager,String id){
         JsonResult jsonResult = new JsonResult();
-        List<Job> jobList = jobMapper.myApplyPosition(pager.getRowBounds(),id);
+        List<Job> jobList = jobMapper.findAllMyApplyPosition(pager.getRowBounds(),id);
         List list = new ArrayList();
         for(int i=0;i<jobList.size();i++){
             Job job = jobList.get(i);

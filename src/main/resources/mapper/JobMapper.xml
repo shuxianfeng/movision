@@ -209,7 +209,7 @@
     </where>
     order by publishTime desc
   </select>
-  <select id="myApplyPosition" parameterType="java.lang.String" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
+  <select id="findAllMyApplyPosition" parameterType="java.lang.String" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
     select j.id,j.name, c.name as salaryName,ci.name as workArea,re.publishDate as publishTime,m.enterpriseName,
     (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
     from t_i_job j

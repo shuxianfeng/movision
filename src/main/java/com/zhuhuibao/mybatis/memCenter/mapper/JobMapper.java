@@ -40,5 +40,5 @@ public interface JobMapper {
 
     List<Job> findAllOtherPosition(RowBounds rowBounds,Map<String,Object> map);
 
-    List<Job> myApplyPosition(RowBounds rowBounds,@Param("id") String id);
+    List<Job> findAllMyApplyPosition(RowBounds rowBounds,@Param("id") String id);
 }
