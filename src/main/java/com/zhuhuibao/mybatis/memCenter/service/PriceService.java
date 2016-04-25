@@ -220,7 +220,7 @@ public class PriceService {
             AskPrice askPrice = askPriceList.get(i);
             Map map = new HashMap();
             map.put(Constant.id,askPrice.getId());
-            map.put(Constant.title,askPrice.getTitle());
+            map.put(Constant.companyName,askPrice.getTitle());
             list.add(map);
         }
         jsonResult.setCode(200);
