@@ -2,12 +2,15 @@ package com.zhuhuibao.business.memCenter.JobManage;
 
 import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.JsonUtils;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -146,13 +149,22 @@ public class ResumeController {
      * 我收到的简历
      */
     @RequestMapping(value = "/rest/job/receiveResume", method = RequestMethod.GET)
-    public void receiveResume(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public void receiveResume(HttpServletRequest req, HttpServletResponse response,String pageNo,String pageSize) throws IOException {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         JsonResult jsonResult = new JsonResult();
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            jsonResult = resumeService.receiveResume(principal.getId().toString());
+            if(null != principal) {
+                Paging<Resume> pager = new Paging<Resume>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+                jsonResult = resumeService.receiveResume(pager,principal.getId().toString());
+            }
         }else{
             jsonResult.setCode(401);
             jsonResult.setMessage("请先登录");

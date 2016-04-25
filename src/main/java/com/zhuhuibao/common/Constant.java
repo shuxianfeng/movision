@@ -306,4 +306,6 @@ public interface Constant {
 	String realName = "realName";
 
 	String experienceYear = "experienceYear";
+
+	String welfare = "welfare";
 }

@@ -171,9 +171,9 @@ public class ResumeService {
     /**
      * 我收到的简历
      */
-    public JsonResult receiveResume(String id){
+    public JsonResult receiveResume(Paging<Resume> pager,String id){
         JsonResult jsonResult = new JsonResult();
-        List<Resume> resumeList = resumeMapper.receiveResume(id);
+        List<Resume> resumeList = resumeMapper.receiveResume(pager.getRowBounds(),id);
         List list = new ArrayList();
         for(int i=0;i<resumeList.size();i++){
             Resume resume = resumeList.get(i);
@@ -185,8 +185,9 @@ public class ResumeService {
             map.put(Constant.experienceYear,resume.getExperienceYear());
             list.add(map);
         }
+        pager.result(list);
         jsonResult.setCode(200);
-        jsonResult.setData(list);
+        jsonResult.setData(pager);
         return jsonResult;
     }
 }

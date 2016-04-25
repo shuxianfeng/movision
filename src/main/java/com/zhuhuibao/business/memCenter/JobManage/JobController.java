@@ -153,13 +153,22 @@ public class JobController {
      * 我申请的职位
      */
     @RequestMapping(value = "/rest/job/myApplyPosition", method = RequestMethod.GET)
-    public void myApplyPosition(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public void myApplyPosition(HttpServletRequest req, HttpServletResponse response,String pageNo,String pageSize) throws IOException {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         JsonResult jsonResult = new JsonResult();
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            jsonResult = jobService.myApplyPosition(principal.getId().toString());
+            if(null != principal){
+                Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+                jsonResult = jobService.myApplyPosition(pager,principal.getId().toString());
+            }
         }else{
             jsonResult.setCode(401);
             jsonResult.setMessage("请先登录");

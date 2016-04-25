@@ -28,5 +28,5 @@ public interface ResumeMapper {
     List<Resume> findAllResume(RowBounds rowBounds, Map<String,Object> map);
 
     //我收到的简历
-    List<Resume> receiveResume(@Param("id")String id);
+    List<Resume> receiveResume(RowBounds rowBounds,@Param("id")String id);
 }

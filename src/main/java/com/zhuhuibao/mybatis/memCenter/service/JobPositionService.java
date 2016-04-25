@@ -282,9 +282,9 @@ public class JobPositionService {
     /**
      * 我申请的职位
      */
-    public JsonResult myApplyPosition(String id){
+    public JsonResult myApplyPosition(Paging<Job> pager,String id){
         JsonResult jsonResult = new JsonResult();
-        List<Job> jobList = jobMapper.myApplyPosition(id);
+        List<Job> jobList = jobMapper.myApplyPosition(pager.getRowBounds(),id);
         List list = new ArrayList();
         for(int i=0;i<jobList.size();i++){
             Job job = jobList.get(i);
@@ -295,10 +295,12 @@ public class JobPositionService {
             map.put(Constant.salary,job.getSalaryName());
             map.put(Constant.publishTime,job.getPublishTime());
             map.put(Constant.area,job.getWorkArea());
+            map.put(Constant.welfare,job.getWelfare());
             list.add(map);
         }
+        pager.result(list);
         jsonResult.setCode(200);
-        jsonResult.setData(list);
+        jsonResult.setData(pager);
         return jsonResult;
     }
 }
