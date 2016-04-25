@@ -211,4 +211,20 @@ public class PriceService {
 
         return askList;
     }
+
+    public JsonResult queryNewPriceInfo(){
+        JsonResult jsonResult = new JsonResult();
+        List<AskPrice> askPriceList = askPriceMapper.queryNewPriceInfo();
+        List list = new ArrayList();
+        for(int i=0;i<askPriceList.size();i++){
+            AskPrice askPrice = askPriceList.get(i);
+            Map map = new HashMap();
+            map.put(Constant.id,askPrice.getId());
+            map.put(Constant.title,askPrice.getTitle());
+            list.add(map);
+        }
+        jsonResult.setCode(200);
+        jsonResult.setData(list);
+        return jsonResult;
+    }
 }

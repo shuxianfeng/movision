@@ -20,4 +20,6 @@ public interface AskPriceMapper {
 
     List<AskPrice> find();
 
+    List<AskPrice> queryNewPriceInfo();
+
 }

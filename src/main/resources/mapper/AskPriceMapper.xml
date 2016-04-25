@@ -304,4 +304,7 @@
       and p.publishTime &lt;= #{endTime}
     </if>
   </select>
+  <select id="queryNewPriceInfo" resultMap="BaseResultMap">
+    select id,title from t_p_ask_price where type = 1 order BY publishTime desc limit 0,6
+  </select>
 </mapper>

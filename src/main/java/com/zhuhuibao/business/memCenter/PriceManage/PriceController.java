@@ -173,4 +173,14 @@ public class PriceController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
+
+    /**
+     * 最新公开询价
+     */
+    @RequestMapping(value = "/rest/price/queryNewPriceInfo", method = RequestMethod.GET)
+    public void queryNewPriceInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult jsonResult = priceService.queryNewPriceInfo();
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
 }
