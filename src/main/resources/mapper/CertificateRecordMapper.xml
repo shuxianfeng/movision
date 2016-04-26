@@ -74,6 +74,13 @@
       <include refid="Base_Column_List" />
     from t_certificate_record
     where
-      mem_id = #{mem_id} and type = #{type} and is_deleted = 0 and status = 1
+      mem_id = #{mem_id} and type = #{type} and is_deleted = 0
+  </select>
+  <select id="certificateSearch1" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_certificate_record
+    where
+    mem_id = #{mem_id} and type = #{type} and is_deleted = 0 and status = 1
   </select>
 </mapper>
