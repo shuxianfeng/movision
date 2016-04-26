@@ -484,7 +484,7 @@ public class MemberService {
 		CertificateRecord certificateRecord = new CertificateRecord();
 		certificateRecord.setMem_id(Integer.parseInt(id));
 		certificateRecord.setType(type);
-		List<CertificateRecord> certificateRecordList = certificateRecordMapper.certificateSearch(certificateRecord);
+		List<CertificateRecord> certificateRecordList = certificateRecordMapper.certificateSearch1(certificateRecord);
 		Map map = new HashMap();
 		String createTime = "";
 		if(member.getEnterpriseCreaterTime()!=null){
