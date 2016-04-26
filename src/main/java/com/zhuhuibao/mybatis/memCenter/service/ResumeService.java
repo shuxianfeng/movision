@@ -190,4 +190,36 @@ public class ResumeService {
         jsonResult.setData(pager);
         return jsonResult;
     }
+
+    /**
+     * 导出简历
+     */
+    public Map<String,String> exportResume(String id){
+        Map<String,String> resumeMap = new HashMap<String,String>();
+        Resume resume = resumeMapper.previewResume(id);
+        if(resume != null && resume.getAttach() != null)
+        {
+            String url = apiConstants.getUploadDoc()+"/job/"+resume.getAttach();
+            resume.setAttach(url);
+            resumeMap.put("title",resume.getTitle());
+            resumeMap.put("name",resume.getRealName());
+            resumeMap.put("sex",resume.getSex());
+            resumeMap.put("marriage",resume.getMarriage());
+            resumeMap.put("birthYear",resume.getBirthYear());
+            resumeMap.put("education",resume.getEducation());
+            resumeMap.put("liveArea",resume.getLiveArea());
+            resumeMap.put("workYear",resume.getWorkYear());
+            resumeMap.put("mobile",resume.getMobile());
+            resumeMap.put("email",resume.getEmail());
+            resumeMap.put("jobNature",resume.getJobNature());
+            resumeMap.put("post",resume.getPost());
+            resumeMap.put("jobArea",resume.getJobArea());
+            resumeMap.put("hopeSalary",resume.getHopeSalary());
+            resumeMap.put("status",resume.getStatus());
+            resumeMap.put("eduExperience",resume.getEduExperience());
+            resumeMap.put("jobExperience",resume.getJobExperience());
+            resumeMap.put("projectExperience",resume.getProjectExperience());
+        }
+        return resumeMap;
+    }
 }

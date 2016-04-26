@@ -136,27 +136,31 @@ public class OfferPriceController {
 	public void downloadBill(HttpServletRequest req,HttpServletResponse response,Long id,String type) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		log.info("query offer priece info by id ");
-		String fileurl = offerService.downloadBill(id, type);
-		response.setDateHeader("Expires", 0);
-		response.setHeader("Cache-Control",
-				"no-store, no-cache, must-revalidate");
-		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		response.setHeader("Content-disposition","attachment;filename="+fileurl);
-		response.setContentType("application/octet-stream");
-		fileurl = ApiConstants.getUploadDoc()+Constant.upload_price_document_url+"/"+fileurl;
-		File file = new File(fileurl);
-		if(file.exists()){   //如果文件存在
-			FileInputStream inputStream = new FileInputStream(file);
-	        byte[] data = new byte[(int)file.length()];
-	        int length = inputStream.read(data);
-	        inputStream.close();
-	        ServletOutputStream stream = response.getOutputStream();
-	        stream.write(data);
-	        stream.flush();
-	        stream.close();
+		try {
+			String fileurl = offerService.downloadBill(id, type);
+			response.setDateHeader("Expires", 0);
+			response.setHeader("Cache-Control",
+					"no-store, no-cache, must-revalidate");
+			response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+			response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
+			response.setContentType("application/octet-stream");
+			fileurl = ApiConstants.getUploadDoc() + Constant.upload_price_document_url + "/" + fileurl;
+			File file = new File(fileurl);
+			if (file.exists()) {   //如果文件存在
+				FileInputStream inputStream = new FileInputStream(file);
+				byte[] data = new byte[(int) file.length()];
+				int length = inputStream.read(data);
+				inputStream.close();
+				ServletOutputStream stream = response.getOutputStream();
+				stream.write(data);
+				stream.flush();
+				stream.close();
+			}
 		}
-//		return null;
-//		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+		catch(Exception e)
+		{
+			log.error("download bill error! ",e);
+		}
 	}
 	
 	@RequestMapping(value="/rest/price/queryAllOfferPriceByAskID", method = RequestMethod.GET)

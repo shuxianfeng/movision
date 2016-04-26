@@ -71,51 +71,25 @@ public class JobSiteController {
         response.setHeader("Cache-Control",
                 "no-store, no-cache, must-revalidate");
         response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-        response.setContentType("application/octet-stream");
-        String path = req.getSession().getServletContext().getRealPath("\\");
-        String destFile="D:\\resume.doc";
-        JsonResult jsonResult = resume.previewResume(String.valueOf(id));
-        if(jsonResult.getData() != null) {
-            Resume resume = (Resume) jsonResult.getData();
-            Map<String,String> resumeMap = new HashMap<String,String>();
-            resumeMap.put("title",resume.getTitle());
-            resumeMap.put("name",resume.getRealName());
-            response.setHeader("Content-disposition", "attachment; filename=\""
-                    + URLEncoder.encode(resume.getTitle(), "UTF-8") + "\""); //
-            resumeMap.put("sex",resume.getSex());
-            resumeMap.put("marriage",resume.getMarriage());
-            resumeMap.put("birthYear",resume.getBirthYear());
-            resumeMap.put("education",resume.getEducation());
-            resumeMap.put("liveArea",resume.getLiveArea());
-            resumeMap.put("workYear",resume.getWorkYear());
-            resumeMap.put("mobile",resume.getMobile());
-            resumeMap.put("email",resume.getEmail());
-            resumeMap.put("jobNature",resume.getJobNature());
-            resumeMap.put("post",resume.getPost());
-            resumeMap.put("jobArea",resume.getJobArea());
-            resumeMap.put("hopeSalary",resume.getHopeSalary());
-            resumeMap.put("status",resume.getStatus());
-            resumeMap.put("eduExperience",resume.getEduExperience());
-            resumeMap.put("jobExperience",resume.getJobExperience());
-            resumeMap.put("projectExperience",resume.getProjectExperience());
-            HWPFDocument document= ExporDoc.replaceDoc(path+"\\resume.doc", resumeMap);
-            ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-            try {
+        response.setContentType("application/msword");
+        try {
+            String path = req.getSession().getServletContext().getRealPath("\\");
+            Map<String, String> resumeMap = resume.exportResume(String.valueOf(id));
+            if (!resumeMap.isEmpty()) {
+                response.setHeader("Content-disposition", "attachment; filename=\""
+                        + URLEncoder.encode(resumeMap.get("title"), "UTF-8") + ".doc\""); //
+                HWPFDocument document = ExporDoc.replaceDoc(path + "\\resumeTemplate.doc", resumeMap);
+                ByteArrayOutputStream ostream = new ByteArrayOutputStream();
                 document.write(ostream);
-                //输出word文件
-                /*OutputStream outs=new FileOutputStream(destFile);
-                outs.write(ostream.toByteArray());*/
                 ServletOutputStream stream = response.getOutputStream();
                 stream.write(ostream.toByteArray());
                 stream.flush();
                 stream.close();
                 stream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        }catch(IOException e){
+                e.printStackTrace();
         }
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
 
     @RequestMapping(value="/rest/job/queryCompanyInfo", method = RequestMethod.GET)
@@ -176,7 +150,7 @@ public class JobSiteController {
      * @param req
      * @param response
      * @param createID
-     * @param jobCity
+     * @param city  城市代码
      * @param name
      * @param pageNo
      * @param pageSize
@@ -264,7 +238,10 @@ public class JobSiteController {
             }
             Paging<Resume> pager = new Paging<Resume>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("title",title);
+            if(title != null && !"".equals(title))
+            {
+                map.put("title",title.replace("_","\\_"));
+            }
             map.put("jobCity",jobCity);
             map.put("expYear",expYear);
             map.put("education",education);

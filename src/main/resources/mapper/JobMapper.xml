@@ -148,7 +148,7 @@
     left join t_dictionary_area ar on ar.code = t.area
     left join t_dictionary_enterpriseType ep on ep.id = t.enterpriseType
     left join t_dictionary_employeeSize es on es.id = t.employeeNumber
-    where jb.id =  #{id}
+    where t.id =  #{id}
   </select>
   <select id="queryAdvertisingPosition" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.MemberDetails">
     select t.id,t.enterpriseName,t.enterpriseLogo,t.enterpriseDesc,
