@@ -73,6 +73,8 @@ public class Resume {
 
     private String attach;
 
+    private String isPublic;
+
     public String getId() {
         return id;
     }
@@ -351,5 +353,13 @@ public class Resume {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIsPublic() {
+        return isPublic;
+    }
+
+    public void setIsPublic(String isPublic) {
+        this.isPublic = isPublic;
     }
 }

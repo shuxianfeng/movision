@@ -36,6 +36,7 @@
     <result column="projectExperience" property="projectExperience" jdbcType="VARCHAR" />
     <result column="eduExperience" property="eduExperience" jdbcType="VARCHAR" />
     <result column="attach" property="attach" jdbcType="VARCHAR" />
+    <result column="isPublic" property="isPublic" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMap" type="com.zhuhuibao.common.ResultBean" >
     <id column="code" property="code" jdbcType="VARCHAR" />
@@ -165,7 +166,7 @@
   <select id="searchMyResume" parameterType="java.lang.String" resultMap="BaseResultMap">
     select r.id,r.title,r.realName,(DATE_FORMAT( current_timestamp(),'%Y' )-r.birthYear)as birthYear,
     case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,r.updateTime,
-    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,concat(c.name,a.name)AS liveArea,r.photo
+    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,concat(c.name,a.name)AS liveArea,r.photo,r.isPublic
     from t_i_resume r
     left join t_dictionary_city c on r.liveCity = c.code
     left join t_dictionary_area a on r.liveArea = a.code
