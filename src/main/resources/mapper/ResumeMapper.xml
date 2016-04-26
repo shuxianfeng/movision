@@ -46,20 +46,20 @@
     id, title, createid, publishTime, updateTime, jobNature, post, jobProvince, jobCity,
     jobArea, hopeSalary, curSalary, status, realName, userName, sex, workYear, education,
     experienceYear, company, positionName, birthYear, marriage, mobile, email, liveProvince,
-    liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach
+    liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach,isPublic
   </sql>
   <insert id="setUpResume" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
     insert into t_i_resume (id, title, createid, publishTime, updateTime, jobNature,
     post, jobProvince, jobCity, jobArea, hopeSalary, curSalary, status, realName, userName,
     sex, workYear, education, experienceYear, company, positionName, birthYear, marriage, mobile,
-    email, liveProvince, liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach
+    email, liveProvince, liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach,isPublic
     )
     values (#{id}, #{title}, #{createid},
     now(), now(), #{jobNature},#{post}, #{jobProvince}, #{jobCity},#{jobArea},
     #{hopeSalary}, #{curSalary},#{status}, #{realName}, #{userName},#{sex}, #{workYear}, #{education},
     #{experienceYear}, #{company}, #{positionName}, #{birthYear}, #{marriage}, #{mobile},
     #{email}, #{liveProvince}, #{liveCity}, #{liveArea}, #{photo}, #{jobExperience},
-    #{projectExperience}, #{eduExperience}, 1
+    #{projectExperience}, #{eduExperience}, #{isPublic},1
     )
   </insert>
 
@@ -159,6 +159,9 @@
       </if>
       <if test="attach != null" >
         attach = #{attach},
+      </if>
+      <if test="isPublic != null" >
+        isPublic = #{isPublic},
       </if>
     </set>
     where id = #{id}
