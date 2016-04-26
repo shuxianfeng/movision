@@ -1,8 +1,8 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
-import com.zhuhuibao.mybatis.memCenter.mapper.JobRelResumeMapper;
+import com.zhuhuibao.mybatis.memCenter.entity.aaa;
+import com.zhuhuibao.mybatis.memCenter.mapper.bbbb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class JobRelResumeService {
+public class Ccccc {
 
-    private final static Logger log = LoggerFactory.getLogger(JobRelResumeService.class);
+    private final static Logger log = LoggerFactory.getLogger(Ccccc.class);
 
     /**
      *
      */
     @Autowired
-    private JobRelResumeMapper jrrMapper;
+    private bbbb jrrMapper;
 
     /**
      * 插入职位与简历的关系
@@ -35,7 +35,7 @@ public class JobRelResumeService {
         JsonResult jsonResult = new JsonResult();
         log.info("insert job relation resume");
         try {
-            JobRelResume jrr = new JobRelResume();
+            aaa jrr = new aaa();
             jrr.setJobID(jobID);
             jrr.setResumeID(resumeID);
             jrrMapper.insertSelective(jrr);

@@ -1,6 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-public class JobRelResume {
+public class aaa {
     private Long id;
 
     private Long jobID;
