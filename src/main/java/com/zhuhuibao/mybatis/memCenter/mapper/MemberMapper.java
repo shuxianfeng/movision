@@ -16,6 +16,9 @@ public interface MemberMapper {
     //更新会员信息
     int updateMemInfo(Member member);
 
+    //更新会员状态
+    int updateStatus(Member member);
+
     //新建会员
     int addMember(Member member);
 

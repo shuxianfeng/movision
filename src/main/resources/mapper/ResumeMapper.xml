@@ -58,7 +58,7 @@
     #{hopeSalary}, #{curSalary},#{status}, #{realName}, #{userName},#{sex}, #{workYear}, #{education},
     #{experienceYear}, #{company}, #{positionName}, #{birthYear}, #{marriage}, #{mobile},
     #{email}, #{liveProvince}, #{liveCity}, #{liveArea}, #{photo}, #{jobExperience},
-    #{projectExperience}, #{eduExperience}, #{attach}
+    #{projectExperience}, #{eduExperience}, 1
     )
   </insert>
   <update id="updateResume" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume" >

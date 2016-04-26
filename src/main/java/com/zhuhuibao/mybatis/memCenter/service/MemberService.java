@@ -70,6 +70,17 @@ public class MemberService {
 	}
 
 	/**
+	 * 更新会员状态
+	 */
+	public int updateStatus(Member member)
+	{
+		log.debug("更新会员状态");
+		int result = 0;
+		result = memberMapper.updateStatus(member);
+		return result;
+	}
+
+	/**
 	 * 根据会员ID查询会员信息
 	 */
 	public Member findMemById(String id)

@@ -79,8 +79,31 @@ public class InformationController {
 		}catch (Exception e){
 			log.error("update info error!",e);
 		}
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+	}
 
-
+	/**
+	 * 会员状态审核
+	 * @param req
+	 * @param member
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/rest/updateStatus", method = RequestMethod.POST)
+	public void updateStatus(HttpServletRequest req, HttpServletResponse response, Member member) throws IOException {
+		JsonResult result = new JsonResult();
+		try {
+			int isUpdate = memberService.updateStatus(member);
+			if (isUpdate == 0) {
+				result.setCode(400);
+				result.setMessage("审核失败");
+			} else {
+				result.setCode(200);
+			}
+		}catch (Exception e){
+			log.error("updateStatus error!",e);
+		}
 		response.setContentType("application/json;charset=utf-8");
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}

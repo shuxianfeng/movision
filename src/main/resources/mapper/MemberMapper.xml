@@ -447,4 +447,124 @@
       and r.id = #{id}
     </if>
   </select>
+  <update id="updateStatus" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+    update t_m_member
+    <set>
+      <if test="mobile != null" >
+        mobile = #{mobile},
+      </if>
+      <if test="email != null" >
+        email = #{email},
+      </if>
+      <if test="emailCheckCode != null" >
+        emailCheckCode = #{emailCheckCode},
+      </if>
+      <if test="password != null" >
+        password = #{password},
+      </if>
+      <if test="registerTime != null" >
+        registerTime = #{registerTime},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="identify != null" >
+        identify = #{identify},
+      </if>
+      <if test="enterpriseName != null" >
+        enterpriseName = #{enterpriseName},
+      </if>
+      <if test="workType != null" >
+        workType = #{workType},
+      </if>
+      <if test="enterpriseEmployeeParentId != null" >
+        enterpriseEmployeeParentId = #{enterpriseEmployeeParentId},
+      </if>
+      <if test="province != null" >
+        province = #{province},
+      </if>
+      <if test="city != null" >
+        city = #{city},
+      </if>
+      <if test="area != null" >
+        area = #{area},
+      </if>
+      <if test="address != null" >
+        address = #{address},
+      </if>
+      <if test="enterpriseType != null" >
+        enterpriseType = #{enterpriseType},
+      </if>
+      <if test="enterpriseLogo != null" >
+        enterpriseLogo = #{enterpriseLogo},
+      </if>
+      <if test="enterpriseDesc != null" >
+        enterpriseDesc = #{enterpriseDesc},
+      </if>
+      <if test="headShot != null" >
+        headShot = #{headShot},
+      </if>
+      <if test="saleProductDesc != null" >
+        saleProductDesc = #{saleProductDesc},
+      </if>
+      <if test="enterpriseCreaterTime != null" >
+        enterpriseCreaterTime = #{enterpriseCreaterTime},
+      </if>
+      <if test="registerCapital != null" >
+        registerCapital = #{registerCapital},
+      </if>
+      <if test="employeeNumber != null" >
+        employeeNumber = #{employeeNumber},
+      </if>
+      <if test="companyBusinessLicenseImg != null" >
+        companyBusinessLicenseImg = #{companyBusinessLicenseImg},
+      </if>
+      <if test="enterpriseTelephone != null" >
+        enterpriseTelephone = #{enterpriseTelephone},
+      </if>
+      <if test="enterpriseFox != null" >
+        enterpriseFox = #{enterpriseFox},
+      </if>
+      <if test="enterpriseWebSite != null" >
+        enterpriseWebSite = #{enterpriseWebSite},
+      </if>
+      <if test="enterpriseLinkman != null" >
+        enterpriseLinkman = #{enterpriseLinkman},
+      </if>
+      <if test="enterpriseLMDep != null" >
+        enterpriseLMDep = #{enterpriseLMDep},
+      </if>
+      <if test="fixedTelephone != null" >
+        fixedTelephone = #{fixedTelephone},
+      </if>
+      <if test="fixedMobile != null" >
+        fixedMobile = #{fixedMobile},
+      </if>
+      <if test="QQ != null" >
+        QQ = #{QQ},
+      </if>
+      <if test="personRealName != null" >
+        personRealName = #{personRealName},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex},
+      </if>
+      <if test="personCompanyType != null" >
+        personCompanyType = #{personCompanyType},
+      </if>
+      <if test="personIdentifyCard != null" >
+        personIdentifyCard = #{personIdentifyCard},
+      </if>
+      <if test="personIDFrontImgUrl != null" >
+        personIDFrontImgUrl = #{personIDFrontImgUrl},
+      </if>
+      <if test="personIDBackImgUrl != null" >
+        personIDBackImgUrl = #{personIDBackImgUrl},
+      </if>
+      <if test="isrecommend != null" >
+        isrecommend = #{isrecommend},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
 </mapper>
