@@ -43,8 +43,9 @@ public class SiteMailService {
             MessageText msgText = new MessageText();
             msgText.setMessageText(siteMail.getMessageText());
             msgText.setSendID(siteMail.getSendID());
-            msgText.setType(1);//1：招聘
+            msgText.setType(siteMail.getType());
             msgText.setTypeID(siteMail.getTypeID());
+            msgText.setType(1);
             msgTextMapper.insertSelective(msgText);
             MessageLog msgLog = new MessageLog();
             msgLog.setRecID(siteMail.getRecID());

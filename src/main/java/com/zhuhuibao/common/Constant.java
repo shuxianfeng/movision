@@ -308,4 +308,9 @@ public interface Constant {
 	String experienceYear = "experienceYear";
 
 	String welfare = "welfare";
+
+	/**
+	 * 站内信招聘类型为 1
+	 */
+	int sitemail_type_resume_one = 1;
 }

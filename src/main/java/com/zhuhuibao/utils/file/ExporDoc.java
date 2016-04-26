@@ -1,4 +1,4 @@
-package com.zhuhuibao.utils;
+package com.zhuhuibao.utils.file;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

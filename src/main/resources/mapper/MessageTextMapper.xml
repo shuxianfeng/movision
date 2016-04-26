@@ -57,7 +57,7 @@
       <if test="type != null" >
         #{type,jdbcType=INTEGER},
       </if>
-        #{now(),jdbcType=TIMESTAMP},
+        now(),
       <if test="typeID != null" >
         #{typeID,jdbcType=BIGINT},
       </if>

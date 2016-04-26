@@ -1,5 +1,6 @@
 package com.zhuhuibao.business.job;
 
+import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
@@ -11,7 +12,7 @@ import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.DateUtils;
-import com.zhuhuibao.utils.ExporDoc;
+import com.zhuhuibao.utils.file.ExporDoc;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -58,7 +59,7 @@ public class JobSiteController {
     @Autowired
     JobRelResumeService jrrService;
 
-    @RequestMapping(value="/rest/job/applyPosition", method = RequestMethod.GET)
+    @RequestMapping(value="/rest/job/applyPosition", method = RequestMethod.POST)
     public void applyPosition(HttpServletRequest req, HttpServletResponse response,String jobID,String resumeID,
                               String recID,String messageText) throws JsonGenerationException, JsonMappingException, IOException
     {
@@ -72,6 +73,7 @@ public class JobSiteController {
             msgText.setRecID(Long.valueOf(recID));
             msgText.setMessageText(messageText);
             msgText.setTypeID(Long.valueOf(resumeID));
+            msgText.setType(Constant.sitemail_type_resume_one);
             jsonResult = smService.addSiteMail(msgText);
             jrrService.insert(Long.valueOf(jobID),Long.valueOf(resumeID));
         }
@@ -84,6 +86,15 @@ public class JobSiteController {
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
 
+    /**
+     * 定义简历模板导出简历
+     * @param req
+     * @param response
+     * @param id
+     * @throws JsonGenerationException
+     * @throws JsonMappingException
+     * @throws IOException
+     */
     @RequestMapping(value="/rest/job/exportResume", method = RequestMethod.GET)
     public void exportResume(HttpServletRequest req, HttpServletResponse response,Long id) throws JsonGenerationException, JsonMappingException, IOException
     {
