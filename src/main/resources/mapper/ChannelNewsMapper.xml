@@ -183,7 +183,7 @@
   </select>
 
   <select id="queryViewsByChannel" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
-    select id,title,description,views from t_oms_channel_news
+    select id,title,description,imgUrl,views from t_oms_channel_news
     <where>
       <if test="channelid != null">
         and channelid = #{channelid}

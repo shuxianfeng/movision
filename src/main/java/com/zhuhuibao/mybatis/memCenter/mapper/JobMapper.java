@@ -31,6 +31,9 @@ public interface JobMapper {
     //查询推荐职位
     List<Job> searchRecommendPosition(String id);
 
+    //查询最新发布的职位
+    List<Job> searchLatestPublishPosition();
+
     //查询发布职位企业的信息
     MemberDetails queryCompanyInfo(Long id);
 
@@ -39,6 +42,4 @@ public interface JobMapper {
     Job queryPositionInfoByID(Long id);
 
     List<Job> findAllOtherPosition(RowBounds rowBounds,Map<String,Object> map);
-
-    List<Job> findAllMyApplyPosition(RowBounds rowBounds,@Param("id") String id);
 }

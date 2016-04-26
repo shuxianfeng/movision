@@ -4,7 +4,6 @@
   <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="createid" property="createid" jdbcType="VARCHAR" />
     <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
@@ -43,24 +42,24 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, title, createid, publishTime, updateTime, jobNature, post, jobProvince, jobCity, 
-    jobArea, hopeSalary, curSalary, status, realName, userName, sex, workYear, education, 
-    experienceYear, company, positionName, birthYear, marriage, mobile, email, liveProvince, 
+    id, title, createid, publishTime, updateTime, jobNature, post, jobProvince, jobCity,
+    jobArea, hopeSalary, curSalary, status, realName, userName, sex, workYear, education,
+    experienceYear, company, positionName, birthYear, marriage, mobile, email, liveProvince,
     liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach
   </sql>
   <insert id="setUpResume" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
     insert into t_i_resume (id, title, createid, publishTime, updateTime, jobNature,
-      post, jobProvince, jobCity, jobArea, hopeSalary, curSalary, status, realName, userName,
-      sex, workYear, education, experienceYear, company, positionName, birthYear, marriage, mobile,
-      email, liveProvince, liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach
-      )
+    post, jobProvince, jobCity, jobArea, hopeSalary, curSalary, status, realName, userName,
+    sex, workYear, education, experienceYear, company, positionName, birthYear, marriage, mobile,
+    email, liveProvince, liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach
+    )
     values (#{id}, #{title}, #{createid},
-      now(), now(), #{jobNature},#{post}, #{jobProvince}, #{jobCity},#{jobArea},
-      #{hopeSalary}, #{curSalary},#{status}, #{realName}, #{userName},#{sex}, #{workYear}, #{education},
-      #{experienceYear}, #{company}, #{positionName}, #{birthYear}, #{marriage}, #{mobile},
-      #{email}, #{liveProvince}, #{liveCity}, #{liveArea}, #{photo}, #{jobExperience},
-      #{projectExperience}, #{eduExperience}, #{attach}
-      )
+    now(), now(), #{jobNature},#{post}, #{jobProvince}, #{jobCity},#{jobArea},
+    #{hopeSalary}, #{curSalary},#{status}, #{realName}, #{userName},#{sex}, #{workYear}, #{education},
+    #{experienceYear}, #{company}, #{positionName}, #{birthYear}, #{marriage}, #{mobile},
+    #{email}, #{liveProvince}, #{liveCity}, #{liveArea}, #{photo}, #{jobExperience},
+    #{projectExperience}, #{eduExperience}, #{attach}
+    )
   </insert>
   <update id="updateResume" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
     update t_i_resume
@@ -74,7 +73,7 @@
       <if test="publishTime != null" >
         publishTime = #{publishTime},
       </if>
-        updateTime = now(),
+      updateTime = now(),
       <if test="jobNature != null" >
         jobNature = #{jobNature},
       </if>
@@ -202,20 +201,29 @@
     where r.id = #{id} and co.type =1 and con.type = 6 and dc.type = 2
   </select>
   <select id="findAllResume" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select t.id,t.title,ct.name jobCity,dc.name hopeSalary,t.photo,
+    select t.id,t.title,t.realName,ct.name jobCity,dc.name hopeSalary,t.photo,dt.name,
+    period_diff(date_format(concat(birthYear,'-01-01'),'%Y'),date_format(now(),'%Y')) birthYear,
     period_diff(date_format(now(),'%Y'),date_format(concat(workYear,'-01-01'),'%Y')) workYear,
     (select Group_concat(name) from t_dictionary_constant where find_in_set(code,t.jobNature) and type=7)AS jobNature,
     (select Group_concat(name) from t_dictionary_position where find_in_set(id,t.post))AS post
     from t_i_resume t
     left join t_dictionary_city ct on ct.code = t.jobCity
     left join t_dictionary_constant dc on dc.code = t.hopeSalary
-    where dc.type = 1 order by t.publishTime desc
-  </select>
-  <select id="findALLReceiveResume" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select r.id,j.name,r.realName,re.publishDate as publishTime ,c.name as experienceYear from t_i_resume r
-    left join t_i_jobRelresume re on re.resumeID = r.id
-    left join t_i_job j on j.id = re.jobID
-    left join t_dictionary_constant c on c.code = r.experienceYear
-    where re.jobID in (select id from t_i_job where createid=#{id}) and c.type = 3
+    left join t_dictionary_constant dt on dt.code = t.education
+    where dc.type = 1 and dt.type =2
+    <if test="title != null and title != ''">
+      and t.title like concat('%',#{title},'%')
+    </if>
+    <if test="jobCity != null and jobCity != ''">
+      and t.jobCity = #{jobCity}
+    </if>
+    <if test="expYear != null and expYear != ''">
+      and t.experienceYear = #{expYear}
+    </if>
+    <if test="education != null and education != ''">
+      and t.education = #{education}
+    </if>
+    order by t.publishTime desc
+
   </select>
 </mapper>

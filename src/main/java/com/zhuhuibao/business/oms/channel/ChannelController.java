@@ -114,7 +114,7 @@ public class ChannelController {
     public void queryPersonVisit(HttpServletRequest req, HttpServletResponse response, ChannelNews channelNews) throws JsonGenerationException, JsonMappingException, IOException {
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("channelid", channelNews.getChannelid());
-        map.put("sort",2);
+        map.put("sort",channelNews.getSort());
         map.put("status",1);
         JsonResult jsonResult = newsService.queryNewsByChannelInfo(map);
         response.setContentType("application/json;charset=utf-8");

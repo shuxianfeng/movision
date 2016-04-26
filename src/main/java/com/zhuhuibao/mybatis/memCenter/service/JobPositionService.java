@@ -157,6 +157,17 @@ public class JobPositionService {
     }
 
     /**
+     * 查询最新发布的职位
+     */
+    public JsonResult searchLatestPublishPosition(){
+        JsonResult result = new JsonResult();
+        List<Job> jobList = jobMapper.searchLatestPublishPosition();
+        result.setData(jobList);
+        result.setCode(200);
+        return result;
+    }
+
+    /**
      * 职位类别
      */
     public JsonResult positionType(){
@@ -277,30 +288,5 @@ public class JobPositionService {
 
         }
         return jobList;
-    }
-
-    /**
-     * 我申请的职位
-     */
-    public JsonResult myApplyPosition(Paging<Job> pager,String id){
-        JsonResult jsonResult = new JsonResult();
-        List<Job> jobList = jobMapper.findAllMyApplyPosition(pager.getRowBounds(),id);
-        List list = new ArrayList();
-        for(int i=0;i<jobList.size();i++){
-            Job job = jobList.get(i);
-            Map map = new HashMap();
-            map.put(Constant.id,job.getId());
-            map.put(Constant.name,job.getName());
-            map.put(Constant.companyName,job.getEnterpriseName());
-            map.put(Constant.salary,job.getSalaryName());
-            map.put(Constant.publishTime,job.getPublishTime());
-            map.put(Constant.area,job.getWorkArea());
-            map.put(Constant.welfare,job.getWelfare());
-            list.add(map);
-        }
-        pager.result(list);
-        jsonResult.setCode(200);
-        jsonResult.setData(pager);
-        return jsonResult;
     }
 }
