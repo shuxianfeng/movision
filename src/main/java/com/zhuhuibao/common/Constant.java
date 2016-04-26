@@ -224,6 +224,10 @@ public interface Constant {
 	 * 上传询，报价单的路径  /price
 	 */
 	String upload_price_document_url = "/price";
+	/**
+	 * 上传简历附件的路径  /job
+	 */
+	String upload_job_document_url = "/job";
 
 	/******************end****************/
 	/**
