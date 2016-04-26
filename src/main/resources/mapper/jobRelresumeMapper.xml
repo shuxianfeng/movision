@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.jobRelresumeMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.jobRelresume" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.JobRelResumeMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.JobRelResume" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="jobID" property="jobID" jdbcType="BIGINT" />
     <result column="resumeID" property="resumeID" jdbcType="BIGINT" />
+    <result column="publishDate" property="publishDate" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, jobID, resumeID
+    id, jobID, resumeID,publishDate
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -19,13 +20,13 @@
     delete from t_i_jobRelresume
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.zhuhuibao.mybatis.memCenter.entity.jobRelresume" >
+  <insert id="insert" parameterType="com.zhuhuibao.mybatis.memCenter.entity.JobRelResume" >
     insert into t_i_jobRelresume (id, jobID, resumeID
       )
     values (#{id,jdbcType=BIGINT}, #{jobID,jdbcType=BIGINT}, #{resumeID,jdbcType=BIGINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.jobRelresume" >
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.JobRelResume" >
     insert into t_i_jobRelresume
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -37,6 +38,7 @@
       <if test="resumeID != null" >
         resumeID,
       </if>
+      publishDate,
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -48,9 +50,10 @@
       <if test="resumeID != null" >
         #{resumeID,jdbcType=BIGINT},
       </if>
+      current_date(),
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.jobRelresume" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.JobRelResume" >
     update t_i_jobRelresume
     <set >
       <if test="jobID != null" >
@@ -62,7 +65,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.memCenter.entity.jobRelresume" >
+  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.memCenter.entity.JobRelResume" >
     update t_i_jobRelresume
     set jobID = #{jobID,jdbcType=BIGINT},
       resumeID = #{resumeID,jdbcType=BIGINT}

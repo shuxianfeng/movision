@@ -1,17 +1,17 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
-import com.zhuhuibao.mybatis.memCenter.entity.jobRelresume;
+import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
 
-public interface jobRelresumeMapper {
+public interface JobRelResumeMapper {
     int deleteByPrimaryKey(Long id);
 
-    int insert(jobRelresume record);
+    int insert(JobRelResume record);
 
-    int insertSelective(jobRelresume record);
+    int insertSelective(JobRelResume record);
 
-    jobRelresume selectByPrimaryKey(Long id);
+    JobRelResume selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKeySelective(jobRelresume record);
+    int updateByPrimaryKeySelective(JobRelResume record);
 
-    int updateByPrimaryKey(jobRelresume record);
+    int updateByPrimaryKey(JobRelResume record);
 }

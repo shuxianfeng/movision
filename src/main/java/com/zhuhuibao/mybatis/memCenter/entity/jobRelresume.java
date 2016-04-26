@@ -1,11 +1,13 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-public class jobRelresume {
+public class JobRelResume {
     private Long id;
 
     private Long jobID;
 
     private Long resumeID;
+
+    private String publishDate;
 
     public Long getId() {
         return id;
@@ -29,5 +31,13 @@ public class jobRelresume {
 
     public void setResumeID(Long resumeID) {
         this.resumeID = resumeID;
+    }
+
+    public String getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(String publishDate) {
+        this.publishDate = publishDate;
     }
 }

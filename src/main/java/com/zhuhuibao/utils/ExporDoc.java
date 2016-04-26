@@ -50,7 +50,7 @@ public class ExporDoc {
         map.put("nowm", "01");
         map.put("nowd", "20220301");
         //注意biyezheng_moban.doc文档位置,此例中为应用根目录
-        HWPFDocument document=new ExporDoc().replaceDoc("biyezheng_moban.doc", map);
+        HWPFDocument document=new ExporDoc().replaceDoc("resumeTemplate.doc", map);
         ByteArrayOutputStream ostream = new ByteArrayOutputStream();
         try {
             document.write(ostream);

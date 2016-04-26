@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.utils.file.FileUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -138,31 +139,15 @@ public class OfferPriceController {
 		log.info("query offer priece info by id ");
 		try {
 			String fileurl = offerService.downloadBill(id, type);
-			response.setDateHeader("Expires", 0);
-			response.setHeader("Cache-Control",
-					"no-store, no-cache, must-revalidate");
-			response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-			response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
-			response.setContentType("application/octet-stream");
 			fileurl = ApiConstants.getUploadDoc() + Constant.upload_price_document_url + "/" + fileurl;
-			File file = new File(fileurl);
-			if (file.exists()) {   //如果文件存在
-				FileInputStream inputStream = new FileInputStream(file);
-				byte[] data = new byte[(int) file.length()];
-				int length = inputStream.read(data);
-				inputStream.close();
-				ServletOutputStream stream = response.getOutputStream();
-				stream.write(data);
-				stream.flush();
-				stream.close();
-			}
+			FileUtil.downloadFile(response, fileurl);
 		}
 		catch(Exception e)
 		{
 			log.error("download bill error! ",e);
 		}
 	}
-	
+
 	@RequestMapping(value="/rest/price/queryAllOfferPriceByAskID", method = RequestMethod.GET)
 	public void queryAllOfferPriceByAskID(HttpServletRequest req,HttpServletResponse response,Long id) throws JsonGenerationException, JsonMappingException, IOException
 	{

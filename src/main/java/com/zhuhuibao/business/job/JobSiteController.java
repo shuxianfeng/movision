@@ -5,6 +5,7 @@ import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
+import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
@@ -54,11 +55,31 @@ public class JobSiteController {
     @Autowired
     SiteMailService smService;
 
+    @Autowired
+    JobRelResumeService jrrService;
+
     @RequestMapping(value="/rest/job/applyPosition", method = RequestMethod.GET)
-    public void applyPosition(HttpServletRequest req, HttpServletResponse response,MessageText msgText) throws JsonGenerationException, JsonMappingException, IOException
+    public void applyPosition(HttpServletRequest req, HttpServletResponse response,String jobID,String resumeID,
+                              String recID,String messageText) throws JsonGenerationException, JsonMappingException, IOException
     {
-        log.info("applay position "+msgText.getMessageText());
-        JsonResult jsonResult = smService.addSiteMail(msgText);
+        log.info("applay position resumeID = "+resumeID+" recID = "+recID+" messageText ="+messageText);
+        Long createid = ShiroUtil.getCreateID();
+        JsonResult jsonResult = new JsonResult();
+        if(createid != null)
+        {
+            MessageText msgText = new  MessageText();
+            msgText.setSendID(createid);
+            msgText.setRecID(Long.valueOf(recID));
+            msgText.setMessageText(messageText);
+            msgText.setTypeID(Long.valueOf(resumeID));
+            jsonResult = smService.addSiteMail(msgText);
+            jrrService.insert(Long.valueOf(jobID),Long.valueOf(resumeID));
+        }
+        else
+        {
+            jsonResult.setCode(400);
+            jsonResult.setMessage("you are not login!!!!");
+        }
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
