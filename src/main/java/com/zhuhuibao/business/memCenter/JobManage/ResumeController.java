@@ -56,7 +56,7 @@ public class ResumeController {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
                 resume.setCreateid(principal.getId().toString());
-                jsonResult = resumeService.setUpResume(resume);
+                jsonResult = resumeService.setUpResume(resume,principal.getId().toString());
             }
         }else{
             jsonResult.setCode(401);
