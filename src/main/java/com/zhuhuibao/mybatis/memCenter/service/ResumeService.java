@@ -222,7 +222,7 @@ public class ResumeService {
     }
 
     public String downloadBill(String id){
-        Resume resume = resumeMapper.searchMyResume(id);
+        Resume resume = resumeMapper.searchResumeById(id);
         String fileUrl = "";
         if(resume!=null){
             fileUrl = resume.getAttach();
