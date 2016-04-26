@@ -29,4 +29,7 @@ public interface ResumeMapper {
 
     //我收到的简历
     List<Resume> findALLReceiveResume(RowBounds rowBounds,@Param("id")String id);
+
+    //根据id查简历
+    Resume searchResumeById(@Param("id")String id);
 }

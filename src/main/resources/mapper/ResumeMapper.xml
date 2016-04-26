@@ -61,6 +61,7 @@
     #{projectExperience}, #{eduExperience}, 1
     )
   </insert>
+
   <update id="updateResume" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
     update t_i_resume
     <set >
@@ -232,5 +233,8 @@
     left join t_i_job j on j.id = re.jobID
     left join t_dictionary_constant c on c.code = r.experienceYear
     where re.jobID in (select id from t_i_job where createid=#{id}) and c.type = 3
+  </select>
+  <select id="searchResumeById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT * from t_i_resume WHERE id = #{id}
   </select>
 </mapper>

@@ -217,4 +217,13 @@ public class ResumeService {
         }
         return resumeMap;
     }
+
+    public String downloadBill(String id){
+        Resume resume = resumeMapper.searchMyResume(id);
+        String fileUrl = "";
+        if(resume!=null){
+            fileUrl = resume.getAttach();
+        }
+        return fileUrl;
+    }
 }
