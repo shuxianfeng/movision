@@ -138,11 +138,6 @@ public class ResumeService {
     public JsonResult previewResume(String id){
         JsonResult jsonResult = new JsonResult();
         Resume resume = resumeMapper.previewResume(id);
-        if(resume != null && resume.getAttach() != null)
-        {
-            String url = apiConstants.getUploadDoc()+"/job/"+resume.getAttach();
-            resume.setAttach(url);
-        }
         jsonResult.setCode(200);
         jsonResult.setData(resume);
         return jsonResult;
