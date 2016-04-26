@@ -56,7 +56,7 @@ public class ResumeController {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
                 resume.setCreateid(principal.getId().toString());
-                jsonResult = resumeService.setUpResume(resume);
+                jsonResult = resumeService.setUpResume(resume,principal.getId().toString());
             }
         }else{
             jsonResult.setCode(401);
@@ -90,7 +90,7 @@ public class ResumeController {
     /**
      * 更新简历,刷新简历
      */
-    @RequestMapping(value = "/rest/job/updateResume", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/job/updateResume", method = RequestMethod.POST)
     public void updateResume(HttpServletRequest req, HttpServletResponse response,Resume resume) throws IOException {
         JsonResult jsonResult = resumeService.updateResume(resume);
         response.setContentType("application/json;charset=utf-8");

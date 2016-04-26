@@ -35,12 +35,14 @@ public class ResumeService {
     /**
      * 发布简历
      */
-    public JsonResult setUpResume(Resume resume){
+    public JsonResult setUpResume(Resume resume,String id){
         JsonResult jsonResult = new JsonResult();
         int isSetUp = resumeMapper.setUpResume(resume);
         try{
             if(isSetUp==1){
+                Resume resume1 = resumeMapper.searchMyResume(id);
                 jsonResult.setCode(200);
+                jsonResult.setData(resume1.getId());
             }else {
                 jsonResult.setMessage("发布失败");
             }
@@ -121,6 +123,7 @@ public class ResumeService {
         try{
             if(isUpdate==1){
                 jsonResult.setCode(200);
+                jsonResult.setData(resume.getId());
             }else {
                 jsonResult.setCode(400);
                 jsonResult.setMessage("更新失败");
