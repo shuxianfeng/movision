@@ -6,7 +6,7 @@ import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
-import com.zhuhuibao.mybatis.memCenter.service.Ccccc;
+import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
@@ -57,7 +57,7 @@ public class JobSiteController {
     SiteMailService smService;
 
     @Autowired
-    Ccccc jrrService;
+    JobRelResumeService jrrService;
 
     @RequestMapping(value="/rest/job/applyPosition", method = RequestMethod.POST)
     public void applyPosition(HttpServletRequest req, HttpServletResponse response,String jobID,String resumeID,
