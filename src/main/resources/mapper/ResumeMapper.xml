@@ -225,7 +225,6 @@
       and t.education = #{education}
     </if>
     order by t.publishTime desc
-    where dc.type = 1 order by t.publishTime desc
   </select>
   <select id="findALLReceiveResume" parameterType="java.lang.String" resultMap="BaseResultMap">
     select r.id,j.name,r.realName,re.publishDate as publishTime ,c.name as experienceYear from t_i_resume r
