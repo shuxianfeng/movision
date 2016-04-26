@@ -90,15 +90,15 @@ public class JobSiteController {
      * 定义简历模板导出简历
      * @param req
      * @param response
-     * @param id
+     * @param resumeID 简历ID
      * @throws JsonGenerationException
      * @throws JsonMappingException
      * @throws IOException
      */
     @RequestMapping(value="/rest/job/exportResume", method = RequestMethod.GET)
-    public void exportResume(HttpServletRequest req, HttpServletResponse response,Long id) throws JsonGenerationException, JsonMappingException, IOException
+    public void exportResume(HttpServletRequest req, HttpServletResponse response,Long resumeID) throws JsonGenerationException, JsonMappingException, IOException
     {
-        log.info("export resume id == "+id);
+        log.info("export resume id == "+resumeID);
         response.setDateHeader("Expires", 0);
         response.setHeader("Cache-Control",
                 "no-store, no-cache, must-revalidate");
@@ -106,7 +106,7 @@ public class JobSiteController {
         response.setContentType("application/msword");
         try {
             String path = req.getSession().getServletContext().getRealPath("\\");
-            Map<String, String> resumeMap = resume.exportResume(String.valueOf(id));
+            Map<String, String> resumeMap = resume.exportResume(String.valueOf(resumeID));
             if (!resumeMap.isEmpty()) {
                 response.setHeader("Content-disposition", "attachment; filename=\""
                         + URLEncoder.encode(resumeMap.get("title"), "UTF-8") + ".doc\""); //
@@ -181,7 +181,7 @@ public class JobSiteController {
      * 查询某个企业发布的职位
      * @param req
      * @param response
-     * @param createID
+     * @param enterpriseID 创建者ID
      * @param city  城市代码
      * @param name
      * @param pageNo
@@ -192,7 +192,7 @@ public class JobSiteController {
      */
     @RequestMapping(value="/rest/job/queryPublishPositionByID", method = RequestMethod.GET)
     public void queryPublishPositionByID(HttpServletRequest req, HttpServletResponse response,
-                                   String createID,String city,String name,
+                                   String enterpriseID,String city,String name,
                                    String pageNo,String pageSize) throws JsonGenerationException, JsonMappingException, IOException
     {
         log.info("query position info by id");
@@ -204,7 +204,7 @@ public class JobSiteController {
         }
         Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String,Object> map = new HashMap<String,Object>();
-        map.put("createID",createID);
+        map.put("createID",enterpriseID);
         map.put("city",city);
         map.put("name",name);
         JsonResult jsonResult = new JsonResult();
