@@ -142,7 +142,6 @@
   <select id="queryCompanyInfo" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.memCenter.entity.MemberDetails">
     select t.id,t.enterpriseName,t.enterpriseLogo,t.enterpriseDesc,
     concat(pv.name,ct.name,ar.name,t.address) address,ep.name enterpriseTypeName,es.name employeeNumber from t_m_member t
-    left join t_i_job jb on jb.createid = t.id
     left join t_dictionary_province pv on pv.code = t.province
     left join t_dictionary_city ct on ct.code = t.city
     left join t_dictionary_area ar on ar.code = t.area

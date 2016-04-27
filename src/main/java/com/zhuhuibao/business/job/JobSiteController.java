@@ -110,7 +110,7 @@ public class JobSiteController {
             if (!resumeMap.isEmpty()) {
                 response.setHeader("Content-disposition", "attachment; filename=\""
                         + URLEncoder.encode(resumeMap.get("title"), "UTF-8") + ".doc\""); //
-                HWPFDocument document = ExporDoc.replaceDoc(path + "\\resumeTemplate.doc", resumeMap);
+                HWPFDocument document = ExporDoc.replaceDoc(path + "/resumeTemplate.doc", resumeMap);
                 ByteArrayOutputStream ostream = new ByteArrayOutputStream();
                 document.write(ostream);
                 ServletOutputStream stream = response.getOutputStream();

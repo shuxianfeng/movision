@@ -136,6 +136,7 @@ public class OfferPriceController {
 	@RequestMapping(value="/rest/price/downloadBill", method = RequestMethod.GET)
 	public void downloadBill(HttpServletRequest req,HttpServletResponse response,Long id,String type) throws JsonGenerationException, JsonMappingException, IOException
 	{
+		JsonResult jsonResult = new JsonResult();
 		log.info("query offer priece info by id ");
 		try {
 			String fileurl = offerService.downloadBill(id, type);
@@ -146,12 +147,14 @@ public class OfferPriceController {
 			response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
 			response.setContentType("application/octet-stream");
 			fileurl = ApiConstants.getUploadDoc() + Constant.upload_price_document_url + "/" + fileurl;
-			FileUtil.downloadFile(response, fileurl);
+			jsonResult = FileUtil.downloadFile(response, fileurl);
 		}
 		catch(Exception e)
 		{
 			log.error("download bill error! ",e);
 		}
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
 	}
 
 	@RequestMapping(value="/rest/price/queryAllOfferPriceByAskID", method = RequestMethod.GET)

@@ -20,7 +20,7 @@ public interface MsgCodeConstant {
 	 * 通用错误
 	 */
 	int mcode_common_failure = 1001;
-	
+
 	/**
 	 * 会员错误信息码：100开头
 	 * 账户名已经存在
@@ -88,7 +88,12 @@ public interface MsgCodeConstant {
 	int member_mcode_sms_timeout = 10013;
 
 	/**
-	 * 文件名不存在
+	 * 文件不存在
 	 */
 	int file_not_exist = 10210;
+
+	/**
+	 * 文件名下载异常
+	 */
+	int file_download_error = 10211;
 }

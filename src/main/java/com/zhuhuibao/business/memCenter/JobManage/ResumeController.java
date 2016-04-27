@@ -184,16 +184,17 @@ public class ResumeController {
      */
     @RequestMapping(value = "/rest/job/downLoadResume", method = RequestMethod.GET)
     public void downLoadResume(HttpServletRequest req, HttpServletResponse response,String id,String url) throws IOException {
+        JsonResult jsonResult = new JsonResult();
         try {
             String fileurl = resumeService.downloadBill(id);
             response.setDateHeader("Expires", 0);
             response.setHeader("Cache-Control",
                     "no-store, no-cache, must-revalidate");
             response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-            response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileurl, "UTF-8"));
+            response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
             response.setContentType("application/octet-stream");
             fileurl = ApiConstants.getUploadDoc() + Constant.upload_job_document_url + "/" + fileurl;
-            FileUtil.downloadFile(response, fileurl);
+            jsonResult = FileUtil.downloadFile(response, fileurl);
         }
         catch(Exception e)
         {
