@@ -18,12 +18,6 @@ public class FileUtil {
      * @throws IOException
      */
     public static void downloadFile(HttpServletResponse response, String fileurl) throws IOException {
-        response.setDateHeader("Expires", 0);
-        response.setHeader("Cache-Control",
-                "no-store, no-cache, must-revalidate");
-        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-        response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
-        response.setContentType("application/octet-stream");
         //fileurl = ApiConstants.getUploadDoc() + Constant.upload_price_document_url + "/" + fileurl;
         File file = new File(fileurl);
         if (file.exists()) {   //如果文件存在

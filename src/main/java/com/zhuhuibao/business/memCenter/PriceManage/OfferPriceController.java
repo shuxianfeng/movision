@@ -139,6 +139,12 @@ public class OfferPriceController {
 		log.info("query offer priece info by id ");
 		try {
 			String fileurl = offerService.downloadBill(id, type);
+			response.setDateHeader("Expires", 0);
+			response.setHeader("Cache-Control",
+					"no-store, no-cache, must-revalidate");
+			response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+			response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
+			response.setContentType("application/octet-stream");
 			fileurl = ApiConstants.getUploadDoc() + Constant.upload_price_document_url + "/" + fileurl;
 			FileUtil.downloadFile(response, fileurl);
 		}
