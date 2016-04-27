@@ -70,7 +70,7 @@ public class JobPositionService {
             map.put(Constant.salary,job.getSalaryName());
             map.put(Constant.area,job.getWorkArea());
             map.put(Constant.id,job.getId());
-            map.put(Constant.publishTime,job.getPublishTime());
+            map.put(Constant.publishTime,job.getPublishTime().substring(0,10));
             list.add(map);
         }
         pager.result(list);
