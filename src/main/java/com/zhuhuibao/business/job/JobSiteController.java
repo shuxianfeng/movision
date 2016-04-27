@@ -261,30 +261,23 @@ public class JobSiteController {
         log.info("find all resume!!");
         JsonResult jsonResult = new JsonResult();
         Long createId = ShiroUtil.getCreateID();
-        if(createId == null) {
-            if (StringUtils.isEmpty(pageNo)) {
-                pageNo = "1";
-            }
-            if (StringUtils.isEmpty(pageSize)) {
-                pageSize = "10";
-            }
-            Paging<Resume> pager = new Paging<Resume>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-            Map<String, Object> map = new HashMap<String, Object>();
-            if(title != null && !"".equals(title))
-            {
-                map.put("title",title.replace("_","\\_"));
-            }
-            map.put("jobCity",jobCity);
-            map.put("expYear",expYear);
-            map.put("education",education);
-            jsonResult = resume.findAllResume(pager, map);
-            jsonResult.setData(pager);
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
         }
-        else
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Resume> pager = new Paging<Resume>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String, Object> map = new HashMap<String, Object>();
+        if(title != null && !"".equals(title))
         {
-            jsonResult.setCode(400);
-            jsonResult.setMessage("you are not login!!!!");
+            map.put("title",title.replace("_","\\_"));
         }
+        map.put("jobCity",jobCity);
+        map.put("expYear",expYear);
+        map.put("education",education);
+        jsonResult = resume.findAllResume(pager, map);
+        jsonResult.setData(pager);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }

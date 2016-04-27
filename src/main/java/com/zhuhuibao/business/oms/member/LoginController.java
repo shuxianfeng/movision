@@ -7,17 +7,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.zhuhuibao.mybatis.oms.entity.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,36 +38,34 @@ import com.zhuhuibao.utils.VerifyCodeUtils;
  * @author penglong
  *
  */
+@Controller("omsLoginController")
 public class LoginController {
 	private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 	
-	@Autowired
-	MemberRegService memberService;
-	
-	@RequestMapping(value = "/oms/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/rest/oms/login", method = RequestMethod.POST)
     @ResponseBody
-    public void login(HttpServletRequest req,HttpServletResponse response,Member member, Model model) throws JsonGenerationException, JsonMappingException, IOException {
+    public void login(HttpServletRequest req, HttpServletResponse response, User user, Model model) throws JsonGenerationException, JsonMappingException, IOException {
         log.info("oms login post 登录校验");
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         String username = "";
         UsernamePasswordToken token = null;
         try {
-        	String verifyCode = (String) req.getSession().getAttribute("oms");
-			if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getCheckCode()))
-        	{
-				username = member.getAccount();
-		        String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
-		        member.setPassword(pwd);
+//        	String verifyCode = (String) req.getSession().getAttribute("oms");
+//			if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getCheckCode()))
+//        	{
+				username = user.getUsername();
+		        String pwd = new String(EncodeUtil.decodeBase64(user.getPassword()));
+				user.setPassword(pwd);
 		        token = new UsernamePasswordToken(username, pwd);
 		        currentUser.login(token);
 		        jsonResult.setData(username);
-        	}
-			else
+//        	}
+			/*else
 			{
 				jsonResult.setCode(400);
 				jsonResult.setMessage("验证码错误");
-			}
+			}*/
         } catch (UnknownAccountException e) {
 //            e.printStackTrace();
             jsonResult.setCode(400);
@@ -84,6 +85,8 @@ public class LoginController {
         }
 
         if(currentUser.isAuthenticated()){
+			Session session = currentUser.getSession();
+			session.setAttribute("oms", currentUser.getPrincipal());
             System.out.println("用户[" + username + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
         }else{
             token.clear();
@@ -92,7 +95,7 @@ public class LoginController {
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
     
-    @RequestMapping(value = "/oms/logout", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/oms/logout", method = RequestMethod.GET)
     @ResponseBody
     public void logout(HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException
     {
@@ -108,7 +111,7 @@ public class LoginController {
 	  * @param response
 	  * @param model
 	  */
-	@RequestMapping(value = "/oms/imgCode", method = RequestMethod.GET)
+	@RequestMapping(value = "/rest/oms/imgCode", method = RequestMethod.GET)
 	public void getCode(HttpServletRequest req, HttpServletResponse response,
 			Model model) {
 		log.debug("获得验证码");

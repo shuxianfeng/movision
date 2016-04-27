@@ -206,7 +206,7 @@
     where r.id = #{id} and co.type =1 and con.type = 6 and dc.type = 2
   </select>
   <select id="findAllResume" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select tr.* from (select t.id,t.title,t.realName,ct.name jobCity,dc.name hopeSalary,t.photo,dt.name,t.publishTime,
+    select tr.* from (select t.id,t.title,t.realName,ct.name jobCity,dc.name hopeSalary,t.photo,dt.name,t.publishTime,t.experienceYear,t.education,
     (DATE_FORMAT( current_date(),'%Y' )-birthYear) birthYear,
     (DATE_FORMAT( current_date(),'%Y' )-workYear) workYear,
     (select Group_concat(name) from t_dictionary_constant where find_in_set(code,t.jobNature) and type=7)AS jobNature,

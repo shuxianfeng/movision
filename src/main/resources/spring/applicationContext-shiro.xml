@@ -17,6 +17,11 @@
         <property name="cachingEnabled" value="true"/>
     </bean>
 
+    <!-- Realm实现运营管理系统 -->
+    <bean id="omsRealm" class="com.zhuhuibao.shiro.realm.OMSRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+        <property name="cachingEnabled" value="true"/>
+    </bean>
 
     <!-- 用户授权信息Cache, 采用EhCache -->
     <bean id="ehcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
@@ -46,7 +51,13 @@
 
     <!-- 安全管理器 配置权限管理器 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-        <property name="realm" ref="userRealm"/>
+        <!--<property name="realm" ref="userRealm"/>-->
+        <property name="realms">
+            <list>
+                <ref bean="userRealm" />
+                <ref bean="omsRealm" />
+            </list>
+        </property>
         <property name="sessionManager" ref="sessionManager"/>
         <property name="cacheManager" ref="cacheManager"/>
     </bean>
