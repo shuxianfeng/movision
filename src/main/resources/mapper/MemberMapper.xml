@@ -103,7 +103,7 @@
         registerTime = #{registerTime},
       </if>
       <if test="status != null" >
-        status = (case when status = 4 then 4 else #{status} end ),
+        status = (case when status = 4 then 4 when status=1 or status=3 then #{status} else status end ),
       </if>
       <if test="identify != null" >
         identify = #{identify},
