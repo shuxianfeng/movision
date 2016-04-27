@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -189,7 +190,7 @@ public class ResumeController {
             response.setHeader("Cache-Control",
                     "no-store, no-cache, must-revalidate");
             response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-            response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
+            response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileurl, "UTF-8"));
             response.setContentType("application/octet-stream");
             fileurl = ApiConstants.getUploadDoc() + Constant.upload_job_document_url + "/" + fileurl;
             FileUtil.downloadFile(response, fileurl);
