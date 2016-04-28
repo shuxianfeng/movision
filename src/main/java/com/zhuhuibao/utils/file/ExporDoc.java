@@ -14,12 +14,15 @@ import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.Range;
 import org.apache.poi.poifs.filesystem.DirectoryEntry;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by Administrator on 2016/4/23 0023.
  */
 public class ExporDoc {
 
-
+    private final static Logger log = LoggerFactory.getLogger(ExporDoc.class);
     public static void main(String[] args) {
         String destFile="D:\\11.doc";
         /*//#####################根据自定义内容导出Word文档#################################################
@@ -96,6 +99,7 @@ public class ExporDoc {
      */
     public static HWPFDocument replaceDoc(String srcPath, Map<String, String> map) {
         try {
+            log.info("srcPath = "+srcPath);
             // 读取word模板
             FileInputStream fis = new FileInputStream(new File(srcPath));
             HWPFDocument doc = new HWPFDocument(fis);

@@ -106,6 +106,7 @@ public class JobSiteController {
         response.setContentType("application/msword");
         try {
             String path = req.getSession().getServletContext().getRealPath("\\");
+            log.info("base path = "+path);
             Map<String, String> resumeMap = resume.exportResume(String.valueOf(resumeID));
             if (!resumeMap.isEmpty()) {
                 response.setHeader("Content-disposition", "attachment; filename=\""
