@@ -145,6 +145,9 @@ public class EngineerSupplierController {
             if(null != principal){
                 message.setCreateid(principal.getId().toString());
                 jsonResult = memberService.saveMessage(message);
+            }else{
+                jsonResult.setCode(401);
+                jsonResult.setMessage("请先登录");
             }
         }else{
             jsonResult.setCode(401);

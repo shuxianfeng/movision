@@ -34,4 +34,7 @@ public interface ResumeMapper {
     Resume searchResumeById(@Param("id")String id);
 
     List<Resume> queryResumeByCreateId(Long createID);
+
+    //最新求职
+    List<Resume> queryLatestResume(int count);
 }

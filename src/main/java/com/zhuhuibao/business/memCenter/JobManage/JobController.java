@@ -52,6 +52,9 @@ public class JobController {
             if(null != principal){
                 job.setCreateid(principal.getId().toString());
                 jsonResult = jobService.publishPosition(job);
+            }else{
+                jsonResult.setCode(401);
+                jsonResult.setMessage("请先登录");
             }
         }else{
             jsonResult.setCode(401);
@@ -80,6 +83,9 @@ public class JobController {
             if(null != principal){
                 Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
                 jsonResult = jobService.findAllPositionByMemId(pager, principal.getId().toString());
+            }else{
+                jsonResult.setCode(401);
+                jsonResult.setMessage("请先登录");
             }
         }else{
             jsonResult.setCode(401);
@@ -142,6 +148,9 @@ public class JobController {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
             if(null != principal) {
                 jsonResult = jobService.searchRecommendPosition(principal.getId().toString());
+            }else{
+                jsonResult.setCode(401);
+                jsonResult.setMessage("请先登录");
             }
         }else{
                 jsonResult.setCode(401);
@@ -170,6 +179,9 @@ public class JobController {
             if(null != principal){
                 Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
                 jsonResult = jobService.myApplyPosition(pager,principal.getId().toString());
+            }else{
+                jsonResult.setCode(401);
+                jsonResult.setMessage("请先登录");
             }
         }else{
             jsonResult.setCode(401);

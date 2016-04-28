@@ -59,6 +59,9 @@ public class PriceController {
             if(null != principal){
                 askPrice.setCreateid(principal.getId().toString());
                 result = priceService.saveAskPrice(askPrice);
+            }else{
+                result.setCode(401);
+                result.setMessage("请先登录");
             }
         }else{
             result.setCode(401);
@@ -117,12 +120,14 @@ public class PriceController {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
                 jsonResult = priceService.getLinkInfo(principal.getId().toString());
+            }else{
+                jsonResult.setCode(401);
+                jsonResult.setMessage("请先登录");
             }
         }else{
             jsonResult.setCode(401);
             jsonResult.setMessage("请先登录");
         }
-
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
@@ -163,8 +168,15 @@ public class PriceController {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
                 askPriceSearch.setCreateid(principal.getId().toString());
+            }else{
+                jsonResult.setCode(401);
+                jsonResult.setMessage("请先登录");
             }
+        }else{
+            jsonResult.setCode(401);
+            jsonResult.setMessage("请先登录");
         }
+
         askPriceSearch.setEndTime(askPriceSearch.getEndTime()+" 23:59:59");
         Paging<AskPriceResultBean> pager = new Paging<AskPriceResultBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
         List<AskPriceResultBean> askPriceList = priceService.findAllByPager(pager,askPriceSearch);

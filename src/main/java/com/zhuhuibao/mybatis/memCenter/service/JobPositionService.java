@@ -3,12 +3,11 @@ package com.zhuhuibao.mybatis.memCenter.service;
 import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.MsgCodeConstant;
-import com.zhuhuibao.mybatis.memCenter.entity.Job;
-import com.zhuhuibao.mybatis.memCenter.entity.Member;
-import com.zhuhuibao.mybatis.memCenter.entity.MemberDetails;
-import com.zhuhuibao.mybatis.memCenter.entity.Position;
+import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.PositionMapper;
+import com.zhuhuibao.utils.L;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -312,6 +311,61 @@ public class JobPositionService {
         pager.result(list);
         jsonResult.setCode(200);
         jsonResult.setData(pager);
+        return jsonResult;
+    }
+
+    /**
+     * 热门招聘
+     */
+    public JsonResult queryHotPosition(int count){
+        JsonResult jsonResult = new JsonResult();
+        List<Job> jobList = jobMapper.queryHotPosition(count);
+        List list = new ArrayList();
+        for(int i=0;i<jobList.size();i++){
+            Job job = jobList.get(i);
+            Map map = new HashMap();
+            map.put(Constant.id,job.getId());
+            map.put(Constant.name,job.getName());
+            map.put(Constant.companyName,job.getEnterpriseName());
+            map.put(Constant.salary,job.getSalaryName());
+            map.put(Constant.publishTime,job.getPublishTime().substring(0,10));
+            map.put(Constant.area,job.getWorkArea());
+            map.put(Constant.welfare,job.getWelfare());
+            map.put(Constant.logo,job.getEnterpriseLogo());
+            list.add(map);
+        }
+        jsonResult.setCode(200);
+        jsonResult.setData(list);
+        return jsonResult;
+    }
+
+    /**
+     * 最新招聘（按分类一起查询）
+     */
+    public JsonResult queryLatestJob(int count){
+        JsonResult jsonResult = new JsonResult();
+        List<Position> positionList = positionMapper.findPosition();
+        List list = new ArrayList();
+        for(int a=0;a<positionList.size();a++){
+            Position position = positionList.get(a);
+            Map map = new HashMap();
+            map.put(Constant.name,position.getName());
+            List<Job> jobList = jobMapper.queryLatestJob(position.getId(),count);
+            List list1 = new ArrayList();
+            for(int i=0;i<jobList.size();i++){
+                Job job = jobList.get(i);
+                Map map1 = new HashMap();
+                map1.put(Constant.id,job.getId());
+                map1.put(Constant.name,job.getName());
+                map1.put(Constant.salary,job.getSalaryName());
+                map1.put(Constant.area,job.getCity());
+                list1.add(map1);
+            }
+            map.put("jobList",list1);
+            list.add(map);
+        }
+        jsonResult.setCode(200);
+        jsonResult.setData(list);
         return jsonResult;
     }
 }

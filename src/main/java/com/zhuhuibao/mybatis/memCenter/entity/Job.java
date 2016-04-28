@@ -59,6 +59,8 @@ public class Job {
 
     private Integer is_deleted;
 
+    private String enterpriseLogo;
+
     public String getId() {
         return id;
     }
@@ -281,6 +283,13 @@ public class Job {
 
     public void setEnterpriseDesc(String enterpriseDesc) {
         this.enterpriseDesc = enterpriseDesc;
+    }
 
+    public String getEnterpriseLogo() {
+        return enterpriseLogo;
+    }
+
+    public void setEnterpriseLogo(String enterpriseLogo) {
+        this.enterpriseLogo = enterpriseLogo;
     }
 }

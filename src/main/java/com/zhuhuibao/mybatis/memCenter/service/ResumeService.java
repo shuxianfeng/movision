@@ -251,4 +251,29 @@ public class ResumeService {
         }
         return resume;
     }
+
+    /**
+     * 最新求职
+     */
+    public JsonResult queryLatestResume(int count){
+        JsonResult jsonResult = new JsonResult();
+        List<Resume> resumeList = resumeMapper.queryLatestResume(count);
+        List list = new ArrayList();
+        for(int i=0;i<resumeList.size();i++){
+            Resume resume = resumeList.get(i);
+            Map map = new HashMap();
+            map.put(Constant.id,resume.getId());
+            map.put(Constant.logo,resume.getPhoto());
+            map.put(Constant.status,resume.getStatus());
+            map.put(Constant.area,resume.getJobCity());
+            map.put(Constant.name,resume.getRealName());
+            map.put(Constant.position,resume.getPost());
+            map.put(Constant.experienceYear,resume.getWorkYear());
+            map.put(Constant.age,resume.getBirthYear());
+            list.add(map);
+        }
+        jsonResult.setCode(200);
+        jsonResult.setData(list);
+        return jsonResult;
+    }
 }

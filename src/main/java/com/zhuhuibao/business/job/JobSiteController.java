@@ -306,4 +306,34 @@ public class JobSiteController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
+
+    /**
+     * 热门招聘
+     */
+    @RequestMapping(value = "/rest/job/queryHotPosition", method = RequestMethod.GET)
+    public void queryHotPosition(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult jsonResult = job.queryHotPosition(6);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+
+    /**
+     * 最新求职
+     */
+    @RequestMapping(value = "/rest/job/queryLatestResume", method = RequestMethod.GET)
+    public void queryLatestResume(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult jsonResult = resume.queryLatestResume(9);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+
+    /**
+     * 最新招聘（按分类一起查询）
+     */
+    @RequestMapping(value = "/rest/job/queryLatestJob", method = RequestMethod.GET)
+    public void queryLatestJob(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult jsonResult = job.queryLatestJob(5);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
 }

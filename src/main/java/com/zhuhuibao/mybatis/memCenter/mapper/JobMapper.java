@@ -44,4 +44,10 @@ public interface JobMapper {
     List<Job> findAllOtherPosition(RowBounds rowBounds,Map<String,Object> map);
 
     List<Job> findAllMyApplyPosition(RowBounds rowBounds,@Param("id") String id);
+
+    //热门招聘
+    List<Job> queryHotPosition(int count);
+
+    //最新招聘（按分类查询）
+    List<Job> queryLatestJob(@Param("id")String id,@Param("count")int count);
 }
