@@ -136,9 +136,9 @@ public class JobPositionService {
     /**
      * 查询最新招聘职位
      */
-    public JsonResult searchNewPosition(){
+    public JsonResult searchNewPosition(int count){
         JsonResult result = new JsonResult();
-        List<Job> jobList = jobMapper.searchNewPosition();
+        List<Job> jobList = jobMapper.searchNewPosition(count);
         result.setData(jobList);
         result.setCode(200);
         return result;
@@ -147,9 +147,9 @@ public class JobPositionService {
     /**
      * 查询推荐职位
      */
-    public JsonResult searchRecommendPosition(String id){
+    public JsonResult searchRecommendPosition(String id,int count){
         JsonResult result = new JsonResult();
-        List<Job> jobList = jobMapper.searchRecommendPosition(id);
+        List<Job> jobList = jobMapper.searchRecommendPosition(id,count);
         result.setData(jobList);
         result.setCode(200);
         return result;

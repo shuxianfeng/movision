@@ -117,7 +117,7 @@
     left join t_dictionary_constant co on co.code = j.salary
     left join t_m_member m on m.id = j.createid
     where co.type = 1
-    order by publishTime desc limit 0,6
+    order by publishTime desc limit 0,#{count}
   </select>
   <select id="searchRecommendPosition" resultMap="BaseResultMap">
     select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,
@@ -127,7 +127,7 @@
     left join t_dictionary_constant co on co.code = j.salary
     left join t_m_member m on m.id = j.createid
     where co.type = 1 and find_in_set(j.positionType,(select post from t_i_resume where createid= #{id} ))
-    order by publishTime desc limit 0,6
+    order by publishTime desc limit 0,#{count}
   </select>
   <select id="searchSamePosition" resultMap="BaseResultMap">
     select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,

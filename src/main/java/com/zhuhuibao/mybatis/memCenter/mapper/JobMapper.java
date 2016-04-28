@@ -27,10 +27,10 @@ public interface JobMapper {
     int updatePosition(Job job);
 
     //查询最新招聘职位
-    List<Job> searchNewPosition();
+    List<Job> searchNewPosition(int count);
 
     //查询推荐职位
-    List<Job> searchRecommendPosition(String id);
+    List<Job> searchRecommendPosition(String id,int count);
 
     //查询相同职位
     List<Job> searchSamePosition(String id);

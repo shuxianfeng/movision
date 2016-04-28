@@ -131,7 +131,7 @@ public class JobController {
      */
     @RequestMapping(value = "/rest/job/searchNewPosition", method = RequestMethod.GET)
     public void searchNewPosition(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        JsonResult jsonResult = jobService.searchNewPosition();
+        JsonResult jsonResult = jobService.searchNewPosition(6);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
@@ -147,7 +147,7 @@ public class JobController {
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
             if(null != principal) {
-                jsonResult = jobService.searchRecommendPosition(principal.getId().toString());
+                jsonResult = jobService.searchRecommendPosition(principal.getId().toString(),6);
             }else{
                 jsonResult.setCode(401);
                 jsonResult.setMessage("请先登录");
