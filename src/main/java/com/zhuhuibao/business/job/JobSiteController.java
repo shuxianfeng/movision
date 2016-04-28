@@ -327,4 +327,14 @@ public class JobSiteController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
+
+    /**
+     * 名企招聘
+     */
+    @RequestMapping(value = "/rest/job/greatCompanyPosition", method = RequestMethod.GET)
+    public void greatCompanyPosition(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        JsonResult jsonResult = job.greatCompanyPosition();
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
 }

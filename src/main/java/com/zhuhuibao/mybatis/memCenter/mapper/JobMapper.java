@@ -1,5 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
+import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.MemberDetails;
@@ -53,4 +54,7 @@ public interface JobMapper {
 
     //最新招聘（按分类查询）
     List<Job> queryLatestJob(@Param("id")String id,@Param("count")int count);
+
+    //名企招聘
+    List<ResultBean> greatCompanyPosition();
 }

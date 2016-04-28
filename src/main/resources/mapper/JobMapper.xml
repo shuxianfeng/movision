@@ -255,4 +255,9 @@
     left join t_dictionary_constant c on j.salary = c.code
     where p.parentId = #{id} and c.type = 1 order by j.publishTime desc limit 0,#{count}
   </select>
+  <select id="greatCompanyPosition" resultType="com.zhuhuibao.common.ResultBean">
+    select distinct m.id as code,m.enterpriseLogo as name from t_i_job j
+    left join t_m_member m on j.createid = m.id
+    where m.isrecommend = 1
+  </select>
 </mapper>

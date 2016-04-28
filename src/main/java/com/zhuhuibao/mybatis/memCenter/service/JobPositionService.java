@@ -380,4 +380,23 @@ public class JobPositionService {
         jsonResult.setData(list);
         return jsonResult;
     }
+
+    /**
+     * 名企招聘
+     */
+    public JsonResult greatCompanyPosition(){
+        JsonResult jsonResult = new JsonResult();
+        List<ResultBean> companyList = jobMapper.greatCompanyPosition();
+        List list = new ArrayList();
+        for(int i=0;i<companyList.size();i++){
+            ResultBean company = companyList.get(i);
+            Map map = new HashMap();
+            map.put(Constant.id,company.getCode());
+            map.put(Constant.logo,company.getName());
+            list.add(map);
+        }
+        jsonResult.setData(list);
+        jsonResult.setCode(200);
+        return jsonResult;
+    }
 }
