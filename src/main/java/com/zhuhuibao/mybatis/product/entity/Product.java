@@ -52,6 +52,9 @@ public class Product implements Serializable {
     
     private String ENName;
 
+    //产品发布者名称
+    private String publisherName;
+
     public Long getId() {
         return id;
     }
@@ -219,5 +222,12 @@ public class Product implements Serializable {
 	public void setENName(String eNName) {
 		ENName = eNName;
 	}
-	
+
+    public String getPublisherName() {
+        return publisherName;
+    }
+
+    public void setPublisherName(String publisherName) {
+        this.publisherName = publisherName;
+    }
 }

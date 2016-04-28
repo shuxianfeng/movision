@@ -38,10 +38,11 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
 	  price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,c.name fcateName ,c1.name scateName,
-	  b.CNName,b.ENName  
+	  b.CNName,b.ENName,if(mm.identify = 2,mm.personRealName,mm.enterpriseName) publisherName
 	  from t_p_product t left join t_p_category c on t.fcateid = c.id
 	  left join t_p_category c1 on t.scateid = c1.id 
 	  left join t_p_brand b on t.brandid = b.id
+	  left join t_m_member mm on t.createid = mm.id
     where t.id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectProductMemberByid" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.product.entity.ProductWithMember">
@@ -263,10 +264,11 @@
   <select id="findAllByPager" parameterType="com.zhuhuibao.mybatis.product.entity.Product" resultType="com.zhuhuibao.mybatis.product.entity.Product">
       select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
 	  price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,c.name fcateName ,c1.name scateName,
-	  b.CNName,b.ENName  
-	  from t_p_product t left join t_p_category c on t.fcateid = c.id
+	  b.CNName,b.ENName,if(mm.identify = 2,mm.personRealName,mm.enterpriseName) publisherName
+      from t_p_product t left join t_p_category c on t.fcateid = c.id
 	  left join t_p_category c1 on t.scateid = c1.id 
 	  left join t_p_brand b on t.brandid = b.id
+      left join t_m_member mm on t.createid = mm.id
       where t.status != 2 
       <if test="fcateid != null">
         and t.fcateid = #{fcateid,jdbcType=INTEGER}
