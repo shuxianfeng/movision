@@ -31,6 +31,9 @@ public interface JobMapper {
     //查询推荐职位
     List<Job> searchRecommendPosition(String id);
 
+    //查询相同职位
+    List<Job> searchSamePosition(String id);
+
     //查询最新发布的职位
     List<Job> searchLatestPublishPosition();
 

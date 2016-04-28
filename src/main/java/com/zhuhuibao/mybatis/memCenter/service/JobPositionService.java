@@ -157,6 +157,18 @@ public class JobPositionService {
     }
 
     /**
+     * 查询不同公司发布的相同职位
+     */
+    public JsonResult searchSamePosition(String id){
+        log.info("search same position form different company postID = "+id);
+        JsonResult result = new JsonResult();
+        List<Job> jobList = jobMapper.searchSamePosition(id);
+        result.setData(jobList);
+        result.setCode(200);
+        return result;
+    }
+
+    /**
      * 查询最新发布的职位
      */
     public JsonResult searchLatestPublishPosition(){

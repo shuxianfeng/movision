@@ -291,18 +291,9 @@ public class JobSiteController {
      * 查询推荐感兴趣的职位
      */
     @RequestMapping(value = "/rest/job/queryRecommendPosition", method = RequestMethod.GET)
-    public void queryRecommendPosition(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        JsonResult jsonResult = new JsonResult();
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if(principal != null) {
-                jsonResult = job.searchRecommendPosition(principal.getId().toString());
-            }
-        }else{
-            jsonResult = job.searchLatestPublishPosition();
-        }
+    public void queryRecommendPosition(HttpServletRequest req, HttpServletResponse response,String postID) throws IOException {
+        //查询不同公司发布的相同职位
+        JsonResult jsonResult = job.searchSamePosition(postID);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }

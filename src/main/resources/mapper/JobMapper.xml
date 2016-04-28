@@ -129,6 +129,16 @@
     where co.type = 1 and find_in_set(j.positionType,(select post from t_i_resume where createid= #{id} ))
     order by publishTime desc limit 0,6
   </select>
+  <select id="searchSamePosition" resultMap="BaseResultMap">
+    select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,
+    (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
+    from t_i_job j
+    left join t_dictionary_city c on c.code = j.city
+    left join t_dictionary_constant co on co.code = j.salary
+    left join t_m_member m on m.id = j.createid
+    where co.type = 1 and j.positionType = #{positionType}
+    order by publishTime desc limit 0,6
+  </select>
   <select id="searchLatestPublishPosition" resultMap="BaseResultMap">
     select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,j.createid,
     (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
