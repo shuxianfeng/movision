@@ -60,22 +60,26 @@ public class JobSiteController {
     JobRelResumeService jrrService;
 
     @RequestMapping(value="/rest/job/applyPosition", method = RequestMethod.POST)
-    public void applyPosition(HttpServletRequest req, HttpServletResponse response,String jobID,String resumeID,
+    public void applyPosition(HttpServletRequest req, HttpServletResponse response,String jobID,
                               String recID,String messageText) throws JsonGenerationException, JsonMappingException, IOException
     {
-        log.info("applay position resumeID = "+resumeID+" recID = "+recID+" messageText ="+messageText);
+        log.info("applay position recID = "+recID+" messageText ="+messageText);
         Long createid = ShiroUtil.getCreateID();
         JsonResult jsonResult = new JsonResult();
         if(createid != null)
         {
-            MessageText msgText = new  MessageText();
-            msgText.setSendID(createid);
-            msgText.setRecID(Long.valueOf(recID));
-            msgText.setMessageText(messageText);
-            msgText.setTypeID(Long.valueOf(resumeID));
-            msgText.setType(Constant.sitemail_type_resume_one);
-            jsonResult = smService.addSiteMail(msgText);
-            jrrService.insert(Long.valueOf(jobID),Long.valueOf(resumeID));
+            Resume rme = resume.queryResumeByCreateId(createid);
+            if(rme != null && rme.getId() != null) {
+                Long resumeID = Long.valueOf(rme.getId());
+                MessageText msgText = new MessageText();
+                msgText.setSendID(createid);
+                msgText.setRecID(Long.valueOf(recID));
+                msgText.setMessageText(messageText);
+                msgText.setTypeID(resumeID);
+                msgText.setType(Constant.sitemail_type_resume_one);
+                jsonResult = smService.addSiteMail(msgText);
+                jrrService.insert(Long.valueOf(jobID), resumeID);
+            }
         }
         else
         {
@@ -111,7 +115,7 @@ public class JobSiteController {
             if (!resumeMap.isEmpty()) {
                 response.setHeader("Content-disposition", "attachment; filename=\""
                         + URLEncoder.encode(resumeMap.get("title"), "UTF-8") + ".doc\""); //
-                HWPFDocument document = ExporDoc.replaceDoc(path + "/resumeTemplate.doc", resumeMap);
+                HWPFDocument document = ExporDoc.replaceDoc(path + "resumeTemplate.doc", resumeMap);
                 ByteArrayOutputStream ostream = new ByteArrayOutputStream();
                 document.write(ostream);
                 ServletOutputStream stream = response.getOutputStream();

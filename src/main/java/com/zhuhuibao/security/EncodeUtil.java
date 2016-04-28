@@ -33,7 +33,7 @@ public class EncodeUtil {
     	//123456 MTIzNDU2  123 MTIz  19630759@qq.com MTk2MzA3NTlAcXEuY29t
     	System.out.println(encodeBase64ToString("abc123".getBytes()));
 		System.out.println(decodeBase64ToString(encodeBase64ToString("123".getBytes())));
-        System.out.println(new Md5Hash("abc123",null,2).toString());
+        System.out.println(new Md5Hash("123456a",null,2).toString());
 	}
 }
 

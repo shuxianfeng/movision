@@ -107,7 +107,12 @@ public class ExporDoc {
             Range bodyRange = doc.getRange();
             // 替换文本内容
             for (Map.Entry<String, String> entry : map.entrySet()) {
-                bodyRange.replaceText("${" + entry.getKey() + "}", entry.getValue());
+                if(entry.getValue() != null) {
+                    bodyRange.replaceText("${" + entry.getKey() + "}", entry.getValue());
+                }else
+                {
+                    bodyRange.replaceText("${" + entry.getKey() + "}", "");
+                }
             }
             return doc;
         } catch (Exception e) {

@@ -59,7 +59,7 @@
       </if>
         now(),
       <if test="typeID != null" >
-        #{typeID,jdbcType=BIGINT},
+        #{typeID,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>

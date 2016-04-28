@@ -32,4 +32,6 @@ public interface ResumeMapper {
 
     //根据id查简历
     Resume searchResumeById(@Param("id")String id);
+
+    List<Resume> queryResumeByCreateId(Long createID);
 }

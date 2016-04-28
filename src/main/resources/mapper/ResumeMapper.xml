@@ -242,4 +242,7 @@
   <select id="searchResumeById" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT * from t_i_resume WHERE id = #{id}
   </select>
+  <select id="queryResumeByCreateId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT * from t_i_resume WHERE createid = #{id}
+  </select>
 </mapper>

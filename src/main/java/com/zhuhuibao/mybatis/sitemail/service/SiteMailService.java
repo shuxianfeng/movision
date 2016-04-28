@@ -40,16 +40,11 @@ public class SiteMailService {
         JsonResult jsonResult  = new JsonResult();
         try
         {
-            MessageText msgText = new MessageText();
-            msgText.setMessageText(siteMail.getMessageText());
-            msgText.setSendID(siteMail.getSendID());
-            msgText.setType(siteMail.getType());
-            msgText.setTypeID(siteMail.getTypeID());
-            msgText.setType(1);
-            msgTextMapper.insertSelective(msgText);
+
+            msgTextMapper.insertSelective(siteMail);
             MessageLog msgLog = new MessageLog();
             msgLog.setRecID(siteMail.getRecID());
-            msgLog.setMessageID(msgText.getId());
+            msgLog.setMessageID(siteMail.getId());
             msgLog.setStatus(1);
             msgLogMapper.insertSelective(msgLog);
         }

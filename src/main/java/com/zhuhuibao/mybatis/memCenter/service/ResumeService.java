@@ -229,4 +229,26 @@ public class ResumeService {
         }
         return fileUrl;
     }
+
+    /**
+     * 根据会员ID查询出他自己的简历
+     * @param createID
+     * @return
+     */
+    public Resume queryResumeByCreateId(Long createID)
+    {
+        Resume resume = null;
+        try
+        {
+            List<Resume> resumeList = resumeMapper.queryResumeByCreateId(createID);
+            if(!resumeList.isEmpty())
+            {
+                resume = resumeList.get(0);
+            }
+        }catch(Exception e)
+        {
+            log.error("query resume by createID error!",e);
+        }
+        return resume;
+    }
 }
