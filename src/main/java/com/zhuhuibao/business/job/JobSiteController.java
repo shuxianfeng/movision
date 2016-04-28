@@ -105,7 +105,7 @@ public class JobSiteController {
         response.addHeader("Cache-Control", "post-check=0, pre-check=0");
         response.setContentType("application/msword");
         try {
-            String path = req.getSession().getServletContext().getRealPath("\\");
+            String path = req.getSession().getServletContext().getRealPath("/");
             log.info("base path = "+path);
             Map<String, String> resumeMap = resume.exportResume(String.valueOf(resumeID));
             if (!resumeMap.isEmpty()) {
