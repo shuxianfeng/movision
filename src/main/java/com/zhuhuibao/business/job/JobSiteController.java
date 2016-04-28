@@ -8,6 +8,7 @@ import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
+import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
@@ -58,6 +59,9 @@ public class JobSiteController {
 
     @Autowired
     JobRelResumeService jrrService;
+
+    @Autowired
+    ChannelNewsService newsService;
 
     @RequestMapping(value="/rest/job/applyPosition", method = RequestMethod.POST)
     public void applyPosition(HttpServletRequest req, HttpServletResponse response,String jobID,
@@ -335,6 +339,21 @@ public class JobSiteController {
     @RequestMapping(value = "/rest/job/greatCompanyPosition", method = RequestMethod.GET)
     public void greatCompanyPosition(HttpServletRequest req, HttpServletResponse response) throws IOException {
         JsonResult jsonResult = job.greatCompanyPosition();
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+
+    /**
+     * 招聘会信息
+     */
+    @RequestMapping(value = "/rest/job/queryJobMeetingInfo", method = RequestMethod.GET)
+    public void queryJobMeetingInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("channelid", 11);
+        map.put("sort",1);
+        map.put("status",1);
+        map.put("count",4);
+        JsonResult jsonResult = newsService.queryNewsByChannelInfo(map);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
