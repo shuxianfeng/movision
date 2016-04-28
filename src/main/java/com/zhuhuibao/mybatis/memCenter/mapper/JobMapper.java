@@ -57,4 +57,7 @@ public interface JobMapper {
 
     //名企招聘
     List<ResultBean> greatCompanyPosition();
+
+    //更新点击率
+    int updateViews(Long jobID);
 }

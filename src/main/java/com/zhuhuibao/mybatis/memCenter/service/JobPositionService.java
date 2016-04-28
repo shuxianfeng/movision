@@ -399,4 +399,18 @@ public class JobPositionService {
         jsonResult.setCode(200);
         return jsonResult;
     }
+
+    /**
+     * 更新点击率
+     */
+    public void updateViews(Long jobID)
+    {
+        try{
+            jobMapper.updateViews(jobID);
+        }
+        catch(Exception e)
+        {
+            log.error("update position info error!",e);
+        }
+    }
 }

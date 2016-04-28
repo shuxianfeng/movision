@@ -260,4 +260,7 @@
     left join t_m_member m on j.createid = m.id
     where m.isrecommend = 1
   </select>
+  <update id="updateViews" parameterType="java.lang.Long" >
+    UPDATE t_i_job SET views=views+1 WHERE id = #{id}
+  </update>
 </mapper>

@@ -154,6 +154,7 @@ public class JobSiteController {
     {
         log.info("query position info by id");
         JsonResult jsonResult = job.queryPositionInfoByID(id);
+        job.updateViews(id);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
