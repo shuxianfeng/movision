@@ -41,7 +41,7 @@
     LEFT JOIN t_dictionary_province p on j.province = p.code
     LEFT JOIN t_dictionary_city c on j.city = c.code
     LEFT JOIN t_dictionary_area a on j.area = a.code
-    WHERE j.createid = #{id} and j.is_deleted = 0 and co.type = 1
+    WHERE j.createid = #{id} and j.is_deleted = 0 and co.type = 1 order by j.publishTime desc
   </select>
   <select id="getPositionByPositionId" resultMap="BaseResultMap" parameterType="java.lang.String">
     SELECT j.*,p.parentId FROM t_i_job j
