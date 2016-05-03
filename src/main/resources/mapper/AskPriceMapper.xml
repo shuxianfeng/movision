@@ -9,8 +9,8 @@
     <result column="type" property="type" jdbcType="TINYINT" />
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="billurl" property="billurl" jdbcType="VARCHAR" />
-    <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP" />
-    <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+    <result column="endTime" property="endTime" jdbcType="VARCHAR" />
     <result column="provinceCode" property="provinceCode" jdbcType="VARCHAR" />
     <result column="cityCode" property="cityCode" jdbcType="VARCHAR" />
     <result column="areaCode" property="areaCode" jdbcType="VARCHAR" />
@@ -305,6 +305,14 @@
     </if>
   </select>
   <select id="queryNewPriceInfo" resultMap="BaseResultMap">
-    select id,title from t_p_ask_price where type = 1 order BY publishTime desc limit 0,6
+    select id,title from t_p_ask_price where type = 1 order BY publishTime desc limit 0,#{count}
+  </select>
+
+  <select id="findAllNewPriceInfoList" resultMap="BaseResultMap">
+    select p.id,p.title,p.publishTime,concat(pr.name,c.name) as provinceCode
+    from t_p_ask_price p
+    LEFT JOIN t_dictionary_province pr on pr.code = p.provinceCode
+    LEFT JOIN t_dictionary_city c on c.code = p.cityCode
+     where p.type = 1 order BY p.publishTime desc
   </select>
 </mapper>

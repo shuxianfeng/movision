@@ -187,11 +187,32 @@ public class PriceController {
     }
 
     /**
-     * 最新公开询价
+     * 最新公开询价(限六条)
      */
     @RequestMapping(value = "/rest/price/queryNewPriceInfo", method = RequestMethod.GET)
     public void queryNewPriceInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        JsonResult jsonResult = priceService.queryNewPriceInfo();
+        JsonResult jsonResult = priceService.queryNewPriceInfo(6);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+
+    /**
+     * 最新公开询价(分页)
+     */
+    @RequestMapping(value = "/rest/price/queryNewPriceInfoList", method = RequestMethod.GET)
+    public void queryNewPriceInfoList(HttpServletRequest req, HttpServletResponse response,String pageNo,String pageSize) throws IOException {
+        JsonResult jsonResult = new JsonResult();
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<AskPrice> pager = new Paging<AskPrice>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        List<AskPrice> askPriceList = priceService.queryNewPriceInfoList(pager);
+        pager.result(askPriceList);
+        jsonResult.setCode(200);
+        jsonResult.setData(pager);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
