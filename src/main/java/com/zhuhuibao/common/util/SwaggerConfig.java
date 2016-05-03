@@ -45,11 +45,11 @@ public class SwaggerConfig {
     private ApiInfo apiInfo()
     {
         return new ApiInfo(
-                "筑慧宝Api文档",
-                "筑慧宝前后端Api接口文档",
+                "筑慧宝",
+                "筑慧宝Api接口文档(rest)",
                 "/rest",
                 "www.zhuhui8.com",
                 "MIT License",
-                "/LICENSE");
+                "/rest");
     }
 }
