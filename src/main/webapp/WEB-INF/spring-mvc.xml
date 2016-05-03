@@ -44,7 +44,9 @@
     </mvc:annotation-driven>
 
 
-    <mvc:resources mapping="/**" location="/"/>
+    <!--<mvc:resources mapping="/**" location="/"/>-->
+    <mvc:resources mapping="/swagger/**" location="/swagger-ui/"/>
+
     <mvc:default-servlet-handler/>
     <!-- CSRF 
     <bean name="requestDataValueProcessor" class="com.zhuhuibao.security.csrf.CSRFRequestDataValueProcessor"/>
@@ -140,12 +142,12 @@
         <bean class="com.zhuhuibao.security.resubmit.TokenInterceptor"/>
     </mvc:interceptors>-->
     
-    <bean id="AspectLog" class="com.zhuhuibao.aop.AspectLog"></bean>
+    <bean id="AspectLog" class="com.zhuhuibao.aop.AspectLog"/>
     <aop:config>
         <aop:pointcut expression="@annotation(org.springframework.web.bind.annotation.RequestMapping)" id="logPointcut" />
         <aop:aspect id="zhblog" ref="AspectLog">
             <aop:around method="aroundLog" pointcut-ref="logPointcut" />
        </aop:aspect>
     </aop:config>
-
+    <bean id="documentationConfig" class="com.zhuhuibao.common.util.SwaggerConfig"/>
 </beans>
