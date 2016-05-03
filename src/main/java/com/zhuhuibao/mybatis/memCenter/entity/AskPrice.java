@@ -17,7 +17,7 @@ public class AskPrice {
 
     private String billurl;
 
-    private Date publishTime;
+    private String publishTime;
 
     private String endTime;
 
@@ -103,11 +103,11 @@ public class AskPrice {
         this.content = content == null ? null : content.trim();
     }
 
-    public Date getPublishTime() {
+    public String getPublishTime() {
         return publishTime;
     }
 
-    public void setPublishTime(Date publishTime) {
+    public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
     }
 

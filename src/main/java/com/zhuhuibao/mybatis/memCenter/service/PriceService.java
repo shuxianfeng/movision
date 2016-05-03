@@ -212,9 +212,12 @@ public class PriceService {
         return askList;
     }
 
-    public JsonResult queryNewPriceInfo(){
+    /**
+     * 最新公开询价(限六条)
+     */
+    public JsonResult queryNewPriceInfo(int count){
         JsonResult jsonResult = new JsonResult();
-        List<AskPrice> askPriceList = askPriceMapper.queryNewPriceInfo();
+        List<AskPrice> askPriceList = askPriceMapper.queryNewPriceInfo(count);
         List list = new ArrayList();
         for(int i=0;i<askPriceList.size();i++){
             AskPrice askPrice = askPriceList.get(i);
@@ -226,5 +229,23 @@ public class PriceService {
         jsonResult.setCode(200);
         jsonResult.setData(list);
         return jsonResult;
+    }
+
+    /**
+     * 最新公开询价(分页)
+     */
+    public List<AskPrice> queryNewPriceInfoList(Paging<AskPrice> pager){
+        List<AskPrice> askPriceList = askPriceMapper.findAllNewPriceInfoList(pager.getRowBounds());
+        List list = new ArrayList();
+        for(int i=0;i<askPriceList.size();i++){
+            AskPrice askPrice = askPriceList.get(i);
+            Map map = new HashMap();
+            map.put(Constant.id,askPrice.getId());
+            map.put(Constant.title,askPrice.getTitle());
+            map.put(Constant.publishTime,askPrice.getPublishTime().substring(0,10));
+            map.put(Constant.area,askPrice.getProvinceCode());
+            list.add(map);
+        }
+        return list;
     }
 }

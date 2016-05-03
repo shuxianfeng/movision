@@ -20,6 +20,8 @@ public interface AskPriceMapper {
 
     List<AskPrice> find();
 
-    List<AskPrice> queryNewPriceInfo();
+    List<AskPrice> queryNewPriceInfo(int count);
+
+    List<AskPrice> findAllNewPriceInfoList(RowBounds rowBounds);
 
 }

@@ -286,6 +286,7 @@ public class JobSiteController {
         map.put("jobCity",jobCity);
         map.put("expYear",expYear);
         map.put("education",education);
+        map.put("isPublic","1");
         jsonResult = resume.findAllResume(pager, map);
         jsonResult.setData(pager);
         response.setContentType("application/json;charset=utf-8");
