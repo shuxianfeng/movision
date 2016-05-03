@@ -1,10 +1,14 @@
 package com.zhuhuibao.common;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 /**
  * 返回前台的json数据
  * @author pl
  */
+@ApiModel
 public class JsonResult implements Serializable{
 
 	private static final long serialVersionUID = 4273005680206220420L;
@@ -12,20 +16,24 @@ public class JsonResult implements Serializable{
 	 * 返回结果码
 	 * 200成功，400失败，403没有权限
 	 */
+	@ApiModelProperty(value="返回结果码,200成功，400失败，403没有权限",required = true)
 	private int code = 200;
 	/**
 	 * 操作结果信息
 	 */
+	@ApiModelProperty(value="返回信息",notes="异常返回信息")
 	private String message = "";
 	/**
 	 * 返回的数据
 	 */
+	@ApiModelProperty(value="返回数据",required = true)
 	private Object data;
 	
 	/**
 	 * 平台返回的消息码
 	 * @return
 	 */
+	@ApiModelProperty(value="平台返回的消息码")
 	private int msgCode;
 	
 	public int getMsgCode() {

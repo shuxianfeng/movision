@@ -1,64 +1,90 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
+@ApiModel(value="职位",description = "职位属性")
 public class Job {
+    @ApiModelProperty(value="职位ID",required = true)
     private String id;
 
+    @ApiModelProperty(value="发布人ID",required = true)
     private String createid;
 
+    @ApiModelProperty(value="发布时间")
     private String publishTime;
 
+    @ApiModelProperty(value="更新时间")
     private String updateTime;
 
+    @ApiModelProperty(value="职位名称")
     private String name;
 
     private String enterpriseName;
 
     private String enterpriseDesc;
 
+    @ApiModelProperty(value="职位类别")
     private String positionType;
 
+    @ApiModelProperty(hidden = true)
     private String parentId;
 
+    @ApiModelProperty(value="职位月薪")
     private Integer salary;
 
     private String salaryName;
 
+    @ApiModelProperty(value="省份编码")
     private String province;
 
+    @ApiModelProperty(value="城市编码")
     private String city;
 
+    @ApiModelProperty(value="区域编码")
     private String area;
 
+    @ApiModelProperty(value="工作区域")
     private String workArea;
 
+    @ApiModelProperty(value="学历要求")
     private Integer education;
 
     private String educationName;
 
+    @ApiModelProperty(value="工作经验")
     private Integer experience;
 
     private String experienceName;
 
+    @ApiModelProperty(value="年龄要求")
     private Integer age;
 
     private String ageName;
 
     private String description;
 
+    @ApiModelProperty(value="福利",notes="逗号隔开")
     private String welfare;
 
+    @ApiModelProperty(value="部门")
     private String department;
 
+    @ApiModelProperty(value="汇报对象上级")
     private String superior;
 
+    @ApiModelProperty(value="下属人数")
     private Integer number;
 
+    @ApiModelProperty(value="专业要求")
     private String profession;
 
+    @ApiModelProperty(value="删除标识",hidden = true)
     private Integer is_deleted;
 
+    @ApiModelProperty(value="企业logo")
     private String enterpriseLogo;
 
     public String getId() {
