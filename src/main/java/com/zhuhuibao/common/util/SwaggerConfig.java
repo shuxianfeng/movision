@@ -45,10 +45,10 @@ public class SwaggerConfig {
     private ApiInfo apiInfo()
     {
         return new ApiInfo(
-                "ZHB",
-                "ZHB",
-                "开发者: Example",
-                "example@example.com",
+                "筑慧宝Api文档",
+                "筑慧宝前后端Api接口文档",
+                "/rest",
+                "www.zhuhui8.com",
                 "MIT License",
                 "/LICENSE");
     }

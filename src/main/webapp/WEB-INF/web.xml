@@ -19,7 +19,7 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <!-- 伪静态过滤器-->
+    <!-- 伪静态过滤器
     <filter>
         <filter-name>UrlRewriteFilter</filter-name>
         <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
@@ -34,7 +34,7 @@
         <dispatcher>REQUEST </dispatcher>
         <dispatcher>FORWARD </dispatcher>
     </filter-mapping>
-
+-->
     <!-- 中文乱码过滤器-->
     <filter>
         <filter-name>encodingFilter</filter-name>
@@ -98,7 +98,7 @@
 
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
-        <welcome-file>index.do</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
     <error-page>

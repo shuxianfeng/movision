@@ -99,9 +99,8 @@
                 /checkCode = anon
                 /admin/** = roles[admin]
                 <!--/** = user-->
-                /static/** = anon
-                /css/** =anon
-                /js/** =anon
+                /swagger/** = anon
+                /upload/** = anon
                 <!--/** = authc-->
             </value>
         </property>
