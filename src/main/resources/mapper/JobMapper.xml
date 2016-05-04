@@ -277,8 +277,9 @@
     GROUP BY positionType)A)) and j.createid != #{id} and m.enterpriseType = #{enterpriseType} group by j.createid limit 0,#{count}
   </select>
   <select id="querySimilarCompanyInfo" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
-    select m.enterpriseName,count(*)as size from t_i_job j
+    select c.name as city,m.enterpriseName,count(*)as size from t_i_job j
     left join t_m_member m on m.id = j.createid
+    LEFT join t_dictionary_city c on c.code = m.city
     where j.createid=#{id} and j.is_deleted = 0
   </select>
 </mapper>

@@ -435,6 +435,7 @@ public class JobPositionService {
             map.put(Constant.id,job.getCreateid());
             map.put(Constant.companyName,companyInfo.getEnterpriseName());
             map.put(Constant.size,companyInfo.getSize());
+            map.put(Constant.area,companyInfo.getCity());
             list.add(map);
         }
         jsonResult.setData(list);
