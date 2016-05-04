@@ -24,6 +24,8 @@ public class Job {
 
     private String enterpriseName;
 
+    private String size;
+
     private String enterpriseDesc;
 
     @ApiModelProperty(value="职位类别")
@@ -317,5 +319,13 @@ public class Job {
 
     public void setEnterpriseLogo(String enterpriseLogo) {
         this.enterpriseLogo = enterpriseLogo;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 }
