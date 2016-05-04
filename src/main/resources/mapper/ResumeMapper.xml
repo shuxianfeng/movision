@@ -176,7 +176,9 @@
     where r.createid = #{id}
   </select>
   <select id="searchMyResumeAllInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select r.*,(select parentId from t_dictionary_position where find_in_set(id,r.post) group by parentId) as parentId
+    select r.*,(select po.name from t_dictionary_position p
+    left join t_dictionary_position po on p.parentId = po.id
+    where find_in_set(p.id,'19,20')group by p.parentId) as parentId
     FROM t_i_resume r
     where r.createid = #{id}
   </select>
