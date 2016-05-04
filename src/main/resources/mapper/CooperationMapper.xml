@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.CooperationMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createId" property="createId" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="category" property="category" jdbcType="INTEGER" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="isShow" property="isShow" jdbcType="BIT" />
+    <result column="companyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="linkMan" property="linkMan" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, createId, publishTime, updateTime, title, type, category, province, city, area, 
+    price, endTime, isShow, companyName, linkMan, telephone, email
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_c_cooperation
+    where id = #{id}
+  </select>
+  <insert id="publishCooperation" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
+    insert into t_c_cooperation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createId != null" >
+        createId,
+      </if>
+        publishTime,
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="category != null" >
+        category,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="endTime != null" >
+        endTime,
+      </if>
+      <if test="isShow != null" >
+        isShow,
+      </if>
+      <if test="companyName != null" >
+        companyName,
+      </if>
+      <if test="linkMan != null" >
+        linkMan,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="createId != null" >
+        #{createId},
+      </if>
+        now(),
+      <if test="updateTime != null" >
+        #{updateTime},
+      </if>
+      <if test="title != null" >
+        #{title},
+      </if>
+      <if test="type != null" >
+        #{type},
+      </if>
+      <if test="category != null" >
+        #{category},
+      </if>
+      <if test="province != null" >
+        #{province},
+      </if>
+      <if test="city != null" >
+        #{city},
+      </if>
+      <if test="area != null" >
+        #{area},
+      </if>
+      <if test="price != null" >
+        #{price},
+      </if>
+      <if test="endTime != null" >
+        #{endTime},
+      </if>
+      <if test="isShow != null" >
+        #{isShow},
+      </if>
+      <if test="companyName != null" >
+        #{companyName},
+      </if>
+      <if test="linkMan != null" >
+        #{linkMan},
+      </if>
+      <if test="telephone != null" >
+        #{telephone},
+      </if>
+      <if test="email != null" >
+        #{email},
+      </if>
+      <if test="content != null" >
+        #{content},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
+    update t_c_cooperation
+    <set >
+      <if test="createId != null" >
+        createId = #{createId},
+      </if>
+      <if test="publishTime != null" >
+        publishTime = #{publishTime},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime},
+      </if>
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="type != null" >
+        type = #{type},
+      </if>
+      <if test="category != null" >
+        category = #{category},
+      </if>
+      <if test="province != null" >
+        province = #{province},
+      </if>
+      <if test="city != null" >
+        city = #{city},
+      </if>
+      <if test="area != null" >
+        area = #{area},
+      </if>
+      <if test="price != null" >
+        price = #{price},
+      </if>
+      <if test="endTime != null" >
+        endTime = #{endTime},
+      </if>
+      <if test="isShow != null" >
+        isShow = #{isShow},
+      </if>
+      <if test="companyName != null" >
+        companyName = #{companyName},
+      </if>
+      <if test="linkMan != null" >
+        linkMan = #{linkMan},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone},
+      </if>
+      <if test="email != null" >
+        email = #{email},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

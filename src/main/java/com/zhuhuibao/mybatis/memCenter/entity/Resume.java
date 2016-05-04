@@ -21,6 +21,8 @@ public class Resume {
 
     private String parentId;
 
+    private String parentName;
+
     private String jobProvince;
 
     private String jobCity;
@@ -361,5 +363,13 @@ public class Resume {
 
     public void setIsPublic(String isPublic) {
         this.isPublic = isPublic;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 }

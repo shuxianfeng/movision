@@ -10,6 +10,7 @@
     <result column="jobNature" property="jobNature" jdbcType="VARCHAR" />
     <result column="post" property="post" jdbcType="VARCHAR" />
     <result column="parentId" property="parentId" jdbcType="VARCHAR" />
+    <result column="parentName" property="parentName" jdbcType="VARCHAR" />
     <result column="jobProvince" property="jobProvince" jdbcType="VARCHAR" />
     <result column="jobCity" property="jobCity" jdbcType="VARCHAR" />
     <result column="jobArea" property="jobArea" jdbcType="VARCHAR" />
@@ -176,9 +177,12 @@
     where r.createid = #{id}
   </select>
   <select id="searchMyResumeAllInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select r.*,(select po.name from t_dictionary_position p
+    select r.*,(select po.id from t_dictionary_position p
     left join t_dictionary_position po on p.parentId = po.id
-    where find_in_set(p.id,'19,20')group by p.parentId) as parentId
+    where find_in_set(p.id,r.post)group by p.parentId)as parentId,
+    (select po.name from t_dictionary_position p
+    left join t_dictionary_position po on p.parentId = po.id
+    where find_in_set(p.id,r.post)group by p.parentId)as parentName
     FROM t_i_resume r
     where r.createid = #{id}
   </select>
