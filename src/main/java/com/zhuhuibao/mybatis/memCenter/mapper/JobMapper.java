@@ -30,7 +30,7 @@ public interface JobMapper {
     List<Job> searchNewPosition(int count);
 
     //查询推荐职位
-    List<Job> searchRecommendPosition(String id,int count);
+    List<Job> searchRecommendPosition(@Param("id")String id,@Param("count")int count);
 
     //查询相同职位
     List<Job> searchSamePosition(String id);
