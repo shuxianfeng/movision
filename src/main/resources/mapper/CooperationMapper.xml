@@ -7,19 +7,19 @@
     <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
     <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="parentId" property="parentId" jdbcType="INTEGER" />
-    <result column="parentName" property="parentName" jdbcType="INTEGER" />
-    <result column="type" property="type" jdbcType="INTEGER" />
-    <result column="typeName" property="typeName" jdbcType="INTEGER" />
-    <result column="category" property="category" jdbcType="INTEGER" />
-    <result column="categoryName" property="categoryName" jdbcType="INTEGER" />
+    <result column="parentId" property="parentId" jdbcType="VARCHAR" />
+    <result column="parentName" property="parentName" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="typeName" property="typeName" jdbcType="VARCHAR" />
+    <result column="category" property="category" jdbcType="VARCHAR" />
+    <result column="categoryName" property="categoryName" jdbcType="VARCHAR" />
     <result column="province" property="province" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
     <result column="area" property="area" jdbcType="VARCHAR" />
     <result column="cooperationArea" property="cooperationArea" jdbcType="VARCHAR" />
     <result column="price" property="price" jdbcType="DOUBLE" />
-    <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
-    <result column="isShow" property="isShow" jdbcType="BIT" />
+    <result column="endTime" property="endTime" jdbcType="VARCHAR" />
+    <result column="isShow" property="isShow" jdbcType="VARCHAR" />
     <result column="companyName" property="companyName" jdbcType="VARCHAR" />
     <result column="linkMan" property="linkMan" jdbcType="VARCHAR" />
     <result column="telephone" property="telephone" jdbcType="VARCHAR" />
@@ -45,9 +45,7 @@
         createId,
       </if>
         publishTime,
-      <if test="updateTime != null" >
         updateTime,
-      </if>
       <if test="title != null" >
         title,
       </if>
@@ -102,9 +100,7 @@
         #{createId},
       </if>
         now(),
-      <if test="updateTime != null" >
-        #{updateTime},
-      </if>
+        now(),
       <if test="title != null" >
         #{title},
       </if>
@@ -239,6 +235,7 @@
     left join t_dictionary_area a on a.code = c.area
     left join t_dictionary_constant co on co.code = c.category
     left join t_dictionary_cooperationType coo on coo.id = c.type
+    LEFT JOIN t_m_member m on c.createId = m.id
     where co.type = 9
     <if test="createId != null">
       and c.createId = #{createId}
@@ -255,5 +252,15 @@
     <if test="province != null">
       and c.province = #{province}
     </if>
+    <if test="memberType != null and memberType == 1">
+      and m.identify != 2
+    </if>
+    <if test="memberType != null and memberType == 2">
+      and m.identify = 2
+    </if>
+    <if test="parentId != null">
+      and coo.parentId = #{parentId}
+    </if>
+    order by c.updateTime desc
   </select>
 </mapper>

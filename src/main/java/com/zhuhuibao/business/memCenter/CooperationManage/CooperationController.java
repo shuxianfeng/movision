@@ -2,6 +2,7 @@ package com.zhuhuibao.business.memCenter.CooperationManage;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
 import com.zhuhuibao.mybatis.memCenter.service.CooperationService;
@@ -35,7 +36,7 @@ public class CooperationController {
      */
     @ApiOperation(value="发布任务",notes="发布任务",response = JsonResult.class)
     @RequestMapping(value = "publishCooperation", method = RequestMethod.POST)
-    public JsonResult publishCooperation(@RequestBody Cooperation cooperation) throws IOException {
+    public JsonResult publishCooperation(Cooperation cooperation) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         JsonResult jsonResult = new JsonResult();
@@ -113,8 +114,11 @@ public class CooperationController {
      * 查询我发布的任务（分页）
      */
     @ApiOperation(value="查询我发布的任务（分页）",notes="查询我发布的任务（分页）",response = JsonResult.class)
-    @RequestMapping(value = "findAllCooperationByPager", method = RequestMethod.GET)
-    public JsonResult findAllCooperationByPager(@RequestParam String pageNo,@RequestParam String pageSize,@RequestBody Cooperation cooperation) throws IOException {
+    @RequestMapping(value = "findAllMyCooperationByPager", method = RequestMethod.GET)
+    public JsonResult findAllMyCooperationByPager(
+            @RequestParam(required = false) String pageNo,@RequestParam(required = false) String pageSize,
+            @ApiParam(value = "合作标题")@RequestParam(required = false) String title,
+            @ApiParam(value = "合作类型")@RequestParam(required = false) String type) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (StringUtils.isEmpty(pageNo)) {
@@ -128,7 +132,10 @@ public class CooperationController {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
                 Paging<Cooperation> pager = new Paging<Cooperation>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+                Cooperation cooperation = new Cooperation();
                 cooperation.setCreateId(principal.getId().toString());
+                cooperation.setType(type);
+                cooperation.setTitle(title);
                 jsonResult = cooperationService.findAllCooperationByPager(pager, cooperation);
             }else{
                 jsonResult.setCode(401);
