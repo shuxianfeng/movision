@@ -16,7 +16,7 @@ public class JsonResult implements Serializable{
 	 * 返回结果码
 	 * 200成功，400失败，403没有权限
 	 */
-	@ApiModelProperty(value="返回结果码,200成功，400失败，403没有权限",required = true)
+	@ApiModelProperty(value="返回结果码,200成功，400失败，401没有权限",required = true)
 	private int code = 200;
 	/**
 	 * 操作结果信息
