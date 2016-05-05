@@ -205,11 +205,11 @@
         and t.id != #{jobID}
       </if>
       <if test="name != null and name != ''">
-        and t.name like concat('%',#{name},'%')
+        and t.name like concat('%',#{name},'%') or mb.enterpriseName like concat('%',#{name},'%')
       </if>
-      <if test="enterpriseName != null and enterpriseName != ''">
+      <!--<if test="enterpriseName != null and enterpriseName != ''">
         and mb.enterpriseName like concat('%',#{enterpriseName},'%')
-      </if>
+      </if>-->
       <if test="city != null and city != ''">
         and t.city = #{city}
       </if>
