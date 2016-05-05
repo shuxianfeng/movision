@@ -10,6 +10,7 @@
     <result column="jobNature" property="jobNature" jdbcType="VARCHAR" />
     <result column="post" property="post" jdbcType="VARCHAR" />
     <result column="parentId" property="parentId" jdbcType="VARCHAR" />
+    <result column="parentName" property="parentName" jdbcType="VARCHAR" />
     <result column="jobProvince" property="jobProvince" jdbcType="VARCHAR" />
     <result column="jobCity" property="jobCity" jdbcType="VARCHAR" />
     <result column="jobArea" property="jobArea" jdbcType="VARCHAR" />
@@ -176,7 +177,12 @@
     where r.createid = #{id}
   </select>
   <select id="searchMyResumeAllInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select r.*,(select parentId from t_dictionary_position where find_in_set(id,r.post) group by parentId) as parentId
+    select r.*,(select po.id from t_dictionary_position p
+    left join t_dictionary_position po on p.parentId = po.id
+    where find_in_set(p.id,r.post)group by p.parentId)as parentId,
+    (select po.name from t_dictionary_position p
+    left join t_dictionary_position po on p.parentId = po.id
+    where find_in_set(p.id,r.post)group by p.parentId)as parentName
     FROM t_i_resume r
     where r.createid = #{id}
   </select>
@@ -250,11 +256,12 @@
   </select>
   <select id="queryLatestResume" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select r.id,r.realName,(DATE_FORMAT( current_timestamp(),'%Y' )-r.birthYear)as birthYear,
-    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,c.name AS jobCity,r.photo,
+    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,c.name AS jobCity,m.headShot as photo,
     (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post,
     CASE WHEN r.status=1 or r.status=2 or r.status=3 THEN '在职' WHEN r.status=4 THEN '离职' END AS status
     from t_i_resume r
     left join t_dictionary_city c on r.jobCity = c.code
+    left join t_m_member m on r.createid = m.id
     WHERE r.isPublic = 1 ORDER by r.publishTime limit 0,#{count}
   </select>
 </mapper>

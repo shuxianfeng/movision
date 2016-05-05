@@ -24,12 +24,13 @@ public class Job {
 
     private String enterpriseName;
 
+    private String size;
+
     private String enterpriseDesc;
 
     @ApiModelProperty(value="职位类别")
     private String positionType;
 
-    @ApiModelProperty(hidden = true)
     private String parentId;
 
     @ApiModelProperty(value="职位月薪")
@@ -317,5 +318,13 @@ public class Job {
 
     public void setEnterpriseLogo(String enterpriseLogo) {
         this.enterpriseLogo = enterpriseLogo;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 }

@@ -53,8 +53,8 @@
 		</javaClientGenerator>
 
 		<!-- 配置表信息 -->
-		<table tableName="t_p_brand"
-			domainObjectName="Brand" enableCountByExample="false"
+		<table tableName="t_dictionary_cooperationType"
+			domainObjectName="CooperationType" enableCountByExample="false"
 			enableSelectByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" >
 			<!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 enable*ByExample 

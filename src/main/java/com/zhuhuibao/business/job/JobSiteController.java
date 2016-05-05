@@ -358,4 +358,14 @@ public class JobSiteController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
+
+    /**
+     * 相似企业
+     */
+    @RequestMapping(value = "/rest/job/querySimilarCompany", method = RequestMethod.GET)
+    public void querySimilarCompany(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+        JsonResult jsonResult = job.querySimilarCompany(id,4);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
 }

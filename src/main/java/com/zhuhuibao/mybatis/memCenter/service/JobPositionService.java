@@ -6,6 +6,7 @@ import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.PositionMapper;
 import com.zhuhuibao.utils.L;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -35,6 +36,9 @@ public class JobPositionService {
 
     @Autowired
     private PositionMapper positionMapper;
+
+    @Autowired
+    private MemberMapper memberMapper;
     /**
      * 发布职位
      */
@@ -412,5 +416,29 @@ public class JobPositionService {
         {
             log.error("update position info error!",e);
         }
+    }
+
+    /**
+     * 相似企业
+     */
+    public JsonResult querySimilarCompany(String id,int count)
+    {
+        JsonResult jsonResult = new JsonResult();
+        Member member = memberMapper.findMemById(id);
+        List<Job> companyList = jobMapper.querySimilarCompany(member.getEnterpriseType(),id,count);
+        List list = new ArrayList();
+        for(int i=0;i<companyList.size();i++){
+            Job job = companyList.get(i);
+            Job companyInfo = new Job();
+            companyInfo = jobMapper.querySimilarCompanyInfo(job.getCreateid());
+            Map map = new HashMap();
+            map.put(Constant.id,job.getCreateid());
+            map.put(Constant.companyName,companyInfo.getEnterpriseName());
+            map.put(Constant.size,companyInfo.getSize());
+            map.put(Constant.area,companyInfo.getCity());
+            list.add(map);
+        }
+        jsonResult.setData(list);
+        return jsonResult;
     }
 }

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.CooperationMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createId" property="createId" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="parentId" property="parentId" jdbcType="VARCHAR" />
+    <result column="parentName" property="parentName" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="typeName" property="typeName" jdbcType="VARCHAR" />
+    <result column="category" property="category" jdbcType="VARCHAR" />
+    <result column="categoryName" property="categoryName" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="cooperationArea" property="cooperationArea" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="endTime" property="endTime" jdbcType="VARCHAR" />
+    <result column="isShow" property="isShow" jdbcType="VARCHAR" />
+    <result column="companyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="linkMan" property="linkMan" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="is_deleted" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.ResultBean" >
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, createId, publishTime, updateTime, title, type, category, province, city, area, 
+    price, endTime, isShow, companyName, linkMan, telephone, email,content,is_deleted
+  </sql>
+  <insert id="publishCooperation" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
+    insert into t_c_cooperation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createId != null" >
+        createId,
+      </if>
+        publishTime,
+        updateTime,
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="category != null" >
+        category,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="endTime != null" >
+        endTime,
+      </if>
+      <if test="isShow != null" >
+        isShow,
+      </if>
+      <if test="companyName != null" >
+        companyName,
+      </if>
+      <if test="linkMan != null" >
+        linkMan,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="is_deleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="createId != null" >
+        #{createId},
+      </if>
+        now(),
+        now(),
+      <if test="title != null" >
+        #{title},
+      </if>
+      <if test="type != null" >
+        #{type},
+      </if>
+      <if test="category != null" >
+        #{category},
+      </if>
+      <if test="province != null" >
+        #{province},
+      </if>
+      <if test="city != null" >
+        #{city},
+      </if>
+      <if test="area != null" >
+        #{area},
+      </if>
+      <if test="price != null" >
+        #{price},
+      </if>
+      <if test="endTime != null" >
+        #{endTime},
+      </if>
+      <if test="isShow != null" >
+        #{isShow},
+      </if>
+      <if test="companyName != null" >
+        #{companyName},
+      </if>
+      <if test="linkMan != null" >
+        #{linkMan},
+      </if>
+      <if test="telephone != null" >
+        #{telephone},
+      </if>
+      <if test="email != null" >
+        #{email},
+      </if>
+      <if test="content != null" >
+        #{content},
+      </if>
+      <if test="is_deleted != null" >
+        #{is_deleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateCooperation" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
+    update t_c_cooperation
+    <set >
+      <if test="createId != null" >
+        createId = #{createId},
+      </if>
+      <if test="publishTime != null" >
+        publishTime = #{publishTime},
+      </if>
+        updateTime = now(),
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="type != null" >
+        type = #{type},
+      </if>
+      <if test="category != null" >
+        category = #{category},
+      </if>
+      <if test="province != null" >
+        province = #{province},
+      </if>
+      <if test="city != null" >
+        city = #{city},
+      </if>
+      <if test="area != null" >
+        area = #{area},
+      </if>
+      <if test="price != null" >
+        price = #{price},
+      </if>
+      <if test="endTime != null" >
+        endTime = #{endTime},
+      </if>
+      <if test="isShow != null" >
+        isShow = #{isShow},
+      </if>
+      <if test="companyName != null" >
+        companyName = #{companyName},
+      </if>
+      <if test="linkMan != null" >
+        linkMan = #{linkMan},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone},
+      </if>
+      <if test="email != null" >
+        email = #{email},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+      <if test="is_deleted != null" >
+        is_deleted = #{is_deleted},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="cooperationCategory" resultMap="ResultMap" >
+    select
+    code,name
+    from t_dictionary_constant
+    where type = 9
+  </select>
+  <update id="deleteCooperation" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
+    UPDATE t_c_cooperation SET is_deleted = 1 WHERE id = #{id}
+  </update>
+  <select id="queryCooperationInfoById" resultMap="BaseResultMap" >
+    select c.*, concat(p.name,ci.name,a.name)as cooperationArea,co.name as categoryName,coo.name as TypeName,coo.parentId,
+    (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName
+    from t_c_cooperation c
+    left join t_dictionary_province p on p.code = c.province
+    left join t_dictionary_city ci on ci.code = c.city
+    left join t_dictionary_area a on a.code = c.area
+    left join t_dictionary_constant co on co.code = c.category
+    left join t_dictionary_cooperationType coo on coo.id = c.type
+    where c.id = #{id} and co.type = 9
+  </select>
+  <select id="findAllCooperationByPager" resultMap="BaseResultMap" >
+    select c.*, concat(p.name,ci.name,a.name)as cooperationArea,co.name as categoryName,coo.name as TypeName,coo.parentId,
+    (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName
+    from t_c_cooperation c
+    left join t_dictionary_province p on p.code = c.province
+    left join t_dictionary_city ci on ci.code = c.city
+    left join t_dictionary_area a on a.code = c.area
+    left join t_dictionary_constant co on co.code = c.category
+    left join t_dictionary_cooperationType coo on coo.id = c.type
+    LEFT JOIN t_m_member m on c.createId = m.id
+    where co.type = 9
+    <if test="createId != null">
+      and c.createId = #{createId}
+    </if>
+    <if test="title != null">
+      and c.title like CONCAT('%',#{title},'%')
+    </if>
+    <if test="type != null">
+      and c.type = #{type}
+    </if>
+    <if test="category != null">
+      and c.category = #{category}
+    </if>
+    <if test="province != null">
+      and c.province = #{province}
+    </if>
+    <if test="memberType != null and memberType == 1">
+      and m.identify != 2
+    </if>
+    <if test="memberType != null and memberType == 2">
+      and m.identify = 2
+    </if>
+    <if test="parentId != null">
+      and coo.parentId = #{parentId}
+    </if>
+    order by c.updateTime desc
+  </select>
+</mapper>

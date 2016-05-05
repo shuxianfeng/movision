@@ -315,6 +315,8 @@ public interface Constant {
 
 	String age = "age";
 
+	String size= "size";
+
 	/**
 	 * 站内信招聘类型为 1
 	 */

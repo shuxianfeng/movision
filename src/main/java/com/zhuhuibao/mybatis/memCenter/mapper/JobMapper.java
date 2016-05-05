@@ -30,7 +30,7 @@ public interface JobMapper {
     List<Job> searchNewPosition(int count);
 
     //查询推荐职位
-    List<Job> searchRecommendPosition(String id,int count);
+    List<Job> searchRecommendPosition(@Param("id")String id,@Param("count")int count);
 
     //查询相同职位
     List<Job> searchSamePosition(String id);
@@ -60,4 +60,10 @@ public interface JobMapper {
 
     //更新点击率
     int updateViews(Long jobID);
+
+    //相似企业
+    List<Job> querySimilarCompany(@Param("enterpriseType")int enterpriseType,@Param("id")String id,@Param("count")int count);
+
+    //相似企业信息
+    Job querySimilarCompanyInfo(@Param("id")String id);
 }
