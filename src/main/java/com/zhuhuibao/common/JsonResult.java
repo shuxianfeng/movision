@@ -14,7 +14,7 @@ public class JsonResult implements Serializable{
 	private static final long serialVersionUID = 4273005680206220420L;
 	/**
 	 * 返回结果码
-	 * 200成功，400失败，403没有权限
+	 * 200成功，400失败，401没有权限
 	 */
 	@ApiModelProperty(value="返回结果码,200成功，400失败，401没有权限",required = true)
 	private int code = 200;
@@ -57,8 +57,7 @@ public class JsonResult implements Serializable{
 	public Object getData() {
 		if(data == null)
 		{
-			Object[] obj = {};
-			data = obj;
+			data = new Object[]{};
 		}
 		return data;
 	}
