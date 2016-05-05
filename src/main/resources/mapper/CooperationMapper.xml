@@ -7,11 +7,16 @@
     <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
     <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="parentId" property="parentId" jdbcType="INTEGER" />
+    <result column="parentName" property="parentName" jdbcType="INTEGER" />
     <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="typeName" property="typeName" jdbcType="INTEGER" />
     <result column="category" property="category" jdbcType="INTEGER" />
+    <result column="categoryName" property="categoryName" jdbcType="INTEGER" />
     <result column="province" property="province" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
     <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="cooperationArea" property="cooperationArea" jdbcType="VARCHAR" />
     <result column="price" property="price" jdbcType="DOUBLE" />
     <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
     <result column="isShow" property="isShow" jdbcType="BIT" />
@@ -19,25 +24,17 @@
     <result column="linkMan" property="linkMan" jdbcType="VARCHAR" />
     <result column="telephone" property="telephone" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="is_deleted" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" extends="BaseResultMap" >
-    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.ResultBean" >
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, createId, publishTime, updateTime, title, type, category, province, city, area, 
-    price, endTime, isShow, companyName, linkMan, telephone, email
+    price, endTime, isShow, companyName, linkMan, telephone, email,content,is_deleted
   </sql>
-  <sql id="Blob_Column_List" >
-    content
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from t_c_cooperation
-    where id = #{id}
-  </select>
   <insert id="publishCooperation" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
     insert into t_c_cooperation
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -93,6 +90,9 @@
       <if test="content != null" >
         content,
       </if>
+      <if test="is_deleted != null" >
+        is_deleted,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -147,9 +147,12 @@
       <if test="content != null" >
         #{content},
       </if>
+      <if test="is_deleted != null" >
+        #{is_deleted},
+      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
+  <update id="updateCooperation" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
     update t_c_cooperation
     <set >
       <if test="createId != null" >
@@ -158,9 +161,7 @@
       <if test="publishTime != null" >
         publishTime = #{publishTime},
       </if>
-      <if test="updateTime != null" >
-        updateTime = #{updateTime},
-      </if>
+        updateTime = now(),
       <if test="title != null" >
         title = #{title},
       </if>
@@ -203,7 +204,56 @@
       <if test="content != null" >
         content = #{content},
       </if>
+      <if test="is_deleted != null" >
+        is_deleted = #{is_deleted},
+      </if>
     </set>
     where id = #{id}
   </update>
+  <select id="cooperationCategory" resultMap="ResultMap" >
+    select
+    code,name
+    from t_dictionary_constant
+    where type = 9
+  </select>
+  <update id="deleteCooperation" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
+    UPDATE t_c_cooperation SET is_deleted = 1 WHERE id = #{id}
+  </update>
+  <select id="queryCooperationInfoById" resultMap="BaseResultMap" >
+    select c.*, concat(p.name,ci.name,a.name)as cooperationArea,co.name as categoryName,coo.name as TypeName,coo.parentId,
+    (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName
+    from t_c_cooperation c
+    left join t_dictionary_province p on p.code = c.province
+    left join t_dictionary_city ci on ci.code = c.city
+    left join t_dictionary_area a on a.code = c.area
+    left join t_dictionary_constant co on co.code = c.category
+    left join t_dictionary_cooperationType coo on coo.id = c.type
+    where c.id = #{id} and co.type = 9
+  </select>
+  <select id="findAllCooperationByPager" resultMap="BaseResultMap" >
+    select c.*, concat(p.name,ci.name,a.name)as cooperationArea,co.name as categoryName,coo.name as TypeName,coo.parentId,
+    (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName
+    from t_c_cooperation c
+    left join t_dictionary_province p on p.code = c.province
+    left join t_dictionary_city ci on ci.code = c.city
+    left join t_dictionary_area a on a.code = c.area
+    left join t_dictionary_constant co on co.code = c.category
+    left join t_dictionary_cooperationType coo on coo.id = c.type
+    where co.type = 9
+    <if test="createId != null">
+      and c.createId = #{createId}
+    </if>
+    <if test="title != null">
+      and c.title like CONCAT('%',#{title},'%')
+    </if>
+    <if test="type != null">
+      and c.type = #{type}
+    </if>
+    <if test="category != null">
+      and c.category = #{category}
+    </if>
+    <if test="province != null">
+      and c.province = #{province}
+    </if>
+  </select>
 </mapper>

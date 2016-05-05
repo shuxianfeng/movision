@@ -1,7 +1,5 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-import java.util.Date;
-
 public class Cooperation {
     private String id;
 
@@ -38,6 +36,18 @@ public class Cooperation {
     private String email;
 
     private String content;
+
+    private String is_deleted;
+
+    private String parentId;
+
+    private String parentName;
+
+    private String typeName;
+
+    private String categoryName;
+
+    private String cooperationArea;
 
     public String getId() {
         return id;
@@ -181,5 +191,53 @@ public class Cooperation {
 
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
+    }
+
+    public String getIs_deleted() {
+        return is_deleted;
+    }
+
+    public void setIs_deleted(String is_deleted) {
+        this.is_deleted = is_deleted;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getCooperationArea() {
+        return cooperationArea;
+    }
+
+    public void setCooperationArea(String cooperationArea) {
+        this.cooperationArea = cooperationArea;
     }
 }

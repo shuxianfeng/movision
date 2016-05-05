@@ -31,7 +31,6 @@ public class Job {
     @ApiModelProperty(value="职位类别")
     private String positionType;
 
-    @ApiModelProperty(hidden = true)
     private String parentId;
 
     @ApiModelProperty(value="职位月薪")
