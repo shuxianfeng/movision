@@ -2,6 +2,7 @@ package com.zhuhuibao.business.memCenter.JobManage;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
@@ -45,7 +46,7 @@ public class JobController {
      */
     @ApiOperation(value="发布职位",notes = "发布职位",response = JsonResult.class)
     @RequestMapping(value = "publishPosition", method = RequestMethod.POST)
-    public JsonResult publishPosition(@RequestBody Job job) throws IOException {
+    public JsonResult publishPosition(@ApiParam(value="职位属性") Job job) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         JsonResult jsonResult = new JsonResult();

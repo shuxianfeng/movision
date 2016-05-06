@@ -1,30 +1,39 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-import java.util.Date;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 
 public class Cooperation {
     private String id;
 
+    @ApiModelProperty(value="发布人ID")
     private String createId;
 
     private String publishTime;
 
     private String updateTime;
 
+    @ApiModelProperty(value="合作标题")
     private String title;
 
-    private Integer type;
+    @ApiModelProperty(value="合作类型")
+    private String type;
 
-    private Integer category;
+    @ApiModelProperty(value="项目类别")
+    private String category;
 
+    @ApiModelProperty(value="省")
     private String province;
 
+    @ApiModelProperty(value="市")
     private String city;
 
+    @ApiModelProperty(value="区")
     private String area;
 
+    @ApiModelProperty(value="合作价格")
     private Double price;
 
+    @ApiModelProperty(value="截止日期")
     private String endTime;
 
     private Boolean isShow;
@@ -38,6 +47,23 @@ public class Cooperation {
     private String email;
 
     private String content;
+
+    private String is_deleted;
+
+    @ApiModelProperty(value="发布类型，1：发布任务，2：发布服务，3：发布资质合作")
+    private String parentId;
+
+    private String parentName;
+
+    private String typeName;
+
+    private String categoryName;
+
+    @ApiModelProperty(value="合作地点，省市区")
+    private String cooperationArea;
+
+    @ApiModelProperty(value="会员类型，1：企业，2：个人")
+    private String memberType;
 
     public String getId() {
         return id;
@@ -79,19 +105,19 @@ public class Cooperation {
         this.title = title == null ? null : title.trim();
     }
 
-    public Integer getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public Integer getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Integer category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
@@ -181,5 +207,61 @@ public class Cooperation {
 
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
+    }
+
+    public String getIs_deleted() {
+        return is_deleted;
+    }
+
+    public void setIs_deleted(String is_deleted) {
+        this.is_deleted = is_deleted;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getCooperationArea() {
+        return cooperationArea;
+    }
+
+    public void setCooperationArea(String cooperationArea) {
+        this.cooperationArea = cooperationArea;
+    }
+
+    public String getMemberType() {
+        return memberType;
+    }
+
+    public void setMemberType(String memberType) {
+        this.memberType = memberType;
     }
 }
