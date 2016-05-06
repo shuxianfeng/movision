@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.zhuhuibao.utils.exception.BusinessException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -228,22 +230,28 @@ public class RegisterController {
      */
 	@RequestMapping(value = "/rest/register", method = RequestMethod.POST)
 	@ResponseBody
-	public void register(HttpServletRequest req,HttpServletResponse response, Member member,Model model) throws IOException {
+	public void register(HttpServletRequest req, HttpServletResponse response, Member member, Model model) throws Exception{
 		log.debug("注册  mobile=="+member.getMobile()+" email =="+member.getEmail());
 		JsonResult result = new JsonResult();
-		Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(false);
-		//校验手机验证码是否正确
-		if(member.getMobileCheckCode() != null )
+//		try {
+			Subject currentUser = SecurityUtils.getSubject();
+			Session sess = currentUser.getSession(false);
+			//校验手机验证码是否正确
+			if (member.getMobileCheckCode() != null) {
+				String verifyCode = (String) sess.getAttribute("r" + member.getMobile());
+				result = memberService.registerMobileMember(member, verifyCode);
+			}
+			if (member.getEmailCheckCode() != null) {
+				String verifyCode = (String) sess.getAttribute("email");
+				result = memberService.registerMailMember(member, verifyCode);
+			}
+//		}
+/*		catch(BusinessException e)
 		{
-			String verifyCode = (String) sess.getAttribute("r"+member.getMobile());
-			result = memberService.registerMobileMember(member, verifyCode);
-		}
-		if(member.getEmailCheckCode() != null )
-		{
-			String verifyCode = (String) sess.getAttribute("email");
-			result =memberService.registerMailMember(member, verifyCode);
-		}
+			result.setCode(400);
+			result.setMsgCode(Integer.parseInt(e.getMsgid()));
+			result.setMessage(e.getMessage());
+		}*/
 		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
 	}
 	
@@ -401,6 +409,12 @@ public class RegisterController {
 	        }
 		}
         return modelAndView;
+	}
+
+	@RequestMapping(value = "/rest/testvalidateMail", method = RequestMethod.GET)
+	public ModelAndView testvalidateMail(HttpServletRequest req, @RequestParam String id, Model model) throws UnsupportedEncodingException {
+		log.debug("validate mail start.....");
+		return null;
 	}
 
 	/**

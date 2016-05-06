@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.memberReg.service;
 
 import java.util.*;
 
+import com.zhuhuibao.utils.exception.BusinessException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.session.Session;
@@ -517,7 +518,7 @@ public class MemberRegService {
      * @param verifyCode
      * @return
      */
-    public JsonResult registerMailMember(Member member, String verifyCode) {
+    public JsonResult registerMailMember(Member member, String verifyCode) throws BusinessException{
     	JsonResult result = new JsonResult();
 		if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getEmailCheckCode()) )			{
 			if(member.getEmail().indexOf("@")>=0)
@@ -543,9 +544,10 @@ public class MemberRegService {
 				}
 				else
 				{
-					result.setCode(400);
+				/*	result.setCode(400);
 					result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
-					result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+					result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);*/
+					throw new BusinessException(MsgCodeConstant.member_mcode_account_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
 				}
 			}
 		}

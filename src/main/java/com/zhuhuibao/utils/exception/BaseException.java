@@ -6,7 +6,7 @@ public class BaseException extends RuntimeException {
     private static final long serialVersionUID = 2372697857363295686L;
 
     // 异常信息编码
-    private String msgid;
+    private Integer msgid;
 
     private String type;
 
@@ -15,7 +15,7 @@ public class BaseException extends RuntimeException {
      *
      * @return long
      */
-    public String getMsgid() {
+    public Integer getMsgid() {
         return msgid;
     }
 
@@ -24,7 +24,7 @@ public class BaseException extends RuntimeException {
      *
      * @param msgid long
      */
-    public void setMsgid(String msgid) {
+    public void setMsgid(Integer msgid) {
         this.msgid = msgid;
     }
 
@@ -69,7 +69,7 @@ public class BaseException extends RuntimeException {
      * @param msgid   long
      * @param message String
      */
-    public BaseException(String msgid, String message) {
+    public BaseException(Integer msgid, String message) {
         super(message);
         this.msgid = msgid;
     }
@@ -81,7 +81,7 @@ public class BaseException extends RuntimeException {
      * @param message String
      * @param cause   Throwable
      */
-    public BaseException(String msgid, String message, Throwable cause) {
+    public BaseException(Integer msgid, String message, Throwable cause) {
         super(message, cause);
         this.msgid = msgid;
     }
@@ -93,7 +93,7 @@ public class BaseException extends RuntimeException {
      * @param message String
      * @param type    String
      */
-    public BaseException(String msgid, String message, String type) {
+    public BaseException(Integer msgid, String message, String type) {
         super(message);
         this.msgid = msgid;
         this.sendException(msgid, message, type);
@@ -137,7 +137,7 @@ public class BaseException extends RuntimeException {
      * @param message String
      * @param type    String
      */
-    public void sendException(String msgid, String message, String type) {
+    public void sendException(Integer msgid, String message, String type) {
         // ExceptionProcess.senderException(type, BaseException.class, message,
         // String.valueOf(msgid));
     }

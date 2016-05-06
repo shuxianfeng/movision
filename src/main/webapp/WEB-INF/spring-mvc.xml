@@ -137,6 +137,8 @@
           class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
     </bean>
 
+    <bean id="bussinessException" class="com.zhuhuibao.utils.exception.MyExceptionHandler"></bean>
+
     <!-- token拦截器
     <mvc:interceptors>
         <bean class="com.zhuhuibao.security.resubmit.TokenInterceptor"/>
