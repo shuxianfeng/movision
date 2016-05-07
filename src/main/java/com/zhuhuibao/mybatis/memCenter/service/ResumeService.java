@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.zhuhuibao.common.ApiConstants;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,35 +63,34 @@ public class ResumeService {
         Resume resume1 = resumeMapper.searchMyResumeAllInfo(id);
         if(resume1!=null){
             Integer i = 0;
-            if(resume1.getJobExperience()!=null){
+            if(resume1.getJobExperience()!=null && !"".equals(resume1.getJobExperience())){
                 i = i+1;
             }
-            if(resume1.getEduExperience()!=null){
+            if(resume1.getEduExperience()!=null && !"".equals(resume1.getEduExperience())){
                 i=i+1;
             }
-            if(resume1.getProjectExperience()!=null){
+            if(resume1.getProjectExperience()!=null && !"".equals(resume1.getProjectExperience())){
                 i=i+1;
             }
-            if(resume1.getAttach()!=null){
+            if(resume1.getAttach()!=null && !"".equals(resume1.getAttach())){
                 i=i+1;
             }
-            if(resume1.getPhoto()!=null){
+            if(resume1.getPhoto()!=null && !"".equals(resume1.getPhoto())){
                 i=i+1;
             }
-            if(resume1.getPhoto()!=null){
+            if(resume1.getExperienceYear()!=null && !"".equals(resume1.getExperienceYear())){
                 i=i+1;
             }
-            if(resume1.getExperienceYear()!=null){
+            if(resume1.getCompany()!=null && !"".equals(resume1.getCompany())){
                 i=i+1;
             }
-            if(resume1.getCompany()!=null){
+            if(resume1.getPositionName()!=null && !"".equals(resume1.getPositionName())){
                 i=i+1;
             }
-            if(resume1.getPositionName()!=null){
-                i=i+1;
-            }
-            Integer a = (i+16)/24;
-            String b = Integer.toString(a*100)+"%";
+            NumberFormat numberFormat = NumberFormat.getInstance();
+            numberFormat.setMaximumFractionDigits(0);
+            String result = numberFormat.format((float) (i+16) / (float) 24 * 100);
+            String b = result + "%";
             Map map = new HashMap();
             map.put("info",resume);
             map.put("percent",b);
