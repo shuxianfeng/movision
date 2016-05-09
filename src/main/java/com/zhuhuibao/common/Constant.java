@@ -317,6 +317,8 @@ public interface Constant {
 
 	String size= "size";
 
+	String createid= "createid";
+
 	/**
 	 * 站内信招聘类型为 1
 	 */

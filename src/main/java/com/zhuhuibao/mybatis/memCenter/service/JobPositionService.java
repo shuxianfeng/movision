@@ -345,6 +345,7 @@ public class JobPositionService {
             Map map = new HashMap();
             map.put(Constant.id,job.getId());
             map.put(Constant.name,job.getName());
+            map.put(Constant.createid,job.getCreateid());
             map.put(Constant.companyName,job.getEnterpriseName());
             map.put(Constant.salary,job.getSalaryName());
             map.put(Constant.publishTime,job.getPublishTime().substring(0,10));
