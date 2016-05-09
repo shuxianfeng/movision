@@ -13,7 +13,7 @@
     select 
     <include refid="Base_Column_List" />
     from t_dictionary_position
-    where parentId = 0
+    where parentId = 0 limit 0,6
   </select>
   <select id="findSubPosition" resultMap="BaseResultMap">
     select
