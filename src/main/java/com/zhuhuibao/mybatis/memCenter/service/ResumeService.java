@@ -270,6 +270,7 @@ public class ResumeService {
             map.put(Constant.position,resume.getPost());
             map.put(Constant.experienceYear,resume.getWorkYear());
             map.put(Constant.age,resume.getBirthYear());
+            map.put(Constant.salary,resume.getHopeSalary());
             list.add(map);
         }
         jsonResult.setCode(200);
