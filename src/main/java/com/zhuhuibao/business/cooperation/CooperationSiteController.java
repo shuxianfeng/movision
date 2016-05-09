@@ -39,7 +39,7 @@ public class CooperationSiteController {
         @ApiParam(value = "项目类别")@RequestParam(required = false) String category,
         @ApiParam(value = "省")@RequestParam(required = false) String province,
         @ApiParam(value = "会员类型，1：企业，2：个人")@RequestParam(required = false) String memberType,
-        @ApiParam(value = "发布类型，1：发布任务，2：发布服务，3：发布资质合作")@RequestParam(required = false) String parentId) throws IOException
+        @ApiParam(value = "发布类型，1：发布任务，2：发布服务，3：发布资质合作")@RequestParam String parentId) throws IOException
     {
             if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
