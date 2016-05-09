@@ -305,7 +305,7 @@ public class JobSiteController {
      */
     @RequestMapping(value = "/rest/job/queryHotPosition", method = RequestMethod.GET)
     public void queryHotPosition(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        JsonResult jsonResult = job.queryHotPosition(6);
+        JsonResult jsonResult = job.queryHotPosition(9);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
