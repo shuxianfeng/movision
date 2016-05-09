@@ -23,14 +23,14 @@ public class SDKSendTaoBaoSMS {
 	public static void sendRegisterSMS(String mobile,String checkCode,String time) throws ApiException
 	{
 		log.info("send register sms mobile =  "+mobile+" checkcode = "+checkCode);
-		TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23326329", "eb3fa5d51db6e7f43cdc2210113f1a1d");
+		TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23361295", "752b6bcb411e07baf34e11e0b4ddb767");
 		AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
 		req.setExtend("123456");
 		req.setSmsType("normal");
 		req.setSmsFreeSignName("筑慧宝");
 		req.setSmsParamString("{\"code\":\""+checkCode+"\",\"time\":\""+time+"\"}");
 		req.setRecNum(mobile);
-		req.setSmsTemplateCode("SMS_6080034");
+		req.setSmsTemplateCode("SMS_8440019");
 		AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
 		System.out.println(rsp.getBody());
 	}
@@ -45,14 +45,14 @@ public class SDKSendTaoBaoSMS {
 	public static void sendFindPwdSMS(String mobile,String checkCode,String time) throws ApiException
 	{
 		log.info("send find pwd sms mobile =  "+mobile+" checkcode = "+checkCode);
-		TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23326329", "eb3fa5d51db6e7f43cdc2210113f1a1d");
+		TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23361295", "752b6bcb411e07baf34e11e0b4ddb767");
 		AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
 		req.setExtend("123456");
 		req.setSmsType("normal");
 		req.setSmsFreeSignName("筑慧宝");
 		req.setSmsParamString("{\"code\":\""+checkCode+"\",\"time\":\""+time+"\"}");
 		req.setRecNum(mobile);
-		req.setSmsTemplateCode("SMS_6085123");
+		req.setSmsTemplateCode("SMS_8440021");
 		AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
 		System.out.println(rsp.getBody());
 	}
@@ -67,14 +67,14 @@ public class SDKSendTaoBaoSMS {
 	public static void sendModifyBindMobileSMS(String mobile,String checkCode,String time) throws ApiException
 	{
 		log.info("send modify bind mobile sms mobile =  "+mobile+" checkcode = "+checkCode);
-		TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23326329", "eb3fa5d51db6e7f43cdc2210113f1a1d");
+		TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23361295", "752b6bcb411e07baf34e11e0b4ddb767");
 		AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
 		req.setExtend("123456");
 		req.setSmsType("normal");
 		req.setSmsFreeSignName("筑慧宝");
 		req.setSmsParamString("{\"code\":\""+checkCode+"\",\"time\":\""+time+"\"}");
 		req.setRecNum(mobile);
-		req.setSmsTemplateCode("SMS_6155047");
+		req.setSmsTemplateCode("SMS_8440020");
 		AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
 		System.out.println(rsp.getBody());
 	}
@@ -92,6 +92,6 @@ public class SDKSendTaoBaoSMS {
 		AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
 		System.out.println(rsp.getBody());*/
 		
-		SDKSendTaoBaoSMS.sendModifyBindMobileSMS("15996309704","1123","10");
+		SDKSendTaoBaoSMS.sendFindPwdSMS("13260797061","1123","10");
 	}
 }
