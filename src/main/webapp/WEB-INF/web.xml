@@ -103,26 +103,26 @@
 
     <error-page>
         <error-code>400</error-code>
-        <location>/error_400</location>
+        <location>/rest/exception/error_400</location>
     </error-page>
     <error-page>
         <error-code>404</error-code>
-        <location>/error_404</location>
+        <location>/rest/exception/error_404</location>
     </error-page>
     <error-page>
         <error-code>405</error-code>
-        <location>/error_405</location>
+        <location>/rest/exception/error_405</location>
     </error-page>
     <error-page>
         <error-code>403</error-code>
-        <location>/error_403</location>
+        <location>/rest/exception/error_403</location>
     </error-page>
     <error-page>
         <error-code>413</error-code>
-        <location>/error_413</location>
+        <location>/rest/exception/error_413</location>
     </error-page>
     <error-page>
         <error-code>500</error-code>
-        <location>/error_500</location>
+        <location>/rest/exception/error_500</location>
     </error-page>
 </web-app>

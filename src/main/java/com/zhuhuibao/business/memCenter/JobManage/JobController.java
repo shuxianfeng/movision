@@ -11,6 +11,7 @@ import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -100,6 +101,7 @@ public class JobController {
     /**
      * 查询公司发布的某条职位的信息
      */
+    @RequiresRoles("admin")
     @RequestMapping(value = "getPositionByPositionId", method = RequestMethod.GET)
     public void getPositionByPositionId(HttpServletRequest req, HttpServletResponse response, String id) throws IOException {
         JsonResult jsonResult = jobService.getPositionByPositionId(id);

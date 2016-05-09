@@ -8,7 +8,7 @@ import java.io.Serializable;
  * 返回前台的json数据
  * @author pl
  */
-@ApiModel
+@ApiModel(value="后台返回前端的统一JSON格式", description="JSON格式定义")
 public class JsonResult implements Serializable{
 
 	private static final long serialVersionUID = 4273005680206220420L;
