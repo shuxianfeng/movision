@@ -259,7 +259,7 @@
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,c.name AS jobCity,m.headShot as photo,
     (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post,
     CASE WHEN r.status=1 or r.status=2 or r.status=3 THEN '在职' WHEN r.status=4 THEN '离职' END AS status,
-    co.name as hopeSalary,
+    co.name as hopeSalary
     from t_i_resume r
     left join t_dictionary_constant co on co.code = r.hopeSalary
     left join t_dictionary_city c on r.jobCity = c.code
