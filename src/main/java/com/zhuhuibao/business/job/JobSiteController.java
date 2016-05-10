@@ -1,5 +1,6 @@
 package com.zhuhuibao.business.job;
 
+import com.zhuhuibao.common.AskPriceResultBean;
 import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.util.ShiroUtil;
@@ -8,6 +9,7 @@ import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
+import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
@@ -344,13 +346,23 @@ public class JobSiteController {
      * 招聘会信息
      */
     @RequestMapping(value = "/rest/job/queryJobMeetingInfo", method = RequestMethod.GET)
-    public void queryJobMeetingInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public void queryJobMeetingInfo(HttpServletRequest req, HttpServletResponse response,String pageSize,String pageNo) throws IOException {
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("channelid", 11);
         map.put("sort",1);
         map.put("status",1);
         map.put("count",4);
-        JsonResult jsonResult = newsService.queryNewsByChannelInfo(map);
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        JsonResult jsonResult = new JsonResult();
+        Paging<ChannelNews> pager = new Paging<ChannelNews>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        List<ChannelNews> list = newsService.findAllNewsByChannelInfo(pager,map);
+        pager.result(list);
+        jsonResult.setData(pager);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }

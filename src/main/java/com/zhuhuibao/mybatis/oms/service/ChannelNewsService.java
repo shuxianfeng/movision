@@ -135,6 +135,11 @@ public class ChannelNewsService {
         return jsonResult;
     }
 
+    public List<ChannelNews> findAllNewsByChannelInfo(Paging<ChannelNews> pager,Map<String,Object> channelMap)
+    {
+          return channel.findAllNewsByChannelInfo(pager.getRowBounds(),channelMap);
+    }
+
     /**
      * 查询主频道某个栏目点击率排行
      * @param channelMap  频道资讯页条件
