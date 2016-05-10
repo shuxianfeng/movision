@@ -13,6 +13,9 @@
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="imgurl" property="imgurl" jdbcType="VARCHAR" />
     <result column="views" property="views" jdbcType="INTEGER" />
+    <result column="publisher" property="publisher" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.oms.entity.ChannelNews" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
@@ -46,6 +49,7 @@
       <if test="channelid != null" >
         channelid,
       </if>
+      
       <if test="sort != null" >
         sort,
       </if>
@@ -181,7 +185,7 @@
     </where>
     order by createTime desc
   </select>
-
+  
   <select id="queryViewsByChannel" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
     select id,title,description,imgUrl,views from t_oms_channel_news
     <where>
@@ -198,5 +202,43 @@
     order by views desc
     limit #{count}
   </select>
-
+  <!-- 查询咨询列表@author:gmli@since2016.05.09 -->
+ <select id="queryAllContentList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
+	select a.id,a.title,b.name,a.views,
+	(case when a.status=0 then '未审核'
+	when a.status=1 then '已审核' when
+	a.status='2' then '已拒绝' else '回收站' end )
+	statusText,a.createid, (case when
+	m.personRealName is null then
+	m.enterpriseName else m.personRealName
+	end) publisher,date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime
+	from
+	t_oms_channel_news a left join t_oms_channel b on a.channelid=b.id
+	left
+	join t_m_member m on m.id=a.createid 
+	<where>
+      <if test="titile != null">
+        and a.title = #{title}
+      </if>
+      <if test="status != null">
+        and a.status = #{status}
+      </if>
+      <if test="channelid != null">
+        and a.channelid = #{channelid}
+      </if>
+    </where> 
+	order by a.createTime desc
+  </select> 
+ <!-- 查询所属栏目列表@author:gmli@since2016.05.09 -->
+ <select id="queryChannelList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
+   select t.id,t.name,t.sort,t.parentId  from t_oms_channel t
+  </select>
+  <update id="batchDelNews">
+   update t_oms_channel_news
+    <set>
+      status = 3,
+    </set>
+    where id = #{id}
+  </update>
+  
 </mapper>
