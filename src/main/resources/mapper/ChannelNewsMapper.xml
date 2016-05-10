@@ -169,24 +169,8 @@
     ,
     <include refid="Blob_Column_List" />
     from t_oms_channel_news
-    <where>
-      <if test="channelid != null">
-        and channelid = #{channelid}
-      </if>
-      <if test="status != null">
-        and status = #{status}
-      </if>
-      <if test="sort != null">
-        and sort = #{sort}
-      </if>
-      <if test="createid != null">
-        and createid = #{createid}
-      </if>
-    </where>
+    where channelid = 11 and status = 1 and sort = 1
     order by createTime desc
-    <if test="count != null">
-      limit #{count}
-    </if>
   </select>
 
   <select id="findAllNewsList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >

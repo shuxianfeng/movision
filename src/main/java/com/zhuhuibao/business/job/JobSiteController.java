@@ -343,7 +343,7 @@ public class JobSiteController {
     }
 
     /**
-     * 招聘会信息
+     * 招聘会信息列表
      */
     @RequestMapping(value = "/rest/job/queryJobMeetingInfo", method = RequestMethod.GET)
     public void queryJobMeetingInfo(HttpServletRequest req, HttpServletResponse response,String pageSize,String pageNo) throws IOException {
@@ -351,7 +351,6 @@ public class JobSiteController {
         map.put("channelid", 11);
         map.put("sort",1);
         map.put("status",1);
-        map.put("count",4);
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -363,6 +362,16 @@ public class JobSiteController {
         List<ChannelNews> list = newsService.findAllNewsByChannelInfo(pager,map);
         pager.result(list);
         jsonResult.setData(pager);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+
+    /**
+     * 根据ID查询招聘会信息
+     */
+    @RequestMapping(value = "/rest/job/queryJobMeetingInfoById", method = RequestMethod.GET)
+    public void queryJobMeetingInfoById(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+        JsonResult jsonResult = newsService.queryJobMeetingInfoById(id);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
