@@ -136,7 +136,9 @@ public class JobSiteController {
     }
 
     @RequestMapping(value="queryCompanyInfo", method = RequestMethod.GET)
-    public void queryCompanyInfo(HttpServletRequest req, HttpServletResponse response, Long id) throws JsonGenerationException, JsonMappingException, IOException
+    @ApiOperation(value="公司详情",notes = "公司详情",response = JsonResult.class)
+    public void queryCompanyInfo(HttpServletRequest req, HttpServletResponse response,
+                                 @ApiParam(value = "创建者ID(会员ID)") @RequestParam(required = true) Long id) throws JsonGenerationException, JsonMappingException, IOException
     {
         log.info("query company info id "+id);
         JsonResult jsonResult = job.queryCompanyInfo(id);

@@ -9,6 +9,16 @@ public class MemberDetails extends Member {
 
     private String enterpriseTypeName;
 
+    private String welfare;
+
+    public String getWelfare() {
+        return welfare;
+    }
+
+    public void setWelfare(String welfare) {
+        this.welfare = welfare;
+    }
+
     public String getEnterpriseTypeName() {
         return enterpriseTypeName;
     }
