@@ -8,6 +8,7 @@ import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -164,4 +166,81 @@ public class ChannelController {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
+    
+    /**
+     * 查询资讯内容列表
+     * @param req
+     * @param response
+     * @param channelNews
+     * @param pageNo
+     * @param pageSize
+     * @throws JsonGenerationException
+     * @throws JsonMappingException
+     * @throws IOException
+     */
+    @RequestMapping(value="/rest/oms/queryContentList", method = RequestMethod.GET)
+    public void queryContentList(HttpServletRequest req, HttpServletResponse response, ChannelNews channelNews,String pageNo,String pageSize) throws JsonGenerationException, JsonMappingException, IOException {
+        JsonResult jsonResult = new JsonResult();
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<ChannelNews> pager = new Paging<ChannelNews>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("title", channelNews.getTitle());
+        map.put("channelid",channelNews.getChannelid());
+        map.put("status",channelNews.getStatus());
+        List<ChannelNews> channelList = newsService.queryAllContentList(pager,map);
+        pager.result(channelList);
+        jsonResult.setData(pager);
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+    
+    /**
+     * 查询资讯内容列表
+     * @param req
+     * @param response
+     * @param channelNews
+     * @param pageNo
+     * @param pageSize
+     * @throws JsonGenerationException
+     * @throws JsonMappingException
+     * @throws IOException
+     */
+    @RequestMapping(value="/rest/oms/queryChannelList", method = RequestMethod.GET)
+    public void queryChannelList(HttpServletRequest req, HttpServletResponse response, ChannelNews channelNews,String pageNo,String pageSize) throws JsonGenerationException, JsonMappingException, IOException {
+        JsonResult jsonResult = new JsonResult();
+        jsonResult = newsService.queryChannelList(); 
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+         
+    }
+    
+    /**
+	 * 批量删除咨询信息
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 */
+
+	@RequestMapping(value = "/rest/oms/batchDelNews", method = RequestMethod.POST)
+	public void batchDelNews(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		String ids[] = req.getParameterValues("ids");
+		JsonResult result = new JsonResult();
+		for(int i=0;i<ids.length;i++){
+			String id = ids[i];
+			int isdelete = newsService.batchDelNews(id);
+			if(isdelete==0){
+				result.setCode(400);
+				result.setMessage("删除失败");
+			}else{
+				result.setCode(200);
+			}
+		}
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+	}
 }
