@@ -190,7 +190,7 @@ public class JobPositionService {
      */
     public JsonResult positionType(){
         JsonResult jsonResult = new JsonResult();
-        List<Position> positionList = positionMapper.findPosition();
+        List<Position> positionList = positionMapper.findPosition(8);
         List<Position> subPositionList = positionMapper.findSubPosition();
         List list1 = new ArrayList();
         for(int i=0;i<positionList.size();i++){
@@ -364,7 +364,7 @@ public class JobPositionService {
      */
     public JsonResult queryLatestJob(int count){
         JsonResult jsonResult = new JsonResult();
-        List<Position> positionList = positionMapper.findPosition();
+        List<Position> positionList = positionMapper.findPosition(6);
         List list = new ArrayList();
         for(int a=0;a<positionList.size();a++){
             Position position = positionList.get(a);
@@ -377,6 +377,7 @@ public class JobPositionService {
                 Map map1 = new HashMap();
                 map1.put(Constant.id,job.getId());
                 map1.put(Constant.name,job.getName());
+                map1.put(Constant.createid,job.getCreateid());
                 map1.put(Constant.salary,job.getSalaryName());
                 map1.put(Constant.area,job.getCity());
                 list1.add(map1);

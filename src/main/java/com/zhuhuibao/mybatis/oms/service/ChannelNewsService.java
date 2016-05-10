@@ -136,6 +136,17 @@ public class ChannelNewsService {
         return jsonResult;
     }
 
+    public List<ChannelNews> findAllNewsByChannelInfo(Paging<ChannelNews> pager)
+    {
+          return channel.findAllNewsByChannelInfo(pager.getRowBounds());
+    }
+
+    public JsonResult queryJobMeetingInfoById(String id){
+        JsonResult jsonResult = new JsonResult();
+        ChannelNews channelNews = channel.selectByPrimaryKey(Long.parseLong(id));
+        jsonResult.setData(channelNews);
+        return jsonResult;
+    }
     /**
      * 查询主频道某个栏目点击率排行
      * @param channelMap  频道资讯页条件

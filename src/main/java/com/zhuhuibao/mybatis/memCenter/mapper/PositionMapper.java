@@ -5,7 +5,7 @@ import com.zhuhuibao.mybatis.memCenter.entity.Position;
 import java.util.List;
 
 public interface PositionMapper {
-    List<Position> findPosition();
+    List<Position> findPosition(int size);
 
     List<Position> findSubPosition();
 }
