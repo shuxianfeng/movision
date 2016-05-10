@@ -14,6 +14,8 @@ public class ChannelNews implements Serializable{
     private String createTime;
 
     private Integer status;
+    
+    private String statusText;
 
     private Long createid;
 
@@ -30,6 +32,10 @@ public class ChannelNews implements Serializable{
     private Integer views;
 
     private String content;
+    
+    private String publisher;
+    
+    private String name;
 
     public Long getId() {
         return id;
@@ -126,4 +132,30 @@ public class ChannelNews implements Serializable{
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
     }
+
+	public String getStatusText() {
+		return statusText;
+	}
+
+	public void setStatusText(String statusText) {
+		this.statusText = statusText;
+	}
+
+	public String getPublisher() {
+		return publisher;
+	}
+
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+    
+    
 }

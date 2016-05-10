@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.oms.mapper;
 
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
+
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.*;
@@ -20,4 +21,10 @@ public interface ChannelNewsMapper {
     int updateViews(Long id);
 
     List<ChannelNews> queryViewsByChannel(Map<String,Object> channelMap);
+    //查询咨询列表
+    List<ChannelNews> queryAllContentList(RowBounds rowBounds, Map<String,Object> channelMap);
+    //查询所属项目
+    List<ChannelNews> queryChannelList();
+
+	int batchDelNews(String id);
 }

@@ -6,6 +6,7 @@ import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.mapper.ChannelNewsMapper;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,5 +177,59 @@ public class ChannelNewsService {
         }
         return newsList;
     }
+    
+    /**
+     * 查询资讯内容管理
+     * @param channelMap  频道资讯页条件
+     * @return List<ChannelNews>
+     */
+    public List<ChannelNews> queryAllContentList(Paging<ChannelNews> pager,Map<String, Object> channelMap )
+    {
+        List<ChannelNews> newsList = null;
+        try
+        {
+            newsList =  channel.queryAllContentList(pager.getRowBounds(),channelMap);
+        }
+        catch(Exception e)
+        {
+            log.error("find all news List pager error!",e);
+        }
+        return newsList;
+    }
+    
+    /**
+     * 查询所说项目
+     * @param channelMap  频道资讯页条件
+     * @return JsonResult
+     */
+    public JsonResult queryChannelList()
+    {
+        JsonResult jsonResult = new JsonResult();
+        try
+        {
+            List<ChannelNews> newsList =  channel.queryChannelList();
+            jsonResult.setData(newsList);
+        }
+        catch(Exception e)
+        {
+            log.error("select by primary key error!",e);
+            jsonResult.setCode(MsgCodeConstant.response_status_400);
+            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+        }
+        return jsonResult;
+    }
+    /**
+     * 删除咨询信息
+     * @param id  频道资讯页条件
+     * @return int
+     */
+	public int batchDelNews(String id) {
+		log.debug("删除咨询信息");
+		int result = 0;
+		result = channel.batchDelNews(id);
+		return result;
+	}
+    
 
 }
