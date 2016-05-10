@@ -135,9 +135,9 @@ public class ChannelNewsService {
         return jsonResult;
     }
 
-    public List<ChannelNews> findAllNewsByChannelInfo(Paging<ChannelNews> pager,Map<String,Object> channelMap)
+    public List<ChannelNews> findAllNewsByChannelInfo(Paging<ChannelNews> pager)
     {
-          return channel.findAllNewsByChannelInfo(pager.getRowBounds(),channelMap);
+          return channel.findAllNewsByChannelInfo(pager.getRowBounds());
     }
 
     public JsonResult queryJobMeetingInfoById(String id){

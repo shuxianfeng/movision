@@ -347,10 +347,6 @@ public class JobSiteController {
      */
     @RequestMapping(value = "/rest/job/queryJobMeetingInfo", method = RequestMethod.GET)
     public void queryJobMeetingInfo(HttpServletRequest req, HttpServletResponse response,String pageSize,String pageNo) throws IOException {
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("channelid", 11);
-        map.put("sort",1);
-        map.put("status",1);
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -359,7 +355,7 @@ public class JobSiteController {
         }
         JsonResult jsonResult = new JsonResult();
         Paging<ChannelNews> pager = new Paging<ChannelNews>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-        List<ChannelNews> list = newsService.findAllNewsByChannelInfo(pager,map);
+        List<ChannelNews> list = newsService.findAllNewsByChannelInfo(pager);
         pager.result(list);
         jsonResult.setData(pager);
         response.setContentType("application/json;charset=utf-8");
