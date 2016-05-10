@@ -206,10 +206,11 @@
     left join t_dictionary_area a on r.liveArea = a.code
     left join t_dictionary_city ci on r.jobCity = ci.code
     left join t_dictionary_area ar on r.jobArea = ar.code
-    left join t_dictionary_constant co on co.code = r.hopeSalary
-    left join t_dictionary_constant con on con.code = r.status
-    left join t_dictionary_constant dc on dc.code = r.education
-    where r.id = #{id} and co.type =1 and con.type = 6 and dc.type = 2
+    case WHEN r.hopeSalary != null THEN
+    left join t_dictionary_constant co on co.code = r.hopeSalary and co.type =1
+    left join t_dictionary_constant con on con.code = r.status and con.type = 6
+    left join t_dictionary_constant dc on dc.code = r.education and dc.type = 2
+    where r.id = #{id}
   </select>
   <select id="findAllResume" parameterType="java.util.Map" resultMap="BaseResultMap">
     select tr.* from (select t.id,t.title,t.realName,ct.name jobCity,dc.name hopeSalary,t.photo,dt.name,t.publishTime,t.experienceYear,t.education,t.isPublic,
@@ -219,9 +220,9 @@
     (select Group_concat(name) from t_dictionary_position where find_in_set(id,t.post))AS post
     from t_i_resume t
     left join t_dictionary_city ct on ct.code = t.jobCity
-    left join t_dictionary_constant dc on dc.code = t.hopeSalary
-    left join t_dictionary_constant dt on dt.code = t.education
-    where dc.type = 1 and dt.type =2 ) tr
+    left join t_dictionary_constant dc on dc.code = t.hopeSalary and dc.type = 1
+    left join t_dictionary_constant dt on dt.code = t.education and dt.type =2
+    ) tr
     <where>
       <if test="title != null and title != ''">
         and tr.post like concat('%',#{title},'%')
@@ -261,9 +262,9 @@
     CASE WHEN r.status=1 or r.status=2 or r.status=3 THEN '在职' WHEN r.status=4 THEN '离职' END AS status,
     co.name as hopeSalary
     from t_i_resume r
-    left join t_dictionary_constant co on co.code = r.hopeSalary
+    left join t_dictionary_constant co on co.code = r.hopeSalary and co.type = 1
     left join t_dictionary_city c on r.jobCity = c.code
     left join t_m_member m on r.createid = m.id
-    WHERE r.isPublic = 1 and co.type = 1 ORDER by r.publishTime limit 0,#{count}
+    WHERE r.isPublic = 1 ORDER by r.publishTime limit 0,#{count}
   </select>
 </mapper>
