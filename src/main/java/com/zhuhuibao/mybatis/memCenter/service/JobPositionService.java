@@ -8,7 +8,6 @@ import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.PositionMapper;
-import com.zhuhuibao.utils.L;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.exception.BusinessException;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -446,4 +445,5 @@ public class JobPositionService {
         jsonResult.setData(list);
         return jsonResult;
     }
+
 }
