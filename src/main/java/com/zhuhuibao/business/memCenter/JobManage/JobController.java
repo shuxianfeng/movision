@@ -101,7 +101,7 @@ public class JobController {
     /**
      * 查询公司发布的某条职位的信息
      */
-    @RequiresRoles("admin")
+    //@RequiresRoles("admin")
     @RequestMapping(value = "getPositionByPositionId", method = RequestMethod.GET)
     public void getPositionByPositionId(HttpServletRequest req, HttpServletResponse response, String id) throws IOException {
         JsonResult jsonResult = jobService.getPositionByPositionId(id);
