@@ -32,7 +32,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from t_oms_channel_news
+    from t_oms_channel_news 
     where id = #{id,jdbcType=BIGINT}
   </select>
 
@@ -227,7 +227,7 @@
 	left
 	join t_m_member m on m.id=a.createid 
 	<where>
-      <if test="titile != null">
+      <if test="title != null">
         and a.title = #{title}
       </if>
       <if test="status != null">
@@ -241,7 +241,7 @@
   </select> 
  <!-- 查询所属栏目列表@author:gmli@since2016.05.09 -->
  <select id="queryChannelList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
-   select t.id,t.name,t.sort,t.parentId  from t_oms_channel t
+   select t.id,t.name,t.sort,t.parentId channelid  from t_oms_channel t
   </select>
   <update id="batchDelNews">
    update t_oms_channel_news
