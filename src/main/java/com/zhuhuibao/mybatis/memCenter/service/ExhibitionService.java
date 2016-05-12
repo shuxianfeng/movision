@@ -73,7 +73,7 @@ public class ExhibitionService {
      * @param pager,map
      */
     public List<Exhibition> findAllExhibition(Paging<Exhibition> pager,Map<String, Object> map){
-        return exhibitionMapper.findAllMeetingOrderInfo(pager.getRowBounds(),map);
+        return exhibitionMapper.findAllExhibition(pager.getRowBounds(),map);
     }
 
     /**

@@ -190,8 +190,8 @@
     </set>
     where id = #{id}
   </update>
-  <select id="findAllMeetingOrderInfo" resultMap="BaseResultMap" parameterType="java.util.Map" >
-    select e.id,e.title,c.name as type,e.views,e.updateTime,e.status,
+  <select id="findAllExhibition" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select e.id,e.title,c.name as type,e.views,e.updateTime,e.status,e.publishTime,e.startDate,e.endDate,e.imgUrl,e.address,
     case when e.createrType = 1 then (select u.username from t_oms_user u where u.id = e.createid)
     when e.createrType = 2 then (select m.enterpriseName from t_m_member m where m.id = e.createid) end as createName
     from t_c_exhibition e
