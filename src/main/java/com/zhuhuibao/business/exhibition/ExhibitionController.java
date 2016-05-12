@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 会展接口类
  * Created by cxx on 2016/5/11 0011.
  */
 @RestController
@@ -92,6 +93,7 @@ public class ExhibitionController {
         @RequestParam(required = false)String province,@RequestParam(required = false)String city,
         @RequestParam(required = false)String status,@RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws IOException {
         JsonResult jsonResult = new JsonResult();
+        //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -100,10 +102,12 @@ public class ExhibitionController {
         }
         Paging<MeetingOrder> pager = new Paging<MeetingOrder>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String,Object> map = new HashMap<>();
+        //查询传参
         map.put("account",account);
         map.put("province",province);
         map.put("city",city);
         map.put("status",status);
+        //查询
         List<MeetingOrder> meetingOrderList = exhibitionService.findAllMeetingOrderInfo(pager,map);
         pager.result(meetingOrderList);
         jsonResult.setData(pager);
@@ -119,6 +123,7 @@ public class ExhibitionController {
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
+        //判断是否登陆
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
@@ -142,8 +147,10 @@ public class ExhibitionController {
     @RequestMapping(value = "findAllExhibition", method = RequestMethod.GET)
     public JsonResult findAllExhibition(@RequestParam(required = false)String title,
         @RequestParam(required = false)String type,@RequestParam(required = false)String status,
+                                        @RequestParam(required = false)String province,
         @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws IOException {
         JsonResult jsonResult = new JsonResult();
+        //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -152,9 +159,12 @@ public class ExhibitionController {
         }
         Paging<Exhibition> pager = new Paging<Exhibition>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String,Object> map = new HashMap<>();
+        //查询传参
         map.put("title",title);
         map.put("type",type);
         map.put("status",status);
+        map.put("province",province);
+        //查询
         List<Exhibition> exhibitionList = exhibitionService.findAllExhibition(pager,map);
         pager.result(exhibitionList);
         jsonResult.setData(pager);

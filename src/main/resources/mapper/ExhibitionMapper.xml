@@ -206,5 +206,8 @@
     <if test="type != null">
       and e.type = #{type}
     </if>
+    <if test="province != null">
+      and e.province = #{province}
+    </if>
   </select>
 </mapper>
