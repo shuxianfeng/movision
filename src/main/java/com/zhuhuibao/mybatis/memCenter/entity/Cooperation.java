@@ -12,6 +12,9 @@ public class Cooperation {
 
     private String updateTime;
 
+    @ApiModelProperty(value="关键字")
+    private String smart;
+
     @ApiModelProperty(value="合作标题")
     private String title;
 
@@ -273,5 +276,13 @@ public class Cooperation {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getSmart() {
+        return smart;
+    }
+
+    public void setSmart(String smart) {
+        this.smart = smart;
     }
 }

@@ -247,6 +247,9 @@
     <if test="title != null">
       and c.title like CONCAT('%',#{title},'%')
     </if>
+    <if test="smart != null">
+      and (c.title like CONCAT('%',#{smart},'%') or c.content like CONCAT('%',#{smart},'%'))
+    </if>
     <if test="type != null">
       and c.type = #{type}
     </if>

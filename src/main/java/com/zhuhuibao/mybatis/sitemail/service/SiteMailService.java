@@ -59,4 +59,23 @@ public class SiteMailService {
         return jsonResult;
     }
 
+    /**
+     * 站内信查询未读的消息数目
+     * @param map recID:消息接收者Id;type:站内信消息类型；status：状态：未读(1)
+     * @return 未读消息数目
+     */
+    public Integer queryUnreadMsgCount(Map<String,Object> map)
+    {
+        log.info("query unread message count receiveid = "+map.get("recID")+" type = "+map.get("type")+" status = "+map.get("status"));
+        Integer count = 0;
+        try
+        {
+            count = msgLogMapper.queryUnreadMsgCount(map);
+        }catch(Exception e)
+        {
+            throw e;
+        }
+        return count;
+    }
+
 }

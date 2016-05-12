@@ -38,6 +38,7 @@ public class CooperationSiteController {
         @ApiParam(value = "合作类型")@RequestParam(required = false) String type,
         @ApiParam(value = "项目类别")@RequestParam(required = false) String category,
         @ApiParam(value = "省")@RequestParam(required = false) String province,
+        @ApiParam(value = "关键字")@RequestParam(required = false) String smart,
         @ApiParam(value = "会员类型，1：企业，2：个人")@RequestParam(required = false) String memberType,
         @ApiParam(value = "发布类型，1：发布任务，2：发布服务，3：发布资质合作")@RequestParam String parentId) throws IOException
     {
@@ -49,6 +50,7 @@ public class CooperationSiteController {
         }
         Paging<Cooperation> pager = new Paging<Cooperation>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
         Cooperation cooperation = new Cooperation();
+        cooperation.setSmart(smart);
         cooperation.setType(type);
         cooperation.setCategory(category);
         cooperation.setMemberType(memberType);

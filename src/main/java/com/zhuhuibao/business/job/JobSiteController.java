@@ -83,7 +83,7 @@ public class JobSiteController {
                 msgText.setRecID(Long.valueOf(recID));
                 msgText.setMessageText(messageText);
                 msgText.setTypeID(resumeID);
-                msgText.setType(Constant.sitemail_type_resume_one);
+                msgText.setType(JobConstant.SITEMAIL_TYPE_JOB_ELEVEN);
                 jsonResult = smService.addSiteMail(msgText);
                 jrrService.insert(Long.valueOf(jobID), resumeID);
             }
@@ -377,7 +377,7 @@ public class JobSiteController {
     }
 
     @RequestMapping(value = "queryEnterpriseHotPosition", method = RequestMethod.GET)
-    @ApiOperation(value="查询名企发布的热门职位", notes="查询名企发布的热门职位", response=JsonResult.class)
+    @ApiOperation(value="热门职位", notes="查询名企发布的热门职位", response=JsonResult.class)
     public JsonResult queryEnterpriseHotPosition() throws IOException {
         JsonResult jsonResult = new JsonResult();
         Map<String,Object> map = new HashMap<String,Object>();
@@ -396,6 +396,22 @@ public class JobSiteController {
         JsonResult jsonResult = new JsonResult();
         Boolean isExist = resume.isExistResume(createID);
         jsonResult.setData(isExist);
+        return jsonResult;
+    }
+
+    @RequestMapping(value="queryUnreadMsgCount",method = RequestMethod.GET)
+    @ApiOperation(value="未读消息数目",notes = "人才网未读消息数目",response = JsonResult.class)
+    public JsonResult queryUnreadMsgCount()
+    {
+        JsonResult jsonResult = new JsonResult();
+        Long receiveID = ShiroUtil.getCreateID();
+        if(receiveID != null) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("recID", receiveID);
+            map.put("type", JobConstant.SITEMAIL_TYPE_JOB_ELEVEN);
+            map.put("status", Constant.MAILSITE_STATUS_UNREAD);
+            jsonResult.setData(smService.queryUnreadMsgCount(map));
+        }
         return jsonResult;
     }
 }
