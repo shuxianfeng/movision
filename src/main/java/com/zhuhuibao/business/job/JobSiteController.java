@@ -401,14 +401,17 @@ public class JobSiteController {
 
     @RequestMapping(value="queryUnreadMsgCount",method = RequestMethod.GET)
     @ApiOperation(value="未读消息数目",notes = "人才网未读消息数目",response = JsonResult.class)
-    public JsonResult queryUnreadMsgCount(@ApiParam(value = "登陆会员ID") @RequestParam Long receiveID)
+    public JsonResult queryUnreadMsgCount()
     {
         JsonResult jsonResult = new JsonResult();
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("recID",receiveID);
-        map.put("type",JobConstant.SITEMAIL_TYPE_JOB_ELEVEN);
-        map.put("status",Constant.MAILSITE_STATUS_UNREAD);
-        jsonResult.setData(smService.queryUnreadMsgCount(map));
+        Long receiveID = ShiroUtil.getCreateID();
+        if(receiveID != null) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("recID", receiveID);
+            map.put("type", JobConstant.SITEMAIL_TYPE_JOB_ELEVEN);
+            map.put("status", Constant.MAILSITE_STATUS_UNREAD);
+            jsonResult.setData(smService.queryUnreadMsgCount(map));
+        }
         return jsonResult;
     }
 }
