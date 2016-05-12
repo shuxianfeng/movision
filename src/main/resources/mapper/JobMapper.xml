@@ -117,7 +117,7 @@
     left join t_dictionary_constant co on co.code = j.salary
     left join t_m_member m on m.id = j.createid
     where co.type = 1 and j.is_deleted = 0
-    order by publishTime desc limit 0,#{count}
+    order by updateTime desc limit 0,#{count}
   </select>
   <select id="searchRecommendPosition" resultMap="BaseResultMap">
     select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,

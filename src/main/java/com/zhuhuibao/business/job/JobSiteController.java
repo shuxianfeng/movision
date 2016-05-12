@@ -369,32 +369,6 @@ public class JobSiteController {
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
 
-    /**
-     * 招聘会信息列表
-     */
-    @RequestMapping(value = "queryJobMeetingInfo", method = RequestMethod.GET)
-    public JsonResult queryJobMeetingInfo(HttpServletRequest req, HttpServletResponse response,String pageSize,String pageNo) throws IOException {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        JsonResult jsonResult = new JsonResult();
-        Paging<ChannelNews> pager = new Paging<ChannelNews>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-        List<ChannelNews> list = newsService.findAllNewsByChannelInfo(pager);
-        pager.result(list);
-        jsonResult.setData(pager);
-        return jsonResult;
-    }
-
-    @RequestMapping(value = "queryJobMeetingInfoById", method = RequestMethod.GET)
-    @ApiOperation(value="根据ID查询招聘会信息",notes = "根据ID查询招聘会信息",response = JsonResult.class)
-    public JsonResult queryJobMeetingInfoById(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
-        JsonResult jsonResult = newsService.queryJobMeetingInfoById(id);
-        return jsonResult;
-    }
-
     @RequestMapping(value = "querySimilarCompany", method = RequestMethod.GET)
     @ApiOperation(value = "相似企业",notes = "相似企业",response = JsonResult.class)
     public JsonResult querySimilarCompany(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {

@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.oms.service;
 
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.MsgCodeConstant;
+import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.mapper.ChannelNewsMapper;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -136,17 +137,6 @@ public class ChannelNewsService {
         return jsonResult;
     }
 
-    public List<ChannelNews> findAllNewsByChannelInfo(Paging<ChannelNews> pager)
-    {
-          return channel.findAllNewsByChannelInfo(pager.getRowBounds());
-    }
-
-    public JsonResult queryJobMeetingInfoById(String id){
-        JsonResult jsonResult = new JsonResult();
-        ChannelNews channelNews = channel.selectByPrimaryKey(Long.parseLong(id));
-        jsonResult.setData(channelNews);
-        return jsonResult;
-    }
     /**
      * 查询主频道某个栏目点击率排行
      * @param channelMap  频道资讯页条件

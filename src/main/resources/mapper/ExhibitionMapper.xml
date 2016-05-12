@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.ExhibitionMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Exhibition" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createid" property="createid" jdbcType="VARCHAR" />
+    <result column="createName" property="createName" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
+    <result column="startDate" property="startDate" jdbcType="VARCHAR" />
+    <result column="endDate" property="endDate" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="provinceName" property="provinceName" jdbcType="VARCHAR" />
+    <result column="cityName" property="cityName" jdbcType="VARCHAR" />
+    <result column="areaName" property="areaName" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="imgUrl" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="introduce" property="introduce" jdbcType="VARCHAR" />
+    <result column="views" property="views" jdbcType="VARCHAR" />
+    <result column="createrType" property="createrType" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="queryExhibitionInfoById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    e.*,ci.name as cityName,p.name as provinceName,a.name as areaName
+    from t_c_exhibition e
+    left join t_dictionary_city ci on ci.code = e.city
+    left join t_dictionary_province p on p.code = e.province
+    left join t_dictionary_area a on a.code = e.area
+    where id = #{id}
+  </select>
+  <insert id="publishExhibition" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Exhibition" >
+    insert into t_c_exhibition
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createid != null" >
+        createid,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+        publishTime,
+        updateTime,
+      <if test="startDate != null" >
+        startDate,
+      </if>
+      <if test="endDate != null" >
+        endDate,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="company != null" >
+        company,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="imgUrl != null" >
+        imgUrl,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="introduce != null" >
+        introduce,
+      </if>
+      <if test="views != null" >
+        views,
+      </if>
+      <if test="createrType != null" >
+        createrType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="createid != null" >
+        #{createid},
+      </if>
+      <if test="title != null" >
+        #{title},
+      </if>
+        now(),
+        now(),
+      <if test="startDate != null" >
+        #{startDate},
+      </if>
+      <if test="endDate != null" >
+        #{endDate},
+      </if>
+      <if test="province != null" >
+        #{province},
+      </if>
+      <if test="city != null" >
+        #{city},
+      </if>
+      <if test="area != null" >
+        #{area},
+      </if>
+      <if test="type != null" >
+        #{type},
+      </if>
+      <if test="company != null" >
+        #{company},
+      </if>
+      <if test="address != null" >
+        #{address},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="introduce != null" >
+        #{introduce},
+      </if>
+      <if test="views != null" >
+        #{views},
+      </if>
+      <if test="createrType != null" >
+        #{createrType},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Exhibition" >
+    update t_c_exhibition
+    <set >
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="startDate != null" >
+        startDate = #{startDate},
+      </if>
+      <if test="endDate != null" >
+        endDate = #{endDate},
+      </if>
+        updateTime = now(),
+      <if test="province != null" >
+        province = #{province},
+      </if>
+      <if test="city != null" >
+        city = #{city},
+      </if>
+      <if test="area != null" >
+        area = #{area},
+      </if>
+      <if test="type != null" >
+        type = #{type},
+      </if>
+      <if test="company != null" >
+        company = #{company},
+      </if>
+      <if test="address != null" >
+        address = #{address},
+      </if>
+      <if test="imgUrl != null" >
+        imgUrl = #{imgUrl},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="introduce != null" >
+        introduce = #{introduce},
+      </if>
+      <if test="views != null" >
+        views = #{views},
+      </if>
+      <if test="createrType != null" >
+        createrType = #{createrType},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="findAllMeetingOrderInfo" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select e.id,e.title,c.name as type,e.views,e.updateTime,e.status,
+    case when e.createrType = 1 then (select u.username from t_oms_user u where u.id = e.createid)
+    when e.createrType = 2 then (select m.enterpriseName from t_m_member m where m.id = e.createid) end as createName
+    from t_c_exhibition e
+    left join t_dictionary_constant c on e.`type` = c.code and c.`type` = 17
+    where 1=1
+    <if test="title != null">
+      and e.title like CONCAT('%',#{title},'%')
+    </if>
+    <if test="status != null">
+      and e.status = #{status}
+    </if>
+    <if test="type != null">
+      and e.type = #{type}
+    </if>
+  </select>
+</mapper>
