@@ -1,8 +1,5 @@
 package com.zhuhuibao.mybatis.oms.entity;
 
-import com.wordnik.swagger.annotations.ApiModel;
-
-@ApiModel(value = "项目频道甲方信息",description = "项目频道甲方信息")
 public class ProjectPartyA {
     private Integer id;
 
