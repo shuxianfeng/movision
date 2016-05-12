@@ -1,5 +1,6 @@
 package com.zhuhuibao.business.oms.channel;
 
+import com.zhuhuibao.business.oms.project.ProjectController;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
@@ -14,6 +15,8 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +37,7 @@ import java.util.Map;
 public class ChannelController {
     @Autowired
     ChannelNewsService newsService;
-
+    private static final Logger log = LoggerFactory.getLogger(ChannelController.class);
     @RequestMapping(value="/rest/oms/addChannelNews", method = RequestMethod.POST)
     public void addChannelNews(HttpServletRequest req, HttpServletResponse response, ChannelNews channelNews) throws JsonGenerationException, JsonMappingException, IOException {
         JsonResult jsonResult = new JsonResult();
@@ -51,11 +54,17 @@ public class ChannelController {
     @RequestMapping(value="/rest/oms/updateChannelNewsByID", method = RequestMethod.POST)
     public void updateChannelNewsByID(HttpServletRequest req, HttpServletResponse response, ChannelNews channelNews) throws JsonGenerationException, JsonMappingException, IOException {
         JsonResult jsonResult = new JsonResult();
-        Long createID= ShiroUtil.getCreateID();
+        Long createID= ShiroUtil.getOmsCreateID();
+       
         if(createID != null)
         {
             channelNews.setCreateid(createID);
             jsonResult = newsService.updateByPrimaryKeySelective(channelNews);
+        }else{
+        	 
+        		jsonResult.setCode(400);
+				jsonResult.setMessage("更新失败");
+		 
         }
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
@@ -192,7 +201,7 @@ public class ChannelController {
         map.put("title", channelNews.getTitle());
         map.put("channelid",channelNews.getChannelid());
         map.put("status",channelNews.getStatus());
-        List<ChannelNews> channelList = newsService.queryAllContentList(pager,map);
+        List<ChannelNews> channelList = newsService.findAllContentList(pager,map);
         pager.result(channelList);
         jsonResult.setData(pager);
         response.setContentType("application/json;charset=utf-8");
