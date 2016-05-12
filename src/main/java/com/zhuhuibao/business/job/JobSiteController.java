@@ -417,7 +417,7 @@ public class JobSiteController {
 
     @RequestMapping(value="isExistResume",method=RequestMethod.GET)
     @ApiOperation(value = "判断是否已经创建简历",notes = "判断是否已经创建简历",response=JsonResult.class)
-    public JsonResult isExistResume(@ApiParam(value = "创建者ID或者会员ID") @RequestParam Long createID)
+    public JsonResult isExistResume(@ApiParam(value = "创建者ID或者会员ID") @RequestParam Long createID) throws Exception
     {
         JsonResult jsonResult = new JsonResult();
         Boolean isExist = resume.isExistResume(createID);
