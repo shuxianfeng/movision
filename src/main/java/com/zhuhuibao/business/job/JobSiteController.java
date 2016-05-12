@@ -6,6 +6,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.AskPriceResultBean;
 import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
@@ -372,7 +373,7 @@ public class JobSiteController {
      * 招聘会信息列表
      */
     @RequestMapping(value = "queryJobMeetingInfo", method = RequestMethod.GET)
-    public void queryJobMeetingInfo(HttpServletRequest req, HttpServletResponse response,String pageSize,String pageNo) throws IOException {
+    public JsonResult queryJobMeetingInfo(HttpServletRequest req, HttpServletResponse response,String pageSize,String pageNo) throws IOException {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -384,27 +385,43 @@ public class JobSiteController {
         List<ChannelNews> list = newsService.findAllNewsByChannelInfo(pager);
         pager.result(list);
         jsonResult.setData(pager);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 
-    /**
-     * 根据ID查询招聘会信息
-     */
     @RequestMapping(value = "queryJobMeetingInfoById", method = RequestMethod.GET)
-    public void queryJobMeetingInfoById(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+    @ApiOperation(value="根据ID查询招聘会信息",notes = "根据ID查询招聘会信息",response = JsonResult.class)
+    public JsonResult queryJobMeetingInfoById(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
         JsonResult jsonResult = newsService.queryJobMeetingInfoById(id);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 
-    /**
-     * 相似企业
-     */
     @RequestMapping(value = "querySimilarCompany", method = RequestMethod.GET)
-    public void querySimilarCompany(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+    @ApiOperation(value = "相似企业",notes = "相似企业",response = JsonResult.class)
+    public JsonResult querySimilarCompany(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
         JsonResult jsonResult = job.querySimilarCompany(id,4);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
+    }
+
+    @RequestMapping(value = "queryEnterpriseHotPosition", method = RequestMethod.GET)
+    @ApiOperation(value="查询名企发布的热门职位", notes="查询名企发布的热门职位", response=JsonResult.class)
+    public JsonResult queryEnterpriseHotPosition() throws IOException {
+        JsonResult jsonResult = new JsonResult();
+        Map<String,Object> map = new HashMap<String,Object>();
+        //“1”推荐企业.
+        map.put("recommend", JobConstant.JOB_RECOMMEND_TRUE);
+        map.put("count",JobConstant.JOB_HOTPOSITION_COUNT_EIGHT);
+        List<Job> jobList = job.queryEnterpriseHotPosition(map);
+        jsonResult.setData(jobList);
+        return jsonResult;
+    }
+
+    @RequestMapping(value="isExistResume",method=RequestMethod.GET)
+    @ApiOperation(value = "判断是否已经创建简历",notes = "判断是否已经创建简历",response=JsonResult.class)
+    public JsonResult isExistResume(@ApiParam(value = "创建者ID或者会员ID") @RequestParam Long createID)
+    {
+        JsonResult jsonResult = new JsonResult();
+        Boolean isExist = resume.isExistResume(createID);
+        jsonResult.setData(isExist);
+        return jsonResult;
     }
 }

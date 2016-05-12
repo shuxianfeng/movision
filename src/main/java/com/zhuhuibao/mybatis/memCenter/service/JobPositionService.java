@@ -446,4 +446,23 @@ public class JobPositionService {
         return jsonResult;
     }
 
+    /**
+     * 查询名企发布的热门职位
+     * @param map  查询条件：recommend 是否名企（1：是），count 条数
+     * @return 发布职位集合
+     */
+    public List<Job> queryEnterpriseHotPosition(Map<String,Object> map)
+    {
+        List<Job> jobList = new ArrayList<Job>();
+        try
+        {
+            jobList = jobMapper.queryEnterpriseHotPosition(map);
+        }
+        catch(Exception e)
+        {
+            throw e;
+        }
+        return jobList;
+    }
+
 }
