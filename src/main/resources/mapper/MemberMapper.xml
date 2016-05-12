@@ -415,7 +415,7 @@
     <if test="status != null and status != '' ">
       and m.status = #{status}
     </if>
-    <if test="status == null">
+    <if test="type != null and type == 1">
       and m.status in (4,5,6)
     </if>
   </select>
