@@ -167,16 +167,6 @@
     </if>
   </select>
 
-  <select id="findAllNewsByChannelInfo" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
-    select
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from t_oms_channel_news
-    where channelid = 11 and status = 1 and sort = 1
-    order by createTime desc
-  </select>
-
   <select id="findAllNewsList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
     select id,title,date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime from t_oms_channel_news
     <where>
