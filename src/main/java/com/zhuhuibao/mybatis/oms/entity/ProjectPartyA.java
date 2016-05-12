@@ -1,109 +1,116 @@
 package com.zhuhuibao.mybatis.oms.entity;
-/**
- * 工程甲方信息
- * @author gmli
- * @since 2016.5.10
- *
- */
+
+import com.wordnik.swagger.annotations.ApiModel;
+
+@ApiModel(value = "项目频道甲方信息",description = "项目频道甲方信息")
 public class ProjectPartyA {
-	private Long id; // 主键
-	private String projectid; // 项目ID
-	private String deptType; // 单位类型
-	private String name; // 单位名称
-	private String linkman; // 联系人
-	private String mobile; // 手机号
-	private String telephone; // 座机
-	private String fax; // 传真
-	private String address; // 地址
-	private String note; // 备注
-	private String is_deleted; // 删除标识：1删除，0不删除
+    private Integer id;
 
-	public Long getId() {
-		return id;
-	}
+    private Long projectid;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    private String deptType;
 
-	public String getProjectid() {
-		return projectid;
-	}
+    private String name;
 
-	public void setProjectid(String projectid) {
-		this.projectid = projectid;
-	}
+    private String linkman;
 
-	public String getDeptType() {
-		return deptType;
-	}
+    private String mobile;
 
-	public void setDeptType(String deptType) {
-		this.deptType = deptType;
-	}
+    private String telephone;
 
-	public String getName() {
-		return name;
-	}
+    private String fax;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    private String address;
 
-	public String getLinkman() {
-		return linkman;
-	}
+    private String note;
 
-	public void setLinkman(String linkman) {
-		this.linkman = linkman;
-	}
+    private Boolean is_deleted;
 
-	public String getMobile() {
-		return mobile;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public String getTelephone() {
-		return telephone;
-	}
+    public Long getProjectid() {
+        return projectid;
+    }
 
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
+    public void setProjectid(Long projectid) {
+        this.projectid = projectid;
+    }
 
-	public String getFax() {
-		return fax;
-	}
+    public String getDeptType() {
+        return deptType;
+    }
 
-	public void setFax(String fax) {
-		this.fax = fax;
-	}
+    public void setDeptType(String deptType) {
+        this.deptType = deptType == null ? null : deptType.trim();
+    }
 
-	public String getAddress() {
-		return address;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
 
-	public String getNote() {
-		return note;
-	}
+    public String getLinkman() {
+        return linkman;
+    }
 
-	public void setNote(String note) {
-		this.note = note;
-	}
+    public void setLinkman(String linkman) {
+        this.linkman = linkman == null ? null : linkman.trim();
+    }
 
-	public String getIs_deleted() {
-		return is_deleted;
-	}
+    public String getMobile() {
+        return mobile;
+    }
 
-	public void setIs_deleted(String is_deleted) {
-		this.is_deleted = is_deleted;
-	}
+    public void setMobile(String mobile) {
+        this.mobile = mobile == null ? null : mobile.trim();
+    }
 
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone == null ? null : telephone.trim();
+    }
+
+    public String getFax() {
+        return fax;
+    }
+
+    public void setFax(String fax) {
+        this.fax = fax == null ? null : fax.trim();
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note == null ? null : note.trim();
+    }
+
+    public Boolean getIs_deleted() {
+        return is_deleted;
+    }
+
+    public void setIs_deleted(Boolean is_deleted) {
+        this.is_deleted = is_deleted;
+    }
 }

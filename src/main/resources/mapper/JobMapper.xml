@@ -210,7 +210,7 @@
         and t.id != #{jobID}
       </if>
       <if test="name != null and name != ''">
-        and t.name like concat('%',#{name},'%') or mb.enterpriseName like concat('%',#{name},'%')
+        and (t.name like concat('%',#{name},'%') or mb.enterpriseName like concat('%',#{name},'%'))
       </if>
       <if test="positionType != null and positionType != ''">
         and t.positionType in (${positionType})
