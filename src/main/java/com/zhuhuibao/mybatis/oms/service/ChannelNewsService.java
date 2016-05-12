@@ -194,12 +194,12 @@ public class ChannelNewsService {
      * @param channelMap  频道资讯页条件
      * @return List<ChannelNews>
      */
-    public List<ChannelNews> queryAllContentList(Paging<ChannelNews> pager,Map<String, Object> channelMap )
+    public List<ChannelNews> findAllContentList(Paging<ChannelNews> pager,Map<String, Object> channelMap )
     {
         List<ChannelNews> newsList = null;
         try
         {
-            newsList =  channel.queryAllContentList(pager.getRowBounds(),channelMap);
+            newsList =  channel.findAllContentList(pager.getRowBounds(),channelMap);
         }
         catch(Exception e)
         {

@@ -24,7 +24,7 @@ public interface ChannelNewsMapper {
 
     List<ChannelNews> queryViewsByChannel(Map<String,Object> channelMap);
     //查询咨询列表
-    List<ChannelNews> queryAllContentList(RowBounds rowBounds, Map<String,Object> channelMap);
+    List<ChannelNews> findAllContentList(RowBounds rowBounds, Map<String,Object> channelMap);
     //查询所属项目
     List<ChannelNews> queryChannelList();
 
