@@ -177,7 +177,7 @@
 
   <select id="queryPositionInfoByID" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select t.id,t.createid,date_format(t.publishTime,'%Y-%m-%d') publishTime,t.name,ps.name positionType,t.description,
-    t.department,t.superior,t.number,t.profession,mb.enterpriseName,mb.enterpriseDesc,
+    t.department,t.superior,t.number,t.profession,mb.enterpriseName,mb.enterpriseDesc,t.positionType postionTypeID,
     (select cs.name from t_dictionary_constant cs where cs.code = t.salary and cs.type = 1)  salaryName,
     (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=2) as educationName,
     (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=3) as experienceName,
