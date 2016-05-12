@@ -29,7 +29,6 @@ import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMeth
  * @author jianglz
  * @version 2016-05-05
  */
-@ControllerAdvice
 public class GlobalDefaultExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalDefaultExceptionHandler.class);
 

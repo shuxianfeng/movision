@@ -72,6 +72,19 @@ public class Member implements Serializable{
 	
 	private int workType;
 
+	/**
+	 * 会员头像
+	 */
+	private String headShot;
+
+	public String getHeadShot() {
+		return headShot;
+	}
+
+	public void setHeadShot(String headShot) {
+		this.headShot = headShot;
+	}
+
 	public Long getId() {
 		return id;
 	}

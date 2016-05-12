@@ -40,7 +40,7 @@
    
    <select id="findMemberInfoById" resultType="com.zhuhuibao.mybatis.memberReg.entity.Member">
     select id,case when mobile != '' or mobile != null then mobile when email!= '' or email != null then email end as  account,password, 
-	date_format(registerTime,'%Y-%m-%d %H:%i:%s') registerTime, status,identify
+	date_format(registerTime,'%Y-%m-%d %H:%i:%s') registerTime, status,identify,headShot
     from t_m_member
     where id = #{id}
    </select>

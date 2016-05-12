@@ -1,37 +1,51 @@
 package com.zhuhuibao.utils.exception;
 
 import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.utils.JsonUtils;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.SQLException;
 
 /**
- * Created by Administrator on 2016/5/5 0005.
+ *异常处理统一处理类
+ *  @author pl
  */
 @ControllerAdvice
 public class MyExceptionHandler{
+    private final static Logger log = LoggerFactory.getLogger(MyExceptionHandler.class);
 
-    @ExceptionHandler(value = BusinessException.class)
+    @ExceptionHandler(value = Exception.class)
     @ResponseBody
-    public JsonResult defaultErrorHandler(HttpServletRequest req,HttpServletResponse response, Exception e) throws Exception {
-        BusinessException ex = (BusinessException) e;
+    public JsonResult defaultErrorHandler(Exception e) throws Exception {
         JsonResult jsonResult = new JsonResult();
-        jsonResult.setCode(400);
-        jsonResult.setMessage(ex.getMessage());
-        jsonResult.setMsgCode(ex.getMsgid());
+        try {
+            if (e instanceof BusinessException) {
+                jsonResult.setCode(400);
+                jsonResult.setMessage(((BusinessException) e).getMessage());
+                jsonResult.setMsgCode(((BusinessException) e).getMsgid());
+            }
+            if (e instanceof DataAccessException) {
+                jsonResult.setCode(400);
+                jsonResult.setMessage("数据库访问异常");
+                jsonResult.setMsgCode(10031);
+            }
+            if (e instanceof SQLException) {
+                jsonResult.setCode(400);
+                jsonResult.setMessage(((SQLException) e).getMessage());
+                jsonResult.setMsgCode(((SQLException) e).getErrorCode());
+            }
+
+        }
+        catch(Exception ex)
+        {
+            if (log.isWarnEnabled()) {
+                log.warn("Handling of [" + ex.getClass().getName() + "] resulted in Exception", ex);
+            }
+        }
+
         return jsonResult;
-        /*response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));*/
     }
 }

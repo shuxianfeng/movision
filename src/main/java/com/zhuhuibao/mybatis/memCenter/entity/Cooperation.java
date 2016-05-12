@@ -50,6 +50,8 @@ public class Cooperation {
 
     private String is_deleted;
 
+    private String status;
+
     @ApiModelProperty(value="发布类型，1：发布任务，2：发布服务，3：发布资质合作")
     private String parentId;
 
@@ -263,5 +265,13 @@ public class Cooperation {
 
     public void setMemberType(String memberType) {
         this.memberType = memberType;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

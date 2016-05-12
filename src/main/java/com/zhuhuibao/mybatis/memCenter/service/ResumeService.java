@@ -9,10 +9,12 @@ import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.zhuhuibao.common.ApiConstants;
 
+import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -138,11 +140,16 @@ public class ResumeService {
     /**
      * 预览简历
      */
-    public JsonResult previewResume(String id){
+    public JsonResult previewResume(String id) throws Exception{
         JsonResult jsonResult = new JsonResult();
-        Resume resume = resumeMapper.previewResume(id);
-        jsonResult.setCode(200);
-        jsonResult.setData(resume);
+        try {
+            Resume resume = resumeMapper.previewResume(id);
+            jsonResult.setCode(200);
+            jsonResult.setData(resume);
+        }catch(Exception e)
+        {
+            throw e;
+        }
         return jsonResult;
     }
 
@@ -276,5 +283,28 @@ public class ResumeService {
         jsonResult.setCode(200);
         jsonResult.setData(list);
         return jsonResult;
+    }
+
+    /**
+     * 判断某个人是否已经创建简历
+     * @param createID  创建者ID或者会员ID
+     * @return true:存在，false:不存在
+     */
+    public Boolean isExistResume(Long createID)
+    {
+        log.info("isExistResume createID = "+createID);
+        Boolean isExist = false;
+        try {
+            int count = resumeMapper.isExistResume(createID);
+            if(count > 0)
+            {
+                isExist = true;
+            }
+        }catch(Exception e)
+        {
+            log.error("judge is exist resume error !!!");
+            throw e;
+        }
+        return isExist;
     }
 }

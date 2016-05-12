@@ -37,4 +37,7 @@ public interface ResumeMapper {
 
     //最新求职
     List<Resume> queryLatestResume(int count);
+
+    //是否存在简历
+    int isExistResume(Long createID);
 }

@@ -66,4 +66,7 @@ public interface JobMapper {
 
     //相似企业信息
     Job querySimilarCompanyInfo(@Param("id")String id);
+
+    //查询名企热门职位
+    List<Job> queryEnterpriseHotPosition(Map<String,Object> map);
 }

@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ *
  * Created by cxx on 2016/4/19 0019.
  */
 @RestController
@@ -102,10 +103,9 @@ public class ResumeController {
      * 预览简历
      */
     @RequestMapping(value = "/rest/job/previewResume", method = RequestMethod.GET)
-    public void previewResume(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+    public JsonResult previewResume(HttpServletRequest req, HttpServletResponse response,String id) throws Exception {
         JsonResult jsonResult = resumeService.previewResume(id);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 
     /**
