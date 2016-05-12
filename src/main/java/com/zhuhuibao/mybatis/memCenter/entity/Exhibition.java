@@ -1,14 +1,18 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 public class Exhibition {
     private String id;
 
+    @ApiModelProperty(value="发布人ID")
     private String createid;
 
     private String createName;
 
+    @ApiModelProperty(value="会展标题")
     private String title;
 
     private String publishTime;
@@ -39,12 +43,15 @@ public class Exhibition {
 
     private String imgUrl;
 
+    @ApiModelProperty(value="审核状态：0：未审核；1：已审核；2：已拒绝")
     private String status;
 
     private String introduce;
 
+    @ApiModelProperty(value="点击率")
     private String views;
 
+    @ApiModelProperty(value="发布人类型：1：运营人员；2：会员")
     private String createrType;
 
     public String getId() {

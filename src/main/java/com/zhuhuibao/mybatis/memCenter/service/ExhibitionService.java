@@ -82,4 +82,12 @@ public class ExhibitionService {
     public Exhibition queryExhibitionInfoById(String id){
         return exhibitionMapper.queryExhibitionInfoById(id);
     }
+
+    /**
+     * 会展信息编辑更新
+     * @param exhibition
+     */
+    public void updateExhibitionInfoById(Exhibition exhibition){
+        exhibitionMapper.updateExhibitionInfoById(exhibition);
+    }
 }

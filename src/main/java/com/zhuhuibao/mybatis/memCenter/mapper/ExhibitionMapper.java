@@ -11,7 +11,7 @@ public interface ExhibitionMapper {
 
     Exhibition queryExhibitionInfoById(String id);
 
-    int updateByPrimaryKeySelective(Exhibition record);
+    int updateExhibitionInfoById(Exhibition record);
 
     List<Exhibition> findAllMeetingOrderInfo(RowBounds rowBounds,Map<String, Object> map);
 

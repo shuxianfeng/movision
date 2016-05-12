@@ -141,7 +141,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Exhibition" >
+  <update id="updateExhibitionInfoById" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Exhibition" >
     update t_c_exhibition
     <set >
       <if test="title != null" >

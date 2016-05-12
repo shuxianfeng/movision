@@ -118,7 +118,9 @@ public class CooperationController {
     public JsonResult findAllMyCooperationByPager(
             @RequestParam(required = false) String pageNo,@RequestParam(required = false) String pageSize,
             @ApiParam(value = "合作标题")@RequestParam(required = false) String title,
-            @ApiParam(value = "合作类型")@RequestParam(required = false) String type) throws IOException {
+            @ApiParam(value = "合作类型")@RequestParam(required = false) String type,
+            @ApiParam(value = "审核状态")@RequestParam(required = false) String status
+    ) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (StringUtils.isEmpty(pageNo)) {
@@ -136,6 +138,7 @@ public class CooperationController {
                 cooperation.setCreateId(principal.getId().toString());
                 cooperation.setType(type);
                 cooperation.setTitle(title);
+                cooperation.setStatus(status);
                 jsonResult = cooperationService.findAllCooperationByPager(pager, cooperation);
             }else{
                 jsonResult.setCode(401);

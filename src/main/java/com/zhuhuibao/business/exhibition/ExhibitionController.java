@@ -172,4 +172,15 @@ public class ExhibitionController {
         jsonResult.setData(exhibition);
         return jsonResult;
     }
+
+    /**
+     * 会展信息编辑更新
+     */
+    @ApiOperation(value="会展信息编辑更新",notes="会展信息编辑更新",response = JsonResult.class)
+    @RequestMapping(value = "updateExhibitionInfoById", method = RequestMethod.POST)
+    public JsonResult updateExhibitionInfoById(@RequestParam Exhibition exhibition) throws IOException {
+        JsonResult jsonResult = new JsonResult();
+        exhibitionService.updateExhibitionInfoById(exhibition);
+        return jsonResult;
+    }
 }
