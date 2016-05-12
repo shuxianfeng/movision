@@ -6,6 +6,7 @@ import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
 import com.zhuhuibao.mybatis.memCenter.entity.MeetingOrder;
 import com.zhuhuibao.mybatis.memCenter.service.ExhibitionService;
+import com.zhuhuibao.shiro.realm.OMSRealm;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -119,19 +120,30 @@ public class ExhibitionController {
      */
     @ApiOperation(value="发布会展信息",notes="发布会展信息",response = JsonResult.class)
     @RequestMapping(value = "publishExhibition", method = RequestMethod.POST)
-    public JsonResult publishExhibition(@RequestBody Exhibition exhibition) throws IOException {
+    public JsonResult publishExhibition(Exhibition exhibition) throws IOException {
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         //判断是否登陆
         if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-            if(null != principal){
-                exhibition.setCreateid(principal.getId().toString());
-                exhibitionService.publishExhibition(exhibition);
+            if("1".equals(exhibition.getCreaterType())) {
+                OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
+                if(null != principal){
+                    exhibition.setCreateid(principal.getId().toString());
+                    exhibitionService.publishExhibition(exhibition);
+                }else{
+                    jsonResult.setCode(401);
+                    jsonResult.setMessage("请先登录");
+                }
             }else{
-                jsonResult.setCode(401);
-                jsonResult.setMessage("请先登录");
+                ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
+                if(null != principal){
+                    exhibition.setCreateid(principal.getId().toString());
+                    exhibitionService.publishExhibition(exhibition);
+                }else{
+                    jsonResult.setCode(401);
+                    jsonResult.setMessage("请先登录");
+                }
             }
         }else{
             jsonResult.setCode(401);
@@ -188,7 +200,7 @@ public class ExhibitionController {
      */
     @ApiOperation(value="会展信息编辑更新",notes="会展信息编辑更新",response = JsonResult.class)
     @RequestMapping(value = "updateExhibitionInfoById", method = RequestMethod.POST)
-    public JsonResult updateExhibitionInfoById(@RequestParam Exhibition exhibition) throws IOException {
+    public JsonResult updateExhibitionInfoById(Exhibition exhibition) throws IOException {
         JsonResult jsonResult = new JsonResult();
         exhibitionService.updateExhibitionInfoById(exhibition);
         return jsonResult;

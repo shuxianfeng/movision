@@ -106,6 +106,9 @@
       <if test="is_deleted != null" >
         is_deleted = #{is_deleted}
       </if>
+      <if test="positionType != null" >
+        positionType = #{positionType}
+      </if>
     </set>
     where id = #{id}
   </update>
