@@ -19,4 +19,11 @@ public interface JobConstant {
      * 名企热门职位的数量
      */
     Integer JOB_HOTPOSITION_COUNT_EIGHT = 8;
+
+    /**
+     * 人才网站内信类型为 11
+     */
+    int SITEMAIL_TYPE_JOB_ELEVEN = 11;
+
+
 }

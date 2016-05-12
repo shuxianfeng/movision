@@ -79,4 +79,18 @@
       status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="queryUnreadMsgCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select count(mg.recID) msgCount
+	 from t_sys_messageLog mg ,t_sys_messageText mt
+	 where mt.id = mg.messageID
+       <if test="recID != null">
+         and mg.recID = #{recID}
+       </if>
+       <if test="type != null">
+         and mt.type = #{type}
+       </if>
+       <if test="status != null">
+         and mg.status = #{status}
+       </if>
+  </select>
 </mapper>

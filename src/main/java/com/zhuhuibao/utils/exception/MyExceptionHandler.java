@@ -13,7 +13,7 @@ import java.sql.SQLException;
  *异常处理统一处理类
  *  @author pl
  */
-@ControllerAdvice
+//@ControllerAdvice
 public class MyExceptionHandler{
     private final static Logger log = LoggerFactory.getLogger(MyExceptionHandler.class);
 

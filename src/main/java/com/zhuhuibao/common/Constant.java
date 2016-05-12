@@ -320,7 +320,17 @@ public interface Constant {
 	String createid= "createid";
 
 	/**
-	 * 站内信招聘类型为 1
+	 * 站内信状态 1
 	 */
-	int sitemail_type_resume_one = 1;
+	Integer MAILSITE_STATUS_UNREAD = 1;
+
+	/**
+	 * 站内信已读 2
+	 */
+	Integer MAILSITE_STATUS_READED = 2;
+
+	/**
+	 * 站内信删除 3
+	 */
+	Integer MAILSITE_STATUS_DELETE = 3;
 }

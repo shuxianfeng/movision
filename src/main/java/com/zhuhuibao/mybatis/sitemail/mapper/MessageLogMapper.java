@@ -2,6 +2,8 @@ package com.zhuhuibao.mybatis.sitemail.mapper;
 
 import com.zhuhuibao.mybatis.sitemail.entity.MessageLog;
 
+import java.util.Map;
+
 public interface MessageLogMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -14,4 +16,6 @@ public interface MessageLogMapper {
     int updateByPrimaryKeySelective(MessageLog record);
 
     int updateByPrimaryKey(MessageLog record);
+
+    Integer queryUnreadMsgCount(Map<String,Object> map);
 }

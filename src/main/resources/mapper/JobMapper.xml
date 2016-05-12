@@ -285,9 +285,8 @@
     where j.createid=#{id} and j.is_deleted = 0
   </select>
   <select id="queryEnterpriseHotPosition" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
-    select jb.id,jb.createid,co.name as salaryName,ps.name positionType from t_i_job jb left join t_m_member m on jb.createid = m.id
+    select jb.id,jb.createid,co.name as salaryName,jb.name from t_i_job jb left join t_m_member m on jb.createid = m.id
     left join t_dictionary_constant co on co.code = jb.salary and co.type = 1
-    left join t_dictionary_position ps on ps.id = jb.positionType
     where m.isrecommend = #{recommend} order by jb.views desc limit #{count}
   </select>
 </mapper>

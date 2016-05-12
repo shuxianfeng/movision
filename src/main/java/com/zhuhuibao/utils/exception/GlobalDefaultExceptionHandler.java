@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.BindException;
@@ -24,11 +25,14 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
+import java.sql.SQLException;
+
 
 /**
  * @author jianglz
  * @version 2016-05-05
  */
+@ControllerAdvice
 public class GlobalDefaultExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalDefaultExceptionHandler.class);
 
@@ -42,6 +46,21 @@ public class GlobalDefaultExceptionHandler {
         JsonResult result = new JsonResult();
 
         try {
+            if (ex instanceof BusinessException) {
+                result.setCode(400);
+                result.setMessage(((BusinessException) ex).getMessage());
+                result.setMsgCode(((BusinessException) ex).getMsgid());
+            }
+            if (ex instanceof DataAccessException) {
+                result.setCode(400);
+                result.setMessage("数据库访问异常");
+                result.setMsgCode(10031);
+            }
+            if (ex instanceof SQLException) {
+                result.setCode(400);
+                result.setMessage(((SQLException) ex).getMessage());
+                result.setMsgCode(((SQLException) ex).getErrorCode());
+            }
             if (ex instanceof NoSuchRequestHandlingMethodException) {
                 result.setCode(404);
             }
