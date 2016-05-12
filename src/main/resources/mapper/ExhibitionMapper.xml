@@ -32,7 +32,7 @@
     left join t_dictionary_city ci on ci.code = e.city
     left join t_dictionary_province p on p.code = e.province
     left join t_dictionary_area a on a.code = e.area
-    where id = #{id}
+    where e.id = #{id}
   </select>
   <insert id="publishExhibition" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Exhibition" >
     insert into t_c_exhibition
