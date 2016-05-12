@@ -213,7 +213,7 @@
     limit #{count}
   </select>
   <!-- 查询咨询列表@author:gmli@since2016.05.09 -->
- <select id="queryAllContentList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
+ <select id="findAllContentList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
 	select a.id,a.title,b.name,a.views,
 	(case when a.status=0 then '未审核'
 	when a.status=1 then '已审核' when
