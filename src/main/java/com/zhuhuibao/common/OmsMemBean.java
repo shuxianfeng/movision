@@ -22,6 +22,8 @@ public class OmsMemBean {
     private String identify;
 
     private String status;
+    
+    private String type;
 
     private String isrecommend;
 
@@ -154,4 +156,14 @@ public class OmsMemBean {
     public void setCertificate_number(String certificate_number) {
         this.certificate_number = certificate_number;
     }
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+    
+    
 }
