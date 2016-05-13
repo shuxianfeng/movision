@@ -258,7 +258,7 @@
     left join t_dictionary_position p on j.positionType = p.id
     left join t_dictionary_city ci on ci.code = j.city
     left join t_dictionary_constant c on j.salary = c.code
-    where p.parentId = #{id} and c.type = 1 and j.is_deleted =0 order by j.publishTime desc limit 0,#{count}
+    where p.parentId = #{id} and c.type = 1 and j.is_deleted =0 order by j.updateTime desc limit 0,#{count}
   </select>
   <select id="greatCompanyPosition" resultType="com.zhuhuibao.common.ResultBean">
     select distinct m.id as code,m.enterpriseLogo as name from t_i_job j
