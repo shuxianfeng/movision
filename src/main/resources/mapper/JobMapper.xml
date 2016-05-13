@@ -41,7 +41,7 @@
     LEFT JOIN t_dictionary_province p on j.province = p.code
     LEFT JOIN t_dictionary_city c on j.city = c.code
     LEFT JOIN t_dictionary_area a on j.area = a.code
-    WHERE j.createid = #{id} and j.is_deleted = 0 and co.type = 1 order by j.publishTime desc
+    WHERE j.createid = #{id} and j.is_deleted = 0 and co.type = 1 order by j.updateTime desc
   </select>
   <select id="getPositionByPositionId" resultMap="BaseResultMap" parameterType="java.lang.String">
     SELECT j.*,p.parentId FROM t_i_job j
@@ -130,7 +130,7 @@
     left join t_dictionary_constant co on co.code = j.salary
     left join t_m_member m on m.id = j.createid
     where co.type = 1 and j.is_deleted = 0 and find_in_set(j.positionType,(select post from t_i_resume where createid= #{id} ))
-    order by publishTime desc limit 0,#{count}
+    order by updateTime desc limit 0,#{count}
   </select>
   <select id="searchSamePosition" resultMap="BaseResultMap">
     select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,
@@ -140,7 +140,7 @@
     left join t_dictionary_constant co on co.code = j.salary
     left join t_m_member m on m.id = j.createid
     where co.type = 1 and j.positionType = #{positionType}
-    order by publishTime desc limit 0,6
+    order by updateTime desc limit 0,6
   </select>
   <select id="searchLatestPublishPosition" resultMap="BaseResultMap">
     select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,j.createid,
@@ -150,7 +150,7 @@
     left join t_dictionary_constant co on co.code = j.salary
     left join t_m_member m on m.id = j.createid
     where co.type = 1
-    order by publishTime desc limit 0,5
+    order by updateTime desc limit 0,5
   </select>
   <select id="queryCompanyInfo" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.memCenter.entity.MemberDetails">
     select t.id,t.enterpriseName,t.enterpriseLogo,t.enterpriseDesc,
@@ -172,7 +172,7 @@
     left join t_dictionary_area ar on ar.code = t.area
     left join t_dictionary_enterpriseType ep on ep.id = t.enterpriseType
     left join t_dictionary_employeeSize es on es.id = t.employeeNumber
-    where t.id in (select jb.createid from t_i_job jb order by jb.publishTime desc ) limit #{count}
+    where t.id in (select jb.createid from t_i_job jb order by jb.updateTime desc ) limit #{count}
   </select>
 
   <select id="queryPositionInfoByID" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -231,7 +231,7 @@
         and salary = #{salary}
       </if>
     </where>
-    order by publishTime desc
+    order by updateTime desc
   </select>
 
   <select id="findAllMyApplyPosition" parameterType="java.lang.String" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
