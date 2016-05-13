@@ -10,42 +10,58 @@ public class Exhibition {
     @ApiModelProperty(value="发布人ID")
     private String createid;
 
+    @ApiModelProperty(value="发布人名称")
     private String createName;
 
     @ApiModelProperty(value="会展标题")
     private String title;
 
+    @ApiModelProperty(value="发布时间")
     private String publishTime;
 
+    @ApiModelProperty(value="更新时间")
     private String updateTime;
 
+    @ApiModelProperty(value="开始时间")
     private String startDate;
 
+    @ApiModelProperty(value="截止时间")
     private String endDate;
 
+    @ApiModelProperty(value="省名称")
     private String provinceName;
 
+    @ApiModelProperty(value="市名称")
     private String cityName;
 
+    @ApiModelProperty(value="区名称")
     private String areaName;
 
+    @ApiModelProperty(value="省")
     private String province;
 
+    @ApiModelProperty(value="市")
     private String city;
 
+    @ApiModelProperty(value="区")
     private String area;
 
+    @ApiModelProperty(value="所属栏目")
     private String type;
 
+    @ApiModelProperty(value="主办单位")
     private String company;
 
+    @ApiModelProperty(value="详细地址")
     private String address;
 
+    @ApiModelProperty(value="会展缩略图")
     private String imgUrl;
 
     @ApiModelProperty(value="审核状态：0：未审核；1：已审核；2：已拒绝")
     private String status;
 
+    @ApiModelProperty(value="内容介绍")
     private String introduce;
 
     @ApiModelProperty(value="点击率")

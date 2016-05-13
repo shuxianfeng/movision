@@ -2,6 +2,7 @@ package com.zhuhuibao.business.exhibition;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
 import com.zhuhuibao.mybatis.memCenter.entity.MeetingOrder;
@@ -90,9 +91,9 @@ public class ExhibitionController {
      */
     @ApiOperation(value="会展定制申请管理",notes="会展定制申请管理",response = JsonResult.class)
     @RequestMapping(value = "findAllMeetingOrderInfo", method = RequestMethod.GET)
-    public JsonResult findAllMeetingOrderInfo(@RequestParam(required = false) String account,
-        @RequestParam(required = false)String province,@RequestParam(required = false)String city,
-        @RequestParam(required = false)String status,@RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws IOException {
+    public JsonResult findAllMeetingOrderInfo(@ApiParam(value = "账号")@RequestParam(required = false) String account,
+        @ApiParam(value = "省")@RequestParam(required = false)String province,@ApiParam(value = "市")@RequestParam(required = false)String city,
+        @ApiParam(value = "审核状态")@RequestParam(required = false)String status,@RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws IOException {
         JsonResult jsonResult = new JsonResult();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
@@ -157,9 +158,9 @@ public class ExhibitionController {
      */
     @ApiOperation(value="会展信息列表",notes="会展信息列表",response = JsonResult.class)
     @RequestMapping(value = "findAllExhibition", method = RequestMethod.GET)
-    public JsonResult findAllExhibition(@RequestParam(required = false)String title,
-        @RequestParam(required = false)String type,@RequestParam(required = false)String status,
-                                        @RequestParam(required = false)String province,
+    public JsonResult findAllExhibition(@ApiParam(value = "标题")@RequestParam(required = false)String title,
+        @ApiParam(value = "所属栏目")@RequestParam(required = false)String type,@ApiParam(value = "审核状态")@RequestParam(required = false)String status,
+        @ApiParam(value = "省")@RequestParam(required = false)String province,
         @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws IOException {
         JsonResult jsonResult = new JsonResult();
         //设定默认分页pageSize

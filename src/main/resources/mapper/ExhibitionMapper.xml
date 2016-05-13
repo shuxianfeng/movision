@@ -209,5 +209,6 @@
     <if test="province != null">
       and e.province = #{province}
     </if>
+    order by e.updateTime desc
   </select>
 </mapper>
