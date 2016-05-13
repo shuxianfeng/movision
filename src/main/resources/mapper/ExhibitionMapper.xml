@@ -196,7 +196,7 @@
     when e.createrType = 2 then (select m.enterpriseName from t_m_member m where m.id = e.createid) end as createName
     from t_c_exhibition e
     left join t_dictionary_constant c on e.`type` = c.code and c.`type` = 17
-    where 1=1
+    where e.status = 1
     <if test="title != null">
       and e.title like CONCAT('%',#{title},'%')
     </if>
