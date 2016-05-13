@@ -273,7 +273,7 @@
     left join t_dictionary_constant co on co.code = r.hopeSalary and co.type = 1
     left join t_dictionary_city c on r.jobCity = c.code
     left join t_m_member m on r.createid = m.id
-    WHERE r.isPublic = 1 ORDER by r.publishTime limit 0,#{count}
+    WHERE r.isPublic = 1 ORDER by r.publishTime desc limit 0,#{count}
   </select>
   <select id="isExistResume" parameterType="java.lang.Long" resultType="java.lang.Integer">
     select count(1) from t_i_resume t where t.createid = #{createID}
