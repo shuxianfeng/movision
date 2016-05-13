@@ -161,6 +161,7 @@ public class ExhibitionController {
     public JsonResult findAllExhibition(@ApiParam(value = "标题")@RequestParam(required = false)String title,
         @ApiParam(value = "所属栏目")@RequestParam(required = false)String type,@ApiParam(value = "审核状态")@RequestParam(required = false)String status,
         @ApiParam(value = "省")@RequestParam(required = false)String province,
+        @ApiParam(value = "区别后台与前台频道")@RequestParam(required = false)String type1,
         @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws IOException {
         JsonResult jsonResult = new JsonResult();
         //设定默认分页pageSize
@@ -177,6 +178,7 @@ public class ExhibitionController {
         map.put("type",type);
         map.put("status",status);
         map.put("province",province);
+        map.put("type1",type1);
         //查询
         List<Exhibition> exhibitionList = exhibitionService.findAllExhibition(pager,map);
         pager.result(exhibitionList);
