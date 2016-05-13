@@ -1,26 +1,36 @@
 package com.zhuhuibao.mybatis.oms.entity;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
+/**
+ * @Description 甲方信息
+ * @author penglong
+ * @createDate 2016-05-13
+ */
+@ApiModel(value = "甲方信息",description = "甲方信息")
 public class ProjectPartyA {
+    @ApiModelProperty(value = "甲方信息ID，主键")
     private Integer id;
-
+    @ApiModelProperty(value = "项目ID")
     private Long projectid;
-
+    @ApiModelProperty(value = "单位类型")
     private String deptType;
-
+    @ApiModelProperty(value = "单位名称")
     private String name;
-
+    @ApiModelProperty(value = "联系人")
     private String linkman;
-
+    @ApiModelProperty(value = "手机号")
     private String mobile;
-
+    @ApiModelProperty(value = "座机")
     private String telephone;
-
+    @ApiModelProperty(value = "传真")
     private String fax;
-
+    @ApiModelProperty(value = "地址")
     private String address;
-
+    @ApiModelProperty(value = "备注")
     private String note;
-
+    @ApiModelProperty(value = "删除标识：1删除，0不删除")
     private Boolean is_deleted;
 
     public Integer getId() {
