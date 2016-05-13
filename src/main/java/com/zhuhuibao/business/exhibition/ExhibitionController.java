@@ -42,7 +42,7 @@ public class ExhibitionController {
      */
     @ApiOperation(value="发布会展定制",notes="发布会展定制",response = JsonResult.class)
     @RequestMapping(value = "publishMeetingOrder", method = RequestMethod.POST)
-    public JsonResult publishMeetingOrder(@RequestBody MeetingOrder meetingOrder) throws IOException {
+    public JsonResult publishMeetingOrder(MeetingOrder meetingOrder) throws IOException {
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -67,7 +67,7 @@ public class ExhibitionController {
      */
     @ApiOperation(value="会展定制申请处理",notes="会展定制申请处理",response = JsonResult.class)
     @RequestMapping(value = "updateMeetingOrderStatus", method = RequestMethod.POST)
-    public JsonResult updateMeetingOrderStatus(@RequestBody MeetingOrder meetingOrder) throws IOException {
+    public JsonResult updateMeetingOrderStatus(MeetingOrder meetingOrder) throws IOException {
         JsonResult jsonResult = new JsonResult();
         exhibitionService.updateMeetingOrderStatus(meetingOrder);
         return jsonResult;
