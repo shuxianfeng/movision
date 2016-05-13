@@ -1,5 +1,8 @@
 package com.zhuhuibao.mybatis.oms.entity;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 import java.util.List;
 
@@ -9,25 +12,44 @@ import java.util.List;
  * @since 2016-05-10
  *
  */
+@ApiModel(value = "项目信息",description = "项目频道信息")
 public class ProjectInfo {
-	private Long id; // 主键
-	private String name; // 项目名称
-	private Long createid; // 创建者ID
-	private Date publishDate; // 发布日期
-	private Date updateDate; // 修改日期
-	private String province; // 省代码
-	private String city; // 市代码
-	private String area; // 区代码
-	private String address; // 地址
-	private Integer category; // 项目类别 type=8
-	private Double price; // 工程造价
-	private Date startDate; // 开工日期
-	private Date endDate; // 竣工日期
-	private String description; // 项目描述
-	private String record; // 跟进记录
-	private String is_deleted; // 删除标识：1删除,0:不删除
-	private List partyAList;//甲方信息	
-	private List partyBList;//甲方信息	
+	@ApiModelProperty(value = "项目ID，主键",required = true)
+	private Long id;
+	@ApiModelProperty(value = "项目名称")
+	private String name;
+	@ApiModelProperty(value = "创建者ID")
+	private Long createid;
+	@ApiModelProperty(value = "发布日期")
+	private Date publishDate;
+	@ApiModelProperty(value = "修改日期")
+	private Date updateDate;
+	@ApiModelProperty(value = "省代码")
+	private String province;
+	@ApiModelProperty(value = "市代码")
+	private String city;
+	@ApiModelProperty(value = "区代码")
+	private String area;
+	@ApiModelProperty(value = "地址")
+	private String address;
+	@ApiModelProperty(value = " 项目类别 type=8")
+	private Integer category;
+	@ApiModelProperty(value = " 工程造价")
+	private Double price;
+	@ApiModelProperty(value = " 公告日期")
+	private Date startDate;
+	@ApiModelProperty(value = " 截止日期")
+	private Date endDate;
+	@ApiModelProperty(value = " 项目描述")
+	private String description;
+	@ApiModelProperty(value = " 跟进记录")
+	private String record;
+	@ApiModelProperty(value = " 删除标识：1删除,0:不删除")
+	private String is_deleted;
+	@ApiModelProperty(value = " 甲方信息集合")
+	private List partyAList;
+	@ApiModelProperty(value = " 乙方信息集合")
+	private List partyBList;
 	
 
 	public Long getId() {
