@@ -221,7 +221,7 @@
   </update>
   <select id="queryCooperationInfoById" resultMap="BaseResultMap" >
     select c.*, concat(p.name,ci.name,a.name)as cooperationArea,co.name as categoryName,coo.name as TypeName,coo.parentId,
-    (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName,c.status
+    (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName
     from t_c_cooperation c
     left join t_dictionary_province p on p.code = c.province
     left join t_dictionary_city ci on ci.code = c.city
@@ -232,7 +232,7 @@
   </select>
   <select id="findAllCooperationByPager" resultMap="BaseResultMap" >
     select c.*, concat(p.name,ci.name,a.name)as cooperationArea,co.name as categoryName,coo.name as TypeName,coo.parentId,
-    (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName,c.status
+    (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName
     from t_c_cooperation c
     left join t_dictionary_province p on p.code = c.province
     left join t_dictionary_city ci on ci.code = c.city
