@@ -95,10 +95,10 @@
         #{price},
       </if>
       <if test="startDate != null" >
-        #{startDate},
+        date_format(#{startDate},'%Y-%m-%d'),
       </if>
       <if test="endDate != null" >
-        #{endDate},
+        date_format(#{endDate},'%Y-%m-%d'),
       </if>
       <if test="description != null" >
         #{description},
@@ -123,7 +123,7 @@
       <if test="createid != null" >
         createid=#{createid,jdbcType=BIGINT},
       </if>  
-        updateDate=now(),
+        updateDate=current_date(),
       <if test="province != null" >
         province=#{province},
       </if>
@@ -144,10 +144,10 @@
         price= #{price},
       </if>
       <if test="startDate != null" >
-        startDate=#{startDate,jdbcType=DATE},
+        startDate=date_format(#{startDate},'%Y-%m-%d'),
       </if>
       <if test="endDate != null" >
-        endDate=#{endDate,jdbcType=DATE},
+        endDate=date_format(#{endDate},'%Y-%m-%d'),
       </if>
       <if test="description != null" >
         description=#{description},
@@ -204,7 +204,8 @@
 
   <select id="queryLatestProject" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.oms.entity.ProjectInfo">
     SELECT
-    t.id,t.name,t.createid,t.publishDate,t.updateDate
+    t.id,t.name,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
+    date_format(t.updateDate,'%Y-%m-%d') updateDate
     FROM t_prj_project t
     order by t.updateDate desc
     <if test="count !=null">
