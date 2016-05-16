@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +54,7 @@ public class PriceController {
      */
     @ApiOperation(value="询价保存",notes="询价保存",response = JsonResult.class)
     @RequestMapping(value = "saveAskPrice", method = RequestMethod.POST)
-    public JsonResult saveAskPrice(HttpServletRequest req, HttpServletResponse response, AskPrice askPrice) throws IOException {
+    public JsonResult saveAskPrice(AskPrice askPrice) throws IOException {
         JsonResult result = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -80,7 +81,7 @@ public class PriceController {
      */
     @ApiOperation(value="上传询价单（定向，公开），上传报价单",notes="上传询价单（定向，公开），上传报价单",response = JsonResult.class)
     @RequestMapping(value = "uploadAskList", method = RequestMethod.POST)
-    public JsonResult uploadAskList(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public JsonResult uploadAskList(HttpServletRequest req) throws IOException {
         JsonResult result = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -102,7 +103,7 @@ public class PriceController {
      */
     @ApiOperation(value="获得我的联系方式（询报价者联系方式）",notes="获得我的联系方式（询报价者联系方式）",response = JsonResult.class)
     @RequestMapping(value = "getLinkInfo", method = RequestMethod.GET)
-    public JsonResult getLinkInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public JsonResult getLinkInfo() throws IOException {
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -127,7 +128,7 @@ public class PriceController {
      */
     @ApiOperation(value="查看具体某条询价信息",notes="查看具体某条询价信息",response = JsonResult.class)
     @RequestMapping(value = "queryAskPriceByID", method = RequestMethod.GET)
-    public JsonResult queryAskPriceByID(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+    public JsonResult queryAskPriceByID(@RequestParam String id) throws IOException {
         JsonResult result = priceService.queryAskPriceByID(id);
         return result;
     }
@@ -137,7 +138,7 @@ public class PriceController {
      */
     @ApiOperation(value="根据条件查询询价信息（分页）",notes="根据条件查询询价信息（分页）",response = JsonResult.class)
     @RequestMapping(value = "queryAskPriceInfo", method = RequestMethod.GET)
-    public JsonResult queryAskPriceInfo(HttpServletRequest req, HttpServletResponse response, AskPriceSearchBean askPriceSearch,String pageNo,String pageSize) throws IOException {
+    public JsonResult queryAskPriceInfo(AskPriceSearchBean askPriceSearch,@RequestParam String pageNo,@RequestParam String pageSize) throws IOException {
         /*String title = new String(askPriceSearch.getTitle().getBytes("8859_1"), "utf8" );
         askPriceSearch.setTitle(title);*/
         JsonResult jsonResult = new JsonResult();
@@ -191,7 +192,7 @@ public class PriceController {
      */
     @ApiOperation(value="最新公开询价(分页)",notes="最新公开询价(分页)",response = JsonResult.class)
     @RequestMapping(value = "queryNewPriceInfoList", method = RequestMethod.GET)
-    public JsonResult queryNewPriceInfoList(HttpServletRequest req, HttpServletResponse response,String pageNo,String pageSize) throws IOException {
+    public JsonResult queryNewPriceInfoList(@RequestParam String pageNo,@RequestParam String pageSize) throws IOException {
         JsonResult jsonResult = new JsonResult();
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
