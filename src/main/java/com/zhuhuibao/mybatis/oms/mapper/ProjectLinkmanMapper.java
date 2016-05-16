@@ -2,6 +2,8 @@ package com.zhuhuibao.mybatis.oms.mapper;
 
 import com.zhuhuibao.mybatis.oms.entity.ProjectLinkman;
 
+import java.util.List;
+
 /**
  * 项目联系人信息 甲方乙方信息
  * @author  pl
@@ -14,4 +16,5 @@ public interface ProjectLinkmanMapper {
 
     int updateByPrimaryKeySelective(ProjectLinkman record);
 
+    List<ProjectLinkman> queryProjectLinkmanByProjectID(Long projectid);
 }

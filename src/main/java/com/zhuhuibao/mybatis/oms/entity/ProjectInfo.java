@@ -39,10 +39,10 @@ public class ProjectInfo {
 	private String categoryName;
 	@ApiModelProperty(value = " 工程造价")
 	private Double price;
-	@ApiModelProperty(value = " 公告日期")
-	private Date startDate;
-	@ApiModelProperty(value = " 截止日期")
-	private Date endDate;
+	@ApiModelProperty(value = " 开工日期")
+	private String startDate;
+	@ApiModelProperty(value = " 竣工日期")
+	private String endDate;
 	@ApiModelProperty(value = " 项目描述")
 	private String description;
 	@ApiModelProperty(value = " 跟进记录")
@@ -150,19 +150,19 @@ public class ProjectInfo {
 		this.price = price;
 	}
 
-	public Date getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 
