@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,21 +29,22 @@ public class ProjectService {
 	private ProjectMapper projectMapper;
    /**
     * 查询项目信息
-    * @param map 查询参数
+    * @param projectID 项目信息ID
     * @return 项目信息
      * @throws SQLException 
     */
-	public List<ProjectInfo> queryProjectInfoList(Map<String, Object> map) throws SQLException {
-		List<ProjectInfo> projectList=null;
+	public int queryProjectInfoByID(Long projectID) {
+		log.info("query project info by id "+projectID);
+		int result = 0;
 		try {
-			projectList = projectMapper.queryProjectInfoList(map);
+			projectMapper.queryProjectInfoByID(projectID);
 			 
 		} catch (Exception e) {
 			log.error("select by primary key error!", e);
-			throw new SQLException();
+			throw e;
 			
 		}	
-		return projectList;
+		return result;
 	}
 	/**
 	 * 添加项目工程信息
@@ -77,5 +80,24 @@ public class ProjectService {
 			
 		}	
 		return result;
+	}
+
+	/**
+	 * 根据条件查询项目分页信息
+	 * @param map 项目信息搜素条件
+	 * @return
+	 */
+	public List<ProjectInfo> findAllPrjectPager(Map<String,Object> map, Paging<ProjectInfo> page)
+	{
+		log.info("search project info for pager condition = "+ StringUtils.mapToString(map));
+		List<ProjectInfo> projectList = null;
+		try {
+			projectList = projectMapper.findAllPrjectPager(map,page.getRowBounds());
+		}catch(Exception e)
+		{
+			log.error("search project info for pager error!");
+			throw e;
+		}
+		return projectList;
 	}
 }

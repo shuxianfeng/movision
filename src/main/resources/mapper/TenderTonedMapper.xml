@@ -153,4 +153,24 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="findAllTenderTonedPager" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.oms.entity.TenderToned">
+    select t.id, t.noticeName, t.createid, t.publishDate, t.updateDate, t.projectName, concat(pn.name,ct.name,ar.name) area,
+    t.type, t.startDate, t.endDate, t.content
+    from t_prj_tender_toned t
+    left join t_dictionary_province pn on pn.code = t.province
+    left join t_dictionary_city ct on ct.code = t.city
+    left join t_dictionary_area ar on ar.code = t.area
+    <where>
+      <if test="noticeName != null and noticeName != ''">
+        and noticeName = #{noticeName}
+      </if>
+      <if test="province != null and province != ''">
+        and province = #{province}
+      </if>
+      <if test="city != null and city != ''">
+        and city = #{city}
+      </if>
+    </where>
+  </select>
 </mapper>

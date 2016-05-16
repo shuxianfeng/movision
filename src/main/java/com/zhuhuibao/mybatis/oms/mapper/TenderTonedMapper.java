@@ -1,6 +1,9 @@
 package com.zhuhuibao.mybatis.oms.mapper;
 
 import com.zhuhuibao.mybatis.oms.entity.TenderToned;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.*;
 
 /**
  * 招中标公告DAO层
@@ -14,4 +17,5 @@ public interface TenderTonedMapper {
 
     int updateByPrimaryKeySelective(TenderToned record);
 
+    List<TenderToned> findAllTenderTonedPager(Map<String,Object> map,RowBounds rowBounds);
 }

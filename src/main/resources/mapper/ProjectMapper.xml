@@ -74,8 +74,8 @@
       <if test="createid != null" >
         #{createid},
       </if>
-        now(),
-        now(),
+      CURDATE(),
+      CURDATE(),
       <if test="province != null" >
         #{province},
       </if>
@@ -163,30 +163,41 @@
   </update>
   
   
- <!-- 查询所属栏目列表@author:gmli@since2016.05.09 -->
- <select id="queryProjectInfoList" resultMap="BaseResultMap" parameterType="java.util.Map" >
+ <select id="queryProjectInfoByID" resultMap="BaseResultMap" parameterType="java.lang.Long" >
 	SELECT
 	   t.id,t.name,t.createid,t.publishDate,t.updateDate,t.province,t.city,t.area,t.address,t.category,t.price,t.startDate,t.endDate,t.description,t.record,t.is_deleted
 	FROM t_prj_project t  
 	<where>
-      <if test="name != null">
-        and t.name = #{name}
-      </if>
-      <if test="category != null">
-        and t.category = #{category}
-      </if>
-      <if test="province != null">
-        and t.province = #{province}
-      </if>
-       <if test="city != null">
-        and t.city = #{city}
-      </if>
       <if test="id != null">
         and t.id = #{id}
       </if>
     </where> 
 	 
   </select>
- 
+
+  <select id="findAllPrjectPager" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.oms.entity.ProjectInfo">
+    SELECT
+    t.id,t.name,t.createid,t.publishDate,t.updateDate,concat(pn.name,ct.name,ar.name,t.address) address,
+    t.price,t.startDate,t.endDate,t.description,t.record,t.is_deleted,
+    (select cs.name from t_dictionary_constant cs where cs.code = t.category and cs.type=8) as category
+    FROM t_prj_project t
+    left join t_dictionary_province pn on pn.code = t.province
+    left join t_dictionary_city ct on ct.code = t.city
+    left join t_dictionary_area ar on ar.code = t.area
+    <where>
+      <if test="name != null and name != ''">
+        and t.name like concat('%',#{name},'%')
+      </if>
+      <if test="category !=null">
+        and t.category = #{category}
+      </if>
+      <if test="province != null and province != ''">
+        and t.province = #{province}
+      </if>
+      <if test="city != null and city != ''">
+        and t.city = #{city}
+      </if>
+    </where>
+  </select>
   
 </mapper>
