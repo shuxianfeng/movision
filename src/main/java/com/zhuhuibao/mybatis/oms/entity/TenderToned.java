@@ -19,9 +19,9 @@ public class TenderToned {
     @ApiModelProperty(value="创建者ID")
     private Long createid;
     @ApiModelProperty(value = "发布日期")
-    private Date publishDate;
+    private String publishDate;
     @ApiModelProperty(value = "修改日期")
-    private Date updateDate;
+    private String updateDate;
     @ApiModelProperty(value = "项目名称")
     private String projectName;
     @ApiModelProperty(value = "省代码")
@@ -33,9 +33,9 @@ public class TenderToned {
     @ApiModelProperty(value = "公告类别1:招标公告，2：中标公告")
     private Integer type;
     @ApiModelProperty(value = "公告日期")
-    private Date startDate;
+    private String startDate;
     @ApiModelProperty(value = "截止日期")
-    private Date endDate;
+    private String endDate;
     @ApiModelProperty(value = "公告内容")
     private String content;
     @ApiModelProperty(value = "删除标识：1删除,0:不删除")
@@ -65,19 +65,19 @@ public class TenderToned {
         this.createid = createid;
     }
 
-    public Date getPublishDate() {
+    public String getPublishDate() {
         return publishDate;
     }
 
-    public void setPublishDate(Date publishDate) {
+    public void setPublishDate(String publishDate) {
         this.publishDate = publishDate;
     }
 
-    public Date getUpdateDate() {
+    public String getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Date updateDate) {
+    public void setUpdateDate(String updateDate) {
         this.updateDate = updateDate;
     }
 
@@ -121,19 +121,19 @@ public class TenderToned {
         this.type = type;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
