@@ -138,7 +138,7 @@ public class PriceController {
      */
     @ApiOperation(value="根据条件查询询价信息（分页）",notes="根据条件查询询价信息（分页）",response = JsonResult.class)
     @RequestMapping(value = "queryAskPriceInfo", method = RequestMethod.GET)
-    public JsonResult queryAskPriceInfo(AskPriceSearchBean askPriceSearch,@RequestParam String pageNo,@RequestParam String pageSize) throws IOException {
+    public JsonResult queryAskPriceInfo(AskPriceSearchBean askPriceSearch,@RequestParam(required = false) String pageNo,@RequestParam(required = false) String pageSize) throws IOException {
         /*String title = new String(askPriceSearch.getTitle().getBytes("8859_1"), "utf8" );
         askPriceSearch.setTitle(title);*/
         JsonResult jsonResult = new JsonResult();
@@ -192,7 +192,7 @@ public class PriceController {
      */
     @ApiOperation(value="最新公开询价(分页)",notes="最新公开询价(分页)",response = JsonResult.class)
     @RequestMapping(value = "queryNewPriceInfoList", method = RequestMethod.GET)
-    public JsonResult queryNewPriceInfoList(@RequestParam String pageNo,@RequestParam String pageSize) throws IOException {
+    public JsonResult queryNewPriceInfoList(@RequestParam(required = false) String pageNo,@RequestParam(required = false) String pageSize) throws IOException {
         JsonResult jsonResult = new JsonResult();
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
