@@ -91,4 +91,16 @@ public class TenderTonedController {
         jsonResult.setData(tenderToned);
         return jsonResult;
     }
+
+    @RequestMapping(value = "queryLatestTenderToned", method = RequestMethod.GET)
+    @ApiOperation(value = "最新招标或中标公告信息，默认6条",notes = "最新招标或中标公告信息，默认6条",response = JsonResult.class)
+    public JsonResult queryLatestTenderToned(@ApiParam(value="公告类型 1:招标公告，2：中标公告") @RequestParam() String type){
+        JsonResult jsonResult = new JsonResult();
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("type",type);
+        map.put("count",6);
+        List<TenderToned> projectList = ttService.queryLatestTenderToned(map);
+        jsonResult.setData(projectList);
+        return jsonResult;
+    }
 }

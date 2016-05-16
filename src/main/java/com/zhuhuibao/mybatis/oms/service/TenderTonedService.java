@@ -103,4 +103,23 @@ public class TenderTonedService {
         }
         return ttList;
     }
+
+    /**
+     * 查询最新招标公告或者中标公告
+     * @param map 项目信息搜素条件 count：指定项目信息条数
+     * @return
+     */
+    public List<TenderToned> queryLatestTenderToned(Map<String,Object> map)
+    {
+        log.info("query latest project info condition = "+ StringUtils.mapToString(map));
+        List<TenderToned> projectList = null;
+        try {
+            projectList = tenderTonedMapper.queryLatestTenderToned(map);
+        }catch(Exception e)
+        {
+            log.error("query latest project info error!");
+            throw e;
+        }
+        return projectList;
+    }
 }

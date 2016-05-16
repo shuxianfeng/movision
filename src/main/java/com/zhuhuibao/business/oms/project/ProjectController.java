@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -38,6 +40,9 @@ public class ProjectController {
 
 	 @Autowired
 	 ProjectService projectService;
+
+	 @Autowired
+	 private MemberService memberService;
 
 	 /**
      * 根据条件查询项目分页信息
@@ -137,6 +142,24 @@ public class ProjectController {
 	{
 		JsonResult jsonResult = new JsonResult();
 		int result = projectService.queryProjectInfoByID(porjectID);
+		return jsonResult;
+	}
+
+	@RequestMapping(value = "greatCompany", method = RequestMethod.GET)
+	@ApiOperation(value = "优秀工程商",notes = "优秀工程商",response = JsonResult.class)
+	public JsonResult greatCompany(@ApiParam("工程商类型=2") @RequestParam String type) throws IOException {
+		JsonResult jsonResult = memberService.greatCompany(type);
+		return jsonResult;
+	}
+
+	@RequestMapping(value = "queryLatestProject", method = RequestMethod.GET)
+	@ApiOperation(value = "查询最新项目信息，默认6条",notes = "查询最新项目信息，默认6条",response = JsonResult.class)
+	public JsonResult queryLatestProject() throws IOException {
+		JsonResult jsonResult = new JsonResult();
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("count",6);
+		List<ProjectInfo> projectList = projectService.queryLatestProject(map);
+		jsonResult.setData(projectList);
 		return jsonResult;
 	}
 }

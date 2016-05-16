@@ -100,4 +100,23 @@ public class ProjectService {
 		}
 		return projectList;
 	}
+
+	/**
+	 * 根据条件查询最新项目信息
+	 * @param map 项目信息搜素条件 count：指定项目信息条数
+	 * @return
+	 */
+	public List<ProjectInfo> queryLatestProject(Map<String,Object> map)
+	{
+		log.info("query latest project info condition = "+ StringUtils.mapToString(map));
+		List<ProjectInfo> projectList = null;
+		try {
+			projectList = projectMapper.queryLatestProject(map);
+		}catch(Exception e)
+		{
+			log.error("query latest project info error!");
+			throw e;
+		}
+		return projectList;
+	}
 }

@@ -173,4 +173,19 @@
       </if>
     </where>
   </select>
+
+  <select id="queryLatestTenderToned" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.oms.entity.ProjectInfo">
+    SELECT
+    t.id,t.name,t.createid,t.publishDate,t.updateDate
+    FROM t_prj_tender_toned t
+    order by t.updateDate desc
+    <where>
+      <if test="type != null">
+        and t.type = #{type}
+      </if>
+    </where>
+    <if test="count !=null">
+      limit #{count}
+    </if>
+  </select>
 </mapper>

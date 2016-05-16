@@ -18,4 +18,6 @@ public interface TenderTonedMapper {
     int updateByPrimaryKeySelective(TenderToned record);
 
     List<TenderToned> findAllTenderTonedPager(Map<String,Object> map,RowBounds rowBounds);
+
+    List<TenderToned> queryLatestTenderToned(Map<String,Object> map);
 }
