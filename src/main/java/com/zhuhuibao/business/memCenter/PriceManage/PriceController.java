@@ -1,5 +1,7 @@
 package com.zhuhuibao.business.memCenter.PriceManage;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.AskPriceResultBean;
 import com.zhuhuibao.common.AskPriceSearchBean;
 import com.zhuhuibao.common.Constant;
@@ -36,6 +38,7 @@ import java.util.Map;
  * Created by cxx on 2016/3/29 0029.
  */
 @RestController
+@Api(value="Price", description="询价")
 public class PriceController {
     private static final Logger log = LoggerFactory.getLogger(PriceController.class);
 
@@ -47,8 +50,9 @@ public class PriceController {
     /**
      * 询价保存
      */
+    @ApiOperation(value="询价保存",notes="询价保存",response = JsonResult.class)
     @RequestMapping(value = "/rest/price/saveAskPrice", method = RequestMethod.POST)
-    public void saveAskPrice(HttpServletRequest req, HttpServletResponse response, AskPrice askPrice) throws IOException {
+    public JsonResult saveAskPrice(HttpServletRequest req, HttpServletResponse response, AskPrice askPrice) throws IOException {
         JsonResult result = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -67,8 +71,7 @@ public class PriceController {
             result.setCode(401);
             result.setMessage("请先登录");
         }
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+        return result;
     }
 
     /**
@@ -77,18 +80,19 @@ public class PriceController {
      * @return
      * @throws IOException
      */
+    @ApiOperation(value="根据品牌id查询代理商跟厂商（区域分组）",notes="根据品牌id查询代理商跟厂商（区域分组）",response = JsonResult.class)
     @RequestMapping(value = "/rest/agent/getAgentByBrandid", method = RequestMethod.GET)
-    public void getAgentByBrandid(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+    public JsonResult getAgentByBrandid(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
         JsonResult result = priceService.getAgentByBrandid(id);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+        return result;
     }
 
     /**
      * 上传询价单（定向，公开），上传报价单
      */
+    @ApiOperation(value="上传询价单（定向，公开），上传报价单",notes="上传询价单（定向，公开），上传报价单",response = JsonResult.class)
     @RequestMapping(value = "/rest/price/uploadAskList", method = RequestMethod.POST)
-    public void uploadAskList(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public JsonResult uploadAskList(HttpServletRequest req, HttpServletResponse response) throws IOException {
         JsonResult result = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -102,16 +106,15 @@ public class PriceController {
             result.setCode(401);
             result.setMessage("请先登录");
         }
-
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+        return result;
     }
 
     /**
      * 获得我的联系方式（询报价者联系方式）
      */
+    @ApiOperation(value="获得我的联系方式（询报价者联系方式）",notes="获得我的联系方式（询报价者联系方式）",response = JsonResult.class)
     @RequestMapping(value = "/rest/price/getLinkInfo", method = RequestMethod.GET)
-    public void getLinkInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public JsonResult getLinkInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -128,25 +131,25 @@ public class PriceController {
             jsonResult.setCode(401);
             jsonResult.setMessage("请先登录");
         }
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 
     /**
      * 查看具体某条询价信息
      */
+    @ApiOperation(value="查看具体某条询价信息",notes="查看具体某条询价信息",response = JsonResult.class)
     @RequestMapping(value = "/rest/price/queryAskPriceByID", method = RequestMethod.GET)
-    public void queryAskPriceByID(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+    public JsonResult queryAskPriceByID(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
         JsonResult result = priceService.queryAskPriceByID(id);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+        return result;
     }
 
     /**
      * 根据条件查询询价信息（分页）
      */
+    @ApiOperation(value="根据条件查询询价信息（分页）",notes="根据条件查询询价信息（分页）",response = JsonResult.class)
     @RequestMapping(value = "/rest/price/queryAskPriceInfo", method = RequestMethod.GET)
-    public void queryAskPriceInfo(HttpServletRequest req, HttpServletResponse response, AskPriceSearchBean askPriceSearch,String pageNo,String pageSize) throws IOException {
+    public JsonResult queryAskPriceInfo(HttpServletRequest req, HttpServletResponse response, AskPriceSearchBean askPriceSearch,String pageNo,String pageSize) throws IOException {
         /*String title = new String(askPriceSearch.getTitle().getBytes("8859_1"), "utf8" );
         askPriceSearch.setTitle(title);*/
         JsonResult jsonResult = new JsonResult();
@@ -182,25 +185,25 @@ public class PriceController {
         List<AskPriceResultBean> askPriceList = priceService.findAllByPager(pager,askPriceSearch);
         pager.result(askPriceList);
         jsonResult.setData(pager);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 
     /**
      * 最新公开询价(限六条)
      */
+    @ApiOperation(value="最新公开询价(限六条)",notes="最新公开询价(限六条)",response = JsonResult.class)
     @RequestMapping(value = "/rest/price/queryNewPriceInfo", method = RequestMethod.GET)
-    public void queryNewPriceInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public JsonResult queryNewPriceInfo() throws IOException {
         JsonResult jsonResult = priceService.queryNewPriceInfo(6);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 
     /**
      * 最新公开询价(分页)
      */
+    @ApiOperation(value="最新公开询价(分页)",notes="最新公开询价(分页)",response = JsonResult.class)
     @RequestMapping(value = "/rest/price/queryNewPriceInfoList", method = RequestMethod.GET)
-    public void queryNewPriceInfoList(HttpServletRequest req, HttpServletResponse response,String pageNo,String pageSize) throws IOException {
+    public JsonResult queryNewPriceInfoList(HttpServletRequest req, HttpServletResponse response,String pageNo,String pageSize) throws IOException {
         JsonResult jsonResult = new JsonResult();
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -213,7 +216,6 @@ public class PriceController {
         pager.result(askPriceList);
         jsonResult.setCode(200);
         jsonResult.setData(pager);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 }
