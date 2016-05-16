@@ -1,14 +1,12 @@
-package com.zhuhuibao.mybatis.oms.service;/**
- * @author Administrator
- * @version 2016/5/16 0016
- */
-
+package com.zhuhuibao.mybatis.oms.service;
 import com.zhuhuibao.mybatis.oms.entity.ProjectLinkman;
 import com.zhuhuibao.mybatis.oms.mapper.ProjectLinkmanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  *项目联系人业务处理类，甲方乙方信息
@@ -22,6 +20,7 @@ public class ProjectLinkmanService {
 
     @Autowired
     private ProjectLinkmanMapper linkmanMapper;
+
     /**
      * 添加项目联系人信息
      * @param linkmanInfo 项目联系人信息
@@ -38,5 +37,20 @@ public class ProjectLinkmanService {
 
         }
         return result;
+    }
+
+    public List<ProjectLinkman> queryProjectLinkmanByProjectID(Long projectID) throws Exception
+    {
+        log.info("query Linkman By ProjectID = "+projectID);
+        List<ProjectLinkman> linkmanList = null;
+        try
+        {
+            linkmanList = linkmanMapper.queryProjectLinkmanByProjectID(projectID);
+        }catch (Exception e)
+        {
+            log.error("query Linkman By ProjectID error!");
+            throw e;
+        }
+        return linkmanList;
     }
 }

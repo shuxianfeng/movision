@@ -19,7 +19,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, noticeName, createid, date_format(publishDate,'%Y-%m-%d') publishDate,
-    date_format(t.updateDate,'%Y-%m-%d') updateDate, projectName, province, city, area,
+    date_format(updateDate,'%Y-%m-%d') updateDate, projectName, province, city, area,
     type, startDate, endDate, content, is_deleted
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >

@@ -7,6 +7,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.oms.entity.TenderToned;
 import com.zhuhuibao.mybatis.oms.service.TenderTonedService;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -14,10 +15,7 @@ import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,16 +38,20 @@ public class TenderTonedController {
 
     @RequestMapping(value = "addTenderToned",method = RequestMethod.POST)
     @ApiOperation(value="运营管理平台增加招中标",notes = "运营管理平台增加招中标",response = JsonResult.class)
-    public JsonResult addTenderToned(@ApiParam(value = "招中标信息") TenderToned tt)
+    public JsonResult addTenderToned(@ApiParam(value = "招中标信息") @ModelAttribute TenderToned tt)
     {
         JsonResult jsonResult = new JsonResult();
-        ttService.insertTenderTone(tt);
+        Long createId = ShiroUtil.getCreateID();
+        if(createId != null) {
+            tt.setCreateid(createId);
+            ttService.insertTenderTone(tt);
+        }
         return jsonResult;
     }
 
     @RequestMapping(value = "updateTenderToned",method = RequestMethod.POST)
     @ApiOperation(value="运营管理平台修改招中标",notes = "运营管理平台修改招中标",response = JsonResult.class)
-    public JsonResult updateTenderToned(@ApiParam(value = "招中标信息") TenderToned tt)
+    public JsonResult updateTenderToned(@ApiParam(value = "招中标信息") @ModelAttribute TenderToned tt)
     {
         JsonResult jsonResult = new JsonResult();
         ttService.updateTenderTone(tt);

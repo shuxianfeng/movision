@@ -1,11 +1,15 @@
 package com.zhuhuibao.mybatis.oms.service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.mybatis.oms.entity.ProjectLinkman;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.apache.tools.ant.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +31,9 @@ public class ProjectService {
 			.getLogger(OmsMemService.class);
 	@Autowired
 	private ProjectMapper projectMapper;
+
+	@Autowired
+	private ProjectLinkmanService linkmanService;
    /**
     * 查询项目信息
     * @param projectID 项目信息ID
@@ -45,6 +52,87 @@ public class ProjectService {
 			
 		}	
 		return projectInfo;
+	}
+
+	/**
+	 * 查询项目信息详情
+	 * @param projectID 项目信息ID
+	 * @return 项目信息
+     */
+	public Map<String,Object> queryProjectDetail(Long projectID) throws Exception
+	{
+		Map<String,Object> map = new HashMap<String,Object>();
+		log.info("query project detail info projectId = "+projectID);
+		try
+		{
+			ProjectInfo projectInfo = queryProjectInfoByID(projectID);
+			//项目信息
+			map.put("project",projectInfo);
+			//根据项目ID查询联系人信息
+			List<ProjectLinkman> linkmanList = linkmanService.queryProjectLinkmanByProjectID(projectID);
+			if(!linkmanList.isEmpty())
+			{
+				//甲方信息
+				Map<String,List<ProjectLinkman>> partyAMap = new HashMap<String,List<ProjectLinkman>>();
+				List<ProjectLinkman> partyAList = new ArrayList<ProjectLinkman>();
+				//乙方信息
+				Map<String,Object> partyBMap = new HashMap<String,Object>();
+				List<Map<String,List<ProjectLinkman>>> partyBList = new ArrayList<Map<String,List<ProjectLinkman>>>();
+				//乙方中的设计师信息
+				Map<String,List<ProjectLinkman>> partyBDesignMap = new HashMap<String,List<ProjectLinkman>>();
+				List<ProjectLinkman> partyBDesignList = new ArrayList<ProjectLinkman>();
+				//乙方中的工程商信息
+				Map<String,List<ProjectLinkman>> partyBFirstMap = new HashMap<String,List<ProjectLinkman>>();
+				List<ProjectLinkman> partyBFirstList = new ArrayList<ProjectLinkman>();
+				//乙方中的工程商信息
+				Map<String,List<ProjectLinkman>> partyBWorkMap = new HashMap<String,List<ProjectLinkman>>();
+				List<ProjectLinkman> partyBWorkList = new ArrayList<ProjectLinkman>();
+				//乙方中的分包商信息
+				Map<String,List<ProjectLinkman>> partyBSecondMap = new HashMap<String,List<ProjectLinkman>>();
+				List<ProjectLinkman> partyBSecondList = new ArrayList<ProjectLinkman>();
+				int size = linkmanList.size();
+				for(int i = 0;i < size;i++)
+				{
+					ProjectLinkman linkman= linkmanList.get(i);
+					//甲方信息
+					if(linkman.getPartyType() == 1)
+					{
+						partyAList.add(linkman);
+					}
+					else//乙方信息
+					{
+						//1:设计师，2：总包商，3：工程商，4:分包商
+						if(linkman.getTypePartyB() == 1) {
+							partyBDesignList.add(linkman);
+						} else if(linkman.getTypePartyB() == 2) {
+							partyBFirstList.add(linkman);
+						}
+						else if(linkman.getTypePartyB() == 3) {
+							partyBWorkList.add(linkman);
+						}else if(linkman.getTypePartyB() == 4){
+							partyBSecondList.add(linkman);
+						}
+
+					}
+				}
+				partyBDesignMap.put("design",partyBDesignList);
+				partyBFirstMap.put("first",partyBFirstList);
+				partyBWorkMap.put("engineering",partyBWorkList);
+				partyBSecondMap.put("second",partyBSecondList);
+				partyBList.add(partyBDesignMap);
+				partyBList.add(partyBFirstMap);
+				partyBList.add(partyBWorkMap);
+				partyBList.add(partyBSecondMap);
+				map.put("partyB",partyBList);
+				map.put("partyA",partyAList);
+			}
+		}
+		catch(Exception e)
+		{
+			log.error("query project detail info error!");
+			throw e;
+		}
+		return map;
 	}
 	/**
 	 * 添加项目工程信息

@@ -9,9 +9,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.ProjectLinkmanService;
 import com.zhuhuibao.utils.JsonUtils;
@@ -22,14 +24,11 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.oms.service.ProjectService;
 import com.zhuhuibao.mybatis.oms.entity.ProjectInfo;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by Administrator on 2016/4/11 0011.
@@ -46,9 +45,6 @@ public class ProjectController {
 	 @Autowired
 	 private MemberService memberService;
 
-	 @Autowired
-	 ProjectLinkmanService linkmanService;
-
 	 /**
      * 根据条件查询项目分页信息
      * @param projectInfo  项目信息
@@ -58,7 +54,7 @@ public class ProjectController {
      */
     @RequestMapping(value="searchProjectPage", method = RequestMethod.GET)
 	@ApiOperation(value = "根据条件查询项目分页信息",notes = "根据条件查询分页",response = JsonResult.class)
-    public JsonResult searchProjectPage(@ApiParam(value = "项目信息+甲方乙方信息") ProjectInfo projectInfo,
+    public JsonResult searchProjectPage(@ApiParam(value = "项目信息+甲方乙方信息")@ModelAttribute() ProjectInfo projectInfo,
 									   @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
 									   @ApiParam(value="每页显示的条数") @RequestParam(required = false) String pageSize) throws Exception {
 	    //封装查询参数
@@ -84,23 +80,27 @@ public class ProjectController {
     
     /**
      * 添加项目信息
-     * @param projectInfo  项目工程信息
+     * @param json  项目工程信息
      * @throws JsonGenerationException
      * @throws JsonMappingException
      * @throws IOException
      */
     @RequestMapping(value="addProjectInfo", method = RequestMethod.POST)
 	@ApiOperation(value = "运营后台添加项目信息",notes = "运营后台的新增项目",response = JsonResult.class)
-    public JsonResult addProjectInfo(@ApiParam(value = "项目信息+甲方乙方信息") ProjectInfo projectInfo) throws JsonGenerationException, JsonMappingException, IOException {
+    public JsonResult addProjectInfo(@ApiParam(value = "项目信息+甲方乙方信息") String json) throws JsonGenerationException, JsonMappingException, IOException {
 	   
-		log.info("查询工程信息：queryProjectInfo",projectInfo);
+		log.info("查询工程信息：queryProjectInfo",json);
 		JsonResult jsonResult = new JsonResult();
 		int reslult=0;
 		try {
 			//添加项目信息
-			reslult = projectService.addProjectInfo(projectInfo);
-//			linkmanService.addProjectLinkmanInfo();
-
+			Long createId = ShiroUtil.getCreateID();
+			if(createId != null) {
+				Gson gson = new Gson();
+				ProjectInfo projectInfo = gson.fromJson(json, ProjectInfo.class);
+				projectInfo.setCreateid(createId);
+				reslult = projectService.addProjectInfo(projectInfo);
+			}
 		} catch (SQLException e) {
 			log.error("queryProjectInfo:query sql exception",e.getMessage());
 			jsonResult.setCode(400);
@@ -125,7 +125,7 @@ public class ProjectController {
      */
     @RequestMapping(value="updateProjectInfo", method = RequestMethod.POST)
 	@ApiOperation(value = "运营后台修改项目信息",notes = "运营后台的修改项目信息",response = JsonResult.class)
-    public JsonResult updateProjectInfo(@ApiParam(value = "项目信息+甲方乙方信息") ProjectInfo projectInfo) throws JsonGenerationException, JsonMappingException, IOException {
+    public JsonResult updateProjectInfo(@ApiParam(value = "项目信息+甲方乙方信息") @ModelAttribute() ProjectInfo projectInfo) throws JsonGenerationException, JsonMappingException, IOException {
 	   
 		log.info("修改工程信息：updateProjectInfo",projectInfo);
 		JsonResult jsonResult = new JsonResult();
@@ -150,11 +150,10 @@ public class ProjectController {
 
 	@RequestMapping(value = "previewProject",method = RequestMethod.GET)
 	@ApiOperation(value="预览项目信息",notes = "根据Id查看项目信息",response = JsonResult.class)
-	public JsonResult previewProject(@ApiParam(value = "项目信息ID") @RequestParam Long porjectID)
-	{
+	public JsonResult previewProject(@ApiParam(value = "项目信息ID") @RequestParam Long porjectID) throws Exception {
 		JsonResult jsonResult = new JsonResult();
-		ProjectInfo info  = projectService.queryProjectInfoByID(porjectID);
-		jsonResult.setData(info);
+		Map<String,Object> map  = projectService.queryProjectDetail(porjectID);
+		jsonResult.setData(map);
 		return jsonResult;
 	}
 
@@ -175,4 +174,5 @@ public class ProjectController {
 		jsonResult.setData(projectList);
 		return jsonResult;
 	}
+
 }

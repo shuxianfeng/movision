@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.oms.mapper;
 
 import com.zhuhuibao.mybatis.oms.entity.ProjectLinkman;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,5 +17,6 @@ public interface ProjectLinkmanMapper {
 
     int updateByPrimaryKeySelective(ProjectLinkman record);
 
-    List<ProjectLinkman> queryProjectLinkmanByProjectID(Long projectid);
+    List<ProjectLinkman> queryProjectLinkmanByProjectID(@Param(value = "projectid") Long projectid);
+
 }
