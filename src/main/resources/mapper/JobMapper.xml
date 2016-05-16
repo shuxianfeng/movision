@@ -278,7 +278,7 @@
     SELECT positionType
     FROM t_i_job
     WHERE createid = #{id} and is_deleted = 0
-    GROUP BY positionType)A)) and j.createid != #{id} and m.enterpriseType = #{enterpriseType} group by j.createid limit 0,#{count}
+    GROUP BY positionType)A)) and j.createid != #{id} and j.is_deleted = 0 and m.enterpriseType = #{enterpriseType} group by j.createid limit 0,#{count}
   </select>
   <select id="querySimilarCompanyInfo" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
     select c.name as city,m.enterpriseName,count(*)as size from t_i_job j
