@@ -13,6 +13,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.mybatis.oms.service.ProjectLinkmanService;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -44,6 +45,9 @@ public class ProjectController {
 
 	 @Autowired
 	 private MemberService memberService;
+
+	 @Autowired
+	 ProjectLinkmanService linkmanService;
 
 	 /**
      * 根据条件查询项目分页信息
@@ -95,6 +99,8 @@ public class ProjectController {
 		try {
 			//添加项目信息
 			reslult = projectService.addProjectInfo(projectInfo);
+//			linkmanService.addProjectLinkmanInfo();
+
 		} catch (SQLException e) {
 			log.error("queryProjectInfo:query sql exception",e.getMessage());
 			jsonResult.setCode(400);
@@ -160,11 +166,11 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = "queryLatestProject", method = RequestMethod.GET)
-	@ApiOperation(value = "查询最新项目信息，默认6条",notes = "查询最新项目信息，默认6条",response = JsonResult.class)
+	@ApiOperation(value = "查询最新项目信息，默认10条",notes = "查询最新项目信息，默认10条",response = JsonResult.class)
 	public JsonResult queryLatestProject() throws IOException {
 		JsonResult jsonResult = new JsonResult();
 		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("count",6);
+		map.put("count",10);
 		List<ProjectInfo> projectList = projectService.queryLatestProject(map);
 		jsonResult.setData(projectList);
 		return jsonResult;

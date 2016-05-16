@@ -22,7 +22,7 @@
   
   
    <!-- 添加工程信息@author:gmli@since2016.05.11 -->
-  <insert id="addProjectInfo" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectInfo" >
+  <insert id="addProjectInfo" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectInfo" useGeneratedKeys="true" keyProperty="id">
     insert into t_prj_project
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="name != null" >
@@ -165,7 +165,8 @@
   
  <select id="queryProjectInfoByID" resultMap="BaseResultMap" parameterType="java.lang.Long" >
 	SELECT
-	   t.id,t.name,t.createid,t.publishDate,t.updateDate,t.province,t.city,t.area,t.address,t.category,t.price,t.startDate,t.endDate,t.description,t.record,t.is_deleted
+	   t.id,t.name,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
+   date_format(t.updateDate,'%Y-%m-%d') updateDate,t.province,t.city,t.area,t.address,t.category,t.price,t.startDate,t.endDate,t.description,t.record,t.is_deleted
 	FROM t_prj_project t  
 	<where>
       <if test="id != null">
@@ -177,7 +178,8 @@
 
   <select id="findAllPrjectPager" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.oms.entity.ProjectInfo">
     SELECT
-    t.id,t.name,t.createid,t.publishDate,t.updateDate,concat(pn.name,ct.name,ar.name,t.address) address,
+    t.id,t.name,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
+    date_format(t.updateDate,'%Y-%m-%d') updateDate,concat(pn.name,ct.name,ar.name,t.address) address,
     t.price,t.startDate,t.endDate,t.description,t.record,t.is_deleted,
     (select cs.name from t_dictionary_constant cs where cs.code = t.category and cs.type=8) as categoryName
     FROM t_prj_project t

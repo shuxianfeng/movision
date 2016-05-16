@@ -2,26 +2,25 @@ package com.zhuhuibao.mybatis.oms.entity;
 
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
-import org.apache.commons.lang3.StringUtils;
 
 /**
- * @Description 甲方，乙方信息实体类
- * @author penglong
- * @createDate 2016-05-13
+ * 项目联系人信息 甲方乙方信息
+ * @author  pl
+ * @create  pl
  */
-@ApiModel(value = "乙方信息",description = "乙方信息")
+@ApiModel(value = "项目联系人信息 甲方乙方信息",description = "甲方乙方信息")
 public class ProjectLinkman {
-    @ApiModelProperty(value = "乙方信息ID，主键")
+    @ApiModelProperty(value = "甲方乙方信息主键",required = true)
     private Integer id;
     @ApiModelProperty(value = "项目ID")
     private Long projectid;
-    @ApiModelProperty(value = "项目联系人信息 1：甲方，2：乙方")
-    private Integer partyType;
-    @ApiModelProperty(value = "乙方类型:1-设计师，2-总包商，3-工程商，4-分包商 type=10")
-    private Integer typePartyB;
-    @ApiModelProperty(value = "单位类型")
+    @ApiModelProperty(value="单位类型")
     private String deptType;
-    @ApiModelProperty(value = "单位名称")
+    @ApiModelProperty(value="联系人类型1：甲方，2：乙方")
+    private Long partyType;
+    @ApiModelProperty(value="乙方类型 1:设计师，2：总包商，3：工程商，4:分包商")
+    private Integer typePartyB;
+    @ApiModelProperty(value="单位名称")
     private String name;
     @ApiModelProperty(value = "联系人")
     private String linkman;
@@ -54,20 +53,28 @@ public class ProjectLinkman {
         this.projectid = projectid;
     }
 
-    public Integer getTypePartyB() {
-        return typePartyB;
-    }
-
-    public void setTypePartyB(Integer typePartyB) {
-        this.typePartyB = typePartyB;
-    }
-
     public String getDeptType() {
         return deptType;
     }
 
     public void setDeptType(String deptType) {
         this.deptType = deptType == null ? null : deptType.trim();
+    }
+
+    public Long getPartyType() {
+        return partyType;
+    }
+
+    public void setPartyType(Long partyType) {
+        this.partyType = partyType;
+    }
+
+    public Integer getTypePartyB() {
+        return typePartyB;
+    }
+
+    public void setTypePartyB(Integer typePartyB) {
+        this.typePartyB = typePartyB;
     }
 
     public String getName() {
@@ -132,32 +139,5 @@ public class ProjectLinkman {
 
     public void setIs_deleted(Boolean is_deleted) {
         this.is_deleted = is_deleted;
-    }
-
-    public Integer getPartyType() {
-        return partyType;
-    }
-
-    public void setPartyType(Integer partyType) {
-        this.partyType = partyType;
-    }
-
-    @Override
-    public String toString() {
-        return "ProjectLinkman{" +
-                "id=" + id +
-                ", projectid=" + projectid +
-                ", partyType=" + partyType +
-                ", typePartyB=" + typePartyB +
-                ", deptType='" + deptType + '\'' +
-                ", name='" + name + '\'' +
-                ", linkman='" + linkman + '\'' +
-                ", mobile='" + mobile + '\'' +
-                ", telephone='" + telephone + '\'' +
-                ", fax='" + fax + '\'' +
-                ", address='" + address + '\'' +
-                ", note='" + note + '\'' +
-                ", is_deleted=" + is_deleted +
-                '}';
     }
 }

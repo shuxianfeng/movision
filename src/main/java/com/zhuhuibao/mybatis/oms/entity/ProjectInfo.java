@@ -22,9 +22,9 @@ public class ProjectInfo {
 	@ApiModelProperty(value = "创建者ID")
 	private Long createid;
 	@ApiModelProperty(value = "发布日期")
-	private Date publishDate;
+	private String publishDate;
 	@ApiModelProperty(value = "修改日期")
-	private Date updateDate;
+	private String updateDate;
 	@ApiModelProperty(value = "省代码")
 	private String province;
 	@ApiModelProperty(value = "市代码")
@@ -86,19 +86,19 @@ public class ProjectInfo {
 		this.createid = createid;
 	}
 
-	public Date getPublishDate() {
+	public String getPublishDate() {
 		return publishDate;
 	}
 
-	public void setPublishDate(Date publishDate) {
+	public void setPublishDate(String publishDate) {
 		this.publishDate = publishDate;
 	}
 
-	public Date getUpdateDate() {
+	public String getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setUpdateDate(Date updateDate) {
+	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
 

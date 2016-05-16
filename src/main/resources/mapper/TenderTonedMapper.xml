@@ -18,7 +18,8 @@
     <result column="is_deleted" property="is_deleted" jdbcType="TINYINT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, noticeName, createid, publishDate, updateDate, projectName, province, city, area, 
+    id, noticeName, createid, date_format(publishDate,'%Y-%m-%d') publishDate,
+    date_format(t.updateDate,'%Y-%m-%d') updateDate, projectName, province, city, area,
     type, startDate, endDate, content, is_deleted
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -79,8 +80,8 @@
       <if test="createid != null" >
         #{createid,jdbcType=BIGINT},
       </if>
-      date_format(current_date(),'%Y-%m-%d'),
-      date_format(current_date(),'%Y-%m-%d'),
+      current_date(),
+      current_date(),
       <if test="projectName != null" >
         #{projectName,jdbcType=CHAR},
       </if>
@@ -122,7 +123,7 @@
       <if test="publishDate != null" >
         publishDate = #{publishDate,jdbcType=DATE},
       </if>
-        updateDate = date_format(current_date(),'%Y-%m-%d'),
+        updateDate = current_date(),
       <if test="projectName != null" >
         projectName = #{projectName,jdbcType=CHAR},
       </if>
@@ -155,7 +156,8 @@
   </update>
 
   <select id="findAllTenderTonedPager" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.oms.entity.TenderToned">
-    select t.id, t.noticeName, t.createid, t.publishDate, t.updateDate, t.projectName, concat(pn.name,ct.name,ar.name) area,
+    select t.id, t.noticeName, t.createid, date_format(t.publishDate,'%Y-%m-%d') publishDate,
+    date_format(t.updateDate,'%Y-%m-%d') updateDate, t.projectName, concat(pn.name,ct.name,ar.name) area,
     t.type, t.startDate, t.endDate, t.content
     from t_prj_tender_toned t
     left join t_dictionary_province pn on pn.code = t.province
@@ -176,7 +178,8 @@
 
   <select id="queryLatestTenderToned" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.oms.entity.ProjectInfo">
     SELECT
-    t.id,t.noticeName,t.createid,t.publishDate,t.updateDate
+    t.id,t.noticeName,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
+    date_format(t.updateDate,'%Y-%m-%d') updateDate
     FROM t_prj_tender_toned t
     <where>
       <if test="type != null">
