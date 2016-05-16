@@ -1,5 +1,6 @@
 package com.zhuhuibao.business.memCenter.AgentManage;
 
+import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.*;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memCenter.entity.Agent;
@@ -407,5 +408,18 @@ public class AgentMamageController {
         JsonResult result = agentService.getGreatAgentByBrandId(id);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+    }
+
+    /**
+     * 根据品牌id查询代理商跟厂商（区域分组）
+     * @param req
+     * @return
+     * @throws IOException
+     */
+    @ApiOperation(value="根据品牌id查询代理商跟厂商（区域分组）",notes="根据品牌id查询代理商跟厂商（区域分组）",response = JsonResult.class)
+    @RequestMapping(value = "/rest/agent/getAgentByBrandid", method = RequestMethod.GET)
+    public JsonResult getAgentByBrandid(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+        JsonResult result = agentService.getAgentByBrandid(id);
+        return result;
     }
 }

@@ -112,43 +112,7 @@ public class PriceService {
         return result;
     }
 
-    /**
-     * 根据品牌id查询代理商跟厂商（区域分组）
-     */
-    public JsonResult getAgentByBrandid(String id){
-        JsonResult result = new JsonResult();
-        List<ResultBean> provinceList = provinceMapper.findProvince();
-        List<ResultBean> agentList = agentMapper.getAgentByBrandid(id);
-        ResultBean resultBean = agentMapper.findManufactorByBrandid(id);
-        List list = new ArrayList();
-        Map map = new HashMap();
-        Map map3 = new HashMap();
-        map3.put(Constant.id,resultBean.getCode());
-        map3.put(Constant.name,resultBean.getName());
-        map.put("manufactor",map3);
-        for(int i=0;i<provinceList.size();i++){
-            ResultBean province = provinceList.get(i);
-            Map map1 = new HashMap();
-            map1.put(Constant.id,province.getCode());
-            map1.put(Constant.name,province.getName());
-            List list1 = new ArrayList();
-            for(int j=0;j<agentList.size();j++){
-                ResultBean agent = agentList.get(j);
-                Map map2 = new HashMap();
-                if(agent.getSmallIcon().contains(province.getCode())){
-                    map2.put(Constant.id,agent.getCode());
-                    map2.put(Constant.name,agent.getName());
-                    list1.add(map2);
-                }
-            }
-            map1.put("agentList",list1);
-            list.add(map1);
-        }
-        map.put("agent",list);
-        result.setCode(200);
-        result.setData(map);
-        return result;
-    }
+
 
     /**
      * 获得我的联系方式（询报价者联系方式）

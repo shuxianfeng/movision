@@ -38,6 +38,7 @@ import java.util.Map;
  * Created by cxx on 2016/3/29 0029.
  */
 @RestController
+@RequestMapping("/rest/price/")
 @Api(value="Price", description="询价")
 public class PriceController {
     private static final Logger log = LoggerFactory.getLogger(PriceController.class);
@@ -51,7 +52,7 @@ public class PriceController {
      * 询价保存
      */
     @ApiOperation(value="询价保存",notes="询价保存",response = JsonResult.class)
-    @RequestMapping(value = "/rest/price/saveAskPrice", method = RequestMethod.POST)
+    @RequestMapping(value = "saveAskPrice", method = RequestMethod.POST)
     public JsonResult saveAskPrice(HttpServletRequest req, HttpServletResponse response, AskPrice askPrice) throws IOException {
         JsonResult result = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
@@ -75,23 +76,10 @@ public class PriceController {
     }
 
     /**
-     * 根据品牌id查询代理商跟厂商（区域分组）
-     * @param req
-     * @return
-     * @throws IOException
-     */
-    @ApiOperation(value="根据品牌id查询代理商跟厂商（区域分组）",notes="根据品牌id查询代理商跟厂商（区域分组）",response = JsonResult.class)
-    @RequestMapping(value = "/rest/agent/getAgentByBrandid", method = RequestMethod.GET)
-    public JsonResult getAgentByBrandid(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
-        JsonResult result = priceService.getAgentByBrandid(id);
-        return result;
-    }
-
-    /**
      * 上传询价单（定向，公开），上传报价单
      */
     @ApiOperation(value="上传询价单（定向，公开），上传报价单",notes="上传询价单（定向，公开），上传报价单",response = JsonResult.class)
-    @RequestMapping(value = "/rest/price/uploadAskList", method = RequestMethod.POST)
+    @RequestMapping(value = "uploadAskList", method = RequestMethod.POST)
     public JsonResult uploadAskList(HttpServletRequest req, HttpServletResponse response) throws IOException {
         JsonResult result = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
@@ -113,7 +101,7 @@ public class PriceController {
      * 获得我的联系方式（询报价者联系方式）
      */
     @ApiOperation(value="获得我的联系方式（询报价者联系方式）",notes="获得我的联系方式（询报价者联系方式）",response = JsonResult.class)
-    @RequestMapping(value = "/rest/price/getLinkInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "getLinkInfo", method = RequestMethod.GET)
     public JsonResult getLinkInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
@@ -138,7 +126,7 @@ public class PriceController {
      * 查看具体某条询价信息
      */
     @ApiOperation(value="查看具体某条询价信息",notes="查看具体某条询价信息",response = JsonResult.class)
-    @RequestMapping(value = "/rest/price/queryAskPriceByID", method = RequestMethod.GET)
+    @RequestMapping(value = "queryAskPriceByID", method = RequestMethod.GET)
     public JsonResult queryAskPriceByID(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
         JsonResult result = priceService.queryAskPriceByID(id);
         return result;
@@ -148,7 +136,7 @@ public class PriceController {
      * 根据条件查询询价信息（分页）
      */
     @ApiOperation(value="根据条件查询询价信息（分页）",notes="根据条件查询询价信息（分页）",response = JsonResult.class)
-    @RequestMapping(value = "/rest/price/queryAskPriceInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "queryAskPriceInfo", method = RequestMethod.GET)
     public JsonResult queryAskPriceInfo(HttpServletRequest req, HttpServletResponse response, AskPriceSearchBean askPriceSearch,String pageNo,String pageSize) throws IOException {
         /*String title = new String(askPriceSearch.getTitle().getBytes("8859_1"), "utf8" );
         askPriceSearch.setTitle(title);*/
@@ -192,7 +180,7 @@ public class PriceController {
      * 最新公开询价(限六条)
      */
     @ApiOperation(value="最新公开询价(限六条)",notes="最新公开询价(限六条)",response = JsonResult.class)
-    @RequestMapping(value = "/rest/price/queryNewPriceInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "queryNewPriceInfo", method = RequestMethod.GET)
     public JsonResult queryNewPriceInfo() throws IOException {
         JsonResult jsonResult = priceService.queryNewPriceInfo(6);
         return jsonResult;
@@ -202,7 +190,7 @@ public class PriceController {
      * 最新公开询价(分页)
      */
     @ApiOperation(value="最新公开询价(分页)",notes="最新公开询价(分页)",response = JsonResult.class)
-    @RequestMapping(value = "/rest/price/queryNewPriceInfoList", method = RequestMethod.GET)
+    @RequestMapping(value = "queryNewPriceInfoList", method = RequestMethod.GET)
     public JsonResult queryNewPriceInfoList(HttpServletRequest req, HttpServletResponse response,String pageNo,String pageSize) throws IOException {
         JsonResult jsonResult = new JsonResult();
         if (StringUtils.isEmpty(pageNo)) {
