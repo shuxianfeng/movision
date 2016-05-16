@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.oms.entity;
 
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -47,9 +48,9 @@ public class ProjectInfo {
 	@ApiModelProperty(value = " 删除标识：1删除,0:不删除")
 	private String is_deleted;
 	@ApiModelProperty(value = " 甲方信息集合")
-	private List partyAList;
+	private List<ProjectLinkman> partyAList;
 	@ApiModelProperty(value = " 乙方信息集合")
-	private List partyBList;
+	private List<ProjectLinkman> partyBList;
 	
 
 	public Long getId() {
@@ -196,4 +197,8 @@ public class ProjectInfo {
 		this.partyBList = partyBList;
 	}
 
+	@Override
+	public String toString() {
+		return StringUtils.beanToString(this);
+	}
 }

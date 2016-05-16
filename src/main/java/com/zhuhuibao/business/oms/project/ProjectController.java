@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.oms.service.ProjectService;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.mybatis.oms.entity.ProjectInfo;

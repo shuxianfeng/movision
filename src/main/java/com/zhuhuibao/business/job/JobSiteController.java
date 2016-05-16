@@ -148,14 +148,15 @@ public class JobSiteController {
     }
 
     @RequestMapping(value="queryAdvertisingPosition", method = RequestMethod.GET)
-    public void queryAdvertisingPosition(HttpServletRequest req, HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException
+    @ApiOperation(value = "企业信息广告位",notes = "展示最新发布职位的企业信息，默认7条可配置",response = JsonResult.class)
+    public JsonResult queryAdvertisingPosition() throws IOException
     {
         log.info("query advertising postion");
         Map<String,Object> map = new HashMap<String,Object>();
+        map.put("isDelete",0);
         map.put("count",7);
         JsonResult jsonResult = job.queryAdvertisingPosition(map);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 
     @RequestMapping(value="queryPositionInfoByID", method = RequestMethod.GET)
@@ -322,6 +323,7 @@ public class JobSiteController {
      * 查询推荐感兴趣的职位
      */
     @RequestMapping(value = "queryRecommendPosition", method = RequestMethod.GET)
+    @ApiOperation(value = "根据当前职位类别查询出其它公司的职位",notes = "查找按照最新时间排序",response = JsonResult.class)
     public void queryRecommendPosition(HttpServletRequest req, HttpServletResponse response,String postID) throws IOException {
         //查询不同公司发布的相同职位
         JsonResult jsonResult = job.searchSamePosition(postID);
