@@ -12,11 +12,12 @@ import java.util.Map;
  * @since 2019.5.10
  */
 import com.zhuhuibao.mybatis.oms.entity.ProjectInfo;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 public interface ProjectMapper {
     //项目信息查询
-	ProjectInfo queryProjectInfoByID(Long id);
+	ProjectInfo queryProjectInfoByID(@Param(value = "id") Long id);
     //新增项目信息
 	int addProjectInfo(ProjectInfo projectInfo);
 	//修改项目信息

@@ -35,6 +35,8 @@ public class ProjectInfo {
 	private String address;
 	@ApiModelProperty(value = " 项目类别 type=8")
 	private Integer category;
+	@ApiModelProperty(value = "项目类别名称")
+	private String categoryName;
 	@ApiModelProperty(value = " 工程造价")
 	private Double price;
 	@ApiModelProperty(value = " 公告日期")
@@ -51,7 +53,14 @@ public class ProjectInfo {
 	private List<ProjectLinkman> partyAList;
 	@ApiModelProperty(value = " 乙方信息集合")
 	private List<ProjectLinkman> partyBList;
-	
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
 
 	public Long getId() {
 		return id;

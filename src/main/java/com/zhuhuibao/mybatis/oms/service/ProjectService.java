@@ -33,18 +33,18 @@ public class ProjectService {
     * @return 项目信息
      * @throws SQLException 
     */
-	public int queryProjectInfoByID(Long projectID) {
+	public ProjectInfo queryProjectInfoByID(Long projectID) {
 		log.info("query project info by id "+projectID);
-		int result = 0;
+		ProjectInfo projectInfo;
 		try {
-			projectMapper.queryProjectInfoByID(projectID);
+			projectInfo = projectMapper.queryProjectInfoByID(projectID);
 			 
 		} catch (Exception e) {
 			log.error("select by primary key error!", e);
 			throw e;
 			
 		}	
-		return result;
+		return projectInfo;
 	}
 	/**
 	 * 添加项目工程信息
@@ -87,7 +87,7 @@ public class ProjectService {
 	 * @param map 项目信息搜素条件
 	 * @return
 	 */
-	public List<ProjectInfo> findAllPrjectPager(Map<String,Object> map, Paging<ProjectInfo> page)
+	public List<ProjectInfo> findAllPrjectPager(Map<String,Object> map, Paging<ProjectInfo> page) throws Exception
 	{
 		log.info("search project info for pager condition = "+ StringUtils.mapToString(map));
 		List<ProjectInfo> projectList = null;
