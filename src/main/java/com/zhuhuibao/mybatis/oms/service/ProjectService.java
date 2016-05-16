@@ -143,7 +143,14 @@ public class ProjectService {
 		int result=0;
 		try {
 			result = projectMapper.addProjectInfo(projectInfo);
-			 
+			Long projectId = projectInfo.getId();
+			//甲方信息
+			List<ProjectLinkman> partyAlist = projectInfo.getPartyAList();
+			insertProjectLinkman(projectId, partyAlist);
+			//乙方信息
+			List<ProjectLinkman> partyBlist = projectInfo.getPartyBList();
+			insertProjectLinkman(projectId, partyBlist);
+
 		} catch (Exception e) {
 			log.error("add project error!", e);
 			throw new SQLException();
@@ -151,6 +158,31 @@ public class ProjectService {
 		}	
 		return result;
 	}
+
+	/**
+	 * 插入项目联系人信息 甲方乙方信息
+	 * @param projectId  项目ID
+	 * @param partylist  联系人信息
+	 * @throws Exception
+     */
+	private void insertProjectLinkman(Long projectId, List<ProjectLinkman> partylist) throws Exception {
+		log.info("projectId = "+projectId);
+		try {
+			if (!partylist.isEmpty()) {
+				int partyASize = partylist.size();
+				for (int i = 0; i < partyASize; i++) {
+					ProjectLinkman partyA = partylist.get(i);
+					partyA.setProjectid(projectId);
+					linkmanService.addProjectLinkmanInfo(partyA);
+				}
+			}
+		}catch(Exception e)
+		{
+			log.error("insert project linkman info error!");
+			throw e;
+		}
+	}
+
 	/**
 	 * 修改项目信息
 	 * @param projectInfo
