@@ -134,6 +134,35 @@ public class ProjectService {
 		}
 		return map;
 	}
+
+	/**
+	 * 查询未登录的项目信息详情
+	 * @param projectID 项目信息ID
+	 * @return 项目信息
+	 */
+	public Map<String,Object> previewUnLoginProject(Long projectID) throws Exception
+	{
+		Map<String,Object> map = new HashMap<String,Object>();
+		log.info("query unlogin project detail info projectId = "+projectID);
+		try
+		{
+			ProjectInfo projectInfo = queryProjectInfoByID(projectID);
+			//项目信息
+			map.put("project",projectInfo);
+			//乙方信息
+			List<Map<String,List<ProjectLinkman>>> partyBList = new ArrayList<Map<String,List<ProjectLinkman>>>();
+			map.put("partyB",partyBList);
+			//甲方信息
+			List<ProjectLinkman> partyAList = new ArrayList<ProjectLinkman>();
+			map.put("partyA",partyAList);
+		}
+		catch(Exception e)
+		{
+			log.error("query project detail info error!");
+			throw e;
+		}
+		return map;
+	}
 	/**
 	 * 添加项目工程信息
 	 * @param projectInfo 项目工程信息
@@ -190,10 +219,10 @@ public class ProjectService {
 	 * @throws SQLException
 	 */
 	public int updateProjectInfo(ProjectInfo projectInfo) throws SQLException {
-		int result=0;
+		log.info("update project info ="+StringUtils.beanToString(projectInfo));
+		int result = 0;
 		try {
 			result = projectMapper.updateProjectInfo(projectInfo);
-			 
 		} catch (Exception e) {
 			log.error("upate project error!", e);
 			throw new SQLException();
@@ -207,10 +236,10 @@ public class ProjectService {
 	 * @param map 项目信息搜素条件
 	 * @return
 	 */
-	public List<ProjectInfo> findAllPrjectPager(Map<String,Object> map, Paging<ProjectInfo> page) throws Exception
+	public List<Map<String,String>> findAllPrjectPager(Map<String,Object> map, Paging<Map<String,String>> page) throws Exception
 	{
 		log.info("search project info for pager condition = "+ StringUtils.mapToString(map));
-		List<ProjectInfo> projectList = null;
+		List<Map<String,String>> projectList = null;
 		try {
 			projectList = projectMapper.findAllPrjectPager(map,page.getRowBounds());
 		}catch(Exception e)

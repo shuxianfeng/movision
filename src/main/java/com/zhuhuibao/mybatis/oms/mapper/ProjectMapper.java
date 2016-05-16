@@ -23,7 +23,7 @@ public interface ProjectMapper {
 	//修改项目信息
     int updateProjectInfo(ProjectInfo projectInfo);
 
-    List<ProjectInfo> findAllPrjectPager(Map<String,Object> map,RowBounds rowBounds);
+    List<Map<String,String>> findAllPrjectPager(Map<String,Object> map,RowBounds rowBounds);
 
     List<ProjectInfo> queryLatestProject(Map<String,Object> map);
 }

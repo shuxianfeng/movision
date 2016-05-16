@@ -82,9 +82,9 @@ public class ProjectController {
 		if (StringUtils.isEmpty(pageSize)) {
 			pageSize = "10";
 		}
-		Paging<ProjectInfo> pager = new Paging<ProjectInfo>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+		Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
 		//调用查询接口
-		List<ProjectInfo> projectList = projectService.findAllPrjectPager(map,pager);
+		List<Map<String,String>> projectList = projectService.findAllPrjectPager(map,pager);
 		pager.result(projectList);
 		jsonResult.setData(pager);
 		return jsonResult;
@@ -161,10 +161,19 @@ public class ProjectController {
     }
 
 	@RequestMapping(value = "previewProject",method = RequestMethod.GET)
-	@ApiOperation(value="预览项目信息",notes = "根据Id查看项目信息",response = JsonResult.class)
+	@ApiOperation(value="项目信息详情",notes = "根据Id查看项目信息",response = JsonResult.class)
 	public JsonResult previewProject(@ApiParam(value = "项目信息ID") @RequestParam Long porjectID) throws Exception {
 		JsonResult jsonResult = new JsonResult();
 		Map<String,Object> map  = projectService.queryProjectDetail(porjectID);
+		jsonResult.setData(map);
+		return jsonResult;
+	}
+
+	@RequestMapping(value = "previewUnLoginProject",method = RequestMethod.GET)
+	@ApiOperation(value="预览未登陆的项目信息",notes = "根据Id查看未登陆的项目信息",response = JsonResult.class)
+	public JsonResult previewUnLoginProject(@ApiParam(value = "项目信息ID") @RequestParam Long porjectID) throws Exception {
+		JsonResult jsonResult = new JsonResult();
+		Map<String,Object> map  = projectService.previewUnLoginProject(porjectID);
 		jsonResult.setData(map);
 		return jsonResult;
 	}
