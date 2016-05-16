@@ -14,7 +14,9 @@ import com.zhuhuibao.mybatis.oms.entity.ProjectInfo;
 import com.zhuhuibao.mybatis.oms.mapper.ProjectMapper;
 
 /**
- * Created by gmli on 2016/5/10
+ * 项目信息业务处理类
+ * @author Created by gmli on 2016/5/10
+ * @created 2016-05-13
  */
 @Service
 @Transactional

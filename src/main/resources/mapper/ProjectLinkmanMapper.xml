@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.oms.mapper.ProjectPartyAMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.oms.entity.ProjectPartyA" >
+<mapper namespace="com.zhuhuibao.mybatis.oms.mapper.ProjectLinkmanMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.oms.entity.ProjectLinkman" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="projectid" property="projectid" jdbcType="BIGINT" />
     <result column="deptType" property="deptType" jdbcType="VARCHAR" />
@@ -27,7 +27,7 @@
     delete from t_prj_partyA
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectPartyA" >
+  <insert id="insert" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectLinkman" >
     insert into t_prj_partyA (id, projectid, deptType, 
       name, linkman, mobile, 
       telephone, fax, address, 
@@ -37,7 +37,7 @@
       #{telephone,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
       #{note,jdbcType=VARCHAR}, #{is_deleted,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectPartyA" >
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectLinkman" >
     insert into t_prj_partyA
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -110,7 +110,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectPartyA" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectLinkman" >
     update t_prj_partyA
     <set >
       <if test="projectid != null" >
@@ -146,7 +146,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectPartyA" >
+  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectLinkman" >
     update t_prj_partyA
     set projectid = #{projectid,jdbcType=BIGINT},
       deptType = #{deptType,jdbcType=VARCHAR},

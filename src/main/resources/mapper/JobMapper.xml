@@ -172,7 +172,7 @@
     left join t_dictionary_area ar on ar.code = t.area
     left join t_dictionary_enterpriseType ep on ep.id = t.enterpriseType
     left join t_dictionary_employeeSize es on es.id = t.employeeNumber
-    where t.id in (select jb.createid from t_i_job jb order by jb.updateTime desc ) limit #{count}
+    where t.id in (select jb.createid from t_i_job jb where jb.is_deleted = #{isDelete} order by jb.updateTime desc ) limit #{count}
   </select>
 
   <select id="queryPositionInfoByID" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -225,7 +225,7 @@
         and mb.enterpriseType = #{enterpriseType}
       </if>
       <if test="publishTime != null and publishTime != ''">
-        and date_format(#{publishTime},'%Y-%m-%d') &lt;= date_format(t.publishTime,'%Y-%m-%d')
+        and date_format(#{publishTime},'%Y-%m-%d') &lt;= date_format(t.updateTime,'%Y-%m-%d')
       </if>
       <if test="salary != null and salary != ''">
         and salary = #{salary}
