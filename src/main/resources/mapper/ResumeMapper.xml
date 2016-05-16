@@ -213,7 +213,7 @@
 
   </select>
   <select id="findAllResume" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select tr.* from (select t.id,t.title,t.realName,ct.name jobCity,dc.name hopeSalary,t.photo,dt.name,t.publishTime,t.updateTime,t.experienceYear,t.education,t.isPublic,
+    select tr.* from (select t.id,t.title,t.realName,t.jobCity,dc.name hopeSalary,m.headShot as photo,dt.name,t.publishTime,t.updateTime,t.experienceYear,t.education,t.isPublic,
     (DATE_FORMAT( current_date(),'%Y' )-birthYear) birthYear,
     (DATE_FORMAT( current_date(),'%Y' )-workYear) workYear,
     (select Group_concat(name) from t_dictionary_constant where find_in_set(code,t.jobNature) and type=7)AS jobNature,
@@ -222,6 +222,7 @@
     left join t_dictionary_city ct on ct.code = t.jobCity
     left join t_dictionary_constant dc on dc.code = t.hopeSalary and dc.type = 1
     left join t_dictionary_constant dt on dt.code = t.education and dt.type =2
+    LEFT JOIN t_m_member m on t.createid = m.id
     ) tr
     <where>
       <if test="title != null and title != ''">
