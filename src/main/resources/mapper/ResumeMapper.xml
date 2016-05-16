@@ -192,7 +192,7 @@
     group by a.parentId
   </select>
   <select id="previewResume" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select r.id,r.title,r.realName,r.birthYear,dc.name education,
+    select r.id,r.title,r.realName,r.birthYear,dc.name education,r.photo,
     case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,
     case WHEN r.marriage =0 then '未婚' WHEN r.marriage =1 THEN '已婚' WHEN r.marriage =2 THEN '保密' END AS marriage,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
