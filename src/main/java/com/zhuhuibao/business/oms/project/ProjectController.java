@@ -47,21 +47,33 @@ public class ProjectController {
 
 	 /**
      * 根据条件查询项目分页信息
-     * @param projectInfo  项目信息
+     * @param name  项目信息
      * @throws JsonGenerationException
      * @throws JsonMappingException
      * @throws IOException
      */
     @RequestMapping(value="searchProjectPage", method = RequestMethod.GET)
 	@ApiOperation(value = "根据条件查询项目分页信息",notes = "根据条件查询分页",response = JsonResult.class)
-    public JsonResult searchProjectPage(@ApiParam(value = "项目信息+甲方乙方信息")@ModelAttribute() ProjectInfo projectInfo,
+    public JsonResult searchProjectPage(@ApiParam(value = "项目名称") @RequestParam(required = false) String name,
+										@ApiParam(value = "城市Code") @RequestParam(required = false) String city,
+										@ApiParam(value = "省代码") @RequestParam(required = false) String province,
+										@ApiParam(value = "项目类别") @RequestParam(required = false) String category,
+										@ApiParam(value = "开工日期查询开始日期") @RequestParam(required = false) String startDateA,
+										@ApiParam(value = "开工日期查询结束日期") @RequestParam(required = false) String startDateB,
+										@ApiParam(value = "竣工日期查询开始日期") @RequestParam(required = false) String endDateA,
+										@ApiParam(value = "竣工日期查询结束日期") @RequestParam(required = false) String endDateB,
 									   @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
 									   @ApiParam(value="每页显示的条数") @RequestParam(required = false) String pageSize) throws Exception {
 	    //封装查询参数
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("name", projectInfo.getName());
-		map.put("city", projectInfo.getCity());
-		map.put("province", projectInfo.getProvince());
+		map.put("name", name);
+		map.put("city", city);
+		map.put("province", province);
+		map.put("category",category);
+		map.put("startDateA",startDateA);
+		map.put("startDateB",startDateB);
+		map.put("endDateA",endDateA);
+		map.put("endDateB",endDateB);
 		log.info("查询工程信息：queryProjectInfo",map);
 		JsonResult jsonResult = new JsonResult();
 		if (StringUtils.isEmpty(pageNo)) {
@@ -94,7 +106,7 @@ public class ProjectController {
 		int reslult=0;
 		try {
 			//添加项目信息
-			Long createId = ShiroUtil.getCreateID();
+			Long createId = ShiroUtil.getOmsCreateID();
 			if(createId != null) {
 				Gson gson = new Gson();
 				ProjectInfo projectInfo = gson.fromJson(json, ProjectInfo.class);

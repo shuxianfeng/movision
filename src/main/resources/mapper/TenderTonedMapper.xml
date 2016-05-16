@@ -158,7 +158,7 @@
   <select id="findAllTenderTonedPager" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.oms.entity.TenderToned">
     select t.id, t.noticeName, t.createid, date_format(t.publishDate,'%Y-%m-%d') publishDate,
     date_format(t.updateDate,'%Y-%m-%d') updateDate, t.projectName, concat(pn.name,ct.name,ar.name) area,
-    t.type, t.startDate, t.endDate, t.content
+    t.type, date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate, t.content
     from t_prj_tender_toned t
     left join t_dictionary_province pn on pn.code = t.province
     left join t_dictionary_city ct on ct.code = t.city
@@ -172,6 +172,12 @@
       </if>
       <if test="city != null and city != ''">
         and city = #{city}
+      </if>
+      <if test="startDateA != null and startDateB != null">
+        and t.startDate &gt;= date_format(#{startDateA},'%Y-%m-%d') and t.startDate &lt;= date_format(#{startDateB},'%Y-%m-%d')
+      </if>
+      <if test="endDateA != null and endDateB != null">
+        and t.endDate &gt;= date_format(#{endDateA},'%Y-%m-%d') and t.endDate &lt;= date_format(#{endDateB},'%Y-%m-%d')
       </if>
     </where>
   </select>

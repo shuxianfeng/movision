@@ -41,7 +41,7 @@ public class TenderTonedController {
     public JsonResult addTenderToned(@ApiParam(value = "招中标信息") @ModelAttribute TenderToned tt)
     {
         JsonResult jsonResult = new JsonResult();
-        Long createId = ShiroUtil.getCreateID();
+        Long createId = ShiroUtil.getOmsCreateID();
         if(createId != null) {
             tt.setCreateid(createId);
             ttService.insertTenderTone(tt);
@@ -63,6 +63,10 @@ public class TenderTonedController {
     public JsonResult searchTenderTonedPager(@ApiParam(value = "招中标公告名称") @RequestParam(required = false) String noticeName,
                                              @ApiParam(value="省代码") @RequestParam(required = false) String province,
                                              @ApiParam(value="市代码") @RequestParam(required = false) String city,
+                                             @ApiParam(value = "开工日期查询开始日期") @RequestParam(required = false) String startDateA,
+                                             @ApiParam(value = "开工日期查询结束日期") @RequestParam(required = false) String startDateB,
+                                             @ApiParam(value = "竣工日期查询开始日期") @RequestParam(required = false) String endDateA,
+                                             @ApiParam(value = "竣工日期查询结束日期") @RequestParam(required = false) String endDateB,
                                              @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
                                              @ApiParam(value="每页显示的条数") @RequestParam(required = false) String pageSize)
     {
@@ -77,6 +81,10 @@ public class TenderTonedController {
         map.put("noticeName",noticeName);
         map.put("province",province);
         map.put("city",city);
+        map.put("startDateA",startDateA);
+        map.put("startDateB",startDateB);
+        map.put("endDateA",endDateA);
+        map.put("endDateB",endDateB);
         Paging<TenderToned> pager = new Paging<TenderToned>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
         List<TenderToned> ttList = ttService.findAllTenderTonedPager(map,pager);
         pager.result(ttList);
