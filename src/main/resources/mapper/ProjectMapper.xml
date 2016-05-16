@@ -224,7 +224,7 @@
     </where>
   </select>
 
-  <select id="queryLatestProject" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.oms.entity.ProjectInfo">
+  <select id="queryLatestProject" parameterType="java.util.Map" resultType="java.util.Map">
     SELECT
     t.id,t.name,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
     date_format(t.updateDate,'%Y-%m-%d') updateDate

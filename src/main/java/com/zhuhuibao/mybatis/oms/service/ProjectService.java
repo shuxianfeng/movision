@@ -255,10 +255,10 @@ public class ProjectService {
 	 * @param map 项目信息搜素条件 count：指定项目信息条数
 	 * @return
 	 */
-	public List<ProjectInfo> queryLatestProject(Map<String,Object> map)
+	public List<Map<String,String>> queryLatestProject(Map<String,Object> map)
 	{
 		log.info("query latest project info condition = "+ StringUtils.mapToString(map));
-		List<ProjectInfo> projectList = null;
+		List<Map<String,String>> projectList = null;
 		try {
 			projectList = projectMapper.queryLatestProject(map);
 		}catch(Exception e)

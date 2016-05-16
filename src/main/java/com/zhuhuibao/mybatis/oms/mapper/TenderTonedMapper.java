@@ -20,5 +20,5 @@ public interface TenderTonedMapper {
 
     List<TenderToned> findAllTenderTonedPager(Map<String,Object> map,RowBounds rowBounds);
 
-    List<TenderToned> queryLatestTenderToned(Map<String,Object> map);
+    List<Map<String,String>> queryLatestTenderToned(Map<String,Object> map);
 }

@@ -191,7 +191,7 @@ public class ProjectController {
 		JsonResult jsonResult = new JsonResult();
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("count",10);
-		List<ProjectInfo> projectList = projectService.queryLatestProject(map);
+		List<Map<String,String>> projectList = projectService.queryLatestProject(map);
 		jsonResult.setData(projectList);
 		return jsonResult;
 	}

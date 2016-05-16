@@ -25,5 +25,5 @@ public interface ProjectMapper {
 
     List<Map<String,String>> findAllPrjectPager(Map<String,Object> map,RowBounds rowBounds);
 
-    List<ProjectInfo> queryLatestProject(Map<String,Object> map);
+    List<Map<String,String>> queryLatestProject(Map<String,Object> map);
 }
