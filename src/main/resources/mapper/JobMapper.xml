@@ -202,7 +202,7 @@
     left join t_dictionary_city ct on ct.code = t.city
     left join t_dictionary_area ar on ar.code = t.area
     left join t_m_member mb on mb.id = t.createid
-    <where>
+    WHERE t.is_deleted = 0
       <if test="createID != null">
         and t.createid = #{createID}
       </if>
@@ -230,7 +230,6 @@
       <if test="salary != null and salary != ''">
         and salary = #{salary}
       </if>
-    </where>
     order by updateTime desc
   </select>
 
