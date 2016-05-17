@@ -61,6 +61,7 @@ public class TenderTonedController {
     public JsonResult searchTenderTonedPager(@ApiParam(value = "招中标公告名称") @RequestParam(required = false) String noticeName,
                                              @ApiParam(value="省代码") @RequestParam(required = false) String province,
                                              @ApiParam(value="市代码") @RequestParam(required = false) String city,
+                                             @ApiParam(value="招中标类型：1招标，2中标") @RequestParam(required = true) String type,
                                              @ApiParam(value = "开工日期查询开始日期") @RequestParam(required = false) String startDateA,
                                              @ApiParam(value = "开工日期查询结束日期") @RequestParam(required = false) String startDateB,
                                              @ApiParam(value = "竣工日期查询开始日期") @RequestParam(required = false) String endDateA,
@@ -75,6 +76,7 @@ public class TenderTonedController {
             pageSize = "10";
         }
         Map<String,Object> map = new HashMap<String,Object>();
+        map.put("type",type);
         map.put("noticeName",noticeName);
         map.put("province",province);
         map.put("city",city);
