@@ -134,6 +134,35 @@ public class ProjectService {
 		}
 		return map;
 	}
+
+	/**
+	 * 查询未登录的项目信息详情
+	 * @param projectID 项目信息ID
+	 * @return 项目信息
+	 */
+	public Map<String,Object> previewUnLoginProject(Long projectID) throws Exception
+	{
+		Map<String,Object> map = new HashMap<String,Object>();
+		log.info("query unlogin project detail info projectId = "+projectID);
+		try
+		{
+			ProjectInfo projectInfo = queryProjectInfoByID(projectID);
+			//项目信息
+			map.put("project",projectInfo);
+			//乙方信息
+			List<Map<String,List<ProjectLinkman>>> partyBList = new ArrayList<Map<String,List<ProjectLinkman>>>();
+			map.put("partyB",partyBList);
+			//甲方信息
+			List<ProjectLinkman> partyAList = new ArrayList<ProjectLinkman>();
+			map.put("partyA",partyAList);
+		}
+		catch(Exception e)
+		{
+			log.error("query project detail info error!");
+			throw e;
+		}
+		return map;
+	}
 	/**
 	 * 添加项目工程信息
 	 * @param projectInfo 项目工程信息
@@ -143,7 +172,14 @@ public class ProjectService {
 		int result=0;
 		try {
 			result = projectMapper.addProjectInfo(projectInfo);
-			 
+			Long projectId = projectInfo.getId();
+			//甲方信息
+			List<ProjectLinkman> partyAlist = projectInfo.getPartyAList();
+			insertProjectLinkman(projectId, partyAlist);
+			//乙方信息
+			List<ProjectLinkman> partyBlist = projectInfo.getPartyBList();
+			insertProjectLinkman(projectId, partyBlist);
+
 		} catch (Exception e) {
 			log.error("add project error!", e);
 			throw new SQLException();
@@ -151,6 +187,31 @@ public class ProjectService {
 		}	
 		return result;
 	}
+
+	/**
+	 * 插入项目联系人信息 甲方乙方信息
+	 * @param projectId  项目ID
+	 * @param partylist  联系人信息
+	 * @throws Exception
+     */
+	private void insertProjectLinkman(Long projectId, List<ProjectLinkman> partylist) throws Exception {
+		log.info("projectId = "+projectId);
+		try {
+			if (!partylist.isEmpty()) {
+				int partyASize = partylist.size();
+				for (int i = 0; i < partyASize; i++) {
+					ProjectLinkman partyA = partylist.get(i);
+					partyA.setProjectid(projectId);
+					linkmanService.addProjectLinkmanInfo(partyA);
+				}
+			}
+		}catch(Exception e)
+		{
+			log.error("insert project linkman info error!");
+			throw e;
+		}
+	}
+
 	/**
 	 * 修改项目信息
 	 * @param projectInfo
@@ -158,10 +219,10 @@ public class ProjectService {
 	 * @throws SQLException
 	 */
 	public int updateProjectInfo(ProjectInfo projectInfo) throws SQLException {
-		int result=0;
+		log.info("update project info ="+StringUtils.beanToString(projectInfo));
+		int result = 0;
 		try {
 			result = projectMapper.updateProjectInfo(projectInfo);
-			 
 		} catch (Exception e) {
 			log.error("upate project error!", e);
 			throw new SQLException();
@@ -175,10 +236,10 @@ public class ProjectService {
 	 * @param map 项目信息搜素条件
 	 * @return
 	 */
-	public List<ProjectInfo> findAllPrjectPager(Map<String,Object> map, Paging<ProjectInfo> page) throws Exception
+	public List<Map<String,String>> findAllPrjectPager(Map<String,Object> map, Paging<Map<String,String>> page) throws Exception
 	{
 		log.info("search project info for pager condition = "+ StringUtils.mapToString(map));
-		List<ProjectInfo> projectList = null;
+		List<Map<String,String>> projectList = null;
 		try {
 			projectList = projectMapper.findAllPrjectPager(map,page.getRowBounds());
 		}catch(Exception e)
@@ -194,10 +255,10 @@ public class ProjectService {
 	 * @param map 项目信息搜素条件 count：指定项目信息条数
 	 * @return
 	 */
-	public List<ProjectInfo> queryLatestProject(Map<String,Object> map)
+	public List<Map<String,String>> queryLatestProject(Map<String,Object> map)
 	{
 		log.info("query latest project info condition = "+ StringUtils.mapToString(map));
-		List<ProjectInfo> projectList = null;
+		List<Map<String,String>> projectList = null;
 		try {
 			projectList = projectMapper.queryLatestProject(map);
 		}catch(Exception e)

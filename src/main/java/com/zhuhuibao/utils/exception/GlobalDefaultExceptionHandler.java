@@ -130,7 +130,7 @@ public class GlobalDefaultExceptionHandler {
             }
         }
 
-        result.setMessage(ex.getMessage());
+//        result.setMessage(ex.getMessage());
 
         return result;
     }

@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import java.util.Map;
  *@create 2016/5/13 0013
  **/
 @Service
+@Transactional
 public class TenderTonedService {
 
     private final static Logger log = LoggerFactory.getLogger(TenderTonedService.class);
@@ -33,7 +35,7 @@ public class TenderTonedService {
      * @param tt 招中标公告
      * @return
      */
-    public int insertTenderTone(TenderToned tt)
+    public int insertTenderTone(TenderToned tt) throws Exception
     {
         log.info("insert tender tone "+tt.toString());
         int result = 0;
@@ -52,7 +54,7 @@ public class TenderTonedService {
      * @param tt 招中标公告
      * @return
      */
-    public int updateTenderTone(TenderToned tt)
+    public int updateTenderTone(TenderToned tt) throws Exception
     {
         log.info("update tender tone "+tt.toString());
         int result = 0;
@@ -71,7 +73,7 @@ public class TenderTonedService {
      * @param id 招中标公告ID
      * @return
      */
-    public TenderToned queryTenderToneByID(Long id)
+    public TenderToned queryTenderToneByID(Long id) throws Exception
     {
         log.info("preview tender tone info id = "+id.toString());
         TenderToned tt = null;
@@ -90,7 +92,7 @@ public class TenderTonedService {
      * @param map 招中标公告查询条件
      * @return
      */
-    public List<TenderToned> findAllTenderTonedPager(Map<String,Object> map, Paging<TenderToned> page)
+    public List<TenderToned> findAllTenderTonedPager(Map<String,Object> map, Paging<TenderToned> page) throws Exception
     {
         log.info("search tender tone info for pager condition = "+ StringUtils.mapToString(map));
         List<TenderToned> ttList = null;
@@ -106,20 +108,20 @@ public class TenderTonedService {
 
     /**
      * 查询最新招标公告或者中标公告
-     * @param map 项目信息搜素条件 count：指定项目信息条数
+     * @param map 搜素条件 count：指定项目信息条数
      * @return
      */
-    public List<TenderToned> queryLatestTenderToned(Map<String,Object> map)
+    public List<Map<String,String>> queryLatestTenderToned(Map<String,Object> map) throws Exception
     {
         log.info("query latest project info condition = "+ StringUtils.mapToString(map));
-        List<TenderToned> projectList = null;
+        List<Map<String,String>> tenderTonedList = null;
         try {
-            projectList = tenderTonedMapper.queryLatestTenderToned(map);
+            tenderTonedList = tenderTonedMapper.queryLatestTenderToned(map);
         }catch(Exception e)
         {
             log.error("query latest project info error!");
             throw e;
         }
-        return projectList;
+        return tenderTonedList;
     }
 }

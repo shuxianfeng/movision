@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  *@create 2016/5/16 0016
  **/
 @Service
+@Transactional
 public class ProjectLinkmanService {
 
     private static final Logger log = LoggerFactory.getLogger(ProjectLinkmanService.class);
