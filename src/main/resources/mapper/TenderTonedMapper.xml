@@ -23,10 +23,14 @@
     type, startDate, endDate, content, is_deleted
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_prj_tender_toned
-    where id = #{id,jdbcType=BIGINT}
+    select t.id, t.noticeName, t.createid, date_format(t.publishDate,'%Y-%m-%d') publishDate,
+    date_format(t.updateDate,'%Y-%m-%d') updateDate, t.projectName, concat(pn.name,ct.name,ar.name) area,ct.name city,
+    t.type, date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate, t.content
+    from t_prj_tender_toned t
+    left join t_dictionary_province pn on pn.code = t.province
+    left join t_dictionary_city ct on ct.code = t.city
+    left join t_dictionary_area ar on ar.code = t.area
+    where t.id = #{id}
   </select>
   <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.oms.entity.TenderToned" >
     insert into t_prj_tender_toned
@@ -187,10 +191,11 @@
   </select>
 
   <select id="queryLatestTenderToned" parameterType="java.util.Map" resultType="java.util.Map">
-    SELECT
-    t.id,t.noticeName,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
-    date_format(t.updateDate,'%Y-%m-%d') updateDate
-    FROM t_prj_tender_toned t
+    select t.id,t.noticeName,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
+    date_format(t.updateDate,'%Y-%m-%d') updateDate,t.projectName, ct.name city,
+    t.type, date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate, t.content
+    from t_prj_tender_toned t
+    left join t_dictionary_city ct on ct.code = t.city
     <where>
       <if test="type != null">
         and t.type = #{type}
