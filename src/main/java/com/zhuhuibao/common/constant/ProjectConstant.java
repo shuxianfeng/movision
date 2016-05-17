@@ -5,7 +5,7 @@ package com.zhuhuibao.common.constant;
  * @author Administrator
  * @version 2016/5/17 0017
  */
-public interface SSSProjectConstant {
+public interface ProjectConstant {
 
     /**
      * 项目详情隐藏符号星号
