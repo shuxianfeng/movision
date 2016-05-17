@@ -222,7 +222,7 @@ public class RegisterValidateService {
 	
 	/**
 	 * 密码重置时验证身份
-	 * @param decodeVM
+	 * @param validateInfo 用户验证信息
 	 * @return
 	 */
 	public JsonResult processValidate(String validateInfo){  
