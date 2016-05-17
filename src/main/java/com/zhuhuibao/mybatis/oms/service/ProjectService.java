@@ -75,20 +75,13 @@ public class ProjectService {
 				//甲方信息
 				Map<String,List<ProjectLinkman>> partyAMap = new HashMap<String,List<ProjectLinkman>>();
 				List<ProjectLinkman> partyAList = new ArrayList<ProjectLinkman>();
-				//乙方信息
-				Map<String,Object> partyBMap = new HashMap<String,Object>();
-				List<Map<String,List<ProjectLinkman>>> partyBList = new ArrayList<Map<String,List<ProjectLinkman>>>();
 				//乙方中的设计师信息
-				Map<String,List<ProjectLinkman>> partyBDesignMap = new HashMap<String,List<ProjectLinkman>>();
 				List<ProjectLinkman> partyBDesignList = new ArrayList<ProjectLinkman>();
 				//乙方中的工程商信息
-				Map<String,List<ProjectLinkman>> partyBFirstMap = new HashMap<String,List<ProjectLinkman>>();
 				List<ProjectLinkman> partyBFirstList = new ArrayList<ProjectLinkman>();
 				//乙方中的工程商信息
-				Map<String,List<ProjectLinkman>> partyBWorkMap = new HashMap<String,List<ProjectLinkman>>();
 				List<ProjectLinkman> partyBWorkList = new ArrayList<ProjectLinkman>();
 				//乙方中的分包商信息
-				Map<String,List<ProjectLinkman>> partyBSecondMap = new HashMap<String,List<ProjectLinkman>>();
 				List<ProjectLinkman> partyBSecondList = new ArrayList<ProjectLinkman>();
 				int size = linkmanList.size();
 				for(int i = 0;i < size;i++)
@@ -115,16 +108,17 @@ public class ProjectService {
 
 					}
 				}
-				partyBDesignMap.put("design",partyBDesignList);
-				partyBFirstMap.put("first",partyBFirstList);
-				partyBWorkMap.put("engineering",partyBWorkList);
-				partyBSecondMap.put("second",partyBSecondList);
-				partyBList.add(partyBDesignMap);
-				partyBList.add(partyBFirstMap);
-				partyBList.add(partyBWorkMap);
-				partyBList.add(partyBSecondMap);
-				map.put("partyB",partyBList);
+				//乙方信息
+				Map<String,Object> partyB = new HashMap<>();
+				partyB.put("design",partyBDesignList);
+				partyB.put("first",partyBFirstList);
+				partyB.put("engineering",partyBWorkList);
+				partyB.put("second",partyBSecondList);
+
+				map.put("partyB",partyB);
+
 				map.put("partyA",partyAList);
+
 			}
 		}
 		catch(Exception e)

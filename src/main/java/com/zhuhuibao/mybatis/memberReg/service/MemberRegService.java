@@ -115,6 +115,8 @@ public class MemberRegService {
     	}
     	return member;
     }
+
+
     
     /**
      * 根据邮箱查询会员信息

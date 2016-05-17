@@ -241,7 +241,7 @@
         and tr.isPublic = #{isPublic}
       </if>
       <if test="positionList != null">
-      <foreach collection="positionList" item="item" index="index" open="and" separator="or" close="" >
+      <foreach collection="positionList" item="item" index="index" open="and (" separator="or" close=")" >
         find_in_set(#{item},tr.postID)
       </foreach>
       </if>
