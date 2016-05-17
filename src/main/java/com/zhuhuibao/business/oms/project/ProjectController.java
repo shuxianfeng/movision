@@ -137,8 +137,10 @@ public class ProjectController {
      */
     @RequestMapping(value="updateProjectInfo", method = RequestMethod.POST)
 	@ApiOperation(value = "运营后台修改项目信息",notes = "运营后台的修改项目信息",response = JsonResult.class)
-    public JsonResult updateProjectInfo(@ApiParam(value = "项目信息+甲方乙方信息") @ModelAttribute() ProjectInfo projectInfo) throws JsonGenerationException, JsonMappingException, IOException {
-	   
+    public JsonResult updateProjectInfo(@ApiParam(value = "项目信息+甲方乙方信息") String json) throws JsonGenerationException, JsonMappingException, IOException {
+    	Gson gson = new Gson();
+		ProjectInfo projectInfo = gson.fromJson(json, ProjectInfo.class);
+		  
 		log.info("修改工程信息：updateProjectInfo",projectInfo);
 		JsonResult jsonResult = new JsonResult();
 		int reslult=0;

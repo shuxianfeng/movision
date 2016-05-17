@@ -1,11 +1,9 @@
 package com.zhuhuibao.mybatis.oms.service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.zhuhuibao.common.constant.ProjectConstant;
 import com.zhuhuibao.mybatis.oms.entity.ProjectLinkman;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -38,19 +36,19 @@ public class ProjectService {
     * 查询项目信息
     * @param projectID 项目信息ID
     * @return 项目信息
-     * @throws SQLException 
+     * @throws SQLException
     */
 	public ProjectInfo queryProjectInfoByID(Long projectID) {
 		log.info("query project info by id "+projectID);
 		ProjectInfo projectInfo;
 		try {
 			projectInfo = projectMapper.queryProjectInfoByID(projectID);
-			 
+
 		} catch (Exception e) {
 			log.error("select by primary key error!", e);
 			throw e;
-			
-		}	
+
+		}
 		return projectInfo;
 	}
 
@@ -109,7 +107,7 @@ public class ProjectService {
 					}
 				}
 				//乙方信息
-				Map<String,Object> partyB = new HashMap<>();
+				Map<String,Object> partyB = new TreeMap<>();
 				partyB.put("design",partyBDesignList);
 				partyB.put("first",partyBFirstList);
 				partyB.put("engineering",partyBWorkList);
@@ -137,18 +135,70 @@ public class ProjectService {
 	public Map<String,Object> previewUnLoginProject(Long projectID) throws Exception
 	{
 		Map<String,Object> map = new HashMap<String,Object>();
-		log.info("query unlogin project detail info projectId = "+projectID);
+		log.info("query project detail info projectId = "+projectID);
 		try
 		{
 			ProjectInfo projectInfo = queryProjectInfoByID(projectID);
 			//项目信息
 			map.put("project",projectInfo);
-			//乙方信息
-			List<Map<String,List<ProjectLinkman>>> partyBList = new ArrayList<Map<String,List<ProjectLinkman>>>();
-			map.put("partyB",partyBList);
-			//甲方信息
-			List<ProjectLinkman> partyAList = new ArrayList<ProjectLinkman>();
-			map.put("partyA",partyAList);
+			//根据项目ID查询联系人信息
+			List<ProjectLinkman> linkmanList = linkmanService.queryProjectLinkmanByProjectID(projectID);
+			if(!linkmanList.isEmpty())
+			{
+				//甲方信息
+				Map<String,List<ProjectLinkman>> partyAMap = new HashMap<String,List<ProjectLinkman>>();
+				List<ProjectLinkman> partyAList = new ArrayList<ProjectLinkman>();
+				//乙方中的设计师信息
+				List<ProjectLinkman> partyBDesignList = new ArrayList<ProjectLinkman>();
+				//乙方中的工程商信息
+				List<ProjectLinkman> partyBFirstList = new ArrayList<ProjectLinkman>();
+				//乙方中的工程商信息
+				List<ProjectLinkman> partyBWorkList = new ArrayList<ProjectLinkman>();
+				//乙方中的分包商信息
+				List<ProjectLinkman> partyBSecondList = new ArrayList<ProjectLinkman>();
+				int size = linkmanList.size();
+				for(int i = 0;i < size;i++)
+				{
+					StringBuilder sb = null;
+					ProjectLinkman linkman= linkmanList.get(i);
+					//甲方信息
+					if(linkman.getPartyType() == 1)
+					{
+						hideLinkman(linkman);
+						partyAList.add(linkman);
+					}
+					else//乙方信息
+					{
+						//1:设计师，2：总包商，3：工程商，4:分包商
+						if(linkman.getTypePartyB() == 1) {
+							hideLinkman(linkman);
+							partyBDesignList.add(linkman);
+						} else if(linkman.getTypePartyB() == 2) {
+							hideLinkman(linkman);
+							partyBFirstList.add(linkman);
+						}
+						else if(linkman.getTypePartyB() == 3) {
+							hideLinkman(linkman);
+							partyBWorkList.add(linkman);
+						}else if(linkman.getTypePartyB() == 4){
+							hideLinkman(linkman);
+							partyBSecondList.add(linkman);
+						}
+
+					}
+				}
+				//乙方信息
+				Map<String,Object> partyB = new TreeMap<>();
+				partyB.put("design",partyBDesignList);
+				partyB.put("first",partyBFirstList);
+				partyB.put("engineering",partyBWorkList);
+				partyB.put("second",partyBSecondList);
+
+				map.put("partyB",partyB);
+
+				map.put("partyA",partyAList);
+
+			}
 		}
 		catch(Exception e)
 		{
@@ -157,6 +207,47 @@ public class ProjectService {
 		}
 		return map;
 	}
+
+	/**
+	 * 隐藏联系人部分信息
+	 * @param linkman 联系人信息
+     */
+	private void hideLinkman(ProjectLinkman linkman) {
+		StringBuilder sb;
+		linkman.setName(ProjectConstant.PROJECT_HIDDEN_STAR_TEN);
+		linkman.setNote(ProjectConstant.PROJECT_HIDDEN_STAR_TEN);
+		linkman.setAddress(ProjectConstant.PROJECT_HIDDEN_STAR_TEN);
+		//联系人
+		String lman = linkman.getLinkman();
+		if(!StringUtils.isEmpty(lman)) {
+            linkman.setLinkman(linkman.getLinkman().substring(0,1) + ProjectConstant.PROJECT_HIDDEN_LINKMAN_STAR_THREE);
+        }
+		//手机
+		String mobile = linkman.getMobile();
+		if(!StringUtils.isEmpty(mobile))
+        {
+            sb = new StringBuilder(mobile);
+            sb.replace(sb.length()-4,sb.length(),ProjectConstant.PROJECT_HIDDEN_MOBILE_STAR_FOUR);
+            linkman.setMobile(sb.toString());
+        }
+		//座机
+		String tel = linkman.getTelephone();
+		if(!StringUtils.isEmpty(tel) && tel.length() > 5)
+        {
+            sb = new StringBuilder(tel);
+            sb.replace(sb.length()-4,sb.length(),ProjectConstant.PROJECT_HIDDEN_MOBILE_STAR_FOUR);
+            linkman.setTelephone(sb.toString());
+        }
+		//传真
+		String fax = linkman.getFax();
+		if(!StringUtils.isEmpty(fax))
+        {
+            sb = new StringBuilder(fax);
+            sb.replace(sb.length()-4,sb.length(),ProjectConstant.PROJECT_HIDDEN_MOBILE_STAR_FOUR);
+            linkman.setFax(sb.toString());
+        }
+	}
+
 	/**
 	 * 添加项目工程信息
 	 * @param projectInfo 项目工程信息
@@ -177,8 +268,8 @@ public class ProjectService {
 		} catch (Exception e) {
 			log.error("add project error!", e);
 			throw new SQLException();
-			
-		}	
+
+		}
 		return result;
 	}
 
@@ -220,8 +311,8 @@ public class ProjectService {
 		} catch (Exception e) {
 			log.error("upate project error!", e);
 			throw new SQLException();
-			
-		}	
+
+		}
 		return result;
 	}
 
@@ -261,5 +352,12 @@ public class ProjectService {
 			throw e;
 		}
 		return projectList;
+	}
+	public static void main(String[] args)
+	{
+		StringBuilder sb = new StringBuilder("15996309704");
+		System.out.println(sb.replace(sb.length()-4,sb.length(),"****"));
+		System.out.println(sb.substring(0,1)+ ProjectConstant.PROJECT_HIDDEN_LINKMAN_STAR_THREE);
+
 	}
 }
