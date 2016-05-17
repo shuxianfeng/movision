@@ -101,7 +101,7 @@ public class TenderTonedController {
     }
 
     @RequestMapping(value = "queryLatestTenderToned", method = RequestMethod.GET)
-    @ApiOperation(value = "最新招标或中标公告信息，默认10条",notes = "最新招标或中标公告信息，默认10条",response = JsonResult.class)
+    @ApiOperation(value = "最新招标或中标公告信息或搜索时的推荐，默认10条",notes = "最新招标或中标公告信息，默认10条",response = JsonResult.class)
     public JsonResult queryLatestTenderToned(@ApiParam(value="公告类型 1:招标公告，2：中标公告") @RequestParam() String type) throws Exception {
         JsonResult jsonResult = new JsonResult();
         Map<String,Object> map = new HashMap<String,Object>();
