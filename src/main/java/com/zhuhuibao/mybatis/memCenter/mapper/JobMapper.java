@@ -33,7 +33,7 @@ public interface JobMapper {
     List<Job> searchRecommendPosition(@Param("id")String id,@Param("count")int count);
 
     //查询相同职位
-    List<Job> searchSamePosition(String id);
+    List<Job> searchSamePosition(Map<String,Object> map);
 
     //查询最新发布的职位
     List<Job> searchLatestPublishPosition();
@@ -50,7 +50,7 @@ public interface JobMapper {
     List<Job> findAllMyApplyPosition(RowBounds rowBounds,@Param("id") String id);
 
     //热门招聘
-    List<Job> queryHotPosition(int count);
+    List<Job> queryHotPosition(Map<String,Object> map);
 
     //最新招聘（按分类查询）
     List<Job> queryLatestJob(@Param("id")String id,@Param("count")int count);

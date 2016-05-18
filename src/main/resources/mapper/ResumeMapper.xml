@@ -223,6 +223,7 @@
     left join t_dictionary_constant dc on dc.code = t.hopeSalary and dc.type = 1
     left join t_dictionary_constant dt on dt.code = t.education and dt.type =2
     LEFT JOIN t_m_member m on t.createid = m.id
+    where m.status != #{status}
     ) tr
     <where>
       <if test="title != null and title != ''">
@@ -261,7 +262,7 @@
   <select id="queryResumeByCreateId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     SELECT * from t_i_resume WHERE createid = #{id}
   </select>
-  <select id="queryLatestResume" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="queryLatestResume" parameterType="java.util.Map" resultMap="BaseResultMap">
     select r.id,r.realName,(DATE_FORMAT( current_timestamp(),'%Y' )-r.birthYear)as birthYear,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,c.name AS jobCity,m.headShot as photo,
     (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post,
@@ -271,7 +272,15 @@
     left join t_dictionary_constant co on co.code = r.hopeSalary and co.type = 1
     left join t_dictionary_city c on r.jobCity = c.code
     left join t_m_member m on r.createid = m.id
-    WHERE r.isPublic = 1 ORDER by r.updateTime desc limit 0,#{count}
+    <where>
+      <if test="public != null">
+        and r.isPublic = #{public}
+      </if>
+      <if test="status != null">
+        and m.status != #{status}
+      </if>
+    </where>
+    ORDER by r.updateTime desc limit 0,#{count}
   </select>
   <select id="isExistResume" parameterType="java.lang.Long" resultType="java.lang.Integer">
     select count(1) from t_i_resume t where t.createid = #{createID}
