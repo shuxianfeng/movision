@@ -35,7 +35,7 @@ public class ProjectLinkman {
     @ApiModelProperty(value = "备注")
     private String note;
     @ApiModelProperty(value = "删除标识：1删除，0不删除")
-    private Boolean is_deleted;
+    private Integer is_deleted;
 
     public Integer getId() {
         return id;
@@ -133,11 +133,11 @@ public class ProjectLinkman {
         this.note = note == null ? null : note.trim();
     }
 
-    public Boolean getIs_deleted() {
+    public Integer getIs_deleted() {
         return is_deleted;
     }
 
-    public void setIs_deleted(Boolean is_deleted) {
+    public void setIs_deleted(Integer is_deleted) {
         this.is_deleted = is_deleted;
     }
 }

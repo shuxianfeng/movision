@@ -1,6 +1,8 @@
 package com.zhuhuibao.mybatis.oms.service;
 import com.zhuhuibao.mybatis.oms.entity.ProjectLinkman;
 import com.zhuhuibao.mybatis.oms.mapper.ProjectLinkmanMapper;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,5 +56,20 @@ public class ProjectLinkmanService {
             throw e;
         }
         return linkmanList;
+    }
+    
+    public int updateByPrimaryKeySelective(ProjectLinkman linkman)
+    {
+    	log.info("update Linkman info = "+StringUtils.beanToString(linkman));
+    	int result = 0;
+        try
+        {
+        	result = linkmanMapper.updateByPrimaryKeySelective(linkman);
+        }catch (Exception e)
+        {
+            log.error("update Linkman info error!");
+            throw e;
+        }
+        return result;
     }
 }

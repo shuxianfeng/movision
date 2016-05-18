@@ -11,6 +11,8 @@ import com.zhuhuibao.mybatis.memCenter.mapper.PositionMapper;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.exception.BusinessException;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import org.apache.ibatis.reflection.ReflectionException;
+import org.mybatis.spring.MyBatisSystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -268,8 +270,9 @@ public class JobPositionService {
      * @param id 职位ID
      * @return
      */
-    public JsonResult queryPositionInfoByID(Long id)
+    public JsonResult queryPositionInfoByID(Long id) throws Exception
     {
+        log.info("query position info by id = "+id);
         JsonResult jsonResult = new JsonResult();
         try
         {
@@ -279,10 +282,7 @@ public class JobPositionService {
         catch(Exception e)
         {
             log.error("add offer price error!",e);
-            jsonResult.setCode(MsgCodeConstant.response_status_400);
-            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return jsonResult;
+            throw e;
         }
         return jsonResult;
     }
