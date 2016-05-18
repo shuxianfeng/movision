@@ -179,9 +179,9 @@ public class PriceService {
     /**
      * 最新公开询价(限六条)
      */
-    public JsonResult queryNewPriceInfo(int count){
+    public JsonResult queryNewPriceInfo(int count,AskPriceSearchBean askPriceSearch){
         JsonResult jsonResult = new JsonResult();
-        List<AskPrice> askPriceList = askPriceMapper.queryNewPriceInfo(count);
+        List<AskPrice> askPriceList = askPriceMapper.queryNewPriceInfo(count,askPriceSearch);
         List list = new ArrayList();
         for(int i=0;i<askPriceList.size();i++){
             AskPrice askPrice = askPriceList.get(i);
@@ -198,8 +198,8 @@ public class PriceService {
     /**
      * 最新公开询价(分页)
      */
-    public List<AskPrice> queryNewPriceInfoList(Paging<AskPrice> pager){
-        List<AskPrice> askPriceList = askPriceMapper.findAllNewPriceInfoList(pager.getRowBounds());
+    public List<AskPrice> queryNewPriceInfoList(Paging<AskPrice> pager,AskPriceSearchBean askPriceSearch){
+        List<AskPrice> askPriceList = askPriceMapper.findAllNewPriceInfoList(pager.getRowBounds(),askPriceSearch);
         List list = new ArrayList();
         for(int i=0;i<askPriceList.size();i++){
             AskPrice askPrice = askPriceList.get(i);
