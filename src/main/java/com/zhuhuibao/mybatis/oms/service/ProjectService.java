@@ -308,6 +308,22 @@ public class ProjectService {
 		int result = 0;
 		try {
 			result = projectMapper.updateProjectInfo(projectInfo);
+			List<ProjectLinkman> partyAList = projectInfo.getPartyAList();
+			List<ProjectLinkman> partyBList = projectInfo.getPartyBList();
+			if(partyAList!=null&&!partyAList.isEmpty())
+			{
+				for(int i=0;i<partyAList.size();i++ )
+				{
+				  linkmanService.updateByPrimaryKeySelective(partyAList.get(i));
+				}
+				 
+			}
+			if(partyBList!=null&&!partyBList.isEmpty()){
+				for(int i=0;i<partyBList.size();i++ )
+				{
+				  linkmanService.updateByPrimaryKeySelective(partyBList.get(i));
+				}
+			}
 		} catch (Exception e) {
 			log.error("upate project error!", e);
 			throw new SQLException();
