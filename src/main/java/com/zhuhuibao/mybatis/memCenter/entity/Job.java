@@ -31,8 +31,8 @@ public class Job {
     @ApiModelProperty(value="职位类别")
     private String positionType;
 
-    @ApiModelProperty(value="职位类别ID")
-    private String postionTypeID;
+    @ApiModelProperty(value="职位类别名称")
+    private String positionTypeName;
 
     private String parentId;
 
@@ -323,19 +323,19 @@ public class Job {
         this.enterpriseLogo = enterpriseLogo;
     }
 
-    public String getPostionTypeID() {
-        return postionTypeID;
-    }
-
-    public void setPostionTypeID(String postionTypeID) {
-        this.postionTypeID = postionTypeID;
-    }
-
     public String getSize() {
         return size;
     }
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    public String getPositionTypeName() {
+        return positionTypeName;
+    }
+
+    public void setPositionTypeName(String positionTypeName) {
+        this.positionTypeName = positionTypeName;
     }
 }

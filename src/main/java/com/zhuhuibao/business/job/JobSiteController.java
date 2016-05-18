@@ -160,13 +160,12 @@ public class JobSiteController {
     }
 
     @RequestMapping(value="queryPositionInfoByID", method = RequestMethod.GET)
-    public void queryPositionInfoByID(HttpServletRequest req, HttpServletResponse response,Long id) throws JsonGenerationException, JsonMappingException, IOException
+    @ApiOperation(value = "职位详情页面",notes = "职位搜索查看职位详情",response = JsonResult.class)
+    public JsonResult queryPositionInfoByID(@ApiParam(value = "招聘职位ID") @RequestParam Long id) throws Exception
     {
-        log.info("query position info by id");
         JsonResult jsonResult = job.queryPositionInfoByID(id);
         job.updateViews(id);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 
     @RequestMapping(value="queryOtherPosition", method = RequestMethod.GET)

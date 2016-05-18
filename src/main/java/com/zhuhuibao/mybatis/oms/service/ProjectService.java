@@ -7,7 +7,6 @@ import com.zhuhuibao.common.constant.ProjectConstant;
 import com.zhuhuibao.mybatis.oms.entity.ProjectLinkman;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
-import org.apache.tools.ant.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -227,7 +226,7 @@ public class ProjectService {
 		if(!StringUtils.isEmpty(mobile))
         {
             sb = new StringBuilder(mobile);
-            sb.replace(sb.length()-4,sb.length(),ProjectConstant.PROJECT_HIDDEN_MOBILE_STAR_FOUR);
+            sb.replace(sb.length()-4,sb.length(), ProjectConstant.PROJECT_HIDDEN_MOBILE_STAR_FOUR);
             linkman.setMobile(sb.toString());
         }
 		//座机
@@ -235,7 +234,7 @@ public class ProjectService {
 		if(!StringUtils.isEmpty(tel) && tel.length() > 5)
         {
             sb = new StringBuilder(tel);
-            sb.replace(sb.length()-4,sb.length(),ProjectConstant.PROJECT_HIDDEN_MOBILE_STAR_FOUR);
+            sb.replace(sb.length()-4,sb.length(), ProjectConstant.PROJECT_HIDDEN_MOBILE_STAR_FOUR);
             linkman.setTelephone(sb.toString());
         }
 		//传真
@@ -243,7 +242,7 @@ public class ProjectService {
 		if(!StringUtils.isEmpty(fax))
         {
             sb = new StringBuilder(fax);
-            sb.replace(sb.length()-4,sb.length(),ProjectConstant.PROJECT_HIDDEN_MOBILE_STAR_FOUR);
+            sb.replace(sb.length()-4,sb.length(), ProjectConstant.PROJECT_HIDDEN_MOBILE_STAR_FOUR);
             linkman.setFax(sb.toString());
         }
 	}

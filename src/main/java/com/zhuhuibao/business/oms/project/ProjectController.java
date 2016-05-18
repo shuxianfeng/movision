@@ -130,7 +130,7 @@ public class ProjectController {
     
     /**
      * 修改项目信息
-     * @param projectInfo  项目工程信息
+     * @param json  项目工程信息
      * @throws JsonGenerationException
      * @throws JsonMappingException
      * @throws IOException
@@ -188,7 +188,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = "queryLatestProject", method = RequestMethod.GET)
-	@ApiOperation(value = "查询最新项目信息，默认10条",notes = "查询最新项目信息，默认10条",response = JsonResult.class)
+	@ApiOperation(value = "查询最新项目信息或者搜索时的推荐，默认10条",notes = "查询最新项目信息，默认10条",response = JsonResult.class)
 	public JsonResult queryLatestProject() throws IOException {
 		JsonResult jsonResult = new JsonResult();
 		Map<String,Object> map = new HashMap<String,Object>();
