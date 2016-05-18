@@ -232,13 +232,13 @@
         and tr.jobCity = #{jobCity}
       </if>
       <if test="expYearBefore != null and expYearBefore != '' and expYearBehind != null and expYearBehind != ''">
-        and (DATE_FORMAT( current_date(),'%Y' )-workYear) &gt; #{expYearBefore} and (DATE_FORMAT( current_date(),'%Y' )-workYear) &lt; #{expYearBehind}
+        and tr.workYear &gt;= #{expYearBefore} and tr.workYear &lt;= #{expYearBehind}
       </if>
       <if test="expYearBefore != null and expYearBefore != '' and expYearBehind == null and expYearBehind = ''">
-        and (DATE_FORMAT( current_date(),'%Y' )-workYear) &gt; #{expYearBefore}
+        and tr.workYear &gt;= #{expYearBefore}
       </if>
       <if test="expYearBefore == null and expYearBefore = ''  and expYearBehind != null and expYearBehind != ''">
-        and ((DATE_FORMAT( current_date(),'%Y' )-workYear) &lt; #{expYearBehind}
+        and tr.workYear &lt;= #{expYearBehind}
       </if>
       <if test="education != null and education != ''">
         and tr.education = #{education}
