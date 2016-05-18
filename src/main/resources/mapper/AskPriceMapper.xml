@@ -305,7 +305,7 @@
     </if>
   </select>
   <select id="queryNewPriceInfo" resultMap="BaseResultMap">
-    select id,title from t_p_ask_price t where type = 1 and date_format(now(),'%Y-%m-%d') &lt;= date_format(t.endTime,'%Y-%m-%d')
+    select t.id,t.title from t_p_ask_price t where t.type = 1 and date_format(now(),'%Y-%m-%d') &lt;= date_format(t.endTime,'%Y-%m-%d')
     <if test="createid != null and createid != ''">
       and t.id not in (select askid from t_p_offer_price where createid = #{createid})
     </if>
