@@ -282,7 +282,8 @@ public class JobSiteController {
     public void findAllResume(HttpServletRequest req, HttpServletResponse response,
                               @ApiParam(value="简历名称") @RequestParam(required = false) String title,
                               @ApiParam(value="期望工作城市") @RequestParam(required = false) String jobCity,
-                              @ApiParam(value="工作经验") @RequestParam(required = false)String expYear,
+                              @ApiParam(value="工作年限前") @RequestParam(required = false)String expYearBefore,
+                              @ApiParam(value="工作年限后") @RequestParam(required = false)String expYearBehind,
                               @ApiParam(value="学历") @RequestParam(required = false)String education,
                               @ApiParam(value="职位类别") @RequestParam(required = false)String positionType,
                               @ApiParam(value="页码") @RequestParam(required = false)String pageNo,
@@ -303,7 +304,8 @@ public class JobSiteController {
             map.put("title",title.replace("_","\\_"));
         }
         map.put("jobCity",jobCity);
-        map.put("expYear",expYear);
+        map.put("expYearBefore",expYearBefore);
+        map.put("expYearBehind",expYearBehind);
         map.put("education",education);
         map.put("isPublic","1");
         if(positionType != null && positionType.length() > 0)
