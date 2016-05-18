@@ -305,7 +305,25 @@
     </if>
   </select>
   <select id="queryNewPriceInfo" resultMap="BaseResultMap">
-    select id,title from t_p_ask_price where type = 1 order BY publishTime desc limit 0,#{count}
+    select t.id,t.title from t_p_ask_price t
+    left join t_m_member m on m.id = t.createid
+    where t.type = 1 and date_format(now(),'%Y-%m-%d') &lt;= date_format(t.endTime,'%Y-%m-%d')
+    <if test="createid != null and createid != ''">
+      and t.id not in (select askid from t_p_offer_price where createid = #{createid})
+    </if>
+    <if test="createid != null and createid != ''">
+      and t.createid != #{createid}
+    </if>
+    <if test="createid != null and createid != ''">
+      and t.createid not in (select enterpriseEmployeeParentId from t_m_member where id = #{createid})
+    </if>
+    <if test="createid != null and createid != ''">
+      and t.createid not in (select id from t_m_member where enterpriseEmployeeParentId = #{createid})
+    </if>
+    <if test="createid != null and createid != ''">
+      and (case when m.enterpriseEmployeeParentId != 0 then (m.enterpriseEmployeeParentId not in (select enterpriseEmployeeParentId from t_m_member where id = #{createid})) else '1=1' end )
+    </if>
+    order BY t.publishTime desc limit 0,#{count}
   </select>
 
   <select id="findAllNewPriceInfoList" resultMap="BaseResultMap">
@@ -313,6 +331,23 @@
     from t_p_ask_price p
     LEFT JOIN t_dictionary_province pr on pr.code = p.provinceCode
     LEFT JOIN t_dictionary_city c on c.code = p.cityCode
-     where p.type = 1 order BY p.publishTime desc
+    left join t_m_member m on m.id = p.createid
+    where p.type = 1 and date_format(now(),'%Y-%m-%d') &lt;= date_format(p.endTime,'%Y-%m-%d')
+    <if test="createid != null and createid != ''">
+      and p.id not in (select askid from t_p_offer_price where createid = #{createid})
+    </if>
+    <if test="createid != null and createid != ''">
+      and p.createid != #{createid}
+    </if>
+    <if test="createid != null and createid != ''">
+      and p.createid not in (select enterpriseEmployeeParentId from t_m_member where id = #{createid})
+    </if>
+    <if test="createid != null and createid != ''">
+      and p.createid not in (select id from t_m_member where enterpriseEmployeeParentId = #{createid})
+    </if>
+    <if test="createid != null and createid != ''">
+      and (case when m.enterpriseEmployeeParentId != 0 then (m.enterpriseEmployeeParentId not in (select enterpriseEmployeeParentId from t_m_member where id = #{createid})) else '1=1' end )
+    </if>
+    order BY p.publishTime desc
   </select>
 </mapper>

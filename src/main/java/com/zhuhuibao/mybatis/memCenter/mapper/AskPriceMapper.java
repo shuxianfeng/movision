@@ -4,6 +4,7 @@ import com.zhuhuibao.common.AskPriceBean;
 import com.zhuhuibao.common.AskPriceResultBean;
 import com.zhuhuibao.common.AskPriceSearchBean;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -20,8 +21,8 @@ public interface AskPriceMapper {
 
     List<AskPrice> find();
 
-    List<AskPrice> queryNewPriceInfo(int count);
+    List<AskPrice> queryNewPriceInfo(@Param("count") int count,@Param("createid")String createid);
 
-    List<AskPrice> findAllNewPriceInfoList(RowBounds rowBounds);
+    List<AskPrice> findAllNewPriceInfoList(RowBounds rowBounds,AskPriceSearchBean askPriceSearch);
 
 }
