@@ -241,25 +241,25 @@
     left join t_dictionary_cooperationType coo on coo.id = c.type
     LEFT JOIN t_m_member m on c.createId = m.id
     where co.type = 9
-    <if test="createId != null">
+    <if test="createId != null and createId != ''">
       and c.createId = #{createId}
     </if>
-    <if test="title != null">
+    <if test="title != null and title != ''">
       and c.title like CONCAT('%',#{title},'%')
     </if>
-    <if test="smart != null">
+    <if test="smart != null and smart != ''">
       and (c.title like CONCAT('%',#{smart},'%') or c.content like CONCAT('%',#{smart},'%'))
     </if>
-    <if test="type != null">
+    <if test="type != null and type != ''">
       and c.type = #{type}
     </if>
-    <if test="status != null">
+    <if test="status != null and status != ''">
       and c.status = #{status}
     </if>
-    <if test="category != null">
+    <if test="category != null and category != ''">
       and c.category = #{category}
     </if>
-    <if test="province != null">
+    <if test="province != null and province != ''">
       and c.province = #{province}
     </if>
     <if test="memberType != null and memberType == 1">
@@ -268,7 +268,7 @@
     <if test="memberType != null and memberType == 2">
       and m.identify = 2
     </if>
-    <if test="parentId != null">
+    <if test="parentId != null and parentId != ''">
       and coo.parentId = #{parentId}
     </if>
     order by c.updateTime desc

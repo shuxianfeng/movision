@@ -32,22 +32,22 @@
     telephone, email, province, city, area, address, cooperationType, status, is_deleted,introduce
   </sql>
   <select id="queryAchievementById" parameterType="java.lang.String" resultType="com.zhuhuibao.mybatis.memCenter.entity.Achievement">
-    select a.*,p.name as provinceName,c.name as cityName,ar.name as areaName,ca.name as systemName,co.name as useAreaName
+    select a.*,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,co.name as useAreaName
     from t_e_achievement a
     LEFT JOIN t_dictionary_province p on a.procince = p.code
     LEFT JOIN t_dictionary_city c on a.city = c.code
     LEFT JOIN t_dictionary_area ar on a.area = ar.code
-    LEFT JOIN t_p_category ca on ca.id = a.systemType
+    LEFT JOIN t_dictionary_constant con on con.code = a.systemType and con.type = 19
     LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
     where id = #{id}
   </select>
   <select id="findAllAchievementList" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.Achievement">
-    select a.*,p.name as provinceName,c.name as cityName,ar.name as areaName,ca.name as systemName,co.name as useAreaName
+    select a.*,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,co.name as useAreaName
     from t_e_achievement a
     LEFT JOIN t_dictionary_province p on a.procince = p.code
     LEFT JOIN t_dictionary_city c on a.city = c.code
     LEFT JOIN t_dictionary_area ar on a.area = ar.code
-    LEFT JOIN t_p_category ca on ca.id = a.systemType
+    LEFT JOIN t_dictionary_constant con on con.code = a.systemType and con.type = 19
     LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
     where a.is_deleted = 0
     <if test="title != null">
