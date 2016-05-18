@@ -186,14 +186,15 @@ public class PriceController {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         AskPriceSearchBean askPriceSearch = new AskPriceSearchBean();
+        String createid = "";
         if(null != session)
         {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
-                askPriceSearch.setCreateid(principal.getId().toString());
+                createid = principal.getId().toString();
             }
         }
-        JsonResult jsonResult = priceService.queryNewPriceInfo(6,askPriceSearch);
+        JsonResult jsonResult = priceService.queryNewPriceInfo(6,createid);
         return jsonResult;
     }
 

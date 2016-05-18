@@ -179,9 +179,9 @@ public class PriceService {
     /**
      * 最新公开询价(限六条)
      */
-    public JsonResult queryNewPriceInfo(int count,AskPriceSearchBean askPriceSearch){
+    public JsonResult queryNewPriceInfo(int count,String createid){
         JsonResult jsonResult = new JsonResult();
-        List<AskPrice> askPriceList = askPriceMapper.queryNewPriceInfo(count,askPriceSearch);
+        List<AskPrice> askPriceList = askPriceMapper.queryNewPriceInfo(count,createid);
         List list = new ArrayList();
         for(int i=0;i<askPriceList.size();i++){
             AskPrice askPrice = askPriceList.get(i);
