@@ -35,7 +35,7 @@ import com.zhuhuibao.mybatis.oms.entity.ProjectInfo;
  */
 @RestController
 @RequestMapping(value="/rest/project/")
-//@Api(value="项目信息",description = "项目信息")
+@Api(value="项目信息",description = "项目信息")
 public class ProjectController {
 	 private static final Logger log = LoggerFactory.getLogger(ProjectController.class);
 
