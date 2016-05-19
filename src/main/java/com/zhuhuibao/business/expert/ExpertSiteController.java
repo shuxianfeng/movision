@@ -167,8 +167,8 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="专家详情(前台)",notes="专家详情(前台)",response = JsonResult.class)
-    @RequestMapping(value = "queryExpertById", method = RequestMethod.GET)
-    public JsonResult queryExpertById(@ApiParam(value = "专家id")@RequestParam String id) throws Exception {
+    @RequestMapping(value = "expertInfo", method = RequestMethod.GET)
+    public JsonResult expertInfo(@ApiParam(value = "专家id")@RequestParam String id) throws Exception {
         JsonResult jsonResult = new JsonResult();
         Expert expert = expertService.queryExpertById(id);
         //返回到页面
@@ -196,8 +196,8 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="专家联系方式详情(前台)",notes="专家联系方式详情(前台)",response = JsonResult.class)
-    @RequestMapping(value = "queryExpertContactInfoById", method = RequestMethod.GET)
-    public JsonResult queryExpertContactInfoById(@ApiParam(value = "专家id")@RequestParam String id) throws Exception {
+    @RequestMapping(value = "expertContactInfo", method = RequestMethod.GET)
+    public JsonResult expertContactInfo(@ApiParam(value = "专家id")@RequestParam String id) throws Exception {
         JsonResult jsonResult = new JsonResult();
         Expert expert = expertService.queryExpertById(id);
         //返回到页面
