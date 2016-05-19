@@ -17,5 +17,7 @@ public interface AchievementMapper {
 
     List<Achievement> findAllAchievementList(Map<String,Object> map);
 
+    List<Map<String,String>> findAchievementListByCount(int count);
+
     int updateAchievement(Achievement achievement);
 }

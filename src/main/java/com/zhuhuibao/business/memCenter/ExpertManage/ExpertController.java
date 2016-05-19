@@ -1,6 +1,5 @@
 package com.zhuhuibao.business.memCenter.ExpertManage;
 
-import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
@@ -30,7 +29,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/expert")
-@Api(value="Expert", description="专家-会员中心")
 public class ExpertController {
     private static final Logger log = LoggerFactory
             .getLogger(ExpertController.class);

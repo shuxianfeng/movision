@@ -16,4 +16,6 @@ public interface DynamicMapper {
 
     List<Dynamic> findAllDynamicList(RowBounds rowBounds, Map<String,Object> map);
 
+    List<Map<String,String>> findDynamicListByCount(int count);
+
 }

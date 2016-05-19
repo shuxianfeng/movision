@@ -1,6 +1,5 @@
 package com.zhuhuibao.business.oms.expert;
 
-import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
@@ -26,8 +25,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/19 0019.
  */
 @RestController
-@RequestMapping("/rest/Oms")
-@Api(value="Expert", description="专家-运营")
+@RequestMapping("/rest/oms")
 public class ExpertOmsController {
     private static final Logger log = LoggerFactory
             .getLogger(ExpertOmsController.class);

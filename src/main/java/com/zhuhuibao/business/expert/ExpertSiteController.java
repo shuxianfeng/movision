@@ -1,6 +1,5 @@
 package com.zhuhuibao.business.expert;
 
-import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +31,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/expertSite")
-@Api(value="Expert", description="专家-前台")
 public class ExpertSiteController {
     private static final Logger log = LoggerFactory
             .getLogger(ExpertSiteController.class);
@@ -98,6 +95,15 @@ public class ExpertSiteController {
         return jsonResult;
     }
 
+    @ApiOperation(value="技术成果列表(前台)控制条数",notes="技术成果列表(前台)控制条数",response = JsonResult.class)
+    @RequestMapping(value = "achievementListByCount", method = RequestMethod.GET)
+    public JsonResult achievementListByCount(@RequestParam(required = false) int count) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        List<Map<String,String>> achievementList = expertService.findAchievementListByCount(count);
+        jsonResult.setData(achievementList);
+        return jsonResult;
+    }
+
     @ApiOperation(value="协会动态详情",notes="协会动态详情",response = JsonResult.class)
     @RequestMapping(value = "queryDynamicById", method = RequestMethod.GET)
     public JsonResult queryDynamicById(@RequestParam String id) throws Exception {
@@ -126,6 +132,15 @@ public class ExpertSiteController {
         List<Dynamic> dynamicList = expertService.findAllDynamicList(pager,map);
         pager.result(dynamicList);
         jsonResult.setData(pager);
+        return jsonResult;
+    }
+
+    @ApiOperation(value="协会动态列表(前台)控制条数",notes="协会动态列表(前台)控制条数",response = JsonResult.class)
+    @RequestMapping(value = "dynamicListByCount", method = RequestMethod.GET)
+    public JsonResult dynamicListByCount(@RequestParam(required = false) int count) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        List<Map<String,String>> dynamicList = expertService.findDynamicListByCount(count);
+        jsonResult.setData(dynamicList);
         return jsonResult;
     }
 
