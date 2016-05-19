@@ -261,28 +261,34 @@ public class ResumeService {
 
     /**
      * 最新求职
+     * @param condition 查询条件
+     * @return
      */
-    public JsonResult queryLatestResume(int count){
-        JsonResult jsonResult = new JsonResult();
-        List<Resume> resumeList = resumeMapper.queryLatestResume(count);
+    public List queryLatestResume(Map<String,Object> condition) throws Exception{
         List list = new ArrayList();
-        for(int i=0;i<resumeList.size();i++){
-            Resume resume = resumeList.get(i);
-            Map map = new HashMap();
-            map.put(Constant.id,resume.getId());
-            map.put(Constant.logo,resume.getPhoto());
-            map.put(Constant.status,resume.getStatus());
-            map.put(Constant.area,resume.getJobCity());
-            map.put(Constant.name,resume.getRealName());
-            map.put(Constant.position,resume.getPost());
-            map.put(Constant.experienceYear,resume.getWorkYear());
-            map.put(Constant.age,resume.getBirthYear());
-            map.put(Constant.salary,resume.getHopeSalary());
-            list.add(map);
+        try {
+            List<Resume> resumeList = resumeMapper.queryLatestResume(condition);
+
+            for (int i = 0; i < resumeList.size(); i++) {
+                Resume resume = resumeList.get(i);
+                Map map = new HashMap();
+                map.put(Constant.id, resume.getId());
+                map.put(Constant.logo, resume.getPhoto());
+                map.put(Constant.status, resume.getStatus());
+                map.put(Constant.area, resume.getJobCity());
+                map.put(Constant.name, resume.getRealName());
+                map.put(Constant.position, resume.getPost());
+                map.put(Constant.experienceYear, resume.getWorkYear());
+                map.put(Constant.age, resume.getBirthYear());
+                map.put(Constant.salary, resume.getHopeSalary());
+                list.add(map);
+            }
+        }catch(Exception e)
+        {
+            log.error("query latest resume error!");
+            throw e;
         }
-        jsonResult.setCode(200);
-        jsonResult.setData(list);
-        return jsonResult;
+        return list;
     }
 
     /**

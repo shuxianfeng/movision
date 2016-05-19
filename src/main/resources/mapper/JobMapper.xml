@@ -133,15 +133,24 @@
     where co.type = 1 and j.is_deleted = 0 and find_in_set(j.positionType,(select post from t_i_resume where createid= #{id} ))
     order by updateTime desc limit 0,#{count}
   </select>
-  <select id="searchSamePosition" resultMap="BaseResultMap">
+  <select id="searchSamePosition" resultType="java.util.Map" resultMap="BaseResultMap">
     select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,
     (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
     from t_i_job j
     left join t_dictionary_city c on c.code = j.city
     left join t_dictionary_constant co on co.code = j.salary
     left join t_m_member m on m.id = j.createid
-    where co.type = 1 and j.positionType = #{positionType}
-    order by updateTime desc limit 0,6
+    where co.type = 1 and m.status != 2
+    <if test="jobID != null and jobID != ''">
+      and j.id != ${jobID}
+    </if>
+    <if test="delete != null">
+      and j.is_deleted = #{delete}
+    </if>
+    <if test="positionType != null">
+      and j.positionType = #{positionType}
+    </if>
+    order by updateTime desc limit ${count}
   </select>
   <select id="searchLatestPublishPosition" resultMap="BaseResultMap">
     select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,j.createid,
@@ -203,7 +212,7 @@
     left join t_dictionary_city ct on ct.code = t.city
     left join t_dictionary_area ar on ar.code = t.area
     left join t_m_member mb on mb.id = t.createid
-    WHERE t.is_deleted = 0
+    WHERE t.is_deleted = 0 and mb.status != 2
       <if test="createID != null">
         and t.createid = #{createID}
       </if>
@@ -244,21 +253,34 @@
     left join t_m_member m on m.id = j.createid
     where re.resumeID = (select id from t_i_resume where createid = #{id}) and c.type = 1
   </select>
-  <select id="queryHotPosition" parameterType="java.lang.Integer" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
+  <select id="queryHotPosition" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
     select j.id,j.name, c.name as salaryName,ci.name as workArea,j.publishTime,m.enterpriseName,j.createid,
     (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare,m.enterpriseLogo
     from t_i_job j
     left join t_dictionary_constant c on j.salary = c.code
     LEFT JOIN t_dictionary_city ci on j.city = ci.code
     left join t_m_member m on m.id = j.createid
-    where c.type = 1 and j.is_deleted =0 order by j.views desc limit 0,#{count}
+    <where>
+    <if test="salary != null">
+      and c.type = #{salary}
+    </if>
+    <if test="delete != null">
+      and j.is_deleted = #{delete}
+    </if>
+    <if test="status != null">
+      and m.status != #{status}
+    </if>
+    </where>
+    order by j.views desc limit 0,#{count}
   </select>
   <select id="queryLatestJob" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
     select j.id,j.name,ci.name as city, c.name as salaryName,j.createid from t_i_job j
     left join t_dictionary_position p on j.positionType = p.id
     left join t_dictionary_city ci on ci.code = j.city
     left join t_dictionary_constant c on j.salary = c.code
-    where p.parentId = #{id} and c.type = 1 and j.is_deleted =0 order by j.updateTime desc limit 0,#{count}
+    left join t_m_member mb on mb.id = j.createid
+    where p.parentId = #{id} and c.type = 1 and j.is_deleted =0 and mb.status != 2
+    order by j.updateTime desc limit 0,#{count}
   </select>
   <select id="greatCompanyPosition" resultType="com.zhuhuibao.common.ResultBean">
     select distinct m.id as code,m.enterpriseLogo as name from t_i_job j

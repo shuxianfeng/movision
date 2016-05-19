@@ -183,7 +183,18 @@ public class PriceController {
     @ApiOperation(value="最新公开询价(限六条)",notes="最新公开询价(限六条)",response = JsonResult.class)
     @RequestMapping(value = "queryNewPriceInfo", method = RequestMethod.GET)
     public JsonResult queryNewPriceInfo() throws IOException {
-        JsonResult jsonResult = priceService.queryNewPriceInfo(6);
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        AskPriceSearchBean askPriceSearch = new AskPriceSearchBean();
+        String createid = "";
+        if(null != session)
+        {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
+            if(null != principal){
+                createid = principal.getId().toString();
+            }
+        }
+        JsonResult jsonResult = priceService.queryNewPriceInfo(6,createid);
         return jsonResult;
     }
 
@@ -200,8 +211,18 @@ public class PriceController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        AskPriceSearchBean askPriceSearch = new AskPriceSearchBean();
+        if(null != session)
+        {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
+            if(null != principal){
+                askPriceSearch.setCreateid(principal.getId().toString());
+            }
+        }
         Paging<AskPrice> pager = new Paging<AskPrice>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-        List<AskPrice> askPriceList = priceService.queryNewPriceInfoList(pager);
+        List<AskPrice> askPriceList = priceService.queryNewPriceInfoList(pager,askPriceSearch);
         pager.result(askPriceList);
         jsonResult.setCode(200);
         jsonResult.setData(pager);

@@ -11,6 +11,7 @@ import com.zhuhuibao.mybatis.memCenter.mapper.PositionMapper;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.exception.BusinessException;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.ibatis.reflection.ReflectionException;
 import org.mybatis.spring.MyBatisSystemException;
 import org.slf4j.Logger;
@@ -166,10 +167,10 @@ public class JobPositionService {
     /**
      * 查询不同公司发布的相同职位
      */
-    public JsonResult searchSamePosition(String id){
-        log.info("search same position form different company postID = "+id);
+    public JsonResult searchSamePosition(Map<String,Object> map){
+        log.info("search same position form different company postID = "+ StringUtils.mapToString(map));
         JsonResult result = new JsonResult();
-        List<Job> jobList = jobMapper.searchSamePosition(id);
+        List<Job> jobList = jobMapper.searchSamePosition(map);
         result.setData(jobList);
         result.setCode(200);
         return result;
@@ -333,60 +334,73 @@ public class JobPositionService {
     }
 
     /**
-     * 热门招聘
+     * 人才网首页热门招聘
+     * @param condition 查询的条件
+     * @return
+     * @throws Exception
      */
-    public JsonResult queryHotPosition(int count){
-        JsonResult jsonResult = new JsonResult();
-        List<Job> jobList = jobMapper.queryHotPosition(count);
+    public List queryHotPosition(Map<String,Object> condition) throws Exception{
         List list = new ArrayList();
-        for(int i=0;i<jobList.size();i++){
-            Job job = jobList.get(i);
-            Map map = new HashMap();
-            map.put(Constant.id,job.getId());
-            map.put(Constant.name,job.getName());
-            map.put(Constant.createid,job.getCreateid());
-            map.put(Constant.companyName,job.getEnterpriseName());
-            map.put(Constant.salary,job.getSalaryName());
-            map.put(Constant.publishTime,job.getPublishTime().substring(0,10));
-            map.put(Constant.area,job.getWorkArea());
-            map.put(Constant.welfare,job.getWelfare());
-            map.put(Constant.logo,job.getEnterpriseLogo());
-            list.add(map);
+        try {
+            List<Job> jobList = jobMapper.queryHotPosition(condition);
+            for (int i = 0; i < jobList.size(); i++) {
+                Job job = jobList.get(i);
+                Map map = new HashMap();
+                map.put(Constant.id, job.getId());
+                map.put(Constant.name, job.getName());
+                map.put(Constant.createid, job.getCreateid());
+                map.put(Constant.companyName, job.getEnterpriseName());
+                map.put(Constant.salary, job.getSalaryName());
+                map.put(Constant.publishTime, job.getPublishTime().substring(0, 10));
+                map.put(Constant.area, job.getWorkArea());
+                map.put(Constant.welfare, job.getWelfare());
+                map.put(Constant.logo, job.getEnterpriseLogo());
+                list.add(map);
+            }
+
+        }catch(Exception e)
+        {
+            log.error("query hot postion error!!");
+            throw e;
         }
-        jsonResult.setCode(200);
-        jsonResult.setData(list);
-        return jsonResult;
+        return list;
     }
 
     /**
      * 最新招聘（按分类一起查询）
+     * @param count 数量
+     * @return
      */
-    public JsonResult queryLatestJob(int count){
-        JsonResult jsonResult = new JsonResult();
-        List<Position> positionList = positionMapper.findPosition(6);
+    public List queryLatestJob(int count) throws Exception{
         List list = new ArrayList();
-        for(int a=0;a<positionList.size();a++){
-            Position position = positionList.get(a);
-            Map map = new HashMap();
-            map.put(Constant.name,position.getName());
-            List<Job> jobList = jobMapper.queryLatestJob(position.getId(),count);
-            List list1 = new ArrayList();
-            for(int i=0;i<jobList.size();i++){
-                Job job = jobList.get(i);
-                Map map1 = new HashMap();
-                map1.put(Constant.id,job.getId());
-                map1.put(Constant.name,job.getName());
-                map1.put(Constant.createid,job.getCreateid());
-                map1.put(Constant.salary,job.getSalaryName());
-                map1.put(Constant.area,job.getCity());
-                list1.add(map1);
+        try {
+            List<Position> positionList = positionMapper.findPosition(6);
+            for (int a = 0; a < positionList.size(); a++) {
+                Position position = positionList.get(a);
+                Map map = new HashMap();
+                map.put(Constant.name, position.getName());
+                List<Job> jobList = jobMapper.queryLatestJob(position.getId(), count);
+                List list1 = new ArrayList();
+                for (int i = 0; i < jobList.size(); i++) {
+                    Job job = jobList.get(i);
+                    Map map1 = new HashMap();
+                    map1.put(Constant.id, job.getId());
+                    map1.put(Constant.name, job.getName());
+                    map1.put(Constant.createid, job.getCreateid());
+                    map1.put(Constant.salary, job.getSalaryName());
+                    map1.put(Constant.area, job.getCity());
+                    list1.add(map1);
+                }
+                map.put("jobList", list1);
+                list.add(map);
             }
-            map.put("jobList",list1);
-            list.add(map);
+
+        }catch(Exception e)
+        {
+            log.error("query latest job error",e);
+            throw e;
         }
-        jsonResult.setCode(200);
-        jsonResult.setData(list);
-        return jsonResult;
+        return list;
     }
 
     /**
