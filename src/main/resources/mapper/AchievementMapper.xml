@@ -42,6 +42,12 @@
     LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
     where id = #{id}
   </select>
+  <select id="findAchievementListByCount" resultType="java.util.Map">
+    select a.id,a.title,date_format(a.publishTime,'%Y-%m-%d') publishTime
+    from t_e_achievement a
+    WHERE a.is_deleted = 0 and a.status = 1
+    ORDER a.updateTime DESC limit 0,#{count}
+  </select>
   <select id="findAllAchievementList" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.Achievement">
     select a.*,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,co.name as useAreaName,m.personRealName as createName
     from t_e_achievement a

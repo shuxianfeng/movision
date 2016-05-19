@@ -23,6 +23,12 @@
   <select id="queryDynamicById" resultMap="BaseResultMap" parameterType="java.lang.String" >
     SELECT * FROM t_e_dynamic WHERE id = #{id}
   </select>
+  <select id="findDynamicListByCount" resultType="java.util.Map" >
+    SELECT id,title
+    FROM t_e_dynamic
+    WHERE is_deleted = 0 and status = 1
+    ORDER updateTime DESC limit 0,#{count}
+  </select>
   <select id="findAllDynamicList" resultMap="BaseResultMap" >
     SELECT d.*,m.personRealName as createName FROM t_e_dynamic d
     LEFT JOIN t_m_member m on d.createId = m.id

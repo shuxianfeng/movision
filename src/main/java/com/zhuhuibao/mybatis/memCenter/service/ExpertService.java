@@ -2,8 +2,10 @@ package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
 import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
+import com.zhuhuibao.mybatis.memCenter.entity.Expert;
 import com.zhuhuibao.mybatis.memCenter.mapper.AchievementMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.DynamicMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.ExpertMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +31,9 @@ public class ExpertService {
 
     @Autowired
     private DynamicMapper dynamicMapper;
+
+    @Autowired
+    private ExpertMapper expertMapper;
 
     /**
      * 发布技术成果
@@ -57,11 +63,33 @@ public class ExpertService {
     }
 
     /**
-     * 技术成果列表
+     * 技术成果列表(分页)
      */
     public List<Achievement> findAllAchievementList(Paging<Achievement> pager,Map<String,Object> map)throws Exception{
         try{
             return achievementMapper.findAllAchievementList(pager.getRowBounds(),map);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    /**
+     * 技术成果列表
+     */
+    public List<Achievement> findAchievementList(Map<String,Object> map)throws Exception{
+        try{
+            return achievementMapper.findAllAchievementList(map);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    /**
+     * 技术成果列表(控制条数)
+     */
+    public List<Map<String,String>> findAchievementListByCount(int count)throws Exception{
+        try{
+            return achievementMapper.findAchievementListByCount(count);
         }catch (Exception e){
             throw e;
         }
@@ -105,7 +133,7 @@ public class ExpertService {
     }
 
     /**
-     * 更新动态详情
+     * 更新协会动态
      */
     public int updateDynamic(Dynamic dynamic)throws Exception{
         try{
@@ -116,11 +144,100 @@ public class ExpertService {
     }
 
     /**
-     * 动态详情列表
+     * 协会动态列表
      */
     public List<Dynamic> findAllDynamicList(Paging<Dynamic> pager,Map<String,Object> map)throws Exception{
         try{
             return dynamicMapper.findAllDynamicList(pager.getRowBounds(),map);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    /**
+     * 协会动态列表(控制条数)
+     */
+    public List<Map<String,String>> findDynamicListByCount(int count)throws Exception{
+        try{
+            return dynamicMapper.findDynamicListByCount(count);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    /**
+     * 申请专家
+     * @param expert
+     * @return
+     */
+    public int applyExpert(Expert expert)throws Exception{
+        try{
+            return expertMapper.expertMapper(expert);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    /**
+     * 专家详情
+     * @param id
+     * @return
+     */
+    public Expert queryExpertById(String id)throws Exception{
+        try{
+            return expertMapper.queryExpertById(id);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    /**
+     * 更新专家信息
+     * @param expert
+     * @return
+     */
+    public int updateExpert(Expert expert)throws Exception{
+        try{
+            return expertMapper.updateExpert(expert);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    /**
+     * 专家列表
+     * @param pager,map
+     * @return
+     */
+    public List<Expert> findAllExpertList(Paging<Expert> pager,Map<String,Object> map)throws Exception{
+        try{
+            return expertMapper.findAllExpertList(pager.getRowBounds(),map);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    /**
+     * 热门专家
+     * @param count
+     * @return
+     */
+    public List<Expert> queryHotExpert(int count)throws Exception{
+        try{
+            return expertMapper.queryHotExpert(count);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    /**
+     * 最新专家
+     * @param count
+     * @return
+     */
+    public List<Expert> queryLatestExpert(int count)throws Exception{
+        try{
+            return expertMapper.queryLatestExpert(count);
         }catch (Exception e){
             throw e;
         }

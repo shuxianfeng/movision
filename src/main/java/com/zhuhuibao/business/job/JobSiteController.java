@@ -401,6 +401,7 @@ public class JobSiteController {
         //“1”推荐企业.
         map.put("recommend", JobConstant.JOB_RECOMMEND_TRUE);
         map.put("count",JobConstant.JOB_HOTPOSITION_COUNT_EIGHT);
+        map.put("status",JobConstant.JOB_MEMBER_STATUS_LOGOUT);
         List<Job> jobList = job.queryEnterpriseHotPosition(map);
         jsonResult.setData(jobList);
         return jsonResult;
