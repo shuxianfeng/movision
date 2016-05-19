@@ -282,6 +282,9 @@
        <if test="createid != null">
         and t.createid = #{createid,jdbcType=BIGINT}
       </if>
+      <if test="name != null">
+        and t.name = #{name,jdbcType=VARCHAR}
+      </if>
       order by publishTime desc
   </select>
    <select id="queryProductByParamIDs" parameterType="java.lang.String" resultType="com.zhuhuibao.mybatis.product.entity.Product">
