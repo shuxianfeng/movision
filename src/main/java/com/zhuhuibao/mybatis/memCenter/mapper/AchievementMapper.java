@@ -12,7 +12,10 @@ public interface AchievementMapper {
 
     Achievement queryAchievementById(String id);
 
+    //分页
     List<Achievement> findAllAchievementList(RowBounds rowBounds,Map<String,Object> map);
+
+    List<Achievement> findAllAchievementList(Map<String,Object> map);
 
     int updateAchievement(Achievement achievement);
 }

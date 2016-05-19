@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,37 +37,6 @@ public class ExpertController {
 
     @Autowired
     private ExpertService expertService;
-
-    @ApiOperation(value="发布技术成果",notes="发布技术成果",response = JsonResult.class)
-    @RequestMapping(value = "publishAchievement", method = RequestMethod.POST)
-    public JsonResult publishAchievement(Achievement achievement) throws Exception {
-        JsonResult jsonResult = new JsonResult();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-            if(null != principal){
-                achievement.setCreateId(principal.getId().toString());
-                expertService.publishAchievement(achievement);
-            }else{
-                jsonResult.setCode(401);
-                jsonResult.setMessage("请先登录");
-            }
-        }else{
-            jsonResult.setCode(401);
-            jsonResult.setMessage("请先登录");
-        }
-        return jsonResult;
-    }
-
-    @ApiOperation(value="技术成果详情",notes="技术成果详情",response = JsonResult.class)
-    @RequestMapping(value = "queryAchievementById", method = RequestMethod.GET)
-    public JsonResult queryAchievementById(@RequestParam String id) throws Exception {
-        JsonResult jsonResult = new JsonResult();
-        Achievement achievement = expertService.queryAchievementById(id);
-        jsonResult.setData(achievement);
-        return jsonResult;
-    }
 
     @ApiOperation(value="我的技术成果(后台)",notes="我的技术成果(后台)",response = JsonResult.class)
     @RequestMapping(value = "myAchievementList", method = RequestMethod.GET)
@@ -94,7 +62,7 @@ public class ExpertController {
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
-                map.put("createid",principal.getId());
+                map.put("createId",principal.getId());
                 List<Achievement> achievementList = expertService.findAllAchievementList(pager,map);
                 pager.result(achievementList);
                 jsonResult.setData(pager);
@@ -109,7 +77,7 @@ public class ExpertController {
         return jsonResult;
     }
 
-    @ApiOperation(value="删除成果详情",notes="删除成果详情",response = JsonResult.class)
+    @ApiOperation(value="删除技术成果",notes="删除技术成果",response = JsonResult.class)
     @RequestMapping(value = "deleteAchievement", method = RequestMethod.POST)
     public JsonResult deleteAchievement(@RequestParam String ids[]) throws Exception {
         JsonResult jsonResult = new JsonResult();
@@ -124,7 +92,7 @@ public class ExpertController {
         return jsonResult;
     }
 
-    @ApiOperation(value="更新成果详情",notes="更新成果详情",response = JsonResult.class)
+    @ApiOperation(value="更新技术成果",notes="更新技术成果",response = JsonResult.class)
     @RequestMapping(value = "updateAchievement", method = RequestMethod.POST)
     public JsonResult updateAchievement(Achievement achievement) throws Exception {
         JsonResult jsonResult = new JsonResult();
@@ -151,15 +119,6 @@ public class ExpertController {
             jsonResult.setCode(401);
             jsonResult.setMessage("请先登录");
         }
-        return jsonResult;
-    }
-
-    @ApiOperation(value="协会动态详情",notes="协会动态详情",response = JsonResult.class)
-    @RequestMapping(value = "queryDynamicById", method = RequestMethod.GET)
-    public JsonResult queryDynamicById(@RequestParam String id) throws Exception {
-        JsonResult jsonResult = new JsonResult();
-        Dynamic dynamic = expertService.queryDynamicById(id);
-        jsonResult.setData(dynamic);
         return jsonResult;
     }
 
@@ -210,7 +169,7 @@ public class ExpertController {
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
-                map.put("createid",principal.getId());
+                map.put("createId",principal.getId());
                 List<Dynamic> dynamicList = expertService.findAllDynamicList(pager,map);
                 pager.result(dynamicList);
                 jsonResult.setData(pager);
@@ -224,4 +183,5 @@ public class ExpertController {
         }
         return jsonResult;
     }
+
 }
