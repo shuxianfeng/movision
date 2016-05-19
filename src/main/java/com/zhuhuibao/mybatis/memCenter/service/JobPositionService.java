@@ -405,21 +405,26 @@ public class JobPositionService {
 
     /**
      * 名企招聘
+     * @return
+     * @throws Exception
      */
-    public JsonResult greatCompanyPosition(){
-        JsonResult jsonResult = new JsonResult();
-        List<ResultBean> companyList = jobMapper.greatCompanyPosition();
+    public List greatCompanyPosition() throws Exception{
+        log.info("advertising greatest enterprise job");
         List list = new ArrayList();
-        for(int i=0;i<companyList.size();i++){
-            ResultBean company = companyList.get(i);
-            Map map = new HashMap();
-            map.put(Constant.id,company.getCode());
-            map.put(Constant.logo,company.getName());
-            list.add(map);
+        try {
+            List<ResultBean> companyList = jobMapper.greatCompanyPosition();
+            for (int i = 0; i < companyList.size(); i++) {
+                ResultBean company = companyList.get(i);
+                Map map = new HashMap();
+                map.put(Constant.id, company.getCode());
+                map.put(Constant.logo, company.getName());
+                list.add(map);
+            }
+        }catch(Exception e) {
+            log.error("advertising greatest enterprise job error!",e);
+            throw e;
         }
-        jsonResult.setData(list);
-        jsonResult.setCode(200);
-        return jsonResult;
+        return list;
     }
 
     /**
