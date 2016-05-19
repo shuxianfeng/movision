@@ -67,8 +67,10 @@ public class JobSiteController {
     ChannelNewsService newsService;
 
     @RequestMapping(value="applyPosition", method = RequestMethod.POST)
-    public void applyPosition(HttpServletRequest req, HttpServletResponse response,String jobID,
-                              String recID,String messageText) throws JsonGenerationException, JsonMappingException, IOException
+    @ApiOperation(value="应聘职位",notes = "应聘职位",response = JsonResult.class)
+    public JsonResult applyPosition(@ApiParam(value = "简历ID") @RequestParam String jobID,
+                                    @ApiParam(value = "发布职位企业ID") @RequestParam String recID,
+                                    @ApiParam(value = "职位标题") @RequestParam String messageText) throws JsonGenerationException, JsonMappingException, IOException
     {
         log.info("applay position recID = "+recID+" messageText ="+messageText);
         Long createid = ShiroUtil.getCreateID();
@@ -93,8 +95,7 @@ public class JobSiteController {
             jsonResult.setCode(400);
             jsonResult.setMessage("you are not login!!!!");
         }
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 
     /**
@@ -107,7 +108,9 @@ public class JobSiteController {
      * @throws IOException
      */
     @RequestMapping(value="exportResume", method = RequestMethod.GET)
-    public void exportResume(HttpServletRequest req, HttpServletResponse response,Long resumeID) throws JsonGenerationException, JsonMappingException, IOException
+    @ApiOperation(value="定义简历模板导出简历",notes = "定义简历模板导出简历")
+    public void exportResume(HttpServletRequest req, HttpServletResponse response,
+                             @ApiParam(value = "简历ID") @RequestParam Long resumeID) throws JsonGenerationException, JsonMappingException, IOException
     {
         log.info("export resume id == "+resumeID);
         response.setDateHeader("Expires", 0);
@@ -138,13 +141,11 @@ public class JobSiteController {
 
     @RequestMapping(value="queryCompanyInfo", method = RequestMethod.GET)
     @ApiOperation(value="公司详情",notes = "公司详情",response = JsonResult.class)
-    public void queryCompanyInfo(HttpServletRequest req, HttpServletResponse response,
-                                 @ApiParam(value = "创建者ID(会员ID)") @RequestParam(required = true) Long id) throws JsonGenerationException, JsonMappingException, IOException
+    public JsonResult queryCompanyInfo(@ApiParam(value = "创建者ID(会员ID)") @RequestParam(required = true) Long id) throws JsonGenerationException, JsonMappingException, IOException
     {
         log.info("query company info id "+id);
         JsonResult jsonResult = job.queryCompanyInfo(id);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 
     @RequestMapping(value="queryAdvertisingPosition", method = RequestMethod.GET)
@@ -169,9 +170,12 @@ public class JobSiteController {
     }
 
     @RequestMapping(value="queryOtherPosition", method = RequestMethod.GET)
-    public void queryOtherPosition(HttpServletRequest req, HttpServletResponse response,
-                                   String jobID,String createID,
-                                   String pageNo,String pageSize) throws JsonGenerationException, JsonMappingException, IOException
+    @ApiOperation(value = "职位详情中的其它职位",notes = "职位详情中的其它职位",response = JsonResult.class)
+    public JsonResult queryOtherPosition(
+                                   @ApiParam(value = "职位ID") @RequestParam(required = true) String jobID,
+                                   @ApiParam(value="") @RequestParam() String createID,
+                                   @ApiParam(value = "页码") @RequestParam(required = false)String pageNo,
+                                   @ApiParam(value="每页显示的条数") @RequestParam(required = false) String pageSize) throws JsonGenerationException, JsonMappingException, IOException
     {
         log.info("query position info by id");
         if (StringUtils.isEmpty(pageNo)) {
@@ -188,26 +192,15 @@ public class JobSiteController {
         List<Job> jobList = job.findAllOtherPosition(pager,map);
         pager.result(jobList);
         jsonResult.setData(pager);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 
-    /**
-     * 查询某个企业发布的职位
-     * @param req
-     * @param response
-     * @param enterpriseID 创建者ID
-     * @param city  城市代码
-     * @param name
-     * @param pageNo
-     * @param pageSize
-     * @throws JsonGenerationException
-     * @throws JsonMappingException
-     * @throws IOException
-     */
     @RequestMapping(value="queryPublishPositionByID", method = RequestMethod.GET)
-    public void queryPublishPositionByID(HttpServletRequest req, HttpServletResponse response,
-                                   String enterpriseID,String city,String name,
+    @ApiOperation(value="查询某个企业发布的职位",notes = "查询某个企业发布的职位",response = JsonResult.class)
+    public JsonResult queryPublishPositionByID(
+                                   @ApiParam(value = "企业ID") @RequestParam String enterpriseID,
+                                   @ApiParam(value= "城市code") @RequestParam(required = false) String city,
+                                   @ApiParam(value= "名称") @RequestParam(required = false) String name,
                                    String pageNo,String pageSize) throws JsonGenerationException, JsonMappingException, IOException
     {
         log.info("query position info by id");
@@ -226,13 +219,12 @@ public class JobSiteController {
         List<Job> jobList = job.findAllOtherPosition(pager,map);
         pager.result(jobList);
         jsonResult.setData(pager);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 
     @RequestMapping(value="queryAllPosition", method = RequestMethod.GET)
     @ApiOperation(value="职位搜索",notes = "职位频道页搜索",response = JsonResult.class)
-    public void queryAllPosition(HttpServletRequest req, HttpServletResponse response,
+    public JsonResult queryAllPosition(HttpServletRequest req, HttpServletResponse response,
                                  @ApiParam(value="公司名称或企业名称") @RequestParam(required = false) String name,
                                  @ApiParam(value="省代码") @RequestParam(required = false) String province,
                                  @ApiParam(value="市代码") @RequestParam(required = false)String city,
@@ -273,16 +265,16 @@ public class JobSiteController {
         List<Job> jobList = job.findAllOtherPosition(pager,map);
         pager.result(jobList);
         jsonResult.setData(pager);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 
     @RequestMapping(value="findAllResume", method = RequestMethod.GET)
     @ApiOperation(value="人才库搜索",notes = "人才库搜索",response = JsonResult.class)
-    public void findAllResume(HttpServletRequest req, HttpServletResponse response,
+    public JsonResult findAllResume(HttpServletRequest req, HttpServletResponse response,
                               @ApiParam(value="简历名称") @RequestParam(required = false) String title,
                               @ApiParam(value="期望工作城市") @RequestParam(required = false) String jobCity,
-                              @ApiParam(value="工作经验") @RequestParam(required = false)String expYear,
+                              @ApiParam(value="工作年限前") @RequestParam(required = false)String expYearBefore,
+                              @ApiParam(value="工作年限后") @RequestParam(required = false)String expYearBehind,
                               @ApiParam(value="学历") @RequestParam(required = false)String education,
                               @ApiParam(value="职位类别") @RequestParam(required = false)String positionType,
                               @ApiParam(value="页码") @RequestParam(required = false)String pageNo,
@@ -303,9 +295,11 @@ public class JobSiteController {
             map.put("title",title.replace("_","\\_"));
         }
         map.put("jobCity",jobCity);
-        map.put("expYear",expYear);
+        map.put("expYearBefore",expYearBefore);
+        map.put("expYearBehind",expYearBehind);
         map.put("education",education);
         map.put("isPublic","1");
+        map.put("status",JobConstant.JOB_MEMBER_STATUS_LOGOUT);
         if(positionType != null && positionType.length() > 0)
         {
             String[] positionTypes = positionType.split(",");
@@ -314,8 +308,7 @@ public class JobSiteController {
         }
         jsonResult = resume.findAllResume(pager, map);
         jsonResult.setData(pager);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 
     /**
@@ -323,51 +316,74 @@ public class JobSiteController {
      */
     @RequestMapping(value = "queryRecommendPosition", method = RequestMethod.GET)
     @ApiOperation(value = "根据当前职位类别查询出其它公司的职位",notes = "查找按照最新时间排序",response = JsonResult.class)
-    public void queryRecommendPosition(HttpServletRequest req, HttpServletResponse response,String postID) throws IOException {
+    public JsonResult queryRecommendPosition(@ApiParam(value = "职位ID") @RequestParam String jobID,
+                                             @ApiParam(value="职位类别ID") @RequestParam(required = false) String postID) throws IOException {
         //查询不同公司发布的相同职位
-        JsonResult jsonResult = job.searchSamePosition(postID);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("postID",postID);
+        map.put("count",JobConstant.JOB_RECOMMEND_COUNT);
+        map.put("delete",JobConstant.JOB_DELETE_ZERO);
+        map.put("jobID",jobID);
+        JsonResult jsonResult = job.searchSamePosition(map);
+        return jsonResult;
     }
 
     /**
      * 热门招聘
      */
     @RequestMapping(value = "queryHotPosition", method = RequestMethod.GET)
-    public void queryHotPosition(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        JsonResult jsonResult = job.queryHotPosition(9);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    @ApiOperation(value = "人才网首页热门招聘 默认9个",notes = "人才网首页热门招聘 默认9个",response = JsonResult.class)
+    public JsonResult queryHotPosition() throws Exception {
+        Map<String,Object> condition = new HashMap<String,Object>();
+        condition.put("count",JobConstant.JOB_HOTPOSITION_COUNT_NINE);
+        condition.put("delete",JobConstant.JOB_DELETE_ZERO);
+        condition.put("salary",JobConstant.JOB_TYPE_SALARY);
+        condition.put("status",JobConstant.JOB_MEMBER_STATUS_LOGOUT);
+        List jobList = job.queryHotPosition(condition);
+        JsonResult jsonResult = new JsonResult();
+        jsonResult.setData(jobList);
+        return jsonResult;
     }
 
     /**
      * 最新求职
      */
     @RequestMapping(value = "queryLatestResume", method = RequestMethod.GET)
-    public void queryLatestResume(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        JsonResult jsonResult = resume.queryLatestResume(9);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    @ApiOperation(value = "人才网首页最新求职 默认9个",notes = "人才网首页最新求职    默认9个",response = JsonResult.class)
+    public JsonResult queryLatestResume() throws Exception {
+        Map<String,Object> condition = new HashMap<String,Object>();
+        condition.put("count",JobConstant.JOB_RESUME_LATEST_COUNT_NINE);
+        condition.put("public",JobConstant.JOB_RESUME_STATUS_PUBLIC);
+        condition.put("status",JobConstant.JOB_MEMBER_STATUS_LOGOUT);
+        JsonResult jsonResult = new JsonResult();
+        List resumeList = resume.queryLatestResume(condition);
+        jsonResult.setData(resumeList);
+        return jsonResult;
     }
 
     /**
      * 最新招聘（按分类一起查询）
      */
     @RequestMapping(value = "queryLatestJob", method = RequestMethod.GET)
-    public void queryLatestJob(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        JsonResult jsonResult = job.queryLatestJob(5);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    @ApiOperation(value = "人才网首页最新招聘",notes = "人才网首页最新招聘",response = JsonResult.class)
+    public JsonResult queryLatestJob() throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        List list = job.queryLatestJob(5);
+        jsonResult.setData(list);
+        return jsonResult;
+
     }
 
     /**
      * 名企招聘
      */
     @RequestMapping(value = "greatCompanyPosition", method = RequestMethod.GET)
-    public void greatCompanyPosition(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        JsonResult jsonResult = job.greatCompanyPosition();
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    @ApiOperation(value = "广告位名企招聘",notes = "广告位名企招聘",response = JsonResult.class)
+    public JsonResult greatCompanyPosition() throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        List enterpriseList = job.greatCompanyPosition();
+        jsonResult.setData(enterpriseList);
+        return jsonResult;
     }
 
     @RequestMapping(value = "querySimilarCompany", method = RequestMethod.GET)

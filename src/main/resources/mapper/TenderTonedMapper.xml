@@ -173,7 +173,7 @@
         and type = #{type}
       </if>
       <if test="noticeName != null and noticeName != ''">
-        and noticeName = #{noticeName}
+        and noticeName like concat('%',#{noticeName},'%')
       </if>
       <if test="province != null and province != ''">
         and province = #{province}

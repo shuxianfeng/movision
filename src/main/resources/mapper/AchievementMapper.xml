@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.AchievementMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Achievement" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createId" property="createId" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="systemType" property="systemType" jdbcType="VARCHAR" />
+    <result column="useArea" property="useArea" jdbcType="VARCHAR" />
+    <result column="companyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="linkMan" property="linkMan" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="cooperationType" property="cooperationType" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="is_deleted" jdbcType="VARCHAR" />
+    <result column="introduce" property="introduce" jdbcType="VARCHAR" />
+    <result column="provinceName" property="provinceName" jdbcType="VARCHAR" />
+    <result column="cityName" property="cityName" jdbcType="VARCHAR" />
+    <result column="areaName" property="areaName" jdbcType="VARCHAR" />
+    <result column="systemName" property="systemName" jdbcType="VARCHAR" />
+    <result column="useAreaName" property="useAreaName" jdbcType="VARCHAR" />
+    <result column="createName" property="createName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, createId, publishTime, updateTime, title, systemType, useArea, companyName, linkMan, 
+    telephone, email, province, city, area, address, cooperationType, status, is_deleted,introduce
+  </sql>
+  <select id="queryAchievementById" parameterType="java.lang.String" resultType="com.zhuhuibao.mybatis.memCenter.entity.Achievement">
+    select a.*,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,co.name as useAreaName
+    from t_e_achievement a
+    LEFT JOIN t_dictionary_province p on a.procince = p.code
+    LEFT JOIN t_dictionary_city c on a.city = c.code
+    LEFT JOIN t_dictionary_area ar on a.area = ar.code
+    LEFT JOIN t_dictionary_constant con on con.code = a.systemType and con.type = 19
+    LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
+    where id = #{id}
+  </select>
+  <select id="findAllAchievementList" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.Achievement">
+    select a.*,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,co.name as useAreaName,m.personRealName as createName
+    from t_e_achievement a
+    LEFT JOIN t_dictionary_province p on a.procince = p.code
+    LEFT JOIN t_dictionary_city c on a.city = c.code
+    LEFT JOIN t_dictionary_area ar on a.area = ar.code
+    LEFT JOIN t_dictionary_constant con on con.code = a.systemType and con.type = 19
+    LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
+    LEFT JOIN t_m_member m on a.createId = m.id
+    where a.is_deleted = 0
+    <if test="title != null">
+      and a.title like CONCAT('%',#{title},'%')
+    </if>
+    <if test="status != null">
+      and a.status = #{status}
+    </if>
+    <if test="createId != null">
+      and a.createId = #{createId}
+    </if>
+    <if test="systemType != null">
+      and a.systemType = #{systemType}
+    </if>
+    <if test="useArea != null">
+      and a.useArea = #{useArea}
+    </if>
+    <if test="type != null">
+      and a.status = 1
+    </if>
+    order by a.updateTime desc
+  </select>
+  <insert id="publishAchievement" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Achievement" >
+    insert into t_e_achievement
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createId != null" >
+        createId,
+      </if>
+        publishTime,
+        updateTime,
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="systemType != null" >
+        systemType,
+      </if>
+      <if test="useArea != null" >
+        useArea,
+      </if>
+      <if test="companyName != null" >
+        companyName,
+      </if>
+      <if test="linkMan != null" >
+        linkMan,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="cooperationType != null" >
+        cooperationType,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="is_deleted != null" >
+        is_deleted,
+      </if>
+      <if test="introduce != null" >
+        introduce,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="createId != null" >
+        #{createId},
+      </if>
+      now(),
+      now(),
+      <if test="title != null" >
+        #{title},
+      </if>
+      <if test="systemType != null" >
+        #{systemType},
+      </if>
+      <if test="useArea != null" >
+        #{useArea},
+      </if>
+      <if test="companyName != null" >
+        #{companyName},
+      </if>
+      <if test="linkMan != null" >
+        #{linkMan},
+      </if>
+      <if test="telephone != null" >
+        #{telephone},
+      </if>
+      <if test="email != null" >
+        #{email},
+      </if>
+      <if test="province != null" >
+        #{province},
+      </if>
+      <if test="city != null" >
+        #{city},
+      </if>
+      <if test="area != null" >
+        #{area},
+      </if>
+      <if test="address != null" >
+        #{address},
+      </if>
+      <if test="cooperationType != null" >
+        #{cooperationType},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="is_deleted != null" >
+        #{is_deleted},
+      </if>
+      <if test="introduce != null" >
+        #{introduce},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateAchievement" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Achievement" >
+    update t_e_achievement
+    <set >
+      <if test="updateTime != null" >
+        updateTime = now(),
+      </if>
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="systemType != null" >
+        systemType = #{systemType},
+      </if>
+      <if test="useArea != null" >
+        useArea = #{useArea},
+      </if>
+      <if test="companyName != null" >
+        companyName = #{companyName},
+      </if>
+      <if test="linkMan != null" >
+        linkMan = #{linkMan},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone},
+      </if>
+      <if test="email != null" >
+        email = #{email},
+      </if>
+      <if test="province != null" >
+        province = #{province},
+      </if>
+      <if test="city != null" >
+        city = #{city},
+      </if>
+      <if test="area != null" >
+        area = #{area},
+      </if>
+      <if test="address != null" >
+        address = #{address},
+      </if>
+      <if test="cooperationType != null" >
+        cooperationType = #{cooperationType},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="is_deleted != null" >
+        is_deleted = #{is_deleted},
+      </if>
+      <if test="introduce != null" >
+        introduce = #{introduce},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>
