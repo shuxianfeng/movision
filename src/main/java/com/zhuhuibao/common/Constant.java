@@ -291,6 +291,10 @@ public interface Constant {
 	 */
 	String publishTime = "publishTime";
 	/**
+	 * 更新时间
+	 */
+	String updateTime = "updateTime";
+	/**
 	 *
 	 */
 	String offerTime = "offerTime";

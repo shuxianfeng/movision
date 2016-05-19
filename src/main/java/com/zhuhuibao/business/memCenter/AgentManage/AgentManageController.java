@@ -35,9 +35,9 @@ import java.util.Map;
  * Created by cxx on 2016/3/22 0022.
  */
 @RestController
-public class AgentMamageController {
+public class AgentManageController {
     private static final Logger log = LoggerFactory
-            .getLogger(AgentMamageController.class);
+            .getLogger(AgentManageController.class);
 
     @Autowired
     private CategoryService categoryService;

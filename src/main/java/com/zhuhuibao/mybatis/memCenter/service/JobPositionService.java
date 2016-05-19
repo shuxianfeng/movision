@@ -352,6 +352,7 @@ public class JobPositionService {
                 map.put(Constant.companyName, job.getEnterpriseName());
                 map.put(Constant.salary, job.getSalaryName());
                 map.put(Constant.publishTime, job.getPublishTime().substring(0, 10));
+                map.put(Constant.updateTime, job.getUpdateTime().substring(0, 10));
                 map.put(Constant.area, job.getWorkArea());
                 map.put(Constant.welfare, job.getWelfare());
                 map.put(Constant.logo, job.getEnterpriseLogo());
