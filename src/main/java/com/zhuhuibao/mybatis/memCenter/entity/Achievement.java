@@ -51,6 +51,8 @@ public class Achievement {
 
     private String useAreaName;
 
+    private String createName;
+
     public String getId() {
         return id;
     }
@@ -241,5 +243,13 @@ public class Achievement {
 
     public void setUseAreaName(String useAreaName) {
         this.useAreaName = useAreaName;
+    }
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
     }
 }
