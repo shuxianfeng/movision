@@ -71,4 +71,7 @@
       resumeID = #{resumeID,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="isExistApplyPosition" parameterType="java.util.Map">
+
+  </select>
 </mapper>

@@ -134,7 +134,7 @@
     order by updateTime desc limit 0,#{count}
   </select>
   <select id="searchSamePosition" resultType="java.util.Map" resultMap="BaseResultMap">
-    select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,
+    select j.positionType,j.id,j.publishTime,j.name,j.createid,c.name as city,co.name as salaryName,m.enterpriseName,
     (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
     from t_i_job j
     left join t_dictionary_city c on c.code = j.city
@@ -312,6 +312,6 @@
   <select id="queryEnterpriseHotPosition" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
     select jb.id,jb.createid,co.name as salaryName,jb.name from t_i_job jb left join t_m_member m on jb.createid = m.id
     left join t_dictionary_constant co on co.code = jb.salary and co.type = 1
-    where m.isrecommend = #{recommend} and jb.is_deleted = 0 order by jb.views desc limit #{count}
+    where m.isrecommend = #{recommend} and and m.status != #{status} and jb.is_deleted = 0 order by jb.views desc limit #{count}
   </select>
 </mapper>
