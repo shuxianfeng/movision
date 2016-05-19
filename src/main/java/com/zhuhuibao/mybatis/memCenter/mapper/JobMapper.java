@@ -69,4 +69,6 @@ public interface JobMapper {
 
     //查询名企热门职位
     List<Job> queryEnterpriseHotPosition(Map<String,Object> map);
+
+    Map<String,Object> findJobByID(String id);
 }

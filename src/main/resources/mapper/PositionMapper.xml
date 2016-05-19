@@ -21,4 +21,7 @@
     from t_dictionary_position
     where parentId != 0
   </select>
+  <select id="findById" resultType="java.util.Map">
+    select * from t_dictionary_position where id = #{id}
+  </select>
 </mapper>

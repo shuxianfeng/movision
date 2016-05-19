@@ -314,4 +314,7 @@
     left join t_dictionary_constant co on co.code = jb.salary and co.type = 1
     where m.isrecommend = #{recommend} and jb.is_deleted = 0 order by jb.views desc limit #{count}
   </select>
+  <select id="findJobByID" resultType="java.util.Map">
+    select * from t_i_job where id= #{id}
+  </select>
 </mapper>

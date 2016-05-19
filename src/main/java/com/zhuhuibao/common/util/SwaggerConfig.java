@@ -14,9 +14,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  * @author jianglz
  * @version 2016-05-03
  */
-@Configuration
+//@Configuration
+//@EnableWebMvc
 @EnableSwagger
-@EnableWebMvc
 public class SwaggerConfig {
     private SpringSwaggerConfig springSwaggerConfig;
 

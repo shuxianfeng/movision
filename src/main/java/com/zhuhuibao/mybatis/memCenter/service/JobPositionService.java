@@ -484,4 +484,12 @@ public class JobPositionService {
         return jobList;
     }
 
+    /**
+     * 根据ID查询
+     * @param id {id}
+     * @return
+     */
+    public Map<String,Object> findById(String id){
+       return positionMapper.findById(id);
+    }
 }
