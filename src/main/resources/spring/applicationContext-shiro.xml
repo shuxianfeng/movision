@@ -89,10 +89,8 @@
         </property>
         <property name="filterChainDefinitions">
             <value>
-                <!--/index = authc-->
                 /login** = anon
                 /index = anon
-                /demo = anon
                 /pagination = anon
                 /logout = logout
                 /register/** = anon
