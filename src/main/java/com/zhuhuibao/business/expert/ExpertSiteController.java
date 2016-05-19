@@ -4,9 +4,14 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
+import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
 import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +43,7 @@ public class ExpertSiteController {
     public JsonResult achievementList(@RequestParam(required = false) String systemType,
                                         @RequestParam(required = false)String useArea,
                                         @RequestParam(required = false)String pageNo,
-                                        @RequestParam(required = false)String pageSize) throws IOException {
+                                        @RequestParam(required = false)String pageSize) throws Exception {
         JsonResult jsonResult = new JsonResult();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
@@ -66,7 +71,7 @@ public class ExpertSiteController {
                                          @RequestParam(required = false) String systemType,
                                       @RequestParam(required = false)String useArea,
                                       @RequestParam(required = false)String pageNo,
-                                      @RequestParam(required = false)String pageSize) throws IOException {
+                                      @RequestParam(required = false)String pageSize) throws Exception {
         JsonResult jsonResult = new JsonResult();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
@@ -84,6 +89,53 @@ public class ExpertSiteController {
         map.put("status",status);
         List<Achievement> achievementList = expertService.findAllAchievementList(pager,map);
         pager.result(achievementList);
+        jsonResult.setData(pager);
+        return jsonResult;
+    }
+
+    @ApiOperation(value="协会动态列表(前台)",notes="协会动态列表(前台)",response = JsonResult.class)
+    @RequestMapping(value = "dynamicList", method = RequestMethod.GET)
+    public JsonResult dynamicList(@RequestParam(required = false)String pageNo,
+                                    @RequestParam(required = false)String pageSize) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        //设定默认分页pageSize
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Dynamic> pager = new Paging<Dynamic>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String,Object> map = new HashMap<>();
+        //查询传参
+        map.put("type",1);
+        List<Dynamic> dynamicList = expertService.findAllDynamicList(pager,map);
+        pager.result(dynamicList);
+        jsonResult.setData(pager);
+        return jsonResult;
+    }
+
+    @ApiOperation(value="协会动态列表(运营)",notes="协会动态列表(运营)",response = JsonResult.class)
+    @RequestMapping(value = "dynamicListOms", method = RequestMethod.GET)
+    public JsonResult dynamicListOms(@RequestParam(required = false) String title,
+                                     @RequestParam(required = false)String status,
+                                     @RequestParam(required = false)String pageNo,
+                                  @RequestParam(required = false)String pageSize) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        //设定默认分页pageSize
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Dynamic> pager = new Paging<Dynamic>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String,Object> map = new HashMap<>();
+        //查询传参
+        map.put("title",title);
+        map.put("status",status);
+        List<Dynamic> dynamicList = expertService.findAllDynamicList(pager,map);
+        pager.result(dynamicList);
         jsonResult.setData(pager);
         return jsonResult;
     }

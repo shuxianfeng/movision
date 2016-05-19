@@ -1,0 +1,135 @@
+package com.zhuhuibao.mybatis.memCenter.entity;
+
+import java.util.Date;
+
+public class Dynamic {
+    private String id;
+
+    private String createId;
+
+    private String publishTime;
+
+    private String updateTime;
+
+    private String title;
+
+    private String wordkey;
+
+    private String description;
+
+    private String imgurl;
+
+    private String views;
+
+    private String status;
+
+    private String is_deleted;
+
+    private String content;
+
+    private String createName;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(String createId) {
+        this.createId = createId;
+    }
+
+    public String getPublishTime() {
+        return publishTime;
+    }
+
+    public void setPublishTime(String publishTime) {
+        this.publishTime = publishTime;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getWordkey() {
+        return wordkey;
+    }
+
+    public void setWordkey(String wordkey) {
+        this.wordkey = wordkey;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
+    }
+
+    public String getViews() {
+        return views;
+    }
+
+    public void setViews(String views) {
+        this.views = views;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getIs_deleted() {
+        return is_deleted;
+    }
+
+    public void setIs_deleted(String is_deleted) {
+        this.is_deleted = is_deleted;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+}

@@ -26,6 +26,7 @@
     <result column="areaName" property="areaName" jdbcType="VARCHAR" />
     <result column="systemName" property="systemName" jdbcType="VARCHAR" />
     <result column="useAreaName" property="useAreaName" jdbcType="VARCHAR" />
+    <result column="createName" property="createName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, createId, publishTime, updateTime, title, systemType, useArea, companyName, linkMan, 
@@ -42,13 +43,14 @@
     where id = #{id}
   </select>
   <select id="findAllAchievementList" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.Achievement">
-    select a.*,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,co.name as useAreaName
+    select a.*,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,co.name as useAreaName,m.personRealName as createName
     from t_e_achievement a
     LEFT JOIN t_dictionary_province p on a.procince = p.code
     LEFT JOIN t_dictionary_city c on a.city = c.code
     LEFT JOIN t_dictionary_area ar on a.area = ar.code
     LEFT JOIN t_dictionary_constant con on con.code = a.systemType and con.type = 19
     LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
+    LEFT JOIN t_m_member m on a.createId = m.id
     where a.is_deleted = 0
     <if test="title != null">
       and a.title like CONCAT('%',#{title},'%')
