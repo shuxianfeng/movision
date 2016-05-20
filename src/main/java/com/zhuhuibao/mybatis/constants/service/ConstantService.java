@@ -48,32 +48,32 @@ public class ConstantService {
 
     /**
      * 新增
-     * @param constant  [entity]
+     * @param aConstant  [entity]
      * @return
      */
-    @CachePut(value = "constantCache" , key = "#constant.id")
-    public int insert(Constant constant){
-        return constantMapper.insert(constant);
+    @CachePut(value = "constantCache" , key = "#aConstant.id")
+    public int insert(Constant aConstant){
+        return constantMapper.insert(aConstant);
     }
 
-    @CachePut(value = "constantCache" , key = "#constant.id")
-    public int insertSelective(Constant constant){
-        return constantMapper.insertSelective(constant);
+    @CachePut(value = "constantCache" , key = "#aConstant.id")
+    public int insertSelective(Constant aConstant){
+        return constantMapper.insertSelective(aConstant);
     }
 
     /**
      * 更新
-     * @param constant [entity]
+     * @param aConstant [entity]
      * @return
      */
-    @CachePut(value = "constantCache" , key = "#constant.id")
-    public int updateByPrimaryKey(Constant constant){
-        return constantMapper.updateByPrimaryKey(constant);
+    @CachePut(value = "constantCache" , key = "#aConstant.id")
+    public int updateByPrimaryKey(Constant aConstant){
+        return constantMapper.updateByPrimaryKey(aConstant);
     }
 
-    @CachePut(value = "constantCache" , key = "#constant.id")
-    public int updateByPrimaryKeySelective(Constant constant){
-        return constantMapper.updateByPrimaryKeySelective(constant);
+    @CachePut(value = "constantCache" , key = "#aConstant.id")
+    public int updateByPrimaryKeySelective(Constant aConstant){
+        return constantMapper.updateByPrimaryKeySelective(aConstant);
     }
 
 

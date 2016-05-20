@@ -1,7 +1,6 @@
 package com.zhuhuibao.mybatis.constants.mapper;
 
 import com.zhuhuibao.mybatis.constants.entity.Constant;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,7 @@ public interface ConstantMapper {
 
     int updateByPrimaryKey(Constant record);
 
-    List<Constant> selectByType(String type);
+    Map<String,String> selectByTypeCode(String type, String code);
 
-    Map<String,String> selectByTypeCode(@Param("type") String type , @Param("code") String code);
+    List<Constant> selectByType(String type);
 }

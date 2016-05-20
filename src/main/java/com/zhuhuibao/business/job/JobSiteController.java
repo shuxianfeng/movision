@@ -46,8 +46,8 @@ import java.util.*;
  * Created by Administrator on 2016/4/21 0021.
  */
 @RestController
-@RequestMapping("/rest/jobsite/")
-@Api(value="jobsite", description="人才网")
+@RequestMapping("/rest/jobsite")
+@Api(value="Jobsite", description="人才网")
 public class JobSiteController {
     private final static Logger log = LoggerFactory.getLogger(JobSiteController.class);
 

@@ -2,13 +2,10 @@ package com.zhuhuibao.business.brand;
 
 import com.zhuhuibao.common.*;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
-import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.oms.entity.Category;
-import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
 import com.zhuhuibao.mybatis.oms.service.CategoryService;
 import com.zhuhuibao.mybatis.product.entity.Product;
-import com.zhuhuibao.mybatis.product.mapper.ProductMapper;
 import com.zhuhuibao.mybatis.product.service.ProductService;
 import com.zhuhuibao.utils.JsonUtils;
 import org.slf4j.Logger;
@@ -32,8 +29,7 @@ import java.util.Map;
  */
 @RestController
 public class BrandController {
-    private static final Logger log = LoggerFactory
-            .getLogger(BrandController.class);
+    private static final Logger log = LoggerFactory.getLogger(BrandController.class);
 
     @Autowired
     private BrandService brandService;
@@ -46,51 +42,50 @@ public class BrandController {
 
     /**
      * 查询大系统，子系统，品牌（首页）
-     * @param req
      * @return
      * @throws IOException
      */
     @RequestMapping(value = "/rest/category/all", method = RequestMethod.GET)
-    public void findAll(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public JsonResult findAll(HttpServletResponse response) throws IOException {
         JsonResult result = new JsonResult();
         List<ResultBean> sysList = categoryService.findSystemList();
         List<SysBean> allList = categoryService.searchAll();
         List<BrandBean> brandList = brandService.searchAll();
         List list = new ArrayList();
-        for(int i=0;i<sysList.size();i++){
+        for (ResultBean aSysList : sysList) {
             List list1 = new ArrayList();
             Map map1 = new HashMap();
-            ResultBean a = sysList.get(i);
-            map1.put("id",a.getCode());
-            map1.put("name",a.getName());
-            map1.put("icon",a.getSmallIcon());
-            for(int y=0;y<allList.size();y++){
+            ResultBean a = aSysList;
+            map1.put("id", a.getCode());
+            map1.put("name", a.getName());
+            map1.put("icon", a.getSmallIcon());
+            for (SysBean anAllList : allList) {
                 Map map2 = new HashMap();
-                SysBean b = allList.get(y);
-                if(a.getCode().equals(b.getId())){
-                    map2.put("id",b.getCode());
-                    map2.put("name",b.getSubSystemName());
+                SysBean b = anAllList;
+                if (a.getCode().equals(b.getId())) {
+                    map2.put("id", b.getCode());
+                    map2.put("name", b.getSubSystemName());
                     List list3 = new ArrayList();
-                    for(int x=0;x<brandList.size();x++){
+                    for (BrandBean aBrandList : brandList) {
                         Map map3 = new HashMap();
-                        BrandBean c = brandList.get(x);
-                        if(b.getCode().equals(c.getScateid())){
-                            map3.put("id",c.getId());
-                            map3.put("name",c.getBrandCNName());
+                        BrandBean c = aBrandList;
+                        if (b.getCode().equals(c.getScateid())) {
+                            map3.put("id", c.getId());
+                            map3.put("name", c.getBrandCNName());
                             list3.add(map3);
                         }
                     }
-                    map2.put("brand",list3);
+                    map2.put("brand", list3);
                     list1.add(map2);
                 }
             }
-            map1.put("subSystem",list1);
+            map1.put("subSystem", list1);
             list.add(map1);
         }
         result.setCode(200);
         result.setData(list);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+        return result;
     }
 
     /**
@@ -100,36 +95,36 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/findSuggestBrand", method = RequestMethod.GET)
-    public void findSuggestBrand(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+    public JsonResult findSuggestBrand(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
         JsonResult result = new JsonResult();
         List<ResultBean> SubSystemList = categoryService.findSubSystemListLimit(id);
         List<SuggestBrand> brandList = brandService.SuggestBrand();
         List list = new ArrayList();
-        for(int i=0;i<SubSystemList.size();i++){
+        for (ResultBean aSubSystemList : SubSystemList) {
             List list1 = new ArrayList();
             Map map1 = new HashMap();
-            ResultBean a = SubSystemList.get(i);
-            map1.put("id",a.getCode());
-            map1.put("name",a.getName());
-            for(int x=0;x<brandList.size();x++){
+            ResultBean a = aSubSystemList;
+            map1.put("id", a.getCode());
+            map1.put("name", a.getName());
+            for (SuggestBrand aBrandList : brandList) {
                 Map map2 = new HashMap();
-                SuggestBrand b = brandList.get(x);
-                if(a.getCode().equals(b.getScateid())){
-                    if(list1.size()<6){
-                        map2.put("id",b.getId());
-                        map2.put("name",b.getBrandCNName());
-                        map2.put("logoUrl",b.getLogoUrl());
+                SuggestBrand b = aBrandList;
+                if (a.getCode().equals(b.getScateid())) {
+                    if (list1.size() < 6) {
+                        map2.put("id", b.getId());
+                        map2.put("name", b.getBrandCNName());
+                        map2.put("logoUrl", b.getLogoUrl());
                         list1.add(map2);
                     }
                 }
             }
-            map1.put("brand",list1);
+            map1.put("brand", list1);
             list.add(map1);
         }
         result.setCode(200);
         result.setData(list);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+        return result;
     }
     /**
      * 查询大系统下的子系统
@@ -138,7 +133,7 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/category/findSubSystem", method = RequestMethod.GET)
-    public void findSubSystem(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+    public JsonResult findSubSystem(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
         List<ResultBean> subSystemList = categoryService.findSubSystemList(id);
         Map map = new HashMap();
         Category category = categoryService.findSystem(id);
@@ -149,8 +144,8 @@ public class BrandController {
         JsonResult result = new JsonResult();
         result.setCode(200);
         result.setData(map);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+        return result;
     }
 
     /**
@@ -160,13 +155,13 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/findAllBrand", method = RequestMethod.GET)
-    public void findAllBrand(HttpServletRequest req, HttpServletResponse response, Product product) throws IOException {
+    public JsonResult findAllBrand(HttpServletRequest req, HttpServletResponse response, Product product) throws IOException {
         List<ResultBean> brandList = brandService.findAllBrand(product);
         JsonResult result = new JsonResult();
         result.setCode(200);
         result.setData(brandList);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+        return result;
     }
 
     /**
@@ -176,13 +171,13 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/searchSuggestBrand", method = RequestMethod.GET)
-    public void searchSuggestBrand(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public JsonResult searchSuggestBrand(HttpServletRequest req, HttpServletResponse response) throws IOException {
         List<ResultBean> brandList = brandService.searchSuggestBrand();
         JsonResult result = new JsonResult();
         result.setCode(200);
         result.setData(brandList);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+        return result;
     }
 
     /**
@@ -192,7 +187,7 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/details", method = RequestMethod.GET)
-    public void details(HttpServletRequest req, HttpServletResponse response,String id,String scateid) throws IOException {
+    public JsonResult details(HttpServletRequest req, HttpServletResponse response,String id,String scateid) throws IOException {
         Map map1 = new HashMap();
         Map map2 = new HashMap();
         Map map3 = new HashMap();
@@ -227,8 +222,8 @@ public class BrandController {
         JsonResult jsonResult = new JsonResult();
         jsonResult.setCode(200);
         jsonResult.setData(map1);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+
+        return jsonResult;
     }
 
     /**
@@ -238,13 +233,13 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/findSubSystemByBrand", method = RequestMethod.GET)
-    public void findSubSystemByBrand(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+    public JsonResult findSubSystemByBrand(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
         //品牌对应的子系统
         List<ResultBean> list = productService.findSubSystem(id);
         JsonResult result = new JsonResult();
         result.setCode(200);
         result.setData(list);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+        return result;
     }
 }

@@ -39,7 +39,7 @@ import java.util.Map;
  * Created by cxx on 2016/3/29 0029.
  */
 @RestController
-@RequestMapping("/rest/price/")
+@RequestMapping("/rest/price")
 @Api(value="Price", description="询价")
 public class PriceController {
     private static final Logger log = LoggerFactory.getLogger(PriceController.class);

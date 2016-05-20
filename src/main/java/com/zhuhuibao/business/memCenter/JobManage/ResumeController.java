@@ -1,5 +1,7 @@
 package com.zhuhuibao.business.memCenter.JobManage;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.ApiConstants;
 import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
@@ -35,6 +37,8 @@ import java.util.Map;
  * Created by cxx on 2016/4/19 0019.
  */
 @RestController
+@RequestMapping("/rest/job")
+@Api(value="Resume", description="会员中心-简历管理")
 public class ResumeController {
     private static final Logger log = LoggerFactory.getLogger(ResumeController.class);
 
@@ -49,8 +53,9 @@ public class ResumeController {
     /**
      * 发布简历
      */
-    @RequestMapping(value = "/rest/job/setUpResume", method = RequestMethod.POST)
-    public void setUpResume(HttpServletRequest req, HttpServletResponse response, Resume resume) throws IOException {
+    @ApiOperation(value = "发布简历", notes = "发布简历", response = JsonResult.class)
+    @RequestMapping(value = "setUpResume", method = RequestMethod.POST)
+    public JsonResult setUpResume(Resume resume) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         JsonResult jsonResult = new JsonResult();
@@ -64,15 +69,16 @@ public class ResumeController {
             jsonResult.setCode(401);
             jsonResult.setMessage("请先登录");
         }
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+
+        return jsonResult;
     }
 
     /**
      * 查询我创建的简历
      */
-    @RequestMapping(value = "/rest/job/searchMyResume", method = RequestMethod.GET)
-    public void searchMyResume(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    @ApiOperation(value = "查询我创建的简历", notes = "查询我创建的简历", response = JsonResult.class)
+    @RequestMapping(value = "searchMyResume", method = RequestMethod.GET)
+    public JsonResult searchMyResume() throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         JsonResult jsonResult = new JsonResult();
@@ -85,34 +91,33 @@ public class ResumeController {
             jsonResult.setCode(401);
             jsonResult.setMessage("请先登录");
         }
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+        return jsonResult;
     }
 
     /**
      * 更新简历,刷新简历
      */
-    @RequestMapping(value = "/rest/job/updateResume", method = RequestMethod.POST)
-    public void updateResume(HttpServletRequest req, HttpServletResponse response,Resume resume) throws IOException {
-        JsonResult jsonResult = resumeService.updateResume(resume);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    @ApiOperation(value = "更新简历", notes = "更新简历", response = JsonResult.class)
+    @RequestMapping(value = "updateResume", method = RequestMethod.POST)
+    public JsonResult updateResume(Resume resume) throws IOException {
+        return resumeService.updateResume(resume);
     }
 
     /**
      * 预览简历
      */
-    @RequestMapping(value = "/rest/job/previewResume", method = RequestMethod.GET)
-    public JsonResult previewResume(HttpServletRequest req, HttpServletResponse response,String id) throws Exception {
-        JsonResult jsonResult = resumeService.previewResume(id);
-        return jsonResult;
+    @ApiOperation(value = "预览简历", notes = "预览简历", response = JsonResult.class)
+    @RequestMapping(value = "previewResume", method = RequestMethod.GET)
+    public JsonResult previewResume(String id) throws Exception {
+        return resumeService.previewResume(id);
     }
 
     /**
      * 上传简历附件
      */
-    @RequestMapping(value = "/rest/price/uploadResume", method = RequestMethod.POST)
-    public void uploadResume(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    @ApiOperation(value = "上传简历附件", notes = "上传简历附件", response = JsonResult.class)
+    @RequestMapping(value = "uploadResume", method = RequestMethod.POST)
+    public JsonResult uploadResume(HttpServletRequest req) throws IOException {
         JsonResult result = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -126,15 +131,15 @@ public class ResumeController {
             result.setCode(401);
             result.setMessage("请先登录");
         }
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+        return result;
     }
 
     /**
      * 查询我创建的简历的全部信息
      */
-    @RequestMapping(value = "/rest/job/searchMyResumeAllInfo", method = RequestMethod.GET)
-    public void searchMyResumeAllInfo(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    @ApiOperation(value = "查询我创建的简历的全部信息", notes = "查询我创建的简历的全部信息", response = JsonResult.class)
+    @RequestMapping(value = "searchMyResumeAllInfo", method = RequestMethod.GET)
+    public JsonResult searchMyResumeAllInfo() throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         JsonResult jsonResult = new JsonResult();
@@ -147,15 +152,16 @@ public class ResumeController {
             jsonResult.setCode(401);
             jsonResult.setMessage("请先登录");
         }
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+
+        return jsonResult;
     }
 
     /**
      * 我收到的简历
      */
-    @RequestMapping(value = "/rest/job/receiveResume", method = RequestMethod.GET)
-    public void receiveResume(HttpServletRequest req, HttpServletResponse response,String pageNo,String pageSize) throws IOException {
+    @ApiOperation(value = "我收到的简历", notes = "我收到的简历", response = JsonResult.class)
+    @RequestMapping(value = "receiveResume", method = RequestMethod.GET)
+    public JsonResult receiveResume(String pageNo, String pageSize) throws IOException {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -175,15 +181,16 @@ public class ResumeController {
             jsonResult.setCode(401);
             jsonResult.setMessage("请先登录");
         }
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+
+        return jsonResult;
     }
 
     /**
      * 下载简历附件
      */
-    @RequestMapping(value = "/rest/job/downLoadResume", method = RequestMethod.GET)
-    public void downLoadResume(HttpServletRequest req, HttpServletResponse response,String id,String url) throws IOException {
+    @ApiOperation(value = "下载简历附件", notes = "下载简历附件")
+    @RequestMapping(value = "downLoadResume", method = RequestMethod.GET)
+    public void downLoadResume(HttpServletResponse response, String id) throws IOException {
         JsonResult jsonResult = new JsonResult();
         try {
             String fileurl = resumeService.downloadBill(id);

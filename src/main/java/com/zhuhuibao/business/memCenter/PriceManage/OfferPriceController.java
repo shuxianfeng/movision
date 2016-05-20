@@ -1,30 +1,21 @@
 package com.zhuhuibao.business.memCenter.PriceManage;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.*;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
-import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.utils.file.FileUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.zhuhuibao.common.ApiConstants;
@@ -35,12 +26,12 @@ import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferPrice;
 import com.zhuhuibao.mybatis.memCenter.service.OfferPriceService;
 import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
-import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 
 @RestController
-@RequestMapping("/rest/price/")
+@RequestMapping("/rest/price")
+@Api(value="OfferPrice", description="报价")
 public class OfferPriceController {
 	
 	private static final Logger log = LoggerFactory.getLogger(OfferPriceController.class);
@@ -53,7 +44,7 @@ public class OfferPriceController {
 
 	@ApiOperation(value="我要报价(清单和单一产品)",notes="我要报价(清单和单一产品)",response = JsonResult.class)
 	@RequestMapping(value="addOfferPrice", method = RequestMethod.POST)
-	public JsonResult addOfferPrice(OfferPrice price) throws JsonGenerationException, JsonMappingException, IOException
+	public JsonResult addOfferPrice(OfferPrice price) throws IOException
 	{
 		log.info("add offer price");
 		JsonResult jsonResult = new JsonResult();
@@ -72,7 +63,7 @@ public class OfferPriceController {
 	@RequestMapping(value="queryAskingPriceInfo",method = RequestMethod.GET)
 	public JsonResult queryAskingPriceInfo(AskPrice price,
 										   @RequestParam(required = false) String pageNo,
-										   @RequestParam(required = false) String pageSize) throws JsonGenerationException, JsonMappingException, IOException
+										   @RequestParam(required = false) String pageSize) throws IOException
 	{
 		JsonResult jsonResult = new JsonResult();
 		Long createID= ShiroUtil.getCreateID();
@@ -102,7 +93,7 @@ public class OfferPriceController {
 											@RequestParam(required = false) String startDate,
 											@RequestParam(required = false) String endDate,
 											@RequestParam(required = false) String pageNo,
-											@RequestParam(required = false) String pageSize) throws JsonGenerationException, JsonMappingException, IOException
+											@RequestParam(required = false) String pageSize) throws IOException
 	{
 		JsonResult jsonResult = new JsonResult();
 		Long createID= ShiroUtil.getCreateID();
@@ -131,19 +122,19 @@ public class OfferPriceController {
 
 	@ApiOperation(value="公开，定向，单一产品报价查询",notes="公开，定向，单一产品报价查询",response = JsonResult.class)
 	@RequestMapping(value="queryOfferPriceInfoByID", method = RequestMethod.GET)
-	public JsonResult queryOfferPriceInfoByID(@RequestParam Long id) throws JsonGenerationException, JsonMappingException, IOException
+	public JsonResult queryOfferPriceInfoByID(@RequestParam Long id) throws IOException
 	{
-		log.info("query offer priece info by id ");
+		log.debug("query offer priece info by id ");
 		JsonResult jsonResult = offerService.queryOfferPriceInfoByID(id);
 		return jsonResult;
 	}
 
 	@ApiOperation(value="下载报价单，询价单",notes="下载报价单，询价单",response = JsonResult.class)
 	@RequestMapping(value="downloadBill", method = RequestMethod.GET)
-	public JsonResult downloadBill(HttpServletResponse response,@RequestParam Long id,@RequestParam String type) throws JsonGenerationException, JsonMappingException, IOException
+	public JsonResult downloadBill(HttpServletResponse response,@RequestParam Long id,@RequestParam String type) throws IOException
 	{
 		JsonResult jsonResult = new JsonResult();
-		log.info("query offer priece info by id ");
+		log.debug("query offer priece info by id ");
 		try {
 			String fileurl = offerService.downloadBill(id, type);
 			response.setDateHeader("Expires", 0);
@@ -164,19 +155,17 @@ public class OfferPriceController {
 
 	@ApiOperation(value="查看某条询价信息的所有报价信息",notes="查看某条询价信息的所有报价信息",response = JsonResult.class)
 	@RequestMapping(value="queryAllOfferPriceByAskID", method = RequestMethod.GET)
-	public JsonResult queryAllOfferPriceByAskID(@RequestParam Long id) throws JsonGenerationException, JsonMappingException, IOException
+	public JsonResult queryAllOfferPriceByAskID(@RequestParam Long id) throws IOException
 	{
-		log.info("query all offer priece by askid ");
-		JsonResult jsonResult = offerService.queryAllOfferPriceByAskID(id);
-		return jsonResult;
+		log.debug("query all offer priece by askid ");
+		return offerService.queryAllOfferPriceByAskID(id);
 	}
 
 	@ApiOperation(value="查看回复的具体某条报价信息(清单,单一产品)",notes="查看回复的具体某条报价信息(清单,单一产品)",response = JsonResult.class)
 	@RequestMapping(value="queryOfferPriceByID", method = RequestMethod.GET)
-	public JsonResult queryOfferPriceByID(@RequestParam Long id) throws JsonGenerationException, JsonMappingException, IOException
+	public JsonResult queryOfferPriceByID(@RequestParam Long id) throws IOException
 	{
-		log.info("query offer priece info by id ");
-		JsonResult jsonResult = offerService.queryOfferPriceByID(id);
-		return jsonResult;
+		log.debug("query offer priece info by id ");
+		return offerService.queryOfferPriceByID(id);
 	}
 }

@@ -32,8 +32,7 @@ import java.util.Map;
 @RequestMapping("/rest/exhibition")
 @Api(value="Exhibition", description="会展")
 public class ExhibitionController {
-    private static final Logger log = LoggerFactory
-            .getLogger(ExhibitionController.class);
+    private static final Logger log = LoggerFactory.getLogger(ExhibitionController.class);
 
     @Autowired
     private ExhibitionService exhibitionService;

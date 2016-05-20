@@ -1,5 +1,6 @@
 package com.zhuhuibao.business.oms.expert;
 
+import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
@@ -26,9 +27,9 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/oms")
+@Api(value="ExportOms")
 public class ExpertOmsController {
-    private static final Logger log = LoggerFactory
-            .getLogger(ExpertOmsController.class);
+    private static final Logger log = LoggerFactory.getLogger(ExpertOmsController.class);
 
     @Autowired
     private ExpertService expertService;

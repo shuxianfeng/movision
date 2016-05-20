@@ -2,13 +2,9 @@ package com.zhuhuibao.business.oms.member;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import com.zhuhuibao.common.OmsMemBean;
-import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
-import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -33,13 +29,11 @@ public class MemManageController {
 	private OmsMemService omsMemService;
 	/**
 	 * 查询全部会员（分页）
-	 * @param req
-	 * @param response
 	 * @param member
 	 * @throws IOException
 	 */
 	@RequestMapping(value="/rest/oms/getAllMemInfo",method = RequestMethod.GET)
-	public void getAllMemInfo(HttpServletRequest req,HttpServletResponse response, OmsMemBean member,String pageNo,String pageSize) throws IOException
+	public JsonResult getAllMemInfo(OmsMemBean member, String pageNo, String pageSize) throws IOException
 	{
 		if (StringUtils.isEmpty(pageNo)) {
 			pageNo = "1";
@@ -49,19 +43,16 @@ public class MemManageController {
 		}
 		Paging<OmsMemBean> pager = new Paging<OmsMemBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
 		JsonResult result = omsMemService.getAllMemInfo(pager,member);
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+		return result;
 	}
 
 	/**
 	 * 查询全部会员资质（分页）
-	 * @param req
-	 * @param response
 	 * @param member
 	 * @throws IOException
 	 */
 	@RequestMapping(value="/rest/oms/getAllMemCertificate",method = RequestMethod.GET)
-	public void getAllMemCertificate(HttpServletRequest req,HttpServletResponse response, OmsMemBean member,String pageNo,String pageSize) throws IOException
+	public JsonResult getAllMemCertificate(OmsMemBean member, String pageNo, String pageSize) throws IOException
 	{
 		if (StringUtils.isEmpty(pageNo)) {
 			pageNo = "1";
@@ -71,7 +62,7 @@ public class MemManageController {
 		}
 		Paging<OmsMemBean> pager = new Paging<OmsMemBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
 		JsonResult result = omsMemService.getAllMemCertificate(pager,member);
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+		return result;
 	}
 }

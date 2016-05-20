@@ -3,11 +3,9 @@ package com.zhuhuibao.business.oms.system;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.oms.entity.Category;
-import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
 import com.zhuhuibao.mybatis.oms.service.CategoryService;
 import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.mybatis.product.service.ProductService;
-import com.zhuhuibao.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +22,9 @@ import java.util.List;
  * 运营中心类目管理
  * Created by cxx on 2016/3/4 0004.
  */
-@RestController()
+@RestController
 public class SystemController {
-    private static final Logger log = LoggerFactory
-            .getLogger(SystemController.class);
+    private static final Logger log = LoggerFactory.getLogger(SystemController.class);
 
     @Autowired
     private CategoryService categoryService;
@@ -36,19 +33,18 @@ public class SystemController {
     private ProductService productService;
     /**
      * 查询大系统类目
-     * @param req
      * @return
      * @throws IOException
      */
 
     @RequestMapping(value = "/rest/systemSearch", method = RequestMethod.GET)
-    public void systemSearch(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public JsonResult systemSearch() throws IOException {
         JsonResult jsonResult = new JsonResult();
         List<ResultBean> systemList = categoryService.findSystemList();
         jsonResult.setCode(200);
         jsonResult.setData(systemList);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+
+        return jsonResult;
     }
 
     /**
@@ -59,40 +55,36 @@ public class SystemController {
      */
 
     @RequestMapping(value = "/rest/subSystemSearch", method = RequestMethod.GET)
-    public void subSystemSearch(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public JsonResult subSystemSearch(HttpServletRequest req) throws IOException {
         JsonResult jsonResult = new JsonResult();
         String parentId = req.getParameter("parentId");
         List<ResultBean> subSystemList = categoryService.findSubSystemList(parentId);
         jsonResult.setCode(200);
         jsonResult.setData(subSystemList);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+
+        return jsonResult;
     }
 
 
     /**
      * 查询大系统，子系统
-     * @param req
      * @return
      * @throws IOException
      */
 
     @RequestMapping(value = "/rest/system/findSystem", method = RequestMethod.GET)
-    public void findSystem(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        JsonResult jsonResult = categoryService.findAllSystem();
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    public JsonResult findSystem() throws IOException {
+        return categoryService.findAllSystem();
     }
 
     /**
      * 添加类目
-     * @param req
      * @return
      * @throws IOException
      */
 
     @RequestMapping(value = "/rest/system/addSystem", method = RequestMethod.POST)
-    public void addSystem(HttpServletRequest req, HttpServletResponse response,Category category) throws IOException {
+    public JsonResult addSystem(Category category) throws IOException {
         JsonResult result = new JsonResult();
         int isAdd = categoryService.addSystem(category);
         if(isAdd==0){
@@ -101,19 +93,18 @@ public class SystemController {
         }else{
             result.setCode(200);
         }
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+        return result;
     }
 
     /**
      * 编辑类目
-     * @param req
      * @return
      * @throws IOException
      */
 
     @RequestMapping(value = "/rest/system/updateSystem", method = RequestMethod.POST)
-    public void updateSystem(HttpServletRequest req, HttpServletResponse response,Category category) throws IOException {
+    public JsonResult updateSystem(Category category) throws IOException {
         JsonResult result = new JsonResult();
         int isUpdate = categoryService.updateSystem(category);
         if(isUpdate==0){
@@ -122,19 +113,17 @@ public class SystemController {
         }else{
             result.setCode(200);
         }
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+        return result;
     }
 
     /**
      * 删除类目
-     * @param req
      * @return
      * @throws IOException
      */
 
     @RequestMapping(value = "/rest/system/deleteSystem", method = RequestMethod.POST)
-    public void deleteSystem(HttpServletRequest req, HttpServletResponse response,Category category) throws IOException {
+    public JsonResult deleteSystem(Category category) throws IOException {
         JsonResult result = new JsonResult();
         Product product = productService.findProductBySystemId(category.getId().toString());
         if(product!=null){
@@ -144,8 +133,8 @@ public class SystemController {
             categoryService.deleteSystem(category);
             result.setCode(200);
         }
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+        return result;
     }
 
 }

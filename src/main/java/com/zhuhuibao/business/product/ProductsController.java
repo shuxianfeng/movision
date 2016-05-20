@@ -36,7 +36,7 @@ public class ProductsController {
 	
 	@RequestMapping(value="/rest/searchProducts", method = RequestMethod.GET)
 	@ResponseBody
-	public void searchProducts(HttpServletRequest req,HttpServletResponse response,ProductSearchSpec spec) throws JsonGenerationException, JsonMappingException, IOException
+	public JsonResult searchProducts(ProductSearchSpec spec) throws IOException
 	{
 		if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
 			spec.setLimit(12);
@@ -56,7 +56,6 @@ public class ProductsController {
 		jsonResult.setMessage("OK!");
 		jsonResult.setData(ret);
 
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+		return jsonResult;
 	}
 }

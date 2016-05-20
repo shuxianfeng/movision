@@ -26,8 +26,7 @@ import java.io.IOException;
 @RequestMapping("/rest/cooperation")
 @Api(value="Cooperation", description="会员中心-合作管理")
 public class CooperationController {
-    private static final Logger log = LoggerFactory
-            .getLogger(CooperationController.class);
+    private static final Logger log = LoggerFactory.getLogger(CooperationController.class);
 
     @Autowired
     private CooperationService cooperationService;

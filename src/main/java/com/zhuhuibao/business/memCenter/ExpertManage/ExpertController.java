@@ -1,5 +1,6 @@
 package com.zhuhuibao.business.memCenter.ExpertManage;
 
+import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
@@ -31,6 +32,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/expert")
+@Api(value = "Expert")
 public class ExpertController {
     private static final Logger log = LoggerFactory
             .getLogger(ExpertController.class);
@@ -81,8 +83,7 @@ public class ExpertController {
     @RequestMapping(value = "deleteAchievement", method = RequestMethod.POST)
     public JsonResult deleteAchievement(@ApiParam(value = "技术成果ids")@RequestParam String ids[]) throws Exception {
         JsonResult jsonResult = new JsonResult();
-        for(int i=0;i<ids.length;i++){
-            String id = ids[i];
+        for (String id : ids) {
             String is_deleted = "1";
             Achievement achievement = new Achievement();
             achievement.setIs_deleted(is_deleted);
@@ -126,8 +127,7 @@ public class ExpertController {
     @RequestMapping(value = "deleteDynamic", method = RequestMethod.POST)
     public JsonResult deleteDynamic(@ApiParam(value = "协会动态ids")@RequestParam String ids[]) throws Exception {
         JsonResult jsonResult = new JsonResult();
-        for(int i=0;i<ids.length;i++){
-            String id = ids[i];
+        for (String id : ids) {
             String is_deleted = "1";
             Dynamic dynamic = new Dynamic();
             dynamic.setIs_deleted(is_deleted);

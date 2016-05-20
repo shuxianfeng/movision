@@ -1,13 +1,9 @@
 package com.zhuhuibao.business.memCenter.AccountManage;
 
-import com.zhuhuibao.common.AskPriceResultBean;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
-import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
-import com.zhuhuibao.mybatis.memCenter.mapper.CertificateMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
-import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -22,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +29,7 @@ import java.util.Map;
  */
 @RestController
 public class StaffManageController {
-	private static final Logger log = LoggerFactory
-			.getLogger(StaffManageController.class);
+	private static final Logger log = LoggerFactory.getLogger(StaffManageController.class);
 
 	@Autowired
 	private MemberService memberService;
@@ -51,7 +45,7 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/addMember", method = RequestMethod.POST)
-	public void addMember(HttpServletRequest req, HttpServletResponse response, Member member) throws IOException {
+	public JsonResult addMember(HttpServletRequest req, Member member) throws IOException {
 		String account = req.getParameter("account");
 		if(account.contains("@")){
 			member.setEmail(account);
@@ -77,8 +71,7 @@ public class StaffManageController {
 			result.setMessage("账号已经存在");
 		}
 
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+		return result;
 	}
 
 	/**
@@ -89,7 +82,7 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/updateMember", method = RequestMethod.POST)
-	public void updateMember(HttpServletRequest req, HttpServletResponse response, Member member) throws IOException {
+	public JsonResult updateMember(HttpServletRequest req, Member member) throws IOException {
 		String account = req.getParameter("account");
 		if(account.contains("@")){
 			member.setEmail(account);
@@ -107,8 +100,8 @@ public class StaffManageController {
 			result.setCode(200);
 		}
 
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+		return result;
+
 	}
 
 	/**
@@ -140,32 +133,30 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/deleteMember", method = RequestMethod.POST)
-	public void deleteMember(HttpServletRequest req, HttpServletResponse response) throws IOException {
+	public JsonResult deleteMember(HttpServletRequest req) throws IOException {
 		String ids[] = req.getParameterValues("ids");
 		JsonResult result = new JsonResult();
-		for(int i=0;i<ids.length;i++){
-			String id = ids[i];
+		for (String id : ids) {
 			int isdelete = memberService.deleteMember(id);
-			if(isdelete==0){
+			if (isdelete == 0) {
 				result.setCode(400);
 				result.setMessage("删除失败");
-			}else{
+			} else {
 				result.setCode(200);
 			}
 		}
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+		return result;
 	}
 
 	/**
 	 * 员工搜索
-	 * @param req
 	 * @return
 	 * @throws IOException
 	 */
 
 	@RequestMapping(value = "/rest/staffSearch", method = RequestMethod.GET)
-	public void staffSearch(HttpServletRequest req, HttpServletResponse response,Member member,String pageNo,String pageSize) throws IOException {
+	public JsonResult staffSearch(Member member, String pageNo, String pageSize) throws IOException {
 		if(member.getAccount()!=null){
 			if(member.getAccount().contains("_")){
 				member.setAccount(member.getAccount().replace("_","\\_"));
@@ -178,19 +169,17 @@ public class StaffManageController {
 			pageSize = "10";
 		}
 		Paging<Member> pager = new Paging<Member>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-		JsonResult result = memberService.findStaffByParentId(pager,member);
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+		return memberService.findStaffByParentId(pager,member);
 	}
 
 	/**
 	 * 员工搜索size
-	 * @param req
 	 * @return
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/staffSearchSize", method = RequestMethod.GET)
-	public void staffSearchSize(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
+	public JsonResult staffSearchSize(Member member) throws IOException {
 		JsonResult result = new JsonResult();
 		List<Member> memberList = memberMapper.findStaffByParentId(member);
 		Map map = new HashMap();
@@ -198,8 +187,8 @@ public class StaffManageController {
 		map.put("leftSize",30-memberList.size());
 		result.setCode(200);
 		result.setData(map);
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+		return result;
 	}
 
 	/**
@@ -210,24 +199,23 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/resetPwd", method = RequestMethod.POST)
-	public void resetPwd(HttpServletRequest req, HttpServletResponse response) throws IOException {
+	public JsonResult resetPwd(HttpServletRequest req) throws IOException {
 		String ids[] = req.getParameterValues("ids");
 		JsonResult result = new JsonResult();
-		for(int i=0;i<ids.length;i++){
-			String id = ids[i];
+		for (String id : ids) {
 			Member member = new Member();
-			String md5Pwd = new Md5Hash("123456",null,2).toString();
+			String md5Pwd = new Md5Hash("123456", null, 2).toString();
 			member.setPassword(md5Pwd);
 			member.setId(Long.parseLong(id));
 			int isReset = memberService.resetPwd(member);
-			if(isReset==0){
+			if (isReset == 0) {
 				result.setCode(400);
 				result.setMessage("重置失败");
-			}else{
+			} else {
 				result.setCode(200);
 			}
 		}
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+
+		return result;
 	}
 }

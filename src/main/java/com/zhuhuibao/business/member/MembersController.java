@@ -37,7 +37,7 @@ public class MembersController {
 	
 	@RequestMapping(value="/rest/searchContractors", method = RequestMethod.GET)
 	@ResponseBody
-	public void searchContractors(HttpServletRequest req,HttpServletResponse response,ContractorSearchSpec spec) throws JsonGenerationException, JsonMappingException, IOException
+	public JsonResult searchContractors(ContractorSearchSpec spec) throws IOException
 	{
 		if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
 			spec.setLimit(12);
@@ -57,13 +57,12 @@ public class MembersController {
 		jsonResult.setMessage("OK!");
 		jsonResult.setData(ret);
 
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+		return jsonResult;
 	}
 	
 	@RequestMapping(value="/rest/searchSuppliers", method = RequestMethod.GET)
 	@ResponseBody
-	public void searchSuppliers(HttpServletRequest req,HttpServletResponse response,SupplierSearchSpec spec) throws JsonGenerationException, JsonMappingException, IOException
+	public JsonResult searchSuppliers(SupplierSearchSpec spec) throws IOException
 	{
 		if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
 			spec.setLimit(12);
@@ -83,8 +82,7 @@ public class MembersController {
 		jsonResult.setMessage("OK!");
 		jsonResult.setData(ret);
 
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+		return jsonResult;
 	}
 	
 }

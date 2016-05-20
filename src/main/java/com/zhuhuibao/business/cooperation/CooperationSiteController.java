@@ -22,8 +22,7 @@ import java.io.IOException;
 @RequestMapping("/rest/cooperation")
 @Api(value="Cooperation", description="前台频道-合作")
 public class CooperationSiteController {
-    private static final Logger log = LoggerFactory
-            .getLogger(CooperationSiteController.class);
+    private static final Logger log = LoggerFactory .getLogger(CooperationSiteController.class);
 
     @Autowired
     private CooperationService cooperationService;
@@ -56,7 +55,6 @@ public class CooperationSiteController {
         cooperation.setMemberType(memberType);
         cooperation.setProvince(province);
         cooperation.setParentId(parentId);
-        JsonResult jsonResult = cooperationService.findAllCooperationByPager(pager, cooperation);
-        return jsonResult;
+        return cooperationService.findAllCooperationByPager(pager, cooperation);
     }
 }

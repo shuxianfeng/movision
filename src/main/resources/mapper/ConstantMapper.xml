@@ -16,14 +16,6 @@
     from t_dictionary_constant
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectByType" parameterType="java.lang.String" resultType="com.zhuhuibao.mybatis.constants.entity.Constant">
-    select * from t_dictionary_constant where type = #{type,jdbcType=INTEGER}
-  </select>
-  <select id="selectByTypeCode" resultType="java.util.Map">
-    select * from t_dictionary_constant where type = #{type,jdbcType=VARCHAR} and code =  #{code,jdbcType=INTEGER}
-  </select>
-
-
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_dictionary_constant
     where id = #{id,jdbcType=INTEGER}
@@ -87,4 +79,12 @@
       type = #{type,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByType" parameterType="java.lang.String" resultType="com.zhuhuibao.mybatis.constants.entity.Constant">
+    select * from t_dictionary_constant where type = #{type,jdbcType=INTEGER}
+  </select>
+  <select id="selectByTypeCode" resultType="java.util.Map">
+    select * from t_dictionary_constant where type = #{type,jdbcType=VARCHAR} and code =  #{code,jdbcType=INTEGER}
+  </select>
+
 </mapper>

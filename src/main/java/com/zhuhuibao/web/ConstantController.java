@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +34,7 @@ public class ConstantController {
     ConstantService service;
 
 
-    @RequestMapping(value = "/findByType", method = RequestMethod.GET)
+    @RequestMapping(value = "findByType", method = RequestMethod.GET)
     @ApiOperation(value = "根据类型查询", notes = "根据类型查询", response = JsonResult.class)
     public JsonResult findByType(@ApiParam(value = "类型") @RequestParam String type) {
         JsonResult result = new JsonResult();
@@ -53,7 +50,7 @@ public class ConstantController {
     }
 
 
-    @RequestMapping(value = "/findJobByID", method = RequestMethod.GET)
+    @RequestMapping(value = "findJobByID", method = RequestMethod.GET)
     @ApiOperation(value = "测试", notes = "测试", response = JsonResult.class)
     public JsonResult findJobByID(@ApiParam(value = "id") @RequestParam String id) {
         JsonResult result = new JsonResult();

@@ -35,6 +35,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * 登录
+ *
  * @author caijl@20160303
  */
 @Controller
@@ -42,74 +43,72 @@ public class AuthenticationController {
     private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
 
     @Autowired
-	private MemberRegService memberService;
-    
+    private MemberRegService memberService;
+
     @RequestMapping(value = "/rest/web/authc", method = RequestMethod.GET)
     @ResponseBody
-    public void isLogin(HttpServletRequest req,HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException{
+    public JsonResult isLogin(HttpServletResponse response) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         JsonResult jsonResult = new JsonResult();
         jsonResult.setCode(200);
-		Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<String, Object>();
 
-        if(null == session){
-        	jsonResult.setMsgCode(0);
+        if (null == session) {
+            jsonResult.setMsgCode(0);
             jsonResult.setMessage("you are rejected!");
             map.put("authorized", false);
-        }else{
-        	ShiroUser principal = (ShiroUser)session.getAttribute("member");
-        	if(null == principal){
-            	jsonResult.setMsgCode(0);
+        } else {
+            ShiroUser principal = (ShiroUser) session.getAttribute("member");
+            if (null == principal) {
+                jsonResult.setMsgCode(0);
                 jsonResult.setMessage("you are rejected!");
                 map.put("authorized", false);
-        	}else{
-        		LoginMember member = new LoginMember();
-        		member.setAccount(principal.getAccount());
+            } else {
+                LoginMember member = new LoginMember();
+                member.setAccount(principal.getAccount());
                 member.setId(principal.getId());
-            	jsonResult.setMsgCode(1);
+                jsonResult.setMsgCode(1);
                 jsonResult.setMessage("welcome you!");
                 map.put("authorized", true);
                 map.put("member", member);
-        	}
+            }
         }
-        
+
         jsonResult.setData(map);
-        response.setContentType("application/json;charset=utf-8");
-      	response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
-      	log.debug("caijl:/rest/web/authc is called,msgcode=["+jsonResult.getMsgCode()+"],Message=["+jsonResult.getMessage()+"].");
+        log.debug("caijl:/rest/web/authc is called,msgcode=[" + jsonResult.getMsgCode() + "],Message=[" + jsonResult.getMessage() + "].");
+        return jsonResult;
+
     }
 
 
-    @RequestMapping(value="/rest/getToken",method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/getToken", method = RequestMethod.GET)
     @ResponseBody
     public JsonResult getToken(HttpServletRequest req, HttpServletResponse rsp) {
         JsonResult result = new JsonResult();
-        String  token = TokenHelper.setToken(req);
+        String token = TokenHelper.setToken(req);
         result.setData(token);
         return result;
     }
-    
-    @RequestMapping(value="/rest/findMemberInfoById",method = RequestMethod.GET)
-	@ResponseBody
-	public void findMemberInfoById(HttpServletRequest req,HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException
-	{
-		JsonResult jsonResult = new JsonResult();
-		Subject currentUser = SecurityUtils.getSubject();
+
+    @RequestMapping(value = "/rest/findMemberInfoById", method = RequestMethod.GET)
+    @ResponseBody
+    public JsonResult findMemberInfoById() throws IOException {
+        JsonResult jsonResult = new JsonResult();
+        Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        if(null == session){
+        if (null == session) {
             jsonResult.setMessage("you are not login!");
-        }
-        else {
+        } else {
             ShiroUser principal = (ShiroUser) session.getAttribute("member");
             if (null != principal) {
                 jsonResult = memberService.findMemberInfoById(principal.getId());
             }
         }
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
-	}
-    
+
+        return jsonResult;
+    }
+
     public static class LoginMember {
         private String account;
         private Long id;
@@ -125,23 +124,28 @@ public class AuthenticationController {
         }
 
         public String getAccount() {
-			return account;
-		}
-		public void setAccount(String account) {
-			this.account = account;
-		}
-		public int getOrdercount() {
-			return ordercount;
-		}
-		public void setOrdercount(int ordercount) {
-			this.ordercount = ordercount;
-		}
-		public int getMsgcount() {
-			return msgcount;
-		}
-		public void setMsgcount(int msgcount) {
-			this.msgcount = msgcount;
-		}
+            return account;
+        }
+
+        public void setAccount(String account) {
+            this.account = account;
+        }
+
+        public int getOrdercount() {
+            return ordercount;
+        }
+
+        public void setOrdercount(int ordercount) {
+            this.ordercount = ordercount;
+        }
+
+        public int getMsgcount() {
+            return msgcount;
+        }
+
+        public void setMsgcount(int msgcount) {
+            this.msgcount = msgcount;
+        }
 
         /**
          * 重载equals,只计算account;

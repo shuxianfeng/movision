@@ -28,7 +28,7 @@ import java.util.Map;
  **/
 @RestController
 @RequestMapping(value = "/rest/project")
-@Api(value = "招中标公告管理控制层",description = "频道页和运营平台调用")
+@Api(value = "TenderToned",description = "频道页和运营平台调用")
 public class TenderTonedController {
 
     private final static Logger log = LoggerFactory.getLogger(TenderTonedController.class);

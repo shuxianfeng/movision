@@ -19,7 +19,6 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +26,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.mybatis.memberReg.entity.Member;
-import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
@@ -38,9 +35,9 @@ import com.zhuhuibao.utils.VerifyCodeUtils;
  * @author penglong
  *
  */
-@Controller("omsLoginController")
-public class LoginController {
-	private static final Logger log = LoggerFactory.getLogger(LoginController.class);
+@Controller
+public class OmsLoginController {
+	private static final Logger log = LoggerFactory.getLogger(OmsLoginController.class);
 	
 	@RequestMapping(value = "/rest/oms/login", method = RequestMethod.POST)
     @ResponseBody

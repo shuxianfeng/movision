@@ -37,7 +37,7 @@ public class OMSAuthenticationController {
     
     @RequestMapping(value = "/rest/oms/authc", method = RequestMethod.GET)
     @ResponseBody
-    public void isLogin(HttpServletRequest req,HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException{
+    public JsonResult isLogin() throws IOException{
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         JsonResult jsonResult = new JsonResult();
@@ -66,15 +66,16 @@ public class OMSAuthenticationController {
         }
         
         jsonResult.setData(map);
-        response.setContentType("application/json;charset=utf-8");
-      	response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
-      	log.debug("caijl:/rest/web/authc is called,msgcode=["+jsonResult.getMsgCode()+"],Message=["+jsonResult.getMessage()+"].");
+
+        log.debug("caijl:/rest/web/authc is called,msgcode=["+jsonResult.getMsgCode()+"],Message=["+jsonResult.getMessage()+"].");
+        return jsonResult;
+
     }
 
 
     @RequestMapping(value="/rest/oms/getToken",method = RequestMethod.GET)
     @ResponseBody
-    public JsonResult getToken(HttpServletRequest req, HttpServletResponse rsp) {
+    public JsonResult getToken(HttpServletRequest req) {
         JsonResult result = new JsonResult();
         String  token = TokenHelper.setToken(req);
         result.setData(token);
@@ -83,7 +84,7 @@ public class OMSAuthenticationController {
     
     @RequestMapping(value="/rest/oms/findMemberInfoById",method = RequestMethod.GET)
 	@ResponseBody
-	public void findMemberInfoById(HttpServletRequest req,HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException
+	public JsonResult findMemberInfoById() throws IOException
 	{
 		JsonResult jsonResult = new JsonResult();
 		Subject currentUser = SecurityUtils.getSubject();
@@ -97,8 +98,8 @@ public class OMSAuthenticationController {
                 jsonResult = userService.selectByPrimaryKey(principal.getId());
             }
         }
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+
+        return jsonResult;
 	}
     
     public static class LoginUser {

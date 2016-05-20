@@ -238,16 +238,15 @@ public class ExpertSiteController {
         map.put("type",1);
         List<Expert> expertList = expertService.findAllExpertList(pager,map);
         List list = new ArrayList();
-        for(int i=0;i<expertList.size();i++){
-            Expert expert = expertList.get(i);
+        for (Expert expert : expertList) {
             Map expertMap = new HashMap();
-            expertMap.put("id",expert.getId());
-            expertMap.put("name",expert.getName());
-            expertMap.put("company",expert.getCompany());
-            expertMap.put("position",expert.getPosition());
-            expertMap.put("photo",expert.getPhotoUrl());
-            expertMap.put("hot",expert.getViews());
-            expertMap.put("introduce",expert.getIntroduce());
+            expertMap.put("id", expert.getId());
+            expertMap.put("name", expert.getName());
+            expertMap.put("company", expert.getCompany());
+            expertMap.put("position", expert.getPosition());
+            expertMap.put("photo", expert.getPhotoUrl());
+            expertMap.put("hot", expert.getViews());
+            expertMap.put("introduce", expert.getIntroduce());
             list.add(expertMap);
         }
         pager.result(list);
@@ -261,14 +260,13 @@ public class ExpertSiteController {
         JsonResult jsonResult = new JsonResult();
         List<Expert> expertList = expertService.queryHotExpert(count);
         List list = new ArrayList();
-        for(int i=0;i<expertList.size();i++){
-            Expert expert = expertList.get(i);
+        for (Expert expert : expertList) {
             Map expertMap = new HashMap();
-            expertMap.put("id",expert.getId());
-            expertMap.put("name",expert.getName());
-            expertMap.put("company",expert.getCompany());
-            expertMap.put("position",expert.getPosition());
-            expertMap.put("photo",expert.getPhotoUrl());
+            expertMap.put("id", expert.getId());
+            expertMap.put("name", expert.getName());
+            expertMap.put("company", expert.getCompany());
+            expertMap.put("position", expert.getPosition());
+            expertMap.put("photo", expert.getPhotoUrl());
             list.add(expertMap);
         }
         return jsonResult;
@@ -280,16 +278,15 @@ public class ExpertSiteController {
         JsonResult jsonResult = new JsonResult();
         List<Expert> expertList = expertService.queryLatestExpert(count);
         List list = new ArrayList();
-        for(int i=0;i<expertList.size();i++){
-            Expert expert = expertList.get(i);
+        for (Expert expert : expertList) {
             Map expertMap = new HashMap();
-            expertMap.put("id",expert.getId());
-            expertMap.put("name",expert.getName());
-            expertMap.put("company",expert.getCompany());
-            expertMap.put("position",expert.getPosition());
-            expertMap.put("photo",expert.getPhotoUrl());
-            expertMap.put("hot",expert.getViews());
-            expertMap.put("introduce",expert.getIntroduce());
+            expertMap.put("id", expert.getId());
+            expertMap.put("name", expert.getName());
+            expertMap.put("company", expert.getCompany());
+            expertMap.put("position", expert.getPosition());
+            expertMap.put("photo", expert.getPhotoUrl());
+            expertMap.put("hot", expert.getViews());
+            expertMap.put("introduce", expert.getIntroduce());
             list.add(expertMap);
         }
         return jsonResult;
@@ -323,13 +320,11 @@ public class ExpertSiteController {
             VerifyCodeUtils.outputImage1(w, h, out, verifyCode);
             out.flush();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
             try {
                 out.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }

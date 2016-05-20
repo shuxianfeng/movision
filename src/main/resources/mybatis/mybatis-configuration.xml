@@ -5,8 +5,8 @@
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
     <typeAliases>
-    	<typeAlias type="com.zhuhuibao.mybatis.memberReg.entity.Member" alias="memberReg"/>
-    	<typeAlias type="com.zhuhuibao.mybatis.memberReg.entity.Validateinfo" alias="validateInfo"/>
+        <typeAlias type="com.zhuhuibao.mybatis.memberReg.entity.Member" alias="memberReg"/>
+        <typeAlias type="com.zhuhuibao.mybatis.memberReg.entity.Validateinfo" alias="validateInfo"/>
     </typeAliases>
     <typeHandlers>
         <typeHandler jdbcType="CLOB" javaType="java.lang.String"

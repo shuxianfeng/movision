@@ -1,22 +1,12 @@
 package com.zhuhuibao.mybatis.constants.entity;
 
-import com.wordnik.swagger.annotations.ApiModel;
-import com.wordnik.swagger.annotations.ApiModelProperty;
-
-import java.io.Serializable;
-
-@ApiModel(value="常量",description = "常量")
-public class Constant implements Serializable {
-    @ApiModelProperty(value="ID")
+public class Constant {
     private Integer id;
 
-    @ApiModelProperty(value="code")
     private Integer code;
 
-    @ApiModelProperty(value="name")
     private String name;
 
-    @ApiModelProperty(value="type")
     private String type;
 
     public Integer getId() {

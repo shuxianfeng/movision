@@ -30,7 +30,7 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring/applicationContext.xml",
         "classpath:spring/applicationContext-shiro.xml",
-        "file:/src/main/webapp/WEB-INF/spring-mvc.xml"})
+        "file:src/main/webapp/WEB-INF/spring-mvc.xml"})
 public class BaseSpringContext {// extends
     // AbstractTransactionalJUnit4SpringContextTests
     // {
