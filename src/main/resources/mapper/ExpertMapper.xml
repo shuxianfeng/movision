@@ -45,7 +45,7 @@
   </select>
   <select id="findAllExpertList" resultMap="BaseResultMap">
     SELECT e.*,p.name as provinceName,c.name as cityName,ar.name as areaName FROM t_e_expert e
-    LEFT JOIN t_dictionary_province p on e.procince = p.code
+    LEFT JOIN t_dictionary_province p on e.province = p.code
     LEFT JOIN t_dictionary_city c on e.city = c.code
     LEFT JOIN t_dictionary_area ar on e.area = ar.code
     WHERE e.is_deleted = 0
