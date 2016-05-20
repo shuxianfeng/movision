@@ -163,7 +163,7 @@ public class CooperationService {
     }
 
     /**
-     * 最热服务
+     * 最热合作信息
      */
     public List<Cooperation> queryHotCooperation(Map<String,Object> map)throws Exception{
         try {

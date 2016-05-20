@@ -65,9 +65,9 @@ public class CooperationSiteController {
     }
 
     /**
-     * 最热服务
+     * 最热合作信息
      */
-    @ApiOperation(value="最热服务",notes="最热服务",response = JsonResult.class)
+    @ApiOperation(value="最热合作信息",notes="最热合作信息",response = JsonResult.class)
     @RequestMapping(value = "queryHotService", method = RequestMethod.GET)
     public JsonResult queryHotService(@ApiParam(value = "条数")@RequestParam(required = false)int count,
                                       @ApiParam(value = "合作类型：1：任务，2：服务，3：资质合作")String type) throws Exception

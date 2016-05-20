@@ -27,6 +27,6 @@ public interface CooperationMapper {
     //根据条件查询任务信息列表（分页）
     List<Cooperation> findAllCooperationByPager(RowBounds rowBounds,Cooperation cooperation);
 
-    //最热服务
+    //最热合作信息
     List<Cooperation> queryHotCooperation(Map<String,Object> map);
 }
