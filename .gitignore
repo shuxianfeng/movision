@@ -1,0 +1,12 @@
+### Java template
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+/src/main/resources/logback.xml
+
+
+
