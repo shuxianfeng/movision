@@ -27,6 +27,7 @@
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="is_deleted" property="is_deleted" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="views" property="views" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMap" type="com.zhuhuibao.common.ResultBean" >
     <result column="code" property="code" jdbcType="VARCHAR" />
@@ -34,7 +35,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, createId, publishTime, updateTime, title, type, category, province, city, area, 
-    price, endTime, isShow, companyName, linkMan, telephone, email,content,is_deleted
+    price, endTime, isShow, companyName, linkMan, telephone, email,content,is_deleted,views
   </sql>
   <insert id="publishCooperation" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
     insert into t_c_cooperation
@@ -92,6 +93,9 @@
       <if test="is_deleted != null" >
         is_deleted,
       </if>
+      <if test="views != null" >
+        views,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -146,6 +150,9 @@
       </if>
       <if test="is_deleted != null" >
         #{is_deleted},
+      </if>
+      <if test="views != null" >
+        #{views},
       </if>
     </trim>
   </insert>
@@ -206,6 +213,9 @@
       </if>
       <if test="status != null" >
         status = #{status},
+      </if>
+      <if test="views != null" >
+        views = #{views},
       </if>
     </set>
     where id = #{id}
@@ -272,5 +282,12 @@
       and coo.parentId = #{parentId}
     </if>
     order by c.updateTime desc
+  </select>
+  <select id="queryHotCooperation" resultMap="ResultMap" >
+    SELECT * FROM t_c_cooperation where
+    type = #{type}
+    and is_deleted = #{is_deleted}
+    and status = #{status}
+    order by views desc limit 0,#{count}
   </select>
 </mapper>

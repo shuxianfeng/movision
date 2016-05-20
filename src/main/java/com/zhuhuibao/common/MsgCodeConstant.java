@@ -96,4 +96,9 @@ public interface MsgCodeConstant {
 	 * 文件名下载异常
 	 */
 	int file_download_error = 10211;
+
+	/**
+	 * 未登录
+	 */
+	int un_login = 10212;
 }

@@ -5,6 +5,7 @@ import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CooperationMapper {
 
@@ -26,4 +27,6 @@ public interface CooperationMapper {
     //根据条件查询任务信息列表（分页）
     List<Cooperation> findAllCooperationByPager(RowBounds rowBounds,Cooperation cooperation);
 
+    //最热合作信息
+    List<Cooperation> queryHotCooperation(Map<String,Object> map);
 }

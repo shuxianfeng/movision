@@ -14,15 +14,16 @@
     <result column="telephone" property="telephone" jdbcType="VARCHAR" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
     <result column="postDate" property="postDate" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, receiveid, receiveName, title, content, isShow, companyName, linkman, telephone, 
-    mobile,createid
+    mobile,createid,type
   </sql>
   <insert id="saveMessage" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Message" >
     insert into t_sys_message (id, receiveid,createid, receiveName, title, content, isShow,
-      companyName, linkman, telephone, mobile,postDate)
+      companyName, linkman, telephone, mobile,postDate,type)
     values (#{id}, #{receiveid},#{createid} ,#{receiveName}, #{title}, #{content}, #{isShow},
-      #{companyName}, #{linkman}, #{telephone}, #{mobile},now())
+      #{companyName}, #{linkman}, #{telephone}, #{mobile},now(),#{type})
   </insert>
 </mapper>

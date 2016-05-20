@@ -55,6 +55,8 @@ public class Cooperation {
 
     private String status;
 
+    private String views;
+
     @ApiModelProperty(value="发布类型，1：发布任务，2：发布服务，3：发布资质合作")
     private String parentId;
 
@@ -284,5 +286,13 @@ public class Cooperation {
 
     public void setSmart(String smart) {
         this.smart = smart;
+    }
+
+    public String getViews() {
+        return views;
+    }
+
+    public void setViews(String views) {
+        this.views = views;
     }
 }

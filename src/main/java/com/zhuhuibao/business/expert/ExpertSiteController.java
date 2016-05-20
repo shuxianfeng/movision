@@ -3,11 +3,15 @@ package com.zhuhuibao.business.expert;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
 import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
 import com.zhuhuibao.mybatis.memCenter.entity.Expert;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -42,6 +46,9 @@ public class ExpertSiteController {
     @Autowired
     private ExpertService expertService;
 
+    @Autowired
+    private MemberService memberService;
+
     @ApiOperation(value="发布技术成果",notes="发布技术成果",response = JsonResult.class)
     @RequestMapping(value = "publishAchievement", method = RequestMethod.POST)
     public JsonResult publishAchievement(Achievement achievement) throws Exception {
@@ -55,11 +62,13 @@ public class ExpertSiteController {
                 expertService.publishAchievement(achievement);
             }else{
                 jsonResult.setCode(401);
-                jsonResult.setMessage("请先登录");
+                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                jsonResult.setMsgCode(MsgCodeConstant.un_login);
             }
         }else{
             jsonResult.setCode(401);
-            jsonResult.setMessage("请先登录");
+            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            jsonResult.setMsgCode(MsgCodeConstant.un_login);
         }
         return jsonResult;
     }
@@ -161,11 +170,13 @@ public class ExpertSiteController {
                 expertService.applyExpert(expert);
             }else{
                 jsonResult.setCode(401);
-                jsonResult.setMessage("请先登录");
+                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                jsonResult.setMsgCode(MsgCodeConstant.un_login);
             }
         }else{
             jsonResult.setCode(401);
-            jsonResult.setMessage("请先登录");
+            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            jsonResult.setMsgCode(MsgCodeConstant.un_login);
         }
         return jsonResult;
     }
@@ -183,6 +194,9 @@ public class ExpertSiteController {
         map.put("position",expert.getPosition());
         map.put("title",expert.getTitle());
         map.put("photo",expert.getPhotoUrl());
+        map.put("province",expert.getProvinceName());
+        map.put("city",expert.getCityName());
+        map.put("area",expert.getAreaName());
         map.put("hot",expert.getViews());
         map.put("introduce",expert.getIntroduce());
         //技术成果
@@ -206,9 +220,6 @@ public class ExpertSiteController {
         Expert expert = expertService.queryExpertById(id);
         //返回到页面
         Map map = new HashMap();
-        map.put("province",expert.getProvinceName());
-        map.put("city",expert.getCityName());
-        map.put("area",expert.getAreaName());
         map.put("address",expert.getAddress());
         map.put("telephone",expert.getTelephone());
         map.put("mobile",expert.getMobile());
