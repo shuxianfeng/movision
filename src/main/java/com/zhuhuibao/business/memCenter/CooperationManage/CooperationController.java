@@ -4,9 +4,11 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
 import com.zhuhuibao.mybatis.memCenter.service.CooperationService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -49,11 +51,13 @@ public class CooperationController {
                 cooperationService.publishCooperation(cooperation);
             }else{
                 jsonResult.setCode(401);
-                jsonResult.setMessage("请先登录");
+                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                jsonResult.setMsgCode(MsgCodeConstant.un_login);
             }
         }else{
             jsonResult.setCode(401);
-            jsonResult.setMessage("请先登录");
+            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            jsonResult.setMsgCode(MsgCodeConstant.un_login);
         }
         return jsonResult;
     }
@@ -162,11 +166,13 @@ public class CooperationController {
                 jsonResult.setData(pager);
             }else{
                 jsonResult.setCode(401);
-                jsonResult.setMessage("请先登录");
+                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                jsonResult.setMsgCode(MsgCodeConstant.un_login);
             }
         }else{
             jsonResult.setCode(401);
-            jsonResult.setMessage("请先登录");
+            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            jsonResult.setMsgCode(MsgCodeConstant.un_login);
         }
         return jsonResult;
     }

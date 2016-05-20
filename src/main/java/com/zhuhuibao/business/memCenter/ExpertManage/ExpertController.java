@@ -3,11 +3,13 @@ package com.zhuhuibao.business.memCenter.ExpertManage;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
 import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
 import com.zhuhuibao.mybatis.memCenter.entity.Expert;
 import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -68,11 +70,13 @@ public class ExpertController {
                 jsonResult.setData(pager);
             }else{
                 jsonResult.setCode(401);
-                jsonResult.setMessage("请先登录");
+                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                jsonResult.setMsgCode(MsgCodeConstant.un_login);
             }
         }else{
             jsonResult.setCode(401);
-            jsonResult.setMessage("请先登录");
+            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            jsonResult.setMsgCode(MsgCodeConstant.un_login);
         }
         return jsonResult;
     }
@@ -113,11 +117,13 @@ public class ExpertController {
                 expertService.publishDynamic(dynamic);
             }else{
                 jsonResult.setCode(401);
-                jsonResult.setMessage("请先登录");
+                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                jsonResult.setMsgCode(MsgCodeConstant.un_login);
             }
         }else{
             jsonResult.setCode(401);
-            jsonResult.setMessage("请先登录");
+            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            jsonResult.setMsgCode(MsgCodeConstant.un_login);
         }
         return jsonResult;
     }
@@ -175,11 +181,13 @@ public class ExpertController {
                 jsonResult.setData(pager);
             }else{
                 jsonResult.setCode(401);
-                jsonResult.setMessage("请先登录");
+                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                jsonResult.setMsgCode(MsgCodeConstant.un_login);
             }
         }else{
             jsonResult.setCode(401);
-            jsonResult.setMessage("请先登录");
+            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            jsonResult.setMsgCode(MsgCodeConstant.un_login);
         }
         return jsonResult;
     }

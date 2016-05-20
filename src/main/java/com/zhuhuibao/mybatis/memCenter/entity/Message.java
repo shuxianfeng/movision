@@ -25,6 +25,8 @@ public class Message {
 
     private String postDate;
 
+    private String type;
+
     public String getId() {
         return id;
     }
@@ -119,5 +121,13 @@ public class Message {
 
     public void setPostDate(String postDate) {
         this.postDate = postDate;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

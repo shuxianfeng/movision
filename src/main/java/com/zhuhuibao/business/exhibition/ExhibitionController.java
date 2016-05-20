@@ -4,11 +4,13 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
 import com.zhuhuibao.mybatis.memCenter.entity.MeetingOrder;
 import com.zhuhuibao.mybatis.memCenter.service.ExhibitionService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -53,11 +55,13 @@ public class ExhibitionController {
                 exhibitionService.publishMeetingOrder(meetingOrder);
             }else{
                 jsonResult.setCode(401);
-                jsonResult.setMessage("请先登录");
+                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                jsonResult.setMsgCode(MsgCodeConstant.un_login);
             }
         }else{
             jsonResult.setCode(401);
-            jsonResult.setMessage("请先登录");
+            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            jsonResult.setMsgCode(MsgCodeConstant.un_login);
         }
         return jsonResult;
     }
@@ -133,7 +137,8 @@ public class ExhibitionController {
                     exhibitionService.publishExhibition(exhibition);
                 }else{
                     jsonResult.setCode(401);
-                    jsonResult.setMessage("请先登录");
+                    jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                    jsonResult.setMsgCode(MsgCodeConstant.un_login);
                 }
             }else{
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
@@ -142,12 +147,14 @@ public class ExhibitionController {
                     exhibitionService.publishExhibition(exhibition);
                 }else{
                     jsonResult.setCode(401);
-                    jsonResult.setMessage("请先登录");
+                    jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                    jsonResult.setMsgCode(MsgCodeConstant.un_login);
                 }
             }
         }else{
             jsonResult.setCode(401);
-            jsonResult.setMessage("请先登录");
+            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            jsonResult.setMsgCode(MsgCodeConstant.un_login);
         }
         return jsonResult;
     }
