@@ -24,9 +24,9 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/cooperation")
-@Api(value="Cooperation", description="前台频道-威客")
+@Api(value = "Cooperation", description = "前台频道-威客")
 public class CooperationSiteController {
-    private static final Logger log = LoggerFactory .getLogger(CooperationSiteController.class);
+    private static final Logger log = LoggerFactory.getLogger(CooperationSiteController.class);
 
     @Autowired
     private CooperationService cooperationService;
@@ -35,23 +35,23 @@ public class CooperationSiteController {
     /**
      * 查询任务列表（分页）
      */
-    @ApiOperation(value="查询任务列表（分页）",notes="查询任务列表（分页）",response = JsonResult.class)
+    @ApiOperation(value = "查询任务列表（分页）", notes = "查询任务列表（分页）", response = JsonResult.class)
     @RequestMapping(value = "findAllCooperationByPager", method = RequestMethod.GET)
-    public JsonResult findAllCooperationByPager(@RequestParam(required = false) String pageNo,@RequestParam(required = false) String pageSize,
-        @ApiParam(value = "合作类型")@RequestParam(required = false) String type,
-        @ApiParam(value = "项目类别")@RequestParam(required = false) String category,
-        @ApiParam(value = "省")@RequestParam(required = false) String province,
-        @ApiParam(value = "关键字")@RequestParam(required = false) String smart,
-        @ApiParam(value = "会员类型，1：企业，2：个人")@RequestParam(required = false) String memberType,
-        @ApiParam(value = "发布类型，1：接任务，2：接服务，3：资质合作")@RequestParam String parentId) throws IOException
-    {
-            if (StringUtils.isEmpty(pageNo)) {
+    public JsonResult findAllCooperationByPager
+    (@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize,
+     @ApiParam(value = "合作类型") @RequestParam(required = false) String type,
+     @ApiParam(value = "项目类别") @RequestParam(required = false) String category,
+     @ApiParam(value = "省") @RequestParam(required = false) String province,
+     @ApiParam(value = "关键字") @RequestParam(required = false) String smart,
+     @ApiParam(value = "会员类型，1：企业，2：个人") @RequestParam(required = false) String memberType,
+     @ApiParam(value = "发布类型，1：接任务，2：接服务，3：资质合作") @RequestParam String parentId) throws Exception {
+        if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Paging<Cooperation> pager = new Paging<Cooperation>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        Paging<Cooperation> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Cooperation cooperation = new Cooperation();
         cooperation.setSmart(smart);
         cooperation.setType(type);
@@ -69,18 +69,17 @@ public class CooperationSiteController {
     /**
      * 最热合作信息
      */
-    @ApiOperation(value="最热合作信息",notes="最热合作信息",response = JsonResult.class)
+    @ApiOperation(value = "最热合作信息", notes = "最热合作信息", response = JsonResult.class)
     @RequestMapping(value = "queryHotService", method = RequestMethod.GET)
-    public JsonResult queryHotService(@ApiParam(value = "条数")@RequestParam(required = false)int count,
-                                      @ApiParam(value = "合作类型：1：任务，2：服务，3：资质合作")String type) throws Exception
-    {
+    public JsonResult queryHotService(@ApiParam(value = "条数") @RequestParam(required = false) int count,
+                                      @ApiParam(value = "合作类型：1：任务，2：服务，3：资质合作") String type) throws Exception {
         JsonResult jsonResult = new JsonResult();
-        Map<String,Object> map = new HashMap<>();
-        map.put("count",count);
-        map.put("type",type);
-        map.put("is_deleted",0);
-        map.put("status",1);
-        List<Cooperation> cooperations =  cooperationService.queryHotCooperation(map);
+        Map<String, Object> map = new HashMap<>();
+        map.put("count", count);
+        map.put("type", type);
+        map.put("is_deleted", 0);
+        map.put("status", 1);
+        List<Cooperation> cooperations = cooperationService.queryHotCooperation(map);
         jsonResult.setData(cooperations);
         return jsonResult;
     }
