@@ -1,14 +1,12 @@
 package com.zhuhuibao.business.oms.channel;
 
-import com.zhuhuibao.business.oms.project.ProjectController;
-import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
-import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
-import com.zhuhuibao.shiro.realm.ShiroRealm;
-import com.zhuhuibao.utils.JsonUtils;
-import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -22,13 +20,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
+import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
+import com.zhuhuibao.shiro.realm.OMSRealm;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.JsonUtils;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 
 /**
  * Created by Administrator on 2016/4/11 0011.
@@ -44,7 +44,7 @@ public class ChannelController {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(session != null) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
+            OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
             channelNews.setCreateid(new Long(principal.getId()));
             jsonResult = newsService.addChannelNews(channelNews);
         }
