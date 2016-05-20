@@ -188,6 +188,7 @@
         and t.endDate &gt;= date_format(#{endDateA},'%Y-%m-%d') and t.endDate &lt;= date_format(#{endDateB},'%Y-%m-%d')
       </if>
     </where>
+    order by t.updateDate desc
   </select>
 
   <select id="queryLatestTenderToned" parameterType="java.util.Map" resultType="java.util.Map">
@@ -196,11 +197,10 @@
     t.type, date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate, t.content
     from t_prj_tender_toned t
     left join t_dictionary_city ct on ct.code = t.city
-    <where>
+    where t.is_deleted = 0
       <if test="type != null">
         and t.type = #{type}
       </if>
-    </where>
     order by t.updateDate desc
     <if test="count !=null">
       limit #{count}

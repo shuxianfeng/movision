@@ -164,7 +164,7 @@
   </select>
   <select id="queryCompanyInfo" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.memCenter.entity.MemberDetails">
     select t.id,t.enterpriseName,t.enterpriseLogo,t.enterpriseDesc,
-    (select group_concat(name) from t_dictionary_constant where find_in_set(code,jb.welfare) and type=5 ) as welfare,
+    (select group_concat(name) from t_dictionary_constant where type=5 ) as welfare,
     concat(pv.name,ct.name,ar.name,t.address) address,ep.name enterpriseTypeName,es.name employeeNumber from t_m_member t
     left join t_dictionary_province pv on pv.code = t.province
     left join t_dictionary_city ct on ct.code = t.city
