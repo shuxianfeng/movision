@@ -62,7 +62,7 @@ public interface JobMapper {
     int updateViews(Long jobID);
 
     //相似企业
-    List<Job> querySimilarCompany(@Param("enterpriseType")int enterpriseType,@Param("id")String id,@Param("count")int count);
+    List<Job> querySimilarCompany(@Param("employeeNumber")String employeeNumber,@Param("enterpriseType")int enterpriseType,@Param("id")String id,@Param("count")int count);
 
     //相似企业信息
     Job querySimilarCompanyInfo(@Param("id")String id);

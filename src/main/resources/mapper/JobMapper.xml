@@ -291,7 +291,7 @@
   <update id="updateViews" parameterType="java.lang.Long" >
     UPDATE t_i_job SET views=views+1 WHERE id = #{id}
   </update>
-  <select id="querySimilarCompany" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
+<!--  <select id="querySimilarCompany" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
     SELECT j.createid
     FROM t_i_job j
     LEFT JOIN t_m_member m on j.createid = m.id
@@ -303,6 +303,22 @@
     FROM t_i_job
     WHERE createid = #{id} and is_deleted = 0
     GROUP BY positionType)A)) and j.createid != #{id} and j.is_deleted = 0 and m.enterpriseType = #{enterpriseType} group by j.createid limit 0,#{count}
+  </select>-->
+    <select id="querySimilarCompany" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
+      select distinct A.createid from ((SELECT j.createid FROM t_i_job j
+        WHERE FIND_IN_SET(j.positionType,(
+        SELECT GROUP_CONCAT(A.positionType) AS positionType
+        FROM
+        (
+            SELECT positionType
+            FROM t_i_job
+            WHERE createid = #{id} and is_deleted = 0
+            GROUP BY positionType)A
+         )
+    )and j.createid != #{id} and j.is_deleted = 0) union all
+    (select t.createid from t_i_job t left join t_m_member m on m.id = t.createid where m.enterpriseType = #{enterpriseType} and t.createid !=#{id})union all
+    (select t.createid from t_i_job t left join t_m_member m on m.id = t.createid where m.employeeNumber = #{employeeNumber} and t.createid !=#{id})union all
+    (select t.createid from t_i_job t left join t_m_member m on m.id = t.createid where t.createid != #{id} order by t.views desc))A limit 0,#{count}
   </select>
   <select id="querySimilarCompanyInfo" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
     select c.name as city,m.enterpriseName,count(*)as size from t_i_job j

@@ -1,6 +1,7 @@
 package com.zhuhuibao.business.memCenter.ExpertManage;
 
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
 import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
@@ -39,8 +40,8 @@ public class ExpertController {
 
     @ApiOperation(value="我的技术成果(后台)",notes="我的技术成果(后台)",response = JsonResult.class)
     @RequestMapping(value = "myAchievementList", method = RequestMethod.GET)
-    public JsonResult myAchievementList(@RequestParam(required = false) String title,
-                                        @RequestParam(required = false)String status,
+    public JsonResult myAchievementList(@ApiParam(value = "标题")@RequestParam(required = false) String title,
+                                        @ApiParam(value = "状态")@RequestParam(required = false)String status,
                                         @RequestParam(required = false)String pageNo,
                                         @RequestParam(required = false)String pageSize) throws Exception {
         JsonResult jsonResult = new JsonResult();
@@ -78,7 +79,7 @@ public class ExpertController {
 
     @ApiOperation(value="删除技术成果",notes="删除技术成果",response = JsonResult.class)
     @RequestMapping(value = "deleteAchievement", method = RequestMethod.POST)
-    public JsonResult deleteAchievement(@RequestParam String ids[]) throws Exception {
+    public JsonResult deleteAchievement(@ApiParam(value = "技术成果ids")@RequestParam String ids[]) throws Exception {
         JsonResult jsonResult = new JsonResult();
         for(int i=0;i<ids.length;i++){
             String id = ids[i];
@@ -123,7 +124,7 @@ public class ExpertController {
 
     @ApiOperation(value="删除协会动态",notes="删除协会动态",response = JsonResult.class)
     @RequestMapping(value = "deleteDynamic", method = RequestMethod.POST)
-    public JsonResult deleteDynamic(@RequestParam String ids[]) throws Exception {
+    public JsonResult deleteDynamic(@ApiParam(value = "协会动态ids")@RequestParam String ids[]) throws Exception {
         JsonResult jsonResult = new JsonResult();
         for(int i=0;i<ids.length;i++){
             String id = ids[i];
@@ -146,8 +147,8 @@ public class ExpertController {
 
     @ApiOperation(value="我的协会动态(后台)",notes="我的协会动态(后台)",response = JsonResult.class)
     @RequestMapping(value = "myDynamicList", method = RequestMethod.GET)
-    public JsonResult myDynamicList(@RequestParam(required = false) String title,
-                                        @RequestParam(required = false)String status,
+    public JsonResult myDynamicList(@ApiParam(value = "标题")@RequestParam(required = false) String title,
+                                    @ApiParam(value = "状态")@RequestParam(required = false)String status,
                                         @RequestParam(required = false)String pageNo,
                                         @RequestParam(required = false)String pageSize) throws Exception {
         JsonResult jsonResult = new JsonResult();
@@ -193,7 +194,7 @@ public class ExpertController {
 
     @ApiOperation(value="根据id查询专家全部信息",notes="根据id查询专家全部信息",response = JsonResult.class)
     @RequestMapping(value = "queryExpertById", method = RequestMethod.GET)
-    public JsonResult queryExpertById(@RequestParam String id) throws Exception {
+    public JsonResult queryExpertById(@ApiParam(value = "专家id")@RequestParam String id) throws Exception {
         JsonResult jsonResult = new JsonResult();
         Expert expert = expertService.queryExpertById(id);
         jsonResult.setData(expert);

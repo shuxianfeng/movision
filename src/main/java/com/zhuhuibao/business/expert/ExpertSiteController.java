@@ -8,6 +8,7 @@ import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
 import com.zhuhuibao.mybatis.memCenter.entity.Expert;
 import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -21,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -290,4 +294,46 @@ public class ExpertSiteController {
         }
         return jsonResult;
     }
+
+    /**
+     * 向专家提问时的图形验证码
+     * @param response
+     */
+    @RequestMapping(value = "imgCode", method = RequestMethod.GET)
+    public void getCode(HttpServletResponse response) {
+        log.debug("获得验证码");
+        response.setDateHeader("Expires", 0);
+        response.setHeader("Cache-Control",
+                "no-store, no-cache, must-revalidate");
+        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+        response.setHeader("Pragma", "no-cache");
+        response.setContentType("image/jpeg");
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(true);
+        // 生成随机字串
+        String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
+        log.debug("verifyCode == " + verifyCode);
+        sess.setAttribute("expert", verifyCode);
+
+        ServletOutputStream out = null;
+        try {
+            out = response.getOutputStream();
+            int w = 100;// 定义图片的width
+            int h = 40;// 定义图片的height
+            VerifyCodeUtils.outputImage1(w, h, out, verifyCode);
+            out.flush();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            try {
+                out.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 }
