@@ -166,14 +166,8 @@ public class ExpertSiteController {
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
-                Member member = memberService.findMemById(principal.getId().toString());
-                if(!"2".equals(member.getIdentify())){
-                    jsonResult.setCode(400);
-                    jsonResult.setMessage("");
-                }else{
-                    expert.setCreateId(principal.getId().toString());
-                    expertService.applyExpert(expert);
-                }
+                expert.setCreateId(principal.getId().toString());
+                expertService.applyExpert(expert);
             }else{
                 jsonResult.setCode(401);
                 jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
