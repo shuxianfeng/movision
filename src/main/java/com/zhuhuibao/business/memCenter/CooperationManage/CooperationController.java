@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 威客接口
@@ -37,7 +38,7 @@ public class CooperationController {
      */
     @ApiOperation(value="发布任务",notes="发布任务",response = JsonResult.class)
     @RequestMapping(value = "publishCooperation", method = RequestMethod.POST)
-    public JsonResult publishCooperation(Cooperation cooperation) throws IOException {
+    public JsonResult publishCooperation(Cooperation cooperation) throws Exception {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         JsonResult jsonResult = new JsonResult();
@@ -45,7 +46,7 @@ public class CooperationController {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
             if(null != principal){
                 cooperation.setCreateId(principal.getId().toString());
-                jsonResult = cooperationService.publishCooperation(cooperation);
+                cooperationService.publishCooperation(cooperation);
             }else{
                 jsonResult.setCode(401);
                 jsonResult.setMessage("请先登录");
@@ -62,8 +63,11 @@ public class CooperationController {
      */
     @ApiOperation(value="合作类型(大类，子类)",notes="合作类型(大类，子类)",response = JsonResult.class)
     @RequestMapping(value = "cooperationType", method = RequestMethod.GET)
-    public JsonResult cooperationType() throws IOException {
-        return cooperationService.cooperationType();
+    public JsonResult cooperationType() throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        List list = cooperationService.cooperationType();
+        jsonResult.setData(list);
+        return jsonResult;
     }
 
     /**
@@ -71,8 +75,11 @@ public class CooperationController {
      */
     @ApiOperation(value="合作类型(子类)",notes="合作类型(子类)",response = JsonResult.class)
     @RequestMapping(value = "subCooperationType", method = RequestMethod.GET)
-    public JsonResult subCooperationType() throws IOException {
-        return cooperationService.subCooperationType();
+    public JsonResult subCooperationType() throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        List list = cooperationService.subCooperationType();
+        jsonResult.setData(list);
+        return jsonResult;
     }
 
     /**
@@ -80,8 +87,11 @@ public class CooperationController {
      */
     @ApiOperation(value="项目类别",notes="项目类别",response = JsonResult.class)
     @RequestMapping(value = "cooperationCategory", method = RequestMethod.GET)
-    public JsonResult cooperationCategory() throws IOException {
-        return cooperationService.cooperationCategory();
+    public JsonResult cooperationCategory() throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        List list = cooperationService.cooperationCategory();
+        jsonResult.setData(list);
+        return jsonResult;
     }
 
     /**
@@ -89,8 +99,10 @@ public class CooperationController {
      */
     @ApiOperation(value="编辑任务",notes="编辑任务",response = JsonResult.class)
     @RequestMapping(value = "updateCooperation", method = RequestMethod.POST)
-    public JsonResult updateCooperation(@RequestBody Cooperation cooperation) throws IOException {
-        return cooperationService.updateCooperation(cooperation);
+    public JsonResult updateCooperation(@RequestBody Cooperation cooperation) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        cooperationService.updateCooperation(cooperation);
+        return jsonResult;
     }
 
     /**
@@ -98,8 +110,10 @@ public class CooperationController {
      */
     @ApiOperation(value="批量删除任务",notes="批量删除任务",response = JsonResult.class)
     @RequestMapping(value = "deleteCooperation", method = RequestMethod.POST)
-    public JsonResult deleteCooperation(@RequestParam String ids[]) throws IOException {
-        return cooperationService.deleteCooperation(ids);
+    public JsonResult deleteCooperation(@RequestParam String ids[]) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        cooperationService.deleteCooperation(ids);
+        return jsonResult;
     }
 
     /**
@@ -107,8 +121,11 @@ public class CooperationController {
      */
     @ApiOperation(value="查询一条任务的信息",notes="查询一条任务的信息",response = Cooperation.class)
     @RequestMapping(value = "queryCooperationInfoById", method = RequestMethod.GET)
-    public JsonResult queryCooperationInfo(@RequestParam String id) throws IOException {
-        return cooperationService.queryCooperationInfoById(id);
+    public JsonResult queryCooperationInfo(@RequestParam String id) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
+        jsonResult.setData(cooperation);
+        return jsonResult;
     }
 
     /**
@@ -121,7 +138,7 @@ public class CooperationController {
             @ApiParam(value = "合作标题")@RequestParam(required = false) String title,
             @ApiParam(value = "合作类型")@RequestParam(required = false) String type,
             @ApiParam(value = "审核状态")@RequestParam(required = false) String status
-    ) throws IOException {
+    ) throws Exception {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (StringUtils.isEmpty(pageNo)) {
@@ -140,7 +157,9 @@ public class CooperationController {
                 cooperation.setType(type);
                 cooperation.setTitle(title);
                 cooperation.setStatus(status);
-                jsonResult = cooperationService.findAllCooperationByPager(pager, cooperation);
+                List<Cooperation> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
+                pager.result(cooperationList);
+                jsonResult.setData(pager);
             }else{
                 jsonResult.setCode(401);
                 jsonResult.setMessage("请先登录");

@@ -44,7 +44,7 @@ public class CooperationSiteController {
         @ApiParam(value = "省")@RequestParam(required = false) String province,
         @ApiParam(value = "关键字")@RequestParam(required = false) String smart,
         @ApiParam(value = "会员类型，1：企业，2：个人")@RequestParam(required = false) String memberType,
-        @ApiParam(value = "发布类型，1：接任务，2：接服务，3：资质合作")@RequestParam String parentId) throws IOException
+        @ApiParam(value = "发布类型，1：接任务，2：接服务，3：资质合作")@RequestParam String parentId) throws Exception
     {
             if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -60,7 +60,10 @@ public class CooperationSiteController {
         cooperation.setMemberType(memberType);
         cooperation.setProvince(province);
         cooperation.setParentId(parentId);
-        JsonResult jsonResult = cooperationService.findAllCooperationByPager(pager, cooperation);
+        JsonResult jsonResult = new JsonResult();
+        List<Cooperation> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
+        pager.result(cooperationList);
+        jsonResult.setData(pager);
         return jsonResult;
     }
 
