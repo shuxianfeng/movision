@@ -14,13 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
+ * 威客接口
  * Created by cxx on 2016/5/4 0004.
  */
 @RestController
 @RequestMapping("/rest/cooperation")
-@Api(value="Cooperation", description="前台频道-合作")
+@Api(value="Cooperation", description="前台频道-威客")
 public class CooperationSiteController {
     private static final Logger log = LoggerFactory
             .getLogger(CooperationSiteController.class);
@@ -57,6 +61,25 @@ public class CooperationSiteController {
         cooperation.setProvince(province);
         cooperation.setParentId(parentId);
         JsonResult jsonResult = cooperationService.findAllCooperationByPager(pager, cooperation);
+        return jsonResult;
+    }
+
+    /**
+     * 最热服务
+     */
+    @ApiOperation(value="最热服务",notes="最热服务",response = JsonResult.class)
+    @RequestMapping(value = "queryHotService", method = RequestMethod.GET)
+    public JsonResult queryHotService(@ApiParam(value = "条数")@RequestParam(required = false)int count,
+                                      @ApiParam(value = "合作类型：1：任务，2：服务，3：资质合作")String type) throws Exception
+    {
+        JsonResult jsonResult = new JsonResult();
+        Map<String,Object> map = new HashMap<>();
+        map.put("count",count);
+        map.put("type",type);
+        map.put("is_deleted",0);
+        map.put("status",1);
+        List<Cooperation> cooperations =  cooperationService.queryHotCooperation(map);
+        jsonResult.setData(cooperations);
         return jsonResult;
     }
 }

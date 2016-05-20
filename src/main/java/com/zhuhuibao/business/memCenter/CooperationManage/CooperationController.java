@@ -20,11 +20,12 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 /**
+ * 威客接口
  * Created by cxx on 2016/5/4 0004.
  */
 @RestController
 @RequestMapping("/rest/cooperation")
-@Api(value="Cooperation", description="会员中心-合作管理")
+@Api(value="Cooperation", description="会员中心-威客管理")
 public class CooperationController {
     private static final Logger log = LoggerFactory
             .getLogger(CooperationController.class);

@@ -5,6 +5,7 @@ import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
 import com.zhuhuibao.mybatis.memCenter.entity.CooperationType;
+import com.zhuhuibao.mybatis.memCenter.entity.Expert;
 import com.zhuhuibao.mybatis.memCenter.entity.Position;
 import com.zhuhuibao.mybatis.memCenter.mapper.CooperationMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.CooperationTypeMapper;
@@ -12,6 +13,7 @@ import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ejb.access.EjbAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -158,5 +160,16 @@ public class CooperationService {
         pager.result(cooperationList);
         jsonResult.setData(pager);
         return jsonResult;
+    }
+
+    /**
+     * 最热服务
+     */
+    public List<Cooperation> queryHotCooperation(Map<String,Object> map)throws Exception{
+        try {
+            return cooperationMapper.queryHotCooperation(map);
+        }catch (Exception e){
+            throw e;
+        }
     }
 }

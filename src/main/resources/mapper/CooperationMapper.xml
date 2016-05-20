@@ -273,4 +273,11 @@
     </if>
     order by c.updateTime desc
   </select>
+  <select id="queryHotCooperation" resultMap="ResultMap" >
+    SELECT * FROM t_c_cooperation where
+    type = #{type}
+    and is_deleted = #{is_deleted}
+    and status = #{status}
+    limit 0,#{count}
+  </select>
 </mapper>
