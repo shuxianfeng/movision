@@ -435,4 +435,17 @@ public class JobSiteController {
         }
         return jsonResult;
     }
+
+    @RequestMapping(value="isExistApplyPosition",method = RequestMethod.GET)
+    @ApiOperation(value="查看此职位是否已被同一个人申请，10天后可以再次申请",notes = "1:已申请，0：未申请",response = JsonResult.class)
+    public JsonResult isExistApplyPosition(@ApiParam(value = "职位ID") @RequestParam String JobID,
+                                           @ApiParam(value = "简历ID") @RequestParam String resumeID) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("jobID",JobID);
+        map.put("resumeID",resumeID);
+        Integer count = jrrService.isExistApplyPosition(map);
+        jsonResult.setData(count);
+        return jsonResult;
+    }
 }

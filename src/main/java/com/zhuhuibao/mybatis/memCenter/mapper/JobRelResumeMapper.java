@@ -2,6 +2,8 @@ package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
 
+import java.util.Map;
+
 public interface JobRelResumeMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -14,4 +16,6 @@ public interface JobRelResumeMapper {
     int updateByPrimaryKeySelective(JobRelResume record);
 
     int updateByPrimaryKey(JobRelResume record);
+
+    Integer isExistApplyPosition(Map<String,Object> map);
 }
