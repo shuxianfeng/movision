@@ -35,10 +35,10 @@ public class ExpertOmsController {
 
     @ApiOperation(value="技术成果列表(运营分页)",notes="技术成果列表(运营分页)",response = JsonResult.class)
     @RequestMapping(value = "achievementListOms", method = RequestMethod.GET)
-    public JsonResult achievementListOms(@RequestParam(required = false) String title,
-                                         @RequestParam(required = false)String status,
-                                         @RequestParam(required = false) String systemType,
-                                         @RequestParam(required = false)String useArea,
+    public JsonResult achievementListOms(@ApiParam(value = "标题")@RequestParam(required = false) String title,
+                                         @ApiParam(value = "状态")@RequestParam(required = false)String status,
+                                         @ApiParam(value = "系统分类")@RequestParam(required = false) String systemType,
+                                         @ApiParam(value = "应用领域")@RequestParam(required = false)String useArea,
                                          @RequestParam(required = false)String pageNo,
                                          @RequestParam(required = false)String pageSize) throws Exception {
         JsonResult jsonResult = new JsonResult();
