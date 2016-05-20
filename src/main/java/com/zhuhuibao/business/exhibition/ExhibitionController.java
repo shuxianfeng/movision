@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +42,7 @@ public class ExhibitionController {
      */
     @ApiOperation(value="发布会展定制",notes="发布会展定制",response = JsonResult.class)
     @RequestMapping(value = "publishMeetingOrder", method = RequestMethod.POST)
-    public JsonResult publishMeetingOrder(MeetingOrder meetingOrder) throws IOException {
+    public JsonResult publishMeetingOrder(MeetingOrder meetingOrder) throws Exception {
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -68,7 +67,7 @@ public class ExhibitionController {
      */
     @ApiOperation(value="会展定制申请处理",notes="会展定制申请处理",response = JsonResult.class)
     @RequestMapping(value = "updateMeetingOrderStatus", method = RequestMethod.POST)
-    public JsonResult updateMeetingOrderStatus(MeetingOrder meetingOrder) throws IOException {
+    public JsonResult updateMeetingOrderStatus(MeetingOrder meetingOrder) throws Exception {
         JsonResult jsonResult = new JsonResult();
         exhibitionService.updateMeetingOrderStatus(meetingOrder);
         return jsonResult;
@@ -79,7 +78,7 @@ public class ExhibitionController {
      */
     @ApiOperation(value="会展定制查看",notes="会展定制查看",response = JsonResult.class)
     @RequestMapping(value = "queryMeetingOrderInfoById", method = RequestMethod.GET)
-    public JsonResult queryMeetingOrderInfoById(@RequestParam String id) throws IOException {
+    public JsonResult queryMeetingOrderInfoById(@RequestParam String id) throws Exception {
         JsonResult jsonResult = new JsonResult();
         MeetingOrder meetingOrder = exhibitionService.queryMeetingOrderInfoById(id);
         jsonResult.setData(meetingOrder);
@@ -93,7 +92,7 @@ public class ExhibitionController {
     @RequestMapping(value = "findAllMeetingOrderInfo", method = RequestMethod.GET)
     public JsonResult findAllMeetingOrderInfo(@ApiParam(value = "账号")@RequestParam(required = false) String account,
         @ApiParam(value = "省")@RequestParam(required = false)String province,@ApiParam(value = "市")@RequestParam(required = false)String city,
-        @ApiParam(value = "审核状态")@RequestParam(required = false)String status,@RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws IOException {
+        @ApiParam(value = "审核状态")@RequestParam(required = false)String status,@RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws Exception {
         JsonResult jsonResult = new JsonResult();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
@@ -121,7 +120,7 @@ public class ExhibitionController {
      */
     @ApiOperation(value="发布会展信息",notes="发布会展信息",response = JsonResult.class)
     @RequestMapping(value = "publishExhibition", method = RequestMethod.POST)
-    public JsonResult publishExhibition(Exhibition exhibition) throws IOException {
+    public JsonResult publishExhibition(Exhibition exhibition) throws Exception {
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -162,7 +161,7 @@ public class ExhibitionController {
         @ApiParam(value = "所属栏目")@RequestParam(required = false)String type,@ApiParam(value = "审核状态")@RequestParam(required = false)String status,
         @ApiParam(value = "省")@RequestParam(required = false)String province,
         @ApiParam(value = "区别后台与前台频道")@RequestParam(required = false)String type1,
-        @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws IOException {
+        @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws Exception {
         JsonResult jsonResult = new JsonResult();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
@@ -191,7 +190,7 @@ public class ExhibitionController {
      */
     @ApiOperation(value="会展详情查看",notes="会展详情查看",response = JsonResult.class)
     @RequestMapping(value = "queryExhibitionInfoById", method = RequestMethod.GET)
-    public JsonResult queryExhibitionInfoById(@RequestParam String id) throws IOException {
+    public JsonResult queryExhibitionInfoById(@RequestParam String id) throws Exception {
         JsonResult jsonResult = new JsonResult();
         Exhibition exhibition = exhibitionService.queryExhibitionInfoById(id);
         jsonResult.setData(exhibition);
@@ -203,7 +202,7 @@ public class ExhibitionController {
      */
     @ApiOperation(value="会展信息编辑更新",notes="会展信息编辑更新",response = JsonResult.class)
     @RequestMapping(value = "updateExhibitionInfoById", method = RequestMethod.POST)
-    public JsonResult updateExhibitionInfoById(Exhibition exhibition) throws IOException {
+    public JsonResult updateExhibitionInfoById(Exhibition exhibition) throws Exception {
         JsonResult jsonResult = new JsonResult();
         exhibitionService.updateExhibitionInfoById(exhibition);
         return jsonResult;

@@ -33,62 +33,94 @@ public class ExhibitionService {
      * 发布会展定制
      * @param meetingOrder
      */
-    public void publishMeetingOrder(MeetingOrder meetingOrder){
-        meetingOrderMapper.publishMeetingOrder(meetingOrder);
+    public void publishMeetingOrder(MeetingOrder meetingOrder)throws Exception{
+        try {
+            meetingOrderMapper.publishMeetingOrder(meetingOrder);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 会展定制申请处理
      * @param meetingOrder
      */
-    public void updateMeetingOrderStatus(MeetingOrder meetingOrder){
-        meetingOrderMapper.updateMeetingOrderStatus(meetingOrder);
+    public void updateMeetingOrderStatus(MeetingOrder meetingOrder)throws Exception{
+        try {
+            meetingOrderMapper.updateMeetingOrderStatus(meetingOrder);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 会展定制查看
      * @param id
      */
-    public MeetingOrder queryMeetingOrderInfoById(String id){
-        return meetingOrderMapper.queryMeetingOrderInfoById(id);
+    public MeetingOrder queryMeetingOrderInfoById(String id)throws Exception{
+        try {
+            return meetingOrderMapper.queryMeetingOrderInfoById(id);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 会展定制申请管理
      */
-    public List<MeetingOrder> findAllMeetingOrderInfo(Paging<MeetingOrder> pager,Map<String, Object> map){
-        return meetingOrderMapper.findAllMeetingOrderInfo(pager.getRowBounds(),map);
+    public List<MeetingOrder> findAllMeetingOrderInfo(Paging<MeetingOrder> pager,Map<String, Object> map)throws Exception{
+        try {
+            return meetingOrderMapper.findAllMeetingOrderInfo(pager.getRowBounds(),map);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 发布会展定制
      * @param exhibition
      */
-    public void publishExhibition(Exhibition exhibition){
-        exhibitionMapper.publishExhibition(exhibition);
+    public void publishExhibition(Exhibition exhibition)throws Exception{
+        try {
+            exhibitionMapper.publishExhibition(exhibition);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 会展信息列表
      * @param pager,map
      */
-    public List<Exhibition> findAllExhibition(Paging<Exhibition> pager,Map<String, Object> map){
-        return exhibitionMapper.findAllExhibition(pager.getRowBounds(),map);
+    public List<Exhibition> findAllExhibition(Paging<Exhibition> pager,Map<String, Object> map)throws Exception{
+        try {
+            return exhibitionMapper.findAllExhibition(pager.getRowBounds(),map);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 会展详情查看
      * @param id
      */
-    public Exhibition queryExhibitionInfoById(String id){
-        return exhibitionMapper.queryExhibitionInfoById(id);
+    public Exhibition queryExhibitionInfoById(String id)throws Exception{
+        try {
+            return exhibitionMapper.queryExhibitionInfoById(id);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 会展信息编辑更新
      * @param exhibition
      */
-    public void updateExhibitionInfoById(Exhibition exhibition){
-        exhibitionMapper.updateExhibitionInfoById(exhibition);
+    public void updateExhibitionInfoById(Exhibition exhibition)throws Exception{
+        try {
+            exhibitionMapper.updateExhibitionInfoById(exhibition);
+        }catch (Exception e){
+            throw e;
+        }
     }
 }
