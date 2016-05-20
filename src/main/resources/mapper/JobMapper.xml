@@ -208,7 +208,7 @@
     (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=2) as educationName,
     (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=3) as experienceName,
     (select group_concat(name) from t_dictionary_constant where find_in_set(code,t.welfare) and type=5 ) as welfare,
-    concat(ct.name,ar.name) workArea
+    ct.name workArea
     from t_i_job t
     left join t_dictionary_city ct on ct.code = t.city
     left join t_dictionary_area ar on ar.code = t.area
@@ -255,7 +255,7 @@
     where re.resumeID = (select id from t_i_resume where createid = #{id}) and c.type = 1
   </select>
   <select id="queryHotPosition" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
-    select j.id,j.name, c.name as salaryName,ci.name as workArea,j.publishTime,j.updateTime,m.enterpriseName,j.createid,
+    select j.id,j.name,j.positionType, c.name as salaryName,ci.name as workArea,j.publishTime,j.updateTime,m.enterpriseName,j.createid,
     (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare,m.enterpriseLogo
     from t_i_job j
     left join t_dictionary_constant c on j.salary = c.code
@@ -275,7 +275,7 @@
     order by j.views desc limit 0,#{count}
   </select>
   <select id="queryLatestJob" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
-    select j.id,j.name,ci.name as city, c.name as salaryName,j.createid from t_i_job j
+    select j.id,j.name,j.positionType,ci.name as city, c.name as salaryName,j.createid from t_i_job j
     left join t_dictionary_position p on j.positionType = p.id
     left join t_dictionary_city ci on ci.code = j.city
     left join t_dictionary_constant c on j.salary = c.code

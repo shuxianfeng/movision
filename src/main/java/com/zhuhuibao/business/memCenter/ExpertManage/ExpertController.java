@@ -193,7 +193,7 @@ public class ExpertController {
 
     @ApiOperation(value="根据id查询专家全部信息",notes="根据id查询专家全部信息",response = JsonResult.class)
     @RequestMapping(value = "queryExpertById", method = RequestMethod.GET)
-    public JsonResult queryExpertById(String id) throws Exception {
+    public JsonResult queryExpertById(@RequestParam String id) throws Exception {
         JsonResult jsonResult = new JsonResult();
         Expert expert = expertService.queryExpertById(id);
         jsonResult.setData(expert);

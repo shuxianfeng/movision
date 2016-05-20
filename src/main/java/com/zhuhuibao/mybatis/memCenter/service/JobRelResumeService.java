@@ -3,11 +3,14 @@ package com.zhuhuibao.mybatis.memCenter.service;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobRelResumeMapper;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 /**
  * Created by Administrator on 2016/4/26 0026.
@@ -44,5 +47,25 @@ public class JobRelResumeService {
             log.error("insert job relation resume error",e);
         }
         return jsonResult;
+    }
+
+    /**
+     * 查询此职位是否已被同一个人应聘，10天后可以再次申请职位
+     * @param map
+     * @return
+     * @throws Exception
+     */
+    public Integer isExistApplyPosition(Map<String,Object> map) throws Exception
+    {
+        log.info("apply position count"+ StringUtils.mapToString(map));
+        int count = 0;
+        try {
+            count = jrrMapper.isExistApplyPosition(map);
+        }catch(Exception e)
+        {
+            log.error("apply position count",e);
+            throw e;
+        }
+        return count;
     }
 }

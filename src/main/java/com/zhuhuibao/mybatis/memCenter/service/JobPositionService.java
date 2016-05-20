@@ -4,6 +4,7 @@ import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
@@ -348,6 +349,7 @@ public class JobPositionService {
                 Map map = new HashMap();
                 map.put(Constant.id, job.getId());
                 map.put(Constant.name, job.getName());
+                map.put(JobConstant.JOB_KEY_POSITIONTYPE,job.getPositionType());
                 map.put(Constant.createid, job.getCreateid());
                 map.put(Constant.companyName, job.getEnterpriseName());
                 map.put(Constant.salary, job.getSalaryName());
@@ -390,6 +392,7 @@ public class JobPositionService {
                     map1.put(Constant.createid, job.getCreateid());
                     map1.put(Constant.salary, job.getSalaryName());
                     map1.put(Constant.area, job.getCity());
+                    map1.put(JobConstant.JOB_KEY_POSITIONTYPE,job.getPositionType());
                     list1.add(map1);
                 }
                 map.put("jobList", list1);

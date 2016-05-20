@@ -59,4 +59,9 @@ public interface JobConstant {
      * 简历状态公开 1
      */
     int JOB_RESUME_STATUS_PUBLIC = 1;
+
+    /**
+     * 职位类型
+     */
+    String JOB_KEY_POSITIONTYPE = "positionType";
 }

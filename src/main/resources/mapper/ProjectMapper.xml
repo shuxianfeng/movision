@@ -192,8 +192,22 @@
 	 
   </select>
 
+  <!--自定义返回结果-->
+  <resultMap id="list" type="java.util.HashMap">
+    <result property="id" column="id" />
+    <result property="name" column="name" />
+    <result property="publishDate" column="publishDate" />
+    <result property="updateDate" column="updateDate" />
+    <result property="address" column="address" typeHandler="com.zhuhuibao.utils.mybatis.EmptyStringIfNull"/>
+    <result property="price" column="price" typeHandler="com.zhuhuibao.utils.mybatis.EmptyStringIfNull"/>
+    <result property="city" column="city" typeHandler="com.zhuhuibao.utils.mybatis.EmptyStringIfNull"/>
+    <result property="startDate" column="startDate" />
+    <result property="endDate" column="endDate" />
+    <result property="categoryName" column="categoryName" />
+  </resultMap>
+
   <!--<select id="findAllPrjectPager" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.oms.entity.ProjectInfo">-->
-  <select id="findAllPrjectPager" parameterType="java.util.Map" resultType="java.util.Map">
+  <select id="findAllPrjectPager" parameterType="java.util.Map" resultMap="list">
     SELECT
     t.id ,t.name,date_format(t.publishDate,'%Y-%m-%d') publishDate,
     date_format(t.updateDate,'%Y-%m-%d') updateDate,concat(pn.name,ct.name,ar.name,t.address) address,ct.name city,
