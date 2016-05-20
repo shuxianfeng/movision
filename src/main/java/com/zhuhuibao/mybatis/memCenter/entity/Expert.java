@@ -1,6 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-import java.util.Date;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 
 public class Expert {
     private String id;
@@ -11,28 +11,40 @@ public class Expert {
 
     private String updateTime;
 
+    @ApiModelProperty(value="姓名")
     private String name;
 
+    @ApiModelProperty(value="所在单位")
     private String company;
 
+    @ApiModelProperty(value="职位")
     private String position;
 
+    @ApiModelProperty(value="专业职称")
     private String title;
 
+    @ApiModelProperty(value="专家类型：1：协会专家；2：行业专家")
     private String expertType;
 
+    @ApiModelProperty(value="座机")
     private String telephone;
 
+    @ApiModelProperty(value="手机")
     private String mobile;
 
+    @ApiModelProperty(value="省")
     private String province;
 
+    @ApiModelProperty(value="市")
     private String city;
 
+    @ApiModelProperty(value="区")
     private String area;
 
+    @ApiModelProperty(value="详细地址")
     private String address;
 
+    @ApiModelProperty(value="照片url地址")
     private String photoUrl;
 
     private String status;
@@ -41,6 +53,7 @@ public class Expert {
 
     private String views;
 
+    @ApiModelProperty(value="姓名")
     private String introduce;
 
     private String provinceName;

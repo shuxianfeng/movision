@@ -1,6 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-import java.util.Date;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 
 public class Dynamic {
     private String id;
@@ -11,12 +11,16 @@ public class Dynamic {
 
     private String updateTime;
 
+    @ApiModelProperty(value="标题")
     private String title;
 
+    @ApiModelProperty(value="关键字 多个关键字逗号隔开")
     private String wordkey;
 
+    @ApiModelProperty(value="描述")
     private String description;
 
+    @ApiModelProperty(value="缩略图地址")
     private String imgurl;
 
     private String views;
@@ -25,6 +29,7 @@ public class Dynamic {
 
     private String is_deleted;
 
+    @ApiModelProperty(value="内容")
     private String content;
 
     private String createName;

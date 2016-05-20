@@ -1,6 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-import java.util.Date;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 
 public class Achievement {
     private String id;
@@ -11,34 +11,47 @@ public class Achievement {
 
     private String updateTime;
 
+    @ApiModelProperty(value="标题")
     private String title;
 
+    @ApiModelProperty(value="系统分类")
     private String systemType;
 
+    @ApiModelProperty(value="应用领域")
     private String useArea;
 
+    @ApiModelProperty(value="单位名称")
     private String companyName;
 
+    @ApiModelProperty(value="联系人")
     private String linkMan;
 
+    @ApiModelProperty(value="联系电话")
     private String telephone;
 
+    @ApiModelProperty(value="电子邮箱")
     private String email;
 
+    @ApiModelProperty(value="省")
     private String province;
 
+    @ApiModelProperty(value="市")
     private String city;
 
+    @ApiModelProperty(value="区")
     private String area;
 
+    @ApiModelProperty(value="详细地址")
     private String address;
 
+    @ApiModelProperty(value="合作方式")
     private String cooperationType;
 
     private String status;
 
     private String is_deleted;
 
+    @ApiModelProperty(value="详情介绍")
     private String introduce;
 
     private String provinceName;

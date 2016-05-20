@@ -62,7 +62,7 @@ public class ExpertSiteController {
 
     @ApiOperation(value="技术成果详情",notes="技术成果详情",response = JsonResult.class)
     @RequestMapping(value = "queryAchievementById", method = RequestMethod.GET)
-    public JsonResult queryAchievementById(@RequestParam String id) throws Exception {
+    public JsonResult queryAchievementById(@ApiParam(value = "技术成果ID")@RequestParam String id) throws Exception {
         JsonResult jsonResult = new JsonResult();
         Achievement achievement = expertService.queryAchievementById(id);
         jsonResult.setData(achievement);
@@ -71,8 +71,8 @@ public class ExpertSiteController {
 
     @ApiOperation(value="技术成果列表(前台分页)",notes="技术成果列表(前台分页)",response = JsonResult.class)
     @RequestMapping(value = "achievementList", method = RequestMethod.GET)
-    public JsonResult achievementList(@RequestParam(required = false) String systemType,
-                                        @RequestParam(required = false)String useArea,
+    public JsonResult achievementList(@ApiParam(value = "系统分类")@RequestParam(required = false) String systemType,
+                                      @ApiParam(value = "应用领域")@RequestParam(required = false)String useArea,
                                         @RequestParam(required = false)String pageNo,
                                         @RequestParam(required = false)String pageSize) throws Exception {
         JsonResult jsonResult = new JsonResult();
@@ -97,7 +97,7 @@ public class ExpertSiteController {
 
     @ApiOperation(value="技术成果列表(前台)控制条数",notes="技术成果列表(前台)控制条数",response = JsonResult.class)
     @RequestMapping(value = "achievementListByCount", method = RequestMethod.GET)
-    public JsonResult achievementListByCount(@RequestParam(required = false) int count) throws Exception {
+    public JsonResult achievementListByCount(@ApiParam(value = "条数")@RequestParam(required = false) int count) throws Exception {
         JsonResult jsonResult = new JsonResult();
         List<Map<String,String>> achievementList = expertService.findAchievementListByCount(count);
         jsonResult.setData(achievementList);
@@ -106,7 +106,7 @@ public class ExpertSiteController {
 
     @ApiOperation(value="协会动态详情",notes="协会动态详情",response = JsonResult.class)
     @RequestMapping(value = "queryDynamicById", method = RequestMethod.GET)
-    public JsonResult queryDynamicById(@RequestParam String id) throws Exception {
+    public JsonResult queryDynamicById(@ApiParam(value = "协会动态Id")@RequestParam String id) throws Exception {
         JsonResult jsonResult = new JsonResult();
         Dynamic dynamic = expertService.queryDynamicById(id);
         jsonResult.setData(dynamic);
@@ -137,7 +137,7 @@ public class ExpertSiteController {
 
     @ApiOperation(value="协会动态列表(前台)控制条数",notes="协会动态列表(前台)控制条数",response = JsonResult.class)
     @RequestMapping(value = "dynamicListByCount", method = RequestMethod.GET)
-    public JsonResult dynamicListByCount(@RequestParam(required = false) int count) throws Exception {
+    public JsonResult dynamicListByCount(@ApiParam(value = "条数")@RequestParam(required = false) int count) throws Exception {
         JsonResult jsonResult = new JsonResult();
         List<Map<String,String>> dynamicList = expertService.findDynamicListByCount(count);
         jsonResult.setData(dynamicList);
