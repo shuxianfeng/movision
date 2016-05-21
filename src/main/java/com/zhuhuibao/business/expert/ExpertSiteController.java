@@ -46,9 +46,6 @@ public class ExpertSiteController {
     @Autowired
     private ExpertService expertService;
 
-    @Autowired
-    private MemberService memberService;
-
     @ApiOperation(value="发布技术成果",notes="发布技术成果",response = JsonResult.class)
     @RequestMapping(value = "publishAchievement", method = RequestMethod.POST)
     public JsonResult publishAchievement(Achievement achievement) throws Exception {

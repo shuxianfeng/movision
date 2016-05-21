@@ -3,6 +3,7 @@ package com.zhuhuibao.business.memCenter.AccountManage;
 import com.taobao.api.ApiException;
 import com.zhuhuibao.common.Constant;
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.service.AccountService;
@@ -11,6 +12,7 @@ import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.DateUtils;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
@@ -61,7 +63,7 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/checkPwdById", method = RequestMethod.GET)
-    public JsonResult checkPwdById(HttpServletRequest req) throws IOException {
+    public JsonResult checkPwdById(HttpServletRequest req) throws Exception {
         String id = req.getParameter("id");
         //前台密码解密
         String pwd = new String(EncodeUtil.decodeBase64(req.getParameter("pwd")));
@@ -85,13 +87,15 @@ public class AccountSafeController {
         if(member!=null){
             if(!md5Pwd.equals(member.getPassword())){
                 result.setCode(400);
-                result.setMessage("密码不正确");
+                result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_usernameorpwd_error)));
+                result.setMsgCode(MsgCodeConstant.member_mcode_usernameorpwd_error);
             }else{
                 result.setCode(200);
             }
         }else{
             result.setCode(400);
-            result.setMessage("账户不存在");
+            result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
+            result.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
         }
 
         return  result;
@@ -103,7 +107,7 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/checkPwdByAccount", method = RequestMethod.GET)
-    public JsonResult checkPwdByAccount(HttpServletRequest req) throws IOException {
+    public JsonResult checkPwdByAccount(HttpServletRequest req) throws Exception {
         //账号：手机或邮箱
         String account = req.getParameter("account");
         //前台密码解密
@@ -132,7 +136,7 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/saveNewPwd", method = RequestMethod.POST)
-    public JsonResult saveNewPwd(HttpServletRequest req) throws IOException {
+    public JsonResult saveNewPwd(HttpServletRequest req) throws Exception {
         String id = req.getParameter("id");
         String newPwd = new String(EncodeUtil.decodeBase64(req.getParameter("newPwd")));
         String md5Pwd = new Md5Hash(newPwd,null,2).toString();
@@ -141,14 +145,7 @@ public class AccountSafeController {
         member.setId(Long.parseLong(id));
 
         JsonResult result = new JsonResult();
-        int isUpdate = memberService.updateMember(member);
-        if(isUpdate==1){
-            result.setCode(200);
-        }else{
-            result.setCode(400);
-            result.setMessage("更新密码失败");
-        }
-
+        memberService.updateMember(member);
         return result;
 
     }
@@ -159,7 +156,7 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/sendChangeEmail", method = RequestMethod.POST)
-    public JsonResult sendChangeEmail(HttpServletRequest req) throws IOException {
+    public JsonResult sendChangeEmail(HttpServletRequest req) throws Exception {
         JsonResult result = new JsonResult();
         String email = req.getParameter("email");
         Member member1 = new Member();
@@ -195,18 +192,12 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/updateMobile", method = RequestMethod.POST)
-    public JsonResult updateMobile(Member member) throws IOException {
+    public JsonResult updateMobile(Member member) throws Exception {
         JsonResult result = new JsonResult();
         try {
-            int isUpdate = memberService.updateMember(member);
-            if (isUpdate == 1) {
-                result.setCode(200);
-            } else {
-                result.setCode(400);
-                result.setMessage("更改失败");
-            }
+            memberService.updateMember(member);
         }catch(Exception e){
-            log.error("updateMobile error");
+            throw e;
         }
 
         return result;
@@ -223,7 +214,8 @@ public class AccountSafeController {
             Member member1 = memberService.findMemer(member);
             if(member1!=null){
                 result.setCode(400);
-                result.setMessage("该手机号已存在");
+                result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
+                result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
             }else {
                 result.setCode(200);
             }

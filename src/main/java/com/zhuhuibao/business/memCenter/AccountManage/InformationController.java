@@ -46,7 +46,7 @@ public class InformationController {
 	 */
 
 	@RequestMapping(value = "/rest/info", method = RequestMethod.GET)
-	public JsonResult info(HttpServletRequest req, HttpServletResponse response) throws IOException {
+	public JsonResult info(HttpServletRequest req, HttpServletResponse response) throws Exception {
 		JsonResult result = new JsonResult();
 		String memId = req.getParameter("id");
 		Member member = memberService.findMemById(memId);

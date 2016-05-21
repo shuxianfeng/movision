@@ -1,10 +1,12 @@
 package com.zhuhuibao.business.memCenter.AccountManage;
 
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.JsonUtils;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -45,7 +47,7 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/addMember", method = RequestMethod.POST)
-	public JsonResult addMember(HttpServletRequest req, Member member) throws IOException {
+	public JsonResult addMember(HttpServletRequest req, Member member) throws Exception {
 		String account = req.getParameter("account");
 		if(account.contains("@")){
 			member.setEmail(account);
@@ -59,16 +61,11 @@ public class StaffManageController {
 		//先判断账号是否已经存在
 		Member mem = memberService.findMember(member);
 		if(mem==null){
-			int isAdd = memberService.addMember(member);
-			if(isAdd==0){
-				result.setCode(400);
-				result.setMessage("新增失败");
-			}else{
-				result.setCode(200);
-			}
+			memberService.addMember(member);
 		}else{
 			result.setCode(400);
-			result.setMessage("账号已经存在");
+			result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
+			result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
 		}
 
 		return result;
@@ -82,7 +79,7 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/updateMember", method = RequestMethod.POST)
-	public JsonResult updateMember(HttpServletRequest req, Member member) throws IOException {
+	public JsonResult updateMember(HttpServletRequest req, Member member) throws Exception {
 		String account = req.getParameter("account");
 		if(account.contains("@")){
 			member.setEmail(account);
@@ -91,15 +88,7 @@ public class StaffManageController {
 		}
 
 		JsonResult result = new JsonResult();
-
-		int isUpdate = memberService.updateMember(member);
-		if(isUpdate==0){
-			result.setCode(400);
-			result.setMessage("修改失败");
-		}else{
-			result.setCode(200);
-		}
-
+		memberService.updateMember(member);
 		return result;
 
 	}
@@ -133,19 +122,12 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/deleteMember", method = RequestMethod.POST)
-	public JsonResult deleteMember(HttpServletRequest req) throws IOException {
+	public JsonResult deleteMember(HttpServletRequest req) throws Exception {
 		String ids[] = req.getParameterValues("ids");
 		JsonResult result = new JsonResult();
 		for (String id : ids) {
-			int isdelete = memberService.deleteMember(id);
-			if (isdelete == 0) {
-				result.setCode(400);
-				result.setMessage("删除失败");
-			} else {
-				result.setCode(200);
-			}
+			memberService.deleteMember(id);
 		}
-
 		return result;
 	}
 
@@ -199,7 +181,7 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/resetPwd", method = RequestMethod.POST)
-	public JsonResult resetPwd(HttpServletRequest req) throws IOException {
+	public JsonResult resetPwd(HttpServletRequest req) throws Exception {
 		String ids[] = req.getParameterValues("ids");
 		JsonResult result = new JsonResult();
 		for (String id : ids) {
@@ -207,13 +189,7 @@ public class StaffManageController {
 			String md5Pwd = new Md5Hash("123456", null, 2).toString();
 			member.setPassword(md5Pwd);
 			member.setId(Long.parseLong(id));
-			int isReset = memberService.resetPwd(member);
-			if (isReset == 0) {
-				result.setCode(400);
-				result.setMessage("重置失败");
-			} else {
-				result.setCode(200);
-			}
+			memberService.resetPwd(member);
 		}
 
 		return result;
