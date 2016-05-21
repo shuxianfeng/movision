@@ -489,6 +489,25 @@ public class JobPositionService {
     }
 
     /**
+     * 查询名企发布的热门职位
+     * @param map  查询条件：recommend 是否名企（1：是），count 条数
+     * @return 发布职位集合
+     */
+    public List<Map<String,String>> queryPublishJobCity(Map<String,Object> map) throws Exception
+    {
+        List<Map<String,String>> jobList = new ArrayList<Map<String,String>>();
+        try
+        {
+            jobList = jobMapper.queryPublishJobCity(map);
+        }
+        catch(Exception e)
+        {
+            throw e;
+        }
+        return jobList;
+    }
+
+    /**
      * 根据ID查询
      * @param id {id}
      * @return
