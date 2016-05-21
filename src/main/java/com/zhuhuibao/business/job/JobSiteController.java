@@ -110,7 +110,7 @@ public class JobSiteController {
     @RequestMapping(value="exportResume", method = RequestMethod.GET)
     @ApiOperation(value="定义简历模板导出简历",notes = "定义简历模板导出简历")
     public void exportResume(HttpServletRequest req, HttpServletResponse response,
-                             @ApiParam(value = "简历ID") @RequestParam Long resumeID) throws JsonGenerationException, JsonMappingException, IOException
+                             @ApiParam(value = "简历ID") @RequestParam Long resumeID) throws IOException
     {
         log.info("export resume id == "+resumeID);
         response.setDateHeader("Expires", 0);
@@ -141,7 +141,7 @@ public class JobSiteController {
 
     @RequestMapping(value="queryCompanyInfo", method = RequestMethod.GET)
     @ApiOperation(value="公司详情",notes = "公司详情",response = JsonResult.class)
-    public JsonResult queryCompanyInfo(@ApiParam(value = "创建者ID(会员ID)") @RequestParam(required = true) Long id) throws JsonGenerationException, JsonMappingException, IOException
+    public JsonResult queryCompanyInfo(@ApiParam(value = "创建者ID(会员ID)") @RequestParam(required = true) Long id) throws IOException
     {
         log.info("query company info id "+id);
         JsonResult jsonResult = job.queryCompanyInfo(id);
@@ -175,7 +175,7 @@ public class JobSiteController {
                                    @ApiParam(value = "职位ID") @RequestParam(required = true) String jobID,
                                    @ApiParam(value="") @RequestParam() String createID,
                                    @ApiParam(value = "页码") @RequestParam(required = false)String pageNo,
-                                   @ApiParam(value="每页显示的条数") @RequestParam(required = false) String pageSize) throws JsonGenerationException, JsonMappingException, IOException
+                                   @ApiParam(value="每页显示的条数") @RequestParam(required = false) String pageSize) throws IOException
     {
         log.info("query position info by id");
         if (StringUtils.isEmpty(pageNo)) {
@@ -201,7 +201,7 @@ public class JobSiteController {
                                    @ApiParam(value = "企业ID") @RequestParam String enterpriseID,
                                    @ApiParam(value= "城市code") @RequestParam(required = false) String city,
                                    @ApiParam(value= "名称") @RequestParam(required = false) String name,
-                                   String pageNo,String pageSize) throws JsonGenerationException, JsonMappingException, IOException
+                                   String pageNo,String pageSize) throws IOException
     {
         log.info("query position info by id");
         if (StringUtils.isEmpty(pageNo)) {
@@ -224,18 +224,17 @@ public class JobSiteController {
 
     @RequestMapping(value="queryAllPosition", method = RequestMethod.GET)
     @ApiOperation(value="职位搜索",notes = "职位频道页搜索",response = JsonResult.class)
-    public JsonResult queryAllPosition(HttpServletRequest req, HttpServletResponse response,
-                                 @ApiParam(value="公司名称或企业名称") @RequestParam(required = false) String name,
-                                 @ApiParam(value="省代码") @RequestParam(required = false) String province,
-                                 @ApiParam(value="市代码") @RequestParam(required = false)String city,
-                                 @ApiParam(value="区代码") @RequestParam(required = false) String area,
-                                 @ApiParam(value="企业规模") @RequestParam(required = false) String employeeNumber,
-                                 @ApiParam(value="企业性质") @RequestParam(required = false)String enterpriseType,
-                                 @ApiParam(value="发布时间") @RequestParam(required = false)String days,
-                                 @ApiParam(value="薪资") @RequestParam(required = false)String salary,
-                                 @ApiParam(value="职位类别")@RequestParam(required = false) String positionType,
-                                 @ApiParam(value="页码")@RequestParam(required = false) String pageNo,
-                                 @ApiParam(value="每页显示的数目")@RequestParam(required = false) String pageSize) throws JsonGenerationException, JsonMappingException, IOException
+    public JsonResult queryAllPosition(@ApiParam(value = "公司名称或企业名称") @RequestParam(required = false) String name,
+                                       @ApiParam(value = "省代码") @RequestParam(required = false) String province,
+                                       @ApiParam(value = "市代码") @RequestParam(required = false) String city,
+                                       @ApiParam(value = "区代码") @RequestParam(required = false) String area,
+                                       @ApiParam(value = "企业规模") @RequestParam(required = false) String employeeNumber,
+                                       @ApiParam(value = "企业性质") @RequestParam(required = false) String enterpriseType,
+                                       @ApiParam(value = "发布时间") @RequestParam(required = false) String days,
+                                       @ApiParam(value = "薪资") @RequestParam(required = false) String salary,
+                                       @ApiParam(value = "职位类别") @RequestParam(required = false) String positionType,
+                                       @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
+                                       @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) throws IOException
     {
         JsonResult jsonResult = new JsonResult();
         log.info("query position info by id");
@@ -270,15 +269,14 @@ public class JobSiteController {
 
     @RequestMapping(value="findAllResume", method = RequestMethod.GET)
     @ApiOperation(value="人才库搜索",notes = "人才库搜索",response = JsonResult.class)
-    public JsonResult findAllResume(HttpServletRequest req, HttpServletResponse response,
-                              @ApiParam(value="简历名称") @RequestParam(required = false) String title,
-                              @ApiParam(value="期望工作城市") @RequestParam(required = false) String jobCity,
-                              @ApiParam(value="工作年限前") @RequestParam(required = false)String expYearBefore,
-                              @ApiParam(value="工作年限后") @RequestParam(required = false)String expYearBehind,
-                              @ApiParam(value="学历") @RequestParam(required = false)String education,
-                              @ApiParam(value="职位类别") @RequestParam(required = false)String positionType,
-                              @ApiParam(value="页码") @RequestParam(required = false)String pageNo,
-                              @ApiParam(value="每页显示的数目") @RequestParam(required = false)String pageSize) throws JsonGenerationException, JsonMappingException, IOException
+    public JsonResult findAllResume(@ApiParam(value = "简历名称") @RequestParam(required = false) String title,
+                                    @ApiParam(value = "期望工作城市") @RequestParam(required = false) String jobCity,
+                                    @ApiParam(value = "工作年限前") @RequestParam(required = false) String expYearBefore,
+                                    @ApiParam(value = "工作年限后") @RequestParam(required = false) String expYearBehind,
+                                    @ApiParam(value = "学历") @RequestParam(required = false) String education,
+                                    @ApiParam(value = "职位类别") @RequestParam(required = false) String positionType,
+                                    @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
+                                    @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) throws IOException
     {
         log.info("find all resume!!");
         JsonResult jsonResult = new JsonResult();
@@ -388,7 +386,7 @@ public class JobSiteController {
 
     @RequestMapping(value = "querySimilarCompany", method = RequestMethod.GET)
     @ApiOperation(value = "相似企业",notes = "相似企业",response = JsonResult.class)
-    public JsonResult querySimilarCompany(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+    public JsonResult querySimilarCompany(String id) throws IOException {
         JsonResult jsonResult = job.querySimilarCompany(id,4);
         return jsonResult;
     }

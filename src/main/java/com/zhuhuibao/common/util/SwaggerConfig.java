@@ -47,7 +47,7 @@ public class SwaggerConfig {
         return new ApiInfo(
                 "筑慧宝",
                 "筑慧宝Api接口文档(rest)",
-                "Zhb1.0",
+                "api.zhuhui8.com",
                 "server@zhuhui8.com",
                 "MIT License",
                 "/rest");

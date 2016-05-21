@@ -7,7 +7,6 @@ import com.zhuhuibao.mybatis.oms.entity.Category;
 import com.zhuhuibao.mybatis.oms.service.CategoryService;
 import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.mybatis.product.service.ProductService;
-import com.zhuhuibao.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,7 +44,7 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/category/all", method = RequestMethod.GET)
-    public JsonResult findAll(HttpServletResponse response) throws IOException {
+    public JsonResult findAll() throws IOException {
         JsonResult result = new JsonResult();
         List<ResultBean> sysList = categoryService.findSystemList();
         List<SysBean> allList = categoryService.searchAll();
@@ -90,12 +88,11 @@ public class BrandController {
 
     /**
      * 查询二级系统下推荐品牌
-     * @param req
      * @return
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/findSuggestBrand", method = RequestMethod.GET)
-    public JsonResult findSuggestBrand(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+    public JsonResult findSuggestBrand(String id) throws IOException {
         JsonResult result = new JsonResult();
         List<ResultBean> SubSystemList = categoryService.findSubSystemListLimit(id);
         List<SuggestBrand> brandList = brandService.SuggestBrand();
@@ -128,12 +125,11 @@ public class BrandController {
     }
     /**
      * 查询大系统下的子系统
-     * @param req
      * @return
      * @throws IOException
      */
     @RequestMapping(value = "/rest/category/findSubSystem", method = RequestMethod.GET)
-    public JsonResult findSubSystem(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+    public JsonResult findSubSystem(String id) throws IOException {
         List<ResultBean> subSystemList = categoryService.findSubSystemList(id);
         Map map = new HashMap();
         Category category = categoryService.findSystem(id);
@@ -150,12 +146,11 @@ public class BrandController {
 
     /**
      * 查询二级系统下所有品牌
-     * @param req
      * @return
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/findAllBrand", method = RequestMethod.GET)
-    public JsonResult findAllBrand(HttpServletRequest req, HttpServletResponse response, Product product) throws IOException {
+    public JsonResult findAllBrand(Product product) throws IOException {
         List<ResultBean> brandList = brandService.findAllBrand(product);
         JsonResult result = new JsonResult();
         result.setCode(200);
@@ -166,12 +161,11 @@ public class BrandController {
 
     /**
      * 查询推荐品牌
-     * @param req
      * @return
      * @throws IOException
      */
     @RequestMapping(value = "/rest/searchSuggestBrand", method = RequestMethod.GET)
-    public JsonResult searchSuggestBrand(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public JsonResult searchSuggestBrand() throws IOException {
         List<ResultBean> brandList = brandService.searchSuggestBrand();
         JsonResult result = new JsonResult();
         result.setCode(200);
@@ -182,12 +176,11 @@ public class BrandController {
 
     /**
      * 查询品牌详情
-     * @param req
      * @return
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/details", method = RequestMethod.GET)
-    public JsonResult details(HttpServletRequest req, HttpServletResponse response,String id,String scateid) throws IOException {
+    public JsonResult details(String id, String scateid) throws IOException {
         Map map1 = new HashMap();
         Map map2 = new HashMap();
         Map map3 = new HashMap();
@@ -228,12 +221,11 @@ public class BrandController {
 
     /**
      * 品牌对应的子系统
-     * @param req
      * @return
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/findSubSystemByBrand", method = RequestMethod.GET)
-    public JsonResult findSubSystemByBrand(HttpServletRequest req, HttpServletResponse response,String id) throws IOException {
+    public JsonResult findSubSystemByBrand(String id) throws IOException {
         //品牌对应的子系统
         List<ResultBean> list = productService.findSubSystem(id);
         JsonResult result = new JsonResult();
