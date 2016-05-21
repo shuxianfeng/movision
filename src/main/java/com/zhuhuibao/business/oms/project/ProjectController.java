@@ -182,8 +182,10 @@ public class ProjectController {
 
 	@RequestMapping(value = "greatCompany", method = RequestMethod.GET)
 	@ApiOperation(value = "优秀工程商",notes = "优秀工程商",response = JsonResult.class)
-	public JsonResult greatCompany(@ApiParam("工程商类型=2") @RequestParam String type) throws IOException {
-		JsonResult jsonResult = memberService.greatCompany(type);
+	public JsonResult greatCompany(@ApiParam("工程商类型=2") @RequestParam String type) throws Exception {
+		JsonResult jsonResult = new JsonResult();
+		List list = memberService.greatCompany(type);
+		jsonResult.setData(list);
 		return jsonResult;
 	}
 

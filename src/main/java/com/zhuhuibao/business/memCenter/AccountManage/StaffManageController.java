@@ -138,7 +138,8 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/staffSearch", method = RequestMethod.GET)
-	public JsonResult staffSearch(Member member, String pageNo, String pageSize) throws IOException {
+	public JsonResult staffSearch(Member member, String pageNo, String pageSize) throws Exception {
+		JsonResult jsonResult = new JsonResult();
 		if(member.getAccount()!=null){
 			if(member.getAccount().contains("_")){
 				member.setAccount(member.getAccount().replace("_","\\_"));
@@ -151,8 +152,10 @@ public class StaffManageController {
 			pageSize = "10";
 		}
 		Paging<Member> pager = new Paging<Member>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-
-		return memberService.findStaffByParentId(pager,member);
+		List list = memberService.findStaffByParentId(pager,member);
+		pager.result(list);
+		jsonResult.setData(pager);
+		return jsonResult;
 	}
 
 	/**

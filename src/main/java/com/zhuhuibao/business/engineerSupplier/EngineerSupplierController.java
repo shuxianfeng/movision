@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by cxx on 2016/4/11 0011.
@@ -36,9 +38,12 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "newEngineer", method = RequestMethod.GET)
-    public JsonResult newEngineer() throws IOException {
+    public JsonResult newEngineer() throws Exception {
         String type = "4";
-        return memberService.findNewEngineerOrSupplier(type);
+        JsonResult jsonResult = new JsonResult();
+        List list = memberService.findNewEngineerOrSupplier(type);
+        jsonResult.setData(list);
+        return jsonResult;
     }
 
 
@@ -48,9 +53,12 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "newManufacturer", method = RequestMethod.GET)
-    public JsonResult newManufacturer() throws IOException {
+    public JsonResult newManufacturer() throws Exception {
         String type = "1";
-        return  memberService.findNewEngineerOrSupplier(type);
+        JsonResult jsonResult = new JsonResult();
+        List list = memberService.findNewEngineerOrSupplier(type);
+        jsonResult.setData(list);
+        return jsonResult;
     }
 
     /**
@@ -59,9 +67,12 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "newAgent", method = RequestMethod.GET)
-    public JsonResult newAgent() throws IOException {
+    public JsonResult newAgent() throws Exception {
         String type = "2";
-        return memberService.findNewEngineerOrSupplier(type);
+        JsonResult jsonResult = new JsonResult();
+        List list = memberService.findNewEngineerOrSupplier(type);
+        jsonResult.setData(list);
+        return jsonResult;
     }
 
     /**
@@ -70,9 +81,12 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "newChannel", method = RequestMethod.GET)
-    public JsonResult newChannel() throws IOException {
+    public JsonResult newChannel() throws Exception {
         String type = "3";
-        return  memberService.findNewEngineerOrSupplier(type);
+        JsonResult jsonResult = new JsonResult();
+        List list = memberService.findNewEngineerOrSupplier(type);
+        jsonResult.setData(list);
+        return jsonResult;
     }
 
     /**
@@ -81,8 +95,11 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "introduce", method = RequestMethod.GET)
-    public JsonResult introduce(String id, String type) throws IOException {
-        return memberService.introduce(id,type);
+    public JsonResult introduce(String id, String type) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        Map map = memberService.introduce(id,type);
+        jsonResult.setData(map);
+        return jsonResult;
     }
 
     /**
@@ -91,8 +108,11 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "greatCompany", method = RequestMethod.GET)
-    public JsonResult greatCompany(String type) throws IOException {
-        return memberService.greatCompany(type);
+    public JsonResult greatCompany(String type) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        List list = memberService.greatCompany(type);
+        jsonResult.setData(list);
+        return jsonResult;
     }
 
     /**
@@ -101,8 +121,11 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "newIdentifyEngineer", method = RequestMethod.GET)
-    public JsonResult newIdentifyEngineer(String type) throws IOException {
-        return  memberService.findnewIdentifyEngineer(type);
+    public JsonResult newIdentifyEngineer(String type) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        List list = memberService.findnewIdentifyEngineer(type);
+        jsonResult.setData(list);
+        return jsonResult;
     }
 
     /**
@@ -111,7 +134,7 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "message", method = RequestMethod.POST)
-    public JsonResult message(Message message) throws IOException {
+    public JsonResult message(Message message) throws Exception {
 /*        String title = new String(message.getTitle().getBytes("8859_1"), "utf8" );
         String receiveName = new String(message.getReceiveName().getBytes("8859_1"), "utf8" );
         String content = new String(message.getContent().getBytes("8859_1"), "utf8" );*/
@@ -123,7 +146,7 @@ public class EngineerSupplierController {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
                 message.setCreateid(principal.getId().toString());
-                jsonResult = memberService.saveMessage(message);
+                memberService.saveMessage(message);
             }else{
                 jsonResult.setCode(401);
                 jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -134,7 +157,6 @@ public class EngineerSupplierController {
             jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             jsonResult.setMsgCode(MsgCodeConstant.un_login);
         }
-
         return jsonResult;
     }
 }

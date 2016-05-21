@@ -28,141 +28,174 @@ public class BrandService {
     /**
      * 根据会员id，状态status(可以为空)查询品牌
      */
-    public List<Brand> searchBrandByStatus(Brand brand)
+    public List<Brand> searchBrandByStatus(Brand brand)throws Exception
     {
-        List<Brand> brands = brandMapper.searchBrandByStatus(brand);
-        return brands;
+        try {
+            return brandMapper.searchBrandByStatus(brand);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
-    public List<Brand> searchBrand(Brand brand)
+    public List<Brand> searchBrand(Brand brand)throws Exception
     {
-        List<Brand> brands = brandMapper.searchBrand(brand);
-        return brands;
+        try {
+            return brandMapper.searchBrand(brand);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
-    public List<Brand> searchBrandByPager(Paging<Brand> pager, Brand brand)
+    public List<Brand> searchBrandByPager(Paging<Brand> pager, Brand brand)throws Exception
     {
-        List<Brand> brands = brandMapper.findAllByPager(pager.getRowBounds(),brand);
-        return brands;
+        try {
+            return brandMapper.findAllByPager(pager.getRowBounds(),brand);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 查询拥有产品的品牌
      */
-    public List<BrandBean> searchAll()
+    public List<BrandBean> searchAll()throws Exception
     {
-        log.debug("查询拥有产品的品牌");
-        List<BrandBean> brandList = brandMapper.searchAll();
-        return brandList;
+        try {
+            return brandMapper.searchAll();
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 查询拥有产品的推荐品牌
      */
-    public List<SuggestBrand> SuggestBrand()
+    public List<SuggestBrand> SuggestBrand()throws Exception
     {
-        log.debug("查询拥有产品的推荐品牌");
-        List<SuggestBrand> brandList = brandMapper.SuggestBrand();
-        return brandList;
+        try {
+            return brandMapper.SuggestBrand();
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 查询二级系统下所有品牌,返回id,品牌logo
      */
-    public List<ResultBean> findAllBrand(Product product)
+    public List<ResultBean> findAllBrand(Product product)throws Exception
     {
-        log.debug("查询二级系统下所有品牌");
-        List<ResultBean> brandList = brandMapper.findAllBrand(product);
-        return brandList;
+        try {
+            return brandMapper.findAllBrand(product);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 查询二级系统下所有品牌，返回id，name
      */
-    public List<ResultBean> findBrandByScateid(Product product)
+    public List<ResultBean> findBrandByScateid(Product product)throws Exception
     {
-        log.debug("查询二级系统下所有品牌");
-        List<ResultBean> brandList = brandMapper.findBrandByScateid(product);
-        return brandList;
+        try {
+            return brandMapper.findBrandByScateid(product);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 查询推荐品牌
      */
-    public List<ResultBean> searchSuggestBrand()
+    public List<ResultBean> searchSuggestBrand()throws Exception
     {
-        log.debug("查询推荐品牌");
-        List<ResultBean> brandList = brandMapper.searchSuggestBrand();
-        return brandList;
+        try {
+            return brandMapper.searchSuggestBrand();
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 查询品牌详情
      */
-    public BrandDetailBean details(String id)
+    public BrandDetailBean details(String id)throws Exception
     {
-        log.debug("查询品牌详情");
-        BrandDetailBean brand = brandMapper.details(id);
-        return brand;
+        try {
+            return brandMapper.details(id);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 新建品牌
      */
-    public int addBrand(Brand brand)
+    public int addBrand(Brand brand)throws Exception
     {
-        log.debug("新建品牌");
-        int isAdd = brandMapper.addBrand(brand);
-        return isAdd;
+        try {
+            return brandMapper.addBrand(brand);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 更新品牌
      */
-    public int updateBrand(Brand brand)
+    public int updateBrand(Brand brand)throws Exception
     {
-        log.debug("更新品牌");
-        int isUpdate = brandMapper.updateBrand(brand);
-        return isUpdate;
+        try {
+            return brandMapper.updateBrand(brand);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 删除品牌
      */
-    public int deleteBrand(String id)
+    public int deleteBrand(String id)throws Exception
     {
-        log.debug("删除品牌");
-        int isDelete = brandMapper.deleteBrand(id);
-        return isDelete;
+        try {
+            return brandMapper.deleteBrand(id);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 品牌数量
      */
-    public int searchBrandSize(Brand brand)
+    public int searchBrandSize(Brand brand)throws Exception
     {
-        log.debug("品牌数量");
-        int size = brandMapper.searchBrandSize(brand);
-        return size;
+        try {
+            return brandMapper.searchBrandSize(brand);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 品牌数量
      */
-    public int findBrandSize(Brand brand)
+    public int findBrandSize(Brand brand)throws Exception
     {
-        log.debug("品牌数量");
-        int size = brandMapper.findBrandSize(brand);
-        return size;
+        try {
+            return brandMapper.findBrandSize(brand);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 查询品牌详情
      */
-    public Brand brandDetails(int id)
+    public Brand brandDetails(int id)throws Exception
     {
-        log.debug("查询品牌详情");
-        Brand brand = brandMapper.brandDetails(id);
-        return brand;
+        try {
+            return brandMapper.brandDetails(id);
+        }catch (Exception e){
+            throw e;
+        }
     }
 }

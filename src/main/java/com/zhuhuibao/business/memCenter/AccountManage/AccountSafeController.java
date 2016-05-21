@@ -126,7 +126,6 @@ public class AccountSafeController {
         //对比密码是否正确
         JsonResult result = new JsonResult();
         result = checkPwd(md5Pwd, mem, result);
-
         return result;
     }
 
@@ -143,7 +142,6 @@ public class AccountSafeController {
         Member member = new Member();
         member.setPassword(md5Pwd);
         member.setId(Long.parseLong(id));
-
         JsonResult result = new JsonResult();
         memberService.updateMember(member);
         return result;
@@ -208,21 +206,16 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/checkMobile", method = RequestMethod.POST)
-    public JsonResult checkMobile(Member member) throws IOException {
+    public JsonResult checkMobile(Member member) throws Exception {
         JsonResult result = new JsonResult();
-        try {
-            Member member1 = memberService.findMemer(member);
-            if(member1!=null){
-                result.setCode(400);
-                result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
-                result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
-            }else {
-                result.setCode(200);
-            }
-        }catch(Exception e){
-            log.error("checkMobile error");
+        Member member1 = memberService.findMemer(member);
+        if(member1!=null){
+            result.setCode(400);
+            result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
+            result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+        }else {
+            result.setCode(200);
         }
-
         return result;
     }
 
@@ -232,36 +225,29 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/updateEmail", method = RequestMethod.GET)
-    public ModelAndView updateEmail(HttpServletRequest req) throws IOException {
+    public ModelAndView updateEmail(HttpServletRequest req) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
         Member member = new Member();
-        try
-        {
-            String email = req.getParameter("email");//获取email
-            String decodeTime = new String (EncodeUtil.decodeBase64(req.getParameter("time")));
-            String decodeId = new String (EncodeUtil.decodeBase64(req.getParameter("id")));
-            Date currentTime = new Date();//获取当前时间
-            Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(decodeTime,"yyyy-MM-dd HH:mm:ss"),5,1);
-            String redirectUrl ="";
-            if(currentTime.before(registerDate)){
-                if(email != null & !email.equals(""))
-                {
-                    String decodeVM = new String (EncodeUtil.decodeBase64(email));
-                    member.setEmail(decodeVM);
-                    member.setId(Long.parseLong(decodeId));
-                    memberService.updateMember(member);
-                    redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-bind.page");
-                }
-            }else{
-                redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-error.page");
+        String email = req.getParameter("email");//获取email
+        String decodeTime = new String (EncodeUtil.decodeBase64(req.getParameter("time")));
+        String decodeId = new String (EncodeUtil.decodeBase64(req.getParameter("id")));
+        Date currentTime = new Date();//获取当前时间
+        Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(decodeTime,"yyyy-MM-dd HH:mm:ss"),5,1);
+        String redirectUrl ="";
+        if(currentTime.before(registerDate)){
+            if(email != null & !email.equals(""))
+            {
+                String decodeVM = new String (EncodeUtil.decodeBase64(email));
+                member.setEmail(decodeVM);
+                member.setId(Long.parseLong(decodeId));
+                memberService.updateMember(member);
+                redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-bind.page");
             }
-            RedirectView rv = new RedirectView(redirectUrl);
-            modelAndView.setView(rv);
+        }else{
+            redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-error.page");
         }
-        catch(Exception e)
-        {
-            log.error("email updateEmail error!",e);
-        }
+        RedirectView rv = new RedirectView(redirectUrl);
+        modelAndView.setView(rv);
         return modelAndView;
     }
 

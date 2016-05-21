@@ -41,10 +41,12 @@ public class AgentService {
      * @param agent
      * @return
      */
-    public int agentSave(Agent agent){
-        log.debug("关联代理商保存");
-        int isSave = agentMapper.agentSave(agent);
-        return isSave;
+    public int agentSave(Agent agent)throws Exception{
+        try {
+            return agentMapper.agentSave(agent);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
@@ -52,10 +54,12 @@ public class AgentService {
      * @param agent
      * @return
      */
-    public int agentUpdate(Agent agent){
-        log.debug("关联代理商更新编辑");
-        int isUpdate = agentMapper.agentUpdate(agent);
-        return isUpdate;
+    public int agentUpdate(Agent agent)throws Exception{
+        try {
+            return agentMapper.agentUpdate(agent);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
@@ -63,10 +67,12 @@ public class AgentService {
      * @param
      * @return
      */
-    public List<CommonBean> searchProvinceByPinYin(){
-        log.debug("区域按首拼分类");
-        List<CommonBean> list = provinceMapper.searchProvinceByPinYin();
-        return list;
+    public List<CommonBean> searchProvinceByPinYin()throws Exception{
+        try {
+            return provinceMapper.searchProvinceByPinYin();
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
@@ -74,10 +80,12 @@ public class AgentService {
      * @param
      * @return
      */
-    public List<AgentBean> findAgentByMemId(String id){
-        log.debug("根据会员id查询代理商");
-        List<AgentBean> list = agentMapper.findAgentByMemId(id);
-        return list;
+    public List<AgentBean> findAgentByMemId(String id)throws Exception{
+        try {
+            return agentMapper.findAgentByMemId(id);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
@@ -85,8 +93,7 @@ public class AgentService {
      * @param
      * @return
      */
-    public JsonResult updateAgentById(String id){
-        JsonResult result = new JsonResult();
+    public Map updateAgentById(String id)throws Exception{
         try{
             AgentBean agent = agentMapper.updateAgentById(id);
             Map map = new HashMap();
@@ -109,110 +116,112 @@ public class AgentService {
             }
             map.put("product",list);
             map.put("agent",map1);
-            result.setCode(200);
-            result.setData(map);
+            return map;
         }catch (Exception e){
-            log.error("query error ",e);
-            e.printStackTrace();
+            throw e;
         }
-        return result;
     }
 
-    public Agent find(Agent agent){
-        Agent result = agentMapper.find(agent);
-        return result;
+    public Agent find(Agent agent)throws Exception{
+        try {
+            return agentMapper.find(agent);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
 
-    public JsonResult getAgentByProId(String id){
-        JsonResult result = new JsonResult();
-        List<ResultBean> provinceList = provinceMapper.findProvince();
-        List<ResultBean> agentList = agentMapper.findAgentByProId(id);
-        Member member = agentMapper.findManufactorByProId(id);
-        List list = new ArrayList();
-        Map map = new HashMap();
-        Map map3 = new HashMap();
-        map3.put(Constant.id,member.getId());
-        map3.put(Constant.name,member.getEnterpriseName());
-        map3.put(Constant.logo,member.getEnterpriseLogo());
-        map3.put(Constant.webSite,member.getEnterpriseWebSite());
-        map3.put(Constant.address,member.getAddress());
-        map.put("manufactor",map3);
-        for(int i=0;i<provinceList.size();i++){
-            ResultBean province = provinceList.get(i);
-            Map map1 = new HashMap();
-            map1.put(Constant.id,province.getCode());
-            map1.put(Constant.name,province.getName());
-            List list1 = new ArrayList();
-            for(int j=0;j<agentList.size();j++){
-                ResultBean agent = agentList.get(j);
-                Map map2 = new HashMap();
-                if(agent.getSmallIcon().contains(province.getCode())){
-                    map2.put(Constant.id,agent.getCode());
-                    map2.put(Constant.name,agent.getName());
-                    list1.add(map2);
+    public Map getAgentByProId(String id)throws Exception{
+        try {
+            List<ResultBean> provinceList = provinceMapper.findProvince();
+            List<ResultBean> agentList = agentMapper.findAgentByProId(id);
+            Member member = agentMapper.findManufactorByProId(id);
+            List list = new ArrayList();
+            Map map = new HashMap();
+            Map map3 = new HashMap();
+            map3.put(Constant.id,member.getId());
+            map3.put(Constant.name,member.getEnterpriseName());
+            map3.put(Constant.logo,member.getEnterpriseLogo());
+            map3.put(Constant.webSite,member.getEnterpriseWebSite());
+            map3.put(Constant.address,member.getAddress());
+            map.put("manufactor",map3);
+            for(int i=0;i<provinceList.size();i++){
+                ResultBean province = provinceList.get(i);
+                Map map1 = new HashMap();
+                map1.put(Constant.id,province.getCode());
+                map1.put(Constant.name,province.getName());
+                List list1 = new ArrayList();
+                for(int j=0;j<agentList.size();j++){
+                    ResultBean agent = agentList.get(j);
+                    Map map2 = new HashMap();
+                    if(agent.getSmallIcon().contains(province.getCode())){
+                        map2.put(Constant.id,agent.getCode());
+                        map2.put(Constant.name,agent.getName());
+                        list1.add(map2);
+                    }
                 }
+                map1.put("agentList",list1);
+                list.add(map1);
             }
-            map1.put("agentList",list1);
-            list.add(map1);
+            map.put("agent",list);
+            return map;
+        }catch (Exception e){
+            throw e;
         }
-        map.put("agent",list);
-        result.setCode(200);
-        result.setData(map);
-        return result;
     }
 
-    public JsonResult getGreatAgentByScateid(String id){
-        JsonResult result = new JsonResult();
-        List<ResultBean> greatAgentList = agentMapper.getGreatAgentByScateid(id);
-        result.setCode(200);
-        result.setData(greatAgentList);
-        return result;
+    public List<ResultBean> getGreatAgentByScateid(String id)throws Exception{
+        try {
+            return agentMapper.getGreatAgentByScateid(id);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
-    public JsonResult getGreatAgentByBrandId(String id){
-        JsonResult result = new JsonResult();
-        List<ResultBean> greatAgentList = agentMapper.getGreatAgentByBrandId(id);
-        result.setCode(200);
-        result.setData(greatAgentList);
-        return result;
+    public List<ResultBean> getGreatAgentByBrandId(String id)throws Exception{
+        try {
+            return agentMapper.getGreatAgentByBrandId(id);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 根据品牌id查询代理商跟厂商（区域分组）
      */
-    public JsonResult getAgentByBrandid(String id){
-        JsonResult result = new JsonResult();
-        List<ResultBean> provinceList = provinceMapper.findProvince();
-        List<ResultBean> agentList = agentMapper.getAgentByBrandid(id);
-        ResultBean resultBean = agentMapper.findManufactorByBrandid(id);
-        List list = new ArrayList();
-        Map map = new HashMap();
-        Map map3 = new HashMap();
-        map3.put(Constant.id,resultBean.getCode());
-        map3.put(Constant.name,resultBean.getName());
-        map.put("manufactor",map3);
-        for(int i=0;i<provinceList.size();i++){
-            ResultBean province = provinceList.get(i);
-            Map map1 = new HashMap();
-            map1.put(Constant.id,province.getCode());
-            map1.put(Constant.name,province.getName());
-            List list1 = new ArrayList();
-            for(int j=0;j<agentList.size();j++){
-                ResultBean agent = agentList.get(j);
-                Map map2 = new HashMap();
-                if(agent.getSmallIcon().contains(province.getCode())){
-                    map2.put(Constant.id,agent.getCode());
-                    map2.put(Constant.name,agent.getName());
-                    list1.add(map2);
+    public Map getAgentByBrandid(String id)throws Exception{
+        try {
+            List<ResultBean> provinceList = provinceMapper.findProvince();
+            List<ResultBean> agentList = agentMapper.getAgentByBrandid(id);
+            ResultBean resultBean = agentMapper.findManufactorByBrandid(id);
+            List list = new ArrayList();
+            Map map = new HashMap();
+            Map map3 = new HashMap();
+            map3.put(Constant.id,resultBean.getCode());
+            map3.put(Constant.name,resultBean.getName());
+            map.put("manufactor",map3);
+            for(int i=0;i<provinceList.size();i++){
+                ResultBean province = provinceList.get(i);
+                Map map1 = new HashMap();
+                map1.put(Constant.id,province.getCode());
+                map1.put(Constant.name,province.getName());
+                List list1 = new ArrayList();
+                for(int j=0;j<agentList.size();j++){
+                    ResultBean agent = agentList.get(j);
+                    Map map2 = new HashMap();
+                    if(agent.getSmallIcon().contains(province.getCode())){
+                        map2.put(Constant.id,agent.getCode());
+                        map2.put(Constant.name,agent.getName());
+                        list1.add(map2);
+                    }
                 }
+                map1.put("agentList",list1);
+                list.add(map1);
             }
-            map1.put("agentList",list1);
-            list.add(map1);
+            map.put("agent",list);
+            return map;
+        }catch (Exception e){
+            throw e;
         }
-        map.put("agent",list);
-        result.setCode(200);
-        result.setData(map);
-        return result;
     }
 }

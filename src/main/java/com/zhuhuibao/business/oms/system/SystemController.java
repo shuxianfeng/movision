@@ -38,12 +38,11 @@ public class SystemController {
      */
 
     @RequestMapping(value = "/rest/systemSearch", method = RequestMethod.GET)
-    public JsonResult systemSearch() throws IOException {
+    public JsonResult systemSearch() throws Exception {
         JsonResult jsonResult = new JsonResult();
         List<ResultBean> systemList = categoryService.findSystemList();
         jsonResult.setCode(200);
         jsonResult.setData(systemList);
-
         return jsonResult;
     }
 
@@ -55,13 +54,12 @@ public class SystemController {
      */
 
     @RequestMapping(value = "/rest/subSystemSearch", method = RequestMethod.GET)
-    public JsonResult subSystemSearch(HttpServletRequest req) throws IOException {
+    public JsonResult subSystemSearch(HttpServletRequest req) throws Exception {
         JsonResult jsonResult = new JsonResult();
         String parentId = req.getParameter("parentId");
         List<ResultBean> subSystemList = categoryService.findSubSystemList(parentId);
         jsonResult.setCode(200);
         jsonResult.setData(subSystemList);
-
         return jsonResult;
     }
 
@@ -84,16 +82,9 @@ public class SystemController {
      */
 
     @RequestMapping(value = "/rest/system/addSystem", method = RequestMethod.POST)
-    public JsonResult addSystem(Category category) throws IOException {
+    public JsonResult addSystem(Category category) throws Exception {
         JsonResult result = new JsonResult();
-        int isAdd = categoryService.addSystem(category);
-        if(isAdd==0){
-            result.setCode(400);
-            result.setMessage("添加失败");
-        }else{
-            result.setCode(200);
-        }
-
+        categoryService.addSystem(category);
         return result;
     }
 
@@ -104,15 +95,9 @@ public class SystemController {
      */
 
     @RequestMapping(value = "/rest/system/updateSystem", method = RequestMethod.POST)
-    public JsonResult updateSystem(Category category) throws IOException {
+    public JsonResult updateSystem(Category category) throws Exception {
         JsonResult result = new JsonResult();
-        int isUpdate = categoryService.updateSystem(category);
-        if(isUpdate==0){
-            result.setCode(400);
-            result.setMessage("更新失败");
-        }else{
-            result.setCode(200);
-        }
+        categoryService.updateSystem(category);
         return result;
     }
 
@@ -123,7 +108,7 @@ public class SystemController {
      */
 
     @RequestMapping(value = "/rest/system/deleteSystem", method = RequestMethod.POST)
-    public JsonResult deleteSystem(Category category) throws IOException {
+    public JsonResult deleteSystem(Category category) throws Exception {
         JsonResult result = new JsonResult();
         Product product = productService.findProductBySystemId(category.getId().toString());
         if(product!=null){
