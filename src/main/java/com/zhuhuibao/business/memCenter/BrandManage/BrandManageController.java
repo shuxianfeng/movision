@@ -45,14 +45,7 @@ public class BrandManageController {
     public JsonResult upload(Brand brand) throws IOException {
         JsonResult result = new JsonResult();
         brand.setPublishTime(new Date());
-        int isAdd = brandService.addBrand(brand);
-        if(isAdd==0){
-            result.setCode(400);
-            result.setMessage("添加失败");
-        }else{
-            result.setCode(200);
-        }
-
+        brandService.addBrand(brand);
         return result;
     }
 
@@ -74,14 +67,7 @@ public class BrandManageController {
                 brand.setLastModifyTime(new Date());
             }
         }
-        int isUpdate = brandService.updateBrand(brand);
-        if(isUpdate==0){
-            result.setCode(400);
-            result.setMessage("更新失败");
-        }else{
-            result.setCode(200);
-        }
-
+        brandService.updateBrand(brand);
         return result;
     }
 
@@ -93,14 +79,7 @@ public class BrandManageController {
     @RequestMapping(value = "/rest/deleteBrand", method = RequestMethod.POST)
     public JsonResult deleteBrand(String id) throws IOException {
         JsonResult result = new JsonResult();
-        int isDelete = brandService.deleteBrand(id);
-        if(isDelete==0){
-            result.setCode(400);
-            result.setMessage("删除失败");
-        }else{
-            result.setCode(200);
-        }
-
+        brandService.deleteBrand(id);
         return result;
     }
 
@@ -114,20 +93,10 @@ public class BrandManageController {
     public JsonResult batchDeleteBrand(HttpServletRequest req) throws IOException {
         String ids[] = req.getParameterValues("id");
         JsonResult result = new JsonResult();
-        int isDelete = 0;
         for (String id : ids) {
-            isDelete = brandService.deleteBrand(id);
-            if (isDelete == 0) {
-                result.setCode(400);
-                result.setMessage("批量删除失败");
-                break;
-            } else {
-                result.setCode(200);
-            }
+            brandService.deleteBrand(id);
         }
-
         return result;
-
     }
 
     /**
@@ -139,9 +108,7 @@ public class BrandManageController {
     public JsonResult searchBrand(Brand brand) throws IOException {
         List<Brand> brandList = brandService.searchBrand(brand);
         JsonResult result = new JsonResult();
-        result.setCode(200);
         result.setData(brandList);
-
         return result;
     }
 
@@ -162,9 +129,7 @@ public class BrandManageController {
         List<Brand> brandList = brandService.searchBrandByPager(pager,brand);
         pager.result(brandList);
         JsonResult result = new JsonResult();
-        result.setCode(200);
         result.setData(pager);
-
         return result;
     }
 
@@ -185,9 +150,7 @@ public class BrandManageController {
             list.add(map);
         }
         JsonResult result = new JsonResult();
-        result.setCode(200);
         result.setData(list);
-
         return result;
     }
 
@@ -198,9 +161,7 @@ public class BrandManageController {
     public JsonResult searchBrandSize(Brand brand) throws IOException {
         int size = brandService.searchBrandSize(brand);
         JsonResult result = new JsonResult();
-        result.setCode(200);
         result.setData(size);
-
         return result;
     }
 
@@ -211,9 +172,7 @@ public class BrandManageController {
     public JsonResult findBrandSize(Brand brand) throws IOException {
         int size = brandService.findBrandSize(brand);
         JsonResult result = new JsonResult();
-        result.setCode(200);
         result.setData(size);
-
         return result;
     }
 
@@ -228,9 +187,8 @@ public class BrandManageController {
         }else{
             brand.setViews(brand.getViews()+1);
         }
-        int isUpdate = brandService.updateBrand(brand);
+        brandService.updateBrand(brand);
         JsonResult result = new JsonResult();
-        result.setCode(200);
         result.setData(brand);
         return result;
     }
@@ -243,9 +201,7 @@ public class BrandManageController {
         //完成文件上传
         JsonResult result = new JsonResult();
         String url = uploadService.upload(req,"img");
-        result.setCode(200);
         result.setData(url);
-
         return result;
     }
 
@@ -258,9 +214,7 @@ public class BrandManageController {
     public JsonResult findBrandByScateid(Product product) throws IOException {
         List<ResultBean> brandList = brandService.findBrandByScateid(product);
         JsonResult result = new JsonResult();
-        result.setCode(200);
         result.setData(brandList);
-
         return result;
     }
 }

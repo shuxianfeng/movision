@@ -1,10 +1,12 @@
 package com.zhuhuibao.business.engineerSupplier;
 
 import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.JsonUtils;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -124,11 +126,13 @@ public class EngineerSupplierController {
                 jsonResult = memberService.saveMessage(message);
             }else{
                 jsonResult.setCode(401);
-                jsonResult.setMessage("请先登录");
+                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                jsonResult.setMsgCode(MsgCodeConstant.un_login);
             }
         }else{
             jsonResult.setCode(401);
-            jsonResult.setMessage("请先登录");
+            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            jsonResult.setMsgCode(MsgCodeConstant.un_login);
         }
 
         return jsonResult;

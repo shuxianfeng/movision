@@ -63,53 +63,59 @@ public class MemberService {
 	 */
 	public int updateMemInfo(Member member)
 	{
-		log.debug("会员信息保存");
-		int result = 0;
-		result = memberMapper.updateMemInfo(member);
-		return result;
+		try{
+			return memberMapper.updateMemInfo(member);
+		}catch (Exception e){
+			throw e;
+		}
 	}
 
 	/**
 	 * 更新会员状态
 	 */
-	public int updateStatus(Member member)
+	public int updateStatus(Member member)throws Exception
 	{
-		log.debug("更新会员状态");
-		int result = 0;
-		result = memberMapper.updateStatus(member);
-		return result;
+		try{
+			return memberMapper.updateStatus(member);
+		}catch (Exception e){
+			throw e;
+		}
 	}
 
 	/**
 	 * 根据会员ID查询会员信息
 	 */
-	public Member findMemById(String id)
+	public Member findMemById(String id)throws Exception
 	{
-		log.debug("根据会员ID查询会员信息");
-		Member member = memberMapper.findMemById(id);
-		return member;
+		try{
+			return memberMapper.findMemById(id);
+		}catch (Exception e){
+			throw e;
+		}
 	}
 
 	/**
 	 * 新建员工
 	 */
-	public int addMember(Member member)
+	public int addMember(Member member)throws Exception
 	{
-		log.debug("新建员工");
-		int result = 0;
-		result = memberMapper.addMember(member);
-		return result;
+		try{
+			return memberMapper.addMember(member);
+		}catch (Exception e){
+			throw e;
+		}
 	}
 
 	/**
 	 * 修改员工
 	 */
-	public int updateMember(Member member)
+	public int updateMember(Member member)throws Exception
 	{
-		log.debug("修改员工");
-		int result = 0;
-		result = memberMapper.updateMember(member);
-		return result;
+		try{
+			return memberMapper.updateMember(member);
+		}catch (Exception e){
+			throw e;
+		}
 	}
 
 	/**
@@ -126,73 +132,85 @@ public class MemberService {
 	/**
 	 * 删除员工
 	 */
-	public int deleteMember(String id)
+	public int deleteMember(String id)throws Exception
 	{
-		log.debug("修改员工");
-		int result = 0;
-		result = memberMapper.deleteMember(id);
-		return result;
+		try{
+			return memberMapper.deleteMember(id);
+		}catch (Exception e){
+			throw e;
+		}
 	}
 
 	/**
 	 * 员工密码重置
 	 */
-	public int resetPwd(Member member)
+	public int resetPwd(Member member)throws Exception
 	{
-		log.debug("密码重置");
-		int result = 0;
-		result = memberMapper.resetPwd(member);
-		return result;
+		try{
+			return memberMapper.resetPwd(member);
+		}catch (Exception e){
+			throw e;
+		}
 	}
 
 	/**
 	 * 会员头像修改
 	 */
-	public int uploadHeadShot(Member member)
+	public int uploadHeadShot(Member member)throws Exception
 	{
-		log.debug("会员头像修改");
-		int isUpdate = memberMapper.uploadHeadShot(member);
-		return isUpdate;
+		try{
+			return memberMapper.uploadHeadShot(member);
+		}catch (Exception e){
+			throw e;
+		}
 	}
 
 	/**
 	 * 公司logo修改
 	 */
-	public int uploadLogo(Member member)
+	public int uploadLogo(Member member)throws Exception
 	{
-		log.debug("公司logo修改");
-		int isUpdate = memberMapper.uploadLogo(member);
-		return isUpdate;
+		try{
+			return memberMapper.uploadLogo(member);
+		}catch (Exception e){
+			throw e;
+		}
 	}
 
 	/**
 	 * 查询代理商
 	 */
-	public List<AccountBean> findAgentMember(String account,String type)
+	public List<AccountBean> findAgentMember(String account,String type)throws Exception
 	{
-		log.debug("查询代理商");
-		List<AccountBean> memList = memberMapper.findAgentMember(account,type);
-		return memList;
+		try{
+			return memberMapper.findAgentMember(account,type);
+		}catch (Exception e){
+			throw e;
+		}
 	}
 
 	/**
 	 * 根据会员账号查询会员
 	 */
-	public Member findMember(Member member)
+	public Member findMember(Member member)throws Exception
 	{
-		log.debug("根据会员账号查询会员");
-		Member mem = memberMapper.findMember(member);
-		return mem;
+		try{
+			return memberMapper.findMember(member);
+		}catch (Exception e){
+			throw e;
+		}
 	}
 
 	/**
 	 * 根据会员账号查询会员
 	 */
-	public Member findMemer(Member member)
+	public Member findMemer(Member member)throws Exception
 	{
-		log.debug("根据会员账号查询会员");
-		Member mem = memberMapper.findMember(member);
-		return mem;
+		try{
+			return memberMapper.findMember(member);
+		}catch (Exception e){
+			throw e;
+		}
 	}
 
 	/**

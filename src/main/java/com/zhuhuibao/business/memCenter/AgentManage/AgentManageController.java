@@ -153,13 +153,7 @@ public class AgentManageController {
         try{
             Agent agent1 = agentService.find(agent);
             if(agent1==null){
-                int isSave = agentService.agentSave(agent);
-                if(isSave==0){
-                    result.setCode(400);
-                    result.setMessage("关联代理商保存成功");
-                }else{
-                    result.setCode(200);
-                }
+                agentService.agentSave(agent);
             }else{
                 result.setCode(400);
                 result.setMessage("该品牌该代理商已设置");
@@ -180,13 +174,7 @@ public class AgentManageController {
     public JsonResult agentUpdate(Agent agent) throws IOException {
         JsonResult result = new JsonResult();
         try{
-            int isUpdate = agentService.agentUpdate(agent);
-            if (isUpdate == 0) {
-                result.setCode(400);
-                result.setMessage("关联代理商编辑更新成功");
-            } else {
-                result.setCode(200);
-            }
+            agentService.agentUpdate(agent);
         }catch (Exception e){
             log.error("update agent error!");
             e.printStackTrace();
@@ -204,13 +192,7 @@ public class AgentManageController {
         JsonResult result = new JsonResult();
         agent.setStatus("1");
         try{
-            int isUpdate = agentService.agentUpdate(agent);
-            if(isUpdate==0){
-                result.setCode(400);
-                result.setMessage("取消关联代理商失败");
-            }else{
-                result.setCode(200);
-            }
+            agentService.agentUpdate(agent);
         }catch (Exception e){
             log.error("cancel agent error!");
         }
@@ -267,7 +249,7 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "inviteAgent", method = RequestMethod.POST)
-    public JsonResult inviteAgent(HttpServletRequest req, String id) throws IOException {
+    public JsonResult inviteAgent(HttpServletRequest req, String id) throws Exception {
         JsonResult result = new JsonResult();
         Member member = memberService.findMemById(id);
         String email = req.getParameter("email");
