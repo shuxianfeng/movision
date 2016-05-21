@@ -449,7 +449,7 @@ public class JobSiteController {
 
     @RequestMapping(value="queryPublishJobCity",method = RequestMethod.GET)
     @ApiOperation(value="查询某企业发布职位的城市",notes = "查询某企业发布职位的城市",response = JsonResult.class)
-    public JsonResult queryPublishJobCity(@ApiParam(value = "创建者ID") @RequestParam String enterpriseID) throws Exception {
+    public JsonResult queryPublishJobCity(@ApiParam(value = "企业ID(创建者ID)") @RequestParam String enterpriseID) throws Exception {
         JsonResult jsonResult = new JsonResult();
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("enterpriseID",enterpriseID);
