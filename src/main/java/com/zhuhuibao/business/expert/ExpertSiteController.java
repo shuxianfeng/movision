@@ -1,5 +1,6 @@
 package com.zhuhuibao.business.expert;
 
+import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
@@ -7,9 +8,7 @@ import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
 import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
 import com.zhuhuibao.mybatis.memCenter.entity.Expert;
-import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
-import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
@@ -39,12 +38,14 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/expertSite")
+@Api(value = "expertSite")
 public class ExpertSiteController {
     private static final Logger log = LoggerFactory
             .getLogger(ExpertSiteController.class);
 
     @Autowired
     private ExpertService expertService;
+
 
     @ApiOperation(value="发布技术成果",notes="发布技术成果",response = JsonResult.class)
     @RequestMapping(value = "publishAchievement", method = RequestMethod.POST)

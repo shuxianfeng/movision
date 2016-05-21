@@ -48,7 +48,7 @@ public class GlobalDefaultExceptionHandler {
         try {
             if (ex instanceof BusinessException) {
                 result.setCode(400);
-                result.setMessage(((BusinessException) ex).getMessage());
+                result.setMessage(ex.getMessage());
                 result.setMsgCode(((BusinessException) ex).getMsgid());
             }
             if (ex instanceof DataAccessException) {
@@ -58,7 +58,7 @@ public class GlobalDefaultExceptionHandler {
             }
             if (ex instanceof SQLException) {
                 result.setCode(400);
-                result.setMessage(((SQLException) ex).getMessage());
+                result.setMessage(ex.getMessage());
                 result.setMsgCode(((SQLException) ex).getErrorCode());
             }
             if (ex instanceof NoSuchRequestHandlingMethodException) {
