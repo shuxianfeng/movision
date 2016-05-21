@@ -35,7 +35,7 @@
     LEFT JOIN t_dictionary_province p on e.province = p.code
     LEFT JOIN t_dictionary_city c on e.city = c.code
     LEFT JOIN t_dictionary_area ar on e.area = ar.code
-    WHERE id = #{id}
+    WHERE e.id = #{id}
   </select>
   <select id="queryHotExpert" resultMap="BaseResultMap" >
     SELECT * FROM t_e_expert WHERE is_deleted = 0 and status = 1 ORDER by views desc limit 0,#{count}
