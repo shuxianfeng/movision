@@ -148,14 +148,9 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "agentUpdate", method = RequestMethod.POST)
-    public JsonResult agentUpdate(Agent agent) throws IOException {
+    public JsonResult agentUpdate(Agent agent) throws Exception {
         JsonResult result = new JsonResult();
-        try{
-            agentService.agentUpdate(agent);
-        }catch (Exception e){
-            log.error("update agent error!");
-            e.printStackTrace();
-        }
+        agentService.agentUpdate(agent);
         return result;
     }
 
@@ -165,14 +160,10 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "cancelAgent", method = RequestMethod.POST)
-    public JsonResult cancelAgent(Agent agent) throws IOException {
+    public JsonResult cancelAgent(Agent agent) throws Exception {
         JsonResult result = new JsonResult();
         agent.setStatus("1");
-        try{
-            agentService.agentUpdate(agent);
-        }catch (Exception e){
-            log.error("cancel agent error!");
-        }
+        agentService.agentUpdate(agent);
         return result;
     }
 
@@ -182,41 +173,37 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "province", method = RequestMethod.GET)
-    public JsonResult province() throws IOException {
+    public JsonResult province() throws Exception {
         JsonResult result = new JsonResult();
         List list1 = new ArrayList();
         List list2 = new ArrayList();
         List list3 = new ArrayList();
         List list4 = new ArrayList();
         Map map = new HashMap();
-        try{
-            List<CommonBean> ResultList = agentService.searchProvinceByPinYin();
-            for (CommonBean aResultList : ResultList) {
-                Map map1 = new HashMap();
-                CommonBean resultBean = aResultList;
-                map1.put("id", resultBean.getId());
-                map1.put("code", resultBean.getCode());
-                map1.put("name", resultBean.getName());
-                if ("A-G".equals(resultBean.getOther())) {
-                    list1.add(map1);
-                } else if ("H-K".equals(resultBean.getOther())) {
-                    list2.add(map1);
-                } else if ("L-S".equals(resultBean.getOther())) {
-                    list3.add(map1);
-                } else {
-                    list4.add(map1);
-                }
+        List<CommonBean> ResultList = agentService.searchProvinceByPinYin();
+        for (CommonBean aResultList : ResultList) {
+            Map map1 = new HashMap();
+            CommonBean resultBean = aResultList;
+            map1.put("id", resultBean.getId());
+            map1.put("code", resultBean.getCode());
+            map1.put("name", resultBean.getName());
+            if ("A-G".equals(resultBean.getOther())) {
+                list1.add(map1);
+            } else if ("H-K".equals(resultBean.getOther())) {
+                list2.add(map1);
+            } else if ("L-S".equals(resultBean.getOther())) {
+                list3.add(map1);
+            } else {
+                list4.add(map1);
             }
-            map.put("AG",list1);
-            map.put("HK",list2);
-            map.put("LS",list3);
-            map.put("TZ",list4);
-            result.setCode(200);
-            result.setData(map);
-        }catch (Exception e){
-            log.error("searchProvinceByPinYin error!");
         }
-       return result;
+        map.put("AG",list1);
+        map.put("HK",list2);
+        map.put("LS",list3);
+        map.put("TZ",list4);
+        result.setCode(200);
+        result.setData(map);
+        return result;
     }
 
     /**
@@ -251,16 +238,11 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "myAgent", method = RequestMethod.GET)
-    public JsonResult myAgent(String id) throws IOException {
+    public JsonResult myAgent(String id) throws Exception {
         JsonResult result = new JsonResult();
-        try{
-            List<AgentBean> list = agentService.findAgentByMemId(id);
-            result.setData(list);
-            result.setCode(200);
-        }catch (Exception e){
-            log.error("findAgentByMemId error!");
-            e.printStackTrace();
-        }
+        List<AgentBean> list = agentService.findAgentByMemId(id);
+        result.setData(list);
+        result.setCode(200);
         return result;
     }
 

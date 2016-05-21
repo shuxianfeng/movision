@@ -225,13 +225,11 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/findSubSystemByBrand", method = RequestMethod.GET)
-    public JsonResult findSubSystemByBrand(String id) throws IOException {
+    public JsonResult findSubSystemByBrand(String id) throws Exception {
         //品牌对应的子系统
         List<ResultBean> list = productService.findSubSystem(id);
         JsonResult result = new JsonResult();
-        result.setCode(200);
         result.setData(list);
-
         return result;
     }
 }

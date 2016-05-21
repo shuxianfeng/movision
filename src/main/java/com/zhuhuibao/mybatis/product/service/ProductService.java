@@ -759,16 +759,17 @@ public class ProductService {
 	/**
 	 * 查询品牌对应的子系统
 	 */
-	public List<ResultBean> findSubSystem(String id)
+	public List<ResultBean> findSubSystem(String id)throws Exception
 	{
-		log.debug("查询品牌对应的子系统");
-		List<ResultBean> list = productMapper.findSubSystem(id);
-		return list;
+		try {
+			return productMapper.findSubSystem(id);
+		}catch (Exception e){
+			throw e;
+		}
 	}
 	
 	/**
      * 查询指定目录中电子表格中所有的数据
-     * @param file 文件完整路径
      * @return
      */
    /* public static List<ProductWithBLOBs> getAllByExcel(String file){

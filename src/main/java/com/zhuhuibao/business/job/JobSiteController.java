@@ -70,7 +70,7 @@ public class JobSiteController {
     @ApiOperation(value="应聘职位",notes = "应聘职位",response = JsonResult.class)
     public JsonResult applyPosition(@ApiParam(value = "简历ID") @RequestParam String jobID,
                                     @ApiParam(value = "发布职位企业ID") @RequestParam String recID,
-                                    @ApiParam(value = "职位标题") @RequestParam String messageText) throws JsonGenerationException, JsonMappingException, IOException
+                                    @ApiParam(value = "职位标题") @RequestParam String messageText) throws IOException
     {
         log.info("applay position recID = "+recID+" messageText ="+messageText);
         Long createid = ShiroUtil.getCreateID();

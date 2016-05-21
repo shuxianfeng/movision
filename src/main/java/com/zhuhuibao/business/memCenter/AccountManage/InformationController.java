@@ -334,7 +334,7 @@ public class InformationController {
 	}
 
 	@RequestMapping(value = "/rest/getNowTime", method = RequestMethod.GET)
-	public JsonResult getNowTime() throws IOException {
+	public JsonResult getNowTime() throws Exception {
 		JsonResult result = new JsonResult();
 		result.setCode(200);
 		Date date = new Date();
