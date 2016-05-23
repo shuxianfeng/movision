@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by cxx on 2016/5/11 0011.
  */
 @RestController
-@RequestMapping("/rest/exhibition")
+@RequestMapping("/rest/exhibitionSite")
 public class ExhibitionSiteController {
     private static final Logger log = LoggerFactory.getLogger(ExhibitionSiteController.class);
 

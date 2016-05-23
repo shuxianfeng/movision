@@ -38,8 +38,8 @@ public class ExhibitionController {
      * 我的活动
      */
     @ApiOperation(value="我的活动",notes="我的活动",response = JsonResult.class)
-    @RequestMapping(value = "findAllExhibition", method = RequestMethod.GET)
-    public JsonResult findAllExhibition(@ApiParam(value = "标题")@RequestParam(required = false)String title,
+    @RequestMapping(value = "findAllMyExhibition", method = RequestMethod.GET)
+    public JsonResult findAllMyExhibition(@ApiParam(value = "标题")@RequestParam(required = false)String title,
                                         @ApiParam(value = "审核状态")@RequestParam(required = false)String status,
                                         @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws Exception {
         JsonResult jsonResult = new JsonResult();
