@@ -101,7 +101,7 @@ public class CooperationController {
      */
     @ApiOperation(value="编辑任务",notes="编辑任务",response = JsonResult.class)
     @RequestMapping(value = "updateCooperation", method = RequestMethod.POST)
-    public JsonResult updateCooperation(@RequestBody Cooperation cooperation) throws Exception {
+    public JsonResult updateCooperation(Cooperation cooperation) throws Exception {
         JsonResult jsonResult = new JsonResult();
         cooperationService.updateCooperation(cooperation);
         return jsonResult;
