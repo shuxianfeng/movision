@@ -163,26 +163,5 @@ public class ExhibitionOmsController {
         return jsonResult;
     }
 
-    /**
-     * 会展详情查看
-     */
-    @ApiOperation(value="会展详情查看",notes="会展详情查看",response = JsonResult.class)
-    @RequestMapping(value = "queryExhibitionInfoById", method = RequestMethod.GET)
-    public JsonResult queryExhibitionInfoById(@RequestParam String id) throws Exception {
-        JsonResult jsonResult = new JsonResult();
-        Exhibition exhibition = exhibitionService.queryExhibitionInfoById(id);
-        jsonResult.setData(exhibition);
-        return jsonResult;
-    }
 
-    /**
-     * 会展信息编辑更新
-     */
-    @ApiOperation(value="会展信息编辑更新",notes="会展信息编辑更新",response = JsonResult.class)
-    @RequestMapping(value = "updateExhibitionInfoById", method = RequestMethod.POST)
-    public JsonResult updateExhibitionInfoById(@ModelAttribute()Exhibition exhibition) throws Exception {
-        JsonResult jsonResult = new JsonResult();
-        exhibitionService.updateExhibitionInfoById(exhibition);
-        return jsonResult;
-    }
 }

@@ -70,6 +70,8 @@ public class Exhibition {
     @ApiModelProperty(value="发布人类型：1：运营人员；2：会员")
     private String createrType;
 
+    private String is_deleted;
+
     public String getId() {
         return id;
     }
@@ -244,5 +246,13 @@ public class Exhibition {
 
     public void setAreaName(String areaName) {
         this.areaName = areaName;
+    }
+
+    public String getIs_deleted() {
+        return is_deleted;
+    }
+
+    public void setIs_deleted(String is_deleted) {
+        this.is_deleted = is_deleted;
     }
 }
