@@ -3,9 +3,11 @@ package com.zhuhuibao.mybatis.memCenter.service;
 import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
 import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
 import com.zhuhuibao.mybatis.memCenter.entity.Expert;
+import com.zhuhuibao.mybatis.memCenter.entity.Question;
 import com.zhuhuibao.mybatis.memCenter.mapper.AchievementMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.DynamicMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ExpertMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.QuestionMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,9 @@ public class ExpertService {
 
     @Autowired
     private ExpertMapper expertMapper;
+
+    @Autowired
+    private QuestionMapper questionMapper;
 
     /**
      * 发布技术成果
@@ -238,6 +243,19 @@ public class ExpertService {
     public List<Expert> queryLatestExpert(int count)throws Exception{
         try{
             return expertMapper.queryLatestExpert(count);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    /**
+     * 向专家咨询
+     * @param question
+     * @return
+     */
+    public int askExpert(Question question)throws Exception{
+        try{
+            return questionMapper.askExpert(question);
         }catch (Exception e){
             throw e;
         }
