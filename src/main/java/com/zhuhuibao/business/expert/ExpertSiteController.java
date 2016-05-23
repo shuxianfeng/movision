@@ -1,6 +1,5 @@
 package com.zhuhuibao.business.expert;
 
-import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
@@ -39,7 +38,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/expertSite")
-@Api(value = "expertSite")
 public class ExpertSiteController {
     private static final Logger log = LoggerFactory
             .getLogger(ExpertSiteController.class);

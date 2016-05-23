@@ -34,7 +34,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/oms")
-@Api(value="Exhibition", description="会展")
 public class ExhibitionOmsController {
     private static final Logger log = LoggerFactory.getLogger(ExhibitionOmsController.class);
 
