@@ -49,6 +49,9 @@ public class Exhibition {
     @ApiModelProperty(value="所属栏目")
     private String type;
 
+    @ApiModelProperty(value="筑慧活动子栏目")
+    private String subType;
+
     @ApiModelProperty(value="主办单位")
     private String company;
 
@@ -254,5 +257,13 @@ public class Exhibition {
 
     public void setIs_deleted(String is_deleted) {
         this.is_deleted = is_deleted;
+    }
+
+    public String getSubType() {
+        return subType;
+    }
+
+    public void setSubType(String subType) {
+        this.subType = subType;
     }
 }

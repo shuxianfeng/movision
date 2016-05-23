@@ -17,6 +17,7 @@
     <result column="cityName" property="cityName" jdbcType="VARCHAR" />
     <result column="areaName" property="areaName" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="subType" property="subType" jdbcType="VARCHAR" />
     <result column="company" property="company" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="imgUrl" property="imgUrl" jdbcType="VARCHAR" />
@@ -24,6 +25,7 @@
     <result column="introduce" property="introduce" jdbcType="VARCHAR" />
     <result column="views" property="views" jdbcType="VARCHAR" />
     <result column="createrType" property="createrType" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="is_deleted" jdbcType="VARCHAR" />
   </resultMap>
   <select id="queryExhibitionInfoById" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -65,6 +67,9 @@
       </if>
       <if test="type != null" >
         type,
+      </if>
+      <if test="subType != null" >
+        subType,
       </if>
       <if test="company != null" >
         company,
@@ -118,6 +123,9 @@
       <if test="type != null" >
         #{type},
       </if>
+      <if test="subType != null" >
+        #{subType},
+      </if>
       <if test="company != null" >
         #{company},
       </if>
@@ -166,6 +174,9 @@
       <if test="type != null" >
         type = #{type},
       </if>
+      <if test="subType != null" >
+        subType = #{subType},
+      </if>
       <if test="company != null" >
         company = #{company},
       </if>
@@ -187,6 +198,9 @@
       <if test="createrType != null" >
         createrType = #{createrType},
       </if>
+      <if test="is_deleted != null" >
+        is_deleted = #{is_deleted},
+      </if>
     </set>
     where id = #{id}
   </update>
@@ -196,7 +210,7 @@
     when e.createrType = 2 then (select m.enterpriseName from t_m_member m where m.id = e.createid) end as createName
     from t_c_exhibition e
     left join t_dictionary_constant c on e.`type` = c.code and c.`type` = 17
-    where 1 = 1
+    where e.is_deleted = 0
     <if test="title != null">
       and e.title like CONCAT('%',#{title},'%')
     </if>
@@ -205,6 +219,9 @@
     </if>
     <if test="type != null">
       and e.type = #{type}
+    </if>
+    <if test="subType != null">
+      and e.subType = #{subType}
     </if>
     <if test="province != null">
       and e.province = #{province}

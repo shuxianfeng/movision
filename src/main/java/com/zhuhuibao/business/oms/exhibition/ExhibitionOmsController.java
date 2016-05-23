@@ -131,14 +131,13 @@ public class ExhibitionOmsController {
     }
 
     /**
-     * 会展信息列表
+     * 会展信息列表(运营)
      */
-    @ApiOperation(value="会展信息列表",notes="会展信息列表",response = JsonResult.class)
-    @RequestMapping(value = "findAllExhibition", method = RequestMethod.GET)
-    public JsonResult findAllExhibition(@ApiParam(value = "标题")@RequestParam(required = false)String title,
-        @ApiParam(value = "所属栏目")@RequestParam(required = false)String type,@ApiParam(value = "审核状态")@RequestParam(required = false)String status,
-        @ApiParam(value = "省")@RequestParam(required = false)String province,
-        @ApiParam(value = "区别后台与前台频道")@RequestParam(required = false)String type1,
+    @ApiOperation(value="会展信息列表(运营)",notes="会展信息列表(运营)",response = JsonResult.class)
+    @RequestMapping(value = "findAllExhibitionOms", method = RequestMethod.GET)
+    public JsonResult findAllExhibitionOms(@ApiParam(value = "标题")@RequestParam(required = false)String title,
+                                           @ApiParam(value = "所属栏目")@RequestParam(required = false)String type,
+                                           @ApiParam(value = "审核状态")@RequestParam(required = false)String status,
         @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws Exception {
         JsonResult jsonResult = new JsonResult();
         //设定默认分页pageSize
@@ -154,8 +153,6 @@ public class ExhibitionOmsController {
         map.put("title",title);
         map.put("type",type);
         map.put("status",status);
-        map.put("province",province);
-        map.put("type1",type1);
         //查询
         List<Exhibition> exhibitionList = exhibitionService.findAllExhibition(pager,map);
         pager.result(exhibitionList);
