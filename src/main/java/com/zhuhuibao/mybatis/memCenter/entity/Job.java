@@ -80,7 +80,7 @@ public class Job {
     private String superior;
 
     @ApiModelProperty(value="下属人数")
-    private Integer number;
+    private String number;
 
     @ApiModelProperty(value="专业要求")
     private String profession;
@@ -219,11 +219,11 @@ public class Job {
         this.superior = superior == null ? null : superior.trim();
     }
 
-    public Integer getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 

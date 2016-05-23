@@ -24,7 +24,7 @@
     <result column="welfare" property="welfare" jdbcType="VARCHAR" />
     <result column="department" property="department" jdbcType="VARCHAR" />
     <result column="superior" property="superior" jdbcType="VARCHAR" />
-    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="number" property="number" jdbcType="VARCHAR" />
     <result column="profession" property="profession" jdbcType="VARCHAR" />
     <result column="is_deleted" property="is_deleted" jdbcType="INTEGER" />
   </resultMap>
@@ -105,7 +105,7 @@
         profession = #{profession},
       </if>
       <if test="is_deleted != null" >
-        is_deleted = #{is_deleted}
+        is_deleted = #{is_deleted},
       </if>
       <if test="positionType != null" >
         positionType = #{positionType}
