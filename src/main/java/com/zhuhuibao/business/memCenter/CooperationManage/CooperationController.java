@@ -27,7 +27,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/rest/cooperation")
-@Api(value="Cooperation", description="会员中心-威客管理")
 public class CooperationController {
     private static final Logger log = LoggerFactory.getLogger(CooperationController.class);
 
