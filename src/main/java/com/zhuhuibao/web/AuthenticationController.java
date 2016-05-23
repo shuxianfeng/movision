@@ -15,10 +15,9 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author caijl@20160303
  */
-@Controller
+@RestController
 public class AuthenticationController {
     private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
 
@@ -36,8 +35,7 @@ public class AuthenticationController {
     private MemberRegService memberService;
 
     @RequestMapping(value = "/rest/web/authc", method = RequestMethod.GET)
-    @ResponseBody
-    public JsonResult isLogin(HttpServletResponse response) throws IOException {
+    public JsonResult isLogin() throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         JsonResult jsonResult = new JsonResult();
@@ -73,7 +71,6 @@ public class AuthenticationController {
 
 
     @RequestMapping(value = "/rest/getToken", method = RequestMethod.GET)
-    @ResponseBody
     public JsonResult getToken(HttpServletRequest req, HttpServletResponse rsp) {
         JsonResult result = new JsonResult();
         String token = TokenHelper.setToken(req);
@@ -82,7 +79,6 @@ public class AuthenticationController {
     }
 
     @RequestMapping(value = "/rest/findMemberInfoById", method = RequestMethod.GET)
-    @ResponseBody
     public JsonResult findMemberInfoById() throws IOException {
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();

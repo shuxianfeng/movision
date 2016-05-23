@@ -6,7 +6,7 @@
 *.war
 *.ear
 
-/src/main/resources/logback.xml
+#/src/main/resources/logback.xml
 
 
 

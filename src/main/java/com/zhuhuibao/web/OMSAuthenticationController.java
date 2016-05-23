@@ -4,22 +4,17 @@ import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.oms.service.UserService;
 import com.zhuhuibao.security.resubmit.TokenHelper;
 import com.zhuhuibao.shiro.realm.OMSRealm;
-import com.zhuhuibao.utils.JsonUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +23,7 @@ import java.util.Map;
  * 登录
  * @author caijl@20160303
  */
-@Controller
+@RestController
 public class OMSAuthenticationController {
     private static final Logger log = LoggerFactory.getLogger(OMSAuthenticationController.class);
 
@@ -36,7 +31,6 @@ public class OMSAuthenticationController {
 	private UserService userService;
     
     @RequestMapping(value = "/rest/oms/authc", method = RequestMethod.GET)
-    @ResponseBody
     public JsonResult isLogin() throws IOException{
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -74,7 +68,6 @@ public class OMSAuthenticationController {
 
 
     @RequestMapping(value="/rest/oms/getToken",method = RequestMethod.GET)
-    @ResponseBody
     public JsonResult getToken(HttpServletRequest req) {
         JsonResult result = new JsonResult();
         String  token = TokenHelper.setToken(req);
@@ -83,7 +76,6 @@ public class OMSAuthenticationController {
     }
     
     @RequestMapping(value="/rest/oms/findMemberInfoById",method = RequestMethod.GET)
-	@ResponseBody
 	public JsonResult findMemberInfoById() throws IOException
 	{
 		JsonResult jsonResult = new JsonResult();

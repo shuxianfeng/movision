@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -16,7 +15,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,14 +24,14 @@ import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
-import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by Administrator on 2016/4/11 0011.
  */
-@Controller
+@RestController
 public class ChannelController {
     private static final Logger log = LoggerFactory.getLogger(ChannelController.class);
 
@@ -40,7 +39,7 @@ public class ChannelController {
     ChannelNewsService newsService;
 
     @RequestMapping(value = "/rest/oms/addChannelNews", method = RequestMethod.POST)
-    public JsonResult addChannelNews(ChannelNews channelNews) throws IOException {
+    public JsonResult addChannelNews(@ModelAttribute ChannelNews channelNews) throws IOException {
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);

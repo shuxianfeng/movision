@@ -15,33 +15,28 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 运营管理系统登录
  * @author penglong
  *
  */
-@Controller
+@RestController
 public class OmsLoginController {
 	private static final Logger log = LoggerFactory.getLogger(OmsLoginController.class);
 	
 	@RequestMapping(value = "/rest/oms/login", method = RequestMethod.POST)
-    @ResponseBody
-    public void login(HttpServletRequest req, HttpServletResponse response, User user, Model model) throws JsonGenerationException, JsonMappingException, IOException {
+    public void login(HttpServletResponse response, User user) throws IOException {
         log.info("oms login post 登录校验");
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
@@ -93,8 +88,7 @@ public class OmsLoginController {
     }
     
     @RequestMapping(value = "/rest/oms/logout", method = RequestMethod.GET)
-    @ResponseBody
-    public void logout(HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException
+    public void logout(HttpServletResponse response) throws IOException
     {
         SecurityUtils.getSubject().logout();
         JsonResult jsonResult = new JsonResult();
@@ -106,11 +100,9 @@ public class OmsLoginController {
 	  * 获得图形验证码
 	  * @param req
 	  * @param response
-	  * @param model
-	  */
+	 */
 	@RequestMapping(value = "/rest/oms/imgCode", method = RequestMethod.GET)
-	public void getCode(HttpServletRequest req, HttpServletResponse response,
-			Model model) {
+	public void getCode(HttpServletRequest req, HttpServletResponse response) {
 		log.debug("获得验证码");
 		getImageVerifyCode(req, response,100,40,4,"oms");
 	}

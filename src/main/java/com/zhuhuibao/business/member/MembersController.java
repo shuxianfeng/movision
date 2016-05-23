@@ -1,34 +1,26 @@
 package com.zhuhuibao.business.member;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.service.impl.MembersService;
 import com.zhuhuibao.pojo.ContractorSearchSpec;
 import com.zhuhuibao.pojo.SupplierSearchSpec;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 会员控制
  * @author caijl@20160414
  *
  */
-@Controller
+@RestController
 public class MembersController {
 	private static final Logger log = LoggerFactory.getLogger(MembersController.class);
 	
@@ -36,7 +28,6 @@ public class MembersController {
 	MembersService membersService;
 	
 	@RequestMapping(value="/rest/searchContractors", method = RequestMethod.GET)
-	@ResponseBody
 	public JsonResult searchContractors(ContractorSearchSpec spec) throws IOException
 	{
 		if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
@@ -61,7 +52,6 @@ public class MembersController {
 	}
 	
 	@RequestMapping(value="/rest/searchSuppliers", method = RequestMethod.GET)
-	@ResponseBody
 	public JsonResult searchSuppliers(SupplierSearchSpec spec) throws IOException
 	{
 		if (spec.getLimit() <= 0 || spec.getLimit() > 100) {

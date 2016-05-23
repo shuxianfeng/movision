@@ -17,11 +17,10 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -43,7 +42,7 @@ import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
  * @author jianglz
  * @since 15/12/12.
  */
-@Controller
+@RestController
 public class RegisterController {
 	private static final Logger log = LoggerFactory.getLogger(RegisterController.class);
 
@@ -205,7 +204,6 @@ public class RegisterController {
      * @throws IOException 
      */
 	@RequestMapping(value = "/rest/register", method = RequestMethod.POST)
-	@ResponseBody
 	public JsonResult register(Member member) throws Exception{
 		log.debug("注册  mobile=="+member.getMobile()+" email =="+member.getEmail());
 		JsonResult result = new JsonResult();
@@ -238,7 +236,6 @@ public class RegisterController {
      * @throws IOException 
      */
 	@RequestMapping(value = "/rest/writeAccount", method = RequestMethod.POST)
-	@ResponseBody
 	public JsonResult writeAccount(Member member) throws IOException {
 		log.debug("seek pwd write account");
 		JsonResult result = new JsonResult();
@@ -258,7 +255,6 @@ public class RegisterController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/mobileValidate", method = RequestMethod.POST)
-	@ResponseBody
 	public JsonResult mobileValidate(Member member) throws IOException {
 		log.debug("找回密码  mobile =="+member.getMobile());
 		Subject currentUser = SecurityUtils.getSubject();
@@ -275,7 +271,6 @@ public class RegisterController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/sendValidateMail", method = RequestMethod.POST)
-	@ResponseBody
 	public JsonResult sendValidateMail(Member member) throws IOException {
 		log.debug("找回密码  email =="+member.getEmail());
 		JsonResult result = new JsonResult();
@@ -302,7 +297,6 @@ public class RegisterController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/modifyPwd", method = RequestMethod.POST)
-	@ResponseBody
 	public JsonResult modifyPwd(Member member) throws IOException {
 		log.debug("重置密码");
 		JsonResult jsonResult = new JsonResult();
@@ -384,7 +378,6 @@ public class RegisterController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/isValidatePass", method = RequestMethod.GET)
-	@ResponseBody
 	public JsonResult isValidatePass(HttpServletRequest req) throws IOException {
 		log.debug("找回密码是否验证");
 		JsonResult jsonResult = new JsonResult();
@@ -409,7 +402,6 @@ public class RegisterController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/watchMail", method = RequestMethod.GET)
-	@ResponseBody
 	public JsonResult watchMail(HttpServletRequest req) throws IOException {
 		log.debug("找回密码是否验证");
 		JsonResult jsonResult = new JsonResult();

@@ -16,17 +16,16 @@ import org.apache.shiro.session.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * 登录
  */
-@Controller
+@RestController
 public class LoginController {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
@@ -34,7 +33,6 @@ public class LoginController {
     MemberRegService memberService;
     
     @RequestMapping(value = "/rest/login", method = RequestMethod.POST)
-    @ResponseBody
     public JsonResult login(HttpServletRequest req, Member member) throws IOException {
         log.info("login post 登录校验");
         JsonResult jsonResult = new JsonResult();
@@ -87,7 +85,6 @@ public class LoginController {
     }
     
     @RequestMapping(value = "/rest/logout", method = RequestMethod.GET)
-    @ResponseBody
     public JsonResult logout() throws IOException{
         SecurityUtils.getSubject().logout();
         return new JsonResult();
