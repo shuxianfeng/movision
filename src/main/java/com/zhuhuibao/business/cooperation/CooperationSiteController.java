@@ -24,7 +24,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/cooperation")
-@Api(value = "Cooperation", description = "前台频道-威客")
 public class CooperationSiteController {
     private static final Logger log = LoggerFactory.getLogger(CooperationSiteController.class);
 
@@ -35,7 +34,7 @@ public class CooperationSiteController {
     /**
      * 查询任务列表（分页）
      */
-    @ApiOperation(value = "查询任务列表（分页）", notes = "查询任务列表（分页）", response = JsonResult.class)
+    @ApiOperation(value = "查询任务列表（前台分页）", notes = "查询任务列表（前台分页）", response = JsonResult.class)
     @RequestMapping(value = "findAllCooperationByPager", method = RequestMethod.GET)
     public JsonResult findAllCooperationByPager
     (@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize,
@@ -43,7 +42,6 @@ public class CooperationSiteController {
      @ApiParam(value = "项目类别") @RequestParam(required = false) String category,
      @ApiParam(value = "省") @RequestParam(required = false) String province,
      @ApiParam(value = "关键字") @RequestParam(required = false) String smart,
-     @ApiParam(value = "会员类型，1：企业，2：个人") @RequestParam(required = false) String memberType,
      @ApiParam(value = "发布类型，1：接任务，2：接服务，3：资质合作") @RequestParam String parentId) throws Exception {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -55,8 +53,8 @@ public class CooperationSiteController {
         Cooperation cooperation = new Cooperation();
         cooperation.setSmart(smart);
         cooperation.setType(type);
+        cooperation.setType1("1");
         cooperation.setCategory(category);
-        cooperation.setMemberType(memberType);
         cooperation.setProvince(province);
         cooperation.setParentId(parentId);
         JsonResult jsonResult = new JsonResult();

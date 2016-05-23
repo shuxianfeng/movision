@@ -27,7 +27,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/rest/cooperation")
-@Api(value="Cooperation", description="会员中心-威客管理")
 public class CooperationController {
     private static final Logger log = LoggerFactory.getLogger(CooperationController.class);
 
@@ -101,7 +100,7 @@ public class CooperationController {
      */
     @ApiOperation(value="编辑任务",notes="编辑任务",response = JsonResult.class)
     @RequestMapping(value = "updateCooperation", method = RequestMethod.POST)
-    public JsonResult updateCooperation(@RequestBody Cooperation cooperation) throws Exception {
+    public JsonResult updateCooperation(Cooperation cooperation) throws Exception {
         JsonResult jsonResult = new JsonResult();
         cooperationService.updateCooperation(cooperation);
         return jsonResult;
@@ -133,7 +132,7 @@ public class CooperationController {
     /**
      * 查询我发布的任务（分页）
      */
-    @ApiOperation(value="查询我发布的任务（分页）",notes="查询我发布的任务（分页）",response = JsonResult.class)
+    @ApiOperation(value="查询我发布的任务（后台分页）",notes="查询我发布的任务（后台分页）",response = JsonResult.class)
     @RequestMapping(value = "findAllMyCooperationByPager", method = RequestMethod.GET)
     public JsonResult findAllMyCooperationByPager(
             @RequestParam(required = false) String pageNo,@RequestParam(required = false) String pageSize,

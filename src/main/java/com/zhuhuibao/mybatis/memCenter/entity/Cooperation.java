@@ -69,8 +69,7 @@ public class Cooperation {
     @ApiModelProperty(value="合作地点，省市区")
     private String cooperationArea;
 
-    @ApiModelProperty(value="会员类型，1：企业，2：个人")
-    private String memberType;
+    private String type1;
 
     public String getId() {
         return id;
@@ -264,14 +263,6 @@ public class Cooperation {
         this.cooperationArea = cooperationArea;
     }
 
-    public String getMemberType() {
-        return memberType;
-    }
-
-    public void setMemberType(String memberType) {
-        this.memberType = memberType;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -294,5 +285,13 @@ public class Cooperation {
 
     public void setViews(String views) {
         this.views = views;
+    }
+
+    public String getType1() {
+        return type1;
+    }
+
+    public void setType1(String type1) {
+        this.type1 = type1;
     }
 }

@@ -1,6 +1,5 @@
 package com.zhuhuibao.business.expert;
 
-import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
@@ -8,6 +7,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
 import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
 import com.zhuhuibao.mybatis.memCenter.entity.Expert;
+import com.zhuhuibao.mybatis.memCenter.entity.Question;
 import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -38,7 +38,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/expertSite")
-@Api(value = "expertSite")
 public class ExpertSiteController {
     private static final Logger log = LoggerFactory
             .getLogger(ExpertSiteController.class);
@@ -339,5 +338,37 @@ public class ExpertSiteController {
         }
     }
 
-
+    @ApiOperation(value="向专家咨询(前台)",notes="向专家咨询(前台)",response = JsonResult.class)
+    @RequestMapping(value = "askExpert", method = RequestMethod.POST)
+    public JsonResult askExpert(@ApiParam(value = "咨询内容")@RequestParam String content,
+                                @ApiParam(value = "验证码")@RequestParam String code) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
+        if(null != sess) {
+            String verifyCode = (String) sess.getAttribute("expert");
+            if(!code.equals(verifyCode)){
+                jsonResult.setCode(400);
+                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
+                jsonResult.setMsgCode(MsgCodeConstant.validate_error);
+            }else {
+                ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)sess.getAttribute("member");
+                if(null != principal){
+                    Question question = new Question();
+                    question.setCreateid(principal.getId().toString());
+                    question.setContent(content);
+                    expertService.askExpert(question);
+                }else {
+                    jsonResult.setCode(401);
+                    jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                    jsonResult.setMsgCode(MsgCodeConstant.un_login);
+                }
+            }
+        }else {
+            jsonResult.setCode(401);
+            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            jsonResult.setMsgCode(MsgCodeConstant.un_login);
+        }
+        return jsonResult;
+    }
 }

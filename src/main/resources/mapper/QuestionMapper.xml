@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.QuestionMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Question" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createid" property="createid" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+    <result column="answerId" property="answerId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, createid, content, status, publishTime, answerId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_e_question
+    where id = #{id}
+  </select>
+  <insert id="askExpert" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Question" >
+    insert into t_e_question
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createid != null" >
+        createid,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+        publishTime,
+      <if test="answerId != null" >
+        answerId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="createid != null" >
+        #{createid},
+      </if>
+      <if test="content != null" >
+        #{content},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+        now(),
+      <if test="answerId != null" >
+        #{answerId},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Question" >
+    update t_e_question
+    <set >
+      <if test="createid != null" >
+        createid = #{createid},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="publishTime != null" >
+        publishTime = #{publishTime},
+      </if>
+      <if test="answerId != null" >
+        answerId = #{answerId},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

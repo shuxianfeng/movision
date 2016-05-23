@@ -124,7 +124,7 @@
     order by updateTime desc limit 0,#{count}
   </select>
   <select id="searchRecommendPosition" resultMap="BaseResultMap">
-    select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,
+    select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,j.createid,
     (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
     from t_i_job j
     left join t_dictionary_city c on c.code = j.city
@@ -147,8 +147,8 @@
     <if test="delete != null">
       and j.is_deleted = #{delete}
     </if>
-    <if test="positionType != null">
-      and j.positionType = #{positionType}
+    <if test="postID != null">
+      and j.positionType = #{postID}
     </if>
     order by updateTime desc limit ${count}
   </select>
@@ -202,8 +202,10 @@
   </select>
 
   <select id="findAllOtherPosition" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select t.id,t.createid,t.name,t.positionType,date_format(t.publishTime,'%Y-%m-%d') publishTime,
-    date_format(t.updateTime,'%Y-%m-%d') updateTime,mb.enterpriseName,
+    select job.id,job.createid,job.name,job.positionType,date_format(job.publishTime,'%Y-%m-%d') publishTime,
+    date_format(job.updateTime,'%Y-%m-%d') updateTime,job.enterpriseName,job.salaryName,job.educationName,job.experienceName,job.welfare,job.workArea
+    from (select t.id,t.createid,t.name,t.positionType,t.publishTime,
+    t.updateTime,mb.enterpriseName,
     (select cs.name from t_dictionary_constant cs where cs.code = t.salary and cs.type = 1)  salaryName,
     (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=2) as educationName,
     (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=3) as experienceName,
@@ -241,7 +243,7 @@
       <if test="salary != null and salary != ''">
         and salary = #{salary}
       </if>
-    order by updateTime desc
+     order by updateTime desc) job
   </select>
 
   <select id="findAllMyApplyPosition" parameterType="java.lang.String" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
@@ -329,7 +331,7 @@
   <select id="queryEnterpriseHotPosition" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
     select jb.id,jb.createid,co.name as salaryName,jb.name from t_i_job jb left join t_m_member m on jb.createid = m.id
     left join t_dictionary_constant co on co.code = jb.salary and co.type = 1
-    where m.isrecommend = #{recommend} and and m.status != #{status} and jb.is_deleted = 0 order by jb.views desc limit #{count}
+    where m.isrecommend = #{recommend} and m.status != #{status} and jb.is_deleted = 0 order by jb.views desc limit #{count}
   </select>
   <select id="findJobByID" resultType="java.util.Map">
     select * from t_i_job where id= #{id}

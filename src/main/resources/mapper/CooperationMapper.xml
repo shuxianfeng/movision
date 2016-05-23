@@ -266,17 +266,17 @@
     <if test="status != null and status != ''">
       and c.status = #{status}
     </if>
+    <if test="type1 != null and type1 != ''">
+      and c.status = 1
+    </if>
     <if test="category != null and category != ''">
       and c.category = #{category}
     </if>
     <if test="province != null and province != ''">
       and c.province = #{province}
     </if>
-    <if test="memberType != null and memberType == 1">
-      and m.identify != 2
-    </if>
-    <if test="memberType != null and memberType == 2">
-      and m.identify = 2
+    <if test="city != null and city != ''">
+      and c.city = #{city}
     </if>
     <if test="parentId != null and parentId != ''">
       and coo.parentId = #{parentId}

@@ -221,7 +221,7 @@ public class JobPositionService {
      * @param id
      * @return
      */
-    public JsonResult queryCompanyInfo(Long id)
+    public JsonResult queryCompanyInfo(Long id) throws Exception
     {
         JsonResult jsonResult = new JsonResult();
         try
@@ -232,10 +232,7 @@ public class JobPositionService {
         catch(Exception e)
         {
             log.error("add offer price error!",e);
-            jsonResult.setCode(MsgCodeConstant.response_status_400);
-            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return jsonResult;
+            throw e;
         }
         return jsonResult;
     }

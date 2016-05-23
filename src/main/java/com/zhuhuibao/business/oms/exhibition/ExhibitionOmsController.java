@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.exhibition;
+package com.zhuhuibao.business.oms.exhibition;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -19,7 +19,10 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,40 +33,12 @@ import java.util.Map;
  * Created by cxx on 2016/5/11 0011.
  */
 @RestController
-@RequestMapping("/rest/exhibition")
-@Api(value="Exhibition", description="会展")
-public class ExhibitionController {
-    private static final Logger log = LoggerFactory.getLogger(ExhibitionController.class);
+@RequestMapping("/rest/oms")
+public class ExhibitionOmsController {
+    private static final Logger log = LoggerFactory.getLogger(ExhibitionOmsController.class);
 
     @Autowired
     private ExhibitionService exhibitionService;
-
-    /**
-     * 发布会展定制
-     */
-    @ApiOperation(value="发布会展定制",notes="发布会展定制",response = JsonResult.class)
-    @RequestMapping(value = "publishMeetingOrder", method = RequestMethod.POST)
-    public JsonResult publishMeetingOrder(MeetingOrder meetingOrder) throws Exception {
-        JsonResult jsonResult = new JsonResult();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-            if(null != principal){
-                meetingOrder.setCreateid(principal.getId().toString());
-                exhibitionService.publishMeetingOrder(meetingOrder);
-            }else{
-                jsonResult.setCode(401);
-                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                jsonResult.setMsgCode(MsgCodeConstant.un_login);
-            }
-        }else{
-            jsonResult.setCode(401);
-            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            jsonResult.setMsgCode(MsgCodeConstant.un_login);
-        }
-        return jsonResult;
-    }
 
     /**
      * 会展定制申请处理

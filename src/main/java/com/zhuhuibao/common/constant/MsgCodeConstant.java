@@ -101,4 +101,9 @@ public interface MsgCodeConstant {
 	 * 未登录
 	 */
 	int un_login = 10212;
+
+	/**
+	 * 图形验证码不正确
+	 */
+	int validate_error = 10213;
 }
