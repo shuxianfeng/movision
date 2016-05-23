@@ -334,4 +334,9 @@
   <select id="findJobByID" resultType="java.util.Map">
     select * from t_i_job where id= #{id}
   </select>
+  <select id="queryPublishJobCity" parameterType="java.util.Map" resultType="java.util.Map">
+    select distinct(t.city) cityCode,ct.name cityName from t_i_job t
+    left join t_dictionary_city ct on ct.code = t.city
+ where t.createid = #{enterpriseID}
+  </select>
 </mapper>

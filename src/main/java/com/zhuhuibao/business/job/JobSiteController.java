@@ -66,7 +66,7 @@ public class JobSiteController {
     @ApiOperation(value="应聘职位",notes = "应聘职位",response = JsonResult.class)
     public JsonResult applyPosition(@ApiParam(value = "简历ID") @RequestParam String jobID,
                                     @ApiParam(value = "发布职位企业ID") @RequestParam String recID,
-                                    @ApiParam(value = "职位标题") @RequestParam String messageText) throws JsonGenerationException, JsonMappingException, IOException
+                                    @ApiParam(value = "职位标题") @RequestParam String messageText) throws IOException
     {
         log.info("applay position recID = "+recID+" messageText ="+messageText);
         Long createid = ShiroUtil.getCreateID();
@@ -440,6 +440,17 @@ public class JobSiteController {
         map.put("resumeID",resumeID);
         Integer count = jrrService.isExistApplyPosition(map);
         jsonResult.setData(count);
+        return jsonResult;
+    }
+
+    @RequestMapping(value="queryPublishJobCity",method = RequestMethod.GET)
+    @ApiOperation(value="查询某企业发布职位的城市",notes = "查询某企业发布职位的城市",response = JsonResult.class)
+    public JsonResult queryPublishJobCity(@ApiParam(value = "企业ID(创建者ID)") @RequestParam String enterpriseID) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("enterpriseID",enterpriseID);
+        List<Map<String,String>> jobList = job.queryPublishJobCity(map);
+        jsonResult.setData(jobList);
         return jsonResult;
     }
 }

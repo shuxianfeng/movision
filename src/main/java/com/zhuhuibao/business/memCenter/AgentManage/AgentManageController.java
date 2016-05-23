@@ -59,34 +59,28 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "category", method = RequestMethod.GET)
-    public JsonResult category(String id) throws IOException {
+    public JsonResult category(String id) throws Exception {
         JsonResult result = new JsonResult();
         List list = new ArrayList();
-        try{
-            List<ResultBean> resultBeanList = categoryService.findSystemByBrand(id);
-            List<SysBean> sysBeanList = categoryService.findCategoryByBrand(id);
-            for (ResultBean resultBean : resultBeanList) {
-                Map map = new HashMap();
-                List list1 = new ArrayList();
-                map.put("id", resultBean.getCode());
-                map.put("name", resultBean.getName());
-                for (int y = 0; y < sysBeanList.size(); y++) {
-                    SysBean sysBean = sysBeanList.get(y);
-                    Map map1 = new HashMap();
-                    if (resultBean.getCode().equals(sysBean.getId())) {
-                        map1.put("id", sysBean.getCode());
-                        map1.put("name", sysBean.getSubSystemName());
-                        list1.add(map1);
-                    }
+        List<ResultBean> resultBeanList = categoryService.findSystemByBrand(id);
+        List<SysBean> sysBeanList = categoryService.findCategoryByBrand(id);
+        for (ResultBean resultBean : resultBeanList) {
+            Map map = new HashMap();
+            List list1 = new ArrayList();
+            map.put("id", resultBean.getCode());
+            map.put("name", resultBean.getName());
+            for (int y = 0; y < sysBeanList.size(); y++) {
+                SysBean sysBean = sysBeanList.get(y);
+                Map map1 = new HashMap();
+                if (resultBean.getCode().equals(sysBean.getId())) {
+                    map1.put("id", sysBean.getCode());
+                    map1.put("name", sysBean.getSubSystemName());
+                    list1.add(map1);
                 }
-                map.put("subSys", list1);
-                list.add(map);
             }
-        }catch (Exception e){
-            log.error("query error!");
-            e.printStackTrace();
+            map.put("subSys", list1);
+            list.add(map);
         }
-        result.setCode(200);
         result.setData(list);
         return result;
     }
@@ -97,22 +91,16 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "brand", method = RequestMethod.GET)
-    public JsonResult brand(Brand brand) throws IOException {
+    public JsonResult brand(Brand brand) throws Exception {
         JsonResult result = new JsonResult();
         List list = new ArrayList();
-        try{
-            List<Brand> brands = brandService.searchBrandByStatus(brand);
-            for (Brand brand1 : brands) {
-                Map map = new HashMap();
-                map.put("id", brand1.getId());
-                map.put("name", brand1.getCNName());
-                list.add(map);
-            }
-        }catch (Exception e){
-            log.error("search brand by memId error!");
-            e.printStackTrace();
+        List<Brand> brands = brandService.searchBrandByStatus(brand);
+        for (Brand brand1 : brands) {
+            Map map = new HashMap();
+            map.put("id", brand1.getId());
+            map.put("name", brand1.getCNName());
+            list.add(map);
         }
-        result.setCode(200);
         result.setData(list);
         return result;
     }
@@ -124,21 +112,15 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "searchAgent", method = RequestMethod.GET)
-    public JsonResult searchAgent(HttpServletRequest req) throws IOException {
+    public JsonResult searchAgent(HttpServletRequest req) throws Exception {
         JsonResult result = new JsonResult();
         String account = req.getParameter("account");
         if(account.contains("_")){
             account = account.replace("_","\\_");
         }
         String type = req.getParameter("type");
-        try{
-            List<AccountBean> memList = memberService.findAgentMember(account,type);
-            result.setCode(200);
-            result.setData(memList);
-        }catch (Exception e){
-            log.error("query Agent error!");
-            e.printStackTrace();
-        }
+        List<AccountBean> memList = memberService.findAgentMember(account,type);
+        result.setData(memList);
         return result;
     }
 
@@ -148,19 +130,14 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "agentSave", method = RequestMethod.POST)
-    public JsonResult agentSave(Agent agent) throws IOException {
+    public JsonResult agentSave(Agent agent) throws Exception {
         JsonResult result = new JsonResult();
-        try{
-            Agent agent1 = agentService.find(agent);
-            if(agent1==null){
-                agentService.agentSave(agent);
-            }else{
-                result.setCode(400);
-                result.setMessage("该品牌该代理商已设置");
-            }
-        }catch (Exception e){
-            log.error("save agent error!");
-            e.printStackTrace();
+        Agent agent1 = agentService.find(agent);
+        if(agent1==null){
+            agentService.agentSave(agent);
+        }else{
+            result.setCode(400);
+            result.setMessage("该品牌该代理商已设置");
         }
         return result;
     }
@@ -171,14 +148,9 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "agentUpdate", method = RequestMethod.POST)
-    public JsonResult agentUpdate(Agent agent) throws IOException {
+    public JsonResult agentUpdate(Agent agent) throws Exception {
         JsonResult result = new JsonResult();
-        try{
-            agentService.agentUpdate(agent);
-        }catch (Exception e){
-            log.error("update agent error!");
-            e.printStackTrace();
-        }
+        agentService.agentUpdate(agent);
         return result;
     }
 
@@ -188,14 +160,10 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "cancelAgent", method = RequestMethod.POST)
-    public JsonResult cancelAgent(Agent agent) throws IOException {
+    public JsonResult cancelAgent(Agent agent) throws Exception {
         JsonResult result = new JsonResult();
         agent.setStatus("1");
-        try{
-            agentService.agentUpdate(agent);
-        }catch (Exception e){
-            log.error("cancel agent error!");
-        }
+        agentService.agentUpdate(agent);
         return result;
     }
 
@@ -205,41 +173,37 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "province", method = RequestMethod.GET)
-    public JsonResult province() throws IOException {
+    public JsonResult province() throws Exception {
         JsonResult result = new JsonResult();
         List list1 = new ArrayList();
         List list2 = new ArrayList();
         List list3 = new ArrayList();
         List list4 = new ArrayList();
         Map map = new HashMap();
-        try{
-            List<CommonBean> ResultList = agentService.searchProvinceByPinYin();
-            for (CommonBean aResultList : ResultList) {
-                Map map1 = new HashMap();
-                CommonBean resultBean = aResultList;
-                map1.put("id", resultBean.getId());
-                map1.put("code", resultBean.getCode());
-                map1.put("name", resultBean.getName());
-                if ("A-G".equals(resultBean.getOther())) {
-                    list1.add(map1);
-                } else if ("H-K".equals(resultBean.getOther())) {
-                    list2.add(map1);
-                } else if ("L-S".equals(resultBean.getOther())) {
-                    list3.add(map1);
-                } else {
-                    list4.add(map1);
-                }
+        List<CommonBean> ResultList = agentService.searchProvinceByPinYin();
+        for (CommonBean aResultList : ResultList) {
+            Map map1 = new HashMap();
+            CommonBean resultBean = aResultList;
+            map1.put("id", resultBean.getId());
+            map1.put("code", resultBean.getCode());
+            map1.put("name", resultBean.getName());
+            if ("A-G".equals(resultBean.getOther())) {
+                list1.add(map1);
+            } else if ("H-K".equals(resultBean.getOther())) {
+                list2.add(map1);
+            } else if ("L-S".equals(resultBean.getOther())) {
+                list3.add(map1);
+            } else {
+                list4.add(map1);
             }
-            map.put("AG",list1);
-            map.put("HK",list2);
-            map.put("LS",list3);
-            map.put("TZ",list4);
-            result.setCode(200);
-            result.setData(map);
-        }catch (Exception e){
-            log.error("searchProvinceByPinYin error!");
         }
-       return result;
+        map.put("AG",list1);
+        map.put("HK",list2);
+        map.put("LS",list3);
+        map.put("TZ",list4);
+        result.setCode(200);
+        result.setData(map);
+        return result;
     }
 
     /**
@@ -274,16 +238,11 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "myAgent", method = RequestMethod.GET)
-    public JsonResult myAgent(String id) throws IOException {
+    public JsonResult myAgent(String id) throws Exception {
         JsonResult result = new JsonResult();
-        try{
-            List<AgentBean> list = agentService.findAgentByMemId(id);
-            result.setData(list);
-            result.setCode(200);
-        }catch (Exception e){
-            log.error("findAgentByMemId error!");
-            e.printStackTrace();
-        }
+        List<AgentBean> list = agentService.findAgentByMemId(id);
+        result.setData(list);
+        result.setCode(200);
         return result;
     }
 
@@ -325,8 +284,11 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "updateAgentById", method = RequestMethod.GET)
-    public JsonResult updateAgentById(String id) throws IOException {
-        return  agentService.updateAgentById(id);
+    public JsonResult updateAgentById(String id) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        Map map = agentService.updateAgentById(id);
+        jsonResult.setData(map);
+        return jsonResult;
     }
 
     /**
@@ -335,8 +297,11 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "getAgentByProId", method = RequestMethod.GET)
-    public JsonResult getAgentByProId(String id) throws IOException {
-        return agentService.getAgentByProId(id);
+    public JsonResult getAgentByProId(String id) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        Map map = agentService.getAgentByProId(id);
+        jsonResult.setData(map);
+        return jsonResult;
     }
 
     /**
@@ -345,8 +310,11 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/agent/getGreatAgentByScateid", method = RequestMethod.GET)
-    public JsonResult getGreatAgentByScateid(String id) throws IOException {
-        return agentService.getGreatAgentByScateid(id);
+    public JsonResult getGreatAgentByScateid(String id) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        List<ResultBean> resultBeen =  agentService.getGreatAgentByScateid(id);
+        jsonResult.setData(resultBeen);
+        return jsonResult;
     }
 
     /**
@@ -355,8 +323,11 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "getGreatAgentByBrandId", method = RequestMethod.GET)
-    public JsonResult getGreatAgentByBrandId(String id) throws IOException {
-        return agentService.getGreatAgentByBrandId(id);
+    public JsonResult getGreatAgentByBrandId(String id) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        List<ResultBean> resultBeen =  agentService.getGreatAgentByBrandId(id);
+        jsonResult.setData(resultBeen);
+        return jsonResult;
     }
 
     /**
@@ -366,7 +337,10 @@ public class AgentManageController {
      */
     @ApiOperation(value="根据品牌id查询代理商跟厂商（区域分组）",notes="根据品牌id查询代理商跟厂商（区域分组）",response = JsonResult.class)
     @RequestMapping(value = "getAgentByBrandid", method = RequestMethod.GET)
-    public JsonResult getAgentByBrandid(String id) throws IOException {
-        return agentService.getAgentByBrandid(id);
+    public JsonResult getAgentByBrandid(String id) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        Map map = agentService.getAgentByBrandid(id);
+        jsonResult.setData(map);
+        return jsonResult;
     }
 }

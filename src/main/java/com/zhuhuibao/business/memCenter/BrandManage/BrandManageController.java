@@ -41,7 +41,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/addBrand", method = RequestMethod.POST)
-    public JsonResult upload(Brand brand) throws IOException {
+    public JsonResult upload(Brand brand) throws Exception {
         JsonResult result = new JsonResult();
         brand.setPublishTime(new Date());
         brandService.addBrand(brand);
@@ -54,7 +54,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/updateBrand", method = RequestMethod.POST)
-    public JsonResult updateBrand(Brand brand, String type) throws IOException {
+    public JsonResult updateBrand(Brand brand, String type) throws Exception {
         JsonResult result = new JsonResult();
         //如果是未通过的品牌进行更新，则状态变为待审核
         if(type==null || "".equals(type)){
@@ -76,7 +76,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/deleteBrand", method = RequestMethod.POST)
-    public JsonResult deleteBrand(String id) throws IOException {
+    public JsonResult deleteBrand(String id) throws Exception {
         JsonResult result = new JsonResult();
         brandService.deleteBrand(id);
         return result;
@@ -89,7 +89,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/batchDeleteBrand", method = RequestMethod.POST)
-    public JsonResult batchDeleteBrand(HttpServletRequest req) throws IOException {
+    public JsonResult batchDeleteBrand(HttpServletRequest req) throws Exception {
         String ids[] = req.getParameterValues("id");
         JsonResult result = new JsonResult();
         for (String id : ids) {
@@ -104,7 +104,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/searchBrand", method = RequestMethod.GET)
-    public JsonResult searchBrand(Brand brand) throws IOException {
+    public JsonResult searchBrand(Brand brand) throws Exception {
         List<Brand> brandList = brandService.searchBrand(brand);
         JsonResult result = new JsonResult();
         result.setData(brandList);
@@ -117,7 +117,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/searchBrandByPager", method = RequestMethod.GET)
-    public JsonResult searchBrandByPager(Brand brand, String pageNo, String pageSize) throws IOException {
+    public JsonResult searchBrandByPager(Brand brand, String pageNo, String pageSize) throws Exception {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -138,7 +138,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/searchBrandSelect", method = RequestMethod.GET)
-    public JsonResult searchBrandSelect(Brand brand) throws IOException {
+    public JsonResult searchBrandSelect(Brand brand) throws Exception {
         List<Brand> brandList = brandService.searchBrandByStatus(brand);
         List list = new ArrayList();
         for (Brand aBrandList : brandList) {
@@ -157,7 +157,7 @@ public class BrandManageController {
      * 品牌数量（自己发布的品牌）
      */
     @RequestMapping(value = "/rest/searchBrandSize", method = RequestMethod.GET)
-    public JsonResult searchBrandSize(Brand brand) throws IOException {
+    public JsonResult searchBrandSize(Brand brand) throws Exception {
         int size = brandService.searchBrandSize(brand);
         JsonResult result = new JsonResult();
         result.setData(size);
@@ -168,7 +168,7 @@ public class BrandManageController {
      * 品牌数量(运营系统，系统所有品牌)
      */
     @RequestMapping(value = "/rest/findBrandSize", method = RequestMethod.GET)
-    public JsonResult findBrandSize(Brand brand) throws IOException {
+    public JsonResult findBrandSize(Brand brand) throws Exception {
         int size = brandService.findBrandSize(brand);
         JsonResult result = new JsonResult();
         result.setData(size);
@@ -179,7 +179,7 @@ public class BrandManageController {
      * 查看品牌详情
      */
     @RequestMapping(value = "/rest/brandDetails", method = RequestMethod.GET)
-    public JsonResult brandDetails(int id) throws IOException {
+    public JsonResult brandDetails(int id) throws Exception {
         Brand brand = brandService.brandDetails(id);
         if(brand.getViews()==null){
             brand.setViews(1);
@@ -196,7 +196,7 @@ public class BrandManageController {
      * 上传图片，返回url
      */
     @RequestMapping(value = "/rest/uploadImg", method = RequestMethod.POST)
-    public JsonResult uploadImg(HttpServletRequest req) throws IOException {
+    public JsonResult uploadImg(HttpServletRequest req) throws Exception {
         //完成文件上传
         JsonResult result = new JsonResult();
         String url = uploadService.upload(req,"img");
@@ -210,7 +210,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/findBrandByScateid", method = RequestMethod.GET)
-    public JsonResult findBrandByScateid(Product product) throws IOException {
+    public JsonResult findBrandByScateid(Product product) throws Exception {
         List<ResultBean> brandList = brandService.findBrandByScateid(product);
         JsonResult result = new JsonResult();
         result.setData(brandList);

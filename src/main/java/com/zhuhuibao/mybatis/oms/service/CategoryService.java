@@ -36,101 +36,123 @@ public class CategoryService {
     /**
      * 查询品牌所属大系统
      */
-    public List<ResultBean> findSystemByBrand(String id){
-        log.debug("查询品牌所属大系统");
-        List<ResultBean> resultBeanList = categoryMapper.findSystemByBrand(id);
-        return resultBeanList;
+    public List<ResultBean> findSystemByBrand(String id)throws Exception{
+        try{
+            return categoryMapper.findSystemByBrand(id);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 查询品牌所属大系统,子系统
      */
-    public List<SysBean> findCategoryByBrand(String id){
-        log.debug("查询品牌所属大系统,子系统");
-        List<SysBean> sysBeanList = categoryMapper.findCategoryByBrand(id);
-        return sysBeanList;
+    public List<SysBean> findCategoryByBrand(String id)throws Exception{
+        try{
+            return categoryMapper.findCategoryByBrand(id);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 查询所有大系统
      */
-    public List<ResultBean> findSystemList(){
-        log.debug("查询所有大系统");
-        List<ResultBean> sysList = categoryMapper.findSystemList();
-        return sysList;
+    public List<ResultBean> findSystemList()throws Exception{
+        try{
+            return categoryMapper.findSystemList();
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 查询所有大系统,子系统
      */
-    public List<SysBean> searchAll(){
-        log.debug("查询所有大系统,子系统");
-        List<SysBean> allList = categoryMapper.searchAll();
-        return allList;
+    public List<SysBean> searchAll()throws Exception{
+        try{
+            return categoryMapper.searchAll();
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 根据大系统id查询子系统
      */
-    public List<ResultBean> findSubSystemList(String id){
-        log.debug("根据大系统id查询子系统");
-        List<ResultBean> SubSystemList = categoryMapper.findSubSystemList(id);
-        return SubSystemList;
+    public List<ResultBean> findSubSystemList(String id)throws Exception{
+        try{
+            return categoryMapper.findSubSystemList(id);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 根据大系统id查询子系统(limit 8)
      */
-    public List<ResultBean> findSubSystemListLimit(String id){
-        log.debug("根据大系统id查询子系统(limit 8)");
-        List<ResultBean> SubSystemList = categoryMapper.findSubSystemListLimit(id);
-        return SubSystemList;
+    public List<ResultBean> findSubSystemListLimit(String id)throws Exception{
+        try{
+            return categoryMapper.findSubSystemListLimit(id);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 根据大系统id查询大系统信息
      */
-    public Category findSystem(String id){
-        log.debug("根据大系统id查询大系统信息");
-        Category category = categoryMapper.findSystem(id);
-        return category;
+    public Category findSystem(String id)throws Exception{
+        try{
+            return categoryMapper.findSystem(id);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
 
     /**
      * 添加类目
      */
-    public int addSystem(Category category){
-        log.debug("添加类目");
-        int isAdd = categoryMapper.addSystem(category);
-        return isAdd;
+    public int addSystem(Category category)throws Exception{
+        try{
+            return categoryMapper.addSystem(category);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 更新类目
      */
-    public int updateSystem(Category category){
-        log.debug("更新类目");
-        int isUpdate = categoryMapper.updateSystem(category);
-        return isUpdate;
+    public int updateSystem(Category category)throws Exception{
+        try{
+            return categoryMapper.updateSystem(category);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 删除类目
      */
-    public int deleteSystem(Category category){
-        log.debug("删除类目");
-        int isDelete = categoryMapper.deleteSystem(category);
-        return isDelete;
+    public int deleteSystem(Category category)throws Exception{
+        try{
+            return categoryMapper.deleteSystem(category);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
      * 查询系统信息
      */
-    public ResultBean querySystem(String id){
-        log.debug("查询系统信息");
-        ResultBean result = categoryMapper.querySystem(id);
-        return result;
+    public ResultBean querySystem(String id)throws Exception{
+        try{
+            return categoryMapper.querySystem(id);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     /**
