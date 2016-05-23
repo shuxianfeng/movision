@@ -1,0 +1,70 @@
+package com.zhuhuibao.business.oms.cooperation;
+
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
+import com.zhuhuibao.mybatis.memCenter.service.CooperationService;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * 威客运营接口
+ * Created by cxx on 2016/5/4 0004.
+ */
+@RestController
+@RequestMapping("/rest/oms")
+@Api(value="Cooperation", description="会员中心-威客管理")
+public class CooperationOmsController {
+    private static final Logger log = LoggerFactory.getLogger(CooperationOmsController.class);
+
+    @Autowired
+    private CooperationService cooperationService;
+
+
+    /**
+     * 查询我发布的任务（分页）
+     */
+    @ApiOperation(value="查询任务（后台分页）",notes="查询任务（后台分页）",response = JsonResult.class)
+    @RequestMapping(value = "findAllCooperationByPager", method = RequestMethod.GET)
+    public JsonResult findAllMyCooperationByPager(
+            @RequestParam(required = false) String pageNo,@RequestParam(required = false) String pageSize,
+            @ApiParam(value = "标题")@RequestParam(required = false) String title,
+            @ApiParam(value = "威客类型")@RequestParam(required = false) String type,
+            @ApiParam(value = "审核状态")@RequestParam(required = false) String status,
+            @ApiParam(value = "省") @RequestParam(required = false) String province,
+            @ApiParam(value = "市") @RequestParam(required = false) String city
+    ) throws Exception {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        JsonResult jsonResult = new JsonResult();
+        Paging<Cooperation> pager = new Paging<Cooperation>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        Cooperation cooperation = new Cooperation();
+        cooperation.setType(type);
+        cooperation.setTitle(title);
+        cooperation.setStatus(status);
+        cooperation.setProvince(province);
+        cooperation.setCity(city);
+        List<Cooperation> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
+        pager.result(cooperationList);
+        jsonResult.setData(pager);
+        return jsonResult;
+    }
+}

@@ -133,7 +133,7 @@ public class CooperationController {
     /**
      * 查询我发布的任务（分页）
      */
-    @ApiOperation(value="查询我发布的任务（分页）",notes="查询我发布的任务（分页）",response = JsonResult.class)
+    @ApiOperation(value="查询我发布的任务（后台分页）",notes="查询我发布的任务（后台分页）",response = JsonResult.class)
     @RequestMapping(value = "findAllMyCooperationByPager", method = RequestMethod.GET)
     public JsonResult findAllMyCooperationByPager(
             @RequestParam(required = false) String pageNo,@RequestParam(required = false) String pageSize,
