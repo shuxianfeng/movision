@@ -5,7 +5,7 @@ package com.zhuhuibao.mybatis.memCenter.service;
  */
 
 import com.oreilly.servlet.MultipartRequest;
-import com.zhuhuibao.common.ApiConstants;
+import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.utils.RandomFileNamePolicy;
 import com.zhuhuibao.utils.ResourcePropertiesUtils;
 import org.slf4j.Logger;
@@ -14,13 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Enumeration;
-import java.util.StringTokenizer;
 
 /**
  * 上传处理

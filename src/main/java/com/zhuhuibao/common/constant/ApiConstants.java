@@ -1,4 +1,4 @@
-package com.zhuhuibao.common;
+package com.zhuhuibao.common.constant;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

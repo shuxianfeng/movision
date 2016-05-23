@@ -1,4 +1,4 @@
-package com.zhuhuibao.common;
+package com.zhuhuibao.common.constant;
 
 public interface Constant {
 	/**

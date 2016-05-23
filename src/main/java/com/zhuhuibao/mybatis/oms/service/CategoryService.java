@@ -4,7 +4,7 @@ package com.zhuhuibao.mybatis.oms.service;
  * Created by cxx on 2016/3/14 0014.
  */
 
-import com.zhuhuibao.common.Constant;
+import com.zhuhuibao.common.constant.Constant;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.common.SysBean;

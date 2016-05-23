@@ -1,8 +1,7 @@
 package com.zhuhuibao.mybatis.oms.service;
 
 import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.MsgCodeConstant;
-import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.mapper.ChannelNewsMapper;
 import com.zhuhuibao.utils.MsgPropertiesUtils;

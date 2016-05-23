@@ -1,11 +1,11 @@
-package com.zhuhuibao.common;
+package com.zhuhuibao.common.constant;
 
 /**
  * 常量类
  *
  * @author wangxiang2
  */
-public class Constants {
+public class PayConstants {
 
     /**
      * 支付方式 大类

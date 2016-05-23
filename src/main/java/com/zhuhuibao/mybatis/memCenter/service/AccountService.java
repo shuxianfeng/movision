@@ -5,7 +5,7 @@ package com.zhuhuibao.mybatis.memCenter.service;
  */
 
 import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.MsgCodeConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.security.EncodeUtil;

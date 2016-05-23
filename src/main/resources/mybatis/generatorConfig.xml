@@ -5,7 +5,7 @@
 	<properties resource="mybatis/init.properties" />
 
 	<!-- 指定数据连接驱动jar地址 -->
-	<!-- <classPathEntry location="D:\repositor\maven\mysql\mysql-connector-java\5.1.6\mysql-connector-java-5.1.6.jar" /> -->
+	 <classPathEntry location="${classPath}" />
 
 	<!-- 一个数据库一个context -->
 	<context id="infoGuardian">

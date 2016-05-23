@@ -1,4 +1,4 @@
-package com.zhuhuibao.common;
+package com.zhuhuibao.common.constant;
 
 /**
  * 消息定义接口常量

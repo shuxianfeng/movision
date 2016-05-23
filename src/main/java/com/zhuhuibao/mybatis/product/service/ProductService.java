@@ -1,43 +1,19 @@
 package com.zhuhuibao.mybatis.product.service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.DecimalFormat;
 import java.util.*;
-import java.util.Map.Entry;
 
 import com.zhuhuibao.mybatis.product.entity.*;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.gson.Gson;
-import com.taobao.api.internal.util.StringUtils;
-import com.zhuhuibao.common.Constant;
+import com.zhuhuibao.common.constant.Constant;
 import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.MsgCodeConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.ResultBean;
-import com.zhuhuibao.mybatis.memCenter.entity.Brand;
-import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
-import com.zhuhuibao.mybatis.memberReg.entity.Member;
-import com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper;
-import com.zhuhuibao.mybatis.oms.entity.Category;
-import com.zhuhuibao.mybatis.oms.entity.CategoryAssemble;
-import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
 import com.zhuhuibao.mybatis.product.mapper.ProductMapper;
-import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 

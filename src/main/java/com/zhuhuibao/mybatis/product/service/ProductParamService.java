@@ -8,12 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.MsgCodeConstant;
 import com.zhuhuibao.mybatis.product.entity.ProductParam;
 import com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs;
 import com.zhuhuibao.mybatis.product.mapper.ProductParamMapper;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
 
 @Service
 @Transactional

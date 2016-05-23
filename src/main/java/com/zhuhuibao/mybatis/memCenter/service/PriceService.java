@@ -1,13 +1,14 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.common.*;
+import com.zhuhuibao.common.constant.Constant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.AgentMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.AskPriceMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ProvinceMapper;
-import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,7 @@ public class PriceService {
     MemberMapper memberMapper;
 
     @Autowired
-    ApiConstants ApiConstants;
+    com.zhuhuibao.common.constant.ApiConstants ApiConstants;
     /**
      * 询价保存
      */

@@ -1,7 +1,7 @@
 package com.zhuhuibao.utils.file;
 
 import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.MsgCodeConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

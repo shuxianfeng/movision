@@ -1,7 +1,7 @@
 package com.zhuhuibao.mybatis.oms.service;
 
 import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.MsgCodeConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.oms.entity.User;
 import com.zhuhuibao.mybatis.oms.mapper.UserMapper;
 import com.zhuhuibao.utils.MsgPropertiesUtils;

@@ -26,7 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.taobao.api.ApiException;
-import com.zhuhuibao.common.Constant;
+import com.zhuhuibao.common.constant.Constant;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;

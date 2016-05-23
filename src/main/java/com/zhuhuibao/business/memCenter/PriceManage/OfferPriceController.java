@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.zhuhuibao.common.ApiConstants;
-import com.zhuhuibao.common.Constant;
+import com.zhuhuibao.common.constant.ApiConstants;
+import com.zhuhuibao.common.constant.Constant;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;

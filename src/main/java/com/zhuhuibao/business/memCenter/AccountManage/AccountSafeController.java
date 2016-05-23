@@ -1,9 +1,9 @@
 package com.zhuhuibao.business.memCenter.AccountManage;
 
 import com.taobao.api.ApiException;
-import com.zhuhuibao.common.Constant;
+import com.zhuhuibao.common.constant.Constant;
 import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.MsgCodeConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.service.AccountService;

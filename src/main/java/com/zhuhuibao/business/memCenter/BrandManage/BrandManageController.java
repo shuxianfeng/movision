@@ -1,6 +1,6 @@
 package com.zhuhuibao.business.memCenter.BrandManage;
 
-import com.zhuhuibao.common.ApiConstants;
+import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 

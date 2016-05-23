@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import com.zhuhuibao.common.*;
+import com.zhuhuibao.common.constant.Constant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ import com.zhuhuibao.mybatis.memCenter.mapper.AskPriceMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.OfferPriceMapper;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.common.ApiConstants;
+import com.zhuhuibao.common.constant.ApiConstants;
 
 /**
  * 报价业务处理类
