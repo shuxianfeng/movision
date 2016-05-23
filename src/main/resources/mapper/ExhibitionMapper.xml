@@ -205,11 +205,15 @@
     where id = #{id}
   </update>
   <select id="findAllExhibition" resultMap="BaseResultMap" parameterType="java.util.Map" >
-    select e.id,e.title,c.name as type,e.views,date_format(e.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,e.status,date_format(e.publishTime,'%Y-%m-%d') publishTime,e.startDate,e.endDate,e.imgUrl,e.address,e.introduce,
+    select e.id,e.createid,e.title,c.name as type,e.views,date_format(e.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,e.status,date_format(e.publishTime,'%Y-%m-%d') publishTime,e.startDate,e.endDate,e.imgUrl,e.address,e.introduce,
     case when e.createrType = 1 then (select u.username from t_oms_user u where u.id = e.createid)
-    when e.createrType = 2 then (select m.enterpriseName from t_m_member m where m.id = e.createid) end as createName
+    when e.createrType = 2 then (select m.enterpriseName from t_m_member m where m.id = e.createid) end as createName,
+    ci.name as cityName,p.name as provinceName,a.name as areaName
     from t_c_exhibition e
     left join t_dictionary_constant c on e.`type` = c.code and c.`type` = 17
+    left join t_dictionary_city ci on ci.code = e.city
+    left join t_dictionary_province p on p.code = e.province
+    left join t_dictionary_area a on a.code = e.area
     where e.is_deleted = 0
     <if test="title != null">
       and e.title like CONCAT('%',#{title},'%')
