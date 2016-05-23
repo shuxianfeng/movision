@@ -41,7 +41,7 @@ public class ExhibitionController {
     @RequestMapping(value = "findAllMyExhibition", method = RequestMethod.GET)
     public JsonResult findAllMyExhibition(@ApiParam(value = "标题")@RequestParam(required = false)String title,
                                         @ApiParam(value = "审核状态")@RequestParam(required = false)String status,
-                                        @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws Exception {
+                                        @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) {
         JsonResult jsonResult = new JsonResult();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
@@ -84,7 +84,7 @@ public class ExhibitionController {
      */
     @ApiOperation(value="会展详情查看",notes="会展详情查看",response = JsonResult.class)
     @RequestMapping(value = "queryExhibitionInfoById", method = RequestMethod.GET)
-    public JsonResult queryExhibitionInfoById(@RequestParam String id) throws Exception {
+    public JsonResult queryExhibitionInfoById(@RequestParam String id)  {
         JsonResult jsonResult = new JsonResult();
         Exhibition exhibition = exhibitionService.queryExhibitionInfoById(id);
         jsonResult.setData(exhibition);
@@ -96,7 +96,7 @@ public class ExhibitionController {
      */
     @ApiOperation(value="会展信息编辑更新",notes="会展信息编辑更新",response = JsonResult.class)
     @RequestMapping(value = "updateExhibitionInfoById", method = RequestMethod.POST)
-    public JsonResult updateExhibitionInfoById(@ModelAttribute()Exhibition exhibition) throws Exception {
+    public JsonResult updateExhibitionInfoById(@ModelAttribute()Exhibition exhibition)  {
         JsonResult jsonResult = new JsonResult();
         exhibitionService.updateExhibitionInfoById(exhibition);
         return jsonResult;
@@ -107,7 +107,7 @@ public class ExhibitionController {
      */
     @ApiOperation(value="会展信息删除",notes="会展信息删除",response = JsonResult.class)
     @RequestMapping(value = "deleteExhibition", method = RequestMethod.POST)
-    public JsonResult deleteExhibition(@ApiParam(value = "ids,逗号隔开") @RequestParam String ids) throws Exception {
+    public JsonResult deleteExhibition(@ApiParam(value = "ids,逗号隔开") @RequestParam String ids)  {
         JsonResult jsonResult = new JsonResult();
         String[] idList = ids.split(",");
         for (String id : idList) {

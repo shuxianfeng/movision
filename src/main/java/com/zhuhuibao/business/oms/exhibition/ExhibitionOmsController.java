@@ -42,9 +42,25 @@ public class ExhibitionOmsController {
      */
     @ApiOperation(value="会展定制申请处理",notes="会展定制申请处理",response = JsonResult.class)
     @RequestMapping(value = "updateMeetingOrderStatus", method = RequestMethod.POST)
-    public JsonResult updateMeetingOrderStatus(@ModelAttribute()MeetingOrder meetingOrder) throws Exception {
+    public JsonResult updateMeetingOrderStatus(@ModelAttribute()MeetingOrder meetingOrder)  {
         JsonResult jsonResult = new JsonResult();
-        exhibitionService.updateMeetingOrderStatus(meetingOrder);
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if(null != session) {
+            OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
+            if(null != principal){
+                meetingOrder.setUpdateManId(principal.getId().toString());
+                exhibitionService.updateMeetingOrderStatus(meetingOrder);
+            }else{
+                jsonResult.setCode(401);
+                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                jsonResult.setMsgCode(MsgCodeConstant.un_login);
+            }
+        }else{
+            jsonResult.setCode(401);
+            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            jsonResult.setMsgCode(MsgCodeConstant.un_login);
+        }
         return jsonResult;
     }
 
@@ -53,7 +69,7 @@ public class ExhibitionOmsController {
      */
     @ApiOperation(value="会展定制查看",notes="会展定制查看",response = JsonResult.class)
     @RequestMapping(value = "queryMeetingOrderInfoById", method = RequestMethod.GET)
-    public JsonResult queryMeetingOrderInfoById(@RequestParam String id) throws Exception {
+    public JsonResult queryMeetingOrderInfoById(@RequestParam String id)  {
         JsonResult jsonResult = new JsonResult();
         MeetingOrder meetingOrder = exhibitionService.queryMeetingOrderInfoById(id);
         jsonResult.setData(meetingOrder);
@@ -65,9 +81,12 @@ public class ExhibitionOmsController {
      */
     @ApiOperation(value="会展定制申请管理",notes="会展定制申请管理",response = JsonResult.class)
     @RequestMapping(value = "findAllMeetingOrderInfo", method = RequestMethod.GET)
-    public JsonResult findAllMeetingOrderInfo(@ApiParam(value = "账号")@RequestParam(required = false) String account,
-        @ApiParam(value = "省")@RequestParam(required = false)String province,@ApiParam(value = "市")@RequestParam(required = false)String city,
-        @ApiParam(value = "审核状态")@RequestParam(required = false)String status,@RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws Exception {
+    public JsonResult findAllMeetingOrderInfo(
+            @ApiParam(value = "账号")@RequestParam(required = false) String account,
+            @ApiParam(value = "省")@RequestParam(required = false)String province,
+            @ApiParam(value = "市")@RequestParam(required = false)String city,
+            @ApiParam(value = "审核状态")@RequestParam(required = false)String status,
+            @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize)  {
         JsonResult jsonResult = new JsonResult();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
@@ -95,7 +114,7 @@ public class ExhibitionOmsController {
      */
     @ApiOperation(value="发布会展信息",notes="发布会展信息",response = JsonResult.class)
     @RequestMapping(value = "publishExhibition", method = RequestMethod.POST)
-    public JsonResult publishExhibition(@ModelAttribute()Exhibition exhibition) throws Exception {
+    public JsonResult publishExhibition(@ModelAttribute()Exhibition exhibition) {
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -138,7 +157,7 @@ public class ExhibitionOmsController {
     public JsonResult findAllExhibitionOms(@ApiParam(value = "标题")@RequestParam(required = false)String title,
                                            @ApiParam(value = "所属栏目")@RequestParam(required = false)String type,
                                            @ApiParam(value = "审核状态")@RequestParam(required = false)String status,
-        @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws Exception {
+        @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) {
         JsonResult jsonResult = new JsonResult();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {

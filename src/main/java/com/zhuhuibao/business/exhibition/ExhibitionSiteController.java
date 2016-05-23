@@ -40,7 +40,7 @@ public class ExhibitionSiteController {
      */
     @ApiOperation(value="发布会展定制",notes="发布会展定制",response = JsonResult.class)
     @RequestMapping(value = "publishMeetingOrder", method = RequestMethod.POST)
-    public JsonResult publishMeetingOrder(@ModelAttribute()MeetingOrder meetingOrder) throws Exception {
+    public JsonResult publishMeetingOrder(@ModelAttribute()MeetingOrder meetingOrder) {
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -67,10 +67,10 @@ public class ExhibitionSiteController {
      */
     @ApiOperation(value="会展信息列表(前台)",notes="会展信息列表(前台)",response = JsonResult.class)
     @RequestMapping(value = "findAllExhibition", method = RequestMethod.GET)
-    public JsonResult findAllExhibition(@ApiParam(value = "所属栏目")@RequestParam(required = false)String type,
-                                           @ApiParam(value = "筑慧活动子栏目")@RequestParam(required = false)String subType,
+    public JsonResult findAllExhibition(@ApiParam(value = "所属栏目:1:筑慧活动;2:行业会议;3:厂商活动")@RequestParam(required = false)String type,
+                                           @ApiParam(value = "筑慧活动子栏目:1:技术研讨会;2:产品发布会;3:行业峰会;4:市场活动会")@RequestParam(required = false)String subType,
                                            @ApiParam(value = "省")@RequestParam(required = false)String province,
-                                           @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws Exception {
+                                           @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) {
         JsonResult jsonResult = new JsonResult();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
@@ -90,6 +90,23 @@ public class ExhibitionSiteController {
         List<Exhibition> exhibitionList = exhibitionService.findAllExhibition(pager,map);
         pager.result(exhibitionList);
         jsonResult.setData(pager);
+        return jsonResult;
+    }
+
+    /**
+     * 会展信息列表(前台)
+     */
+    @ApiOperation(value="最新会展信息",notes="最新会展信息",response = JsonResult.class)
+    @RequestMapping(value = "newExhibition", method = RequestMethod.GET)
+    public JsonResult newExhibition(@ApiParam(value = "条数")@RequestParam int count,
+                                    @ApiParam(value = "会展类型：1:筑慧活动;2:行业会议;3:厂商活动")@RequestParam String type
+    ){
+        JsonResult jsonResult = new JsonResult();
+        Map<String,Object> map = new HashMap<>();
+        map.put("count",count);
+        map.put("type",type);
+        List<Exhibition> exhibitionList = exhibitionService.findNewExhibition(map);
+        jsonResult.setData(exhibitionList);
         return jsonResult;
     }
 }

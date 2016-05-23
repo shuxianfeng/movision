@@ -15,6 +15,10 @@ public class MeetingOrder {
 
     private String publishTime;
 
+    private String updateTime;
+
+    private String updateManId;
+
     private String startDate;
 
     private String endDate;
@@ -351,5 +355,21 @@ public class MeetingOrder {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getUpdateManId() {
+        return updateManId;
+    }
+
+    public void setUpdateManId(String updateManId) {
+        this.updateManId = updateManId;
     }
 }
