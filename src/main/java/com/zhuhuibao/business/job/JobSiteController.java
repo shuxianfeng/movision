@@ -311,7 +311,7 @@ public class JobSiteController {
     @RequestMapping(value = "queryRecommendPosition", method = RequestMethod.GET)
     @ApiOperation(value = "根据当前职位类别查询出其它公司的职位",notes = "查找按照最新时间排序",response = JsonResult.class)
     public JsonResult queryRecommendPosition(@ApiParam(value = "职位ID") @RequestParam String jobID,
-                                             @ApiParam(value="职位类别ID") @RequestParam(required = false) String postID) throws IOException {
+                                             @ApiParam(value="职位类别ID") @RequestParam String postID) throws IOException {
         //查询不同公司发布的相同职位
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("postID",postID);
@@ -382,7 +382,7 @@ public class JobSiteController {
 
     @RequestMapping(value = "querySimilarCompany", method = RequestMethod.GET)
     @ApiOperation(value = "相似企业",notes = "相似企业",response = JsonResult.class)
-    public JsonResult querySimilarCompany(String id) throws IOException {
+    public JsonResult querySimilarCompany(@ApiParam(value = "企业ID(创建者ID)") @RequestParam String id) throws IOException {
         JsonResult jsonResult = job.querySimilarCompany(id,4);
         return jsonResult;
     }

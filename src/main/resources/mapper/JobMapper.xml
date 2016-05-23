@@ -147,8 +147,8 @@
     <if test="delete != null">
       and j.is_deleted = #{delete}
     </if>
-    <if test="positionType != null">
-      and j.positionType = #{positionType}
+    <if test="postID != null">
+      and j.positionType = #{postID}
     </if>
     order by updateTime desc limit ${count}
   </select>
@@ -329,7 +329,7 @@
   <select id="queryEnterpriseHotPosition" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
     select jb.id,jb.createid,co.name as salaryName,jb.name from t_i_job jb left join t_m_member m on jb.createid = m.id
     left join t_dictionary_constant co on co.code = jb.salary and co.type = 1
-    where m.isrecommend = #{recommend} and and m.status != #{status} and jb.is_deleted = 0 order by jb.views desc limit #{count}
+    where m.isrecommend = #{recommend} and m.status != #{status} and jb.is_deleted = 0 order by jb.views desc limit #{count}
   </select>
   <select id="findJobByID" resultType="java.util.Map">
     select * from t_i_job where id= #{id}

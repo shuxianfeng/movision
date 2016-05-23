@@ -34,7 +34,7 @@ import com.zhuhuibao.utils.pagination.util.StringUtils;
  * @author penglong
  *
  */
-@Controller
+@RestController
 public class ProductPublishController {
 	
 	private static final Logger log = LoggerFactory.getLogger(ProductPublishController.class);
@@ -162,9 +162,7 @@ public class ProductPublishController {
 	public JsonResult getProductFirstCategory(HttpServletResponse response) throws IOException {
 		JsonResult jsonResult = new JsonResult();
 		List<ResultBean> systemList = categoryMapper.findSystemList();
-		response.setContentType("application/json;charset=utf-8");
 		jsonResult.setData(systemList);
-
 		return jsonResult;
 	}
 
