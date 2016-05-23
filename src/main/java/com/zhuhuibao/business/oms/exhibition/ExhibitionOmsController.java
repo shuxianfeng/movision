@@ -19,10 +19,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +42,7 @@ public class ExhibitionOmsController {
      */
     @ApiOperation(value="会展定制申请处理",notes="会展定制申请处理",response = JsonResult.class)
     @RequestMapping(value = "updateMeetingOrderStatus", method = RequestMethod.POST)
-    public JsonResult updateMeetingOrderStatus(MeetingOrder meetingOrder) throws Exception {
+    public JsonResult updateMeetingOrderStatus(@ModelAttribute()MeetingOrder meetingOrder) throws Exception {
         JsonResult jsonResult = new JsonResult();
         exhibitionService.updateMeetingOrderStatus(meetingOrder);
         return jsonResult;
@@ -98,7 +95,7 @@ public class ExhibitionOmsController {
      */
     @ApiOperation(value="发布会展信息",notes="发布会展信息",response = JsonResult.class)
     @RequestMapping(value = "publishExhibition", method = RequestMethod.POST)
-    public JsonResult publishExhibition(Exhibition exhibition) throws Exception {
+    public JsonResult publishExhibition(@ModelAttribute()Exhibition exhibition) throws Exception {
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -183,7 +180,7 @@ public class ExhibitionOmsController {
      */
     @ApiOperation(value="会展信息编辑更新",notes="会展信息编辑更新",response = JsonResult.class)
     @RequestMapping(value = "updateExhibitionInfoById", method = RequestMethod.POST)
-    public JsonResult updateExhibitionInfoById(Exhibition exhibition) throws Exception {
+    public JsonResult updateExhibitionInfoById(@ModelAttribute()Exhibition exhibition) throws Exception {
         JsonResult jsonResult = new JsonResult();
         exhibitionService.updateExhibitionInfoById(exhibition);
         return jsonResult;

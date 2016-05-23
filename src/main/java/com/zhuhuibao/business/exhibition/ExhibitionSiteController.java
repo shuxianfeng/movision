@@ -32,7 +32,7 @@ public class ExhibitionSiteController {
      */
     @ApiOperation(value="发布会展定制",notes="发布会展定制",response = JsonResult.class)
     @RequestMapping(value = "publishMeetingOrder", method = RequestMethod.POST)
-    public JsonResult publishMeetingOrder(MeetingOrder meetingOrder) throws Exception {
+    public JsonResult publishMeetingOrder(@ModelAttribute()MeetingOrder meetingOrder) throws Exception {
         JsonResult jsonResult = new JsonResult();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
