@@ -1,7 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.constant.JobConstant;
@@ -45,28 +45,28 @@ public class JobPositionService {
     /**
      * 发布职位
      */
-    public JsonResult publishPosition(Job job){
-        JsonResult jsonResult = new JsonResult();
+    public Response publishPosition(Job job){
+        Response response = new Response();
         try{
             int isPublish = jobMapper.publishPosition(job);
             if(isPublish==1){
-                jsonResult.setCode(200);
+                response.setCode(200);
             }else{
-                jsonResult.setCode(400);
-                jsonResult.setMessage("发布失败");
+                response.setCode(400);
+                response.setMessage("发布失败");
             }
         }catch (Exception e){
             log.error("publishPosition error",e);
             e.printStackTrace();
         }
-        return jsonResult;
+        return response;
     }
 
     /**
      * 查询公司已发布的职位
      */
-    public JsonResult findAllPositionByMemId(Paging<Job> pager, String id){
-        JsonResult jsonResult = new JsonResult();
+    public Response findAllPositionByMemId(Paging<Job> pager, String id){
+        Response response = new Response();
         List<Job> jobList = jobMapper.findAllByPager(pager.getRowBounds(),id);
         List list = new ArrayList();
         for(int i=0;i<jobList.size();i++){
@@ -80,16 +80,16 @@ public class JobPositionService {
             list.add(map);
         }
         pager.result(list);
-        jsonResult.setData(pager);
-        jsonResult.setCode(200);
-        return jsonResult;
+        response.setData(pager);
+        response.setCode(200);
+        return response;
     }
 
     /**
      * 查询公司发布的某条职位的信息
      */
-    public JsonResult getPositionByPositionId(String id){
-        JsonResult result = new JsonResult();
+    public Response getPositionByPositionId(String id){
+        Response result = new Response();
         Job job = jobMapper.getPositionByPositionId(id);
         result.setCode(200);
         result.setData(job);
@@ -99,32 +99,32 @@ public class JobPositionService {
     /**
      * 删除已发布的职位
      */
-    public JsonResult deletePosition(String ids[]){
-        JsonResult jsonResult = new JsonResult();
+    public Response deletePosition(String ids[]){
+        Response response = new Response();
         int isDelete = 0;
         for(int i = 0; i < ids.length; i++){
             String id = ids[i];
             isDelete = jobMapper.deletePosition(id);
             try{
                 if(isDelete==1){
-                    jsonResult.setCode(200);
+                    response.setCode(200);
                 }else {
-                    jsonResult.setCode(400);
-                    jsonResult.setMessage("删除失败");
+                    response.setCode(400);
+                    response.setMessage("删除失败");
                 }
             }catch (Exception e){
                 log.error("deletePosition error",e);
                 e.printStackTrace();
             }
         }
-        return jsonResult;
+        return response;
     }
 
     /**
      * 更新编辑已发布的职位
      */
-    public JsonResult updatePosition(Job job){
-        JsonResult result = new JsonResult();
+    public Response updatePosition(Job job){
+        Response result = new Response();
         int isUpdate = jobMapper.updatePosition(job);
         try{
             if(isUpdate==1){
@@ -143,8 +143,8 @@ public class JobPositionService {
     /**
      * 查询最新招聘职位
      */
-    public JsonResult searchNewPosition(int count){
-        JsonResult result = new JsonResult();
+    public Response searchNewPosition(int count){
+        Response result = new Response();
         List<Job> jobList = jobMapper.searchNewPosition(count);
         result.setData(jobList);
         result.setCode(200);
@@ -154,8 +154,8 @@ public class JobPositionService {
     /**
      * 查询推荐职位
      */
-    public JsonResult searchRecommendPosition(String id,int count){
-        JsonResult result = new JsonResult();
+    public Response searchRecommendPosition(String id, int count){
+        Response result = new Response();
         List<Job> jobList = jobMapper.searchRecommendPosition(id,count);
         result.setData(jobList);
         result.setCode(200);
@@ -165,9 +165,9 @@ public class JobPositionService {
     /**
      * 查询不同公司发布的相同职位
      */
-    public JsonResult searchSamePosition(Map<String,Object> map){
+    public Response searchSamePosition(Map<String,Object> map){
         log.info("search same position form different company postID = "+ StringUtils.mapToString(map));
-        JsonResult result = new JsonResult();
+        Response result = new Response();
         List<Job> jobList = jobMapper.searchSamePosition(map);
         result.setData(jobList);
         result.setCode(200);
@@ -177,8 +177,8 @@ public class JobPositionService {
     /**
      * 查询最新发布的职位
      */
-    public JsonResult searchLatestPublishPosition(){
-        JsonResult result = new JsonResult();
+    public Response searchLatestPublishPosition(){
+        Response result = new Response();
         List<Job> jobList = jobMapper.searchLatestPublishPosition();
         result.setData(jobList);
         result.setCode(200);
@@ -188,8 +188,8 @@ public class JobPositionService {
     /**
      * 职位类别
      */
-    public JsonResult positionType(){
-        JsonResult jsonResult = new JsonResult();
+    public Response positionType(){
+        Response response = new Response();
         List<Position> positionList = positionMapper.findPosition(8);
         List<Position> subPositionList = positionMapper.findSubPosition();
         List list1 = new ArrayList();
@@ -211,9 +211,9 @@ public class JobPositionService {
             map.put(Constants.subPositionList,list);
             list1.add(map);
         }
-        jsonResult.setCode(200);
-        jsonResult.setData(list1);
-        return jsonResult;
+        response.setCode(200);
+        response.setData(list1);
+        return response;
     }
 
     /**
@@ -221,20 +221,20 @@ public class JobPositionService {
      * @param id
      * @return
      */
-    public JsonResult queryCompanyInfo(Long id) throws Exception
+    public Response queryCompanyInfo(Long id) throws Exception
     {
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         try
         {
             MemberDetails member = jobMapper.queryCompanyInfo(id);
-            jsonResult.setData(member);
+            response.setData(member);
         }
         catch(Exception e)
         {
             log.error("add offer price error!",e);
             throw e;
         }
-        return jsonResult;
+        return response;
     }
 
     /**
@@ -242,23 +242,23 @@ public class JobPositionService {
      * @param map 查询条件
      * @return
      */
-    public JsonResult queryAdvertisingPosition(Map<String,Object> map)
+    public Response queryAdvertisingPosition(Map<String,Object> map)
     {
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         try
         {
             List<MemberDetails> memberList = jobMapper.queryAdvertisingPosition(map);
-            jsonResult.setData(memberList);
+            response.setData(memberList);
         }
         catch(Exception e)
         {
             log.error("add offer price error!",e);
-            jsonResult.setCode(MsgCodeConstant.response_status_400);
-            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return jsonResult;
+            response.setCode(MsgCodeConstant.response_status_400);
+            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            return response;
         }
-        return jsonResult;
+        return response;
     }
 
     /**
@@ -266,21 +266,21 @@ public class JobPositionService {
      * @param id 职位ID
      * @return
      */
-    public JsonResult queryPositionInfoByID(Long id) throws Exception
+    public Response queryPositionInfoByID(Long id) throws Exception
     {
         log.info("query position info by id = "+id);
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         try
         {
             Job job = jobMapper.queryPositionInfoByID(id);
-            jsonResult.setData(job);
+            response.setData(job);
         }
         catch(Exception e)
         {
             log.error("add offer price error!",e);
             throw e;
         }
-        return jsonResult;
+        return response;
     }
 
     /**
@@ -306,8 +306,8 @@ public class JobPositionService {
     /**
      * 我申请的职位
      */
-    public JsonResult myApplyPosition(Paging<Job> pager,String id){
-        JsonResult jsonResult = new JsonResult();
+    public Response myApplyPosition(Paging<Job> pager, String id){
+        Response response = new Response();
         List<Job> jobList = jobMapper.findAllMyApplyPosition(pager.getRowBounds(),id);
         List list = new ArrayList();
         for(int i=0;i<jobList.size();i++){
@@ -323,9 +323,9 @@ public class JobPositionService {
             list.add(map);
         }
         pager.result(list);
-        jsonResult.setCode(200);
-        jsonResult.setData(pager);
-        return jsonResult;
+        response.setCode(200);
+        response.setData(pager);
+        return response;
     }
 
     /**
@@ -442,9 +442,9 @@ public class JobPositionService {
     /**
      * 相似企业
      */
-    public JsonResult querySimilarCompany(String id,int count)
+    public Response querySimilarCompany(String id, int count)
     {
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         Member member = memberMapper.findMemById(id);
         List<Job> companyList = jobMapper.querySimilarCompany(member.getEmployeeNumber(),member.getEnterpriseType(),id,count);
         List list = new ArrayList();
@@ -459,8 +459,8 @@ public class JobPositionService {
             map.put(Constants.area,companyInfo.getCity());
             list.add(map);
         }
-        jsonResult.setData(list);
-        return jsonResult;
+        response.setData(list);
+        return response;
     }
 
     /**

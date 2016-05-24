@@ -1,6 +1,6 @@
 package com.zhuhuibao.business.memCenter.AccountManage;
 
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
@@ -45,14 +45,14 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/addMember", method = RequestMethod.POST)
-	public JsonResult addMember(HttpServletRequest req, Member member) throws Exception {
+	public Response addMember(HttpServletRequest req, Member member) throws Exception {
 		String account = req.getParameter("account");
 		if(account.contains("@")){
 			member.setEmail(account);
 		}else{
 			member.setMobile(account);
 		}
-		JsonResult result = new JsonResult();
+		Response result = new Response();
 
 		String md5Pwd = new Md5Hash("123456",null,2).toString();
 		member.setPassword(md5Pwd);
@@ -77,7 +77,7 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/updateMember", method = RequestMethod.POST)
-	public JsonResult updateMember(HttpServletRequest req, Member member) throws Exception {
+	public Response updateMember(HttpServletRequest req, Member member) throws Exception {
 		String account = req.getParameter("account");
 		if(account.contains("@")){
 			member.setEmail(account);
@@ -85,7 +85,7 @@ public class StaffManageController {
 			member.setMobile(account);
 		}
 
-		JsonResult result = new JsonResult();
+		Response result = new Response();
 		memberService.updateMember(member);
 		return result;
 
@@ -100,7 +100,7 @@ public class StaffManageController {
 
 /*	@RequestMapping(value = "/rest/disableMember", method = RequestMethod.POST)
 	public void disableMember(HttpServletRequest req, HttpServletResponse response,Member member) throws IOException {
-		JsonResult result = new JsonResult();
+		Response result = new Response();
 		int isDisable = memberService.disableMember(member);
 		if(isDisable==0){
 			result.setCode(400);
@@ -120,9 +120,9 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/deleteMember", method = RequestMethod.POST)
-	public JsonResult deleteMember(HttpServletRequest req) throws Exception {
+	public Response deleteMember(HttpServletRequest req) throws Exception {
 		String ids[] = req.getParameterValues("ids");
-		JsonResult result = new JsonResult();
+		Response result = new Response();
 		for (String id : ids) {
 			memberService.deleteMember(id);
 		}
@@ -136,8 +136,8 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/staffSearch", method = RequestMethod.GET)
-	public JsonResult staffSearch(Member member, String pageNo, String pageSize) throws Exception {
-		JsonResult jsonResult = new JsonResult();
+	public Response staffSearch(Member member, String pageNo, String pageSize) throws Exception {
+		Response response = new Response();
 		if(member.getAccount()!=null){
 			if(member.getAccount().contains("_")){
 				member.setAccount(member.getAccount().replace("_","\\_"));
@@ -152,8 +152,8 @@ public class StaffManageController {
 		Paging<Member> pager = new Paging<Member>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
 		List list = memberService.findStaffByParentId(pager,member);
 		pager.result(list);
-		jsonResult.setData(pager);
-		return jsonResult;
+		response.setData(pager);
+		return response;
 	}
 
 	/**
@@ -162,8 +162,8 @@ public class StaffManageController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/staffSearchSize", method = RequestMethod.GET)
-	public JsonResult staffSearchSize(Member member) throws IOException {
-		JsonResult result = new JsonResult();
+	public Response staffSearchSize(Member member) throws IOException {
+		Response result = new Response();
 		List<Member> memberList = memberMapper.findStaffByParentId(member);
 		Map map = new HashMap();
 		map.put("size",memberList.size());
@@ -182,9 +182,9 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/resetPwd", method = RequestMethod.POST)
-	public JsonResult resetPwd(HttpServletRequest req) throws Exception {
+	public Response resetPwd(HttpServletRequest req) throws Exception {
 		String ids[] = req.getParameterValues("ids");
-		JsonResult result = new JsonResult();
+		Response result = new Response();
 		for (String id : ids) {
 			Member member = new Member();
 			String md5Pwd = new Md5Hash("123456", null, 2).toString();

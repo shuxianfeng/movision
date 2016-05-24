@@ -3,12 +3,12 @@ package com.zhuhuibao.mybatis.memberReg.service;
 import java.util.Date;
 import java.util.List;
 
+import com.zhuhuibao.common.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
@@ -73,9 +73,9 @@ public class RegisterValidateService {
 	 * 邮件激活
 	 * @param decodeVM  激活信息 id code
 	 */
-	public JsonResult processActivate(String decodeVM){  
+	public Response processActivate(String decodeVM){
         //数据访问层，通过email获取用户信息
-		JsonResult result = new JsonResult();
+		Response result = new Response();
 		int code = 200;
 	    int msgCode = MsgCodeConstant.mcode_common_success;
 		try
@@ -224,14 +224,14 @@ public class RegisterValidateService {
 	 * @param validateInfo 用户验证信息
 	 * @return
 	 */
-	public JsonResult processValidate(String validateInfo){  
+	public Response processValidate(String validateInfo){
         //数据访问层，通过email获取用户信息
 		String decodeInfo = new String (EncodeUtil.decodeBase64(validateInfo));
 		String[] arr = decodeInfo.split(",");
 		String email = arr[1];
 		String url = ResourcePropertiesUtils.getValue("host.ip")+"/rest/validateMail?vm="+validateInfo;
         Member user = memberService.findMemberByAccount(email);
-        JsonResult result = new JsonResult();
+        Response result = new Response();
         int code = 200;
         int msgCode = MsgCodeConstant.mcode_common_success;
         String id = "0";
@@ -279,20 +279,20 @@ public class RegisterValidateService {
 		
 	/**
 	 * 获得跳转页面的URL
-	 * @param jsonResult
+	 * @param response
 	 * @return
 	 */
-    public String getRedirectUrl(JsonResult jsonResult,String type) {
+    public String getRedirectUrl(Response response, String type) {
 		String redirectUrl;
 		if(type.equals("validate"))
 		{
-			if(jsonResult.getCode() == 200)
+			if(response.getCode() == 200)
 			{
 				redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("reset.pwd.page");
 			}
 			else
 			{
-				if(MsgCodeConstant.member_mcode_mail_validate_expire == jsonResult.getMsgCode())
+				if(MsgCodeConstant.member_mcode_mail_validate_expire == response.getMsgCode())
 				{
 					//验证邮件过期
 					redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email.validate.expire.page");
@@ -306,14 +306,14 @@ public class RegisterValidateService {
 		}
 		else
 		{
-			if(jsonResult.getCode() == 200)
+			if(response.getCode() == 200)
 	    	{
 	    		//跳转到会员中心页面
 	    		redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page");
 	    	}
 	    	else
 	    	{
-	    		if(MsgCodeConstant.member_mcode_active_code_expire == jsonResult.getMsgCode())
+	    		if(MsgCodeConstant.member_mcode_active_code_expire == response.getMsgCode())
 	    		{
 	    			//激活邮件超过24小时
 	    			redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email.active.expire.page");

@@ -6,6 +6,7 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.zhuhuibao.common.Response;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.google.gson.Gson;
 import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
@@ -54,76 +54,76 @@ public class ProductPublishController {
 	 * @throws JsonGenerationException 
 	 */
 	@RequestMapping(value="/rest/addProduct", method = RequestMethod.POST)
-	public JsonResult addProduct(String json) throws IOException
+	public Response addProduct(String json) throws IOException
 	{
 		Gson gson = new Gson();
 		ProductWithBLOBs product = gson.fromJson(json, ProductWithBLOBs.class);
-		JsonResult jsonResult = new JsonResult();
+		Response response = new Response();
 		productService.insertProduct(product);
-		return jsonResult;
+		return response;
 	}
 	
 	@RequestMapping(value="/rest/addComplainSuggest", method = RequestMethod.POST)
-	public JsonResult addComplainSuggest(ComplainSuggest suggest) throws IOException
+	public Response addComplainSuggest(ComplainSuggest suggest) throws IOException
 	{
-		JsonResult jsonResult = new JsonResult();
+		Response response = new Response();
 		suggestService.insert(suggest);
 
-		return jsonResult;
+		return response;
 	}
 	
 	
 	@RequestMapping(value="/rest/updateProduct", method = RequestMethod.POST)
-	public JsonResult updateProduct(ProductWithBLOBs product) throws IOException
+	public Response updateProduct(ProductWithBLOBs product) throws IOException
 	{
-		JsonResult jsonResult = new JsonResult();
-		jsonResult = productService.updateProduct(product);
+		Response response = new Response();
+		response = productService.updateProduct(product);
 
-		return jsonResult;
+		return response;
 	}
 	
 	@RequestMapping(value="/rest/updateProductStatus", method = RequestMethod.POST)
-	public JsonResult updateProductStatus(ProductWithBLOBs product) throws IOException
+	public Response updateProductStatus(ProductWithBLOBs product) throws IOException
 	{
-		JsonResult jsonResult = new JsonResult();
-		jsonResult = productService.updateProductStatus(product);
+		Response response = new Response();
+		response = productService.updateProductStatus(product);
 
-		return jsonResult;
+		return response;
 	}
 	
 	@RequestMapping(value="/rest/batchUnpublish", method = RequestMethod.POST)
-	public JsonResult batchUnpublish(@RequestParam String[] ids) throws IOException
+	public Response batchUnpublish(@RequestParam String[] ids) throws IOException
 	{
-		JsonResult jsonResult = new JsonResult();
+		Response response = new Response();
 		List<String> list = new ArrayList<String>();
 		Collections.addAll(list, ids);
-		jsonResult = productService.batchUnpublish(list);
+		response = productService.batchUnpublish(list);
 
-		return jsonResult;
+		return response;
 	}
 	
 	@RequestMapping(value="/rest/queryProductById", method = RequestMethod.GET)
 	@ResponseBody
-	public JsonResult queryProductById(Long id) throws IOException
+	public Response queryProductById(Long id) throws IOException
 	{
-		JsonResult jsonResult = new JsonResult();
-		jsonResult = productService.selectByPrimaryKey(id);
+		Response response = new Response();
+		response = productService.selectByPrimaryKey(id);
 
-		return jsonResult;
+		return response;
 	}
 	
 	@RequestMapping(value="/rest/productDetail/queryProductInfoById", method = RequestMethod.GET)
 	@ResponseBody
-	public JsonResult queryProductInfoById(Long id) throws IOException
+	public Response queryProductInfoById(Long id) throws IOException
 	{
-		JsonResult jsonResult = productService.queryProductInfoById(id);
+		Response response = productService.queryProductInfoById(id);
 		productService.updateHit(id);
-		return jsonResult;
+		return response;
 	}
 	
 	@RequestMapping(value="/rest/productDetail/queryPrdDescParamService", method = RequestMethod.GET)
 	@ResponseBody
-	public JsonResult queryPrdDescParamService(Long id) throws IOException
+	public Response queryPrdDescParamService(Long id) throws IOException
 	{
 
 		return productService.queryPrdDescParamService(id);
@@ -140,9 +140,9 @@ public class ProductPublishController {
 	 */
 	@RequestMapping(value="/rest/findAllProduct", method = RequestMethod.GET)
 	@ResponseBody
-	public JsonResult findAllProduct(ProductWithBLOBs product, String pageNo, String pageSize) throws IOException
+	public Response findAllProduct(ProductWithBLOBs product, String pageNo, String pageSize) throws IOException
 	{
-		JsonResult jsonResult = new JsonResult();
+		Response response = new Response();
 		if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -152,14 +152,14 @@ public class ProductPublishController {
         Paging<Product> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<Product>  productList = productService.findAllByPager(pager,product);
         pager.result(productList);
-        jsonResult.setData(pager);
+        response.setData(pager);
 
-		return jsonResult;
+		return response;
 	}
 	
 	@RequestMapping(value = "/rest/getProductFirstCategory", method = RequestMethod.GET)
-	public JsonResult getProductFirstCategory(HttpServletResponse response) throws IOException {
-		JsonResult jsonResult = new JsonResult();
+	public Response getProductFirstCategory(HttpServletResponse response) throws IOException {
+		Response jsonResult = new Response();
 		List<ResultBean> systemList = categoryMapper.findSystemList();
 		jsonResult.setData(systemList);
 		return jsonResult;
@@ -173,13 +173,13 @@ public class ProductPublishController {
 	     */
 
 	    @RequestMapping(value = "/rest/getProductSecondCategory", method = RequestMethod.GET)
-	    public JsonResult getProductSecondCategory(HttpServletRequest req) throws IOException {
+	    public Response getProductSecondCategory(HttpServletRequest req) throws IOException {
 	        String parentId = req.getParameter("parentID");
-	        JsonResult jsonResult = new JsonResult();
+	        Response response = new Response();
 	        List<ResultBean> subSystemList = categoryMapper.findSubSystemList(parentId);
-	        jsonResult.setData(subSystemList);
+	        response.setData(subSystemList);
 
-			return jsonResult;
+			return response;
 	    }
 	    
 	    /**
@@ -188,10 +188,10 @@ public class ProductPublishController {
 	     * @throws IOException
 	     */
 	    @RequestMapping(value = "/rest/getBrandList", method = RequestMethod.GET)
-	    public JsonResult getBrandList(Brand brand) throws IOException {
+	    public Response getBrandList(Brand brand) throws IOException {
 	    	brand.setStatus(1);
 	        List<Brand> brandList = brandMapper.searchBrandByStatus(brand);
-	        JsonResult result = new JsonResult();
+	        Response result = new Response();
 	        result.setCode(200);
 	        result.setData(brandList);
 
@@ -204,11 +204,11 @@ public class ProductPublishController {
 	     * @throws IOException
 	     */
 	    @RequestMapping(value = "/rest/productDetail/querySCateListByBrandId", method = RequestMethod.GET)
-	    public JsonResult querySCateListByBrandId(Product product) throws IOException {
-	    	JsonResult jsonResult = new JsonResult();
-	        jsonResult = productService.querySCateListByBrandId(product);
+	    public Response querySCateListByBrandId(Product product) throws IOException {
+	    	Response response = new Response();
+	        response = productService.querySCateListByBrandId(product);
 
-			return jsonResult;
+			return response;
 	    }
 	    
 	    /**
@@ -220,18 +220,18 @@ public class ProductPublishController {
 		 */
 		@RequestMapping(value="/rest/productDetail/queryProductInfoBySCategory",method = RequestMethod.GET)
 		@ResponseBody
-		public JsonResult queryProductInfoBySCategory(ProductWithBLOBs product) throws IOException
+		public Response queryProductInfoBySCategory(ProductWithBLOBs product) throws IOException
 		{
-			JsonResult jsonResult = new JsonResult();
+			Response response = new Response();
 			Map<String,Object> productMap = new HashMap<String,Object>();
 			productMap.put("scateid",product.getScateid());
 			productMap.put("brandid",product.getBrandid());
 			productMap.put("status", Constants.product_status_publish);
 			productMap.put("count", Constants.brand_page_product_count);
 			productMap.put("order", "publishTime");
-	        jsonResult = productService.queryProductInfoBySCategory(productMap);
+	        response = productService.queryProductInfoBySCategory(productMap);
 
-			return jsonResult;
+			return response;
 		}
 		
 		/**
@@ -242,16 +242,16 @@ public class ProductPublishController {
 		 */
 		@RequestMapping(value="/rest/productDetail/queryRecommendProduct",method = RequestMethod.GET)
 		@ResponseBody
-		public JsonResult queryRecommendProduct() throws IOException
+		public Response queryRecommendProduct() throws IOException
 		{
-			JsonResult jsonResult = new JsonResult();
+			Response response = new Response();
 			Map<String,Object> productMap = new HashMap<String,Object>();
 			productMap.put("status", Constants.product_status_publish);
 			productMap.put("count", Constants.recommend_product_count);
 			productMap.put("order", "hit");
-	        jsonResult = productService.queryRecommendHotProduct(productMap);
+	        response = productService.queryRecommendHotProduct(productMap);
 
-			return jsonResult;
+			return response;
 		}
 		
 		/**
@@ -262,15 +262,15 @@ public class ProductPublishController {
 		 */
 		@RequestMapping(value="/rest/productDetail/queryHotProduct",method = RequestMethod.GET)
 		@ResponseBody
-		public JsonResult queryHotProduct() throws IOException
+		public Response queryHotProduct() throws IOException
 		{
-			JsonResult jsonResult = new JsonResult();
+			Response response = new Response();
 			Map<String,Object> productMap = new HashMap<String,Object>();
 			productMap.put("status", Constants.product_status_publish);
 			productMap.put("count", Constants.hot_product_count);
 			productMap.put("order", "hit");
-	        jsonResult = productService.queryRecommendHotProduct(productMap);
+	        response = productService.queryRecommendHotProduct(productMap);
 
-			return jsonResult;
+			return response;
 		}
 }

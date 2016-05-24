@@ -1,6 +1,6 @@
 package com.zhuhuibao.mybatis.sitemail.service;
 
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageLog;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
@@ -35,9 +35,9 @@ public class SiteMailService {
      * @param siteMail  站内信信息
      * @return
      */
-    public JsonResult addSiteMail(MessageText siteMail)
+    public Response addSiteMail(MessageText siteMail)
     {
-        JsonResult jsonResult  = new JsonResult();
+        Response response = new Response();
         try
         {
 
@@ -51,12 +51,12 @@ public class SiteMailService {
         catch(Exception e)
         {
             log.error("add offer price error!",e);
-            jsonResult.setCode(MsgCodeConstant.response_status_400);
-            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return jsonResult;
+            response.setCode(MsgCodeConstant.response_status_400);
+            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            return response;
         }
-        return jsonResult;
+        return response;
     }
 
     /**

@@ -2,7 +2,7 @@ package com.zhuhuibao.exception;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,12 +21,12 @@ public class GlobalExceptionController {
      * String
      */
     @RequestMapping(value = "/error_400", produces = "text/html;charset=UTF-8")
-    @ApiOperation(value = "页面请求400错误", response = JsonResult.class, notes = "400错误",httpMethod = "GET")
-    public JsonResult error_400() throws Exception {
-        JsonResult jsonResult = new JsonResult();
-        jsonResult.setMsgCode(400);
-        jsonResult.setMessage("错误请求,服务器不理解请求的语法");
-        return jsonResult;
+    @ApiOperation(value = "页面请求400错误", response = Response.class, notes = "400错误",httpMethod = "GET")
+    public Response error_400() throws Exception {
+        Response response = new Response();
+        response.setMsgCode(400);
+        response.setMessage("错误请求,服务器不理解请求的语法");
+        return response;
     }
 
     /**
@@ -37,12 +37,12 @@ public class GlobalExceptionController {
      */
 
     @RequestMapping(value = "/error_403", produces = "text/html;charset=UTF-8")
-    @ApiOperation(value = "页面请求403错误", response = JsonResult.class, notes = "403错误",httpMethod = "GET")
-    public JsonResult error_403() throws Exception {
-        JsonResult jsonResult = new JsonResult();
-        jsonResult.setMsgCode(403);
-        jsonResult.setMessage("（禁止） 服务器拒绝请求。");
-        return jsonResult;
+    @ApiOperation(value = "页面请求403错误", response = Response.class, notes = "403错误",httpMethod = "GET")
+    public Response error_403() throws Exception {
+        Response response = new Response();
+        response.setMsgCode(403);
+        response.setMessage("（禁止） 服务器拒绝请求。");
+        return response;
     }
 
     /**
@@ -52,12 +52,12 @@ public class GlobalExceptionController {
      * String
      */
     @RequestMapping(value = "/error_404", produces = "text/html;charset=UTF-8")
-    @ApiOperation(value = "页面请求404错误", response = JsonResult.class, notes = "404错误",httpMethod = "GET")
-    public JsonResult error_404() throws Exception {
-        JsonResult jsonResult = new JsonResult();
-        jsonResult.setMsgCode(404);
-        jsonResult.setMessage("服务器找不到请求的网页");
-        return jsonResult;
+    @ApiOperation(value = "页面请求404错误", response = Response.class, notes = "404错误",httpMethod = "GET")
+    public Response error_404() throws Exception {
+        Response response = new Response();
+        response.setMsgCode(404);
+        response.setMessage("服务器找不到请求的网页");
+        return response;
     }
 
     /**
@@ -67,12 +67,12 @@ public class GlobalExceptionController {
      * String
      */
     @RequestMapping(value = "/error_405", produces = "text/html;charset=UTF-8")
-    @ApiOperation(value = "页面请求405错误", response = JsonResult.class, notes = "405错误",httpMethod = "GET")
-    public JsonResult error_405() throws Exception {
-        JsonResult jsonResult = new JsonResult();
-        jsonResult.setMsgCode(405);
-        jsonResult.setMessage("禁用请求中指定的方法");
-        return jsonResult;
+    @ApiOperation(value = "页面请求405错误", response = Response.class, notes = "405错误",httpMethod = "GET")
+    public Response error_405() throws Exception {
+        Response response = new Response();
+        response.setMsgCode(405);
+        response.setMessage("禁用请求中指定的方法");
+        return response;
     }
 
     /**
@@ -82,12 +82,12 @@ public class GlobalExceptionController {
      * String
      */
     @RequestMapping(value = "/error_413", produces = "text/html;charset=UTF-8")
-    @ApiOperation(value = "页面请求413错误", response = JsonResult.class, notes = "413错误",httpMethod = "GET")
-    public JsonResult error_413() throws Exception {
-        JsonResult jsonResult = new JsonResult();
-        jsonResult.setMsgCode(413);
-        jsonResult.setMessage("（请求实体过大） 服务器无法处理请求，因为请求实体过大，超出服务器的处理能力。 ");
-        return jsonResult;
+    @ApiOperation(value = "页面请求413错误", response = Response.class, notes = "413错误",httpMethod = "GET")
+    public Response error_413() throws Exception {
+        Response response = new Response();
+        response.setMsgCode(413);
+        response.setMessage("（请求实体过大） 服务器无法处理请求，因为请求实体过大，超出服务器的处理能力。 ");
+        return response;
     }
 
     /**
@@ -96,12 +96,12 @@ public class GlobalExceptionController {
      * String
      */
     @RequestMapping(value ="/error_500", produces = "text/html;charset=UTF-8")
-    @ApiOperation(value = "页面请求500错误", response = JsonResult.class, notes = "500错误",httpMethod = "GET")
-    public JsonResult error_500() throws Exception {
-        JsonResult jsonResult = new JsonResult();
-        jsonResult.setMsgCode(500);
-        jsonResult.setMessage("服务器处理失败");
-        return jsonResult;
+    @ApiOperation(value = "页面请求500错误", response = Response.class, notes = "500错误",httpMethod = "GET")
+    public Response error_500() throws Exception {
+        Response response = new Response();
+        response.setMsgCode(500);
+        response.setMessage("服务器处理失败");
+        return response;
     }
 
 }

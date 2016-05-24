@@ -1,6 +1,6 @@
 package com.zhuhuibao.mybatis.oms.service;
 
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.pojo.OmsMemBean;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -23,21 +23,21 @@ public class OmsMemService {
     @Autowired
     private MemberMapper memberMapper;
 
-    public JsonResult getAllMemInfo(Paging<OmsMemBean> pager, OmsMemBean member){
-        JsonResult jsonResult = new JsonResult();
+    public Response getAllMemInfo(Paging<OmsMemBean> pager, OmsMemBean member){
+        Response response = new Response();
         List<OmsMemBean> memberList = memberMapper.findAllMemberByPager(pager.getRowBounds(),member);
         pager.result(memberList);
-        jsonResult.setCode(200);
-        jsonResult.setData(pager);
-        return jsonResult;
+        response.setCode(200);
+        response.setData(pager);
+        return response;
     }
 
-    public JsonResult getAllMemCertificate(Paging<OmsMemBean> pager, OmsMemBean member){
-        JsonResult jsonResult = new JsonResult();
+    public Response getAllMemCertificate(Paging<OmsMemBean> pager, OmsMemBean member){
+        Response response = new Response();
         List<OmsMemBean> memCertificateList = memberMapper.findAllMemCertificateByPager(pager.getRowBounds(),member);
         pager.result(memCertificateList);
-        jsonResult.setCode(200);
-        jsonResult.setData(pager);
-        return jsonResult;
+        response.setCode(200);
+        response.setData(pager);
+        return response;
     }
 }

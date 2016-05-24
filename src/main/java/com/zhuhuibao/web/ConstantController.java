@@ -3,7 +3,7 @@ package com.zhuhuibao.web;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.mybatis.constants.entity.Constant;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
@@ -35,9 +35,9 @@ public class ConstantController {
 
 
     @RequestMapping(value = "findByType", method = RequestMethod.GET)
-    @ApiOperation(value = "根据类型查询", notes = "根据类型查询", response = JsonResult.class)
-    public JsonResult findByType(@ApiParam(value = "类型") @RequestParam String type) {
-        JsonResult result = new JsonResult();
+    @ApiOperation(value = "根据类型查询", notes = "根据类型查询", response = Response.class)
+    public Response findByType(@ApiParam(value = "类型") @RequestParam String type) {
+        Response result = new Response();
         try {
             List<Constant> list = service.findByType(type);
             result.setData(list);
@@ -51,9 +51,9 @@ public class ConstantController {
 
 
     @RequestMapping(value = "findJobByID", method = RequestMethod.GET)
-    @ApiOperation(value = "测试", notes = "测试", response = JsonResult.class)
-    public JsonResult findJobByID(@ApiParam(value = "id") @RequestParam String id) {
-        JsonResult result = new JsonResult();
+    @ApiOperation(value = "测试", notes = "测试", response = Response.class)
+    public Response findJobByID(@ApiParam(value = "id") @RequestParam String id) {
+        Response result = new Response();
         try {
 
             Map<String, Object> map = service.findJobByID(id);

@@ -1,6 +1,6 @@
 package com.zhuhuibao.utils.file;
 
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import org.slf4j.Logger;
@@ -23,8 +23,8 @@ public class FileUtil {
      * @param fileurl  文件完整路径
      * @throws IOException
      */
-    public static JsonResult downloadFile(HttpServletResponse response, String fileurl) throws IOException {
-        JsonResult jsonResult = new JsonResult();
+    public static Response downloadFile(HttpServletResponse response, String fileurl) throws IOException {
+        Response jsonResult = new Response();
         try {
             File file = new File(fileurl);
             if (file.exists()) {   //如果文件存在

@@ -1,4 +1,4 @@
-package com.zhuhuibao.common.pojo;
+package com.zhuhuibao.common;
 
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author pl
  */
 @ApiModel(value="后台返回前端的统一JSON格式", description="JSON格式定义")
-public class JsonResult implements Serializable{
+public class Response implements Serializable{
 
 	private static final long serialVersionUID = 4273005680206220420L;
 	/**

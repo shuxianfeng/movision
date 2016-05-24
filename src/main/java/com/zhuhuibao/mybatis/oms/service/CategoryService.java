@@ -5,7 +5,7 @@ package com.zhuhuibao.mybatis.oms.service;
  */
 
 import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.pojo.SysBean;
 import com.zhuhuibao.mybatis.oms.entity.Category;
@@ -158,8 +158,8 @@ public class CategoryService {
     /**
      * 查询所有系统信息
      */
-    public JsonResult findAllSystem(){
-        JsonResult result = new JsonResult();
+    public Response findAllSystem(){
+        Response result = new Response();
         List<ResultBean> sysList = categoryMapper.findSystemList();
         List<SysBean> allList = categoryMapper.searchAll();
         List list = new ArrayList();

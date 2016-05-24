@@ -4,7 +4,7 @@ package com.zhuhuibao.mybatis.memCenter.service;
  * Created by cxx on 2016/3/14 0014.
  */
 
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
@@ -129,8 +129,8 @@ public class AccountService {
     /**
      * 代理商邮件注册
      */
-    public JsonResult agentRegister(String email){
-        JsonResult result = new JsonResult();
+    public Response agentRegister(String email){
+        Response result = new Response();
         Member member = new Member();
         String md5Pwd = new Md5Hash("123456",null,2).toString();
         member.setEmail(email);
@@ -154,12 +154,12 @@ public class AccountService {
 
     /**
      * 获得跳转页面的URL
-     * @param jsonResult
+     * @param response
      * @return
      */
-    public String getRedirectUrl(JsonResult jsonResult) {
+    public String getRedirectUrl(Response response) {
         String redirectUrl;
-        if(jsonResult.getCode()==200){
+        if(response.getCode()==200){
             redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page");
         }else{
             redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.replay.page");
