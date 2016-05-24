@@ -256,11 +256,10 @@
     order by tr.updateTime desc
   </select>
   <select id="findAllReceiveResume" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select r.id,j.name,r.realName,re.publishDate as publishTime ,c.name as experienceYear from t_i_resume r
+     select r.id,j.name,r.realName,re.publishDate as publishTime ,(DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear)  as experienceYear from t_i_resume r
     left join t_i_jobRelresume re on re.resumeID = r.id
     left join t_i_job j on j.id = re.jobID
-    left join t_dictionary_constant c on c.code = r.experienceYear
-    where re.jobID in (select id from t_i_job where createid=#{id}) and c.type = 3
+    where re.jobID in (select id from t_i_job where createid=#{id}) order by publishTime desc
   </select>
   <select id="searchResumeById" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT * from t_i_resume WHERE id = #{id}
