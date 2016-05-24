@@ -5,7 +5,7 @@ package com.zhuhuibao.common.constant;
  * @author Administrator
  * @version 2016/5/17 0017
  */
-public interface ProjectConstant {
+public class ProjectConstant {
 
     /**
      * 隐藏星
