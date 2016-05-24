@@ -5,8 +5,7 @@ import java.util.*;
 import com.zhuhuibao.mybatis.product.entity.ProductWithMember;
 import org.apache.ibatis.session.RowBounds;
 
-import com.zhuhuibao.common.ResultBean;
-import com.zhuhuibao.mybatis.memCenter.entity.Brand;
+import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.oms.entity.CategoryAssemble;
 import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.mybatis.product.entity.ProductMap;

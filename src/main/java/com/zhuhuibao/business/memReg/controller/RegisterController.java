@@ -25,8 +25,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.taobao.api.ApiException;
-import com.zhuhuibao.common.constant.Constant;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
@@ -153,7 +153,7 @@ public class RegisterController {
 		log.debug("verifyCode == " + verifyCode);
 		//发送验证码到手机
 		//SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-		SDKSendTaoBaoSMS.sendRegisterSMS(mobile, verifyCode, Constant.sms_time);
+		SDKSendTaoBaoSMS.sendRegisterSMS(mobile, verifyCode, Constants.sms_time);
 		Validateinfo info = new Validateinfo();
 		info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
 		info.setCheckCode(verifyCode);
@@ -184,7 +184,7 @@ public class RegisterController {
 		log.debug("verifyCode == " + verifyCode);
 		//发送验证码到手机
 		//SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-		SDKSendTaoBaoSMS.sendFindPwdSMS(mobile, verifyCode, Constant.sms_time);
+		SDKSendTaoBaoSMS.sendFindPwdSMS(mobile, verifyCode, Constants.sms_time);
 		Validateinfo info = new Validateinfo();
 		info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
 		info.setCheckCode(verifyCode);

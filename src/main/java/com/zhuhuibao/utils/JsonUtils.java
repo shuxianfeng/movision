@@ -12,8 +12,6 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
-import com.zhuhuibao.common.JsonResult;
-
 public class JsonUtils {
 
     private static final ObjectMapper om = new ObjectMapper();

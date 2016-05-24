@@ -2,8 +2,8 @@ package com.zhuhuibao.business.oms.member;
 
 import java.io.IOException;
 
-import com.zhuhuibao.common.OmsMemBean;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.pojo.OmsMemBean;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;

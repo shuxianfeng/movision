@@ -3,16 +3,16 @@ package com.zhuhuibao.business.member;
 import java.io.IOException;
 import java.util.Map;
 
+import com.zhuhuibao.fsearch.pojo.ContractorSearchSpec;
+import com.zhuhuibao.fsearch.pojo.SupplierSearchSpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.service.impl.MembersService;
-import com.zhuhuibao.pojo.ContractorSearchSpec;
-import com.zhuhuibao.pojo.SupplierSearchSpec;
+import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.fsearch.service.impl.MembersService;
 import org.springframework.web.bind.annotation.RestController;
 
 /**

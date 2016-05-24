@@ -1,8 +1,8 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.*;
-import com.zhuhuibao.common.constant.Constant;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -37,7 +37,7 @@ public class ResumeService {
     /**
      * 发布简历
      */
-    public JsonResult setUpResume(Resume resume,String id){
+    public JsonResult setUpResume(Resume resume, String id){
         JsonResult jsonResult = new JsonResult();
         int isSetUp = resumeMapper.setUpResume(resume);
         try{
@@ -182,11 +182,11 @@ public class ResumeService {
         for(int i=0;i<resumeList.size();i++){
             Resume resume = resumeList.get(i);
             Map map = new HashMap();
-            map.put(Constant.id,resume.getId());
-            map.put(Constant.name,resume.getName());
-            map.put(Constant.publishTime,resume.getPublishTime());
-            map.put(Constant.realName,resume.getRealName());
-            map.put(Constant.experienceYear,resume.getExperienceYear());
+            map.put(Constants.id,resume.getId());
+            map.put(Constants.name,resume.getName());
+            map.put(Constants.publishTime,resume.getPublishTime());
+            map.put(Constants.realName,resume.getRealName());
+            map.put(Constants.experienceYear,resume.getExperienceYear());
             list.add(map);
         }
         pager.result(list);
@@ -271,15 +271,15 @@ public class ResumeService {
             for (int i = 0; i < resumeList.size(); i++) {
                 Resume resume = resumeList.get(i);
                 Map map = new HashMap();
-                map.put(Constant.id, resume.getId());
-                map.put(Constant.logo, resume.getPhoto());
-                map.put(Constant.status, resume.getStatus());
-                map.put(Constant.area, resume.getJobCity());
-                map.put(Constant.name, resume.getRealName());
-                map.put(Constant.position, resume.getPost());
-                map.put(Constant.experienceYear, resume.getWorkYear());
-                map.put(Constant.age, resume.getBirthYear());
-                map.put(Constant.salary, resume.getHopeSalary());
+                map.put(Constants.id, resume.getId());
+                map.put(Constants.logo, resume.getPhoto());
+                map.put(Constants.status, resume.getStatus());
+                map.put(Constants.area, resume.getJobCity());
+                map.put(Constants.name, resume.getRealName());
+                map.put(Constants.position, resume.getPost());
+                map.put(Constants.experienceYear, resume.getWorkYear());
+                map.put(Constants.age, resume.getBirthYear());
+                map.put(Constants.salary, resume.getHopeSalary());
                 list.add(map);
             }
         }catch(Exception e)

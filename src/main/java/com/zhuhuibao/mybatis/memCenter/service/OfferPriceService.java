@@ -6,9 +6,10 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import com.zhuhuibao.common.*;
-import com.zhuhuibao.common.constant.Constant;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.pojo.AskPriceBean;
+import com.zhuhuibao.common.pojo.JsonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,7 @@ public class OfferPriceService {
 			if(price.getBillurl() != null && !price.getBillurl().equals(""))
 			{
 				String fileUrl = price.getBillurl();
-				fileUrl = ApiConstants.getUploadDoc()+ Constant.upload_price_document_url+"/"+fileUrl;
+				fileUrl = ApiConstants.getUploadDoc()+ Constants.upload_price_document_url+"/"+fileUrl;
 				File file = new File(fileUrl);
 				if(file.exists()){
 					priceMapper.insertSelective(price);

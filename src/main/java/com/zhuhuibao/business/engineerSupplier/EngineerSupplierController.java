@@ -1,6 +1,6 @@
 package com.zhuhuibao.business.engineerSupplier;
 
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;

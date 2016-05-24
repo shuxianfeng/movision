@@ -19,8 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.zhuhuibao.common.constant.ApiConstants;
-import com.zhuhuibao.common.constant.Constant;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferPrice;
@@ -143,7 +143,7 @@ public class OfferPriceController {
 			response.addHeader("Cache-Control", "post-check=0, pre-check=0");
 			response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
 			response.setContentType("application/octet-stream");
-			fileurl = ApiConstants.getUploadDoc() + Constant.upload_price_document_url + "/" + fileurl;
+			fileurl = ApiConstants.getUploadDoc() + Constants.upload_price_document_url + "/" + fileurl;
 			jsonResult = FileUtil.downloadFile(response, fileurl);
 		}
 		catch(Exception e)

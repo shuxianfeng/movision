@@ -1,6 +1,6 @@
 package com.zhuhuibao.web;
 
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.mybatis.oms.service.UserService;
 import com.zhuhuibao.security.resubmit.TokenHelper;
 import com.zhuhuibao.shiro.realm.OMSRealm;

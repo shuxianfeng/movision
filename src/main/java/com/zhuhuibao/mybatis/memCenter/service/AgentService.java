@@ -1,7 +1,9 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.*;
-import com.zhuhuibao.common.constant.Constant;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.pojo.AgentBean;
+import com.zhuhuibao.common.pojo.CommonBean;
+import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Agent;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.AgentMapper;
@@ -139,24 +141,24 @@ public class AgentService {
             List list = new ArrayList();
             Map map = new HashMap();
             Map map3 = new HashMap();
-            map3.put(Constant.id,member.getId());
-            map3.put(Constant.name,member.getEnterpriseName());
-            map3.put(Constant.logo,member.getEnterpriseLogo());
-            map3.put(Constant.webSite,member.getEnterpriseWebSite());
-            map3.put(Constant.address,member.getAddress());
+            map3.put(Constants.id,member.getId());
+            map3.put(Constants.name,member.getEnterpriseName());
+            map3.put(Constants.logo,member.getEnterpriseLogo());
+            map3.put(Constants.webSite,member.getEnterpriseWebSite());
+            map3.put(Constants.address,member.getAddress());
             map.put("manufactor",map3);
             for(int i=0;i<provinceList.size();i++){
                 ResultBean province = provinceList.get(i);
                 Map map1 = new HashMap();
-                map1.put(Constant.id,province.getCode());
-                map1.put(Constant.name,province.getName());
+                map1.put(Constants.id,province.getCode());
+                map1.put(Constants.name,province.getName());
                 List list1 = new ArrayList();
                 for(int j=0;j<agentList.size();j++){
                     ResultBean agent = agentList.get(j);
                     Map map2 = new HashMap();
                     if(agent.getSmallIcon().contains(province.getCode())){
-                        map2.put(Constant.id,agent.getCode());
-                        map2.put(Constant.name,agent.getName());
+                        map2.put(Constants.id,agent.getCode());
+                        map2.put(Constants.name,agent.getName());
                         list1.add(map2);
                     }
                 }
@@ -197,21 +199,21 @@ public class AgentService {
             List list = new ArrayList();
             Map map = new HashMap();
             Map map3 = new HashMap();
-            map3.put(Constant.id,resultBean.getCode());
-            map3.put(Constant.name,resultBean.getName());
+            map3.put(Constants.id,resultBean.getCode());
+            map3.put(Constants.name,resultBean.getName());
             map.put("manufactor",map3);
             for(int i=0;i<provinceList.size();i++){
                 ResultBean province = provinceList.get(i);
                 Map map1 = new HashMap();
-                map1.put(Constant.id,province.getCode());
-                map1.put(Constant.name,province.getName());
+                map1.put(Constants.id,province.getCode());
+                map1.put(Constants.name,province.getName());
                 List list1 = new ArrayList();
                 for(int j=0;j<agentList.size();j++){
                     ResultBean agent = agentList.get(j);
                     Map map2 = new HashMap();
                     if(agent.getSmallIcon().contains(province.getCode())){
-                        map2.put(Constant.id,agent.getCode());
-                        map2.put(Constant.name,agent.getName());
+                        map2.put(Constants.id,agent.getCode());
+                        map2.put(Constants.name,agent.getName());
                         list1.add(map2);
                     }
                 }

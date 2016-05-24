@@ -1,7 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.constant.Constant;
-import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
 import com.zhuhuibao.mybatis.memCenter.entity.CooperationType;
 import com.zhuhuibao.mybatis.memCenter.mapper.CooperationMapper;
@@ -53,15 +53,15 @@ public class CooperationService {
             for(int i=0;i<cooperationTypeList.size();i++){
                 CooperationType cooperationType = cooperationTypeList.get(i);
                 Map map = new HashMap();
-                map.put(Constant.code,cooperationType.getId());
-                map.put(Constant.name,cooperationType.getName());
+                map.put(Constants.code,cooperationType.getId());
+                map.put(Constants.name,cooperationType.getName());
                 List list = new ArrayList();
                 for(int y=0;y<subCooperationTypeList.size();y++){
                     CooperationType subCooperation = subCooperationTypeList.get(y);
                     if(cooperationType.getId().equals(subCooperation.getParentId())){
                         Map map1 = new HashMap();
-                        map1.put(Constant.code,subCooperation.getId());
-                        map1.put(Constant.name,subCooperation.getName());
+                        map1.put(Constants.code,subCooperation.getId());
+                        map1.put(Constants.name,subCooperation.getName());
                         list.add(map1);
                     }
                 }
@@ -84,8 +84,8 @@ public class CooperationService {
             for(int y=0;y<subCooperationTypeList.size();y++){
                 CooperationType subCooperation = subCooperationTypeList.get(y);
                 Map map = new HashMap();
-                map.put(Constant.code,subCooperation.getId());
-                map.put(Constant.name,subCooperation.getName());
+                map.put(Constants.code,subCooperation.getId());
+                map.put(Constants.name,subCooperation.getName());
                 list.add(map);
             }
             return list;
@@ -104,8 +104,8 @@ public class CooperationService {
             for(int i=0;i<resultBeanList.size();i++){
                 ResultBean resultBean = resultBeanList.get(i);
                 Map map = new HashMap();
-                map.put(Constant.code,resultBean.getCode());
-                map.put(Constant.name,resultBean.getName());
+                map.put(Constants.code,resultBean.getCode());
+                map.put(Constants.name,resultBean.getName());
                 list.add(map);
             }
             return list;

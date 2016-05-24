@@ -39,7 +39,7 @@
     <result column="attach" property="attach" jdbcType="VARCHAR" />
     <result column="isPublic" property="isPublic" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMap" type="com.zhuhuibao.common.ResultBean" >
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.ResultBean" >
     <id column="code" property="code" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>

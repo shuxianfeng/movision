@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zhuhuibao.common.constant.Constant;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.product.mapper.ProductMapper;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -108,7 +108,7 @@ public class ProductService {
 					product.setNumber("1");
 				}
 				if (product.getPrice() == null || product.getPrice().trim().equals("")) {
-					product.setPrice(Constant.product_price);
+					product.setPrice(Constants.product_price);
 				}
 				productMapper.updateByPrimaryKeySelective(product);
 			}
@@ -320,13 +320,13 @@ public class ProductService {
 			ProductWithMember product) {
 		//面包屑
 		Map<String,Object> navigationMap = new TreeMap<String,Object>();
-		navigationMap.put(Constant.product_field_fcateid, product.getFcateid());
-		navigationMap.put(Constant.product_field_fcateName,product.getFcateName());
-		navigationMap.put(Constant.product_field_scateid, product.getScateid());
-		navigationMap.put(Constant.product_field_scateName,product.getScateName());
-		navigationMap.put(Constant.product_field_brandid, product.getBrandid());
-		navigationMap.put(Constant.product_field_brandName, product.getCNName());
-		productMap.put(Constant.product_field_navigation, navigationMap);
+		navigationMap.put(Constants.product_field_fcateid, product.getFcateid());
+		navigationMap.put(Constants.product_field_fcateName,product.getFcateName());
+		navigationMap.put(Constants.product_field_scateid, product.getScateid());
+		navigationMap.put(Constants.product_field_scateName,product.getScateName());
+		navigationMap.put(Constants.product_field_brandid, product.getBrandid());
+		navigationMap.put(Constants.product_field_brandName, product.getCNName());
+		productMap.put(Constants.product_field_navigation, navigationMap);
 		setMemberInfo(productMap, product);
 
 
@@ -342,27 +342,27 @@ public class ProductService {
 			for(Map.Entry<String,List<Long>> entry:imgsMap.entrySet())
 			{
 				Map<String,Object> imgMap = new TreeMap<String,Object>();
-				imgMap.put(Constant.product_field_skuid, entry.getValue());
-				imgMap.put(Constant.product_field_imgUrl,entry.getKey());
+				imgMap.put(Constants.product_field_skuid, entry.getValue());
+				imgMap.put(Constants.product_field_imgUrl,entry.getKey());
 				imgList.add(imgMap);
 			}
 		}
-		productMap.put(Constant.product_field_imgs, imgList);
+		productMap.put(Constants.product_field_imgs, imgList);
 		List<Map<String,Object>> prdList = new ArrayList<Map<String,Object>>();
 		Map<String,Object> prdMap = new TreeMap<String,Object>();
 		Map<String,Object> prdInfoMap = new TreeMap<String,Object>();
-		prdMap.put(Constant.product_field_skuid, product.getId());
-		prdMap.put(Constant.product_field_name, product.getName());
-		prdMap.put(Constant.product_field_price, product.getPrice());
-		prdMap.put(Constant.product_field_number, product.getNumber());
-		prdMap.put(Constant.product_field_unit, product.getUnit());
-		prdMap.put(Constant.product_field_defalut, new Boolean(true));
-		prdInfoMap.put(Constant.product_field_k, "");
-		prdInfoMap.put(Constant.product_field_v, prdMap);
+		prdMap.put(Constants.product_field_skuid, product.getId());
+		prdMap.put(Constants.product_field_name, product.getName());
+		prdMap.put(Constants.product_field_price, product.getPrice());
+		prdMap.put(Constants.product_field_number, product.getNumber());
+		prdMap.put(Constants.product_field_unit, product.getUnit());
+		prdMap.put(Constants.product_field_defalut, new Boolean(true));
+		prdInfoMap.put(Constants.product_field_k, "");
+		prdInfoMap.put(Constants.product_field_v, prdMap);
 		prdList.add(prdInfoMap);
-		productMap.put(Constant.product_field_products, prdList);
+		productMap.put(Constants.product_field_products, prdList);
 		List<Map<String,Object>> paramList = new ArrayList<Map<String,Object>>();
-		productMap.put(Constant.product_field_params, paramList);
+		productMap.put(Constants.product_field_params, paramList);
 	}
 
 	/**
@@ -398,11 +398,11 @@ public class ProductService {
 			Map<String,Object> prdMap = new TreeMap<String,Object>();
 			StringBuilder sbkey = new StringBuilder();
 			Product prd = productList.get(i);
-			prdMap.put(Constant.product_field_skuid, prd.getId());
-			prdMap.put(Constant.product_field_name, prd.getName());
-			prdMap.put(Constant.product_field_price, prd.getPrice());
-			prdMap.put(Constant.product_field_number, prd.getNumber());
-			prdMap.put(Constant.product_field_unit, prd.getUnit());
+			prdMap.put(Constants.product_field_skuid, prd.getId());
+			prdMap.put(Constants.product_field_name, prd.getName());
+			prdMap.put(Constants.product_field_price, prd.getPrice());
+			prdMap.put(Constants.product_field_number, prd.getNumber());
+			prdMap.put(Constants.product_field_unit, prd.getUnit());
 			if(id.equals(prd.getId()))
 			{
 				setNavigation(productMap, prdMap, prd);
@@ -431,11 +431,11 @@ public class ProductService {
 				sbkey.append("|");
 			}
 			String key = sbkey.delete(sbkey.lastIndexOf("|"), sbkey.length()).toString();
-			prdInfoMap.put(Constant.product_field_k, key);
-			prdInfoMap.put(Constant.product_field_v, prdMap);
+			prdInfoMap.put(Constants.product_field_k, key);
+			prdInfoMap.put(Constants.product_field_v, prdMap);
 			prdList.add(prdInfoMap);
 		}
-		productMap.put(Constant.product_field_products, prdList);
+		productMap.put(Constants.product_field_products, prdList);
 	}
 
 	/**
@@ -446,15 +446,15 @@ public class ProductService {
 	 */
 	private void setNavigation(Map<String, Object> productMap,
 			Map<String, Object> prdMap, Product prd) {
-		prdMap.put(Constant.product_field_defalut, new Boolean(true));
+		prdMap.put(Constants.product_field_defalut, new Boolean(true));
 		Map<String,Object> navigationMap = new TreeMap<String,Object>();
-		navigationMap.put(Constant.product_field_fcateid, prd.getFcateid());
-		navigationMap.put(Constant.product_field_fcateName,prd.getFcateName());
-		navigationMap.put(Constant.product_field_scateid, prd.getScateid());
-		navigationMap.put(Constant.product_field_scateName,prd.getScateName());
-		navigationMap.put(Constant.product_field_brandid, prd.getBrandid());
-		navigationMap.put(Constant.product_field_brandName, prd.getCNName());
-		productMap.put(Constant.product_field_navigation, navigationMap);
+		navigationMap.put(Constants.product_field_fcateid, prd.getFcateid());
+		navigationMap.put(Constants.product_field_fcateName,prd.getFcateName());
+		navigationMap.put(Constants.product_field_scateid, prd.getScateid());
+		navigationMap.put(Constants.product_field_scateName,prd.getScateName());
+		navigationMap.put(Constants.product_field_brandid, prd.getBrandid());
+		navigationMap.put(Constants.product_field_brandName, prd.getCNName());
+		productMap.put(Constants.product_field_navigation, navigationMap);
 	}
 
     /**
@@ -478,12 +478,12 @@ public class ProductService {
 			for(Map.Entry<String,List<Long>> entry:a.entrySet())
 			{
 				Map<String,Object> imgsMap = new TreeMap<String,Object>();
-				imgsMap.put(Constant.product_field_skuid, entry.getValue());
-				imgsMap.put(Constant.product_field_imgUrl,entry.getKey());
+				imgsMap.put(Constants.product_field_skuid, entry.getValue());
+				imgsMap.put(Constants.product_field_imgUrl,entry.getKey());
 				imgList.add(imgsMap);
 			}
 		}
-		productMap.put(Constant.product_field_imgs, imgList);
+		productMap.put(Constants.product_field_imgs, imgList);
 	}
 
     /**
@@ -502,8 +502,8 @@ public class ProductService {
 			{
 				Map<String,Object> paramMap  = new TreeMap<String,Object>();
 				Map<String,Object> paramValueMap  = new TreeMap<String,Object>();
-				paramMap.put(Constant.product_field_key, p.getId());
-				paramMap.put(Constant.product_field_value,p.getPname());
+				paramMap.put(Constants.product_field_key, p.getId());
+				paramMap.put(Constants.product_field_value,p.getPname());
 				String pValue = p.getPvalue();
 				String[] arr_pValue = null;
 				if(pValue.indexOf(",") > 0)
@@ -521,12 +521,12 @@ public class ProductService {
 					arr_pValue[0] = pValue;
 					paramValueMap.put(pValue, "0");
 				}
-				paramMap.put(Constant.product_field_values,arr_pValue);
+				paramMap.put(Constants.product_field_values,arr_pValue);
 				paramValuesMap.put(String.valueOf(p.getId()), paramValueMap);
 				paramList.add(paramMap);
 			}
 		}
-		productMap.put(Constant.product_field_params, paramList);
+		productMap.put(Constants.product_field_params, paramList);
 	}
 
 	/**
@@ -715,10 +715,10 @@ public class ProductService {
     	{
     		product = productMapper.selectByPrimaryKey(id);
     		Map<String,Object> map = new TreeMap<String,Object>();
-    		map.put(Constant.product_field_id,product.getId());
-    		map.put(Constant.product_field_detailDesc, product.getDetailDesc());
-    		map.put(Constant.product_field_paras, product.getParas());
-    		map.put(Constant.product_field_service, product.getService());
+    		map.put(Constants.product_field_id,product.getId());
+    		map.put(Constants.product_field_detailDesc, product.getDetailDesc());
+    		map.put(Constants.product_field_paras, product.getParas());
+    		map.put(Constants.product_field_service, product.getService());
     		jsonResult.setData(map);
     	}
     	catch(Exception e)

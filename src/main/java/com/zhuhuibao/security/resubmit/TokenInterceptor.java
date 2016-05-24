@@ -1,6 +1,6 @@
 package com.zhuhuibao.security.resubmit;
 
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

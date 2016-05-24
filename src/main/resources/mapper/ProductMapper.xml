@@ -25,7 +25,7 @@
     <result column="paras" jdbcType="LONGVARCHAR" property="paras" />
     <result column="service" jdbcType="LONGVARCHAR" property="service" />
   </resultMap>
-  <resultMap id="ResultMap" type="com.zhuhuibao.common.ResultBean" >
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.ResultBean" >
     <result column="id" property="code" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
@@ -370,7 +370,7 @@
     select t.id,t.detailDesc,t.paras,t.service from t_p_product t
     where t.id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="findSubSystem" resultType="com.zhuhuibao.common.ResultBean">
+  <select id="findSubSystem" resultType="com.zhuhuibao.common.pojo.ResultBean">
     SELECT distinct c.id as code,c.name as name
     FROM  t_p_product p
     LEFT JOIN t_p_category c ON p.scateid = c.id

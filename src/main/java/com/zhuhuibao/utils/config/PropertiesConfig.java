@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import com.zhuhuibao.utils.search.FileUtil;
-import com.zhuhuibao.utils.search.FileUtil.ReadLineHandler;
+import com.zhuhuibao.fsearch.utils.FileUtil;
+import com.zhuhuibao.fsearch.utils.FileUtil.ReadLineHandler;
 
 public class PropertiesConfig extends Config {
 

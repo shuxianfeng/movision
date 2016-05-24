@@ -1,6 +1,5 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
-import com.zhuhuibao.common.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;

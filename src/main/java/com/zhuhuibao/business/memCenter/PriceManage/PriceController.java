@@ -2,10 +2,10 @@ package com.zhuhuibao.business.memCenter.PriceManage;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
-import com.zhuhuibao.common.AskPriceResultBean;
-import com.zhuhuibao.common.AskPriceSearchBean;
-import com.zhuhuibao.common.constant.Constant;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.pojo.AskPriceResultBean;
+import com.zhuhuibao.common.pojo.AskPriceSearchBean;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.service.PriceService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
@@ -83,7 +83,7 @@ public class PriceController {
         if(null != session){
             String url = uploadService.upload(req,"doc");
             Map map = new HashMap();
-            map.put(Constant.name,url);
+            map.put(Constants.name,url);
             result.setData(map);
             result.setCode(200);
         }else{

@@ -1,7 +1,7 @@
 package com.zhuhuibao.business.oms.system;
 
-import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.oms.entity.Category;
 import com.zhuhuibao.mybatis.oms.service.CategoryService;
 import com.zhuhuibao.mybatis.product.entity.Product;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 

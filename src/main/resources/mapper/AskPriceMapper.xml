@@ -29,7 +29,7 @@
     <result column="telephone" property="telephone" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMap" type="com.zhuhuibao.common.AskPriceBean" >
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.AskPriceBean" >
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="statusName" property="statusName" jdbcType="VARCHAR" />
@@ -232,7 +232,7 @@
     left join t_dictionary_area a on a.code = p.areaCode
     where p.id = #{id}
   </select>
-  <select id="findAll" parameterType="com.zhuhuibao.common.AskPriceSearchBean" resultType="com.zhuhuibao.common.AskPriceResultBean">
+  <select id="findAll" parameterType="com.zhuhuibao.common.pojo.AskPriceSearchBean" resultType="com.zhuhuibao.common.pojo.AskPriceResultBean">
     SELECT * FROM (
       select p.id,p.title,
       CASE WHEN p.endTime &gt; now() then '询价中' WHEN p.endTime &lt; now() then '结束' END AS status,
@@ -271,7 +271,7 @@
     left join t_dictionary_province pp on pp.code =m.province
     left join t_dictionary_city ct on ct.code = m.city)pa on pa.askid = o.id
   </select>
-  <select id="findAllByPager1" parameterType="com.zhuhuibao.common.AskPriceSearchBean" resultType="com.zhuhuibao.common.AskPriceResultBean">
+  <select id="findAllByPager1" parameterType="com.zhuhuibao.common.pojo.AskPriceSearchBean" resultType="com.zhuhuibao.common.pojo.AskPriceResultBean">
     select p.id,p.title,
     CASE WHEN p.endTime &gt; now() then '询价中' WHEN p.endTime &lt; now() then '结束' END AS status,
     CASE WHEN p.`type`=1 THEN '公开询价' WHEN p.`type`=2 THEN '定向询价' END AS type,

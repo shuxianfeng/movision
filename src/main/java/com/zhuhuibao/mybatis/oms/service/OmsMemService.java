@@ -1,8 +1,7 @@
 package com.zhuhuibao.mybatis.oms.service;
 
-import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.OmsMemBean;
-import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.pojo.OmsMemBean;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;

@@ -1,9 +1,9 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.constant.Constant;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
@@ -72,11 +72,11 @@ public class JobPositionService {
         for(int i=0;i<jobList.size();i++){
             Job job = jobList.get(i);
             Map map = new HashMap();
-            map.put(Constant.position,job.getName());
-            map.put(Constant.salary,job.getSalaryName());
-            map.put(Constant.area,job.getWorkArea());
-            map.put(Constant.id,job.getId());
-            map.put(Constant.publishTime,job.getPublishTime().substring(0,10));
+            map.put(Constants.position,job.getName());
+            map.put(Constants.salary,job.getSalaryName());
+            map.put(Constants.area,job.getWorkArea());
+            map.put(Constants.id,job.getId());
+            map.put(Constants.publishTime,job.getPublishTime().substring(0,10));
             list.add(map);
         }
         pager.result(list);
@@ -196,19 +196,19 @@ public class JobPositionService {
         for(int i=0;i<positionList.size();i++){
             Position position = positionList.get(i);
             Map map = new HashMap();
-            map.put(Constant.code,position.getId());
-            map.put(Constant.name,position.getName());
+            map.put(Constants.code,position.getId());
+            map.put(Constants.name,position.getName());
             List list = new ArrayList();
             for(int y=0;y<subPositionList.size();y++){
                 Position subPosition = subPositionList.get(y);
                 if(position.getId().equals(subPosition.getParentId())){
                     Map map1 = new HashMap();
-                    map1.put(Constant.code,subPosition.getId());
-                    map1.put(Constant.name,subPosition.getName());
+                    map1.put(Constants.code,subPosition.getId());
+                    map1.put(Constants.name,subPosition.getName());
                     list.add(map1);
                 }
             }
-            map.put(Constant.subPositionList,list);
+            map.put(Constants.subPositionList,list);
             list1.add(map);
         }
         jsonResult.setCode(200);
@@ -313,13 +313,13 @@ public class JobPositionService {
         for(int i=0;i<jobList.size();i++){
             Job job = jobList.get(i);
             Map map = new HashMap();
-            map.put(Constant.id,job.getId());
-            map.put(Constant.name,job.getName());
-            map.put(Constant.companyName,job.getEnterpriseName());
-            map.put(Constant.salary,job.getSalaryName());
-            map.put(Constant.publishTime,job.getPublishTime());
-            map.put(Constant.area,job.getWorkArea());
-            map.put(Constant.welfare,job.getWelfare());
+            map.put(Constants.id,job.getId());
+            map.put(Constants.name,job.getName());
+            map.put(Constants.companyName,job.getEnterpriseName());
+            map.put(Constants.salary,job.getSalaryName());
+            map.put(Constants.publishTime,job.getPublishTime());
+            map.put(Constants.area,job.getWorkArea());
+            map.put(Constants.welfare,job.getWelfare());
             list.add(map);
         }
         pager.result(list);
@@ -341,17 +341,17 @@ public class JobPositionService {
             for (int i = 0; i < jobList.size(); i++) {
                 Job job = jobList.get(i);
                 Map map = new HashMap();
-                map.put(Constant.id, job.getId());
-                map.put(Constant.name, job.getName());
+                map.put(Constants.id, job.getId());
+                map.put(Constants.name, job.getName());
                 map.put(JobConstant.JOB_KEY_POSITIONTYPE,job.getPositionType());
-                map.put(Constant.createid, job.getCreateid());
-                map.put(Constant.companyName, job.getEnterpriseName());
-                map.put(Constant.salary, job.getSalaryName());
-                map.put(Constant.publishTime, job.getPublishTime().substring(0, 10));
-                map.put(Constant.updateTime, job.getUpdateTime().substring(0, 10));
-                map.put(Constant.area, job.getWorkArea());
-                map.put(Constant.welfare, job.getWelfare());
-                map.put(Constant.logo, job.getEnterpriseLogo());
+                map.put(Constants.createid, job.getCreateid());
+                map.put(Constants.companyName, job.getEnterpriseName());
+                map.put(Constants.salary, job.getSalaryName());
+                map.put(Constants.publishTime, job.getPublishTime().substring(0, 10));
+                map.put(Constants.updateTime, job.getUpdateTime().substring(0, 10));
+                map.put(Constants.area, job.getWorkArea());
+                map.put(Constants.welfare, job.getWelfare());
+                map.put(Constants.logo, job.getEnterpriseLogo());
                 list.add(map);
             }
 
@@ -375,17 +375,17 @@ public class JobPositionService {
             for (int a = 0; a < positionList.size(); a++) {
                 Position position = positionList.get(a);
                 Map map = new HashMap();
-                map.put(Constant.name, position.getName());
+                map.put(Constants.name, position.getName());
                 List<Job> jobList = jobMapper.queryLatestJob(position.getId(), count);
                 List list1 = new ArrayList();
                 for (int i = 0; i < jobList.size(); i++) {
                     Job job = jobList.get(i);
                     Map map1 = new HashMap();
-                    map1.put(Constant.id, job.getId());
-                    map1.put(Constant.name, job.getName());
-                    map1.put(Constant.createid, job.getCreateid());
-                    map1.put(Constant.salary, job.getSalaryName());
-                    map1.put(Constant.area, job.getCity());
+                    map1.put(Constants.id, job.getId());
+                    map1.put(Constants.name, job.getName());
+                    map1.put(Constants.createid, job.getCreateid());
+                    map1.put(Constants.salary, job.getSalaryName());
+                    map1.put(Constants.area, job.getCity());
                     map1.put(JobConstant.JOB_KEY_POSITIONTYPE,job.getPositionType());
                     list1.add(map1);
                 }
@@ -414,8 +414,8 @@ public class JobPositionService {
             for (int i = 0; i < companyList.size(); i++) {
                 ResultBean company = companyList.get(i);
                 Map map = new HashMap();
-                map.put(Constant.id, company.getCode());
-                map.put(Constant.logo, company.getName());
+                map.put(Constants.id, company.getCode());
+                map.put(Constants.logo, company.getName());
                 list.add(map);
             }
         }catch(Exception e) {
@@ -453,10 +453,10 @@ public class JobPositionService {
             Job companyInfo = new Job();
             companyInfo = jobMapper.querySimilarCompanyInfo(job.getCreateid());
             Map map = new HashMap();
-            map.put(Constant.id,job.getCreateid());
-            map.put(Constant.companyName,companyInfo.getEnterpriseName());
-            map.put(Constant.size,companyInfo.getSize());
-            map.put(Constant.area,companyInfo.getCity());
+            map.put(Constants.id,job.getCreateid());
+            map.put(Constants.companyName,companyInfo.getEnterpriseName());
+            map.put(Constants.size,companyInfo.getSize());
+            map.put(Constants.area,companyInfo.getCity());
             list.add(map);
         }
         jsonResult.setData(list);

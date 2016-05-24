@@ -1,6 +1,6 @@
 package com.zhuhuibao.utils.file;
 
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import org.slf4j.Logger;
@@ -24,7 +24,6 @@ public class FileUtil {
      * @throws IOException
      */
     public static JsonResult downloadFile(HttpServletResponse response, String fileurl) throws IOException {
-        //fileurl = ApiConstants.getUploadDoc() + Constant.upload_price_document_url + "/" + fileurl;
         JsonResult jsonResult = new JsonResult();
         try {
             File file = new File(fileurl);

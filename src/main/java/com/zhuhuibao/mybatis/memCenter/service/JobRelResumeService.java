@@ -1,6 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobRelResumeMapper;
 import com.zhuhuibao.utils.pagination.util.StringUtils;

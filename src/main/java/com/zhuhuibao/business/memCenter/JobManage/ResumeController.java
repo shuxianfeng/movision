@@ -3,8 +3,8 @@ package com.zhuhuibao.business.memCenter.JobManage;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.constant.ApiConstants;
-import com.zhuhuibao.common.constant.Constant;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
@@ -120,7 +120,7 @@ public class ResumeController {
         if(null != session){
             String url = uploadService.upload(req,"job");
             Map map = new HashMap();
-            map.put(Constant.name,url);
+            map.put(Constants.name,url);
             result.setData(map);
             result.setCode(200);
         }else{
@@ -196,7 +196,7 @@ public class ResumeController {
             response.addHeader("Cache-Control", "post-check=0, pre-check=0");
             response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
             response.setContentType("application/octet-stream");
-            fileurl = ApiConstants.getUploadDoc() + Constant.upload_job_document_url + "/" + fileurl;
+            fileurl = ApiConstants.getUploadDoc() + Constants.upload_job_document_url + "/" + fileurl;
             jsonResult = FileUtil.downloadFile(response, fileurl);
         }
         catch(Exception e)

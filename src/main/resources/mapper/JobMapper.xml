@@ -285,7 +285,7 @@
     where p.parentId = #{id} and c.type = 1 and j.is_deleted =0 and mb.status != 2
     order by j.updateTime desc limit 0,#{count}
   </select>
-  <select id="greatCompanyPosition" resultType="com.zhuhuibao.common.ResultBean">
+  <select id="greatCompanyPosition" resultType="com.zhuhuibao.common.pojo.ResultBean">
     select distinct m.id as code,m.enterpriseLogo as name from t_i_job j
     left join t_m_member m on j.createid = m.id
     where m.isrecommend = 1

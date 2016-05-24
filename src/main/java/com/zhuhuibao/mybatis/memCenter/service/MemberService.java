@@ -1,7 +1,8 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.*;
-import com.zhuhuibao.common.constant.Constant;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.pojo.AccountBean;
+import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.*;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -180,7 +181,7 @@ public class MemberService {
 	/**
 	 * 查询代理商
 	 */
-	public List<AccountBean> findAgentMember(String account,String type)throws Exception
+	public List<AccountBean> findAgentMember(String account, String type)throws Exception
 	{
 		try{
 			return memberMapper.findAgentMember(account,type);
@@ -434,13 +435,13 @@ public class MemberService {
 			for(int i=0;i<memberList.size();i++){
 				Member member = memberList.get(i);
 				Map map = new HashMap();
-				map.put(Constant.id,member.getId());
-				map.put(Constant.companyName,member.getEnterpriseName());
-				map.put(Constant.webSite,member.getEnterpriseWebSite());
-				map.put(Constant.address,member.getAddress());
-				map.put(Constant.saleProductDesc,member.getSaleProductDesc());
-				map.put(Constant.logo,member.getEnterpriseLogo());
-				map.put(Constant.status,member.getStatus());
+				map.put(Constants.id,member.getId());
+				map.put(Constants.companyName,member.getEnterpriseName());
+				map.put(Constants.webSite,member.getEnterpriseWebSite());
+				map.put(Constants.address,member.getAddress());
+				map.put(Constants.saleProductDesc,member.getSaleProductDesc());
+				map.put(Constants.logo,member.getEnterpriseLogo());
+				map.put(Constants.status,member.getStatus());
 				list.add(map);
 			}
 			return list;
@@ -462,8 +463,8 @@ public class MemberService {
 				for(int i=0;i<list1.size();i++){
 					Member member = list1.get(i);
 					Map map = new HashMap();
-					map.put(Constant.id,member.getId());
-					map.put(Constant.companyName,member.getEnterpriseName());
+					map.put(Constants.id,member.getId());
+					map.put(Constants.companyName,member.getEnterpriseName());
 					list.add(map);
 				}
 			}else{
@@ -477,8 +478,8 @@ public class MemberService {
 				for(int a=0;a<list2.size();a++){
 					Member member = list2.get(a);
 					Map map1 = new HashMap();
-					map1.put(Constant.id,member.getId());
-					map1.put(Constant.companyName,member.getEnterpriseName());
+					map1.put(Constants.id,member.getId());
+					map1.put(Constants.companyName,member.getEnterpriseName());
 					list.add(map1);
 				}
 			}
@@ -543,20 +544,20 @@ public class MemberService {
 			if(member.getEnterpriseCreaterTime()!=null){
 				createTime = member.getEnterpriseCreaterTime().substring(0,10);
 			}
-			map.put(Constant.companyName,member.getEnterpriseName());
-			map.put(Constant.enterpriseTypeName,enterpriseTypeName);
-			map.put(Constant.area,address);
-			map.put(Constant.enterpriseCreaterTime,createTime);
-			map.put(Constant.registerCapital,member.getRegisterCapital());
-			map.put(Constant.employeeNumber,employeeSizeName);
-			map.put(Constant.identifyName,identifyName);
-			map.put(Constant.enterpriseDesc,member.getEnterpriseDesc());
-			map.put(Constant.saleProductDesc,member.getSaleProductDesc());
-			map.put(Constant.address,member.getAddress());
-			map.put(Constant.webSite,member.getEnterpriseWebSite());
-			map.put(Constant.telephone,member.getEnterpriseTelephone());
-			map.put(Constant.fax,member.getEnterpriseFox());
-			map.put(Constant.certificateRecord,certificateRecordList);
+			map.put(Constants.companyName,member.getEnterpriseName());
+			map.put(Constants.enterpriseTypeName,enterpriseTypeName);
+			map.put(Constants.area,address);
+			map.put(Constants.enterpriseCreaterTime,createTime);
+			map.put(Constants.registerCapital,member.getRegisterCapital());
+			map.put(Constants.employeeNumber,employeeSizeName);
+			map.put(Constants.identifyName,identifyName);
+			map.put(Constants.enterpriseDesc,member.getEnterpriseDesc());
+			map.put(Constants.saleProductDesc,member.getSaleProductDesc());
+			map.put(Constants.address,member.getAddress());
+			map.put(Constants.webSite,member.getEnterpriseWebSite());
+			map.put(Constants.telephone,member.getEnterpriseTelephone());
+			map.put(Constants.fax,member.getEnterpriseFox());
+			map.put(Constants.certificateRecord,certificateRecordList);
 			return map;
 		}catch (Exception e){
 			throw e;
@@ -574,9 +575,9 @@ public class MemberService {
 			for(int i=0;i<list1.size();i++){
 				ResultBean resultBean = list1.get(i);
 				Map map = new HashMap();
-				map.put(Constant.id,resultBean.getCode());
-				map.put(Constant.companyName,resultBean.getName());
-				map.put(Constant.logo,resultBean.getSmallIcon());
+				map.put(Constants.id,resultBean.getCode());
+				map.put(Constants.companyName,resultBean.getName());
+				map.put(Constants.logo,resultBean.getSmallIcon());
 				list.add(map);
 			}
 		}else{
@@ -590,9 +591,9 @@ public class MemberService {
 			for(int a=0;a<list2.size();a++){
 				ResultBean resultBean = list2.get(a);
 				Map map1 = new HashMap();
-				map1.put(Constant.id,resultBean.getCode());
-				map1.put(Constant.companyName,resultBean.getName());
-				map1.put(Constant.logo,resultBean.getSmallIcon());
+				map1.put(Constants.id,resultBean.getCode());
+				map1.put(Constants.companyName,resultBean.getName());
+				map1.put(Constants.logo,resultBean.getSmallIcon());
 				list.add(map1);
 			}
 		}

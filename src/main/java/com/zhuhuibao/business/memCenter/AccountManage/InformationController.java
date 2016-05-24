@@ -2,8 +2,8 @@ package com.zhuhuibao.business.memCenter.AccountManage;
 
 import com.mysql.jdbc.StringUtils;
 import com.zhuhuibao.common.constant.ApiConstants;
-import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;

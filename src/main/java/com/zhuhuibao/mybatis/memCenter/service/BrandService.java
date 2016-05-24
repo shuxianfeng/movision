@@ -1,6 +1,9 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.*;
+import com.zhuhuibao.common.pojo.BrandBean;
+import com.zhuhuibao.common.pojo.BrandDetailBean;
+import com.zhuhuibao.common.pojo.ResultBean;
+import com.zhuhuibao.common.pojo.SuggestBrand;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
 import com.zhuhuibao.mybatis.product.entity.Product;

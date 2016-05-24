@@ -1,7 +1,7 @@
 package com.zhuhuibao.mybatis.oms.mapper;
 
-import com.zhuhuibao.common.ResultBean;
-import com.zhuhuibao.common.SysBean;
+import com.zhuhuibao.common.pojo.ResultBean;
+import com.zhuhuibao.common.pojo.SysBean;
 import com.zhuhuibao.mybatis.oms.entity.Category;
 
 import java.util.List;

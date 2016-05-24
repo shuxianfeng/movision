@@ -4,10 +4,10 @@ package com.zhuhuibao.mybatis.oms.service;
  * Created by cxx on 2016/3/14 0014.
  */
 
-import com.zhuhuibao.common.constant.Constant;
-import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.ResultBean;
-import com.zhuhuibao.common.SysBean;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.pojo.ResultBean;
+import com.zhuhuibao.common.pojo.SysBean;
 import com.zhuhuibao.mybatis.oms.entity.Category;
 import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
 import org.slf4j.Logger;
@@ -167,16 +167,16 @@ public class CategoryService {
             List list1 = new ArrayList();
             Map map1 = new HashMap();
             ResultBean a = sysList.get(i);
-            map1.put(Constant.id,a.getCode());
-            map1.put(Constant.name,a.getName());
-            map1.put(Constant.sort,a.getSort());
+            map1.put(Constants.id,a.getCode());
+            map1.put(Constants.name,a.getName());
+            map1.put(Constants.sort,a.getSort());
             for(int y=0;y<allList.size();y++) {
                 Map map2 = new HashMap();
                 SysBean b = allList.get(y);
                 if (a.getCode().equals(b.getId())) {
-                    map2.put(Constant.id, b.getCode());
-                    map2.put(Constant.name, b.getSubSystemName());
-                    map2.put(Constant.sort,b.getSort());
+                    map2.put(Constants.id, b.getCode());
+                    map2.put(Constants.name, b.getSubSystemName());
+                    map2.put(Constants.sort,b.getSort());
                     list1.add(map2);
                 }
             }

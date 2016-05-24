@@ -4,7 +4,7 @@ package com.zhuhuibao.mybatis.memCenter.service;
  * Created by cxx on 2016/3/14 0014.
  */
 
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;

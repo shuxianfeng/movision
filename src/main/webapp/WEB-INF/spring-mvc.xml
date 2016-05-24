@@ -1,155 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
-       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
-		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
-    
-    <aop:aspectj-autoproxy proxy-target-class="true"/>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+       default-lazy-init="true">
+    <description>安全配置</description>
 
-    <!-- 开启controller注解支持 -->
-    <context:component-scan base-package="com.zhuhuibao"
-                            use-default-filters="false">
-        <context:include-filter type="annotation"
-                                expression="org.springframework.stereotype.Controller"/>
-        <context:include-filter type="annotation"
-                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
-    </context:component-scan>
-    <bean id="messageSource"
-          class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
-          p:fallbackToSystemLocale="true" p:useCodeAsDefaultMessage="false"
-          p:defaultEncoding="UTF-8">
-        <description>Base message source to handle internationalization</description>
-        <!--<property name="basenames">  -->
-        <!--<list>  -->
-        <!--&lt;!&ndash; main resources &ndash;&gt;  -->
-        <!--<value>classpath:message/main</value>  -->
-        <!--</list>  -->
-        <!--</property>  -->
+    <!-- 凭证匹配器 -->
+    <bean id="credentialsMatcher"
+          class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <property name="hashAlgorithmName" value="${password.algorithmName}"/>
+        <property name="hashIterations" value="${password.hashIterations}"/>
     </bean>
-    <mvc:annotation-driven>
-        <mvc:message-converters register-defaults="true">
-            <!-- 将StringHttpMessageCOnverter的默认编码设为UTF-8 -->
-            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
-                <constructor-arg value="UTF-8"/>
-            </bean>
-
-            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-                <property name="supportedMediaTypes" value="*/*"/>
-            </bean>
-        </mvc:message-converters>
-    </mvc:annotation-driven>
-
-
-    <!--<mvc:resources mapping="/**" location="/"/>-->
-    <mvc:resources mapping="/swagger/**" location="/swagger-ui/"/>
-
-    <mvc:default-servlet-handler/>
-    <!-- CSRF 
-    <bean name="requestDataValueProcessor" class="com.zhuhuibao.security.csrf.CSRFRequestDataValueProcessor"/>
-    <mvc:interceptors>
-        <bean class="com.zhuhuibao.security.csrf.CSRFHandlerInterceptor"/>
-    </mvc:interceptors>-->
-
-
-    <context:property-placeholder
-            ignore-unresolvable="true" location="classpath*:/spring/application.properties"/>
-
-    <!--视图解释器-->
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <property name="prefix" value="/WEB-INF/views"/>
-        <property name="suffix" value=".jsp"/>
+    <!-- Realm实现 -->
+    <bean id="userRealm" class="com.zhuhuibao.shiro.realm.ShiroRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+        <property name="cachingEnabled" value="true"/>
     </bean>
 
-    <bean
-            class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-        <property name="messageConverters">
+    <!-- Realm实现运营管理系统 -->
+    <bean id="omsRealm" class="com.zhuhuibao.shiro.realm.OMSRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+        <property name="cachingEnabled" value="true"/>
+    </bean>
+
+    <!-- 用户授权信息Cache, 采用EhCache -->
+    <bean id="ehcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache.xml"/>
+    </bean>
+
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="sessionDAO" ref="redisSessionDAO" />
+    </bean>
+
+    <!-- shiro redisManager -->
+    <bean id="redisManager" class="org.crazycake.shiro.RedisManager">
+        <property name="host" value="${redis.host}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="expire" value="${redis.expire}"/>
+    </bean>
+
+    <!-- redisSessionDAO -->
+    <bean id="redisSessionDAO" class="org.crazycake.shiro.RedisSessionDAO">
+        <property name="redisManager" ref="redisManager" />
+    </bean>
+
+    <!-- cacheManager -->
+    <bean id="cacheManager" class="org.crazycake.shiro.RedisCacheManager">
+        <property name="redisManager" ref="redisManager" />
+    </bean>
+
+    <!-- 安全管理器 配置权限管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!--<property name="realm" ref="userRealm"/>-->
+        <property name="realms">
             <list>
-                <bean
-                        class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-                    <property name="supportedMediaTypes" value="*/*"/>
-                </bean>
+                <ref bean="userRealm" />
+                <ref bean="omsRealm" />
             </list>
         </property>
+        <property name="sessionManager" ref="sessionManager"/>
+        <property name="cacheManager" ref="cacheManager"/>
     </bean>
 
-<!--    <bean id="multipartResolver"
-          class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
-          p:maxUploadSize="104857600" p:maxInMemorySize="4096"
-          p:defaultEncoding="UTF-8"/>-->
-
-    <!-- json配置 -->
-    <bean
-            class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-        <property name="contentNegotiationManager">
-            <bean
-                    class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean"
-                    p:favorPathExtension="true" p:favorParameter="false"
-                    p:parameterName="format" p:ignoreAcceptHeader="true"
-                    p:defaultContentType="text/html">
-                <property name="mediaTypes">
-                    <map>
-                        <entry key="html" value="text/html"/>
-                        <entry key="pdf" value="application/pdf"/>
-                        <entry key="json" value="application/json"/>
-                        <entry key="xml" value="application/xml"/>
-                        <entry key="xls" value="application/vnd.ms-excel"/>
-                        <entry key="xlsx" value="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
-                    </map>
-                </property>
-            </bean>
-        </property>
-        <property name="defaultViews">
-            <list>
-                <ref bean="mappingJacksonJsonView"/>
-                <ref bean="marshallingView"/>
-                <ref bean="xlsExcelView"/>
-                <ref bean="xlsxExcelView"/>
-            </list>
-        </property>
-    </bean>
-    <bean id="marshallingView"
-          class="org.springframework.web.servlet.view.xml.MarshallingView">
-        <property name="marshaller">
-            <bean class="org.springframework.oxm.xstream.XStreamMarshaller"/>
-        </property>
-    </bean>
-    <bean id="mappingJacksonJsonView"
-          class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
-
-    <bean id="xlsExcelView" class="com.zhuhuibao.common.view.XlsExcelView">
-    </bean>
-    <bean id="xlsxExcelView" class="com.zhuhuibao.common.view.XlsxExcelView">
+    <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod"
+                  value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
+        <property name="arguments" ref="securityManager"/>
     </bean>
 
-    <aop:config proxy-target-class="true"/>
-    <bean
-            class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+    <!-- 基于Form表单的身份验证过滤器 -->
+    <bean id="formAuthenticationFilter"
+          class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">
+        <property name="usernameParam" value="username"/>
+        <property name="passwordParam" value="password"/>
+        <property name="rememberMeParam" value="rememberMe"/>
+        <property name="loginUrl" value="/login"/>
+    </bean>
+    <!-- shiro定义 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login"/>
+        <property name="successUrl" value="/index"/>
+        <property name="filters">
+            <util:map>
+                <entry key="authc" value-ref="formAuthenticationFilter" />
+            </util:map>
+        </property>
+        <property name="filterChainDefinitions">
+            <value>
+                /login** = anon
+                /index = anon
+                /pagination = anon
+                /logout = logout
+                /register/** = anon
+                /checkCode = anon
+                /admin/** = roles[admin]
+                <!--/** = user-->
+                /swagger/** = anon
+                /upload/** = anon
+                <!--/** = authc-->
+            </value>
+        </property>
+
     </bean>
 
-    <!-- 控制器异常处理 -->
-    <bean id="exceptionHandlerExceptionResolver"
-          class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
-    </bean>
+    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
-    <bean id="bussinessException" class="com.zhuhuibao.utils.exception.MyExceptionHandler"></bean>
-
-    <!-- token拦截器
-    <mvc:interceptors>
-        <bean class="com.zhuhuibao.security.resubmit.TokenInterceptor"/>
-    </mvc:interceptors>-->
-    
-    <bean id="AspectLog" class="com.zhuhuibao.aop.AspectLog"/>
-    <aop:config>
-        <aop:pointcut expression="@annotation(org.springframework.web.bind.annotation.RequestMapping)" id="logPointcut" />
-        <aop:aspect id="zhblog" ref="AspectLog">
-            <aop:around method="aroundLog" pointcut-ref="logPointcut" />
-       </aop:aspect>
-    </aop:config>
-    <bean id="documentationConfig" class="com.zhuhuibao.common.util.SwaggerConfig"/>
 </beans>

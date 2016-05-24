@@ -1,8 +1,8 @@
 package com.zhuhuibao.business.memCenter.AccountManage;
 
 import com.taobao.api.ApiException;
-import com.zhuhuibao.common.constant.Constant;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
@@ -270,7 +270,7 @@ public class AccountSafeController {
         log.debug("verifyCode == " + verifyCode);
         //发送验证码到手机
         //SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-        SDKSendTaoBaoSMS.sendModifyBindMobileSMS(mobile, verifyCode, Constant.sms_time);
+        SDKSendTaoBaoSMS.sendModifyBindMobileSMS(mobile, verifyCode, Constants.sms_time);
         Validateinfo info = new Validateinfo();
         info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
         info.setCheckCode(verifyCode);

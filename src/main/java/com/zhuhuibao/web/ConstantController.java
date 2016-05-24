@@ -3,7 +3,7 @@ package com.zhuhuibao.web;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.mybatis.constants.entity.Constant;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;

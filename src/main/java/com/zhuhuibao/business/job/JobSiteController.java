@@ -3,8 +3,8 @@ package com.zhuhuibao.business.job;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.constant.Constant;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
@@ -424,7 +424,7 @@ public class JobSiteController {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("recID", receiveID);
             map.put("type", JobConstant.SITEMAIL_TYPE_JOB_ELEVEN);
-            map.put("status", Constant.MAILSITE_STATUS_UNREAD);
+            map.put("status", Constants.MAILSITE_STATUS_UNREAD);
             jsonResult.setData(smService.queryUnreadMsgCount(map));
         }
         return jsonResult;

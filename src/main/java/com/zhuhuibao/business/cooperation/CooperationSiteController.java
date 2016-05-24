@@ -1,9 +1,10 @@
 package com.zhuhuibao.business.cooperation;
 
-import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.CooperationConstants;
+import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
 import com.zhuhuibao.mybatis.memCenter.service.CooperationService;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -13,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,8 +75,8 @@ public class CooperationSiteController {
         Map<String, Object> map = new HashMap<>();
         map.put("count", count);
         map.put("type", type);
-        map.put("is_deleted", 0);
-        map.put("status", 1);
+        map.put("is_deleted", Constants.DeleteMark.NODELETE.toString());
+        map.put("status", CooperationConstants.Status.AUDITED.toString());
         List<Cooperation> cooperations = cooperationService.queryHotCooperation(map);
         jsonResult.setData(cooperations);
         return jsonResult;

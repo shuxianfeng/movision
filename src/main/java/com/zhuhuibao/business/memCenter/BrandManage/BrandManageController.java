@@ -1,8 +1,8 @@
 package com.zhuhuibao.business.memCenter.BrandManage;
 
 import com.zhuhuibao.common.constant.ApiConstants;
-import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;

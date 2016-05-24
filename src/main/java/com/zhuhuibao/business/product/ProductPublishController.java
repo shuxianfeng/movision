@@ -14,9 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.google.gson.Gson;
-import com.zhuhuibao.common.constant.Constant;
-import com.zhuhuibao.common.JsonResult;
-import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
 import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
@@ -226,8 +226,8 @@ public class ProductPublishController {
 			Map<String,Object> productMap = new HashMap<String,Object>();
 			productMap.put("scateid",product.getScateid());
 			productMap.put("brandid",product.getBrandid());
-			productMap.put("status",Constant.product_status_publish);
-			productMap.put("count",Constant.brand_page_product_count);
+			productMap.put("status", Constants.product_status_publish);
+			productMap.put("count", Constants.brand_page_product_count);
 			productMap.put("order", "publishTime");
 	        jsonResult = productService.queryProductInfoBySCategory(productMap);
 
@@ -246,8 +246,8 @@ public class ProductPublishController {
 		{
 			JsonResult jsonResult = new JsonResult();
 			Map<String,Object> productMap = new HashMap<String,Object>();
-			productMap.put("status",Constant.product_status_publish);
-			productMap.put("count",Constant.recommend_product_count);
+			productMap.put("status", Constants.product_status_publish);
+			productMap.put("count", Constants.recommend_product_count);
 			productMap.put("order", "hit");
 	        jsonResult = productService.queryRecommendHotProduct(productMap);
 
@@ -266,8 +266,8 @@ public class ProductPublishController {
 		{
 			JsonResult jsonResult = new JsonResult();
 			Map<String,Object> productMap = new HashMap<String,Object>();
-			productMap.put("status",Constant.product_status_publish);
-			productMap.put("count",Constant.hot_product_count);
+			productMap.put("status", Constants.product_status_publish);
+			productMap.put("count", Constants.hot_product_count);
 			productMap.put("order", "hit");
 	        jsonResult = productService.queryRecommendHotProduct(productMap);
 
