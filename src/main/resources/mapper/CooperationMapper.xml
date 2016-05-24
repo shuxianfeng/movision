@@ -252,10 +252,10 @@
     left join t_dictionary_province p on p.code = c.province
     left join t_dictionary_city ci on ci.code = c.city
     left join t_dictionary_area a on a.code = c.area
-    left join t_dictionary_constant co on co.code = c.category
+    left join t_dictionary_constant co on co.code = c.category and co.type = 9
     left join t_dictionary_cooperationType coo on coo.id = c.type
     LEFT JOIN t_m_member m on c.createId = m.id
-    where co.type = 9
+    where c.is_deleted = 0
     <if test="createId != null and createId != ''">
       and c.createId = #{createId}
     </if>
@@ -289,12 +289,19 @@
     order by c.updateTime desc
   </select>
   <select id="queryHotCooperation" resultMap="BaseResultMap" >
-    SELECT * FROM t_c_cooperation coo
-    left JOIN t_dictionary_cooperationType ct on ct.id = coo.type
-    where
-    ct.parentId = #{type}
-    and coo.is_deleted = #{is_deleted}
-    and coo.status = #{status}
-    order by coo.views desc limit 0,#{count}
+    select c.*, concat(p.name,ci.name,a.name)as cooperationArea,co.name as categoryName,coo.name as TypeName,coo.parentId,
+    (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName,
+    CASE WHEN m.identify = 2 THEN '个人' WHEN m.identify !=2 THEN '公司' END AS memberType,m.headShot
+    from t_c_cooperation c
+    left join t_dictionary_province p on p.code = c.province
+    left join t_dictionary_city ci on ci.code = c.city
+    left join t_dictionary_area a on a.code = c.area
+    left join t_dictionary_constant co on co.code = c.category and co.type = 9
+    left join t_dictionary_cooperationType coo on coo.id = c.type
+    LEFT JOIN t_m_member m on c.createId = m.id
+    where coo.parentId = #{type}
+    and c.is_deleted = #{is_deleted}
+    and c.status = #{status}
+    order by c.views desc limit 0,#{count}
   </select>
 </mapper>
