@@ -4,7 +4,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.CooperationConstants;
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
 import com.zhuhuibao.mybatis.memCenter.service.CooperationService;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -34,9 +34,9 @@ public class CooperationSiteController {
     /**
      * 查询任务列表（分页）
      */
-    @ApiOperation(value = "查询任务列表（前台分页）", notes = "查询任务列表（前台分页）", response = JsonResult.class)
+    @ApiOperation(value = "查询任务列表（前台分页）", notes = "查询任务列表（前台分页）", response = Response.class)
     @RequestMapping(value = "findAllCooperationByPager", method = RequestMethod.GET)
-    public JsonResult findAllCooperationByPager
+    public Response findAllCooperationByPager
     (@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize,
      @ApiParam(value = "合作类型") @RequestParam(required = false) String type,
      @ApiParam(value = "项目类别") @RequestParam(required = false) String category,
@@ -57,28 +57,28 @@ public class CooperationSiteController {
         cooperation.setCategory(category);
         cooperation.setProvince(province);
         cooperation.setParentId(parentId);
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         List<Cooperation> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
         pager.result(cooperationList);
-        jsonResult.setData(pager);
-        return jsonResult;
+        response.setData(pager);
+        return response;
     }
 
     /**
      * 最热合作信息
      */
-    @ApiOperation(value = "最热合作信息", notes = "最热合作信息", response = JsonResult.class)
+    @ApiOperation(value = "最热合作信息", notes = "最热合作信息", response = Response.class)
     @RequestMapping(value = "queryHotService", method = RequestMethod.GET)
-    public JsonResult queryHotService(@ApiParam(value = "条数") @RequestParam(required = false) int count,
-                                      @ApiParam(value = "合作类型：1：任务，2：服务，3：资质合作") String type) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response queryHotService(@ApiParam(value = "条数") @RequestParam(required = false) int count,
+                                    @ApiParam(value = "合作类型：1：任务，2：服务，3：资质合作") String type) throws Exception {
+        Response response = new Response();
         Map<String, Object> map = new HashMap<>();
         map.put("count", count);
         map.put("type", type);
         map.put("is_deleted", Constants.DeleteMark.NODELETE.toString());
         map.put("status", CooperationConstants.Status.AUDITED.toString());
         List<Cooperation> cooperations = cooperationService.queryHotCooperation(map);
-        jsonResult.setData(cooperations);
-        return jsonResult;
+        response.setData(cooperations);
+        return response;
     }
 }

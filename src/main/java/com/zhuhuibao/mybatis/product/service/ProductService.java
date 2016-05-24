@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.product.service;
 
 import java.util.*;
 
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.mybatis.product.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.product.mapper.ProductMapper;
@@ -97,9 +97,9 @@ public class ProductService {
         return productMapper.findAllByPager(pager.getRowBounds(),product);
     }
     
-    public JsonResult updateProduct(ProductWithBLOBs product)
+    public Response updateProduct(ProductWithBLOBs product)
     {
-    	JsonResult jsonResult = new JsonResult();
+    	Response response = new Response();
     	log.info("update product");
     	try
     	{
@@ -116,12 +116,12 @@ public class ProductService {
     	catch(Exception e)
     	{
     		log.error("update product error",e);
-    		jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+    		response.setCode(MsgCodeConstant.response_status_400);
+    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return response;
     	}
-    	return jsonResult;
+    	return response;
     }
     
     /**
@@ -129,9 +129,9 @@ public class ProductService {
      * @param product
      * @return
      */
-    public JsonResult updateProductStatus(ProductWithBLOBs product)
+    public Response updateProductStatus(ProductWithBLOBs product)
     {
-    	JsonResult jsonResult = new JsonResult();
+    	Response response = new Response();
     	log.info("update product");
     	try
     	{
@@ -140,17 +140,17 @@ public class ProductService {
     	catch(Exception e)
     	{
     		log.error("update product error",e);
-    		jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+    		response.setCode(MsgCodeConstant.response_status_400);
+    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return response;
     	}
-    	return jsonResult;
+    	return response;
     }
     
-    public JsonResult batchUnpublish(List<String> list)
+    public Response batchUnpublish(List<String> list)
     {
-    	JsonResult jsonResult = new JsonResult();
+    	Response response = new Response();
     	log.info("update product");
     	try
     	{
@@ -159,12 +159,12 @@ public class ProductService {
     	catch(Exception e)
     	{
     		log.error("update product error",e);
-    		jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+    		response.setCode(MsgCodeConstant.response_status_400);
+    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return response;
     	}
-    	return jsonResult;
+    	return response;
     }
     
     /**
@@ -172,9 +172,9 @@ public class ProductService {
      * @param id
      * @return
      */
-    public JsonResult updateHit(Long id)
+    public Response updateHit(Long id)
     {
-    	JsonResult jsonResult = new JsonResult();
+    	Response response = new Response();
     	log.info("update product");
     	try
     	{
@@ -183,17 +183,17 @@ public class ProductService {
     	catch(Exception e)
     	{
     		log.error("update product error",e);
-    		jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+    		response.setCode(MsgCodeConstant.response_status_400);
+    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return response;
     	}
-    	return jsonResult;
+    	return response;
     }
     
-    public JsonResult selectByPrimaryKey(Long id)
+    public Response selectByPrimaryKey(Long id)
     {
-    	JsonResult jsonResult = new JsonResult();
+    	Response response = new Response();
     	ProductWithBLOBs product = null;
     	try
     	{
@@ -233,17 +233,17 @@ public class ProductService {
     			product.setParams(params);
     		}
     		
-    		jsonResult.setData(product);
+    		response.setData(product);
     	}
     	catch(Exception e)
     	{
     		log.error("update product error",e);
-    		jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+    		response.setCode(MsgCodeConstant.response_status_400);
+    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return response;
     	}
-    	return jsonResult;
+    	return response;
     }
     
     /**
@@ -271,9 +271,9 @@ public class ProductService {
      * @param id
      * @return
      */
-    public JsonResult queryProductInfoById(Long id)
+    public Response queryProductInfoById(Long id)
     {
-    	JsonResult jsonResult = new JsonResult();
+    	Response response = new Response();
     	//保存参数值信息
     	Map<String,Object> paramValuesMap  = new TreeMap<String,Object>();
     	Map<String,Object> productMap = new TreeMap<String,Object>();
@@ -298,17 +298,17 @@ public class ProductService {
     		{
     			setSingleProductInfo(productMap, product);
     		}
-    		jsonResult.setData(productMap);
+    		response.setData(productMap);
     	}
     	catch(Exception e)
     	{
     		log.error("update product error",e);
-    		jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+    		response.setCode(MsgCodeConstant.response_status_400);
+    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return response;
     	}
-    	return jsonResult;
+    	return response;
     }
     
     /**
@@ -562,24 +562,24 @@ public class ProductService {
      * @param product
      * @return
      */
-    public JsonResult querySCateListByBrandId(Product product)
+    public Response querySCateListByBrandId(Product product)
     {
-    	JsonResult jsonResult = new JsonResult();
+    	Response response = new Response();
     	List<ResultBean> scategoryList = null;
     	try
     	{
     		scategoryList = productMapper.getSCateListByBrandId(product);
-    		jsonResult.setData(scategoryList);
+    		response.setData(scategoryList);
     	}
     	catch(Exception e)
     	{
     		log.error("update product error",e);
-    		jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+    		response.setCode(MsgCodeConstant.response_status_400);
+    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return response;
     	}
-    	return jsonResult;
+    	return response;
     }
     
     /**
@@ -587,24 +587,24 @@ public class ProductService {
      * @param product
      * @return
      */
-    public JsonResult queryProductInfoBySCategory(Map<String,Object> product)
+    public Response queryProductInfoBySCategory(Map<String,Object> product)
     {
-    	JsonResult jsonResult = new JsonResult();
+    	Response response = new Response();
     	List<ProductWithBLOBs> productList = null;
     	try
     	{
     		productList = productMapper.queryProductInfoBySCategory(product);
-    		jsonResult.setData(productList);
+    		response.setData(productList);
     	}
     	catch(Exception e)
     	{
     		log.error("update product error",e);
-    		jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+    		response.setCode(MsgCodeConstant.response_status_400);
+    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return response;
     	}
-    	return jsonResult;
+    	return response;
     }
     
     /**
@@ -612,29 +612,29 @@ public class ProductService {
      * @param product
      * @return
      */
-    public JsonResult queryRecommendHotProduct(Map<String,Object> product)
+    public Response queryRecommendHotProduct(Map<String,Object> product)
     {
-    	JsonResult jsonResult = new JsonResult();
+    	Response response = new Response();
     	List<ProductMap> productList = null;
     	try
     	{
     		productList = productMapper.queryRecommendHotProduct(product);
-    		jsonResult.setData(productList);
+    		response.setData(productList);
     	}
     	catch(Exception e)
     	{
     		log.error("update product error",e);
-    		jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+    		response.setCode(MsgCodeConstant.response_status_400);
+    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return response;
     	}
-    	return jsonResult;
+    	return response;
     }
     
-    /*public JsonResult assembleSysCategory() throws JsonGenerationException, JsonMappingException, IOException
+    /*public Response assembleSysCategory() throws JsonGenerationException, JsonMappingException, IOException
     {
-    	JsonResult result = new JsonResult();
+    	Response result = new Response();
     	List<CategoryAssemble> categoryAssembleList = productMapper.findCategoryAssemble();
     	//List<Map<String,Object>> categroyList = new ArrayList<Map<String,Object>>();
     	Map<String,Object> categoryMap = new TreeMap<String,Object>();
@@ -707,9 +707,9 @@ public class ProductService {
     	return result;
     }*/
     
-    public JsonResult queryPrdDescParamService(Long id)
+    public Response queryPrdDescParamService(Long id)
     {
-    	JsonResult jsonResult = new JsonResult();
+    	Response response = new Response();
     	ProductWithBLOBs product = null;
     	try
     	{
@@ -719,17 +719,17 @@ public class ProductService {
     		map.put(Constants.product_field_detailDesc, product.getDetailDesc());
     		map.put(Constants.product_field_paras, product.getParas());
     		map.put(Constants.product_field_service, product.getService());
-    		jsonResult.setData(map);
+    		response.setData(map);
     	}
     	catch(Exception e)
     	{
     		log.error("query product detail param servie error!",e);
-    		jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+    		response.setCode(MsgCodeConstant.response_status_400);
+    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return response;
     	}
-    	return jsonResult;
+    	return response;
     }
 	
 	/**

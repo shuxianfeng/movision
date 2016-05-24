@@ -1,6 +1,7 @@
 package com.zhuhuibao.business.memCenter.AgentManage;
 
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.pojo.*;
 import com.zhuhuibao.mybatis.memCenter.entity.Agent;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
@@ -57,8 +58,8 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "category", method = RequestMethod.GET)
-    public JsonResult category(String id) throws Exception {
-        JsonResult result = new JsonResult();
+    public Response category(String id) throws Exception {
+        Response result = new Response();
         List list = new ArrayList();
         List<ResultBean> resultBeanList = categoryService.findSystemByBrand(id);
         List<SysBean> sysBeanList = categoryService.findCategoryByBrand(id);
@@ -89,8 +90,8 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "brand", method = RequestMethod.GET)
-    public JsonResult brand(Brand brand) throws Exception {
-        JsonResult result = new JsonResult();
+    public Response brand(Brand brand) throws Exception {
+        Response result = new Response();
         List list = new ArrayList();
         List<Brand> brands = brandService.searchBrandByStatus(brand);
         for (Brand brand1 : brands) {
@@ -110,8 +111,8 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "searchAgent", method = RequestMethod.GET)
-    public JsonResult searchAgent(HttpServletRequest req) throws Exception {
-        JsonResult result = new JsonResult();
+    public Response searchAgent(HttpServletRequest req) throws Exception {
+        Response result = new Response();
         String account = req.getParameter("account");
         if(account.contains("_")){
             account = account.replace("_","\\_");
@@ -128,8 +129,8 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "agentSave", method = RequestMethod.POST)
-    public JsonResult agentSave(Agent agent) throws Exception {
-        JsonResult result = new JsonResult();
+    public Response agentSave(Agent agent) throws Exception {
+        Response result = new Response();
         Agent agent1 = agentService.find(agent);
         if(agent1==null){
             agentService.agentSave(agent);
@@ -146,8 +147,8 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "agentUpdate", method = RequestMethod.POST)
-    public JsonResult agentUpdate(Agent agent) throws Exception {
-        JsonResult result = new JsonResult();
+    public Response agentUpdate(Agent agent) throws Exception {
+        Response result = new Response();
         agentService.agentUpdate(agent);
         return result;
     }
@@ -158,8 +159,8 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "cancelAgent", method = RequestMethod.POST)
-    public JsonResult cancelAgent(Agent agent) throws Exception {
-        JsonResult result = new JsonResult();
+    public Response cancelAgent(Agent agent) throws Exception {
+        Response result = new Response();
         agent.setStatus("1");
         agentService.agentUpdate(agent);
         return result;
@@ -171,8 +172,8 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "province", method = RequestMethod.GET)
-    public JsonResult province() throws Exception {
-        JsonResult result = new JsonResult();
+    public Response province() throws Exception {
+        Response result = new Response();
         List list1 = new ArrayList();
         List list2 = new ArrayList();
         List list3 = new ArrayList();
@@ -211,8 +212,8 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "inviteAgent", method = RequestMethod.POST)
-    public JsonResult inviteAgent(HttpServletRequest req, String id) throws Exception {
-        JsonResult result = new JsonResult();
+    public Response inviteAgent(HttpServletRequest req, String id) throws Exception {
+        Response result = new Response();
         Member member = memberService.findMemById(id);
         String email = req.getParameter("email");
         Member member1 = new Member();
@@ -236,8 +237,8 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "myAgent", method = RequestMethod.GET)
-    public JsonResult myAgent(String id) throws Exception {
-        JsonResult result = new JsonResult();
+    public Response myAgent(String id) throws Exception {
+        Response result = new Response();
         List<AgentBean> list = agentService.findAgentByMemId(id);
         result.setData(list);
         result.setCode(200);
@@ -253,7 +254,7 @@ public class AgentManageController {
     @RequestMapping(value = "agentRegister", method = RequestMethod.GET)
     public ModelAndView agentRegister(HttpServletRequest req) throws IOException {
         log.debug("email agentRegister start.....");
-        JsonResult result = new JsonResult();
+        Response result = new Response();
         ModelAndView modelAndView = new ModelAndView();
         try
         {
@@ -282,11 +283,11 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "updateAgentById", method = RequestMethod.GET)
-    public JsonResult updateAgentById(String id) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response updateAgentById(String id) throws Exception {
+        Response response = new Response();
         Map map = agentService.updateAgentById(id);
-        jsonResult.setData(map);
-        return jsonResult;
+        response.setData(map);
+        return response;
     }
 
     /**
@@ -295,11 +296,11 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "getAgentByProId", method = RequestMethod.GET)
-    public JsonResult getAgentByProId(String id) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response getAgentByProId(String id) throws Exception {
+        Response response = new Response();
         Map map = agentService.getAgentByProId(id);
-        jsonResult.setData(map);
-        return jsonResult;
+        response.setData(map);
+        return response;
     }
 
     /**
@@ -308,11 +309,11 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/agent/getGreatAgentByScateid", method = RequestMethod.GET)
-    public JsonResult getGreatAgentByScateid(String id) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response getGreatAgentByScateid(String id) throws Exception {
+        Response response = new Response();
         List<ResultBean> resultBeen =  agentService.getGreatAgentByScateid(id);
-        jsonResult.setData(resultBeen);
-        return jsonResult;
+        response.setData(resultBeen);
+        return response;
     }
 
     /**
@@ -321,11 +322,11 @@ public class AgentManageController {
      * @throws IOException
      */
     @RequestMapping(value = "getGreatAgentByBrandId", method = RequestMethod.GET)
-    public JsonResult getGreatAgentByBrandId(String id) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response getGreatAgentByBrandId(String id) throws Exception {
+        Response response = new Response();
         List<ResultBean> resultBeen =  agentService.getGreatAgentByBrandId(id);
-        jsonResult.setData(resultBeen);
-        return jsonResult;
+        response.setData(resultBeen);
+        return response;
     }
 
     /**
@@ -333,12 +334,12 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @ApiOperation(value="根据品牌id查询代理商跟厂商（区域分组）",notes="根据品牌id查询代理商跟厂商（区域分组）",response = JsonResult.class)
+    @ApiOperation(value="根据品牌id查询代理商跟厂商（区域分组）",notes="根据品牌id查询代理商跟厂商（区域分组）",response = Response.class)
     @RequestMapping(value = "getAgentByBrandid", method = RequestMethod.GET)
-    public JsonResult getAgentByBrandid(String id) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response getAgentByBrandid(String id) throws Exception {
+        Response response = new Response();
         Map map = agentService.getAgentByBrandid(id);
-        jsonResult.setData(map);
-        return jsonResult;
+        response.setData(map);
+        return response;
     }
 }

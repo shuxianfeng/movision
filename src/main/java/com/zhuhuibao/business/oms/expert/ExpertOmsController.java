@@ -3,7 +3,7 @@ package com.zhuhuibao.business.oms.expert;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
 import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
 import com.zhuhuibao.mybatis.memCenter.entity.Expert;
@@ -34,15 +34,15 @@ public class ExpertOmsController {
     @Autowired
     private ExpertService expertService;
 
-    @ApiOperation(value="技术成果列表(运营分页)",notes="技术成果列表(运营分页)",response = JsonResult.class)
+    @ApiOperation(value="技术成果列表(运营分页)",notes="技术成果列表(运营分页)",response = Response.class)
     @RequestMapping(value = "achievementListOms", method = RequestMethod.GET)
-    public JsonResult achievementListOms(@ApiParam(value = "标题")@RequestParam(required = false) String title,
-                                         @ApiParam(value = "状态")@RequestParam(required = false)String status,
-                                         @ApiParam(value = "系统分类")@RequestParam(required = false) String systemType,
-                                         @ApiParam(value = "应用领域")@RequestParam(required = false)String useArea,
-                                         @RequestParam(required = false)String pageNo,
-                                         @RequestParam(required = false)String pageSize) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response achievementListOms(@ApiParam(value = "标题")@RequestParam(required = false) String title,
+                                       @ApiParam(value = "状态")@RequestParam(required = false)String status,
+                                       @ApiParam(value = "系统分类")@RequestParam(required = false) String systemType,
+                                       @ApiParam(value = "应用领域")@RequestParam(required = false)String useArea,
+                                       @RequestParam(required = false)String pageNo,
+                                       @RequestParam(required = false)String pageSize) throws Exception {
+        Response response = new Response();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -59,17 +59,17 @@ public class ExpertOmsController {
         map.put("status",status);
         List<Achievement> achievementList = expertService.findAllAchievementList(pager,map);
         pager.result(achievementList);
-        jsonResult.setData(pager);
-        return jsonResult;
+        response.setData(pager);
+        return response;
     }
 
-    @ApiOperation(value="协会动态列表(运营分页)",notes="协会动态列表(运营分页)",response = JsonResult.class)
+    @ApiOperation(value="协会动态列表(运营分页)",notes="协会动态列表(运营分页)",response = Response.class)
     @RequestMapping(value = "dynamicListOms", method = RequestMethod.GET)
-    public JsonResult dynamicListOms(@RequestParam(required = false) String title,
-                                     @RequestParam(required = false)String status,
-                                     @RequestParam(required = false)String pageNo,
-                                     @RequestParam(required = false)String pageSize) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response dynamicListOms(@RequestParam(required = false) String title,
+                                   @RequestParam(required = false)String status,
+                                   @RequestParam(required = false)String pageNo,
+                                   @RequestParam(required = false)String pageSize) throws Exception {
+        Response response = new Response();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -84,18 +84,18 @@ public class ExpertOmsController {
         map.put("status",status);
         List<Dynamic> dynamicList = expertService.findAllDynamicList(pager,map);
         pager.result(dynamicList);
-        jsonResult.setData(pager);
-        return jsonResult;
+        response.setData(pager);
+        return response;
     }
 
-    @ApiOperation(value="专家列表(运营分页)",notes="专家列表(运营分页)",response = JsonResult.class)
+    @ApiOperation(value="专家列表(运营分页)",notes="专家列表(运营分页)",response = Response.class)
     @RequestMapping(value = "expertListOms", method = RequestMethod.GET)
-    public JsonResult expertListOms(@ApiParam(value = "姓名")@RequestParam(required = false) String name,
-                                    @ApiParam(value = "专家类型")@RequestParam(required = false) String expertType,
-                                    @ApiParam(value = "状态")@RequestParam(required = false) String status,
-                                    @RequestParam(required = false)String pageNo,
-                                    @RequestParam(required = false)String pageSize) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response expertListOms(@ApiParam(value = "姓名")@RequestParam(required = false) String name,
+                                  @ApiParam(value = "专家类型")@RequestParam(required = false) String expertType,
+                                  @ApiParam(value = "状态")@RequestParam(required = false) String status,
+                                  @RequestParam(required = false)String pageNo,
+                                  @RequestParam(required = false)String pageSize) throws Exception {
+        Response response = new Response();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -111,7 +111,7 @@ public class ExpertOmsController {
         map.put("status",status);
         List<Expert> expertList = expertService.findAllExpertList(pager,map);
         pager.result(expertList);
-        jsonResult.setData(pager);
-        return jsonResult;
+        response.setData(pager);
+        return response;
     }
 }

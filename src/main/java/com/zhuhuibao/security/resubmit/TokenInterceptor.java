@@ -1,6 +1,6 @@
 package com.zhuhuibao.security.resubmit;
 
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +65,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
      * 当出现一个非法令牌时调用
      */
     protected boolean handleInvalidToken(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
-        JsonResult result = new JsonResult();
+        Response result = new Response();
         result.setCode(400);
         result.setMessage("请不要频繁操作");
         writeMessageUtf8(response, result);
@@ -79,7 +79,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
-    private void writeMessageUtf8(HttpServletResponse response, JsonResult  json) throws IOException {
+    private void writeMessageUtf8(HttpServletResponse response, Response json) throws IOException {
         try
         {
             response.setCharacterEncoding("UTF-8");

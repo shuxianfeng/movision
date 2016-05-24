@@ -3,7 +3,7 @@ package com.zhuhuibao.business.memCenter.ExpertManage;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
 import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
@@ -38,13 +38,13 @@ public class ExpertController {
     @Autowired
     private ExpertService expertService;
 
-    @ApiOperation(value = "我的技术成果(后台)", notes = "我的技术成果(后台)", response = JsonResult.class)
+    @ApiOperation(value = "我的技术成果(后台)", notes = "我的技术成果(后台)", response = Response.class)
     @RequestMapping(value = "myAchievementList", method = RequestMethod.GET)
-    public JsonResult myAchievementList(@ApiParam(value = "标题") @RequestParam(required = false) String title,
-                                        @ApiParam(value = "状态") @RequestParam(required = false) String status,
-                                        @RequestParam(required = false) String pageNo,
-                                        @RequestParam(required = false) String pageSize) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response myAchievementList(@ApiParam(value = "标题") @RequestParam(required = false) String title,
+                                      @ApiParam(value = "状态") @RequestParam(required = false) String status,
+                                      @RequestParam(required = false) String pageNo,
+                                      @RequestParam(required = false) String pageSize) throws Exception {
+        Response response = new Response();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -65,25 +65,25 @@ public class ExpertController {
                 map.put("createId", principal.getId());
                 List<Achievement> achievementList = expertService.findAllAchievementList(pager, map);
                 pager.result(achievementList);
-                jsonResult.setData(pager);
+                response.setData(pager);
             } else {
-                jsonResult.setCode(401);
-                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                jsonResult.setMsgCode(MsgCodeConstant.un_login);
+                response.setCode(401);
+                response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                response.setMsgCode(MsgCodeConstant.un_login);
             }
         } else {
-            jsonResult.setCode(401);
-            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            jsonResult.setMsgCode(MsgCodeConstant.un_login);
+            response.setCode(401);
+            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            response.setMsgCode(MsgCodeConstant.un_login);
         }
-        return jsonResult;
+        return response;
     }
 
-    @ApiOperation(value = "删除技术成果", notes = "删除技术成果", response = JsonResult.class)
+    @ApiOperation(value = "删除技术成果", notes = "删除技术成果", response = Response.class)
     @RequestMapping(value = "deleteAchievement", method = RequestMethod.POST)
-    public JsonResult deleteAchievement(@ApiParam(value = "技术成果ids,逗号隔开") @RequestParam String ids)
+    public Response deleteAchievement(@ApiParam(value = "技术成果ids,逗号隔开") @RequestParam String ids)
             throws Exception {
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         String[] idList = ids.split(",");
         for (String id : idList) {
             String is_deleted = "1";
@@ -92,21 +92,21 @@ public class ExpertController {
             achievement.setId(id);
             expertService.updateAchievement(achievement);
         }
-        return jsonResult;
+        return response;
     }
 
-    @ApiOperation(value = "更新技术成果", notes = "更新技术成果", response = JsonResult.class)
+    @ApiOperation(value = "更新技术成果", notes = "更新技术成果", response = Response.class)
     @RequestMapping(value = "updateAchievement", method = RequestMethod.POST)
-    public JsonResult updateAchievement(Achievement achievement) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response updateAchievement(Achievement achievement) throws Exception {
+        Response response = new Response();
         expertService.updateAchievement(achievement);
-        return jsonResult;
+        return response;
     }
 
-    @ApiOperation(value = "发布协会动态", notes = "发布协会动态", response = JsonResult.class)
+    @ApiOperation(value = "发布协会动态", notes = "发布协会动态", response = Response.class)
     @RequestMapping(value = "publishDynamic", method = RequestMethod.POST)
-    public JsonResult publishDynamic(Dynamic dynamic) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response publishDynamic(Dynamic dynamic) throws Exception {
+        Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (null != session) {
@@ -115,22 +115,22 @@ public class ExpertController {
                 dynamic.setCreateId(principal.getId().toString());
                 expertService.publishDynamic(dynamic);
             } else {
-                jsonResult.setCode(401);
-                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                jsonResult.setMsgCode(MsgCodeConstant.un_login);
+                response.setCode(401);
+                response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                response.setMsgCode(MsgCodeConstant.un_login);
             }
         } else {
-            jsonResult.setCode(401);
-            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            jsonResult.setMsgCode(MsgCodeConstant.un_login);
+            response.setCode(401);
+            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            response.setMsgCode(MsgCodeConstant.un_login);
         }
-        return jsonResult;
+        return response;
     }
 
-    @ApiOperation(value = "删除协会动态", notes = "删除协会动态", response = JsonResult.class)
+    @ApiOperation(value = "删除协会动态", notes = "删除协会动态", response = Response.class)
     @RequestMapping(value = "deleteDynamic", method = RequestMethod.POST)
-    public JsonResult deleteDynamic(@ApiParam(value = "协会动态ids,逗号隔开") @RequestParam String ids) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response deleteDynamic(@ApiParam(value = "协会动态ids,逗号隔开") @RequestParam String ids) throws Exception {
+        Response response = new Response();
         String[] idList = ids.split(",");
         for (String id : idList) {
             String is_deleted = "1";
@@ -139,24 +139,24 @@ public class ExpertController {
             dynamic.setId(id);
             expertService.updateDynamic(dynamic);
         }
-        return jsonResult;
+        return response;
     }
 
-    @ApiOperation(value = "更新协会动态", notes = "更新协会动态", response = JsonResult.class)
+    @ApiOperation(value = "更新协会动态", notes = "更新协会动态", response = Response.class)
     @RequestMapping(value = "updateDynamic", method = RequestMethod.POST)
-    public JsonResult updateDynamic(Dynamic dynamic) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response updateDynamic(Dynamic dynamic) throws Exception {
+        Response response = new Response();
         expertService.updateDynamic(dynamic);
-        return jsonResult;
+        return response;
     }
 
-    @ApiOperation(value = "我的协会动态(后台)", notes = "我的协会动态(后台)", response = JsonResult.class)
+    @ApiOperation(value = "我的协会动态(后台)", notes = "我的协会动态(后台)", response = Response.class)
     @RequestMapping(value = "myDynamicList", method = RequestMethod.GET)
-    public JsonResult myDynamicList(@ApiParam(value = "标题") @RequestParam(required = false) String title,
-                                    @ApiParam(value = "状态") @RequestParam(required = false) String status,
-                                    @RequestParam(required = false) String pageNo,
-                                    @RequestParam(required = false) String pageSize) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response myDynamicList(@ApiParam(value = "标题") @RequestParam(required = false) String title,
+                                  @ApiParam(value = "状态") @RequestParam(required = false) String status,
+                                  @RequestParam(required = false) String pageNo,
+                                  @RequestParam(required = false) String pageSize) throws Exception {
+        Response response = new Response();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -177,34 +177,34 @@ public class ExpertController {
                 map.put("createId", principal.getId());
                 List<Dynamic> dynamicList = expertService.findAllDynamicList(pager, map);
                 pager.result(dynamicList);
-                jsonResult.setData(pager);
+                response.setData(pager);
             } else {
-                jsonResult.setCode(401);
-                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                jsonResult.setMsgCode(MsgCodeConstant.un_login);
+                response.setCode(401);
+                response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                response.setMsgCode(MsgCodeConstant.un_login);
             }
         } else {
-            jsonResult.setCode(401);
-            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            jsonResult.setMsgCode(MsgCodeConstant.un_login);
+            response.setCode(401);
+            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            response.setMsgCode(MsgCodeConstant.un_login);
         }
-        return jsonResult;
+        return response;
     }
 
-    @ApiOperation(value = "更新专家信息", notes = "更新专家信息", response = JsonResult.class)
+    @ApiOperation(value = "更新专家信息", notes = "更新专家信息", response = Response.class)
     @RequestMapping(value = "updateExpert", method = RequestMethod.POST)
-    public JsonResult updateExpert(Expert expert) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response updateExpert(Expert expert) throws Exception {
+        Response response = new Response();
         expertService.updateExpert(expert);
-        return jsonResult;
+        return response;
     }
 
-    @ApiOperation(value = "根据id查询专家全部信息", notes = "根据id查询专家全部信息", response = JsonResult.class)
+    @ApiOperation(value = "根据id查询专家全部信息", notes = "根据id查询专家全部信息", response = Response.class)
     @RequestMapping(value = "queryExpertById", method = RequestMethod.GET)
-    public JsonResult queryExpertById(@ApiParam(value = "专家id") @RequestParam String id) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response queryExpertById(@ApiParam(value = "专家id") @RequestParam String id) throws Exception {
+        Response response = new Response();
         Expert expert = expertService.queryExpertById(id);
-        jsonResult.setData(expert);
-        return jsonResult;
+        response.setData(expert);
+        return response;
     }
 }

@@ -1,6 +1,6 @@
 package com.zhuhuibao.business.engineerSupplier;
 
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
@@ -36,12 +36,12 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "newEngineer", method = RequestMethod.GET)
-    public JsonResult newEngineer() throws Exception {
+    public Response newEngineer() throws Exception {
         String type = "4";
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         List list = memberService.findNewEngineerOrSupplier(type);
-        jsonResult.setData(list);
-        return jsonResult;
+        response.setData(list);
+        return response;
     }
 
 
@@ -51,12 +51,12 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "newManufacturer", method = RequestMethod.GET)
-    public JsonResult newManufacturer() throws Exception {
+    public Response newManufacturer() throws Exception {
         String type = "1";
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         List list = memberService.findNewEngineerOrSupplier(type);
-        jsonResult.setData(list);
-        return jsonResult;
+        response.setData(list);
+        return response;
     }
 
     /**
@@ -65,12 +65,12 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "newAgent", method = RequestMethod.GET)
-    public JsonResult newAgent() throws Exception {
+    public Response newAgent() throws Exception {
         String type = "2";
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         List list = memberService.findNewEngineerOrSupplier(type);
-        jsonResult.setData(list);
-        return jsonResult;
+        response.setData(list);
+        return response;
     }
 
     /**
@@ -79,12 +79,12 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "newChannel", method = RequestMethod.GET)
-    public JsonResult newChannel() throws Exception {
+    public Response newChannel() throws Exception {
         String type = "3";
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         List list = memberService.findNewEngineerOrSupplier(type);
-        jsonResult.setData(list);
-        return jsonResult;
+        response.setData(list);
+        return response;
     }
 
     /**
@@ -93,11 +93,11 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "introduce", method = RequestMethod.GET)
-    public JsonResult introduce(String id, String type) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response introduce(String id, String type) throws Exception {
+        Response response = new Response();
         Map map = memberService.introduce(id,type);
-        jsonResult.setData(map);
-        return jsonResult;
+        response.setData(map);
+        return response;
     }
 
     /**
@@ -106,11 +106,11 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "greatCompany", method = RequestMethod.GET)
-    public JsonResult greatCompany(String type) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response greatCompany(String type) throws Exception {
+        Response response = new Response();
         List list = memberService.greatCompany(type);
-        jsonResult.setData(list);
-        return jsonResult;
+        response.setData(list);
+        return response;
     }
 
     /**
@@ -119,11 +119,11 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "newIdentifyEngineer", method = RequestMethod.GET)
-    public JsonResult newIdentifyEngineer(String type) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response newIdentifyEngineer(String type) throws Exception {
+        Response response = new Response();
         List list = memberService.findnewIdentifyEngineer(type);
-        jsonResult.setData(list);
-        return jsonResult;
+        response.setData(list);
+        return response;
     }
 
     /**
@@ -132,11 +132,11 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "message", method = RequestMethod.POST)
-    public JsonResult message(Message message) throws Exception {
+    public Response message(Message message) throws Exception {
 /*        String title = new String(message.getTitle().getBytes("8859_1"), "utf8" );
         String receiveName = new String(message.getReceiveName().getBytes("8859_1"), "utf8" );
         String content = new String(message.getContent().getBytes("8859_1"), "utf8" );*/
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session)
@@ -146,15 +146,15 @@ public class EngineerSupplierController {
                 message.setCreateid(principal.getId().toString());
                 memberService.saveMessage(message);
             }else{
-                jsonResult.setCode(401);
-                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                jsonResult.setMsgCode(MsgCodeConstant.un_login);
+                response.setCode(401);
+                response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                response.setMsgCode(MsgCodeConstant.un_login);
             }
         }else{
-            jsonResult.setCode(401);
-            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            jsonResult.setMsgCode(MsgCodeConstant.un_login);
+            response.setCode(401);
+            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            response.setMsgCode(MsgCodeConstant.un_login);
         }
-        return jsonResult;
+        return response;
     }
 }

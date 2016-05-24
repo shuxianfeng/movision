@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.memberReg.service;
 
 import java.util.*;
 
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.exception.BusinessException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
@@ -260,9 +260,9 @@ public class MemberRegService {
      * @param seekPwdCode 查找密码的验证code
      * @return
      */
-    public JsonResult writeAccount(Member member,String seekPwdCode)
+    public Response writeAccount(Member member, String seekPwdCode)
     {
-    	JsonResult result = new JsonResult();
+    	Response result = new Response();
     	try
     	{
 	    	String data = "";
@@ -331,9 +331,9 @@ public class MemberRegService {
      * @param info
      * @return
      */
-    public JsonResult inserValidateInfo(Validateinfo info)
+    public Response inserValidateInfo(Validateinfo info)
     {
-    	JsonResult result = new JsonResult();
+    	Response result = new Response();
     	try
     	{
     		viMapper.insertValidateInfo(info);
@@ -408,8 +408,8 @@ public class MemberRegService {
      * @param seekMobileCode 图形验证码
      * @return
      */
-    public JsonResult mobileValidate(Member member, String seekMobileCode) {
-		JsonResult result = new JsonResult();
+    public Response mobileValidate(Member member, String seekMobileCode) {
+		Response result = new Response();
 		if(seekMobileCode != null)
 		{
 			Validateinfo info = new Validateinfo();
@@ -456,8 +456,8 @@ public class MemberRegService {
      * @param verifyCode
      * @return
      */
-    public JsonResult registerMobileMember(Member member,String verifyCode) {
-		JsonResult result = new JsonResult();
+    public Response registerMobileMember(Member member, String verifyCode) {
+		Response result = new Response();
 		if(verifyCode != null)
 		{
 			Validateinfo info = new Validateinfo();
@@ -520,8 +520,8 @@ public class MemberRegService {
      * @param verifyCode
      * @return
      */
-    public JsonResult registerMailMember(Member member, String verifyCode) throws BusinessException{
-    	JsonResult result = new JsonResult();
+    public Response registerMailMember(Member member, String verifyCode) throws BusinessException{
+    	Response result = new Response();
 		if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getEmailCheckCode()) )			{
 			if(member.getEmail().indexOf("@")>=0)
 			{
@@ -568,22 +568,22 @@ public class MemberRegService {
 	 * @param id
 	 * @return
 	 */
-	public JsonResult findMemberInfoById(Long id)
+	public Response findMemberInfoById(Long id)
 	{
-		JsonResult jsonResult = new JsonResult();
+		Response response = new Response();
 		try
 		{
 			Member member = memberMapper.findMemberInfoById(id);
-			jsonResult.setData(member);
+			response.setData(member);
 		}
 		catch(Exception e)
 		{
 			log.error("find member info error!",e);
-			jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+			response.setCode(MsgCodeConstant.response_status_400);
+    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return response;
 		}
-		return jsonResult;
+		return response;
 	}
 }

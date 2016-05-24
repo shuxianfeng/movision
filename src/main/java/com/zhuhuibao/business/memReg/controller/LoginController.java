@@ -2,7 +2,7 @@ package com.zhuhuibao.business.memReg.controller;
 
 import java.io.IOException;
 
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
@@ -33,9 +33,9 @@ public class LoginController {
     MemberRegService memberService;
     
     @RequestMapping(value = "/rest/login", method = RequestMethod.POST)
-    public JsonResult login(HttpServletRequest req, Member member) throws IOException {
+    public Response login(HttpServletRequest req, Member member) throws IOException {
         log.info("login post 登录校验");
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         String username = member.getAccount();
         UsernamePasswordToken token = null;
         Subject currentUser = null;
@@ -50,27 +50,27 @@ public class LoginController {
 	        }
 	        currentUser = SecurityUtils.getSubject();
             currentUser.login(token);
-            jsonResult.setData(username);
+            response.setData(username);
         } catch (UnknownAccountException e) {
 //            e.printStackTrace();
-            jsonResult.setCode(400);
-            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
-            jsonResult.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
+            response.setCode(400);
+            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
+            response.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
             
         }catch (LockedAccountException e){
             /*e.printStackTrace();
             model.addAttribute("error", "帐户状态异常");
             result = "login";*/
-		    jsonResult.setCode(400);
-		    jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_status_exception)));
-		    jsonResult.setMsgCode(MsgCodeConstant.member_mcode_account_status_exception);
+		    response.setCode(400);
+		    response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_status_exception)));
+		    response.setMsgCode(MsgCodeConstant.member_mcode_account_status_exception);
         } catch (AuthenticationException e){
             /*e.printStackTrace();
             model.addAttribute("error", "用户名或密码错误");
             result = "login";*/
-        	jsonResult.setCode(400);
-		    jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_usernameorpwd_error)));
-		    jsonResult.setMsgCode(MsgCodeConstant.member_mcode_usernameorpwd_error);
+        	response.setCode(400);
+		    response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_usernameorpwd_error)));
+		    response.setMsgCode(MsgCodeConstant.member_mcode_usernameorpwd_error);
         }
 
         if(currentUser.isAuthenticated()){
@@ -81,12 +81,12 @@ public class LoginController {
             token.clear();
         }
 
-        return jsonResult;
+        return response;
     }
     
     @RequestMapping(value = "/rest/logout", method = RequestMethod.GET)
-    public JsonResult logout() throws IOException{
+    public Response logout() throws IOException{
         SecurityUtils.getSubject().logout();
-        return new JsonResult();
+        return new Response();
     }
 }

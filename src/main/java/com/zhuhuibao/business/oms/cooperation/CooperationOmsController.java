@@ -2,7 +2,7 @@ package com.zhuhuibao.business.oms.cooperation;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
 import com.zhuhuibao.mybatis.memCenter.service.CooperationService;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -30,9 +30,9 @@ public class CooperationOmsController {
     /**
      * 查询我发布的任务（分页）
      */
-    @ApiOperation(value="查询任务（后台分页）",notes="查询任务（后台分页）",response = JsonResult.class)
+    @ApiOperation(value="查询任务（后台分页）",notes="查询任务（后台分页）",response = Response.class)
     @RequestMapping(value = "findAllCooperationByPager", method = RequestMethod.GET)
-    public JsonResult findAllMyCooperationByPager(
+    public Response findAllMyCooperationByPager(
             @RequestParam(required = false) String pageNo,@RequestParam(required = false) String pageSize,
             @ApiParam(value = "标题")@RequestParam(required = false) String title,
             @ApiParam(value = "威客类型")@RequestParam(required = false) String type,
@@ -46,7 +46,7 @@ public class CooperationOmsController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         Paging<Cooperation> pager = new Paging<Cooperation>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
         Cooperation cooperation = new Cooperation();
         cooperation.setType(type);
@@ -56,7 +56,7 @@ public class CooperationOmsController {
         cooperation.setCity(city);
         List<Cooperation> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
         pager.result(cooperationList);
-        jsonResult.setData(pager);
-        return jsonResult;
+        response.setData(pager);
+        return response;
     }
 }

@@ -1,11 +1,11 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.AskPriceBean;
 import com.zhuhuibao.common.pojo.AskPriceResultBean;
 import com.zhuhuibao.common.pojo.AskPriceSearchBean;
-import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.AgentMapper;
@@ -50,9 +50,9 @@ public class PriceService {
     /**
      * 询价保存
      */
-    public JsonResult saveAskPrice(AskPrice askPrice){
+    public Response saveAskPrice(AskPrice askPrice){
         log.debug("询价保存");
-        JsonResult result = new JsonResult();
+        Response result = new Response();
         if(askPrice.getBillurl()!=null && !askPrice.getBillurl().equals("")){
             String fileUrl = askPrice.getBillurl();
             fileUrl = ApiConstants.getUploadDoc()+ Constants.upload_price_document_url+"/"+fileUrl;
@@ -77,9 +77,9 @@ public class PriceService {
     /**
      * 根据Id具体某条询价信息
      */
-    public JsonResult queryAskPriceByID(String id){
+    public Response queryAskPriceByID(String id){
         log.debug("根据Id具体某条询价信息");
-        JsonResult result = new JsonResult();
+        Response result = new Response();
         try{
             AskPriceBean bean = askPriceMapper.queryAskPriceByID(id);
             SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -121,8 +121,8 @@ public class PriceService {
     /**
      * 获得我的联系方式（询报价者联系方式）
      */
-    public JsonResult getLinkInfo(String id){
-        JsonResult result = new JsonResult();
+    public Response getLinkInfo(String id){
+        Response result = new Response();
         Map map = new HashMap();
         Member member = memberMapper.findMemById(id);
         if(member!=null){
@@ -183,8 +183,8 @@ public class PriceService {
     /**
      * 最新公开询价(限六条)
      */
-    public JsonResult queryNewPriceInfo(int count,String createid){
-        JsonResult jsonResult = new JsonResult();
+    public Response queryNewPriceInfo(int count, String createid){
+        Response response = new Response();
         List<AskPrice> askPriceList = askPriceMapper.queryNewPriceInfo(count,createid);
         List list = new ArrayList();
         for(int i=0;i<askPriceList.size();i++){
@@ -194,9 +194,9 @@ public class PriceService {
             map.put(Constants.companyName,askPrice.getTitle());
             list.add(map);
         }
-        jsonResult.setCode(200);
-        jsonResult.setData(list);
-        return jsonResult;
+        response.setCode(200);
+        response.setData(list);
+        return response;
     }
 
     /**

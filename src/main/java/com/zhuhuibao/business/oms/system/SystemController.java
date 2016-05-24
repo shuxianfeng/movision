@@ -1,6 +1,6 @@
 package com.zhuhuibao.business.oms.system;
 
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.oms.entity.Category;
 import com.zhuhuibao.mybatis.oms.service.CategoryService;
@@ -37,12 +37,12 @@ public class SystemController {
      */
 
     @RequestMapping(value = "/rest/systemSearch", method = RequestMethod.GET)
-    public JsonResult systemSearch() throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response systemSearch() throws Exception {
+        Response response = new Response();
         List<ResultBean> systemList = categoryService.findSystemList();
-        jsonResult.setCode(200);
-        jsonResult.setData(systemList);
-        return jsonResult;
+        response.setCode(200);
+        response.setData(systemList);
+        return response;
     }
 
     /**
@@ -53,13 +53,13 @@ public class SystemController {
      */
 
     @RequestMapping(value = "/rest/subSystemSearch", method = RequestMethod.GET)
-    public JsonResult subSystemSearch(HttpServletRequest req) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response subSystemSearch(HttpServletRequest req) throws Exception {
+        Response response = new Response();
         String parentId = req.getParameter("parentId");
         List<ResultBean> subSystemList = categoryService.findSubSystemList(parentId);
-        jsonResult.setCode(200);
-        jsonResult.setData(subSystemList);
-        return jsonResult;
+        response.setCode(200);
+        response.setData(subSystemList);
+        return response;
     }
 
 
@@ -70,7 +70,7 @@ public class SystemController {
      */
 
     @RequestMapping(value = "/rest/system/findSystem", method = RequestMethod.GET)
-    public JsonResult findSystem() throws IOException {
+    public Response findSystem() throws IOException {
         return categoryService.findAllSystem();
     }
 
@@ -81,8 +81,8 @@ public class SystemController {
      */
 
     @RequestMapping(value = "/rest/system/addSystem", method = RequestMethod.POST)
-    public JsonResult addSystem(Category category) throws Exception {
-        JsonResult result = new JsonResult();
+    public Response addSystem(Category category) throws Exception {
+        Response result = new Response();
         categoryService.addSystem(category);
         return result;
     }
@@ -94,8 +94,8 @@ public class SystemController {
      */
 
     @RequestMapping(value = "/rest/system/updateSystem", method = RequestMethod.POST)
-    public JsonResult updateSystem(Category category) throws Exception {
-        JsonResult result = new JsonResult();
+    public Response updateSystem(Category category) throws Exception {
+        Response result = new Response();
         categoryService.updateSystem(category);
         return result;
     }
@@ -107,8 +107,8 @@ public class SystemController {
      */
 
     @RequestMapping(value = "/rest/system/deleteSystem", method = RequestMethod.POST)
-    public JsonResult deleteSystem(Category category) throws Exception {
-        JsonResult result = new JsonResult();
+    public Response deleteSystem(Category category) throws Exception {
+        Response result = new Response();
         Product product = productService.findProductBySystemId(category.getId().toString());
         if(product!=null){
             result.setCode(400);

@@ -6,10 +6,10 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.AskPriceBean;
-import com.zhuhuibao.common.pojo.JsonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +50,9 @@ public class OfferPriceService {
 	 * @param price
 	 * @return
 	 */
-	public JsonResult addOfferPrice(OfferPrice price)
+	public Response addOfferPrice(OfferPrice price)
 	{
-		JsonResult jsonResult = new JsonResult();
+		Response response = new Response();
 		try
 		{
 			if(price.getBillurl() != null && !price.getBillurl().equals(""))
@@ -65,9 +65,9 @@ public class OfferPriceService {
 				}
 				else
 				{
-					jsonResult.setCode(400);
-					jsonResult.setMessage("文件不存在");
-					jsonResult.setMsgCode(MsgCodeConstant.file_not_exist);
+					response.setCode(400);
+					response.setMessage("文件不存在");
+					response.setMsgCode(MsgCodeConstant.file_not_exist);
 				}
 			}
 			else if(price.getContent() != null && !price.getContent().equals(""))
@@ -78,12 +78,12 @@ public class OfferPriceService {
 		catch(Exception e)
 		{
 			log.error("add offer price error!",e);
-			jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+			response.setCode(MsgCodeConstant.response_status_400);
+    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return response;
 		}
-		return jsonResult;
+		return response;
 	}
 	
 	/**
@@ -111,23 +111,23 @@ public class OfferPriceService {
      * @param id
      * @return
      */
-    public JsonResult queryOfferPriceInfoByID(Long id)
+    public Response queryOfferPriceInfoByID(Long id)
     {
-    	JsonResult jsonResult = new JsonResult();
+    	Response response = new Response();
 		try
 		{
 			OfferAskPrice price = priceMapper.queryOfferPriceInfoByID(id);
-			jsonResult.setData(price);
+			response.setData(price);
 		}
 		catch(Exception e)
 		{
 			log.error("add offer price error!",e);
-			jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+			response.setCode(MsgCodeConstant.response_status_400);
+    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return response;
 		}
-		return jsonResult;
+		return response;
     }
     
     /**
@@ -169,23 +169,23 @@ public class OfferPriceService {
      * @param id
      * @return
      */
-    public JsonResult queryAllOfferPriceByAskID(Long id)
+    public Response queryAllOfferPriceByAskID(Long id)
     {
-    	JsonResult jsonResult = new JsonResult();
+    	Response response = new Response();
 		try
 		{
 			List<AskPriceSimpleBean> priceList = priceMapper.queryAllOfferPriceByAskID(id);
-			jsonResult.setData(priceList);
+			response.setData(priceList);
 		}
 		catch(Exception e)
 		{
 			log.error("add offer price error!",e);
-			jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+			response.setCode(MsgCodeConstant.response_status_400);
+    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return response;
 		}
-		return jsonResult;
+		return response;
     }
     
     /**
@@ -193,23 +193,23 @@ public class OfferPriceService {
      * @param id
      * @return
      */
-    public JsonResult queryOfferPriceByID(Long id)
+    public Response queryOfferPriceByID(Long id)
     {
-    	JsonResult jsonResult = new JsonResult();
+    	Response response = new Response();
 		try
 		{
 			OfferPrice price = priceMapper.selectByPrimaryKey(id);
-			jsonResult.setData(price);
+			response.setData(price);
 		}
 		catch(Exception e)
 		{
 			log.error("add offer price error!",e);
-			jsonResult.setCode(MsgCodeConstant.response_status_400);
-    		jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return jsonResult;
+			response.setCode(MsgCodeConstant.response_status_400);
+    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+    		return response;
 		}
-		return jsonResult;
+		return response;
     }
     
 }

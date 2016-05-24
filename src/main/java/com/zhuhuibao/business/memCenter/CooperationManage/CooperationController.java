@@ -2,7 +2,7 @@ package com.zhuhuibao.business.memCenter.CooperationManage;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
 import com.zhuhuibao.mybatis.memCenter.service.CooperationService;
@@ -34,86 +34,86 @@ public class CooperationController {
     /**
      * 发布任务
      */
-    @ApiOperation(value="发布任务",notes="发布任务",response = JsonResult.class)
+    @ApiOperation(value="发布任务",notes="发布任务",response = Response.class)
     @RequestMapping(value = "publishCooperation", method = RequestMethod.POST)
-    public JsonResult publishCooperation(Cooperation cooperation) throws Exception {
+    public Response publishCooperation(Cooperation cooperation) throws Exception {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
             if(null != principal){
                 cooperation.setCreateId(principal.getId().toString());
                 cooperationService.publishCooperation(cooperation);
             }else{
-                jsonResult.setCode(401);
-                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                jsonResult.setMsgCode(MsgCodeConstant.un_login);
+                response.setCode(401);
+                response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                response.setMsgCode(MsgCodeConstant.un_login);
             }
         }else{
-            jsonResult.setCode(401);
-            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            jsonResult.setMsgCode(MsgCodeConstant.un_login);
+            response.setCode(401);
+            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            response.setMsgCode(MsgCodeConstant.un_login);
         }
-        return jsonResult;
+        return response;
     }
 
     /**
      * 合作类型(大类，子类)
      */
-    @ApiOperation(value="合作类型(大类，子类)",notes="合作类型(大类，子类)",response = JsonResult.class)
+    @ApiOperation(value="合作类型(大类，子类)",notes="合作类型(大类，子类)",response = Response.class)
     @RequestMapping(value = "cooperationType", method = RequestMethod.GET)
-    public JsonResult cooperationType() throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response cooperationType() throws Exception {
+        Response response = new Response();
         List list = cooperationService.cooperationType();
-        jsonResult.setData(list);
-        return jsonResult;
+        response.setData(list);
+        return response;
     }
 
     /**
      * 合作类型(子类)
      */
-    @ApiOperation(value="合作类型(子类)",notes="合作类型(子类)",response = JsonResult.class)
+    @ApiOperation(value="合作类型(子类)",notes="合作类型(子类)",response = Response.class)
     @RequestMapping(value = "subCooperationType", method = RequestMethod.GET)
-    public JsonResult subCooperationType() throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response subCooperationType() throws Exception {
+        Response response = new Response();
         List list = cooperationService.subCooperationType();
-        jsonResult.setData(list);
-        return jsonResult;
+        response.setData(list);
+        return response;
     }
 
     /**
      * 项目类别
      */
-    @ApiOperation(value="项目类别",notes="项目类别",response = JsonResult.class)
+    @ApiOperation(value="项目类别",notes="项目类别",response = Response.class)
     @RequestMapping(value = "cooperationCategory", method = RequestMethod.GET)
-    public JsonResult cooperationCategory() throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response cooperationCategory() throws Exception {
+        Response response = new Response();
         List list = cooperationService.cooperationCategory();
-        jsonResult.setData(list);
-        return jsonResult;
+        response.setData(list);
+        return response;
     }
 
     /**
      * 编辑任务
      */
-    @ApiOperation(value="编辑任务",notes="编辑任务",response = JsonResult.class)
+    @ApiOperation(value="编辑任务",notes="编辑任务",response = Response.class)
     @RequestMapping(value = "updateCooperation", method = RequestMethod.POST)
-    public JsonResult updateCooperation(Cooperation cooperation) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response updateCooperation(Cooperation cooperation) throws Exception {
+        Response response = new Response();
         cooperationService.updateCooperation(cooperation);
-        return jsonResult;
+        return response;
     }
 
     /**
      * 批量删除任务
      */
-    @ApiOperation(value="批量删除任务",notes="批量删除任务",response = JsonResult.class)
+    @ApiOperation(value="批量删除任务",notes="批量删除任务",response = Response.class)
     @RequestMapping(value = "deleteCooperation", method = RequestMethod.POST)
-    public JsonResult deleteCooperation(@RequestParam String ids[]) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response deleteCooperation(@RequestParam String ids[]) throws Exception {
+        Response response = new Response();
         cooperationService.deleteCooperation(ids);
-        return jsonResult;
+        return response;
     }
 
     /**
@@ -121,19 +121,19 @@ public class CooperationController {
      */
     @ApiOperation(value="查询一条任务的信息",notes="查询一条任务的信息",response = Cooperation.class)
     @RequestMapping(value = "queryCooperationInfoById", method = RequestMethod.GET)
-    public JsonResult queryCooperationInfo(@RequestParam String id) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response queryCooperationInfo(@RequestParam String id) throws Exception {
+        Response response = new Response();
         Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
-        jsonResult.setData(cooperation);
-        return jsonResult;
+        response.setData(cooperation);
+        return response;
     }
 
     /**
      * 查询我发布的任务（分页）
      */
-    @ApiOperation(value="查询我发布的任务（后台分页）",notes="查询我发布的任务（后台分页）",response = JsonResult.class)
+    @ApiOperation(value="查询我发布的任务（后台分页）",notes="查询我发布的任务（后台分页）",response = Response.class)
     @RequestMapping(value = "findAllMyCooperationByPager", method = RequestMethod.GET)
-    public JsonResult findAllMyCooperationByPager(
+    public Response findAllMyCooperationByPager(
             @RequestParam(required = false) String pageNo,@RequestParam(required = false) String pageSize,
             @ApiParam(value = "合作标题")@RequestParam(required = false) String title,
             @ApiParam(value = "合作类型")@RequestParam(required = false) String type,
@@ -147,7 +147,7 @@ public class CooperationController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
@@ -159,17 +159,17 @@ public class CooperationController {
                 cooperation.setStatus(status);
                 List<Cooperation> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
                 pager.result(cooperationList);
-                jsonResult.setData(pager);
+                response.setData(pager);
             }else{
-                jsonResult.setCode(401);
-                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                jsonResult.setMsgCode(MsgCodeConstant.un_login);
+                response.setCode(401);
+                response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                response.setMsgCode(MsgCodeConstant.un_login);
             }
         }else{
-            jsonResult.setCode(401);
-            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            jsonResult.setMsgCode(MsgCodeConstant.un_login);
+            response.setCode(401);
+            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            response.setMsgCode(MsgCodeConstant.un_login);
         }
-        return jsonResult;
+        return response;
     }
 }
