@@ -5,6 +5,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder;
 import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
 import com.zhuhuibao.mybatis.memCenter.entity.MeetingOrder;
 import com.zhuhuibao.mybatis.memCenter.service.ExhibitionService;
@@ -38,7 +39,7 @@ public class ExhibitionOmsController {
     private ExhibitionService exhibitionService;
 
     /**
-     * 会展定制申请处理
+     * 一站式会展定制申请处理
      */
     @ApiOperation(value="会展定制申请处理",notes="会展定制申请处理",response = JsonResult.class)
     @RequestMapping(value = "updateMeetingOrderStatus", method = RequestMethod.POST)
@@ -65,7 +66,7 @@ public class ExhibitionOmsController {
     }
 
     /**
-     * 会展定制查看
+     * 一站式会展定制查看
      */
     @ApiOperation(value="会展定制查看",notes="会展定制查看",response = JsonResult.class)
     @RequestMapping(value = "queryMeetingOrderInfoById", method = RequestMethod.GET)
@@ -77,7 +78,7 @@ public class ExhibitionOmsController {
     }
 
     /**
-     * 会展定制申请管理
+     * 一站式会展定制申请管理
      */
     @ApiOperation(value="会展定制申请管理",notes="会展定制申请管理",response = JsonResult.class)
     @RequestMapping(value = "findAllMeetingOrderInfo", method = RequestMethod.GET)
@@ -110,7 +111,7 @@ public class ExhibitionOmsController {
     }
 
     /**
-     * 发布会展信息
+     * 发布一站式会展信息
      */
     @ApiOperation(value="发布会展信息",notes="发布会展信息",response = JsonResult.class)
     @RequestMapping(value = "publishExhibition", method = RequestMethod.POST)
@@ -150,7 +151,7 @@ public class ExhibitionOmsController {
     }
 
     /**
-     * 会展信息列表(运营)
+     * 一站式会展信息列表(运营)
      */
     @ApiOperation(value="会展信息列表(运营)",notes="会展信息列表(运营)",response = JsonResult.class)
     @RequestMapping(value = "findAllExhibitionOms", method = RequestMethod.GET)
@@ -179,5 +180,46 @@ public class ExhibitionOmsController {
         return jsonResult;
     }
 
+    /**
+     * 分布式会展定制列表(运营)
+     */
+    @ApiOperation(value="分布式会展定制列表(运营)",notes="分布式会展定制列表(运营)",response = JsonResult.class)
+    @RequestMapping(value = "findAllDistributedOrder", method = RequestMethod.GET)
+    public JsonResult findAllDistributedOrder(@ApiParam(value = "联系手机")@RequestParam(required = false)String mobile,
+                                           @ApiParam(value = "定制类型")@RequestParam(required = false)String type,
+                                           @ApiParam(value = "审核状态")@RequestParam(required = false)String status,
+                                           @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) {
+        JsonResult jsonResult = new JsonResult();
+        //设定默认分页pageSize
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<DistributedOrder> pager = new Paging<DistributedOrder>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String,Object> map = new HashMap<>();
+        //查询传参
+        map.put("mobile",mobile);
+        map.put("type",type);
+        map.put("status",status);
+        //查询
+        List<DistributedOrder> distributedOrderList = exhibitionService.findAllDistributedOrder(pager,map);
+        pager.result(distributedOrderList);
+        jsonResult.setData(pager);
+        return jsonResult;
+    }
+
+    /**
+     * 分布式会展定制查看
+     */
+    @ApiOperation(value="分布式会展定制查看",notes="分布式会展定制查看",response = JsonResult.class)
+    @RequestMapping(value = "queryDistributedOrderInfoById", method = RequestMethod.GET)
+    public JsonResult queryDistributedOrderInfoById(@RequestParam String id)  {
+        JsonResult jsonResult = new JsonResult();
+        DistributedOrder distributedOrder = exhibitionService.queryDistributedOrderInfoById(id);
+        jsonResult.setData(distributedOrder);
+        return jsonResult;
+    }
 
 }

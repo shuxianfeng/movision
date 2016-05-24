@@ -1,7 +1,9 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
+import com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder;
 import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
 import com.zhuhuibao.mybatis.memCenter.entity.MeetingOrder;
+import com.zhuhuibao.mybatis.memCenter.mapper.DistributedOrderMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ExhibitionMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MeetingOrderMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -29,8 +31,11 @@ public class ExhibitionService {
     @Autowired
     private ExhibitionMapper exhibitionMapper;
 
+    @Autowired
+    private DistributedOrderMapper distributedOrderMapper;
+
     /**
-     * 发布会展定制
+     * 发布一站式会展定制
      * @param meetingOrder
      */
     public void publishMeetingOrder(MeetingOrder meetingOrder){
@@ -43,7 +48,7 @@ public class ExhibitionService {
     }
 
     /**
-     * 会展定制申请处理
+     * 一站式会展定制申请处理
      * @param meetingOrder
      */
     public void updateMeetingOrderStatus(MeetingOrder meetingOrder){
@@ -56,7 +61,7 @@ public class ExhibitionService {
     }
 
     /**
-     * 会展定制查看
+     * 一站式会展定制查看
      * @param id
      */
     public MeetingOrder queryMeetingOrderInfoById(String id){
@@ -69,7 +74,7 @@ public class ExhibitionService {
     }
 
     /**
-     * 会展定制申请管理
+     * 一站式会展定制申请管理
      */
     public List<MeetingOrder> findAllMeetingOrderInfo(Paging<MeetingOrder> pager,Map<String, Object> map){
         try {
@@ -81,7 +86,7 @@ public class ExhibitionService {
     }
 
     /**
-     * 发布会展定制
+     * 发布会展信息
      * @param exhibition
      */
     public void publishExhibition(Exhibition exhibition){
@@ -144,4 +149,45 @@ public class ExhibitionService {
             throw e;
         }
     }
+
+    /**
+     * 发布分布式会展定制
+     * @param distributedOrder
+     */
+    public int publishDistributedOrder(DistributedOrder distributedOrder){
+        try {
+            return distributedOrderMapper.publishDistributedOrder(distributedOrder);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 分布式会展定制列表(运营)
+     * @param pager,map
+     */
+    public List<DistributedOrder> findAllDistributedOrder(Paging<DistributedOrder> pager,Map<String,Object> map){
+        try {
+            return distributedOrderMapper.findAllDistributedOrder(pager.getRowBounds(),map);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 分布式会展定制查看
+     * @param id
+     */
+    public DistributedOrder queryDistributedOrderInfoById(String id){
+        try {
+            return distributedOrderMapper.queryDistributedOrderInfoById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
 }

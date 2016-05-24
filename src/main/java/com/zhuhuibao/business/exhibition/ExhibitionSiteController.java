@@ -4,6 +4,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder;
 import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
 import com.zhuhuibao.mybatis.memCenter.entity.MeetingOrder;
 import com.zhuhuibao.mybatis.memCenter.service.ExhibitionService;
@@ -36,9 +37,9 @@ public class ExhibitionSiteController {
     private ExhibitionService exhibitionService;
 
     /**
-     * 发布会展定制
+     * 发布一站式会展定制
      */
-    @ApiOperation(value="发布会展定制",notes="发布会展定制",response = JsonResult.class)
+    @ApiOperation(value="发布一站式会展定制",notes="发布一站式会展定制",response = JsonResult.class)
     @RequestMapping(value = "publishMeetingOrder", method = RequestMethod.POST)
     public JsonResult publishMeetingOrder(@ModelAttribute()MeetingOrder meetingOrder) {
         JsonResult jsonResult = new JsonResult();
@@ -107,6 +108,33 @@ public class ExhibitionSiteController {
         map.put("type",type);
         List<Exhibition> exhibitionList = exhibitionService.findNewExhibition(map);
         jsonResult.setData(exhibitionList);
+        return jsonResult;
+    }
+
+    /**
+     * 发布分布式会展定制
+     */
+    @ApiOperation(value="发布分布式会展定制",notes="发布分布式会展定制",response = JsonResult.class)
+    @RequestMapping(value = "publishDistributedOrder", method = RequestMethod.POST)
+    public JsonResult publishDistributedOrder(@ModelAttribute()DistributedOrder distributedOrder) {
+        JsonResult jsonResult = new JsonResult();
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if(null != session) {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
+            if(null != principal){
+                distributedOrder.setCreateid(principal.getId().toString());
+                exhibitionService.publishDistributedOrder(distributedOrder);
+            }else{
+                jsonResult.setCode(401);
+                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                jsonResult.setMsgCode(MsgCodeConstant.un_login);
+            }
+        }else{
+            jsonResult.setCode(401);
+            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            jsonResult.setMsgCode(MsgCodeConstant.un_login);
+        }
         return jsonResult;
     }
 }

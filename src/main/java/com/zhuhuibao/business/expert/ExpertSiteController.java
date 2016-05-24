@@ -277,6 +277,7 @@ public class ExpertSiteController {
             expertMap.put("photo", expert.getPhotoUrl());
             list.add(expertMap);
         }
+        jsonResult.setData(list);
         return jsonResult;
     }
 
@@ -297,6 +298,7 @@ public class ExpertSiteController {
             expertMap.put("introduce", expert.getIntroduce());
             list.add(expertMap);
         }
+        jsonResult.setData(list);
         return jsonResult;
     }
 
