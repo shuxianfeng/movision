@@ -43,10 +43,12 @@ public class AgentService {
      * @param agent
      * @return
      */
-    public int agentSave(Agent agent)throws Exception{
+    public int agentSave(Agent agent){
         try {
             return agentMapper.agentSave(agent);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -56,10 +58,12 @@ public class AgentService {
      * @param agent
      * @return
      */
-    public int agentUpdate(Agent agent)throws Exception{
+    public int agentUpdate(Agent agent){
         try {
             return agentMapper.agentUpdate(agent);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -69,10 +73,12 @@ public class AgentService {
      * @param
      * @return
      */
-    public List<CommonBean> searchProvinceByPinYin()throws Exception{
+    public List<CommonBean> searchProvinceByPinYin(){
         try {
             return provinceMapper.searchProvinceByPinYin();
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -82,10 +88,12 @@ public class AgentService {
      * @param
      * @return
      */
-    public List<AgentBean> findAgentByMemId(String id)throws Exception{
+    public List<AgentBean> findAgentByMemId(String id){
         try {
             return agentMapper.findAgentByMemId(id);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -95,7 +103,7 @@ public class AgentService {
      * @param
      * @return
      */
-    public Map updateAgentById(String id)throws Exception{
+    public Map updateAgentById(String id){
         try{
             AgentBean agent = agentMapper.updateAgentById(id);
             Map map = new HashMap();
@@ -120,20 +128,24 @@ public class AgentService {
             map.put("agent",map1);
             return map;
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
 
-    public Agent find(Agent agent)throws Exception{
+    public Agent find(Agent agent){
         try {
             return agentMapper.find(agent);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
 
 
-    public Map getAgentByProId(String id)throws Exception{
+    public Map getAgentByProId(String id){
         try {
             List<ResultBean> provinceList = provinceMapper.findProvince();
             List<ResultBean> agentList = agentMapper.findAgentByProId(id);
@@ -168,22 +180,28 @@ public class AgentService {
             map.put("agent",list);
             return map;
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
 
-    public List<ResultBean> getGreatAgentByScateid(String id)throws Exception{
+    public List<ResultBean> getGreatAgentByScateid(String id){
         try {
             return agentMapper.getGreatAgentByScateid(id);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
 
-    public List<ResultBean> getGreatAgentByBrandId(String id)throws Exception{
+    public List<ResultBean> getGreatAgentByBrandId(String id){
         try {
             return agentMapper.getGreatAgentByBrandId(id);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -191,7 +209,7 @@ public class AgentService {
     /**
      * 根据品牌id查询代理商跟厂商（区域分组）
      */
-    public Map getAgentByBrandid(String id)throws Exception{
+    public Map getAgentByBrandid(String id){
         try {
             List<ResultBean> provinceList = provinceMapper.findProvince();
             List<ResultBean> agentList = agentMapper.getAgentByBrandid(id);
@@ -223,6 +241,8 @@ public class AgentService {
             map.put("agent",list);
             return map;
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }

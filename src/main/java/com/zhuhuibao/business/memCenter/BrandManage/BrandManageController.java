@@ -41,7 +41,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/addBrand", method = RequestMethod.POST)
-    public Response upload(Brand brand) throws Exception {
+    public Response upload(Brand brand) {
         Response result = new Response();
         brand.setPublishTime(new Date());
         brandService.addBrand(brand);
@@ -54,7 +54,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/updateBrand", method = RequestMethod.POST)
-    public Response updateBrand(Brand brand, String type) throws Exception {
+    public Response updateBrand(Brand brand, String type)  {
         Response result = new Response();
         //如果是未通过的品牌进行更新，则状态变为待审核
         if(type==null || "".equals(type)){
@@ -76,7 +76,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/deleteBrand", method = RequestMethod.POST)
-    public Response deleteBrand(String id) throws Exception {
+    public Response deleteBrand(String id)  {
         Response result = new Response();
         brandService.deleteBrand(id);
         return result;
@@ -89,7 +89,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/batchDeleteBrand", method = RequestMethod.POST)
-    public Response batchDeleteBrand(HttpServletRequest req) throws Exception {
+    public Response batchDeleteBrand(HttpServletRequest req)  {
         String ids[] = req.getParameterValues("id");
         Response result = new Response();
         for (String id : ids) {
@@ -104,7 +104,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/searchBrand", method = RequestMethod.GET)
-    public Response searchBrand(Brand brand) throws Exception {
+    public Response searchBrand(Brand brand)  {
         List<Brand> brandList = brandService.searchBrand(brand);
         Response result = new Response();
         result.setData(brandList);
@@ -117,7 +117,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/searchBrandByPager", method = RequestMethod.GET)
-    public Response searchBrandByPager(Brand brand, String pageNo, String pageSize) throws Exception {
+    public Response searchBrandByPager(Brand brand, String pageNo, String pageSize)  {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -138,7 +138,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/searchBrandSelect", method = RequestMethod.GET)
-    public Response searchBrandSelect(Brand brand) throws Exception {
+    public Response searchBrandSelect(Brand brand)  {
         List<Brand> brandList = brandService.searchBrandByStatus(brand);
         List list = new ArrayList();
         for (Brand aBrandList : brandList) {
@@ -157,7 +157,7 @@ public class BrandManageController {
      * 品牌数量（自己发布的品牌）
      */
     @RequestMapping(value = "/rest/searchBrandSize", method = RequestMethod.GET)
-    public Response searchBrandSize(Brand brand) throws Exception {
+    public Response searchBrandSize(Brand brand) {
         int size = brandService.searchBrandSize(brand);
         Response result = new Response();
         result.setData(size);
@@ -168,7 +168,7 @@ public class BrandManageController {
      * 品牌数量(运营系统，系统所有品牌)
      */
     @RequestMapping(value = "/rest/findBrandSize", method = RequestMethod.GET)
-    public Response findBrandSize(Brand brand) throws Exception {
+    public Response findBrandSize(Brand brand){
         int size = brandService.findBrandSize(brand);
         Response result = new Response();
         result.setData(size);
@@ -179,7 +179,7 @@ public class BrandManageController {
      * 查看品牌详情
      */
     @RequestMapping(value = "/rest/brandDetails", method = RequestMethod.GET)
-    public Response brandDetails(int id) throws Exception {
+    public Response brandDetails(int id) {
         Brand brand = brandService.brandDetails(id);
         if(brand.getViews()==null){
             brand.setViews(1);
@@ -210,7 +210,7 @@ public class BrandManageController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/findBrandByScateid", method = RequestMethod.GET)
-    public Response findBrandByScateid(Product product) throws Exception {
+    public Response findBrandByScateid(Product product)  {
         List<ResultBean> brandList = brandService.findBrandByScateid(product);
         Response result = new Response();
         result.setData(brandList);

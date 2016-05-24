@@ -45,7 +45,7 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/addMember", method = RequestMethod.POST)
-	public Response addMember(HttpServletRequest req, Member member) throws Exception {
+	public Response addMember(HttpServletRequest req, Member member)  {
 		String account = req.getParameter("account");
 		if(account.contains("@")){
 			member.setEmail(account);
@@ -77,7 +77,7 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/updateMember", method = RequestMethod.POST)
-	public Response updateMember(HttpServletRequest req, Member member) throws Exception {
+	public Response updateMember(HttpServletRequest req, Member member)  {
 		String account = req.getParameter("account");
 		if(account.contains("@")){
 			member.setEmail(account);
@@ -120,7 +120,7 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/deleteMember", method = RequestMethod.POST)
-	public Response deleteMember(HttpServletRequest req) throws Exception {
+	public Response deleteMember(HttpServletRequest req)  {
 		String ids[] = req.getParameterValues("ids");
 		Response result = new Response();
 		for (String id : ids) {
@@ -136,7 +136,7 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/staffSearch", method = RequestMethod.GET)
-	public Response staffSearch(Member member, String pageNo, String pageSize) throws Exception {
+	public Response staffSearch(Member member, String pageNo, String pageSize)  {
 		Response response = new Response();
 		if(member.getAccount()!=null){
 			if(member.getAccount().contains("_")){
@@ -162,7 +162,7 @@ public class StaffManageController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/staffSearchSize", method = RequestMethod.GET)
-	public Response staffSearchSize(Member member) throws IOException {
+	public Response staffSearchSize(Member member)  {
 		Response result = new Response();
 		List<Member> memberList = memberMapper.findStaffByParentId(member);
 		Map map = new HashMap();
@@ -182,7 +182,7 @@ public class StaffManageController {
 	 */
 
 	@RequestMapping(value = "/rest/resetPwd", method = RequestMethod.POST)
-	public Response resetPwd(HttpServletRequest req) throws Exception {
+	public Response resetPwd(HttpServletRequest req)  {
 		String ids[] = req.getParameterValues("ids");
 		Response result = new Response();
 		for (String id : ids) {

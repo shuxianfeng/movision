@@ -62,11 +62,13 @@ public class MemberService {
 	/**
 	 * 会员信息保存
 	 */
-	public int updateMemInfo(Member member)throws Exception
+	public int updateMemInfo(Member member)
 	{
 		try{
 			return memberMapper.updateMemInfo(member);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -74,11 +76,13 @@ public class MemberService {
 	/**
 	 * 更新会员状态
 	 */
-	public int updateStatus(Member member)throws Exception
+	public int updateStatus(Member member)
 	{
 		try{
 			return memberMapper.updateStatus(member);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -86,11 +90,13 @@ public class MemberService {
 	/**
 	 * 根据会员ID查询会员信息
 	 */
-	public Member findMemById(String id)throws Exception
+	public Member findMemById(String id)
 	{
 		try{
 			return memberMapper.findMemById(id);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -98,11 +104,13 @@ public class MemberService {
 	/**
 	 * 新建员工
 	 */
-	public int addMember(Member member)throws Exception
+	public int addMember(Member member)
 	{
 		try{
 			return memberMapper.addMember(member);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -110,11 +118,13 @@ public class MemberService {
 	/**
 	 * 修改员工
 	 */
-	public int updateMember(Member member)throws Exception
+	public int updateMember(Member member)
 	{
 		try{
 			return memberMapper.updateMember(member);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -133,11 +143,13 @@ public class MemberService {
 	/**
 	 * 删除员工
 	 */
-	public int deleteMember(String id)throws Exception
+	public int deleteMember(String id)
 	{
 		try{
 			return memberMapper.deleteMember(id);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -145,11 +157,13 @@ public class MemberService {
 	/**
 	 * 员工密码重置
 	 */
-	public int resetPwd(Member member)throws Exception
+	public int resetPwd(Member member)
 	{
 		try{
 			return memberMapper.resetPwd(member);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -157,11 +171,13 @@ public class MemberService {
 	/**
 	 * 会员头像修改
 	 */
-	public int uploadHeadShot(Member member)throws Exception
+	public int uploadHeadShot(Member member)
 	{
 		try{
 			return memberMapper.uploadHeadShot(member);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -169,11 +185,13 @@ public class MemberService {
 	/**
 	 * 公司logo修改
 	 */
-	public int uploadLogo(Member member)throws Exception
+	public int uploadLogo(Member member)
 	{
 		try{
 			return memberMapper.uploadLogo(member);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -181,11 +199,13 @@ public class MemberService {
 	/**
 	 * 查询代理商
 	 */
-	public List<AccountBean> findAgentMember(String account, String type)throws Exception
-	{
+	public List<AccountBean> findAgentMember(String account, String type)
+		{
 		try{
 			return memberMapper.findAgentMember(account,type);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -193,11 +213,13 @@ public class MemberService {
 	/**
 	 * 根据会员账号查询会员
 	 */
-	public Member findMember(Member member)throws Exception
+	public Member findMember(Member member)
 	{
 		try{
 			return memberMapper.findMember(member);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -205,11 +227,13 @@ public class MemberService {
 	/**
 	 * 根据会员账号查询会员
 	 */
-	public Member findMemer(Member member)throws Exception
+	public Member findMemer(Member member)
 	{
 		try{
 			return memberMapper.findMember(member);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -217,7 +241,7 @@ public class MemberService {
 	/**
 	 * 资质类型
 	 */
-	public List findCertificateList(String type)throws Exception
+	public List findCertificateList(String type)
 	{
 		try {
 			List<Certificate> certificate = certificateMapper.findCertificateList(type);
@@ -233,6 +257,8 @@ public class MemberService {
 			}
 			return list;
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -240,11 +266,13 @@ public class MemberService {
 	/**
 	 * 工作类别
 	 */
-	public List<WorkType> findWorkTypeList()throws Exception
+	public List<WorkType> findWorkTypeList()
 	{
 		try{
 			return workTypeMapper.findWorkTypeList();
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -262,11 +290,13 @@ public class MemberService {
 	/**
 	 * 人员规模
 	 */
-	public List<EmployeeSize> findEmployeeSizeList()throws Exception
+	public List<EmployeeSize> findEmployeeSizeList()
 	{
 		try{
 			return employeeSizeMapper.findEmployeeSizeList();
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -274,11 +304,13 @@ public class MemberService {
 	/**
 	 * 企业性质
 	 */
-	public List<EnterpriseType> findEnterpriseTypeList()throws Exception
+	public List<EnterpriseType> findEnterpriseTypeList()
 	{
 		try{
 			return enterpriseTypeMapper.findEnterpriseTypeList();
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -286,11 +318,13 @@ public class MemberService {
 	/**
 	 * 企业身份
 	 */
-	public List<Identity> findIdentityList()throws Exception
+	public List<Identity> findIdentityList()
 	{
 		try{
 			return identityMapper.findIdentityList();
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -298,11 +332,13 @@ public class MemberService {
 	/**
 	 * 查询省
 	 */
-	public List<ResultBean> findProvince()throws Exception
+	public List<ResultBean> findProvince()
 	{
 		try{
 			return provinceMapper.findProvince();
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -310,11 +346,13 @@ public class MemberService {
 	/**
 	 * 根据省Code查询市
 	 */
-	public List<ResultBean> findCity(String provincecode)throws Exception
+	public List<ResultBean> findCity(String provincecode)
 	{
 		try{
 			return cityMapper.findCity(provincecode);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -322,11 +360,13 @@ public class MemberService {
 	/**
 	 * 根据市Code查询县区
 	 */
-	public List<ResultBean> findArea(String cityCode)throws Exception
+	public List<ResultBean> findArea(String cityCode)
 	{
 		try{
 			return areaMapper.findArea(cityCode);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -334,11 +374,13 @@ public class MemberService {
 	/**
 	 * 资质保存
 	 */
-	public int saveCertificate(CertificateRecord record)throws Exception
+	public int saveCertificate(CertificateRecord record)
 	{
 		try{
 			return certificateRecordMapper.saveCertificate(record);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -346,11 +388,13 @@ public class MemberService {
 	/**
 	 * 资质编辑
 	 */
-	public int updateCertificate(CertificateRecord record)throws Exception
+	public int updateCertificate(CertificateRecord record)
 	{
 		try{
 			return certificateRecordMapper.updateCertificate(record);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -358,11 +402,13 @@ public class MemberService {
 	/**
 	 * 资质删除
 	 */
-	public int deleteCertificate(CertificateRecord record)throws Exception
+	public int deleteCertificate(CertificateRecord record)
 	{
 		try{
 			return certificateRecordMapper.deleteCertificate(record);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -370,11 +416,13 @@ public class MemberService {
 	/**
 	 * 查询资质
 	 */
-	public List<CertificateRecord> certificateSearch(CertificateRecord record)throws Exception
+	public List<CertificateRecord> certificateSearch(CertificateRecord record)
 	{
 		try{
 			return certificateRecordMapper.certificateSearch(record);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -382,7 +430,7 @@ public class MemberService {
 	/**
 	 * 根据父类ID查询公司下属员工
 	 */
-	public List findStaffByParentId(Paging<Member> pager, Member member)throws Exception
+	public List findStaffByParentId(Paging<Member> pager, Member member)
 	{
 		try {
 			List<Member> memberList = memberMapper.findAllByPager(pager.getRowBounds(),member);
@@ -420,6 +468,8 @@ public class MemberService {
 			}
 			return list;
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -428,7 +478,7 @@ public class MemberService {
 	 *查询最新供应商 工程商
 	 * @return
      */
-	public List findNewEngineerOrSupplier(String type)throws Exception{
+	public List findNewEngineerOrSupplier(String type){
 		try {
 			List<Member> memberList = memberMapper.findNewEngineerOrSupplier(type);
 			List list = new ArrayList();
@@ -446,6 +496,8 @@ public class MemberService {
 			}
 			return list;
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -455,7 +507,7 @@ public class MemberService {
 	 *查询最新认证供应商 工程商
 	 * @return
 	 */
-	public List findnewIdentifyEngineer(String type)throws Exception{
+	public List findnewIdentifyEngineer(String type){
 		try {
 			List list = new ArrayList();
 			if("2".equals(type)){
@@ -488,6 +540,8 @@ public class MemberService {
 			}
 			return list;
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -496,7 +550,7 @@ public class MemberService {
 	 *供应商 工程商简版介绍
 	 * @return
 	 */
-	public Map introduce(String id,String type)throws Exception{
+	public Map introduce(String id,String type){
 		try {
 			Member member = memberMapper.findMemById(id);
 			String enterpriseTypeName = "";
@@ -560,6 +614,8 @@ public class MemberService {
 			map.put(Constants.certificateRecord,certificateRecordList);
 			return map;
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -568,7 +624,7 @@ public class MemberService {
 	 *名企展示
 	 * @return
 	 */
-	public List greatCompany(String type)throws Exception{
+	public List greatCompany(String type){
 		List list = new ArrayList();
 		if("2".equals(type)){
 			List<ResultBean> list1 = memberMapper.findGreatCompany("4");
@@ -607,11 +663,13 @@ public class MemberService {
 	 *留言
 	 * @return
 	 */
-	public int saveMessage(Message message)throws Exception{
+	public int saveMessage(Message message){
 		try {
 			return messageMapper.saveMessage(message);
 		}
 		catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}

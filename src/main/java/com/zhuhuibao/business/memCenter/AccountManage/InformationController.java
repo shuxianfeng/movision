@@ -45,7 +45,7 @@ public class InformationController {
 	 */
 
 	@RequestMapping(value = "/rest/info", method = RequestMethod.GET)
-	public Response info(HttpServletRequest req, HttpServletResponse response) throws Exception {
+	public Response info(HttpServletRequest req) {
 		Response result = new Response();
 		String memId = req.getParameter("id");
 		Member member = memberService.findMemById(memId);
@@ -62,7 +62,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/detailInfo", method = RequestMethod.POST)
-	public Response detailInfo(Member member) throws Exception {
+	public Response detailInfo(Member member)  {
 		Response result = new Response();
 		memberService.updateMemInfo(member);
 		return result;
@@ -75,7 +75,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/updateStatus", method = RequestMethod.POST)
-	public Response updateStatus(Member member) throws Exception {
+	public Response updateStatus(Member member)  {
 		Response result = new Response();
 		memberService.updateStatus(member);
 		return result;
@@ -89,7 +89,7 @@ public class InformationController {
 	 */
 
 	@RequestMapping(value = "/rest/certificateList", method = RequestMethod.GET)
-	public Response certificateList(HttpServletRequest req) throws Exception {
+	public Response certificateList(HttpServletRequest req)  {
 		Response response = new Response();
 		String type = req.getParameter("type");
 		List list = memberService.findCertificateList(type);
@@ -104,7 +104,7 @@ public class InformationController {
 	 */
 
 	@RequestMapping(value = "/rest/workTypeList", method = RequestMethod.GET)
-	public Response workTypeList() throws Exception {
+	public Response workTypeList()  {
 		Response result = new Response();
 		List<WorkType> workType = memberService.findWorkTypeList();
 		result.setData(workType);
@@ -118,7 +118,7 @@ public class InformationController {
 	 */
 
 	@RequestMapping(value = "/rest/enterpriseTypeList", method = RequestMethod.GET)
-	public Response enterpriseTypeList() throws Exception {
+	public Response enterpriseTypeList()  {
 		Response result = new Response();
 		List<EnterpriseType> enterpriseType = memberService.findEnterpriseTypeList();
 		result.setData(enterpriseType);
@@ -132,7 +132,7 @@ public class InformationController {
 	 */
 
 	@RequestMapping(value = "/rest/identityList", method = RequestMethod.GET)
-	public Response identityList() throws Exception {
+	public Response identityList()  {
 		Response result = new Response();
 		List<Identity> identity = memberService.findIdentityList();
 		result.setData(identity);
@@ -147,7 +147,7 @@ public class InformationController {
 	 */
 
 	@RequestMapping(value = "/rest/employeeSizeList", method = RequestMethod.GET)
-	public Response employeeSizeList() throws Exception {
+	public Response employeeSizeList()  {
 		Response result = new Response();
 		List<EmployeeSize> employeeSizeList = memberService.findEmployeeSizeList();
 		result.setData(employeeSizeList);
@@ -161,7 +161,7 @@ public class InformationController {
 	 */
 
 	@RequestMapping(value = "/rest/searchProvince", method = RequestMethod.GET)
-	public Response searchProvince() throws Exception {
+	public Response searchProvince()  {
 		Response result = new Response();
 		List<ResultBean> province = memberService.findProvince();
 		result.setData(province);
@@ -174,7 +174,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/searchCity", method = RequestMethod.GET)
-	public Response searchCity(String provincecode) throws Exception {
+	public Response searchCity(String provincecode)  {
 		Response result = new Response();
 		List<ResultBean> city = memberService.findCity(provincecode);
 		result.setData(city);
@@ -187,7 +187,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/searchArea", method = RequestMethod.GET)
-	public Response searchArea(String cityCode) throws Exception {
+	public Response searchArea(String cityCode)  {
 		Response result = new Response();
 		List<ResultBean> area = memberService.findArea(cityCode);
 		result.setData(area);
@@ -202,7 +202,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/isBindMobile", method = RequestMethod.POST)
-	public Response isBindMobile(HttpServletRequest req) throws Exception {
+	public Response isBindMobile(HttpServletRequest req) {
 		String memId = req.getParameter("id");
 		Response result = new Response();
 		Member member = memberService.findMemById(memId);
@@ -223,7 +223,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/isBindEmail", method = RequestMethod.POST)
-	public Response isBindEmail(HttpServletRequest req) throws Exception {
+	public Response isBindEmail(HttpServletRequest req)  {
 		String memId = req.getParameter("id");
 		Response result = new Response();
 		Member member = memberService.findMemById(memId);
@@ -245,7 +245,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/memberLogo", method = RequestMethod.GET)
-	public Response memberLogo(HttpServletRequest req) throws Exception {
+	public Response memberLogo(HttpServletRequest req)  {
 		Response result = new Response();
 		String memId = req.getParameter("id");
 		Member member = memberService.findMemById(memId);
@@ -259,7 +259,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/certificateSave", method = RequestMethod.POST)
-	public Response certificateSave(CertificateRecord record) throws Exception {
+	public Response certificateSave(CertificateRecord record)  {
 		Response result = new Response();
 		record.setTime(new Date());
 		memberService.saveCertificate(record);
@@ -272,7 +272,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/certificateUpdate", method = RequestMethod.POST)
-	public Response certificateUpdate(CertificateRecord record) throws Exception {
+	public Response certificateUpdate(CertificateRecord record)  {
 		Response result = new Response();
 		record.setTime(new Date());
 		memberService.updateCertificate(record);
@@ -286,7 +286,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/certificateDelete", method = RequestMethod.POST)
-	public Response certificateDelete(CertificateRecord record) throws Exception {
+	public Response certificateDelete(CertificateRecord record)  {
 		Response result = new Response();
 		memberService.deleteCertificate(record);
 		return result;
@@ -299,7 +299,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/certificateSearch", method = RequestMethod.GET)
-	public Response certificateSearch(CertificateRecord record) throws Exception {
+	public Response certificateSearch(CertificateRecord record)  {
 		Response result = new Response();
 		List<CertificateRecord> list = memberService.certificateSearch(record);
 		result.setData(list);

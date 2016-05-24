@@ -735,11 +735,13 @@ public class ProductService {
 	/**
 	 * 查询品牌对应的子系统
 	 */
-	public List<ResultBean> findSubSystem(String id)throws Exception
+	public List<ResultBean> findSubSystem(String id)
 	{
 		try {
 			return productMapper.findSubSystem(id);
 		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}

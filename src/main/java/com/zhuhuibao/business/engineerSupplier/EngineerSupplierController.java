@@ -36,7 +36,7 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "newEngineer", method = RequestMethod.GET)
-    public Response newEngineer() throws Exception {
+    public Response newEngineer()  {
         String type = "4";
         Response response = new Response();
         List list = memberService.findNewEngineerOrSupplier(type);
@@ -51,7 +51,7 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "newManufacturer", method = RequestMethod.GET)
-    public Response newManufacturer() throws Exception {
+    public Response newManufacturer()  {
         String type = "1";
         Response response = new Response();
         List list = memberService.findNewEngineerOrSupplier(type);
@@ -65,7 +65,7 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "newAgent", method = RequestMethod.GET)
-    public Response newAgent() throws Exception {
+    public Response newAgent()  {
         String type = "2";
         Response response = new Response();
         List list = memberService.findNewEngineerOrSupplier(type);
@@ -79,7 +79,7 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "newChannel", method = RequestMethod.GET)
-    public Response newChannel() throws Exception {
+    public Response newChannel()  {
         String type = "3";
         Response response = new Response();
         List list = memberService.findNewEngineerOrSupplier(type);
@@ -93,7 +93,7 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "introduce", method = RequestMethod.GET)
-    public Response introduce(String id, String type) throws Exception {
+    public Response introduce(String id, String type) {
         Response response = new Response();
         Map map = memberService.introduce(id,type);
         response.setData(map);
@@ -106,7 +106,7 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "greatCompany", method = RequestMethod.GET)
-    public Response greatCompany(String type) throws Exception {
+    public Response greatCompany(String type) {
         Response response = new Response();
         List list = memberService.greatCompany(type);
         response.setData(list);
@@ -119,7 +119,7 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "newIdentifyEngineer", method = RequestMethod.GET)
-    public Response newIdentifyEngineer(String type) throws Exception {
+    public Response newIdentifyEngineer(String type)  {
         Response response = new Response();
         List list = memberService.findnewIdentifyEngineer(type);
         response.setData(list);
@@ -132,7 +132,7 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @RequestMapping(value = "message", method = RequestMethod.POST)
-    public Response message(Message message) throws Exception {
+    public Response message(Message message) {
 /*        String title = new String(message.getTitle().getBytes("8859_1"), "utf8" );
         String receiveName = new String(message.getReceiveName().getBytes("8859_1"), "utf8" );
         String content = new String(message.getContent().getBytes("8859_1"), "utf8" );*/

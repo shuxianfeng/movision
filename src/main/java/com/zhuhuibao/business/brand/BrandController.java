@@ -44,7 +44,7 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/category/all", method = RequestMethod.GET)
-    public Response findAll() throws Exception {
+    public Response findAll()  {
         Response result = new Response();
         List<ResultBean> sysList = categoryService.findSystemList();
         List<SysBean> allList = categoryService.searchAll();
@@ -92,7 +92,7 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/findSuggestBrand", method = RequestMethod.GET)
-    public Response findSuggestBrand(String id) throws Exception {
+    public Response findSuggestBrand(String id)  {
         Response result = new Response();
         List<ResultBean> SubSystemList = categoryService.findSubSystemListLimit(id);
         List<SuggestBrand> brandList = brandService.SuggestBrand();
@@ -129,7 +129,7 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/category/findSubSystem", method = RequestMethod.GET)
-    public Response findSubSystem(String id) throws Exception {
+    public Response findSubSystem(String id)  {
         List<ResultBean> subSystemList = categoryService.findSubSystemList(id);
         Map map = new HashMap();
         Category category = categoryService.findSystem(id);
@@ -150,7 +150,7 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/findAllBrand", method = RequestMethod.GET)
-    public Response findAllBrand(Product product) throws Exception {
+    public Response findAllBrand(Product product) {
         List<ResultBean> brandList = brandService.findAllBrand(product);
         Response result = new Response();
         result.setCode(200);
@@ -165,7 +165,7 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/searchSuggestBrand", method = RequestMethod.GET)
-    public Response searchSuggestBrand() throws Exception {
+    public Response searchSuggestBrand()  {
         List<ResultBean> brandList = brandService.searchSuggestBrand();
         Response result = new Response();
         result.setCode(200);
@@ -180,7 +180,7 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/details", method = RequestMethod.GET)
-    public Response details(String id, String scateid) throws Exception {
+    public Response details(String id, String scateid)  {
         Map map1 = new HashMap();
         Map map2 = new HashMap();
         Map map3 = new HashMap();
@@ -225,7 +225,7 @@ public class BrandController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/brand/findSubSystemByBrand", method = RequestMethod.GET)
-    public Response findSubSystemByBrand(String id) throws Exception {
+    public Response findSubSystemByBrand(String id)  {
         //品牌对应的子系统
         List<ResultBean> list = productService.findSubSystem(id);
         Response result = new Response();

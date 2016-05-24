@@ -63,7 +63,7 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/checkPwdById", method = RequestMethod.GET)
-    public Response checkPwdById(HttpServletRequest req) throws Exception {
+    public Response checkPwdById(HttpServletRequest req)  {
         String id = req.getParameter("id");
         //前台密码解密
         String pwd = new String(EncodeUtil.decodeBase64(req.getParameter("pwd")));
@@ -107,7 +107,7 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/checkPwdByAccount", method = RequestMethod.GET)
-    public Response checkPwdByAccount(HttpServletRequest req) throws Exception {
+    public Response checkPwdByAccount(HttpServletRequest req)  {
         //账号：手机或邮箱
         String account = req.getParameter("account");
         //前台密码解密
@@ -135,7 +135,7 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/saveNewPwd", method = RequestMethod.POST)
-    public Response saveNewPwd(HttpServletRequest req) throws Exception {
+    public Response saveNewPwd(HttpServletRequest req)  {
         String id = req.getParameter("id");
         String newPwd = new String(EncodeUtil.decodeBase64(req.getParameter("newPwd")));
         String md5Pwd = new Md5Hash(newPwd,null,2).toString();
@@ -154,7 +154,7 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/sendChangeEmail", method = RequestMethod.POST)
-    public Response sendChangeEmail(HttpServletRequest req) throws Exception {
+    public Response sendChangeEmail(HttpServletRequest req) {
         Response result = new Response();
         String email = req.getParameter("email");
         Member member1 = new Member();
@@ -190,14 +190,9 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/updateMobile", method = RequestMethod.POST)
-    public Response updateMobile(Member member) throws Exception {
+    public Response updateMobile(Member member)  {
         Response result = new Response();
-        try {
-            memberService.updateMember(member);
-        }catch(Exception e){
-            throw e;
-        }
-
+        memberService.updateMember(member);
         return result;
     }
 
@@ -206,7 +201,7 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/checkMobile", method = RequestMethod.POST)
-    public Response checkMobile(Member member) throws Exception {
+    public Response checkMobile(Member member)  {
         Response result = new Response();
         Member member1 = memberService.findMemer(member);
         if(member1!=null){
@@ -225,7 +220,7 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/updateEmail", method = RequestMethod.GET)
-    public ModelAndView updateEmail(HttpServletRequest req) throws Exception {
+    public ModelAndView updateEmail(HttpServletRequest req)  {
         ModelAndView modelAndView = new ModelAndView();
         Member member = new Member();
         String email = req.getParameter("email");//获取email
