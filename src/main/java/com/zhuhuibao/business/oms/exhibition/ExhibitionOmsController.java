@@ -222,4 +222,31 @@ public class ExhibitionOmsController {
         return jsonResult;
     }
 
+
+    /**
+     * 分布式会展定制申请处理
+     */
+    @ApiOperation(value="分布式会展定制申请处理",notes="分布式会展定制申请处理",response = JsonResult.class)
+    @RequestMapping(value = "updateDistributedStatus", method = RequestMethod.POST)
+    public JsonResult updateDistributedStatus(@ModelAttribute()DistributedOrder distributedOrder)  {
+        JsonResult jsonResult = new JsonResult();
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if(null != session) {
+            OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
+            if(null != principal){
+                distributedOrder.setUpdateManId(principal.getId().toString());
+                exhibitionService.updateDistributedStatus(distributedOrder);
+            }else{
+                jsonResult.setCode(401);
+                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                jsonResult.setMsgCode(MsgCodeConstant.un_login);
+            }
+        }else{
+            jsonResult.setCode(401);
+            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            jsonResult.setMsgCode(MsgCodeConstant.un_login);
+        }
+        return jsonResult;
+    }
 }

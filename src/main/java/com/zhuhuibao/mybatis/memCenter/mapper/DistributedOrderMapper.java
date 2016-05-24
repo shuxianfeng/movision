@@ -12,7 +12,7 @@ public interface DistributedOrderMapper {
 
     DistributedOrder queryDistributedOrderInfoById(String id);
 
-    int updateStatus(DistributedOrder distributedOrder);
+    int updateDistributedStatus(DistributedOrder distributedOrder);
 
     List<DistributedOrder> findAllDistributedOrder(RowBounds rowBounds,Map<String,Object> map);
 }

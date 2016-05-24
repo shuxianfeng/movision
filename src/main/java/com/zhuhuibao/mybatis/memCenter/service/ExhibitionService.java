@@ -189,5 +189,16 @@ public class ExhibitionService {
         }
     }
 
-
+    /**
+     * 分布式会展定制申请处理
+     * @param distributedOrder
+     */
+    public void updateDistributedStatus(DistributedOrder distributedOrder){
+        try {
+            distributedOrderMapper.updateDistributedStatus(distributedOrder);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

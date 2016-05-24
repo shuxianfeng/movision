@@ -87,7 +87,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateStatus" parameterType="com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder" >
+  <update id="updateDistributedStatus" parameterType="com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder" >
     update t_c_distributedOrder
     <set >
         updateTime = now(),
