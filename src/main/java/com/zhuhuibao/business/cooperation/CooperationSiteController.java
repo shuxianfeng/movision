@@ -42,7 +42,7 @@ public class CooperationSiteController {
      @ApiParam(value = "项目类别") @RequestParam(required = false) String category,
      @ApiParam(value = "省") @RequestParam(required = false) String province,
      @ApiParam(value = "关键字") @RequestParam(required = false) String smart,
-     @ApiParam(value = "发布类型，1：接任务，2：接服务，3：资质合作") @RequestParam String parentId) throws Exception {
+     @ApiParam(value = "发布类型，1：接任务，2：接服务，3：资质合作") @RequestParam String parentId) {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -70,7 +70,7 @@ public class CooperationSiteController {
     @ApiOperation(value = "最热合作信息", notes = "最热合作信息", response = JsonResult.class)
     @RequestMapping(value = "queryHotService", method = RequestMethod.GET)
     public JsonResult queryHotService(@ApiParam(value = "条数") @RequestParam(required = false) int count,
-                                      @ApiParam(value = "合作类型：1：任务，2：服务，3：资质合作") String type) throws Exception {
+                                      @ApiParam(value = "合作类型：1：任务，2：服务，3：资质合作") String type)  {
         JsonResult jsonResult = new JsonResult();
         Map<String, Object> map = new HashMap<>();
         map.put("count", count);

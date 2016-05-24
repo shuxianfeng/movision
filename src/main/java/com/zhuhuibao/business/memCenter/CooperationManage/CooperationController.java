@@ -4,6 +4,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.pojo.JsonResult;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
 import com.zhuhuibao.mybatis.memCenter.service.CooperationService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
@@ -36,7 +37,7 @@ public class CooperationController {
      */
     @ApiOperation(value="发布任务",notes="发布任务",response = JsonResult.class)
     @RequestMapping(value = "publishCooperation", method = RequestMethod.POST)
-    public JsonResult publishCooperation(Cooperation cooperation) throws Exception {
+    public JsonResult publishCooperation(Cooperation cooperation)  {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         JsonResult jsonResult = new JsonResult();
@@ -46,14 +47,10 @@ public class CooperationController {
                 cooperation.setCreateId(principal.getId().toString());
                 cooperationService.publishCooperation(cooperation);
             }else{
-                jsonResult.setCode(401);
-                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                jsonResult.setMsgCode(MsgCodeConstant.un_login);
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }else{
-            jsonResult.setCode(401);
-            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            jsonResult.setMsgCode(MsgCodeConstant.un_login);
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return jsonResult;
     }
@@ -63,7 +60,7 @@ public class CooperationController {
      */
     @ApiOperation(value="合作类型(大类，子类)",notes="合作类型(大类，子类)",response = JsonResult.class)
     @RequestMapping(value = "cooperationType", method = RequestMethod.GET)
-    public JsonResult cooperationType() throws Exception {
+    public JsonResult cooperationType()  {
         JsonResult jsonResult = new JsonResult();
         List list = cooperationService.cooperationType();
         jsonResult.setData(list);
@@ -75,7 +72,7 @@ public class CooperationController {
      */
     @ApiOperation(value="合作类型(子类)",notes="合作类型(子类)",response = JsonResult.class)
     @RequestMapping(value = "subCooperationType", method = RequestMethod.GET)
-    public JsonResult subCooperationType() throws Exception {
+    public JsonResult subCooperationType()  {
         JsonResult jsonResult = new JsonResult();
         List list = cooperationService.subCooperationType();
         jsonResult.setData(list);
@@ -87,7 +84,7 @@ public class CooperationController {
      */
     @ApiOperation(value="项目类别",notes="项目类别",response = JsonResult.class)
     @RequestMapping(value = "cooperationCategory", method = RequestMethod.GET)
-    public JsonResult cooperationCategory() throws Exception {
+    public JsonResult cooperationCategory()  {
         JsonResult jsonResult = new JsonResult();
         List list = cooperationService.cooperationCategory();
         jsonResult.setData(list);
@@ -99,7 +96,7 @@ public class CooperationController {
      */
     @ApiOperation(value="编辑任务",notes="编辑任务",response = JsonResult.class)
     @RequestMapping(value = "updateCooperation", method = RequestMethod.POST)
-    public JsonResult updateCooperation(Cooperation cooperation) throws Exception {
+    public JsonResult updateCooperation(Cooperation cooperation)  {
         JsonResult jsonResult = new JsonResult();
         cooperationService.updateCooperation(cooperation);
         return jsonResult;
@@ -110,7 +107,7 @@ public class CooperationController {
      */
     @ApiOperation(value="批量删除任务",notes="批量删除任务",response = JsonResult.class)
     @RequestMapping(value = "deleteCooperation", method = RequestMethod.POST)
-    public JsonResult deleteCooperation(@RequestParam String ids[]) throws Exception {
+    public JsonResult deleteCooperation(@RequestParam String ids[])  {
         JsonResult jsonResult = new JsonResult();
         cooperationService.deleteCooperation(ids);
         return jsonResult;
@@ -121,7 +118,7 @@ public class CooperationController {
      */
     @ApiOperation(value="查询一条任务的信息",notes="查询一条任务的信息",response = Cooperation.class)
     @RequestMapping(value = "queryCooperationInfoById", method = RequestMethod.GET)
-    public JsonResult queryCooperationInfo(@RequestParam String id) throws Exception {
+    public JsonResult queryCooperationInfo(@RequestParam String id)  {
         JsonResult jsonResult = new JsonResult();
         Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
         jsonResult.setData(cooperation);
@@ -138,7 +135,7 @@ public class CooperationController {
             @ApiParam(value = "合作标题")@RequestParam(required = false) String title,
             @ApiParam(value = "合作类型")@RequestParam(required = false) String type,
             @ApiParam(value = "审核状态")@RequestParam(required = false) String status
-    ) throws Exception {
+    )  {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (StringUtils.isEmpty(pageNo)) {
