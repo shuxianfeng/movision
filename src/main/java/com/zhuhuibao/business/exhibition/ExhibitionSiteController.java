@@ -95,7 +95,7 @@ public class ExhibitionSiteController {
     }
 
     /**
-     * 会展信息列表(前台)
+     * 最新会展信息
      */
     @ApiOperation(value="最新会展信息",notes="最新会展信息",response = Response.class)
     @RequestMapping(value = "newExhibition", method = RequestMethod.GET)
