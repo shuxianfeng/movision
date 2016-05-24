@@ -2,7 +2,7 @@ package com.zhuhuibao.business.oms.exhibition;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.pojo.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder;
 import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
@@ -40,10 +40,10 @@ public class ExhibitionOmsController {
     /**
      * 一站式会展定制申请处理
      */
-    @ApiOperation(value="会展定制申请处理",notes="会展定制申请处理",response = JsonResult.class)
+    @ApiOperation(value="会展定制申请处理",notes="会展定制申请处理",response = Response.class)
     @RequestMapping(value = "updateMeetingOrderStatus", method = RequestMethod.POST)
-    public JsonResult updateMeetingOrderStatus(@ModelAttribute()MeetingOrder meetingOrder)  {
-        JsonResult jsonResult = new JsonResult();
+    public Response updateMeetingOrderStatus(@ModelAttribute()MeetingOrder meetingOrder)  {
+        Response Response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session) {
@@ -52,42 +52,42 @@ public class ExhibitionOmsController {
                 meetingOrder.setUpdateManId(principal.getId().toString());
                 exhibitionService.updateMeetingOrderStatus(meetingOrder);
             }else{
-                jsonResult.setCode(401);
-                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                jsonResult.setMsgCode(MsgCodeConstant.un_login);
+                Response.setCode(401);
+                Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                Response.setMsgCode(MsgCodeConstant.un_login);
             }
         }else{
-            jsonResult.setCode(401);
-            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            jsonResult.setMsgCode(MsgCodeConstant.un_login);
+            Response.setCode(401);
+            Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            Response.setMsgCode(MsgCodeConstant.un_login);
         }
-        return jsonResult;
+        return Response;
     }
 
     /**
      * 一站式会展定制查看
      */
-    @ApiOperation(value="会展定制查看",notes="会展定制查看",response = JsonResult.class)
+    @ApiOperation(value="会展定制查看",notes="会展定制查看",response = Response.class)
     @RequestMapping(value = "queryMeetingOrderInfoById", method = RequestMethod.GET)
-    public JsonResult queryMeetingOrderInfoById(@RequestParam String id)  {
-        JsonResult jsonResult = new JsonResult();
+    public Response queryMeetingOrderInfoById(@RequestParam String id)  {
+        Response Response = new Response();
         MeetingOrder meetingOrder = exhibitionService.queryMeetingOrderInfoById(id);
-        jsonResult.setData(meetingOrder);
-        return jsonResult;
+        Response.setData(meetingOrder);
+        return Response;
     }
 
     /**
      * 一站式会展定制列表
      */
-    @ApiOperation(value="一站式会展定制列表",notes="一站式会展定制列表",response = JsonResult.class)
+    @ApiOperation(value="一站式会展定制列表",notes="一站式会展定制列表",response = Response.class)
     @RequestMapping(value = "findAllMeetingOrderInfo", method = RequestMethod.GET)
-    public JsonResult findAllMeetingOrderInfo(
+    public Response findAllMeetingOrderInfo(
             @ApiParam(value = "账号")@RequestParam(required = false) String account,
             @ApiParam(value = "省")@RequestParam(required = false)String province,
             @ApiParam(value = "市")@RequestParam(required = false)String city,
             @ApiParam(value = "审核状态")@RequestParam(required = false)String status,
             @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize)  {
-        JsonResult jsonResult = new JsonResult();
+        Response Response = new Response();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -105,17 +105,17 @@ public class ExhibitionOmsController {
         //查询
         List<MeetingOrder> meetingOrderList = exhibitionService.findAllMeetingOrderInfo(pager,map);
         pager.result(meetingOrderList);
-        jsonResult.setData(pager);
-        return jsonResult;
+        Response.setData(pager);
+        return Response;
     }
 
     /**
      * 发布会展信息
      */
-    @ApiOperation(value="发布会展信息",notes="发布会展信息",response = JsonResult.class)
+    @ApiOperation(value="发布会展信息",notes="发布会展信息",response = Response.class)
     @RequestMapping(value = "publishExhibition", method = RequestMethod.POST)
-    public JsonResult publishExhibition(@ModelAttribute()Exhibition exhibition) {
-        JsonResult jsonResult = new JsonResult();
+    public Response publishExhibition(@ModelAttribute()Exhibition exhibition) {
+        Response Response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         //判断是否登陆
@@ -126,9 +126,9 @@ public class ExhibitionOmsController {
                     exhibition.setCreateid(principal.getId().toString());
                     exhibitionService.publishExhibition(exhibition);
                 }else{
-                    jsonResult.setCode(401);
-                    jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                    jsonResult.setMsgCode(MsgCodeConstant.un_login);
+                    Response.setCode(401);
+                    Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                    Response.setMsgCode(MsgCodeConstant.un_login);
                 }
             }else{
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
@@ -136,30 +136,30 @@ public class ExhibitionOmsController {
                     exhibition.setCreateid(principal.getId().toString());
                     exhibitionService.publishExhibition(exhibition);
                 }else{
-                    jsonResult.setCode(401);
-                    jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                    jsonResult.setMsgCode(MsgCodeConstant.un_login);
+                    Response.setCode(401);
+                    Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                    Response.setMsgCode(MsgCodeConstant.un_login);
                 }
             }
         }else{
-            jsonResult.setCode(401);
-            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            jsonResult.setMsgCode(MsgCodeConstant.un_login);
+            Response.setCode(401);
+            Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            Response.setMsgCode(MsgCodeConstant.un_login);
         }
-        return jsonResult;
+        return Response;
     }
 
     /**
      * 会展信息列表
      */
-    @ApiOperation(value="会展信息列表(运营)",notes="会展信息列表(运营)",response = JsonResult.class)
+    @ApiOperation(value="会展信息列表(运营)",notes="会展信息列表(运营)",response = Response.class)
     @RequestMapping(value = "findAllExhibitionOms", method = RequestMethod.GET)
-    public JsonResult findAllExhibitionOms(@ApiParam(value = "标题")@RequestParam(required = false)String title,
+    public Response findAllExhibitionOms(@ApiParam(value = "标题")@RequestParam(required = false)String title,
                                            @ApiParam(value = "所属栏目")@RequestParam(required = false)String type,
                                            @ApiParam(value = "审核状态")@RequestParam(required = false)String status,
                                            @ApiParam(value = "状态")@RequestParam(required = false)String type2,
         @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) {
-        JsonResult jsonResult = new JsonResult();
+        Response Response = new Response();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -177,20 +177,20 @@ public class ExhibitionOmsController {
         //查询
         List<Exhibition> exhibitionList = exhibitionService.findAllExhibition(pager,map);
         pager.result(exhibitionList);
-        jsonResult.setData(pager);
-        return jsonResult;
+        Response.setData(pager);
+        return Response;
     }
 
     /**
      * 分布式会展定制列表
      */
-    @ApiOperation(value="分布式会展定制列表(运营)",notes="分布式会展定制列表(运营)",response = JsonResult.class)
+    @ApiOperation(value="分布式会展定制列表(运营)",notes="分布式会展定制列表(运营)",response = Response.class)
     @RequestMapping(value = "findAllDistributedOrder", method = RequestMethod.GET)
-    public JsonResult findAllDistributedOrder(@ApiParam(value = "联系手机")@RequestParam(required = false)String mobile,
+    public Response findAllDistributedOrder(@ApiParam(value = "联系手机")@RequestParam(required = false)String mobile,
                                            @ApiParam(value = "定制类型")@RequestParam(required = false)String type,
                                            @ApiParam(value = "审核状态")@RequestParam(required = false)String status,
                                            @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) {
-        JsonResult jsonResult = new JsonResult();
+        Response Response = new Response();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -207,30 +207,30 @@ public class ExhibitionOmsController {
         //查询
         List<DistributedOrder> distributedOrderList = exhibitionService.findAllDistributedOrder(pager,map);
         pager.result(distributedOrderList);
-        jsonResult.setData(pager);
-        return jsonResult;
+        Response.setData(pager);
+        return Response;
     }
 
     /**
      * 分布式会展定制查看
      */
-    @ApiOperation(value="分布式会展定制查看",notes="分布式会展定制查看",response = JsonResult.class)
+    @ApiOperation(value="分布式会展定制查看",notes="分布式会展定制查看",response = Response.class)
     @RequestMapping(value = "queryDistributedOrderInfoById", method = RequestMethod.GET)
-    public JsonResult queryDistributedOrderInfoById(@RequestParam String id)  {
-        JsonResult jsonResult = new JsonResult();
+    public Response queryDistributedOrderInfoById(@RequestParam String id)  {
+        Response Response = new Response();
         DistributedOrder distributedOrder = exhibitionService.queryDistributedOrderInfoById(id);
-        jsonResult.setData(distributedOrder);
-        return jsonResult;
+        Response.setData(distributedOrder);
+        return Response;
     }
 
 
     /**
      * 分布式会展定制申请处理
      */
-    @ApiOperation(value="分布式会展定制申请处理",notes="分布式会展定制申请处理",response = JsonResult.class)
+    @ApiOperation(value="分布式会展定制申请处理",notes="分布式会展定制申请处理",response = Response.class)
     @RequestMapping(value = "updateDistributedStatus", method = RequestMethod.POST)
-    public JsonResult updateDistributedStatus(@ModelAttribute()DistributedOrder distributedOrder)  {
-        JsonResult jsonResult = new JsonResult();
+    public Response updateDistributedStatus(@ModelAttribute()DistributedOrder distributedOrder)  {
+        Response Response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session) {
@@ -239,15 +239,15 @@ public class ExhibitionOmsController {
                 distributedOrder.setUpdateManId(principal.getId().toString());
                 exhibitionService.updateDistributedStatus(distributedOrder);
             }else{
-                jsonResult.setCode(401);
-                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                jsonResult.setMsgCode(MsgCodeConstant.un_login);
+                Response.setCode(401);
+                Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                Response.setMsgCode(MsgCodeConstant.un_login);
             }
         }else{
-            jsonResult.setCode(401);
-            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            jsonResult.setMsgCode(MsgCodeConstant.un_login);
+            Response.setCode(401);
+            Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            Response.setMsgCode(MsgCodeConstant.un_login);
         }
-        return jsonResult;
+        return Response;
     }
 }
