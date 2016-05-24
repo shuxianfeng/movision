@@ -4,6 +4,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder;
 import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
 import com.zhuhuibao.mybatis.memCenter.entity.MeetingOrder;
@@ -52,14 +53,10 @@ public class ExhibitionOmsController {
                 meetingOrder.setUpdateManId(principal.getId().toString());
                 exhibitionService.updateMeetingOrderStatus(meetingOrder);
             }else{
-                Response.setCode(401);
-                Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                Response.setMsgCode(MsgCodeConstant.un_login);
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }else{
-            Response.setCode(401);
-            Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            Response.setMsgCode(MsgCodeConstant.un_login);
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return Response;
     }
@@ -126,9 +123,7 @@ public class ExhibitionOmsController {
                     exhibition.setCreateid(principal.getId().toString());
                     exhibitionService.publishExhibition(exhibition);
                 }else{
-                    Response.setCode(401);
-                    Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                    Response.setMsgCode(MsgCodeConstant.un_login);
+                    throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
                 }
             }else{
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
@@ -136,9 +131,7 @@ public class ExhibitionOmsController {
                     exhibition.setCreateid(principal.getId().toString());
                     exhibitionService.publishExhibition(exhibition);
                 }else{
-                    Response.setCode(401);
-                    Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                    Response.setMsgCode(MsgCodeConstant.un_login);
+                    throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
                 }
             }
         }else{
@@ -239,14 +232,10 @@ public class ExhibitionOmsController {
                 distributedOrder.setUpdateManId(principal.getId().toString());
                 exhibitionService.updateDistributedStatus(distributedOrder);
             }else{
-                Response.setCode(401);
-                Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                Response.setMsgCode(MsgCodeConstant.un_login);
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }else{
-            Response.setCode(401);
-            Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            Response.setMsgCode(MsgCodeConstant.un_login);
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return Response;
     }

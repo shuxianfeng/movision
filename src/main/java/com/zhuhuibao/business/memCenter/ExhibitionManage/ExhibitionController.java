@@ -4,6 +4,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
 import com.zhuhuibao.mybatis.memCenter.service.ExhibitionService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
@@ -67,14 +68,10 @@ public class ExhibitionController {
                 pager.result(exhibitionList);
                 response.setData(pager);
             }else {
-                response.setCode(401);
-                response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                response.setMsgCode(MsgCodeConstant.un_login);
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }else {
-            response.setCode(401);
-            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            response.setMsgCode(MsgCodeConstant.un_login);
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }

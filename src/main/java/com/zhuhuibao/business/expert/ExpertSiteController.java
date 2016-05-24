@@ -4,6 +4,8 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
 import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
 import com.zhuhuibao.mybatis.memCenter.entity.Expert;
@@ -58,14 +60,10 @@ public class ExpertSiteController {
                 achievement.setCreateId(principal.getId().toString());
                 expertService.publishAchievement(achievement);
             }else{
-                response.setCode(401);
-                response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                response.setMsgCode(MsgCodeConstant.un_login);
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }else{
-            response.setCode(401);
-            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            response.setMsgCode(MsgCodeConstant.un_login);
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -166,14 +164,10 @@ public class ExpertSiteController {
                 expert.setCreateId(principal.getId().toString());
                 expertService.applyExpert(expert);
             }else{
-                response.setCode(401);
-                response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                response.setMsgCode(MsgCodeConstant.un_login);
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }else{
-            response.setCode(401);
-            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            response.setMsgCode(MsgCodeConstant.un_login);
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -350,9 +344,7 @@ public class ExpertSiteController {
         if(null != sess) {
             String verifyCode = (String) sess.getAttribute("expert");
             if(!code.equals(verifyCode)){
-                response.setCode(400);
-                response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
-                response.setMsgCode(MsgCodeConstant.validate_error);
+                throw new BusinessException(MsgCodeConstant.validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
             }else {
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)sess.getAttribute("member");
                 if(null != principal){
@@ -361,15 +353,11 @@ public class ExpertSiteController {
                     question.setContent(content);
                     expertService.askExpert(question);
                 }else {
-                    response.setCode(401);
-                    response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                    response.setMsgCode(MsgCodeConstant.un_login);
+                    throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
                 }
             }
         }else {
-            response.setCode(401);
-            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            response.setMsgCode(MsgCodeConstant.un_login);
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }

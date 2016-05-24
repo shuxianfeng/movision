@@ -42,6 +42,7 @@ public class ExhibitionService {
         try {
             meetingOrderMapper.publishMeetingOrder(meetingOrder);
         }catch (Exception e){
+            log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
@@ -55,6 +56,7 @@ public class ExhibitionService {
         try {
             meetingOrderMapper.updateMeetingOrderStatus(meetingOrder);
         }catch (Exception e){
+            log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
@@ -68,6 +70,7 @@ public class ExhibitionService {
         try {
             return meetingOrderMapper.queryMeetingOrderInfoById(id);
         }catch (Exception e){
+            log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
@@ -80,6 +83,7 @@ public class ExhibitionService {
         try {
             return meetingOrderMapper.findAllMeetingOrderInfo(pager.getRowBounds(),map);
         }catch (Exception e){
+            log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
@@ -93,6 +97,7 @@ public class ExhibitionService {
         try {
             exhibitionMapper.publishExhibition(exhibition);
         }catch (Exception e){
+            log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
@@ -106,6 +111,7 @@ public class ExhibitionService {
         try {
             return exhibitionMapper.findAllExhibition(pager.getRowBounds(),map);
         }catch (Exception e){
+            log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
@@ -119,6 +125,7 @@ public class ExhibitionService {
         try {
             return exhibitionMapper.queryExhibitionInfoById(id);
         }catch (Exception e){
+            log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
@@ -132,6 +139,7 @@ public class ExhibitionService {
         try {
             exhibitionMapper.updateExhibitionInfoById(exhibition);
         }catch (Exception e){
+            log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
@@ -145,6 +153,7 @@ public class ExhibitionService {
         try {
             return exhibitionMapper.findNewExhibition(map);
         }catch (Exception e){
+            log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
@@ -158,6 +167,7 @@ public class ExhibitionService {
         try {
             return distributedOrderMapper.publishDistributedOrder(distributedOrder);
         }catch (Exception e){
+            log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
@@ -171,6 +181,7 @@ public class ExhibitionService {
         try {
             return distributedOrderMapper.findAllDistributedOrder(pager.getRowBounds(),map);
         }catch (Exception e){
+            log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
@@ -184,6 +195,7 @@ public class ExhibitionService {
         try {
             return distributedOrderMapper.queryDistributedOrderInfoById(id);
         }catch (Exception e){
+            log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
@@ -197,6 +209,7 @@ public class ExhibitionService {
         try {
             distributedOrderMapper.updateDistributedStatus(distributedOrder);
         }catch (Exception e){
+            log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }

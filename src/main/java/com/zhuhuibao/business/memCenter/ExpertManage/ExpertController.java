@@ -5,6 +5,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
 import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
 import com.zhuhuibao.mybatis.memCenter.entity.Expert;
@@ -67,14 +68,10 @@ public class ExpertController {
                 pager.result(achievementList);
                 response.setData(pager);
             } else {
-                response.setCode(401);
-                response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                response.setMsgCode(MsgCodeConstant.un_login);
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         } else {
-            response.setCode(401);
-            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            response.setMsgCode(MsgCodeConstant.un_login);
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -115,14 +112,10 @@ public class ExpertController {
                 dynamic.setCreateId(principal.getId().toString());
                 expertService.publishDynamic(dynamic);
             } else {
-                response.setCode(401);
-                response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                response.setMsgCode(MsgCodeConstant.un_login);
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         } else {
-            response.setCode(401);
-            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            response.setMsgCode(MsgCodeConstant.un_login);
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -179,14 +172,10 @@ public class ExpertController {
                 pager.result(dynamicList);
                 response.setData(pager);
             } else {
-                response.setCode(401);
-                response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                response.setMsgCode(MsgCodeConstant.un_login);
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         } else {
-            response.setCode(401);
-            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            response.setMsgCode(MsgCodeConstant.un_login);
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }

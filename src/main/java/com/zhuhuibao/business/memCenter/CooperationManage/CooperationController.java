@@ -40,7 +40,7 @@ public class CooperationController {
     public Response publishCooperation(Cooperation cooperation)  {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        Response Response = new Response();
+        Response response = new Response();
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
             if(null != principal){
@@ -52,7 +52,7 @@ public class CooperationController {
         }else{
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-        return Response;
+        return response;
     }
 
     /**
@@ -61,10 +61,10 @@ public class CooperationController {
     @ApiOperation(value="合作类型(大类，子类)",notes="合作类型(大类，子类)",response = Response.class)
     @RequestMapping(value = "cooperationType", method = RequestMethod.GET)
     public Response cooperationType()  {
-        Response Response = new Response();
+        Response response = new Response();
         List list = cooperationService.cooperationType();
-        Response.setData(list);
-        return Response;
+        response.setData(list);
+        return response;
     }
 
     /**
@@ -73,10 +73,10 @@ public class CooperationController {
     @ApiOperation(value="合作类型(子类)",notes="合作类型(子类)",response = Response.class)
     @RequestMapping(value = "subCooperationType", method = RequestMethod.GET)
     public Response subCooperationType()  {
-        Response Response = new Response();
+        Response response = new Response();
         List list = cooperationService.subCooperationType();
-        Response.setData(list);
-        return Response;
+        response.setData(list);
+        return response;
     }
 
     /**
@@ -85,10 +85,10 @@ public class CooperationController {
     @ApiOperation(value="项目类别",notes="项目类别",response = Response.class)
     @RequestMapping(value = "cooperationCategory", method = RequestMethod.GET)
     public Response cooperationCategory()  {
-        Response Response = new Response();
+        Response response = new Response();
         List list = cooperationService.cooperationCategory();
-        Response.setData(list);
-        return Response;
+        response.setData(list);
+        return response;
     }
 
     /**
@@ -97,9 +97,9 @@ public class CooperationController {
     @ApiOperation(value="编辑任务",notes="编辑任务",response = Response.class)
     @RequestMapping(value = "updateCooperation", method = RequestMethod.POST)
     public Response updateCooperation(Cooperation cooperation)  {
-        Response Response = new Response();
+        Response response = new Response();
         cooperationService.updateCooperation(cooperation);
-        return Response;
+        return response;
     }
 
     /**
@@ -108,9 +108,9 @@ public class CooperationController {
     @ApiOperation(value="批量删除任务",notes="批量删除任务",response = Response.class)
     @RequestMapping(value = "deleteCooperation", method = RequestMethod.POST)
     public Response deleteCooperation(@RequestParam String ids[])  {
-        Response Response = new Response();
+        Response response = new Response();
         cooperationService.deleteCooperation(ids);
-        return Response;
+        return response;
     }
 
     /**
@@ -119,10 +119,10 @@ public class CooperationController {
     @ApiOperation(value="查询一条任务的信息",notes="查询一条任务的信息",response = Cooperation.class)
     @RequestMapping(value = "queryCooperationInfoById", method = RequestMethod.GET)
     public Response queryCooperationInfo(@RequestParam String id)  {
-        Response Response = new Response();
+        Response response = new Response();
         Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
-        Response.setData(cooperation);
-        return Response;
+        response.setData(cooperation);
+        return response;
     }
 
     /**
@@ -144,7 +144,7 @@ public class CooperationController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Response Response = new Response();
+        Response response = new Response();
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
@@ -156,17 +156,13 @@ public class CooperationController {
                 cooperation.setStatus(status);
                 List<Cooperation> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
                 pager.result(cooperationList);
-                Response.setData(pager);
+                response.setData(pager);
             }else{
-                Response.setCode(401);
-                Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                Response.setMsgCode(MsgCodeConstant.un_login);
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }else{
-            Response.setCode(401);
-            Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            Response.setMsgCode(MsgCodeConstant.un_login);
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-        return Response;
+        return response;
     }
 }

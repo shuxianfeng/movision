@@ -39,7 +39,7 @@ public class CooperationOmsController {
             @ApiParam(value = "审核状态")@RequestParam(required = false) String status,
             @ApiParam(value = "省") @RequestParam(required = false) String province,
             @ApiParam(value = "市") @RequestParam(required = false) String city
-    ) throws Exception {
+    )  {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }

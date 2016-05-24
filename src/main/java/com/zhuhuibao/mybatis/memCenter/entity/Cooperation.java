@@ -71,6 +71,10 @@ public class Cooperation {
 
     private String type1;
 
+    private String memberType;
+
+    private String headShot;
+
     public String getId() {
         return id;
     }
@@ -293,5 +297,21 @@ public class Cooperation {
 
     public void setType1(String type1) {
         this.type1 = type1;
+    }
+
+    public String getMemberType() {
+        return memberType;
+    }
+
+    public void setMemberType(String memberType) {
+        this.memberType = memberType;
+    }
+
+    public String getHeadShot() {
+        return headShot;
+    }
+
+    public void setHeadShot(String headShot) {
+        this.headShot = headShot;
     }
 }
