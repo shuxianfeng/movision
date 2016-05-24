@@ -289,10 +289,12 @@
     order by c.updateTime desc
   </select>
   <select id="queryHotCooperation" resultMap="ResultMap" >
-    SELECT * FROM t_c_cooperation where
-    type = #{type}
-    and is_deleted = #{is_deleted}
-    and status = #{status}
-    order by views desc limit 0,#{count}
+    SELECT * FROM t_c_cooperation coo
+    left JOIN t_dictionary_cooperationType ct on ct.id = coo.type
+    where
+    ct.parentId = #{type}
+    and coo.is_deleted = #{is_deleted}
+    and coo.status = #{status}
+    order by coo.views desc limit 0,#{count}
   </select>
 </mapper>
