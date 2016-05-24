@@ -77,9 +77,9 @@ public class ExhibitionOmsController {
     }
 
     /**
-     * 一站式会展定制申请管理
+     * 一站式会展定制列表
      */
-    @ApiOperation(value="会展定制申请管理",notes="会展定制申请管理",response = JsonResult.class)
+    @ApiOperation(value="一站式会展定制列表",notes="一站式会展定制列表",response = JsonResult.class)
     @RequestMapping(value = "findAllMeetingOrderInfo", method = RequestMethod.GET)
     public JsonResult findAllMeetingOrderInfo(
             @ApiParam(value = "账号")@RequestParam(required = false) String account,
@@ -110,7 +110,7 @@ public class ExhibitionOmsController {
     }
 
     /**
-     * 发布一站式会展信息
+     * 发布会展信息
      */
     @ApiOperation(value="发布会展信息",notes="发布会展信息",response = JsonResult.class)
     @RequestMapping(value = "publishExhibition", method = RequestMethod.POST)
@@ -150,13 +150,14 @@ public class ExhibitionOmsController {
     }
 
     /**
-     * 一站式会展信息列表(运营)
+     * 会展信息列表
      */
     @ApiOperation(value="会展信息列表(运营)",notes="会展信息列表(运营)",response = JsonResult.class)
     @RequestMapping(value = "findAllExhibitionOms", method = RequestMethod.GET)
     public JsonResult findAllExhibitionOms(@ApiParam(value = "标题")@RequestParam(required = false)String title,
                                            @ApiParam(value = "所属栏目")@RequestParam(required = false)String type,
                                            @ApiParam(value = "审核状态")@RequestParam(required = false)String status,
+                                           @ApiParam(value = "状态")@RequestParam(required = false)String type2,
         @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) {
         JsonResult jsonResult = new JsonResult();
         //设定默认分页pageSize
@@ -172,6 +173,7 @@ public class ExhibitionOmsController {
         map.put("title",title);
         map.put("type",type);
         map.put("status",status);
+        map.put("type2",type2);
         //查询
         List<Exhibition> exhibitionList = exhibitionService.findAllExhibition(pager,map);
         pager.result(exhibitionList);
@@ -180,7 +182,7 @@ public class ExhibitionOmsController {
     }
 
     /**
-     * 分布式会展定制列表(运营)
+     * 分布式会展定制列表
      */
     @ApiOperation(value="分布式会展定制列表(运营)",notes="分布式会展定制列表(运营)",response = JsonResult.class)
     @RequestMapping(value = "findAllDistributedOrder", method = RequestMethod.GET)

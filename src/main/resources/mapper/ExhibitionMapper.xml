@@ -237,6 +237,9 @@
     <if test="type1 != null">
       and e.status = 1
     </if>
+    <if test="type2 != null">
+      and e.type in (1,2,3)
+    </if>
     order by e.updateTime desc
   </select>
   <select id="findNewExhibition" resultMap="BaseResultMap" parameterType="java.util.Map" >
