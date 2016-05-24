@@ -79,9 +79,9 @@ public class ResumeService {
             if(resume1.getPhoto()!=null && !"".equals(resume1.getPhoto())){
                 i=i+1;
             }
-            if(resume1.getExperienceYear()!=null && !"".equals(resume1.getExperienceYear())){
+            /*if(resume1.getExperienceYear()!=null && !"".equals(resume1.getExperienceYear())){
                 i=i+1;
-            }
+            }*/
             if(resume1.getCompany()!=null && !"".equals(resume1.getCompany())){
                 i=i+1;
             }
@@ -90,7 +90,7 @@ public class ResumeService {
             }
             NumberFormat numberFormat = NumberFormat.getInstance();
             numberFormat.setMaximumFractionDigits(0);
-            String result = numberFormat.format((float) (i+16) / (float) 24 * 100);
+            String result = numberFormat.format((float) (i+16) / (float) 23 * 100);
             String b = result + "%";
             Map map = new HashMap();
             map.put("info",resume);

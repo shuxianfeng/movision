@@ -44,7 +44,7 @@ public class ExpertController {
     public Response myAchievementList(@ApiParam(value = "标题") @RequestParam(required = false) String title,
                                       @ApiParam(value = "状态") @RequestParam(required = false) String status,
                                       @RequestParam(required = false) String pageNo,
-                                      @RequestParam(required = false) String pageSize) throws Exception {
+                                      @RequestParam(required = false) String pageSize) {
         Response response = new Response();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
@@ -79,7 +79,7 @@ public class ExpertController {
     @ApiOperation(value = "删除技术成果", notes = "删除技术成果", response = Response.class)
     @RequestMapping(value = "deleteAchievement", method = RequestMethod.POST)
     public Response deleteAchievement(@ApiParam(value = "技术成果ids,逗号隔开") @RequestParam String ids)
-            throws Exception {
+            {
         Response response = new Response();
         String[] idList = ids.split(",");
         for (String id : idList) {
@@ -94,7 +94,7 @@ public class ExpertController {
 
     @ApiOperation(value = "更新技术成果", notes = "更新技术成果", response = Response.class)
     @RequestMapping(value = "updateAchievement", method = RequestMethod.POST)
-    public Response updateAchievement(Achievement achievement) throws Exception {
+    public Response updateAchievement(Achievement achievement)  {
         Response response = new Response();
         expertService.updateAchievement(achievement);
         return response;
@@ -102,7 +102,7 @@ public class ExpertController {
 
     @ApiOperation(value = "发布协会动态", notes = "发布协会动态", response = Response.class)
     @RequestMapping(value = "publishDynamic", method = RequestMethod.POST)
-    public Response publishDynamic(Dynamic dynamic) throws Exception {
+    public Response publishDynamic(Dynamic dynamic)  {
         Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -122,7 +122,7 @@ public class ExpertController {
 
     @ApiOperation(value = "删除协会动态", notes = "删除协会动态", response = Response.class)
     @RequestMapping(value = "deleteDynamic", method = RequestMethod.POST)
-    public Response deleteDynamic(@ApiParam(value = "协会动态ids,逗号隔开") @RequestParam String ids) throws Exception {
+    public Response deleteDynamic(@ApiParam(value = "协会动态ids,逗号隔开") @RequestParam String ids)  {
         Response response = new Response();
         String[] idList = ids.split(",");
         for (String id : idList) {
@@ -137,7 +137,7 @@ public class ExpertController {
 
     @ApiOperation(value = "更新协会动态", notes = "更新协会动态", response = Response.class)
     @RequestMapping(value = "updateDynamic", method = RequestMethod.POST)
-    public Response updateDynamic(Dynamic dynamic) throws Exception {
+    public Response updateDynamic(Dynamic dynamic)  {
         Response response = new Response();
         expertService.updateDynamic(dynamic);
         return response;
@@ -148,7 +148,7 @@ public class ExpertController {
     public Response myDynamicList(@ApiParam(value = "标题") @RequestParam(required = false) String title,
                                   @ApiParam(value = "状态") @RequestParam(required = false) String status,
                                   @RequestParam(required = false) String pageNo,
-                                  @RequestParam(required = false) String pageSize) throws Exception {
+                                  @RequestParam(required = false) String pageSize)  {
         Response response = new Response();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
@@ -182,7 +182,7 @@ public class ExpertController {
 
     @ApiOperation(value = "更新专家信息", notes = "更新专家信息", response = Response.class)
     @RequestMapping(value = "updateExpert", method = RequestMethod.POST)
-    public Response updateExpert(Expert expert) throws Exception {
+    public Response updateExpert(Expert expert)  {
         Response response = new Response();
         expertService.updateExpert(expert);
         return response;
@@ -190,7 +190,7 @@ public class ExpertController {
 
     @ApiOperation(value = "根据id查询专家全部信息", notes = "根据id查询专家全部信息", response = Response.class)
     @RequestMapping(value = "queryExpertById", method = RequestMethod.GET)
-    public Response queryExpertById(@ApiParam(value = "专家id") @RequestParam String id) throws Exception {
+    public Response queryExpertById(@ApiParam(value = "专家id") @RequestParam String id)  {
         Response response = new Response();
         Expert expert = expertService.queryExpertById(id);
         response.setData(expert);

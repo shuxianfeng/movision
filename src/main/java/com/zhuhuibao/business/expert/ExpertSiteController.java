@@ -174,7 +174,7 @@ public class ExpertSiteController {
 
     @ApiOperation(value="专家详情(前台)",notes="专家详情(前台)",response = Response.class)
     @RequestMapping(value = "expertInfo", method = RequestMethod.GET)
-    public Response expertInfo(@ApiParam(value = "专家id")@RequestParam String id) throws Exception {
+    public Response expertInfo(@ApiParam(value = "专家id")@RequestParam String id) {
         Response response = new Response();
         Expert expert = expertService.queryExpertById(id);
         //返回到页面
@@ -206,7 +206,7 @@ public class ExpertSiteController {
 
     @ApiOperation(value="专家联系方式详情(前台)",notes="专家联系方式详情(前台)",response = Response.class)
     @RequestMapping(value = "expertContactInfo", method = RequestMethod.GET)
-    public Response expertContactInfo(@ApiParam(value = "专家id")@RequestParam String id) throws Exception {
+    public Response expertContactInfo(@ApiParam(value = "专家id")@RequestParam String id)  {
         Response response = new Response();
         Expert expert = expertService.queryExpertById(id);
         //返回到页面
@@ -223,7 +223,7 @@ public class ExpertSiteController {
     public Response expertList(@ApiParam(value = "省")@RequestParam(required = false) String province,
                                @ApiParam(value = "专家类型")@RequestParam(required = false) String expertType,
                                @RequestParam(required = false)String pageNo,
-                               @RequestParam(required = false)String pageSize) throws Exception {
+                               @RequestParam(required = false)String pageSize)  {
         Response response = new Response();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
@@ -258,7 +258,7 @@ public class ExpertSiteController {
 
     @ApiOperation(value="热门专家(前台)",notes="热门专家(前台)",response = Response.class)
     @RequestMapping(value = "queryHotExpert", method = RequestMethod.GET)
-    public Response queryHotExpert(@ApiParam(value = "条数")@RequestParam(required = false) int count) throws Exception {
+    public Response queryHotExpert(@ApiParam(value = "条数")@RequestParam(required = false) int count) {
         Response response = new Response();
         List<Expert> expertList = expertService.queryHotExpert(count);
         List list = new ArrayList();
@@ -277,7 +277,7 @@ public class ExpertSiteController {
 
     @ApiOperation(value="最新专家(前台)",notes="最新专家(前台)",response = Response.class)
     @RequestMapping(value = "queryLatestExpert", method = RequestMethod.GET)
-    public Response queryLatestExpert(@ApiParam(value = "条数")@RequestParam(required = false) int count) throws Exception {
+    public Response queryLatestExpert(@ApiParam(value = "条数")@RequestParam(required = false) int count) {
         Response response = new Response();
         List<Expert> expertList = expertService.queryLatestExpert(count);
         List list = new ArrayList();
@@ -337,7 +337,7 @@ public class ExpertSiteController {
     @ApiOperation(value="向专家咨询(前台)",notes="向专家咨询(前台)",response = Response.class)
     @RequestMapping(value = "askExpert", method = RequestMethod.POST)
     public Response askExpert(@ApiParam(value = "咨询内容")@RequestParam String content,
-                              @ApiParam(value = "验证码")@RequestParam String code) throws Exception {
+                              @ApiParam(value = "验证码")@RequestParam String code)  {
         Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(false);

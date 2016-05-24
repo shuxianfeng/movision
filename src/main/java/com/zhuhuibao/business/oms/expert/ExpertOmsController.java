@@ -41,7 +41,7 @@ public class ExpertOmsController {
                                        @ApiParam(value = "系统分类")@RequestParam(required = false) String systemType,
                                        @ApiParam(value = "应用领域")@RequestParam(required = false)String useArea,
                                        @RequestParam(required = false)String pageNo,
-                                       @RequestParam(required = false)String pageSize) throws Exception {
+                                       @RequestParam(required = false)String pageSize)  {
         Response response = new Response();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
@@ -68,7 +68,7 @@ public class ExpertOmsController {
     public Response dynamicListOms(@RequestParam(required = false) String title,
                                    @RequestParam(required = false)String status,
                                    @RequestParam(required = false)String pageNo,
-                                   @RequestParam(required = false)String pageSize) throws Exception {
+                                   @RequestParam(required = false)String pageSize)  {
         Response response = new Response();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
@@ -94,7 +94,7 @@ public class ExpertOmsController {
                                   @ApiParam(value = "专家类型")@RequestParam(required = false) String expertType,
                                   @ApiParam(value = "状态")@RequestParam(required = false) String status,
                                   @RequestParam(required = false)String pageNo,
-                                  @RequestParam(required = false)String pageSize) throws Exception {
+                                  @RequestParam(required = false)String pageSize) {
         Response response = new Response();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
