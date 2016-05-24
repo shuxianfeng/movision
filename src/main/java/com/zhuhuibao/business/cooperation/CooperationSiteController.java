@@ -70,7 +70,7 @@ public class CooperationSiteController {
     @ApiOperation(value = "最热合作信息", notes = "最热合作信息", response = Response.class)
     @RequestMapping(value = "queryHotService", method = RequestMethod.GET)
     public Response queryHotService(@ApiParam(value = "条数") @RequestParam(required = false) int count,
-                                      @ApiParam(value = "合作类型：1：任务，2：服务，3：资质合作") String type)  {
+                                      @ApiParam(value = "合作类型：1：任务，2：服务，3：资质合作")@RequestParam String type)  {
         Response Response = new Response();
         Map<String, Object> map = new HashMap<>();
         map.put("count", count);
