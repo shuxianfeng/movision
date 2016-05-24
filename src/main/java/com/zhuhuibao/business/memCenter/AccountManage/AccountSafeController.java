@@ -4,6 +4,8 @@ import com.taobao.api.ApiException;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.BaseException;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.service.AccountService;
@@ -86,16 +88,12 @@ public class AccountSafeController {
     private Response checkPwd(String md5Pwd, Member member, Response result) {
         if(member!=null){
             if(!md5Pwd.equals(member.getPassword())){
-                result.setCode(400);
-                result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_usernameorpwd_error)));
-                result.setMsgCode(MsgCodeConstant.member_mcode_usernameorpwd_error);
+                throw new BusinessException(MsgCodeConstant.member_mcode_usernameorpwd_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_usernameorpwd_error)));
             }else{
                 result.setCode(200);
             }
         }else{
-            result.setCode(400);
-            result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
-            result.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
+            throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
         }
 
         return  result;
@@ -205,9 +203,7 @@ public class AccountSafeController {
         Response result = new Response();
         Member member1 = memberService.findMemer(member);
         if(member1!=null){
-            result.setCode(400);
-            result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
-            result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+            throw new BaseException(MsgCodeConstant.member_mcode_account_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
         }else {
             result.setCode(200);
         }

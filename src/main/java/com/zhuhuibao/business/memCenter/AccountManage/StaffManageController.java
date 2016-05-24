@@ -2,6 +2,7 @@ package com.zhuhuibao.business.memCenter.AccountManage;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.BaseException;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
@@ -61,9 +62,7 @@ public class StaffManageController {
 		if(mem==null){
 			memberService.addMember(member);
 		}else{
-			result.setCode(400);
-			result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
-			result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+			throw new BaseException(MsgCodeConstant.member_mcode_account_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
 		}
 
 		return result;

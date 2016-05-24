@@ -5,10 +5,13 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -60,10 +63,11 @@ public class ResumeController {
             if(null != principal){
                 resume.setCreateid(principal.getId().toString());
                 response = resumeService.setUpResume(resume,principal.getId().toString());
+            }else{
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }else{
-            response.setCode(401);
-            response.setMessage("请先登录");
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
 
         return response;
@@ -82,10 +86,11 @@ public class ResumeController {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
                 response = resumeService.searchMyResume(principal.getId().toString());
+            }else{
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }else{
-            response.setCode(401);
-            response.setMessage("请先登录");
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -124,8 +129,7 @@ public class ResumeController {
             result.setData(map);
             result.setCode(200);
         }else{
-            result.setCode(401);
-            result.setMessage("请先登录");
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
     }
@@ -143,10 +147,11 @@ public class ResumeController {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
                 response = resumeService.searchMyResumeAllInfo(principal.getId().toString());
+            }else{
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }else{
-            response.setCode(401);
-            response.setMessage("请先登录");
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
 
         return response;
@@ -172,10 +177,11 @@ public class ResumeController {
             if(null != principal) {
                 Paging<Resume> pager = new Paging<Resume>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
                 response = resumeService.receiveResume(pager,principal.getId().toString());
+            }else{
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }else{
-            response.setCode(401);
-            response.setMessage("请先登录");
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
 
         return response;

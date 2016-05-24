@@ -4,9 +4,12 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -56,12 +59,10 @@ public class JobController {
                 job.setCreateid(principal.getId().toString());
                 response = jobService.publishPosition(job);
             } else {
-                response.setCode(401);
-                response.setMessage("请先登录");
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         } else {
-            response.setCode(401);
-            response.setMessage("请先登录");
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -87,12 +88,10 @@ public class JobController {
                 Paging<Job> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
                 response = jobService.findAllPositionByMemId(pager, principal.getId().toString());
             } else {
-                response.setCode(401);
-                response.setMessage("请先登录");
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         } else {
-            response.setCode(401);
-            response.setMessage("请先登录");
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -149,12 +148,10 @@ public class JobController {
             if (null != principal) {
                 response = jobService.searchRecommendPosition(principal.getId().toString(), 6);
             } else {
-                response.setCode(401);
-                response.setMessage("请先登录");
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         } else {
-            response.setCode(401);
-            response.setMessage("请先登录");
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -180,12 +177,10 @@ public class JobController {
                 Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
                 response = jobService.myApplyPosition(pager, principal.getId().toString());
             } else {
-                response.setCode(401);
-                response.setMessage("请先登录");
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         } else {
-            response.setCode(401);
-            response.setMessage("请先登录");
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }

@@ -3,13 +3,16 @@ package com.zhuhuibao.business.memCenter.PriceManage;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.AskPriceResultBean;
 import com.zhuhuibao.common.pojo.AskPriceSearchBean;
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.service.PriceService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -61,12 +64,10 @@ public class PriceController {
                 askPrice.setCreateid(principal.getId().toString());
                 result = priceService.saveAskPrice(askPrice);
             }else{
-                result.setCode(401);
-                result.setMessage("请先登录");
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }else{
-            result.setCode(401);
-            result.setMessage("请先登录");
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
     }
@@ -87,8 +88,7 @@ public class PriceController {
             result.setData(map);
             result.setCode(200);
         }else{
-            result.setCode(401);
-            result.setMessage("请先登录");
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
     }
@@ -108,12 +108,10 @@ public class PriceController {
             if(null != principal){
                 response = priceService.getLinkInfo(principal.getId().toString());
             }else{
-                response.setCode(401);
-                response.setMessage("请先登录");
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }else{
-            response.setCode(401);
-            response.setMessage("请先登录");
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -156,12 +154,10 @@ public class PriceController {
             if(null != principal){
                 askPriceSearch.setCreateid(principal.getId().toString());
             }else{
-                response.setCode(401);
-                response.setMessage("请先登录");
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }else{
-            response.setCode(401);
-            response.setMessage("请先登录");
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
 
         askPriceSearch.setEndTime(askPriceSearch.getEndTime()+" 23:59:59");
