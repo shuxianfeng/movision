@@ -1,6 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobRelResumeMapper;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -33,9 +33,9 @@ public class JobRelResumeService {
      * @param resumeID 简历ID
      * @return
      */
-    public JsonResult insert(Long jobID,Long resumeID)
+    public Response insert(Long jobID, Long resumeID)
     {
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         log.info("insert job relation resume");
         try {
             JobRelResume jrr = new JobRelResume();
@@ -46,7 +46,7 @@ public class JobRelResumeService {
         {
             log.error("insert job relation resume error",e);
         }
-        return jsonResult;
+        return response;
     }
 
     /**

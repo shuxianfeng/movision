@@ -1,7 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.*;
-import com.zhuhuibao.common.constant.Constant;
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
@@ -37,29 +37,29 @@ public class ResumeService {
     /**
      * 发布简历
      */
-    public JsonResult setUpResume(Resume resume,String id){
-        JsonResult jsonResult = new JsonResult();
+    public Response setUpResume(Resume resume, String id){
+        Response response = new Response();
         int isSetUp = resumeMapper.setUpResume(resume);
         try{
             if(isSetUp==1){
                 Resume resume1 = resumeMapper.searchMyResume(id);
-                jsonResult.setCode(200);
-                jsonResult.setData(resume1.getId());
+                response.setCode(200);
+                response.setData(resume1.getId());
             }else {
-                jsonResult.setMessage("发布失败");
+                response.setMessage("发布失败");
             }
         }catch (Exception e){
             log.error("setUpResume error",e);
             e.printStackTrace();
         }
-        return jsonResult;
+        return response;
     }
 
     /**
      * 查询我创建的简历
      */
-    public JsonResult searchMyResume(String id){
-        JsonResult jsonResult = new JsonResult();
+    public Response searchMyResume(String id){
+        Response response = new Response();
         Resume resume = resumeMapper.searchMyResume(id);
         Resume resume1 = resumeMapper.searchMyResumeAllInfo(id);
         if(resume1!=null){
@@ -79,9 +79,9 @@ public class ResumeService {
             if(resume1.getPhoto()!=null && !"".equals(resume1.getPhoto())){
                 i=i+1;
             }
-            if(resume1.getExperienceYear()!=null && !"".equals(resume1.getExperienceYear())){
+            /*if(resume1.getExperienceYear()!=null && !"".equals(resume1.getExperienceYear())){
                 i=i+1;
-            }
+            }*/
             if(resume1.getCompany()!=null && !"".equals(resume1.getCompany())){
                 i=i+1;
             }
@@ -90,109 +90,109 @@ public class ResumeService {
             }
             NumberFormat numberFormat = NumberFormat.getInstance();
             numberFormat.setMaximumFractionDigits(0);
-            String result = numberFormat.format((float) (i+16) / (float) 24 * 100);
+            String result = numberFormat.format((float) (i+16) / (float) 23 * 100);
             String b = result + "%";
             Map map = new HashMap();
             map.put("info",resume);
             map.put("percent",b);
-            jsonResult.setCode(200);
-            jsonResult.setData(map);
+            response.setCode(200);
+            response.setData(map);
         }else{
-            jsonResult.setCode(400);
-            jsonResult.setMessage("暂无简历");
+            response.setCode(400);
+            response.setMessage("暂无简历");
         }
-        return jsonResult;
+        return response;
     }
 
     /**
      * 查询我创建的简历的全部信息
      */
-    public JsonResult searchMyResumeAllInfo(String id){
-        JsonResult jsonResult = new JsonResult();
+    public Response searchMyResumeAllInfo(String id){
+        Response response = new Response();
         Resume resume = resumeMapper.searchMyResumeAllInfo(id);
-        jsonResult.setCode(200);
-        jsonResult.setData(resume);
-        return jsonResult;
+        response.setCode(200);
+        response.setData(resume);
+        return response;
     }
 
     /**
      * 更新简历,刷新简历
      */
-    public JsonResult updateResume(Resume resume){
-        JsonResult jsonResult = new JsonResult();
+    public Response updateResume(Resume resume){
+        Response response = new Response();
         int isUpdate = resumeMapper.updateResume(resume);
         try{
             if(isUpdate==1){
-                jsonResult.setCode(200);
-                jsonResult.setData(resume.getId());
+                response.setCode(200);
+                response.setData(resume.getId());
             }else {
-                jsonResult.setCode(400);
-                jsonResult.setMessage("更新失败");
+                response.setCode(400);
+                response.setMessage("更新失败");
             }
         }catch (Exception e){
             log.error("updateResume error",e);
             e.printStackTrace();
         }
-        return jsonResult;
+        return response;
     }
 
     /**
      * 预览简历
      */
-    public JsonResult previewResume(String id) throws Exception{
-        JsonResult jsonResult = new JsonResult();
+    public Response previewResume(String id) throws Exception{
+        Response response = new Response();
         try {
             Resume resume = resumeMapper.previewResume(id);
-            jsonResult.setCode(200);
-            jsonResult.setData(resume);
+            response.setCode(200);
+            response.setData(resume);
         }catch(Exception e)
         {
             throw e;
         }
-        return jsonResult;
+        return response;
     }
 
-    public JsonResult findAllResume(Paging<Resume> pager, Map<String,Object> map)
+    public Response findAllResume(Paging<Resume> pager, Map<String,Object> map)
     {
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         try
         {
             List<Resume> resumeList = resumeMapper.findAllResume(pager.getRowBounds(),map);
             pager.result(resumeList);
-            jsonResult.setData(pager);
+            response.setData(pager);
         }
         catch(Exception e)
         {
             log.error("find all resume error!",e);
-            jsonResult.setCode(MsgCodeConstant.response_status_400);
-            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return jsonResult;
+            response.setCode(MsgCodeConstant.response_status_400);
+            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            return response;
         }
-        return jsonResult;
+        return response;
     }
 
     /**
      * 我收到的简历
      */
-    public JsonResult receiveResume(Paging<Resume> pager,String id){
-        JsonResult jsonResult = new JsonResult();
+    public Response receiveResume(Paging<Resume> pager, String id){
+        Response response = new Response();
         List<Resume> resumeList = resumeMapper.findAllReceiveResume(pager.getRowBounds(),id);
         List list = new ArrayList();
         for(int i=0;i<resumeList.size();i++){
             Resume resume = resumeList.get(i);
             Map map = new HashMap();
-            map.put(Constant.id,resume.getId());
-            map.put(Constant.name,resume.getName());
-            map.put(Constant.publishTime,resume.getPublishTime());
-            map.put(Constant.realName,resume.getRealName());
-            map.put(Constant.experienceYear,resume.getExperienceYear());
+            map.put(Constants.id,resume.getId());
+            map.put(Constants.name,resume.getName());
+            map.put(Constants.publishTime,resume.getPublishTime());
+            map.put(Constants.realName,resume.getRealName());
+            map.put(Constants.experienceYear,resume.getExperienceYear());
             list.add(map);
         }
         pager.result(list);
-        jsonResult.setCode(200);
-        jsonResult.setData(pager);
-        return jsonResult;
+        response.setCode(200);
+        response.setData(pager);
+        return response;
     }
 
     /**
@@ -271,15 +271,15 @@ public class ResumeService {
             for (int i = 0; i < resumeList.size(); i++) {
                 Resume resume = resumeList.get(i);
                 Map map = new HashMap();
-                map.put(Constant.id, resume.getId());
-                map.put(Constant.logo, resume.getPhoto());
-                map.put(Constant.status, resume.getStatus());
-                map.put(Constant.area, resume.getJobCity());
-                map.put(Constant.name, resume.getRealName());
-                map.put(Constant.position, resume.getPost());
-                map.put(Constant.experienceYear, resume.getWorkYear());
-                map.put(Constant.age, resume.getBirthYear());
-                map.put(Constant.salary, resume.getHopeSalary());
+                map.put(Constants.id, resume.getId());
+                map.put(Constants.logo, resume.getPhoto());
+                map.put(Constants.status, resume.getStatus());
+                map.put(Constants.area, resume.getJobCity());
+                map.put(Constants.name, resume.getRealName());
+                map.put(Constants.position, resume.getPost());
+                map.put(Constants.experienceYear, resume.getWorkYear());
+                map.put(Constants.age, resume.getBirthYear());
+                map.put(Constants.salary, resume.getHopeSalary());
                 list.add(map);
             }
         }catch(Exception e)

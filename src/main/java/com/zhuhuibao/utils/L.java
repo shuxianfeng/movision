@@ -3,8 +3,8 @@ package com.zhuhuibao.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zhuhuibao.service.exception.ServiceException;
-import com.zhuhuibao.service.exception.UnknownServiceException;
+import com.zhuhuibao.fsearch.service.exception.ServiceException;
+import com.zhuhuibao.fsearch.service.exception.UnknownServiceException;
 
 public class L {
 	private static final Logger DEFAULT_LOGGER = LoggerFactory

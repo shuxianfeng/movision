@@ -213,20 +213,20 @@ public class ProjectService {
      */
 	private void hideLinkman(ProjectLinkman linkman) {
 		StringBuilder sb;
-		linkman.setName(ProjectConstant.PROJECT_HIDDEN_STAR_TEN);
-		linkman.setNote(ProjectConstant.PROJECT_HIDDEN_STAR_TEN);
-		linkman.setAddress(ProjectConstant.PROJECT_HIDDEN_STAR_TEN);
+		linkman.setName(ProjectConstant.HiddenStar.TEN.toString());
+		linkman.setNote(ProjectConstant.HiddenStar.TEN.toString());
+		linkman.setAddress(ProjectConstant.HiddenStar.TEN.toString());
 		//联系人
 		String lman = linkman.getLinkman();
 		if(!StringUtils.isEmpty(lman)) {
-            linkman.setLinkman(linkman.getLinkman().substring(0,1) + ProjectConstant.PROJECT_HIDDEN_LINKMAN_STAR_THREE);
+            linkman.setLinkman(linkman.getLinkman().substring(0,1) + ProjectConstant.HiddenStar.THREE.toString());
         }
 		//手机
 		String mobile = linkman.getMobile();
 		if(!StringUtils.isEmpty(mobile))
         {
             sb = new StringBuilder(mobile);
-            sb.replace(sb.length()-4,sb.length(), ProjectConstant.PROJECT_HIDDEN_MOBILE_STAR_FOUR);
+            sb.replace(sb.length()-4,sb.length(), ProjectConstant.HiddenStar.FOUR.toString());
             linkman.setMobile(sb.toString());
         }
 		//座机
@@ -234,7 +234,7 @@ public class ProjectService {
 		if(!StringUtils.isEmpty(tel) && tel.length() > 5)
         {
             sb = new StringBuilder(tel);
-            sb.replace(sb.length()-4,sb.length(), ProjectConstant.PROJECT_HIDDEN_MOBILE_STAR_FOUR);
+            sb.replace(sb.length()-4,sb.length(), ProjectConstant.HiddenStar.FOUR.toString());
             linkman.setTelephone(sb.toString());
         }
 		//传真
@@ -242,7 +242,7 @@ public class ProjectService {
 		if(!StringUtils.isEmpty(fax))
         {
             sb = new StringBuilder(fax);
-            sb.replace(sb.length()-4,sb.length(), ProjectConstant.PROJECT_HIDDEN_MOBILE_STAR_FOUR);
+            sb.replace(sb.length()-4,sb.length(), ProjectConstant.HiddenStar.FOUR.toString());
             linkman.setFax(sb.toString());
         }
 	}
@@ -372,7 +372,7 @@ public class ProjectService {
 	{
 		StringBuilder sb = new StringBuilder("15996309704");
 		System.out.println(sb.replace(sb.length()-4,sb.length(),"****"));
-		System.out.println(sb.substring(0,1)+ ProjectConstant.PROJECT_HIDDEN_LINKMAN_STAR_THREE);
+		System.out.println(sb.substring(0,1)+ ProjectConstant.HiddenStar.THREE.toString());
 
 	}
 }

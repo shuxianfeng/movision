@@ -7,7 +7,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
-    
+
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
     <!-- 开启controller注解支持 -->
@@ -43,20 +43,19 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-
     <!--<mvc:resources mapping="/**" location="/"/>-->
     <mvc:resources mapping="/swagger/**" location="/swagger-ui/"/>
 
     <mvc:default-servlet-handler/>
-    <!-- CSRF 
+    <!-- CSRF
     <bean name="requestDataValueProcessor" class="com.zhuhuibao.security.csrf.CSRFRequestDataValueProcessor"/>
     <mvc:interceptors>
         <bean class="com.zhuhuibao.security.csrf.CSRFHandlerInterceptor"/>
     </mvc:interceptors>-->
 
-
     <context:property-placeholder
-            ignore-unresolvable="true" location="classpath*:/spring/application.properties"/>
+            ignore-unresolvable="true" location="classpath*:/spring/application.properties,
+                classpath*:web/message.properties,classpath*:web/config.properties"/>
 
     <!--视图解释器-->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
@@ -76,15 +75,15 @@
             </list>
         </property>
     </bean>
-
-<!--    <bean id="multipartResolver"
-          class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
-          p:maxUploadSize="104857600" p:maxInMemorySize="4096"
-          p:defaultEncoding="UTF-8"/>-->
+    <!--
+        <bean id="multipartResolver"
+                  class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+                  p:maxUploadSize="104857600" p:maxInMemorySize="4096"
+                  p:defaultEncoding="UTF-8"/>
+                  -->
 
     <!-- json配置 -->
-    <bean
-            class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
         <property name="contentNegotiationManager">
             <bean
                     class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean"
@@ -137,19 +136,22 @@
           class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
     </bean>
 
-    <bean id="bussinessException" class="com.zhuhuibao.utils.exception.MyExceptionHandler"></bean>
-
     <!-- token拦截器
     <mvc:interceptors>
         <bean class="com.zhuhuibao.security.resubmit.TokenInterceptor"/>
     </mvc:interceptors>-->
-    
-    <bean id="AspectLog" class="com.zhuhuibao.aop.AspectLog"/>
+
+    <!--AOP-->
+    <aop:config proxy-target-class="true"/>
+    <bean id="aspectLog" class="com.zhuhuibao.aop.AspectLog"/>
     <aop:config>
-        <aop:pointcut expression="@annotation(org.springframework.web.bind.annotation.RequestMapping)" id="logPointcut" />
-        <aop:aspect id="zhblog" ref="AspectLog">
-            <aop:around method="aroundLog" pointcut-ref="logPointcut" />
-       </aop:aspect>
+        <aop:pointcut expression="@annotation(org.springframework.web.bind.annotation.RequestMapping)"
+                      id="logPointcut"/>
+        <aop:aspect id="zhblog" ref="aspectLog">
+            <aop:around method="aroundLog" pointcut-ref="logPointcut"/>
+        </aop:aspect>
     </aop:config>
-    <bean id="documentationConfig" class="com.zhuhuibao.common.util.SwaggerConfig"/>
+
+    <!--swagger-->
+    <bean id="apiConfig" class="com.zhuhuibao.common.util.SwaggerConfig"/>
 </beans>

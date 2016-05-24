@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.DistributedOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createid" property="createid" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
+    <result column="updateManId" property="updateManId" jdbcType="VARCHAR" />
+    <result column="linkName" property="linkName" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, createid, publishTime, updateTime, updateManId, linkName, mobile, status, type
+  </sql>
+  <select id="queryDistributedOrderInfoById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    *
+    from t_c_distributedOrder
+    where id = #{id}
+  </select>
+  <select id="findAllDistributedOrder" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    SELECT * FROM t_c_distributedOrder d
+    where 1=1
+    <if test="mobile != null">
+      and d.mobile like CONCAT('%',#{mobile},'%')
+    </if>
+    <if test="type != null">
+      and d.type = #{type}
+    </if>
+    <if test="status != null">
+      and d.status = #{status}
+    </if>
+  </select>
+  <insert id="publishDistributedOrder" parameterType="com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder" >
+    insert into t_c_distributedOrder
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createid != null" >
+        createid,
+      </if>
+        publishTime,
+        updateTime,
+      <if test="updateManId != null" >
+        updateManId,
+      </if>
+      <if test="linkName != null" >
+        linkName,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="createid != null" >
+        #{createid},
+      </if>
+        now(),
+        now(),
+      <if test="updateManId != null" >
+        #{updateManId},
+      </if>
+      <if test="linkName != null" >
+        #{linkName},
+      </if>
+      <if test="mobile != null" >
+        #{mobile},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="type != null" >
+        #{type},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateDistributedStatus" parameterType="com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder" >
+    update t_c_distributedOrder
+    <set >
+        updateTime = now(),
+      <if test="updateManId != null" >
+        updateManId = #{updateManId},
+      </if>
+      <if test="linkName != null" >
+        linkName = #{linkName},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="type != null" >
+        type = #{type},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

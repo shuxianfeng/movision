@@ -2,8 +2,8 @@ package com.zhuhuibao.business.oms.member;
 
 import java.io.IOException;
 
-import com.zhuhuibao.common.OmsMemBean;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.pojo.OmsMemBean;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -33,7 +33,7 @@ public class MemManageController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value="/rest/oms/getAllMemInfo",method = RequestMethod.GET)
-	public JsonResult getAllMemInfo(OmsMemBean member, String pageNo, String pageSize) throws IOException
+	public Response getAllMemInfo(OmsMemBean member, String pageNo, String pageSize) throws IOException
 	{
 		if (StringUtils.isEmpty(pageNo)) {
 			pageNo = "1";
@@ -42,7 +42,7 @@ public class MemManageController {
 			pageSize = "10";
 		}
 		Paging<OmsMemBean> pager = new Paging<OmsMemBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-		JsonResult result = omsMemService.getAllMemInfo(pager,member);
+		Response result = omsMemService.getAllMemInfo(pager,member);
 		return result;
 	}
 
@@ -52,7 +52,7 @@ public class MemManageController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value="/rest/oms/getAllMemCertificate",method = RequestMethod.GET)
-	public JsonResult getAllMemCertificate(OmsMemBean member, String pageNo, String pageSize) throws IOException
+	public Response getAllMemCertificate(OmsMemBean member, String pageNo, String pageSize) throws IOException
 	{
 		if (StringUtils.isEmpty(pageNo)) {
 			pageNo = "1";
@@ -61,7 +61,7 @@ public class MemManageController {
 			pageSize = "10";
 		}
 		Paging<OmsMemBean> pager = new Paging<OmsMemBean>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-		JsonResult result = omsMemService.getAllMemCertificate(pager,member);
+		Response result = omsMemService.getAllMemCertificate(pager,member);
 
 		return result;
 	}

@@ -1,8 +1,11 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.*;
-import com.zhuhuibao.common.constant.Constant;
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.pojo.AskPriceBean;
+import com.zhuhuibao.common.pojo.AskPriceResultBean;
+import com.zhuhuibao.common.pojo.AskPriceSearchBean;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.AgentMapper;
@@ -47,12 +50,12 @@ public class PriceService {
     /**
      * 询价保存
      */
-    public JsonResult saveAskPrice(AskPrice askPrice){
+    public Response saveAskPrice(AskPrice askPrice){
         log.debug("询价保存");
-        JsonResult result = new JsonResult();
+        Response result = new Response();
         if(askPrice.getBillurl()!=null && !askPrice.getBillurl().equals("")){
             String fileUrl = askPrice.getBillurl();
-            fileUrl = ApiConstants.getUploadDoc()+ Constant.upload_price_document_url+"/"+fileUrl;
+            fileUrl = ApiConstants.getUploadDoc()+ Constants.upload_price_document_url+"/"+fileUrl;
             File file = new File(fileUrl);
             if(file.exists()){
                 askPriceMapper.saveAskPrice(askPrice);
@@ -74,9 +77,9 @@ public class PriceService {
     /**
      * 根据Id具体某条询价信息
      */
-    public JsonResult queryAskPriceByID(String id){
+    public Response queryAskPriceByID(String id){
         log.debug("根据Id具体某条询价信息");
-        JsonResult result = new JsonResult();
+        Response result = new Response();
         try{
             AskPriceBean bean = askPriceMapper.queryAskPriceByID(id);
             SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -118,21 +121,21 @@ public class PriceService {
     /**
      * 获得我的联系方式（询报价者联系方式）
      */
-    public JsonResult getLinkInfo(String id){
-        JsonResult result = new JsonResult();
+    public Response getLinkInfo(String id){
+        Response result = new Response();
         Map map = new HashMap();
         Member member = memberMapper.findMemById(id);
         if(member!=null){
             if("2".equals(member.getIdentify())){
-                map.put(Constant.companyName,member.getPersonRealName());
-                map.put(Constant.linkMan,"");
-                map.put(Constant.telephone,member.getFixedTelephone());
-                map.put(Constant.mobile,member.getFixedMobile());
+                map.put(Constants.companyName,member.getPersonRealName());
+                map.put(Constants.linkMan,"");
+                map.put(Constants.telephone,member.getFixedTelephone());
+                map.put(Constants.mobile,member.getFixedMobile());
             }else{
-                map.put(Constant.companyName,member.getEnterpriseName());
-                map.put(Constant.linkMan,member.getEnterpriseLinkman());
-                map.put(Constant.telephone,member.getFixedTelephone());
-                map.put(Constant.mobile,member.getFixedMobile());
+                map.put(Constants.companyName,member.getEnterpriseName());
+                map.put(Constants.linkMan,member.getEnterpriseLinkman());
+                map.put(Constants.telephone,member.getFixedTelephone());
+                map.put(Constants.mobile,member.getFixedMobile());
             }
         }
         result.setCode(200);
@@ -152,21 +155,21 @@ public class PriceService {
         for(int i=0;i<resultBeanList1.size();i++){
             AskPriceResultBean resultBean = resultBeanList1.get(i);
             Map askMap = new HashMap();
-            askMap.put(Constant.id,resultBean.getId());
-            askMap.put(Constant.title,resultBean.getTitle());
-            askMap.put(Constant.status,resultBean.getStatus());
-            askMap.put(Constant.type,resultBean.getType());
-            askMap.put(Constant.publishTime,resultBean.getPublishTime().substring(0,10));
-            askMap.put(Constant.area,resultBean.getArea());
+            askMap.put(Constants.id,resultBean.getId());
+            askMap.put(Constants.title,resultBean.getTitle());
+            askMap.put(Constants.status,resultBean.getStatus());
+            askMap.put(Constants.type,resultBean.getType());
+            askMap.put(Constants.publishTime,resultBean.getPublishTime().substring(0,10));
+            askMap.put(Constants.area,resultBean.getArea());
             List offerList = new ArrayList();
             for(int y=0;y<resultBeanList.size();y++){
                 AskPriceResultBean resultBean1 = resultBeanList.get(y);
                 if(resultBean.getId().equals(resultBean1.getAskid())){
                     Map offerMap = new HashMap();
-                    offerMap.put(Constant.id,resultBean1.getOfferid());
-                    offerMap.put(Constant.offerTime,resultBean1.getOfferTime().substring(0,19));
-                    offerMap.put(Constant.companyName,resultBean1.getCompanyName());
-                    offerMap.put(Constant.address,resultBean1.getAddress());
+                    offerMap.put(Constants.id,resultBean1.getOfferid());
+                    offerMap.put(Constants.offerTime,resultBean1.getOfferTime().substring(0,19));
+                    offerMap.put(Constants.companyName,resultBean1.getCompanyName());
+                    offerMap.put(Constants.address,resultBean1.getAddress());
                     offerList.add(offerMap);
                 }
             }
@@ -180,20 +183,20 @@ public class PriceService {
     /**
      * 最新公开询价(限六条)
      */
-    public JsonResult queryNewPriceInfo(int count,String createid){
-        JsonResult jsonResult = new JsonResult();
+    public Response queryNewPriceInfo(int count, String createid){
+        Response response = new Response();
         List<AskPrice> askPriceList = askPriceMapper.queryNewPriceInfo(count,createid);
         List list = new ArrayList();
         for(int i=0;i<askPriceList.size();i++){
             AskPrice askPrice = askPriceList.get(i);
             Map map = new HashMap();
-            map.put(Constant.id,askPrice.getId());
-            map.put(Constant.companyName,askPrice.getTitle());
+            map.put(Constants.id,askPrice.getId());
+            map.put(Constants.companyName,askPrice.getTitle());
             list.add(map);
         }
-        jsonResult.setCode(200);
-        jsonResult.setData(list);
-        return jsonResult;
+        response.setCode(200);
+        response.setData(list);
+        return response;
     }
 
     /**
@@ -205,10 +208,10 @@ public class PriceService {
         for(int i=0;i<askPriceList.size();i++){
             AskPrice askPrice = askPriceList.get(i);
             Map map = new HashMap();
-            map.put(Constant.id,askPrice.getId());
-            map.put(Constant.title,askPrice.getTitle());
-            map.put(Constant.publishTime,askPrice.getPublishTime().substring(0,10));
-            map.put(Constant.area,askPrice.getProvinceCode());
+            map.put(Constants.id,askPrice.getId());
+            map.put(Constants.title,askPrice.getTitle());
+            map.put(Constants.publishTime,askPrice.getPublishTime().substring(0,10));
+            map.put(Constants.area,askPrice.getProvinceCode());
             list.add(map);
         }
         return list;

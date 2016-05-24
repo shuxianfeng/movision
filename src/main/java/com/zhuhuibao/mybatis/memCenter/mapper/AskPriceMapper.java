@@ -1,8 +1,8 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
-import com.zhuhuibao.common.AskPriceBean;
-import com.zhuhuibao.common.AskPriceResultBean;
-import com.zhuhuibao.common.AskPriceSearchBean;
+import com.zhuhuibao.common.pojo.AskPriceBean;
+import com.zhuhuibao.common.pojo.AskPriceResultBean;
+import com.zhuhuibao.common.pojo.AskPriceSearchBean;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;

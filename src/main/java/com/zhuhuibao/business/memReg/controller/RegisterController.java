@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.zhuhuibao.common.Response;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -25,8 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.taobao.api.ApiException;
-import com.zhuhuibao.common.constant.Constant;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
@@ -143,7 +143,7 @@ public class RegisterController {
 	 * @throws ApiException 
 	 */
 	@RequestMapping(value = "/rest/mobileCode", method = RequestMethod.GET)
-	public JsonResult getMobileCode(HttpServletRequest req) throws IOException, ApiException {
+	public Response getMobileCode(HttpServletRequest req) throws IOException, ApiException {
 		String mobile = req.getParameter("mobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
 		Subject currentUser = SecurityUtils.getSubject();
@@ -153,16 +153,16 @@ public class RegisterController {
 		log.debug("verifyCode == " + verifyCode);
 		//发送验证码到手机
 		//SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-		SDKSendTaoBaoSMS.sendRegisterSMS(mobile, verifyCode, Constant.sms_time);
+		SDKSendTaoBaoSMS.sendRegisterSMS(mobile, verifyCode, Constants.sms_time);
 		Validateinfo info = new Validateinfo();
 		info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
 		info.setCheckCode(verifyCode);
 		info.setAccount(mobile);
 		memberService.inserValidateInfo(info);
 		sess.setAttribute("r"+mobile, verifyCode);
-		JsonResult jsonResult = new JsonResult();
-		jsonResult.setData(verifyCode);
-		return jsonResult;
+		Response response = new Response();
+		response.setData(verifyCode);
+		return response;
 	}
 	
 	/**
@@ -174,7 +174,7 @@ public class RegisterController {
 	 * @throws ApiException 
 	 */
 	@RequestMapping(value = "/rest/getSeekPwdMobileCode", method = RequestMethod.GET)
-	public JsonResult getSeekPwdMobileCode(HttpServletRequest req) throws IOException, ApiException {
+	public Response getSeekPwdMobileCode(HttpServletRequest req) throws IOException, ApiException {
 		String mobile = req.getParameter("mobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
 		Subject currentUser = SecurityUtils.getSubject();
@@ -184,17 +184,17 @@ public class RegisterController {
 		log.debug("verifyCode == " + verifyCode);
 		//发送验证码到手机
 		//SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-		SDKSendTaoBaoSMS.sendFindPwdSMS(mobile, verifyCode, Constant.sms_time);
+		SDKSendTaoBaoSMS.sendFindPwdSMS(mobile, verifyCode, Constants.sms_time);
 		Validateinfo info = new Validateinfo();
 		info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
 		info.setCheckCode(verifyCode);
 		info.setAccount(mobile);
 		memberService.inserValidateInfo(info);
 		sess.setAttribute("s"+mobile, verifyCode);
-		JsonResult jsonResult = new JsonResult();
-		jsonResult.setData(verifyCode);
+		Response response = new Response();
+		response.setData(verifyCode);
 
-		return jsonResult;
+		return response;
 	}
 
     /**
@@ -204,9 +204,9 @@ public class RegisterController {
      * @throws IOException 
      */
 	@RequestMapping(value = "/rest/register", method = RequestMethod.POST)
-	public JsonResult register(Member member) throws Exception{
+	public Response register(Member member) throws Exception{
 		log.debug("注册  mobile=="+member.getMobile()+" email =="+member.getEmail());
-		JsonResult result = new JsonResult();
+		Response result = new Response();
 //		try {
 			Subject currentUser = SecurityUtils.getSubject();
 			Session sess = currentUser.getSession(false);
@@ -236,9 +236,9 @@ public class RegisterController {
      * @throws IOException 
      */
 	@RequestMapping(value = "/rest/writeAccount", method = RequestMethod.POST)
-	public JsonResult writeAccount(Member member) throws IOException {
+	public Response writeAccount(Member member) throws IOException {
 		log.debug("seek pwd write account");
-		JsonResult result = new JsonResult();
+		Response result = new Response();
 		Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(false);
 		String seekCode = (String) sess.getAttribute("seekPwdCode");
@@ -255,7 +255,7 @@ public class RegisterController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/mobileValidate", method = RequestMethod.POST)
-	public JsonResult mobileValidate(Member member) throws IOException {
+	public Response mobileValidate(Member member) throws IOException {
 		log.debug("找回密码  mobile =="+member.getMobile());
 		Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(false);
@@ -271,9 +271,9 @@ public class RegisterController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/sendValidateMail", method = RequestMethod.POST)
-	public JsonResult sendValidateMail(Member member) throws IOException {
+	public Response sendValidateMail(Member member) throws IOException {
 		log.debug("找回密码  email =="+member.getEmail());
-		JsonResult result = new JsonResult();
+		Response result = new Response();
 		rvService.sendValidateMail(member,ResourcePropertiesUtils.getValue("host.ip"));
 		String mail = ds.findMailAddress(member.getEmail());
 		Map<String,String> map = new HashMap<String,String>();
@@ -297,15 +297,15 @@ public class RegisterController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/modifyPwd", method = RequestMethod.POST)
-	public JsonResult modifyPwd(Member member) throws IOException {
+	public Response modifyPwd(Member member) throws IOException {
 		log.debug("重置密码");
-		JsonResult jsonResult = new JsonResult();
+		Response response = new Response();
 		int result = memberService.modifyPwd(member);
 		Validateinfo info = new Validateinfo();
 		info.setAccount(member.getAccount());
 		memberService.deleteValidateInfo(info);
 
-		return jsonResult;
+		return response;
 	}
 	
 	/**
@@ -317,7 +317,7 @@ public class RegisterController {
 	@RequestMapping(value = "/rest/activateEmail", method = RequestMethod.GET)
 	public ModelAndView activateEmail(HttpServletRequest req) throws UnsupportedEncodingException {
 		log.debug("email activate start.....");
-		JsonResult jsonResult = new JsonResult();
+		Response response = new Response();
 		ModelAndView modelAndView = new ModelAndView(); 
 		try
         {
@@ -325,9 +325,9 @@ public class RegisterController {
 			if(vm != null & !vm.equals(""))
 			{
 				String decodeVM = new String (EncodeUtil.decodeBase64(vm));
-	        	jsonResult = rvService.processActivate(decodeVM);
-	        	modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(jsonResult.getData()).getBytes())); 
-	        	RedirectView rv = new RedirectView(rvService.getRedirectUrl(jsonResult, "active"));
+	        	response = rvService.processActivate(decodeVM);
+	        	modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(response.getData()).getBytes()));
+	        	RedirectView rv = new RedirectView(rvService.getRedirectUrl(response, "active"));
 	        	modelAndView.setView(rv);
 			}
         }
@@ -352,14 +352,14 @@ public class RegisterController {
 		ModelAndView modelAndView = new ModelAndView();  
 		if(vm != null & !vm.equals(""))
 		{
-			JsonResult jsonResult = new JsonResult();
+			Response response = new Response();
 	        try
 	        {
-	        	jsonResult = rvService.processValidate(vm);
-	        	String[] array = (String[]) jsonResult.getData();
+	        	response = rvService.processValidate(vm);
+	        	String[] array = (String[]) response.getData();
 	        	modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(array[0].getBytes()));
 	        	modelAndView.addObject("id",EncodeUtil.encodeBase64ToString(array[1].getBytes()));
-	        	RedirectView rv = new RedirectView(rvService.getRedirectUrl(jsonResult,"validate"));
+	        	RedirectView rv = new RedirectView(rvService.getRedirectUrl(response,"validate"));
 	 	        modelAndView.setView(rv);
 	        }
 	        catch(Exception e)
@@ -378,9 +378,9 @@ public class RegisterController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/isValidatePass", method = RequestMethod.GET)
-	public JsonResult isValidatePass(HttpServletRequest req) throws IOException {
+	public Response isValidatePass(HttpServletRequest req) throws IOException {
 		log.debug("找回密码是否验证");
-		JsonResult jsonResult = new JsonResult();
+		Response response = new Response();
 		String id = req.getParameter("account");
 		int int_id = Integer.parseInt(EncodeUtil.decodeBase64ToString(id));
 		int result = memberService.isValidatePass(int_id);
@@ -391,9 +391,9 @@ public class RegisterController {
 		    vinfo.setValid(1);
 		    memberService.updateValidateInfo(vinfo);
 		}
-		jsonResult.setData(result);
+		response.setData(result);
 
-		return jsonResult;
+		return response;
 	}
 	
 	/**
@@ -402,14 +402,14 @@ public class RegisterController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/watchMail", method = RequestMethod.GET)
-	public JsonResult watchMail(HttpServletRequest req) throws IOException {
+	public Response watchMail(HttpServletRequest req) throws IOException {
 		log.debug("找回密码是否验证");
-		JsonResult jsonResult = new JsonResult();
+		Response response = new Response();
 		String account = req.getParameter("email");
 		String result = ds.findMailAddress(EncodeUtil.decodeBase64ToString(account));
-		jsonResult.setData(result);
+		response.setData(result);
 
-		return jsonResult;
+		return response;
 	}
 	
 	/**

@@ -2,9 +2,9 @@ package com.zhuhuibao.business.memCenter.JobManage;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ApiConstants;
-import com.zhuhuibao.common.constant.Constant;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
@@ -49,78 +49,78 @@ public class ResumeController {
     /**
      * 发布简历
      */
-    @ApiOperation(value = "发布简历", notes = "发布简历", response = JsonResult.class)
+    @ApiOperation(value = "发布简历", notes = "发布简历", response = Response.class)
     @RequestMapping(value = "setUpResume", method = RequestMethod.POST)
-    public JsonResult setUpResume(Resume resume) throws IOException {
+    public Response setUpResume(Resume resume) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
                 resume.setCreateid(principal.getId().toString());
-                jsonResult = resumeService.setUpResume(resume,principal.getId().toString());
+                response = resumeService.setUpResume(resume,principal.getId().toString());
             }
         }else{
-            jsonResult.setCode(401);
-            jsonResult.setMessage("请先登录");
+            response.setCode(401);
+            response.setMessage("请先登录");
         }
 
-        return jsonResult;
+        return response;
     }
 
     /**
      * 查询我创建的简历
      */
-    @ApiOperation(value = "查询我创建的简历", notes = "查询我创建的简历", response = JsonResult.class)
+    @ApiOperation(value = "查询我创建的简历", notes = "查询我创建的简历", response = Response.class)
     @RequestMapping(value = "searchMyResume", method = RequestMethod.GET)
-    public JsonResult searchMyResume() throws IOException {
+    public Response searchMyResume() throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
-                jsonResult = resumeService.searchMyResume(principal.getId().toString());
+                response = resumeService.searchMyResume(principal.getId().toString());
             }
         }else{
-            jsonResult.setCode(401);
-            jsonResult.setMessage("请先登录");
+            response.setCode(401);
+            response.setMessage("请先登录");
         }
-        return jsonResult;
+        return response;
     }
 
     /**
      * 更新简历,刷新简历
      */
-    @ApiOperation(value = "更新简历", notes = "更新简历", response = JsonResult.class)
+    @ApiOperation(value = "更新简历", notes = "更新简历", response = Response.class)
     @RequestMapping(value = "updateResume", method = RequestMethod.POST)
-    public JsonResult updateResume(Resume resume) throws IOException {
+    public Response updateResume(Resume resume) throws IOException {
         return resumeService.updateResume(resume);
     }
 
     /**
      * 预览简历
      */
-    @ApiOperation(value = "预览简历", notes = "预览简历", response = JsonResult.class)
+    @ApiOperation(value = "预览简历", notes = "预览简历", response = Response.class)
     @RequestMapping(value = "previewResume", method = RequestMethod.GET)
-    public JsonResult previewResume(String id) throws Exception {
+    public Response previewResume(String id) throws Exception {
         return resumeService.previewResume(id);
     }
 
     /**
      * 上传简历附件
      */
-    @ApiOperation(value = "上传简历附件", notes = "上传简历附件", response = JsonResult.class)
+    @ApiOperation(value = "上传简历附件", notes = "上传简历附件", response = Response.class)
     @RequestMapping(value = "uploadResume", method = RequestMethod.POST)
-    public JsonResult uploadResume(HttpServletRequest req) throws IOException {
-        JsonResult result = new JsonResult();
+    public Response uploadResume(HttpServletRequest req) throws IOException {
+        Response result = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session){
             String url = uploadService.upload(req,"job");
             Map map = new HashMap();
-            map.put(Constant.name,url);
+            map.put(Constants.name,url);
             result.setData(map);
             result.setCode(200);
         }else{
@@ -133,31 +133,31 @@ public class ResumeController {
     /**
      * 查询我创建的简历的全部信息
      */
-    @ApiOperation(value = "查询我创建的简历的全部信息", notes = "查询我创建的简历的全部信息", response = JsonResult.class)
+    @ApiOperation(value = "查询我创建的简历的全部信息", notes = "查询我创建的简历的全部信息", response = Response.class)
     @RequestMapping(value = "searchMyResumeAllInfo", method = RequestMethod.GET)
-    public JsonResult searchMyResumeAllInfo() throws IOException {
+    public Response searchMyResumeAllInfo() throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
-                jsonResult = resumeService.searchMyResumeAllInfo(principal.getId().toString());
+                response = resumeService.searchMyResumeAllInfo(principal.getId().toString());
             }
         }else{
-            jsonResult.setCode(401);
-            jsonResult.setMessage("请先登录");
+            response.setCode(401);
+            response.setMessage("请先登录");
         }
 
-        return jsonResult;
+        return response;
     }
 
     /**
      * 我收到的简历
      */
-    @ApiOperation(value = "我收到的简历", notes = "我收到的简历", response = JsonResult.class)
+    @ApiOperation(value = "我收到的简历", notes = "我收到的简历", response = Response.class)
     @RequestMapping(value = "receiveResume", method = RequestMethod.GET)
-    public JsonResult receiveResume(String pageNo, String pageSize) throws IOException {
+    public Response receiveResume(String pageNo, String pageSize) throws IOException {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -166,19 +166,19 @@ public class ResumeController {
         }
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
             if(null != principal) {
                 Paging<Resume> pager = new Paging<Resume>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-                jsonResult = resumeService.receiveResume(pager,principal.getId().toString());
+                response = resumeService.receiveResume(pager,principal.getId().toString());
             }
         }else{
-            jsonResult.setCode(401);
-            jsonResult.setMessage("请先登录");
+            response.setCode(401);
+            response.setMessage("请先登录");
         }
 
-        return jsonResult;
+        return response;
     }
 
     /**
@@ -187,7 +187,7 @@ public class ResumeController {
     @ApiOperation(value = "下载简历附件", notes = "下载简历附件")
     @RequestMapping(value = "downLoadResume", method = RequestMethod.GET)
     public void downLoadResume(HttpServletResponse response, String id) throws IOException {
-        JsonResult jsonResult = new JsonResult();
+        Response jsonResult = new Response();
         try {
             String fileurl = resumeService.downloadBill(id);
             response.setDateHeader("Expires", 0);
@@ -196,7 +196,7 @@ public class ResumeController {
             response.addHeader("Cache-Control", "post-check=0, pre-check=0");
             response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
             response.setContentType("application/octet-stream");
-            fileurl = ApiConstants.getUploadDoc() + Constant.upload_job_document_url + "/" + fileurl;
+            fileurl = ApiConstants.getUploadDoc() + Constants.upload_job_document_url + "/" + fileurl;
             jsonResult = FileUtil.downloadFile(response, fileurl);
         }
         catch(Exception e)

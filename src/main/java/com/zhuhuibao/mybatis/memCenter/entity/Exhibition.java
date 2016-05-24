@@ -49,6 +49,9 @@ public class Exhibition {
     @ApiModelProperty(value="所属栏目")
     private String type;
 
+    @ApiModelProperty(value="筑慧活动子栏目")
+    private String subType;
+
     @ApiModelProperty(value="主办单位")
     private String company;
 
@@ -69,6 +72,8 @@ public class Exhibition {
 
     @ApiModelProperty(value="发布人类型：1：运营人员；2：会员")
     private String createrType;
+
+    private String is_deleted;
 
     public String getId() {
         return id;
@@ -244,5 +249,21 @@ public class Exhibition {
 
     public void setAreaName(String areaName) {
         this.areaName = areaName;
+    }
+
+    public String getIs_deleted() {
+        return is_deleted;
+    }
+
+    public void setIs_deleted(String is_deleted) {
+        this.is_deleted = is_deleted;
+    }
+
+    public String getSubType() {
+        return subType;
+    }
+
+    public void setSubType(String subType) {
+        this.subType = subType;
     }
 }

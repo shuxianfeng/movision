@@ -7,7 +7,7 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="cityCode" property="cityCode" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMap" type="com.zhuhuibao.common.ResultBean" >
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.ResultBean" >
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>

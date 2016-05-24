@@ -1,6 +1,6 @@
 package com.zhuhuibao.mybatis.oms.service;
 
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.oms.entity.User;
 import com.zhuhuibao.mybatis.oms.mapper.UserMapper;
@@ -37,21 +37,21 @@ public class UserService {
         return account;
     }
 
-    public JsonResult selectByPrimaryKey(Integer id)
+    public Response selectByPrimaryKey(Integer id)
     {
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         try
         {
             User account = userMapper.selectByPrimaryKey(id);
-            jsonResult.setData(account);
+            response.setData(account);
         }
         catch(Exception e)
         {
             log.error("query user by account error!",e);
-            jsonResult.setCode(MsgCodeConstant.response_status_400);
-            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            response.setCode(MsgCodeConstant.response_status_400);
+            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
         }
-        return jsonResult;
+        return response;
     }
 }

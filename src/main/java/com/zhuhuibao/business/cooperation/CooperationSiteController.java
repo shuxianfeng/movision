@@ -1,9 +1,10 @@
 package com.zhuhuibao.business.cooperation;
 
-import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.CooperationConstants;
 import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
 import com.zhuhuibao.mybatis.memCenter.service.CooperationService;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -13,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,15 +34,15 @@ public class CooperationSiteController {
     /**
      * 查询任务列表（分页）
      */
-    @ApiOperation(value = "查询任务列表（前台分页）", notes = "查询任务列表（前台分页）", response = JsonResult.class)
+    @ApiOperation(value = "查询任务列表（前台分页）", notes = "查询任务列表（前台分页）", response = Response.class)
     @RequestMapping(value = "findAllCooperationByPager", method = RequestMethod.GET)
-    public JsonResult findAllCooperationByPager
+    public Response findAllCooperationByPager
     (@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize,
      @ApiParam(value = "合作类型") @RequestParam(required = false) String type,
      @ApiParam(value = "项目类别") @RequestParam(required = false) String category,
      @ApiParam(value = "省") @RequestParam(required = false) String province,
      @ApiParam(value = "关键字") @RequestParam(required = false) String smart,
-     @ApiParam(value = "发布类型，1：接任务，2：接服务，3：资质合作") @RequestParam String parentId) throws Exception {
+     @ApiParam(value = "发布类型，1：接任务，2：接服务，3：资质合作") @RequestParam String parentId) {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -57,28 +57,28 @@ public class CooperationSiteController {
         cooperation.setCategory(category);
         cooperation.setProvince(province);
         cooperation.setParentId(parentId);
-        JsonResult jsonResult = new JsonResult();
+        Response Response = new Response();
         List<Cooperation> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
         pager.result(cooperationList);
-        jsonResult.setData(pager);
-        return jsonResult;
+        Response.setData(pager);
+        return Response;
     }
 
     /**
      * 最热合作信息
      */
-    @ApiOperation(value = "最热合作信息", notes = "最热合作信息", response = JsonResult.class)
+    @ApiOperation(value = "最热合作信息", notes = "最热合作信息", response = Response.class)
     @RequestMapping(value = "queryHotService", method = RequestMethod.GET)
-    public JsonResult queryHotService(@ApiParam(value = "条数") @RequestParam(required = false) int count,
-                                      @ApiParam(value = "合作类型：1：任务，2：服务，3：资质合作") String type) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    public Response queryHotService(@ApiParam(value = "条数") @RequestParam(required = false) int count,
+                                      @ApiParam(value = "合作类型：1：任务，2：服务，3：资质合作") String type)  {
+        Response Response = new Response();
         Map<String, Object> map = new HashMap<>();
         map.put("count", count);
         map.put("type", type);
-        map.put("is_deleted", 0);
-        map.put("status", 1);
+        map.put("is_deleted", Constants.DeleteMark.NODELETE.toString());
+        map.put("status", CooperationConstants.Status.AUDITED.toString());
         List<Cooperation> cooperations = cooperationService.queryHotCooperation(map);
-        jsonResult.setData(cooperations);
-        return jsonResult;
+        Response.setData(cooperations);
+        return Response;
     }
 }

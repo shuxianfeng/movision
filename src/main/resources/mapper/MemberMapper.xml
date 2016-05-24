@@ -42,17 +42,17 @@
     <result column="personIDBackImgUrl" property="personIDBackImgUrl" jdbcType="VARCHAR" />
     <result column="isrecommend" property="isrecommend" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMap" type="com.zhuhuibao.common.AccountBean" >
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.AccountBean" >
     <result column="id" property="id" jdbcType="VARCHAR" />
     <result column="account" property="account" jdbcType="VARCHAR" />
     <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMap1" type="com.zhuhuibao.common.ResultBean" >
+  <resultMap id="ResultMap1" type="com.zhuhuibao.common.pojo.ResultBean" >
     <result column="id" property="code" jdbcType="VARCHAR" />
     <result column="enterpriseName" property="name" jdbcType="VARCHAR" />
     <result column="enterpriseLogo" property="smallIcon" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMap2" type="com.zhuhuibao.common.OmsMemBean" >
+  <resultMap id="ResultMap2" type="com.zhuhuibao.common.pojo.OmsMemBean" >
     <result column="id" property="id" jdbcType="VARCHAR" />
     <result column="registerTime" property="registerTime" jdbcType="VARCHAR" />
     <result column="account" property="account" jdbcType="VARCHAR" />
@@ -384,7 +384,7 @@
       identify like '%6%'
     </if>
   </select>
-  <select id="findAllMemberByPager" resultMap="ResultMap2" parameterType="com.zhuhuibao.common.OmsMemBean">
+  <select id="findAllMemberByPager" resultMap="ResultMap2" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
     select m.id,m.registerTime,m.isrecommend,
     CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile WHEN m.email IS NOT NULL and m.email != '' THEN m.email END AS account,
     m.enterpriseLinkman,
@@ -419,7 +419,7 @@
       and m.status in (4,5,6)
     </if>
   </select>
-  <select id="findAllMemCertificateByPager" resultMap="ResultMap2" parameterType="com.zhuhuibao.common.OmsMemBean">
+  <select id="findAllMemCertificateByPager" resultMap="ResultMap2" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
     select r.certificate_name,r.certificate_grade,r.time,r.status,r.id,r.certificate_url,r.certificate_number,
     CASE WHEN m.enterpriseName IS NOT NULL and m.enterpriseName != '' THEN m.enterpriseName
     WHEN m.personRealName IS NOT NULL and m.personRealName != '' THEN m.personRealName END AS memberName,

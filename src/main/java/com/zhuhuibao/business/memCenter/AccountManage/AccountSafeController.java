@@ -1,8 +1,8 @@
 package com.zhuhuibao.business.memCenter.AccountManage;
 
 import com.taobao.api.ApiException;
-import com.zhuhuibao.common.constant.Constant;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
@@ -63,7 +63,7 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/checkPwdById", method = RequestMethod.GET)
-    public JsonResult checkPwdById(HttpServletRequest req) throws Exception {
+    public Response checkPwdById(HttpServletRequest req)  {
         String id = req.getParameter("id");
         //前台密码解密
         String pwd = new String(EncodeUtil.decodeBase64(req.getParameter("pwd")));
@@ -71,7 +71,7 @@ public class AccountSafeController {
         Member member = memberService.findMemById(id);
 
         //对比密码是否正确
-        JsonResult result = new JsonResult();
+        Response result = new Response();
         result = checkPwd(md5Pwd, member, result);
 
         return result;
@@ -83,7 +83,7 @@ public class AccountSafeController {
      * @param member
      * @param result
      */
-    private JsonResult checkPwd(String md5Pwd, Member member, JsonResult result) {
+    private Response checkPwd(String md5Pwd, Member member, Response result) {
         if(member!=null){
             if(!md5Pwd.equals(member.getPassword())){
                 result.setCode(400);
@@ -107,7 +107,7 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/checkPwdByAccount", method = RequestMethod.GET)
-    public JsonResult checkPwdByAccount(HttpServletRequest req) throws Exception {
+    public Response checkPwdByAccount(HttpServletRequest req)  {
         //账号：手机或邮箱
         String account = req.getParameter("account");
         //前台密码解密
@@ -124,7 +124,7 @@ public class AccountSafeController {
         Member mem = memberService.findMember(member);
 
         //对比密码是否正确
-        JsonResult result = new JsonResult();
+        Response result = new Response();
         result = checkPwd(md5Pwd, mem, result);
         return result;
     }
@@ -135,14 +135,14 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/saveNewPwd", method = RequestMethod.POST)
-    public JsonResult saveNewPwd(HttpServletRequest req) throws Exception {
+    public Response saveNewPwd(HttpServletRequest req)  {
         String id = req.getParameter("id");
         String newPwd = new String(EncodeUtil.decodeBase64(req.getParameter("newPwd")));
         String md5Pwd = new Md5Hash(newPwd,null,2).toString();
         Member member = new Member();
         member.setPassword(md5Pwd);
         member.setId(Long.parseLong(id));
-        JsonResult result = new JsonResult();
+        Response result = new Response();
         memberService.updateMember(member);
         return result;
 
@@ -154,8 +154,8 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/sendChangeEmail", method = RequestMethod.POST)
-    public JsonResult sendChangeEmail(HttpServletRequest req) throws Exception {
-        JsonResult result = new JsonResult();
+    public Response sendChangeEmail(HttpServletRequest req) {
+        Response result = new Response();
         String email = req.getParameter("email");
         Member member1 = new Member();
         member1.setEmail(email);
@@ -190,14 +190,9 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/updateMobile", method = RequestMethod.POST)
-    public JsonResult updateMobile(Member member) throws Exception {
-        JsonResult result = new JsonResult();
-        try {
-            memberService.updateMember(member);
-        }catch(Exception e){
-            throw e;
-        }
-
+    public Response updateMobile(Member member)  {
+        Response result = new Response();
+        memberService.updateMember(member);
         return result;
     }
 
@@ -206,8 +201,8 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/checkMobile", method = RequestMethod.POST)
-    public JsonResult checkMobile(Member member) throws Exception {
-        JsonResult result = new JsonResult();
+    public Response checkMobile(Member member)  {
+        Response result = new Response();
         Member member1 = memberService.findMemer(member);
         if(member1!=null){
             result.setCode(400);
@@ -225,7 +220,7 @@ public class AccountSafeController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/updateEmail", method = RequestMethod.GET)
-    public ModelAndView updateEmail(HttpServletRequest req) throws Exception {
+    public ModelAndView updateEmail(HttpServletRequest req)  {
         ModelAndView modelAndView = new ModelAndView();
         Member member = new Member();
         String email = req.getParameter("email");//获取email
@@ -260,7 +255,7 @@ public class AccountSafeController {
      * @throws ApiException
      */
     @RequestMapping(value = "/rest/getModifyBindMobileSMS", method = RequestMethod.GET)
-    public JsonResult getModifyBindMobileSMS(HttpServletRequest req) throws IOException, ApiException {
+    public Response getModifyBindMobileSMS(HttpServletRequest req) throws IOException, ApiException {
         String mobile = req.getParameter("mobile");
         log.debug("获得手机验证码  mobile=="+mobile);
         Subject currentUser = SecurityUtils.getSubject();
@@ -270,16 +265,16 @@ public class AccountSafeController {
         log.debug("verifyCode == " + verifyCode);
         //发送验证码到手机
         //SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-        SDKSendTaoBaoSMS.sendModifyBindMobileSMS(mobile, verifyCode, Constant.sms_time);
+        SDKSendTaoBaoSMS.sendModifyBindMobileSMS(mobile, verifyCode, Constants.sms_time);
         Validateinfo info = new Validateinfo();
         info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
         info.setCheckCode(verifyCode);
         info.setAccount(mobile);
         memberRegService.inserValidateInfo(info);
         sess.setAttribute("s"+mobile, verifyCode);
-        JsonResult jsonResult = new JsonResult();
-        jsonResult.setData(verifyCode);
+        Response response = new Response();
+        response.setData(verifyCode);
 
-        return jsonResult;
+        return response;
     }
 }

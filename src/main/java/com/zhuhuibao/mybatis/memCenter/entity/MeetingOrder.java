@@ -1,6 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-import java.util.Date;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 
 public class MeetingOrder {
     private String id;
@@ -9,68 +9,103 @@ public class MeetingOrder {
 
     private String account;
 
+    @ApiModelProperty(value="省")
     private String province;
 
+    @ApiModelProperty(value="市")
     private String city;
 
     private String publishTime;
 
+    private String updateTime;
+
+    private String updateManId;
+
+    @ApiModelProperty(value="开始时间")
     private String startDate;
 
+    @ApiModelProperty(value="截止时间")
     private String endDate;
 
+    @ApiModelProperty(value="时长")
     private String day;
 
+    @ApiModelProperty(value="场馆要求")
     private String venue;
 
+    @ApiModelProperty(value="参会人数")
     private String meetingNum;
 
+    @ApiModelProperty(value="会议类型")
     private String meetingType;
 
+    @ApiModelProperty(value="场地布局")
     private String field;
 
+    @ApiModelProperty(value="住宿：1：需要；0：不需要")
     private String hotel;
 
+    @ApiModelProperty(value="房间数")
     private String roomSize;
 
+    @ApiModelProperty(value="房价预算")
     private String roomPrice;
 
+    @ApiModelProperty(value="用餐：1：需要；0：不需要")
     private String food;
 
+    @ApiModelProperty(value="用餐人数")
     private String mealsNum;
 
+    @ApiModelProperty(value="用餐类型")
     private String mealsType;
 
+    @ApiModelProperty(value="用餐预算")
     private String mealsPrice;
 
+    @ApiModelProperty(value="预算单位")
     private String priceType;
 
+    @ApiModelProperty(value="礼品：1：需要；0：不需要")
     private String present;
 
+    @ApiModelProperty(value="礼品份数")
     private String presentNum;
 
+    @ApiModelProperty(value="礼品预算")
     private String presentPrice;
 
+    @ApiModelProperty(value="周边游：1：需要；0：不需要")
     private String play;
 
+    @ApiModelProperty(value="游玩人数")
     private String playerNum;
 
+    @ApiModelProperty(value="游玩预算")
     private String playPrice;
 
+    @ApiModelProperty(value="其他要求")
     private String otherRequriement;
 
+    @ApiModelProperty(value="联系人名称")
     private String linkName;
 
+    @ApiModelProperty(value="1:先生 0：女士")
     private String call;
 
+    @ApiModelProperty(value="手机")
     private String mobile;
 
+    @ApiModelProperty(value="座机")
     private String telephone;
 
+    @ApiModelProperty(value="公司名称")
     private String company;
 
+    @ApiModelProperty(value="邮件")
     private String email;
 
+    @ApiModelProperty(value="审核状态：0：未处理；1：已处理")
     private String status;
 
     public String getId() {
@@ -351,5 +386,21 @@ public class MeetingOrder {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getUpdateManId() {
+        return updateManId;
+    }
+
+    public void setUpdateManId(String updateManId) {
+        this.updateManId = updateManId;
     }
 }

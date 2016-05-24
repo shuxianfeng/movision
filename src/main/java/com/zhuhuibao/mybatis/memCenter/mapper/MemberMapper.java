@@ -1,8 +1,8 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
-import com.zhuhuibao.common.AccountBean;
-import com.zhuhuibao.common.OmsMemBean;
-import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.common.pojo.AccountBean;
+import com.zhuhuibao.common.pojo.OmsMemBean;
+import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;

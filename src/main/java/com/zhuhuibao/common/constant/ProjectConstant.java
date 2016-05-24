@@ -5,20 +5,22 @@ package com.zhuhuibao.common.constant;
  * @author Administrator
  * @version 2016/5/17 0017
  */
-public interface ProjectConstant {
+public class ProjectConstant {
 
     /**
-     * 项目详情隐藏符号星号
+     * 隐藏星
      */
-    String PROJECT_HIDDEN_STAR_TEN = "**********";
+    public enum HiddenStar {
+        THREE ("***"),FOUR("****"),TEN("**********");
+        public final String value;
 
-    /**
-     * 项目详情联系人隐藏星号
-     */
-    String PROJECT_HIDDEN_LINKMAN_STAR_THREE = "***";
+        HiddenStar(String value) {
+            this.value = value;
+        }
 
-    /**
-     * 项目详情手机隐藏星号
-     */
-    String PROJECT_HIDDEN_MOBILE_STAR_FOUR = "****";
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
 }

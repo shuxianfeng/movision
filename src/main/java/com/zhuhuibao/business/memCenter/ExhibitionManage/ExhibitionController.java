@@ -2,8 +2,9 @@ package com.zhuhuibao.business.memCenter.ExhibitionManage;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
 import com.zhuhuibao.mybatis.memCenter.service.ExhibitionService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
@@ -37,12 +38,12 @@ public class ExhibitionController {
     /**
      * 我的活动
      */
-    @ApiOperation(value="我的活动",notes="我的活动",response = JsonResult.class)
+    @ApiOperation(value="我的活动",notes="我的活动",response = Response.class)
     @RequestMapping(value = "findAllMyExhibition", method = RequestMethod.GET)
-    public JsonResult findAllMyExhibition(@ApiParam(value = "标题")@RequestParam(required = false)String title,
+    public Response findAllMyExhibition(@ApiParam(value = "标题")@RequestParam(required = false)String title,
                                         @ApiParam(value = "审核状态")@RequestParam(required = false)String status,
-                                        @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+                                        @RequestParam(required = false)String pageNo, @RequestParam(required = false)String pageSize) {
+        Response response = new Response();
         //设定默认分页pageSize
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -65,17 +66,54 @@ public class ExhibitionController {
                 //查询
                 List<Exhibition> exhibitionList = exhibitionService.findAllExhibition(pager,map);
                 pager.result(exhibitionList);
-                jsonResult.setData(pager);
+                response.setData(pager);
             }else {
-                jsonResult.setCode(401);
-                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                jsonResult.setMsgCode(MsgCodeConstant.un_login);
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }else {
-            jsonResult.setCode(401);
-            jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            jsonResult.setMsgCode(MsgCodeConstant.un_login);
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-        return jsonResult;
+        return response;
+    }
+
+    /**
+     * 会展详情查看
+     */
+    @ApiOperation(value="会展详情查看",notes="会展详情查看",response = Response.class)
+    @RequestMapping(value = "queryExhibitionInfoById", method = RequestMethod.GET)
+    public Response queryExhibitionInfoById(@RequestParam String id)  {
+        Response response = new Response();
+        Exhibition exhibition = exhibitionService.queryExhibitionInfoById(id);
+        response.setData(exhibition);
+        return response;
+    }
+
+    /**
+     * 会展信息编辑更新
+     */
+    @ApiOperation(value="会展信息编辑更新",notes="会展信息编辑更新",response = Response.class)
+    @RequestMapping(value = "updateExhibitionInfoById", method = RequestMethod.POST)
+    public Response updateExhibitionInfoById(@ModelAttribute()Exhibition exhibition)  {
+        Response response = new Response();
+        exhibitionService.updateExhibitionInfoById(exhibition);
+        return response;
+    }
+
+    /**
+     * 会展信息删除
+     */
+    @ApiOperation(value="会展信息删除",notes="会展信息删除",response = Response.class)
+    @RequestMapping(value = "deleteExhibition", method = RequestMethod.POST)
+    public Response deleteExhibition(@ApiParam(value = "ids,逗号隔开") @RequestParam String ids)  {
+        Response response = new Response();
+        String[] idList = ids.split(",");
+        for (String id : idList) {
+            String is_deleted = "1";
+            Exhibition exhibition = new Exhibition();
+            exhibition.setIs_deleted(is_deleted);
+            exhibition.setId(id);
+            exhibitionService.updateExhibitionInfoById(exhibition);
+        }
+        return response;
     }
 }

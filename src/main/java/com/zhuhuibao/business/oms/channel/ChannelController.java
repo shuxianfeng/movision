@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.zhuhuibao.common.Response;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -20,14 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zhuhuibao.common.JsonResult;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by Administrator on 2016/4/11 0011.
@@ -40,35 +39,35 @@ public class ChannelController {
     ChannelNewsService newsService;
 
     @RequestMapping(value = "/rest/oms/addChannelNews", method = RequestMethod.POST)
-    public JsonResult addChannelNews(@ModelAttribute ChannelNews channelNews) throws IOException {
-        JsonResult jsonResult = new JsonResult();
+    public Response addChannelNews(@ModelAttribute ChannelNews channelNews) throws IOException {
+        Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (session != null) {
             OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
             channelNews.setCreateid(new Long(principal.getId()));
-            jsonResult = newsService.addChannelNews(channelNews);
+            response = newsService.addChannelNews(channelNews);
         }
 
-        return jsonResult;
+        return response;
     }
 
     @RequestMapping(value = "/rest/oms/updateChannelNewsByID", method = RequestMethod.POST)
-    public JsonResult updateChannelNewsByID(ChannelNews channelNews) throws IOException {
-        JsonResult jsonResult = new JsonResult();
+    public Response updateChannelNewsByID(ChannelNews channelNews) throws IOException {
+        Response response = new Response();
         Long createID = ShiroUtil.getOmsCreateID();
 
         if (createID != null) {
             channelNews.setCreateid(createID);
-            jsonResult = newsService.updateByPrimaryKeySelective(channelNews);
+            response = newsService.updateByPrimaryKeySelective(channelNews);
         } else {
 
-            jsonResult.setCode(400);
-            jsonResult.setMessage("更新失败");
+            response.setCode(400);
+            response.setMessage("更新失败");
 
         }
 
-        return jsonResult;
+        return response;
     }
 
     /**
@@ -80,15 +79,15 @@ public class ChannelController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/oms/queryDetailsByID", method = RequestMethod.GET)
-    public JsonResult queryDetailsByID(Long id) throws IOException {
-        JsonResult jsonResult = newsService.selectByPrimaryKey(id);
+    public Response queryDetailsByID(Long id) throws IOException {
+        Response response = newsService.selectByPrimaryKey(id);
         newsService.updateViews(id);
-        return jsonResult;
+        return response;
     }
 
     @RequestMapping(value = "/rest/oms/queryNewsByChannelInfo", method = RequestMethod.GET)
-    public JsonResult queryNewsByChannelInfo(ChannelNews channelNews) throws IOException {
-        JsonResult jsonResult = new JsonResult();
+    public Response queryNewsByChannelInfo(ChannelNews channelNews) throws IOException {
+        Response response = new Response();
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("channelid", channelNews.getChannelid());
         map.put("sort", channelNews.getSort());
@@ -102,9 +101,9 @@ public class ChannelController {
         } else if (channelNews.getSort() == 3) {
             map.put("count", 3);
         }
-        jsonResult = newsService.queryNewsByChannelInfo(map);
+        response = newsService.queryNewsByChannelInfo(map);
 
-        return jsonResult;
+        return response;
     }
 
     /**
@@ -116,24 +115,24 @@ public class ChannelController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/oms/queryPersonVisit", method = RequestMethod.GET)
-    public JsonResult queryPersonVisit(ChannelNews channelNews) throws IOException {
+    public Response queryPersonVisit(ChannelNews channelNews) throws IOException {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("channelid", channelNews.getChannelid());
         map.put("sort", channelNews.getSort());
         map.put("status", 1);
-        JsonResult jsonResult = newsService.queryNewsByChannelInfo(map);
-        return jsonResult;
+        Response response = newsService.queryNewsByChannelInfo(map);
+        return response;
     }
 
     @RequestMapping(value = "/rest/oms/queryViewsByChannel", method = RequestMethod.GET)
-    public JsonResult queryViewsByChannel(ChannelNews channelNews) throws IOException {
+    public Response queryViewsByChannel(ChannelNews channelNews) throws IOException {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("channelid", channelNews.getChannelid());
         map.put("sort", channelNews.getSort());
         map.put("status", 1);
         map.put("count", 5);
-        JsonResult jsonResult = newsService.queryViewsByChannel(map);
-        return jsonResult;
+        Response response = newsService.queryViewsByChannel(map);
+        return response;
     }
 
     /**
@@ -147,8 +146,8 @@ public class ChannelController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/oms/queryNewsList", method = RequestMethod.GET)
-    public JsonResult queryNewsList(ChannelNews channelNews, String pageNo, String pageSize) throws IOException {
-        JsonResult jsonResult = new JsonResult();
+    public Response queryNewsList(ChannelNews channelNews, String pageNo, String pageSize) throws IOException {
+        Response response = new Response();
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -162,9 +161,9 @@ public class ChannelController {
         map.put("status", 1);
         List<ChannelNews> channelList = newsService.findAllNewsList(pager, map);
         pager.result(channelList);
-        jsonResult.setData(pager);
+        response.setData(pager);
 
-        return jsonResult;
+        return response;
     }
 
     /**
@@ -178,8 +177,8 @@ public class ChannelController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/oms/queryContentList", method = RequestMethod.GET)
-    public JsonResult queryContentList(ChannelNews channelNews, String pageNo, String pageSize) throws IOException {
-        JsonResult jsonResult = new JsonResult();
+    public Response queryContentList(ChannelNews channelNews, String pageNo, String pageSize) throws IOException {
+        Response response = new Response();
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -193,9 +192,9 @@ public class ChannelController {
         map.put("status", channelNews.getStatus());
         List<ChannelNews> channelList = newsService.findAllContentList(pager, map);
         pager.result(channelList);
-        jsonResult.setData(pager);
+        response.setData(pager);
 
-        return jsonResult;
+        return response;
     }
 
     /**
@@ -206,10 +205,10 @@ public class ChannelController {
      * @throws IOException
      */
     @RequestMapping(value = "/rest/oms/queryChannelList", method = RequestMethod.GET)
-    public JsonResult queryChannelList() throws IOException {
-        JsonResult jsonResult = new JsonResult();
-        jsonResult = newsService.queryChannelList();
-        return jsonResult;
+    public Response queryChannelList() throws IOException {
+        Response response = new Response();
+        response = newsService.queryChannelList();
+        return response;
     }
 
     /**
@@ -221,9 +220,9 @@ public class ChannelController {
      */
 
     @RequestMapping(value = "/rest/oms/batchDelNews", method = RequestMethod.POST)
-    public JsonResult batchDelNews(HttpServletRequest req) throws IOException {
+    public Response batchDelNews(HttpServletRequest req) throws IOException {
         String ids[] = req.getParameterValues("ids");
-        JsonResult result = new JsonResult();
+        Response result = new Response();
         for (String id : ids) {
             int isdelete = newsService.batchDelNews(id);
             if (isdelete == 0) {

@@ -45,11 +45,13 @@ public class ExpertService {
      * @param achievement
      * @return
      */
-    public int publishAchievement(Achievement achievement)throws Exception
+    public int publishAchievement(Achievement achievement)
     {
         try{
             return achievementMapper.publishAchievement(achievement);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -59,10 +61,12 @@ public class ExpertService {
      * @param id
      * @return
      */
-    public Achievement queryAchievementById(String id)throws Exception{
+    public Achievement queryAchievementById(String id){
         try{
             return achievementMapper.queryAchievementById(id);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -70,10 +74,12 @@ public class ExpertService {
     /**
      * 技术成果列表(分页)
      */
-    public List<Achievement> findAllAchievementList(Paging<Achievement> pager,Map<String,Object> map)throws Exception{
+    public List<Achievement> findAllAchievementList(Paging<Achievement> pager,Map<String,Object> map){
         try{
             return achievementMapper.findAllAchievementList(pager.getRowBounds(),map);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -81,10 +87,12 @@ public class ExpertService {
     /**
      * 技术成果列表
      */
-    public List<Achievement> findAchievementList(Map<String,Object> map)throws Exception{
+    public List<Achievement> findAchievementList(Map<String,Object> map){
         try{
             return achievementMapper.findAllAchievementList(map);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -92,10 +100,12 @@ public class ExpertService {
     /**
      * 技术成果列表(控制条数)
      */
-    public List<Map<String,String>> findAchievementListByCount(int count)throws Exception{
+    public List<Map<String,String>> findAchievementListByCount(int count){
         try{
             return achievementMapper.findAchievementListByCount(count);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -103,10 +113,12 @@ public class ExpertService {
     /**
      * 更新技术成果
      */
-    public int updateAchievement(Achievement achievement)throws Exception{
+    public int updateAchievement(Achievement achievement){
         try{
             return achievementMapper.updateAchievement(achievement);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -116,10 +128,12 @@ public class ExpertService {
      * @param dynamic
      * @return
      */
-    public int publishDynamic(Dynamic dynamic)throws Exception{
+    public int publishDynamic(Dynamic dynamic){
         try{
             return dynamicMapper.publishDynamic(dynamic);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -129,10 +143,12 @@ public class ExpertService {
      * @param id
      * @return
      */
-    public Dynamic queryDynamicById(String id)throws Exception{
+    public Dynamic queryDynamicById(String id){
         try{
             return dynamicMapper.queryDynamicById(id);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -140,10 +156,12 @@ public class ExpertService {
     /**
      * 更新协会动态
      */
-    public int updateDynamic(Dynamic dynamic)throws Exception{
+    public int updateDynamic(Dynamic dynamic){
         try{
             return dynamicMapper.updateDynamic(dynamic);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -151,10 +169,12 @@ public class ExpertService {
     /**
      * 协会动态列表
      */
-    public List<Dynamic> findAllDynamicList(Paging<Dynamic> pager,Map<String,Object> map)throws Exception{
+    public List<Dynamic> findAllDynamicList(Paging<Dynamic> pager,Map<String,Object> map){
         try{
             return dynamicMapper.findAllDynamicList(pager.getRowBounds(),map);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -162,10 +182,12 @@ public class ExpertService {
     /**
      * 协会动态列表(控制条数)
      */
-    public List<Map<String,String>> findDynamicListByCount(int count)throws Exception{
+    public List<Map<String,String>> findDynamicListByCount(int count){
         try{
             return dynamicMapper.findDynamicListByCount(count);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -175,10 +197,12 @@ public class ExpertService {
      * @param expert
      * @return
      */
-    public int applyExpert(Expert expert)throws Exception{
+    public int applyExpert(Expert expert){
         try{
             return expertMapper.expertMapper(expert);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -188,10 +212,12 @@ public class ExpertService {
      * @param id
      * @return
      */
-    public Expert queryExpertById(String id)throws Exception{
+    public Expert queryExpertById(String id){
         try{
             return expertMapper.queryExpertById(id);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -201,10 +227,12 @@ public class ExpertService {
      * @param expert
      * @return
      */
-    public int updateExpert(Expert expert)throws Exception{
+    public int updateExpert(Expert expert){
         try{
             return expertMapper.updateExpert(expert);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -214,10 +242,12 @@ public class ExpertService {
      * @param pager,map
      * @return
      */
-    public List<Expert> findAllExpertList(Paging<Expert> pager,Map<String,Object> map)throws Exception{
+    public List<Expert> findAllExpertList(Paging<Expert> pager,Map<String,Object> map){
         try{
             return expertMapper.findAllExpertList(pager.getRowBounds(),map);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -227,10 +257,12 @@ public class ExpertService {
      * @param count
      * @return
      */
-    public List<Expert> queryHotExpert(int count)throws Exception{
+    public List<Expert> queryHotExpert(int count){
         try{
             return expertMapper.queryHotExpert(count);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -240,10 +272,12 @@ public class ExpertService {
      * @param count
      * @return
      */
-    public List<Expert> queryLatestExpert(int count)throws Exception{
+    public List<Expert> queryLatestExpert(int count){
         try{
             return expertMapper.queryLatestExpert(count);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -253,10 +287,12 @@ public class ExpertService {
      * @param question
      * @return
      */
-    public int askExpert(Question question)throws Exception{
+    public int askExpert(Question question){
         try{
             return questionMapper.askExpert(question);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }

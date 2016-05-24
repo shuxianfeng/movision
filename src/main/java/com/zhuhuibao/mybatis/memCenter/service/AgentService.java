@@ -1,7 +1,9 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.*;
-import com.zhuhuibao.common.constant.Constant;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.pojo.AgentBean;
+import com.zhuhuibao.common.pojo.CommonBean;
+import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Agent;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.AgentMapper;
@@ -41,10 +43,12 @@ public class AgentService {
      * @param agent
      * @return
      */
-    public int agentSave(Agent agent)throws Exception{
+    public int agentSave(Agent agent){
         try {
             return agentMapper.agentSave(agent);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -54,10 +58,12 @@ public class AgentService {
      * @param agent
      * @return
      */
-    public int agentUpdate(Agent agent)throws Exception{
+    public int agentUpdate(Agent agent){
         try {
             return agentMapper.agentUpdate(agent);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -67,10 +73,12 @@ public class AgentService {
      * @param
      * @return
      */
-    public List<CommonBean> searchProvinceByPinYin()throws Exception{
+    public List<CommonBean> searchProvinceByPinYin(){
         try {
             return provinceMapper.searchProvinceByPinYin();
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -80,10 +88,12 @@ public class AgentService {
      * @param
      * @return
      */
-    public List<AgentBean> findAgentByMemId(String id)throws Exception{
+    public List<AgentBean> findAgentByMemId(String id){
         try {
             return agentMapper.findAgentByMemId(id);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -93,7 +103,7 @@ public class AgentService {
      * @param
      * @return
      */
-    public Map updateAgentById(String id)throws Exception{
+    public Map updateAgentById(String id){
         try{
             AgentBean agent = agentMapper.updateAgentById(id);
             Map map = new HashMap();
@@ -118,20 +128,24 @@ public class AgentService {
             map.put("agent",map1);
             return map;
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
 
-    public Agent find(Agent agent)throws Exception{
+    public Agent find(Agent agent){
         try {
             return agentMapper.find(agent);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
 
 
-    public Map getAgentByProId(String id)throws Exception{
+    public Map getAgentByProId(String id){
         try {
             List<ResultBean> provinceList = provinceMapper.findProvince();
             List<ResultBean> agentList = agentMapper.findAgentByProId(id);
@@ -139,24 +153,24 @@ public class AgentService {
             List list = new ArrayList();
             Map map = new HashMap();
             Map map3 = new HashMap();
-            map3.put(Constant.id,member.getId());
-            map3.put(Constant.name,member.getEnterpriseName());
-            map3.put(Constant.logo,member.getEnterpriseLogo());
-            map3.put(Constant.webSite,member.getEnterpriseWebSite());
-            map3.put(Constant.address,member.getAddress());
+            map3.put(Constants.id,member.getId());
+            map3.put(Constants.name,member.getEnterpriseName());
+            map3.put(Constants.logo,member.getEnterpriseLogo());
+            map3.put(Constants.webSite,member.getEnterpriseWebSite());
+            map3.put(Constants.address,member.getAddress());
             map.put("manufactor",map3);
             for(int i=0;i<provinceList.size();i++){
                 ResultBean province = provinceList.get(i);
                 Map map1 = new HashMap();
-                map1.put(Constant.id,province.getCode());
-                map1.put(Constant.name,province.getName());
+                map1.put(Constants.id,province.getCode());
+                map1.put(Constants.name,province.getName());
                 List list1 = new ArrayList();
                 for(int j=0;j<agentList.size();j++){
                     ResultBean agent = agentList.get(j);
                     Map map2 = new HashMap();
                     if(agent.getSmallIcon().contains(province.getCode())){
-                        map2.put(Constant.id,agent.getCode());
-                        map2.put(Constant.name,agent.getName());
+                        map2.put(Constants.id,agent.getCode());
+                        map2.put(Constants.name,agent.getName());
                         list1.add(map2);
                     }
                 }
@@ -166,22 +180,28 @@ public class AgentService {
             map.put("agent",list);
             return map;
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
 
-    public List<ResultBean> getGreatAgentByScateid(String id)throws Exception{
+    public List<ResultBean> getGreatAgentByScateid(String id){
         try {
             return agentMapper.getGreatAgentByScateid(id);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
 
-    public List<ResultBean> getGreatAgentByBrandId(String id)throws Exception{
+    public List<ResultBean> getGreatAgentByBrandId(String id){
         try {
             return agentMapper.getGreatAgentByBrandId(id);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -189,7 +209,7 @@ public class AgentService {
     /**
      * 根据品牌id查询代理商跟厂商（区域分组）
      */
-    public Map getAgentByBrandid(String id)throws Exception{
+    public Map getAgentByBrandid(String id){
         try {
             List<ResultBean> provinceList = provinceMapper.findProvince();
             List<ResultBean> agentList = agentMapper.getAgentByBrandid(id);
@@ -197,21 +217,21 @@ public class AgentService {
             List list = new ArrayList();
             Map map = new HashMap();
             Map map3 = new HashMap();
-            map3.put(Constant.id,resultBean.getCode());
-            map3.put(Constant.name,resultBean.getName());
+            map3.put(Constants.id,resultBean.getCode());
+            map3.put(Constants.name,resultBean.getName());
             map.put("manufactor",map3);
             for(int i=0;i<provinceList.size();i++){
                 ResultBean province = provinceList.get(i);
                 Map map1 = new HashMap();
-                map1.put(Constant.id,province.getCode());
-                map1.put(Constant.name,province.getName());
+                map1.put(Constants.id,province.getCode());
+                map1.put(Constants.name,province.getName());
                 List list1 = new ArrayList();
                 for(int j=0;j<agentList.size();j++){
                     ResultBean agent = agentList.get(j);
                     Map map2 = new HashMap();
                     if(agent.getSmallIcon().contains(province.getCode())){
-                        map2.put(Constant.id,agent.getCode());
-                        map2.put(Constant.name,agent.getName());
+                        map2.put(Constants.id,agent.getCode());
+                        map2.put(Constants.name,agent.getName());
                         list1.add(map2);
                     }
                 }
@@ -221,6 +241,8 @@ public class AgentService {
             map.put("agent",list);
             return map;
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }

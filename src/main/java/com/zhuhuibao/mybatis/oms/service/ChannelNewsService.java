@@ -1,6 +1,6 @@
 package com.zhuhuibao.mybatis.oms.service;
 
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.mapper.ChannelNewsMapper;
@@ -33,9 +33,9 @@ public class ChannelNewsService {
      * @param news
      * @return
      */
-    public JsonResult addChannelNews(ChannelNews news)
+    public Response addChannelNews(ChannelNews news)
     {
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         try
         {
             int result = channel.insertSelective(news);
@@ -44,7 +44,7 @@ public class ChannelNewsService {
         {
             log.error("add channel news error!",e);
         }
-        return jsonResult;
+        return response;
     }
 
     /**
@@ -52,9 +52,9 @@ public class ChannelNewsService {
      * @param channelNews  频道信息
      * @return
      */
-    public JsonResult updateByPrimaryKeySelective(ChannelNews channelNews)
+    public Response updateByPrimaryKeySelective(ChannelNews channelNews)
     {
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         try
         {
             channel.updateByPrimaryKeySelective(channelNews);
@@ -62,20 +62,20 @@ public class ChannelNewsService {
         catch(Exception e)
         {
             log.error("add channel news error!",e);
-            jsonResult.setCode(MsgCodeConstant.response_status_400);
-            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            response.setCode(MsgCodeConstant.response_status_400);
+            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
         }
-        return jsonResult;
+        return response;
     }
     /**
      * 更新点击率
      * @param id  频道ID
      * @return
      */
-    public JsonResult updateViews(Long id)
+    public Response updateViews(Long id)
     {
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         try
         {
             channel.updateViews(id);
@@ -83,11 +83,11 @@ public class ChannelNewsService {
         catch(Exception e)
         {
             log.error("add channel news error!",e);
-            jsonResult.setCode(MsgCodeConstant.response_status_400);
-            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            response.setCode(MsgCodeConstant.response_status_400);
+            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
         }
-        return jsonResult;
+        return response;
     }
 
     /**
@@ -95,68 +95,68 @@ public class ChannelNewsService {
      * @param id  频道信息
      * @return
      */
-    public JsonResult selectByPrimaryKey(Long id)
+    public Response selectByPrimaryKey(Long id)
     {
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         try
         {
             ChannelNews news =  channel.selectByPrimaryKey(id);
-            jsonResult.setData(news);
+            response.setData(news);
         }
         catch(Exception e)
         {
             log.error("select by primary key error!",e);
-            jsonResult.setCode(MsgCodeConstant.response_status_400);
-            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            response.setCode(MsgCodeConstant.response_status_400);
+            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
         }
-        return jsonResult;
+        return response;
     }
 
     /**
      * 查询资讯信息根据频道ID
      * @param channelMap  频道资讯页条件
-     * @return JsonResult
+     * @return Response
      */
-    public JsonResult queryNewsByChannelInfo(Map<String,Object> channelMap )
+    public Response queryNewsByChannelInfo(Map<String,Object> channelMap )
     {
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         try
         {
             List<ChannelNews> newsList =  channel.queryNewsByChannelInfo(channelMap);
-            jsonResult.setData(newsList);
+            response.setData(newsList);
         }
         catch(Exception e)
         {
             log.error("select by primary key error!",e);
-            jsonResult.setCode(MsgCodeConstant.response_status_400);
-            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            response.setCode(MsgCodeConstant.response_status_400);
+            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
         }
-        return jsonResult;
+        return response;
     }
 
     /**
      * 查询主频道某个栏目点击率排行
      * @param channelMap  频道资讯页条件
-     * @return JsonResult
+     * @return Response
      */
-    public JsonResult queryViewsByChannel(Map<String,Object> channelMap )
+    public Response queryViewsByChannel(Map<String,Object> channelMap )
     {
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         try
         {
             List<ChannelNews> newsList =  channel.queryViewsByChannel(channelMap);
-            jsonResult.setData(newsList);
+            response.setData(newsList);
         }
         catch(Exception e)
         {
             log.error("select by primary key error!",e);
-            jsonResult.setCode(MsgCodeConstant.response_status_400);
-            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            response.setCode(MsgCodeConstant.response_status_400);
+            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
         }
-        return jsonResult;
+        return response;
     }
 
     /**
@@ -200,24 +200,24 @@ public class ChannelNewsService {
     /**
      * 查询所说项目
      * @param channelMap  频道资讯页条件
-     * @return JsonResult
+     * @return Response
      */
-    public JsonResult queryChannelList()
+    public Response queryChannelList()
     {
-        JsonResult jsonResult = new JsonResult();
+        Response response = new Response();
         try
         {
             List<ChannelNews> newsList =  channel.queryChannelList();
-            jsonResult.setData(newsList);
+            response.setData(newsList);
         }
         catch(Exception e)
         {
             log.error("select by primary key error!",e);
-            jsonResult.setCode(MsgCodeConstant.response_status_400);
-            jsonResult.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            jsonResult.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            response.setCode(MsgCodeConstant.response_status_400);
+            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
+            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
         }
-        return jsonResult;
+        return response;
     }
     /**
      * 删除咨询信息

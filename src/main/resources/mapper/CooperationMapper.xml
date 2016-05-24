@@ -28,8 +28,10 @@
     <result column="is_deleted" property="is_deleted" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="views" property="views" jdbcType="VARCHAR" />
+    <result column="memberType" property="memberType" jdbcType="VARCHAR" />
+    <result column="headShot" property="headShot" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMap" type="com.zhuhuibao.common.ResultBean" >
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.ResultBean" >
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
@@ -231,18 +233,21 @@
   </update>
   <select id="queryCooperationInfoById" resultMap="BaseResultMap" >
     select c.*, concat(p.name,ci.name,a.name)as cooperationArea,co.name as categoryName,coo.name as TypeName,coo.parentId,
-    (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName
+    (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName,
+    CASE WHEN m.identify = 2 THEN '个人' WHEN m.identify !=2 THEN '公司' END AS memberType,m.headShot
     from t_c_cooperation c
     left join t_dictionary_province p on p.code = c.province
     left join t_dictionary_city ci on ci.code = c.city
     left join t_dictionary_area a on a.code = c.area
     left join t_dictionary_constant co on co.code = c.category
     left join t_dictionary_cooperationType coo on coo.id = c.type
+    LEFT JOIN t_m_member m on c.createId = m.id
     where c.id = #{id} and co.type = 9
   </select>
   <select id="findAllCooperationByPager" resultMap="BaseResultMap" >
     select c.*, concat(p.name,ci.name,a.name)as cooperationArea,co.name as categoryName,coo.name as TypeName,coo.parentId,
-    (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName
+    (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName,
+    CASE WHEN m.identify = 2 THEN '个人' WHEN m.identify !=2 THEN '公司' END AS memberType,m.headShot
     from t_c_cooperation c
     left join t_dictionary_province p on p.code = c.province
     left join t_dictionary_city ci on ci.code = c.city

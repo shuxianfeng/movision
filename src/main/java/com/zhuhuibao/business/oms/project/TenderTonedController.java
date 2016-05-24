@@ -6,7 +6,7 @@ package com.zhuhuibao.business.oms.project;/**
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.oms.entity.TenderToned;
 import com.zhuhuibao.mybatis.oms.service.TenderTonedService;
@@ -37,38 +37,38 @@ public class TenderTonedController {
     TenderTonedService ttService;
 
     @RequestMapping(value = "addTenderToned",method = RequestMethod.POST)
-    @ApiOperation(value="运营管理平台增加招中标",notes = "运营管理平台增加招中标",response = JsonResult.class)
-    public JsonResult addTenderToned(@ApiParam(value = "招中标信息") @ModelAttribute TenderToned tt) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    @ApiOperation(value="运营管理平台增加招中标",notes = "运营管理平台增加招中标",response = Response.class)
+    public Response addTenderToned(@ApiParam(value = "招中标信息") @ModelAttribute TenderToned tt) throws Exception {
+        Response response = new Response();
         Long createId = ShiroUtil.getOmsCreateID();
         if(createId != null) {
             tt.setCreateid(createId);
             ttService.insertTenderTone(tt);
         }
-        return jsonResult;
+        return response;
     }
 
     @RequestMapping(value = "updateTenderToned",method = RequestMethod.POST)
-    @ApiOperation(value="运营管理平台修改招中标",notes = "运营管理平台修改招中标",response = JsonResult.class)
-    public JsonResult updateTenderToned(@ApiParam(value = "招中标信息") @ModelAttribute TenderToned tt) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    @ApiOperation(value="运营管理平台修改招中标",notes = "运营管理平台修改招中标",response = Response.class)
+    public Response updateTenderToned(@ApiParam(value = "招中标信息") @ModelAttribute TenderToned tt) throws Exception {
+        Response response = new Response();
         ttService.updateTenderTone(tt);
-        return jsonResult;
+        return response;
     }
 
     @RequestMapping(value = "searchTenderTonedPager",method = RequestMethod.GET)
-    @ApiOperation(value="查询招中标分页展示",notes = "根据条件查询招中标",response = JsonResult.class)
-    public JsonResult searchTenderTonedPager(@ApiParam(value = "招中标公告名称") @RequestParam(required = false) String noticeName,
-                                             @ApiParam(value="省代码") @RequestParam(required = false) String province,
-                                             @ApiParam(value="市代码") @RequestParam(required = false) String city,
-                                             @ApiParam(value="招中标类型：1招标，2中标") @RequestParam(required = false) String type,
-                                             @ApiParam(value = "开工日期查询开始日期") @RequestParam(required = false) String startDateA,
-                                             @ApiParam(value = "开工日期查询结束日期") @RequestParam(required = false) String startDateB,
-                                             @ApiParam(value = "竣工日期查询开始日期") @RequestParam(required = false) String endDateA,
-                                             @ApiParam(value = "竣工日期查询结束日期") @RequestParam(required = false) String endDateB,
-                                             @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-                                             @ApiParam(value="每页显示的条数") @RequestParam(required = false) String pageSize) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    @ApiOperation(value="查询招中标分页展示",notes = "根据条件查询招中标",response = Response.class)
+    public Response searchTenderTonedPager(@ApiParam(value = "招中标公告名称") @RequestParam(required = false) String noticeName,
+                                           @ApiParam(value="省代码") @RequestParam(required = false) String province,
+                                           @ApiParam(value="市代码") @RequestParam(required = false) String city,
+                                           @ApiParam(value="招中标类型：1招标，2中标") @RequestParam(required = false) String type,
+                                           @ApiParam(value = "开工日期查询开始日期") @RequestParam(required = false) String startDateA,
+                                           @ApiParam(value = "开工日期查询结束日期") @RequestParam(required = false) String startDateB,
+                                           @ApiParam(value = "竣工日期查询开始日期") @RequestParam(required = false) String endDateA,
+                                           @ApiParam(value = "竣工日期查询结束日期") @RequestParam(required = false) String endDateB,
+                                           @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
+                                           @ApiParam(value="每页显示的条数") @RequestParam(required = false) String pageSize) throws Exception {
+        Response response = new Response();
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -87,28 +87,28 @@ public class TenderTonedController {
         Paging<TenderToned> pager = new Paging<TenderToned>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
         List<TenderToned> ttList = ttService.findAllTenderTonedPager(map,pager);
         pager.result(ttList);
-        jsonResult.setData(pager);
-        return jsonResult;
+        response.setData(pager);
+        return response;
     }
 
     @RequestMapping(value = "previewTenderToned",method = RequestMethod.GET)
-    @ApiOperation(value="运营管理平台预览招中标信息",notes = "运营管理平台预览",response = JsonResult.class)
-    public JsonResult previewTenderToned(@ApiParam(value = "招中标信息ID") @RequestParam Long tenderTonedID) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    @ApiOperation(value="运营管理平台预览招中标信息",notes = "运营管理平台预览",response = Response.class)
+    public Response previewTenderToned(@ApiParam(value = "招中标信息ID") @RequestParam Long tenderTonedID) throws Exception {
+        Response response = new Response();
         TenderToned tenderToned = ttService.queryTenderToneByID(tenderTonedID);
-        jsonResult.setData(tenderToned);
-        return jsonResult;
+        response.setData(tenderToned);
+        return response;
     }
 
     @RequestMapping(value = "queryLatestTenderToned", method = RequestMethod.GET)
-    @ApiOperation(value = "最新招标或中标公告信息或搜索时的推荐，默认10条",notes = "最新招标或中标公告信息，默认10条",response = JsonResult.class)
-    public JsonResult queryLatestTenderToned(@ApiParam(value="公告类型 1:招标公告，2：中标公告") @RequestParam() String type) throws Exception {
-        JsonResult jsonResult = new JsonResult();
+    @ApiOperation(value = "最新招标或中标公告信息或搜索时的推荐，默认10条",notes = "最新招标或中标公告信息，默认10条",response = Response.class)
+    public Response queryLatestTenderToned(@ApiParam(value="公告类型 1:招标公告，2：中标公告") @RequestParam() String type) throws Exception {
+        Response response = new Response();
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("type",type);
         map.put("count",10);
         List<Map<String,String>> projectList = ttService.queryLatestTenderToned(map);
-        jsonResult.setData(projectList);
-        return jsonResult;
+        response.setData(projectList);
+        return response;
     }
 }

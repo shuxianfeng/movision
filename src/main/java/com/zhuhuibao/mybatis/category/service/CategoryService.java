@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
 
 @Service("cs")

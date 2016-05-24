@@ -15,4 +15,6 @@ public interface ExhibitionMapper {
 
     List<Exhibition> findAllExhibition(RowBounds rowBounds,Map<String, Object> map);
 
+    List<Exhibition> findNewExhibition(Map<String,Object> map);
+
 }

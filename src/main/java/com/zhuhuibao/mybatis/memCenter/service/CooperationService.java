@@ -1,7 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.constant.Constant;
-import com.zhuhuibao.common.ResultBean;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
 import com.zhuhuibao.mybatis.memCenter.entity.CooperationType;
 import com.zhuhuibao.mybatis.memCenter.mapper.CooperationMapper;
@@ -34,10 +34,12 @@ public class CooperationService {
     /**
      * 发布任务
      */
-    public int publishCooperation(Cooperation cooperation)throws Exception{
+    public int publishCooperation(Cooperation cooperation){
         try{
             return cooperationMapper.publishCooperation(cooperation);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -45,7 +47,7 @@ public class CooperationService {
     /**
      * 合作类型(大类，子类)
      */
-    public List cooperationType()throws Exception{
+    public List cooperationType(){
         try{
             List<CooperationType> cooperationTypeList = cooperationTypeMapper.findCooperationType();
             List<CooperationType> subCooperationTypeList = cooperationTypeMapper.findSubCooperationType();
@@ -53,15 +55,15 @@ public class CooperationService {
             for(int i=0;i<cooperationTypeList.size();i++){
                 CooperationType cooperationType = cooperationTypeList.get(i);
                 Map map = new HashMap();
-                map.put(Constant.code,cooperationType.getId());
-                map.put(Constant.name,cooperationType.getName());
+                map.put(Constants.code,cooperationType.getId());
+                map.put(Constants.name,cooperationType.getName());
                 List list = new ArrayList();
                 for(int y=0;y<subCooperationTypeList.size();y++){
                     CooperationType subCooperation = subCooperationTypeList.get(y);
                     if(cooperationType.getId().equals(subCooperation.getParentId())){
                         Map map1 = new HashMap();
-                        map1.put(Constant.code,subCooperation.getId());
-                        map1.put(Constant.name,subCooperation.getName());
+                        map1.put(Constants.code,subCooperation.getId());
+                        map1.put(Constants.name,subCooperation.getName());
                         list.add(map1);
                     }
                 }
@@ -70,6 +72,8 @@ public class CooperationService {
             }
             return list1;
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -77,19 +81,21 @@ public class CooperationService {
     /**
      * 合作类型(子类)
      */
-    public List subCooperationType()throws Exception{
+    public List subCooperationType(){
         try{
             List<CooperationType> subCooperationTypeList = cooperationTypeMapper.findSubCooperationType();
             List list = new ArrayList();
             for(int y=0;y<subCooperationTypeList.size();y++){
                 CooperationType subCooperation = subCooperationTypeList.get(y);
                 Map map = new HashMap();
-                map.put(Constant.code,subCooperation.getId());
-                map.put(Constant.name,subCooperation.getName());
+                map.put(Constants.code,subCooperation.getId());
+                map.put(Constants.name,subCooperation.getName());
                 list.add(map);
             }
             return list;
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -97,19 +103,21 @@ public class CooperationService {
     /**
      * 项目类别
      */
-    public List cooperationCategory()throws Exception {
+    public List cooperationCategory() {
         try{
             List<ResultBean> resultBeanList = cooperationMapper.cooperationCategory();
             List list = new ArrayList();
             for(int i=0;i<resultBeanList.size();i++){
                 ResultBean resultBean = resultBeanList.get(i);
                 Map map = new HashMap();
-                map.put(Constant.code,resultBean.getCode());
-                map.put(Constant.name,resultBean.getName());
+                map.put(Constants.code,resultBean.getCode());
+                map.put(Constants.name,resultBean.getName());
                 list.add(map);
             }
             return list;
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -117,10 +125,12 @@ public class CooperationService {
     /**
      * 编辑任务
      */
-    public int updateCooperation(Cooperation cooperation)throws Exception{
+    public int updateCooperation(Cooperation cooperation){
         try{
             return cooperationMapper.updateCooperation(cooperation);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -128,13 +138,15 @@ public class CooperationService {
     /**
      * 批量删除任务
      */
-    public void deleteCooperation(String ids[])throws Exception{
+    public void deleteCooperation(String ids[]){
         try {
             for(int i=0;i<ids.length;i++){
                 String id = ids[i];
                 cooperationMapper.deleteCooperation(id);
             }
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -142,11 +154,13 @@ public class CooperationService {
     /**
      * 查询一条任务的信息
      */
-    public Cooperation queryCooperationInfoById(String id)throws Exception{
+    public Cooperation queryCooperationInfoById(String id){
         try{
             Cooperation cooperation = cooperationMapper.queryCooperationInfoById(id);
             return cooperation;
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -154,11 +168,13 @@ public class CooperationService {
     /**
      * 根据条件查询任务信息列表（分页）
      */
-    public List<Cooperation> findAllCooperationByPager( Paging<Cooperation> pager,Cooperation cooperation)throws Exception{
+    public List<Cooperation> findAllCooperationByPager( Paging<Cooperation> pager,Cooperation cooperation){
         try {
             List<Cooperation> cooperationList = cooperationMapper.findAllCooperationByPager(pager.getRowBounds(),cooperation);
             return cooperationList;
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }
@@ -166,10 +182,12 @@ public class CooperationService {
     /**
      * 最热合作信息
      */
-    public List<Cooperation> queryHotCooperation(Map<String,Object> map)throws Exception{
+    public List<Cooperation> queryHotCooperation(Map<String,Object> map){
         try {
             return cooperationMapper.queryHotCooperation(map);
         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
             throw e;
         }
     }

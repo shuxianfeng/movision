@@ -1,6 +1,6 @@
 package com.zhuhuibao.web;
 
-import com.zhuhuibao.common.JsonResult;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.mybatis.oms.service.UserService;
 import com.zhuhuibao.security.resubmit.TokenHelper;
 import com.zhuhuibao.shiro.realm.OMSRealm;
@@ -31,67 +31,67 @@ public class OMSAuthenticationController {
 	private UserService userService;
     
     @RequestMapping(value = "/rest/oms/authc", method = RequestMethod.GET)
-    public JsonResult isLogin() throws IOException{
+    public Response isLogin() throws IOException{
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        JsonResult jsonResult = new JsonResult();
-        jsonResult.setCode(200);
+        Response response = new Response();
+        response.setCode(200);
 		Map<String, Object> map = new HashMap<String, Object>();
 
         if(null == session){
-        	jsonResult.setMsgCode(0);
-            jsonResult.setMessage("you are rejected!");
+        	response.setMsgCode(0);
+            response.setMessage("you are rejected!");
             map.put("authorized", false);
         }else{
             OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser)session.getAttribute("oms");
         	if(null == principal){
-            	jsonResult.setMsgCode(0);
-                jsonResult.setMessage("you are rejected!");
+            	response.setMsgCode(0);
+                response.setMessage("you are rejected!");
                 map.put("authorized", false);
         	}else{
                 LoginUser user = new LoginUser();
                 user.setAccount(principal.getAccount());
                 user.setId(principal.getId());
-            	jsonResult.setMsgCode(1);
-                jsonResult.setMessage("welcome you!");
+            	response.setMsgCode(1);
+                response.setMessage("welcome you!");
                 map.put("authorized", true);
                 map.put("user", user);
         	}
         }
         
-        jsonResult.setData(map);
+        response.setData(map);
 
-        log.debug("caijl:/rest/web/authc is called,msgcode=["+jsonResult.getMsgCode()+"],Message=["+jsonResult.getMessage()+"].");
-        return jsonResult;
+        log.debug("caijl:/rest/web/authc is called,msgcode=["+ response.getMsgCode()+"],Message=["+ response.getMessage()+"].");
+        return response;
 
     }
 
 
     @RequestMapping(value="/rest/oms/getToken",method = RequestMethod.GET)
-    public JsonResult getToken(HttpServletRequest req) {
-        JsonResult result = new JsonResult();
+    public Response getToken(HttpServletRequest req) {
+        Response result = new Response();
         String  token = TokenHelper.setToken(req);
         result.setData(token);
         return result;
     }
     
     @RequestMapping(value="/rest/oms/findMemberInfoById",method = RequestMethod.GET)
-	public JsonResult findMemberInfoById() throws IOException
+	public Response findMemberInfoById() throws IOException
 	{
-		JsonResult jsonResult = new JsonResult();
+		Response response = new Response();
 		Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null == session){
-            jsonResult.setMessage("you are not login!");
+            response.setMessage("you are not login!");
         }
         else {
             OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
             if (null != principal) {
-                jsonResult = userService.selectByPrimaryKey(principal.getId());
+                response = userService.selectByPrimaryKey(principal.getId());
             }
         }
 
-        return jsonResult;
+        return response;
 	}
     
     public static class LoginUser {
