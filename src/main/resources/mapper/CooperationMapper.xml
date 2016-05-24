@@ -288,7 +288,7 @@
     </if>
     order by c.updateTime desc
   </select>
-  <select id="queryHotCooperation" resultMap="ResultMap" >
+  <select id="queryHotCooperation" resultMap="BaseResultMap" >
     SELECT * FROM t_c_cooperation coo
     left JOIN t_dictionary_cooperationType ct on ct.id = coo.type
     where
