@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 
-public class ResourcePropertiesUtils {
+public class PropertiesUtils {
 
     private static Properties properties = null;
 
@@ -23,7 +23,7 @@ public class ResourcePropertiesUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(ResourcePropertiesUtils.getValue("host.ip"));
+        System.out.println(PropertiesUtils.getValue("host.ip"));
     }
 
 }

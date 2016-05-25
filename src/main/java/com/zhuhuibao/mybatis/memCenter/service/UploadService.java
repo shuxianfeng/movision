@@ -7,7 +7,7 @@ package com.zhuhuibao.mybatis.memCenter.service;
 import com.oreilly.servlet.MultipartRequest;
 import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.utils.RandomFileNamePolicy;
-import com.zhuhuibao.utils.ResourcePropertiesUtils;
+import com.zhuhuibao.utils.PropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class UploadService {
 
         //String a = getFileSuffix(req);
 
-        String ip_address = ResourcePropertiesUtils.getValue("host.ip");
+        String ip_address = PropertiesUtils.getValue("host.ip");
 
         //指定所上传的文件命名规则
         RandomFileNamePolicy rfnp = new RandomFileNamePolicy();

@@ -42,6 +42,17 @@ public class AliPayConfig {
     @Value("${exter_invoke_ip}")
     private  String exterInvokeIp;
 
+    @Value("${enable_timestamp}")
+    private boolean enableTimestamp;
+
+    public boolean isEnableTimestamp() {
+        return enableTimestamp;
+    }
+
+    public void setEnableTimestamp(boolean enableTimestamp) {
+        this.enableTimestamp = enableTimestamp;
+    }
+
     public String getPartner() {
         return partner;
     }

@@ -106,4 +106,14 @@ public interface MsgCodeConstant {
 	 * 图形验证码不正确
 	 */
 	int validate_error = 10213;
+
+	/**
+	 * 支付宝异常错误码 9000~9999
+	 */
+	int ALIPAY_JSON_ERROR = 9000;
+
+	/**
+	 * 支付参数错误
+	 */
+	int PAY_PARAM_ERROR = 9001;
 }

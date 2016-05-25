@@ -11,7 +11,7 @@ import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
-import com.zhuhuibao.utils.ResourcePropertiesUtils;
+import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.SendEmail;
 
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -42,7 +42,7 @@ public class AccountService {
         ///邮件的内容
         String currentTime = DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss");
         StringBuffer sb=new StringBuffer("");
-        String serverIp = ResourcePropertiesUtils.getValue("host.ip");
+        String serverIp = PropertiesUtils.getValue("host.ip");
 
         sb.append("<div style=\"line-height:40px;height:40px\">");
         sb.append("</div>");
@@ -107,9 +107,9 @@ public class AccountService {
                 "筑慧宝是优秀的Icity一站式服务平台，我司已入驻筑慧宝，期待着你的加入！");
         sb.append("</p>");
         sb.append("<p>点击下面链接完成账号一键注册激活（账号默认该邮箱，密码默认123456，请登陆后修改密码）：</p>");
-        sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\""+ResourcePropertiesUtils.getValue("host.ip")+"/rest/agent/agentRegister?vm=");
+        sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\""+ PropertiesUtils.getValue("host.ip")+"/rest/agent/agentRegister?vm=");
         sb.append(new String(EncodeUtil.encodeBase64(email)));
-        sb.append("\">"+ResourcePropertiesUtils.getValue("host.ip")+"/rest/agent/agentRegister?vm=");
+        sb.append("\">"+ PropertiesUtils.getValue("host.ip")+"/rest/agent/agentRegister?vm=");
         sb.append(new String(EncodeUtil.encodeBase64(email)));
         sb.append("</a>");
         sb.append("<p style=\"padding:0px;line-height:24px;font-size:12px;color:#979797;font-family:arial,sans-serif\">");
@@ -160,9 +160,9 @@ public class AccountService {
     public String getRedirectUrl(Response response) {
         String redirectUrl;
         if(response.getCode()==200){
-            redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.page");
+            redirectUrl = PropertiesUtils.getValue("host.ip")+"/"+ PropertiesUtils.getValue("active.mail.page");
         }else{
-            redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("active.mail.replay.page");
+            redirectUrl = PropertiesUtils.getValue("host.ip")+"/"+ PropertiesUtils.getValue("active.mail.replay.page");
         }
         return redirectUrl;
     }

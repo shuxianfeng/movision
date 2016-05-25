@@ -34,7 +34,7 @@ import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.mybatis.memberReg.service.RegisterValidateService;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.DateUtils;
-import com.zhuhuibao.utils.ResourcePropertiesUtils;
+import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
 
@@ -274,7 +274,7 @@ public class RegisterController {
 	public Response sendValidateMail(Member member) throws IOException {
 		log.debug("找回密码  email =="+member.getEmail());
 		Response result = new Response();
-		rvService.sendValidateMail(member,ResourcePropertiesUtils.getValue("host.ip"));
+		rvService.sendValidateMail(member, PropertiesUtils.getValue("host.ip"));
 		String mail = ds.findMailAddress(member.getEmail());
 		Map<String,String> map = new HashMap<String,String>();
 		if(mail != null && !mail.equals(""))

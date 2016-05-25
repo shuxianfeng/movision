@@ -1,18 +1,15 @@
 package com.zhuhuibao.alipay.service.direct;
 
 import com.zhuhuibao.alipay.config.AliPayConfig;
-import com.zhuhuibao.alipay.service.AlipayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 即时到账接口 （create_direct_pay_by_user）
  */
 @Service
-public class DirectService extends AlipayService {
+public class DirectService{
 
 
     @Autowired
