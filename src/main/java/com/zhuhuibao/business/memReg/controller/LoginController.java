@@ -2,6 +2,8 @@ package com.zhuhuibao.business.memReg.controller;
 
 import java.io.IOException;
 
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
@@ -16,9 +18,7 @@ import org.apache.shiro.session.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,24 +33,29 @@ public class LoginController {
     MemberRegService memberService;
     
     @RequestMapping(value = "/rest/login", method = RequestMethod.POST)
-    public Response login(HttpServletRequest req, Member member) throws IOException {
-        log.info("login post 登录校验");
+    @ApiOperation(value = "登录", notes = "登录", response = Response.class)
+    public Response login(HttpServletRequest req,@ApiParam(value = "用户名") @RequestParam String account,
+                          @ApiParam(value = "密码（Base64加密）") @RequestParam String password) throws IOException {
+        log.debug("login post 登录校验");
         Response response = new Response();
-        String username = member.getAccount();
+//        String username = member.getAccount();
         UsernamePasswordToken token = null;
+        Member member = new Member();
+        member.setAccount(account);
+
         Subject currentUser = null;
         try {
-	        String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
+	        String pwd = new String(EncodeUtil.decodeBase64(password));
 	        member.setPassword(pwd);
 	        String rememberMe = req.getParameter("rememberMe");
-	        token = new UsernamePasswordToken(username, pwd);
+	        token = new UsernamePasswordToken(account, pwd);
 	        if(rememberMe!=null && rememberMe.equals("1"))
 	        {
 	            token.setRememberMe(true);
 	        }
 	        currentUser = SecurityUtils.getSubject();
             currentUser.login(token);
-            response.setData(username);
+            response.setData(account);
         } catch (UnknownAccountException e) {
 //            e.printStackTrace();
             response.setCode(400);
@@ -76,7 +81,7 @@ public class LoginController {
         if(currentUser.isAuthenticated()){
         	Session session = currentUser.getSession();
         	session.setAttribute("member", currentUser.getPrincipal());
-            System.out.println("用户[" + username + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
+            System.out.println("用户[" + account + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
         }else{
             token.clear();
         }
