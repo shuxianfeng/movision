@@ -8,12 +8,12 @@ public class IdGenerator {
     private static AtomicInteger ID = new AtomicInteger(0);
 
     /**
-     * Method getWarnId.
+     * Method createOrderId.
      *
      * @return String
      */
     public synchronized static String createOrderId() {
-        String str = null;
+        String str;
 
         if (ID.intValue() > 9999) {
             ID.set(0);

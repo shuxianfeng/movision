@@ -15,7 +15,7 @@ import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
-import com.zhuhuibao.utils.ResourcePropertiesUtils;
+import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
 import org.apache.shiro.SecurityUtils;
@@ -232,10 +232,10 @@ public class AccountSafeController {
                 member.setEmail(decodeVM);
                 member.setId(Long.parseLong(decodeId));
                 memberService.updateMember(member);
-                redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-bind.page");
+                redirectUrl = PropertiesUtils.getValue("host.ip")+"/"+ PropertiesUtils.getValue("email-active-bind.page");
             }
         }else{
-            redirectUrl = ResourcePropertiesUtils.getValue("host.ip")+"/"+ResourcePropertiesUtils.getValue("email-active-error.page");
+            redirectUrl = PropertiesUtils.getValue("host.ip")+"/"+ PropertiesUtils.getValue("email-active-error.page");
         }
         RedirectView rv = new RedirectView(redirectUrl);
         modelAndView.setView(rv);

@@ -24,7 +24,7 @@ import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
 import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
-import com.zhuhuibao.utils.ResourcePropertiesUtils;
+import com.zhuhuibao.utils.PropertiesUtils;
 
 /**
  * 会员业务处理
@@ -530,7 +530,7 @@ public class MemberRegService {
 				{
 					this.registerMember(member);
 					//发送激活链接给此邮件
-					rvService.sendMailActivateCode(member,ResourcePropertiesUtils.getValue("host.ip"));
+					rvService.sendMailActivateCode(member, PropertiesUtils.getValue("host.ip"));
 					//是否显示“立即激活按钮”
 					String mail = ds.findMailAddress(member.getEmail());
 					Map<String,String> map = new HashMap<String,String>();

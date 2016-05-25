@@ -219,25 +219,25 @@
     left join t_dictionary_province p on p.code = e.province
     left join t_dictionary_area a on a.code = e.area
     where e.is_deleted = 0
-    <if test="title != null">
+    <if test="title != null and title != ''">
       and e.title like CONCAT('%',#{title},'%')
     </if>
-    <if test="status != null">
+    <if test="status != null and status != ''">
       and e.status = #{status}
     </if>
-    <if test="type != null">
+    <if test="type != null and type != ''">
       and e.type = #{type}
     </if>
-    <if test="subType != null">
+    <if test="subType != null and subType != ''">
       and e.subType = #{subType}
     </if>
-    <if test="province != null">
+    <if test="province != null and province != ''">
       and e.province = #{province}
     </if>
-    <if test="type1 != null">
+    <if test="type1 != null and type1 != ''">
       and e.status = 1
     </if>
-    <if test="type2 != null">
+    <if test="type2 != null and type2 != ''">
       and e.type in (1,2,3)
     </if>
     order by e.updateTime desc

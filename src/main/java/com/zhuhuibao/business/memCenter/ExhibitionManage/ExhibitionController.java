@@ -77,9 +77,9 @@ public class ExhibitionController {
     }
 
     /**
-     * 会展详情查看
+     * 根據id查詢会展详情
      */
-    @ApiOperation(value="会展详情查看",notes="会展详情查看",response = Response.class)
+    @ApiOperation(value="根據id查詢会展详情",notes="根據id查詢会展详情",response = Response.class)
     @RequestMapping(value = "queryExhibitionInfoById", method = RequestMethod.GET)
     public Response queryExhibitionInfoById(@RequestParam String id)  {
         Response response = new Response();

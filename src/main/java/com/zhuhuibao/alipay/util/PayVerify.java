@@ -1,4 +1,4 @@
-package com.zhuhuibao.utils;
+package com.zhuhuibao.alipay.util;
 
 import java.io.UnsupportedEncodingException;
 import java.security.SignatureException;
@@ -18,8 +18,7 @@ public class PayVerify {
 
     static {
         try {
-            properties = PropertiesLoaderUtils
-                    .loadAllProperties("pay.properties");
+            properties = PropertiesLoaderUtils.loadAllProperties("web/alipay.properties");
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("加载pay.properties属性文件出错：" + e.getMessage());

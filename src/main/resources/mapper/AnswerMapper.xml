@@ -2,32 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.AnswerMapper" >
   <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Answer" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="createid" property="createid" jdbcType="BIGINT" />
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createid" property="createid" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP" />
-    <result column="questionId" property="questionId" jdbcType="BIGINT" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+    <result column="questionId" property="questionId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, createid, content, publishTime, questionId
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_e_answer
-    where id = #{id,jdbcType=BIGINT}
+  <select id="queryAnswerByQuestionId" resultType="java.util.Map" parameterType="java.lang.String" >
+    select
+    a.id,a.content,date_format(a.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,a.createid,a.questionId,m.headShot,
+    case WHEN m.identify = 2 THEN m.personRealName WHEN m.identify !=2 THEN m.enterpriseName end as memberName
+    from t_e_answer a
+    LEFT JOIN t_m_member m on m.id = a.createid
+    where a.questionId = #{id}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from t_e_answer
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Answer" >
-    insert into t_e_answer (id, createid, content, 
-      publishTime, questionId)
-    values (#{id,jdbcType=BIGINT}, #{createid,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, 
-      #{publishTime,jdbcType=TIMESTAMP}, #{questionId,jdbcType=BIGINT})
-  </insert>
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Answer" >
+  <insert id="answerQuestion" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Answer" >
     insert into t_e_answer
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -39,55 +31,25 @@
       <if test="content != null" >
         content,
       </if>
-      <if test="publishTime != null" >
         publishTime,
-      </if>
       <if test="questionId != null" >
         questionId,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=BIGINT},
+        #{id},
       </if>
       <if test="createid != null" >
-        #{createid,jdbcType=BIGINT},
+        #{createid},
       </if>
       <if test="content != null" >
-        #{content,jdbcType=VARCHAR},
+        #{content},
       </if>
-      <if test="publishTime != null" >
-        #{publishTime,jdbcType=TIMESTAMP},
-      </if>
+        now(),
       <if test="questionId != null" >
-        #{questionId,jdbcType=BIGINT},
+        #{questionId},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Answer" >
-    update t_e_answer
-    <set >
-      <if test="createid != null" >
-        createid = #{createid,jdbcType=BIGINT},
-      </if>
-      <if test="content != null" >
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="publishTime != null" >
-        publishTime = #{publishTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="questionId != null" >
-        questionId = #{questionId,jdbcType=BIGINT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Answer" >
-    update t_e_answer
-    set createid = #{createid,jdbcType=BIGINT},
-      content = #{content,jdbcType=VARCHAR},
-      publishTime = #{publishTime,jdbcType=TIMESTAMP},
-      questionId = #{questionId,jdbcType=BIGINT}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
 </mapper>

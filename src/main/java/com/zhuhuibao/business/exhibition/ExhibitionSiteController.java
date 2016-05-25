@@ -130,4 +130,19 @@ public class ExhibitionSiteController {
         }
         return response;
     }
+
+    /**
+     * 会展详情查看
+     */
+    @ApiOperation(value="会展详情查看",notes="会展详情查看",response = Response.class)
+    @RequestMapping(value = "exhibitionInfo", method = RequestMethod.GET)
+    public Response exhibitionInfo(@RequestParam String id)  {
+        Response response = new Response();
+        Exhibition exhibition = exhibitionService.queryExhibitionInfoById(id);
+        response.setData(exhibition);
+        //更新點擊率
+        exhibition.setViews(exhibition.getViews()+1);
+        exhibitionService.updateExhibitionInfoById(exhibition);
+        return response;
+    }
 }

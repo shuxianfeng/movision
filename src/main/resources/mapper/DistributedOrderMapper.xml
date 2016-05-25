@@ -15,7 +15,7 @@
   <sql id="Base_Column_List" >
     id, createid, publishTime, updateTime, updateManId, linkName, mobile, status, type
   </sql>
-  <select id="queryDistributedOrderInfoById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="queryDistributedOrderInfoById" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     *
     from t_c_distributedOrder

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.order.mapper.OrderMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.order.entity.Order" >
+    <id column="orderNo" property="orderNo" jdbcType="VARCHAR" />
+    <result column="goodsId" property="goodsId" jdbcType="BIGINT" />
+    <result column="goodsName" property="goodsName" jdbcType="VARCHAR" />
+    <result column="buyerId" property="buyerId" jdbcType="BIGINT" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DOUBLE" />
+    <result column="dealTime" property="dealTime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="payMode" property="payMode" jdbcType="INTEGER" />
+    <result column="invoiceType" property="invoiceType" jdbcType="INTEGER" />
+    <result column="invoiceTitle" property="invoiceTitle" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="goodsType" property="goodsType" jdbcType="INTEGER" />
+    <result column="descriptions" property="descriptions" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    orderNo, goodsId, goodsName, buyerId, number, amount, dealTime, updateTime, payMode, 
+    invoiceType, invoiceTitle, status, mobile, goodsType, descriptions
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_p_order
+    where orderNo = #{orderNo,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_p_order
+    where orderNo = #{orderNo,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.zhuhuibao.mybatis.order.entity.Order" >
+    insert into t_p_order (orderNo, goodsId, goodsName, 
+      buyerId, number, amount, 
+      dealTime, updateTime, payMode, 
+      invoiceType, invoiceTitle, status, 
+      mobile, goodsType, descriptions
+      )
+    values (#{orderNo,jdbcType=VARCHAR}, #{goodsId,jdbcType=BIGINT}, #{goodsName,jdbcType=VARCHAR}, 
+      #{buyerId,jdbcType=BIGINT}, #{number,jdbcType=INTEGER}, #{amount,jdbcType=DOUBLE}, 
+      #{dealTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{payMode,jdbcType=INTEGER}, 
+      #{invoiceType,jdbcType=INTEGER}, #{invoiceTitle,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{mobile,jdbcType=VARCHAR}, #{goodsType,jdbcType=INTEGER}, #{descriptions,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.order.entity.Order" >
+    insert into t_p_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        orderNo,
+      </if>
+      <if test="goodsId != null" >
+        goodsId,
+      </if>
+      <if test="goodsName != null" >
+        goodsName,
+      </if>
+      <if test="buyerId != null" >
+        buyerId,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="dealTime != null" >
+        dealTime,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+      <if test="payMode != null" >
+        payMode,
+      </if>
+      <if test="invoiceType != null" >
+        invoiceType,
+      </if>
+      <if test="invoiceTitle != null" >
+        invoiceTitle,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="goodsType != null" >
+        goodsType,
+      </if>
+      <if test="descriptions != null" >
+        descriptions,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsName != null" >
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerId != null" >
+        #{buyerId,jdbcType=BIGINT},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="dealTime != null" >
+        #{dealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payMode != null" >
+        #{payMode,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceType != null" >
+        #{invoiceType,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceTitle != null" >
+        #{invoiceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsType != null" >
+        #{goodsType,jdbcType=INTEGER},
+      </if>
+      <if test="descriptions != null" >
+        #{descriptions,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.order.entity.Order" >
+    update t_p_order
+    <set >
+      <if test="goodsId != null" >
+        goodsId = #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsName != null" >
+        goodsName = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerId != null" >
+        buyerId = #{buyerId,jdbcType=BIGINT},
+      </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="dealTime != null" >
+        dealTime = #{dealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payMode != null" >
+        payMode = #{payMode,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceType != null" >
+        invoiceType = #{invoiceType,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceTitle != null" >
+        invoiceTitle = #{invoiceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsType != null" >
+        goodsType = #{goodsType,jdbcType=INTEGER},
+      </if>
+      <if test="descriptions != null" >
+        descriptions = #{descriptions,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where orderNo = #{orderNo,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.order.entity.Order" >
+    update t_p_order
+    set goodsId = #{goodsId,jdbcType=BIGINT},
+      goodsName = #{goodsName,jdbcType=VARCHAR},
+      buyerId = #{buyerId,jdbcType=BIGINT},
+      number = #{number,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DOUBLE},
+      dealTime = #{dealTime,jdbcType=TIMESTAMP},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      payMode = #{payMode,jdbcType=INTEGER},
+      invoiceType = #{invoiceType,jdbcType=INTEGER},
+      invoiceTitle = #{invoiceTitle,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      goodsType = #{goodsType,jdbcType=INTEGER},
+      descriptions = #{descriptions,jdbcType=VARCHAR}
+    where orderNo = #{orderNo,jdbcType=VARCHAR}
+  </update>
+</mapper>

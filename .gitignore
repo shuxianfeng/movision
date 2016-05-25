@@ -7,7 +7,9 @@
 *.ear
 
 #/src/main/resources/logback.xml
-
+.idea
+zhuhuibao.iml
+/target
 
 
 /target
