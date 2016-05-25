@@ -1,13 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
-import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
-import com.zhuhuibao.mybatis.memCenter.entity.Expert;
-import com.zhuhuibao.mybatis.memCenter.entity.Question;
-import com.zhuhuibao.mybatis.memCenter.mapper.AchievementMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.DynamicMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.ExpertMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.QuestionMapper;
+import com.zhuhuibao.mybatis.memCenter.entity.*;
+import com.zhuhuibao.mybatis.memCenter.mapper.*;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +33,12 @@ public class ExpertService {
 
     @Autowired
     private QuestionMapper questionMapper;
+
+    @Autowired
+    private AnswerMapper answerMapper;
+
+    @Autowired
+    private MemberMapper memberMapper;
 
     /**
      * 发布技术成果
@@ -290,6 +290,90 @@ public class ExpertService {
     public int askExpert(Question question){
         try{
             return questionMapper.askExpert(question);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    /**
+     * 查询等我回答的問題列表
+     * @param pager
+     * @return
+     */
+    public List<Map<String,String>> queryExpertQuestion(Paging<Map<String,String>> pager,Map<String, Object> map){
+        try{
+            return questionMapper.findAllExpertQuestion(pager.getRowBounds(),map);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 立刻回答
+     * @param answer
+     * @return
+     */
+    public int answerQuestion(Answer answer){
+        try{
+            return answerMapper.answerQuestion(answer);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 查询我(專家)已經回答的問題列表
+     * @param pager
+     * @return
+     */
+    public List<Map<String,String>> queryMyAnswerQuestion(Paging<Map<String,String>> pager,Map<String, Object> map){
+        try{
+            return questionMapper.findAllMyAnswerQuestion(pager.getRowBounds(),map);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 查询我提問的問題列表
+     * @param pager
+     * @return
+     */
+    public List<Map<String,String>> queryMyQuestion(Paging<Map<String,String>> pager,Map<String, Object> map){
+        try{
+            return questionMapper.findAllMyQuestion(pager.getRowBounds(),map);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 查询我提問的一條問題及其回答內容
+     * @param id
+     * @return
+     */
+    public Map queryMyQuestionById(String id){
+        try{
+            //查詢問題信息和提問者的信息
+            Map<String,String> question = questionMapper.queryMyQuestionById(id);
+            //查詢該問題的回答信息以及回答者的信息
+            List<Map<String,String>> answerList = answerMapper.queryAnswerByQuestionId(question.get("id"));
+            Map map = new HashMap();
+            map.put("question",question);
+            map.put("answerList",answerList);
+            map.put("answerSize",answerList.size());
+            return map;
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();

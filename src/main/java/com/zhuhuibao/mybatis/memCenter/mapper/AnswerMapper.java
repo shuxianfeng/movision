@@ -2,16 +2,13 @@ package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.mybatis.memCenter.entity.Answer;
 
+import java.util.List;
+import java.util.Map;
+
 public interface AnswerMapper {
-    int deleteByPrimaryKey(Long id);
 
-    int insert(Answer record);
+    int answerQuestion(Answer answer);
 
-    int insertSelective(Answer record);
+    List<Map<String,String>> queryAnswerByQuestionId(String id);
 
-    Answer selectByPrimaryKey(Long id);
-
-    int updateByPrimaryKeySelective(Answer record);
-
-    int updateByPrimaryKey(Answer record);
 }
