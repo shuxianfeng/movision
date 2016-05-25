@@ -34,6 +34,9 @@ public class Dynamic {
 
     private String createName;
 
+    @ApiModelProperty(value="发布人类型：1：运营人员；2：会员",required = true)
+    private String createrType;
+
     public String getId() {
         return id;
     }
@@ -136,5 +139,13 @@ public class Dynamic {
 
     public void setCreateName(String createName) {
         this.createName = createName;
+    }
+
+    public String getCreaterType() {
+        return createrType;
+    }
+
+    public void setCreaterType(String createrType) {
+        this.createrType = createrType;
     }
 }

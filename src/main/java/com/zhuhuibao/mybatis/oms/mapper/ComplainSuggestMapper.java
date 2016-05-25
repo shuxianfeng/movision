@@ -1,6 +1,6 @@
-package com.zhuhuibao.mybatis.product.mapper;
+package com.zhuhuibao.mybatis.oms.mapper;
 
-import com.zhuhuibao.mybatis.product.entity.ComplainSuggest;
+import com.zhuhuibao.mybatis.oms.entity.ComplainSuggest;
 
 public interface ComplainSuggestMapper {
     int deleteByPrimaryKey(Long id);

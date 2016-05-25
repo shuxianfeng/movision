@@ -5,10 +5,17 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.CooperationConstants;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
 import com.zhuhuibao.mybatis.memCenter.service.CooperationService;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +30,35 @@ import java.util.Map;
  * Created by cxx on 2016/5/4 0004.
  */
 @RestController
-@RequestMapping("/rest/cooperation")
+@RequestMapping("/rest/cooperationSite")
 public class CooperationSiteController {
     private static final Logger log = LoggerFactory.getLogger(CooperationSiteController.class);
 
     @Autowired
     private CooperationService cooperationService;
+
+    /**
+     * 发布任务
+     */
+    @ApiOperation(value="发布任务",notes="发布任务",response = Response.class)
+    @RequestMapping(value = "publishCooperation", method = RequestMethod.POST)
+    public Response publishCooperation(Cooperation cooperation)  {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        Response response = new Response();
+        if(null != session) {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
+            if(null != principal){
+                cooperation.setCreateId(principal.getId().toString());
+                cooperationService.publishCooperation(cooperation);
+            }else{
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            }
+        }else{
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
 
 
     /**
@@ -80,5 +110,19 @@ public class CooperationSiteController {
         List<Cooperation> cooperations = cooperationService.queryHotCooperation(map);
         Response.setData(cooperations);
         return Response;
+    }
+
+    /**
+     * 威客信息詳情
+     */
+    @ApiOperation(value="威客信息詳情",notes="威客信息詳情",response = Cooperation.class)
+    @RequestMapping(value = "cooperationInfo", method = RequestMethod.GET)
+    public Response cooperationInfo(@RequestParam String id)  {
+        Response response = new Response();
+        Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
+        response.setData(cooperation);
+        cooperation.setViews(cooperation.getViews()+1);
+        cooperationService.updateCooperation(cooperation);
+        return response;
     }
 }

@@ -1,4 +1,4 @@
-package com.zhuhuibao.mybatis.product.entity;
+package com.zhuhuibao.mybatis.oms.entity;
 
 import java.util.Date;
 

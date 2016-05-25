@@ -370,9 +370,9 @@ public class ProjectService {
 	}
 	public static void main(String[] args)
 	{
-		StringBuilder sb = new StringBuilder("15996309704");
-		System.out.println(sb.replace(sb.length()-4,sb.length(),"****"));
-		System.out.println(sb.substring(0,1)+ ProjectConstant.HiddenStar.THREE.toString());
+
+		UUID uuid = UUID.randomUUID();
+		System.out.println(".{"+uuid.toString()+"}");
 
 	}
 }

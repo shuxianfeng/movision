@@ -70,7 +70,7 @@ public class Exhibition {
     @ApiModelProperty(value="点击率")
     private String views;
 
-    @ApiModelProperty(value="发布人类型：1：运营人员；2：会员")
+    @ApiModelProperty(value="发布人类型：1：运营人员；2：会员",required = true)
     private String createrType;
 
     private String is_deleted;

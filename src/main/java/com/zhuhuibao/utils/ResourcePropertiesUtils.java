@@ -12,7 +12,7 @@ public class ResourcePropertiesUtils {
 
     static {
         try {
-            properties = PropertiesLoaderUtils.loadAllProperties("spring/application.properties");
+            properties = PropertiesLoaderUtils.loadAllProperties("web/config.properties");
         } catch (IOException e) {
             e.printStackTrace();
         }

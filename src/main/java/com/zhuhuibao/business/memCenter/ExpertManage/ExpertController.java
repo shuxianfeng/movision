@@ -9,7 +9,9 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
 import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
 import com.zhuhuibao.mybatis.memCenter.entity.Expert;
+import com.zhuhuibao.mybatis.memCenter.entity.Question;
 import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
+import com.zhuhuibao.shiro.realm.OMSRealm;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -106,16 +108,27 @@ public class ExpertController {
         Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        if (null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if (null != principal) {
-                dynamic.setCreateId(principal.getId().toString());
-                expertService.publishDynamic(dynamic);
-            } else {
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        //判断是否登陆
+        if(null != session) {
+            if ("1".equals(dynamic.getCreaterType())) {
+                OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
+                if (null != principal) {
+                    dynamic.setCreateId(principal.getId().toString());
+                    expertService.publishDynamic(dynamic);
+                } else {
+                    throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                }
+            }else{
+                ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
+                if(null != principal){
+                    dynamic.setCreateId(principal.getId().toString());
+                    expertService.publishDynamic(dynamic);
+                }else{
+                    throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                }
             }
         } else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -196,4 +209,22 @@ public class ExpertController {
         response.setData(expert);
         return response;
     }
+
+    /*@ApiOperation(value = "查询专家頁面等我回答的問題列表", notes = "查询专家頁面等我回答的問題列表", response = Response.class)
+    @RequestMapping(value = "queryExpertQuestion", method = RequestMethod.GET)
+    public Response queryExpertQuestion(@RequestParam(required = false) String pageNo,
+                                        @RequestParam(required = false) String pageSize)  {
+        Response response = new Response();
+        //设定默认分页pageSize
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Question> pager = new Paging<Question>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Expert expert = expertService.queryExpertById(id);
+        response.setData(expert);
+        return response;
+    }*/
 }
