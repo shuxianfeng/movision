@@ -12,11 +12,37 @@
   <sql id="Base_Column_List" >
     id, createid, content, status, publishTime, answerId
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="queryMyQuestionById" resultType="java.util.Map" parameterType="java.lang.String" >
     select 
-    <include refid="Base_Column_List" />
-    from t_e_question
-    where id = #{id}
+    q.id,q.content,date_format(q.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,q.createid,q.status,q.answerId,m.headShot,
+    case WHEN m.identify = 2 THEN m.personRealName WHEN m.identify !=2 THEN m.enterpriseName end as memberName
+    from t_e_question q
+    LEFT JOIN t_m_member m on m.id = q.createid
+    where q.id = #{id}
+  </select>
+  <select id="findAllExpertQuestion" resultType="java.util.Map" >
+    select q.id,q.content,date_format(q.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,q.createid,q.status,q.answerId,m.headShot
+    from t_e_question q
+    LEFT JOIN t_m_member m on m.id = q.createid
+    where q.`status` = 1
+    and q.id not in (select a.questionId from t_e_answer a where a.createid = #{id} )
+    and q.createid != #{id}
+    order by q.publishTime desc
+  </select>
+  <select id="findAllMyAnswerQuestion" resultType="java.util.Map" >
+    select q.content as question,date_format(q.publishTime,'%Y-%m-%d %H:%i:%s') questionTime,m.headShot as questionImg,
+    a.content as answer,date_format(a.publishTime,'%Y-%m-%d %H:%i:%s') answerTime,mm.headShot as answerImg
+    from t_e_answer a
+    left join t_e_question q on a.questionId = q.id
+    LEFT JOIN t_m_member m on m.id = q.createid
+    LEFT JOIN t_m_member mm on mm.id = a.createid
+    where a.createid = #{id} order by a.publishTime desc
+  </select>
+  <select id="findAllMyQuestion" resultType="java.util.Map" >
+    select q.id,q.content,date_format(q.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,
+    (select count(*) from t_e_answer a where a.questionId = q.id)as size
+    from t_e_question q
+    where q.createid = #{id} order by q.publishTime desc
   </select>
   <insert id="askExpert" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Question" >
     insert into t_e_question

@@ -6,10 +6,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
-import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
-import com.zhuhuibao.mybatis.memCenter.entity.Expert;
-import com.zhuhuibao.mybatis.memCenter.entity.Question;
+import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
@@ -210,7 +207,7 @@ public class ExpertController {
         return response;
     }
 
-    /*@ApiOperation(value = "查询专家頁面等我回答的問題列表", notes = "查询专家頁面等我回答的問題列表", response = Response.class)
+    @ApiOperation(value = "查询等我回答的問題列表", notes = "查询专家頁面等我回答的問題列表", response = Response.class)
     @RequestMapping(value = "queryExpertQuestion", method = RequestMethod.GET)
     public Response queryExpertQuestion(@RequestParam(required = false) String pageNo,
                                         @RequestParam(required = false) String pageSize)  {
@@ -222,9 +219,116 @@ public class ExpertController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Paging<Question> pager = new Paging<Question>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        Expert expert = expertService.queryExpertById(id);
-        response.setData(expert);
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String, Object> map = new HashMap<>();
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if (null != session) {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
+            if (null != principal) {
+                map.put("id",principal.getId());
+                List<Map<String,String>> questionList = expertService.queryExpertQuestion(pager,map);
+                pager.result(questionList);
+                response.setData(pager);
+            }else {
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            }
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
-    }*/
+    }
+
+    @ApiOperation(value = "立刻回答", notes = "立刻回答", response = Response.class)
+    @RequestMapping(value = "answerQuestion", method = RequestMethod.POST)
+    public Response answerQuestion(@ModelAttribute Answer answer)  {
+        Response response = new Response();
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if (null != session) {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
+            if (null != principal) {
+                answer.setCreateid(principal.getId());
+                expertService.answerQuestion(answer);
+            }else {
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            }
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "查询我(專家)已經回答的問題列表", notes = "查询我(專家)已經回答的問題列表", response = Response.class)
+    @RequestMapping(value = "queryMyAnswerQuestion", method = RequestMethod.GET)
+    public Response queryMyAnswerQuestion(@RequestParam(required = false) String pageNo,
+                                        @RequestParam(required = false) String pageSize)  {
+        Response response = new Response();
+        //设定默认分页pageSize
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String, Object> map = new HashMap<>();
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if (null != session) {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
+            if (null != principal) {
+                map.put("id",principal.getId());
+                List<Map<String,String>> questionList = expertService.queryMyAnswerQuestion(pager,map);
+                pager.result(questionList);
+                response.setData(pager);
+            }else {
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            }
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "查询我提問的問題列表", notes = "查询我提問的問題列表", response = Response.class)
+    @RequestMapping(value = "queryMyQuestion", method = RequestMethod.GET)
+    public Response queryMyQuestion(@RequestParam(required = false) String pageNo,
+                                          @RequestParam(required = false) String pageSize)  {
+        Response response = new Response();
+        //设定默认分页pageSize
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String, Object> map = new HashMap<>();
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if (null != session) {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
+            if (null != principal) {
+                map.put("id",principal.getId());
+                List<Map<String,String>> questionList = expertService.queryMyQuestion(pager,map);
+                pager.result(questionList);
+                response.setData(pager);
+            }else {
+                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            }
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "查询我提問的一條問題及其回答內容", notes = "查询我提問的一條問題及其回答內容", response = Response.class)
+    @RequestMapping(value = "queryMyQuestionById", method = RequestMethod.GET)
+    public Response queryMyQuestionById(@RequestParam String id)  {
+        Response response = new Response();
+        Map map = expertService.queryMyQuestionById(id);
+        response.setData(map);
+        return response;
+    }
 }
