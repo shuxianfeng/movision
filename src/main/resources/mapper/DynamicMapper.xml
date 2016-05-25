@@ -30,8 +30,9 @@
     ORDER updateTime DESC limit 0,#{count}
   </select>
   <select id="findAllDynamicList" resultMap="BaseResultMap" >
-    SELECT d.*,m.personRealName as createName FROM t_e_dynamic d
-    LEFT JOIN t_m_member m on d.createId = m.id
+    SELECT d.*,
+    case when d.createrType = 1 then (select u.username from t_oms_user u where u.id = d.createid)
+    when d.createrType = 2 then (select m.enterpriseName from t_m_member m where m.id = d.createid) end as createName FROM t_e_dynamic d
     WHERE d.is_deleted = 0
     <if test="title != null">
       and d.title like CONCAT('%',#{title},'%')

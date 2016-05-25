@@ -135,9 +135,7 @@ public class ExhibitionOmsController {
                 }
             }
         }else{
-            Response.setCode(401);
-            Response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            Response.setMsgCode(MsgCodeConstant.un_login);
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return Response;
     }
