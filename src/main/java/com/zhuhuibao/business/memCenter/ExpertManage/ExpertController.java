@@ -248,7 +248,7 @@ public class ExpertController {
         if (null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
             if (null != principal) {
-                answer.setCreateid(principal.getId());
+                answer.setCreateid(principal.getId().toString());
                 expertService.answerQuestion(answer);
             }else {
                 throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

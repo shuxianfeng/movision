@@ -14,14 +14,14 @@
   </sql>
   <select id="queryMyQuestionById" resultType="java.util.Map" parameterType="java.lang.String" >
     select 
-    q.id,q.content,date_format(q.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,q.createid,q.status,q.answerId,m.headShot,
+    q.id,q.content,date_format(q.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,q.status,q.answerId,m.headShot,
     case WHEN m.identify = 2 THEN m.personRealName WHEN m.identify !=2 THEN m.enterpriseName end as memberName
     from t_e_question q
     LEFT JOIN t_m_member m on m.id = q.createid
     where q.id = #{id}
   </select>
   <select id="findAllExpertQuestion" resultType="java.util.Map" >
-    select q.id,q.content,date_format(q.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,q.createid,q.status,q.answerId,m.headShot
+    select q.id,q.content,date_format(q.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,m.headShot
     from t_e_question q
     LEFT JOIN t_m_member m on m.id = q.createid
     where q.`status` = 1
@@ -39,7 +39,7 @@
     where a.createid = #{id} order by a.publishTime desc
   </select>
   <select id="findAllMyQuestion" resultType="java.util.Map" >
-    select q.id,q.content,date_format(q.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,
+    select q.id,q.content,date_format(q.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,q.status,
     (select count(*) from t_e_answer a where a.questionId = q.id)as size
     from t_e_question q
     where q.createid = #{id} order by q.publishTime desc

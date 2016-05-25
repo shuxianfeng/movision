@@ -11,12 +11,6 @@
   <sql id="Base_Column_List" >
     id, createid, content, publishTime, questionId
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_e_answer
-    where id = #{id,jdbcType=BIGINT}
-  </select>
   <select id="queryAnswerByQuestionId" resultType="java.util.Map" parameterType="java.lang.String" >
     select
     a.id,a.content,date_format(a.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,a.createid,a.questionId,m.headShot,

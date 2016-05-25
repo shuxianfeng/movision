@@ -368,7 +368,7 @@ public class ExpertService {
             //查詢問題信息和提問者的信息
             Map<String,String> question = questionMapper.queryMyQuestionById(id);
             //查詢該問題的回答信息以及回答者的信息
-            List<Map<String,String>> answerList = answerMapper.queryAnswerByQuestionId(question.get("id"));
+            List<Map<String,String>> answerList = answerMapper.queryAnswerByQuestionId(String.valueOf(question.get("id")));
             Map map = new HashMap();
             map.put("question",question);
             map.put("answerList",answerList);
