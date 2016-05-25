@@ -32,28 +32,6 @@ public class CooperationController {
 
     @Autowired
     private CooperationService cooperationService;
-    /**
-     * 发布任务
-     */
-    @ApiOperation(value="发布任务",notes="发布任务",response = Response.class)
-    @RequestMapping(value = "publishCooperation", method = RequestMethod.POST)
-    public Response publishCooperation(Cooperation cooperation)  {
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        Response response = new Response();
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if(null != principal){
-                cooperation.setCreateId(principal.getId().toString());
-                cooperationService.publishCooperation(cooperation);
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
-        return response;
-    }
 
     /**
      * 合作类型(大类，子类)
