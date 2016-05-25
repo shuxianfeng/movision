@@ -85,6 +85,9 @@ public class ExhibitionController {
         Response response = new Response();
         Exhibition exhibition = exhibitionService.queryExhibitionInfoById(id);
         response.setData(exhibition);
+        //更新點擊率
+        exhibition.setViews(exhibition.getViews()+1);
+        exhibitionService.updateExhibitionInfoById(exhibition);
         return response;
     }
 
