@@ -22,10 +22,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -50,7 +47,7 @@ public class ExpertSiteController {
 
     @ApiOperation(value="发布技术成果",notes="发布技术成果",response = Response.class)
     @RequestMapping(value = "publishAchievement", method = RequestMethod.POST)
-    public Response publishAchievement(Achievement achievement) throws Exception {
+    public Response publishAchievement(@ModelAttribute Achievement achievement) throws Exception {
         Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -154,7 +151,7 @@ public class ExpertSiteController {
 
     @ApiOperation(value="申请专家",notes="申请专家",response = Response.class)
     @RequestMapping(value = "applyExpert", method = RequestMethod.POST)
-    public Response applyExpert(Expert expert) throws Exception {
+    public Response applyExpert(@ModelAttribute Expert expert) throws Exception {
         Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -300,6 +297,7 @@ public class ExpertSiteController {
      * 向专家提问时的图形验证码
      * @param response
      */
+    @ApiOperation(value="向专家提问时的图形验证码",notes="向专家提问时的图形验证码")
     @RequestMapping(value = "imgCode", method = RequestMethod.GET)
     public void getCode(HttpServletResponse response) {
         log.debug("获得验证码");
