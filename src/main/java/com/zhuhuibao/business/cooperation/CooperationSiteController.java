@@ -23,7 +23,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/4 0004.
  */
 @RestController
-@RequestMapping("/rest/cooperation")
+@RequestMapping("/rest/cooperationSite")
 public class CooperationSiteController {
     private static final Logger log = LoggerFactory.getLogger(CooperationSiteController.class);
 
@@ -86,8 +86,8 @@ public class CooperationSiteController {
      * 威客信息詳情
      */
     @ApiOperation(value="威客信息詳情",notes="威客信息詳情",response = Cooperation.class)
-    @RequestMapping(value = "queryCooperationInfoById", method = RequestMethod.GET)
-    public Response queryCooperationInfo(@RequestParam String id)  {
+    @RequestMapping(value = "cooperationInfo", method = RequestMethod.GET)
+    public Response cooperationInfo(@RequestParam String id)  {
         Response response = new Response();
         Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
         response.setData(cooperation);
