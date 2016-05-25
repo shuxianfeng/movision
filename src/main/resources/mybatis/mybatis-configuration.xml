@@ -3,6 +3,7 @@
 <configuration>
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="callSettersOnNulls" value="true"/>
     </settings>
     <typeAliases>
         <typeAlias type="com.zhuhuibao.mybatis.memberReg.entity.Member" alias="memberReg"/>
