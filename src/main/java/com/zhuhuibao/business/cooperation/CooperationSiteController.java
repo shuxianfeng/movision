@@ -81,4 +81,18 @@ public class CooperationSiteController {
         Response.setData(cooperations);
         return Response;
     }
+
+    /**
+     * 威客信息詳情
+     */
+    @ApiOperation(value="威客信息詳情",notes="威客信息詳情",response = Cooperation.class)
+    @RequestMapping(value = "queryCooperationInfoById", method = RequestMethod.GET)
+    public Response queryCooperationInfo(@RequestParam String id)  {
+        Response response = new Response();
+        Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
+        response.setData(cooperation);
+        cooperation.setViews(cooperation.getViews()+1);
+        cooperationService.updateCooperation(cooperation);
+        return response;
+    }
 }
