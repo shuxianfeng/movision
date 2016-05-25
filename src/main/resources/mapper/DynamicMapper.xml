@@ -15,10 +15,11 @@
     <result column="is_deleted" property="is_deleted" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="createName" property="createName" jdbcType="VARCHAR" />
+    <result column="createrType" property="createrType" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, createId, publishTime, updateTime, title, wordkey, description, imgurl, views, 
-    status, is_deleted,content
+    status, is_deleted,content,createrType
   </sql>
   <select id="queryDynamicById" resultMap="BaseResultMap" parameterType="java.lang.String" >
     SELECT * FROM t_e_dynamic WHERE id = #{id}
@@ -83,6 +84,9 @@
       <if test="content != null" >
         content,
       </if>
+      <if test="createrType != null" >
+        createrType,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -116,6 +120,9 @@
       </if>
       <if test="content != null" >
         #{content},
+      </if>
+      <if test="createrType != null" >
+        #{createrType},
       </if>
     </trim>
   </insert>
