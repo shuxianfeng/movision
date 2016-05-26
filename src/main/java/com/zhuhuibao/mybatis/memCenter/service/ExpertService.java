@@ -38,7 +38,7 @@ public class ExpertService {
     private AnswerMapper answerMapper;
 
     @Autowired
-    private MemberMapper memberMapper;
+    private ExpertSupportMapper expertSupportMapper;
 
     /**
      * 发布技术成果
@@ -374,6 +374,66 @@ public class ExpertService {
             map.put("answerList",answerList);
             map.put("answerSize",answerList.size());
             return map;
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 專家互動(前台)
+     * @param count
+     * @return
+     */
+    public List<Map<String,String>> expertInteraction(int count){
+        try{
+            return questionMapper.expertInteraction(count);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 更新問題信息
+     * @param question
+     * @return
+     */
+    public int updateQuestionInfo(Question question){
+        try{
+            return questionMapper.updateQuestionInfo(question);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 申請專家支持
+     * @param expertSupport
+     * @return
+     */
+    public int applyExpertSupport(ExpertSupport expertSupport){
+        try{
+            return expertSupportMapper.applyExpertSupport(expertSupport);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 专家回答列表
+     * @param pager
+     * @return
+     */
+    public List<Map<String,String>> findAllExpertAnswerListOms(Paging<Map<String,String>> pager){
+        try{
+            return answerMapper.findAllExpertAnswerListOms(pager.getRowBounds());
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();

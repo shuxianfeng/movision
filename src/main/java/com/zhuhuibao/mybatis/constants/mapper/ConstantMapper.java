@@ -20,5 +20,5 @@ public interface ConstantMapper {
 
     Map<String,String> selectByTypeCode(String type, String code);
 
-    List<Constant> selectByType(String type);
+    List<Map<String,String>> selectByType(String type);
 }

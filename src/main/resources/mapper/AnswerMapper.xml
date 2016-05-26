@@ -13,11 +13,14 @@
   </sql>
   <select id="queryAnswerByQuestionId" resultType="java.util.Map" parameterType="java.lang.String" >
     select
-    a.id,a.content,date_format(a.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,m.headShot,
-    case WHEN m.identify = 2 THEN m.personRealName WHEN m.identify !=2 THEN m.enterpriseName end as memberName
+    a.id,a.content,date_format(a.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,e.photoUrl,
+    e.name as memberName
     from t_e_answer a
-    LEFT JOIN t_m_member m on m.id = a.createid
-    where a.questionId = #{id}
+    LEFT JOIN t_e_expert e on e.createid = a.createid
+    where a.questionId = #{id} and a.status = 0
+  </select>
+  <select id="findAllExpertAnswerListOms" resultType="java.util.Map" >
+
   </select>
   <insert id="answerQuestion" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Answer" >
     insert into t_e_answer
