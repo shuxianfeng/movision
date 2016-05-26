@@ -96,30 +96,39 @@ public class Test extends BaseSpringContext {
 //        }else{
 //
 //        }
-        Map<String,Object> map1 = new HashMap<>();
-        Map<String,Object> partyB = new HashMap<>();
-        Map<String,String> a1 = new HashMap<>();
-        a1.put("a11","a11");
-        a1.put("a12","a12");
-        Map<String,String> a2 = new HashMap<>();
-        a2.put("a21","a21");
-        a2.put("a22","a22");
-        Map<String,String> a3 = new HashMap<>();
-        a3.put("a31","a31");
-        a3.put("a32","a32");
-        Map<String,String> a4 = new HashMap<>();
-        a4.put("a41","a41");
-        a4.put("a42","a42");
-        partyB.put("a1",a1);
-        partyB.put("a2",a2);
-        partyB.put("a3",a3);
-        partyB.put("a4",a4);
-        map1.put("partyB",partyB);
+//        Map<String,Object> map1 = new HashMap<>();
+//        Map<String,Object> partyB = new HashMap<>();
+//        Map<String,String> a1 = new HashMap<>();
+//        a1.put("a11","a11");
+//        a1.put("a12","a12");
+//        Map<String,String> a2 = new HashMap<>();
+//        a2.put("a21","a21");
+//        a2.put("a22","a22");
+//        Map<String,String> a3 = new HashMap<>();
+//        a3.put("a31","a31");
+//        a3.put("a32","a32");
+//        Map<String,String> a4 = new HashMap<>();
+//        a4.put("a41","a41");
+//        a4.put("a42","a42");
+//        partyB.put("a1",a1);
+//        partyB.put("a2",a2);
+//        partyB.put("a3",a3);
+//        partyB.put("a4",a4);
+//        map1.put("partyB",partyB);
+//
+//
+//        Gson gson = new Gson();
+//        gson.toJson(map1);
+//        System.out.println(gson.toJson(map1));
+        Long start = System.currentTimeMillis();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Long end = System.currentTimeMillis();
 
-
-        Gson gson = new Gson();
-        gson.toJson(map1);
-        System.out.println(gson.toJson(map1));
+        System.out.println("use time :" + (end - start) + "ms");
 
     }
 

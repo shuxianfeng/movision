@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.order.mapper.TradeMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.order.entity.Trade" >
+    <result column="tradeNo" property="tradeNo" jdbcType="VARCHAR" />
+    <result column="orderNo" property="orderNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="VARCHAR" />
+    <result column="dealTime" property="dealTime" jdbcType="TIMESTAMP" />
+    <result column="confirmTime" property="confirmTime" jdbcType="TIMESTAMP" />
+    <result column="payerAccount" property="payerAccount" jdbcType="VARCHAR" />
+    <result column="receiverAccount" property="receiverAccount" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="insert" parameterType="com.zhuhuibao.mybatis.order.entity.Trade" >
+    insert into t_o_trade (tradeNo, orderNo, status, 
+      price, dealTime, confirmTime, 
+      payerAccount, receiverAccount, type
+      )
+    values (#{tradeNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{price,jdbcType=VARCHAR}, #{dealTime,jdbcType=TIMESTAMP}, #{confirmTime,jdbcType=TIMESTAMP}, 
+      #{payerAccount,jdbcType=VARCHAR}, #{receiverAccount,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.order.entity.Trade" >
+    insert into t_o_trade
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tradeNo != null" >
+        tradeNo,
+      </if>
+      <if test="orderNo != null" >
+        orderNo,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="dealTime != null" >
+        dealTime,
+      </if>
+      <if test="confirmTime != null" >
+        confirmTime,
+      </if>
+      <if test="payerAccount != null" >
+        payerAccount,
+      </if>
+      <if test="receiverAccount != null" >
+        receiverAccount,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tradeNo != null" >
+        #{tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="dealTime != null" >
+        #{dealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmTime != null" >
+        #{confirmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payerAccount != null" >
+        #{payerAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverAccount != null" >
+        #{receiverAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

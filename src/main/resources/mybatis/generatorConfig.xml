@@ -53,8 +53,8 @@
 		</javaClientGenerator>
 
 		<!-- 配置表信息 -->
-		<table tableName="t_p_order"
-			domainObjectName="Order" enableCountByExample="false"
+		<table tableName="t_o_trade"
+			domainObjectName="Trade" enableCountByExample="false"
 			enableSelectByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" >
 			<!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 enable*ByExample
