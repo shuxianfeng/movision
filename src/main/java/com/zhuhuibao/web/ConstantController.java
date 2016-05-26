@@ -39,7 +39,7 @@ public class ConstantController {
     public Response findByType(@ApiParam(value = "类型") @RequestParam String type) {
         Response result = new Response();
         try {
-            List<Constant> list = service.findByType(type);
+            List<Map<String,String>> list = service.findByType(type);
             result.setData(list);
         } catch (Exception e) {
             e.printStackTrace();
