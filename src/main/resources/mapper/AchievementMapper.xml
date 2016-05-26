@@ -33,7 +33,7 @@
     telephone, email, province, city, area, address, cooperationType, status, is_deleted,introduce
   </sql>
   <select id="queryAchievementById" parameterType="java.lang.String" resultType="java.util.Map">
-    select a.id,date_format(a.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,date_format(a.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,
+    select a.id,date_format(a.publishTime,'%Y-%m-%d') publishTime,date_format(a.updateTime,'%Y-%m-%d') updateTime,
     a.title,a.systemType,a.useArea,a.companyName,a.linkMan,a.telephone,a.email,a.province,a.city,a.area,a.address,a.cooperationType,a.status,
     a.introduce,
     p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,co.name as useAreaName
@@ -52,7 +52,10 @@
     ORDER by a.updateTime DESC limit 0,#{count}
   </select>
   <select id="findAllAchievementList" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.Achievement">
-    select a.*,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,co.name as useAreaName,m.personRealName as createName
+    select a.id,date_format(a.publishTime,'%Y-%m-%d') publishTime,date_format(a.updateTime,'%Y-%m-%d') updateTime,
+    a.title,a.systemType,a.useArea,a.companyName,a.linkMan,a.telephone,a.email,a.province,a.city,a.area,a.address,a.cooperationType,a.status,
+    a.introduce,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,
+    co.name as useAreaName,m.personRealName as createName
     from t_e_achievement a
     LEFT JOIN t_dictionary_province p on a.province = p.code
     LEFT JOIN t_dictionary_city c on a.city = c.code
@@ -61,22 +64,22 @@
     LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
     LEFT JOIN t_m_member m on a.createId = m.id
     where a.is_deleted = 0
-    <if test="title != null">
+    <if test="title != null and title != ''">
       and a.title like CONCAT('%',#{title},'%')
     </if>
-    <if test="status != null">
+    <if test="status != null and status != ''">
       and a.status = #{status}
     </if>
-    <if test="createId != null">
+    <if test="createId != null and createId != ''">
       and a.createId = #{createId}
     </if>
-    <if test="systemType != null">
+    <if test="systemType != null and systemType != ''">
       and a.systemType = #{systemType}
     </if>
-    <if test="useArea != null">
+    <if test="useArea != null and useArea != ''">
       and a.useArea = #{useArea}
     </if>
-    <if test="type != null">
+    <if test="type != null and type != ''">
       and a.status = 1
     </if>
     order by a.updateTime desc

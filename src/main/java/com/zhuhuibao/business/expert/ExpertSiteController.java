@@ -101,7 +101,7 @@ public class ExpertSiteController {
             Map m = new HashMap();
             m.put("id",achievement.getId());
             m.put("title",achievement.getTitle());
-            m.put("publishTime",achievement.getUpdateTime());
+            m.put("updateTime",achievement.getUpdateTime());
             list.add(m);
         }
         pager.result(list);
@@ -111,7 +111,7 @@ public class ExpertSiteController {
 
     @ApiOperation(value="技术成果列表(前台)控制条数",notes="技术成果列表(前台)控制条数",response = Response.class)
     @RequestMapping(value = "achievementListByCount", method = RequestMethod.GET)
-    public Response achievementListByCount(@ApiParam(value = "条数")@RequestParam(required = false) int count) throws Exception {
+    public Response achievementListByCount(@ApiParam(value = "条数")@RequestParam int count) throws Exception {
         Response response = new Response();
         List<Map<String,String>> achievementList = expertService.findAchievementListByCount(count);
         response.setData(achievementList);
@@ -150,7 +150,7 @@ public class ExpertSiteController {
             Map m = new HashMap();
             m.put("id",dynamic.getId());
             m.put("title",dynamic.getTitle());
-            m.put("publishTime",dynamic.getUpdateTime());
+            m.put("updateTime",dynamic.getUpdateTime());
             list.add(m);
         }
         pager.result(list);
@@ -160,7 +160,7 @@ public class ExpertSiteController {
 
     @ApiOperation(value="协会动态列表(前台)控制条数",notes="协会动态列表(前台)控制条数",response = Response.class)
     @RequestMapping(value = "dynamicListByCount", method = RequestMethod.GET)
-    public Response dynamicListByCount(@ApiParam(value = "条数")@RequestParam(required = false) int count) throws Exception {
+    public Response dynamicListByCount(@ApiParam(value = "条数")@RequestParam int count) throws Exception {
         Response response = new Response();
         List<Map<String,String>> dynamicList = expertService.findDynamicListByCount(count);
         response.setData(dynamicList);
@@ -210,11 +210,20 @@ public class ExpertSiteController {
         //查询传参
         achievementMap.put("createId",expert.getCreateId());
         achievementMap.put("status",1);
-        List<Achievement> achievementList = expertService.findAchievementList(map);
-        map.put("achievementList",achievementList);
+        List<Achievement> achievementList = expertService.findAchievementList(achievementMap);
+        List list = new ArrayList();
+        for(int i=0;i<achievementList.size();i++){
+            Achievement achievement = achievementList.get(i);
+            Map m = new HashMap();
+            m.put("id",achievement.getId());
+            m.put("title",achievement.getTitle());
+            m.put("updateTime",achievement.getUpdateTime());
+            list.add(m);
+        }
+        map.put("achievementList",list);
         response.setData(map);
         //点击率加1
-        expert.setViews(expert.getViews()+1);
+        expert.setViews(String.valueOf(Integer.parseInt(expert.getViews())+1));
         expertService.updateExpert(expert);
         return response;
     }
@@ -359,7 +368,7 @@ public class ExpertSiteController {
         Session sess = currentUser.getSession(false);
         if(null != sess) {
             String verifyCode = (String) sess.getAttribute("expert");
-            if(!code.equals(verifyCode)){
+            if(!code.equalsIgnoreCase(verifyCode)){
                 throw new BusinessException(MsgCodeConstant.validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
             }else {
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)sess.getAttribute("member");

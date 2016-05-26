@@ -22,7 +22,9 @@
     status, is_deleted,content,createrType
   </sql>
   <select id="queryDynamicById" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    SELECT * FROM t_e_dynamic WHERE id = #{id}
+    SELECT d.id,date_format(d.publishTime,'%Y-%m-%d') publishTime,date_format(d.updateTime,'%Y-%m-%d') updateTime,d.createId,
+    d.title,d.wordkey,d.description,d.imgurl,d.views,d.status,d.content,d.createrType
+    FROM t_e_dynamic d WHERE d.id = #{id}
   </select>
   <select id="findDynamicListByCount" resultType="java.util.Map" >
     SELECT id,title
@@ -31,7 +33,8 @@
     ORDER by updateTime DESC limit 0,#{count}
   </select>
   <select id="findAllDynamicList" resultMap="BaseResultMap" >
-    SELECT d.*,
+    SELECT d.id,date_format(d.publishTime,'%Y-%m-%d') publishTime,date_format(d.updateTime,'%Y-%m-%d') updateTime,
+    d.createId,d.title,d.wordkey,d.description,d.imgurl,d.views,d.status,d.content,d.createrType,
     case when d.createrType = 1 then (select u.username from t_oms_user u where u.id = d.createid)
     when d.createrType = 2 then (select m.enterpriseName from t_m_member m where m.id = d.createid) end as createName FROM t_e_dynamic d
     WHERE d.is_deleted = 0
