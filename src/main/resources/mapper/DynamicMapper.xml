@@ -28,7 +28,7 @@
     SELECT id,title
     FROM t_e_dynamic
     WHERE is_deleted = 0 and status = 1
-    ORDER updateTime DESC limit 0,#{count}
+    ORDER by updateTime DESC limit 0,#{count}
   </select>
   <select id="findAllDynamicList" resultMap="BaseResultMap" >
     SELECT d.*,

@@ -69,8 +69,8 @@ public class ExpertSiteController {
     @RequestMapping(value = "queryAchievementById", method = RequestMethod.GET)
     public Response queryAchievementById(@ApiParam(value = "技术成果ID")@RequestParam String id) throws Exception {
         Response response = new Response();
-        Achievement achievement = expertService.queryAchievementById(id);
-        response.setData(achievement);
+        Map<String,String> map = expertService.queryAchievementById(id);
+        response.setData(map);
         return response;
     }
 
@@ -95,7 +95,16 @@ public class ExpertSiteController {
         map.put("useArea",useArea);
         map.put("type",1);
         List<Achievement> achievementList = expertService.findAllAchievementList(pager,map);
-        pager.result(achievementList);
+        List list = new ArrayList();
+        for(int i=0;i<achievementList.size();i++){
+            Achievement achievement = achievementList.get(i);
+            Map m = new HashMap();
+            m.put("id",achievement.getId());
+            m.put("title",achievement.getTitle());
+            m.put("publishTime",achievement.getUpdateTime());
+            list.add(m);
+        }
+        pager.result(list);
         response.setData(pager);
         return response;
     }
@@ -135,7 +144,16 @@ public class ExpertSiteController {
         //查询传参
         map.put("type",1);
         List<Dynamic> dynamicList = expertService.findAllDynamicList(pager,map);
-        pager.result(dynamicList);
+        List list = new ArrayList();
+        for(int i=0;i<dynamicList.size();i++){
+            Dynamic dynamic = dynamicList.get(i);
+            Map m = new HashMap();
+            m.put("id",dynamic.getId());
+            m.put("title",dynamic.getTitle());
+            m.put("publishTime",dynamic.getUpdateTime());
+            list.add(m);
+        }
+        pager.result(list);
         response.setData(pager);
         return response;
     }

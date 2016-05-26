@@ -61,7 +61,7 @@ public class ExpertService {
      * @param id
      * @return
      */
-    public Achievement queryAchievementById(String id){
+    public Map<String,String> queryAchievementById(String id){
         try{
             return achievementMapper.queryAchievementById(id);
         }catch (Exception e){

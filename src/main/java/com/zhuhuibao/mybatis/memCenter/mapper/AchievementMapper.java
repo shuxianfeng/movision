@@ -10,7 +10,7 @@ public interface AchievementMapper {
 
     int publishAchievement(Achievement achievement);
 
-    Achievement queryAchievementById(String id);
+    Map<String,String> queryAchievementById(String id);
 
     //分页
     List<Achievement> findAllAchievementList(RowBounds rowBounds,Map<String,Object> map);
