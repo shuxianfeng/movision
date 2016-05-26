@@ -115,5 +115,27 @@ public interface MsgCodeConstant {
 	/**
 	 * 支付参数错误
 	 */
-	int PAY_PARAM_ERROR = 9001;
+	int ALIPAY_PARAM_ERROR = 9001;
+
+	/**
+	 * 支付宝校验异常
+	 */
+	int ALIPAY_VERIFY_ERROR = 9002;
+
+	/**
+	 * 支付宝支付失败
+	 */
+	int ALIPAY_PAY_FAIL = 9003;
+	/**
+	 * 支付宝支付成功
+	 */
+	int ALIPAY_PAY_SUCCESS = 9999;
+
+
+	/**
+	 * 解析错误 8000~8888
+	 * JSON格式解析错误
+	 */
+	int JSON_PARSE_ERROR = 8000;
+
 }

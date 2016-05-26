@@ -1,7 +1,6 @@
 package com.zhuhuibao.alipay.util;
 
 
-import com.zhuhuibao.alipay.config.AlipayConfigs;
 import com.zhuhuibao.alipay.sign.RSA;
 
 import java.io.BufferedReader;
@@ -28,7 +27,7 @@ public class AlipayNotify {
     /**
      * 支付宝消息验证地址
      */
-    private static final String HTTPS_VERIFY_URL = "https://mapi.alipay.com/gateway.do?service=notify_verify&";
+    private static final String HTTPS_VERIFY_URL = AlipayPropertiesLoader.getPropertyValue("https_verify_url");
 
     /**
      * 验证消息是否是支付宝发出的合法消息
@@ -69,8 +68,9 @@ public class AlipayNotify {
         String preSignStr = AlipayCore.createLinkString(sParaNew);
         //获得签名验证结果
         boolean isSign = false;
-        if(AlipayConfigs.sign_type.equals("RSA")){
-        	isSign = RSA.verify(preSignStr, sign, AlipayConfigs.alipay_public_key, AlipayConfigs.input_charset);
+        if(AlipayPropertiesLoader.getPropertyValue("sign_type").equals("RSA")){
+        	isSign = RSA.verify(preSignStr, sign, AlipayPropertiesLoader.getPropertyValue("alipay_public_key"),
+                    AlipayPropertiesLoader.getPropertyValue("input_charset"));
         }
         return isSign;
     }
@@ -87,7 +87,7 @@ public class AlipayNotify {
     private static String verifyResponse(String notify_id) {
         //获取远程服务器ATN结果，验证是否是支付宝服务器发来的请求
 
-        String partner = AlipayConfigs.partner;
+        String partner = AlipayPropertiesLoader.getPropertyValue("partner");;
         String veryfy_url = HTTPS_VERIFY_URL + "partner=" + partner + "&notify_id=" + notify_id;
 
         return checkUrl(veryfy_url);

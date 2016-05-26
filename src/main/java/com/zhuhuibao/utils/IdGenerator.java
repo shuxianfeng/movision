@@ -7,18 +7,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class IdGenerator {
     private static AtomicInteger ID = new AtomicInteger(0);
 
+    private static final String TAG = "zhb";
+
     /**
-     * Method createOrderId.
+     * Method createOrderNo.
      *
      * @return String
      */
-    public synchronized static String createOrderId() {
+    public synchronized static String createOrderNo() {
         String str;
 
         if (ID.intValue() > 9999) {
             ID.set(0);
         }
-        str = getYMD() + String.format("%04d", ID.getAndIncrement());
+        str = TAG + getYMD() + String.format("%04d", ID.getAndIncrement());
 
         return str;
     }

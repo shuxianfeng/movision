@@ -1,6 +1,5 @@
 package com.zhuhuibao.alipay.util;
 
-import com.zhuhuibao.alipay.config.AlipayConfigs;
 import com.zhuhuibao.alipay.sign.RSA;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -30,7 +29,7 @@ public class AlipaySubmit {
     /**
      * 支付宝提供给商户的服务接入网关URL(新)
      */
-    private static final String ALIPAY_GATEWAY_NEW = "https://mapi.alipay.com/gateway.do?";
+    private static final String ALIPAY_GATEWAY_NEW = AlipayPropertiesLoader.getPropertyValue("alipay_gateway_new");
 
     /**
      * 生成签名结果
@@ -41,8 +40,9 @@ public class AlipaySubmit {
     public static String buildRequestMysign(Map<String, String> sPara) {
         String prestr = AlipayCore.createLinkString(sPara); //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
         String mysign = "";
-        if (AlipayConfigs.sign_type.equals("RSA")) {
-            mysign = RSA.sign(prestr, AlipayConfigs.private_key, AlipayConfigs.input_charset);
+        if (AlipayPropertiesLoader.getPropertyValue("sign_type").equals("RSA")) {
+            mysign = RSA.sign(prestr, AlipayPropertiesLoader.getPropertyValue("private_key"),
+                    AlipayPropertiesLoader.getPropertyValue("input_charset"));
         }
         return mysign;
     }
@@ -61,7 +61,7 @@ public class AlipaySubmit {
 
         //签名结果与签名方式加入请求提交参数组中
         sPara.put("sign", mysign);
-        sPara.put("sign_type", AlipayConfigs.sign_type);
+        sPara.put("sign_type", AlipayPropertiesLoader.getPropertyValue("sign_type"));
 
         return sPara;
     }
@@ -82,7 +82,7 @@ public class AlipaySubmit {
         StringBuilder sbHtml = new StringBuilder();
 
         sbHtml.append("<form id=\"alipaysubmit\" name=\"alipaysubmit\" action=\"" + ALIPAY_GATEWAY_NEW + "_input_charset=")
-                .append(AlipayConfigs.input_charset)
+                .append(AlipayPropertiesLoader.getPropertyValue("input_charset"))
                 .append("\" method=\"")
                 .append(strMethod)
                 .append("\">");
@@ -119,7 +119,9 @@ public class AlipaySubmit {
             DocumentException, IOException {
 
         //构造访问query_timestamp接口的URL串
-        String strUrl = ALIPAY_GATEWAY_NEW + "service=query_timestamp&partner=" + AlipayConfigs.partner + "&_input_charset" + AlipayConfigs.input_charset;
+        String strUrl = ALIPAY_GATEWAY_NEW + "service=query_timestamp&partner=" +
+                AlipayPropertiesLoader.getPropertyValue("partner") + "&_input_charset" +
+                AlipayPropertiesLoader.getPropertyValue("input_charset");
         StringBuilder result = new StringBuilder();
 
         SAXReader reader = new SAXReader();
