@@ -48,6 +48,15 @@
     where q.createid = #{id} order by q.publishTime desc
   </select>
 
+  <select id="findAllQuestionListOms" resultType="java.util.Map" >
+    select q.id,q.content,date_format(q.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,q.status,
+    (select count(*) from t_e_answer a where a.questionId = q.id)as size,
+    case WHEN m.identify = 2 THEN m.personRealName WHEN m.identify !=2 THEN m.enterpriseName end as memberName
+    from t_e_question q
+    LEFT JOIN t_m_member m on m.id = q.createid
+    order by q.publishTime desc
+  </select>
+
   <select id="expertInteraction" resultType="java.util.Map" >
     select q.content as question,a.content as answer,date_format(a.publishTime,'%Y-%m-%d') publishTime,e.photoUrl,e.name
     from t_e_question q
@@ -98,17 +107,11 @@
   <update id="updateQuestionInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Question" >
     update t_e_question
     <set >
-      <if test="createid != null" >
-        createid = #{createid},
-      </if>
       <if test="content != null" >
         content = #{content},
       </if>
       <if test="status != null" >
         status = #{status},
-      </if>
-      <if test="publishTime != null" >
-        publishTime = #{publishTime},
       </if>
       <if test="answerId != null" >
         answerId = #{answerId},

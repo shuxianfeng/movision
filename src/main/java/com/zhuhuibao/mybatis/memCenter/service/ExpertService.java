@@ -440,4 +440,79 @@ public class ExpertService {
             throw e;
         }
     }
+
+    /**
+     * 更新答案信息
+     * @param answer
+     * @return
+     */
+    public int updateAnswerInfo(Answer answer){
+        try{
+            return answerMapper.updateAnswerInfo(answer);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 查询問題列表
+     * @param pager
+     * @return
+     */
+    public List<Map<String,String>> findAllQuestionListOms(Paging<Map<String,String>> pager){
+        try{
+            return questionMapper.findAllQuestionListOms(pager.getRowBounds());
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 查询問題列表
+     * @param pager
+     * @return
+     */
+    public List<Map<String,String>> findAllExpertSupportListOms(Paging<Map<String,String>> pager,Map<String,Object> map){
+        try{
+            return expertSupportMapper.findAllExpertSupportListOms(pager.getRowBounds(),map);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 专家支持申请处理
+     * @param expertSupport
+     * @return
+     */
+    public int updateExpertSupport(ExpertSupport expertSupport){
+        try{
+            return expertSupportMapper.updateExpertSupport(expertSupport);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 查看一条专家支持申请信息
+     * @param id
+     * @return
+     */
+    public Map<String,String> queryExpertSupportInfoById(String id){
+        try{
+            return expertSupportMapper.queryExpertSupportInfoById(id);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

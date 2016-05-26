@@ -14,4 +14,6 @@ public interface AnswerMapper {
 
     List<Map<String,String>> findAllExpertAnswerListOms(RowBounds rowBounds);
 
+    int updateAnswerInfo(Answer answer);
+
 }
