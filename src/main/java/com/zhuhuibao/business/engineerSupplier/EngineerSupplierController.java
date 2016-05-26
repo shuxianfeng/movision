@@ -1,5 +1,6 @@
 package com.zhuhuibao.business.engineerSupplier;
 
+import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
@@ -13,6 +14,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -132,8 +134,9 @@ public class EngineerSupplierController {
      * @return
      * @throws IOException
      */
+    @ApiOperation(value="留言",notes="留言",response = Response.class)
     @RequestMapping(value = "message", method = RequestMethod.POST)
-    public Response message(Message message) {
+    public Response message(@ModelAttribute Message message) {
 /*        String title = new String(message.getTitle().getBytes("8859_1"), "utf8" );
         String receiveName = new String(message.getReceiveName().getBytes("8859_1"), "utf8" );
         String content = new String(message.getContent().getBytes("8859_1"), "utf8" );*/

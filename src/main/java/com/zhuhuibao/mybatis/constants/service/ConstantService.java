@@ -41,7 +41,7 @@ public class ConstantService {
      * @return
      */
     @Cacheable(value = "constantCache" ,key="#type")
-    public List<Constant> findByType(String type){
+    public List<Map<String,String>> findByType(String type){
         log.warn("select by db.....");
         return constantMapper.selectByType(type);
     }

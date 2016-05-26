@@ -6,10 +6,9 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
-import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
-import com.zhuhuibao.mybatis.memCenter.entity.Expert;
-import com.zhuhuibao.mybatis.memCenter.entity.Question;
+import com.zhuhuibao.mybatis.constants.entity.Constant;
+import com.zhuhuibao.mybatis.constants.service.ConstantService;
+import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -43,6 +42,9 @@ public class ExpertSiteController {
 
     @Autowired
     private ExpertService expertService;
+
+    @Autowired
+    private ConstantService constantService;
 
 
     @ApiOperation(value="发布技术成果",notes="发布技术成果",response = Response.class)
@@ -375,11 +377,68 @@ public class ExpertSiteController {
                 if(null != principal){
                     Question question = new Question();
                     question.setCreateid(principal.getId().toString());
+
                     question.setContent(content);
                     expertService.askExpert(question);
                 }else {
                     throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
                 }
+            }
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @ApiOperation(value="專家互動(前台)",notes="專家互動(前台)",response = Response.class)
+    @RequestMapping(value = "expertInteraction", method = RequestMethod.GET)
+    public Response expertInteraction(@RequestParam int count)  {
+        Response response = new Response();
+        List<Map<String,String>> list = expertService.expertInteraction(count);
+        response.setData(list);
+        return response;
+    }
+
+    @ApiOperation(value="系統分類常量",notes="系統分類常量",response = Response.class)
+    @RequestMapping(value = "SystemList", method = RequestMethod.GET)
+    public Response SystemList()  {
+        Response response = new Response();
+        //系統分類type為19
+        String type = "19";
+        List<Map<String,String>> list = constantService.findByType(type);
+        response.setData(list);
+        return response;
+    }
+
+    @ApiOperation(value="應用領域常量",notes="應用領域常量",response = Response.class)
+    @RequestMapping(value = "useAreaList", method = RequestMethod.GET)
+    public Response useAreaList()  {
+        Response response = new Response();
+        //應用領域type為18
+        String type = "18";
+        List<Map<String,String>> list = constantService.findByType(type);
+        response.setData(list);
+        return response;
+    }
+
+    @ApiOperation(value="申請專家支持",notes="申請專家支持",response = Response.class)
+    @RequestMapping(value = "applyExpertSupport", method = RequestMethod.POST)
+    public Response applyExpertSupport(@ApiParam(value = "联系人名称")@RequestParam String linkName,
+                                       @ApiParam(value = "手机")@RequestParam String mobile,
+                                       @ApiParam(value = "验证码")@RequestParam String code,
+                                       @ApiParam(value = "申请原因")@RequestParam(required = false) String reason)  {
+        Response response = new Response();
+        ExpertSupport expertSupport = new ExpertSupport();
+        expertSupport.setLinkName(linkName);
+        expertSupport.setMobile(mobile);
+        expertSupport.setReason(reason);
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if(null != session) {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
+            if(null != principal){
+                expertSupport.setCreateid(principal.getId().toString());
+                expertService.applyExpertSupport(expertSupport);
             }
         }else {
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

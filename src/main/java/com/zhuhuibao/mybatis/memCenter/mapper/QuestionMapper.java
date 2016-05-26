@@ -18,4 +18,8 @@ public interface QuestionMapper {
 
     List<Map<String,String>> findAllMyQuestion(RowBounds rowBounds,Map<String, Object> map);
 
+    List<Map<String,String>> expertInteraction(int count);
+
+    int updateQuestionInfo(Question question);
+
 }
