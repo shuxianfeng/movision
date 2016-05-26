@@ -174,8 +174,13 @@
     left join t_i_job jb on jb.createid = t.id
     where t.id =  #{id} limit 1
   </select>
-  <select id="queryAdvertisingPosition" parameterType="java.util.Map" resultType="java.util.Map">
-    select t.imgUrl,t.linkUrl from t_ad_advertising t where t.channelId = 1 and t.sort = 1
+
+  <resultMap id="adList" type="java.util.LinkedHashMap">
+    <result property="imgUrl" column="imgUrl" />
+    <result property="id" column="id" />
+  </resultMap>
+  <select id="queryAdvertisingPosition" parameterType="java.util.Map" resultMap="adList">
+    select t.imgUrl,t.linkUrl id from t_ad_advertising t where t.channelId = 1 and t.sort = 1
   </select>
 
   <select id="queryPositionInfoByID" parameterType="java.lang.Long" resultMap="BaseResultMap">
