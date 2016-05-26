@@ -1,6 +1,5 @@
 package com.zhuhuibao.mybatis.order.service;
 
-import com.zhuhuibao.mybatis.order.mapper.OrderMapper;
 import com.zhuhuibao.mybatis.order.mapper.TradeMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
