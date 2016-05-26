@@ -114,4 +114,23 @@ public class ExpertOmsController {
         response.setData(pager);
         return response;
     }
+
+    @ApiOperation(value="专家回答列表",notes="专家回答列表",response = Response.class)
+    @RequestMapping(value = "expertAnswerListOms", method = RequestMethod.GET)
+    public Response expertAnswerListOms(@RequestParam(required = false)String pageNo,
+                                  @RequestParam(required = false)String pageSize) {
+        Response response = new Response();
+        //设定默认分页pageSize
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Map<String,String>> expertAnswerList = expertService.findAllExpertAnswerListOms(pager);
+        pager.result(expertAnswerList);
+        response.setData(pager);
+        return response;
+    }
 }

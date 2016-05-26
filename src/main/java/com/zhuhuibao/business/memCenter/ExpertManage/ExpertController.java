@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +65,19 @@ public class ExpertController {
             if (null != principal) {
                 map.put("createId", principal.getId());
                 List<Achievement> achievementList = expertService.findAllAchievementList(pager, map);
-                pager.result(achievementList);
+                List list = new ArrayList();
+                for(int i=0;i<achievementList.size();i++){
+                    Achievement achievement = achievementList.get(i);
+                    Map m = new HashMap();
+                    m.put("id",achievement.getId());
+                    m.put("title",achievement.getTitle());
+                    m.put("systemName",achievement.getSystemName());
+                    m.put("useAreaName",achievement.getUseAreaName());
+                    m.put("updateTime",achievement.getUpdateTime());
+                    m.put("status",achievement.getStatus());
+                    list.add(m);
+                }
+                pager.result(list);
                 response.setData(pager);
             } else {
                 throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -93,7 +106,7 @@ public class ExpertController {
 
     @ApiOperation(value = "更新技术成果", notes = "更新技术成果", response = Response.class)
     @RequestMapping(value = "updateAchievement", method = RequestMethod.POST)
-    public Response updateAchievement(Achievement achievement)  {
+    public Response updateAchievement(@ModelAttribute Achievement achievement)  {
         Response response = new Response();
         expertService.updateAchievement(achievement);
         return response;
@@ -101,7 +114,7 @@ public class ExpertController {
 
     @ApiOperation(value = "发布协会动态", notes = "发布协会动态", response = Response.class)
     @RequestMapping(value = "publishDynamic", method = RequestMethod.POST)
-    public Response publishDynamic(Dynamic dynamic)  {
+    public Response publishDynamic(@ModelAttribute Dynamic dynamic)  {
         Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -147,7 +160,7 @@ public class ExpertController {
 
     @ApiOperation(value = "更新协会动态", notes = "更新协会动态", response = Response.class)
     @RequestMapping(value = "updateDynamic", method = RequestMethod.POST)
-    public Response updateDynamic(Dynamic dynamic)  {
+    public Response updateDynamic(@ModelAttribute Dynamic dynamic)  {
         Response response = new Response();
         expertService.updateDynamic(dynamic);
         return response;
@@ -179,7 +192,17 @@ public class ExpertController {
             if (null != principal) {
                 map.put("createId", principal.getId());
                 List<Dynamic> dynamicList = expertService.findAllDynamicList(pager, map);
-                pager.result(dynamicList);
+                List list = new ArrayList();
+                for(int i=0;i<dynamicList.size();i++){
+                    Dynamic Dynamic = dynamicList.get(i);
+                    Map m = new HashMap();
+                    m.put("id",Dynamic.getId());
+                    m.put("title",Dynamic.getTitle());
+                    m.put("updateTime",Dynamic.getUpdateTime());
+                    m.put("status",Dynamic.getStatus());
+                    list.add(m);
+                }
+                pager.result(list);
                 response.setData(pager);
             } else {
                 throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -192,7 +215,7 @@ public class ExpertController {
 
     @ApiOperation(value = "更新专家信息", notes = "更新专家信息", response = Response.class)
     @RequestMapping(value = "updateExpert", method = RequestMethod.POST)
-    public Response updateExpert(Expert expert)  {
+    public Response updateExpert(@ModelAttribute Expert expert)  {
         Response response = new Response();
         expertService.updateExpert(expert);
         return response;
@@ -325,10 +348,37 @@ public class ExpertController {
 
     @ApiOperation(value = "查询我提問的一條問題及其回答內容", notes = "查询我提問的一條問題及其回答內容", response = Response.class)
     @RequestMapping(value = "queryMyQuestionById", method = RequestMethod.GET)
-    public Response queryMyQuestionById(@RequestParam String id)  {
+    public Response queryMyQuestionById(@ApiParam(value = "問題id")@RequestParam String id)  {
         Response response = new Response();
         Map map = expertService.queryMyQuestionById(id);
         response.setData(map);
+        return response;
+    }
+
+    @ApiOperation(value = "关闭问题", notes = "关闭问题", response = Response.class)
+    @RequestMapping(value = "closeQuestion", method = RequestMethod.POST)
+    public Response closeQuestion(@ApiParam(value = "問題id")@RequestParam String id)  {
+        Response response = new Response();
+        Question question = new Question();
+        question.setId(id);
+        //狀態設為已關閉
+        question.setStatus("2");
+        expertService.updateQuestionInfo(question);
+        return response;
+    }
+
+    @ApiOperation(value = "采纳答案", notes = "采纳答案", response = Response.class)
+    @RequestMapping(value = "acceptAnswer", method = RequestMethod.POST)
+    public Response acceptAnswer(@ApiParam(value = "問題id")@RequestParam String questionId,
+                                 @ApiParam(value = "答案id")@RequestParam String answerId)  {
+        Response response = new Response();
+        Question question = new Question();
+        question.setId(questionId);
+        //設置採納答案id
+        question.setAnswerId(answerId);
+        //狀態設為已關閉
+        question.setStatus("2");
+        expertService.updateQuestionInfo(question);
         return response;
     }
 }

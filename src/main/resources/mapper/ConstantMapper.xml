@@ -80,8 +80,8 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectByType" parameterType="java.lang.String" resultType="com.zhuhuibao.mybatis.constants.entity.Constant">
-    select * from t_dictionary_constant where type = #{type,jdbcType=INTEGER}
+  <select id="selectByType" parameterType="java.lang.String" resultType="java.util.Map">
+    select code,name from t_dictionary_constant where type = #{type,jdbcType=INTEGER}
   </select>
   <select id="selectByTypeCode" resultType="java.util.Map">
     select * from t_dictionary_constant where type = #{type,jdbcType=VARCHAR} and code =  #{code,jdbcType=INTEGER}
