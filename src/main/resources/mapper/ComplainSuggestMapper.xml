@@ -11,15 +11,35 @@
     <result column="userName" jdbcType="VARCHAR" property="userName" />
     <result column="telephone" jdbcType="VARCHAR" property="telephone" />
     <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, title, content, createId, time, companyName, userName, telephone, email
+    id, title, content, createId, date_format(time,'%Y-%m-%d %H:%i:%s') time, companyName, userName, telephone, email,status
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from t_sys_complain_suggest
     where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="findAllComplaintSuggest" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_complain_suggest a
+    
+    <where>
+      <if test="title != null">
+        and a.title like CONCAT('%',#{title},'%')
+      </if>
+      <if test="status != null">
+        and a.status = #{status}
+      </if>
+      <if test="userName != null">
+        and a.username = #{userName}
+      </if>
+    </where> 
+	order by a.time desc 
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_sys_complain_suggest
@@ -116,6 +136,9 @@
       </if>
       <if test="email != null">
         email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}

@@ -11,7 +11,7 @@ public class ComplainSuggest {
 
     private Long createId;
 
-    private Date time;
+    private String time;
 
     private String companyName;
 
@@ -20,6 +20,8 @@ public class ComplainSuggest {
     private String telephone;
 
     private String email;
+    
+    private String status;
 
     public Long getId() {
         return id;
@@ -53,11 +55,11 @@ public class ComplainSuggest {
         this.createId = createId;
     }
 
-    public Date getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
@@ -92,4 +94,13 @@ public class ComplainSuggest {
     public void setEmail(String email) {
         this.email = email;
     }
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+    
 }
