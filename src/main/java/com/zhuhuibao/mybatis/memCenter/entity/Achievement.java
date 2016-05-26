@@ -11,37 +11,37 @@ public class Achievement {
 
     private String updateTime;
 
-    @ApiModelProperty(value="标题")
+    @ApiModelProperty(value="标题",required = true)
     private String title;
 
-    @ApiModelProperty(value="系统分类")
+    @ApiModelProperty(value="系统分类",required = true)
     private String systemType;
 
-    @ApiModelProperty(value="应用领域")
+    @ApiModelProperty(value="应用领域",required = true)
     private String useArea;
 
     @ApiModelProperty(value="单位名称")
     private String companyName;
 
-    @ApiModelProperty(value="联系人")
+    @ApiModelProperty(value="联系人",required = true)
     private String linkMan;
 
-    @ApiModelProperty(value="联系电话")
+    @ApiModelProperty(value="联系电话",required = true)
     private String telephone;
 
     @ApiModelProperty(value="电子邮箱")
     private String email;
 
-    @ApiModelProperty(value="省")
+    @ApiModelProperty(value="省",required = true)
     private String province;
 
-    @ApiModelProperty(value="市")
+    @ApiModelProperty(value="市",required = true)
     private String city;
 
-    @ApiModelProperty(value="区")
+    @ApiModelProperty(value="区",required = true)
     private String area;
 
-    @ApiModelProperty(value="详细地址")
+    @ApiModelProperty(value="详细地址",required = true)
     private String address;
 
     @ApiModelProperty(value="合作方式")
@@ -51,7 +51,7 @@ public class Achievement {
 
     private String is_deleted;
 
-    @ApiModelProperty(value="详情介绍")
+    @ApiModelProperty(value="成果簡介",required = true)
     private String introduce;
 
     private String provinceName;

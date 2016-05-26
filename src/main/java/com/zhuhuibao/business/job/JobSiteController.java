@@ -271,6 +271,7 @@ public class JobSiteController {
                                   @ApiParam(value = "工作年限后") @RequestParam(required = false) String expYearBehind,
                                   @ApiParam(value = "学历") @RequestParam(required = false) String education,
                                   @ApiParam(value = "职位类别") @RequestParam(required = false) String positionType,
+                                  @ApiParam(value = "是否公开") @RequestParam(required = false) String isPublic,
                                   @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
                                   @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) throws IOException
     {
@@ -292,7 +293,14 @@ public class JobSiteController {
         map.put("expYearBefore",expYearBefore);
         map.put("expYearBehind",expYearBehind);
         map.put("education",education);
-        map.put("isPublic","1");
+        if(isPublic==null)
+        {
+         map.put("isPublic","1");
+        }else{
+        	if(!"2".equals(isPublic)){
+        	  map.put("isPublic",isPublic);
+        	}
+        }
         map.put("status",JobConstant.JOB_MEMBER_STATUS_LOGOUT);
         if(positionType != null && positionType.length() > 0)
         {

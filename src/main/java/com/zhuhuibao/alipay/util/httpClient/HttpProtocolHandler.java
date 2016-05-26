@@ -53,7 +53,7 @@ public class HttpProtocolHandler {
 
     /**
      * 工厂方法
-     * 
+     *
      * @return
      */
     public static HttpProtocolHandler getInstance() {
@@ -78,12 +78,12 @@ public class HttpProtocolHandler {
 
     /**
      * 执行Http请求
-     * 
+     *
      * @param request 请求数据
      * @param strParaFileName 文件类型的参数名
      * @param strFilePath 文件路径
-     * @return 
-     * @throws HttpException, IOException 
+     * @return
+     * @throws HttpException, IOException
      */
     public HttpResponse execute(HttpRequest request, String strParaFileName, String strFilePath) throws HttpException, IOException {
         HttpClient httpclient = new HttpClient(connectionManager);
@@ -131,7 +131,7 @@ public class HttpProtocolHandler {
             }
             //增加文件参数，strParaFileName是参数名，使用本地文件
             parts.add(new FilePart(strParaFileName, new FilePartSource(new File(strFilePath))));
-            
+
             // 设置请求体
             ((PostMethod) method).setRequestEntity(new MultipartRequestEntity(parts.toArray(new Part[0]), new HttpMethodParams()));
         }
@@ -165,7 +165,7 @@ public class HttpProtocolHandler {
 
     /**
      * 将NameValuePairs数组转变为字符串
-     * 
+     *
      * @param nameValues
      * @return
      */

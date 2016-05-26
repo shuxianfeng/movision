@@ -7,23 +7,24 @@
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
     <result column="questionId" property="questionId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, createid, content, publishTime, questionId
+    id, createid, content, publishTime, questionId,status
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_e_answer
-    where id = #{id,jdbcType=BIGINT}
-  </select>
   <select id="queryAnswerByQuestionId" resultType="java.util.Map" parameterType="java.lang.String" >
     select
-    a.id,a.content,date_format(a.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,a.createid,a.questionId,m.headShot,
-    case WHEN m.identify = 2 THEN m.personRealName WHEN m.identify !=2 THEN m.enterpriseName end as memberName
+    a.id,a.content,date_format(a.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,e.photoUrl,
+    e.name as memberName
     from t_e_answer a
-    LEFT JOIN t_m_member m on m.id = a.createid
-    where a.questionId = #{id}
+    LEFT JOIN t_e_expert e on e.createid = a.createid
+    where a.questionId = #{id} and a.status = 0
+  </select>
+  <select id="findAllExpertAnswerListOms" resultType="java.util.Map" >
+    select q.content as question,date_format(a.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,a.content as answer,e.name,a.id as answerId
+    from t_e_answer a
+    left join t_e_question q on a.questionId = q.id
+    left join t_e_expert e on e.createId = a.createid
   </select>
   <insert id="answerQuestion" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Answer" >
     insert into t_e_answer
@@ -41,6 +42,9 @@
       <if test="questionId != null" >
         questionId,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -56,6 +60,21 @@
       <if test="questionId != null" >
         #{questionId},
       </if>
+      <if test="status != null" >
+        #{status},
+      </if>
     </trim>
   </insert>
+  <update id="updateAnswerInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Answer" >
+    update t_e_answer
+    <set >
+      <if test="content != null" >
+        content = #{content},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
 </mapper>

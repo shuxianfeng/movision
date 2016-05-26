@@ -1,16 +1,21 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
 public class Message {
     private String id;
 
     private String createid;
 
+    @ApiModelProperty(value="接收方ID")
     private String receiveid;
 
     private String receiveName;
 
+    @ApiModelProperty(value="標題",required = true)
     private String title;
 
+    @ApiModelProperty(value="內容",required = true)
     private String content;
 
     private Boolean isShow;
@@ -25,6 +30,7 @@ public class Message {
 
     private String postDate;
 
+    @ApiModelProperty(value="留言類型：类型：1：商户留言；2：专家留言；3：合作留言；",required = true)
     private String type;
 
     public String getId() {

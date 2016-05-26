@@ -1,31 +1,35 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-import java.util.Date;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 
 public class Answer {
-    private Long id;
+    private String id;
 
-    private Long createid;
+    private String createid;
 
+    @ApiModelProperty(value="回復內容",required = true)
     private String content;
 
-    private Date publishTime;
+    private String publishTime;
 
-    private Long questionId;
+    @ApiModelProperty(value="問題ID",required = true)
+    private String questionId;
 
-    public Long getId() {
+    private String status;
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Long getCreateid() {
+    public String getCreateid() {
         return createid;
     }
 
-    public void setCreateid(Long createid) {
+    public void setCreateid(String createid) {
         this.createid = createid;
     }
 
@@ -34,22 +38,30 @@ public class Answer {
     }
 
     public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
+        this.content = content;
     }
 
-    public Date getPublishTime() {
+    public String getPublishTime() {
         return publishTime;
     }
 
-    public void setPublishTime(Date publishTime) {
+    public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
     }
 
-    public Long getQuestionId() {
+    public String getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(Long questionId) {
+    public void setQuestionId(String questionId) {
         this.questionId = questionId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

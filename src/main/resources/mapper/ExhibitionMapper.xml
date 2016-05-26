@@ -31,7 +31,7 @@
     select 
     e.id,e.createid,e.title,e.startDate,endDate,e.province,e.city,e.area,e.type,e.subType,e.company,
     e.address,e.imgUrl,e.status,e.introduce,e.views,e.createrType,e.is_deleted,
-    date_format(e.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,date_format(e.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,
+    date_format(e.updateTime,'%Y-%m-%d') updateTime,date_format(e.publishTime,'%Y-%m-%d') publishTime,
     ci.name as cityName,p.name as provinceName,a.name as areaName
     from t_c_exhibition e
     left join t_dictionary_city ci on ci.code = e.city
@@ -208,7 +208,7 @@
     where id = #{id}
   </update>
   <select id="findAllExhibition" resultMap="BaseResultMap" parameterType="java.util.Map" >
-    select e.id,e.createid,e.title,c.name as type,e.views,date_format(e.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,
+    select e.id,e.createid,e.title,c.name as type,e.subType,e.views,date_format(e.updateTime,'%Y-%m-%d') updateTime,
     e.status,date_format(e.publishTime,'%Y-%m-%d') publishTime,e.startDate,e.endDate,e.imgUrl,e.address,e.introduce,
     case when e.createrType = 1 then (select u.username from t_oms_user u where u.id = e.createid)
     when e.createrType = 2 then (select m.enterpriseName from t_m_member m where m.id = e.createid) end as createName,
@@ -219,31 +219,31 @@
     left join t_dictionary_province p on p.code = e.province
     left join t_dictionary_area a on a.code = e.area
     where e.is_deleted = 0
-    <if test="title != null">
+    <if test="title != null and title != ''">
       and e.title like CONCAT('%',#{title},'%')
     </if>
-    <if test="status != null">
+    <if test="status != null and status != ''">
       and e.status = #{status}
     </if>
-    <if test="type != null">
+    <if test="type != null and type != ''">
       and e.type = #{type}
     </if>
-    <if test="subType != null">
+    <if test="subType != null and subType != ''">
       and e.subType = #{subType}
     </if>
-    <if test="province != null">
+    <if test="province != null and province != ''">
       and e.province = #{province}
     </if>
-    <if test="type1 != null">
+    <if test="type1 != null and type1 != ''">
       and e.status = 1
     </if>
-    <if test="type2 != null">
+    <if test="type2 != null and type2 != ''">
       and e.type in (1,2,3)
     </if>
     order by e.updateTime desc
   </select>
   <select id="findNewExhibition" resultMap="BaseResultMap" parameterType="java.util.Map" >
-    select e.id,e.createid,e.title,c.name as type,e.views,date_format(e.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,
+    select e.id,e.createid,e.title,c.name as type,e.views,date_format(e.updateTime,'%Y-%m-%d') updateTime,
     e.status,date_format(e.publishTime,'%Y-%m-%d') publishTime,e.startDate,e.endDate,e.imgUrl,e.address,e.introduce,
     case when e.createrType = 1 then (select u.username from t_oms_user u where u.id = e.createid)
     when e.createrType = 2 then (select m.enterpriseName from t_m_member m where m.id = e.createid) end as createName,

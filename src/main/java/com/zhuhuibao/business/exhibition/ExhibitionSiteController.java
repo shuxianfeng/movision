@@ -141,7 +141,7 @@ public class ExhibitionSiteController {
         Exhibition exhibition = exhibitionService.queryExhibitionInfoById(id);
         response.setData(exhibition);
         //更新點擊率
-        exhibition.setViews(exhibition.getViews()+1);
+        exhibition.setViews(String.valueOf(Integer.parseInt(exhibition.getViews())+1));
         exhibitionService.updateExhibitionInfoById(exhibition);
         return response;
     }

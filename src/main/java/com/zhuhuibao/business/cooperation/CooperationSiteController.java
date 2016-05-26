@@ -121,7 +121,7 @@ public class CooperationSiteController {
         Response response = new Response();
         Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
         response.setData(cooperation);
-        cooperation.setViews(cooperation.getViews()+1);
+        cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews())+1));
         cooperationService.updateCooperation(cooperation);
         return response;
     }
