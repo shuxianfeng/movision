@@ -5,6 +5,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
 import com.zhuhuibao.mybatis.memCenter.service.CooperationService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 威客接口
@@ -32,6 +34,9 @@ public class CooperationController {
 
     @Autowired
     private CooperationService cooperationService;
+
+    @Autowired
+    private ConstantService constantService;
 
     /**
      * 合作类型(大类，子类)
@@ -64,7 +69,9 @@ public class CooperationController {
     @RequestMapping(value = "cooperationCategory", method = RequestMethod.GET)
     public Response cooperationCategory()  {
         Response response = new Response();
-        List list = cooperationService.cooperationCategory();
+        //项目类别type为9
+        String type = "9";
+        List<Map<String,String>> list = constantService.findByType(type);
         response.setData(list);
         return response;
     }
@@ -126,13 +133,13 @@ public class CooperationController {
         if(null != session) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
-                Paging<Cooperation> pager = new Paging<Cooperation>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+                Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
                 Cooperation cooperation = new Cooperation();
                 cooperation.setCreateId(principal.getId().toString());
                 cooperation.setType(type);
                 cooperation.setTitle(title);
                 cooperation.setStatus(status);
-                List<Cooperation> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
+                List<Map<String,String>> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
                 pager.result(cooperationList);
                 response.setData(pager);
             }else{

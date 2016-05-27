@@ -158,7 +158,7 @@ public class ExhibitionOmsController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Paging<Exhibition> pager = new Paging<Exhibition>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String,Object> map = new HashMap<>();
         //查询传参
         map.put("title",title);
@@ -166,7 +166,7 @@ public class ExhibitionOmsController {
         map.put("status",status);
         map.put("type2",type2);
         //查询
-        List<Exhibition> exhibitionList = exhibitionService.findAllExhibition(pager,map);
+        List<Map<String,String>> exhibitionList = exhibitionService.findAllExhibition(pager,map);
         pager.result(exhibitionList);
         Response.setData(pager);
         return Response;
@@ -189,14 +189,14 @@ public class ExhibitionOmsController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Paging<DistributedOrder> pager = new Paging<DistributedOrder>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String,Object> map = new HashMap<>();
         //查询传参
         map.put("mobile",mobile);
         map.put("type",type);
         map.put("status",status);
         //查询
-        List<DistributedOrder> distributedOrderList = exhibitionService.findAllDistributedOrder(pager,map);
+        List<Map<String,String>> distributedOrderList = exhibitionService.findAllDistributedOrder(pager,map);
         pager.result(distributedOrderList);
         Response.setData(pager);
         return Response;

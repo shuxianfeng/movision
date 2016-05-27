@@ -51,7 +51,7 @@ public class ExhibitionController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Paging<Exhibition> pager = new Paging<Exhibition>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String,Object> map = new HashMap<>();
         //查询传参
         map.put("title",title);
@@ -64,7 +64,7 @@ public class ExhibitionController {
             if (null != principal) {
                 map.put("createId", principal.getId());
                 //查询
-                List<Exhibition> exhibitionList = exhibitionService.findAllExhibition(pager,map);
+                List<Map<String,String>> exhibitionList = exhibitionService.findAllExhibition(pager,map);
                 pager.result(exhibitionList);
                 response.setData(pager);
             }else {

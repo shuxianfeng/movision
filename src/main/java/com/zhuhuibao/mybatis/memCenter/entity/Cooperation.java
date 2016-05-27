@@ -69,7 +69,7 @@ public class Cooperation {
     @ApiModelProperty(value="合作地点，省市区")
     private String cooperationArea;
 
-    private String type1;
+    private String distinction;
 
     private String memberType;
 
@@ -291,14 +291,6 @@ public class Cooperation {
         this.views = views;
     }
 
-    public String getType1() {
-        return type1;
-    }
-
-    public void setType1(String type1) {
-        this.type1 = type1;
-    }
-
     public String getMemberType() {
         return memberType;
     }
@@ -313,5 +305,13 @@ public class Cooperation {
 
     public void setHeadShot(String headShot) {
         this.headShot = headShot;
+    }
+
+    public String getDistinction() {
+        return distinction;
+    }
+
+    public void setDistinction(String distinction) {
+        this.distinction = distinction;
     }
 }
