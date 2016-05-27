@@ -15,6 +15,8 @@ public class Answer {
     @ApiModelProperty(value="問題ID",required = true)
     private String questionId;
 
+    private String status;
+
     public String getId() {
         return id;
     }
@@ -53,5 +55,13 @@ public class Answer {
 
     public void setQuestionId(String questionId) {
         this.questionId = questionId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

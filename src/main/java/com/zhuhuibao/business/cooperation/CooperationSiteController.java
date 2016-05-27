@@ -79,16 +79,17 @@ public class CooperationSiteController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Paging<Cooperation> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Cooperation cooperation = new Cooperation();
         cooperation.setSmart(smart);
         cooperation.setType(type);
-        cooperation.setType1("1");
+        //区分前台跟后台
+        cooperation.setDistinction("1");
         cooperation.setCategory(category);
         cooperation.setProvince(province);
         cooperation.setParentId(parentId);
         Response Response = new Response();
-        List<Cooperation> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
+        List<Map<String,String>> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
         pager.result(cooperationList);
         Response.setData(pager);
         return Response;
@@ -121,7 +122,7 @@ public class CooperationSiteController {
         Response response = new Response();
         Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
         response.setData(cooperation);
-        cooperation.setViews(cooperation.getViews()+1);
+        cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews())+1));
         cooperationService.updateCooperation(cooperation);
         return response;
     }

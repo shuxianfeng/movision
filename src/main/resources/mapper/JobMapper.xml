@@ -124,7 +124,7 @@
     order by updateTime desc limit 0,#{count}
   </select>
   <select id="searchRecommendPosition" resultMap="BaseResultMap">
-    select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,j.createid,
+    select j.positionType,j.id,j.publishTime,j.updateTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,j.createid,
     (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
     from t_i_job j
     left join t_dictionary_city c on c.code = j.city
@@ -174,18 +174,16 @@
     left join t_i_job jb on jb.createid = t.id
     where t.id =  #{id} limit 1
   </select>
-  <select id="queryAdvertisingPosition" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.MemberDetails">
-    select t.id,t.enterpriseName,t.enterpriseLogo,t.enterpriseDesc,
-    concat(pv.name,ct.name,ar.name,t.address) address,ep.name enterpriseTypeName,es.name employeeNumber from t_m_member t
-    left join t_dictionary_province pv on pv.code = t.province
-    left join t_dictionary_city ct on ct.code = t.city
-    left join t_dictionary_area ar on ar.code = t.area
-    left join t_dictionary_enterpriseType ep on ep.id = t.enterpriseType
-    left join t_dictionary_employeeSize es on es.id = t.employeeNumber
-    where t.id in (select jb.createid from t_i_job jb where jb.is_deleted = #{isDelete} order by jb.updateTime desc ) limit #{count}
+
+  <resultMap id="adList" type="java.util.LinkedHashMap">
+    <result property="imgUrl" column="imgUrl" />
+    <result property="id" column="id" />
+  </resultMap>
+  <select id="queryAdvertisingPosition" parameterType="java.util.Map" resultMap="adList">
+    select t.imgUrl,t.linkUrl id from t_ad_advertising t where t.channelId = 1 and t.sort = 1
   </select>
 
-  <select id="queryPositionInfoByID" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="queryPositionInfoByID" parameterType="java.lang.Long" resultType="java.util.Map">
     select t.id,t.createid,date_format(t.publishTime,'%Y-%m-%d') publishTime,date_format(t.updateTime,'%Y-%m-%d') updateTime,t.name,t.positionType,ps.name positionTypeName,t.description,
     t.department,t.superior,t.number,t.profession,mb.enterpriseName,mb.enterpriseDesc,
     (select cs.name from t_dictionary_constant cs where cs.code = t.salary and cs.type = 1)  salaryName,
@@ -193,11 +191,12 @@
     (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=3) as experienceName,
     (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=4) as ageName,
     (select group_concat(name) from t_dictionary_constant where find_in_set(code,t.welfare) and type=5 ) as welfare,
-    concat(ct.name,ar.name) workArea from t_i_job t
+    concat(ct.name,ar.name) workArea,count(jrr.id) isApply from t_i_job t
     left join t_dictionary_position ps on ps.id = t.positionType
     left join t_dictionary_city ct on ct.code = t.city
     left join t_dictionary_area ar on ar.code = t.area
     left join t_m_member mb on mb.id = t.createid
+    left join t_i_jobRelresume jrr on jrr.applicantId = t.createid and jrr.jobID = #{id}
     where t.id = #{id}
   </select>
 

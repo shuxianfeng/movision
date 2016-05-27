@@ -6,10 +6,9 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.memCenter.entity.Achievement;
-import com.zhuhuibao.mybatis.memCenter.entity.Dynamic;
-import com.zhuhuibao.mybatis.memCenter.entity.Expert;
-import com.zhuhuibao.mybatis.memCenter.entity.Question;
+import com.zhuhuibao.mybatis.constants.entity.Constant;
+import com.zhuhuibao.mybatis.constants.service.ConstantService;
+import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -22,10 +21,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -47,10 +43,13 @@ public class ExpertSiteController {
     @Autowired
     private ExpertService expertService;
 
+    @Autowired
+    private ConstantService constantService;
+
 
     @ApiOperation(value="发布技术成果",notes="发布技术成果",response = Response.class)
     @RequestMapping(value = "publishAchievement", method = RequestMethod.POST)
-    public Response publishAchievement(Achievement achievement) throws Exception {
+    public Response publishAchievement(@ModelAttribute Achievement achievement) throws Exception {
         Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -72,8 +71,8 @@ public class ExpertSiteController {
     @RequestMapping(value = "queryAchievementById", method = RequestMethod.GET)
     public Response queryAchievementById(@ApiParam(value = "技术成果ID")@RequestParam String id) throws Exception {
         Response response = new Response();
-        Achievement achievement = expertService.queryAchievementById(id);
-        response.setData(achievement);
+        Map<String,String> map = expertService.queryAchievementById(id);
+        response.setData(map);
         return response;
     }
 
@@ -98,14 +97,22 @@ public class ExpertSiteController {
         map.put("useArea",useArea);
         map.put("type",1);
         List<Achievement> achievementList = expertService.findAllAchievementList(pager,map);
-        pager.result(achievementList);
+        List list = new ArrayList();
+        for(Achievement achievement:achievementList){
+            Map m = new HashMap();
+            m.put("id",achievement.getId());
+            m.put("title",achievement.getTitle());
+            m.put("updateTime",achievement.getUpdateTime());
+            list.add(m);
+        }
+        pager.result(list);
         response.setData(pager);
         return response;
     }
 
     @ApiOperation(value="技术成果列表(前台)控制条数",notes="技术成果列表(前台)控制条数",response = Response.class)
     @RequestMapping(value = "achievementListByCount", method = RequestMethod.GET)
-    public Response achievementListByCount(@ApiParam(value = "条数")@RequestParam(required = false) int count) throws Exception {
+    public Response achievementListByCount(@ApiParam(value = "条数")@RequestParam int count) throws Exception {
         Response response = new Response();
         List<Map<String,String>> achievementList = expertService.findAchievementListByCount(count);
         response.setData(achievementList);
@@ -138,14 +145,22 @@ public class ExpertSiteController {
         //查询传参
         map.put("type",1);
         List<Dynamic> dynamicList = expertService.findAllDynamicList(pager,map);
-        pager.result(dynamicList);
+        List list = new ArrayList();
+        for(Dynamic dynamic:dynamicList){
+            Map m = new HashMap();
+            m.put("id",dynamic.getId());
+            m.put("title",dynamic.getTitle());
+            m.put("updateTime",dynamic.getUpdateTime());
+            list.add(m);
+        }
+        pager.result(list);
         response.setData(pager);
         return response;
     }
 
     @ApiOperation(value="协会动态列表(前台)控制条数",notes="协会动态列表(前台)控制条数",response = Response.class)
     @RequestMapping(value = "dynamicListByCount", method = RequestMethod.GET)
-    public Response dynamicListByCount(@ApiParam(value = "条数")@RequestParam(required = false) int count) throws Exception {
+    public Response dynamicListByCount(@ApiParam(value = "条数")@RequestParam int count) throws Exception {
         Response response = new Response();
         List<Map<String,String>> dynamicList = expertService.findDynamicListByCount(count);
         response.setData(dynamicList);
@@ -154,7 +169,7 @@ public class ExpertSiteController {
 
     @ApiOperation(value="申请专家",notes="申请专家",response = Response.class)
     @RequestMapping(value = "applyExpert", method = RequestMethod.POST)
-    public Response applyExpert(Expert expert) throws Exception {
+    public Response applyExpert(@ModelAttribute Expert expert) throws Exception {
         Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -195,11 +210,19 @@ public class ExpertSiteController {
         //查询传参
         achievementMap.put("createId",expert.getCreateId());
         achievementMap.put("status",1);
-        List<Achievement> achievementList = expertService.findAchievementList(map);
-        map.put("achievementList",achievementList);
+        List<Achievement> achievementList = expertService.findAchievementList(achievementMap);
+        List list = new ArrayList();
+        for(Achievement achievement:achievementList){
+            Map m = new HashMap();
+            m.put("id",achievement.getId());
+            m.put("title",achievement.getTitle());
+            m.put("updateTime",achievement.getUpdateTime());
+            list.add(m);
+        }
+        map.put("achievementList",list);
         response.setData(map);
         //点击率加1
-        expert.setViews(expert.getViews()+1);
+        expert.setViews(String.valueOf(Integer.parseInt(expert.getViews())+1));
         expertService.updateExpert(expert);
         return response;
     }
@@ -300,6 +323,7 @@ public class ExpertSiteController {
      * 向专家提问时的图形验证码
      * @param response
      */
+    @ApiOperation(value="向专家提问时的图形验证码",notes="向专家提问时的图形验证码")
     @RequestMapping(value = "imgCode", method = RequestMethod.GET)
     public void getCode(HttpServletResponse response) {
         log.debug("获得验证码");
@@ -343,13 +367,14 @@ public class ExpertSiteController {
         Session sess = currentUser.getSession(false);
         if(null != sess) {
             String verifyCode = (String) sess.getAttribute("expert");
-            if(!code.equals(verifyCode)){
+            if(!code.equalsIgnoreCase(verifyCode)){
                 throw new BusinessException(MsgCodeConstant.validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
             }else {
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)sess.getAttribute("member");
                 if(null != principal){
                     Question question = new Question();
                     question.setCreateid(principal.getId().toString());
+
                     question.setContent(content);
                     expertService.askExpert(question);
                 }else {
@@ -359,6 +384,98 @@ public class ExpertSiteController {
         }else {
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
+        return response;
+    }
+
+    @ApiOperation(value="專家互動(前台)",notes="專家互動(前台)",response = Response.class)
+    @RequestMapping(value = "expertInteraction", method = RequestMethod.GET)
+    public Response expertInteraction(@RequestParam int count)  {
+        Response response = new Response();
+        List<Map<String,String>> list = expertService.expertInteraction(count);
+        response.setData(list);
+        return response;
+    }
+
+    @ApiOperation(value="系統分類常量",notes="系統分類常量",response = Response.class)
+    @RequestMapping(value = "SystemList", method = RequestMethod.GET)
+    public Response SystemList()  {
+        Response response = new Response();
+        //系統分類type為19
+        String type = "19";
+        List<Map<String,String>> list = constantService.findByType(type);
+        response.setData(list);
+        return response;
+    }
+
+    @ApiOperation(value="應用領域常量",notes="應用領域常量",response = Response.class)
+    @RequestMapping(value = "useAreaList", method = RequestMethod.GET)
+    public Response useAreaList()  {
+        Response response = new Response();
+        //應用領域type為18
+        String type = "18";
+        List<Map<String,String>> list = constantService.findByType(type);
+        response.setData(list);
+        return response;
+    }
+
+    @ApiOperation(value="申請專家支持",notes="申請專家支持",response = Response.class)
+    @RequestMapping(value = "applyExpertSupport", method = RequestMethod.POST)
+    public Response applyExpertSupport(@ApiParam(value = "联系人名称")@RequestParam String linkName,
+                                       @ApiParam(value = "手机")@RequestParam String mobile,
+                                       @ApiParam(value = "验证码")@RequestParam String code,
+                                       @ApiParam(value = "申请原因")@RequestParam(required = false) String reason)  {
+        Response response = new Response();
+        ExpertSupport expertSupport = new ExpertSupport();
+        expertSupport.setLinkName(linkName);
+        expertSupport.setMobile(mobile);
+        expertSupport.setReason(reason);
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if(null != session) {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
+            if(null != principal){
+                expertSupport.setCreateid(principal.getId().toString());
+                expertService.applyExpertSupport(expertSupport);
+            }
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @ApiOperation(value="最新专家培训(接口待完成)",notes="最新专家培训(接口待完成)",response = Response.class)
+    @RequestMapping(value = "queryLatestExpertTrain", method = RequestMethod.GET)
+    public Response queryLatestExpertTrain(@ApiParam(value = "条数")@RequestParam int count)  {
+        Response response = new Response();
+
+        return response;
+    }
+
+    @ApiOperation(value="专家培训列表(接口待完成)",notes="专家培训列表(接口待完成)",response = Response.class)
+    @RequestMapping(value = "queryExpertTrainList", method = RequestMethod.GET)
+    public Response queryExpertTrainList(@ApiParam(value = "省")@RequestParam(required = false) String province,
+                                         @RequestParam(required = false)String pageNo,
+                                         @RequestParam(required = false)String pageSize)  {
+        Response response = new Response();
+
+        return response;
+    }
+
+    @ApiOperation(value="开课申请保存(接口待完成)",notes="开课申请保存(接口待完成)",response = Response.class)
+    @RequestMapping(value = "startClassSave", method = RequestMethod.POST)
+    public Response startClassSave(@ApiParam(value = "省")@RequestParam(required = false) String province,
+                                         @RequestParam(required = false)String pageNo,
+                                         @RequestParam(required = false)String pageSize)  {
+        Response response = new Response();
+
+        return response;
+    }
+
+    @ApiOperation(value="专家培训详情(接口待完成)",notes="专家培训详情(接口待完成)",response = Response.class)
+    @RequestMapping(value = "queryExpertTrainInfoById", method = RequestMethod.GET)
+    public Response queryExpertTrainInfoById(@RequestParam String id)  {
+        Response response = new Response();
+
         return response;
     }
 }

@@ -10,40 +10,46 @@ import org.springframework.stereotype.Component;
 public class AliPayConfig {
 
     @Value("${partner}")
-    private  String partner;
+    private String partner;
 
     @Value("${seller_id}")
-    private  String sellerId;
+    private String sellerId;
 
     @Value("${alipay_public_key}")
-    private  String alipayPublicKey;
+    private String alipayPublicKey;
 
     @Value("${notify_url}")
-    private  String notifyUrl;
+    private String notifyUrl;
 
     @Value("${return_url}")
-    private  String returnUrl;
+    private String returnUrl;
 
     @Value("${sign_type}")
-    private  String signType;
+    private String signType;
 
     @Value("${input_charset}")
-    private  String inputCharset;
+    private String inputCharset;
 
     @Value("${payment_type}")
-    private  String paymentType;
+    private String paymentType;
 
     @Value("${service}")
-    private  String service;
+    private String service;
 
     @Value("${anti_phishing_key}")
-    private  String antiPhishingKey;
+    private String antiPhishingKey;
 
     @Value("${exter_invoke_ip}")
-    private  String exterInvokeIp;
+    private String exterInvokeIp;
 
     @Value("${enable_timestamp}")
     private boolean enableTimestamp;
+
+    @Value("${seller_email}")
+    private String sellerEmail;
+
+    @Value("${seller_account_name}")
+    private String sellerAccountName;
 
     public boolean isEnableTimestamp() {
         return enableTimestamp;

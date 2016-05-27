@@ -21,7 +21,7 @@
     from t_c_distributedOrder
     where id = #{id}
   </select>
-  <select id="findAllDistributedOrder" resultMap="BaseResultMap" parameterType="java.util.Map" >
+  <select id="findAllDistributedOrder" resultType="java.util.Map" parameterType="java.util.Map" >
     SELECT * FROM t_c_distributedOrder d
     where 1=1
     <if test="mobile != null">

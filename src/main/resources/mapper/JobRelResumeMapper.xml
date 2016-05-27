@@ -16,9 +16,9 @@
     from t_i_jobRelresume
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+  <delete id="deleteJobRelResume" parameterType="java.util.Map" >
     delete from t_i_jobRelresume
-    where id = #{id,jdbcType=BIGINT}
+    where jobID = #{jobID} and resumeID = #{resumeID}
   </delete>
   <insert id="insert" parameterType="com.zhuhuibao.mybatis.memCenter.entity.JobRelResume" >
     insert into t_i_jobRelresume (id, jobID, resumeID
@@ -38,6 +38,9 @@
       <if test="resumeID != null" >
         resumeID,
       </if>
+      <if test="applicantId != null">
+        applicantId,
+      </if>
       publishDate,
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -49,6 +52,9 @@
       </if>
       <if test="resumeID != null" >
         #{resumeID,jdbcType=BIGINT},
+      </if>
+      <if test="applicantId != null" >
+        #{applicantId,jdbcType=BIGINT},
       </if>
       current_date(),
     </trim>

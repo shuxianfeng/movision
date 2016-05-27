@@ -7,6 +7,8 @@ public class JobRelResume {
 
     private Long resumeID;
 
+    private Long applicantId;
+
     private String publishDate;
 
     public Long getId() {
@@ -39,5 +41,13 @@ public class JobRelResume {
 
     public void setPublishDate(String publishDate) {
         this.publishDate = publishDate;
+    }
+
+    public Long getApplicantId() {
+        return applicantId;
+    }
+
+    public void setApplicantId(Long applicantId) {
+        this.applicantId = applicantId;
     }
 }

@@ -1,6 +1,6 @@
 package com.zhuhuibao.alipay.util.httpClient;
 
-import com.zhuhuibao.alipay.config.AlipayConfigs;
+import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import org.apache.commons.httpclient.Header;
 
 import java.io.UnsupportedEncodingException;
@@ -60,7 +60,7 @@ public class HttpResponse {
             return stringResult;
         }
         if (byteResult != null) {
-            return new String(byteResult, AlipayConfigs.input_charset);
+            return new String(byteResult, AlipayPropertiesLoader.getPropertyValue("input_charset"));
         }
         return null;
     }

@@ -1,6 +1,5 @@
 package com.zhuhuibao.alipay.util;
 
-import com.zhuhuibao.alipay.config.AlipayConfigs;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.methods.multipart.FilePartSource;
 import org.apache.commons.httpclient.methods.multipart.PartSource;
@@ -81,7 +80,8 @@ public class AlipayCore {
     public static void logResult(String sWord) {
         FileWriter writer = null;
         try {
-            writer = new FileWriter(AlipayConfigs.log_path + "alipay_log_" + System.currentTimeMillis()+".txt");
+            writer = new FileWriter(AlipayPropertiesLoader.getPropertyValue("log_path") + "alipay_log_"
+                    + System.currentTimeMillis()+".txt");
             writer.write(sWord);
         } catch (Exception e) {
             e.printStackTrace();

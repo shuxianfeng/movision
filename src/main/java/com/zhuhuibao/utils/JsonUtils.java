@@ -17,30 +17,26 @@ public class JsonUtils {
     private static final ObjectMapper om = new ObjectMapper();
 
     /**
-     * json串转换为字符串 wangxiang2
+     * json串转换为字符串
      *
-     * @param msg
+     * @param msg   string
      * @return
-     * @throws JsonParseException
-     * @throws JsonMappingException
      * @throws IOException
      */
     public static Map<String, String> getMapFromJsonString(String msg)
-            throws JsonParseException, JsonMappingException, IOException {
+            throws IOException {
         return om.readValue(msg, new TypeReference<Map<String, String>>() {
         });
     }
 
     /**
-     * map转换为json串 wangxiang2
+     * map转换为json串
      *
-     * @param map
+     * @param map   hashmap
      * @return
      * @throws IOException
-     * @throws JsonMappingException
-     * @throws JsonGenerationException
      */
-    public static String getJsonStringFromMap(Map<String, String> map) throws JsonGenerationException, JsonMappingException, IOException {
+    public static String getJsonStringFromMap(Map<String, String> map) throws IOException {
         Map<String, String> paramMap = new HashMap<String, String>();
         List<String> keyList = new ArrayList<String>(map.keySet());
         for (String key : keyList) {
@@ -53,13 +49,11 @@ public class JsonUtils {
     
     /**
      * 对象转换成json字符串
-     * @param obj
+     * @param obj  object
      * @return
-     * @throws JsonGenerationException
-     * @throws JsonMappingException
      * @throws IOException
      */
-    public static String getJsonStringFromObj(Object obj) throws JsonGenerationException, JsonMappingException, IOException
+    public static String getJsonStringFromObj(Object obj) throws IOException
     {
     	return om.writeValueAsString(obj);
     }

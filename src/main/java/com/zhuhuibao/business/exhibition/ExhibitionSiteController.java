@@ -77,7 +77,7 @@ public class ExhibitionSiteController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Paging<Exhibition> pager = new Paging<Exhibition>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String,Object> map = new HashMap<>();
         //查询传参
         map.put("subType",subType);
@@ -85,7 +85,7 @@ public class ExhibitionSiteController {
         map.put("province",province);
         map.put("type1",1);
         //查询
-        List<Exhibition> exhibitionList = exhibitionService.findAllExhibition(pager,map);
+        List<Map<String,String>> exhibitionList = exhibitionService.findAllExhibition(pager,map);
         pager.result(exhibitionList);
         response.setData(pager);
         return response;
@@ -103,7 +103,7 @@ public class ExhibitionSiteController {
         Map<String,Object> map = new HashMap<>();
         map.put("count",count);
         map.put("type",type);
-        List<Exhibition> exhibitionList = exhibitionService.findNewExhibition(map);
+        List<Map<String,String>> exhibitionList = exhibitionService.findNewExhibition(map);
         response.setData(exhibitionList);
         return response;
     }
@@ -141,7 +141,7 @@ public class ExhibitionSiteController {
         Exhibition exhibition = exhibitionService.queryExhibitionInfoById(id);
         response.setData(exhibition);
         //更新點擊率
-        exhibition.setViews(exhibition.getViews()+1);
+        exhibition.setViews(String.valueOf(Integer.parseInt(exhibition.getViews())+1));
         exhibitionService.updateExhibitionInfoById(exhibition);
         return response;
     }

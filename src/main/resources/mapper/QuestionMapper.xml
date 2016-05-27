@@ -20,6 +20,7 @@
     LEFT JOIN t_m_member m on m.id = q.createid
     where q.id = #{id}
   </select>
+
   <select id="findAllExpertQuestion" resultType="java.util.Map" >
     select q.id,q.content,date_format(q.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,m.headShot
     from t_e_question q
@@ -29,21 +30,41 @@
     and q.createid != #{id}
     order by q.publishTime desc
   </select>
+
   <select id="findAllMyAnswerQuestion" resultType="java.util.Map" >
     select q.content as question,date_format(q.publishTime,'%Y-%m-%d %H:%i:%s') questionTime,m.headShot as questionImg,
-    a.content as answer,date_format(a.publishTime,'%Y-%m-%d %H:%i:%s') answerTime,mm.headShot as answerImg
+    a.content as answer,date_format(a.publishTime,'%Y-%m-%d %H:%i:%s') answerTime,e.photoUrl as answerImg
     from t_e_answer a
     left join t_e_question q on a.questionId = q.id
     LEFT JOIN t_m_member m on m.id = q.createid
-    LEFT JOIN t_m_member mm on mm.id = a.createid
+    LEFT JOIN t_e_expert e on e.createid = a.createid
     where a.createid = #{id} order by a.publishTime desc
   </select>
+
   <select id="findAllMyQuestion" resultType="java.util.Map" >
     select q.id,q.content,date_format(q.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,q.status,
     (select count(*) from t_e_answer a where a.questionId = q.id)as size
     from t_e_question q
     where q.createid = #{id} order by q.publishTime desc
   </select>
+
+  <select id="findAllQuestionListOms" resultType="java.util.Map" >
+    select q.id,q.content,date_format(q.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,q.status,
+    (select count(*) from t_e_answer a where a.questionId = q.id)as size,
+    case WHEN m.identify = 2 THEN m.personRealName WHEN m.identify !=2 THEN m.enterpriseName end as memberName
+    from t_e_question q
+    LEFT JOIN t_m_member m on m.id = q.createid
+    order by q.publishTime desc
+  </select>
+
+  <select id="expertInteraction" resultType="java.util.Map" >
+    select q.content as question,a.content as answer,date_format(a.publishTime,'%Y-%m-%d') publishTime,e.photoUrl,e.name
+    from t_e_question q
+    left join t_e_answer a on q.id = a.questionId
+    left join t_e_expert e on e.createid = a.createid
+    where q.`status` = 2 and a.`status` = 0 and q.answerId = a.id order by q.publishTime desc limit 0,#{count}
+  </select>
+
   <insert id="askExpert" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Question" >
     insert into t_e_question
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -83,20 +104,14 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Question" >
+  <update id="updateQuestionInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Question" >
     update t_e_question
     <set >
-      <if test="createid != null" >
-        createid = #{createid},
-      </if>
       <if test="content != null" >
         content = #{content},
       </if>
       <if test="status != null" >
         status = #{status},
-      </if>
-      <if test="publishTime != null" >
-        publishTime = #{publishTime},
       </if>
       <if test="answerId != null" >
         answerId = #{answerId},

@@ -101,28 +101,6 @@ public class CooperationService {
     }
 
     /**
-     * 项目类别
-     */
-    public List cooperationCategory() {
-        try{
-            List<ResultBean> resultBeanList = cooperationMapper.cooperationCategory();
-            List list = new ArrayList();
-            for(int i=0;i<resultBeanList.size();i++){
-                ResultBean resultBean = resultBeanList.get(i);
-                Map map = new HashMap();
-                map.put(Constants.code,resultBean.getCode());
-                map.put(Constants.name,resultBean.getName());
-                list.add(map);
-            }
-            return list;
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
-    /**
      * 编辑任务
      */
     public int updateCooperation(Cooperation cooperation){
@@ -168,9 +146,9 @@ public class CooperationService {
     /**
      * 根据条件查询任务信息列表（分页）
      */
-    public List<Cooperation> findAllCooperationByPager( Paging<Cooperation> pager,Cooperation cooperation){
+    public List<Map<String,String>> findAllCooperationByPager( Paging<Map<String,String>> pager,Cooperation cooperation){
         try {
-            List<Cooperation> cooperationList = cooperationMapper.findAllCooperationByPager(pager.getRowBounds(),cooperation);
+            List<Map<String,String>> cooperationList = cooperationMapper.findAllCooperationByPager(pager.getRowBounds(),cooperation);
             return cooperationList;
         }catch (Exception e){
             log.error(e.getMessage());

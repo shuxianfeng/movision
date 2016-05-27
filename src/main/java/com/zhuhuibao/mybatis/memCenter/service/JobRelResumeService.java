@@ -33,14 +33,15 @@ public class JobRelResumeService {
      * @param resumeID 简历ID
      * @return
      */
-    public Response insert(Long jobID, Long resumeID)
+    public Response insert(Long jobID, Long resumeID,Long createid)
     {
         Response response = new Response();
-        log.info("insert job relation resume");
+        log.info("insert job relation resume jobID = "+jobID+" resumeID = "+resumeID+" createid = "+createid);
         try {
             JobRelResume jrr = new JobRelResume();
             jrr.setJobID(jobID);
             jrr.setResumeID(resumeID);
+            jrr.setApplicantId(createid);
             jrrMapper.insertSelective(jrr);
         }catch(Exception e)
         {
@@ -55,7 +56,7 @@ public class JobRelResumeService {
      * @return
      * @throws Exception
      */
-    public Integer isExistApplyPosition(Map<String,Object> map) throws Exception
+    public Integer isExistApplyPosition(Map<String,Object> map)
     {
         log.info("apply position count"+ StringUtils.mapToString(map));
         int count = 0;
@@ -67,5 +68,24 @@ public class JobRelResumeService {
             throw e;
         }
         return count;
+    }
+
+    /**
+     * 删除职位和简历的关联关系
+     * @param map
+     * @return
+     */
+    public int deleteJobRelResume(Map<String,Object> map)
+    {
+        log.info("delete resume Relation job "+ StringUtils.mapToString(map));
+        int result = 0;
+        try {
+               result = jrrMapper.deleteJobRelResume(map);
+        }catch(Exception e)
+        {
+            log.error("delete resume relation job error!");
+            throw e;
+        }
+        return result;
     }
 }

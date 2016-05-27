@@ -10,6 +10,7 @@
 .idea
 zhuhuibao.iml
 /target
+/src/main/resources/rebel.xml
 
 
 /target
