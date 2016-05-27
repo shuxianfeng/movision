@@ -66,8 +66,7 @@ public class ExpertController {
                 map.put("createId", principal.getId());
                 List<Achievement> achievementList = expertService.findAllAchievementList(pager, map);
                 List list = new ArrayList();
-                for(int i=0;i<achievementList.size();i++){
-                    Achievement achievement = achievementList.get(i);
+                for(Achievement achievement:achievementList){
                     Map m = new HashMap();
                     m.put("id",achievement.getId());
                     m.put("title",achievement.getTitle());
@@ -193,8 +192,7 @@ public class ExpertController {
                 map.put("createId", principal.getId());
                 List<Dynamic> dynamicList = expertService.findAllDynamicList(pager, map);
                 List list = new ArrayList();
-                for(int i=0;i<dynamicList.size();i++){
-                    Dynamic Dynamic = dynamicList.get(i);
+                for(Dynamic Dynamic:dynamicList){
                     Map m = new HashMap();
                     m.put("id",Dynamic.getId());
                     m.put("title",Dynamic.getTitle());
