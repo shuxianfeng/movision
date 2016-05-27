@@ -60,10 +60,10 @@ public class PayConstants {
 
 
     /**
-     * 通知类型  1:  2 :  3:
+     * 通知类型  1:同步  2 :异步:
      */
     public enum NotifyType {
-        CDX("1"), DDD("2"), DZ("3");
+        SYNC("1"), ASYNC("2");
 
         private final String value;
 
@@ -78,11 +78,29 @@ public class PayConstants {
     }
 
     /**
+     * 交易类型 1:支付  2:退款
+     */
+    public enum TradeType {
+        PAY("1"), REFUND("2");
+
+        private final String value;
+
+        TradeType(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
+
+    /**
      * http 状态码
      */
     public static final int HTTP_SUCCESS_CODE = 200;
-    public static final int HTTP_BUSINESS_EXCEPTION_CODE = 560;
-    public static final int HTTP_SYSTEM_EXCEPTION_CODE = 600;
+    public static final int HTTP_BUSINESS_EXCEPTION_CODE = 560;  //业务异常
+    public static final int HTTP_SYSTEM_EXCEPTION_CODE = 600;    //系统异常
 
     /**
      * 支持请求方式类型 get | post

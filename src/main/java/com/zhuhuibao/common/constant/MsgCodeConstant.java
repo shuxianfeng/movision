@@ -133,9 +133,19 @@ public interface MsgCodeConstant {
 
 
 	/**
-	 * 解析错误 8000~8888
+	 * 解析错误 8000~8999
 	 * JSON格式解析错误
 	 */
 	int JSON_PARSE_ERROR = 8000;
 
+	/**
+	 * 数据操作异常 2000~2999
+	 * 插入失败
+	 */
+	int DB_INSERT_FAIL = 2000;
+	/**
+	 * 数据操作异常 2000~2999
+	 * 更新失败
+	 */
+	int DB_UPDATE_FAIL = 2001;
 }

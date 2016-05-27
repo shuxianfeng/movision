@@ -1,5 +1,6 @@
 package com.zhuhuibao.mybatis.order.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Order {
@@ -7,17 +8,21 @@ public class Order {
 
     private Long buyerId;
 
-    private Double amount;
+    private String sellerId;
+
+    private BigDecimal amount;
+
+    private BigDecimal payAmount;
 
     private Date dealTime;
 
     private Date updateTime;
 
-    private Integer payMode;
+    private String payMode;
 
-    private Integer status;
+    private String status;
 
-    private Integer goodsType;
+    private String goodsType;
 
     private String descriptions;
 
@@ -37,12 +42,28 @@ public class Order {
         this.buyerId = buyerId;
     }
 
-    public Double getAmount() {
+    public String getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(String sellerId) {
+        this.sellerId = sellerId == null ? null : sellerId.trim();
+    }
+
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public BigDecimal getPayAmount() {
+        return payAmount;
+    }
+
+    public void setPayAmount(BigDecimal payAmount) {
+        this.payAmount = payAmount;
     }
 
     public Date getDealTime() {
@@ -61,28 +82,28 @@ public class Order {
         this.updateTime = updateTime;
     }
 
-    public Integer getPayMode() {
+    public String getPayMode() {
         return payMode;
     }
 
-    public void setPayMode(Integer payMode) {
-        this.payMode = payMode;
+    public void setPayMode(String payMode) {
+        this.payMode = payMode == null ? null : payMode.trim();
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
     }
 
-    public Integer getGoodsType() {
+    public String getGoodsType() {
         return goodsType;
     }
 
-    public void setGoodsType(Integer goodsType) {
-        this.goodsType = goodsType;
+    public void setGoodsType(String goodsType) {
+        this.goodsType = goodsType == null ? null : goodsType.trim();
     }
 
     public String getDescriptions() {

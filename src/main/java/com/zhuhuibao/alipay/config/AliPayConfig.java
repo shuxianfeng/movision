@@ -11,52 +11,26 @@ public class AliPayConfig {
 
     @Value("${partner}")
     private String partner;
-
-    @Value("${seller_id}")
-    private String sellerId;
-
-    @Value("${alipay_public_key}")
-    private String alipayPublicKey;
-
-    @Value("${notify_url}")
-    private String notifyUrl;
-
-    @Value("${return_url}")
-    private String returnUrl;
-
-    @Value("${sign_type}")
-    private String signType;
-
+    @Value("${key}")
+    private String key;
     @Value("${input_charset}")
     private String inputCharset;
-
+    @Value("${sign_type}")
+    private String signType;
+    @Value("${alipay_gateway_new}")
+    private String alipayGatewayNew;
+    @Value("${enable_timestamp}")
+    private boolean enableTimestamp;
     @Value("${payment_type}")
     private String paymentType;
 
-    @Value("${service}")
-    private String service;
 
-    @Value("${anti_phishing_key}")
-    private String antiPhishingKey;
-
-    @Value("${exter_invoke_ip}")
-    private String exterInvokeIp;
-
-    @Value("${enable_timestamp}")
-    private boolean enableTimestamp;
-
-    @Value("${seller_email}")
-    private String sellerEmail;
-
-    @Value("${seller_account_name}")
-    private String sellerAccountName;
-
-    public boolean isEnableTimestamp() {
-        return enableTimestamp;
+    public String getPaymentType() {
+        return paymentType;
     }
 
-    public void setEnableTimestamp(boolean enableTimestamp) {
-        this.enableTimestamp = enableTimestamp;
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
     }
 
     public String getPartner() {
@@ -67,44 +41,12 @@ public class AliPayConfig {
         this.partner = partner;
     }
 
-    public String getSellerId() {
-        return sellerId;
+    public String getKey() {
+        return key;
     }
 
-    public void setSellerId(String sellerId) {
-        this.sellerId = sellerId;
-    }
-
-    public String getAlipayPublicKey() {
-        return alipayPublicKey;
-    }
-
-    public void setAlipayPublicKey(String alipayPublicKey) {
-        this.alipayPublicKey = alipayPublicKey;
-    }
-
-    public String getNotifyUrl() {
-        return notifyUrl;
-    }
-
-    public void setNotifyUrl(String notifyUrl) {
-        this.notifyUrl = notifyUrl;
-    }
-
-    public String getReturnUrl() {
-        return returnUrl;
-    }
-
-    public void setReturnUrl(String returnUrl) {
-        this.returnUrl = returnUrl;
-    }
-
-    public String getSignType() {
-        return signType;
-    }
-
-    public void setSignType(String signType) {
-        this.signType = signType;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getInputCharset() {
@@ -115,35 +57,27 @@ public class AliPayConfig {
         this.inputCharset = inputCharset;
     }
 
-    public String getPaymentType() {
-        return paymentType;
+    public String getSignType() {
+        return signType;
     }
 
-    public void setPaymentType(String paymentType) {
-        this.paymentType = paymentType;
+    public void setSignType(String signType) {
+        this.signType = signType;
     }
 
-    public String getService() {
-        return service;
+    public String getAlipayGatewayNew() {
+        return alipayGatewayNew;
     }
 
-    public void setService(String service) {
-        this.service = service;
+    public void setAlipayGatewayNew(String alipayGatewayNew) {
+        this.alipayGatewayNew = alipayGatewayNew;
     }
 
-    public String getAntiPhishingKey() {
-        return antiPhishingKey;
+    public boolean isEnableTimestamp() {
+        return enableTimestamp;
     }
 
-    public void setAntiPhishingKey(String antiPhishingKey) {
-        this.antiPhishingKey = antiPhishingKey;
-    }
-
-    public String getExterInvokeIp() {
-        return exterInvokeIp;
-    }
-
-    public void setExterInvokeIp(String exterInvokeIp) {
-        this.exterInvokeIp = exterInvokeIp;
+    public void setEnableTimestamp(boolean enableTimestamp) {
+        this.enableTimestamp = enableTimestamp;
     }
 }

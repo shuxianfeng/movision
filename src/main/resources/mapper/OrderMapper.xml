@@ -4,16 +4,19 @@
   <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.order.entity.Order" >
     <id column="orderNo" property="orderNo" jdbcType="VARCHAR" />
     <result column="buyerId" property="buyerId" jdbcType="BIGINT" />
-    <result column="amount" property="amount" jdbcType="DOUBLE" />
+    <result column="sellerId" property="sellerId" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="payAmount" property="payAmount" jdbcType="DECIMAL" />
     <result column="dealTime" property="dealTime" jdbcType="TIMESTAMP" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="payMode" property="payMode" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="goodsType" property="goodsType" jdbcType="INTEGER" />
+    <result column="payMode" property="payMode" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="goodsType" property="goodsType" jdbcType="CHAR" />
     <result column="descriptions" property="descriptions" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    orderNo, buyerId, amount, dealTime, updateTime, payMode, status, goodsType, descriptions
+    orderNo, buyerId, sellerId, amount, payAmount, dealTime, updateTime, payMode, status,
+    goodsType, descriptions
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -26,14 +29,14 @@
     where orderNo = #{orderNo,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.zhuhuibao.mybatis.order.entity.Order" >
-    insert into t_o_order (orderNo, buyerId, amount, 
-      dealTime, updateTime, payMode, 
-      status, goodsType, descriptions
-      )
-    values (#{orderNo,jdbcType=VARCHAR}, #{buyerId,jdbcType=BIGINT}, #{amount,jdbcType=DOUBLE}, 
-      #{dealTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{payMode,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, #{goodsType,jdbcType=INTEGER}, #{descriptions,jdbcType=VARCHAR}
-      )
+    insert into t_o_order (orderNo, buyerId, sellerId,
+      amount, payAmount, dealTime, 
+      updateTime, payMode, status, 
+      goodsType, descriptions)
+    values (#{orderNo,jdbcType=VARCHAR}, #{buyerId,jdbcType=BIGINT}, #{sellerId,jdbcType=VARCHAR},
+      #{amount,jdbcType=DECIMAL}, #{payAmount,jdbcType=DECIMAL}, #{dealTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{payMode,jdbcType=CHAR}, #{status,jdbcType=CHAR}, 
+      #{goodsType,jdbcType=CHAR}, #{descriptions,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.order.entity.Order" >
     insert into t_o_order
@@ -44,8 +47,14 @@
       <if test="buyerId != null" >
         buyerId,
       </if>
+      <if test="sellerId != null" >
+        sellerId,
+      </if>
       <if test="amount != null" >
         amount,
+      </if>
+      <if test="payAmount != null" >
+        payAmount,
       </if>
       <if test="dealTime != null" >
         dealTime,
@@ -73,8 +82,14 @@
       <if test="buyerId != null" >
         #{buyerId,jdbcType=BIGINT},
       </if>
+      <if test="sellerId != null" >
+        #{sellerId,jdbcType=VARCHAR},
+      </if>
       <if test="amount != null" >
-        #{amount,jdbcType=DOUBLE},
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="payAmount != null" >
+        #{payAmount,jdbcType=DECIMAL},
       </if>
       <if test="dealTime != null" >
         #{dealTime,jdbcType=TIMESTAMP},
@@ -83,13 +98,13 @@
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="payMode != null" >
-        #{payMode,jdbcType=INTEGER},
+        #{payMode,jdbcType=CHAR},
       </if>
       <if test="status != null" >
-        #{status,jdbcType=INTEGER},
+        #{status,jdbcType=CHAR},
       </if>
       <if test="goodsType != null" >
-        #{goodsType,jdbcType=INTEGER},
+        #{goodsType,jdbcType=CHAR},
       </if>
       <if test="descriptions != null" >
         #{descriptions,jdbcType=VARCHAR},
@@ -102,8 +117,14 @@
       <if test="buyerId != null" >
         buyerId = #{buyerId,jdbcType=BIGINT},
       </if>
+      <if test="sellerId != null" >
+        sellerId = #{sellerId,jdbcType=VARCHAR},
+      </if>
       <if test="amount != null" >
-        amount = #{amount,jdbcType=DOUBLE},
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="payAmount != null" >
+        payAmount = #{payAmount,jdbcType=DECIMAL},
       </if>
       <if test="dealTime != null" >
         dealTime = #{dealTime,jdbcType=TIMESTAMP},
@@ -112,13 +133,13 @@
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="payMode != null" >
-        payMode = #{payMode,jdbcType=INTEGER},
+        payMode = #{payMode,jdbcType=CHAR},
       </if>
       <if test="status != null" >
-        status = #{status,jdbcType=INTEGER},
+        status = #{status,jdbcType=CHAR},
       </if>
       <if test="goodsType != null" >
-        goodsType = #{goodsType,jdbcType=INTEGER},
+        goodsType = #{goodsType,jdbcType=CHAR},
       </if>
       <if test="descriptions != null" >
         descriptions = #{descriptions,jdbcType=VARCHAR},
@@ -129,12 +150,14 @@
   <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.order.entity.Order" >
     update t_o_order
     set buyerId = #{buyerId,jdbcType=BIGINT},
-      amount = #{amount,jdbcType=DOUBLE},
+      sellerId = #{sellerId,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      payAmount = #{payAmount,jdbcType=DECIMAL},
       dealTime = #{dealTime,jdbcType=TIMESTAMP},
       updateTime = #{updateTime,jdbcType=TIMESTAMP},
-      payMode = #{payMode,jdbcType=INTEGER},
-      status = #{status,jdbcType=INTEGER},
-      goodsType = #{goodsType,jdbcType=INTEGER},
+      payMode = #{payMode,jdbcType=CHAR},
+      status = #{status,jdbcType=CHAR},
+      goodsType = #{goodsType,jdbcType=CHAR},
       descriptions = #{descriptions,jdbcType=VARCHAR}
     where orderNo = #{orderNo,jdbcType=VARCHAR}
   </update>
