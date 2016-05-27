@@ -98,8 +98,7 @@ public class ExpertSiteController {
         map.put("type",1);
         List<Achievement> achievementList = expertService.findAllAchievementList(pager,map);
         List list = new ArrayList();
-        for(int i=0;i<achievementList.size();i++){
-            Achievement achievement = achievementList.get(i);
+        for(Achievement achievement:achievementList){
             Map m = new HashMap();
             m.put("id",achievement.getId());
             m.put("title",achievement.getTitle());
@@ -147,8 +146,7 @@ public class ExpertSiteController {
         map.put("type",1);
         List<Dynamic> dynamicList = expertService.findAllDynamicList(pager,map);
         List list = new ArrayList();
-        for(int i=0;i<dynamicList.size();i++){
-            Dynamic dynamic = dynamicList.get(i);
+        for(Dynamic dynamic:dynamicList){
             Map m = new HashMap();
             m.put("id",dynamic.getId());
             m.put("title",dynamic.getTitle());
@@ -214,8 +212,7 @@ public class ExpertSiteController {
         achievementMap.put("status",1);
         List<Achievement> achievementList = expertService.findAchievementList(achievementMap);
         List list = new ArrayList();
-        for(int i=0;i<achievementList.size();i++){
-            Achievement achievement = achievementList.get(i);
+        for(Achievement achievement:achievementList){
             Map m = new HashMap();
             m.put("id",achievement.getId());
             m.put("title",achievement.getTitle());
@@ -443,6 +440,42 @@ public class ExpertSiteController {
         }else {
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
+        return response;
+    }
+
+    @ApiOperation(value="最新专家培训(接口待完成)",notes="最新专家培训(接口待完成)",response = Response.class)
+    @RequestMapping(value = "queryLatestExpertTrain", method = RequestMethod.GET)
+    public Response queryLatestExpertTrain(@ApiParam(value = "条数")@RequestParam int count)  {
+        Response response = new Response();
+
+        return response;
+    }
+
+    @ApiOperation(value="专家培训列表(接口待完成)",notes="专家培训列表(接口待完成)",response = Response.class)
+    @RequestMapping(value = "queryExpertTrainList", method = RequestMethod.GET)
+    public Response queryExpertTrainList(@ApiParam(value = "省")@RequestParam(required = false) String province,
+                                         @RequestParam(required = false)String pageNo,
+                                         @RequestParam(required = false)String pageSize)  {
+        Response response = new Response();
+
+        return response;
+    }
+
+    @ApiOperation(value="开课申请保存(接口待完成)",notes="开课申请保存(接口待完成)",response = Response.class)
+    @RequestMapping(value = "startClassSave", method = RequestMethod.POST)
+    public Response startClassSave(@ApiParam(value = "省")@RequestParam(required = false) String province,
+                                         @RequestParam(required = false)String pageNo,
+                                         @RequestParam(required = false)String pageSize)  {
+        Response response = new Response();
+
+        return response;
+    }
+
+    @ApiOperation(value="专家培训详情(接口待完成)",notes="专家培训详情(接口待完成)",response = Response.class)
+    @RequestMapping(value = "queryExpertTrainInfoById", method = RequestMethod.GET)
+    public Response queryExpertTrainInfoById(@RequestParam String id)  {
+        Response response = new Response();
+
         return response;
     }
 }
