@@ -11,6 +11,7 @@ import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,15 +48,12 @@ public class AuthenticationController {
             response.setMessage("you are rejected!");
             map.put("authorized", false);
         } else {
-            ShiroUser principal = (ShiroUser) session.getAttribute("member");
-            if (null == principal) {
+            ShiroUser member = (ShiroUser) session.getAttribute("member");
+            if (null == member) {
                 response.setMsgCode(0);
                 response.setMessage("you are rejected!");
                 map.put("authorized", false);
             } else {
-                LoginMember member = new LoginMember();
-                member.setAccount(principal.getAccount());
-                member.setId(principal.getId());
                 response.setMsgCode(1);
                 response.setMessage("welcome you!");
                 map.put("authorized", true);
@@ -95,62 +93,4 @@ public class AuthenticationController {
         return response;
     }
 
-    public static class LoginMember {
-        private String account;
-        private Long id;
-        private int ordercount;
-        private int msgcount;
-
-        public Long getId() {
-            return id;
-        }
-
-        public void setId(Long id) {
-            this.id = id;
-        }
-
-        public String getAccount() {
-            return account;
-        }
-
-        public void setAccount(String account) {
-            this.account = account;
-        }
-
-        public int getOrdercount() {
-            return ordercount;
-        }
-
-        public void setOrdercount(int ordercount) {
-            this.ordercount = ordercount;
-        }
-
-        public int getMsgcount() {
-            return msgcount;
-        }
-
-        public void setMsgcount(int msgcount) {
-            this.msgcount = msgcount;
-        }
-
-        /**
-         * 重载equals,只计算account;
-         */
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            LoginMember other = (LoginMember) obj;
-
-            if (account == null) {
-                return false;
-            } else if (account.equals(other.account))
-                return true;
-            return false;
-        }
-    }
 }

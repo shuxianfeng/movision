@@ -38,15 +38,14 @@ public class MembersController {
 		Map<String, Object> ret = null;
 		try{
 			ret = membersService.searchContractors(spec);
+			response.setMsgCode(1);
+			response.setMessage("OK!");
+			response.setData(ret);
 		}
 		catch (Exception e) {
 			response.setMsgCode(0);
 			response.setMessage("search error!");
 		}
-		
-		response.setMsgCode(1);
-		response.setMessage("OK!");
-		response.setData(ret);
 
 		return response;
 	}
@@ -62,15 +61,14 @@ public class MembersController {
 		Map<String, Object> ret = null;
 		try{
 			ret = membersService.searchSuppliers(spec);
+			response.setMsgCode(1);
+			response.setMessage("OK!");
+			response.setData(ret);
 		}
 		catch (Exception e) {
 			response.setMsgCode(0);
 			response.setMessage("search error!");
 		}
-		
-		response.setMsgCode(1);
-		response.setMessage("OK!");
-		response.setData(ret);
 
 		return response;
 	}

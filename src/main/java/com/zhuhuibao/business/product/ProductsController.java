@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.fsearch.pojo.ProductSearchSpec;
+
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.zhuhuibao.fsearch.service.impl.ProductsService;
+
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -37,15 +40,14 @@ public class ProductsController {
 		Map<String, Object> ret = null;
 		try{
 			ret = productsService.search(spec);
+			response.setMsgCode(1);
+			response.setMessage("OK!");
+			response.setData(ret);
 		}
 		catch (Exception e) {
 			response.setMsgCode(0);
 			response.setMessage("search error!");
 		}
-		
-		response.setMsgCode(1);
-		response.setMessage("OK!");
-		response.setData(ret);
 
 		return response;
 	}

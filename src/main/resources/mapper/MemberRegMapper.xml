@@ -86,4 +86,19 @@
   		</if>
   	</where> 
   </update>
+  
+  <select id="getLoginMemberByAccount" parameterType="memberReg" resultType="com.zhuhuibao.mybatis.memberReg.entity.LoginMember">
+    select a.id,case when a.mobile != '' or a.mobile != null then a.mobile when a.email!= '' or a. email != null then a.email end as account,
+    a.password,a.status,b.name identifyname,if(a.workType=100,'管理员',c.name)  rolename
+    from t_m_member a left join t_dictionary_identity b on a.identify=b.id
+    left join t_dictionary_workType c on a.workType=c.id
+    WHERE status != 0 and status != 2
+    <if test="mobile != null and mobile != '' " >
+        AND mobile = #{mobile}
+    </if>
+    <if test="email != null" >
+        AND email = #{email}
+    </if>
+  </select>
+  
 </mapper>
