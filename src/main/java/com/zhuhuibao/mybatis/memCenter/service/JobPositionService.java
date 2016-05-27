@@ -266,13 +266,16 @@ public class JobPositionService {
      * @param id 职位ID
      * @return
      */
-    public Response queryPositionInfoByID(Long id) throws Exception
+    public Response queryPositionInfoByID(Long id)
     {
         log.info("query position info by id = "+id);
         Response response = new Response();
         try
         {
-            Job job = jobMapper.queryPositionInfoByID(id);
+            Map<String,Object> job = jobMapper.queryPositionInfoByID(id);
+            Long isApply = (Long) job.get("isApply");
+            job.put("isApply",(isApply == 0 ? false:true));
+
             response.setData(job);
         }
         catch(Exception e)

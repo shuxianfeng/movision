@@ -7,6 +7,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
@@ -73,18 +74,28 @@ public class JobSiteController {
         Response response = new Response();
         if(createid != null)
         {
+
             Resume rme = resume.queryResumeByCreateId(createid);
-            if(rme != null && rme.getId() != null) {
+            if (rme != null && rme.getId() != null) {
                 Long resumeID = Long.valueOf(rme.getId());
-                MessageText msgText = new MessageText();
-                msgText.setSendID(createid);
-                msgText.setRecID(Long.valueOf(recID));
-                msgText.setMessageText(messageText);
-                msgText.setTypeID(resumeID);
-                msgText.setType(JobConstant.SITEMAIL_TYPE_JOB_ELEVEN);
-                response = smService.addSiteMail(msgText);
-                jrrService.insert(Long.valueOf(jobID), resumeID);
+                Map<String,Object> map = new HashMap<String,Object>();
+                map.put("jobID",jobID);
+                map.put("resumeID",resumeID);
+                //职位没有被申请过或者申请10天后可以再次申请
+                if(jrrService.isExistApplyPosition(map) == 0) {
+                    MessageText msgText = new MessageText();
+                    msgText.setSendID(createid);
+                    msgText.setRecID(Long.valueOf(recID));
+                    msgText.setMessageText(messageText);
+                    msgText.setTypeID(resumeID);
+                    msgText.setType(JobConstant.SITEMAIL_TYPE_JOB_ELEVEN);
+                    response = smService.addSiteMail(msgText);
+                    //删除有可能存在的简历和职位对应的关系
+                    jrrService.deleteJobRelResume(map);
+                    jrrService.insert(Long.valueOf(jobID), resumeID,createid);
+                }
             }
+
         }
         else
         {
@@ -158,7 +169,7 @@ public class JobSiteController {
 
     @RequestMapping(value="queryPositionInfoByID", method = RequestMethod.GET)
     @ApiOperation(value = "职位详情页面",notes = "职位搜索查看职位详情",response = Response.class)
-    public Response queryPositionInfoByID(@ApiParam(value = "招聘职位ID") @RequestParam Long id) throws Exception
+    public Response queryPositionInfoByID(@ApiParam(value = "招聘职位ID") @RequestParam Long id)
     {
         Response response = job.queryPositionInfoByID(id);
         job.updateViews(id);
