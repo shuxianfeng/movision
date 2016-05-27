@@ -14,5 +14,5 @@ public interface DistributedOrderMapper {
 
     int updateDistributedStatus(DistributedOrder distributedOrder);
 
-    List<DistributedOrder> findAllDistributedOrder(RowBounds rowBounds,Map<String,Object> map);
+    List<Map<String,String>> findAllDistributedOrder(RowBounds rowBounds,Map<String,Object> map);
 }

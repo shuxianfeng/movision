@@ -5,7 +5,7 @@ import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
 import java.util.Map;
 
 public interface JobRelResumeMapper {
-    int deleteByPrimaryKey(Long id);
+    int deleteJobRelResume(Map<String,Object> map);
 
     int insert(JobRelResume record);
 

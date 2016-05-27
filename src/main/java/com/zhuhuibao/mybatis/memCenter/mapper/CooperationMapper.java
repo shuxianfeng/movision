@@ -15,9 +15,6 @@ public interface CooperationMapper {
     //编辑任务
     int updateCooperation(Cooperation record);
 
-    //项目类别
-    List<ResultBean> cooperationCategory();
-
     //删除任务
     int deleteCooperation(String id);
 
@@ -25,7 +22,7 @@ public interface CooperationMapper {
     Cooperation queryCooperationInfoById(String id);
 
     //根据条件查询任务信息列表（分页）
-    List<Cooperation> findAllCooperationByPager(RowBounds rowBounds,Cooperation cooperation);
+    List<Map<String,String>> findAllCooperationByPager(RowBounds rowBounds,Cooperation cooperation);
 
     //最热合作信息
     List<Cooperation> queryHotCooperation(Map<String,Object> map);

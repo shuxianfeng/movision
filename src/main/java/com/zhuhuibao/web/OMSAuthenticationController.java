@@ -61,7 +61,7 @@ public class OMSAuthenticationController {
         
         response.setData(map);
 
-        log.debug("caijl:/rest/web/authc is called,msgcode=["+ response.getMsgCode()+"],Message=["+ response.getMessage()+"].");
+        log.debug("caijl:/rest/oms/authc is called,msgcode=["+ response.getMsgCode()+"],Message=["+ response.getMessage()+"].");
         return response;
 
     }

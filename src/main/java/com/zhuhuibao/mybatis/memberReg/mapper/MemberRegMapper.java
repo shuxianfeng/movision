@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.memberReg.mapper;
 
 import java.util.*;
 
+import com.zhuhuibao.mybatis.memberReg.entity.LoginMember;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 
 public interface MemberRegMapper {
@@ -30,5 +31,7 @@ public interface MemberRegMapper {
 	int updateMemberValidatePass(Member member);
 	
 	Member findMemberInfoById(Long id);
+	
+	LoginMember getLoginMemberByAccount(Member member);
 	
 }

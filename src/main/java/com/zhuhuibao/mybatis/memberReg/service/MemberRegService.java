@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.exception.BusinessException;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.session.Session;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
+import com.zhuhuibao.mybatis.memberReg.entity.LoginMember;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper;
@@ -477,7 +479,8 @@ public class MemberRegService {
 						this.registerMember(member);
 						this.deleteValidateInfo(info);
 						
-						ShiroUser shrioUser = new ShiroUser(member.getId(), member.getMobile(), member.getStatus());
+						ShiroUser shrioUser = new ShiroUser(member.getId(), member.getMobile(), member.getStatus(),
+								"1".equals(member.getIdentify()) ? "企业":"个人","管理员" );
 						Subject currentUser = SecurityUtils.getSubject();
 						Session session = currentUser.getSession();
 						session.setAttribute("member", shrioUser);
@@ -586,4 +589,34 @@ public class MemberRegService {
 		}
 		return response;
 	}
+	
+    /**
+     * 获取登录会员信息
+     * @param memberAccount 会员账号
+     * @return
+     */
+    public LoginMember getLoginMemberByAccount(String memberAccount)
+    {
+    	log.info("getLoginMemberByAccount accunt =="+memberAccount);
+    	Member member = new Member();
+    	LoginMember loginMember = new LoginMember();
+    	try
+    	{
+	    	if(memberAccount != null && memberAccount.indexOf("@") >= 0)
+	    	{
+	    		member.setEmail(memberAccount);
+	    	}
+	    	else
+	    	{
+	    		member.setMobile(memberAccount);
+	    	}
+	    	loginMember = memberRegMapper.getLoginMemberByAccount(member);
+    	}
+    	catch(Exception e)
+    	{
+    		log.error("find login memeber by account error",e);
+    	}
+    	return loginMember;
+    }
+
 }

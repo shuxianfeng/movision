@@ -220,9 +220,10 @@ public class ResumeService {
             resumeMap.put("jobArea",resume.getJobArea());
             resumeMap.put("hopeSalary",resume.getHopeSalary());
             resumeMap.put("status",resume.getStatus());
-            resumeMap.put("eduExperience",resume.getEduExperience());
-            resumeMap.put("jobExperience",resume.getJobExperience());
-            resumeMap.put("projectExperience",resume.getProjectExperience());
+            //表格内的使用“(char)11”换行，ascii码的制表符.表格外的参数使用“\r”换行
+            resumeMap.put("eduExperience",resume.getEduExperience().replaceAll("<br/>",String.valueOf((char)11)));
+            resumeMap.put("jobExperience",resume.getJobExperience().replaceAll("<br/>",String.valueOf((char)11)));
+            resumeMap.put("projectExperience",resume.getProjectExperience().replaceAll("<br/>",String.valueOf((char)11)));
         }
         return resumeMap;
     }
