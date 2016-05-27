@@ -107,7 +107,7 @@ public class ExhibitionService {
      * 会展信息列表
      * @param pager,map
      */
-    public List<Exhibition> findAllExhibition(Paging<Exhibition> pager,Map<String, Object> map){
+    public List<Map<String,String>> findAllExhibition(Paging<Map<String,String>> pager,Map<String, Object> map){
         try {
             return exhibitionMapper.findAllExhibition(pager.getRowBounds(),map);
         }catch (Exception e){
@@ -149,7 +149,7 @@ public class ExhibitionService {
      * 最新会展信息
      * @param map
      */
-    public List<Exhibition> findNewExhibition(Map<String,Object> map){
+    public List<Map<String,String>> findNewExhibition(Map<String,Object> map){
         try {
             return exhibitionMapper.findNewExhibition(map);
         }catch (Exception e){
@@ -177,7 +177,7 @@ public class ExhibitionService {
      * 分布式会展定制列表(运营)
      * @param pager,map
      */
-    public List<DistributedOrder> findAllDistributedOrder(Paging<DistributedOrder> pager,Map<String,Object> map){
+    public List<Map<String,String>> findAllDistributedOrder(Paging<Map<String,String>> pager,Map<String,Object> map){
         try {
             return distributedOrderMapper.findAllDistributedOrder(pager.getRowBounds(),map);
         }catch (Exception e){
