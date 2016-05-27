@@ -11,10 +11,28 @@ public class LoginMember {
 	 * 会员状态 0：未激活，1：注册成功，2：认证成功，3：vip会员
 	 */
 	private int status;
+    private String identify;
     private String identifyname;
+    private String role;
     private String rolename;
     private int ordercount;
     private int msgcount;
+
+    public String getIdentify() {
+        return identify;
+    }
+
+    public void setIdentify(String identify) {
+        this.identify = identify;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public Long getId() {
         return id;

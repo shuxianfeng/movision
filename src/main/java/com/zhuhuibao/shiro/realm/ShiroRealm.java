@@ -6,13 +6,11 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhuhuibao.mybatis.memberReg.entity.LoginMember;
-import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 
 import java.io.Serializable;
@@ -36,7 +34,7 @@ public class ShiroRealm extends AuthorizingRealm {
     	ShiroUser member = (ShiroUser)principals.fromRealm(getName()).iterator().next();
     	if(null != member){
     		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-    		info.addRole(member.getIdentifyname()+"."+member.getRolename());
+    		info.addRole(member.getIdentify()+"."+member.getRole());
     		return info;
     	}
         return null;
@@ -70,7 +68,7 @@ public class ShiroRealm extends AuthorizingRealm {
         // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(
                 new ShiroUser(loginMember.getId(), loginMember.getAccount(),loginMember.getStatus(),
-                		loginMember.getIdentifyname(),loginMember.getRolename()), // 用户
+                		loginMember.getIdentify(),loginMember.getRole()), // 用户
                 loginMember.getPassword(), // 密码
 //                ByteSource.Util.bytes("123"),
                 getName() // realm name
@@ -96,15 +94,15 @@ public class ShiroRealm extends AuthorizingRealm {
         private Long id;
         private String account;
         private int status;
-        private String identifyname;
-        private String rolename;
+        private String identify;
+        private String role;
 
-        public ShiroUser(Long id, String account, int status, String identifyname, String rolename) {
+        public ShiroUser(Long id, String account, int status, String identify, String role) {
             this.id = id;
             this.account = account;
             this.status = status;
-            this.identifyname = identifyname;
-            this.rolename = rolename;
+            this.identify = identify;
+            this.role = role;
         }
         
 		public Long getId() {
@@ -131,21 +129,21 @@ public class ShiroRealm extends AuthorizingRealm {
             this.status = status;
         }
 
-		public String getIdentifyname() {
-			return identifyname;
-		}
+        public String getRole() {
+            return role;
+        }
 
-		public void setIdentifyname(String identifyname) {
-			this.identifyname = identifyname;
-		}
+        public void setRole(String role) {
+            this.role = role;
+        }
 
-		public String getRolename() {
-			return rolename;
-		}
+        public String getIdentify() {
+            return identify;
+        }
 
-		public void setRolename(String rolename) {
-			this.rolename = rolename;
-		}
+        public void setIdentify(String identify) {
+            this.identify = identify;
+        }
 
         /**
          * 重载equals,只计算id+account;

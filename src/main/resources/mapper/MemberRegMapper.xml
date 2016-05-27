@@ -1,104 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper">
-  <insert id="registerMember" parameterType="memberReg" useGeneratedKeys="true" keyProperty="id">
+    <insert id="registerMember" parameterType="memberReg" useGeneratedKeys="true" keyProperty="id">
   	insert into t_m_member(mobile,email,password,registerTime,status,identify,emailCheckCode,workType) values
   	(#{mobile},#{email},#{password},str_to_date(#{registerTime},'%Y-%m-%d %H:%i:%s'),#{status},#{identify},#{emailCheckCode},#{workType})
   </insert>
-  <sql id="Base_Column_List" >
+    <sql id="Base_Column_List">
     id, mobile, email,password, date_format(registerTime,'%Y-%m-%d %H:%i:%s') registerTime, status,identify 
   </sql>
-  
-  <select id="findMemberByAccount" parameterType="memberReg" resultType="memberReg">
-    select
-    <include refid="Base_Column_List" />
-    from t_m_member WHERE status != 0 and status != 2
-   	<if test="mobile != null and mobile != '' " >
-   		AND mobile = #{mobile}
-   	</if>
-   	<if test="email != null" >
-   		AND email = #{email}
-   	</if>
-  </select>
-  
-  <select id="isExistAccount" parameterType="memberReg" resultType="int">
-    select count(1) from t_m_member WHERE status != 0 and status != 2
-   	<if test="mobile != null and mobile != '' " >
-   		AND mobile = #{mobile}
-   	</if>
-   	<if test="email != null and email != '' " >
-   		AND email = #{email}
-   	</if>
-  </select>
-  
-   <select id="findMemberByMail" resultType="com.zhuhuibao.mybatis.memberReg.entity.Member">
-    select
-    <include refid="Base_Column_List" />
-    from t_m_member
-    where email = #{email}
-   </select>
-   
-   <select id="findMemberInfoById" resultType="com.zhuhuibao.mybatis.memberReg.entity.Member">
+
+    <select id="findMemberByAccount" parameterType="memberReg" resultType="memberReg">
+        select
+        <include refid="Base_Column_List"/>
+        from t_m_member WHERE status != 0 and status != 2
+        <if test="mobile != null and mobile != '' ">
+            AND mobile = #{mobile}
+        </if>
+        <if test="email != null">
+            AND email = #{email}
+        </if>
+    </select>
+
+    <select id="isExistAccount" parameterType="memberReg" resultType="int">
+        select count(1) from t_m_member WHERE status != 0 and status != 2
+        <if test="mobile != null and mobile != '' ">
+            AND mobile = #{mobile}
+        </if>
+        <if test="email != null and email != '' ">
+            AND email = #{email}
+        </if>
+    </select>
+
+    <select id="findMemberByMail" resultType="com.zhuhuibao.mybatis.memberReg.entity.Member">
+        select
+        <include refid="Base_Column_List"/>
+        from t_m_member
+        where email = #{email}
+    </select>
+
+    <select id="findMemberInfoById" resultType="com.zhuhuibao.mybatis.memberReg.entity.Member">
     select id,case when mobile != '' or mobile != null then mobile when email!= '' or email != null then email end as  account,password, 
 	date_format(registerTime,'%Y-%m-%d %H:%i:%s') registerTime, status,identify,headShot
     from t_m_member
     where id = #{id}
    </select>
-  
-  <update id="updateEmailCode" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
-    update t_m_member 
-    <set>
-	    <if test="emailCheckCode != null" >
-	    	emailCheckCode = #{emailCheckCode}
-	    </if>
-    </set>
-    where email = #{email}
-  </update>
-  
-  <update id="updateMemberStatus" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
-  	update t_m_member
-  	<set>
-  		 <if test="status != null" >
-	    	status = #{status},
-	    </if>
-  	</set>
-  	where email = #{email} and id = #{id}
-  </update>
-  
-  <update id="updateMemberValidatePass" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
+
+    <update id="updateEmailCode" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
+        update t_m_member
+        <set>
+            <if test="emailCheckCode != null">
+                emailCheckCode = #{emailCheckCode}
+            </if>
+        </set>
+        where email = #{email}
+    </update>
+
+    <update id="updateMemberStatus" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
+        update t_m_member
+        <set>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+        where email = #{email} and id = #{id}
+    </update>
+
+    <update id="updateMemberValidatePass" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
   	update t_m_member set isValidatePass = #{isValidatePass}
   	where email = #{email} and id = #{id}
   </update>
-  
-  <update id="updateMemberPwd" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
-  	update t_m_member
-  	<set>
-  		<if test="password != null">
-  			password = #{password}
-  		</if>
-  	</set>
-  	<where>
-  		<if test="mobile != null">
-  			mobile = #{mobile}
-  		</if>
-  		<if test="email != null">
-  			email = #{email}
-  		</if>
-  	</where> 
-  </update>
-  
-  <select id="getLoginMemberByAccount" parameterType="memberReg" resultType="com.zhuhuibao.mybatis.memberReg.entity.LoginMember">
-    select a.id,case when a.mobile != '' or a.mobile != null then a.mobile when a.email!= '' or a. email != null then a.email end as account,
-    a.password,a.status,b.name identifyname,if(a.workType=100,'管理员',c.name)  rolename
-    from t_m_member a left join t_dictionary_identity b on a.identify=b.id
-    left join t_dictionary_workType c on a.workType=c.id
-    WHERE status != 0 and status != 2
-    <if test="mobile != null and mobile != '' " >
-        AND mobile = #{mobile}
-    </if>
-    <if test="email != null" >
-        AND email = #{email}
-    </if>
-  </select>
-  
+
+    <update id="updateMemberPwd" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
+        update t_m_member
+        <set>
+            <if test="password != null">
+                password = #{password}
+            </if>
+        </set>
+        <where>
+            <if test="mobile != null">
+                mobile = #{mobile}
+            </if>
+            <if test="email != null">
+                email = #{email}
+            </if>
+        </where>
+    </update>
+
+    <select id="getLoginMemberByAccount" parameterType="memberReg"
+            resultType="com.zhuhuibao.mybatis.memberReg.entity.LoginMember">
+        select a.id,case when a.mobile != '' or a.mobile != null then a.mobile when a.email!= '' or a. email != null
+        then a.email end as account,
+        a.password,a.status,b.id identify,b.name identifyname,if(a.workType=100,'管理员',c.name) rolename,c.id role
+        from t_m_member a left join t_dictionary_identity b on a.identify=b.id
+        left join t_dictionary_workType c on a.workType=c.id
+        WHERE status != 0 and status != 2
+        <if test="mobile != null and mobile != '' ">
+            AND mobile = #{mobile}
+        </if>
+        <if test="email != null">
+            AND email = #{email}
+        </if>
+    </select>
+
 </mapper>
