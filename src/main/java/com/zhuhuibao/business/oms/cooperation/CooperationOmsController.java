@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 威客运营接口
@@ -47,14 +48,14 @@ public class CooperationOmsController {
             pageSize = "10";
         }
         Response response = new Response();
-        Paging<Cooperation> pager = new Paging<Cooperation>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
         Cooperation cooperation = new Cooperation();
         cooperation.setType(type);
         cooperation.setTitle(title);
         cooperation.setStatus(status);
         cooperation.setProvince(province);
         cooperation.setCity(city);
-        List<Cooperation> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
+        List<Map<String,String>> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
         pager.result(cooperationList);
         response.setData(pager);
         return response;

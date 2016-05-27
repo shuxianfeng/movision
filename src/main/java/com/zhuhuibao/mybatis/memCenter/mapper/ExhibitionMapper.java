@@ -13,8 +13,8 @@ public interface ExhibitionMapper {
 
     int updateExhibitionInfoById(Exhibition record);
 
-    List<Exhibition> findAllExhibition(RowBounds rowBounds,Map<String, Object> map);
+    List<Map<String,String>> findAllExhibition(RowBounds rowBounds,Map<String, Object> map);
 
-    List<Exhibition> findNewExhibition(Map<String,Object> map);
+    List<Map<String,String>> findNewExhibition(Map<String,Object> map);
 
 }
