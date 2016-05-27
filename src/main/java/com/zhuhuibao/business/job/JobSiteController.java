@@ -418,6 +418,9 @@ public class JobSiteController {
         if(createID != null) {
             Boolean isExist = resume.isExistResume(createID);
             response.setData(isExist);
+        }else
+        {
+            response.setData(false);
         }
         return response;
     }
