@@ -65,7 +65,7 @@ public class JobSiteController {
 
     @RequestMapping(value="applyPosition", method = RequestMethod.POST)
     @ApiOperation(value="应聘职位",notes = "应聘职位",response = Response.class)
-    public Response applyPosition(@ApiParam(value = "简历ID") @RequestParam String jobID,
+    public Response applyPosition(@ApiParam(value = "职位ID") @RequestParam String jobID,
                                   @ApiParam(value = "发布职位企业ID") @RequestParam String recID,
                                   @ApiParam(value = "职位标题") @RequestParam String messageText) throws IOException
     {
@@ -74,7 +74,6 @@ public class JobSiteController {
         Response response = new Response();
         if(createid != null)
         {
-
             Resume rme = resume.queryResumeByCreateId(createid);
             if (rme != null && rme.getId() != null) {
                 Long resumeID = Long.valueOf(rme.getId());
