@@ -1,12 +1,11 @@
 package com.zhuhuibao.utils.pagination.util;
 
-import com.zhuhuibao.mybatis.oms.entity.User;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Date Created  2014-2-18
@@ -30,7 +29,7 @@ public abstract class StringUtils {
      * @return {@code true} if the CharSequence is empty or null
      */
     public static boolean isEmpty(final String cs) {
-        return cs == null || cs.length() == 0;
+        return cs == null || cs.length() == 0 || Objects.equals(cs, "null");
     }
 
 
@@ -99,13 +98,13 @@ public abstract class StringUtils {
      * @return 返回键值对形式的字符串
      */
     public static String mapToString(Map map) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("Map:{");
         for (Object obj : map.entrySet()) {
             Map.Entry entry = (Map.Entry) obj;
             Object key = entry.getKey();
             Object value = entry.getValue();
-            sb.append(key +"="+value);
+            sb.append(key).append("=").append(value);
             sb.append(" ");
         }
         sb.append("}");

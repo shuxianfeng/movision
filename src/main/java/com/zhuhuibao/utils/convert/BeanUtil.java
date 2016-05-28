@@ -39,7 +39,7 @@ public class BeanUtil {
      * @param obj bean
      * @return map
      */
-    public static Map<?, ?> objectToMap(Object obj) {
+    public static Map objectToMap(Object obj) {
         if (obj == null)
             return null;
 

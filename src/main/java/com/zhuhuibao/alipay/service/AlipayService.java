@@ -3,30 +3,26 @@ package com.zhuhuibao.alipay.service;
 import com.google.common.collect.Maps;
 import com.zhuhuibao.alipay.config.AliPayConfig;
 import com.zhuhuibao.alipay.util.AlipayNotify;
-import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.alipay.util.AlipaySubmit;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.order.entity.AlipayCallbackLog;
-import com.zhuhuibao.mybatis.order.entity.AlipayRefundCallbackLog;
-import com.zhuhuibao.mybatis.order.entity.Order;
-import com.zhuhuibao.mybatis.order.entity.OrderGoods;
-import com.zhuhuibao.mybatis.order.service.AlipayRefundCallbackLogService;
-import com.zhuhuibao.mybatis.order.service.OrderGoodsService;
-import com.zhuhuibao.mybatis.order.service.OrderService;
-import com.zhuhuibao.mybatis.order.service.AlipayCallbackLogService;
+import com.zhuhuibao.mybatis.order.entity.*;
+import com.zhuhuibao.mybatis.order.service.*;
 import com.zhuhuibao.utils.CommonUtils;
 import com.zhuhuibao.utils.IdGenerator;
 import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.convert.DateConvert;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -46,6 +42,7 @@ import java.util.Map;
  * 支付宝服务入口
  */
 @Service
+@Transactional
 public class AlipayService {
     private static final Logger log = LoggerFactory.getLogger(AlipayService.class);
 
@@ -65,22 +62,9 @@ public class AlipayService {
     @Autowired
     private AlipayRefundCallbackLogService refundCallbackLogService;
 
-    /**
-     * 组装基本参数
-     *
-     * @return paramMap
-     */
-    private Map<String, String> genBasicParmas() {
-        Map<String, String> paramMap = new HashMap<>();
+    @Autowired
+    private RefundService refundService;
 
-        //partner == seller_id
-//        paramMap.put("partner", aliPayConfig.getPartner());
-//        paramMap.put("seller_id", aliPayConfig.getPartner());
-        paramMap.put("_input_charset", aliPayConfig.getInputCharset());
-        paramMap.put("payment_type", aliPayConfig.getPaymentType());
-
-        return paramMap;
-    }
 
     /**
      * 支付包支付请求
@@ -89,21 +73,96 @@ public class AlipayService {
      * @param method   提交方式。两个值可选：post、get
      * @return html
      */
-    public String alipay(Map<String, String> msgParam, String method) throws ParseException {
+    public String alipay(Map<String, String> msgParam, String method) throws Exception {
 
-
-        //生成订单号,交易流水号
+        //生成订单号
         String orderNo = IdGenerator.createOrderNo();
         msgParam.put("orderNo", orderNo);
 
-        //请求参数校验
-        checkParams(msgParam);
+        //支付请求参数校验
+        checkPayParams(msgParam);
 
-        //生成一条订单记录
+        //记录订单信息
         genOrderRecord(msgParam);
 
         //支付操作
         return doPay(msgParam, method);
+    }
+
+    /**
+     * 支付宝退款请求
+     *
+     * @param msgParam 请求参数集合
+     * @param method   提交方式。两个值可选：post、get
+     * @return
+     * @throws ParseException
+     */
+    public String alirefund(Map<String, String> msgParam, String method) throws ParseException {
+
+        //生成批量退款批次号
+        String bathcNo = IdGenerator.createBatchNo();
+        msgParam.put("batchNo", bathcNo);
+
+        //退款请求参数校验
+        checkRefundParams(msgParam);
+
+        //记录退款申请信息
+        genRefundRecord(msgParam);
+
+        return doRefund(msgParam, method);
+    }
+
+    /**
+     * 记录退款申请记录 (t_o_refund)
+     *
+     * @param msgParam params
+     */
+    private void genRefundRecord(Map<String, String> msgParam) throws ParseException {
+        log.debug("request params:{}", msgParam.toString());
+        Refund refund = new Refund();
+        refund.setBatchNo(msgParam.get("batchNo"));
+        refund.setBatchNum(Integer.valueOf(msgParam.get("batchNum")));
+        refund.setOperatorId(Integer.valueOf(msgParam.get("operatorId")));
+        refund.setOrderNo(msgParam.get("orderNo"));
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        refund.setRefundDate(sf.parse(msgParam.get("refundDate")));
+        refund.setTotalFee(Long.valueOf(msgParam.get("totalFee")));
+
+        refundService.insert(refund);
+
+    }
+
+    /**
+     * 退款请求参数校验
+     *
+     * @param msgParam 请求参数集合
+     */
+    private void checkRefundParams(Map<String, String> msgParam) {
+        String orderNo = msgParam.get("orderNo");//退款订单编号
+        if (StringUtils.isEmpty(orderNo)) {
+            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "退款订单编号不能为空");
+        }
+
+        String operatorId = msgParam.get("operatorId");//操作员ID
+        if (StringUtils.isEmpty(operatorId)) {
+            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "操作员ID不能为空");
+        }
+
+        String refundDate = msgParam.get("refundDate");//退款申请时间
+        if (StringUtils.isEmpty(refundDate)) {
+            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "退款申请时间不能为空");
+        }
+
+        String totalFee = msgParam.get("totalFee");//退款总金额
+        if (StringUtils.isEmpty(totalFee)) {
+            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "退款总金额不能为空");
+        }
+
+        String batchNum = msgParam.get("batchNum");//退款笔数
+        if (StringUtils.isEmpty(batchNum)) {
+            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "退款笔数不能为空");
+        }
+
     }
 
     /**
@@ -228,22 +287,27 @@ public class AlipayService {
     }
 
     /**
-     * 生成一条订单记录
+     * 生成一条订单记录  (t_o_order)
      *
      * @param msgParam 请求参数
      */
-    private void genOrderRecord(Map<String, String> msgParam) throws ParseException {
-        log.debug("request params:{}", msgParam.toString());
+    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
+    private void genOrderRecord(Map<String, String> msgParam){
+        log.info("request params:{}", msgParam.toString());
+
         Order order = new Order();
         order.setOrderNo(msgParam.get("orderNo"));
         order.setBuyerId(Long.valueOf(msgParam.get("buyerId")));
-        order.setSellerId(msgParam.get("seller_id"));
-        Date dealTime;
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        dealTime = sf.parse(msgParam.get("dealTime"));
-        order.setDealTime(dealTime);
-        order.setAmount(BigDecimal.valueOf(Long.valueOf(msgParam.get("amount")))); //订单总金额
-        order.setPayAmount(BigDecimal.valueOf(Long.valueOf(msgParam.get("payAmount"))));  //交易金额
+        order.setSellerId(msgParam.get("partner"));
+//        Date dealTime;
+//        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        dealTime = sf.parse(msgParam.get("dealTime"));
+//        order.setDealTime(dealTime);
+        order.setDealTime(new Date());
+        String amount = msgParam.get("amount");
+        order.setAmount(BigDecimal.valueOf(Long.valueOf(amount))); //订单总金额
+        String payAmount = msgParam.get("payAmount");
+        order.setPayAmount(BigDecimal.valueOf(Long.valueOf(payAmount)));  //交易金额
         order.setGoodsType(msgParam.get("goodsType"));
         order.setPayMode(msgParam.get("payMode"));
         order.setStatus(PayConstants.OrderStatus.WZF.toString());
@@ -261,6 +325,13 @@ public class AlipayService {
 
         orderGoodsService.insert(orderGoods);
 
+        //如果是技术培训 需要记录订单SN码 t_o_pwdticket
+        if(msgParam.get("goodsType").equals(OrderConstants.GoodsType.JSPX.toString())){
+            PwdTicket pwdTicket = new PwdTicket();
+            pwdTicket.setMobile(msgParam.get("mobile"));
+
+            //......
+        }
     }
 
 
@@ -273,16 +344,15 @@ public class AlipayService {
      */
     private String doPay(Map<String, String> msgParam, String method) {
 
-        Map<String, String> basicMap = genBasicParmas();
         Map<String, String> sParaTemp = new HashMap<>();
-        sParaTemp.putAll(basicMap);
-
         //基本参数
+        sParaTemp.put("_input_charset", aliPayConfig.getInputCharset());//编码格式
+        sParaTemp.put("payment_type", aliPayConfig.getPaymentType());   //支付类型 ，无需修改
         sParaTemp.put("service", msgParam.get("service"));              //接口名称
         sParaTemp.put("notify_url", msgParam.get("notifyUrl"));         //服务器异步通知页面路径
 //        sParaTemp.put("return_url", msgParam.get("returnUrl"));       //页面跳转同步通知页面路径
-        sParaTemp.put("partner", msgParam.get("seller_id"));            //合作伙伴ID  == 商家支付宝账户号
-        sParaTemp.put("seller_id", msgParam.get("seller_id"));          //partner = seller_id
+        sParaTemp.put("partner", msgParam.get("partner"));            //合作伙伴ID  == 商家支付宝账户号
+        sParaTemp.put("seller_id", msgParam.get("partner"));          //partner = seller_id
 
         //业务参数
         sParaTemp.put("out_trade_no", msgParam.get("orderNo"));          //商户网站唯一订单号
@@ -305,26 +375,48 @@ public class AlipayService {
         }
 
 
-        log.debug("Alipay 请求参数:{}", sParaTemp.toString());
+        log.info("Alipay 支付请求参数:{}", sParaTemp.toString());
         return AlipaySubmit.buildRequest(sParaTemp, method, "确认");
     }
 
     /**
      * 即时到账批量退款接口
-     * @param msgParam   请求参数
-     * @param method     请求方法{get,post}
-     * @return  html
+     *
+     * @param msgParam 请求参数
+     * @param method   请求方法{get,post}
+     * @return html
      */
     private String doRefund(Map<String, String> msgParam, String method) {
-        return null;
+        Map<String, String> sParaTemp = new HashMap<>();
+        //基本参数
+        sParaTemp.put("_input_charset", aliPayConfig.getInputCharset());//编码格式
+        sParaTemp.put("service", msgParam.get("service"));
+        sParaTemp.put("notify_url", msgParam.get("notifyUrl"));
+        sParaTemp.put("partner", msgParam.get("partner"));
+        sParaTemp.put("seller_user_id", msgParam.get("partner"));
+        sParaTemp.put("refund_date", msgParam.get("refundDate"));
+        sParaTemp.put("batch_no", msgParam.get("batchNo"));
+        String batchNum = msgParam.get("batchNum");
+        sParaTemp.put("batch_num", batchNum);      //退款笔数
+        String detailDate = msgParam.get("detailDate");
+        sParaTemp.put("detail_data", detailDate);  //退款详细数据 必填(支付宝交易号^退款金额^备注)多笔请用#隔开
+        int count = CommonUtils.getCountAppearInString(detailDate, "#");
+        if (count != Integer.valueOf(batchNum)) {
+            log.error("退款笔数[{}]与退款详情中的记录数[{}]不相等", batchNum, count);
+            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR,
+                    "退款笔数 " + batchNum + " 与退款详情中的记录数 " + count + " 不相等");
+        }
+
+        log.info("Alipay 退款请求参数:{}", sParaTemp.toString());
+        return AlipaySubmit.buildRequest(sParaTemp, method, "确认");
     }
 
     /**
-     * 请求参数校验
+     * 支付请求参数校验
      *
      * @param msgParam 请求参数
      */
-    private void checkParams(Map<String, String> msgParam) {
+    private void checkPayParams(Map<String, String> msgParam) {
         String goodsId = msgParam.get("goodsId");//商品ID
         if (StringUtils.isEmpty(goodsId)) {
             throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "商品ID不能为空");
@@ -337,7 +429,7 @@ public class AlipayService {
         if (StringUtils.isEmpty(goodsPrice)) {
             throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "商品单价不能为空");
         }
-        String buyersid = msgParam.get("buyersId");//创建订单的会员ID
+        String buyersid = msgParam.get("buyerId");//创建订单的会员ID
         if (StringUtils.isEmpty(buyersid)) {
             throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "创建订单会员ID不能为空");
         }
@@ -351,11 +443,14 @@ public class AlipayService {
             throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "订单商品总额不能为空");
         }
 
-        String mobile = msgParam.get("mobile");//手机号码
-        if (StringUtils.isEmpty(mobile)) {
-            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "手机号码不能为空");
+        String payAmount = msgParam.get("payAmount");//订单交易金额
+        if (StringUtils.isEmpty(payAmount)) {
+            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "订单交易金额不能为空");
         }
-
+//        String mobile = msgParam.get("mobile");//手机号码
+//        if (StringUtils.isEmpty(mobile)) {
+//            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "手机号码不能为空");
+//        }
 
         String paymode = msgParam.get("payMode");//支付方式
         if (StringUtils.isEmpty(paymode)) {
@@ -364,6 +459,11 @@ public class AlipayService {
         String goodsType = msgParam.get("goodsType");//商品类型
         if (StringUtils.isEmpty(goodsType)) {
             throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "商品类型不能为空");
+        }
+
+        String partner = msgParam.get("partner");// 卖方商家支付宝账号
+        if (StringUtils.isEmpty(partner)) {
+            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "卖方商家支付宝账号不能为空");
         }
 
 //        String returnUrl = msgParam.get("returnUrl");// 同步通知
@@ -423,7 +523,7 @@ public class AlipayService {
      * @return
      */
     public Map<String, String> tradeSuccessDeal(Map<String, String> params, String notifyType, String tradeType) throws ParseException {
-        log.debug("支付返回成功,业务逻辑处理...");
+        log.info("支付返回成功,业务逻辑处理...");
         Map<String, String> resultMap = new HashMap<>();
 
         try {
@@ -431,7 +531,7 @@ public class AlipayService {
             //1-> 记录支付宝回调信息 交易流水信息
             //异步通知
             if (notifyType.equals(PayConstants.NotifyType.ASYNC.toString())) {
-                log.debug("异步通知返回记录处理...");
+                log.info("异步通知返回记录处理...");
                 //即时到账支付
                 if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
                     recordPayAsyncCallbackLog(params);
@@ -443,7 +543,7 @@ public class AlipayService {
             }
             //同步通知
             if (notifyType.equals(PayConstants.NotifyType.SYNC.toString())) {
-                log.debug("同步通知返回记录处理...");
+                log.info("同步通知返回记录处理...");
             }
 
 
@@ -472,7 +572,7 @@ public class AlipayService {
      * @param params
      */
     private void recordRefundAsyncCallbackLog(Map<String, String> params) {
-        log.debug("支付宝即时到账退款接口,异步通知返回记录 入表操作...");
+        log.info("支付宝即时到账退款接口,异步通知返回记录 入表操作...");
         AlipayRefundCallbackLog refundCallbackLog = new AlipayRefundCallbackLog();
         ConvertUtils.register(new DateConvert(), Date.class);
         Map<String, String> pMap = Maps.newHashMap();
@@ -497,7 +597,7 @@ public class AlipayService {
      * @param params
      */
     private void recordPayAsyncCallbackLog(Map<String, String> params) {
-        log.debug("支付宝即时到账接口 ,异步通知返回记录 入表操作... ");
+        log.info("支付宝即时到账接口 ,异步通知返回记录 入表操作... ");
         AlipayCallbackLog alipayCallbackLog = new AlipayCallbackLog();
         ConvertUtils.register(new DateConvert(), Date.class);
         Map<String, String> pMap = Maps.newHashMap();

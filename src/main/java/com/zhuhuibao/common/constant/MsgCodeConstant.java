@@ -148,4 +148,14 @@ public interface MsgCodeConstant {
 	 * 更新失败
 	 */
 	int DB_UPDATE_FAIL = 2001;
+
+	/**
+	 * 参数校验错误
+	 */
+	int PARAMS_VALIDATE_ERROR = 4000;
+
+	/**
+	 * 系统异常
+	 */
+	int SYSTEM_ERROR = 4001;
 }

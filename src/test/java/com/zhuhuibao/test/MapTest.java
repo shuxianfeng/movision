@@ -36,7 +36,7 @@ public class MapTest {
         System.out.println("--- Bean Info: ");
         System.out.println("orderNo: " + order.getOrderNo());
 
-        BeanUtil.objectToMap(order);
+       Map mp =  BeanUtil.objectToMap(order);
 
     }
 

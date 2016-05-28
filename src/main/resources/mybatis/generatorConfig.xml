@@ -56,8 +56,8 @@
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <table tableName="t_o_order"
-               domainObjectName="Order"
+        <table tableName="t_o_pwdticket"
+               domainObjectName="PwdTicket"
                enableCountByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"

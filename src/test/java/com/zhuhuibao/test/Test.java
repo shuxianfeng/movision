@@ -1,6 +1,8 @@
 package com.zhuhuibao.test;
 
 import com.google.gson.Gson;
+import com.zhuhuibao.fsearch.utils.StringUtil;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -120,15 +122,16 @@ public class Test extends BaseSpringContext {
 //        Gson gson = new Gson();
 //        gson.toJson(map1);
 //        System.out.println(gson.toJson(map1));
-        Long start = System.currentTimeMillis();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Long end = System.currentTimeMillis();
-
-        System.out.println("use time :" + (end - start) + "ms");
+//        Long start = System.currentTimeMillis();
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        Long end = System.currentTimeMillis();
+//
+//        System.out.println("use time :" + (end - start) + "ms");
+        System.out.println(StringUtils.isEmpty("null"));
 
     }
 

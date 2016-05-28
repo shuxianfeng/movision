@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuhuibao.mybatis.order.mapper.RefundMapper">
+
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.order.entity.Refund">
+    <result column="batchNo" jdbcType="VARCHAR" property="batchNo" />
+    <result column="orderNo" jdbcType="VARCHAR" property="orderNo" />
+    <result column="operatorId" jdbcType="INTEGER" property="operatorId" />
+    <result column="refundDate" jdbcType="TIMESTAMP" property="refundDate" />
+    <result column="batchNum" jdbcType="INTEGER" property="batchNum" />
+    <result column="totalFee" jdbcType="DECIMAL" property="totalFee" />
+  </resultMap>
+  <insert id="insert" parameterType="com.zhuhuibao.mybatis.order.entity.Refund">
+    insert into t_o_refund (batchNo, orderNo, operatorId, 
+      refundDate, batchNum, totalFee
+      )
+    values (#{batchNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{operatorId,jdbcType=INTEGER}, 
+      #{refundDate,jdbcType=TIMESTAMP}, #{batchNum,jdbcType=INTEGER}, #{totalFee,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.order.entity.Refund">
+    insert into t_o_refund
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="batchNo != null">
+        batchNo,
+      </if>
+      <if test="orderNo != null">
+        orderNo,
+      </if>
+      <if test="operatorId != null">
+        operatorId,
+      </if>
+      <if test="refundDate != null">
+        refundDate,
+      </if>
+      <if test="batchNum != null">
+        batchNum,
+      </if>
+      <if test="totalFee != null">
+        totalFee,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="batchNo != null">
+        #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=INTEGER},
+      </if>
+      <if test="refundDate != null">
+        #{refundDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="batchNum != null">
+        #{batchNum,jdbcType=INTEGER},
+      </if>
+      <if test="totalFee != null">
+        #{totalFee,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+</mapper>
