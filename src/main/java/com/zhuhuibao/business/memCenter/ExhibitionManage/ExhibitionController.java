@@ -28,7 +28,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/11 0011.
  */
 @RestController
-@RequestMapping("/oms/expo")
+@RequestMapping("/expo/base/")
 public class ExhibitionController {
     private static final Logger log = LoggerFactory.getLogger(ExhibitionController.class);
 
