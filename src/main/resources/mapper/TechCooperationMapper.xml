@@ -233,19 +233,25 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <update id="updateTechCooperationViews" parameterType="java.lang.Long" >
+    update t_tech_cooperation set views = views+1
+    where id = #{id}
+  </update>
   <select id="findAllTechCooperationPager" parameterType="java.util.Map" resultType="java.util.Map">
-    select t.id, t.createID, t.publishTime, t.updateTime, t.title, t.systemCategory, t.applicationArea, t.linkman,
+    select t.id, t.createID, t.publishTime, t.updateTime, t.title, dc.name systemCategory, dn.name applicationArea, t.linkman,
     t.companyName, t.telephone, t.email, po.name province,ct.name city,ar.name area, t.address, t.cooperation, t.type,
     t.status,t.notes from t_tech_cooperation t
     left join t_dictionary_province po on po.code = t.province
     left join t_dictionary_city ct on ct.code = t.city
     left join t_dictionary_area ar on ar.code = t.area
-	 <where>
+    left join t_dictionary_constant dc on dc.code = t.systemCategory and dc.type =19
+    left join t_dictionary_constant dn on dn.code = t.applicationArea and dn.type =18
+    where t.status != 4
        <if test="status != null">
           and t.status = #{status}
        </if>
        <if test="title != null">
-         and t.title like concat('%',#{status},'%')
+         and t.title like concat('%',#{title},'%')
        </if>
        <if test="systemCategory != null">
        and t.systemCategory = #{systemCategory}
@@ -256,18 +262,21 @@
        <if test="type != null">
          and t.type = #{type}
        </if>
-     </where>
   </select>
 
   <select id="findAllOMSTechCooperationPager" parameterType="java.util.Map" resultType="java.util.Map">
-    select t.id, ur.username, t.publishTime, t.updateTime, t.title, t.systemCategory, t.applicationArea,  t.type,
+    select t.id, ur.username, date_format(t.publishTime,'%Y-%m-%d') publishTime, date_format(t.updateTime,'%Y-%m-%d') updateTime, t.title, dc.name systemCategory,
+    dn.name applicationArea,  t.type,
     t.status from t_tech_cooperation t
     left join t_oms_user ur on ur.id = t.createID
+    left join t_dictionary_constant dc on dc.code = t.systemCategory and dc.type =19
+    left join t_dictionary_constant dn on dn.code = t.applicationArea and dn.type =18
+    where t.status != 4
       <if test="status != null">
         and t.status = #{status}
       </if>
       <if test="title != null">
-        and t.title like concat('%',#{status},'%')
+        and t.title like concat('%',#{title},'%')
       </if>
       <if test="systemCategory != null">
         and t.systemCategory = #{systemCategory}
