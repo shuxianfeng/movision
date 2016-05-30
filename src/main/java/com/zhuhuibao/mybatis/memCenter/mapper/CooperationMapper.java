@@ -15,6 +15,8 @@ public interface CooperationMapper {
     //编辑任务
     int updateCooperation(Cooperation record);
 
+    int updateCooperationViews(Cooperation record);
+
     //删除任务
     int deleteCooperation(String id);
 

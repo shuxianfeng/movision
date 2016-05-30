@@ -204,9 +204,64 @@
     </set>
     where id = #{id}
   </update>
-  <insert id="addMember" keyProperty="id" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" useGeneratedKeys="true">
+<!--  <insert id="addMember" keyProperty="id" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" useGeneratedKeys="true">
     insert into t_m_member(mobile,email,password,registerTime,status,identify,enterpriseEmployeeParentId,workType,personRealName) values
-    (#{mobile},#{email},#{password},now(),1,case when #{identify} is null then 2 else #{identify} end,#{enterpriseEmployeeParentId},#{workType},#{personRealName})
+    (#{mobile},#{email},#{password},now(),1,case when #{identify} is null then 2 else #{identify} end,
+    #{enterpriseEmployeeParentId},#{workType},#{personRealName})
+  </insert>-->
+  <insert id="addMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Expert" >
+    insert into t_m_member
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+        registerTime,
+        status,
+        identify,
+      <if test="enterpriseEmployeeParentId != null" >
+        enterpriseEmployeeParentId,
+      </if>
+      <if test="workType != null" >
+        workType,
+      </if>
+      <if test="personRealName != null" >
+        personRealName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mobile != null" >
+        #{mobile},
+      </if>
+      <if test="email != null" >
+        #{email},
+      </if>
+      <if test="password != null" >
+        #{password},
+      </if>
+        now(),
+        1,
+      <if test="identify != null" >
+        #{identify},
+      </if>
+      <if test="identify == null" >
+        2,
+      </if>
+      <if test="enterpriseEmployeeParentId != null" >
+        #{enterpriseEmployeeParentId},
+      </if>
+      <if test="workType != null" >
+        #{workType},
+      </if>
+      <if test="personRealName != null" >
+        #{personRealName},
+      </if>
+    </trim>
   </insert>
   <update id="updateMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     update t_m_member

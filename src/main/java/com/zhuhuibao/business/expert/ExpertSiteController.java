@@ -223,7 +223,7 @@ public class ExpertSiteController {
         response.setData(map);
         //点击率加1
         expert.setViews(String.valueOf(Integer.parseInt(expert.getViews())+1));
-        expertService.updateExpert(expert);
+        expertService.updateExpertViews(expert);
         return response;
     }
 
