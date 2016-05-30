@@ -30,7 +30,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/4 0004.
  */
 @RestController
-@RequestMapping("/witkey/base/")
+@RequestMapping("/rest/witkey/base/")
 public class CooperationSiteController {
     private static final Logger log = LoggerFactory.getLogger(CooperationSiteController.class);
 

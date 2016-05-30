@@ -32,7 +32,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/17 0017.
  */
 @RestController
-@RequestMapping("/expert")
+@RequestMapping("/rest/expert")
 @Api(value = "expert", description = "会员中心-专家")
 public class ExpertController {
     private static final Logger log = LoggerFactory.getLogger(ExpertController.class);

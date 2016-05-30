@@ -30,7 +30,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/11 0011.
  */
 @RestController
-@RequestMapping("/expo/base/")
+@RequestMapping("/rest/expo/base/")
 public class ExhibitionSiteController {
     private static final Logger log = LoggerFactory.getLogger(ExhibitionSiteController.class);
 
