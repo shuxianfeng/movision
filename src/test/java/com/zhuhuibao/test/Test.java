@@ -1,6 +1,7 @@
 package com.zhuhuibao.test;
 
 import com.google.gson.Gson;
+import com.zhuhuibao.common.pojo.RefundReqBean;
 import com.zhuhuibao.fsearch.utils.StringUtil;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -131,7 +132,22 @@ public class Test extends BaseSpringContext {
 //        Long end = System.currentTimeMillis();
 //
 //        System.out.println("use time :" + (end - start) + "ms");
-        System.out.println(StringUtils.isEmpty("null"));
+//        System.out.println(StringUtils.isEmpty("null"));
+
+        String str = "\n" +
+                "{\n" +
+                "\titems:[{\n" +
+                "\t\t\"orderNo\": \"20987389302938\",\n" +
+                "\t\t\"payType\": \"1\", // \n" +
+                "\t\t\"fee\": \"100\"\n" +
+                "\t}]\n" +
+                "\n" +
+                "}";
+        RefundReqBean bean;
+        Gson gson = new Gson();
+        bean = gson.fromJson(str,RefundReqBean.class);
+        System.out.println(bean.getItems().get(0).getOrderNo());
+
 
     }
 

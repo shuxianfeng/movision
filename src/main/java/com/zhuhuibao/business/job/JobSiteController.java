@@ -318,7 +318,7 @@ public class JobSiteController {
             List<String> positionList = Arrays.asList(positionTypes);
             map.put("positionList",positionList);
         }
-        response = resume.findAllResume(pager, map);
+        pager = resume.findAllResume(pager, map);
         response.setData(pager);
         return response;
     }

@@ -218,7 +218,7 @@
 	join t_m_member m on m.id=a.createid 
 	<where>
       <if test="title != null">
-        and a.title = #{title}
+        and a.title like CONCAT('%',#{title},'%') 
       </if>
       <if test="status != null">
         and a.status = #{status}

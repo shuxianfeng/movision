@@ -152,24 +152,25 @@ public class ResumeService {
         return response;
     }
 
-    public Response findAllResume(Paging<Resume> pager, Map<String,Object> map)
+    /**
+     * 人才库搜索
+     * @param pager  分页条件
+     * @param map  查询条件
+     * @return  分页结果
+     */
+    public Paging<Resume> findAllResume(Paging<Resume> pager, Map<String,Object> map)
     {
-        Response response = new Response();
         try
         {
             List<Resume> resumeList = resumeMapper.findAllResume(pager.getRowBounds(),map);
             pager.result(resumeList);
-            response.setData(pager);
         }
         catch(Exception e)
         {
             log.error("find all resume error!",e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return response;
+            throw e;
         }
-        return response;
+        return pager;
     }
 
     /**

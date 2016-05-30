@@ -7,7 +7,9 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.alipay.service.direct.AlipayDirectService;
 import com.zhuhuibao.alipay.service.refund.AlipayRefundService;
 import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.pojo.OrderReqBean;
 import com.zhuhuibao.common.pojo.RefundItem;
 import com.zhuhuibao.common.pojo.RefundReqBean;
@@ -21,6 +23,10 @@ import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ValidateUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
+import com.zhuhuibao.mybatis.techtrain.entity.TechCooperation;
+import com.zhuhuibao.mybatis.techtrain.service.TechnologyService;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +38,9 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 /**
  * 技术培训
  */
@@ -56,6 +63,9 @@ public class TechController {
 
     @Autowired
     OrderService orderService;
+
+    @Autowired
+    TechnologyService techService;
 
     @ApiOperation(value = "培训课程下单支付", notes = "培训课程下单支付")
     @RequestMapping(value = "course/pay", method = RequestMethod.POST)
@@ -104,7 +114,7 @@ public class TechController {
     public void doRefund(HttpServletResponse response, @ApiParam @ModelAttribute(value = "data") RefundReqBean data) throws Exception {
 
         Gson gson = new Gson();
-        String json   = gson.toJson(data);
+        String json = gson.toJson(data);
         log.info("技术培训批量退款页面,请求参数:{}", json);
         Map paramMap = gson.fromJson(json, Map.class);
         paramMap.put("partner", PARTNER);//partner=seller_id     商家支付宝ID  合作伙伴身份ID 签约账号
@@ -115,10 +125,10 @@ public class TechController {
         Session session = currentUser.getSession(false);
 
         List<RefundItem> items = data.getItems();
-        if(items.size() > 0){
-            paramMap.put("batchNum",items.size());
-            OMSRealm.ShiroOmsUser user = (OMSRealm.ShiroOmsUser)session.getAttribute("oms");
-            if(user==null){
+        if (items.size() > 0) {
+            paramMap.put("batchNum", items.size());
+            OMSRealm.ShiroOmsUser user = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
+            if (user == null) {
                 log.error("用户未登陆");
                 throw new AuthException(MsgCodeConstant.un_login,
                         MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -127,35 +137,123 @@ public class TechController {
             List<String> orderNoList = new ArrayList<>();
             BigDecimal totalFee = new BigDecimal(0);
             List<String> detailList = new ArrayList<>();
-            for(RefundItem item : items){
-                String reason =  item.getReason();
-                if(reason.contains("^") || reason.contains("|") || reason.contains("$") ||
-                        reason.contains("#")){
+            for (RefundItem item : items) {
+                String reason = item.getReason();
+                if (reason.contains("^") || reason.contains("|") || reason.contains("$") ||
+                        reason.contains("#")) {
                     log.error("退款理由中不能包含 '^' ,'|', '$' ,'#' 等特殊字符");
                     throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,
                             "退款理由中不能包含 '^' ,'|', '$' ,'#' 等特殊字符");
                 }
-                Order order =  orderService.findByOrderNo(item.getOrderNo());
+                Order order = orderService.findByOrderNo(item.getOrderNo());
                 detailList.add(String.valueOf(order.getBuyerId()) + "^" + item.getFee() + "^" + reason);
 
                 orderNoList.add(item.getOrderNo());
                 totalFee.add(new BigDecimal(item.getFee()));
 
             }
-            String orderNos = CommonUtils.splice(orderNoList,",");
-            paramMap.put("orderNos",orderNos);
-            paramMap.put("totalFee",totalFee.toString());
+            String orderNos = CommonUtils.splice(orderNoList, ",");
+            paramMap.put("orderNos", orderNos);
+            paramMap.put("totalFee", totalFee.toString());
             SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            paramMap.put("refundDate",sf.format(new Date()));
+            paramMap.put("refundDate", sf.format(new Date()));
 
             //detailData 多条   原付款支付宝交易号^退款总金额^退款理由 #  原付款支付宝交易号^退款总金额^退款理由
-            String detailData = CommonUtils.splice(detailList,"#");
-            paramMap.put("detailData",detailData);
+            String detailData = CommonUtils.splice(detailList, "#");
+            paramMap.put("detailData", detailData);
 
 
             log.debug("调用批量退款接口......");
             alipayRefundService.doRefund(response, paramMap);
         }
 
+    }
+    @RequestMapping(value="coop/add_TechCooperation", method = RequestMethod.POST)
+    @ApiOperation(value="新增技术合作(技术成果，技术需求)",notes = "新增技术合作(技术成果，技术需求)",response = Response.class)
+    public Response insertTechCooperation(@ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
+    {
+        log.info("insert tech cooperation");
+        int result = techService.insert(techCoop);
+        Response response = new Response();
+        return response;
+    }
+
+    @RequestMapping(value="coop/sel_tech_cooperation", method = RequestMethod.GET)
+    @ApiOperation(value="频道页搜索技术合作(技术成果，技术需求)",notes = "频道页搜索技术合作(技术成果，技术需求)",response = Response.class)
+    public Response findAllTechCooperationPager(@ApiParam(value = "系统分类") @RequestParam(required = false) String systemCategory,
+                                                @ApiParam(value = "应用领域") @RequestParam(required = false) String applicationArea,
+                                                @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
+                                                @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize)
+    {
+        Response response = new Response();
+        Map<String,Object> condition = new HashMap<String,Object>();
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        condition.put("systemCategory",systemCategory);
+        condition.put("applicationArea",applicationArea);
+        condition.put("status", TechConstant.TechCooperationnStatus.AUDITPASS.toString());
+        List<Map<String,String>> techList = techService.findAllTechCooperationPager(pager,condition);
+        pager.result(techList);
+        response.setData(pager);
+        return response;
+    }
+
+    @RequestMapping(value="coop/sel_oms_tech_cooperation", method = RequestMethod.GET)
+    @ApiOperation(value="运营管理平台搜索技术合作(技术成果，技术需求)",notes = "运营管理平台技术合作(技术成果，技术需求)",response = Response.class)
+    public Response findAllOMSTechCooperationPager(@ApiParam(value = "系统分类") @RequestParam(required = false) String systemCategory,
+                                                   @ApiParam(value = "应用领域") @RequestParam(required = false) String applicationArea,
+                                                   @ApiParam(value = "标题") @RequestParam(required = false) String title,
+                                                   @ApiParam(value = "类型：1成果，2需求") @RequestParam(required = false) String type,
+                                                   @ApiParam(value = "状态") @RequestParam(required = false)   String status,
+                                                   @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
+                                                   @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize)
+    {
+        Response response = new Response();
+        Map<String,Object> condition = new HashMap<String,Object>();
+        condition.put("systemCategory",systemCategory);
+        condition.put("applicationArea",applicationArea);
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        if(title != null && !"".equals(title))
+        {
+            condition.put("title",title.replace("_","\\_"));
+        }
+        condition.put("type",type);
+        condition.put("status",status);
+        List<Map<String,String>> techList = techService.findAllTechCooperationPager(pager,condition);
+        pager.result(techList);
+        response.setData(pager);
+        return response;
+    }
+
+    @RequestMapping(value="coop/upd_oms_tech_cooperation", method = RequestMethod.POST)
+    @ApiOperation(value="修改技术合作(技术成果，技术需求)",notes = "修改技术合作(技术成果，技术需求)",response = Response.class)
+    public Response updateOMSTechCooperation( @ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
+    {
+        Response response = new Response();
+        int result = techService.updateTechCooperation(techCoop);
+        return response;
+    }
+
+    @RequestMapping(value="coop/del_oms_tech_cooperation", method = RequestMethod.POST)
+    @ApiOperation(value="删除技术合作(技术成果，技术需求)",notes = "删除技术合作(技术成果，技术需求)",response = Response.class)
+    public Response deleteOMSTechCooperation( @ApiParam(value = "技术合作ID")  @RequestParam() String techId)
+    {
+        Response response = new Response();
+        Map<String,Object> condition = new HashMap<String,Object>();
+        condition.put("id",techId);
+        condition.put("status", TechConstant.TechCooperationnStatus.DELETE.toString());
+        int result = techService.deleteTechCooperation(condition);
+        return response;
     }
 }
