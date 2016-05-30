@@ -26,31 +26,31 @@ public class TechCooperation {
     private Integer systemCategory;
     @ApiModelProperty(value = "应用领域")
     private Integer applicationArea;
-    @ApiModelProperty(value = "应用领域")
+    @ApiModelProperty(value = "联系人")
     private String linkman;
-
+    @ApiModelProperty(value = "单位名称")
     private String companyName;
-
+    @ApiModelProperty(value = "联系电话")
     private String telephone;
-
+    @ApiModelProperty(value = "邮箱地址")
     private String email;
-
+    @ApiModelProperty(value = "省代码")
     private String province;
-
+    @ApiModelProperty(value = "市代码")
     private String city;
-
+    @ApiModelProperty(value = "区域代码")
     private String area;
-
+    @ApiModelProperty(value = "详细地址")
     private String address;
-
+    @ApiModelProperty(value = "合作方式")
     private String cooperation;
-
+    @ApiModelProperty(value = "类型：1:技术成果，2：技术需求")
     private Integer type;
-
+    @ApiModelProperty(value = "状态：1：待审核，2：已审核，3：拒绝，4：删除")
     private Integer status;
-
+    @ApiModelProperty(value = "点击率")
     private Long views;
-
+    @ApiModelProperty(value = "成果简介")
     private String notes;
 
     public Long getId() {
