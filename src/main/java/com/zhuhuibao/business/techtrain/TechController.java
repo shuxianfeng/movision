@@ -7,6 +7,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.alipay.service.direct.AlipayDirectService;
 import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.pojo.OrderReqBean;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.utils.ValidateUtils;
 import org.slf4j.Logger;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.ParseException;
 import java.util.Map;
 
 /**
@@ -39,7 +39,7 @@ public class TechController {
     @ApiOperation(value = "立即支付", notes = "立即支付")
     @RequestMapping(value = "pay", method = RequestMethod.POST)
     public void doPay(HttpServletRequest request, HttpServletResponse response,
-                      @ApiParam  @ModelAttribute(value="order") TechOrderBean order) throws Exception {
+                      @ApiParam  @ModelAttribute(value="order") OrderReqBean order) throws Exception {
 
         Gson gson = new Gson();
         String json   = gson.toJson(order);
@@ -65,6 +65,8 @@ public class TechController {
         paramMap.put("partner", PARTNER);//partner=seller_id     商家支付宝ID  合作伙伴身份ID 签约账号
 
         log.debug("调用立即支付接口......");
+
+        //需要判断购买数量是否>=产品剩余数量
         alipayDirectService.doPay(response, paramMap);
     }
 

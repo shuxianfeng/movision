@@ -146,6 +146,20 @@ public class ExhibitionService {
     }
 
     /**
+     * 会展信息点击率更新
+     * @param exhibition
+     */
+    public void updateExhibitionViews(Exhibition exhibition){
+        try {
+            exhibitionMapper.updateExhibitionViews(exhibition);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
      * 最新会展信息
      * @param map
      */

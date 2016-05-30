@@ -34,9 +34,11 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 /**
  * 支付宝服务入口
@@ -65,6 +67,12 @@ public class AlipayService {
     @Autowired
     private RefundService refundService;
 
+    @Autowired
+    private PwdTickerService pwdTickerService;
+
+    @Autowired
+    private PublishCourseService publishCourseService;
+
 
     /**
      * 支付包支付请求
@@ -82,8 +90,8 @@ public class AlipayService {
         //支付请求参数校验
         checkPayParams(msgParam);
 
-        //记录订单信息
-        genOrderRecord(msgParam);
+        //记录订单信息和其他相关处理
+        beforePayDeal(msgParam);
 
         //支付操作
         return doPay(msgParam, method);
@@ -287,14 +295,85 @@ public class AlipayService {
     }
 
     /**
-     * 生成一条订单记录  (t_o_order)
+     * 订单相关操作  (t_o_order t_o_order_goods t_o_pwdticket t_p_group_publishCourse)
+     * 事务处理,异常回滚
      *
      * @param msgParam 请求参数
      */
-    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
-    private void genOrderRecord(Map<String, String> msgParam){
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    private void beforePayDeal(Map<String, String> msgParam) {
         log.info("request params:{}", msgParam.toString());
 
+        //订单记录
+        genOrderRecord(msgParam);
+        //订单商品详情
+        genOrderGoodsRecord(msgParam);
+
+
+        //如果是技术培训 专家培训 需要记录订单SN码 t_o_pwdticket
+        if (msgParam.get("goodsType").equals(OrderConstants.GoodsType.JSPX.toString())
+                || msgParam.get("goodsType").equals(OrderConstants.GoodsType.ZJPX.toString())) {
+
+            //根据订单产品数量生成SN码
+            genSNcode(msgParam);
+
+            //修改课程库存数量
+            updateStock(msgParam);
+
+        }
+    }
+
+    /**
+     * 修改课程库存
+     * @param msgParam
+     */
+    private void updateStock(Map<String, String> msgParam) {
+        Long courseId = Long.valueOf(msgParam.get("goodsId"));
+        int number = Integer.valueOf(msgParam.get("number"));
+        publishCourseService.updateStockNum(courseId, number);
+    }
+
+    /**
+     * 根据订单生产SN码
+     * @param msgParam
+     */
+    private void genSNcode(Map<String, String> msgParam) {
+        int num = Integer.valueOf(msgParam.get("number"));
+        List<PwdTicket> list = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            PwdTicket pwdTicket = new PwdTicket();
+            String snCode = IdGenerator.createBatchNo();
+            pwdTicket.setSnCode(snCode);
+            pwdTicket.setMobile(msgParam.get("mobile"));
+            pwdTicket.setOrderNo(Long.valueOf(msgParam.get("orderNo")));
+            pwdTicket.setCourseId(Long.valueOf(msgParam.get("goodsId")));
+            list.add(pwdTicket);
+        }
+        pwdTickerService.batchInsert(list);
+    }
+
+    /**
+     * 生成订单商品详情记录
+     * @param msgParam
+     */
+    private void genOrderGoodsRecord(Map<String, String> msgParam) {
+        //订单商品
+        OrderGoods orderGoods = new OrderGoods();
+        orderGoods.setGoodsId(Long.valueOf(msgParam.get("goodsId")));
+        orderGoods.setGoodsName(msgParam.get("goodsName"));
+        orderGoods.setGoodsPrice(BigDecimal.valueOf(Long.parseLong(msgParam.get("goodsPrice"))));
+        orderGoods.setNumber(Integer.valueOf(msgParam.get("number")));
+        orderGoods.setOrderNo(msgParam.get("orderNo"));
+        orderGoods.setCreateTime(new Date());
+
+        orderGoodsService.insert(orderGoods);
+    }
+
+    /**
+     * 生成订单记录
+     * @param msgParam
+     */
+    private void genOrderRecord(Map<String, String> msgParam) {
         Order order = new Order();
         order.setOrderNo(msgParam.get("orderNo"));
         order.setBuyerId(Long.valueOf(msgParam.get("buyerId")));
@@ -313,25 +392,6 @@ public class AlipayService {
         order.setStatus(PayConstants.OrderStatus.WZF.toString());
 
         orderService.insert(order);
-
-        //订单商品
-        OrderGoods orderGoods = new OrderGoods();
-        orderGoods.setGoodsId(Long.valueOf(msgParam.get("goodsId")));
-        orderGoods.setGoodsName(msgParam.get("goodsName"));
-        orderGoods.setGoodsPrice(BigDecimal.valueOf(Long.parseLong(msgParam.get("goodsPrice"))));
-        orderGoods.setNumber(Integer.valueOf(msgParam.get("number")));
-        orderGoods.setOrderNo(msgParam.get("orderNo"));
-        orderGoods.setCreateTime(new Date());
-
-        orderGoodsService.insert(orderGoods);
-
-        //如果是技术培训 需要记录订单SN码 t_o_pwdticket
-        if(msgParam.get("goodsType").equals(OrderConstants.GoodsType.JSPX.toString())){
-            PwdTicket pwdTicket = new PwdTicket();
-            pwdTicket.setMobile(msgParam.get("mobile"));
-
-            //......
-        }
     }
 
 
@@ -351,8 +411,8 @@ public class AlipayService {
         sParaTemp.put("service", msgParam.get("service"));              //接口名称
         sParaTemp.put("notify_url", msgParam.get("notifyUrl"));         //服务器异步通知页面路径
 //        sParaTemp.put("return_url", msgParam.get("returnUrl"));       //页面跳转同步通知页面路径
-        sParaTemp.put("partner", msgParam.get("partner"));            //合作伙伴ID  == 商家支付宝账户号
-        sParaTemp.put("seller_id", msgParam.get("partner"));          //partner = seller_id
+        sParaTemp.put("partner", msgParam.get("partner"));              //合作伙伴ID  == 商家支付宝账户号
+        sParaTemp.put("seller_id", msgParam.get("partner"));            //partner = seller_id
 
         //业务参数
         sParaTemp.put("out_trade_no", msgParam.get("orderNo"));          //商户网站唯一订单号

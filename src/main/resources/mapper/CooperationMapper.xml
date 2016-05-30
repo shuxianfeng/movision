@@ -23,6 +23,7 @@
     <result column="companyName" property="companyName" jdbcType="VARCHAR" />
     <result column="linkMan" property="linkMan" jdbcType="VARCHAR" />
     <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="is_deleted" property="is_deleted" jdbcType="VARCHAR" />
@@ -37,7 +38,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, createId, publishTime, updateTime, title, type, category, province, city, area, 
-    price, endTime, isShow, companyName, linkMan, telephone, email,content,is_deleted,views
+    price, endTime, isShow, companyName, linkMan, telephone,mobile, email,content,is_deleted,views
   </sql>
   <insert id="publishCooperation" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
     insert into t_c_cooperation
@@ -85,6 +86,9 @@
       </if>
       <if test="telephone != null" >
         telephone,
+      </if>
+      <if test="mobile != null" >
+        mobile,
       </if>
       <if test="email != null" >
         email,
@@ -143,6 +147,9 @@
       </if>
       <if test="telephone != null" >
         #{telephone},
+      </if>
+      <if test="mobile != null" >
+        #{mobile},
       </if>
       <if test="email != null" >
         #{email},
@@ -204,6 +211,9 @@
       <if test="telephone != null" >
         telephone = #{telephone},
       </if>
+      <if test="mobile != null" >
+        mobile = #{mobile},
+      </if>
       <if test="email != null" >
         email = #{email},
       </if>
@@ -216,6 +226,15 @@
       <if test="status != null" >
         status = #{status},
       </if>
+      <if test="views != null" >
+        views = #{views},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateCooperationViews" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
+    update t_c_cooperation
+    <set >
       <if test="views != null" >
         views = #{views},
       </if>
@@ -240,7 +259,7 @@
   </select>
   <select id="findAllCooperationByPager" resultType="java.util.Map" >
     select c.id, c.createId, date_format(c.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, date_format(c.updateTime,'%Y-%m-%d %H:%i:%s') updateTime, c.title, c.type, c.category, c.province, c.city, c.area,
-    c.price, c.endTime, c.isShow, c.companyName, c.linkMan, c.telephone, c.email,c.content,c.is_deleted,c.views,
+    c.price, c.endTime, c.isShow, c.companyName, c.linkMan, c.telephone, c.mobile,c.email,c.content,c.is_deleted,c.views,
     concat(p.name,ci.name,a.name)as cooperationArea,co.name as categoryName,coo.name as TypeName,coo.parentId,
     (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName,
     CASE WHEN m.identify = 2 THEN '个人' WHEN m.identify !=2 THEN '公司' END AS memberType,m.headShot

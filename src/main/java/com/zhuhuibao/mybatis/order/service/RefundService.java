@@ -18,7 +18,7 @@ public class RefundService {
     private static final Logger log = LoggerFactory.getLogger(RefundService.class);
 
     @Autowired
-    RefundMapper refundMapper;
+    RefundMapper mapper;
 
 
     /**
@@ -28,7 +28,7 @@ public class RefundService {
     public void insert(Refund refund) {
         int count;
         try {
-            count = refundMapper.insertSelective(refund);
+            count = mapper.insertSelective(refund);
             if (count != 1) {
                 log.error("t_o_order:插入数据失败");
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");

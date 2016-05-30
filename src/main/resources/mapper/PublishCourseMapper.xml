@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.order.mapper.PublishCourseMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.order.entity.PublishCourse" >
+    <id column="courseid" property="courseid" jdbcType="BIGINT" />
+    <result column="publisherid" property="publisherid" jdbcType="BIGINT" />
+    <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP" />
+    <result column="saleTime" property="saleTime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="teacher" property="teacher" jdbcType="VARCHAR" />
+    <result column="startTime" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="storageNumber" property="storageNumber" jdbcType="INTEGER" />
+    <result column="minBuyNumber" property="minBuyNumber" jdbcType="VARCHAR" />
+    <result column="maxBuyNumber" property="maxBuyNumber" jdbcType="VARCHAR" />
+    <result column="expiryDate" property="expiryDate" jdbcType="DATE" />
+    <result column="imgUrl" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="notice" property="notice" jdbcType="VARCHAR" />
+    <result column="courseType" property="courseType" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.order.entity.PublishCourse" extends="BaseResultMap" >
+    <result column="notes" property="notes" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    courseid, publisherid, publishTime, saleTime, updateTime, title, teacher, startTime, 
+    endTime, province, area, address, city, price, storageNumber, minBuyNumber, maxBuyNumber, 
+    expiryDate, imgUrl, notice, courseType, status
+  </sql>
+  <sql id="Blob_Column_List" >
+    notes
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_p_group_publishCourse
+    where courseid = #{courseid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_p_group_publishCourse
+    where courseid = #{courseid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.zhuhuibao.mybatis.order.entity.PublishCourse" >
+    insert into t_p_group_publishCourse (courseid, publisherid, publishTime, 
+      saleTime, updateTime, title, 
+      teacher, startTime, endTime, 
+      province, area, address, 
+      city, price, storageNumber, 
+      minBuyNumber, maxBuyNumber, expiryDate, 
+      imgUrl, notice, courseType, 
+      status, notes)
+    values (#{courseid,jdbcType=BIGINT}, #{publisherid,jdbcType=BIGINT}, #{publishTime,jdbcType=TIMESTAMP}, 
+      #{saleTime,jdbcType=CHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, 
+      #{teacher,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{province,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{storageNumber,jdbcType=INTEGER}, 
+      #{minBuyNumber,jdbcType=VARCHAR}, #{maxBuyNumber,jdbcType=VARCHAR}, #{expiryDate,jdbcType=DATE}, 
+      #{imgUrl,jdbcType=VARCHAR}, #{notice,jdbcType=VARCHAR}, #{courseType,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{notes,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.order.entity.PublishCourse" >
+    insert into t_p_group_publishCourse
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="courseid != null" >
+        courseid,
+      </if>
+      <if test="publisherid != null" >
+        publisherid,
+      </if>
+      <if test="publishTime != null" >
+        publishTime,
+      </if>
+      <if test="saleTime != null" >
+        saleTime,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="teacher != null" >
+        teacher,
+      </if>
+      <if test="startTime != null" >
+        startTime,
+      </if>
+      <if test="endTime != null" >
+        endTime,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="storageNumber != null" >
+        storageNumber,
+      </if>
+      <if test="minBuyNumber != null" >
+        minBuyNumber,
+      </if>
+      <if test="maxBuyNumber != null" >
+        maxBuyNumber,
+      </if>
+      <if test="expiryDate != null" >
+        expiryDate,
+      </if>
+      <if test="imgUrl != null" >
+        imgUrl,
+      </if>
+      <if test="notice != null" >
+        notice,
+      </if>
+      <if test="courseType != null" >
+        courseType,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="notes != null" >
+        notes,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="courseid != null" >
+        #{courseid,jdbcType=BIGINT},
+      </if>
+      <if test="publisherid != null" >
+        #{publisherid,jdbcType=BIGINT},
+      </if>
+      <if test="publishTime != null" >
+        #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="saleTime != null" >
+        #{saleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="teacher != null" >
+        #{teacher,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="storageNumber != null" >
+        #{storageNumber,jdbcType=INTEGER},
+      </if>
+      <if test="minBuyNumber != null" >
+        #{minBuyNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="maxBuyNumber != null" >
+        #{maxBuyNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="expiryDate != null" >
+        #{expiryDate,jdbcType=DATE},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="notice != null" >
+        #{notice,jdbcType=VARCHAR},
+      </if>
+      <if test="courseType != null" >
+        #{courseType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="notes != null" >
+        #{notes,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.order.entity.PublishCourse" >
+    update t_p_group_publishCourse
+    <set >
+      <if test="publisherid != null" >
+        publisherid = #{publisherid,jdbcType=BIGINT},
+      </if>
+      <if test="publishTime != null" >
+        publishTime = #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="saleTime != null" >
+        saleTime = #{saleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="teacher != null" >
+        teacher = #{teacher,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        startTime = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        endTime = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="storageNumber != null" >
+        storageNumber = #{storageNumber,jdbcType=INTEGER},
+      </if>
+      <if test="minBuyNumber != null" >
+        minBuyNumber = #{minBuyNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="maxBuyNumber != null" >
+        maxBuyNumber = #{maxBuyNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="expiryDate != null" >
+        expiryDate = #{expiryDate,jdbcType=DATE},
+      </if>
+      <if test="imgUrl != null" >
+        imgUrl = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="notice != null" >
+        notice = #{notice,jdbcType=VARCHAR},
+      </if>
+      <if test="courseType != null" >
+        courseType = #{courseType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="notes != null" >
+        notes = #{notes,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where courseid = #{courseid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zhuhuibao.mybatis.order.entity.PublishCourse" >
+    update t_p_group_publishCourse
+    set publisherid = #{publisherid,jdbcType=BIGINT},
+      publishTime = #{publishTime,jdbcType=TIMESTAMP},
+      saleTime = #{saleTime,jdbcType=TIMESTAMP},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      title = #{title,jdbcType=VARCHAR},
+      teacher = #{teacher,jdbcType=VARCHAR},
+      startTime = #{startTime,jdbcType=TIMESTAMP},
+      endTime = #{endTime,jdbcType=TIMESTAMP},
+      province = #{province,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      storageNumber = #{storageNumber,jdbcType=INTEGER},
+      minBuyNumber = #{minBuyNumber,jdbcType=VARCHAR},
+      maxBuyNumber = #{maxBuyNumber,jdbcType=VARCHAR},
+      expiryDate = #{expiryDate,jdbcType=DATE},
+      imgUrl = #{imgUrl,jdbcType=VARCHAR},
+      notice = #{notice,jdbcType=VARCHAR},
+      courseType = #{courseType,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      notes = #{notes,jdbcType=LONGVARCHAR}
+    where courseid = #{courseid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.order.entity.PublishCourse" >
+    update t_p_group_publishCourse
+    set publisherid = #{publisherid,jdbcType=BIGINT},
+      publishTime = #{publishTime,jdbcType=TIMESTAMP},
+      saleTime = #{saleTime,jdbcType=TIMESTAMP},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      title = #{title,jdbcType=VARCHAR},
+      teacher = #{teacher,jdbcType=VARCHAR},
+      startTime = #{startTime,jdbcType=TIMESTAMP},
+      endTime = #{endTime,jdbcType=TIMESTAMP},
+      province = #{province,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      storageNumber = #{storageNumber,jdbcType=INTEGER},
+      minBuyNumber = #{minBuyNumber,jdbcType=VARCHAR},
+      maxBuyNumber = #{maxBuyNumber,jdbcType=VARCHAR},
+      expiryDate = #{expiryDate,jdbcType=DATE},
+      imgUrl = #{imgUrl,jdbcType=VARCHAR},
+      notice = #{notice,jdbcType=VARCHAR},
+      courseType = #{courseType,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER}
+    where courseid = #{courseid,jdbcType=BIGINT}
+  </update>
+  <update id="updateStockNum">
+       update t_p_group_publishCourse
+       set storageNumber = storageNumber -  #{number,jdbcType=INTEGER}
+       where courseId = #{courseId}
+  </update>
+
+</mapper>

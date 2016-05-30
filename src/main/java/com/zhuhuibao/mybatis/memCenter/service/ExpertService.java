@@ -238,6 +238,21 @@ public class ExpertService {
     }
 
     /**
+     * 更新专家点击率
+     * @param expert
+     * @return
+     */
+    public int updateExpertViews(Expert expert){
+        try{
+            return expertMapper.updateExpertViews(expert);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
      * 专家列表
      * @param pager,map
      * @return

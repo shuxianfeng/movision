@@ -142,7 +142,7 @@ public class ExhibitionSiteController {
         response.setData(exhibition);
         //更新點擊率
         exhibition.setViews(String.valueOf(Integer.parseInt(exhibition.getViews())+1));
-        exhibitionService.updateExhibitionInfoById(exhibition);
+        exhibitionService.updateExhibitionViews(exhibition);
         return response;
     }
 }

@@ -49,6 +49,8 @@ public class Cooperation {
 
     private String email;
 
+    private String mobile;
+
     private String content;
 
     private String is_deleted;
@@ -313,5 +315,13 @@ public class Cooperation {
 
     public void setDistinction(String distinction) {
         this.distinction = distinction;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }

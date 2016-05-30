@@ -7,10 +7,17 @@
 *.ear
 
 #/src/main/resources/logback.xml
+
+#idea ide files
 .idea
 zhuhuibao.iml
-/target
+
+#resources files
 /src/main/resources/rebel.xml
+/src/main/resources/mybatis/generatorConfig.xml
+/src/main/resources/mybatis/init.properties
 
 
+#test files
 /target
+/src/test

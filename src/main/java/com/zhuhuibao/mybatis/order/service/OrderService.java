@@ -18,7 +18,7 @@ public class OrderService {
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
 
     @Autowired
-    OrderMapper orderMapper;
+    OrderMapper mapper;
 
 
     /**
@@ -29,7 +29,7 @@ public class OrderService {
     public void insert(Order order) {
         int count;
         try {
-            count = orderMapper.insertSelective(order);
+            count = mapper.insertSelective(order);
             if (count != 1) {
                 log.error("t_o_order:插入数据失败");
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
@@ -50,7 +50,7 @@ public class OrderService {
     public Order findByOrderNo(String orderNo) {
         Order order;
         try {
-            order = orderMapper.selectByPrimaryKey(orderNo);
+            order = mapper.selectByPrimaryKey(orderNo);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,7 +70,7 @@ public class OrderService {
         int count;
 
         try {
-            count = orderMapper.updateByPrimaryKeySelective(order);
+            count = mapper.updateByPrimaryKeySelective(order);
             if (count != 1) {
                 log.error("t_o_order:更新数据失败");
                 throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");

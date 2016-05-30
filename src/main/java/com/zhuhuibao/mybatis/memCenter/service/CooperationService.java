@@ -114,6 +114,19 @@ public class CooperationService {
     }
 
     /**
+     * 更新点击率
+     */
+    public int updateCooperationViews(Cooperation cooperation){
+        try{
+            return cooperationMapper.updateCooperationViews(cooperation);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
      * 批量删除任务
      */
     public void deleteCooperation(String ids[]){
