@@ -20,7 +20,7 @@ public class AlipayRefundCallbackLogService {
     private static final Logger log = LoggerFactory.getLogger(AlipayRefundCallbackLogService.class);
 
     @Autowired
-    AlipayRefundCallbackLogMapper refundCallbackLogMapper;
+    AlipayRefundCallbackLogMapper mapper;
 
 
     /**
@@ -30,7 +30,7 @@ public class AlipayRefundCallbackLogService {
     public void insert(AlipayRefundCallbackLog record) {
         int num;
         try {
-            num = refundCallbackLogMapper.insertSelective(record);
+            num = mapper.insertSelective(record);
             if (num != 1) {
                 log.error("t_o_alipay_refund_callback_log:插入数据失败");
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");

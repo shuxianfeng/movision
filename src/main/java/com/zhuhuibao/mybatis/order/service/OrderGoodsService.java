@@ -18,7 +18,7 @@ public class OrderGoodsService {
     private static final Logger log = LoggerFactory.getLogger(OrderGoodsService.class);
 
     @Autowired
-    OrderGoodsMapper orderGoodsMapper;
+    OrderGoodsMapper mapper;
 
 
     /**
@@ -29,7 +29,7 @@ public class OrderGoodsService {
     public void insert(OrderGoods record) {
         int count;
         try {
-            count = orderGoodsMapper.insertSelective(record);
+            count = mapper.insertSelective(record);
             if (count != 1) {
                 log.error("t_o_order_goods:插入数据失败");
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");

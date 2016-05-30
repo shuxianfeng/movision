@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.techtrain;
+package com.zhuhuibao.common.pojo;
 
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
@@ -7,7 +7,7 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
  * 技术培训 订单请求参数
  */
 @ApiModel(value="订单请求参数")
-public class TechOrderBean {
+public class OrderReqBean {
 
     /**
      * buyerId :   下单会员ID
