@@ -29,9 +29,9 @@ public class CooperationOmsController {
 
 
     /**
-     * 查询我发布的任务（分页）
+     * 查询任务列表
      */
-    @ApiOperation(value="查询任务（后台分页）",notes="查询任务（后台分页）",response = Response.class)
+    @ApiOperation(value="查询任务列表",notes="查询任务列表",response = Response.class)
     @RequestMapping(value = "sel_witkeyList", method = RequestMethod.GET)
     public Response findAllMyCooperationByPager(
             @RequestParam(required = false) String pageNo,@RequestParam(required = false) String pageSize,
