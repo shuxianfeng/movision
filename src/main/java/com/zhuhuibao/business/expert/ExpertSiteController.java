@@ -36,7 +36,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/18 0018.
  */
 @RestController
-@RequestMapping("/expert")
+@RequestMapping("/rest/expert/site")
 public class ExpertSiteController {
     private static final Logger log = LoggerFactory
             .getLogger(ExpertSiteController.class);

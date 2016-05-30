@@ -103,9 +103,9 @@ public class AlipayService {
      * @param msgParam 请求参数集合
      * @param method   提交方式。两个值可选：post、get
      * @return
-     * @throws ParseException
+     * @throws Exception
      */
-    public String alirefund(Map<String, String> msgParam, String method) throws ParseException {
+    public String alirefund(Map<String, String> msgParam, String method) throws Exception {
 
         //生成批量退款批次号
         String bathcNo = IdGenerator.createBatchNo();
@@ -131,7 +131,7 @@ public class AlipayService {
         refund.setBatchNo(msgParam.get("batchNo"));
         refund.setBatchNum(Integer.valueOf(msgParam.get("batchNum")));
         refund.setOperatorId(Integer.valueOf(msgParam.get("operatorId")));
-        refund.setOrderNo(msgParam.get("orderNo"));
+        refund.setOrderNo(msgParam.get("orderNos"));
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         refund.setRefundDate(sf.parse(msgParam.get("refundDate")));
         refund.setTotalFee(Long.valueOf(msgParam.get("totalFee")));
@@ -146,7 +146,7 @@ public class AlipayService {
      * @param msgParam 请求参数集合
      */
     private void checkRefundParams(Map<String, String> msgParam) {
-        String orderNo = msgParam.get("orderNo");//退款订单编号
+        String orderNo = msgParam.get("orderNos");//退款订单编号  逗号隔开
         if (StringUtils.isEmpty(orderNo)) {
             throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "退款订单编号不能为空");
         }
@@ -458,9 +458,9 @@ public class AlipayService {
         sParaTemp.put("batch_no", msgParam.get("batchNo"));
         String batchNum = msgParam.get("batchNum");
         sParaTemp.put("batch_num", batchNum);      //退款笔数
-        String detailDate = msgParam.get("detailDate");
-        sParaTemp.put("detail_data", detailDate);  //退款详细数据 必填(支付宝交易号^退款金额^备注)多笔请用#隔开
-        int count = CommonUtils.getCountAppearInString(detailDate, "#");
+        String detailData = msgParam.get("detailData");
+        sParaTemp.put("detail_data", detailData);  //退款详细数据 必填(支付宝交易号^退款金额^备注)多笔请用#隔开
+        int count = CommonUtils.getCountAppearInString(detailData, "#");
         if (count != Integer.valueOf(batchNum)) {
             log.error("退款笔数[{}]与退款详情中的记录数[{}]不相等", batchNum, count);
             throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR,

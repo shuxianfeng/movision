@@ -30,7 +30,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/4 0004.
  */
 @RestController
-@RequestMapping("/rest/cooperationSite")
+@RequestMapping("/rest/witkey/site/")
 public class CooperationSiteController {
     private static final Logger log = LoggerFactory.getLogger(CooperationSiteController.class);
 
@@ -41,7 +41,7 @@ public class CooperationSiteController {
      * 发布任务
      */
     @ApiOperation(value="发布任务",notes="发布任务",response = Response.class)
-    @RequestMapping(value = "publishCooperation", method = RequestMethod.POST)
+    @RequestMapping(value = "add_witkey", method = RequestMethod.POST)
     public Response publishCooperation(Cooperation cooperation)  {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -65,7 +65,7 @@ public class CooperationSiteController {
      * 查询任务列表（分页）
      */
     @ApiOperation(value = "查询任务列表（前台分页）", notes = "查询任务列表（前台分页）", response = Response.class)
-    @RequestMapping(value = "findAllCooperationByPager", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_witkeyList", method = RequestMethod.GET)
     public Response findAllCooperationByPager
     (@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize,
      @ApiParam(value = "合作类型") @RequestParam(required = false) String type,
@@ -99,7 +99,7 @@ public class CooperationSiteController {
      * 最热合作信息
      */
     @ApiOperation(value = "最热合作信息", notes = "最热合作信息", response = Response.class)
-    @RequestMapping(value = "queryHotService", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_hot_service", method = RequestMethod.GET)
     public Response queryHotService(@ApiParam(value = "条数") @RequestParam(required = false) int count,
                                       @ApiParam(value = "合作类型：1：任务，2：服务，3：资质合作")@RequestParam String type)  {
         Response Response = new Response();
@@ -117,7 +117,7 @@ public class CooperationSiteController {
      * 威客信息詳情
      */
     @ApiOperation(value="威客信息詳情",notes="威客信息詳情",response = Cooperation.class)
-    @RequestMapping(value = "cooperationInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_witkey", method = RequestMethod.GET)
     public Response cooperationInfo(@RequestParam String id)  {
         Response response = new Response();
         Cooperation cooperation = cooperationService.queryCooperationInfoById(id);

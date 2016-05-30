@@ -20,4 +20,4 @@ zhuhuibao.iml
 
 #test files
 /target
-/src/test
+#/src/test

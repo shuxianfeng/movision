@@ -20,7 +20,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/4 0004.
  */
 @RestController
-@RequestMapping("/rest/oms")
+@RequestMapping("/rest/witkey/oms")
 public class CooperationOmsController {
     private static final Logger log = LoggerFactory.getLogger(CooperationOmsController.class);
 
@@ -29,10 +29,10 @@ public class CooperationOmsController {
 
 
     /**
-     * 查询我发布的任务（分页）
+     * 查询任务列表
      */
-    @ApiOperation(value="查询任务（后台分页）",notes="查询任务（后台分页）",response = Response.class)
-    @RequestMapping(value = "findAllCooperationByPager", method = RequestMethod.GET)
+    @ApiOperation(value="查询任务列表",notes="查询任务列表",response = Response.class)
+    @RequestMapping(value = "sel_witkeyList", method = RequestMethod.GET)
     public Response findAllMyCooperationByPager(
             @RequestParam(required = false) String pageNo,@RequestParam(required = false) String pageSize,
             @ApiParam(value = "标题")@RequestParam(required = false) String title,

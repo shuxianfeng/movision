@@ -28,7 +28,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/11 0011.
  */
 @RestController
-@RequestMapping("/rest/exhibition")
+@RequestMapping("/rest/expo/mc/")
 public class ExhibitionController {
     private static final Logger log = LoggerFactory.getLogger(ExhibitionController.class);
 
@@ -39,7 +39,7 @@ public class ExhibitionController {
      * 我的活动
      */
     @ApiOperation(value="我的活动",notes="我的活动",response = Response.class)
-    @RequestMapping(value = "findAllMyExhibition", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_myExpoList", method = RequestMethod.GET)
     public Response findAllMyExhibition(@ApiParam(value = "标题")@RequestParam(required = false)String title,
                                         @ApiParam(value = "审核状态")@RequestParam(required = false)String status,
                                         @RequestParam(required = false)String pageNo, @RequestParam(required = false)String pageSize) {
@@ -80,7 +80,7 @@ public class ExhibitionController {
      * 根據id查詢会展详情
      */
     @ApiOperation(value="根據id查詢会展详情",notes="根據id查詢会展详情",response = Response.class)
-    @RequestMapping(value = "queryExhibitionInfoById", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_mc_expo", method = RequestMethod.GET)
     public Response queryExhibitionInfoById(@RequestParam String id)  {
         Response response = new Response();
         Exhibition exhibition = exhibitionService.queryExhibitionInfoById(id);
@@ -92,7 +92,7 @@ public class ExhibitionController {
      * 会展信息编辑更新
      */
     @ApiOperation(value="会展信息编辑更新",notes="会展信息编辑更新",response = Response.class)
-    @RequestMapping(value = "updateExhibitionInfoById", method = RequestMethod.POST)
+    @RequestMapping(value = "upd_expo", method = RequestMethod.POST)
     public Response updateExhibitionInfoById(@ModelAttribute()Exhibition exhibition)  {
         Response response = new Response();
         exhibitionService.updateExhibitionInfoById(exhibition);
@@ -103,7 +103,7 @@ public class ExhibitionController {
      * 会展信息删除
      */
     @ApiOperation(value="会展信息删除",notes="会展信息删除",response = Response.class)
-    @RequestMapping(value = "deleteExhibition", method = RequestMethod.POST)
+    @RequestMapping(value = "del_expo", method = RequestMethod.POST)
     public Response deleteExhibition(@ApiParam(value = "ids,逗号隔开") @RequestParam String ids)  {
         Response response = new Response();
         String[] idList = ids.split(",");
