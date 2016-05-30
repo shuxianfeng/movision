@@ -46,7 +46,7 @@ import java.util.Map;
  * 技术培训
  */
 @RestController
-@RequestMapping("/tech")
+@RequestMapping("/rest/tech")
 @Api(value = "techApi", description = "技术培训接口")
 public class TechController {
 
