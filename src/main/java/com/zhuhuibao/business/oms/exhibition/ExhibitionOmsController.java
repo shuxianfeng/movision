@@ -31,7 +31,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/11 0011.
  */
 @RestController
-@RequestMapping("/rest/oms/expo")
+@RequestMapping("/rest/expo/oms")
 public class ExhibitionOmsController {
     private static final Logger log = LoggerFactory.getLogger(ExhibitionOmsController.class);
 

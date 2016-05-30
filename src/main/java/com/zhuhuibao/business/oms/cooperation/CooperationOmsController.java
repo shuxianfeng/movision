@@ -20,7 +20,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/4 0004.
  */
 @RestController
-@RequestMapping("/rest/oms/witkey/")
+@RequestMapping("/rest/witkey/oms")
 public class CooperationOmsController {
     private static final Logger log = LoggerFactory.getLogger(CooperationOmsController.class);
 
