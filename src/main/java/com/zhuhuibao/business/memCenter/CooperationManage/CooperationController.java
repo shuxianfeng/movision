@@ -28,7 +28,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/4 0004.
  */
 @RestController
-@RequestMapping("/rest/witkey/base/")
+@RequestMapping("/rest/witkey/mc/")
 public class CooperationController {
     private static final Logger log = LoggerFactory.getLogger(CooperationController.class);
 
