@@ -123,7 +123,7 @@ public class CooperationSiteController {
         Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
         response.setData(cooperation);
         cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews())+1));
-        cooperationService.updateCooperation(cooperation);
+        cooperationService.updateCooperationViews(cooperation);
         return response;
     }
 }

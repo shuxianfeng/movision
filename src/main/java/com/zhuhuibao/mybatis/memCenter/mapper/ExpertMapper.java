@@ -13,6 +13,8 @@ public interface ExpertMapper {
 
     int updateExpert(Expert expert);
 
+    int updateExpertViews(Expert expert);
+
     List<Expert> findAllExpertList(RowBounds rowBounds,Map<String,Object> map);
 
     List<Expert> queryHotExpert(int count);

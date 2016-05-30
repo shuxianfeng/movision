@@ -240,4 +240,13 @@
     </set>
     where id = #{id}
   </update>
+  <update id="updateExpertViews" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Expert" >
+    update t_e_expert
+    <set >
+      <if test="views != null" >
+        views = #{views},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
 </mapper>
