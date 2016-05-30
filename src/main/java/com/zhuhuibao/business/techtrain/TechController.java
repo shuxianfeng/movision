@@ -41,6 +41,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 /**
  * 技术培训
  */
@@ -70,21 +71,21 @@ public class TechController {
     @ApiOperation(value = "培训课程下单支付", notes = "培训课程下单支付")
     @RequestMapping(value = "course/pay", method = RequestMethod.POST)
     public void doPay(HttpServletRequest request, HttpServletResponse response,
-                      @ApiParam  @ModelAttribute(value="order") OrderReqBean order) throws Exception {
+                      @ApiParam @ModelAttribute(value = "order") OrderReqBean order) throws Exception {
 
         Gson gson = new Gson();
-        String json   = gson.toJson(order);
+        String json = gson.toJson(order);
 
-        if("true".equals(order.getNeedInvoice())){
+        if ("true".equals(order.getNeedInvoice())) {
             String invoiceTitle = order.getInvoiceTitle();
-            if(invoiceTitle == null){
+            if (invoiceTitle == null) {
                 log.error("已选需要发票,发票抬头不能为空");
-                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"已选需要发票,发票抬头不能为空");
+                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "已选需要发票,发票抬头不能为空");
             }
             String invoiceType = order.getInvoiceType();
-            if(invoiceType == null){
+            if (invoiceType == null) {
                 log.error("已选需要发票,发票类型不能为空");
-                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"已选需要发票,发票类型不能为空");
+                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "已选需要发票,发票类型不能为空");
             }
         }
 
@@ -106,6 +107,7 @@ public class TechController {
 
     /**
      * 批量退款接口
+     *
      * @param response
      * @param data
      */
@@ -168,90 +170,85 @@ public class TechController {
         }
 
     }
-    @RequestMapping(value="coop/add_TechCooperation", method = RequestMethod.POST)
-    @ApiOperation(value="新增技术合作(技术成果，技术需求)",notes = "新增技术合作(技术成果，技术需求)",response = Response.class)
-    public Response insertTechCooperation(@ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
-    {
+
+    @RequestMapping(value = "coop/add_TechCooperation", method = RequestMethod.POST)
+    @ApiOperation(value = "新增技术合作(技术成果，技术需求)", notes = "新增技术合作(技术成果，技术需求)", response = Response.class)
+    public Response insertTechCooperation(@ApiParam(value = "技术合作：技术成果，技术需求") @ModelAttribute(value = "techCoop") TechCooperation techCoop) {
         log.info("insert tech cooperation");
         int result = techService.insert(techCoop);
         Response response = new Response();
         return response;
     }
 
-    @RequestMapping(value="coop/sel_tech_cooperation", method = RequestMethod.GET)
-    @ApiOperation(value="频道页搜索技术合作(技术成果，技术需求)",notes = "频道页搜索技术合作(技术成果，技术需求)",response = Response.class)
+    @RequestMapping(value = "coop/sel_tech_cooperation", method = RequestMethod.GET)
+    @ApiOperation(value = "频道页搜索技术合作(技术成果，技术需求)", notes = "频道页搜索技术合作(技术成果，技术需求)", response = Response.class)
     public Response findAllTechCooperationPager(@ApiParam(value = "系统分类") @RequestParam(required = false) String systemCategory,
                                                 @ApiParam(value = "应用领域") @RequestParam(required = false) String applicationArea,
                                                 @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-                                                @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize)
-    {
+                                                @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
         Response response = new Response();
-        Map<String,Object> condition = new HashMap<String,Object>();
+        Map<String, Object> condition = new HashMap<String, Object>();
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        condition.put("systemCategory",systemCategory);
-        condition.put("applicationArea",applicationArea);
+        Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        condition.put("systemCategory", systemCategory);
+        condition.put("applicationArea", applicationArea);
         condition.put("status", TechConstant.TechCooperationnStatus.AUDITPASS.toString());
-        List<Map<String,String>> techList = techService.findAllTechCooperationPager(pager,condition);
+        List<Map<String, String>> techList = techService.findAllTechCooperationPager(pager, condition);
         pager.result(techList);
         response.setData(pager);
         return response;
     }
 
-    @RequestMapping(value="coop/sel_oms_tech_cooperation", method = RequestMethod.GET)
-    @ApiOperation(value="运营管理平台搜索技术合作(技术成果，技术需求)",notes = "运营管理平台技术合作(技术成果，技术需求)",response = Response.class)
+    @RequestMapping(value = "coop/sel_oms_tech_cooperation", method = RequestMethod.GET)
+    @ApiOperation(value = "运营管理平台搜索技术合作(技术成果，技术需求)", notes = "运营管理平台技术合作(技术成果，技术需求)", response = Response.class)
     public Response findAllOMSTechCooperationPager(@ApiParam(value = "系统分类") @RequestParam(required = false) String systemCategory,
                                                    @ApiParam(value = "应用领域") @RequestParam(required = false) String applicationArea,
                                                    @ApiParam(value = "标题") @RequestParam(required = false) String title,
                                                    @ApiParam(value = "类型：1成果，2需求") @RequestParam(required = false) String type,
-                                                   @ApiParam(value = "状态") @RequestParam(required = false)   String status,
+                                                   @ApiParam(value = "状态") @RequestParam(required = false) String status,
                                                    @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-                                                   @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize)
-    {
+                                                   @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
         Response response = new Response();
-        Map<String,Object> condition = new HashMap<String,Object>();
-        condition.put("systemCategory",systemCategory);
-        condition.put("applicationArea",applicationArea);
+        Map<String, Object> condition = new HashMap<String, Object>();
+        condition.put("systemCategory", systemCategory);
+        condition.put("applicationArea", applicationArea);
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        if(title != null && !"".equals(title))
-        {
-            condition.put("title",title.replace("_","\\_"));
+        Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        if (title != null && !"".equals(title)) {
+            condition.put("title", title.replace("_", "\\_"));
         }
-        condition.put("type",type);
-        condition.put("status",status);
-        List<Map<String,String>> techList = techService.findAllTechCooperationPager(pager,condition);
+        condition.put("type", type);
+        condition.put("status", status);
+        List<Map<String, String>> techList = techService.findAllTechCooperationPager(pager, condition);
         pager.result(techList);
         response.setData(pager);
         return response;
     }
 
-    @RequestMapping(value="coop/upd_oms_tech_cooperation", method = RequestMethod.POST)
-    @ApiOperation(value="修改技术合作(技术成果，技术需求)",notes = "修改技术合作(技术成果，技术需求)",response = Response.class)
-    public Response updateOMSTechCooperation( @ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
-    {
+    @RequestMapping(value = "coop/upd_oms_tech_cooperation", method = RequestMethod.POST)
+    @ApiOperation(value = "修改技术合作(技术成果，技术需求)", notes = "修改技术合作(技术成果，技术需求)", response = Response.class)
+    public Response updateOMSTechCooperation(@ApiParam(value = "技术合作：技术成果，技术需求") @ModelAttribute(value = "techCoop") TechCooperation techCoop) {
         Response response = new Response();
         int result = techService.updateTechCooperation(techCoop);
         return response;
     }
 
-    @RequestMapping(value="coop/del_oms_tech_cooperation", method = RequestMethod.POST)
-    @ApiOperation(value="删除技术合作(技术成果，技术需求)",notes = "删除技术合作(技术成果，技术需求)",response = Response.class)
-    public Response deleteOMSTechCooperation( @ApiParam(value = "技术合作ID")  @RequestParam() String techId)
-    {
+    @RequestMapping(value = "coop/del_oms_tech_cooperation", method = RequestMethod.POST)
+    @ApiOperation(value = "删除技术合作(技术成果，技术需求)", notes = "删除技术合作(技术成果，技术需求)", response = Response.class)
+    public Response deleteOMSTechCooperation(@ApiParam(value = "技术合作ID") @RequestParam() String techId) {
         Response response = new Response();
-        Map<String,Object> condition = new HashMap<String,Object>();
-        condition.put("id",techId);
+        Map<String, Object> condition = new HashMap<String, Object>();
+        condition.put("id", techId);
         condition.put("status", TechConstant.TechCooperationnStatus.DELETE.toString());
         int result = techService.deleteTechCooperation(condition);
         return response;
