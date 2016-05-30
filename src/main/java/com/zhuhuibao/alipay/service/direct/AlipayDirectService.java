@@ -30,7 +30,13 @@ public class AlipayDirectService {
      * 接口服务名称
      */
     public static final String SERVICE_NAME = AlipayPropertiesLoader.getPropertyValue("direct_service");
+    /**
+     * 支付宝异步通知
+     */
     public static final String NOTIFY_URL =  AlipayPropertiesLoader.getPropertyValue("direct_notify_url");
+    /**
+     * 支付宝同步通知
+     */
 //    public static final String RETURN_URL =  AlipayPropertiesLoader.getPropertyValue("direct_return_url");
 
     @Autowired
@@ -39,21 +45,6 @@ public class AlipayDirectService {
     @Autowired
     private PublishCourseService publishCourseService;
 
-    /**
-     * 支付宝支付
-     *
-     * @param paramMap 请求参数集合
-     * @return
-     */
-    public String alipayRequst(Map<String, String> paramMap) throws Exception {
-
-        paramMap.put("service" ,SERVICE_NAME);
-//        paramMap.put("returnUrl", RETURN_URL); //同步通知
-        paramMap.put("notifyUrl", NOTIFY_URL);   //异步通知
-
-        return  alipayService.alipay(paramMap, PayConstants.ALIPAY_METHOD_GET);
-
-    }
 
     /**
      * 立即支付 线程同步
@@ -84,7 +75,7 @@ public class AlipayDirectService {
 
 
         String  sHtmlText = alipayRequst(paramMap);
-        log.info("支付宝请求页面:{}", sHtmlText);
+        log.info("支付宝支付请求页面:{}", sHtmlText);
 
         PrintWriter out = null;
         try {
@@ -100,9 +91,22 @@ public class AlipayDirectService {
                 out.close();
             }
         }
-
-
     }
 
+    /**
+     * 支付宝支付
+     *
+     * @param paramMap 请求参数集合
+     * @return
+     */
+    public String alipayRequst(Map<String, String> paramMap) throws Exception {
+
+        paramMap.put("service" ,SERVICE_NAME);
+//        paramMap.put("returnUrl", RETURN_URL); //同步通知
+        paramMap.put("notifyUrl", NOTIFY_URL);   //异步通知
+
+        return  alipayService.alipay(paramMap, PayConstants.ALIPAY_METHOD_GET);
+
+    }
 
 }
