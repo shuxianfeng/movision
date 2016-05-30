@@ -8,6 +8,7 @@ import com.zhuhuibao.alipay.service.direct.AlipayDirectService;
 import com.zhuhuibao.alipay.service.refund.AlipayRefundService;
 import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.pojo.OrderReqBean;
@@ -15,8 +16,10 @@ import com.zhuhuibao.common.pojo.RefundItem;
 import com.zhuhuibao.common.pojo.RefundReqBean;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.mybatis.order.entity.Order;
 import com.zhuhuibao.mybatis.order.service.OrderService;
+import com.zhuhuibao.mybatis.techtrain.entity.TechData;
 import com.zhuhuibao.shiro.realm.OMSRealm;
 import com.zhuhuibao.utils.CommonUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -27,6 +30,7 @@ import com.zhuhuibao.mybatis.techtrain.entity.TechCooperation;
 import com.zhuhuibao.mybatis.techtrain.service.TechnologyService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +38,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,6 +72,9 @@ public class TechController {
 
     @Autowired
     TechnologyService techService;
+
+    @Autowired
+    private UploadService uploadService;
 
     @ApiOperation(value = "培训课程下单支付", notes = "培训课程下单支付")
     @RequestMapping(value = "course/pay", method = RequestMethod.POST)
@@ -171,17 +179,31 @@ public class TechController {
 
     }
 
-    @RequestMapping(value = "coop/add_TechCooperation", method = RequestMethod.POST)
-    @ApiOperation(value = "新增技术合作(技术成果，技术需求)", notes = "新增技术合作(技术成果，技术需求)", response = Response.class)
-    public Response insertTechCooperation(@ApiParam(value = "技术合作：技术成果，技术需求") @ModelAttribute(value = "techCoop") TechCooperation techCoop) {
+    @RequestMapping(value="site/coop/add_tech_cooperation", method = RequestMethod.POST)
+    @ApiOperation(value="新增技术合作(技术成果，技术需求)",notes = "新增技术合作(技术成果，技术需求)",response = Response.class)
+    public Response insertTechCooperation(@ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
+    {
         log.info("insert tech cooperation");
-        int result = techService.insert(techCoop);
+        int result = techService.insertTechCooperation(techCoop);
         Response response = new Response();
         return response;
     }
 
-    @RequestMapping(value = "coop/sel_tech_cooperation", method = RequestMethod.GET)
-    @ApiOperation(value = "频道页搜索技术合作(技术成果，技术需求)", notes = "频道页搜索技术合作(技术成果，技术需求)", response = Response.class)
+
+    @RequestMapping(value="site/coop/sel_tech_cooperation", method = RequestMethod.POST)
+    @ApiOperation(value="查看技术合作详情",notes = "查看技术合作详情",response = Response.class)
+    public Response previewTechCooperation(@ApiParam(value = "技术合作成果、需求ID")  @RequestParam String techCoopId)
+    {
+
+        TechCooperation techCoop = techService.selectTechCooperationById(techCoopId);
+        techService.updateTechCooperationViews(techCoopId);
+        Response response = new Response();
+        response.setData(techCoop);
+        return response;
+    }
+
+    @RequestMapping(value="site/coop/sel_tech_cooperation", method = RequestMethod.GET)
+    @ApiOperation(value="频道页搜索技术合作(技术成果，技术需求)",notes = "频道页搜索技术合作(技术成果，技术需求)",response = Response.class)
     public Response findAllTechCooperationPager(@ApiParam(value = "系统分类") @RequestParam(required = false) String systemCategory,
                                                 @ApiParam(value = "应用领域") @RequestParam(required = false) String applicationArea,
                                                 @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
@@ -204,15 +226,16 @@ public class TechController {
         return response;
     }
 
-    @RequestMapping(value = "coop/sel_oms_tech_cooperation", method = RequestMethod.GET)
-    @ApiOperation(value = "运营管理平台搜索技术合作(技术成果，技术需求)", notes = "运营管理平台技术合作(技术成果，技术需求)", response = Response.class)
-    public Response findAllOMSTechCooperationPager(@ApiParam(value = "系统分类") @RequestParam(required = false) String systemCategory,
-                                                   @ApiParam(value = "应用领域") @RequestParam(required = false) String applicationArea,
-                                                   @ApiParam(value = "标题") @RequestParam(required = false) String title,
-                                                   @ApiParam(value = "类型：1成果，2需求") @RequestParam(required = false) String type,
-                                                   @ApiParam(value = "状态") @RequestParam(required = false) String status,
-                                                   @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-                                                   @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
+
+    @RequestMapping(value="oms/coop/sel_tech_cooperation", method = RequestMethod.GET)
+    @ApiOperation(value="运营管理平台搜索技术合作(技术成果，技术需求)",notes = "运营管理平台技术合作(技术成果，技术需求)",response = Response.class)
+    public Response findAllTechCooperationPager(@ApiParam(value = "系统分类") @RequestParam(required = false) String systemCategory,
+                                                @ApiParam(value = "应用领域") @RequestParam(required = false) String applicationArea,
+                                                @ApiParam(value = "标题") @RequestParam(required = false) String title,
+                                                @ApiParam(value = "类型：1成果，2需求") @RequestParam(required = false) String type,
+                                                @ApiParam(value = "状态") @RequestParam(required = false) String status,
+                                                @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
+                                                @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("systemCategory", systemCategory);
@@ -235,17 +258,20 @@ public class TechController {
         return response;
     }
 
-    @RequestMapping(value = "coop/upd_oms_tech_cooperation", method = RequestMethod.POST)
-    @ApiOperation(value = "修改技术合作(技术成果，技术需求)", notes = "修改技术合作(技术成果，技术需求)", response = Response.class)
-    public Response updateOMSTechCooperation(@ApiParam(value = "技术合作：技术成果，技术需求") @ModelAttribute(value = "techCoop") TechCooperation techCoop) {
+
+    @RequestMapping(value="oms/coop/upd_tech_cooperation", method = RequestMethod.POST)
+    @ApiOperation(value="修改技术合作(技术成果，技术需求)",notes = "修改技术合作(技术成果，技术需求)",response = Response.class)
+    public Response updateTechCooperation( @ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
+    {
         Response response = new Response();
         int result = techService.updateTechCooperation(techCoop);
         return response;
     }
 
-    @RequestMapping(value = "coop/del_oms_tech_cooperation", method = RequestMethod.POST)
-    @ApiOperation(value = "删除技术合作(技术成果，技术需求)", notes = "删除技术合作(技术成果，技术需求)", response = Response.class)
-    public Response deleteOMSTechCooperation(@ApiParam(value = "技术合作ID") @RequestParam() String techId) {
+    @RequestMapping(value="oms/coop/del_tech_cooperation", method = RequestMethod.POST)
+    @ApiOperation(value="删除技术合作(技术成果，技术需求)",notes = "删除技术合作(技术成果，技术需求)",response = Response.class)
+    public Response deleteTechCooperation( @ApiParam(value = "技术合作ID")  @RequestParam() String techId)
+    {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("id", techId);
@@ -253,4 +279,54 @@ public class TechController {
         int result = techService.deleteTechCooperation(condition);
         return response;
     }
+
+    @ApiOperation(value="上传技术资料(行业解决方案，技术文档，培训资料)",notes="上传技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)
+    @RequestMapping(value = "site/data/upload_tech_data", method = RequestMethod.POST)
+    public Response uploadAskList(HttpServletRequest req) throws IOException {
+        Response result = new Response();
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if(null != session){
+            String url = uploadService.upload(req,"tech");
+            Map map = new HashMap();
+            map.put(Constants.name,url);
+            result.setData(map);
+            result.setCode(200);
+        }else{
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
+
+    @RequestMapping(value="site/data/add_Tech_data", method = RequestMethod.POST)
+    @ApiOperation(value="新增技术资料(行业解决方案，技术文档，培训资料)",notes = "新增技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)
+    public Response insertTechData(@ApiParam(value = "技术资料:行业解决方案，技术文档，培训资料")  @ModelAttribute(value="techData")TechData techData)
+    {
+        int result = techService.insertTechData(techData);
+        Response response = new Response();
+        return response;
+    }
+
+    @RequestMapping(value="oms/data/del_tech_data", method = RequestMethod.POST)
+    @ApiOperation(value="删除技术资料(行业解决方案，技术文档，培训资料)",notes = "删除技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)
+    public Response deleteTechData( @ApiParam(value = "技术资料ID")  @RequestParam() String techDataId)
+    {
+        Response response = new Response();
+        Map<String,Object> condition = new HashMap<String,Object>();
+        condition.put("id",techDataId);
+        condition.put("status", TechConstant.TechCooperationnStatus.DELETE.toString());
+        int result = techService.deleteTechData(condition);
+        return response;
+    }
+
+    @RequestMapping(value="oms/data/upd_tech_data", method = RequestMethod.POST)
+    @ApiOperation(value="修改技术资料(行业解决方案，技术文档，培训资料)",notes = "修改技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)
+    public Response updateTechData( @ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techData") TechData techData)
+    {
+        Response response = new Response();
+        int result = techService.updateTechData(techData);
+        return response;
+    }
+
+
 }

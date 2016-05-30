@@ -17,9 +17,9 @@ public class TechCooperation {
     @ApiModelProperty(value = "创建者ID")
     private Long createID;
     @ApiModelProperty(value = "发布时间")
-    private Date publishTime;
+    private String publishTime;
     @ApiModelProperty(value = "修改时间")
-    private Date updateTime;
+    private String updateTime;
     @ApiModelProperty(value = "标题")
     private String title;
     @ApiModelProperty(value = "系统分类")
@@ -69,19 +69,19 @@ public class TechCooperation {
         this.createID = createID;
     }
 
-    public Date getPublishTime() {
+    public String getPublishTime() {
         return publishTime;
     }
 
-    public void setPublishTime(Date publishTime) {
+    public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

@@ -24,4 +24,6 @@ public interface TechCooperationMapper {
     List<Map<String,String>> findAllOMSTechCooperationPager(RowBounds rowBounds,Map<String,Object> condition);
 
     int deleteTechCooperation(Map<String, Object> condition);
+
+    int updateTechCooperationViews(Long id);
 }
