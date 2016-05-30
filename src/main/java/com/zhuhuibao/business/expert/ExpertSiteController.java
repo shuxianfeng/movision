@@ -3,6 +3,7 @@ package com.zhuhuibao.business.expert;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
@@ -35,7 +36,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/18 0018.
  */
 @RestController
-@RequestMapping("/rest/expertSite")
+@RequestMapping("/expert")
 public class ExpertSiteController {
     private static final Logger log = LoggerFactory
             .getLogger(ExpertSiteController.class);
@@ -48,7 +49,7 @@ public class ExpertSiteController {
 
 
     @ApiOperation(value="发布技术成果",notes="发布技术成果",response = Response.class)
-    @RequestMapping(value = "publishAchievement", method = RequestMethod.POST)
+    @RequestMapping(value = "ach/add_achievement", method = RequestMethod.POST)
     public Response publishAchievement(@ModelAttribute Achievement achievement) throws Exception {
         Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
@@ -68,7 +69,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="技术成果详情",notes="技术成果详情",response = Response.class)
-    @RequestMapping(value = "queryAchievementById", method = RequestMethod.GET)
+    @RequestMapping(value = "ach/sel_achievement", method = RequestMethod.GET)
     public Response queryAchievementById(@ApiParam(value = "技术成果ID")@RequestParam String id) throws Exception {
         Response response = new Response();
         Map<String,String> map = expertService.queryAchievementById(id);
@@ -77,7 +78,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="技术成果列表(前台分页)",notes="技术成果列表(前台分页)",response = Response.class)
-    @RequestMapping(value = "achievementList", method = RequestMethod.GET)
+    @RequestMapping(value = "ach/sel_achievementList", method = RequestMethod.GET)
     public Response achievementList(@ApiParam(value = "系统分类")@RequestParam(required = false) String systemType,
                                     @ApiParam(value = "应用领域")@RequestParam(required = false)String useArea,
                                     @RequestParam(required = false)String pageNo,
@@ -95,7 +96,7 @@ public class ExpertSiteController {
         //查询传参
         map.put("systemType",systemType);
         map.put("useArea",useArea);
-        map.put("type",1);
+        map.put("type", ExpertConstant.EXPERT_TYPE_ONE);
         List<Achievement> achievementList = expertService.findAllAchievementList(pager,map);
         List list = new ArrayList();
         for(Achievement achievement:achievementList){
@@ -111,7 +112,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="技术成果列表(前台)控制条数",notes="技术成果列表(前台)控制条数",response = Response.class)
-    @RequestMapping(value = "achievementListByCount", method = RequestMethod.GET)
+    @RequestMapping(value = "ach/sel_achievementList_count", method = RequestMethod.GET)
     public Response achievementListByCount(@ApiParam(value = "条数")@RequestParam int count) throws Exception {
         Response response = new Response();
         List<Map<String,String>> achievementList = expertService.findAchievementListByCount(count);
@@ -120,7 +121,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="协会动态详情",notes="协会动态详情",response = Response.class)
-    @RequestMapping(value = "queryDynamicById", method = RequestMethod.GET)
+    @RequestMapping(value = "dynamic/sel_dynamic", method = RequestMethod.GET)
     public Response queryDynamicById(@ApiParam(value = "协会动态Id")@RequestParam String id) throws Exception {
         Response response = new Response();
         Dynamic dynamic = expertService.queryDynamicById(id);
@@ -129,7 +130,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="协会动态列表(前台分页)",notes="协会动态列表(前台分页)",response = Response.class)
-    @RequestMapping(value = "dynamicList", method = RequestMethod.GET)
+    @RequestMapping(value = "dynamic/sel_dynamicList", method = RequestMethod.GET)
     public Response dynamicList(@RequestParam(required = false)String pageNo,
                                 @RequestParam(required = false)String pageSize) throws Exception {
         Response response = new Response();
@@ -143,7 +144,7 @@ public class ExpertSiteController {
         Paging<Dynamic> pager = new Paging<Dynamic>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String,Object> map = new HashMap<>();
         //查询传参
-        map.put("type",1);
+        map.put("type",ExpertConstant.EXPERT_TYPE_ONE);
         List<Dynamic> dynamicList = expertService.findAllDynamicList(pager,map);
         List list = new ArrayList();
         for(Dynamic dynamic:dynamicList){
@@ -159,7 +160,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="协会动态列表(前台)控制条数",notes="协会动态列表(前台)控制条数",response = Response.class)
-    @RequestMapping(value = "dynamicListByCount", method = RequestMethod.GET)
+    @RequestMapping(value = "dynamic/sel_dynamicList_count", method = RequestMethod.GET)
     public Response dynamicListByCount(@ApiParam(value = "条数")@RequestParam int count) throws Exception {
         Response response = new Response();
         List<Map<String,String>> dynamicList = expertService.findDynamicListByCount(count);
@@ -168,7 +169,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="申请专家",notes="申请专家",response = Response.class)
-    @RequestMapping(value = "applyExpert", method = RequestMethod.POST)
+    @RequestMapping(value = "base/add_expert", method = RequestMethod.POST)
     public Response applyExpert(@ModelAttribute Expert expert) throws Exception {
         Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
@@ -188,7 +189,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="专家详情(前台)",notes="专家详情(前台)",response = Response.class)
-    @RequestMapping(value = "expertInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "base/sel_expert", method = RequestMethod.GET)
     public Response expertInfo(@ApiParam(value = "专家id")@RequestParam String id) {
         Response response = new Response();
         Expert expert = expertService.queryExpertById(id);
@@ -209,7 +210,7 @@ public class ExpertSiteController {
         Map<String,Object> achievementMap = new HashMap<>();
         //查询传参
         achievementMap.put("createId",expert.getCreateId());
-        achievementMap.put("status",1);
+        achievementMap.put("status",ExpertConstant.EXPERT_ACHIEVEMENT_STATUS_ONE);
         List<Achievement> achievementList = expertService.findAchievementList(achievementMap);
         List list = new ArrayList();
         for(Achievement achievement:achievementList){
@@ -228,7 +229,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="专家联系方式详情(前台)",notes="专家联系方式详情(前台)",response = Response.class)
-    @RequestMapping(value = "expertContactInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "base/sel_expert_contact", method = RequestMethod.GET)
     public Response expertContactInfo(@ApiParam(value = "专家id")@RequestParam String id)  {
         Response response = new Response();
         Expert expert = expertService.queryExpertById(id);
@@ -242,7 +243,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="专家列表(前台分页)",notes="专家列表(前台分页)",response = Response.class)
-    @RequestMapping(value = "expertList", method = RequestMethod.GET)
+    @RequestMapping(value = "base/sel_expertList", method = RequestMethod.GET)
     public Response expertList(@ApiParam(value = "省")@RequestParam(required = false) String province,
                                @ApiParam(value = "专家类型")@RequestParam(required = false) String expertType,
                                @RequestParam(required = false)String pageNo,
@@ -260,7 +261,7 @@ public class ExpertSiteController {
         //查询传参
         map.put("province",province);
         map.put("expertType",expertType);
-        map.put("type",1);
+        map.put("type",ExpertConstant.EXPERT_TYPE_ONE);
         List<Expert> expertList = expertService.findAllExpertList(pager,map);
         List list = new ArrayList();
         for (Expert expert : expertList) {
@@ -280,7 +281,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="热门专家(前台)",notes="热门专家(前台)",response = Response.class)
-    @RequestMapping(value = "queryHotExpert", method = RequestMethod.GET)
+    @RequestMapping(value = "base/sel_hot_expert", method = RequestMethod.GET)
     public Response queryHotExpert(@ApiParam(value = "条数")@RequestParam(required = false) int count) {
         Response response = new Response();
         List<Expert> expertList = expertService.queryHotExpert(count);
@@ -299,7 +300,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="最新专家(前台)",notes="最新专家(前台)",response = Response.class)
-    @RequestMapping(value = "queryLatestExpert", method = RequestMethod.GET)
+    @RequestMapping(value = "base/sel_latest_expert", method = RequestMethod.GET)
     public Response queryLatestExpert(@ApiParam(value = "条数")@RequestParam(required = false) int count) {
         Response response = new Response();
         List<Expert> expertList = expertService.queryLatestExpert(count);
@@ -324,7 +325,7 @@ public class ExpertSiteController {
      * @param response
      */
     @ApiOperation(value="向专家提问时的图形验证码",notes="向专家提问时的图形验证码")
-    @RequestMapping(value = "imgCode", method = RequestMethod.GET)
+    @RequestMapping(value = "base/imgCode", method = RequestMethod.GET)
     public void getCode(HttpServletResponse response) {
         log.debug("获得验证码");
         response.setDateHeader("Expires", 0);
@@ -359,7 +360,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="向专家咨询(前台)",notes="向专家咨询(前台)",response = Response.class)
-    @RequestMapping(value = "askExpert", method = RequestMethod.POST)
+    @RequestMapping(value = "base/add_askExpert", method = RequestMethod.POST)
     public Response askExpert(@ApiParam(value = "咨询内容")@RequestParam String content,
                               @ApiParam(value = "验证码")@RequestParam String code)  {
         Response response = new Response();
@@ -388,7 +389,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="專家互動(前台)",notes="專家互動(前台)",response = Response.class)
-    @RequestMapping(value = "expertInteraction", method = RequestMethod.GET)
+    @RequestMapping(value = "base/sel_expertInteraction", method = RequestMethod.GET)
     public Response expertInteraction(@RequestParam int count)  {
         Response response = new Response();
         List<Map<String,String>> list = expertService.expertInteraction(count);
@@ -397,29 +398,25 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="系統分類常量",notes="系統分類常量",response = Response.class)
-    @RequestMapping(value = "SystemList", method = RequestMethod.GET)
+    @RequestMapping(value = "base/sel_systemList", method = RequestMethod.GET)
     public Response SystemList()  {
         Response response = new Response();
-        //系統分類type為19
-        String type = "19";
-        List<Map<String,String>> list = constantService.findByType(type);
+        List<Map<String,String>> list = constantService.findByType(ExpertConstant.EXPERT_SYSTEM_TYPE);
         response.setData(list);
         return response;
     }
 
     @ApiOperation(value="應用領域常量",notes="應用領域常量",response = Response.class)
-    @RequestMapping(value = "useAreaList", method = RequestMethod.GET)
+    @RequestMapping(value = "base/sel_useAreaList", method = RequestMethod.GET)
     public Response useAreaList()  {
         Response response = new Response();
-        //應用領域type為18
-        String type = "18";
-        List<Map<String,String>> list = constantService.findByType(type);
+        List<Map<String,String>> list = constantService.findByType(ExpertConstant.EXPERT_USEAREA_TYPE);
         response.setData(list);
         return response;
     }
 
     @ApiOperation(value="申請專家支持",notes="申請專家支持",response = Response.class)
-    @RequestMapping(value = "applyExpertSupport", method = RequestMethod.POST)
+    @RequestMapping(value = "base/add_expertSupport", method = RequestMethod.POST)
     public Response applyExpertSupport(@ApiParam(value = "联系人名称")@RequestParam String linkName,
                                        @ApiParam(value = "手机")@RequestParam String mobile,
                                        @ApiParam(value = "验证码")@RequestParam String code,
@@ -444,7 +441,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="最新专家培训(接口待完成)",notes="最新专家培训(接口待完成)",response = Response.class)
-    @RequestMapping(value = "queryLatestExpertTrain", method = RequestMethod.GET)
+    @RequestMapping(value = "train/sel_latest_train", method = RequestMethod.GET)
     public Response queryLatestExpertTrain(@ApiParam(value = "条数")@RequestParam int count)  {
         Response response = new Response();
 
@@ -452,7 +449,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="专家培训列表(接口待完成)",notes="专家培训列表(接口待完成)",response = Response.class)
-    @RequestMapping(value = "queryExpertTrainList", method = RequestMethod.GET)
+    @RequestMapping(value = "train/sel_trainList", method = RequestMethod.GET)
     public Response queryExpertTrainList(@ApiParam(value = "省")@RequestParam(required = false) String province,
                                          @RequestParam(required = false)String pageNo,
                                          @RequestParam(required = false)String pageSize)  {
@@ -462,7 +459,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="开课申请保存(接口待完成)",notes="开课申请保存(接口待完成)",response = Response.class)
-    @RequestMapping(value = "startClassSave", method = RequestMethod.POST)
+    @RequestMapping(value = "train/add_class", method = RequestMethod.POST)
     public Response startClassSave(@ApiParam(value = "省")@RequestParam(required = false) String province,
                                          @RequestParam(required = false)String pageNo,
                                          @RequestParam(required = false)String pageSize)  {
@@ -472,7 +469,7 @@ public class ExpertSiteController {
     }
 
     @ApiOperation(value="专家培训详情(接口待完成)",notes="专家培训详情(接口待完成)",response = Response.class)
-    @RequestMapping(value = "queryExpertTrainInfoById", method = RequestMethod.GET)
+    @RequestMapping(value = "train/sel_train_info", method = RequestMethod.GET)
     public Response queryExpertTrainInfoById(@RequestParam String id)  {
         Response response = new Response();
 
