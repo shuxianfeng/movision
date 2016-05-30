@@ -21,7 +21,7 @@ public class ApiConstants {
     private int uploadDocMaxPostSize;
 
     @Value("${uploadTechMaxPostSize}")
-    private int uploadTechMaxPostSize;
+    private Long uploadTechMaxPostSize;
 
     public String getUploadDir() {
         return uploadDir;
@@ -55,11 +55,11 @@ public class ApiConstants {
         this.uploadDocMaxPostSize = uploadDocMaxPostSize;
     }
 
-    public int getUploadTechMaxPostSize() {
+    public Long getUploadTechMaxPostSize() {
         return uploadTechMaxPostSize;
     }
 
-    public void setUploadTechMaxPostSize(int uploadTechMaxPostSize) {
+    public void setUploadTechMaxPostSize(Long uploadTechMaxPostSize) {
         this.uploadTechMaxPostSize = uploadTechMaxPostSize;
     }
 }
