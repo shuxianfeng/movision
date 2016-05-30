@@ -157,6 +157,8 @@
     select id, projectid, deptType, partyType, typePartyB, name, linkman, mobile, telephone,
     fax, address, note, is_deleted from t_prj_linkman
     <where>
+    is_deleted=0 
+    
     <if test="projectid != null and projectid != ''">
       and projectid = #{projectid}
     </if>

@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.oms.mapper;
 
 import com.zhuhuibao.mybatis.oms.entity.TenderToned;
+
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,4 +22,6 @@ public interface TenderTonedMapper {
     List<TenderToned> findAllTenderTonedPager(Map<String,Object> map,RowBounds rowBounds);
 
     List<Map<String,String>> queryLatestTenderToned(Map<String,Object> map);
+
+	TenderToned selectByPrimaryKeyCode(Long id);
 }
