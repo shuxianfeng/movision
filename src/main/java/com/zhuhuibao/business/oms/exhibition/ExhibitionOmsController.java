@@ -42,7 +42,7 @@ public class ExhibitionOmsController {
      * 一站式会展定制申请处理
      */
     @ApiOperation(value="会展定制申请处理",notes="会展定制申请处理",response = Response.class)
-    @RequestMapping(value = "updateMeetingOrderStatus", method = RequestMethod.POST)
+    @RequestMapping(value = "upd_meetingOrder", method = RequestMethod.POST)
     public Response updateMeetingOrderStatus(@ModelAttribute()MeetingOrder meetingOrder)  {
         Response Response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
@@ -65,7 +65,7 @@ public class ExhibitionOmsController {
      * 一站式会展定制查看
      */
     @ApiOperation(value="会展定制查看",notes="会展定制查看",response = Response.class)
-    @RequestMapping(value = "queryMeetingOrderInfoById", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_meetingOrder", method = RequestMethod.GET)
     public Response queryMeetingOrderInfoById(@RequestParam String id)  {
         Response Response = new Response();
         MeetingOrder meetingOrder = exhibitionService.queryMeetingOrderInfoById(id);
@@ -77,7 +77,7 @@ public class ExhibitionOmsController {
      * 一站式会展定制列表
      */
     @ApiOperation(value="一站式会展定制列表",notes="一站式会展定制列表",response = Response.class)
-    @RequestMapping(value = "findAllMeetingOrderInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_meetingOrderList", method = RequestMethod.GET)
     public Response findAllMeetingOrderInfo(
             @ApiParam(value = "账号")@RequestParam(required = false) String account,
             @ApiParam(value = "省")@RequestParam(required = false)String province,
@@ -110,7 +110,7 @@ public class ExhibitionOmsController {
      * 发布会展信息
      */
     @ApiOperation(value="发布会展信息",notes="发布会展信息",response = Response.class)
-    @RequestMapping(value = "publishExhibition", method = RequestMethod.POST)
+    @RequestMapping(value = "add_expo", method = RequestMethod.POST)
     public Response publishExhibition(@ModelAttribute()Exhibition exhibition) {
         Response Response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
@@ -144,7 +144,7 @@ public class ExhibitionOmsController {
      * 会展信息列表
      */
     @ApiOperation(value="会展信息列表(运营)",notes="会展信息列表(运营)",response = Response.class)
-    @RequestMapping(value = "findAllExhibitionOms", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_expoList", method = RequestMethod.GET)
     public Response findAllExhibitionOms(@ApiParam(value = "标题")@RequestParam(required = false)String title,
                                            @ApiParam(value = "所属栏目")@RequestParam(required = false)String type,
                                            @ApiParam(value = "审核状态")@RequestParam(required = false)String status,
@@ -176,7 +176,7 @@ public class ExhibitionOmsController {
      * 分布式会展定制列表
      */
     @ApiOperation(value="分布式会展定制列表(运营)",notes="分布式会展定制列表(运营)",response = Response.class)
-    @RequestMapping(value = "findAllDistributedOrder", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_distributedOrderList", method = RequestMethod.GET)
     public Response findAllDistributedOrder(@ApiParam(value = "联系手机")@RequestParam(required = false)String mobile,
                                            @ApiParam(value = "定制类型")@RequestParam(required = false)String type,
                                            @ApiParam(value = "审核状态")@RequestParam(required = false)String status,
@@ -206,7 +206,7 @@ public class ExhibitionOmsController {
      * 分布式会展定制查看
      */
     @ApiOperation(value="分布式会展定制查看",notes="分布式会展定制查看",response = Response.class)
-    @RequestMapping(value = "queryDistributedOrderInfoById", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_distributedOrder", method = RequestMethod.GET)
     public Response queryDistributedOrderInfoById(@RequestParam String id)  {
         Response Response = new Response();
         DistributedOrder distributedOrder = exhibitionService.queryDistributedOrderInfoById(id);
@@ -219,7 +219,7 @@ public class ExhibitionOmsController {
      * 分布式会展定制申请处理
      */
     @ApiOperation(value="分布式会展定制申请处理",notes="分布式会展定制申请处理",response = Response.class)
-    @RequestMapping(value = "updateDistributedStatus", method = RequestMethod.POST)
+    @RequestMapping(value = "upd_distributedOrder", method = RequestMethod.POST)
     public Response updateDistributedStatus(@ModelAttribute()DistributedOrder distributedOrder)  {
         Response Response = new Response();
         Subject currentUser = SecurityUtils.getSubject();

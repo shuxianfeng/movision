@@ -28,7 +28,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/4 0004.
  */
 @RestController
-@RequestMapping("/rest/cooperation")
+@RequestMapping("/witkey/base/")
 public class CooperationController {
     private static final Logger log = LoggerFactory.getLogger(CooperationController.class);
 
@@ -42,7 +42,7 @@ public class CooperationController {
      * 合作类型(大类，子类)
      */
     @ApiOperation(value="合作类型(大类，子类)",notes="合作类型(大类，子类)",response = Response.class)
-    @RequestMapping(value = "cooperationType", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_witkeyTypeList", method = RequestMethod.GET)
     public Response cooperationType()  {
         Response response = new Response();
         List list = cooperationService.cooperationType();
@@ -54,7 +54,7 @@ public class CooperationController {
      * 合作类型(子类)
      */
     @ApiOperation(value="合作类型(子类)",notes="合作类型(子类)",response = Response.class)
-    @RequestMapping(value = "subCooperationType", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_subWitkeyTypeList", method = RequestMethod.GET)
     public Response subCooperationType()  {
         Response response = new Response();
         List list = cooperationService.subCooperationType();
@@ -66,7 +66,7 @@ public class CooperationController {
      * 项目类别
      */
     @ApiOperation(value="项目类别",notes="项目类别",response = Response.class)
-    @RequestMapping(value = "cooperationCategory", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_witkeyCategoryList", method = RequestMethod.GET)
     public Response cooperationCategory()  {
         Response response = new Response();
         //项目类别type为9
@@ -80,7 +80,7 @@ public class CooperationController {
      * 编辑任务
      */
     @ApiOperation(value="编辑任务",notes="编辑任务",response = Response.class)
-    @RequestMapping(value = "updateCooperation", method = RequestMethod.POST)
+    @RequestMapping(value = "upd_witkey", method = RequestMethod.POST)
     public Response updateCooperation(Cooperation cooperation)  {
         Response response = new Response();
         cooperationService.updateCooperation(cooperation);
@@ -91,7 +91,7 @@ public class CooperationController {
      * 批量删除任务
      */
     @ApiOperation(value="批量删除任务",notes="批量删除任务",response = Response.class)
-    @RequestMapping(value = "deleteCooperation", method = RequestMethod.POST)
+    @RequestMapping(value = "del_witkey", method = RequestMethod.POST)
     public Response deleteCooperation(@RequestParam String ids[])  {
         Response response = new Response();
         cooperationService.deleteCooperation(ids);
@@ -102,7 +102,7 @@ public class CooperationController {
      * 查询一条任务的信息
      */
     @ApiOperation(value="查询一条任务的信息",notes="查询一条任务的信息",response = Cooperation.class)
-    @RequestMapping(value = "queryCooperationInfoById", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_mc_witkey", method = RequestMethod.GET)
     public Response queryCooperationInfo(@RequestParam String id)  {
         Response response = new Response();
         Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
@@ -114,7 +114,7 @@ public class CooperationController {
      * 查询我发布的任务（分页）
      */
     @ApiOperation(value="查询我发布的任务（后台分页）",notes="查询我发布的任务（后台分页）",response = Response.class)
-    @RequestMapping(value = "findAllMyCooperationByPager", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_myWitkeyList", method = RequestMethod.GET)
     public Response findAllMyCooperationByPager(
             @RequestParam(required = false) String pageNo,@RequestParam(required = false) String pageSize,
             @ApiParam(value = "合作标题")@RequestParam(required = false) String title,
