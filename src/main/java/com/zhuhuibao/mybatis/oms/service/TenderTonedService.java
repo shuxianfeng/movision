@@ -7,6 +7,7 @@ import com.zhuhuibao.mybatis.oms.entity.TenderToned;
 import com.zhuhuibao.mybatis.oms.mapper.TenderTonedMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,4 +125,21 @@ public class TenderTonedService {
         }
         return tenderTonedList;
     }
+    /**
+     * 预览招中标公共信息
+     * @param id 招中标公告ID
+     * @return
+     */
+	public TenderToned queryTenderToneByIDCode(Long id) {
+		 log.info("preview tender tone info id = "+id.toString());
+	        TenderToned tt = null;
+	        try {
+	            tt = tenderTonedMapper.selectByPrimaryKeyCode(id);
+	        }catch(Exception e)
+	        {
+	            log.error("preview tender tone info error!");
+	            throw e;
+	        }
+	        return tt;
+	}
 }

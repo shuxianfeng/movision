@@ -313,6 +313,7 @@ public class ProjectService {
 			{
 				for(int i=0;i<partyAList.size();i++ )
 				{
+					
 				  linkmanService.updateByPrimaryKeySelective(partyAList.get(i));
 				}
 				 

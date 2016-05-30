@@ -99,6 +99,15 @@ public class TenderTonedController {
         response.setData(tenderToned);
         return response;
     }
+    
+    @RequestMapping(value = "previewTenderTonedCode",method = RequestMethod.GET)
+    @ApiOperation(value="运营管理平台预览招中标信息地区code",notes = "运营管理平台预览",response = Response.class)
+    public Response previewTenderTonedCode(@ApiParam(value = "招中标信息ID") @RequestParam Long tenderTonedID) throws Exception {
+        Response response = new Response();
+        TenderToned tenderToned = ttService.queryTenderToneByIDCode(tenderTonedID);
+        response.setData(tenderToned);
+        return response;
+    }
 
     @RequestMapping(value = "queryLatestTenderToned", method = RequestMethod.GET)
     @ApiOperation(value = "最新招标或中标公告信息或搜索时的推荐，默认10条",notes = "最新招标或中标公告信息，默认10条",response = Response.class)
