@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.oms.mapper.CategoryMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.oms.entity.Category" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="parentId" property="parentId" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="is_deleted" property="is_deleted" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.ResultBean" >
+    <result column="id" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="smallIcon" property="smallIcon" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMap2" type="com.zhuhuibao.common.pojo.ResultBean" >
+    <result column="id" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="parentId" property="smallIcon" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMap1" type="com.zhuhuibao.common.pojo.SysBean" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="systemName" property="systemName" jdbcType="VARCHAR" />
+    <result column="subSystemName" property="subSystemName" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, parentId, sort,smallIcon,bigIcon
+  </sql>
+  <select id="findSystemList" resultMap="ResultMap">
+    select
+    id,name,smallIcon,sort
+    from t_p_category
+    where parentId = 0 and is_deleted = 0 ORDER  by sort
+  </select>
+  <select id="findSubSystemList" resultMap="ResultMap">
+    select
+    id,name
+    from t_p_category
+    where parentId = #{parentId} and is_deleted = 0
+  </select>
+  <select id="findSubSystemListLimit" resultMap="ResultMap">
+    select
+    id,name
+    from t_p_category
+    where parentId = #{parentId} and is_deleted = 0 limit 0,8
+  </select>
+  <insert id="addSystem" parameterType="com.zhuhuibao.mybatis.oms.entity.Category" >
+    insert into t_p_category (id, name, parentId,
+    sort,is_deleted)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER},
+    #{sort,jdbcType=INTEGER},0)
+  </insert>
+  <update id="updateSystem" parameterType="com.zhuhuibao.mybatis.oms.entity.Category" >
+    update t_p_category
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parentId = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="is_deleted != null" >
+        is_deleted = #{is_deleted,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="deleteSystem" parameterType="com.zhuhuibao.mybatis.oms.entity.Category" >
+    update t_p_category
+    <set >
+      is_deleted = 1
+    </set>
+    where id = #{id}
+  </update>
+  <select id="findSystem" resultMap="BaseResultMap">
+    select
+    *
+    from t_p_category
+    where id = #{parentId}
+  </select>
+  <select id="searchAll" resultMap="ResultMap1">
+    SELECT t.id as id,t.name as systemName,p.id as code,p.name as subSystemName,p.sort
+    FROM t_p_category t
+    inner join t_p_category p on t.id = p.parentId
+    where p.is_deleted = 0 and t.is_deleted = 0 ORDER by p.sort
+  </select>
+  <select id="getFcateByScate" resultMap="ResultMap">
+    select b.id,b.name,b.smallIcon
+    from t_p_category a,t_p_category b
+    where a.id=#{scateid} and a.parentId=b.id;
+  </select>
+  <select id="findCategoryByBrand" resultMap="ResultMap1">
+    SELECT DISTINCT p.fcateid as id,p.scateid as code,(
+    SELECT name
+    FROM t_p_category
+    WHERE id= p.fcateid) AS systemName,(
+    SELECT name
+    FROM t_p_category
+    WHERE id= p.scateid) AS subSystemName
+    FROM t_p_product p
+    LEFT JOIN t_p_category c ON c.id = p.fcateid
+    WHERE p.brandid = #{id} and p.status = 1
+    ORDER BY p.fcateid ,p.scateid
+  </select>
+  <select id="findSystemByBrand" resultMap="ResultMap">
+    SELECT DISTINCT p.fcateid as id,c.name
+    FROM t_p_product p
+    LEFT JOIN t_p_category c ON c.id = p.fcateid
+    WHERE p.brandid = #{id} and p.status = 1
+    ORDER BY p.fcateid,p.scateid
+  </select>
+  <select id="querySystem" resultMap="ResultMap2">
+    SELECT id,name,parentId
+    FROM t_p_category
+    WHERE id = #{id}
+  </select>
+  <select id="querySystemByScateid" resultMap="ResultMap2">
+    SELECT ca.id,ca.name
+    FROM t_p_category c
+    left JOIN t_p_category ca on c.parentId = ca.id
+    WHERE c.id = #{id}
+  </select>
+
+</mapper>

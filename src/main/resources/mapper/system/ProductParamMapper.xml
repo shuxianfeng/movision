@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuhuibao.mybatis.product.mapper.ProductParamMapper">
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.product.entity.ProductParam">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="pname" jdbcType="VARCHAR" property="pname" />
+    <result column="pvalue" jdbcType="VARCHAR" property="pvalue" />
+    <result column="createId" jdbcType="BIGINT" property="createId" />
+    <result column="creatTime" jdbcType="TIMESTAMP" property="creatTime" />
+    <result column="searchKey" jdbcType="VARCHAR" property="searchKey" />
+    <result column="removed" jdbcType="BIT" property="removed" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, pname, pvalue, createId, creatTime, searchKey, removed
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_p_product_params
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_p_product_params
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.zhuhuibao.mybatis.product.entity.ProductParam" useGeneratedKeys="true" keyProperty="id">
+    insert into t_p_product_params (pname, pvalue, 
+      createId, creatTime, searchKey, 
+      removed)
+    values (#{pname,jdbcType=VARCHAR}, #{pvalue,jdbcType=VARCHAR}, 
+      #{createId,jdbcType=BIGINT}, now(), #{searchKey,jdbcType=VARCHAR}, 
+      #{removed,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.product.entity.ProductParam" useGeneratedKeys="true" keyProperty="id">
+    insert into t_p_product_params
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pname != null">
+        pname,
+      </if>
+      <if test="pvalue != null">
+        pvalue,
+      </if>
+      <if test="createId != null">
+        createId,
+      </if>
+      <if test="creatTime != null">
+        creatTime,
+      </if>
+      <if test="searchKey != null">
+        searchKey,
+      </if>
+      <if test="removed != null">
+        removed,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pname != null">
+        #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="pvalue != null">
+        #{pvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="creatTime != null">
+        now(),
+      </if>
+      <if test="searchKey != null">
+        #{searchKey,jdbcType=VARCHAR},
+      </if>
+      <if test="removed != null">
+        #{removed,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.product.entity.ProductParam">
+    update t_p_product_params
+    <set>
+      <if test="pname != null">
+        pname = #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="pvalue != null">
+        pvalue = #{pvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        createId = #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="creatTime != null">
+        creatTime = #{creatTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="searchKey != null">
+        searchKey = #{searchKey,jdbcType=VARCHAR},
+      </if>
+      <if test="removed != null">
+        removed = #{removed,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.product.entity.ProductParam">
+    update t_p_product_params
+    set pname = #{pname,jdbcType=VARCHAR},
+      pvalue = #{pvalue,jdbcType=VARCHAR},
+      createId = #{createId,jdbcType=BIGINT},
+      creatTime = #{creatTime,jdbcType=TIMESTAMP},
+      searchKey = #{searchKey,jdbcType=VARCHAR},
+      removed = #{removed,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectParamByIds" parameterType="java.util.List" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_p_product_params
+    where id in
+    <foreach collection="list" item="item" index="index" open="(" separator="," close=")" >  
+        #{item}  
+    </foreach> 
+  </select>
+</mapper>

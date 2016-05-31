@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.DynamicMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Dynamic" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createId" property="createId" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="wordkey" property="wordkey" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="imgurl" property="imgurl" jdbcType="VARCHAR" />
+    <result column="views" property="views" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="is_deleted" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="createName" property="createName" jdbcType="VARCHAR" />
+    <result column="createrType" property="createrType" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, createId, publishTime, updateTime, title, wordkey, description, imgurl, views, 
+    status, is_deleted,content,createrType
+  </sql>
+  <select id="queryDynamicById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT d.id,date_format(d.publishTime,'%Y-%m-%d') publishTime,date_format(d.updateTime,'%Y-%m-%d') updateTime,d.createId,
+    d.title,d.wordkey,d.description,d.imgurl,d.views,d.status,d.content,d.createrType
+    FROM t_e_dynamic d WHERE d.id = #{id}
+  </select>
+  <select id="findDynamicListByCount" resultType="java.util.Map" >
+    SELECT id,title
+    FROM t_e_dynamic
+    WHERE is_deleted = 0 and status = 1
+    ORDER by updateTime DESC limit 0,#{count}
+  </select>
+  <select id="findAllDynamicList" resultMap="BaseResultMap" >
+    SELECT d.id,date_format(d.publishTime,'%Y-%m-%d') publishTime,date_format(d.updateTime,'%Y-%m-%d') updateTime,
+    d.createId,d.title,d.wordkey,d.description,d.imgurl,d.views,d.status,d.content,d.createrType,
+    case when d.createrType = 1 then (select u.username from t_oms_user u where u.id = d.createid)
+    when d.createrType = 2 then (select m.enterpriseName from t_m_member m where m.id = d.createid) end as createName FROM t_e_dynamic d
+    WHERE d.is_deleted = 0
+    <if test="title != null">
+      and d.title like CONCAT('%',#{title},'%')
+    </if>
+    <if test="status != null">
+      and d.status = #{status}
+    </if>
+    <if test="createId != null">
+      and d.createId = #{createId}
+    </if>
+    <if test="type != null">
+      and d.status = 1
+    </if>
+    order by d.updateTime desc
+  </select>
+  <insert id="publishDynamic" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Dynamic" >
+    insert into t_e_dynamic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createId != null" >
+        createId,
+      </if>
+        publishTime,
+        updateTime,
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="wordkey != null" >
+        wordkey,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="imgurl != null" >
+        imgurl,
+      </if>
+      <if test="views != null" >
+        views,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="is_deleted != null" >
+        is_deleted,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="createrType != null" >
+        createrType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="createId != null" >
+        #{createId},
+      </if>
+      now(),
+      now(),
+      <if test="title != null" >
+        #{title},
+      </if>
+      <if test="wordkey != null" >
+        #{wordkey},
+      </if>
+      <if test="description != null" >
+        #{description},
+      </if>
+      <if test="imgurl != null" >
+        #{imgurl},
+      </if>
+      <if test="views != null" >
+        #{views},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="is_deleted != null" >
+        #{is_deleted},
+      </if>
+      <if test="content != null" >
+        #{content},
+      </if>
+      <if test="createrType != null" >
+        #{createrType},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateDynamic" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Dynamic" >
+    update t_e_dynamic
+    <set >
+        updateTime = now(),
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="wordkey != null" >
+        wordkey = #{wordkey},
+      </if>
+      <if test="description != null" >
+        description = #{description},
+      </if>
+      <if test="imgurl != null" >
+        imgurl = #{imgurl},
+      </if>
+      <if test="views != null" >
+        views = #{views},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="is_deleted != null" >
+        is_deleted = #{is_deleted},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

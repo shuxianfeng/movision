@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.AskPriceMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.AskPrice" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="createid" property="createid" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="billurl" property="billurl" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+    <result column="endTime" property="endTime" jdbcType="VARCHAR" />
+    <result column="provinceCode" property="provinceCode" jdbcType="VARCHAR" />
+    <result column="cityCode" property="cityCode" jdbcType="VARCHAR" />
+    <result column="areaCode" property="areaCode" jdbcType="VARCHAR" />
+    <result column="fcateid" property="fcateid" jdbcType="VARCHAR" />
+    <result column="brandid" property="brandid" jdbcType="VARCHAR" />
+    <result column="brandName" property="brandName" jdbcType="VARCHAR" />
+    <result column="productid" property="productid" jdbcType="VARCHAR" />
+    <result column="productName" property="productName" jdbcType="VARCHAR" />
+    <result column="supplierid" property="supplierid" jdbcType="VARCHAR" />
+    <result column="isTax" property="isTax" jdbcType="CHAR" />
+    <result column="period" property="period" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="isShow" property="isShow" jdbcType="BIT" />
+    <result column="companyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="linkMan" property="linkMan" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.AskPriceBean" >
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="statusName" property="statusName" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="typeName" property="typeName" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="billurl" property="billurl" jdbcType="VARCHAR" />
+    <result column="endTime" property="endTime" jdbcType="VARCHAR" />
+    <result column="provinceName" property="provinceName" jdbcType="VARCHAR" />
+    <result column="cityName" property="cityName" jdbcType="VARCHAR" />
+    <result column="areaName" property="areaName" jdbcType="VARCHAR" />
+    <result column="productName" property="productName" jdbcType="VARCHAR" />
+    <result column="isTax" property="isTax" jdbcType="VARCHAR" />
+    <result column="isTaxName" property="isTaxName" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="isShow" property="isShow" jdbcType="VARCHAR" />
+    <result column="companyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="linkMan" property="linkMan" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="fcateName" property="fcateName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, createid, title, status, type, content,billurl, publishTime, endTime, provinceCode, cityCode,
+    areaCode, fcateid,brandid,brandName,productid, productName, supplierid, isTax,
+    period, description, isShow, companyName, linkMan, telephone, email
+  </sql>
+  <select id="find" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_p_ask_price
+  </select>
+  <insert id="saveAskPrice" parameterType="com.zhuhuibao.mybatis.memCenter.entity.AskPrice" >
+    insert into t_p_ask_price
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createid != null" >
+        createid,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="billurl != null" >
+        billurl,
+      </if>
+        publishTime,
+      <if test="endTime != null" >
+        endTime,
+      </if>
+      <if test="provinceCode != null" >
+        provinceCode,
+      </if>
+      <if test="cityCode != null" >
+        cityCode,
+      </if>
+      <if test="areaCode != null" >
+        areaCode,
+      </if>
+      <if test="fcateid != null" >
+        fcateid,
+      </if>
+      <if test="brandid != null" >
+        brandid,
+      </if>
+      <if test="brandName != null" >
+        brandName,
+      </if>
+      <if test="productid != null" >
+        productid,
+      </if>
+      <if test="productName != null" >
+        productName,
+      </if>
+      <if test="supplierid != null" >
+        supplierid,
+      </if>
+      <if test="isTax != null" >
+        isTax,
+      </if>
+      <if test="period != null" >
+        period,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="isShow != null" >
+        isShow,
+      </if>
+      <if test="companyName != null" >
+        companyName,
+      </if>
+      <if test="linkMan != null" >
+        linkMan,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="createid != null" >
+        #{createid,jdbcType=BIGINT},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="billurl != null" >
+        #{billurl,jdbcType=VARCHAR},
+      </if>
+        now(),
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="provinceCode != null" >
+        #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fcateid != null" >
+        #{fcateid,jdbcType=VARCHAR},
+      </if>
+      <if test="brandid != null" >
+        #{brandid,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="productid != null" >
+        #{productid,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierid != null" >
+        #{supplierid,jdbcType=VARCHAR},
+      </if>
+      <if test="isTax != null" >
+        #{isTax,jdbcType=CHAR},
+      </if>
+      <if test="period != null" >
+        #{period,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        #{isShow,jdbcType=BIT},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="linkMan != null" >
+        #{linkMan,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="queryAskPriceByID" resultMap="ResultMap">
+    SELECT p.title,p.productName,p.content,p.billurl,p.endTime,p.status,p.type,p.isTax,p.isShow,
+    p.description,p.companyName,p.linkMan,p.telephone,p.email,c.name as fcateName, pr.name as provinceName,ci.name as cityName,a.name as areaName
+    FROM t_p_ask_price p
+    left join t_p_category c on p.fcateid = c.id
+    left join t_dictionary_province pr on pr.code = p.provinceCode
+    left join t_dictionary_city ci on ci.code = p.cityCode
+    left join t_dictionary_area a on a.code = p.areaCode
+    where p.id = #{id}
+  </select>
+  <select id="findAll" parameterType="com.zhuhuibao.common.pojo.AskPriceSearchBean" resultType="com.zhuhuibao.common.pojo.AskPriceResultBean">
+    SELECT * FROM (
+      select p.id,p.title,
+      CASE WHEN p.endTime &gt; now() then '询价中' WHEN p.endTime &lt; now() then '结束' END AS status,
+      CASE WHEN p.`type`=1 THEN '公开询价' WHEN p.`type`=2 THEN '定向询价' END AS type,
+      p.publishTime,concat(pr.name,ci.name,a.name)as area,
+      (select count(*)from t_p_offer_price where askid = p.id)as size
+      from t_p_ask_price p
+      left join t_dictionary_province pr on pr.code = p.provinceCode
+      left join t_dictionary_city ci on ci.code = p.cityCode
+      left join t_dictionary_area a on a.code = p.areaCode
+      where createid = #{createid}
+      <if test="title != null">
+        and p.title like CONCAT('%',#{title},'%')
+      </if>
+      <if test="type != null">
+        and p.type = #{type}
+      </if>
+      <if test="status != null and status == 1">
+        and p.endTime &gt; now()
+      </if>
+      <if test="status != null and status == 2">
+        and p.endTime &lt; now()
+      </if>
+      <if test="startTime != null and endTime != null">
+        and p.publishTime &lt;= #{endTime} and p.publishTime &gt;= #{startTime}
+      </if>
+      <if test="startTime != null and endTime == null">
+        and p.publishTime &gt;= #{startTime}
+      </if>
+      <if test="startTime == null and endTime != null">
+        and p.publishTime &lt;= #{endTime}
+      </if>
+    )o left join
+    (select t.id as offerid,t.askid,t.offerTime,if(m.identify=3,concat(t.companyName,"(厂商)"),t.companyName) companyName,concat(pp.name,ct.name) address from t_p_offer_price t
+    left join t_m_member m on m.id = t.createid
+    left join t_dictionary_province pp on pp.code =m.province
+    left join t_dictionary_city ct on ct.code = m.city)pa on pa.askid = o.id
+  </select>
+  <select id="findAllByPager1" parameterType="com.zhuhuibao.common.pojo.AskPriceSearchBean" resultType="com.zhuhuibao.common.pojo.AskPriceResultBean">
+    select p.id,p.title,
+    CASE WHEN p.endTime &gt; now() then '询价中' WHEN p.endTime &lt; now() then '结束' END AS status,
+    CASE WHEN p.`type`=1 THEN '公开询价' WHEN p.`type`=2 THEN '定向询价' END AS type,
+    p.publishTime,concat(pr.name,ci.name,a.name)as area,
+    (select count(*)from t_p_offer_price where askid = p.id)as size
+    from t_p_ask_price p
+    left join t_dictionary_province pr on pr.code = p.provinceCode
+    left join t_dictionary_city ci on ci.code = p.cityCode
+    left join t_dictionary_area a on a.code = p.areaCode
+    where createid = #{createid}
+    <if test="title != null">
+      and p.title like CONCAT('%',#{title},'%')
+    </if>
+    <if test="type != null">
+      and p.type = #{type}
+    </if>
+    <if test="status != null and status == 1">
+      and p.endTime &gt; now()
+    </if>
+    <if test="status != null and status == 2">
+      and p.endTime &lt; now()
+    </if>
+    <if test="startTime != null and endTime != null">
+      and p.publishTime &lt;= #{endTime} and p.publishTime &gt;= #{startTime}
+    </if>
+    <if test="startTime != null and endTime == null">
+      and p.publishTime &gt;= #{startTime}
+    </if>
+    <if test="startTime == null and endTime != null">
+      and p.publishTime &lt;= #{endTime}
+    </if>
+  </select>
+  <select id="queryNewPriceInfo" resultMap="BaseResultMap">
+    select t.id,t.title from t_p_ask_price t
+    left join t_m_member m on m.id = t.createid
+    where t.type = 1 and date_format(now(),'%Y-%m-%d') &lt;= date_format(t.endTime,'%Y-%m-%d')
+    <if test="createid != null and createid != ''">
+      and t.id not in (select askid from t_p_offer_price where createid = #{createid})
+    </if>
+    <if test="createid != null and createid != ''">
+      and t.createid != #{createid}
+    </if>
+    <if test="createid != null and createid != ''">
+      and t.createid not in (select enterpriseEmployeeParentId from t_m_member where id = #{createid})
+    </if>
+    <if test="createid != null and createid != ''">
+      and t.createid not in (select id from t_m_member where enterpriseEmployeeParentId = #{createid})
+    </if>
+    <if test="createid != null and createid != ''">
+      and (case when m.enterpriseEmployeeParentId != 0 then (m.enterpriseEmployeeParentId not in (select enterpriseEmployeeParentId from t_m_member where id = #{createid})) else '1=1' end )
+    </if>
+    order BY t.publishTime desc limit 0,#{count}
+  </select>
+
+  <select id="findAllNewPriceInfoList" resultMap="BaseResultMap">
+    select p.id,p.title,p.publishTime,concat(pr.name,c.name) as provinceCode
+    from t_p_ask_price p
+    LEFT JOIN t_dictionary_province pr on pr.code = p.provinceCode
+    LEFT JOIN t_dictionary_city c on c.code = p.cityCode
+    left join t_m_member m on m.id = p.createid
+    where p.type = 1 and date_format(now(),'%Y-%m-%d') &lt;= date_format(p.endTime,'%Y-%m-%d')
+    <if test="createid != null and createid != ''">
+      and p.id not in (select askid from t_p_offer_price where createid = #{createid})
+    </if>
+    <if test="createid != null and createid != ''">
+      and p.createid != #{createid}
+    </if>
+    <if test="createid != null and createid != ''">
+      and p.createid not in (select enterpriseEmployeeParentId from t_m_member where id = #{createid})
+    </if>
+    <if test="createid != null and createid != ''">
+      and p.createid not in (select id from t_m_member where enterpriseEmployeeParentId = #{createid})
+    </if>
+    <if test="createid != null and createid != ''">
+      and (case when m.enterpriseEmployeeParentId != 0 then (m.enterpriseEmployeeParentId not in (select enterpriseEmployeeParentId from t_m_member where id = #{createid})) else '1=1' end )
+    </if>
+    order BY p.publishTime desc
+  </select>
+</mapper>

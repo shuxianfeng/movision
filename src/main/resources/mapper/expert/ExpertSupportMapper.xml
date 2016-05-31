@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.ExpertSupportMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.ExpertSupport" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createid" property="createid" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
+    <result column="updateManId" property="updateManId" jdbcType="VARCHAR" />
+    <result column="linkName" property="linkName" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, createid, publishTime, updateTime, updateManId, linkName, mobile, reason, status
+  </sql>
+  <select id="queryExpertSupportInfoById" resultType="java.util.Map" parameterType="java.lang.String" >
+    select e.linkName,e.mobile,e.reason,e.status,u.username,
+    CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile
+    WHEN m.email IS NOT NULL and m.email != '' THEN m.email END AS account
+    from t_e_expertSupport e
+    LEFT JOIN t_m_member m on e.createid = m.id
+    left join t_oms_user u on e.updateManId = u.id
+    where e.id = #{id}
+  </select>
+
+  <select id="findAllExpertSupportListOms" resultType="java.util.Map" >
+    select
+    e.id,date_format(e.publishTime,'%Y-%m-%d') publishTime,e.linkName,e.status,
+    CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile
+    WHEN m.email IS NOT NULL and m.email != '' THEN m.email END AS account
+    from t_e_expertSupport e
+    LEFT JOIN t_m_member m on e.createid = m.id
+    WHERE 1=1
+    <if test="account != null and account != ''" >
+      and (m.email like CONCAT('%',#{account},'%') or m.mobile like CONCAT('%',#{account},'%'))
+    </if>
+    <if test="linkName != null and linkName != ''" >
+      and e.linkName like CONCAT('%',#{linkName},'%')
+    </if>
+    <if test="status != null and status != ''" >
+      and e.status = #{status}
+    </if>
+    order by e.publishTime desc
+  </select>
+
+  <insert id="applyExpertSupport" parameterType="com.zhuhuibao.mybatis.memCenter.entity.ExpertSupport" >
+    insert into t_e_expertSupport
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createid != null" >
+        createid,
+      </if>
+        publishTime,
+        updateTime,
+      <if test="updateManId != null" >
+        updateManId,
+      </if>
+      <if test="linkName != null" >
+        linkName,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="createid != null" >
+        #{createid},
+      </if>
+        now(),
+        now(),
+      <if test="updateManId != null" >
+        #{updateManId},
+      </if>
+      <if test="linkName != null" >
+        #{linkName},
+      </if>
+      <if test="mobile != null" >
+        #{mobile},
+      </if>
+      <if test="reason != null" >
+        #{reason},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateExpertSupport" parameterType="com.zhuhuibao.mybatis.memCenter.entity.ExpertSupport" >
+    update t_e_expertSupport
+    <set >
+        updateTime = now(),
+      <if test="updateManId != null" >
+        updateManId = #{updateManId},
+      </if>
+      <if test="linkName != null" >
+        linkName = #{linkName},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

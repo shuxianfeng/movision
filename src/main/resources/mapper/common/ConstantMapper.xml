@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuhuibao.mybatis.constants.mapper.ConstantMapper">
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.constants.entity.Constant">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="code" jdbcType="INTEGER" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, code, name, type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_dictionary_constant
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_dictionary_constant
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zhuhuibao.mybatis.constants.entity.Constant">
+    insert into t_dictionary_constant (id, code, name, 
+      type)
+    values (#{id,jdbcType=INTEGER}, #{code,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.constants.entity.Constant">
+    insert into t_dictionary_constant
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.constants.entity.Constant">
+    update t_dictionary_constant
+    <set>
+      <if test="code != null">
+        code = #{code,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.constants.entity.Constant">
+    update t_dictionary_constant
+    set code = #{code,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByType" parameterType="java.lang.String" resultType="java.util.Map">
+    select code,name from t_dictionary_constant where type = #{type,jdbcType=INTEGER}
+  </select>
+  <select id="selectByTypeCode" resultType="java.util.Map">
+    select * from t_dictionary_constant where type = #{type,jdbcType=VARCHAR} and code =  #{code,jdbcType=INTEGER}
+  </select>
+
+</mapper>

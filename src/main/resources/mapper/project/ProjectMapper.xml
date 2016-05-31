@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.oms.mapper.ProjectMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.oms.entity.ProjectInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="createid" property="createid" jdbcType="BIGINT" />
+    <result column="publishDate" property="publishDate" jdbcType="DATE" />
+    <result column="updateDate" property="updateDate" jdbcType="DATE" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="category" property="category" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="startDate" property="startDate" jdbcType="DATE" />
+    <result column="endDate" property="endDate" jdbcType="DATE" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="record" property="record" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="is_deleted" jdbcType="TINYINT" />
+  </resultMap>
+
+  <resultMap id="BaseResultMap2"  type="com.zhuhuibao.mybatis.oms.entity.ProjectInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="createid" property="createid" jdbcType="BIGINT" />
+    <result column="publishDate" property="publishDate" jdbcType="DATE" />
+    <result column="updateDate" property="updateDate" jdbcType="DATE" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="category" property="category" jdbcType="INTEGER" />
+    <result column="categoryName" property="categoryName" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="startDate" property="startDate" jdbcType="DATE" />
+    <result column="endDate" property="endDate" jdbcType="DATE" />
+  </resultMap>
+  
+  
+   <!-- 添加工程信息@author:gmli@since2016.05.11 -->
+  <insert id="addProjectInfo" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectInfo" useGeneratedKeys="true" keyProperty="id">
+    insert into t_prj_project
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="createid != null" >
+        createid,
+      </if> 
+        publishDate, 
+        updateDate, 
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="category != null" >
+        category,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="startDate != null" >
+        startDate,
+      </if>
+      <if test="endDate != null" >
+        endDate,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="record != null" >
+        record,
+      </if>
+      <if test="is_deleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="createid != null" >
+        #{createid},
+      </if>
+      CURDATE(),
+      CURDATE(),
+      <if test="province != null" >
+        #{province},
+      </if>
+      <if test="city != null" >
+        #{city},
+      </if>
+      <if test="area != null" >
+        #{area},
+      </if>
+      <if test="address != null" >
+        #{address},
+      </if>
+      <if test="category != null" >
+        #{category},
+      </if>
+      <if test="price != null" >
+        #{price},
+      </if>
+      <if test="startDate != null" >
+        date_format(#{startDate},'%Y-%m-%d'),
+      </if>
+      <if test="endDate != null" >
+        date_format(#{endDate},'%Y-%m-%d'),
+      </if>
+      <if test="description != null" >
+        #{description},
+      </if>
+      <if test="record != null" >
+        #{record},
+      </if>
+       <if test="is_deleted != null" >
+        #{is_deleted},
+      </if>
+      
+    </trim>
+  </insert>
+   <!-- 修改项目工程信息@author:gmli@since2016.05.11 -->
+  <update id="updateProjectInfo" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectInfo" >
+    update t_prj_project
+    <set > 
+      <if test="name != null" >
+        name=#{name},
+      </if>
+    
+      <if test="createid != null" >
+        createid=#{createid,jdbcType=BIGINT},
+      </if>  
+        updateDate=now(),
+      <if test="province != null" >
+        province=#{province},
+      </if>
+      <if test="city != null" >
+        city=#{city},
+      </if>
+      <if test="area != null" >
+        area=#{area},
+      </if>
+      <if test="address != null" >
+        address=#{address},
+        
+      </if>
+      <if test="category != null" >
+        category=#{category},
+      </if>
+      <if test="price != null" >
+        price= #{price},
+      </if>
+      <if test="startDate != null" >
+        startDate=date_format(#{startDate},'%Y-%m-%d'),
+      </if>
+      <if test="endDate != null" >
+        endDate=date_format(#{endDate},'%Y-%m-%d'),
+      </if>
+      <if test="description != null" >
+        description=#{description},
+      </if>
+      <if test="record != null" >
+        record=#{record},
+      </if>
+      <if test="is_deleted != null" >
+        is_deleted=#{is_deleted},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+ <select id="queryProjectInfoByID" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+	SELECT
+	   t.id,t.name,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
+   date_format(t.updateDate,'%Y-%m-%d') updateDate,t.province,t.city,t.area,t.address,t.category,t.price,t.startDate,t.endDate,t.description,t.record,t.is_deleted,
+   (select cs.name from t_dictionary_constant cs where cs.code = t.category and cs.type=8) as categoryName
+	FROM t_prj_project t  
+	<where>
+      <if test="id != null">
+        and t.id = #{id}
+      </if>
+    </where> 
+	 
+  </select>
+
+  <!--自定义返回结果-->
+  <resultMap id="list" type="java.util.LinkedHashMap">
+    <result property="id" column="id" />
+    <result property="name" column="name" />
+    <result property="publishDate" column="publishDate" />
+    <result property="updateDate" column="updateDate" />
+    <result property="address" column="address" typeHandler="com.zhuhuibao.utils.mybatis.EmptyStringIfNull"/>
+    <result property="price" column="price" typeHandler="com.zhuhuibao.utils.mybatis.EmptyStringIfNull"/>
+    <result property="city" column="city" typeHandler="com.zhuhuibao.utils.mybatis.EmptyStringIfNull"/>
+    <result property="startDate" column="startDate" />
+    <result property="endDate" column="endDate" />
+    <result property="categoryName" column="categoryName" />
+  </resultMap>
+
+  <!--<select id="findAllPrjectPager" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.oms.entity.ProjectInfo">-->
+  <select id="findAllPrjectPager" parameterType="java.util.Map" resultMap="list">
+    SELECT
+    t.id ,t.name,date_format(t.publishDate,'%Y-%m-%d') publishDate,
+    date_format(t.updateDate,'%Y-%m-%d') updateDate,concat(pn.name,ct.name,ar.name,t.address) address,ct.name city,
+    t.price,date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate,
+    (select cs.name from t_dictionary_constant cs where cs.code = t.category and cs.type=8) as categoryName
+    FROM t_prj_project t
+    left join t_dictionary_province pn on pn.code = t.province
+    left join t_dictionary_city ct on ct.code = t.city
+    left join t_dictionary_area ar on ar.code = t.area
+    <where>
+      t.is_deleted=0 
+      <if test="name != null and name != ''">
+        and t.name like concat('%',#{name},'%')
+      </if>
+      <if test="category !=null">
+        and t.category = #{category}
+      </if>
+      <if test="province != null and province != ''">
+        and t.province = #{province}
+      </if>
+      <if test="city != null and city != ''">
+        and t.city = #{city}
+      </if>
+      <if test="startDateA != null and startDateB != null">
+        and t.startDate &gt;= date_format(#{startDateA},'%Y-%m-%d') and t.startDate &lt;= date_format(#{startDateB},'%Y-%m-%d')
+      </if>
+      <if test="endDateA != null and endDateB != null">
+        and t.endDate &gt;= date_format(#{endDateA},'%Y-%m-%d') and t.endDate &lt;= date_format(#{endDateB},'%Y-%m-%d')
+      </if>
+    </where>
+    order by t.updateDate desc
+  </select>
+
+  <select id="queryLatestProject" parameterType="java.util.Map" resultType="java.util.Map">
+    SELECT
+    t.id,t.name,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
+    date_format(t.updateDate,'%Y-%m-%d') updateDate,
+    ct.name city,
+    t.price,date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate,
+    (select cs.name from t_dictionary_constant cs where cs.code = t.category and cs.type=8) as categoryName
+    FROM t_prj_project t
+    left join t_dictionary_city ct on ct.code = t.city
+    where t.is_deleted = 0
+    order by t.updateDate desc
+    <if test="count !=null">
+      limit #{count}
+    </if>
+  </select>
+</mapper>

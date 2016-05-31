@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Member" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="emailCheckCode" property="emailCheckCode" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="registerTime" property="registerTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="identify" property="identify" jdbcType="VARCHAR" />
+    <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
+    <result column="workType" property="workType" jdbcType="INTEGER" />
+    <result column="enterpriseEmployeeParentId" property="enterpriseEmployeeParentId" jdbcType="BIGINT" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="enterpriseType" property="enterpriseType" jdbcType="INTEGER" />
+    <result column="enterpriseLogo" property="enterpriseLogo" jdbcType="VARCHAR" />
+    <result column="enterpriseDesc" property="enterpriseDesc" jdbcType="VARCHAR" />
+    <result column="headShot" property="headShot" jdbcType="VARCHAR" />
+    <result column="saleProductDesc" property="saleProductDesc" jdbcType="VARCHAR" />
+    <result column="enterpriseCreaterTime" property="enterpriseCreaterTime" jdbcType="VARCHAR" />
+    <result column="registerCapital" property="registerCapital" jdbcType="VARCHAR" />
+    <result column="employeeNumber" property="employeeNumber" jdbcType="VARCHAR" />
+    <result column="companyBusinessLicenseImg" property="companyBusinessLicenseImg" jdbcType="VARCHAR" />
+    <result column="enterpriseTelephone" property="enterpriseTelephone" jdbcType="VARCHAR" />
+    <result column="enterpriseFox" property="enterpriseFox" jdbcType="VARCHAR" />
+    <result column="enterpriseWebSite" property="enterpriseWebSite" jdbcType="VARCHAR" />
+    <result column="enterpriseLinkman" property="enterpriseLinkman" jdbcType="VARCHAR" />
+    <result column="enterpriseLMDep" property="enterpriseLMDep" jdbcType="VARCHAR" />
+    <result column="fixedTelephone" property="fixedTelephone" jdbcType="VARCHAR" />
+    <result column="fixedMobile" property="fixedMobile" jdbcType="VARCHAR" />
+    <result column="QQ" property="QQ" jdbcType="VARCHAR" />
+    <result column="personRealName" property="personRealName" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="personCompanyType" property="personCompanyType" jdbcType="INTEGER" />
+    <result column="personIdentifyCard" property="personIdentifyCard" jdbcType="VARCHAR" />
+    <result column="personIDFrontImgUrl" property="personIDFrontImgUrl" jdbcType="VARCHAR" />
+    <result column="personIDBackImgUrl" property="personIDBackImgUrl" jdbcType="VARCHAR" />
+    <result column="isrecommend" property="isrecommend" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.AccountBean" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMap1" type="com.zhuhuibao.common.pojo.ResultBean" >
+    <result column="id" property="code" jdbcType="VARCHAR" />
+    <result column="enterpriseName" property="name" jdbcType="VARCHAR" />
+    <result column="enterpriseLogo" property="smallIcon" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMap2" type="com.zhuhuibao.common.pojo.OmsMemBean" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="registerTime" property="registerTime" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="enterpriseLinkman" property="enterpriseLinkman" jdbcType="VARCHAR" />
+    <result column="memberName" property="memberName" jdbcType="VARCHAR" />
+    <result column="memberType" property="memberType" jdbcType="VARCHAR" />
+    <result column="workType" property="workType" jdbcType="VARCHAR" />
+    <result column="identify" property="identify" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="isrecommend" property="isrecommend" jdbcType="VARCHAR" />
+    <result column="certificate_name" property="certificate_name" jdbcType="VARCHAR" />
+    <result column="certificate_grade" property="certificate_grade" jdbcType="VARCHAR" />
+    <result column="certificate_number" property="certificate_number" jdbcType="VARCHAR" />
+    <result column="certificate_url" property="certificate_url" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, mobile, email, emailCheckCode, password, registerTime, status, identify,
+    enterpriseName, workType, enterpriseEmployeeParentId, province,
+    city, area, address, enterpriseType, enterpriseLogo, enterpriseDesc, headShot, saleProductDesc,
+    enterpriseCreaterTime, registerCapital, employeeNumber, companyBusinessLicenseImg,
+    enterpriseTelephone, enterpriseFox, enterpriseWebSite, enterpriseLinkman, enterpriseLMDep,
+    fixedTelephone, fixedMobile, QQ, personRealName, sex, personCompanyType,
+    personIdentifyCard, personIDFrontImgUrl, personIDBackImgUrl,isrecommend
+  </sql>
+  <select id="findMemById" resultType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+    select
+    <include refid="Base_Column_List" />
+    from t_m_member
+    where id = #{id}
+  </select>
+  <update id="updateMemInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+    update t_m_member
+    <set>
+      <if test="mobile != null" >
+        mobile = #{mobile},
+      </if>
+      <if test="email != null" >
+        email = #{email},
+      </if>
+      <if test="emailCheckCode != null" >
+        emailCheckCode = #{emailCheckCode},
+      </if>
+      <if test="password != null" >
+        password = #{password},
+      </if>
+      <if test="registerTime != null" >
+        registerTime = #{registerTime},
+      </if>
+      <if test="status != null" >
+        status = (case when status = 4 then 4 when status=1 or status=3 then #{status} else status end ),
+      </if>
+      <if test="identify != null" >
+        identify = #{identify},
+      </if>
+      <if test="enterpriseName != null" >
+        enterpriseName = #{enterpriseName},
+      </if>
+      <if test="workType != null" >
+        workType = #{workType},
+      </if>
+      <if test="enterpriseEmployeeParentId != null" >
+        enterpriseEmployeeParentId = #{enterpriseEmployeeParentId},
+      </if>
+      <if test="province != null" >
+        province = #{province},
+      </if>
+      <if test="city != null" >
+        city = #{city},
+      </if>
+      <if test="area != null" >
+        area = #{area},
+      </if>
+      <if test="address != null" >
+        address = #{address},
+      </if>
+      <if test="enterpriseType != null" >
+        enterpriseType = #{enterpriseType},
+      </if>
+      <if test="enterpriseLogo != null" >
+        enterpriseLogo = #{enterpriseLogo},
+      </if>
+      <if test="enterpriseDesc != null" >
+        enterpriseDesc = #{enterpriseDesc},
+      </if>
+      <if test="headShot != null" >
+        headShot = #{headShot},
+      </if>
+      <if test="saleProductDesc != null" >
+        saleProductDesc = #{saleProductDesc},
+      </if>
+      <if test="enterpriseCreaterTime != null" >
+        enterpriseCreaterTime = #{enterpriseCreaterTime},
+      </if>
+      <if test="registerCapital != null" >
+        registerCapital = #{registerCapital},
+      </if>
+      <if test="employeeNumber != null" >
+        employeeNumber = #{employeeNumber},
+      </if>
+      <if test="companyBusinessLicenseImg != null" >
+        companyBusinessLicenseImg = #{companyBusinessLicenseImg},
+      </if>
+      <if test="enterpriseTelephone != null" >
+        enterpriseTelephone = #{enterpriseTelephone},
+      </if>
+      <if test="enterpriseFox != null" >
+        enterpriseFox = #{enterpriseFox},
+      </if>
+      <if test="enterpriseWebSite != null" >
+        enterpriseWebSite = #{enterpriseWebSite},
+      </if>
+      <if test="enterpriseLinkman != null" >
+        enterpriseLinkman = #{enterpriseLinkman},
+      </if>
+      <if test="enterpriseLMDep != null" >
+        enterpriseLMDep = #{enterpriseLMDep},
+      </if>
+      <if test="fixedTelephone != null" >
+        fixedTelephone = #{fixedTelephone},
+      </if>
+      <if test="fixedMobile != null" >
+        fixedMobile = #{fixedMobile},
+      </if>
+      <if test="QQ != null" >
+        QQ = #{QQ},
+      </if>
+      <if test="personRealName != null" >
+        personRealName = #{personRealName},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex},
+      </if>
+      <if test="personCompanyType != null" >
+        personCompanyType = #{personCompanyType},
+      </if>
+      <if test="personIdentifyCard != null" >
+        personIdentifyCard = #{personIdentifyCard},
+      </if>
+      <if test="personIDFrontImgUrl != null" >
+        personIDFrontImgUrl = #{personIDFrontImgUrl},
+      </if>
+      <if test="personIDBackImgUrl != null" >
+        personIDBackImgUrl = #{personIDBackImgUrl},
+      </if>
+      <if test="isrecommend != null" >
+        isrecommend = #{isrecommend},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+<!--  <insert id="addMember" keyProperty="id" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" useGeneratedKeys="true">
+    insert into t_m_member(mobile,email,password,registerTime,status,identify,enterpriseEmployeeParentId,workType,personRealName) values
+    (#{mobile},#{email},#{password},now(),1,case when #{identify} is null then 2 else #{identify} end,
+    #{enterpriseEmployeeParentId},#{workType},#{personRealName})
+  </insert>-->
+  <insert id="addMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Expert" >
+    insert into t_m_member
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+        registerTime,
+        status,
+        identify,
+      <if test="enterpriseEmployeeParentId != null" >
+        enterpriseEmployeeParentId,
+      </if>
+      <if test="workType != null" >
+        workType,
+      </if>
+      <if test="personRealName != null" >
+        personRealName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mobile != null" >
+        #{mobile},
+      </if>
+      <if test="email != null" >
+        #{email},
+      </if>
+      <if test="password != null" >
+        #{password},
+      </if>
+        now(),
+        1,
+      <if test="identify != null" >
+        #{identify},
+      </if>
+      <if test="identify == null" >
+        2,
+      </if>
+      <if test="enterpriseEmployeeParentId != null" >
+        #{enterpriseEmployeeParentId},
+      </if>
+      <if test="workType != null" >
+        #{workType},
+      </if>
+      <if test="personRealName != null" >
+        #{personRealName},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+    update t_m_member
+    <set>
+      <if test="mobile != null">
+        mobile = #{mobile},
+      </if>
+      <if test="email != null">
+        email = #{email},
+      </if>
+      <if test="password != null">
+        password = #{password},
+      </if>
+      <if test="workType != null">
+        workType = #{workType},
+      </if>
+      <if test="personRealName != null">
+        personRealName = #{personRealName},
+      </if>
+      <if test="status != null">
+        status = #{status},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <!--  <update id="disableMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+      update t_m_member
+      <set>
+        <if test="status!= null">
+          status = 3,
+        </if>
+      </set>
+      where id = #{id}
+    </update>-->
+  <update id="deleteMember">
+    update t_m_member
+    <set>
+      status = 2,
+    </set>
+    where id = #{id}
+  </update>
+  <select id="findAllByPager" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_m_member
+    where
+    enterpriseEmployeeParentId = #{enterpriseEmployeeParentId} and status=1
+    <if test="account != null and account != '' ">
+      and (email like CONCAT('%',#{account},'%') or mobile like CONCAT('%',#{account},'%'))
+    </if>
+  </select>
+  <select id="findStaffByParentId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_m_member
+    where
+    enterpriseEmployeeParentId = #{enterpriseEmployeeParentId} and status=1
+    <if test="account != null and account != '' ">
+      and (email like CONCAT('%',#{account},'%') or mobile like CONCAT('%',#{account},'%'))
+    </if>
+  </select>
+  <select id="findMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_m_member
+    where status != 2 and status != 0
+    <if test="mobile != null and mobile != '' ">
+      and mobile = #{mobile}
+    </if>
+    <if test="email != null">
+      and email = #{email}
+    </if>
+  </select>
+  <update id="resetPwd" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+    update t_m_member
+    <set>
+      password = #{password},
+    </set>
+    where id=#{id}
+  </update>
+  <update id="uploadHeadShot" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+    update t_m_member
+    <set>
+      headShot = #{headShot},
+    </set>
+    where
+    id = #{id}
+  </update>
+  <update id="uploadLogo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+    update t_m_member
+    <set>
+      enterpriseLogo = #{enterpriseLogo},
+    </set>
+    where
+    id = #{id}
+  </update>
+  <select id="findAgentMember" resultMap="ResultMap">
+    select
+    id,
+    CASE WHEN mobile IS NOT NULL and mobile != '' THEN mobile WHEN email IS NOT NULL and email != '' THEN email END AS account,
+    enterpriseName
+    from t_m_member
+    where
+    identify like '%4%' and status in(1,3,4,5) AND
+    <if test="type == 1">
+      (email like CONCAT('%',#{account},'%') or mobile like CONCAT('%',#{account},'%'))
+    </if>
+    <if test="type == 2">
+      enterpriseName like CONCAT('%',#{account},'%')
+    </if>
+  </select>
+  <insert id="agentRegister" keyProperty="id" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" useGeneratedKeys="true">
+   insert into t_m_member(email,password,registerTime,status,identify) values
+    (#{email},#{password},now(),1,1)
+  </insert>
+  <select id="findNewEngineerOrSupplier" resultMap="BaseResultMap">
+    select * FROM t_m_member WHERE
+    status in(1,3,4,5) and
+    <if test="type==1">
+      identify like '%3%'
+    </if>
+    <if test="type == 2">
+      identify like '%4%'
+    </if>
+    <if test="type == 3">
+      identify like '%5%'
+    </if>
+    <if test="type == 4">
+      identify like '%6%'
+    </if>
+    order by registerTime desc
+    <if test="type==1">
+      limit 0,2
+    </if>
+    <if test="type == 2">
+      limit 0,2
+    </if>
+    <if test="type == 3">
+      limit 0,2
+    </if>
+    <if test="type == 4">
+      limit 0,4
+    </if>
+  </select>
+  <select id="findnewIdentifyEngineer" resultMap="BaseResultMap">
+    select * FROM t_m_member WHERE
+    status = 5 and
+    <if test="type==1">
+      identify like '%3%'
+    </if>
+    <if test="type == 2">
+      identify like '%4%'
+    </if>
+    <if test="type == 3">
+      identify like '%5%'
+    </if>
+    <if test="type == 4">
+      identify like '%6%'
+    </if>
+    order by registerTime desc
+  </select>
+  <select id="findGreatCompany" resultMap="ResultMap1">
+    SELECT id,enterpriseName,enterpriseLogo FROM t_m_member
+    where isrecommend = 1 and status in(1,3,4,5) AND
+    <if test="type==1">
+      identify like '%3%'
+    </if>
+    <if test="type == 2">
+      identify like '%4%'
+    </if>
+    <if test="type == 3">
+      identify like '%5%'
+    </if>
+    <if test="type == 4">
+      identify like '%6%'
+    </if>
+  </select>
+  <select id="findAllMemberByPager" resultMap="ResultMap2" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
+    select m.id,m.registerTime,m.isrecommend,
+    CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile WHEN m.email IS NOT NULL and m.email != '' THEN m.email END AS account,
+    m.enterpriseLinkman,
+    CASE WHEN m.enterpriseName IS NOT NULL and m.enterpriseName != '' THEN m.enterpriseName
+    WHEN m.personRealName IS NOT NULL and m.personRealName != '' THEN m.personRealName END AS memberName,
+    CASE WHEN m.identify = 2 THEN '个人会员' WHEN m.identify != 2 then '企业会员' END AS memberType,
+    CASE WHEN m.workType = 100 then '管理员' when m.workType!=100 then w.name end as worktype,
+    (select group_concat(name) from t_dictionary_identity where find_in_set(id,m.identify))as identify,
+    m.status
+    from t_m_member m
+    left join t_dictionary_workType w on m.workType = w.id
+    WHERE 1=1
+    <if test="account != null and account != '' ">
+      and (m.email like CONCAT('%',#{account},'%') or m.mobile like CONCAT('%',#{account},'%'))
+    </if>
+    <if test="memberName != null and memberName != '' ">
+      and (m.enterpriseName like CONCAT('%',#{memberName},'%') or m.personRealName like CONCAT('%',#{memberName},'%'))
+    </if>
+    <if test="memberType != null and memberType == 2 ">
+      and m.identify = 2
+    </if>
+    <if test="memberType != null and memberType == 1 ">
+      and m.identify != 2
+    </if>
+    <if test="identify != null and identify != '' ">
+      and find_in_set(#{identify},m.identify)
+    </if>
+    <if test="status != null and status != '' ">
+      and m.status = #{status}
+    </if>
+    <if test="type != null and type == 1">
+      and m.status in (4,5,6)
+    </if>
+  </select>
+  <select id="findAllMemCertificateByPager" resultMap="ResultMap2" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
+    select r.certificate_name,r.certificate_grade,r.time,r.status,r.id,r.certificate_url,r.certificate_number,
+    CASE WHEN m.enterpriseName IS NOT NULL and m.enterpriseName != '' THEN m.enterpriseName
+    WHEN m.personRealName IS NOT NULL and m.personRealName != '' THEN m.personRealName END AS memberName,
+    CASE WHEN m.identify = 2 THEN '个人会员' WHEN m.identify != 2 then '企业会员' END AS memberType,
+    CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile WHEN m.email IS NOT NULL and m.email != '' THEN m.email END AS account
+    from t_certificate_record r
+    left join t_m_member m on m.id = r.mem_id
+    WHERE 1=1
+    <if test="account != null and account != '' ">
+      and (m.email like CONCAT('%',#{account},'%') or m.mobile like CONCAT('%',#{account},'%'))
+    </if>
+    <if test="memberName != null and memberName != '' ">
+      and (m.enterpriseName like CONCAT('%',#{memberName},'%') or m.personRealName like CONCAT('%',#{memberName},'%'))
+    </if>
+    <if test="memberType != null and memberType == 2 ">
+      and m.identify = 2
+    </if>
+    <if test="memberType != null and memberType == 1 ">
+      and m.identify != 2
+    </if>
+    <if test="status != null and status != '' ">
+      and r.status = #{status}
+    </if>
+    <if test="id != null and id != '' ">
+      and r.id = #{id}
+    </if>
+  </select>
+  <update id="updateStatus" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+    update t_m_member
+    <set>
+      <if test="mobile != null" >
+        mobile = #{mobile},
+      </if>
+      <if test="email != null" >
+        email = #{email},
+      </if>
+      <if test="emailCheckCode != null" >
+        emailCheckCode = #{emailCheckCode},
+      </if>
+      <if test="password != null" >
+        password = #{password},
+      </if>
+      <if test="registerTime != null" >
+        registerTime = #{registerTime},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="identify != null" >
+        identify = #{identify},
+      </if>
+      <if test="enterpriseName != null" >
+        enterpriseName = #{enterpriseName},
+      </if>
+      <if test="workType != null" >
+        workType = #{workType},
+      </if>
+      <if test="enterpriseEmployeeParentId != null" >
+        enterpriseEmployeeParentId = #{enterpriseEmployeeParentId},
+      </if>
+      <if test="province != null" >
+        province = #{province},
+      </if>
+      <if test="city != null" >
+        city = #{city},
+      </if>
+      <if test="area != null" >
+        area = #{area},
+      </if>
+      <if test="address != null" >
+        address = #{address},
+      </if>
+      <if test="enterpriseType != null" >
+        enterpriseType = #{enterpriseType},
+      </if>
+      <if test="enterpriseLogo != null" >
+        enterpriseLogo = #{enterpriseLogo},
+      </if>
+      <if test="enterpriseDesc != null" >
+        enterpriseDesc = #{enterpriseDesc},
+      </if>
+      <if test="headShot != null" >
+        headShot = #{headShot},
+      </if>
+      <if test="saleProductDesc != null" >
+        saleProductDesc = #{saleProductDesc},
+      </if>
+      <if test="enterpriseCreaterTime != null" >
+        enterpriseCreaterTime = #{enterpriseCreaterTime},
+      </if>
+      <if test="registerCapital != null" >
+        registerCapital = #{registerCapital},
+      </if>
+      <if test="employeeNumber != null" >
+        employeeNumber = #{employeeNumber},
+      </if>
+      <if test="companyBusinessLicenseImg != null" >
+        companyBusinessLicenseImg = #{companyBusinessLicenseImg},
+      </if>
+      <if test="enterpriseTelephone != null" >
+        enterpriseTelephone = #{enterpriseTelephone},
+      </if>
+      <if test="enterpriseFox != null" >
+        enterpriseFox = #{enterpriseFox},
+      </if>
+      <if test="enterpriseWebSite != null" >
+        enterpriseWebSite = #{enterpriseWebSite},
+      </if>
+      <if test="enterpriseLinkman != null" >
+        enterpriseLinkman = #{enterpriseLinkman},
+      </if>
+      <if test="enterpriseLMDep != null" >
+        enterpriseLMDep = #{enterpriseLMDep},
+      </if>
+      <if test="fixedTelephone != null" >
+        fixedTelephone = #{fixedTelephone},
+      </if>
+      <if test="fixedMobile != null" >
+        fixedMobile = #{fixedMobile},
+      </if>
+      <if test="QQ != null" >
+        QQ = #{QQ},
+      </if>
+      <if test="personRealName != null" >
+        personRealName = #{personRealName},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex},
+      </if>
+      <if test="personCompanyType != null" >
+        personCompanyType = #{personCompanyType},
+      </if>
+      <if test="personIdentifyCard != null" >
+        personIdentifyCard = #{personIdentifyCard},
+      </if>
+      <if test="personIDFrontImgUrl != null" >
+        personIDFrontImgUrl = #{personIDFrontImgUrl},
+      </if>
+      <if test="personIDBackImgUrl != null" >
+        personIDBackImgUrl = #{personIDBackImgUrl},
+      </if>
+      <if test="isrecommend != null" >
+        isrecommend = #{isrecommend},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

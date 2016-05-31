@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuhuibao.mybatis.oms.mapper.ProjectLinkmanMapper">
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.oms.entity.ProjectLinkman">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="projectid" jdbcType="BIGINT" property="projectid" />
+    <result column="deptType" jdbcType="VARCHAR" property="deptType" />
+    <result column="partyType" jdbcType="BIGINT" property="partyType" />
+    <result column="typePartyB" jdbcType="INTEGER" property="typePartyB" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="linkman" jdbcType="VARCHAR" property="linkman" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="fax" jdbcType="VARCHAR" property="fax" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="is_deleted" jdbcType="BIT" property="is_deleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, projectid, deptType, partyType, typePartyB, name, linkman, mobile, telephone, 
+    fax, address, note, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_prj_linkman
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectLinkman">
+    insert into t_prj_linkman
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="projectid != null">
+        projectid,
+      </if>
+      <if test="deptType != null">
+        deptType,
+      </if>
+      <if test="partyType != null">
+        partyType,
+      </if>
+      <if test="typePartyB != null">
+        typePartyB,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="linkman != null">
+        linkman,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="telephone != null">
+        telephone,
+      </if>
+      <if test="fax != null">
+        fax,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+      <if test="is_deleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="projectid != null">
+        #{projectid,jdbcType=BIGINT},
+      </if>
+      <if test="deptType != null">
+        #{deptType,jdbcType=VARCHAR},
+      </if>
+      <if test="partyType != null">
+        #{partyType,jdbcType=BIGINT},
+      </if>
+      <if test="typePartyB != null">
+        #{typePartyB,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="linkman != null">
+        #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null">
+        #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="is_deleted != null">
+        #{is_deleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectLinkman">
+  
+     replace into  t_prj_linkman
+    <set>
+      <if test="id != null">
+       id = #{id,jdbcType=INTEGER},
+       </if>
+       
+      <if test="projectid != null">
+        projectid = #{projectid,jdbcType=BIGINT},
+      </if>
+      <if test="deptType != null">
+        deptType = #{deptType,jdbcType=VARCHAR},
+      </if>
+      <if test="partyType != null">
+        partyType = #{partyType,jdbcType=BIGINT},
+      </if>
+      <if test="typePartyB != null">
+        typePartyB = #{typePartyB,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="linkman != null">
+        linkman = #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null">
+        fax = #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="is_deleted != null">
+        is_deleted = #{is_deleted,jdbcType=BIT},
+      </if>
+    </set>
+      
+  </update>
+
+  <select id="queryProjectLinkmanByProjectID" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.oms.entity.ProjectLinkman">
+    select id, projectid, deptType, partyType, typePartyB, name, linkman, mobile, telephone,
+    fax, address, note, is_deleted from t_prj_linkman
+    <where>
+    is_deleted=0 
+    
+    <if test="projectid != null and projectid != ''">
+      and projectid = #{projectid}
+    </if>
+    </where>
+  </select>
+</mapper>

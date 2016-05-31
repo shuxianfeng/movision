@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.ProvinceMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Province" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.CommonBean" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="ASCII" property="other" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMap1" type="com.zhuhuibao.common.pojo.ResultBean" >
+    <result column="id" property="smallIcon" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, code, name
+  </sql>
+  <select id="findProvince" resultMap="ResultMap1">
+    select
+    id,code,name
+    from t_dictionary_province
+  </select>
+  <select id="searchProvinceByPinYin" resultMap="ResultMap">
+    SELECT CASE
+    WHEN ASCII(LEFT(pinyin,1)) &gt; 96 and ASCII(LEFT(pinyin,1)) &lt; 104 THEN 'A-G'
+    WHEN ASCII(LEFT(pinyin,1)) &gt; 103 and ASCII(LEFT(pinyin,1)) &lt; 108 THEN 'H-K'
+    WHEN ASCII(LEFT(pinyin,1)) &gt; 107 and ASCII(LEFT(pinyin,1)) &lt; 116 THEN 'L-S'
+    WHEN ASCII(LEFT(pinyin,1)) &gt; 115 THEN 'T-Z'
+    END AS ASCII,id,code,name
+    FROM t_dictionary_province order by ASCII;
+  </select>
+  <select id="getProInfo" resultMap="BaseResultMap">
+    select
+    id,code,name
+    from t_dictionary_province
+    where code = #{code}
+  </select>
+</mapper>
