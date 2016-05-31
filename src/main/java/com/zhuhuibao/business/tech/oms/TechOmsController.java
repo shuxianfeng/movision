@@ -93,6 +93,16 @@ public class TechOmsController {
         return response;
     }
 
+    @RequestMapping(value="coop/sel_tech_cooperation_detail", method = RequestMethod.POST)
+    @ApiOperation(value="查询技术合作(技术成果，技术需求)",notes = "查询技术合作(技术成果，技术需求)",response = Response.class)
+    public Response selectTechCooperationById( @ApiParam(value = "技术合作成果、需求ID")  @RequestParam String techCoopId)
+    {
+        Response response = new Response();
+        TechCooperation techCoop = techService.selectTechCooperationById(techCoopId);
+        response.setData(techCoop);
+        return response;
+    }
+
     @RequestMapping(value="coop/del_tech_cooperation", method = RequestMethod.POST)
     @ApiOperation(value="删除技术合作(技术成果，技术需求)",notes = "删除技术合作(技术成果，技术需求)",response = Response.class)
     public Response deleteTechCooperation( @ApiParam(value = "技术合作ID")  @RequestParam() String techId)
