@@ -102,7 +102,7 @@ public class CooperationController {
      * 查询一条任务的信息
      */
     @ApiOperation(value="查询一条任务的信息",notes="查询一条任务的信息",response = Cooperation.class)
-    @RequestMapping(value = "sel_mc_witkey", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_witkey", method = RequestMethod.GET)
     public Response queryCooperationInfo(@RequestParam String id)  {
         Response response = new Response();
         Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
