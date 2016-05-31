@@ -11,6 +11,7 @@ import com.zhuhuibao.mybatis.constants.entity.Constant;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
+import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
@@ -25,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,6 +49,8 @@ public class ExpertSiteController {
     @Autowired
     private ConstantService constantService;
 
+    @Autowired
+    private UploadService uploadService;
 
     @ApiOperation(value="发布技术成果",notes="发布技术成果",response = Response.class)
     @RequestMapping(value = "ach/add_achievement", method = RequestMethod.POST)
@@ -185,6 +189,15 @@ public class ExpertSiteController {
         }else{
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
+        return response;
+    }
+
+    @ApiOperation(value="专家上传照片",notes="专家上传照片",response = Response.class)
+    @RequestMapping(value = "base/upload_photo", method = RequestMethod.POST)
+    public Response uploadPhoto(HttpServletRequest req) throws Exception {
+        Response response = new Response();
+        String url = uploadService.upload(req,"expert");
+        response.setData(url);
         return response;
     }
 

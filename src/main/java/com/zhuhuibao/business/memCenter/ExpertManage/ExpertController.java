@@ -219,7 +219,7 @@ public class ExpertController {
     }
 
     @ApiOperation(value = "根据id查询专家全部信息", notes = "根据id查询专家全部信息", response = Response.class)
-    @RequestMapping(value = "base/sel_mc_expert", method = RequestMethod.GET)
+    @RequestMapping(value = "base/sel_expert", method = RequestMethod.GET)
     public Response queryExpertById(@ApiParam(value = "专家id") @RequestParam String id)  {
         Response response = new Response();
         Expert expert = expertService.queryExpertById(id);
