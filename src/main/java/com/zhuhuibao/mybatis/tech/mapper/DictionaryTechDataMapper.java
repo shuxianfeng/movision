@@ -1,10 +1,9 @@
-package com.zhuhuibao.mybatis.techtrain.mapper;
+package com.zhuhuibao.mybatis.tech.mapper;
 
 import com.zhuhuibao.mybatis.tech.entity.DictionaryTechData;
 
 import java.util.List;
 
-import com.zhuhuibao.mybatis.tech.entity.DictionaryTechData;
 /**
  * 技术资料(解决方案，技术资料，培训资料)分类常量DAO层
  * @author  penglong
@@ -25,5 +24,5 @@ public interface DictionaryTechDataMapper {
 
     List<DictionaryTechData> selectFirstCategory();
 
-    DictionaryTechData selectSecondCategoryById(Integer firstCategoryId);
+    List<DictionaryTechData> selectSecondCategoryById(Integer firstCategoryId);
 }
