@@ -67,7 +67,7 @@
     values (#{id}, #{CNName}, #{ENName}, #{logourl},
     #{createid}, #{description}, #{imgurl},
     2, #{owner}, #{certificate},
-    #{webSite}, #{publishTime})
+    #{webSite}, now())
   </insert>
   <update id="updateBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" >
     update t_p_brand
@@ -102,7 +102,7 @@
       <if test="status != null" >
         status = #{status},
       </if>
-      lastModifyTime = #{lastModifyTime},
+      lastModifyTime = now(),
     </set>
     where id = #{id}
   </update>

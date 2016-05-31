@@ -43,7 +43,6 @@ public class BrandManageController {
     @RequestMapping(value = "/rest/addBrand", method = RequestMethod.POST)
     public Response upload(Brand brand) {
         Response result = new Response();
-        brand.setPublishTime(new Date());
         brandService.addBrand(brand);
         return result;
     }
@@ -63,7 +62,6 @@ public class BrandManageController {
                 if (brand1.getStatus() == 0) {
                     brand.setStatus(2);
                 }
-                brand.setLastModifyTime(new Date());
             }
         }
         brandService.updateBrand(brand);
