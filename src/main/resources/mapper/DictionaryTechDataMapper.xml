@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.techtrain.mapper.DictionaryTechDataMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.techtrain.entity.DictionaryTechData" >
+<mapper namespace="com.zhuhuibao.mybatis.tech.mapper.DictionaryTechDataMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.tech.entity.DictionaryTechData" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="code" property="code" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
@@ -20,13 +20,13 @@
     delete from t_dictionary_techDataCategory
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zhuhuibao.mybatis.techtrain.entity.DictionaryTechData" >
+  <insert id="insert" parameterType="com.zhuhuibao.mybatis.tech.entity.DictionaryTechData" >
     insert into t_dictionary_techDataCategory (id, code, name,
       parentId)
     values (#{id,jdbcType=INTEGER}, #{code,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{parentId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.techtrain.entity.DictionaryTechData" >
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.tech.entity.DictionaryTechData" >
     insert into t_dictionary_techDataCategory
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -57,7 +57,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.techtrain.entity.DictionaryTechData" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.tech.entity.DictionaryTechData" >
     update t_dictionary_techDataCategory
     <set >
       <if test="code != null" >
@@ -72,7 +72,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.techtrain.entity.DictionaryTechData" >
+  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.tech.entity.DictionaryTechData" >
     update t_dictionary_techDataCategory
     set code = #{code,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},

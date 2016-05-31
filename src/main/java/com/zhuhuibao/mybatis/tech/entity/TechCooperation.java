@@ -1,9 +1,7 @@
-package com.zhuhuibao.mybatis.techtrain.entity;
+package com.zhuhuibao.mybatis.tech.entity;
 
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
-
-import java.util.Date;
 
 /**
  * 技术合作：技术成果，技术需求

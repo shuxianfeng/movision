@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.techtrain.mapper.TechDataMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.techtrain.entity.TechData" >
+<mapper namespace="com.zhuhuibao.mybatis.tech.mapper.TechDataMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.tech.entity.TechData" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="createid" property="createid" jdbcType="BIGINT" />
     <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP" />
@@ -16,7 +16,7 @@
     <result column="download" property="download" jdbcType="BIGINT" />
     <result column="attach" property="attach" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.techtrain.entity.TechData" extends="BaseResultMap" >
+  <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.tech.entity.TechData" extends="BaseResultMap" >
     <result column="notes" property="notes" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -43,7 +43,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.techtrain.entity.TechData" >
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.tech.entity.TechData" >
     insert into t_tech_data
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -126,7 +126,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.techtrain.entity.TechData" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.tech.entity.TechData" >
     update t_tech_data
     <set >
       <if test="createid != null" >
@@ -178,7 +178,7 @@
     left join t_m_member ur on ur.id = t.createID
     left join t_dictionary_techDataCategory tc on tc.code = t.fCategory
     left join t_dictionary_techDataCategory td on td.code = t.sCategory
-    <where>
+    where t.status != 4
       <if test="status != null">
         and t.status = #{status}
       </if>
@@ -193,6 +193,25 @@
       </if>
       <if test="type != null">
         and t.type = #{type}
+      </if>
+  </select>
+
+  <select id="findAllTechDataPager" parameterType="java.util.Map" resultType="java.util.Map">
+    select t.id,case when ur.mobile != '' or ur.mobile != null then ur.mobile when ur.email!= '' or ur.email != null then ur.email end as  username,
+    date_format(t.publishTime,'%Y-%m-%d') publishTime, date_format(t.updateTime,'%Y-%m-%d') updateTime, t.title,
+    td.name sCategory, t.type, t.status,'面议' price,t.notes from t_tech_data t
+    left join t_m_member ur on ur.id = t.createID
+    left join t_dictionary_techDataCategory tc on tc.code = t.fCategory
+    left join t_dictionary_techDataCategory td on td.code = t.sCategory
+    <where>
+      <if test="status != null">
+        and t.status = #{status}
+      </if>
+      <if test="fCategory != null">
+        and t.fCategory = #{fCategory}
+      </if>
+      <if test="sCategory != null">
+        and t.sCategory = #{sCategory}
       </if>
     </where>
   </select>

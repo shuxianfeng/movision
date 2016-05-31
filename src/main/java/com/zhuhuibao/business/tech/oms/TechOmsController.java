@@ -5,12 +5,12 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.TechConstant;
-import com.zhuhuibao.mybatis.techtrain.entity.DictionaryTechData;
-import com.zhuhuibao.mybatis.techtrain.entity.TechCooperation;
-import com.zhuhuibao.mybatis.techtrain.entity.TechData;
-import com.zhuhuibao.mybatis.techtrain.service.DictionaryTechDataService;
-import com.zhuhuibao.mybatis.techtrain.service.TechDataService;
-import com.zhuhuibao.mybatis.techtrain.service.TechnologyService;
+import com.zhuhuibao.mybatis.tech.entity.DictionaryTechData;
+import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
+import com.zhuhuibao.mybatis.tech.entity.TechData;
+import com.zhuhuibao.mybatis.tech.service.DictionaryTechDataService;
+import com.zhuhuibao.mybatis.tech.service.TechDataService;
+import com.zhuhuibao.mybatis.tech.service.TechnologyService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -129,8 +129,8 @@ public class TechOmsController {
     public Response selectFirstCategory()
     {
         Response response = new Response();
-        DictionaryTechData firstCategory = dicTDService.getFirstCategory();
-        response.setData(firstCategory);
+        List<DictionaryTechData> firstCategoryList = dicTDService.getFirstCategory();
+        response.setData(firstCategoryList);
         return response;
     }
 
@@ -139,8 +139,8 @@ public class TechOmsController {
     public Response selectSecondCategoryByFirstId( @ApiParam(value = "一级分类ID")  @RequestParam() String firstCategoryId)
     {
         Response response = new Response();
-        DictionaryTechData secondCategory = dicTDService.getSecondCategory(Integer.parseInt(firstCategoryId));
-        response.setData(secondCategory);
+        List<DictionaryTechData> secondCategoryList = dicTDService.getSecondCategory(Integer.parseInt(firstCategoryId));
+        response.setData(secondCategoryList);
         return response;
     }
 
@@ -156,8 +156,8 @@ public class TechOmsController {
 
     @RequestMapping(value="data/sel_tech_data", method = RequestMethod.GET)
     @ApiOperation(value="运营管理平台搜索技术资料",notes = "运营管理平台搜索技术资料",response = Response.class)
-    public Response findAllTechDataPager(@ApiParam(value = "系统分类") @RequestParam(required = false) String fCategory,
-                                                @ApiParam(value = "应用领域") @RequestParam(required = false) String sCategory,
+    public Response findAllTechDataPager(@ApiParam(value = "一级分类") @RequestParam(required = false) String fCategory,
+                                                @ApiParam(value = "二级分类") @RequestParam(required = false) String sCategory,
                                                 @ApiParam(value = "标题") @RequestParam(required = false) String title,
                                                 @ApiParam(value = "类型：1:普通资料，2：付费资料") @RequestParam(required = false) String type,
                                                 @ApiParam(value = "状态") @RequestParam(required = false) String status,

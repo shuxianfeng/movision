@@ -1,10 +1,10 @@
-package com.zhuhuibao.mybatis.techtrain.service;/**
+package com.zhuhuibao.mybatis.tech.service;/**
  * @author Administrator
  * @version 2016/5/31 0031
  */
 
-import com.zhuhuibao.mybatis.techtrain.entity.TechData;
-import com.zhuhuibao.mybatis.techtrain.mapper.TechDataMapper;
+import com.zhuhuibao.mybatis.tech.entity.TechData;
+import com.zhuhuibao.mybatis.tech.mapper.TechDataMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -44,6 +44,25 @@ public class TechDataService {
         }catch(Exception e)
         {
             log.error("find all OMS tech data for pager error!",e);
+            throw e;
+        }
+        return techList;
+    }
+
+    /**
+     * 技术频道技术资料搜索
+     * @param condition 搜索条件
+     * @return
+     */
+    public List<Map<String,String>> findAllTechDataPager(Paging<Map<String,String>> pager, Map<String,Object> condition)
+    {
+        log.info("find all tech data for pager "+ StringUtils.mapToString(condition));
+        List<Map<String,String>> techList = null;
+        try{
+            techList = techDataMapper.findAllTechDataPager(pager.getRowBounds(),condition);
+        }catch(Exception e)
+        {
+            log.error("find all tech data for pager error!",e);
             throw e;
         }
         return techList;

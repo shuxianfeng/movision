@@ -1,4 +1,4 @@
-package com.zhuhuibao.mybatis.techtrain.entity;
+package com.zhuhuibao.mybatis.tech.entity;
 /**
  * 技术资料(解决方案，技术资料，培训资料)分类常量信息
  * @author  penglong
