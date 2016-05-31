@@ -56,13 +56,8 @@
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-<<<<<<< HEAD
-        <table tableName="t_o_invoice"
-               domainObjectName="Invoice"
-=======
         <table tableName="t_dictionary_techData"
                domainObjectName="DictionaryTechData"
->>>>>>> ed41e47f9ab36e033c2bcde247b1694c1cd1f48f
                enableCountByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"
