@@ -33,7 +33,7 @@
 
         <!-- 生成实体类地址 -->
 
-        <javaModelGenerator targetPackage="com.zhuhuibao.mybatis.order.entity"
+        <javaModelGenerator targetPackage="com.zhuhuibao.mybatis.tech.entity"
                             targetProject="${project}">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
@@ -49,15 +49,15 @@
         </sqlMapGenerator>
 
         <!-- 生成mapxml对应client，也就是接口dao -->
-        <javaClientGenerator targetPackage="com.zhuhuibao.mybatis.order.mapper"
+        <javaClientGenerator targetPackage="com.zhuhuibao.mybatis.tech.mapper"
                              targetProject="${project}" type="XMLMAPPER">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <table tableName="t_p_group_publishCourse"
-               domainObjectName="PublishCourse"
+        <table tableName="t_dictionary_techData"
+               domainObjectName="DictionaryTechData"
                enableCountByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"

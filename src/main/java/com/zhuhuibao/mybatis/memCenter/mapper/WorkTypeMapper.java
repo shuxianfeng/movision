@@ -20,4 +20,6 @@ public interface WorkTypeMapper {
     List<WorkType> findWorkTypeList();
 
     WorkType findWorkTypeById(String id);
+
+    WorkType findWordTypeByType(String type);
 }

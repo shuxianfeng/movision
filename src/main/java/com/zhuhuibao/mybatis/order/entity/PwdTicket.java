@@ -7,7 +7,7 @@ public class PwdTicket {
 
     private Long operateId;
 
-    private Long orderNo;
+    private String orderNo;
 
     private Long courseId;
 
@@ -35,11 +35,11 @@ public class PwdTicket {
         this.operateId = operateId;
     }
 
-    public Long getOrderNo() {
+    public String getOrderNo() {
         return orderNo;
     }
 
-    public void setOrderNo(Long orderNo) {
+    public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
     }
 

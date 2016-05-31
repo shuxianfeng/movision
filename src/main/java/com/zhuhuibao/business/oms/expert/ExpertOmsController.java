@@ -9,6 +9,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -19,10 +20,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +37,9 @@ public class ExpertOmsController {
 
     @Autowired
     private ExpertService expertService;
+
+    @Autowired
+    private MemberService memberService;
 
     @ApiOperation(value="技术成果列表(运营分页)",notes="技术成果列表(运营分页)",response = Response.class)
     @RequestMapping(value = "sel_achievementList", method = RequestMethod.GET)
@@ -239,4 +240,18 @@ public class ExpertOmsController {
         response.setData(map);
         return response;
     }
+
+    @ApiOperation(value="专家审核",notes="专家审核",response = Response.class)
+    @RequestMapping(value = "upd_expert", method = RequestMethod.POST)
+    public Response upd_expert(@ModelAttribute Expert expert) {
+        Response response = new Response();
+        expertService.updateExpert(expert);
+        Expert expert1 = expertService.queryExpertById(expert.getId());
+        Member member = memberService.findMemById(expert1.getCreateId());
+        WorkType workType = expertService.findWordTypeByType(ExpertConstant.EXPERT_WORKTYPE_EXPERT);
+        member.setWorkType(workType.getId());
+        memberService.updateMember(member);
+        return response;
+    }
+
 }

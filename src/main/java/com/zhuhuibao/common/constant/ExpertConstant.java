@@ -48,4 +48,9 @@ public interface ExpertConstant {
      * 专家频道答案状态标识 1：已屏蔽
      */
     String EXPERT_ANSWER_STATUS_ONE = "1";
+
+    /**
+     * 专家频道工作类型 专家type
+     */
+    String EXPERT_WORKTYPE_EXPERT = "expert";
 }

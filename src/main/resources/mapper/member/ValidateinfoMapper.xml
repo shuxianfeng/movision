@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memberReg.mapper.ValidateinfoMapper">
+
+  <insert id="insertValidateInfo" parameterType="validateInfo" useGeneratedKeys="true" keyProperty="id">
+  	insert into t_m_validateinfo(account,valid,createTime,checkCode) values
+  	(#{account},#{valid},str_to_date(#{createTime},'%Y-%m-%d %H:%i:%s'),#{checkCode})
+  </insert>
+  
+  <select id="findMemberValidateInfo" parameterType="validateInfo" resultType="validateInfo">
+	  select id,account,valid,date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,checkCode from t_m_validateinfo  
+	  <where>
+	  	<if test="id != 0"> 
+	  		AND id = #{id}
+	  	</if>
+	  	<if test="account != null"> 
+	  		AND account = #{account}
+	  	</if>
+	  	<if test="checkCode != null">
+	  		AND checkCode = #{checkCode}
+	  	</if>
+	  </where>
+  </select>
+  
+  <update id="updateValidateInfo" parameterType="validateInfo">
+  update t_m_validateinfo 
+  	<set>
+	    <if test="valid!= null" >
+	    	valid = #{valid}
+	    </if>
+    </set>
+    where id = #{id}
+  </update>
+  
+  <delete id="deleteValidateInfo" parameterType="validateInfo">
+  delete from t_m_validateinfo where account = #{account}
+  </delete>
+</mapper>
