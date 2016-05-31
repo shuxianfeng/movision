@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.brand;
+package com.zhuhuibao.business.system.brand.site;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.pojo.*;

@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.memCenter.AccountManage;
+package com.zhuhuibao.business.mc;
 
 import com.taobao.api.ApiException;
 import com.zhuhuibao.common.Response;

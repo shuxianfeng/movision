@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.memCenter.PriceManage;
+package com.zhuhuibao.business.system.price;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;

@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.memCenter.AccountManage;
+package com.zhuhuibao.business.mc;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;

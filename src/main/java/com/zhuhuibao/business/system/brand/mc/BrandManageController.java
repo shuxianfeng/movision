@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.memCenter.BrandManage;
+package com.zhuhuibao.business.system.brand.mc;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ApiConstants;

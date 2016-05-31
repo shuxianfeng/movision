@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.memCenter.AgentManage;
+package com.zhuhuibao.business.system.agent;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
