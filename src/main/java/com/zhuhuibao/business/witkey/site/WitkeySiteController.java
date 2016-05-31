@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.cooperation;
+package com.zhuhuibao.business.witkey.site;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -31,8 +31,8 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/witkey/site/")
-public class CooperationSiteController {
-    private static final Logger log = LoggerFactory.getLogger(CooperationSiteController.class);
+public class WitkeySiteController {
+    private static final Logger log = LoggerFactory.getLogger(WitkeySiteController.class);
 
     @Autowired
     private CooperationService cooperationService;

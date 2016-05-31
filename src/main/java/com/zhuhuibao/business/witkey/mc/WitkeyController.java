@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.memCenter.CooperationManage;
+package com.zhuhuibao.business.witkey.mc;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -29,8 +29,8 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/witkey/mc/")
-public class CooperationController {
-    private static final Logger log = LoggerFactory.getLogger(CooperationController.class);
+public class WitkeyController {
+    private static final Logger log = LoggerFactory.getLogger(WitkeyController.class);
 
     @Autowired
     private CooperationService cooperationService;

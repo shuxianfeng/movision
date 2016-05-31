@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.oms.cooperation;
+package com.zhuhuibao.business.oms.witkey;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -21,8 +21,8 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/witkey/oms")
-public class CooperationOmsController {
-    private static final Logger log = LoggerFactory.getLogger(CooperationOmsController.class);
+public class WitkeyOmsController {
+    private static final Logger log = LoggerFactory.getLogger(WitkeyOmsController.class);
 
     @Autowired
     private CooperationService cooperationService;
