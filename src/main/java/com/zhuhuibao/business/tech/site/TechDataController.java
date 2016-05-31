@@ -9,6 +9,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.mybatis.techtrain.entity.TechData;
+import com.zhuhuibao.mybatis.techtrain.service.TechDataService;
 import com.zhuhuibao.mybatis.techtrain.service.TechnologyService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import org.apache.shiro.SecurityUtils;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -38,7 +40,7 @@ public class TechDataController {
     UploadService uploadService;
 
     @Autowired
-    TechnologyService techService;
+    TechDataService techDataService;
 
 
     @ApiOperation(value="上传技术资料(行业解决方案，技术文档，培训资料)",notes="上传技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)
@@ -63,8 +65,18 @@ public class TechDataController {
     @ApiOperation(value="新增技术资料(行业解决方案，技术文档，培训资料)",notes = "新增技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)
     public Response insertTechData(@ApiParam(value = "技术资料:行业解决方案，技术文档，培训资料")  @ModelAttribute(value="techData")TechData techData)
     {
-        int result = techService.insertTechData(techData);
+        int result = techDataService.insertTechData(techData);
         Response response = new Response();
+        return response;
+    }
+
+    @RequestMapping(value="sel_Tech_data_detail", method = RequestMethod.POST)
+    @ApiOperation(value="查询技术资料详情(行业解决方案，技术文档，培训资料)",notes = "查询技术资料详情(行业解决方案，技术文档，培训资料)",response = Response.class)
+    public Response selectTechDataDetail(@ApiParam(value = "技术资料ID")  @RequestParam String techDataId)
+    {
+        TechData techData = techDataService.selectTechDataInfo(Long.parseLong(techDataId));
+        Response response = new Response();
+        response.setData(techData);
         return response;
     }
 }

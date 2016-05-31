@@ -21,9 +21,7 @@ public interface TechDataMapper {
 
     int updateByPrimaryKeySelective(TechData record);
 
-    List<Map<String,String>> findAllTechCooperationPager(RowBounds rowBounds, Map<String, Object> condition);
-
-    List<Map<String,String>> findAllOMSTechCooperationPager(RowBounds rowBounds,Map<String,Object> condition);
+    List<Map<String,String>> findAllOMSTechDataPager(RowBounds rowBounds,Map<String,Object> condition);
 
     int updateTechCooperationViewsAndDownload(Long id);
 }
