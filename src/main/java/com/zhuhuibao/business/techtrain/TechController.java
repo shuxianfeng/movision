@@ -252,7 +252,7 @@ public class TechController {
         }
         condition.put("type", type);
         condition.put("status", status);
-        List<Map<String, String>> techList = techService.findAllTechCooperationPager(pager, condition);
+        List<Map<String, String>> techList = techService.findAllOMSTechCooperationPager(pager, condition);
         pager.result(techList);
         response.setData(pager);
         return response;
