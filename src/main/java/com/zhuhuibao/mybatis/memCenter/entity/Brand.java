@@ -2,7 +2,6 @@ package com.zhuhuibao.mybatis.memCenter.entity;
 
 import com.zhuhuibao.mybatis.product.entity.Product;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import com.zhuhuibao.business.memCenter.BrandManage.JsonDateSerializer;
 import java.util.Date;
 
 public class Brand {
@@ -36,11 +35,11 @@ public class Brand {
 
     private String webSite;
 
-    private Date publishTime;
+    private String publishTime;
 
-    private Date checkTime;
+    private String checkTime;
 
-    private Date lastModifyTime;
+    private String lastModifyTime;
 
     public Product getProduct() {
         return product;
@@ -153,28 +152,25 @@ public class Brand {
     public void setWebSite(String webSite) {
         this.webSite = webSite;
     }
-    @JsonSerialize(using = JsonDateSerializer.class)
-    public Date getPublishTime() {
+    public String getPublishTime() {
         return publishTime;
     }
 
-    public void setPublishTime(Date publishTime) {
+    public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
     }
-    @JsonSerialize(using = JsonDateSerializer.class)
-    public Date getCheckTime() {
+    public String getCheckTime() {
         return checkTime;
     }
 
-    public void setCheckTime(Date checkTime) {
+    public void setCheckTime(String checkTime) {
         this.checkTime = checkTime;
     }
-    @JsonSerialize(using = JsonDateSerializer.class)
-    public Date getLastModifyTime() {
+    public String getLastModifyTime() {
         return lastModifyTime;
     }
 
-    public void setLastModifyTime(Date lastModifyTime) {
+    public void setLastModifyTime(String lastModifyTime) {
         this.lastModifyTime = lastModifyTime;
     }
 

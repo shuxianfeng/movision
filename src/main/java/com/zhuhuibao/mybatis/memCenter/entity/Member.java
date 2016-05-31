@@ -1,6 +1,5 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-import  com.zhuhuibao.business.memCenter.AccountManage.JsonDateSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.io.Serializable;
@@ -20,7 +19,7 @@ public class Member implements Serializable{
 
     private String password;
 
-    private Date registerTime;
+    private String registerTime;
 
     private Integer status;
 
@@ -130,12 +129,11 @@ public class Member implements Serializable{
         this.password = password == null ? null : password.trim();
     }
 
-    @JsonSerialize(using = JsonDateSerializer.class)
-    public Date getRegisterTime() {
+    public String getRegisterTime() {
         return registerTime;
     }
 
-    public void setRegisterTime(Date registerTime) {
+    public void setRegisterTime(String registerTime) {
         this.registerTime = registerTime;
     }
 
