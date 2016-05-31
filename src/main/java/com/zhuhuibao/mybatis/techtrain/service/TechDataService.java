@@ -3,8 +3,8 @@ package com.zhuhuibao.mybatis.techtrain.service;/**
  * @version 2016/5/31 0031
  */
 
-import com.zhuhuibao.mybatis.techtrain.entity.TechData;
-import com.zhuhuibao.mybatis.techtrain.mapper.TechDataMapper;
+import com.zhuhuibao.mybatis.tech.entity.TechData;
+import com.zhuhuibao.mybatis.tech.mapper.TechDataMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
