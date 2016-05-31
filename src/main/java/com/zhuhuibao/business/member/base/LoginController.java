@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.member;
+package com.zhuhuibao.business.member.base;
 
 import java.io.IOException;
 

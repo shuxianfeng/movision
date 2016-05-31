@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.mc;
+package com.zhuhuibao.business.member.mc;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;

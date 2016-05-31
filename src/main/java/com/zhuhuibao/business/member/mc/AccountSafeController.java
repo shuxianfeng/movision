@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.mc;
+package com.zhuhuibao.business.member.mc;
 
 import com.taobao.api.ApiException;
 import com.zhuhuibao.common.Response;
