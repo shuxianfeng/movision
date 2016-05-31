@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.exhibition;
+package com.zhuhuibao.business.expo.site;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -31,8 +31,8 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/expo/site/")
-public class ExhibitionSiteController {
-    private static final Logger log = LoggerFactory.getLogger(ExhibitionSiteController.class);
+public class ExpoSiteController {
+    private static final Logger log = LoggerFactory.getLogger(ExpoSiteController.class);
 
     @Autowired
     private ExhibitionService exhibitionService;

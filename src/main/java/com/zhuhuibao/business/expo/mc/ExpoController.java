@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.memCenter.ExhibitionManage;
+package com.zhuhuibao.business.expo.mc;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -29,8 +29,8 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/expo/mc/")
-public class ExhibitionController {
-    private static final Logger log = LoggerFactory.getLogger(ExhibitionController.class);
+public class ExpoController {
+    private static final Logger log = LoggerFactory.getLogger(ExpoController.class);
 
     @Autowired
     private ExhibitionService exhibitionService;

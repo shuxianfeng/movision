@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.memCenter.JobManage;
+package com.zhuhuibao.business.job.mc;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;

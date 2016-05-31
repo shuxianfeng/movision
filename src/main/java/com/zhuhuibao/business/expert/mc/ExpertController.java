@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.memCenter.ExpertManage;
+package com.zhuhuibao.business.expert.mc;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
