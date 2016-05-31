@@ -17,6 +17,8 @@ public interface TechCooperationMapper {
 
     TechCooperation selectByPrimaryKey(Long id);
 
+    TechCooperation previewTechCooperationDetail(Long id);
+
     int updateByPrimaryKeySelective(TechCooperation record);
 
     List<Map<String,String>> findAllTechCooperationPager(RowBounds rowBounds,Map<String, Object> condition);

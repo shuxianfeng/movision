@@ -204,7 +204,12 @@
   </select>
   <!-- 查询咨询列表@author:gmli@since2016.05.09 -->
  <select id="findAllContentList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
-	select a.id,a.title,b.name,a.views,
+	select a.id,a.title,
+	
+	CONCAT(b.name,'>',
+     (select w.name from t_oms_channel w where w.sort=a.sort and w.parentId=a.channelid) ) name
+	
+	,a.views,
 	(case when a.status=0 then '未审核'
 	when a.status=1 then '已审核' when
 	a.status='2' then '已拒绝' else '回收站' end )
@@ -225,6 +230,9 @@
       </if>
       <if test="channelid != null">
         and a.channelid = #{channelid}
+      </if>
+      <if test="sort != null">
+        and a.sort = #{sort}
       </if>
     </where> 
 	order by a.createTime desc

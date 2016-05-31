@@ -8,8 +8,6 @@ import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
-import com.zhuhuibao.mybatis.tech.entity.TechData;
-import com.zhuhuibao.mybatis.tech.service.TechnologyService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -63,8 +61,18 @@ public class TechDataController {
     @ApiOperation(value="新增技术资料(行业解决方案，技术文档，培训资料)",notes = "新增技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)
     public Response insertTechData(@ApiParam(value = "技术资料:行业解决方案，技术文档，培训资料")  @ModelAttribute(value="techData")TechData techData)
     {
-        int result = techService.insertTechData(techData);
+        int result = techDataService.insertTechData(techData);
         Response response = new Response();
+        return response;
+    }
+
+    @RequestMapping(value="sel_Tech_data_detail", method = RequestMethod.POST)
+    @ApiOperation(value="查询技术资料详情(行业解决方案，技术文档，培训资料)",notes = "查询技术资料详情(行业解决方案，技术文档，培训资料)",response = Response.class)
+    public Response selectTechDataDetail(@ApiParam(value = "技术资料ID")  @RequestParam String techDataId)
+    {
+        TechData techData = techDataService.selectTechDataInfo(Long.parseLong(techDataId));
+        Response response = new Response();
+        response.setData(techData);
         return response;
     }
 }

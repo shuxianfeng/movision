@@ -143,7 +143,7 @@ public class TechnologyService {
     }
 
     /**
-     * 更新技术合作的点击率
+     * 根据ID查看技术合作详情
      * @param id 技术合作ID
      * @return
      */
@@ -161,58 +161,21 @@ public class TechnologyService {
     }
 
     /**
-     * 插入技术资料：行业解决方案，技术文档，培训资料
-     * @param techData
+     * 预览技术合作详情
+     * @param id 技术合作ID
      * @return
      */
-    public int insertTechData(TechData techData)
+    public TechCooperation previewTechCooperationDetail(String id)
     {
-        int result = 0;
-        log.info("insert tech data info "+ StringUtils.beanToString(techData));
-        try {
-            result = techDataMapper.insertSelective(techData);
-        }catch(Exception e)
-        {
-            log.error("insert data cooperation info error!",e);
-            throw e;
-        }
-        return result;
-    }
-
-    /**
-     * 注销技术资料
-     * @param condition
-     * @return
-     */
-    public int deleteTechData(Map<String, Object> condition)
-    {
-        int result;
-        log.info("delete oms tech data "+StringUtils.mapToString(condition));
+        TechCooperation techCoop;
+        log.info("preview tech cooperation by id "+id);
         try{
-            result = techDataMapper.deleteByPrimaryKey(condition);
+            techCoop = techMapper.selectByPrimaryKey(Long.valueOf(id));
         }catch (Exception e){
-            log.error("delete oms tech data error! ",e);
+            log.error("select tech cooperation by id error! ",e);
             throw e;
         }
-        return result;
-    }
-
-    /**
-     * 更新技术资料
-     * @param techData
-     * @return
-     */
-    public int updateTechData(TechData techData)
-    {
-        int result;
-        log.info("update oms tech data "+StringUtils.beanToString(techData));
-        try{
-            result = techDataMapper.updateByPrimaryKeySelective(techData);
-        }catch (Exception e){
-            log.error("update oms tech data error! ",e);
-            throw e;
-        }
-        return result;
+        return techCoop;
     }
 
 }
