@@ -263,16 +263,16 @@ public class JobPositionService {
 
     /**
      * 查询企业发布的职位详情
-     * @param id 职位ID
+     * @param map 职位搜索
      * @return
      */
-    public Response queryPositionInfoByID(Long id)
+    public Response queryPositionInfoByID(Map<String,Object> map)
     {
-        log.info("query position info by id = "+id);
+        log.info("query position info by id = "+StringUtils.mapToString(map));
         Response response = new Response();
         try
         {
-            Map<String,Object> job = jobMapper.queryPositionInfoByID(id);
+            Map<String,Object> job = jobMapper.queryPositionInfoByID(map);
             Long isApply = (Long) job.get("isApply");
             job.put("isApply",(isApply == 0 ? false:true));
 

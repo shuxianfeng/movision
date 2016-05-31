@@ -169,7 +169,11 @@ public class JobSiteController {
     @ApiOperation(value = "职位详情页面",notes = "职位搜索查看职位详情",response = Response.class)
     public Response queryPositionInfoByID(@ApiParam(value = "招聘职位ID") @RequestParam Long id)
     {
-        Response response = job.queryPositionInfoByID(id);
+        Map<String,Object> map = new HashMap<String,Object>();
+        Long createid = ShiroUtil.getCreateID();
+        map.put("createid",createid);
+        map.put("id",id);
+        Response response = job.queryPositionInfoByID(map);
         job.updateViews(id);
         return response;
     }

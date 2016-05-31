@@ -42,7 +42,7 @@ public interface JobMapper {
 
     List<MemberDetails> queryAdvertisingPosition(Map<String,Object> map);
 
-    Map<String,Object> queryPositionInfoByID(Long id);
+    Map<String,Object> queryPositionInfoByID(Map<String,Object> map);
 
     List<Job> findAllOtherPosition(RowBounds rowBounds,Map<String,Object> map);
 
