@@ -8,6 +8,8 @@ import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
+import com.zhuhuibao.mybatis.tech.entity.TechData;
+import com.zhuhuibao.mybatis.tech.service.TechDataService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -36,7 +39,7 @@ public class TechDataController {
     UploadService uploadService;
 
     @Autowired
-    TechnologyService techService;
+    TechDataService techDataService;
 
 
     @ApiOperation(value="上传技术资料(行业解决方案，技术文档，培训资料)",notes="上传技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)

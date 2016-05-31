@@ -18,6 +18,9 @@ import com.zhuhuibao.mybatis.order.service.OrderService;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
 import com.zhuhuibao.mybatis.tech.entity.TechData;
 import com.zhuhuibao.mybatis.tech.service.TechnologyService;
+import com.zhuhuibao.mybatis.tech.entity.DictionaryTechData;
+import com.zhuhuibao.mybatis.tech.service.DictionaryTechDataService;
+import com.zhuhuibao.mybatis.tech.service.TechDataService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
 import com.zhuhuibao.utils.CommonUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -57,6 +60,11 @@ public class TechOmsController {
     @Autowired
     TechnologyService techService;
 
+    @Autowired
+    DictionaryTechDataService dicTDService;
+
+    @Autowired
+    TechDataService techDataService;
     /**
      * 批量退款接口
      * {detail_data 退款详细数据 必填(支付宝交易号^退款金额^备注)多笔请用#隔开}
@@ -123,11 +131,6 @@ public class TechOmsController {
 
     }
 
-    @Autowired
-    DictionaryTechDataService dicTDService;
-
-    @Autowired
-    TechDataService techDataService;
 
     @RequestMapping(value="coop/sel_tech_cooperation", method = RequestMethod.GET)
     @ApiOperation(value="运营管理平台搜索技术合作(技术成果，技术需求)",notes = "运营管理平台技术合作(技术成果，技术需求)",response = Response.class)
