@@ -1,6 +1,5 @@
 package com.zhuhuibao.mybatis.tech.service;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
-import com.zhuhuibao.mybatis.tech.entity.TechData;
 import com.zhuhuibao.mybatis.tech.mapper.TechCooperationMapper;
 import com.zhuhuibao.mybatis.tech.mapper.TechDataMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;

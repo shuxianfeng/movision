@@ -50,6 +50,25 @@ public class TechDataService {
     }
 
     /**
+     * 技术频道技术资料搜索
+     * @param condition 搜索条件
+     * @return
+     */
+    public List<Map<String,String>> findAllTechDataPager(Paging<Map<String,String>> pager, Map<String,Object> condition)
+    {
+        log.info("find all tech data for pager "+ StringUtils.mapToString(condition));
+        List<Map<String,String>> techList = null;
+        try{
+            techList = techDataMapper.findAllTechDataPager(pager.getRowBounds(),condition);
+        }catch(Exception e)
+        {
+            log.error("find all tech data for pager error!",e);
+            throw e;
+        }
+        return techList;
+    }
+
+    /**
      * 插入技术资料：行业解决方案，技术文档，培训资料
      * @param techData
      * @return
