@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.memReg.controller;
+package com.zhuhuibao.business.member;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
