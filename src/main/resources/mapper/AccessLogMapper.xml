@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.accessLog.mapper.AccessLogMapper" >
-  <insert id="addAccessLog" keyProperty="accessLogId" parameterType="com.zhuhuibao.mybatis.accessLog.entity.AccessLog" useGeneratedKeys="true">
-    insert into t_sys_accessLog(memberId,clientIP,httpMethod,requestURL,queryString,userAgent,accessTime,execTime) values
-    (#{memberId},#{clientIP},#{httpMethod},#{requestURL},#{queryString},#{userAgent},now(),#{execTime})
-  </insert>
-</mapper>
