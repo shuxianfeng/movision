@@ -10,7 +10,7 @@
 
 #idea ide files
 .idea
-zhuhuibao.iml
+*.iml
 
 #resources files
 /src/main/resources/rebel.xml
