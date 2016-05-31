@@ -143,7 +143,7 @@ public class TechnologyService {
     }
 
     /**
-     * 更新技术合作的点击率
+     * 根据ID查看技术合作详情
      * @param id 技术合作ID
      * @return
      */
@@ -151,6 +151,24 @@ public class TechnologyService {
     {
         TechCooperation techCoop;
         log.info("select tech cooperation by id "+id);
+        try{
+            techCoop = techMapper.selectByPrimaryKey(Long.valueOf(id));
+        }catch (Exception e){
+            log.error("select tech cooperation by id error! ",e);
+            throw e;
+        }
+        return techCoop;
+    }
+
+    /**
+     * 预览技术合作详情
+     * @param id 技术合作ID
+     * @return
+     */
+    public TechCooperation previewTechCooperationDetail(String id)
+    {
+        TechCooperation techCoop;
+        log.info("preview tech cooperation by id "+id);
         try{
             techCoop = techMapper.selectByPrimaryKey(Long.valueOf(id));
         }catch (Exception e){

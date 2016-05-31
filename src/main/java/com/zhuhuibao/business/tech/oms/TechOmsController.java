@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @RestController
 
-@RequestMapping("/rest/tech/site/oms")
+@RequestMapping("/rest/tech/oms")
 @Api(value = "techOms", description = "技术后台运营系统")
 public class TechOmsController {
     private static final Logger log = LoggerFactory.getLogger(TechOmsController.class);
@@ -53,7 +53,7 @@ public class TechOmsController {
         return response;
     }
 
-    @RequestMapping(value="sel_tech_cooperation", method = RequestMethod.GET)
+    @RequestMapping(value="coop/sel_tech_cooperation", method = RequestMethod.GET)
     @ApiOperation(value="运营管理平台搜索技术合作(技术成果，技术需求)",notes = "运营管理平台技术合作(技术成果，技术需求)",response = Response.class)
     public Response findAllTechCooperationPager(@ApiParam(value = "系统分类") @RequestParam(required = false) String systemCategory,
                                                 @ApiParam(value = "应用领域") @RequestParam(required = false) String applicationArea,
@@ -84,7 +84,7 @@ public class TechOmsController {
         return response;
     }
 
-    @RequestMapping(value="upd_tech_cooperation", method = RequestMethod.POST)
+    @RequestMapping(value="coop/upd_tech_cooperation", method = RequestMethod.POST)
     @ApiOperation(value="修改技术合作(技术成果，技术需求)",notes = "修改技术合作(技术成果，技术需求)",response = Response.class)
     public Response updateTechCooperation( @ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
     {
@@ -93,7 +93,7 @@ public class TechOmsController {
         return response;
     }
 
-    @RequestMapping(value="del_tech_cooperation", method = RequestMethod.POST)
+    @RequestMapping(value="coop/del_tech_cooperation", method = RequestMethod.POST)
     @ApiOperation(value="删除技术合作(技术成果，技术需求)",notes = "删除技术合作(技术成果，技术需求)",response = Response.class)
     public Response deleteTechCooperation( @ApiParam(value = "技术合作ID")  @RequestParam() String techId)
     {
