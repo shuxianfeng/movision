@@ -1,8 +1,8 @@
-package com.zhuhuibao.mybatis.techtrain.service;
-import com.zhuhuibao.mybatis.techtrain.entity.TechCooperation;
-import com.zhuhuibao.mybatis.techtrain.entity.TechData;
-import com.zhuhuibao.mybatis.techtrain.mapper.TechCooperationMapper;
-import com.zhuhuibao.mybatis.techtrain.mapper.TechDataMapper;
+package com.zhuhuibao.mybatis.tech.service;
+import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
+import com.zhuhuibao.mybatis.tech.entity.TechData;
+import com.zhuhuibao.mybatis.tech.mapper.TechCooperationMapper;
+import com.zhuhuibao.mybatis.tech.mapper.TechDataMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.techtrain.mapper.TechDataMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.techtrain.entity.TechData" >
+<mapper namespace="com.zhuhuibao.mybatis.tech.mapper.TechDataMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.tech.entity.TechData" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="createid" property="createid" jdbcType="BIGINT" />
     <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP" />
@@ -16,7 +16,7 @@
     <result column="download" property="download" jdbcType="BIGINT" />
     <result column="attach" property="attach" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.techtrain.entity.TechData" extends="BaseResultMap" >
+  <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.tech.entity.TechData" extends="BaseResultMap" >
     <result column="notes" property="notes" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -43,7 +43,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.techtrain.entity.TechData" >
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.tech.entity.TechData" >
     insert into t_tech_data
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -126,7 +126,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.techtrain.entity.TechData" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.tech.entity.TechData" >
     update t_tech_data
     <set >
       <if test="createid != null" >

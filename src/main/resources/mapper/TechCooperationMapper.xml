@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.techtrain.mapper.TechCooperationMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.techtrain.entity.TechCooperation" >
+<mapper namespace="com.zhuhuibao.mybatis.tech.mapper.TechCooperationMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.tech.entity.TechCooperation" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="createID" property="createID" jdbcType="BIGINT" />
     <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP" />
@@ -22,7 +22,7 @@
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="views" property="views" jdbcType="BIGINT" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.techtrain.entity.TechCooperation" extends="BaseResultMap" >
+  <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.tech.entity.TechCooperation" extends="BaseResultMap" >
     <result column="notes" property="notes" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -47,7 +47,7 @@
     where t.id = #{id,jdbcType=BIGINT}
   </select>
 
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.techtrain.entity.TechCooperation" >
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.tech.entity.TechCooperation" >
     insert into t_tech_cooperation
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -166,7 +166,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.techtrain.entity.TechCooperation" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.tech.entity.TechCooperation" >
     update t_tech_cooperation
     <set >
       <if test="createID != null" >

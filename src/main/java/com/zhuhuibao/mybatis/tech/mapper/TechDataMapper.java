@@ -1,6 +1,6 @@
-package com.zhuhuibao.mybatis.techtrain.mapper;
+package com.zhuhuibao.mybatis.tech.mapper;
 
-import com.zhuhuibao.mybatis.techtrain.entity.TechData;
+import com.zhuhuibao.mybatis.tech.entity.TechData;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;

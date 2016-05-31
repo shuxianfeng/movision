@@ -345,7 +345,7 @@ public class AlipayService {
             String snCode = IdGenerator.createBatchNo();
             pwdTicket.setSnCode(snCode);
             pwdTicket.setMobile(msgParam.get("mobile"));
-            pwdTicket.setOrderNo(Long.valueOf(msgParam.get("orderNo")));
+            pwdTicket.setOrderNo(msgParam.get("orderNo"));
             pwdTicket.setCourseId(Long.valueOf(msgParam.get("goodsId")));
             list.add(pwdTicket);
         }
