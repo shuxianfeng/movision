@@ -40,6 +40,9 @@ public class ExpertService {
     @Autowired
     private ExpertSupportMapper expertSupportMapper;
 
+    @Autowired
+    private WorkTypeMapper workTypeMapper;
+
     /**
      * 发布技术成果
      * @param achievement
@@ -524,6 +527,21 @@ public class ExpertService {
     public Map<String,String> queryExpertSupportInfoById(String id){
         try{
             return expertSupportMapper.queryExpertSupportInfoById(id);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 查询专家对应workType code
+     * @param type
+     * @return
+     */
+    public WorkType findWordTypeByType(String type){
+        try{
+            return workTypeMapper.findWordTypeByType(type);
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();
