@@ -144,7 +144,7 @@ public class TechOmsController {
         return response;
     }
 
-    @RequestMapping(value="sel_tech_data_detail", method = RequestMethod.POST)
+    @RequestMapping(value="data/sel_tech_data_detail", method = RequestMethod.POST)
     @ApiOperation(value="查询技术资料详情(行业解决方案，技术文档，培训资料)",notes = "查询技术资料详情(行业解决方案，技术文档，培训资料)",response = Response.class)
     public Response selectTechDataDetail(@ApiParam(value = "技术资料ID")  @RequestParam String techDataId)
     {
@@ -154,7 +154,7 @@ public class TechOmsController {
         return response;
     }
 
-    @RequestMapping(value="coop/sel_tech_data", method = RequestMethod.GET)
+    @RequestMapping(value="data/sel_tech_data", method = RequestMethod.GET)
     @ApiOperation(value="运营管理平台搜索技术资料",notes = "运营管理平台搜索技术资料",response = Response.class)
     public Response findAllTechDataPager(@ApiParam(value = "系统分类") @RequestParam(required = false) String fCategory,
                                                 @ApiParam(value = "应用领域") @RequestParam(required = false) String sCategory,

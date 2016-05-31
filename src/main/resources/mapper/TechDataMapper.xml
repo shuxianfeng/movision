@@ -186,10 +186,10 @@
         and t.title like concat('%',#{title},'%')
       </if>
       <if test="fCategory != null">
-        and t.systemCategory = #{systemCategory}
+        and t.fCategory = #{fCategory}
       </if>
       <if test="sCategory != null">
-        and t.applicationArea = #{applicationArea}
+        and t.sCategory = #{sCategory}
       </if>
       <if test="type != null">
         and t.type = #{type}
