@@ -259,8 +259,8 @@
   </select>
   <select id="findAllCooperationByPager" resultType="java.util.Map" >
     select c.id, c.createId, date_format(c.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, date_format(c.updateTime,'%Y-%m-%d %H:%i:%s') updateTime, c.title, c.type, c.category, c.province, c.city, c.area,
-    c.price, c.endTime, c.isShow, c.companyName, c.linkMan, c.telephone, c.mobile,c.email,c.content,c.is_deleted,c.views,
-    concat(p.name,ci.name,a.name)as cooperationArea,co.name as categoryName,coo.name as TypeName,coo.parentId,
+    c.price, c.endTime, c.isShow, c.companyName, c.linkMan, c.telephone, c.mobile,c.email,c.content,c.is_deleted,c.views,c.status,
+    concat(p.name,ci.name,a.name)as cooperationArea,co.name as categoryName,coo.name as typeName,coo.parentId,
     (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName,
     CASE WHEN m.identify = 2 THEN '个人' WHEN m.identify !=2 THEN '公司' END AS memberType,m.headShot
     from t_c_cooperation c

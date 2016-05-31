@@ -275,7 +275,6 @@ public class JobPositionService {
             Map<String,Object> job = jobMapper.queryPositionInfoByID(map);
             Long isApply = (Long) job.get("isApply");
             job.put("isApply",(isApply == 0 ? false:true));
-
             response.setData(job);
         }
         catch(Exception e)
