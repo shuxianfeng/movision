@@ -58,12 +58,18 @@
   <select id="findWorkTypeList" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from t_dictionary_workType
+    from t_dictionary_workType where id &lt; 100
   </select>
   <select id="findWorkTypeById" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from t_dictionary_workType
     where id = #{id}
+  </select>
+  <select id="findWordTypeByType" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_dictionary_workType
+    where type = #{type}
   </select>
 </mapper>
