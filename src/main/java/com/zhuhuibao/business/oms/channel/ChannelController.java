@@ -189,6 +189,7 @@ public class ChannelController {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("title", channelNews.getTitle());
         map.put("channelid", channelNews.getChannelid());
+        map.put("sort", channelNews.getSort());
         map.put("status", channelNews.getStatus());
         List<ChannelNews> channelList = newsService.findAllContentList(pager, map);
         pager.result(channelList);
