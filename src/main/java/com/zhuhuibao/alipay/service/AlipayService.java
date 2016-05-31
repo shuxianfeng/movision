@@ -73,6 +73,9 @@ public class AlipayService {
     @Autowired
     private PublishCourseService publishCourseService;
 
+    @Autowired
+    private InvoiceService invoiceService;
+
 
     /**
      * 支付包支付请求
@@ -308,7 +311,8 @@ public class AlipayService {
         genOrderRecord(msgParam);
         //订单商品详情
         genOrderGoodsRecord(msgParam);
-
+        //发票信息
+        genInvoiceRecord(msgParam);
 
         //如果是技术培训 专家培训 需要记录订单SN码 t_o_pwdticket
         if (msgParam.get("goodsType").equals(OrderConstants.GoodsType.JSPX.toString())
@@ -324,7 +328,26 @@ public class AlipayService {
     }
 
     /**
+     * 需要发票 生成发票记录
+     *
+     * @param msgParam
+     */
+    private void genInvoiceRecord(Map<String, String> msgParam) {
+        String needInvoice = msgParam.get("needInvoice");
+        if ("true".equals(needInvoice)){
+            Invoice invoice = new Invoice();
+            invoice.setCreateTime(new Date());
+            invoice.setInvoiceTitle(msgParam.get("invoiceTitle"));
+            invoice.setInvoiceType(Integer.valueOf(msgParam.get("invoiceType")));
+            invoice.setOrderNo(msgParam.get("orderNo"));
+            invoiceService.insert(invoice);
+        }
+
+    }
+
+    /**
      * 修改课程库存
+     *
      * @param msgParam
      */
     private void updateStock(Map<String, String> msgParam) {
@@ -335,6 +358,7 @@ public class AlipayService {
 
     /**
      * 根据订单生产SN码
+     *
      * @param msgParam
      */
     private void genSNcode(Map<String, String> msgParam) {
@@ -354,6 +378,7 @@ public class AlipayService {
 
     /**
      * 生成订单商品详情记录
+     *
      * @param msgParam
      */
     private void genOrderGoodsRecord(Map<String, String> msgParam) {
@@ -371,6 +396,7 @@ public class AlipayService {
 
     /**
      * 生成订单记录
+     *
      * @param msgParam
      */
     private void genOrderRecord(Map<String, String> msgParam) {
