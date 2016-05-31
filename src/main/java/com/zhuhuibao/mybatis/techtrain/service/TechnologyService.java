@@ -215,41 +215,4 @@ public class TechnologyService {
         return result;
     }
 
-    /**
-     * 技术培训频道技术合作搜索
-     * @param condition 搜索条件
-     * @return
-     */
-    public List<Map<String,String>> findAllTechDataPager(Paging<Map<String,String>> pager, Map<String,Object> condition)
-    {
-        log.info("find all tech cooperation for pager "+StringUtils.mapToString(condition));
-        List<Map<String,String>> techList = null;
-        try{
-            techList = techMapper.findAllTechCooperationPager(pager.getRowBounds(),condition);
-        }catch(Exception e)
-        {
-            log.error("find all tech cooperation for pager error!",e);
-            throw e;
-        }
-        return techList;
-    }
-
-    /**
-     * 运营管理平台技术合作搜索
-     * @param condition 搜索条件
-     * @return
-     */
-    public List<Map<String,String>> findAllOMSTechDataPager(Paging<Map<String,String>> pager,Map<String,Object> condition)
-    {
-        log.info("find all OMS tech cooperation for pager "+StringUtils.mapToString(condition));
-        List<Map<String,String>> techList = null;
-        try{
-            techList = techMapper.findAllOMSTechCooperationPager(pager.getRowBounds(),condition);
-        }catch(Exception e)
-        {
-            log.error("find all OMS tech cooperation for pager error!",e);
-            throw e;
-        }
-        return techList;
-    }
 }
