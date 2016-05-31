@@ -196,7 +196,7 @@
     left join t_dictionary_city ct on ct.code = t.city
     left join t_dictionary_area ar on ar.code = t.area
     left join t_m_member mb on mb.id = t.createid
-    left join t_i_jobRelresume jrr on jrr.applicantId = #{createid} and jrr.jobID = #{id} and (current_date() -jrr.publishDate) &lt;= 10
+    left join t_i_jobRelresume jrr on jrr.applicantId = #{createid} and jrr.jobID = #{id} and datediff(current_date(),jrr.publishDate) &lt;= 10
     where t.id = #{id}
   </select>
 
