@@ -53,7 +53,13 @@ public class UploadService {
             saveDirectory = ApiConstants.getUploadDoc()+"/tech";
             //技术资料最大1G
             maxPostSize = ApiConstants.getUploadDocMaxPostSize();
-        } else{
+        }
+        else if("expert".equals(type)){
+            //技术资料
+            saveDirectory = ApiConstants.getUploadDir()+"/expert";
+            //技术资料最大1G
+            maxPostSize = ApiConstants.getUploadPicMaxPostSize();
+        }else{
             saveDirectory = ApiConstants.getUploadDoc()+"/job";
             maxPostSize = ApiConstants.getUploadDocMaxPostSize();
         }
