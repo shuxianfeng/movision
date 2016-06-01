@@ -84,6 +84,12 @@
       <if test="notes != null" >
         notes,
       </if>
+      <if test="fileSize != null" >
+        fileSize,
+      </if>
+      <if test="fileFormat != null" >
+        fileFormat,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -123,6 +129,12 @@
       </if>
       <if test="notes != null" >
         #{notes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="fileSize != null" >
+        #{fileSize},
+      </if>
+      <if test="fileFormat != null" >
+        #{fileFormat},
       </if>
     </trim>
   </insert>
@@ -170,6 +182,18 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+  <update id="updateTechDataViewsOrDL" parameterType="java.util.Map" >
+    update t_tech_data
+    <set>
+      <if test="views != null" >
+        views = views+1,
+      </if>
+      <if test="download != null" >
+        download = download+1,
+      </if>
+    </set>
+    where id = #{id}
+  </update>
   <select id="findAllOMSTechDataPager" parameterType="java.util.Map" resultType="java.util.Map">
     select t.id, case when ur.mobile != '' or ur.mobile != null then ur.mobile when ur.email!= '' or ur.email != null then ur.email end as  username,
     date_format(t.publishTime,'%Y-%m-%d') publishTime, date_format(t.updateTime,'%Y-%m-%d') updateTime, t.title,
@@ -214,5 +238,12 @@
         and t.sCategory = #{sCategory}
       </if>
     </where>
+  </select>
+  <select id="previewTechDataDetail" parameterType="java.util.Map" resultType="java.util.Map">
+    select t.id,case when ur.mobile != '' or ur.mobile != null then ur.mobile when ur.email!= '' or ur.email != null then ur.email end as  username,
+    date_format(t.publishTime,'%Y-%m-%d') publishTime, date_format(t.updateTime,'%Y-%m-%d') updateTime, t.title,t.views,t.download,t.fileSize,t.fileFormat,
+    t.type, t.notes from t_tech_data t
+    left join t_m_member ur on ur.id = t.createID
+    where t.id = #{id}
   </select>
 </mapper>

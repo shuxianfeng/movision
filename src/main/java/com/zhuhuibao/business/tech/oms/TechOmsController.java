@@ -178,7 +178,7 @@ public class TechOmsController {
         return response;
     }
 
-    @RequestMapping(value="coop/sel_tech_cooperation_detail", method = RequestMethod.POST)
+    @RequestMapping(value="coop/sel_tech_cooperation_detail", method = RequestMethod.GET)
     @ApiOperation(value="查询技术合作(技术成果，技术需求)",notes = "查询技术合作(技术成果，技术需求)",response = Response.class)
     public Response selectTechCooperationById( @ApiParam(value = "技术合作成果、需求ID")  @RequestParam String techCoopId)
     {
@@ -188,7 +188,7 @@ public class TechOmsController {
         return response;
     }
 
-    @RequestMapping(value="coop/del_tech_cooperation", method = RequestMethod.POST)
+    @RequestMapping(value="coop/del_tech_cooperation", method = RequestMethod.GET)
     @ApiOperation(value="删除技术合作(技术成果，技术需求)",notes = "删除技术合作(技术成果，技术需求)",response = Response.class)
     public Response deleteTechCooperation( @ApiParam(value = "技术合作ID")  @RequestParam() String techId)
     {
@@ -200,7 +200,7 @@ public class TechOmsController {
         return response;
     }
 
-    @RequestMapping(value="data/del_tech_data", method = RequestMethod.POST)
+    @RequestMapping(value="data/del_tech_data", method = RequestMethod.GET)
     @ApiOperation(value="删除技术资料(行业解决方案，技术文档，培训资料)",notes = "删除技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)
     public Response deleteTechData( @ApiParam(value = "技术资料ID")  @RequestParam() String techDataId)
     {
@@ -221,7 +221,7 @@ public class TechOmsController {
         return response;
     }
 
-    @RequestMapping(value="data/sel_frist_category", method = RequestMethod.POST)
+    @RequestMapping(value="data/sel_frist_category", method = RequestMethod.GET)
     @ApiOperation(value="查询技术资料一级分类",notes = "查询技术资料一级分类",response = Response.class)
     public Response selectFirstCategory()
     {
@@ -231,7 +231,7 @@ public class TechOmsController {
         return response;
     }
 
-    @RequestMapping(value="data/sel_second_category", method = RequestMethod.POST)
+    @RequestMapping(value="data/sel_second_category", method = RequestMethod.GET)
     @ApiOperation(value="查询技术资料二级分类",notes = "查询技术资料二级分类",response = Response.class)
     public Response selectSecondCategoryByFirstId( @ApiParam(value = "一级分类ID")  @RequestParam() String firstCategoryId)
     {
@@ -241,7 +241,7 @@ public class TechOmsController {
         return response;
     }
 
-    @RequestMapping(value="data/sel_tech_data_detail", method = RequestMethod.POST)
+    @RequestMapping(value="data/sel_tech_data_detail", method = RequestMethod.GET)
     @ApiOperation(value="查询技术资料详情(行业解决方案，技术文档，培训资料)",notes = "查询技术资料详情(行业解决方案，技术文档，培训资料)",response = Response.class)
     public Response selectTechDataDetail(@ApiParam(value = "技术资料ID")  @RequestParam String techDataId)
     {

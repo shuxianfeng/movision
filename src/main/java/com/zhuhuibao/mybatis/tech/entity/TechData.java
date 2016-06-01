@@ -38,6 +38,10 @@ public class TechData {
     private String attach;
     @ApiModelProperty(value = "简介")
     private String notes;
+    @ApiModelProperty(value = "文件大小(字节)")
+    private Long fileSize;
+    @ApiModelProperty(value = "文件格式")
+    private String fileFormat;
 
     public Long getId() {
         return id;
@@ -149,5 +153,21 @@ public class TechData {
 
     public void setNotes(String notes) {
         this.notes = notes == null ? null : notes.trim();
+    }
+
+    public Long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(Long fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public String getFileFormat() {
+        return fileFormat;
+    }
+
+    public void setFileFormat(String fileFormat) {
+        this.fileFormat = fileFormat;
     }
 }

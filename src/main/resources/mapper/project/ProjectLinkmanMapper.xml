@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhuhuibao.mybatis.oms.mapper.ProjectLinkmanMapper">
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.oms.entity.ProjectLinkman">
+<mapper namespace="com.zhuhuibao.mybatis.project.mapper.ProjectLinkmanMapper">
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.project.entity.ProjectLinkman">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="projectid" jdbcType="BIGINT" property="projectid" />
     <result column="deptType" jdbcType="VARCHAR" property="deptType" />
@@ -26,7 +26,7 @@
     from t_prj_linkman
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectLinkman">
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.project.entity.ProjectLinkman">
     insert into t_prj_linkman
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="projectid != null">
@@ -105,7 +105,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectLinkman">
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.project.entity.ProjectLinkman">
   
      replace into  t_prj_linkman
     <set>
@@ -153,7 +153,7 @@
       
   </update>
 
-  <select id="queryProjectLinkmanByProjectID" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.oms.entity.ProjectLinkman">
+  <select id="queryProjectLinkmanByProjectID" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.project.entity.ProjectLinkman">
     select id, projectid, deptType, partyType, typePartyB, name, linkman, mobile, telephone,
     fax, address, note, is_deleted from t_prj_linkman
     <where>

@@ -25,5 +25,7 @@ public interface TechDataMapper {
 
     List<Map<String,String>> findAllTechDataPager(RowBounds rowBounds,Map<String,Object> condition);
 
-    int updateTechCooperationViewsAndDownload(Long id);
+    int updateTechDataViewsOrDL(Map<String,Object> map);
+
+    List<Map<String,String>> previewTechDataDetail(Long id);
 }

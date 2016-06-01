@@ -1,6 +1,6 @@
-package com.zhuhuibao.mybatis.oms.mapper;
+package com.zhuhuibao.mybatis.project.mapper;
 
-import com.zhuhuibao.mybatis.oms.entity.ProjectLinkman;
+import com.zhuhuibao.mybatis.project.entity.ProjectLinkman;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

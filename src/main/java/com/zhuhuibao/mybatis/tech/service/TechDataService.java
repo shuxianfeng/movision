@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import java.util.Map;
  **/
 @Service
 @Transactional
+@RequestMapping(value="")
 public class TechDataService {
 
     private final static Logger log = LoggerFactory.getLogger(TechDataService.class);
@@ -124,6 +126,24 @@ public class TechDataService {
     }
 
     /**
+     * 更新点击率或者下载率
+     * @param map
+     * @return
+     */
+    public int updateTechDataViewsOrDL(Map<String,Object> map)
+    {
+        int result;
+        log.info("update tech data views or download rate "+StringUtils.mapToString(map));
+        try{
+            result = techDataMapper.updateTechDataViewsOrDL(map);
+        }catch (Exception e){
+            log.error("update tech data views or download rate error! ",e);
+            throw e;
+        }
+        return result;
+    }
+
+    /**
      * 查询技术资料信息
      * @param id 技术资料ID
      * @return
@@ -139,5 +159,46 @@ public class TechDataService {
             throw e;
         }
         return techData;
+    }
+
+    /**
+     * 获取技术资料文件名称
+     * @param id 技术资料ID
+     * @return
+     */
+    public String selectTechDataAttachName(Long id)
+    {
+        String fileName = null;
+        log.info("select tech data attach file name "+id);
+        try{
+            TechData techData = techDataMapper.selectByPrimaryKey(id);
+            if(techData != null)
+            {
+                fileName = techData.getAttach();
+            }
+        }catch (Exception e){
+            log.error("select tech data attach file name error! ",e);
+            throw e;
+        }
+        return fileName;
+    }
+
+    /**
+     * 预览技术资料详情
+     * @param id 技术资料ID
+     * @return
+     */
+    public List<Map<String,String>> previewTechDataDetail(Long id)
+    {
+        log.info("preview tech data detail id = "+id);
+        List<Map<String,String>> techList = null;
+        try{
+            techList = techDataMapper.previewTechDataDetail(id);
+        }catch(Exception e)
+        {
+            log.error("preview tech data detail error!",e);
+            throw e;
+        }
+        return techList;
     }
 }

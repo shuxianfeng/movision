@@ -114,7 +114,7 @@
     where id = #{id}
   </update>
   <select id="searchNewPosition" resultMap="BaseResultMap">
-    select j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,j.createid,
+    select j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,j.createid,j.positionType,
     (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
     from t_i_job j
     left join t_dictionary_city c on c.code = j.city

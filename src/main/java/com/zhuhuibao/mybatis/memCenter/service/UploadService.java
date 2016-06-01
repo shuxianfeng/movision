@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 
@@ -63,7 +64,12 @@ public class UploadService {
             saveDirectory = ApiConstants.getUploadDoc()+"/job";
             maxPostSize = ApiConstants.getUploadDocMaxPostSize();
         }
-
+        //目录不存在则创建
+        File dir = new File(saveDirectory);
+        if(!dir.exists() && !dir.isDirectory()) {
+            dir.mkdir();
+            log.info("mk dir susscess dirName = "+saveDirectory);
+        }
         //String a = getFileSuffix(req);
 
         String ip_address = PropertiesUtils.getValue("host.ip");
