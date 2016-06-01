@@ -96,6 +96,23 @@ public class PayConstants {
     }
 
     /**
+     * 商品类型 {1表示实物类商品  0表示虚拟类商品}
+     */
+    public enum GoodsType {
+        XNL("0"), SWL("1");
+        public final String value;
+
+        GoodsType(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
+
+    /**
      * http 状态码
      */
     public static final int HTTP_SUCCESS_CODE = 200;
