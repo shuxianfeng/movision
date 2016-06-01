@@ -40,4 +40,19 @@ public class TechConstant {
             return this.value;
         }
     }
+
+    /**
+     * 上传技术资料附件的路径  /tech
+     */
+    public static final String UPLOAD_TECH_DATA_URL = "/tech";
+
+    /**
+     * 上传技术资料的大小  fileSize
+     */
+    public static final String FILE_SIZE = "fileSize";
+
+    /**
+     * 上传技术资料的格式
+     */
+    public static final String FILE_FORMAT = "fileFormat";
 }
