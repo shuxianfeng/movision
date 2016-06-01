@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.oms.project;/**
+package com.zhuhuibao.business.project;/**
  * @author Administrator
  * @version 2016/5/16 0016
  */
@@ -77,7 +77,10 @@ public class TenderTonedController {
         }
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("type",type);
-        map.put("noticeName",noticeName);
+        if(noticeName != null && !"".equals(noticeName))
+        {
+            map.put("noticeName",noticeName.replace("_","\\_"));
+        }
         map.put("province",province);
         map.put("city",city);
         map.put("startDateA",startDateA);
