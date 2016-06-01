@@ -7,6 +7,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.alipay.service.direct.AlipayDirectService;
 import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.common.pojo.OrderReqBean;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.tech.service.TechnologyService;
@@ -31,8 +32,6 @@ import java.util.Map;
 @Api(value = "techCourse", description = "技术培训接口")
 public class TechCourseController {
     private static final Logger log = LoggerFactory.getLogger(TechCourseController.class);
-
-    private static final String ALIPAY_GOODS_TYPE = "0";//虚拟类商品
 
     private static final String PARTNER = AlipayPropertiesLoader.getPropertyValue("partner");
 
@@ -68,7 +67,7 @@ public class TechCourseController {
         Map paramMap = gson.fromJson(json, Map.class);
         //特定参数
         paramMap.put("exterInvokeIp", ValidateUtils.getIpAddr(request));//客户端IP地址
-        paramMap.put("alipay_goods_type", ALIPAY_GOODS_TYPE);//商品类型
+        paramMap.put("alipay_goods_type", PayConstants.GoodsType.XNL.toString());//商品类型  0 , 1
         paramMap.put("partner", PARTNER);//partner=seller_id     商家支付宝ID  合作伙伴身份ID 签约账号
 
         log.debug("调用立即支付接口......");
