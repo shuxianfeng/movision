@@ -213,15 +213,19 @@
 	(case when a.status=0 then '未审核'
 	when a.status=1 then '已审核' when
 	a.status='2' then '已拒绝' else '回收站' end )
-	statusText,a.createid, (case when
-	m.personRealName is null then
-	m.enterpriseName else m.personRealName
-	end) publisher,date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime
+	statusText,a.createid, 
+	m.username  publisher,
+	date_format(a.createTime,'%Y-%m-%d %H:%i:%s') createTime
 	from
 	t_oms_channel_news a left join t_oms_channel b on a.channelid=b.id
 	left
-	join t_m_member m on m.id=a.createid 
+	join t_oms_user m on m.id=a.createid 
 	<where>
+	   a.status!=3 
+	   <if test="channelid!=11">
+	   and a.channelid!='11'
+	   </if>
+	   
       <if test="title != null">
         and a.title like CONCAT('%',#{title},'%') 
       </if>
