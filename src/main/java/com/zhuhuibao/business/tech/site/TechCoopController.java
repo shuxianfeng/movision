@@ -47,7 +47,7 @@ public class TechCoopController {
     }
 
 
-    @RequestMapping(value="sel_tech_cooperation_detail", method = RequestMethod.POST)
+    @RequestMapping(value="sel_tech_cooperation_detail", method = RequestMethod.GET)
     @ApiOperation(value="查看技术合作详情",notes = "查看技术合作详情",response = Response.class)
     public Response previewTechCooperation(@ApiParam(value = "技术合作成果、需求ID")  @RequestParam String techCoopId)
     {

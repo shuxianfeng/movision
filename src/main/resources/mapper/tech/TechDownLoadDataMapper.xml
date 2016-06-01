@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuhuibao.mybatis.tech.mapper.TechDownLoadDataMapper">
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.tech.entity.TechDownLoadData">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="createId" jdbcType="BIGINT" property="createId" />
+    <result column="dataId" jdbcType="BIGINT" property="dataId" />
+    <result column="dowloadTime" jdbcType="TIMESTAMP" property="dowloadTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, createId, dataId, dowloadTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_tech_downloadReldata
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_tech_downloadReldata
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.tech.entity.TechDownLoadData">
+    insert into t_tech_downloadReldata
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createId != null">
+        createId,
+      </if>
+      <if test="dataId != null">
+        dataId,
+      </if>
+        dowloadTime,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="dataId != null">
+        #{dataId,jdbcType=BIGINT},
+      </if>
+        now(),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.tech.entity.TechDownLoadData">
+    update t_tech_downloadReldata
+    <set>
+      <if test="createId != null">
+        createId = #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="dataId != null">
+        dataId = #{dataId,jdbcType=BIGINT},
+      </if>
+      <if test="dowloadTime != null">
+        dowloadTime = #{dowloadTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.tech.entity.TechDownLoadData">
+    update t_tech_downloadReldata
+    set createId = #{createId,jdbcType=BIGINT},
+      dataId = #{dataId,jdbcType=BIGINT},
+      dowloadTime = #{dowloadTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
