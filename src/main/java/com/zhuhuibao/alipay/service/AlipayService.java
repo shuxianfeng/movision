@@ -441,6 +441,7 @@ public class AlipayService {
         sParaTemp.put("seller_id", msgParam.get("partner"));            //partner = seller_id
 
         //业务参数
+        sParaTemp.put("goods_type",msgParam.get("alipay_goods_type"));   //商品类型(0:虚拟类商品,1:实物类商品 默认为1)
         sParaTemp.put("out_trade_no", msgParam.get("orderNo"));          //商户网站唯一订单号
         sParaTemp.put("subject", msgParam.get("subject"));               //商品名称
         sParaTemp.put("total_fee", msgParam.get("total_fee"));           //交易金额

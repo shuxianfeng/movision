@@ -68,7 +68,7 @@ public class TechCourseController {
         Map paramMap = gson.fromJson(json, Map.class);
         //特定参数
         paramMap.put("exterInvokeIp", ValidateUtils.getIpAddr(request));//客户端IP地址
-        paramMap.put("goods_type", ALIPAY_GOODS_TYPE);//商品类型
+        paramMap.put("alipay_goods_type", ALIPAY_GOODS_TYPE);//商品类型
         paramMap.put("partner", PARTNER);//partner=seller_id     商家支付宝ID  合作伙伴身份ID 签约账号
 
         log.debug("调用立即支付接口......");
