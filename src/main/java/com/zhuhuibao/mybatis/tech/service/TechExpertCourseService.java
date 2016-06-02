@@ -5,12 +5,16 @@ package com.zhuhuibao.mybatis.tech.service;/**
 
 import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
 import com.zhuhuibao.mybatis.tech.mapper.TechExpertCourseMapper;
+import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  *技术培训，专家培训申请的课程
@@ -47,15 +51,20 @@ public class TechExpertCourseService {
 
     /**
      * 更新专家培训，技术培训申请的课程
-     * @param techExpertCourse 专家或者技术申请的课程
+     * @param status 状态
+     * @param operateId 操作人ID
      * @return
      */
-    public int updateTechExpertCourse(TechExpertCourse techExpertCourse)
+    public int updateTechExpertCourse(Long techCourseId,int status,long operateId)
     {
         int result = 0;
-        log.info("update tech data info "+ StringUtils.beanToString(techExpertCourse));
+        log.info("update tech data info status= "+status+" operateId = "+operateId);
         try {
-            result = tecMapper.updateByPrimaryKeySelective(techExpertCourse);
+            TechExpertCourse course = new TechExpertCourse();
+            course.setId(techCourseId);
+            course.setOperateId(operateId);
+            course.setStatus(status);
+            result = tecMapper.updateByPrimaryKeySelective(course);
         }catch(Exception e)
         {
             log.error("update tech expert course error!",e);
@@ -82,4 +91,25 @@ public class TechExpertCourseService {
         }
         return techExpertCourse;
     }
+
+    /**
+     * 查询申请的课程
+     * @param pager
+     * @param condition
+     * @return
+     */
+    public List<Map<String,String>> findAllOMSTrainCoursePager(Paging<Map<String,String>> pager, Map<String,Object> condition)
+    {
+        log.info("find all OMS tech data for pager "+ StringUtils.mapToString(condition));
+        List<Map<String,String>> techList = null;
+        try{
+            techList = tecMapper.findAllOMSTrainCoursePager(pager.getRowBounds(),condition);
+        }catch(Exception e)
+        {
+            log.error("find all OMS tech data for pager error!",e);
+            throw e;
+        }
+        return techList;
+    }
+
 }
