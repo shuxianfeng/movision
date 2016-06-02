@@ -102,10 +102,10 @@ public class InformationController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/rest/workTypeList", method = RequestMethod.GET)
+	@RequestMapping(value = "/rest/member/mc/individual/sel_workTypeList", method = RequestMethod.GET)
 	public Response workTypeList()  {
 		Response result = new Response();
-		List<WorkType> workType = memberService.findWorkTypeList();
+		List<WorkType> workType = memberService.findIndividualWorkTypeList();
 		result.setData(workType);
 		return result;
 	}
