@@ -241,17 +241,4 @@ public class ExpertOmsController {
         return response;
     }
 
-    @ApiOperation(value="专家审核",notes="专家审核",response = Response.class)
-    @RequestMapping(value = "upd_expert", method = RequestMethod.POST)
-    public Response upd_expert(@ModelAttribute Expert expert) {
-        Response response = new Response();
-        expertService.updateExpert(expert);
-        Expert expert1 = expertService.queryExpertById(expert.getId());
-        Member member = memberService.findMemById(expert1.getCreateId());
-        WorkType workType = expertService.findWordTypeByType(ExpertConstant.EXPERT_WORKTYPE_EXPERT);
-        member.setWorkType(workType.getId());
-        memberService.updateMember(member);
-        return response;
-    }
-
 }

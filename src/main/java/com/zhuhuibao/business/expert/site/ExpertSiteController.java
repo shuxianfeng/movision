@@ -1,8 +1,10 @@
 package com.zhuhuibao.business.expert.site;
 
+import com.taobao.api.ApiException;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
@@ -10,12 +12,17 @@ import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
+import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
+import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -28,10 +35,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by cxx on 2016/5/18 0018.
@@ -50,6 +54,9 @@ public class ExpertSiteController {
 
     @Autowired
     private UploadService uploadService;
+
+    @Autowired
+    private MemberRegService memberRegService;
 
     @ApiOperation(value="发布技术成果",notes="发布技术成果",response = Response.class)
     @RequestMapping(value = "ach/add_achievement", method = RequestMethod.POST)
@@ -441,14 +448,45 @@ public class ExpertSiteController {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-            if(null != principal){
-                expertSupport.setCreateid(principal.getId().toString());
-                expertService.applyExpertSupport(expertSupport);
+            String verifyCode = (String) session.getAttribute("r" + mobile);
+            if(code.equals(verifyCode)){
+                ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
+                if(null != principal){
+                    expertSupport.setCreateid(principal.getId().toString());
+                    expertService.applyExpertSupport(expertSupport);
+                }else {
+                    throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                }
+            }else {
+                throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
             }
         }else {
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
+        return response;
+    }
+
+    @ApiOperation(value="申請專家支持获取验证码",notes="申請專家支持获取验证码",response = Response.class)
+    @RequestMapping(value = "base/get_mobileCode", method = RequestMethod.GET)
+    public Response get_mobileCode(HttpServletRequest req)  throws IOException, ApiException {
+        String mobile = req.getParameter("mobile");
+        log.debug("获得手机验证码  mobile=="+mobile);
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(true);
+        // 生成随机字串
+        String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
+        log.debug("verifyCode == " + verifyCode);
+        //发送验证码到手机
+        //SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
+        SDKSendTaoBaoSMS.sendExpertSupportSMS(mobile, verifyCode, Constants.sms_time);
+        Validateinfo info = new Validateinfo();
+        info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+        info.setCheckCode(verifyCode);
+        info.setAccount(mobile);
+        memberRegService.inserValidateInfo(info);
+        sess.setAttribute("expert"+mobile, verifyCode);
+        Response response = new Response();
+        response.setData(verifyCode);
         return response;
     }
 

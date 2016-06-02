@@ -184,6 +184,17 @@ public class ProjectController {
 		response.setData(map);
 		return response;
 	}
+	
+	
+	@RequestMapping(value = "previewOmsProject",method = RequestMethod.GET)
+	@ApiOperation(value="项目信息详情",notes = "根据Id查看项目信息",response = Response.class)
+	public Response previewOmsProject(@ApiParam(value = "项目信息ID") @RequestParam Long porjectID) throws Exception {
+		Response response = new Response();
+		Map<String,Object> map  = projectService.queryOmsProjectDetail(porjectID);
+		response.setData(map);
+		return response;
+	}
+
 
 	@RequestMapping(value = "previewUnLoginProject",method = RequestMethod.GET)
 	@ApiOperation(value="预览未登陆的项目信息",notes = "根据Id查看未登陆的项目信息",response = Response.class)

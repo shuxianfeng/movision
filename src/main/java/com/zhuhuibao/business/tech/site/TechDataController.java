@@ -65,7 +65,7 @@ public class TechDataController {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session){
-            String url = uploadService.upload(req,"tech");
+            String url = uploadService.upload(req,"techdoc");
             Map map = new HashMap();
             map.put(Constants.name,url);
             if(url.lastIndexOf(".")!= -1) {
@@ -145,7 +145,7 @@ public class TechDataController {
                 response.addHeader("Cache-Control", "post-check=0, pre-check=0");
                 response.setHeader("Content-disposition", "attachment;filename=" + attachName);
                 response.setContentType("application/octet-stream");
-                attachName = ApiConstants.getUploadDoc() + TechConstant.UPLOAD_TECH_DATA_URL + "/" + attachName;
+                attachName = ApiConstants.getUploadDoc() + TechConstant.UPLOAD_TECH_DOC_URL + "/" + attachName;
                 jsonResult = FileUtil.downloadFile(response, attachName);
                 //插入我的下载资料
                 dlService.insertDownloadData(techDataId,createId);

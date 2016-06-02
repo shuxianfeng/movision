@@ -43,7 +43,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/rest/info", method = RequestMethod.GET)
+	@RequestMapping(value = {"/rest/info","/rest/member/mc/base/sel_mem_info"}, method = RequestMethod.GET)
 	public Response info(HttpServletRequest req) {
 		Response result = new Response();
 		String memId = req.getParameter("id");
@@ -60,7 +60,7 @@ public class InformationController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/detailInfo", method = RequestMethod.POST)
+	@RequestMapping(value = {"/rest/detailInfo","/rest/member/mc/base/upd_mem_info"}, method = RequestMethod.POST)
 	public Response detailInfo(Member member)  {
 		Response result = new Response();
 		memberService.updateMemInfo(member);
@@ -73,7 +73,7 @@ public class InformationController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/updateStatus", method = RequestMethod.POST)
+	@RequestMapping(value = {"/rest/updateStatus","/rest/member/mc/base/upd_mem_status"}, method = RequestMethod.POST)
 	public Response updateStatus(Member member)  {
 		Response result = new Response();
 		memberService.updateStatus(member);
@@ -87,7 +87,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/rest/certificateList", method = RequestMethod.GET)
+	@RequestMapping(value = {"/rest/certificateList","/rest/member/mc/company/sel_certificateList"}, method = RequestMethod.GET)
 	public Response certificateList(HttpServletRequest req)  {
 		Response response = new Response();
 		String type = req.getParameter("type");
@@ -102,10 +102,10 @@ public class InformationController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/rest/workTypeList", method = RequestMethod.GET)
+	@RequestMapping(value = "/rest/member/mc/individual/sel_workTypeList", method = RequestMethod.GET)
 	public Response workTypeList()  {
 		Response result = new Response();
-		List<WorkType> workType = memberService.findWorkTypeList();
+		List<WorkType> workType = memberService.findIndividualWorkTypeList();
 		result.setData(workType);
 		return result;
 	}
@@ -116,7 +116,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/rest/enterpriseTypeList", method = RequestMethod.GET)
+	@RequestMapping(value = {"/rest/enterpriseTypeList","/rest/member/mc/company/sel_enterpriseTypeList"}, method = RequestMethod.GET)
 	public Response enterpriseTypeList()  {
 		Response result = new Response();
 		List<EnterpriseType> enterpriseType = memberService.findEnterpriseTypeList();
@@ -130,7 +130,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/rest/identityList", method = RequestMethod.GET)
+	@RequestMapping(value = {"/rest/identityList","/rest/member/mc/company/sel_identityList"}, method = RequestMethod.GET)
 	public Response identityList()  {
 		Response result = new Response();
 		List<Identity> identity = memberService.findIdentityList();
@@ -145,7 +145,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/rest/employeeSizeList", method = RequestMethod.GET)
+	@RequestMapping(value = {"/rest/employeeSizeList","/rest/member/mc/company/sel_employeeSizeList"}, method = RequestMethod.GET)
 	public Response employeeSizeList()  {
 		Response result = new Response();
 		List<EmployeeSize> employeeSizeList = memberService.findEmployeeSizeList();
@@ -159,7 +159,7 @@ public class InformationController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/rest/searchProvince", method = RequestMethod.GET)
+	@RequestMapping(value = {"/rest/searchProvince","/rest/member/mc/base/sel_province"}, method = RequestMethod.GET)
 	public Response searchProvince()  {
 		Response result = new Response();
 		List<ResultBean> province = memberService.findProvince();
@@ -172,7 +172,7 @@ public class InformationController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/searchCity", method = RequestMethod.GET)
+	@RequestMapping(value = {"/rest/searchCity","/rest/member/mc/base/sel_city"}, method = RequestMethod.GET)
 	public Response searchCity(String provincecode)  {
 		Response result = new Response();
 		List<ResultBean> city = memberService.findCity(provincecode);
@@ -185,7 +185,7 @@ public class InformationController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/searchArea", method = RequestMethod.GET)
+	@RequestMapping(value = {"/rest/searchArea","/rest/member/mc/base/sel_area"}, method = RequestMethod.GET)
 	public Response searchArea(String cityCode)  {
 		Response result = new Response();
 		List<ResultBean> area = memberService.findArea(cityCode);
@@ -200,7 +200,7 @@ public class InformationController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/isBindMobile", method = RequestMethod.POST)
+	@RequestMapping(value = {"/rest/isBindMobile","/rest/member/mc/base/check_isBind_mobile"}, method = RequestMethod.POST)
 	public Response isBindMobile(HttpServletRequest req) {
 		String memId = req.getParameter("id");
 		Response result = new Response();
@@ -221,7 +221,7 @@ public class InformationController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/isBindEmail", method = RequestMethod.POST)
+	@RequestMapping(value = {"/rest/isBindEmail","/rest/member/mc/base/check_isBind_email"}, method = RequestMethod.POST)
 	public Response isBindEmail(HttpServletRequest req)  {
 		String memId = req.getParameter("id");
 		Response result = new Response();
@@ -243,7 +243,7 @@ public class InformationController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/memberLogo", method = RequestMethod.GET)
+	@RequestMapping(value = {"/rest/memberLogo","/rest/member/mc/base/sel_mem_logo"}, method = RequestMethod.GET)
 	public Response memberLogo(HttpServletRequest req)  {
 		Response result = new Response();
 		String memId = req.getParameter("id");
@@ -257,7 +257,7 @@ public class InformationController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/certificateSave", method = RequestMethod.POST)
+	@RequestMapping(value = {"/rest/certificateSave","/rest/member/mc/company/add_certificate"}, method = RequestMethod.POST)
 	public Response certificateSave(CertificateRecord record)  {
 		Response result = new Response();
 		record.setTime(new Date());
@@ -270,7 +270,7 @@ public class InformationController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/certificateUpdate", method = RequestMethod.POST)
+	@RequestMapping(value = {"/rest/certificateUpdate","/rest/member/mc/company/upd_certificate"}, method = RequestMethod.POST)
 	public Response certificateUpdate(CertificateRecord record)  {
 		Response result = new Response();
 		record.setTime(new Date());
@@ -284,7 +284,7 @@ public class InformationController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/certificateDelete", method = RequestMethod.POST)
+	@RequestMapping(value = {"/rest/certificateDelete","/rest/member/mc/company/del_certificate"}, method = RequestMethod.POST)
 	public Response certificateDelete(CertificateRecord record)  {
 		Response result = new Response();
 		memberService.deleteCertificate(record);
@@ -297,7 +297,7 @@ public class InformationController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/certificateSearch", method = RequestMethod.GET)
+	@RequestMapping(value = {"/rest/certificateSearch","/rest/member/mc/company/sel_certificate"}, method = RequestMethod.GET)
 	public Response certificateSearch(CertificateRecord record)  {
 		Response result = new Response();
 		List<CertificateRecord> list = memberService.certificateSearch(record);
@@ -308,7 +308,7 @@ public class InformationController {
 	/**
 	 * 上传头像，返回url，并保存数据库
 	 */
-	@RequestMapping(value = "/rest/uploadHeadShot", method = RequestMethod.POST)
+	@RequestMapping(value = {"/rest/uploadHeadShot","/rest/member/mc/base/upload_headShot"}, method = RequestMethod.POST)
 	public Response uploadHeadShot(HttpServletRequest req, Member member) throws Exception {
 		Response result = new Response();
 		String url = uploadService.upload(req,"img");
@@ -321,7 +321,7 @@ public class InformationController {
 	/**
 	 * 上传公司logo，返回url，并保存数据库
 	 */
-	@RequestMapping(value = "/rest/uploadLogo", method = RequestMethod.POST)
+	@RequestMapping(value = {"/rest/uploadLogo","/rest/member/mc/company/upload_logo"}, method = RequestMethod.POST)
 	public Response uploadLogo(HttpServletRequest req, Member member) throws Exception {
 		Response result = new Response();
 		String url = uploadService.upload(req,"img");
@@ -331,7 +331,7 @@ public class InformationController {
 		return result;
 	}
 
-	@RequestMapping(value = "/rest/getNowTime", method = RequestMethod.GET)
+	@RequestMapping(value = {"/rest/getNowTime","/rest/member/mc/base/get_now_time"}, method = RequestMethod.GET)
 	public Response getNowTime() throws Exception {
 		Response result = new Response();
 		result.setCode(200);

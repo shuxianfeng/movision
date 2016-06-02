@@ -264,12 +264,26 @@ public class MemberService {
 	}
 
 	/**
-	 * 工作类别
+	 * 员工角色
 	 */
 	public List<WorkType> findWorkTypeList()
 	{
 		try{
 			return workTypeMapper.findWorkTypeList();
+		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
+	 * 工作类别
+	 */
+	public List<WorkType> findIndividualWorkTypeList()
+	{
+		try{
+			return workTypeMapper.findIndividualWorkTypeList();
 		}catch (Exception e){
 			log.error(e.getMessage());
 			e.printStackTrace();

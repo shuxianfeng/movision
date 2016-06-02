@@ -49,11 +49,16 @@ public class UploadService {
             saveDirectory = ApiConstants.getUploadDoc()+"/price";
             //指定所上传的文件最大上传文件大小
             maxPostSize = ApiConstants.getUploadDocMaxPostSize();
-        }else if("tech".equals(type)){
+        }else if("techdoc".equals(type)){
             //技术资料
-            saveDirectory = ApiConstants.getUploadDoc()+"/tech";
+            saveDirectory = ApiConstants.getUploadDoc()+"/tech/doc";
             //技术资料最大1G
             maxPostSize = ApiConstants.getUploadDocMaxPostSize();
+        }
+        else if("techimg".equals(type)) {
+            saveDirectory = ApiConstants.getUploadDir()+"/tech/img";
+            //指定所上传的文件最大上传文件大小
+            maxPostSize = ApiConstants.getUploadPicMaxPostSize();
         }
         else if("expert".equals(type)){
             //技术资料

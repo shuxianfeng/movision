@@ -317,9 +317,9 @@
             GROUP BY positionType)A
          )
     )and j.createid != #{id} and j.is_deleted = 0) union all
-    (select t.createid from t_i_job t left join t_m_member m on m.id = t.createid where m.enterpriseType = #{enterpriseType} and t.createid !=#{id})union all
-    (select t.createid from t_i_job t left join t_m_member m on m.id = t.createid where m.employeeNumber = #{employeeNumber} and t.createid !=#{id})union all
-    (select t.createid from t_i_job t left join t_m_member m on m.id = t.createid where t.createid != #{id} order by t.views desc))A limit 0,#{count}
+    (select t.createid from t_i_job t left join t_m_member m on m.id = t.createid where m.enterpriseType = #{enterpriseType} and t.createid !=#{id} and t.is_deleted = 0)union all
+    (select t.createid from t_i_job t left join t_m_member m on m.id = t.createid where m.employeeNumber = #{employeeNumber} and t.createid !=#{id} and t.is_deleted = 0)union all
+    (select t.createid from t_i_job t left join t_m_member m on m.id = t.createid where t.createid != #{id} and t.is_deleted = 0 order by t.views desc))A limit 0,#{count}
   </select>
   <select id="querySimilarCompanyInfo" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
     select c.name as city,m.enterpriseName,count(*)as size from t_i_job j
@@ -328,7 +328,7 @@
     where j.createid=#{id} and j.is_deleted = 0
   </select>
   <select id="queryEnterpriseHotPosition" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
-    select jb.id,jb.createid,co.name as salaryName,jb.name from t_i_job jb left join t_m_member m on jb.createid = m.id
+    select jb.id,jb.createid,co.name as salaryName,jb.name,jb.positionType from t_i_job jb left join t_m_member m on jb.createid = m.id
     left join t_dictionary_constant co on co.code = jb.salary and co.type = 1
     where m.isrecommend = #{recommend} and m.status != #{status} and jb.is_deleted = 0 order by jb.views desc limit #{count}
   </select>
@@ -338,6 +338,6 @@
   <select id="queryPublishJobCity" parameterType="java.util.Map" resultType="java.util.Map">
     select distinct(t.city) cityCode,ct.name cityName from t_i_job t
     left join t_dictionary_city ct on ct.code = t.city
- where t.createid = #{enterpriseID}
+    where t.createid = #{enterpriseID}
   </select>
 </mapper>

@@ -60,6 +60,11 @@
     <include refid="Base_Column_List" />
     from t_dictionary_workType where id &lt; 100
   </select>
+  <select id="findIndividualWorkTypeList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_dictionary_workType where id &gt; 200
+  </select>
   <select id="findWorkTypeById" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

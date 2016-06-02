@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.tech.entity.TechExpertCourse" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="proposerId" property="proposerId" jdbcType="BIGINT" />
+    <result column="operateId" property="operateId" jdbcType="BIGINT" />
     <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="title" property="title" jdbcType="VARCHAR" />
@@ -18,21 +19,14 @@
   <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.tech.entity.TechExpertCourse" extends="BaseResultMap" >
     <result column="notes" property="notes" jdbcType="LONGVARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List" >
-    id, proposerId, publishTime, updateTime, title, teacher, city, linkman, startTime, 
-    endTime, mobile, status
-  </sql>
-  <sql id="Blob_Column_List" >
-    notes
-  </sql>
+
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from t_tech_expert_applyCourse
-    where id = #{id,jdbcType=BIGINT}
+    select t.id, t.proposerId,t.operateId, t.title, t.teacher, ct.name city, t.linkman, date_format(t.startTime,'%Y-%m-%d') startTime,
+    date_format(t.endTime,'%Y-%m-%d') endTime, t.mobile, t.status,t.notes from t_tech_expert_applyCourse t
+    left join t_dictionary_city ct on ct.code = t.city
+    where t.id = #{id,jdbcType=BIGINT}
   </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from t_tech_expert_applyCourse
     where id = #{id,jdbcType=BIGINT}
@@ -45,6 +39,9 @@
       </if>
       <if test="proposerId != null" >
         proposerId,
+      </if>
+      <if test="operateId != null" >
+        operateId,
       </if>
         publishTime,
         updateTime,
@@ -75,6 +72,9 @@
       <if test="notes != null" >
         notes,
       </if>
+      <if test="type != null">
+        type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -82,6 +82,9 @@
       </if>
       <if test="proposerId != null" >
         #{proposerId,jdbcType=BIGINT},
+      </if>
+      <if test="operateId != null" >
+        #{operateId,jdbcType=BIGINT},
       </if>
         now(),
         now(),
@@ -112,13 +115,16 @@
       <if test="notes != null" >
         #{notes,jdbcType=LONGVARCHAR},
       </if>
+      <if test="type != null">
+        #{type},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.tech.entity.TechExpertCourse" >
     update t_tech_expert_applyCourse
     <set >
-      <if test="proposerId != null" >
-        proposerId = #{proposerId,jdbcType=BIGINT},
+      <if test="operateId != null" >
+        operateId = #{operateId,jdbcType=BIGINT},
       </if>
       <if test="publishTime != null" >
         publishTime = #{publishTime,jdbcType=TIMESTAMP},
@@ -154,4 +160,25 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="findAllOMSTrainCoursePager" parameterType="java.util.Map" resultType="java.util.Map">
+  select t.id, t.title, t.teacher, ct.name city, t.linkman, date_format(t.publishTime,'%Y-%m-%d') publishTime,
+    date_format(t.updateTime,'%Y-%m-%d') updateTime, t.mobile, t.status from t_tech_expert_applyCourse t
+    left join t_dictionary_city ct on ct.code = t.city
+    <where>
+      t.status != 3
+      <if test="type != null">
+        and type = #{type}
+      </if>
+      <if test="mobile != null">
+        and mobile = #{mobile}
+      </if>
+      <if test="linkman != null">
+        and t.linkman like concat('%',#{linkman},'%')
+      </if>
+      <if test="status != null">
+        and t.status = #{status}
+      </if>
+    </where>
+  </select>
 </mapper>

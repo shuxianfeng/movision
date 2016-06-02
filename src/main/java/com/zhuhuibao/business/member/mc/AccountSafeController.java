@@ -64,7 +64,7 @@ public class AccountSafeController {
      * @param req
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/checkPwdById", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/checkPwdById","/rest/member/mc/user/check_pwd_id"}, method = RequestMethod.GET)
     public Response checkPwdById(HttpServletRequest req)  {
         String id = req.getParameter("id");
         //前台密码解密
@@ -104,7 +104,7 @@ public class AccountSafeController {
      * @param req
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/checkPwdByAccount", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/checkPwdByAccount","/rest/member/mc/user/check_pwd_account"}, method = RequestMethod.GET)
     public Response checkPwdByAccount(HttpServletRequest req)  {
         //账号：手机或邮箱
         String account = req.getParameter("account");
@@ -132,7 +132,7 @@ public class AccountSafeController {
      * @param req
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/saveNewPwd", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/saveNewPwd","/rest/member/mc/user/add_new_pwd"}, method = RequestMethod.POST)
     public Response saveNewPwd(HttpServletRequest req)  {
         String id = req.getParameter("id");
         String newPwd = new String(EncodeUtil.decodeBase64(req.getParameter("newPwd")));
@@ -151,7 +151,7 @@ public class AccountSafeController {
      * @param req
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/sendChangeEmail", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/sendChangeEmail","/rest/member/mc/user/send_email"}, method = RequestMethod.POST)
     public Response sendChangeEmail(HttpServletRequest req) {
         Response result = new Response();
         String email = req.getParameter("email");
@@ -187,7 +187,7 @@ public class AccountSafeController {
      * 更改手机号
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/updateMobile", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/updateMobile","/rest/member/mc/user/upd_mobile"}, method = RequestMethod.POST)
     public Response updateMobile(Member member)  {
         Response result = new Response();
         memberService.updateMember(member);
@@ -198,7 +198,7 @@ public class AccountSafeController {
      * 验证手机号是否存在
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/checkMobile", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/checkMobile","/rest/member/mc/user/check_mobile_isExist"}, method = RequestMethod.POST)
     public Response checkMobile(Member member)  {
         Response result = new Response();
         Member member1 = memberService.findMemer(member);
@@ -215,7 +215,7 @@ public class AccountSafeController {
      * @param req
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/updateEmail", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/updateEmail","/rest/member/mc/user/upd_email"}, method = RequestMethod.GET)
     public ModelAndView updateEmail(HttpServletRequest req)  {
         ModelAndView modelAndView = new ModelAndView();
         Member member = new Member();
@@ -250,7 +250,7 @@ public class AccountSafeController {
      * @throws JsonGenerationException
      * @throws ApiException
      */
-    @RequestMapping(value = "/rest/getModifyBindMobileSMS", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/getModifyBindMobileSMS","/rest/member/mc/user/get_verifyCode"}, method = RequestMethod.GET)
     public Response getModifyBindMobileSMS(HttpServletRequest req) throws IOException, ApiException {
         String mobile = req.getParameter("mobile");
         log.debug("获得手机验证码  mobile=="+mobile);

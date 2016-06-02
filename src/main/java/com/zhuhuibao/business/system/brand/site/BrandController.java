@@ -43,7 +43,7 @@ public class BrandController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/category/all", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/category/all","/rest/system/site/category/sel_all_category"}, method = RequestMethod.GET)
     public Response findAll()  {
         Response result = new Response();
         List<ResultBean> sysList = categoryService.findSystemList();
@@ -91,7 +91,7 @@ public class BrandController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/brand/findSuggestBrand", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/brand/findSuggestBrand","/rest/system/site/brand/sel_suggest_brand_by_subCategory"}, method = RequestMethod.GET)
     public Response findSuggestBrand(String id)  {
         Response result = new Response();
         List<ResultBean> SubSystemList = categoryService.findSubSystemListLimit(id);
@@ -128,7 +128,7 @@ public class BrandController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/category/findSubSystem", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/category/findSubSystem","/rest/system/site/category/sel_sub_category"}, method = RequestMethod.GET)
     public Response findSubSystem(String id)  {
         List<ResultBean> subSystemList = categoryService.findSubSystemList(id);
         Map map = new HashMap();
@@ -149,7 +149,7 @@ public class BrandController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/brand/findAllBrand", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/brand/findAllBrand","/rest/system/site/brand/sel_all_brand"}, method = RequestMethod.GET)
     public Response findAllBrand(Product product) {
         List<ResultBean> brandList = brandService.findAllBrand(product);
         Response result = new Response();
@@ -164,7 +164,7 @@ public class BrandController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/searchSuggestBrand", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/searchSuggestBrand","/rest/system/site/brand/sel_suggest_brand"}, method = RequestMethod.GET)
     public Response searchSuggestBrand()  {
         List<ResultBean> brandList = brandService.searchSuggestBrand();
         Response result = new Response();
@@ -179,7 +179,7 @@ public class BrandController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/brand/details", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/brand/details","/rest/system/site/brand/sel_brand_info"}, method = RequestMethod.GET)
     public Response details(String id, String scateid)  {
         Map map1 = new HashMap();
         Map map2 = new HashMap();
@@ -224,7 +224,7 @@ public class BrandController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/brand/findSubSystemByBrand", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/brand/findSubSystemByBrand","/rest/system/site/category/sel_category_by_brand"}, method = RequestMethod.GET)
     public Response findSubSystemByBrand(String id)  {
         //品牌对应的子系统
         List<ResultBean> list = productService.findSubSystem(id);

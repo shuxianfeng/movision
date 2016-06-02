@@ -33,7 +33,6 @@ import java.util.Map;
  * Created by cxx on 2016/3/22 0022.
  */
 @RestController
-@RequestMapping(value = "/rest/agent")
 public class AgentManageController {
     private static final Logger log = LoggerFactory.getLogger(AgentManageController.class);
 
@@ -57,7 +56,7 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "category", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/agent/category","/rest/system/mc/agent/sel_category"}, method = RequestMethod.GET)
     public Response category(String id)  {
         Response result = new Response();
         List list = new ArrayList();
@@ -89,7 +88,7 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "brand", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/agent/brand","/rest/system/mc/agent/sel_brand_by_memId"}, method = RequestMethod.GET)
     public Response brand(Brand brand)  {
         Response result = new Response();
         List list = new ArrayList();
@@ -110,7 +109,7 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "searchAgent", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/agent/searchAgent","/rest/system/mc/agent/sel_agent_by_account"}, method = RequestMethod.GET)
     public Response searchAgent(HttpServletRequest req)  {
         Response result = new Response();
         String account = req.getParameter("account");
@@ -128,7 +127,7 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "agentSave", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/agent/agentSave","/rest/system/mc/agent/add_agent"}, method = RequestMethod.POST)
     public Response agentSave(Agent agent)  {
         Response result = new Response();
         Agent agent1 = agentService.find(agent);
@@ -146,7 +145,7 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "agentUpdate", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/agent/agentUpdate","/rest/system/mc/agent/upd_agent"}, method = RequestMethod.POST)
     public Response agentUpdate(Agent agent)  {
         Response result = new Response();
         agentService.agentUpdate(agent);
@@ -158,7 +157,7 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "cancelAgent", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/agent/cancelAgent","/rest/system/mc/agent/cancel_agent"}, method = RequestMethod.POST)
     public Response cancelAgent(Agent agent)  {
         Response result = new Response();
         agent.setStatus("1");
@@ -171,7 +170,7 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "province", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/agent/province","/rest/system/mc/agent/sel_province_by_pinyin"}, method = RequestMethod.GET)
     public Response province()  {
         Response result = new Response();
         List list1 = new ArrayList();
@@ -211,7 +210,7 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "inviteAgent", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/agent/inviteAgent","/rest/system/mc/agent/invite_agent"}, method = RequestMethod.POST)
     public Response inviteAgent(HttpServletRequest req, String id) {
         Response result = new Response();
         Member member = memberService.findMemById(id);
@@ -236,7 +235,7 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "myAgent", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/agent/myAgent","/rest/system/mc/agent/sel_my_agent"}, method = RequestMethod.GET)
     public Response myAgent(String id) {
         Response result = new Response();
         List<AgentBean> list = agentService.findAgentByMemId(id);
@@ -251,7 +250,7 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "agentRegister", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/agent/agentRegister","/rest/system/mc/agent/agent_register"}, method = RequestMethod.GET)
     public ModelAndView agentRegister(HttpServletRequest req) throws IOException {
         log.debug("email agentRegister start.....");
         Response result = new Response();
@@ -282,7 +281,7 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "updateAgentById", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/agent/updateAgentById","/rest/system/mc/agent/sel_agent_by_id"}, method = RequestMethod.GET)
     public Response updateAgentById(String id)  {
         Response response = new Response();
         Map map = agentService.updateAgentById(id);
@@ -295,7 +294,7 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "getAgentByProId", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/agent/getAgentByProId","/rest/system/site/agent/sel_agent_by_pro_id"}, method = RequestMethod.GET)
     public Response getAgentByProId(String id)  {
         Response response = new Response();
         Map map = agentService.getAgentByProId(id);
@@ -308,7 +307,7 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/agent/getGreatAgentByScateid", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/agent/getGreatAgentByScateid","/rest/system/site/agent/sel_great_agent_by_scateId"}, method = RequestMethod.GET)
     public Response getGreatAgentByScateid(String id)  {
         Response response = new Response();
         List<ResultBean> resultBeen =  agentService.getGreatAgentByScateid(id);
@@ -321,7 +320,7 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "getGreatAgentByBrandId", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/agent/getGreatAgentByBrandId","/rest/system/site/agent/sel_great_agent_by_brandId"}, method = RequestMethod.GET)
     public Response getGreatAgentByBrandId(String id)  {
         Response response = new Response();
         List<ResultBean> resultBeen =  agentService.getGreatAgentByBrandId(id);
@@ -335,7 +334,7 @@ public class AgentManageController {
      * @throws IOException
      */
     @ApiOperation(value="根据品牌id查询代理商跟厂商（区域分组）",notes="根据品牌id查询代理商跟厂商（区域分组）",response = Response.class)
-    @RequestMapping(value = "getAgentByBrandid", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/agent/getAgentByBrandid","/rest/system/site/agent/sel_agent_by_brandId"}, method = RequestMethod.GET)
     public Response getAgentByBrandid(String id)  {
         Response response = new Response();
         Map map = agentService.getAgentByBrandid(id);

@@ -15,10 +15,12 @@ public class TechExpertCourse {
     private Long id;
     @ApiModelProperty(value = "申请人ID")
     private Long proposerId;
+    @ApiModelProperty(value = "操作人ID")
+    private Long operateId;
     @ApiModelProperty(value = "发布时间")
-    private Date publishTime;
+    private String publishTime;
     @ApiModelProperty(value = "修改时间")
-    private Date updateTime;
+    private String updateTime;
     @ApiModelProperty(value = "课程名称")
     private String title;
     @ApiModelProperty(value = "主讲人")
@@ -28,15 +30,17 @@ public class TechExpertCourse {
     @ApiModelProperty(value = "联系人名称")
     private String linkman;
     @ApiModelProperty(value = "开课开始时间")
-    private Date startTime;
+    private String startTime;
     @ApiModelProperty(value = "开课结束时间")
-    private Date endTime;
+    private String endTime;
     @ApiModelProperty(value = "手机")
     private String mobile;
-    @ApiModelProperty(value = "课程简介")
-    private Integer status;
     @ApiModelProperty(value = "状态：1待处理，2已处理，3删除")
+    private Integer status;
+    @ApiModelProperty(value = "课程简介")
     private String notes;
+    @ApiModelProperty(value = "课程类型：1：技术培训，2专家培训")
+    private Integer type;
 
     public Long getId() {
         return id;
@@ -54,19 +58,19 @@ public class TechExpertCourse {
         this.proposerId = proposerId;
     }
 
-    public Date getPublishTime() {
+    public String getPublishTime() {
         return publishTime;
     }
 
-    public void setPublishTime(Date publishTime) {
+    public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -102,19 +106,19 @@ public class TechExpertCourse {
         this.linkman = linkman == null ? null : linkman.trim();
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -140,5 +144,21 @@ public class TechExpertCourse {
 
     public void setNotes(String notes) {
         this.notes = notes == null ? null : notes.trim();
+    }
+
+    public Long getOperateId() {
+        return operateId;
+    }
+
+    public void setOperateId(Long operateId) {
+        this.operateId = operateId;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }
