@@ -13,7 +13,6 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.mybatis.tech.entity.DictionaryTechData;
 import com.zhuhuibao.mybatis.tech.entity.TechData;
-import com.zhuhuibao.mybatis.tech.entity.TechDownLoadData;
 import com.zhuhuibao.mybatis.tech.service.DictionaryTechDataService;
 import com.zhuhuibao.mybatis.tech.service.TechDataService;
 import com.zhuhuibao.mybatis.tech.service.TechDownloadDataService;
@@ -31,7 +30,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
