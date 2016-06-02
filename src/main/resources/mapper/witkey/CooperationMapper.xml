@@ -252,10 +252,10 @@
     left join t_dictionary_province p on p.code = c.province
     left join t_dictionary_city ci on ci.code = c.city
     left join t_dictionary_area a on a.code = c.area
-    left join t_dictionary_constant co on co.code = c.category
+    left join t_dictionary_constant co on co.code = c.category and co.type = 9
     left join t_dictionary_cooperationType coo on coo.id = c.type
     LEFT JOIN t_m_member m on c.createId = m.id
-    where c.id = #{id} and co.type = 9
+    where c.id = #{id}
   </select>
   <select id="findAllCooperationByPager" resultType="java.util.Map" >
     select c.id, c.createId, date_format(c.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, date_format(c.updateTime,'%Y-%m-%d %H:%i:%s') updateTime, c.title, c.type, c.category, c.province, c.city, c.area,
