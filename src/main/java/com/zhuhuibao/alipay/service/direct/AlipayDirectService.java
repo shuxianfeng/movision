@@ -8,6 +8,7 @@ import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.PublishCourse;
 import com.zhuhuibao.mybatis.order.service.PublishCourseService;
+import com.zhuhuibao.zookeeper.DistributedLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,8 @@ public class AlipayDirectService {
      */
 //    public static final String RETURN_URL =  AlipayPropertiesLoader.getPropertyValue("direct_return_url");
 
+    public static final String LOCK_NAME = "alipay";
+
     @Autowired
     private AlipayService alipayService;
 
@@ -46,13 +49,41 @@ public class AlipayDirectService {
     private PublishCourseService publishCourseService;
 
 
+
+
     /**
-     * 立即支付 线程同步
+     * 立即支付  {zookeeper 分布式锁  线程同步 }
      * @param resp   HttpServletResponse
      * @param paramMap   请求参数集合
      */
-    public  synchronized void doPay(HttpServletResponse resp,Map<String,String> paramMap) throws Exception {
+    public void doPay(HttpServletResponse resp,Map<String,String> paramMap) throws Exception {
         log.debug("立即支付请求参数:{}", paramMap.toString());
+        DistributedLock lock = null;
+        try {
+            lock = new DistributedLock(LOCK_NAME);
+            lock.lock();
+
+            doBusiness(resp, paramMap);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+        finally {
+            if (lock != null) {
+                lock.unlock();
+            }
+        }
+
+    }
+
+    /**
+     * 下单支付业务逻辑
+     * @param resp   HttpServletResponse
+     * @param paramMap  params
+     * @throws Exception
+     */
+    private void doBusiness(HttpServletResponse resp, Map<String, String> paramMap) throws Exception {
         resp.setContentType("text/html;charset=utf-8");
 
         //技术培训 专家培训购买
