@@ -72,6 +72,9 @@
       <if test="notes != null" >
         notes,
       </if>
+      <if test="type != null">
+        type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -111,6 +114,9 @@
       </if>
       <if test="notes != null" >
         #{notes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="type != null">
+        #{type},
       </if>
     </trim>
   </insert>
@@ -161,6 +167,9 @@
     left join t_dictionary_city ct on ct.code = t.city
     <where>
       t.status != 3
+      <if test="type != null">
+        and type = #{type}
+      </if>
       <if test="mobile != null">
         and mobile = #{mobile}
       </if>

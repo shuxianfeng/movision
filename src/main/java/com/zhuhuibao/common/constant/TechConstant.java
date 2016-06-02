@@ -55,4 +55,9 @@ public class TechConstant {
      * 上传技术资料的格式
      */
     public static final String FILE_FORMAT = "fileFormat";
+
+    /**
+     * 课程类型：1：技术培训，2专家培训
+     */
+    public static final int COURSE_TYPE_TECH = 1;
 }

@@ -39,6 +39,8 @@ public class TechExpertCourse {
     private Integer status;
     @ApiModelProperty(value = "课程简介")
     private String notes;
+    @ApiModelProperty(value = "课程类型：1：技术培训，2专家培训")
+    private Integer type;
 
     public Long getId() {
         return id;
@@ -150,5 +152,13 @@ public class TechExpertCourse {
 
     public void setOperateId(Long operateId) {
         this.operateId = operateId;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

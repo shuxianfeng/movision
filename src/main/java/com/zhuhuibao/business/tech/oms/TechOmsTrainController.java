@@ -5,6 +5,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
@@ -59,7 +60,7 @@ public class TechOmsTrainController {
     }
 
     @RequestMapping(value="sel_course_data", method = RequestMethod.GET)
-    @ApiOperation(value="运营管理平台搜索申请开课",notes = "运营管理平台搜索申请开课",response = Response.class)
+    @ApiOperation(value="运营管理平台搜索技术的申请开课",notes = "运营管理平台搜索申请开课",response = Response.class)
     public Response findAllTechDataPager(@ApiParam(value = "手机号") @RequestParam(required = false) String mobile,
                                          @ApiParam(value = "联系人") @RequestParam(required = false) String linkman,
                                          @ApiParam(value = "状态：1待处理，2已处理") @RequestParam(required = false) String status,
@@ -67,6 +68,7 @@ public class TechOmsTrainController {
                                          @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
+        condition.put("type", TechConstant.COURSE_TYPE_TECH);
         condition.put("mobile", mobile);
         condition.put("linkman", linkman);
         if (StringUtils.isEmpty(pageNo)) {
@@ -77,7 +79,7 @@ public class TechOmsTrainController {
         }
         Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         condition.put("status", status);
-        List<Map<String, String>> techList = techCourseService.findAllOMSTrainCoursePager(pager, condition);
+        List<Map<String, String>> techList = techCourseService.findAllOMSTECoursePager(pager, condition);
         pager.result(techList);
         response.setData(pager);
         return response;

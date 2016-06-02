@@ -93,12 +93,12 @@ public class TechExpertCourseService {
     }
 
     /**
-     * 查询申请的课程
+     * 查询技术或者专家申请的课程
      * @param pager
      * @param condition
      * @return
      */
-    public List<Map<String,String>> findAllOMSTrainCoursePager(Paging<Map<String,String>> pager, Map<String,Object> condition)
+    public List<Map<String,String>> findAllOMSTECoursePager(Paging<Map<String,String>> pager, Map<String,Object> condition)
     {
         log.info("find all OMS tech data for pager "+ StringUtils.mapToString(condition));
         List<Map<String,String>> techList = null;
