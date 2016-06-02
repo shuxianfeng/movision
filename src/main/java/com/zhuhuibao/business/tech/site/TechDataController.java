@@ -127,6 +127,7 @@ public class TechDataController {
         return response;
     }
 
+    //vip减 项目条数减
     @ApiOperation(value="下载技术资料",notes="下载技术资料",response = Response.class)
     @RequestMapping(value="downloadFile", method = RequestMethod.GET)
     public Response downloadBill(HttpServletResponse response,

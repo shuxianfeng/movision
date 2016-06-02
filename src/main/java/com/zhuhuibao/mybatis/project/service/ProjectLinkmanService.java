@@ -1,6 +1,6 @@
-package com.zhuhuibao.mybatis.oms.service;
-import com.zhuhuibao.mybatis.oms.entity.ProjectLinkman;
-import com.zhuhuibao.mybatis.oms.mapper.ProjectLinkmanMapper;
+package com.zhuhuibao.mybatis.project.service;
+import com.zhuhuibao.mybatis.project.entity.ProjectLinkman;
+import com.zhuhuibao.mybatis.project.mapper.ProjectLinkmanMapper;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 
 import org.slf4j.Logger;

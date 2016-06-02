@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.oms.mapper.ProjectMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.oms.entity.ProjectInfo" >
+<mapper namespace="com.zhuhuibao.mybatis.project.mapper.ProjectMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.project.entity.ProjectInfo" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="createid" property="createid" jdbcType="BIGINT" />
@@ -20,7 +20,7 @@
     <result column="is_deleted" property="is_deleted" jdbcType="TINYINT" />
   </resultMap>
 
-  <resultMap id="BaseResultMap2"  type="com.zhuhuibao.mybatis.oms.entity.ProjectInfo" >
+  <resultMap id="BaseResultMap2"  type="com.zhuhuibao.mybatis.project.entity.ProjectInfo" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="createid" property="createid" jdbcType="BIGINT" />
@@ -37,7 +37,7 @@
   
   
    <!-- 添加工程信息@author:gmli@since2016.05.11 -->
-  <insert id="addProjectInfo" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectInfo" useGeneratedKeys="true" keyProperty="id">
+  <insert id="addProjectInfo" parameterType="com.zhuhuibao.mybatis.project.entity.ProjectInfo" useGeneratedKeys="true" keyProperty="id">
     insert into t_prj_project
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="name != null" >
@@ -128,7 +128,7 @@
     </trim>
   </insert>
    <!-- 修改项目工程信息@author:gmli@since2016.05.11 -->
-  <update id="updateProjectInfo" parameterType="com.zhuhuibao.mybatis.oms.entity.ProjectInfo" >
+  <update id="updateProjectInfo" parameterType="com.zhuhuibao.mybatis.project.entity.ProjectInfo" >
     update t_prj_project
     <set > 
       <if test="name != null" >
@@ -179,11 +179,14 @@
   
   
  <select id="queryProjectInfoByID" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-	SELECT
-	   t.id,t.name,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
-   date_format(t.updateDate,'%Y-%m-%d') updateDate,t.province,t.city,t.area,t.address,t.category,t.price,t.startDate,t.endDate,t.description,t.record,t.is_deleted,
+   SELECT
+   t.id,t.name,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
+   date_format(t.updateDate,'%Y-%m-%d') updateDate,pn.name province,ct.name city,ar.name area,t.address,t.category,t.price,t.startDate,t.endDate,t.description,t.record,t.is_deleted,
    (select cs.name from t_dictionary_constant cs where cs.code = t.category and cs.type=8) as categoryName
-	FROM t_prj_project t  
+   FROM t_prj_project t
+   left join t_dictionary_province pn on pn.code = t.province
+   left join t_dictionary_city ct on ct.code = t.city
+   left join t_dictionary_area ar on ar.code = t.area
 	<where>
       <if test="id != null">
         and t.id = #{id}
@@ -206,11 +209,10 @@
     <result property="categoryName" column="categoryName" />
   </resultMap>
 
-  <!--<select id="findAllPrjectPager" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.oms.entity.ProjectInfo">-->
   <select id="findAllPrjectPager" parameterType="java.util.Map" resultMap="list">
     SELECT
     t.id ,t.name,date_format(t.publishDate,'%Y-%m-%d') publishDate,
-    date_format(t.updateDate,'%Y-%m-%d') updateDate,concat(pn.name,ct.name,ar.name,t.address) address,ct.name city,
+    date_format(t.updateDate,'%Y-%m-%d') updateDate,concat(pn.name,ct.name,ar.name,case when  ISNULL(t.address) then '' else t.address end) address,ct.name city,
     t.price,date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate,
     (select cs.name from t_dictionary_constant cs where cs.code = t.category and cs.type=8) as categoryName
     FROM t_prj_project t
@@ -255,5 +257,35 @@
     <if test="count !=null">
       limit #{count}
     </if>
+  </select>
+  <select id="queryOmsViewProject" parameterType="java.util.Map" resultType="java.util.Map">
+    SELECT
+    t.id ,t.name,date_format(t.publishDate,'%Y-%m-%d') publishDate,
+    date_format(t.updateDate,'%Y-%m-%d') updateDate,concat(pn.name,ct.name,ar.name,ifnull(t.address,'')) address,
+    t.price,date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate,
+    (select cs.name from t_dictionary_constant cs where cs.code = t.category and cs.type=8) as categoryName
+    FROM t_prj_viewProject vp
+    left join t_prj_project t on t.id = prjId
+    left join t_dictionary_province pn on pn.code = t.province
+    left join t_dictionary_city ct on ct.code = t.city
+    left join t_dictionary_area ar on ar.code = t.area
+    <where>
+      t.is_deleted = 0
+      <if test="name != null and name != ''">
+        and t.name like concat('%',#{name},'%')
+      </if>
+      <if test="category !=null">
+        and t.category = #{category}
+      </if>
+      <if test="province != null and province != ''">
+        and t.province = #{province}
+      </if>
+      <if test="city != null and city != ''">
+        and t.city = #{city}
+      </if>
+      <if test="viewerId != null and viewerId != ''">
+        and vp.viewerId = #{viewerId}
+      </if>
+    </where>
   </select>
 </mapper>
