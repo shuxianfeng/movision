@@ -308,7 +308,7 @@ public class AgentManageController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/agent/getGreatAgentByScateid", method = RequestMethod.GET)
+    @RequestMapping(value = "/getGreatAgentByScateid", method = RequestMethod.GET)
     public Response getGreatAgentByScateid(String id)  {
         Response response = new Response();
         List<ResultBean> resultBeen =  agentService.getGreatAgentByScateid(id);

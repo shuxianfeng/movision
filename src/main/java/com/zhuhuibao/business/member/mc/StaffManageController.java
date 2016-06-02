@@ -46,7 +46,7 @@ public class StaffManageController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/rest/addMember", method = RequestMethod.POST)
+	@RequestMapping(value = {"/rest/addMember","/rest/member/mc/user/add_member"}, method = RequestMethod.POST)
 	public Response addMember(HttpServletRequest req, Member member)  {
 		String account = req.getParameter("account");
 		if(account.contains("@")){
@@ -76,7 +76,7 @@ public class StaffManageController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/rest/updateMember", method = RequestMethod.POST)
+	@RequestMapping(value = {"/rest/updateMember","/rest/member/mc/user/upd_member"}, method = RequestMethod.POST)
 	public Response updateMember(HttpServletRequest req, Member member)  {
 		String account = req.getParameter("account");
 		if(account.contains("@")){
@@ -119,7 +119,7 @@ public class StaffManageController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/rest/deleteMember", method = RequestMethod.POST)
+	@RequestMapping(value = {"/rest/deleteMember","/rest/member/mc/user/del_member"}, method = RequestMethod.POST)
 	public Response deleteMember(HttpServletRequest req)  {
 		String ids[] = req.getParameterValues("ids");
 		Response result = new Response();
@@ -135,7 +135,7 @@ public class StaffManageController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/rest/staffSearch", method = RequestMethod.GET)
+	@RequestMapping(value = {"/rest/staffSearch","/rest/member/mc/user/sel_memberList"}, method = RequestMethod.GET)
 	public Response staffSearch(Member member, String pageNo, String pageSize)  {
 		Response response = new Response();
 		if(member.getAccount()!=null){
@@ -161,7 +161,7 @@ public class StaffManageController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/staffSearchSize", method = RequestMethod.GET)
+	@RequestMapping(value = {"/rest/staffSearchSize","/rest/member/mc/user/sel_member_size"}, method = RequestMethod.GET)
 	public Response staffSearchSize(Member member)  {
 		Response result = new Response();
 		List<Member> memberList = memberMapper.findStaffByParentId(member);
@@ -181,7 +181,7 @@ public class StaffManageController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/rest/resetPwd", method = RequestMethod.POST)
+	@RequestMapping(value = {"/rest/resetPwd","/rest/member/mc/user/reset_pwd"}, method = RequestMethod.POST)
 	public Response resetPwd(HttpServletRequest req)  {
 		String ids[] = req.getParameterValues("ids");
 		Response result = new Response();
