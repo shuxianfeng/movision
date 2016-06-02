@@ -34,7 +34,7 @@ public class DistributedLock implements Lock, Watcher {
     private String waitNode;//等待前一个锁
     private String myZnode;//当前锁
     private CountDownLatch latch;//计数器
-    private List<Exception> exception = new ArrayList<Exception>();
+    private List<Exception> exception = new ArrayList<>();
 
     @Autowired
     ZookeeperConstants constants;
