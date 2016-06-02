@@ -1,6 +1,7 @@
 package com.zhuhuibao.zookeeper;
 
 import com.zhuhuibao.common.constant.ZookeeperConstants;
+import com.zhuhuibao.exception.LockException;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
@@ -62,7 +63,7 @@ public class DistributedLock implements Lock, Watcher {
     public void lock() {
 
         if (exception.size() > 0) {
-            throw new LockException(exception.get(0));
+            throw new LockException(9999,exception.get(0).getMessage());
         }
         try {
             if (this.tryLock()) {
@@ -72,7 +73,7 @@ public class DistributedLock implements Lock, Watcher {
                 waitForLock(waitNode, constants.getTimeout());//等待锁
             }
         } catch (KeeperException | InterruptedException e) {
-            throw new LockException(e);
+            throw new LockException(9999,e.getMessage());
         }
 
     }
@@ -85,14 +86,14 @@ public class DistributedLock implements Lock, Watcher {
         try {
             String splitStr = "_lock_";
             if (lockName.contains(splitStr))
-                throw new LockException("lockName can not contains");
+                throw new LockException(9999,"lockName can not contains '_lock_' ");
             //创建临时子节点
             myZnode = zk.create(root + "/" + lockName + splitStr, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
             log.info(myZnode + " is created ");
             //取出所有子节点
             List<String> subNodes = zk.getChildren(root, false);
             //取出所有lockName的锁
-            List<String> lockObjNodes = new ArrayList<String>();
+            List<String> lockObjNodes = new ArrayList<>();
             for (String node : subNodes) {
                 String _node = node.split(splitStr)[0];
                 if (_node.equals(lockName)) {
@@ -109,7 +110,7 @@ public class DistributedLock implements Lock, Watcher {
             String subMyZnode = myZnode.substring(myZnode.lastIndexOf("/") + 1);
             waitNode = lockObjNodes.get(Collections.binarySearch(lockObjNodes, subMyZnode) - 1);
         } catch (KeeperException | InterruptedException e) {
-            throw new LockException(e);
+            throw new LockException(9999,e.getMessage());
         }
         return false;
     }

@@ -415,6 +415,12 @@
             <version>1.1-beta-6</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+
     </dependencies>
     <build>
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
