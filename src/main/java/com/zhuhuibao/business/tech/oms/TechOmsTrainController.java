@@ -50,7 +50,7 @@ public class TechOmsTrainController {
     }
 
     @RequestMapping(value="sel_course_detail", method = RequestMethod.POST)
-    @ApiOperation(value="技术培训课程",notes = "插入技术培训课程",response = Response.class)
+    @ApiOperation(value="查看技术培训课程详情",notes = "查看技术培训课程详情",response = Response.class)
     public Response previewTrainCourseDetail(@ApiParam(value = "培训课程ID")  @RequestParam Long techCourseId)
     {
         TechExpertCourse techExpertCourse = techCourseService.selectTechExpertCourseInfo(techCourseId);

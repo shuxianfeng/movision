@@ -27,14 +27,14 @@ import java.util.Map;
  * @version 2016/6/2 0002
  */
 @RestController
-@RequestMapping("/rest/tech/oms/course")
+@RequestMapping("/rest/tech/oms/publish")
 @Api(value = "trainCourse",description = "发布技术培训课程")
 public class TrainCourseController {
     @Autowired
     PublishTCourseService ptCourseService;
 
     @RequestMapping(value="add_course", method = RequestMethod.POST)
-    @ApiOperation(value="更新未发布的培训课程",notes = "更新未发布的培训课程",response = Response.class)
+    @ApiOperation(value="更新未发布的培训课程",notes = "插入发布的培训课程",response = Response.class)
     public Response insertTrainCourse(@ApiParam(value = "培训课程")  @ModelAttribute TrainPublishCourse course)
     {
         Long omsOperateId = ShiroUtil.getOmsCreateID();
@@ -50,7 +50,7 @@ public class TrainCourseController {
     }
 
     @RequestMapping(value="upd_course", method = RequestMethod.POST)
-    @ApiOperation(value="更新未发布的培训课程",notes = "更新未发布的培训课程",response = Response.class)
+    @ApiOperation(value="更新未发布的培训课程",notes = "更新发布的培训课程",response = Response.class)
     public Response updateTrainCourse(@ApiParam(value = "培训课程")  @ModelAttribute TrainPublishCourse course)
     {
         Long omsOperateId = ShiroUtil.getOmsCreateID();
