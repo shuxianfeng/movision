@@ -18,6 +18,8 @@ import org.apache.ibatis.session.RowBounds;
 public interface ProjectMapper {
     //项目信息查询
 	ProjectInfo queryProjectInfoByID(@Param(value = "id") Long id);
+	//OMS项目信息查询
+	ProjectInfo queryOmsProjectInfoByID(@Param(value = "id") Long id); 
     //新增项目信息
 	int addProjectInfo(ProjectInfo projectInfo);
 	//修改项目信息
