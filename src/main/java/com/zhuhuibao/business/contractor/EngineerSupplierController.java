@@ -27,7 +27,6 @@ import java.util.Map;
  * Created by cxx on 2016/4/11 0011.
  */
 @RestController
-@RequestMapping(value = "/rest/engineerSupplier")
 public class EngineerSupplierController {
     private static final Logger log = LoggerFactory.getLogger(EngineerSupplierController.class);
 
@@ -38,7 +37,7 @@ public class EngineerSupplierController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "newEngineer", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/engineerSupplier/newEngineer","/rest/contractor/site/sel_new_engineer"}, method = RequestMethod.GET)
     public Response newEngineer()  {
         String type = "4";
         Response response = new Response();
@@ -53,7 +52,7 @@ public class EngineerSupplierController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "newManufacturer", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/engineerSupplier/newManufacturer","/rest/supplier/site/sel_new_manufacturer"}, method = RequestMethod.GET)
     public Response newManufacturer()  {
         String type = "1";
         Response response = new Response();
@@ -67,7 +66,7 @@ public class EngineerSupplierController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "newAgent", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/engineerSupplier/newAgent","/rest/supplier/site/sel_new_agent"}, method = RequestMethod.GET)
     public Response newAgent()  {
         String type = "2";
         Response response = new Response();
@@ -81,7 +80,7 @@ public class EngineerSupplierController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "newChannel", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/engineerSupplier/newChannel","/rest/supplier/site/sel_new_channel"}, method = RequestMethod.GET)
     public Response newChannel()  {
         String type = "3";
         Response response = new Response();
@@ -95,7 +94,7 @@ public class EngineerSupplierController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "introduce", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/engineerSupplier/introduce","/rest/supplier/site/sel_simple_introduce"}, method = RequestMethod.GET)
     public Response introduce(String id, String type) {
         Response response = new Response();
         Map map = memberService.introduce(id,type);
@@ -108,7 +107,7 @@ public class EngineerSupplierController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "greatCompany", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/engineerSupplier/greatCompany","/rest/supplier/site/sel_great_company"}, method = RequestMethod.GET)
     public Response greatCompany(String type) {
         Response response = new Response();
         List list = memberService.greatCompany(type);
@@ -121,7 +120,7 @@ public class EngineerSupplierController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "newIdentifyEngineer", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/engineerSupplier/newIdentifyEngineer","/rest/supplier/site/sel_new_identify_engineer"}, method = RequestMethod.GET)
     public Response newIdentifyEngineer(String type)  {
         Response response = new Response();
         List list = memberService.findnewIdentifyEngineer(type);
@@ -135,7 +134,7 @@ public class EngineerSupplierController {
      * @throws IOException
      */
     @ApiOperation(value="留言",notes="留言",response = Response.class)
-    @RequestMapping(value = "message", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/engineerSupplier/message","/rest/supplier/site/add_message"}, method = RequestMethod.POST)
     public Response message(@ModelAttribute Message message) {
 /*        String title = new String(message.getTitle().getBytes("8859_1"), "utf8" );
         String receiveName = new String(message.getReceiveName().getBytes("8859_1"), "utf8" );

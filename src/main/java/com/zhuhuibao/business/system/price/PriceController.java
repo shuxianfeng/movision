@@ -37,7 +37,6 @@ import java.util.Map;
  * Created by cxx on 2016/3/29 0029.
  */
 @RestController
-@RequestMapping("/rest/price")
 @Api(value="Price", description="询价")
 public class PriceController {
     private static final Logger log = LoggerFactory.getLogger(PriceController.class);
@@ -51,7 +50,7 @@ public class PriceController {
      * 询价保存
      */
     @ApiOperation(value="询价保存",notes="询价保存",response = Response.class)
-    @RequestMapping(value = "saveAskPrice", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/price/saveAskPrice","/rest/system/mc/enquiry/add_enquiry"}, method = RequestMethod.POST)
     public Response saveAskPrice(AskPrice askPrice) throws IOException {
         Response result = new Response();
         Subject currentUser = SecurityUtils.getSubject();
@@ -76,7 +75,7 @@ public class PriceController {
      * 上传询价单（定向，公开），上传报价单
      */
     @ApiOperation(value="上传询价单（定向，公开），上传报价单",notes="上传询价单（定向，公开），上传报价单",response = Response.class)
-    @RequestMapping(value = "uploadAskList", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/price/uploadAskList","/rest/system/mc/enquiry/upload_enquiryList"}, method = RequestMethod.POST)
     public Response uploadAskList(HttpServletRequest req) throws IOException {
         Response result = new Response();
         Subject currentUser = SecurityUtils.getSubject();
@@ -97,7 +96,7 @@ public class PriceController {
      * 获得我的联系方式（询报价者联系方式）
      */
     @ApiOperation(value="获得我的联系方式（询报价者联系方式）",notes="获得我的联系方式（询报价者联系方式）",response = Response.class)
-    @RequestMapping(value = "getLinkInfo", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/price/getLinkInfo","/rest/system/mc/enquiry/sel_linkMan_info"}, method = RequestMethod.GET)
     public Response getLinkInfo() throws IOException {
         Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
@@ -120,7 +119,7 @@ public class PriceController {
      * 查看具体某条询价信息
      */
     @ApiOperation(value="查看具体某条询价信息",notes="查看具体某条询价信息",response = Response.class)
-    @RequestMapping(value = "queryAskPriceByID", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/price/queryAskPriceByID","/rest/system/mc/enquiry/sel_enquiry"}, method = RequestMethod.GET)
     public Response queryAskPriceByID(@RequestParam String id) throws IOException {
         Response result = priceService.queryAskPriceByID(id);
         return result;
@@ -130,7 +129,7 @@ public class PriceController {
      * 根据条件查询询价信息（分页）
      */
     @ApiOperation(value="根据条件查询询价信息（分页）",notes="根据条件查询询价信息（分页）",response = Response.class)
-    @RequestMapping(value = "queryAskPriceInfo", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/price/queryAskPriceInfo","/rest/system/mc/enquiry/sel_enquiryList"}, method = RequestMethod.GET)
     public Response queryAskPriceInfo(AskPriceSearchBean askPriceSearch, @RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
         /*String title = new String(askPriceSearch.getTitle().getBytes("8859_1"), "utf8" );
         askPriceSearch.setTitle(title);*/
@@ -172,7 +171,7 @@ public class PriceController {
      * 最新公开询价(限六条)
      */
     @ApiOperation(value="最新公开询价(限六条)",notes="最新公开询价(限六条)",response = Response.class)
-    @RequestMapping(value = "queryNewPriceInfo", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/price/queryNewPriceInfo","/rest/system/site/enquiry/sel_new_open_enquiryList_count"}, method = RequestMethod.GET)
     public Response queryNewPriceInfo() throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -193,7 +192,7 @@ public class PriceController {
      * 最新公开询价(分页)
      */
     @ApiOperation(value="最新公开询价(分页)",notes="最新公开询价(分页)",response = Response.class)
-    @RequestMapping(value = "queryNewPriceInfoList", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/price/queryNewPriceInfoList","/rest/system/mc/enquiry/sel_new_open_enquiryList"}, method = RequestMethod.GET)
     public Response queryNewPriceInfoList(@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
         Response response = new Response();
         if (StringUtils.isEmpty(pageNo)) {
