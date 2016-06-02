@@ -42,9 +42,14 @@ public class TechConstant {
     }
 
     /**
-     * 上传技术资料附件的路径  /tech
+     * 上传技术资料附件的路径  /tech/doc
      */
-    public static final String UPLOAD_TECH_DATA_URL = "/tech";
+    public static final String UPLOAD_TECH_DOC_URL = "/tech/doc";
+
+    /**
+     * 上传发布的培训课程路径  /tech/img
+     */
+    public static final String UPLOAD_TECH_IMG_URL = "/tech/img";
 
     /**
      * 上传技术资料的大小  fileSize

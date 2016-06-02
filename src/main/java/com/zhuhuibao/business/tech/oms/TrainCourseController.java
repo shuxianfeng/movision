@@ -4,18 +4,24 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
 import com.zhuhuibao.mybatis.tech.service.PublishTCourseService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +38,9 @@ import java.util.Map;
 public class TrainCourseController {
     @Autowired
     PublishTCourseService ptCourseService;
+
+    @Autowired
+    UploadService uploadService;
 
     @RequestMapping(value="add_course", method = RequestMethod.POST)
     @ApiOperation(value="更新未发布的培训课程",notes = "插入发布的培训课程",response = Response.class)
@@ -94,5 +103,23 @@ public class TrainCourseController {
         pager.result(techList);
         response.setData(pager);
         return response;
+    }
+
+    @ApiOperation(value="上传培训轮播图",notes="上传培训轮播图",response = Response.class)
+    @RequestMapping(value = "upload_img", method = RequestMethod.POST)
+    public Response uploadImg(HttpServletRequest req) throws Exception {
+        Response result = new Response();
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if(null != session){
+            String url = uploadService.upload(req,"techimg");
+            Map map = new HashMap();
+            map.put(Constants.name,url);
+            result.setData(map);
+            result.setCode(200);
+        }else{
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
     }
 }
