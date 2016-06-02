@@ -40,4 +40,14 @@ public class OrderGoodsService {
             throw e;
         }
     }
+
+    /**
+     * 根据订单编号查询订单商品详情
+     *
+     * @param orderNo 订单编号
+     * @return OrderGoods
+     */
+    public OrderGoods findByOrderNo(String orderNo) {
+        return mapper.findByOrderNo(orderNo);
+    }
 }

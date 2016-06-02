@@ -260,8 +260,12 @@ public class AlipayService {
                     //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                     //如果有做过处理，不执行商户的业务程序
                     Order order = orderService.findByOrderNo(params.get("out_trade_no"));
-                    if (!String.valueOf(order.getPayAmount()).equals(params.get("total_fee"))) {
-                        log.error("支付宝返回交易金额[{}] 与 订单支付金额[{}] 不符合", params.get("total_fee"), order.getPayAmount());
+                    BigDecimal price = new BigDecimal(Long.valueOf(params.get("price")));
+                    int quantity = Integer.valueOf(params.get("quantity"));
+                    BigDecimal totalFee =  price.multiply(new BigDecimal(quantity));
+
+                    if (!String.valueOf(order.getPayAmount()).equals(totalFee.toString())) {
+                        log.error("支付宝返回交易金额[{}] 与 订单支付金额[{}] 不符合", totalFee.toString(), order.getPayAmount());
                         out.println("fail");
                     }
                     if (!order.getSellerId().equals(params.get("seller_id"))) {
@@ -322,7 +326,7 @@ public class AlipayService {
             genSNcode(msgParam);
 
             //修改课程库存数量
-            updateStock(msgParam);
+            updateSubStock(msgParam);
 
         }
     }
@@ -346,14 +350,19 @@ public class AlipayService {
     }
 
     /**
-     * 修改课程库存
+     * 修改课程库存 {减库存}
      *
-     * @param msgParam
+     * @param params
      */
-    private void updateStock(Map<String, String> msgParam) {
-        Long courseId = Long.valueOf(msgParam.get("goodsId"));
-        int number = Integer.valueOf(msgParam.get("number"));
-        publishCourseService.updateStockNum(courseId, number);
+    private void updateSubStock(Map<String, String> params) {
+        Long courseId = Long.valueOf(params.get("goodsId"));
+        int number = Integer.valueOf(params.get("number"));
+//        String orderNo = params.get("out_trade_no");
+//        OrderGoods goods = orderGoodsService.findByOrderNo(orderNo);
+//        Long courseId = goods.getGoodsId();
+//        int number = Integer.valueOf(params.get("quantity"));
+        publishCourseService.updateSubStockNum(courseId, number);
+
     }
 
     /**
@@ -444,7 +453,9 @@ public class AlipayService {
         sParaTemp.put("goods_type",msgParam.get("alipay_goods_type"));   //商品类型(0:虚拟类商品,1:实物类商品 默认为1)
         sParaTemp.put("out_trade_no", msgParam.get("orderNo"));          //商户网站唯一订单号
         sParaTemp.put("subject", msgParam.get("subject"));               //商品名称
-        sParaTemp.put("total_fee", msgParam.get("total_fee"));           //交易金额
+//        sParaTemp.put("total_fee", msgParam.get("total_fee"));         //交易金额
+        sParaTemp.put("price",msgParam.get("goodsPrice"));               //商品单价
+        sParaTemp.put("quantity",msgParam.get("number"));                //购买数量
         sParaTemp.put("exter_invoke_ip", msgParam.get("exterInvokeIp")); //客户端IP
 
         // 防钓鱼时间戳

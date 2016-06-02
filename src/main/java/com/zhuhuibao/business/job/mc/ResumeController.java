@@ -53,7 +53,7 @@ public class ResumeController {
      * 发布简历
      */
     @ApiOperation(value = "发布简历", notes = "发布简历", response = Response.class)
-    @RequestMapping(value = "setUpResume", method = RequestMethod.POST)
+    @RequestMapping(value = {"setUpResume","mc/resume/add_resume"}, method = RequestMethod.POST)
     public Response setUpResume(Resume resume) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -77,7 +77,7 @@ public class ResumeController {
      * 查询我创建的简历
      */
     @ApiOperation(value = "查询我创建的简历", notes = "查询我创建的简历", response = Response.class)
-    @RequestMapping(value = "searchMyResume", method = RequestMethod.GET)
+    @RequestMapping(value = {"searchMyResume","mc/resume/sel_my_resume"}, method = RequestMethod.GET)
     public Response searchMyResume() throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -99,7 +99,7 @@ public class ResumeController {
      * 更新简历,刷新简历
      */
     @ApiOperation(value = "更新简历", notes = "更新简历", response = Response.class)
-    @RequestMapping(value = "updateResume", method = RequestMethod.POST)
+    @RequestMapping(value = {"updateResume","mc/resume/upd_resume"}, method = RequestMethod.POST)
     public Response updateResume(Resume resume) throws IOException {
         return resumeService.updateResume(resume);
     }
@@ -108,7 +108,7 @@ public class ResumeController {
      * 预览简历
      */
     @ApiOperation(value = "预览简历", notes = "预览简历", response = Response.class)
-    @RequestMapping(value = "previewResume", method = RequestMethod.GET)
+    @RequestMapping(value = {"previewResume","mc/resume/preview_resume"}, method = RequestMethod.GET)
     public Response previewResume(String id) throws Exception {
         return resumeService.previewResume(id);
     }
@@ -117,7 +117,7 @@ public class ResumeController {
      * 上传简历附件
      */
     @ApiOperation(value = "上传简历附件", notes = "上传简历附件", response = Response.class)
-    @RequestMapping(value = "uploadResume", method = RequestMethod.POST)
+    @RequestMapping(value = {"uploadResume","mc/resume/upload_resume"}, method = RequestMethod.POST)
     public Response uploadResume(HttpServletRequest req) throws IOException {
         Response result = new Response();
         Subject currentUser = SecurityUtils.getSubject();
@@ -138,7 +138,7 @@ public class ResumeController {
      * 查询我创建的简历的全部信息
      */
     @ApiOperation(value = "查询我创建的简历的全部信息", notes = "查询我创建的简历的全部信息", response = Response.class)
-    @RequestMapping(value = "searchMyResumeAllInfo", method = RequestMethod.GET)
+    @RequestMapping(value = {"searchMyResumeAllInfo","mc/resume/sel_my_resume_info"}, method = RequestMethod.GET)
     public Response searchMyResumeAllInfo() throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -161,7 +161,7 @@ public class ResumeController {
      * 我收到的简历
      */
     @ApiOperation(value = "我收到的简历", notes = "我收到的简历", response = Response.class)
-    @RequestMapping(value = "receiveResume", method = RequestMethod.GET)
+    @RequestMapping(value = {"receiveResume","mc/resume/sel_receive_resume"}, method = RequestMethod.GET)
     public Response receiveResume(String pageNo, String pageSize) throws IOException {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -191,7 +191,7 @@ public class ResumeController {
      * 下载简历附件
      */
     @ApiOperation(value = "下载简历附件", notes = "下载简历附件")
-    @RequestMapping(value = "downLoadResume", method = RequestMethod.GET)
+    @RequestMapping(value = {"downLoadResume","mc/resume/download_resume"}, method = RequestMethod.GET)
     public void downLoadResume(HttpServletResponse response, String id) throws IOException {
         Response jsonResult = new Response();
         try {

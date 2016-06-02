@@ -34,15 +34,37 @@ public class PublishCourseService {
     }
 
     /**
-     * 修改库存数量
+     * 修改库存数量 (减库存)
      *
      * @param courseid  课程ID
      * @param number 购买数量
      */
-    public void updateStockNum(Long courseid,int number) {
+    public void updateSubStockNum(Long courseid,int number) {
         int count;
         try {
-            count = mapper.updateStockNum(courseid,number);
+            count = mapper.updateSubStockNum(courseid, number);
+            if (count != 1) {
+                log.error("t_p_group_publishCourse:更新数据失败");
+                throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            throw e;
+        }
+
+    }
+
+    /**
+     * 修改库存数量 (加库存)
+     *
+     * @param courseid  课程ID
+     * @param number 购买数量
+     */
+    public void updateAddStockNum(Long courseid,int number) {
+        int count;
+        try {
+            count = mapper.updateAddStockNum(courseid,number);
             if (count != 1) {
                 log.error("t_p_group_publishCourse:更新数据失败");
                 throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");

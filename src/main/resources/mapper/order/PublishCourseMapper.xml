@@ -334,10 +334,15 @@
       status = #{status,jdbcType=INTEGER}
     where courseid = #{courseid,jdbcType=BIGINT}
   </update>
-  <update id="updateStockNum">
+  <update id="updateSubStockNum">
        update t_p_group_publishCourse
        set storageNumber = storageNumber -  #{number,jdbcType=INTEGER}
        where courseId = #{courseId}
+  </update>
+  <update id="updateAddStockNum">
+    update t_p_group_publishCourse
+    set storageNumber = storageNumber +  #{number,jdbcType=INTEGER}
+    where courseId = #{courseId}
   </update>
 
 </mapper>

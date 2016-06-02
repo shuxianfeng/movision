@@ -4,6 +4,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.BaseException;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -192,6 +193,20 @@ public class StaffManageController {
 			memberService.resetPwd(member);
 		}
 
+		return result;
+	}
+
+	/**
+	 * 员工角色
+	 * @return
+	 * @throws IOException
+	 */
+
+	@RequestMapping(value = "/rest/member/mc/user/sel_workTypeList", method = RequestMethod.GET)
+	public Response workTypeList()  {
+		Response result = new Response();
+		List<WorkType> workType = memberService.findWorkTypeList();
+		result.setData(workType);
 		return result;
 	}
 }

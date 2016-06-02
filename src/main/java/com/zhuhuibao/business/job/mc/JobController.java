@@ -39,7 +39,7 @@ public class JobController {
      * 职位类别
      */
     @ApiOperation(value = "获取职位类别", notes = "获取职位类别", response = Response.class)
-    @RequestMapping(value = "positionType", method = RequestMethod.GET)
+    @RequestMapping(value = {"positionType","/mc/position/sel_positionType"}, method = RequestMethod.GET)
     public Response positionType() throws IOException {
         return jobService.positionType();
     }
@@ -48,7 +48,7 @@ public class JobController {
      * 发布职位
      */
     @ApiOperation(value = "发布职位", notes = "发布职位", response = Response.class)
-    @RequestMapping(value = "publishPosition", method = RequestMethod.POST)
+    @RequestMapping(value = {"publishPosition","mc/position/add_position"}, method = RequestMethod.POST)
     public Response publishPosition(@ApiParam(value = "职位属性") Job job) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -71,7 +71,7 @@ public class JobController {
      * 查询公司已发布的职位
      */
     @ApiOperation(value = "查询公司已发布的职位", notes = "查询公司已发布的职位", response = Response.class)
-    @RequestMapping(value = "searchPositionByMemId", method = RequestMethod.GET)
+    @RequestMapping(value = {"searchPositionByMemId","mc/position/sel_positionList"}, method = RequestMethod.GET)
     public Response searchPositionByMemId(String pageNo, String pageSize) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -101,7 +101,7 @@ public class JobController {
      */
     //@RequiresRoles("admin")
     @ApiOperation(value = "查询公司发布的某条职位的信息", notes = "查询公司发布的某条职位的信息", response = Response.class)
-    @RequestMapping(value = "getPositionByPositionId", method = RequestMethod.GET)
+    @RequestMapping(value = {"getPositionByPositionId","mc/position/sel_position"}, method = RequestMethod.GET)
     public Response getPositionByPositionId(String id) throws IOException {
         return jobService.getPositionByPositionId(id);
     }
@@ -110,7 +110,7 @@ public class JobController {
      * 删除已发布的职位
      */
     @ApiOperation(value = "删除已发布的职位", notes = "删除已发布的职位", response = Response.class)
-    @RequestMapping(value = "deletePosition", method = RequestMethod.POST)
+    @RequestMapping(value = {"deletePosition","mc/position/del_position"}, method = RequestMethod.POST)
     public Response deletePosition(HttpServletRequest req) throws IOException {
         String ids[] = req.getParameterValues("ids");
         return jobService.deletePosition(ids);
@@ -119,8 +119,8 @@ public class JobController {
     /**
      * 更新编辑已发布的职位
      */
-    @ApiOperation(value = "删除已发布的职位", notes = "删除已发布的职位", response = Response.class)
-    @RequestMapping(value = "updatePosition", method = RequestMethod.POST)
+    @ApiOperation(value = "更新编辑已发布的职位", notes = "更新编辑已发布的职位", response = Response.class)
+    @RequestMapping(value = {"updatePosition","mc/position/upd_position"}, method = RequestMethod.POST)
     public Response updatePosition(Job job) throws IOException {
         return jobService.updatePosition(job);
     }
@@ -129,7 +129,7 @@ public class JobController {
      * 查询最新招聘职位
      */
     @ApiOperation(value = "查询最新招聘职位", notes = "查询最新招聘职位", response = Response.class)
-    @RequestMapping(value = "searchNewPosition", method = RequestMethod.GET)
+    @RequestMapping(value = {"searchNewPosition","mc/position/sel_latest_position"}, method = RequestMethod.GET)
     public Response searchNewPosition() throws IOException {
         return jobService.searchNewPosition(6);
     }
@@ -138,7 +138,7 @@ public class JobController {
      * 查询推荐职位
      */
     @ApiOperation(value = "查询推荐职位", notes = "查询推荐职位", response = Response.class)
-    @RequestMapping(value = "searchRecommendPosition", method = RequestMethod.GET)
+    @RequestMapping(value = {"searchRecommendPosition","mc/position/sel_recommend_position"}, method = RequestMethod.GET)
     public Response searchRecommendPosition() throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -160,7 +160,7 @@ public class JobController {
      * 我申请的职位
      */
     @ApiOperation(value = "我申请的职位", notes = "我申请的职位", response = Response.class)
-    @RequestMapping(value = "myApplyPosition", method = RequestMethod.GET)
+    @RequestMapping(value = {"myApplyPosition","mc/position/sel_my_position"}, method = RequestMethod.GET)
     public Response myApplyPosition(String pageNo, String pageSize) throws IOException {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";

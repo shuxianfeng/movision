@@ -58,6 +58,27 @@ public class ProjectService {
 		return projectInfo;
 	}
 
+	   /**
+	    * OMS查询项目信息
+	    * @param projectID 项目信息ID
+	    * @return 项目信息
+	     * @throws SQLException
+	    */
+		public ProjectInfo queryOmsProjectInfoByID(Long projectID) {
+			log.info("query project info by id "+projectID);
+			ProjectInfo projectInfo;
+			try {
+				projectInfo = projectMapper.queryOmsProjectInfoByID(projectID);
+
+			} catch (Exception e) {
+				log.error("select by primary key error!", e);
+				throw e;
+
+			}
+			return projectInfo;
+		}
+	
+
 	/**
 	 * 查询项目信息详情
 	 * @param projectID 项目信息ID
@@ -133,6 +154,80 @@ public class ProjectService {
 		return map;
 	}
 
+	/**
+	 * OMS查询项目信息详情
+	 * @param projectID 项目信息ID
+	 * @return 项目信息
+     */
+	public Map<String,Object> queryOmsProjectDetail(Long projectID) throws Exception
+	{
+		Map<String,Object> map = new HashMap<String,Object>();
+		log.info("query project detail info projectId = "+projectID);
+		try
+		{
+			ProjectInfo projectInfo = queryOmsProjectInfoByID(projectID);
+			//项目信息
+			map.put("project",projectInfo);
+			//根据项目ID查询联系人信息
+			List<ProjectLinkman> linkmanList = linkmanService.queryProjectLinkmanByProjectID(projectID);
+			if(!linkmanList.isEmpty())
+			{
+				//甲方信息
+				Map<String,List<ProjectLinkman>> partyAMap = new HashMap<String,List<ProjectLinkman>>();
+				List<ProjectLinkman> partyAList = new ArrayList<ProjectLinkman>();
+				//乙方中的设计师信息
+				List<ProjectLinkman> partyBDesignList = new ArrayList<ProjectLinkman>();
+				//乙方中的工程商信息
+				List<ProjectLinkman> partyBFirstList = new ArrayList<ProjectLinkman>();
+				//乙方中的工程商信息
+				List<ProjectLinkman> partyBWorkList = new ArrayList<ProjectLinkman>();
+				//乙方中的分包商信息
+				List<ProjectLinkman> partyBSecondList = new ArrayList<ProjectLinkman>();
+				int size = linkmanList.size();
+				for(int i = 0;i < size;i++)
+				{
+					ProjectLinkman linkman= linkmanList.get(i);
+					//甲方信息
+					if(linkman.getPartyType() == 1)
+					{
+						partyAList.add(linkman);
+					}
+					else//乙方信息
+					{
+						//1:设计师，2：总包商，3：工程商，4:分包商
+						if(linkman.getTypePartyB() == 1) {
+							partyBDesignList.add(linkman);
+						} else if(linkman.getTypePartyB() == 2) {
+							partyBFirstList.add(linkman);
+						}
+						else if(linkman.getTypePartyB() == 3) {
+							partyBWorkList.add(linkman);
+						}else if(linkman.getTypePartyB() == 4){
+							partyBSecondList.add(linkman);
+						}
+
+					}
+				}
+				//乙方信息
+				Map<String,Object> partyB = new TreeMap<>();
+				partyB.put("design",partyBDesignList);
+				partyB.put("first",partyBFirstList);
+				partyB.put("engineering",partyBWorkList);
+				partyB.put("second",partyBSecondList);
+
+				map.put("partyB",partyB);
+
+				map.put("partyA",partyAList);
+
+			}
+		}
+		catch(Exception e)
+		{
+			log.error("query project detail info error!");
+			throw e;
+		}
+		return map;
+	}
 	/**
 	 * 查询未登录的项目信息详情
 	 * @param projectID 项目信息ID

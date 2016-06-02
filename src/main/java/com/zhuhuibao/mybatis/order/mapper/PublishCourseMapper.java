@@ -18,5 +18,7 @@ public interface PublishCourseMapper {
 
     int updateByPrimaryKey(PublishCourse record);
 
-    int updateStockNum(@Param("courseId") Long courseId, @Param("number") int number);
+    int updateSubStockNum(@Param("courseId") Long courseId, @Param("number") int number);
+
+    int updateAddStockNum(@Param("courseId") Long courseId, @Param("number") int number);
 }
