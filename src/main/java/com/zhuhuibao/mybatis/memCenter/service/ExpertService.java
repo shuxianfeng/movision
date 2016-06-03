@@ -226,6 +226,21 @@ public class ExpertService {
     }
 
     /**
+     * 根据createid查询专家是否存在
+     * @param createid
+     * @return
+     */
+    public Expert queryExpertByCreateid(String createid){
+        try{
+            return expertMapper.queryExpertByCreateid(createid);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
      * 更新专家信息
      * @param expert
      * @return
