@@ -357,10 +357,6 @@ public class AlipayService {
     private void updateSubStock(Map<String, String> params) {
         Long courseId = Long.valueOf(params.get("goodsId"));
         int number = Integer.valueOf(params.get("number"));
-//        String orderNo = params.get("out_trade_no");
-//        OrderGoods goods = orderGoodsService.findByOrderNo(orderNo);
-//        Long courseId = goods.getGoodsId();
-//        int number = Integer.valueOf(params.get("quantity"));
         publishCourseService.updateSubStockNum(courseId, number);
 
     }
