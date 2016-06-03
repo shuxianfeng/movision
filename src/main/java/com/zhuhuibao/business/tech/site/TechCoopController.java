@@ -7,7 +7,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.mybatis.order.service.OrderService;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
-import com.zhuhuibao.mybatis.tech.service.TechnologyService;
+import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ public class TechCoopController {
     OrderService orderService;
 
     @Autowired
-    TechnologyService techService;
+    TechCooperationService techService;
 
 
     @RequestMapping(value="add_tech_cooperation", method = RequestMethod.POST)
@@ -83,5 +83,16 @@ public class TechCoopController {
         return response;
     }
 
-
+    @RequestMapping(value="sel_views_order", method = RequestMethod.GET)
+    @ApiOperation(value="查询解决方案、技术资料，培训资料的点击排行",notes = "查询解决方案、技术资料，培训资料的点击排行",response = Response.class)
+    public Response findDataViewsOrder(@ApiParam(value="分类：1：行业解决方案，2：技术资料，3：培训资料") @RequestParam Integer categoryId)
+    {
+        Response response = new Response();
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("status",TechConstant.TechCooperationnStatus.AUDITPASS.toString());
+        map.put("count",TechConstant.COOP_DOWNLOAD_COUNT_TEN);
+        List<Map<String,String>> techDataList = techService.findCoopViewsOrder(map);
+        response.setData(techDataList);
+        return response;
+    }
 }

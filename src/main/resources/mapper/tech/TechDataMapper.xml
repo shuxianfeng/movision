@@ -239,11 +239,42 @@
       </if>
     </where>
   </select>
+
   <select id="previewTechDataDetail" parameterType="java.util.Map" resultType="java.util.Map">
     select t.id,case when ur.mobile != '' or ur.mobile != null then ur.mobile when ur.email!= '' or ur.email != null then ur.email end as  username,
     date_format(t.publishTime,'%Y-%m-%d') publishTime, date_format(t.updateTime,'%Y-%m-%d') updateTime, t.title,t.views,t.download,t.fileSize,t.fileFormat,
     t.type, t.notes from t_tech_data t
     left join t_m_member ur on ur.id = t.createID
     where t.id = #{id}
+  </select>
+
+  <select id="findViewsOrder" parameterType="java.util.Map" resultType="java.util.Map">
+    select id,createid,title from t_tech_data
+    <where>
+      <if test="fCategory != null">
+        and fCategory = #{fCategory}
+      </if>
+      <if test="status != null">
+        and status = #{status}
+      </if>
+    </where>
+    order by views desc limit #{count}
+  </select>
+
+  <select id="findDownloadOrder" parameterType="java.util.Map" resultType="java.util.Map">
+    select id,createid,title from t_tech_data
+    <where>
+      <if test="fCategory != null">
+        and fCategory = #{fCategory}
+      </if>
+      <if test="status != null">
+        and status = #{status}
+      </if>
+    </where>
+    order by download desc limit #{count}
+  </select>
+
+  <select id="findIndexTechData" parameterType="java.util.Map" resultType="java.util.Map">
+    select id,title,sCategory,type from t_tech_data where fCategory = #{fCategory} order by sCategory,updateTime desc
   </select>
 </mapper>

@@ -303,10 +303,7 @@ public class ProductService {
     	catch(Exception e)
     	{
     		log.error("update product error",e);
-    		response.setCode(MsgCodeConstant.response_status_400);
-    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return response;
+    		throw e;
     	}
     	return response;
     }

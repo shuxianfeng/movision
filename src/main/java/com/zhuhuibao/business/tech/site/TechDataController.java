@@ -178,4 +178,32 @@ public class TechDataController {
         response.setData(techDataList);
         return response;
     }
+
+    @RequestMapping(value="sel_views_order", method = RequestMethod.GET)
+    @ApiOperation(value="查询解决方案、技术资料，培训资料的点击排行",notes = "查询解决方案、技术资料，培训资料的点击排行",response = Response.class)
+    public Response findDataViewsOrder(@ApiParam(value="分类：1：行业解决方案，2：技术资料，3：培训资料") @RequestParam Integer categoryId)
+    {
+        Response response = new Response();
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("status",TechConstant.TechDataStatus.AUDITPASS.toString());
+        map.put("categoryId",categoryId);
+        map.put("count",TechConstant.DATA_VIEWS_COUNT_TEN);
+        List<Map<String,String>> techDataList = techDataService.findDataViewsOrder(map);
+        response.setData(techDataList);
+        return response;
+    }
+
+    @RequestMapping(value="sel_download_order", method = RequestMethod.GET)
+    @ApiOperation(value="查询解决方案、技术资料，培训资料的下载排行",notes = "查询解决方案、技术资料，培训资料的下载排行",response = Response.class)
+    public Response findDownloadOrder(@ApiParam(value="分类：1：行业解决方案，2：技术资料，3：培训资料") @RequestParam Integer categoryId)
+    {
+        Response response = new Response();
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("status",TechConstant.TechDataStatus.AUDITPASS.toString());
+        map.put("categoryId",categoryId);
+        map.put("count",TechConstant.DATA_DOWNLOAD_COUNT_TEN);
+        List<Map<String,String>> techDataList = techDataService.findDownloadOrder(map);
+        response.setData(techDataList);
+        return response;
+    }
 }

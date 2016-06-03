@@ -28,21 +28,20 @@
   <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse" extends="BaseResultMap" >
     <result column="notes" property="notes" jdbcType="LONGVARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List" >
-    courseid, publisherid, publishTime, saleTime, updateTime, title, teacher, startTime, 
-    endTime, province, area, address, city, price, storageNumber, minBuyNumber, maxBuyNumber, 
-    expiryDate, imgUrl, notice, courseType, status
-  </sql>
-  <sql id="Blob_Column_List" >
-    notes
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
+    select
+    courseid, publisherid, title, teacher, date_format(startTime,'%Y-%m-%d') startTime,
+    date_format(endTime,'%Y-%m-%d') endTime, province, area, address, city, price, storageNumber, minBuyNumber, maxBuyNumber,
+    date_format(expiryDate,'%Y-%m-%d') expiryDate, imgUrl, notice, courseType, status,notes
     from t_p_group_publishCourse
-    where courseid = #{courseid,jdbcType=BIGINT}
+    <where>
+      <if test="courseid != null">
+        and courseid = #{courseid,jdbcType=BIGINT}
+      </if>
+      <if test="courseType != null">
+        and courseType = #{courseType}
+      </if>
+    </where>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from t_p_group_publishCourse
@@ -253,7 +252,7 @@
     </set>
     where courseid = #{courseid,jdbcType=BIGINT}
   </update>
-  <select id="findAllPublishCoursePager" parameterType="java.util.Map" resultType="java.util.Map">
+  <select id="findAllTrainCoursePager" parameterType="java.util.Map" resultType="java.util.Map">
     select t.courseid, t.publisherid, date_format(t.saleTime,'%Y-%m-%d') saleTime, t.title, t.teacher, date_format(t.startTime,'%Y-%m-%d') startTime,
     concat(pv.name,'-',ct.name) provinceCity, t.price, t.minBuyNumber,
     date_format(t.expiryDate,'%Y-%m-%d') expiryDate, t.status from t_p_group_publishCourse t
@@ -276,5 +275,37 @@
         and city = #{city}
       </if>
     </where>
+  </select>
+
+  <select id="findAllPublishCoursePager" parameterType="java.util.Map" resultType="java.util.Map">
+  select t.courseid,t.title,t.notes,
+  case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl) = 0 then imgUrl end as imgUrl
+  from t_p_group_publishCourse t
+  <where>
+    <if test="courseType != null">
+      and courseType = #{courseType}
+    </if>
+    <if test="status != null">
+      and status = #{status}
+    </if>
+    <if test="province != null">
+      and province = #{province}
+    </if>
+  </where>
+</select>
+  <select id="findLatestPublishCourse" parameterType="java.util.Map" resultType="java.util.Map">
+    select t.courseid,t.title,t.notes,
+    case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl) = 0 then imgUrl end as imgUrl
+    from t_p_group_publishCourse t
+    <where>
+      <if test="courseType != null">
+        and courseType = #{courseType}
+      </if>
+      <if test="status != null">
+        and status = #{status}
+      </if>
+    </where>
+    order by t.updateTime desc
+    limit #{count}
   </select>
 </mapper>
