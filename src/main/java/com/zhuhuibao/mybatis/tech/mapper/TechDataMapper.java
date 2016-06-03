@@ -28,4 +28,10 @@ public interface TechDataMapper {
     int updateTechDataViewsOrDL(Map<String,Object> map);
 
     List<Map<String,String>> previewTechDataDetail(Long id);
+
+    List<Map<String,String>> findViewsOrder(Map<String,Object> condition);
+
+    List<Map<String,String>> findDownloadOrder(Map<String,Object> condition);
+
+    List<Map<String,String>> findIndexTechData(Map<String,Object> condition);
 }

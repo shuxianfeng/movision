@@ -54,7 +54,7 @@ public class TrainPublishCourse {
     private String notice;
     @ApiModelProperty(value="课程类型：1技术培训，2专家培训")
     private Integer courseType;
-    @ApiModelProperty(value="状态：1未上架，2销售中，3待开课，4已终止，5已完成")
+    @ApiModelProperty(value="状态：1未上架，2销售中，3待开课，4上课中，5已终止，6已完成")
     private Integer status;
     @ApiModelProperty(value="课程简介")
     private String notes;

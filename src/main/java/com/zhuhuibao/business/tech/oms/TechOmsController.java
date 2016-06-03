@@ -14,19 +14,13 @@ import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
 import com.zhuhuibao.mybatis.tech.entity.TechData;
 import com.zhuhuibao.mybatis.tech.service.DictionaryTechDataService;
 import com.zhuhuibao.mybatis.tech.service.TechDataService;
-import com.zhuhuibao.mybatis.tech.service.TechnologyService;
+import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.common.pojo.RefundItem;
 import com.zhuhuibao.common.pojo.RefundReqBean;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.Order;
 import com.zhuhuibao.mybatis.order.service.OrderService;
-import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
-import com.zhuhuibao.mybatis.tech.entity.TechData;
-import com.zhuhuibao.mybatis.tech.service.TechnologyService;
-import com.zhuhuibao.mybatis.tech.entity.DictionaryTechData;
-import com.zhuhuibao.mybatis.tech.service.DictionaryTechDataService;
-import com.zhuhuibao.mybatis.tech.service.TechDataService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
 import com.zhuhuibao.utils.CommonUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -64,7 +58,7 @@ public class TechOmsController {
     OrderService orderService;
 
     @Autowired
-    TechnologyService techService;
+    TechCooperationService techService;
 
     @Autowired
     DictionaryTechDataService dicTDService;

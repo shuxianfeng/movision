@@ -51,6 +51,25 @@ public class PublishTCourseService {
     }
 
     /**
+     * 查看已发布课程的详情
+     * @param condition 搜索条件
+     * @return
+     */
+    public TrainPublishCourse selectTrainCourseInfo(Map<String,Object> condition)
+    {
+        log.info("select train course info id = "+StringUtils.mapToString(condition));
+        TrainPublishCourse course;
+        try{
+            course = pCourseMapper.selectByPrimaryKey(condition);
+        }catch(Exception e)
+        {
+            log.error("select train course info error!",e);
+            throw e;
+        }
+        return course;
+    }
+
+    /**
      * 更新发布的课程信息
      * @param course 课程信息
      * @return
@@ -79,15 +98,55 @@ public class PublishTCourseService {
      * @param condition
      * @return
      */
-    public List<Map<String,String>> findAllPublishCoursePager(Paging<Map<String,String>> pager, Map<String,Object> condition)
+    public List<Map<String,String>> findAllTrainCoursePager(Paging<Map<String,String>> pager, Map<String,Object> condition)
     {
         log.info("find all OMS tech data for pager "+ StringUtils.mapToString(condition));
+        List<Map<String,String>> courseList = null;
+        try{
+            courseList = pCourseMapper.findAllTrainCoursePager(pager.getRowBounds(),condition);
+        }catch(Exception e)
+        {
+            log.error("find all OMS tech data for pager error!",e);
+            throw e;
+        }
+        return courseList;
+    }
+
+    /**
+     * 查询已发布的课程
+     * @param pager
+     * @param condition
+     * @return
+     */
+    public List<Map<String,String>> findAllPublishCoursePager(Paging<Map<String,String>> pager, Map<String,Object> condition)
+    {
+        log.info("find all publish train course for pager "+ StringUtils.mapToString(condition));
         List<Map<String,String>> courseList = null;
         try{
             courseList = pCourseMapper.findAllPublishCoursePager(pager.getRowBounds(),condition);
         }catch(Exception e)
         {
-            log.error("find all OMS tech data for pager error!",e);
+            log.error("find all publish train course for pager error!",e);
+            throw e;
+        }
+        return courseList;
+    }
+
+    /**
+     * 查询最新发布的培训课程
+     * @param pager
+     * @param condition
+     * @return
+     */
+    public List<Map<String,String>> findLatestPublishCourse(Paging<Map<String,String>> pager, Map<String,Object> condition)
+    {
+        log.info("find Latest publish train course "+ StringUtils.mapToString(condition));
+        List<Map<String,String>> courseList = null;
+        try{
+            courseList = pCourseMapper.findLatestPublishCourse(pager.getRowBounds(),condition);
+        }catch(Exception e)
+        {
+            log.error("find Latest publish train course error!",e);
             throw e;
         }
         return courseList;

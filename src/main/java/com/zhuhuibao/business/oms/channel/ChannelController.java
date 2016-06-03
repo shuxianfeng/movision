@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -100,9 +101,11 @@ public class ChannelController {
             map.put("count", 2);
         } else if (channelNews.getSort() == 3) {
             map.put("count", 3);
+        }else if (channelNews.getChannelid() == 11) {//技术频道新技术播报
+            map.put("count", 5);
         }
-        response = newsService.queryNewsByChannelInfo(map);
-
+        List<ChannelNews> newsList = newsService.queryNewsByChannelInfo(map);
+        response.setData(newsList);
         return response;
     }
 
@@ -120,11 +123,14 @@ public class ChannelController {
         map.put("channelid", channelNews.getChannelid());
         map.put("sort", channelNews.getSort());
         map.put("status", 1);
-        Response response = newsService.queryNewsByChannelInfo(map);
+        List<ChannelNews> newsList = newsService.queryNewsByChannelInfo(map);
+        Response response = new Response();
+        response.setData(newsList);
         return response;
     }
 
     @RequestMapping(value = "/rest/oms/queryViewsByChannel", method = RequestMethod.GET)
+    @ApiOperation(value = "查询资讯点击率排行",notes = "查询资讯点击率排行",response = Response.class)
     public Response queryViewsByChannel(ChannelNews channelNews) throws IOException {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("channelid", channelNews.getChannelid());

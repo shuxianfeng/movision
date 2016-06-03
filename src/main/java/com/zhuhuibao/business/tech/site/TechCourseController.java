@@ -10,7 +10,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.common.pojo.OrderReqBean;
 import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.tech.service.TechnologyService;
+import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.utils.ValidateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,7 @@ public class TechCourseController {
     AlipayDirectService alipayDirectService;
 
     @Autowired
-    TechnologyService techService;
+    TechCooperationService techService;
 
 
     @ApiOperation(value = "培训课程下单支付", notes = "培训课程下单支付")

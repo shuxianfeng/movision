@@ -16,9 +16,13 @@ public interface PublishTCourseMapper {
 
     int insertSelective(TrainPublishCourse record);
 
-    TrainPublishCourse selectByPrimaryKey(Long courseid);
+    TrainPublishCourse selectByPrimaryKey(Map<String,Object> condition);
 
     int updateByPrimaryKeySelective(TrainPublishCourse record);
 
+    List<Map<String,String>> findAllTrainCoursePager(RowBounds rowBounds, Map<String,Object> condition);
+
     List<Map<String,String>> findAllPublishCoursePager(RowBounds rowBounds, Map<String,Object> condition);
+
+    List<Map<String,String>> findLatestPublishCourse(RowBounds rowBounds, Map<String,Object> condition);
 }

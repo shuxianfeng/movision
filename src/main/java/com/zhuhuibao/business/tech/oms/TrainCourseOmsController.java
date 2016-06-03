@@ -34,8 +34,8 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/tech/oms/publish")
-@Api(value = "trainCourse",description = "发布技术培训课程")
-public class TrainCourseController {
+@Api(value = "trainCourseOms",description = "发布技术培训课程")
+public class TrainCourseOmsController {
     @Autowired
     PublishTCourseService ptCourseService;
 
@@ -58,6 +58,19 @@ public class TrainCourseController {
         return response;
     }
 
+    @RequestMapping(value="sel_course_info", method = RequestMethod.POST)
+    @ApiOperation(value="查看发布的培训课程信息",notes = "查看发布的培训课程信息",response = Response.class)
+    public Response selectTrainCourseInfo(@ApiParam(value = "培训课程ID")  @RequestParam Long courseId)
+    {
+        Map<String,Object> condition = new HashMap<String,Object>();
+        condition.put("courseid",courseId);
+        condition.put("courseType",TechConstant.COURSE_TYPE_TECH);
+        TrainPublishCourse course = ptCourseService.selectTrainCourseInfo(condition);
+        Response response = new Response();
+        response.setData(course);
+        return response;
+    }
+
     @RequestMapping(value="upd_course", method = RequestMethod.POST)
     @ApiOperation(value="更新未发布的培训课程",notes = "更新发布的培训课程",response = Response.class)
     public Response updateTrainCourse(@ApiParam(value = "培训课程")  @ModelAttribute TrainPublishCourse course)
@@ -77,14 +90,14 @@ public class TrainCourseController {
     @RequestMapping(value="sel_publish_course", method = RequestMethod.GET)
     @ApiOperation(value="运营管理平台搜索技术的发布课程",notes = "运营管理平台搜索技术的发布课程",response = Response.class)
     public Response findAllTechDataPager(@ApiParam(value = "课程名称") @RequestParam(required = false) String title,
-                                         @ApiParam(value = "状态：1未上架，2销售中，3待开课，4已终止，5已完成") @RequestParam(required = false) String status,
+                                         @ApiParam(value = "状态：1未上架，2销售中，3待开课，4上课中，5已终止，6已完成") @RequestParam(required = false) String status,
                                          @ApiParam(value = "省") @RequestParam(required = false) String province,
                                          @ApiParam(value = "市") @RequestParam(required = false) String city,
                                          @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
                                          @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
-        condition.put("type", TechConstant.COURSE_TYPE_TECH);
+        condition.put("courseType", TechConstant.COURSE_TYPE_TECH);
         condition.put("mobile", province);
         condition.put("linkman", city);
         if(title != null && !title.equals(""))
@@ -99,7 +112,7 @@ public class TrainCourseController {
         }
         Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         condition.put("status", status);
-        List<Map<String, String>> techList = ptCourseService.findAllPublishCoursePager(pager, condition);
+        List<Map<String, String>> techList = ptCourseService.findAllTrainCoursePager(pager, condition);
         pager.result(techList);
         response.setData(pager);
         return response;
@@ -122,4 +135,5 @@ public class TrainCourseController {
         }
         return result;
     }
+
 }
