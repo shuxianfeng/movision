@@ -267,7 +267,7 @@
         and status = #{status}
       </if>
       <if test="title != null and title != ''">
-        and title like concat('%',title,'%')
+        and title like concat('%',#{title},'%')
       </if>
       <if test="province != null">
         and province = #{province}

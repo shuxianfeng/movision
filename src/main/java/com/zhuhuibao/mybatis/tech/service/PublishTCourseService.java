@@ -60,10 +60,17 @@ public class PublishTCourseService {
         int result = 0;
         log.info("update publish course info "+StringUtils.beanToString(course));
         try {
+        	
+        	if(course.getMaxBuyNumber()!=null)
+        	{
             //插入库存
             course.setStorageNumber(Integer.parseInt(course.getMaxBuyNumber()));
+        	}
+        	if(course.getExpiryDate()!=null)
+        	{
             //截止日期
             course.setExpiryDate(course.getExpiryDate()+" 23:59:59");
+        	}
             result = pCourseMapper.updateByPrimaryKeySelective(course);
         }catch(Exception e)
         {
