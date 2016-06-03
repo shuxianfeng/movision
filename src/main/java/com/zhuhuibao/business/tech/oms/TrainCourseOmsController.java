@@ -58,7 +58,7 @@ public class TrainCourseOmsController {
         return response;
     }
 
-    @RequestMapping(value="sel_course_info", method = RequestMethod.POST)
+    @RequestMapping(value="sel_course_info", method = RequestMethod.GET)
     @ApiOperation(value="查看发布的培训课程信息",notes = "查看发布的培训课程信息",response = Response.class)
     public Response selectTrainCourseInfo(@ApiParam(value = "培训课程ID")  @RequestParam Long courseId)
     {
