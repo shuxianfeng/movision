@@ -42,6 +42,23 @@ public class TechConstant {
     }
 
     /**
+     * 发布课程的状态  1未上架，2销售中，3待开课，4上课中，5已终止，6已完成
+     */
+    public enum PublishCourseStatus {
+        UNPUBLISH("1"), SALING("2"), PRECLASS("3"), CLASSING("4"),STOP("5"),FINISH("6");
+        public final String value;
+
+        PublishCourseStatus(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
+
+    /**
      * 上传技术资料附件的路径  /tech/doc
      */
     public static final String UPLOAD_TECH_DOC_URL = "/tech/doc";
@@ -65,4 +82,24 @@ public class TechConstant {
      * 课程类型：1：技术培训，2专家培训
      */
     public static final int COURSE_TYPE_TECH = 1;
+
+    /**
+     * 最新培训课程 默认3条
+     */
+    public static final int COURSE_LATEST_COUNT_THREE = 3;
+
+    /**
+     * 行业解决方案，技术资料，培训资料点击排行数量10条
+     */
+    public static final int DATA_VIEWS_COUNT_TEN = 10;
+
+    /**
+     * 行业解决方案，技术资料，培训资料下载排行数量10条
+     */
+    public static final int DATA_DOWNLOAD_COUNT_TEN = 10;
+
+    /**
+     * 技术合作点击排行数量10条
+     */
+    public static final int COOP_DOWNLOAD_COUNT_TEN = 10;
 }

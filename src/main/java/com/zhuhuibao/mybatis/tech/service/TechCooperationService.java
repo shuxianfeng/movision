@@ -20,7 +20,7 @@ import java.util.Map;
  **/
 @Service
 @Transactional
-public class TechnologyService {
+public class TechCooperationService {
 
     private final static Logger log = LoggerFactory.getLogger("TechService");
 
@@ -177,4 +177,22 @@ public class TechnologyService {
         return techCoop;
     }
 
+    /**
+     * 查询技术合作的点击排行
+     * @param map
+     * @return
+     */
+    public List<Map<String,String>> findCoopViewsOrder(Map<String,Object> map)
+    {
+        log.info("find views order "+StringUtils.mapToString(map));
+        List<Map<String,String>> dataList = null;
+        try{
+            dataList = techMapper.findCoopViewsOrder(map);
+        }catch(Exception e)
+        {
+            log.error("find views order error!",e);
+            throw e;
+        }
+        return dataList;
+    }
 }

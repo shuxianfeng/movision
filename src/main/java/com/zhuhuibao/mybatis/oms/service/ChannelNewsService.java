@@ -118,22 +118,19 @@ public class ChannelNewsService {
      * @param channelMap  频道资讯页条件
      * @return Response
      */
-    public Response queryNewsByChannelInfo(Map<String,Object> channelMap )
+    public List<ChannelNews> queryNewsByChannelInfo(Map<String,Object> channelMap )
     {
-        Response response = new Response();
+        List<ChannelNews> newsList;
         try
         {
-            List<ChannelNews> newsList =  channel.queryNewsByChannelInfo(channelMap);
-            response.setData(newsList);
+            newsList =  channel.queryNewsByChannelInfo(channelMap);
         }
         catch(Exception e)
         {
             log.error("select by primary key error!",e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            throw e;
         }
-        return response;
+        return newsList;
     }
 
     /**

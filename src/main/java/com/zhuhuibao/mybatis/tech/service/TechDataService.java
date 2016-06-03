@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -200,5 +202,81 @@ public class TechDataService {
             throw e;
         }
         return techList;
+    }
+
+    /**
+     * 查询解决方案，技术资料，培训资料的点击排行
+     * @param map
+     * @return
+     */
+    public List<Map<String,String>> findDataViewsOrder(Map<String,Object> map)
+    {
+        log.info("find views order "+StringUtils.mapToString(map));
+        List<Map<String,String>> dataList = null;
+        try{
+            dataList = techDataMapper.findViewsOrder(map);
+        }catch(Exception e)
+        {
+            log.error("find views order error!",e);
+            throw e;
+        }
+        return dataList;
+    }
+
+    /**
+     * 查询解决方案，技术资料，培训资料的下载排行
+     * @param map
+     * @return
+     */
+    public List<Map<String,String>> findDownloadOrder(Map<String,Object> map)
+    {
+        log.info("find views order "+StringUtils.mapToString(map));
+        List<Map<String,String>> dataList = null;
+        try{
+            dataList = techDataMapper.findDownloadOrder(map);
+        }catch(Exception e)
+        {
+            log.error("find views order error!",e);
+            throw e;
+        }
+        return dataList;
+    }
+
+    /**
+     * 查询技术频道首页的解决方案，技术资料，培训资料
+     * @param map
+     * @return
+     */
+    public Map<String,List<Map<String,String>>> findIndexTechData(Map<String,Object> map)
+    {
+        log.info("find home page tech data "+StringUtils.mapToString(map));
+        Map<String,List<Map<String,String>>> techMap = new HashMap<String,List<Map<String,String>>>();
+        try{
+            List<Map<String,String>> dataList = techDataMapper.findIndexTechData(map);
+            int size= dataList.size();
+            List<Map<String,String>> techDataList;
+            for(int i = 0;i < size;i++)
+            {
+                Map<String,String> tData = dataList.get(i);
+                //二级分类
+                String sCategory = String.valueOf(tData.get("sCategory"));
+                if(techMap.get(sCategory) != null)
+                {
+                    techDataList = techMap.get(sCategory);
+                    techDataList.add(tData);
+                }
+                else
+                {
+                    techDataList = new ArrayList<Map<String,String>>();
+                    techDataList.add(tData);
+                    techMap.put(sCategory,techDataList);
+                }
+            }
+        }catch(Exception e)
+        {
+            log.error("find home page tech data error!",e);
+            throw e;
+        }
+        return techMap;
     }
 }

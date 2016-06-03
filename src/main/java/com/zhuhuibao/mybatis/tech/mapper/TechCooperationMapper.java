@@ -28,4 +28,8 @@ public interface TechCooperationMapper {
     int deleteTechCooperation(Map<String, Object> condition);
 
     int updateTechCooperationViews(Long id);
+
+    List<Map<String,String>> findCoopViewsOrder(Map<String,Object> condition);
+
+    List<Map<String,String>> findIndexTechCooperation(Map<String,Object> condition);
 }

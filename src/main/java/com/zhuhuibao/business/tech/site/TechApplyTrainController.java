@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/rest/tech/site/train")
 @Api(value = "TechTrainController",description = "申请技术培训课程")
-public class TechTrainController {
+public class TechApplyTrainController {
 
     @Autowired
     TechExpertCourseService techCourseService;
