@@ -188,7 +188,12 @@ public class ExpertSiteController {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
             if(null != principal){
                 expert.setCreateId(principal.getId().toString());
-                expertService.applyExpert(expert);
+                Expert expert1 = expertService.queryExpertByCreateid(principal.getId().toString());
+                if(expert1==null){
+                    expertService.applyExpert(expert);
+                }else {
+                    throw new BusinessException(MsgCodeConstant.EXPERT_ISEXIST,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.EXPERT_ISEXIST)));
+                }
             }else{
                 throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
