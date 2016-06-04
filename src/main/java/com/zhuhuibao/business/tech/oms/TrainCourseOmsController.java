@@ -99,7 +99,7 @@ public class TrainCourseOmsController {
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("courseType", TechConstant.COURSE_TYPE_TECH);
         condition.put("mobile", province);
-        condition.put("linkman", city);
+        condition.put("city", city);
         if(title != null && !title.equals(""))
         {
             condition.put("title",title.replaceAll("_","\\_"));
