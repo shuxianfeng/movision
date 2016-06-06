@@ -106,6 +106,10 @@
         <location>/rest/exception/error_400</location>
     </error-page>
     <error-page>
+        <error-code>401</error-code>
+        <location>/rest/exception/error_401</location>
+    </error-page>
+    <error-page>
         <error-code>404</error-code>
         <location>/rest/exception/error_404</location>
     </error-page>

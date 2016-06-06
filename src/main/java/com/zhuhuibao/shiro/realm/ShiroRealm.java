@@ -1,5 +1,8 @@
 package com.zhuhuibao.shiro.realm;
 
+import java.io.Serializable;
+import java.util.Arrays;
+
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -12,9 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zhuhuibao.mybatis.memberReg.entity.LoginMember;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
-
-import java.io.Serializable;
-
 
 /**
  * @author jianglz
@@ -34,7 +34,44 @@ public class ShiroRealm extends AuthorizingRealm {
     	ShiroUser member = (ShiroUser)principals.fromRealm(getName()).iterator().next();
     	if(null != member){
     		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-    		info.addRole(member.getIdentify()+"."+member.getRole());
+    		
+    		String status = String.valueOf(member.getStatus());
+    		String identity = member.getIdentify();
+    		String role = member.getRole();
+    		String isexpert = member.getIsexpert();
+    		
+    		if(null==status || null==identity || null==role || null==isexpert){
+    			return null;
+    		}
+    		
+    		if(identity.equals("2")){
+        		if(isexpert.equals("1")){
+        			role = "100,200";
+        		}
+    		}else{
+        		if(identity.length() > 1){
+        			String[] strs = identity.split(",");
+        			if(Arrays.asList(strs).contains("3")){
+        				identity = "3,1";
+        			}else{
+        				identity = "1";
+        			}
+        		}else if(!identity.equals("3")){
+        			identity = "1";
+        		}
+        		
+    			if(!role.equals("100")){
+    				role = "300";
+    			}
+    		}
+    		
+    		String perm = identity + ":" + role + ":" + status;
+    		System.out.println("caijl:shiro member's role="+status);
+    		System.out.println("caijl:shiro member's perm="+perm);
+    		
+    		info.addRole(role);
+    		info.addStringPermission(perm);
+    		
     		return info;
     	}
         return null;
@@ -48,14 +85,6 @@ public class ShiroRealm extends AuthorizingRealm {
             AuthenticationToken token) throws AuthenticationException {
         log.info("登录认证");
         String loginname = (String) token.getPrincipal();
-        /*Member member = memberRegService.findMemberByAccount(loginname);
-        if(member != null){
-            if (0 == member.getStatus() || 2 == member.getStatus()) {
-                throw new LockedAccountException(); // 帐号不正常状态
-            }
-        }  else{
-            throw new UnknownAccountException();//  用户名不存在
-        }*/
         LoginMember loginMember = memberRegService.getLoginMemberByAccount(loginname);
         if(loginMember != null){
             if (0 == loginMember.getStatus() || 2 == loginMember.getStatus()) {
@@ -68,7 +97,7 @@ public class ShiroRealm extends AuthorizingRealm {
         // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(
                 new ShiroUser(loginMember.getId(), loginMember.getAccount(),loginMember.getStatus(),
-                		loginMember.getIdentify(),loginMember.getRole()), // 用户
+                		loginMember.getIdentify(),loginMember.getRole(),loginMember.getIsexpert()), // 用户
                 loginMember.getPassword(), // 密码
 //                ByteSource.Util.bytes("123"),
                 getName() // realm name
@@ -96,13 +125,15 @@ public class ShiroRealm extends AuthorizingRealm {
         private int status;
         private String identify;
         private String role;
+        private String isexpert;
 
-        public ShiroUser(Long id, String account, int status, String identify, String role) {
+        public ShiroUser(Long id, String account, int status, String identify, String role,String isexpert) {
             this.id = id;
             this.account = account;
             this.status = status;
             this.identify = identify;
             this.role = role;
+            this.isexpert = isexpert;
         }
         
 		public Long getId() {
@@ -128,6 +159,14 @@ public class ShiroRealm extends AuthorizingRealm {
         public void setStatus(int status) {
             this.status = status;
         }
+        
+        public String getIdentify() {
+            return identify;
+        }
+
+        public void setIdentify(String identify) {
+            this.identify = identify;
+        }
 
         public String getRole() {
             return role;
@@ -137,14 +176,14 @@ public class ShiroRealm extends AuthorizingRealm {
             this.role = role;
         }
 
-        public String getIdentify() {
-            return identify;
-        }
+		public String getIsexpert() {
+			return isexpert;
+		}
 
-        public void setIdentify(String identify) {
-            this.identify = identify;
-        }
-
+		public void setIsexpert(String isexpert) {
+			this.isexpert = isexpert;
+		}
+        
         /**
          * 重载equals,只计算id+account;
          */
