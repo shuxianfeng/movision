@@ -28,6 +28,21 @@ public class GlobalExceptionController {
         response.setMessage("错误请求,服务器不理解请求的语法");
         return response;
     }
+    
+    /**
+     * 请求异常 错误请求
+     * @return
+     * @throws Exception
+     * String
+     */
+    @RequestMapping(value = "/error_401", produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "请求401错误", response = Response.class, notes = "401错误",httpMethod = "GET")
+    public Response error_401() throws Exception {
+        Response response = new Response();
+        response.setCode(401);
+        response.setMessage("请求无权限！");
+        return response;
+    }
 
     /**
      * 请求异常

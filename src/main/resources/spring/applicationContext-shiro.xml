@@ -75,31 +75,48 @@
         <property name="usernameParam" value="username"/>
         <property name="passwordParam" value="password"/>
         <property name="rememberMeParam" value="rememberMe"/>
-        <property name="loginUrl" value="/login"/>
+        <property name="loginUrl" value="/auth/login.html"/>
+    </bean>
+    <bean id="orRolesAuthorizationFilter"
+          class="com.zhuhuibao.shiro.filter.OrRolesAuthorizationFilter">
+    </bean>
+    <bean id="orPermissionsAuthorizationFilter"
+          class="com.zhuhuibao.shiro.filter.OrPermissionsAuthorizationFilter">
     </bean>
     <!-- shiro定义 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
-        <property name="loginUrl" value="/login"/>
-        <property name="successUrl" value="/index"/>
+        <property name="loginUrl" value="/rest/exception/error_401"/>
+        <property name="successUrl" value="/index.html"/>
         <property name="filters">
             <util:map>
                 <entry key="authc" value-ref="formAuthenticationFilter" />
+                <entry key="orroles" value-ref="orRolesAuthorizationFilter" />
+                <entry key="orperms" value-ref="orPermissionsAuthorizationFilter" />
             </util:map>
         </property>
         <property name="filterChainDefinitions">
             <value>
-                /login** = anon
-                /index = anon
-                /pagination = anon
                 /logout = logout
-                /register/** = anon
-                /checkCode = anon
-                /admin/** = roles[admin]
                 <!--/** = user-->
                 /swagger/** = anon
-                /upload/** = anon
                 <!--/** = authc-->
+                
+                <!--/** = authz-->
+                <!--url = orroles[status]
+                status:0-未激活(只针对邮件) 1-注册成功 2-注销 3-完善资料  4-待认证会员 5-已认证会员-->
+                <!--url = orperms[identity:role:status]
+                identity:1-企业 2-个人 3-厂家;
+                role:100-管理员 200-专家 300-员工;
+                status:3-完善资料  4-待认证会员 5-已认证会员-->
+                /rest/system/mc/enquiry/** = orroles["3,4,5"]
+                /rest/system/mc/product/** = orroles["3,4,5"]
+                /rest/system/mc/brand/** = orperms["3:100:5,3:300:5"]
+                /rest/system/mc/agent/** = orperms["3:100:5,3:300:5"]
+                /rest/job/mc/recruit/** = orperms["1:100:5,1:300:5,3:100:5,3:300:5"]
+                /rest/job/mc/resume/** = orperms["2:100:1,2:100:3,2:100:4,2:100:5,2:200:1,2:200:3,2:200:4,2:200:5"]
+                /rest/expert/mc/** = orperms["2:200:1,2:200:3,2:200:4,2:200:5"]
+                /rest/expo/mc/** = orperms["1:100:3,1:100:4,1:100:5,1:300:3,1:300:4,1:300:5,3:100:3,3:100:4,3:100:5,3:300:3,3:300:4,3:300:5"]
             </value>
         </property>
 

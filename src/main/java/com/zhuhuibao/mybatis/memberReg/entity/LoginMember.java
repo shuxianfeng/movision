@@ -8,31 +8,14 @@ public class LoginMember {
 	 */
 	private String password;
 	/**
-	 * 会员状态 0：未激活，1：注册成功，2：认证成功，3：vip会员
+	 * 会员状态 0：未激活(只针对邮件)，1：注册成功，2：注销，3：完善资料，4：待认证会员，5：已认证会员
 	 */
 	private int status;
     private String identify;
-    private String identifyname;
     private String role;
-    private String rolename;
+    private String isexpert;
     private int ordercount;
     private int msgcount;
-
-    public String getIdentify() {
-        return identify;
-    }
-
-    public void setIdentify(String identify) {
-        this.identify = identify;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 
     public Long getId() {
         return id;
@@ -50,14 +33,6 @@ public class LoginMember {
         this.account = account;
     }
     
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
 	public String getPassword() {
 		return password;
 	}
@@ -65,21 +40,37 @@ public class LoginMember {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+    
+	public int getStatus() {
+		return status;
+	}
+	
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	
+    public String getIdentify() {
+        return identify;
+    }
 
-	public String getIdentifyname() {
-		return identifyname;
+    public void setIdentify(String identify) {
+        this.identify = identify;
+    }
+
+	public String getRole() {
+		return role;
 	}
 
-	public void setIdentifyname(String identifyname) {
-		this.identifyname = identifyname;
+	public void setRole(String role) {
+		this.role = role;
 	}
 
-	public String getRolename() {
-		return rolename;
+	public String getIsexpert() {
+		return isexpert;
 	}
 
-	public void setRolename(String rolename) {
-		this.rolename = rolename;
+	public void setIsexpert(String isexpert) {
+		this.isexpert = isexpert;
 	}
     
     public int getOrdercount() {
