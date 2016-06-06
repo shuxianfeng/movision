@@ -79,8 +79,13 @@ public class ExpertSiteController {
     public Response publishAchievement(@ModelAttribute Achievement achievement) throws Exception {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
-        achievement.setCreateId(createId.toString());
-        expertService.publishAchievement(achievement);
+        if(createId!=null){
+            achievement.setCreateId(createId.toString());
+            expertService.publishAchievement(achievement);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+
         return response;
     }
 
@@ -189,12 +194,16 @@ public class ExpertSiteController {
     public Response applyExpert(@ModelAttribute Expert expert) throws Exception {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
-        expert.setCreateId(createId.toString());
-        Expert expert1 = expertService.queryExpertByCreateid(createId.toString());
-        if(expert1==null){
-            expertService.applyExpert(expert);
+        if(createId!=null){
+            expert.setCreateId(createId.toString());
+            Expert expert1 = expertService.queryExpertByCreateid(createId.toString());
+            if(expert1==null){
+                expertService.applyExpert(expert);
+            }else {
+                throw new BusinessException(MsgCodeConstant.EXPERT_ISEXIST,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.EXPERT_ISEXIST)));
+            }
         }else {
-            throw new BusinessException(MsgCodeConstant.EXPERT_ISEXIST,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.EXPERT_ISEXIST)));
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -448,8 +457,13 @@ public class ExpertSiteController {
         expertSupport.setReason(reason);
         expertService.checkMobileCode(code,mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
         Long createId = ShiroUtil.getCreateID();
-        expertSupport.setCreateid(createId.toString());
-        expertService.applyExpertSupport(expertSupport);
+        if(createId!=null){
+            expertSupport.setCreateid(createId.toString());
+            expertService.applyExpertSupport(expertSupport);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+
         return response;
     }
 

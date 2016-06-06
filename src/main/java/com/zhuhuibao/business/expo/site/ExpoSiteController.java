@@ -46,8 +46,12 @@ public class ExpoSiteController {
     public Response publishMeetingOrder(@ModelAttribute()MeetingOrder meetingOrder) {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
-        meetingOrder.setCreateid(createId.toString());
-        exhibitionService.publishMeetingOrder(meetingOrder);
+        if(createId!=null){
+            meetingOrder.setCreateid(createId.toString());
+            exhibitionService.publishMeetingOrder(meetingOrder);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
@@ -107,8 +111,13 @@ public class ExpoSiteController {
     public Response publishDistributedOrder(@ModelAttribute()DistributedOrder distributedOrder) {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
-        distributedOrder.setCreateid(createId.toString());
-        exhibitionService.publishDistributedOrder(distributedOrder);
+        if(createId!=null){
+            distributedOrder.setCreateid(createId.toString());
+            exhibitionService.publishDistributedOrder(distributedOrder);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+
         return response;
     }
 

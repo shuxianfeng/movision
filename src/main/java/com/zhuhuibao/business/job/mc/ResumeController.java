@@ -57,8 +57,13 @@ public class ResumeController {
     @RequestMapping(value = {"setUpResume","mc/resume/add_resume"}, method = RequestMethod.POST)
     public Response setUpResume(Resume resume) throws IOException {
         Long createid = ShiroUtil.getCreateID();
-        resume.setCreateid(createid.toString());
-        Response response = resumeService.setUpResume(resume,createid.toString());
+        Response response = new Response();
+        if(createid!=null){
+            resume.setCreateid(createid.toString());
+            response = resumeService.setUpResume(resume,createid.toString());
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
@@ -68,8 +73,13 @@ public class ResumeController {
     @ApiOperation(value = "查询我创建的简历", notes = "查询我创建的简历", response = Response.class)
     @RequestMapping(value = {"searchMyResume","mc/resume/sel_my_resume"}, method = RequestMethod.GET)
     public Response searchMyResume() throws IOException {
+        Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
-        Response response = resumeService.searchMyResume(createid.toString());
+        if(createid!=null){
+            response = resumeService.searchMyResume(createid.toString());
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
@@ -118,8 +128,13 @@ public class ResumeController {
     @ApiOperation(value = "查询我创建的简历的全部信息", notes = "查询我创建的简历的全部信息", response = Response.class)
     @RequestMapping(value = {"searchMyResumeAllInfo","mc/resume/sel_my_resume_info"}, method = RequestMethod.GET)
     public Response searchMyResumeAllInfo() throws IOException {
+        Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
-        Response response = resumeService.searchMyResumeAllInfo(createid.toString());
+        if(createid!=null){
+            response = resumeService.searchMyResumeAllInfo(createid.toString());
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
@@ -136,8 +151,13 @@ public class ResumeController {
             pageSize = "10";
         }
         Long createid = ShiroUtil.getCreateID();
-        Paging<Resume> pager = new Paging<Resume>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-        Response response = resumeService.receiveResume(pager,createid.toString());
+        Response response = new Response();
+        if(createid!=null){
+            Paging<Resume> pager = new Paging<Resume>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+            response = resumeService.receiveResume(pager,createid.toString());
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
