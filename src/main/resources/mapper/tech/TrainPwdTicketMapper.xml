@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.tech.mapper.TrainPwdTicketMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.tech.entity.TrainPwdTicket" >
-    <id column="ticketId" property="ticketId" jdbcType="BIGINT" />
-    <result column="operateId" property="operateId" jdbcType="BIGINT" />
-    <result column="orderNo" property="orderNo" jdbcType="VARCHAR" />
-    <result column="courseId" property="courseId" jdbcType="BIGINT" />
-    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
-    <result column="snCode" property="snCode" jdbcType="VARCHAR" />
-    <result column="operateTime" property="operateTime" jdbcType="TIMESTAMP" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-  </resultMap>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultType="java.util.Map" parameterType="java.lang.Long" >
     select pt.ticketId, pt.orderNo, gd.title, pt.mobile, pt.snCode, date_format(pt.operateTime,'%Y-%m-%d %H:%m:%s') operateTime, pt.status from t_o_pwdticket pt
     left join t_p_group_publishCourse gd on gd.courseid = pt.courseId
     where ticketId = #{ticketId,jdbcType=BIGINT}
