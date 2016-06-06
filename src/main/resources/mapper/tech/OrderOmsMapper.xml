@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.tech.mapper.OrderOmsMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.tech.entity.OrderOms" >
+    <id column="orderNo" property="orderNo" jdbcType="VARCHAR" />
+    <result column="buyerId" property="buyerId" jdbcType="BIGINT" />
+    <result column="sellerId" property="sellerId" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="payAmount" property="payAmount" jdbcType="DECIMAL" />
+    <result column="dealTime" property="dealTime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="payMode" property="payMode" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="goodsType" property="goodsType" jdbcType="CHAR" />
+    <result column="descriptions" property="descriptions" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    orderNo, buyerId, sellerId, amount, payAmount, dealTime, updateTime, payMode, status, 
+    goodsType, descriptions
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_o_order
+    where orderNo = #{orderNo,jdbcType=VARCHAR}
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.tech.entity.OrderOms" >
+    update t_o_order
+    <set >
+      <if test="buyerId != null" >
+        buyerId = #{buyerId,jdbcType=BIGINT},
+      </if>
+      <if test="sellerId != null" >
+        sellerId = #{sellerId,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="payAmount != null" >
+        payAmount = #{payAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="dealTime != null" >
+        dealTime = #{dealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payMode != null" >
+        payMode = #{payMode,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="goodsType != null" >
+        goodsType = #{goodsType,jdbcType=CHAR},
+      </if>
+      <if test="descriptions != null" >
+        descriptions = #{descriptions,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where orderNo = #{orderNo,jdbcType=VARCHAR}
+  </update>
+  <select id="findAllOmsTechOrder" parameterType="java.util.Map" resultType="java.util.Map">
+    select o.orderNo,gd.goodsName,gd.number,gd.goodsPrice,
+    case when ur.mobile != '' or ur.mobile != null then ur.mobile when ur.email!= '' or ur.email != null then ur.email end as  buyername,
+    o.amount,date_format(o.dealTime,'%Y-%m-%d %H:%i:%s') dealTime,o.status from t_o_order o
+    left join t_o_order_goods gd on gd.orderNo = o.orderNo
+    left join t_m_member ur on ur.id = o.buyerId
+    <where>
+      <if test="goodsName != null">
+        and gd.goodsName like concat('%',#{goodsName},'%')
+      </if>
+      <if test="buyerName != null">
+      and (ur.mobile like concat('%',#{buyerName},'%') or ur.email like concat('%',#{buyerName},'%'))
+      </if>
+      <if test="status != null">
+        and gd.goodsName = #{status}
+      </if>
+    </where>
+  </select>
+</mapper>
