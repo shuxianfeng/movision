@@ -1,6 +1,5 @@
 package com.zhuhuibao.service.course;
 
-import com.taobao.api.ApiException;
 import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
@@ -11,7 +10,7 @@ import com.zhuhuibao.mybatis.order.service.*;
 import com.zhuhuibao.shiro.realm.OMSRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.PropertiesUtils;
-import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
+import com.zhuhuibao.utils.sms.SDKSendSms;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -63,7 +62,7 @@ public class CourseService {
      * @param courseId 课程ID
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void begin(String courseId) throws ApiException {
+    public void begin(String courseId) throws Exception {
         PublishCourse course = courseService.getCourseById(Long.valueOf(courseId));
 
         if (TechConstant.PublishCourseStatus.SALING.toString().equals(String.valueOf(course.getStatus()))) {
@@ -102,7 +101,7 @@ public class CourseService {
      * @param courseId 课程ID
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void stop(String courseId) throws ApiException {
+    public void stop(String courseId) throws Exception {
         //手动终止课程
         //1.销售中状态终止课程
         //2.待开课状态终止课程
@@ -173,7 +172,7 @@ public class CourseService {
      *
      * @param orderList 需要发短信的订单
      */
-    private void sendSMS(List<Order> orderList, String template) throws ApiException {
+    private void sendSMS(List<Order> orderList, String template) throws Exception {
 
         List<String> orderNos = new ArrayList<>();
         for (Order order : orderList) {
@@ -198,9 +197,9 @@ public class CourseService {
      *
      * @param sms
      */
-    private void sendSms(OrderSms sms, String template) throws ApiException {
+    private void sendSms(OrderSms sms, String template) throws Exception {
 
-        boolean suc = SDKSendTaoBaoSMS.sendSMS(sms.getMobile(), sms.getContent(), template);
+        boolean suc = SDKSendSms.sendSMS(sms.getMobile(), sms.getContent(), template);
         OrderSms orderSms = new OrderSms();
         orderSms.setOrderNo(sms.getOrderNo());
         if (suc) {//发送成功
