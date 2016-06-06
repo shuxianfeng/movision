@@ -83,7 +83,7 @@ public class WitkeyController {
     @RequestMapping(value = "upd_witkey", method = RequestMethod.POST)
     public Response updateCooperation(Cooperation cooperation)  {
         Response response = new Response();
-        cooperation.setUpdateTime(cooperation.getUpdateTime()+" 23:59:59");
+        cooperation.setEndTime(cooperation.getEndTime()+" 23:59:59");
         cooperationService.updateCooperation(cooperation);
         return response;
     }
