@@ -5,6 +5,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by cxx on 2016/4/18 0018.
@@ -40,8 +42,11 @@ public class JobController {
      */
     @ApiOperation(value = "获取职位类别", notes = "获取职位类别", response = Response.class)
     @RequestMapping(value = {"positionType","/mc/position/sel_positionType"}, method = RequestMethod.GET)
-    public Response positionType() throws IOException {
-        return jobService.positionType();
+    public Response positionType() {
+        Response response = new Response();
+        List list = jobService.positionType();
+        response.setData(list);
+        return response;
     }
 
     /**
@@ -50,20 +55,10 @@ public class JobController {
     @ApiOperation(value = "发布职位", notes = "发布职位", response = Response.class)
     @RequestMapping(value = {"publishPosition","mc/position/add_position"}, method = RequestMethod.POST)
     public Response publishPosition(@ApiParam(value = "职位属性") Job job) throws IOException {
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
         Response response = new Response();
-        if (null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if (null != principal) {
-                job.setCreateid(principal.getId().toString());
-                response = jobService.publishPosition(job);
-            } else {
-                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        } else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createid = ShiroUtil.getCreateID();
+        job.setCreateid(createid.toString());
+        jobService.publishPosition(job);
         return response;
     }
 
@@ -73,8 +68,6 @@ public class JobController {
     @ApiOperation(value = "查询公司已发布的职位", notes = "查询公司已发布的职位", response = Response.class)
     @RequestMapping(value = {"searchPositionByMemId","mc/position/sel_positionList"}, method = RequestMethod.GET)
     public Response searchPositionByMemId(String pageNo, String pageSize) throws IOException {
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
         Response response = new Response();
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -82,17 +75,11 @@ public class JobController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        if (null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if (null != principal) {
-                Paging<Job> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-                response = jobService.findAllPositionByMemId(pager, principal.getId().toString());
-            } else {
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        } else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createid = ShiroUtil.getCreateID();
+        Paging<Job> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List list = jobService.findAllPositionByMemId(pager, createid.toString());
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 
@@ -102,8 +89,11 @@ public class JobController {
     //@RequiresRoles("admin")
     @ApiOperation(value = "查询公司发布的某条职位的信息", notes = "查询公司发布的某条职位的信息", response = Response.class)
     @RequestMapping(value = {"getPositionByPositionId","mc/position/sel_position"}, method = RequestMethod.GET)
-    public Response getPositionByPositionId(String id) throws IOException {
-        return jobService.getPositionByPositionId(id);
+    public Response getPositionByPositionId(String id) {
+        Response response = new Response();
+        Job job = jobService.getPositionByPositionId(id);
+        response.setData(job);
+        return response;
     }
 
     /**
@@ -140,19 +130,8 @@ public class JobController {
     @ApiOperation(value = "查询推荐职位", notes = "查询推荐职位", response = Response.class)
     @RequestMapping(value = {"searchRecommendPosition","mc/position/sel_recommend_position"}, method = RequestMethod.GET)
     public Response searchRecommendPosition() throws IOException {
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        Response response = new Response();
-        if (null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if (null != principal) {
-                response = jobService.searchRecommendPosition(principal.getId().toString(), 6);
-            } else {
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        } else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createid = ShiroUtil.getCreateID();
+        Response response = jobService.searchRecommendPosition(createid.toString(), 6);
         return response;
     }
 
@@ -168,20 +147,9 @@ public class JobController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        Response response = new Response();
-        if (null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if (null != principal) {
-                Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-                response = jobService.myApplyPosition(pager, principal.getId().toString());
-            } else {
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        } else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createid = ShiroUtil.getCreateID();
+        Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Response response = jobService.myApplyPosition(pager, createid.toString());
         return response;
     }
 }

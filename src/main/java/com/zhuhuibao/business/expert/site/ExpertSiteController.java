@@ -64,9 +64,6 @@ public class ExpertSiteController {
     private UploadService uploadService;
 
     @Autowired
-    private MemberRegService memberRegService;
-
-    @Autowired
     TechExpertCourseService techCourseService;
 
     @Autowired
@@ -579,5 +576,11 @@ public class ExpertSiteController {
         return response;
     }
 
+    @ApiOperation(value="计算专家培训课程下单时的价格",notes="计算专家培训课程下单时的价格",response = Response.class)
+    @RequestMapping(value = "train/get_trainPrice", method = RequestMethod.GET)
+    public Response get_trainPrice(@RequestParam String id) {
+        Response response = new Response();
 
+        return response;
+    }
 }

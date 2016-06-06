@@ -6,6 +6,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
@@ -55,21 +56,9 @@ public class ResumeController {
     @ApiOperation(value = "发布简历", notes = "发布简历", response = Response.class)
     @RequestMapping(value = {"setUpResume","mc/resume/add_resume"}, method = RequestMethod.POST)
     public Response setUpResume(Resume resume) throws IOException {
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        Response response = new Response();
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-            if(null != principal){
-                resume.setCreateid(principal.getId().toString());
-                response = resumeService.setUpResume(resume,principal.getId().toString());
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
-
+        Long createid = ShiroUtil.getCreateID();
+        resume.setCreateid(createid.toString());
+        Response response = resumeService.setUpResume(resume,createid.toString());
         return response;
     }
 
@@ -79,19 +68,8 @@ public class ResumeController {
     @ApiOperation(value = "查询我创建的简历", notes = "查询我创建的简历", response = Response.class)
     @RequestMapping(value = {"searchMyResume","mc/resume/sel_my_resume"}, method = RequestMethod.GET)
     public Response searchMyResume() throws IOException {
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        Response response = new Response();
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-            if(null != principal){
-                response = resumeService.searchMyResume(principal.getId().toString());
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createid = ShiroUtil.getCreateID();
+        Response response = resumeService.searchMyResume(createid.toString());
         return response;
     }
 
@@ -140,20 +118,8 @@ public class ResumeController {
     @ApiOperation(value = "查询我创建的简历的全部信息", notes = "查询我创建的简历的全部信息", response = Response.class)
     @RequestMapping(value = {"searchMyResumeAllInfo","mc/resume/sel_my_resume_info"}, method = RequestMethod.GET)
     public Response searchMyResumeAllInfo() throws IOException {
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        Response response = new Response();
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-            if(null != principal){
-                response = resumeService.searchMyResumeAllInfo(principal.getId().toString());
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
-
+        Long createid = ShiroUtil.getCreateID();
+        Response response = resumeService.searchMyResumeAllInfo(createid.toString());
         return response;
     }
 
@@ -169,21 +135,9 @@ public class ResumeController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        Response response = new Response();
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if(null != principal) {
-                Paging<Resume> pager = new Paging<Resume>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-                response = resumeService.receiveResume(pager,principal.getId().toString());
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
-
+        Long createid = ShiroUtil.getCreateID();
+        Paging<Resume> pager = new Paging<Resume>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        Response response = resumeService.receiveResume(pager,createid.toString());
         return response;
     }
 
