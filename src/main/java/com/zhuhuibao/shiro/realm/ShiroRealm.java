@@ -66,9 +66,6 @@ public class ShiroRealm extends AuthorizingRealm {
     		}
     		
     		String perm = identity + ":" + role + ":" + status;
-    		System.out.println("caijl:shiro member's role="+status);
-    		System.out.println("caijl:shiro member's perm="+perm);
-    		
     		info.addRole(role);
     		info.addStringPermission(perm);
     		
