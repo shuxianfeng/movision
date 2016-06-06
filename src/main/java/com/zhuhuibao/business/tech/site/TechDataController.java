@@ -74,7 +74,7 @@ public class TechDataController {
             {
                 map.put(TechConstant.FILE_FORMAT, "");
             }
-            map.put(TechConstant.FILE_FORMAT,req.getContentLength());
+            map.put(TechConstant.FILE_SIZE,req.getContentLength());
             result.setData(map);
             result.setCode(200);
         }else{

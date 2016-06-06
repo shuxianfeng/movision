@@ -79,10 +79,17 @@ public class PublishTCourseService {
         int result = 0;
         log.info("update publish course info "+StringUtils.beanToString(course));
         try {
+        	
+        	if(course.getMaxBuyNumber()!=null)
+        	{
             //插入库存
             course.setStorageNumber(Integer.parseInt(course.getMaxBuyNumber()));
+        	}
+        	if(course.getExpiryDate()!=null)
+        	{
             //截止日期
             course.setExpiryDate(course.getExpiryDate()+" 23:59:59");
+        	}
             result = pCourseMapper.updateByPrimaryKeySelective(course);
         }catch(Exception e)
         {
@@ -134,16 +141,34 @@ public class PublishTCourseService {
 
     /**
      * 查询最新发布的培训课程
-     * @param pager
      * @param condition
      * @return
      */
-    public List<Map<String,String>> findLatestPublishCourse(Paging<Map<String,String>> pager, Map<String,Object> condition)
+    public List<Map<String,String>> findLatestPublishCourse(Map<String,Object> condition)
     {
         log.info("find Latest publish train course "+ StringUtils.mapToString(condition));
         List<Map<String,String>> courseList = null;
         try{
-            courseList = pCourseMapper.findLatestPublishCourse(pager.getRowBounds(),condition);
+            courseList = pCourseMapper.findLatestPublishCourse(condition);
+        }catch(Exception e)
+        {
+            log.error("find Latest publish train course error!",e);
+            throw e;
+        }
+        return courseList;
+    }
+
+    /**
+     * 查看培训课程详情
+     * @param condition
+     * @return
+     */
+    public List<Map<String,String>> previewTrainCourseDetail(Map<String,Object> condition)
+    {
+        log.info("find Latest publish train course "+ StringUtils.mapToString(condition));
+        List<Map<String,String>> courseList = null;
+        try{
+            courseList = pCourseMapper.findLatestPublishCourse(condition);
         }catch(Exception e)
         {
             log.error("find Latest publish train course error!",e);

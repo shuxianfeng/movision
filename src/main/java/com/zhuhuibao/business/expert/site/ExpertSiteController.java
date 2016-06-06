@@ -1,12 +1,15 @@
 package com.zhuhuibao.business.expert.site;
 
+import com.google.gson.Gson;
 import com.taobao.api.ApiException;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.alipay.service.direct.AlipayDirectService;
+import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.constant.ExpertConstant;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.*;
+import com.zhuhuibao.common.pojo.OrderReqBean;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
@@ -16,9 +19,14 @@ import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
+import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
+import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
+import com.zhuhuibao.mybatis.tech.service.PublishTCourseService;
+import com.zhuhuibao.mybatis.tech.service.TechExpertCourseService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.ValidateUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -56,25 +64,23 @@ public class ExpertSiteController {
     private UploadService uploadService;
 
     @Autowired
-    private MemberRegService memberRegService;
+    TechExpertCourseService techCourseService;
+
+    @Autowired
+    PublishTCourseService ptCourseService;
+
+    @Autowired
+    AlipayDirectService alipayDirectService;
+
+    private static final String PARTNER = AlipayPropertiesLoader.getPropertyValue("partner");
 
     @ApiOperation(value="发布技术成果",notes="发布技术成果",response = Response.class)
     @RequestMapping(value = "ach/add_achievement", method = RequestMethod.POST)
     public Response publishAchievement(@ModelAttribute Achievement achievement) throws Exception {
         Response response = new Response();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-            if(null != principal){
-                achievement.setCreateId(principal.getId().toString());
-                expertService.publishAchievement(achievement);
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createId = ShiroUtil.getCreateID();
+        achievement.setCreateId(createId.toString());
+        expertService.publishAchievement(achievement);
         return response;
     }
 
@@ -182,18 +188,13 @@ public class ExpertSiteController {
     @RequestMapping(value = "base/add_expert", method = RequestMethod.POST)
     public Response applyExpert(@ModelAttribute Expert expert) throws Exception {
         Response response = new Response();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-            if(null != principal){
-                expert.setCreateId(principal.getId().toString());
-                expertService.applyExpert(expert);
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        Long createId = ShiroUtil.getCreateID();
+        expert.setCreateId(createId.toString());
+        Expert expert1 = expertService.queryExpertByCreateid(createId.toString());
+        if(expert1==null){
+            expertService.applyExpert(expert);
+        }else {
+            throw new BusinessException(MsgCodeConstant.EXPERT_ISEXIST,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.EXPERT_ISEXIST)));
         }
         return response;
     }
@@ -445,82 +446,139 @@ public class ExpertSiteController {
         expertSupport.setLinkName(linkName);
         expertSupport.setMobile(mobile);
         expertSupport.setReason(reason);
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(null != session) {
-            String verifyCode = (String) session.getAttribute("r" + mobile);
-            if(code.equals(verifyCode)){
-                ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-                if(null != principal){
-                    expertSupport.setCreateid(principal.getId().toString());
-                    expertService.applyExpertSupport(expertSupport);
-                }else {
-                    throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                }
-            }else {
-                throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
-            }
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        expertService.checkMobileCode(code,mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
+        Long createId = ShiroUtil.getCreateID();
+        expertSupport.setCreateid(createId.toString());
+        expertService.applyExpertSupport(expertSupport);
         return response;
     }
 
     @ApiOperation(value="申請專家支持获取验证码",notes="申請專家支持获取验证码",response = Response.class)
     @RequestMapping(value = "base/get_mobileCode", method = RequestMethod.GET)
-    public Response get_mobileCode(HttpServletRequest req)  throws IOException, ApiException {
-        String mobile = req.getParameter("mobile");
-        log.debug("获得手机验证码  mobile=="+mobile);
-        Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(true);
-        // 生成随机字串
-        String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
-        log.debug("verifyCode == " + verifyCode);
-        //发送验证码到手机
-        //SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-        SDKSendTaoBaoSMS.sendExpertSupportSMS(mobile, verifyCode, Constants.sms_time);
-        Validateinfo info = new Validateinfo();
-        info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
-        info.setCheckCode(verifyCode);
-        info.setAccount(mobile);
-        memberRegService.inserValidateInfo(info);
-        sess.setAttribute("expert"+mobile, verifyCode);
+    public Response get_mobileCode(@RequestParam String mobile)  throws IOException, ApiException {
         Response response = new Response();
+        String verifyCode = expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
         response.setData(verifyCode);
         return response;
     }
 
-    @ApiOperation(value="最新专家培训(接口待完成)",notes="最新专家培训(接口待完成)",response = Response.class)
+    @ApiOperation(value="最新专家培训",notes="最新专家培训",response = Response.class)
     @RequestMapping(value = "train/sel_latest_train", method = RequestMethod.GET)
     public Response queryLatestExpertTrain(@ApiParam(value = "条数")@RequestParam int count)  {
         Response response = new Response();
-
+        Map<String,Object> condition = new HashMap<String,Object>();
+        condition.put("status", TechConstant.PublishCourseStatus.SALING);
+        condition.put("courseType",ExpertConstant.COURSE_TYPE_EXPERT);
+        condition.put("count",count);
+        TrainPublishCourse course = ptCourseService.selectTrainCourseInfo(condition);
+        response.setData(course);
         return response;
     }
 
-    @ApiOperation(value="专家培训列表(接口待完成)",notes="专家培训列表(接口待完成)",response = Response.class)
+    @ApiOperation(value="专家培训列表",notes="专家培训列表",response = Response.class)
     @RequestMapping(value = "train/sel_trainList", method = RequestMethod.GET)
     public Response queryExpertTrainList(@ApiParam(value = "省")@RequestParam(required = false) String province,
                                          @RequestParam(required = false)String pageNo,
                                          @RequestParam(required = false)String pageSize)  {
         Response response = new Response();
-
+        Map<String, Object> condition = new HashMap<String, Object>();
+        condition.put("province",province);
+        condition.put("type", ExpertConstant.COURSE_TYPE_EXPERT);
+        //销售中
+        condition.put("status", TechConstant.PublishCourseStatus.SALING.toString());
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Map<String, String>> techList = ptCourseService.findAllPublishCoursePager(pager, condition);
+        pager.result(techList);
+        response.setData(pager);
         return response;
     }
 
-    @ApiOperation(value="开课申请保存(接口待完成)",notes="开课申请保存(接口待完成)",response = Response.class)
+    @ApiOperation(value="开课申请保存",notes="开课申请保存",response = Response.class)
     @RequestMapping(value = "train/add_class", method = RequestMethod.POST)
-    public Response startClassSave(@ApiParam(value = "省")@RequestParam(required = false) String province,
-                                         @RequestParam(required = false)String pageNo,
-                                         @RequestParam(required = false)String pageSize)  {
+    public Response startClassSave(@ApiParam(value = "开课申请保存")  @ModelAttribute(value="techCourse")TechExpertCourse techCourse)  {
         Response response = new Response();
-
+        Long createId = ShiroUtil.getCreateID();
+        if(createId != null) {
+            techCourse.setProposerId(createId);
+            techCourseService.insertTechExpertCourse(techCourse);
+        }else{
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
-    @ApiOperation(value="专家培训详情(接口待完成)",notes="专家培训详情(接口待完成)",response = Response.class)
+    @ApiOperation(value="专家培训详情",notes="专家培训详情",response = Response.class)
     @RequestMapping(value = "train/sel_train_info", method = RequestMethod.GET)
     public Response queryExpertTrainInfoById(@RequestParam String id)  {
+        Map<String,Object> condition = new HashMap<String,Object>();
+        condition.put("courseid",id);
+        condition.put("courseType",ExpertConstant.COURSE_TYPE_EXPERT);
+        List<Map<String,String>> courseList = ptCourseService.previewTrainCourseDetail(condition);
+        Response response = new Response();
+        response.setData(courseList);
+        return response;
+    }
+
+    @ApiOperation(value = "专家培训课程下单支付", notes = "专家培训课程下单支付")
+    @RequestMapping(value = "train/pay", method = RequestMethod.POST)
+    public void doPay(HttpServletRequest request, HttpServletResponse response,
+                      @ApiParam @ModelAttribute OrderReqBean order) throws Exception {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(order);
+
+        if ("true".equals(order.getNeedInvoice())) {
+            String invoiceTitle = order.getInvoiceTitle();
+            if (invoiceTitle == null) {
+                log.error("已选需要发票,发票抬头不能为空");
+                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "已选需要发票,发票抬头不能为空");
+            }
+            String invoiceType = order.getInvoiceType();
+            if (invoiceType == null) {
+                log.error("已选需要发票,发票类型不能为空");
+                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "已选需要发票,发票类型不能为空");
+            }
+        }
+
+        log.info("技术培训下单页面,请求参数:{}", json);
+        Map paramMap = gson.fromJson(json, Map.class);
+        //特定参数
+        paramMap.put("exterInvokeIp", ValidateUtils.getIpAddr(request));//客户端IP地址
+        paramMap.put("alipay_goods_type", PayConstants.GoodsType.XNL.toString());//商品类型  0 , 1
+        paramMap.put("partner", PARTNER);//partner=seller_id     商家支付宝ID  合作伙伴身份ID 签约账号
+
+        log.debug("调用立即支付接口......");
+
+        //需要判断购买数量是否 >= 产品剩余数量
+        alipayDirectService.doPay(response, paramMap);
+    }
+
+    @ApiOperation(value="专家培训课程下单获取验证码",notes="专家培训课程下单获取验证码",response = Response.class)
+    @RequestMapping(value = "train/get_mobileCode", method = RequestMethod.GET)
+    public Response get_TrainMobileCode(@RequestParam String mobile) throws IOException, ApiException{
+        Response response = new Response();
+        String verifyCode = expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_TRAIN);
+        response.setData(verifyCode);
+        return response;
+    }
+
+    @ApiOperation(value="专家培训课程下单验证验证码是否正确",notes="专家培训课程下单验证验证码是否正确",response = Response.class)
+    @RequestMapping(value = "train/check_mobileCode", method = RequestMethod.POST)
+    public Response check_mobileCode(@RequestParam String code,@RequestParam String mobile)  {
+        Response response = new Response();
+        expertService.checkMobileCode(code,mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_TRAIN);
+        return response;
+    }
+
+    @ApiOperation(value="计算专家培训课程下单时的价格",notes="计算专家培训课程下单时的价格",response = Response.class)
+    @RequestMapping(value = "train/get_trainPrice", method = RequestMethod.GET)
+    public Response get_trainPrice(@RequestParam String id) {
         Response response = new Response();
 
         return response;

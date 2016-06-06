@@ -102,6 +102,11 @@ public class TechConstant {
     public static final int COURSE_LATEST_COUNT_THREE = 3;
 
     /**
+     * 技术频道首页展示的最新培训课程 默认5条
+     */
+    public static final int INDEX_LATEST_COUNT_FIVE = 5;
+
+    /**
      * 行业解决方案，技术资料，培训资料点击排行数量10条
      */
     public static final int DATA_VIEWS_COUNT_TEN = 10;

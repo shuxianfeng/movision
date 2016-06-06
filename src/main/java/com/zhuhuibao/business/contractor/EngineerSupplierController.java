@@ -3,6 +3,7 @@ package com.zhuhuibao.business.contractor;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
@@ -136,24 +137,10 @@ public class EngineerSupplierController {
     @ApiOperation(value="留言",notes="留言",response = Response.class)
     @RequestMapping(value = {"/rest/engineerSupplier/message","/rest/supplier/site/add_message"}, method = RequestMethod.POST)
     public Response message(@ModelAttribute Message message) {
-/*        String title = new String(message.getTitle().getBytes("8859_1"), "utf8" );
-        String receiveName = new String(message.getReceiveName().getBytes("8859_1"), "utf8" );
-        String content = new String(message.getContent().getBytes("8859_1"), "utf8" );*/
         Response response = new Response();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(null != session)
-        {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-            if(null != principal){
-                message.setCreateid(principal.getId().toString());
-                memberService.saveMessage(message);
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createid = ShiroUtil.getCreateID();
+        message.setCreateid(createid.toString());
+        memberService.saveMessage(message);
         return response;
     }
 }

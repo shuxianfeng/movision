@@ -58,7 +58,7 @@ public class TrainCourseOmsController {
         return response;
     }
 
-    @RequestMapping(value="sel_course_info", method = RequestMethod.POST)
+    @RequestMapping(value="sel_course_info", method = RequestMethod.GET)
     @ApiOperation(value="查看发布的培训课程信息",notes = "查看发布的培训课程信息",response = Response.class)
     public Response selectTrainCourseInfo(@ApiParam(value = "培训课程ID")  @RequestParam Long courseId)
     {
@@ -99,7 +99,7 @@ public class TrainCourseOmsController {
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("courseType", TechConstant.COURSE_TYPE_TECH);
         condition.put("mobile", province);
-        condition.put("linkman", city);
+        condition.put("city", city);
         if(title != null && !title.equals(""))
         {
             condition.put("title",title.replaceAll("_","\\_"));
@@ -125,10 +125,8 @@ public class TrainCourseOmsController {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session){
-            String url = uploadService.upload(req,"techimg");
-            Map map = new HashMap();
-            map.put(Constants.name,url);
-            result.setData(map);
+            String url = uploadService.upload(req,"techimg"); 
+            result.setData(url);
             result.setCode(200);
         }else{
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

@@ -72,7 +72,7 @@ public class UploadService {
         //目录不存在则创建
         File dir = new File(saveDirectory);
         if(!dir.exists() && !dir.isDirectory()) {
-            dir.mkdir();
+            dir.mkdirs();
             log.info("mk dir susscess dirName = "+saveDirectory);
         }
         //String a = getFileSuffix(req);
@@ -93,7 +93,10 @@ public class UploadService {
                 String lastFileName = multi.getFilesystemName(fileName);
                 if("img".equals(type)){
                     url =  ip_address + "/upload/img/" + lastFileName;
-                }else{
+                }else if("techimg".equals(type)){
+                    url =  ip_address +"/upload/tech/img/"+lastFileName;
+                }
+                else{
                     url =  lastFileName;
                 }
 

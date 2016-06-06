@@ -37,6 +37,9 @@
     LEFT JOIN t_dictionary_area ar on e.area = ar.code
     WHERE e.id = #{id}
   </select>
+  <select id="queryExpertByCreateid" resultMap="BaseResultMap" >
+    SELECT * FROM t_e_expert WHERE createid = #{createid} and is_deleted = 0 and status = 1
+  </select>
   <select id="queryHotExpert" resultMap="BaseResultMap" >
     SELECT * FROM t_e_expert WHERE is_deleted = 0 and status = 1 ORDER by views desc limit 0,#{count}
   </select>

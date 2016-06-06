@@ -53,4 +53,19 @@ public interface ExpertConstant {
      * 专家频道工作类型 专家type
      */
     String EXPERT_WORKTYPE_EXPERT = "expert";
+
+    /**
+     * 课程类型：1：技术培训，2专家培训
+     */
+    Integer COURSE_TYPE_EXPERT = 2;
+
+    /**
+     * 发送验证码时存在session的参数type
+     */
+    String MOBILE_CODE_SESSION_TYPE_TRAIN = "expertTrain";
+
+    /**
+     * 发送验证码时存在session的参数type
+     */
+    String MOBILE_CODE_SESSION_TYPE_SUPPORT = "expertSupport";
 }
