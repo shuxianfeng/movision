@@ -9,6 +9,7 @@ import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.tech.entity.DictionaryTechData;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
 import com.zhuhuibao.mybatis.tech.entity.TechData;
@@ -89,13 +90,13 @@ public class TechOmsController {
         List<RefundItem> items = data.getItems();
         if (items.size() > 0) {
             paramMap.put("batchNum", items.size());
-            OMSRealm.ShiroOmsUser user = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
-            if (user == null) {
+            Long userId = ShiroUtil.getOmsCreateID();
+            if (userId == null) {
                 log.error("用户未登陆");
                 throw new AuthException(MsgCodeConstant.un_login,
                         MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
-            paramMap.put("operatorId", user.getId());
+            paramMap.put("operatorId",userId);
             List<String> orderNoList = new ArrayList<>();
             BigDecimal totalFee = new BigDecimal(0);
             List<String> detailList = new ArrayList<>();
