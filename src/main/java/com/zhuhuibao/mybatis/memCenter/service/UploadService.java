@@ -93,7 +93,10 @@ public class UploadService {
                 String lastFileName = multi.getFilesystemName(fileName);
                 if("img".equals(type)){
                     url =  ip_address + "/upload/img/" + lastFileName;
-                }else{
+                }else if("techimg".equals(type)){
+                    url =  ip_address +"/upload/tech/img/"+lastFileName;
+                }
+                else{
                     url =  lastFileName;
                 }
 
