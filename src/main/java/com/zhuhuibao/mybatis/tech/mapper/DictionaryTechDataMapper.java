@@ -3,6 +3,7 @@ package com.zhuhuibao.mybatis.tech.mapper;
 import com.zhuhuibao.mybatis.tech.entity.DictionaryTechData;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 技术资料(解决方案，技术资料，培训资料)分类常量DAO层
@@ -25,4 +26,6 @@ public interface DictionaryTechDataMapper {
     List<DictionaryTechData> selectFirstCategory();
 
     List<DictionaryTechData> selectSecondCategoryById(Integer firstCategoryId);
+
+    List<Map<String,Object>> selectCategoryInfo(Integer firstCategoryId);
 }

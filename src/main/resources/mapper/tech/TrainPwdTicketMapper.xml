@@ -12,8 +12,8 @@
     <result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select pt.ticketId, pt.orderNo, gd.goodsName, pt.mobile, pt.snCode, date_format(pt.operateTime,'%Y-%m-%d %H:%m:%s') operateTime, status from t_o_pwdticket pt
-    left join t_o_order_goods gd on gd.goodsId = pt.courseId
+    select pt.ticketId, pt.orderNo, gd.title, pt.mobile, pt.snCode, date_format(pt.operateTime,'%Y-%m-%d %H:%m:%s') operateTime, pt.status from t_o_pwdticket pt
+    left join t_p_group_publishCourse gd on gd.courseid = pt.courseId
     where ticketId = #{ticketId,jdbcType=BIGINT}
   </select>
   <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.tech.entity.TrainPwdTicket" >
@@ -45,18 +45,18 @@
   </update>
 
   <select id="findAllTrainPwdTicket" parameterType="java.util.Map" resultType="java.util.Map">
-    select pt.ticketId, ur.username, pt.orderNo, gd.goodsName, pt.mobile, pt.snCode, date_format(pt.operateTime,'%Y-%m-%d %H:%m:%s') operateTime, status from t_o_pwdticket pt
-    left join t_o_order_goods gd on gd.goodsId = pt.courseId
+    select pt.ticketId, ur.username, pt.orderNo, gd.title, pt.mobile, pt.snCode, date_format(pt.operateTime,'%Y-%m-%d %H:%m:%s') operateTime, pt.status from t_o_pwdticket pt
+    left join t_p_group_publishCourse gd on gd.courseid = pt.courseId
     left join t_oms_user ur on ur.id = pt.operateId
     <where>
       <if test="snCode != null">
-        and snCode = #{snCode}
+        and pt.snCode = #{snCode}
       </if>
       <if test="mobile != null">
-        and mobile = #{mobile}
+        and pt.mobile = #{mobile}
       </if>
       <if test="status != null">
-        and status = #{status}
+        and pt.status = #{status}
       </if>
     </where>
   </select>

@@ -87,4 +87,10 @@
     select id, code, name, parentId
     from t_dictionary_techDataCategory where parentId = #{parentId}
   </select>
+  <select id="selectCategoryInfo" resultType="java.util.Map" parameterType="java.lang.Integer" >
+     select t.id, t.code, t.name, t.parentId,t1.name firstName
+    from t_dictionary_techDataCategory t
+    left join t_dictionary_techDataCategory t1 on t1.code  = t.parentId
+    where t.parentId != #{parentId}
+  </select>
 </mapper>

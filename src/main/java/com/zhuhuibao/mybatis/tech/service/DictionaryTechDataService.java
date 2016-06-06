@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *技术资料分类业务处理类
@@ -59,5 +62,58 @@ public class DictionaryTechDataService {
             throw e;
         }
         return secondCategoryList;
+    }
+
+    /**
+     * 查询上传资料的分类信息
+     * @param firstCategoryId 一级分类ID
+     * @return
+     */
+    public List<Map<String,Object>> selectCategoryInfo(int firstCategoryId)
+    {
+        log.info("select category info firstCategoryId = "+firstCategoryId);
+        List<Map<String,Object>> fcateList = new ArrayList<Map<String,Object>>();
+        try {
+            List<Map<String,Object>> categoryList = dicTDMapper.selectCategoryInfo(firstCategoryId);
+            List<Map<String,Object>> scateList = null;
+            Map<String,Object> fcateMap = null;
+            Map<String,Object> scateMap = null;
+            if(!categoryList.isEmpty())
+            {
+                int size = categoryList.size();
+                for(int i=0;i<size;i++)
+                {
+                    Map<String,Object> category = categoryList.get(i);
+                    Integer parentId = (Integer) category.get("parentId");
+                    if(fcateMap != null && fcateMap.get("fCode")!= null && fcateMap.get("fCode") == parentId)
+                    {
+                        scateList = (List<Map<String, Object>>) fcateMap.get("list");
+                        scateMap = new HashMap<String,Object>();
+                        scateMap.put("sName",category.get("name"));
+                        scateMap.put("sCode",category.get("code"));
+                        scateList.add(scateMap);
+                        fcateMap.put("list",scateList);
+                    }
+                    else
+                    {
+
+                        fcateMap =  new HashMap<String,Object>();
+                        fcateMap.put("fName",category.get("firstName"));
+                        fcateMap.put("fCode",category.get("parentId"));
+                        scateMap = new HashMap<String,Object>();
+                        scateList = new ArrayList<Map<String,Object>>();
+                        scateMap.put("sName",category.get("name"));
+                        scateMap.put("sCode",category.get("code"));
+                        scateList.add(scateMap);
+                        fcateMap.put("list",scateList);
+                        fcateList.add(fcateMap);
+                    }
+                }
+            }
+        }catch(Exception e){
+            log.error("select category info error!",e);
+            throw e;
+        }
+        return fcateList;
     }
 }
