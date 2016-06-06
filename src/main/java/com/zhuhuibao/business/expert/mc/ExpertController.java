@@ -247,8 +247,12 @@ public class ExpertController {
     public Response answerQuestion(@ModelAttribute Answer answer)  {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
-        answer.setCreateid(createId.toString());
-        expertService.answerQuestion(answer);
+        if(createId!=null){
+            answer.setCreateid(createId.toString());
+            expertService.answerQuestion(answer);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 

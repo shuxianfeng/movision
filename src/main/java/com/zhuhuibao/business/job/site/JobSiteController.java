@@ -173,11 +173,16 @@ public class JobSiteController {
     public Response queryPositionInfoByID(@ApiParam(value = "招聘职位ID") @RequestParam Long id)
     {
         Map<String,Object> map = new HashMap<String,Object>();
+        Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
-        map.put("createid",createid);
-        map.put("id",id);
-        Response response = job.queryPositionInfoByID(map);
-        job.updateViews(id);
+        if(createid!=null){
+            map.put("createid",createid);
+            map.put("id",id);
+            response = job.queryPositionInfoByID(map);
+            job.updateViews(id);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
