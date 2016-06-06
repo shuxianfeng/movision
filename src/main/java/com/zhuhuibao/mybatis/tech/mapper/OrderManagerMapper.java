@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface OrderManagerMapper {
-    OrderOms selectByPrimaryKey(String orderNo);
+    Map<String,Object> selectByPrimaryKey(Map<String,Object> con);
 
     int updateByPrimaryKeySelective(OrderOms record);
 

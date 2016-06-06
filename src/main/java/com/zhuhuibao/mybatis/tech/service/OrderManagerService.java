@@ -46,4 +46,23 @@ public class OrderManagerService {
         }
         return orderList;
     }
+
+    /**
+     * 查询已发布的课程
+     * @param condition
+     * @return
+     */
+    public Map<String,Object> selectOrderDetail(Map<String,Object> condition)
+    {
+        log.info("find all oms order for pager "+ StringUtils.mapToString(condition));
+        Map<String,Object> orderList;
+        try{
+            orderList = orderMapper.selectByPrimaryKey(condition);
+        }catch(Exception e)
+        {
+            log.error("find all oms order for pager error!",e);
+            throw e;
+        }
+        return orderList;
+    }
 }

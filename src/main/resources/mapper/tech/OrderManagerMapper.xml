@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.tech.mapper.OrderManagerMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.tech.entity.OrderOms" >
-    <id column="orderNo" property="orderNo" jdbcType="VARCHAR" />
-    <result column="buyerId" property="buyerId" jdbcType="BIGINT" />
-    <result column="sellerId" property="sellerId" jdbcType="VARCHAR" />
-    <result column="amount" property="amount" jdbcType="DECIMAL" />
-    <result column="payAmount" property="payAmount" jdbcType="DECIMAL" />
-    <result column="dealTime" property="dealTime" jdbcType="TIMESTAMP" />
-    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="payMode" property="payMode" jdbcType="CHAR" />
-    <result column="status" property="status" jdbcType="CHAR" />
-    <result column="goodsType" property="goodsType" jdbcType="CHAR" />
-    <result column="descriptions" property="descriptions" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    orderNo, buyerId, sellerId, amount, payAmount, dealTime, updateTime, payMode, status, 
-    goodsType, descriptions
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_o_order
-    where orderNo = #{orderNo,jdbcType=VARCHAR}
+  <select id="selectByPrimaryKey" resultType="java.util.Map" parameterType="java.util.Map" >
+    select distinct t.orderNo,case when ur.mobile != '' or ur.mobile != null then ur.mobile when ur.email!= '' or ur.email != null then ur.email end as  buyername,
+    t.amount, t.payAmount, date_format(t.dealTime,'%Y-%m-%d %H:%m:%s') dealTime,t.payMode,t.status,iv.invoiceType,
+    iv.invoiceTitle,gd.goodsName,gd.goodsPrice,gd.number,date_format(pc.expiryDate,'%Y-%m-%d %H:%m:%s') expiryDate,
+    date_format(pc.startTime,'%Y-%m-%d %H:%m:%s') startTime,date_format(pc.endTime,'%Y-%m-%d %H:%m:%s') endTime,pc.minBuyNumber,
+    concat(po.name,ct.name,ar.name,pc.address) address,pc.price coursePrice from t_o_order t
+    left join t_m_member ur on ur.id = t.buyerId
+    left join t_o_invoice iv on iv.orderNo = t.orderNo
+    left join t_o_pwdticket pt on pt.orderNo = t.orderNo
+    left join t_o_order_goods gd on gd.orderNo = t.orderNo
+    left join t_p_group_publishCourse pc on pc.courseid = gd.goodsId
+    left join t_dictionary_province po on po.code = pc.province
+    left join t_dictionary_city ct on ct.code = pc.city
+    left join t_dictionary_area ar on ar.code = pc.area
+    <where>
+      <if test="orderNo != null">
+        and t.orderNo = #{orderNo}
+      </if>
+      <if test="goodsType != null">
+        and t.goodsType = #{goodsType}
+      </if>
+    </where>
   </select>
   <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.tech.entity.OrderOms" >
     update t_o_order
