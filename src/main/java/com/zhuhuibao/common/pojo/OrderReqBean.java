@@ -29,13 +29,13 @@ public class OrderReqBean {
     private String goodsId;
     @ApiModelProperty(value="商品名称",required = true)
     private String goodsName;
-    @ApiModelProperty(value="商品单价",required = true)
+    @ApiModelProperty(value="商品单价",required = false)
     private String goodsPrice;
     @ApiModelProperty(value="商品数量",required = true)
     private String number;
-    @ApiModelProperty(value="订单总金额",required = true)
+    @ApiModelProperty(value="订单总金额",required = false)
     private String amount;
-    @ApiModelProperty(value="交易金额",required = true)
+    @ApiModelProperty(value="交易金额",required = false)
     private String payAmount;
     @ApiModelProperty(value="支付方式 1:支付宝",required = true)
     private String payMode;

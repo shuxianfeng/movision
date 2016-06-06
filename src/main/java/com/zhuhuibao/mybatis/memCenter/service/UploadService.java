@@ -39,65 +39,70 @@ public class UploadService {
     public String upload(HttpServletRequest req,String type)throws IOException
     {
         //指定所上传的文件，上传成功后，在服务器的保存位置
-        String saveDirectory ="";
-        int maxPostSize = 0 ;
-        if("img".equals(type)) {
-            saveDirectory = ApiConstants.getUploadDir()+"/img";
-            //指定所上传的文件最大上传文件大小
-            maxPostSize = ApiConstants.getUploadPicMaxPostSize();
-        }else if("doc".equals(type)){
-            saveDirectory = ApiConstants.getUploadDoc()+"/price";
-            //指定所上传的文件最大上传文件大小
-            maxPostSize = ApiConstants.getUploadDocMaxPostSize();
-        }else if("techdoc".equals(type)){
-            //技术资料
-            saveDirectory = ApiConstants.getUploadDoc()+"/tech/doc";
-            //技术资料最大1G
-            maxPostSize = ApiConstants.getUploadDocMaxPostSize();
-        }
-        else if("techimg".equals(type)) {
-            saveDirectory = ApiConstants.getUploadDir()+"/tech/img";
-            //指定所上传的文件最大上传文件大小
-            maxPostSize = ApiConstants.getUploadPicMaxPostSize();
-        }
-        else if("expert".equals(type)){
-            //技术资料
-            saveDirectory = ApiConstants.getUploadDir()+"/expert";
-            //技术资料最大1G
-            maxPostSize = ApiConstants.getUploadPicMaxPostSize();
-        }else{
-            saveDirectory = ApiConstants.getUploadDoc()+"/job";
-            maxPostSize = ApiConstants.getUploadDocMaxPostSize();
-        }
-        //目录不存在则创建
-        File dir = new File(saveDirectory);
-        if(!dir.exists() && !dir.isDirectory()) {
-            dir.mkdir();
-            log.info("mk dir susscess dirName = "+saveDirectory);
-        }
-        //String a = getFileSuffix(req);
-
-        String ip_address = PropertiesUtils.getValue("host.ip");
-
-        //指定所上传的文件命名规则
-        RandomFileNamePolicy rfnp = new RandomFileNamePolicy();
-
-        //完成文件上传
-        MultipartRequest multi = new MultipartRequest(req, saveDirectory, maxPostSize, "UTF-8", rfnp);
-
-        Enumeration fileNames = multi.getFileNames();
         String url = "";
-        while(fileNames.hasMoreElements()){
-            String fileName = (String)fileNames.nextElement();
-            if(null != multi.getFile(fileName)){
-                String lastFileName = multi.getFilesystemName(fileName);
-                if("img".equals(type)){
-                    url =  ip_address + "/upload/img/" + lastFileName;
-                }else{
-                    url =  lastFileName;
-                }
-
+        try {
+            String saveDirectory ="";
+            int maxPostSize = 0 ;
+            if ("img".equals(type)) {
+                saveDirectory = ApiConstants.getUploadDir() + "/img";
+                //指定所上传的文件最大上传文件大小
+                maxPostSize = ApiConstants.getUploadPicMaxPostSize();
+            } else if ("doc".equals(type)) {
+                saveDirectory = ApiConstants.getUploadDoc() + "/price";
+                //指定所上传的文件最大上传文件大小
+                maxPostSize = ApiConstants.getUploadDocMaxPostSize();
+            } else if ("techdoc".equals(type)) {
+                //技术资料
+                saveDirectory = ApiConstants.getUploadDoc() + "/tech/doc";
+                //技术资料最大1G
+                maxPostSize = ApiConstants.getUploadTechMaxPostSize();
+            } else if ("techimg".equals(type)) {
+                saveDirectory = ApiConstants.getUploadDir() + "/tech/img";
+                //指定所上传的文件最大上传文件大小
+                maxPostSize = ApiConstants.getUploadPicMaxPostSize();
+            } else if ("expert".equals(type)) {
+                //技术资料
+                saveDirectory = ApiConstants.getUploadDir() + "/expert";
+                //技术资料最大1G
+                maxPostSize = ApiConstants.getUploadPicMaxPostSize();
+            } else {
+                saveDirectory = ApiConstants.getUploadDoc() + "/job";
+                maxPostSize = ApiConstants.getUploadDocMaxPostSize();
             }
+            //目录不存在则创建
+            File dir = new File(saveDirectory);
+            if (!dir.exists() && !dir.isDirectory()) {
+                dir.mkdirs();
+                log.info("mk dir susscess dirName = " + saveDirectory);
+            }
+            //String a = getFileSuffix(req);
+
+            String ip_address = PropertiesUtils.getValue("host.ip");
+
+            //指定所上传的文件命名规则
+            RandomFileNamePolicy rfnp = new RandomFileNamePolicy();
+
+            //完成文件上传
+            MultipartRequest multi = new MultipartRequest(req, saveDirectory, maxPostSize, "UTF-8", rfnp);
+
+            Enumeration fileNames = multi.getFileNames();
+
+            while (fileNames.hasMoreElements()) {
+                String fileName = (String) fileNames.nextElement();
+                if (null != multi.getFile(fileName)) {
+                    String lastFileName = multi.getFilesystemName(fileName);
+                    if ("img".equals(type)) {
+                        url = ip_address + "/upload/img/" + lastFileName;
+                    } else if ("techimg".equals(type)) {
+                        url = ip_address + "/upload/tech/img/" + lastFileName;
+                    } else {
+                        url = lastFileName;
+                    }
+
+                }
+            }
+        }catch(Exception e){
+            log.error("upload error!",e);
         }
         return url;
     }
@@ -132,4 +137,5 @@ public class UploadService {
         suffix = suffix.replace("\"", "");
         return suffix.substring(suffix.lastIndexOf("."));
     }*/
+
 }

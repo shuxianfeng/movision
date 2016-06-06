@@ -250,28 +250,10 @@ public class TechDataService {
     public Map<String,List<Map<String,String>>> findIndexTechData(Map<String,Object> map)
     {
         log.info("find home page tech data "+StringUtils.mapToString(map));
-        Map<String,List<Map<String,String>>> techMap = new HashMap<String,List<Map<String,String>>>();
+        Map<String,List<Map<String,String>>> techMap;
         try{
             List<Map<String,String>> dataList = techDataMapper.findIndexTechData(map);
-            int size= dataList.size();
-            List<Map<String,String>> techDataList;
-            for(int i = 0;i < size;i++)
-            {
-                Map<String,String> tData = dataList.get(i);
-                //二级分类
-                String sCategory = String.valueOf(tData.get("sCategory"));
-                if(techMap.get(sCategory) != null)
-                {
-                    techDataList = techMap.get(sCategory);
-                    techDataList.add(tData);
-                }
-                else
-                {
-                    techDataList = new ArrayList<Map<String,String>>();
-                    techDataList.add(tData);
-                    techMap.put(sCategory,techDataList);
-                }
-            }
+            techMap = generateDataInfo(dataList,"sCategory");
         }catch(Exception e)
         {
             log.error("find home page tech data error!",e);
@@ -279,4 +261,32 @@ public class TechDataService {
         }
         return techMap;
     }
+
+    /**
+     * 生产技术频道首页展示的数据结构
+     * @param dataList
+     * @param type
+     * @return
+     */
+    public Map<String,List<Map<String,String>>> generateDataInfo(List<Map<String, String>> dataList,String type) {
+        Map<String, List<Map<String, String>>> map = new HashMap<String, List<Map<String, String>>>();
+        if(!dataList.isEmpty()) {
+            int size = dataList.size();
+            List<Map<String, String>> infoList;
+            for (int i = 0; i < size; i++) {
+                Map<String, String> tData = dataList.get(i);
+                String sCategory = String.valueOf(tData.get(type));
+                if (map.get(sCategory) != null) {
+                    infoList = map.get(sCategory);
+                    infoList.add(tData);
+                } else {
+                    infoList = new ArrayList<Map<String, String>>();
+                    infoList.add(tData);
+                    map.put(sCategory, infoList);
+                }
+            }
+        }
+        return map;
+    }
+
 }

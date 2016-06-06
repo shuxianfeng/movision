@@ -74,7 +74,7 @@ public class TechDataController {
             {
                 map.put(TechConstant.FILE_FORMAT, "");
             }
-            map.put(TechConstant.FILE_FORMAT,req.getContentLength());
+            map.put(TechConstant.FILE_SIZE,req.getContentLength());
             result.setData(map);
             result.setCode(200);
         }else{
@@ -119,11 +119,11 @@ public class TechDataController {
 
     @RequestMapping(value="sel_second_category", method = RequestMethod.GET)
     @ApiOperation(value="查询解决方案、技术资料，培训资料行业类别",notes = "查询解决方案、技术资料，培训资料行业类别",response = Response.class)
-    public Response selectSecondCategoryByFirstId( @ApiParam(value = "一级分类ID：1解决方案，2技术资料，3培训资料")  @RequestParam() String firstCategoryId)
+    public Response selectSecondCategoryByFirstId()
     {
         Response response = new Response();
-        List<DictionaryTechData> secondCategoryList = dicTDService.getSecondCategory(Integer.parseInt(firstCategoryId));
-        response.setData(secondCategoryList);
+        List<Map<String,Object>> categoryList = dicTDService.selectCategoryInfo(0);
+        response.setData(categoryList);
         return response;
     }
 

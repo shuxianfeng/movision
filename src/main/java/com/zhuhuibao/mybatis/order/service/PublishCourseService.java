@@ -76,4 +76,23 @@ public class PublishCourseService {
         }
 
     }
+
+    /**
+     * 修改课程状态
+     * @param status  状态
+     */
+    public void updateStatus(Long courseid,String status) {
+        int count;
+        try {
+            count = mapper.updateStatus(courseid,status);
+            if (count != 1) {
+                log.error("t_p_group_publishCourse:更新数据失败");
+                throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            throw e;
+        }
+    }
 }

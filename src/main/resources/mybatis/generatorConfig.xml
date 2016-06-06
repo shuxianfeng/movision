@@ -56,8 +56,8 @@
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <table tableName="t_dictionary_techData"
-               domainObjectName="DictionaryTechData"
+        <table tableName="t_o_sms"
+               domainObjectName="OrderSms"
                enableCountByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"

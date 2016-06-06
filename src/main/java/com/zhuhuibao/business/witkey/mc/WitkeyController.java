@@ -4,6 +4,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
@@ -83,6 +84,9 @@ public class WitkeyController {
     @RequestMapping(value = "upd_witkey", method = RequestMethod.POST)
     public Response updateCooperation(Cooperation cooperation)  {
         Response response = new Response();
+        if(cooperation.getEndTime()!=null){
+            cooperation.setEndTime(cooperation.getEndTime()+" 23:59:59");
+        }
         cooperationService.updateCooperation(cooperation);
         return response;
     }
@@ -121,8 +125,7 @@ public class WitkeyController {
             @ApiParam(value = "合作类型")@RequestParam(required = false) String type,
             @ApiParam(value = "审核状态")@RequestParam(required = false) String status
     )  {
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
+        Long createId = ShiroUtil.getCreateID();
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -130,24 +133,15 @@ public class WitkeyController {
             pageSize = "10";
         }
         Response response = new Response();
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-            if(null != principal){
-                Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-                Cooperation cooperation = new Cooperation();
-                cooperation.setCreateId(principal.getId().toString());
-                cooperation.setType(type);
-                cooperation.setTitle(title);
-                cooperation.setStatus(status);
-                List<Map<String,String>> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
-                pager.result(cooperationList);
-                response.setData(pager);
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        Cooperation cooperation = new Cooperation();
+        cooperation.setCreateId(createId.toString());
+        cooperation.setType(type);
+        cooperation.setTitle(title);
+        cooperation.setStatus(status);
+        List<Map<String,String>> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
+        pager.result(cooperationList);
+        response.setData(pager);
         return response;
     }
 }

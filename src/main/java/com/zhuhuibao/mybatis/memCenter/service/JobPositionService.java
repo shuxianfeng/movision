@@ -45,28 +45,20 @@ public class JobPositionService {
     /**
      * 发布职位
      */
-    public Response publishPosition(Job job){
-        Response response = new Response();
+    public int publishPosition(Job job){
         try{
-            int isPublish = jobMapper.publishPosition(job);
-            if(isPublish==1){
-                response.setCode(200);
-            }else{
-                response.setCode(400);
-                response.setMessage("发布失败");
-            }
+            return jobMapper.publishPosition(job);
         }catch (Exception e){
-            log.error("publishPosition error",e);
+            log.error(e.getMessage());
             e.printStackTrace();
+            throw e;
         }
-        return response;
     }
 
     /**
      * 查询公司已发布的职位
      */
-    public Response findAllPositionByMemId(Paging<Job> pager, String id){
-        Response response = new Response();
+    public List findAllPositionByMemId(Paging<Job> pager, String id){
         List<Job> jobList = jobMapper.findAllByPager(pager.getRowBounds(),id);
         List list = new ArrayList();
         for(int i=0;i<jobList.size();i++){
@@ -79,21 +71,20 @@ public class JobPositionService {
             map.put(Constants.publishTime,job.getPublishTime().substring(0,10));
             list.add(map);
         }
-        pager.result(list);
-        response.setData(pager);
-        response.setCode(200);
-        return response;
+        return list;
     }
 
     /**
      * 查询公司发布的某条职位的信息
      */
-    public Response getPositionByPositionId(String id){
-        Response result = new Response();
-        Job job = jobMapper.getPositionByPositionId(id);
-        result.setCode(200);
-        result.setData(job);
-        return result;
+    public Job getPositionByPositionId(String id){
+        try {
+            return jobMapper.getPositionByPositionId(id);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     /**
@@ -188,8 +179,7 @@ public class JobPositionService {
     /**
      * 职位类别
      */
-    public Response positionType(){
-        Response response = new Response();
+    public List positionType(){
         List<Position> positionList = positionMapper.findPosition(8);
         List<Position> subPositionList = positionMapper.findSubPosition();
         List list1 = new ArrayList();
@@ -211,9 +201,7 @@ public class JobPositionService {
             map.put(Constants.subPositionList,list);
             list1.add(map);
         }
-        response.setCode(200);
-        response.setData(list1);
-        return response;
+        return list1;
     }
 
     /**

@@ -56,9 +56,9 @@
       <if test="publisherid != null" >
         publisherid,
       </if>
-        publishTime,
-        saleTime,
-        updateTime,
+      publishTime,
+      saleTime,
+      updateTime,
       <if test="title != null" >
         title,
       </if>
@@ -121,9 +121,9 @@
       <if test="publisherid != null" >
         #{publisherid,jdbcType=BIGINT},
       </if>
-        now(),
-        now(),
-        now(),
+      now(),
+      now(),
+      now(),
       <if test="title != null" >
         #{title,jdbcType=VARCHAR},
       </if>
@@ -278,21 +278,21 @@
   </select>
 
   <select id="findAllPublishCoursePager" parameterType="java.util.Map" resultType="java.util.Map">
-  select t.courseid,t.title,t.notes,
-  case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl) = 0 then imgUrl end as imgUrl
-  from t_p_group_publishCourse t
-  <where>
-    <if test="courseType != null">
-      and courseType = #{courseType}
-    </if>
-    <if test="status != null">
-      and status = #{status}
-    </if>
-    <if test="province != null">
-      and province = #{province}
-    </if>
-  </where>
-</select>
+    select t.courseid,t.title,t.notes,
+    case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl) = 0 then imgUrl end as imgUrl
+    from t_p_group_publishCourse t
+    <where>
+      <if test="courseType != null">
+        and courseType = #{courseType}
+      </if>
+      <if test="status != null">
+        and status = #{status}
+      </if>
+      <if test="province != null">
+        and province = #{province}
+      </if>
+    </where>
+  </select>
   <select id="findLatestPublishCourse" parameterType="java.util.Map" resultType="java.util.Map">
     select t.courseid,t.title,t.notes,
     case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl) = 0 then imgUrl end as imgUrl
@@ -307,5 +307,24 @@
     </where>
     order by t.updateTime desc
     limit #{count}
+  </select>
+  <select id="previewTrainCourseDetail" parameterType="java.util.Map" resultType="java.util.Map">
+    select
+    courseid, publisherid, title, teacher, date_format(startTime,'%Y-%m-%d %H:%i:%s') startTime,
+    date_format(endTime,'%Y-%m-%d %H:%i:%s') endTime, concat(pv.name,ct.name,ar.name,address) address, price, storageNumber, minBuyNumber, maxBuyNumber,
+    date_format(expiryDate,'%Y-%m-%d') expiryDate, imgUrl, notice, courseType, status,notes,sum(gd.number) number
+    from t_p_group_publishCourse t
+    left join t_o_order_goods gd on gd.goodsId = t.courseid
+    left join t_dictionary_province pv on pv.code = t.province
+    left join t_dictionary_city ct on ct.code = t.city
+    left join t_dictionary_area ar on ar.code = t.area
+    <where>
+      <if test="courseid != null">
+        and courseid = #{courseid,jdbcType=BIGINT}
+      </if>
+      <if test="courseType != null">
+        and courseType = #{courseType}
+      </if>
+    </where>
   </select>
 </mapper>

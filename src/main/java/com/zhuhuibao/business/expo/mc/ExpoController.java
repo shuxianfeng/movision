@@ -4,6 +4,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
 import com.zhuhuibao.mybatis.memCenter.service.ExhibitionService;
@@ -57,22 +58,12 @@ public class ExpoController {
         map.put("title",title);
         map.put("status",status);
         map.put("type",3);
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if (null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if (null != principal) {
-                map.put("createId", principal.getId());
-                //查询
-                List<Map<String,String>> exhibitionList = exhibitionService.findAllExhibition(pager,map);
-                pager.result(exhibitionList);
-                response.setData(pager);
-            }else {
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createId = ShiroUtil.getCreateID();
+        map.put("createId", createId);
+        //查询
+        List<Map<String,String>> exhibitionList = exhibitionService.findAllExhibition(pager,map);
+        pager.result(exhibitionList);
+        response.setData(pager);
         return response;
     }
 

@@ -59,6 +59,19 @@ public class TechConstant {
     }
 
     /**
+     * SN码状态 1有效，2已使用，3已过期，4已取消，5未生效
+     */
+    public enum SNStatus{
+        EFFECT("1"),USED("2"),EXPIRE("3"),CANCELED("4"),INEFFECT("5");
+        public final String value;
+        SNStatus(String value){this.value = value;}
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
+
+    /**
      * 上传技术资料附件的路径  /tech/doc
      */
     public static final String UPLOAD_TECH_DOC_URL = "/tech/doc";
@@ -87,6 +100,11 @@ public class TechConstant {
      * 最新培训课程 默认3条
      */
     public static final int COURSE_LATEST_COUNT_THREE = 3;
+
+    /**
+     * 技术频道首页展示的最新培训课程 默认5条
+     */
+    public static final int INDEX_LATEST_COUNT_FIVE = 5;
 
     /**
      * 行业解决方案，技术资料，培训资料点击排行数量10条

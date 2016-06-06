@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.order.mapper.OrderGoodsMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.order.entity.OrderGoods" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="orderNo" property="orderNo" jdbcType="VARCHAR" />
-    <result column="goodsId" property="goodsId" jdbcType="BIGINT" />
-    <result column="goodsName" property="goodsName" jdbcType="VARCHAR" />
-    <result column="goodsPrice" property="goodsPrice" jdbcType="DECIMAL" />
-    <result column="number" property="number" jdbcType="INTEGER" />
-    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.zhuhuibao.mybatis.order.mapper.OrderGoodsMapper">
+    <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.order.entity.OrderGoods">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="goodsId" property="goodsId" jdbcType="BIGINT"/>
+        <result column="goodsName" property="goodsName" jdbcType="VARCHAR"/>
+        <result column="goodsPrice" property="goodsPrice" jdbcType="DECIMAL"/>
+        <result column="number" property="number" jdbcType="INTEGER"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, orderNo, goodsId, goodsName, goodsPrice, number, createTime
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_o_order_goods
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <select id="findByOrderNo" resultType="com.zhuhuibao.mybatis.order.entity.OrderGoods">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from t_o_order_goods
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="findByOrderNo" resultType="com.zhuhuibao.mybatis.order.entity.OrderGoods">
+        select
+        <include refid="Base_Column_List"/>
+        from t_o_order_goods
+        where orderNo = #{orderNo,jdbcType=VARCHAR}
+    </select>
+    <select id="findListByGoodsId" resultType="com.zhuhuibao.mybatis.order.entity.OrderGoods">
     select
-    <include refid="Base_Column_List" />
+    orderNo
     from t_o_order_goods
-    where orderNo = #{orderNo,jdbcType=VARCHAR}
+    where goodsId = #{goodsId,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_o_order_goods
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.zhuhuibao.mybatis.order.entity.OrderGoods" >
+    <insert id="insert" parameterType="com.zhuhuibao.mybatis.order.entity.OrderGoods">
     insert into t_o_order_goods (id, orderNo, goodsId, 
       goodsName, goodsPrice, number, 
       createTime)
@@ -37,80 +43,80 @@
       #{goodsName,jdbcType=VARCHAR}, #{goodsPrice,jdbcType=DECIMAL}, #{number,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.order.entity.OrderGoods" >
-    insert into t_o_order_goods
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="orderNo != null" >
-        orderNo,
-      </if>
-      <if test="goodsId != null" >
-        goodsId,
-      </if>
-      <if test="goodsName != null" >
-        goodsName,
-      </if>
-      <if test="goodsPrice != null" >
-        goodsPrice,
-      </if>
-      <if test="number != null" >
-        number,
-      </if>
-      <if test="createTime != null" >
-        createTime,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="orderNo != null" >
-        #{orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="goodsId != null" >
-        #{goodsId,jdbcType=BIGINT},
-      </if>
-      <if test="goodsName != null" >
-        #{goodsName,jdbcType=VARCHAR},
-      </if>
-      <if test="goodsPrice != null" >
-        #{goodsPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="number != null" >
-        #{number,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.order.entity.OrderGoods" >
-    update t_o_order_goods
-    <set >
-      <if test="orderNo != null" >
-        orderNo = #{orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="goodsId != null" >
-        goodsId = #{goodsId,jdbcType=BIGINT},
-      </if>
-      <if test="goodsName != null" >
-        goodsName = #{goodsName,jdbcType=VARCHAR},
-      </if>
-      <if test="goodsPrice != null" >
-        goodsPrice = #{goodsPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="number != null" >
-        number = #{number,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null" >
-        createTime = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.order.entity.OrderGoods" >
+    <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.order.entity.OrderGoods">
+        insert into t_o_order_goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderNo != null">
+                orderNo,
+            </if>
+            <if test="goodsId != null">
+                goodsId,
+            </if>
+            <if test="goodsName != null">
+                goodsName,
+            </if>
+            <if test="goodsPrice != null">
+                goodsPrice,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="orderNo != null">
+                #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsId != null">
+                #{goodsId,jdbcType=BIGINT},
+            </if>
+            <if test="goodsName != null">
+                #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsPrice != null">
+                #{goodsPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.order.entity.OrderGoods">
+        update t_o_order_goods
+        <set>
+            <if test="orderNo != null">
+                orderNo = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsId != null">
+                goodsId = #{goodsId,jdbcType=BIGINT},
+            </if>
+            <if test="goodsName != null">
+                goodsName = #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsPrice != null">
+                goodsPrice = #{goodsPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="number != null">
+                number = #{number,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.order.entity.OrderGoods">
     update t_o_order_goods
     set orderNo = #{orderNo,jdbcType=VARCHAR},
       goodsId = #{goodsId,jdbcType=BIGINT},

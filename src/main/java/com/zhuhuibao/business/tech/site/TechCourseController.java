@@ -9,9 +9,16 @@ import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.common.pojo.OrderReqBean;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ValidateUtils;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +72,21 @@ public class TechCourseController {
 
         log.info("技术培训下单页面,请求参数:{}", json);
         Map paramMap = gson.fromJson(json, Map.class);
+
+        String buyerId = (String) paramMap.get("buyerId");
+        if(StringUtils.isEmpty(buyerId)){
+            Subject currentUser = SecurityUtils.getSubject();
+            Session session = currentUser.getSession(false);
+            ShiroRealm.ShiroUser user = (ShiroRealm.ShiroUser) session.getAttribute("member");
+            if (user == null) {
+                log.error("用户未登陆");
+                throw new AuthException(MsgCodeConstant.un_login,
+                        MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            }else{
+                paramMap.put("buyerId",user.getId());
+            }
+        }
+
         //特定参数
         paramMap.put("exterInvokeIp", ValidateUtils.getIpAddr(request));//客户端IP地址
         paramMap.put("alipay_goods_type", PayConstants.GoodsType.XNL.toString());//商品类型  0 , 1

@@ -4,14 +4,13 @@ import com.google.common.collect.Maps;
 import com.zhuhuibao.alipay.config.AliPayConfig;
 import com.zhuhuibao.alipay.util.AlipayNotify;
 import com.zhuhuibao.alipay.util.AlipaySubmit;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.OrderConstants;
-import com.zhuhuibao.common.constant.PayConstants;
+import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.*;
 import com.zhuhuibao.mybatis.order.service.*;
 import com.zhuhuibao.utils.CommonUtils;
 import com.zhuhuibao.utils.IdGenerator;
+import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.convert.DateConvert;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -32,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -76,6 +76,11 @@ public class AlipayService {
     @Autowired
     private InvoiceService invoiceService;
 
+    @Autowired
+    private OrderSmsService orderSmsService;
+
+    @Autowired
+    private ApiConstants constants;
 
     /**
      * 支付包支付请求
@@ -308,7 +313,7 @@ public class AlipayService {
      * @param msgParam 请求参数
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    private void beforePayDeal(Map<String, String> msgParam) {
+    private void beforePayDeal(Map<String, String> msgParam) throws IOException {
         log.info("request params:{}", msgParam.toString());
 
         //订单记录
@@ -357,10 +362,6 @@ public class AlipayService {
     private void updateSubStock(Map<String, String> params) {
         Long courseId = Long.valueOf(params.get("goodsId"));
         int number = Integer.valueOf(params.get("number"));
-//        String orderNo = params.get("out_trade_no");
-//        OrderGoods goods = orderGoodsService.findByOrderNo(orderNo);
-//        Long courseId = goods.getGoodsId();
-//        int number = Integer.valueOf(params.get("quantity"));
         publishCourseService.updateSubStockNum(courseId, number);
 
     }
@@ -370,19 +371,60 @@ public class AlipayService {
      *
      * @param msgParam
      */
-    private void genSNcode(Map<String, String> msgParam) {
+    private void genSNcode(Map<String, String> msgParam) throws IOException {
+
         int num = Integer.valueOf(msgParam.get("number"));
         List<PwdTicket> list = new ArrayList<>();
+        List<String> snCodeList = new ArrayList<>();
         for (int i = 0; i < num; i++) {
             PwdTicket pwdTicket = new PwdTicket();
-            String snCode = IdGenerator.createBatchNo();
+            String snCode = IdGenerator.createSNcode();
             pwdTicket.setSnCode(snCode);
             pwdTicket.setMobile(msgParam.get("mobile"));
             pwdTicket.setOrderNo(msgParam.get("orderNo"));
             pwdTicket.setCourseId(Long.valueOf(msgParam.get("goodsId")));
             list.add(pwdTicket);
+            snCodeList.add(snCode);
         }
         pwdTickerService.batchInsert(list);
+
+        //短信记录
+        PublishCourse course = publishCourseService.getCourseById(Long.valueOf(msgParam.get("goodsId")));
+        StringBuilder sb  = new StringBuilder();
+        for(String code : snCodeList){
+             sb.append(code).append(",");
+        }
+        String temp = sb.toString();
+        String codes = temp.substring(0, temp.length() - 1);
+
+        Map<String,String> smsMap = new HashMap<>();
+        smsMap.put("name",course.getTitle());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        smsMap.put("time",format.format(course.getSaleTime()));
+        smsMap.put("code",format.format(codes));
+        String content = JsonUtils.getJsonStringFromMap(smsMap);
+        OrderSms orderSms = new OrderSms();
+        orderSms.setOrderNo(msgParam.get("orderNo"));
+        orderSms.setMobile(msgParam.get("mobile"));
+        orderSms.setContent(content);
+        orderSms.setStatus(OrderConstants.SmsStatus.WAITING.toString());
+        //开课短信
+        orderSms.setTemplateCode(PropertiesUtils.getValue("course_begin_sms_template_code"));
+        orderSmsService.insert(orderSms);
+
+        //终止课程短信
+        orderSms.setTemplateCode(PropertiesUtils.getValue("course_before_stop_sms_template_code"));
+        orderSmsService.insert(orderSms);
+
+        //终止课程短信
+        orderSms.setTemplateCode(PropertiesUtils.getValue("course_before_autostop_sms_template_code"));
+        orderSmsService.insert(orderSms);
+
+        //终止课程短信
+        orderSms.setTemplateCode(PropertiesUtils.getValue("course_after_stop_sms_template_code"));
+        orderSmsService.insert(orderSms);
+
+
     }
 
     /**
@@ -418,10 +460,12 @@ public class AlipayService {
 //        dealTime = sf.parse(msgParam.get("dealTime"));
 //        order.setDealTime(dealTime);
         order.setDealTime(new Date());
-        String amount = msgParam.get("amount");
-        order.setAmount(BigDecimal.valueOf(Long.valueOf(amount))); //订单总金额
-        String payAmount = msgParam.get("payAmount");
-        order.setPayAmount(BigDecimal.valueOf(Long.valueOf(payAmount)));  //交易金额
+        String payPrice = msgParam.get("goodsPrice");
+        String number = msgParam.get("number");
+        BigDecimal amount = new BigDecimal(Long.valueOf(payPrice)).multiply(new BigDecimal(Long.valueOf(number)));
+        order.setAmount(amount); //订单总金额
+//        String payAmount = msgParam.get("payAmount");
+        order.setPayAmount(amount);  //交易金额
         order.setGoodsType(msgParam.get("goodsType"));
         order.setPayMode(msgParam.get("payMode"));
         order.setStatus(PayConstants.OrderStatus.WZF.toString());
@@ -452,7 +496,7 @@ public class AlipayService {
         //业务参数
         sParaTemp.put("goods_type",msgParam.get("alipay_goods_type"));   //商品类型(0:虚拟类商品,1:实物类商品 默认为1)
         sParaTemp.put("out_trade_no", msgParam.get("orderNo"));          //商户网站唯一订单号
-        sParaTemp.put("subject", msgParam.get("subject"));               //商品名称
+        sParaTemp.put("subject", msgParam.get("goodsName"));               //商品名称
 //        sParaTemp.put("total_fee", msgParam.get("total_fee"));         //交易金额
         sParaTemp.put("price",msgParam.get("goodsPrice"));               //商品单价
         sParaTemp.put("quantity",msgParam.get("number"));                //购买数量
@@ -536,15 +580,14 @@ public class AlipayService {
             throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "订单商品数量不能为空");
         }
 
-        String amount = msgParam.get("amount");//订单商品总额
-        if (StringUtils.isEmpty(amount)) {
-            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "订单商品总额不能为空");
-        }
-
-        String payAmount = msgParam.get("payAmount");//订单交易金额
-        if (StringUtils.isEmpty(payAmount)) {
-            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "订单交易金额不能为空");
-        }
+//        String amount = msgParam.get("amount");//订单商品总额
+//        if (StringUtils.isEmpty(amount)) {
+//            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "订单商品总额不能为空");
+//        }
+//        String payAmount = msgParam.get("payAmount");//订单交易金额
+//        if (StringUtils.isEmpty(payAmount)) {
+//            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "订单交易金额不能为空");
+//        }
 //        String mobile = msgParam.get("mobile");//手机号码
 //        if (StringUtils.isEmpty(mobile)) {
 //            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "手机号码不能为空");
