@@ -64,7 +64,7 @@ public class IdGenerator {
      * 生成SN码  {8位字母数字组合}
      * @return
      */
-    private static String createSNcode(){
+    public static String createSNcode(){
         String val = "";
         Random random = new Random();
         for (int i = 0; i < 8; i++) {

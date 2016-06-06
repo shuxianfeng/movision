@@ -23,6 +23,7 @@ public class ApiConstants {
     @Value("${uploadTechMaxPostSize}")
     private Long uploadTechMaxPostSize;
 
+
     public String getUploadDir() {
         return uploadDir;
     }

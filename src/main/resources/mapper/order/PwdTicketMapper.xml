@@ -20,6 +20,12 @@
     from t_o_pwdticket
     where ticketId = #{ticketId,jdbcType=BIGINT}
   </select>
+  <select id="findByCourseId" resultType="com.zhuhuibao.mybatis.order.entity.PwdTicket">
+    select
+    <include refid="Base_Column_List" />
+    from t_o_pwdticket
+    where courseId = #{courseId,jdbcType=BIGINT}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from t_o_pwdticket
     where ticketId = #{ticketId,jdbcType=BIGINT}
@@ -124,5 +130,12 @@
       operateTime = #{operateTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER}
     where ticketId = #{ticketId,jdbcType=BIGINT}
+  </update>
+  <update id="updateStatusByCourseId">
+     update t_o_pwdticket
+     set status = #{status},
+     operateId = #{operateId},
+     operateTime = NOW()
+     where courseId = #{courseId}
   </update>
 </mapper>

@@ -55,4 +55,22 @@ public class PwdTickerService {
             insert(record);
         }
     }
+
+    /**
+     * 根据课程ID 查询 所有SN信息
+     * @param courseid     课程ID
+     * @return
+     */
+    public List<PwdTicket> findByCourseId(Long courseid) {
+
+        return mapper.findByCourseId(courseid);
+    }
+
+    /**
+     * 根据课程ID 批量更新SN码状态
+     * @param courseId   课程ID
+     */
+    public void updateStatusByCourseId(Long courseId,String status,Integer operateId) {
+        mapper.updateStatusByCourseId(courseId,status,operateId);
+    }
 }

@@ -94,6 +94,9 @@ public class AlipayDirectService {
             //获取当前产品库存数量
             Long courseId = Long.valueOf(paramMap.get("goodsId"));
             PublishCourse course = publishCourseService.getCourseById(courseId);
+            paramMap.put("goodsPrice",course.getPrice().toString());
+            paramMap.put("goodsName",course.getTitle());
+
             int stockNum = course.getStorageNumber();
 
             if(number > stockNum ) { //购买数量大于库存数量
@@ -103,6 +106,7 @@ public class AlipayDirectService {
         }
         //else if 其他类型 根据 业务需求 定制
         log.info("***********************进入支付环节********************");
+
 
 
         String  sHtmlText = alipayRequst(paramMap);

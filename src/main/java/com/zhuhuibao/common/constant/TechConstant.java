@@ -59,6 +59,19 @@ public class TechConstant {
     }
 
     /**
+     * SN码状态 1有效，2已使用，3已过期，4已取消，5未生效
+     */
+    public enum SNStatus{
+        EFFECT("1"),USED("2"),EXPIRE("3"),CANCELED("4"),INEFFECT("5");
+        public final String value;
+        SNStatus(String value){this.value = value;}
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
+
+    /**
      * 上传技术资料附件的路径  /tech/doc
      */
     public static final String UPLOAD_TECH_DOC_URL = "/tech/doc";

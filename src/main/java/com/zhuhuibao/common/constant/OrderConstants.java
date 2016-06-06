@@ -38,4 +38,21 @@ public class OrderConstants {
             return this.value;
         }
     }
+
+    /**
+     * 短信状态 1：待发送  2：已发送  3：发送失败
+     */
+    public enum SmsStatus {
+        WAITING("1"), SUCCESS("2"),FAIL("3");
+        public final String value;
+
+        SmsStatus(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
 }

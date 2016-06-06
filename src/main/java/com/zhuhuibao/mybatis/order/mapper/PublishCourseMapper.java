@@ -21,4 +21,6 @@ public interface PublishCourseMapper {
     int updateSubStockNum(@Param("courseId") Long courseId, @Param("number") int number);
 
     int updateAddStockNum(@Param("courseId") Long courseId, @Param("number") int number);
+
+    int updateStatus(@Param("courseid") Long courseid, @Param("status") String status);
 }

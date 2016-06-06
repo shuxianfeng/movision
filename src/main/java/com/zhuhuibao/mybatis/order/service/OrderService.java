@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * 订单处理
@@ -81,5 +83,30 @@ public class OrderService {
             log.error(e.getMessage());
             throw e;
         }
+    }
+
+    /**
+     * 批量修改订单状态
+     * @param orderNoList 订单编号
+     * @param status      状态
+     */
+    public void batchUpdateStatus(List<String> orderNoList, String status) {
+       for(String orderNo : orderNoList ){
+           Order order = new Order();
+           order.setOrderNo(orderNo);
+           order.setStatus(status);
+           update(order);
+       }
+    }
+
+    /**
+     * 根据课程ID和订单状态查询订单
+     * @param courseId
+     * @param status
+     * @return
+     */
+    public List<Order> findListByCourseIdAndStatus(String courseId, String status) {
+
+        return mapper.findListByCourseIdAndStatus(courseId,status);
     }
 }

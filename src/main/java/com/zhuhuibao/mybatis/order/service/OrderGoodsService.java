@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * 订单商品
@@ -50,4 +52,14 @@ public class OrderGoodsService {
     public OrderGoods findByOrderNo(String orderNo) {
         return mapper.findByOrderNo(orderNo);
     }
+
+    /**
+     * 根据商品id查询所有订单
+     * @param goodsId
+     * @return
+     */
+    public List<String> findListByGoodsId(String goodsId) {
+        return mapper.findListByGoodsId(goodsId);
+    }
+
 }
