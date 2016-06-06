@@ -47,7 +47,7 @@ public class SDKSendTemplateSMS {
         restAPI.setAppId(APP_ID);
         // 初始化应用ID，如果是在沙盒环境开发，请配置"控制台-应用-测试DEMO"中的APPID。
         //如切换到生产环境，请使用自己创建应用的APPID
-        result = restAPI.sendTemplateSMS(mobile, templateCode, new String[]{ArrayUtils.toString(paramsList)});
+        result = restAPI.sendTemplateSMS(mobile, templateCode, paramsList.toArray(new String[paramsList.size()]));
         log.info("SDKTestGetSubAccounts result=" + result);
         if ("000000".equals(result.get("statusCode"))) {
             //正常返回输出data包体信息（map）
