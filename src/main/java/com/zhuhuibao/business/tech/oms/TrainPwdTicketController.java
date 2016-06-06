@@ -73,12 +73,12 @@ public class TrainPwdTicketController {
         return response;
     }
 
-    @RequestMapping(value="sel_pwd_ticket_status", method = RequestMethod.GET)
+    @RequestMapping(value="sel_pwd_ticket", method = RequestMethod.GET)
     @ApiOperation(value="运营管理平台查看培训密码券",notes = "运营管理平台查看培训密码券",response = Response.class)
     public Response selectTrainPwdTicket(@ApiParam(value = "密码券ID") @RequestParam Long ticketId)
     {
         Response response = new Response();
-        TrainPwdTicket ticket = ticketManage.selectTrainPwdTicket(ticketId);
+        Map<String,Object> ticket = ticketManage.selectTrainPwdTicket(ticketId);
         response.setData(ticket);
         return response;
     }

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface TrainPwdTicketMapper {
-    TrainPwdTicket selectByPrimaryKey(Long ticketId);
+    Map<String,Object> selectByPrimaryKey(Long ticketId);
 
     int updateByPrimaryKeySelective(TrainPwdTicket record);
 

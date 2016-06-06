@@ -74,10 +74,10 @@ public class TrainPwdTicketManage {
      * @param ticketId 密码券ID
      * @return
      */
-    public TrainPwdTicket selectTrainPwdTicket(Long ticketId)
+    public Map<String,Object> selectTrainPwdTicket(Long ticketId)
     {
         log.info("select train pwd ticket info ticketId "+ ticketId);
-        TrainPwdTicket ticket;
+        Map<String,Object> ticket;
         try{
             ticket = ticketMapper.selectByPrimaryKey(ticketId);
         }catch(Exception e) {
