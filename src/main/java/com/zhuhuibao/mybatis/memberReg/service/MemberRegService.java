@@ -480,7 +480,7 @@ public class MemberRegService {
 						this.deleteValidateInfo(info);
 						
 						ShiroUser shrioUser = new ShiroUser(member.getId(), member.getMobile(), member.getStatus(),
-								"1".equals(member.getIdentify()) ? "企业":"个人","管理员" );
+								member.getIdentify(),"100","0");
 						Subject currentUser = SecurityUtils.getSubject();
 						Session session = currentUser.getSession();
 						session.setAttribute("member", shrioUser);
