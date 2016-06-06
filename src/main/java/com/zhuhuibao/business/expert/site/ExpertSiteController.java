@@ -453,7 +453,7 @@ public class ExpertSiteController {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session) {
-            String verifyCode = (String) session.getAttribute("r" + mobile);
+            String verifyCode = (String) session.getAttribute("expert" + mobile);
             if(code.equals(verifyCode)){
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
                 if(null != principal){
