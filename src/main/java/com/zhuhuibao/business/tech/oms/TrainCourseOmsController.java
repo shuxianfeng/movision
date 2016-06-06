@@ -125,10 +125,8 @@ public class TrainCourseOmsController {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session){
-            String url = uploadService.upload(req,"techimg");
-            Map map = new HashMap();
-            map.put(Constants.name,url);
-            result.setData(map);
+            String url = uploadService.upload(req,"techimg"); 
+            result.setData(url);
             result.setCode(200);
         }else{
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
