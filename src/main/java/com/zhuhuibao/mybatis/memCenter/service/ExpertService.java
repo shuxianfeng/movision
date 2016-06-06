@@ -1,14 +1,31 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
+import com.taobao.api.ApiException;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.ExpertConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.*;
+import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
+import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
+import com.zhuhuibao.utils.DateUtils;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +59,9 @@ public class ExpertService {
 
     @Autowired
     private WorkTypeMapper workTypeMapper;
+
+    @Autowired
+    private MemberRegService memberRegService;
 
     /**
      * 发布技术成果
@@ -562,5 +582,69 @@ public class ExpertService {
             e.printStackTrace();
             throw e;
         }
+    }
+
+    /**
+     * 验证验证码是否正确
+     * @param type
+     * @return
+     */
+    public void checkMobileCode(String code,String mobile,String type) {
+        if (code != null) {
+            Validateinfo info = new Validateinfo();
+            info.setAccount(mobile);
+            info.setValid(0);
+            info.setCheckCode(code);
+            info = memberRegService.findMemberValidateInfo(info);
+            Date currentTime = new Date();
+            Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
+
+            //判断验证码是否过期
+            if(currentTime.before(sendSMStime))
+            {
+                Subject currentUser = SecurityUtils.getSubject();
+                Session session = currentUser.getSession(false);
+                if (null != session) {
+                    String verifyCode = (String) session.getAttribute(type + mobile);
+                    //判断验证码是否正确
+                    if (!code.equals(verifyCode)) {
+                        throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
+                    }
+                }else {
+                    throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                }
+            }else {
+                throw new BusinessException(MsgCodeConstant.member_mcode_sms_timeout, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_sms_timeout)));
+            }
+        }else {
+            throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
+        }
+    }
+
+    /**
+     * 发送验证码
+     * @return
+     */
+    public String getTrainMobileCode(String mobile,String type)throws IOException, ApiException {
+        log.debug("获得手机验证码  mobile=="+mobile);
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(true);
+        // 生成随机字串
+        String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
+        log.debug("verifyCode == " + verifyCode);
+        //发送验证码到手机
+        if(type.equals(ExpertConstant.MOBILE_CODE_SESSION_TYPE_TRAIN)){
+            SDKSendTaoBaoSMS.sendExpertTrainSMS(mobile, verifyCode, Constants.sms_time);
+        }else if(type.equals(ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT)){
+            SDKSendTaoBaoSMS.sendExpertSupportSMS(mobile, verifyCode, Constants.sms_time);
+        }
+
+        Validateinfo info = new Validateinfo();
+        info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+        info.setCheckCode(verifyCode);
+        info.setAccount(mobile);
+        memberRegService.inserValidateInfo(info);
+        sess.setAttribute(type+mobile, verifyCode);
+        return verifyCode;
     }
 }

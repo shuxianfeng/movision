@@ -81,19 +81,9 @@ public class ExpertSiteController {
     @RequestMapping(value = "ach/add_achievement", method = RequestMethod.POST)
     public Response publishAchievement(@ModelAttribute Achievement achievement) throws Exception {
         Response response = new Response();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-            if(null != principal){
-                achievement.setCreateId(principal.getId().toString());
-                expertService.publishAchievement(achievement);
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createId = ShiroUtil.getCreateID();
+        achievement.setCreateId(createId.toString());
+        expertService.publishAchievement(achievement);
         return response;
     }
 
@@ -201,23 +191,13 @@ public class ExpertSiteController {
     @RequestMapping(value = "base/add_expert", method = RequestMethod.POST)
     public Response applyExpert(@ModelAttribute Expert expert) throws Exception {
         Response response = new Response();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-            if(null != principal){
-                expert.setCreateId(principal.getId().toString());
-                Expert expert1 = expertService.queryExpertByCreateid(principal.getId().toString());
-                if(expert1==null){
-                    expertService.applyExpert(expert);
-                }else {
-                    throw new BusinessException(MsgCodeConstant.EXPERT_ISEXIST,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.EXPERT_ISEXIST)));
-                }
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        Long createId = ShiroUtil.getCreateID();
+        expert.setCreateId(createId.toString());
+        Expert expert1 = expertService.queryExpertByCreateid(createId.toString());
+        if(expert1==null){
+            expertService.applyExpert(expert);
+        }else {
+            throw new BusinessException(MsgCodeConstant.EXPERT_ISEXIST,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.EXPERT_ISEXIST)));
         }
         return response;
     }
@@ -469,47 +449,18 @@ public class ExpertSiteController {
         expertSupport.setLinkName(linkName);
         expertSupport.setMobile(mobile);
         expertSupport.setReason(reason);
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(null != session) {
-            String verifyCode = (String) session.getAttribute("expert" + mobile);
-            if(code.equals(verifyCode)){
-                ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-                if(null != principal){
-                    expertSupport.setCreateid(principal.getId().toString());
-                    expertService.applyExpertSupport(expertSupport);
-                }else {
-                    throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                }
-            }else {
-                throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
-            }
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        expertService.checkMobileCode(code,mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
+        Long createId = ShiroUtil.getCreateID();
+        expertSupport.setCreateid(createId.toString());
+        expertService.applyExpertSupport(expertSupport);
         return response;
     }
 
     @ApiOperation(value="申請專家支持获取验证码",notes="申請專家支持获取验证码",response = Response.class)
     @RequestMapping(value = "base/get_mobileCode", method = RequestMethod.GET)
-    public Response get_mobileCode(HttpServletRequest req)  throws IOException, ApiException {
-        String mobile = req.getParameter("mobile");
-        log.debug("获得手机验证码  mobile=="+mobile);
-        Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(true);
-        // 生成随机字串
-        String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
-        log.debug("verifyCode == " + verifyCode);
-        //发送验证码到手机
-        //SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-        SDKSendTaoBaoSMS.sendExpertSupportSMS(mobile, verifyCode, Constants.sms_time);
-        Validateinfo info = new Validateinfo();
-        info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
-        info.setCheckCode(verifyCode);
-        info.setAccount(mobile);
-        memberRegService.inserValidateInfo(info);
-        sess.setAttribute("expert"+mobile, verifyCode);
+    public Response get_mobileCode(@RequestParam String mobile)  throws IOException, ApiException {
         Response response = new Response();
+        String verifyCode = expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
         response.setData(verifyCode);
         return response;
     }
@@ -610,4 +561,23 @@ public class ExpertSiteController {
         //需要判断购买数量是否 >= 产品剩余数量
         alipayDirectService.doPay(response, paramMap);
     }
+
+    @ApiOperation(value="专家培训课程下单获取验证码",notes="专家培训课程下单获取验证码",response = Response.class)
+    @RequestMapping(value = "train/get_mobileCode", method = RequestMethod.GET)
+    public Response get_TrainMobileCode(@RequestParam String mobile) throws IOException, ApiException{
+        Response response = new Response();
+        String verifyCode = expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_TRAIN);
+        response.setData(verifyCode);
+        return response;
+    }
+
+    @ApiOperation(value="专家培训课程下单验证验证码是否正确",notes="专家培训课程下单验证验证码是否正确",response = Response.class)
+    @RequestMapping(value = "train/check_mobileCode", method = RequestMethod.POST)
+    public Response check_mobileCode(@RequestParam String code,@RequestParam String mobile)  {
+        Response response = new Response();
+        expertService.checkMobileCode(code,mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_TRAIN);
+        return response;
+    }
+
+
 }

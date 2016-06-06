@@ -4,6 +4,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder;
 import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
@@ -45,19 +46,9 @@ public class ExpoOmsController {
     @RequestMapping(value = "upd_meetingOrder", method = RequestMethod.POST)
     public Response updateMeetingOrderStatus(@ModelAttribute()MeetingOrder meetingOrder)  {
         Response Response = new Response();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(null != session) {
-            OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
-            if(null != principal){
-                meetingOrder.setUpdateManId(principal.getId().toString());
-                exhibitionService.updateMeetingOrderStatus(meetingOrder);
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createId = ShiroUtil.getOmsCreateID();
+        meetingOrder.setUpdateManId(createId.toString());
+        exhibitionService.updateMeetingOrderStatus(meetingOrder);
         return Response;
     }
 
@@ -222,19 +213,9 @@ public class ExpoOmsController {
     @RequestMapping(value = "upd_distributedOrder", method = RequestMethod.POST)
     public Response updateDistributedStatus(@ModelAttribute()DistributedOrder distributedOrder)  {
         Response Response = new Response();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(null != session) {
-            OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
-            if(null != principal){
-                distributedOrder.setUpdateManId(principal.getId().toString());
-                exhibitionService.updateDistributedStatus(distributedOrder);
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createId = ShiroUtil.getOmsCreateID();
+        distributedOrder.setUpdateManId(createId.toString());
+        exhibitionService.updateDistributedStatus(distributedOrder);
         return Response;
     }
 }

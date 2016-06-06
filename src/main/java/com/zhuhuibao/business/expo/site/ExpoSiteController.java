@@ -4,6 +4,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder;
 import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
@@ -44,19 +45,9 @@ public class ExpoSiteController {
     @RequestMapping(value = "add_meetingOrder", method = RequestMethod.POST)
     public Response publishMeetingOrder(@ModelAttribute()MeetingOrder meetingOrder) {
         Response response = new Response();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-            if(null != principal){
-                meetingOrder.setCreateid(principal.getId().toString());
-                exhibitionService.publishMeetingOrder(meetingOrder);
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createId = ShiroUtil.getCreateID();
+        meetingOrder.setCreateid(createId.toString());
+        exhibitionService.publishMeetingOrder(meetingOrder);
         return response;
     }
 
@@ -115,19 +106,9 @@ public class ExpoSiteController {
     @RequestMapping(value = "add_distributedOrder", method = RequestMethod.POST)
     public Response publishDistributedOrder(@ModelAttribute()DistributedOrder distributedOrder) {
         Response response = new Response();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-            if(null != principal){
-                distributedOrder.setCreateid(principal.getId().toString());
-                exhibitionService.publishDistributedOrder(distributedOrder);
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createId = ShiroUtil.getCreateID();
+        distributedOrder.setCreateid(createId.toString());
+        exhibitionService.publishDistributedOrder(distributedOrder);
         return response;
     }
 

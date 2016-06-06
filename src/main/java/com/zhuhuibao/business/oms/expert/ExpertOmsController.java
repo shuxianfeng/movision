@@ -6,6 +6,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
@@ -216,19 +217,9 @@ public class ExpertOmsController {
         ExpertSupport expertSupport = new ExpertSupport();
         expertSupport.setId(id);
         expertSupport.setStatus(status);
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(null != session) {
-            OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
-            if (null != principal) {
-                expertSupport.setUpdateManId(principal.getId().toString());
-                expertService.updateExpertSupport(expertSupport);
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createId = ShiroUtil.getOmsCreateID();
+        expertSupport.setUpdateManId(createId.toString());
+        expertService.updateExpertSupport(expertSupport);
         return response;
     }
 

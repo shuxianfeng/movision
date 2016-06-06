@@ -6,6 +6,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
@@ -59,32 +60,22 @@ public class ExpertController {
         //查询传参
         map.put("title", title);
         map.put("status", status);
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if (null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if (null != principal) {
-                map.put("createId", principal.getId());
-                List<Achievement> achievementList = expertService.findAllAchievementList(pager, map);
-                List list = new ArrayList();
-                for(Achievement achievement:achievementList){
-                    Map m = new HashMap();
-                    m.put("id",achievement.getId());
-                    m.put("title",achievement.getTitle());
-                    m.put("systemName",achievement.getSystemName());
-                    m.put("useAreaName",achievement.getUseAreaName());
-                    m.put("updateTime",achievement.getUpdateTime());
-                    m.put("status",achievement.getStatus());
-                    list.add(m);
-                }
-                pager.result(list);
-                response.setData(pager);
-            } else {
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        } else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        Long createId = ShiroUtil.getCreateID();
+        map.put("createId", createId);
+        List<Achievement> achievementList = expertService.findAllAchievementList(pager, map);
+        List list = new ArrayList();
+        for(Achievement achievement:achievementList){
+            Map m = new HashMap();
+            m.put("id",achievement.getId());
+            m.put("title",achievement.getTitle());
+            m.put("systemName",achievement.getSystemName());
+            m.put("useAreaName",achievement.getUseAreaName());
+            m.put("updateTime",achievement.getUpdateTime());
+            m.put("status",achievement.getStatus());
+            list.add(m);
         }
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 
@@ -183,30 +174,20 @@ public class ExpertController {
         //查询传参
         map.put("title", title);
         map.put("status", status);
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if (null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if (null != principal) {
-                map.put("createId", principal.getId());
-                List<Dynamic> dynamicList = expertService.findAllDynamicList(pager, map);
-                List list = new ArrayList();
-                for(Dynamic Dynamic:dynamicList){
-                    Map m = new HashMap();
-                    m.put("id",Dynamic.getId());
-                    m.put("title",Dynamic.getTitle());
-                    m.put("updateTime",Dynamic.getUpdateTime());
-                    m.put("status",Dynamic.getStatus());
-                    list.add(m);
-                }
-                pager.result(list);
-                response.setData(pager);
-            } else {
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        } else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        Long createId = ShiroUtil.getCreateID();
+        map.put("createId", createId);
+        List<Dynamic> dynamicList = expertService.findAllDynamicList(pager, map);
+        List list = new ArrayList();
+        for(Dynamic Dynamic:dynamicList){
+            Map m = new HashMap();
+            m.put("id",Dynamic.getId());
+            m.put("title",Dynamic.getTitle());
+            m.put("updateTime",Dynamic.getUpdateTime());
+            m.put("status",Dynamic.getStatus());
+            list.add(m);
         }
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 
@@ -241,21 +222,11 @@ public class ExpertController {
         }
         Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<>();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if (null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if (null != principal) {
-                map.put("id",principal.getId());
-                List<Map<String,String>> questionList = expertService.queryExpertQuestion(pager,map);
-                pager.result(questionList);
-                response.setData(pager);
-            }else {
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createId = ShiroUtil.getCreateID();
+        map.put("id",createId);
+        List<Map<String,String>> questionList = expertService.queryExpertQuestion(pager,map);
+        pager.result(questionList);
+        response.setData(pager);
         return response;
     }
 
@@ -263,19 +234,9 @@ public class ExpertController {
     @RequestMapping(value = "base/add_answer", method = RequestMethod.POST)
     public Response answerQuestion(@ModelAttribute Answer answer)  {
         Response response = new Response();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if (null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if (null != principal) {
-                answer.setCreateid(principal.getId().toString());
-                expertService.answerQuestion(answer);
-            }else {
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createId = ShiroUtil.getCreateID();
+        answer.setCreateid(createId.toString());
+        expertService.answerQuestion(answer);
         return response;
     }
 
@@ -293,21 +254,11 @@ public class ExpertController {
         }
         Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<>();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if (null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if (null != principal) {
-                map.put("id",principal.getId());
-                List<Map<String,String>> questionList = expertService.queryMyAnswerQuestion(pager,map);
-                pager.result(questionList);
-                response.setData(pager);
-            }else {
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createId = ShiroUtil.getCreateID();
+        map.put("id",createId);
+        List<Map<String,String>> questionList = expertService.queryMyAnswerQuestion(pager,map);
+        pager.result(questionList);
+        response.setData(pager);
         return response;
     }
 
@@ -325,21 +276,11 @@ public class ExpertController {
         }
         Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<>();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if (null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if (null != principal) {
-                map.put("id",principal.getId());
-                List<Map<String,String>> questionList = expertService.queryMyQuestion(pager,map);
-                pager.result(questionList);
-                response.setData(pager);
-            }else {
-                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Long createId = ShiroUtil.getCreateID();
+        map.put("id",createId);
+        List<Map<String,String>> questionList = expertService.queryMyQuestion(pager,map);
+        pager.result(questionList);
+        response.setData(pager);
         return response;
     }
 

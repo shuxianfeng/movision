@@ -6,6 +6,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.CooperationConstants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Cooperation;
 import com.zhuhuibao.mybatis.memCenter.service.CooperationService;
@@ -43,20 +44,10 @@ public class WitkeySiteController {
     @ApiOperation(value="发布任务",notes="发布任务",response = Response.class)
     @RequestMapping(value = "add_witkey", method = RequestMethod.POST)
     public Response publishCooperation(Cooperation cooperation)  {
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
+        Long createId = ShiroUtil.getCreateID();
+        cooperation.setCreateId(createId.toString());
+        cooperationService.publishCooperation(cooperation);
         Response response = new Response();
-        if(null != session) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if(null != principal){
-                cooperation.setCreateId(principal.getId().toString());
-                cooperationService.publishCooperation(cooperation);
-            }else{
-                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
         return response;
     }
 
