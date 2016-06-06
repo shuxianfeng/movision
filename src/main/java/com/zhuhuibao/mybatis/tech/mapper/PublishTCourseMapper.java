@@ -24,5 +24,7 @@ public interface PublishTCourseMapper {
 
     List<Map<String,String>> findAllPublishCoursePager(RowBounds rowBounds, Map<String,Object> condition);
 
-    List<Map<String,String>> findLatestPublishCourse(RowBounds rowBounds, Map<String,Object> condition);
+    List<Map<String,String>> findLatestPublishCourse(Map<String,Object> condition);
+
+    List<Map<String,String>> previewTrainCourseDetail(Map<String,Object> condition);
 }

@@ -62,10 +62,22 @@ public class TrainCourseController {
         condition.put("status",TechConstant.PublishCourseStatus.SALING);
         condition.put("courseType",TechConstant.COURSE_TYPE_TECH);
         condition.put("count",TechConstant.COURSE_LATEST_COUNT_THREE);
-        TrainPublishCourse course = ptCourseService.selectTrainCourseInfo(condition);
+        List<Map<String,String>> courseList = ptCourseService.findLatestPublishCourse(condition);
         Response response = new Response();
-        response.setData(course);
+        response.setData(courseList);
         return response;
     }
 
+    @RequestMapping(value="sel_publish_course_detail", method = RequestMethod.POST)
+    @ApiOperation(value="预览课程详情",notes = "预览课程详情",response = Response.class)
+    public Response previewPublishCourseDetail(@ApiParam(value = "培训课程ID")  @RequestParam Long courseId)
+    {
+        Map<String,Object> condition = new HashMap<String,Object>();
+        condition.put("courseid",courseId);
+        condition.put("courseType",TechConstant.COURSE_TYPE_TECH);
+        List<Map<String,String>> courseList = ptCourseService.previewTrainCourseDetail(condition);
+        Response response = new Response();
+        response.setData(courseList);
+        return response;
+    }
 }
