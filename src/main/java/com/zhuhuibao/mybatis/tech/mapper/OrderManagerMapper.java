@@ -6,7 +6,7 @@ import org.apache.ibatis.session.RowBounds;
 import java.util.List;
 import java.util.Map;
 
-public interface OrderOmsMapper {
+public interface OrderManagerMapper {
     OrderOms selectByPrimaryKey(String orderNo);
 
     int updateByPrimaryKeySelective(OrderOms record);

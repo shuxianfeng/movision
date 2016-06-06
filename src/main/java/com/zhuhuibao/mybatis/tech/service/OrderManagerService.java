@@ -1,6 +1,6 @@
 package com.zhuhuibao.mybatis.tech.service;
 
-import com.zhuhuibao.mybatis.tech.mapper.OrderOmsMapper;
+import com.zhuhuibao.mybatis.tech.mapper.OrderManagerMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -20,12 +20,12 @@ import java.util.Map;
  */
 @Service
 @Transactional
-public class OrderOmsService {
+public class OrderManagerService {
 
-    private final static Logger log = LoggerFactory.getLogger(OrderOmsService.class);
+    private final static Logger log = LoggerFactory.getLogger(OrderManagerService.class);
 
     @Autowired
-    OrderOmsMapper orderMapper;
+    OrderManagerMapper orderMapper;
 
     /**
      * 查询已发布的课程

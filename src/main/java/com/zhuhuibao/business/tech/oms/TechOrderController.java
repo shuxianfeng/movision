@@ -4,7 +4,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.mybatis.tech.service.OrderOmsService;
+import com.zhuhuibao.mybatis.tech.service.OrderManagerService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.util.Map;
 @Api(value = "techOrder", description = "技术培训订单管理接口")
 public class TechOrderController {
     @Autowired
-    OrderOmsService orderService;
+    OrderManagerService orderService;
 
     @RequestMapping(value="sel_order", method = RequestMethod.GET)
     @ApiOperation(value="运营管理平台技术培训订单管理",notes = "运营管理平台技术培训订单管理",response = Response.class)

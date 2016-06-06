@@ -72,7 +72,7 @@ public class UploadService {
         //目录不存在则创建
         File dir = new File(saveDirectory);
         if(!dir.exists() && !dir.isDirectory()) {
-            dir.mkdir();
+            dir.mkdirs();
             log.info("mk dir susscess dirName = "+saveDirectory);
         }
         //String a = getFileSuffix(req);
