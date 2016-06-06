@@ -275,6 +275,18 @@
   </select>
 
   <select id="findIndexTechData" parameterType="java.util.Map" resultType="java.util.Map">
-    select id,title,sCategory,type from t_tech_data where fCategory = #{fCategory} order by sCategory,updateTime desc
+    select id,title,sCategory,type from t_tech_data t
+    <where>
+      <if test="fCategory != null">
+        and fCategory = #{fCategory}
+      </if>
+      <if test="count != null">
+        and #{count} >= (select count(*) from t_tech_data t2 where t.sCategory = t2.sCategory and t.id > t2.id)
+      </if>
+      <if test="status != null">
+        and status = #{status}
+      </if>
+    </where>
+    order by sCategory,updateTime desc
   </select>
 </mapper>

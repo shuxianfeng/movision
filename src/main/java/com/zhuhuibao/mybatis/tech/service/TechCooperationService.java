@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +31,9 @@ public class TechCooperationService {
 
     @Autowired
     TechDataMapper techDataMapper;
+
+    @Autowired
+    TechDataService tdService;
 
     /**
      * 插入技术成果或者技术需求
@@ -194,5 +199,25 @@ public class TechCooperationService {
             throw e;
         }
         return dataList;
+    }
+
+    /**
+     * 查询技术频道首页技术合作：技术成果，技术需求
+     * @param map
+     * @return
+     */
+    public Map<String,List<Map<String,String>>> findIndexTechCooperation(Map<String,Object> map)
+    {
+        log.info("find home page tech cooperation "+StringUtils.mapToString(map));
+        Map<String,List<Map<String,String>>> coopMap;
+        try{
+            List<Map<String,String>> coopList = techMapper.findIndexTechCooperation(map);
+            coopMap = tdService.generateDataInfo(coopList,"type");
+        }catch(Exception e)
+        {
+            log.error("find home page tech data error!",e);
+            throw e;
+        }
+        return coopMap;
     }
 }
