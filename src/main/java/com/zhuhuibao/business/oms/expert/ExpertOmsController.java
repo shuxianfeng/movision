@@ -245,4 +245,57 @@ public class ExpertOmsController {
         response.setData(expert);
         return response;
     }
+
+    @ApiOperation(value = "更新专家信息", notes = "更新专家信息", response = Response.class)
+    @RequestMapping(value = "upd_expert", method = RequestMethod.POST)
+    public Response updateExpert(@ModelAttribute Expert expert)  {
+        Response response = new Response();
+        expertService.updateExpert(expert);
+        return response;
+    }
+
+    @ApiOperation(value = "更新协会动态", notes = "更新协会动态", response = Response.class)
+    @RequestMapping(value = "dynamic/upd_dynamic", method = RequestMethod.POST)
+    public Response updateDynamic(@ModelAttribute Dynamic dynamic)  {
+        Response response = new Response();
+        expertService.updateDynamic(dynamic);
+        return response;
+    }
+
+    @ApiOperation(value = "删除协会动态", notes = "删除协会动态", response = Response.class)
+    @RequestMapping(value = "dynamic/del_dynamic", method = RequestMethod.POST)
+    public Response deleteDynamic(@ApiParam(value = "协会动态ids,逗号隔开") @RequestParam String ids)  {
+        Response response = new Response();
+        String[] idList = ids.split(",");
+        for (String id : idList) {
+            Dynamic dynamic = new Dynamic();
+            dynamic.setIs_deleted(ExpertConstant.EXPERT_DELETE_ONE);
+            dynamic.setId(id);
+            expertService.updateDynamic(dynamic);
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "删除技术成果", notes = "删除技术成果", response = Response.class)
+    @RequestMapping(value = "ach/del_achievement", method = RequestMethod.POST)
+    public Response deleteAchievement(@ApiParam(value = "技术成果ids,逗号隔开") @RequestParam String ids)
+    {
+        Response response = new Response();
+        String[] idList = ids.split(",");
+        for (String id : idList) {
+            Achievement achievement = new Achievement();
+            achievement.setIs_deleted(ExpertConstant.EXPERT_DELETE_ONE);
+            achievement.setId(id);
+            expertService.updateAchievement(achievement);
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "更新技术成果", notes = "更新技术成果", response = Response.class)
+    @RequestMapping(value = "ach/upd_achievement", method = RequestMethod.POST)
+    public Response updateAchievement(@ModelAttribute Achievement achievement)  {
+        Response response = new Response();
+        expertService.updateAchievement(achievement);
+        return response;
+    }
 }
