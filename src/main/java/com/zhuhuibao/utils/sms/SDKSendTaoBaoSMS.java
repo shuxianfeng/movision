@@ -36,7 +36,7 @@ public class SDKSendTaoBaoSMS {
             req.setSmsFreeSignName("筑慧宝");
             req.setSmsParamString(params);
             req.setRecNum(mobile);
-            req.setSmsTemplateCode(PropertiesUtils.getValue(templateCode));
+            req.setSmsTemplateCode(templateCode);
             AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
             log.info("send sms response:" + rsp.getBody());
             return rsp.getResult().getSuccess();
