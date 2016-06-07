@@ -168,7 +168,7 @@ public class PublishTCourseService {
         log.info("find Latest publish train course "+ StringUtils.mapToString(condition));
         List<Map<String,String>> courseList = null;
         try{
-            courseList = pCourseMapper.findLatestPublishCourse(condition);
+            courseList = pCourseMapper.previewTrainCourseDetail(condition);
         }catch(Exception e)
         {
             log.error("find Latest publish train course error!",e);

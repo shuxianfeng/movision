@@ -67,7 +67,7 @@ public class TechOrderController {
     @RequestMapping(value={"/rest/tech/oms/order/sel_order_detail","/rest/expert/oms/order/sel_order_detail"}, method = RequestMethod.GET)
     @ApiOperation(value="查看订单详情",notes = "查看订单详情",response = Response.class)
     public Response selectTechDataDetail(@ApiParam(value = "订单编号")  @RequestParam String orderNo,
-                                         @ApiParam(value = "商品类型 1：VIP服务套餐订单，2：技术培训，3：专家培训")  @RequestParam Long goodsType)
+                                         @ApiParam(value = "商品类型 :1：技术培训，2：专家培训 3：VIP服务套餐订单")  @RequestParam Long goodsType)
     {
         Map<String,Object> condition = new HashMap<String,Object>();
         condition.put("orderNo",orderNo);
@@ -75,6 +75,16 @@ public class TechOrderController {
         Map<String,Object> orderList = orderService.selectOrderDetail(condition);
         Response response = new Response();
         response.setData(orderList);
+        return response;
+    }
+
+    @RequestMapping(value={"/rest/tech/oms/order/upd_order_status","/rest/expert/oms/order/upd_order_status"}, method = RequestMethod.GET)
+    @ApiOperation(value="查看订单详情",notes = "查看订单详情",response = Response.class)
+    public Response selectTechDataDetail(@ApiParam(value = "订单编号")  @RequestParam String orderNo,
+                                         @ApiParam(value = "状态")  @RequestParam String status)
+    {
+        int result = orderService.updateByPrimaryKeySelective(orderNo,status);
+        Response response = new Response();
         return response;
     }
 }

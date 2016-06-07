@@ -1,5 +1,6 @@
 package com.zhuhuibao.mybatis.tech.service;
 
+import com.zhuhuibao.mybatis.tech.entity.OrderOms;
 import com.zhuhuibao.mybatis.tech.mapper.OrderManagerMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -64,5 +65,28 @@ public class OrderManagerService {
             throw e;
         }
         return orderList;
+    }
+
+    /**
+     * 更新订单状态
+     * @param orderNo
+     * @param status
+     * @return
+     */
+    public int updateByPrimaryKeySelective(String orderNo,String status)
+    {
+        log.info("update order status = "+status+" orderNo = "+orderNo);
+        int result = 0;
+        try {
+            OrderOms record = new OrderOms();
+            record.setStatus(status);
+            record.setOrderNo(orderNo);
+            result = orderMapper.updateByPrimaryKeySelective(record);
+        }catch(Exception e)
+        {
+            log.error("update order status error!");
+            throw e;
+        }
+        return result;
     }
 }
