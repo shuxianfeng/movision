@@ -562,6 +562,19 @@ public class ExpertSiteController {
 
         log.info("技术培训下单页面,请求参数:{}", json);
         Map paramMap = gson.fromJson(json, Map.class);
+
+        String buyerId = (String) paramMap.get("buyerId");
+        if(StringUtils.isEmpty(buyerId)){
+            Long userId = ShiroUtil.getCreateID();
+            if (userId == null) {
+                log.error("用户未登陆");
+                throw new AuthException(MsgCodeConstant.un_login,
+                        MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            }else{
+                paramMap.put("buyerId",userId);
+            }
+        }
+
         //特定参数
         paramMap.put("exterInvokeIp", ValidateUtils.getIpAddr(request));//客户端IP地址
         paramMap.put("alipay_goods_type", PayConstants.GoodsType.XNL.toString());//商品类型  0 , 1
