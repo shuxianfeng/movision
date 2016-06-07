@@ -27,34 +27,39 @@ public class SDKSendTemplateSMS {
      * @param params
      * @param templateCode
      * @return
-     * @throws IOException
      */
-    public static Boolean sendSMS(String mobile, String params, String templateCode) throws IOException {
+    public static Boolean sendSMS(String mobile, String params, String templateCode) {
+        try {
+            List<String> paramsList = new ArrayList<>();
+            Map<String, String> map = JsonUtils.getMapFromJsonString(params);
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                String value = entry.getValue();
+                paramsList.add(value);
+            }
 
-        List<String> paramsList = new ArrayList<>();
-        Map<String, String> map = JsonUtils.getMapFromJsonString(params);
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            String value = entry.getValue();
-            paramsList.add(value);
-        }
+            HashMap<String, Object> result;
+            CCPRestSmsSDK restAPI = new CCPRestSmsSDK();
+            restAPI.init(SERVER_IP, PORT);
+            // 初始化服务器地址和端口，沙盒环境配置成sandboxapp.cloopen.com，生产环境配置成app.cloopen.com，端口都是8883.
+            restAPI.setAccount(ACCOUNT_SID, ACCOUNT_TOKEN);
+            // 初始化主账号名称和主账号令牌，登陆云通讯网站后，可在"控制台-应用"中看到开发者主账号ACCOUNT SID和 主账号令牌AUTH TOKEN。
+            restAPI.setAppId(APP_ID);
+            // 初始化应用ID，如果是在沙盒环境开发，请配置"控制台-应用-测试DEMO"中的APPID。
+            //如切换到生产环境，请使用自己创建应用的APPID
+            result = restAPI.sendTemplateSMS(mobile, templateCode, paramsList.toArray(new String[paramsList.size()]));
+            log.info("SDKTestGetSubAccounts result=" + result);
+            if ("000000".equals(result.get("statusCode"))) {
+                //正常返回输出data包体信息（map）
+                return true;
+            } else {
+                //异常返回输出错误码和错误信息
+                log.info("错误码=" + result.get("statusCode") + " 错误信息= " + result.get("statusMsg"));
+                return false;
+            }
 
-        HashMap<String, Object> result;
-        CCPRestSmsSDK restAPI = new CCPRestSmsSDK();
-        restAPI.init(SERVER_IP, PORT);
-        // 初始化服务器地址和端口，沙盒环境配置成sandboxapp.cloopen.com，生产环境配置成app.cloopen.com，端口都是8883.
-        restAPI.setAccount(ACCOUNT_SID, ACCOUNT_TOKEN);
-        // 初始化主账号名称和主账号令牌，登陆云通讯网站后，可在"控制台-应用"中看到开发者主账号ACCOUNT SID和 主账号令牌AUTH TOKEN。
-        restAPI.setAppId(APP_ID);
-        // 初始化应用ID，如果是在沙盒环境开发，请配置"控制台-应用-测试DEMO"中的APPID。
-        //如切换到生产环境，请使用自己创建应用的APPID
-        result = restAPI.sendTemplateSMS(mobile, templateCode, paramsList.toArray(new String[paramsList.size()]));
-        log.info("SDKTestGetSubAccounts result=" + result);
-        if ("000000".equals(result.get("statusCode"))) {
-            //正常返回输出data包体信息（map）
-            return true;
-        } else {
-            //异常返回输出错误码和错误信息
-            log.info("错误码=" + result.get("statusCode") + " 错误信息= " + result.get("statusMsg"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("发送短信异常");
             return false;
         }
 

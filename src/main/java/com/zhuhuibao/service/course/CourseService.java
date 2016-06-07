@@ -209,8 +209,8 @@ public class CourseService {
             //设置发送状态为发送失败
             orderSms.setStatus(OrderConstants.SmsStatus.FAIL.toString());
             orderSms.setUpdateTime(new Date());
-            orderSmsService.update(orderSms);
         }
+        orderSmsService.update(orderSms);
     }
 
 
