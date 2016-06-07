@@ -47,8 +47,12 @@ public class ExpoOmsController {
     public Response updateMeetingOrderStatus(@ModelAttribute()MeetingOrder meetingOrder)  {
         Response Response = new Response();
         Long createId = ShiroUtil.getOmsCreateID();
-        meetingOrder.setUpdateManId(createId.toString());
-        exhibitionService.updateMeetingOrderStatus(meetingOrder);
+        if(createId!=null){
+            meetingOrder.setUpdateManId(createId.toString());
+            exhibitionService.updateMeetingOrderStatus(meetingOrder);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return Response;
     }
 
@@ -214,8 +218,13 @@ public class ExpoOmsController {
     public Response updateDistributedStatus(@ModelAttribute()DistributedOrder distributedOrder)  {
         Response Response = new Response();
         Long createId = ShiroUtil.getOmsCreateID();
-        distributedOrder.setUpdateManId(createId.toString());
-        exhibitionService.updateDistributedStatus(distributedOrder);
+        if(createId!=null){
+            distributedOrder.setUpdateManId(createId.toString());
+            exhibitionService.updateDistributedStatus(distributedOrder);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+
         return Response;
     }
 }

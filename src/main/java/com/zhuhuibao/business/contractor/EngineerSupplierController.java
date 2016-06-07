@@ -139,8 +139,12 @@ public class EngineerSupplierController {
     public Response message(@ModelAttribute Message message) {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
-        message.setCreateid(createid.toString());
-        memberService.saveMessage(message);
+        if(createid!=null){
+            message.setCreateid(createid.toString());
+            memberService.saveMessage(message);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 }

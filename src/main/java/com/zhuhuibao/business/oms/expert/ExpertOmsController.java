@@ -218,8 +218,13 @@ public class ExpertOmsController {
         expertSupport.setId(id);
         expertSupport.setStatus(status);
         Long createId = ShiroUtil.getOmsCreateID();
-        expertSupport.setUpdateManId(createId.toString());
-        expertService.updateExpertSupport(expertSupport);
+        if(createId!=null){
+            expertSupport.setUpdateManId(createId.toString());
+            expertService.updateExpertSupport(expertSupport);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+
         return response;
     }
 

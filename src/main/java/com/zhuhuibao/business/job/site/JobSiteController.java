@@ -6,7 +6,9 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.JobConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
@@ -16,6 +18,7 @@ import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.utils.DateUtils;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.file.ExporDoc;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -170,11 +173,16 @@ public class JobSiteController {
     public Response queryPositionInfoByID(@ApiParam(value = "招聘职位ID") @RequestParam Long id)
     {
         Map<String,Object> map = new HashMap<String,Object>();
+        Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
-        map.put("createid",createid);
-        map.put("id",id);
-        Response response = job.queryPositionInfoByID(map);
-        job.updateViews(id);
+        if(createid!=null){
+            map.put("createid",createid);
+            map.put("id",id);
+            response = job.queryPositionInfoByID(map);
+            job.updateViews(id);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
@@ -450,6 +458,8 @@ public class JobSiteController {
             map.put("type", JobConstant.SITEMAIL_TYPE_JOB_ELEVEN);
             map.put("status", Constants.MAILSITE_STATUS_UNREAD);
             response.setData(smService.queryUnreadMsgCount(map));
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }

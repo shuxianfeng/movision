@@ -59,11 +59,15 @@ public class ExpoController {
         map.put("status",status);
         map.put("type",3);
         Long createId = ShiroUtil.getCreateID();
-        map.put("createId", createId);
-        //查询
-        List<Map<String,String>> exhibitionList = exhibitionService.findAllExhibition(pager,map);
-        pager.result(exhibitionList);
-        response.setData(pager);
+        if(createId!=null){
+            map.put("createId", createId);
+            //查询
+            List<Map<String,String>> exhibitionList = exhibitionService.findAllExhibition(pager,map);
+            pager.result(exhibitionList);
+            response.setData(pager);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 

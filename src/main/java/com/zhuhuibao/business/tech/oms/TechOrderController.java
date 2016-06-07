@@ -61,4 +61,18 @@ public class TechOrderController {
         response.setData(pager);
         return response;
     }
+
+    @RequestMapping(value="sel_order_detail", method = RequestMethod.GET)
+    @ApiOperation(value="查看订单详情",notes = "查看订单详情",response = Response.class)
+    public Response selectTechDataDetail(@ApiParam(value = "订单编号")  @RequestParam String orderNo,
+                                         @ApiParam(value = "商品类型 1：VIP服务套餐订单，2：技术培训，3：专家培训")  @RequestParam Long goodsType)
+    {
+        Map<String,Object> condition = new HashMap<String,Object>();
+        condition.put("orderNo",orderNo);
+        condition.put("goodsType",goodsType);
+        Map<String,Object> orderList = orderService.selectOrderDetail(condition);
+        Response response = new Response();
+        response.setData(orderList);
+        return response;
+    }
 }
