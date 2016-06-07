@@ -227,4 +227,45 @@ public class ExpoOmsController {
 
         return Response;
     }
+
+    /**
+     * 根據id查詢会展详情
+     */
+    @ApiOperation(value="根據id查詢会展详情",notes="根據id查詢会展详情",response = Response.class)
+    @RequestMapping(value = "sel_expo", method = RequestMethod.GET)
+    public Response queryExhibitionInfoById(@RequestParam String id)  {
+        Response response = new Response();
+        Exhibition exhibition = exhibitionService.queryExhibitionInfoById(id);
+        response.setData(exhibition);
+        return response;
+    }
+
+    /**
+     * 会展信息编辑更新
+     */
+    @ApiOperation(value="会展信息编辑更新",notes="会展信息编辑更新",response = Response.class)
+    @RequestMapping(value = "upd_expo", method = RequestMethod.POST)
+    public Response updateExhibitionInfoById(@ModelAttribute()Exhibition exhibition)  {
+        Response response = new Response();
+        exhibitionService.updateExhibitionInfoById(exhibition);
+        return response;
+    }
+
+    /**
+     * 会展信息删除
+     */
+    @ApiOperation(value="会展信息删除",notes="会展信息删除",response = Response.class)
+    @RequestMapping(value = "del_expo", method = RequestMethod.POST)
+    public Response deleteExhibition(@ApiParam(value = "ids,逗号隔开") @RequestParam String ids)  {
+        Response response = new Response();
+        String[] idList = ids.split(",");
+        for (String id : idList) {
+            String is_deleted = "1";
+            Exhibition exhibition = new Exhibition();
+            exhibition.setIs_deleted(is_deleted);
+            exhibition.setId(id);
+            exhibitionService.updateExhibitionInfoById(exhibition);
+        }
+        return response;
+    }
 }
