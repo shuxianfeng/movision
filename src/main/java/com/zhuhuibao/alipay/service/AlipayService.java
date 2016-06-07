@@ -264,19 +264,21 @@ public class AlipayService {
                     //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                     //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                     //如果有做过处理，不执行商户的业务程序
-                    Order order = orderService.findByOrderNo(params.get("out_trade_no"));
-                    BigDecimal price = new BigDecimal(Long.valueOf(params.get("price")));
-                    int quantity = Integer.valueOf(params.get("quantity"));
-                    BigDecimal totalFee =  price.multiply(new BigDecimal(quantity));
+                    if(tradeType.equals(PayConstants.TradeType.PAY.toString())){
+                        Order order = orderService.findByOrderNo(params.get("out_trade_no"));
+                        BigDecimal price = new BigDecimal(params.get("price"));
+                        BigDecimal totalFee =  price.multiply(new BigDecimal(params.get("quantity")));
 
-                    if (!String.valueOf(order.getPayAmount()).equals(totalFee.toString())) {
-                        log.error("支付宝返回交易金额[{}] 与 订单支付金额[{}] 不符合", totalFee.toString(), order.getPayAmount());
-                        out.println("fail");
+                        if (!String.valueOf(order.getPayAmount()).equals(totalFee.toString())) {
+                            log.error("支付宝返回交易金额[{}] 与 订单支付金额[{}] 不符合", totalFee.toString(), order.getPayAmount());
+                            out.println("fail");
+                        }
+                        if (!order.getSellerId().equals(params.get("seller_id"))) {
+                            log.error("支付宝返回卖家支付宝用户号[{}] 与 订单卖家支付宝用户号[{}] 不符合", params.get("seller_id"), order.getSellerId());
+                            out.println("fail");
+                        }
                     }
-                    if (!order.getSellerId().equals(params.get("seller_id"))) {
-                        log.error("支付宝返回卖家支付宝用户号[{}] 与 订单卖家支付宝用户号[{}] 不符合", params.get("seller_id"), order.getSellerId());
-                        out.println("fail");
-                    }
+
                     //业务逻辑处理
                     Map<String, String> resultMap =
                             tradeSuccessDeal(params, PayConstants.NotifyType.ASYNC.toString(), tradeType);
@@ -674,16 +676,25 @@ public class AlipayService {
         try {
 
             //1-> 记录支付宝回调信息 交易流水信息
+            //订单
+            Order order = new Order();
+            order.setOrderNo(params.get("out_trade_no"));
+            order.setUpdateTime(new Date());
             //异步通知
             if (notifyType.equals(PayConstants.NotifyType.ASYNC.toString())) {
                 log.info("异步通知返回记录处理...");
                 //即时到账支付
                 if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
                     recordPayAsyncCallbackLog(params);
+                    //2-> 修改订单状态为已支付
+                    order.setStatus(PayConstants.OrderStatus.YZF.toString());
+
                 }
                 //即时到账退款
                 if (tradeType.equals(PayConstants.TradeType.REFUND.toString())) {
                     recordRefundAsyncCallbackLog(params);
+                    //修改订单状态为已支付
+                    order.setStatus(PayConstants.OrderStatus.YTK.toString());
                 }
             }
             //同步通知
@@ -691,12 +702,7 @@ public class AlipayService {
                 log.info("同步通知返回记录处理...");
             }
 
-
-            //2-> 修改订单状态
-            Order order = new Order();
-            order.setOrderNo(params.get("out_trade_no"));
-            order.setStatus(PayConstants.OrderStatus.YZF.toString());
-            order.setUpdateTime(new Date());
+            //2. 修改订单状态
             orderService.update(order);
 
             resultMap.put("statusCode", String.valueOf(PayConstants.HTTP_SUCCESS_CODE));

@@ -47,11 +47,26 @@ public class AlipayController {
      * @param request  http 请求
      * @param response http
      */
-    @RequestMapping(value = "callback/notify", method = RequestMethod.POST)
+    @RequestMapping(value = "callback/direct_notify", method = RequestMethod.POST)
     public void alipayAsynPay(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("*******支付宝异步跳转******开始");
+        log.debug("*******支付宝[即时到账]异步跳转******开始");
 
         alipayService.asyncNotify(request, response, PayConstants.TradeType.PAY.toString());
+    }
+
+    /**
+     * 即时到账接口
+     * <p/>
+     * 支付宝异步跳转 {notify_url}      POST
+     *
+     * @param request  http 请求
+     * @param response http
+     */
+    @RequestMapping(value = "callback/refund_notify", method = RequestMethod.POST)
+    public void alipayAsynRefund(HttpServletRequest request, HttpServletResponse response) {
+        log.debug("*******支付宝[批量退款]异步跳转******开始");
+
+        alipayService.asyncNotify(request, response, PayConstants.TradeType.REFUND.toString());
     }
 
 }
