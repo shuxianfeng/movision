@@ -27,7 +27,7 @@ public class OrderReqBean {
     private String buyerId;
     @ApiModelProperty(value="商品ID",required = true)
     private String goodsId;
-    @ApiModelProperty(value="商品名称",required = true)
+    @ApiModelProperty(value="商品名称",required = false)
     private String goodsName;
     @ApiModelProperty(value="商品单价",required = false)
     private String goodsPrice;

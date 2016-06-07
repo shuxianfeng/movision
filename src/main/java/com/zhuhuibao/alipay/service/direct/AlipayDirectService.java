@@ -68,6 +68,7 @@ public class AlipayDirectService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,e.getMessage());
         }
         finally {
             if (lock != null) {

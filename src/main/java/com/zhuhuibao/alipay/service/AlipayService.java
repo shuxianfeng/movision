@@ -401,7 +401,7 @@ public class AlipayService {
         smsMap.put("name",course.getTitle());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         smsMap.put("time",format.format(course.getSaleTime()));
-        smsMap.put("code",format.format(codes));
+        smsMap.put("code",codes);
         String content = JsonUtils.getJsonStringFromMap(smsMap);
         OrderSms orderSms = new OrderSms();
         orderSms.setOrderNo(msgParam.get("orderNo"));
@@ -437,7 +437,8 @@ public class AlipayService {
         OrderGoods orderGoods = new OrderGoods();
         orderGoods.setGoodsId(Long.valueOf(msgParam.get("goodsId")));
         orderGoods.setGoodsName(msgParam.get("goodsName"));
-        orderGoods.setGoodsPrice(BigDecimal.valueOf(Long.parseLong(msgParam.get("goodsPrice"))));
+
+        orderGoods.setGoodsPrice(new BigDecimal(msgParam.get("goodsPrice")));
         orderGoods.setNumber(Integer.valueOf(msgParam.get("number")));
         orderGoods.setOrderNo(msgParam.get("orderNo"));
         orderGoods.setCreateTime(new Date());
@@ -462,7 +463,9 @@ public class AlipayService {
         order.setDealTime(new Date());
         String payPrice = msgParam.get("goodsPrice");
         String number = msgParam.get("number");
-        BigDecimal amount = new BigDecimal(Long.valueOf(payPrice)).multiply(new BigDecimal(Long.valueOf(number)));
+        BigDecimal price = new BigDecimal(payPrice);
+        BigDecimal num = new BigDecimal(number);
+        BigDecimal amount = price.multiply(num);
         order.setAmount(amount); //订单总金额
 //        String payAmount = msgParam.get("payAmount");
         order.setPayAmount(amount);  //交易金额
