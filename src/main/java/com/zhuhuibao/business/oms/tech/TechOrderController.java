@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.tech.oms;
+package com.zhuhuibao.business.oms.tech;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -24,13 +24,13 @@ import java.util.Map;
  * @version 2016/6/6 0006
  */
 @RestController
-@RequestMapping("/rest/tech/oms/order")
+@RequestMapping
 @Api(value = "techOrder", description = "技术培训订单管理接口")
 public class TechOrderController {
     @Autowired
     OrderManagerService orderService;
 
-    @RequestMapping(value="sel_order", method = RequestMethod.GET)
+    @RequestMapping(value={"/rest/tech/oms/order/sel_order","/rest/expert/oms/order/sel_order"}, method = RequestMethod.GET)
     @ApiOperation(value="运营管理平台技术培训订单管理",notes = "运营管理平台技术培训订单管理",response = Response.class)
     public Response findAllTechDataPager(@ApiParam(value = "课程名称") @RequestParam(required = false) String goodsName,
                                          @ApiParam(value = "订单状态：1未支付，2：已支付，3：退款中，4，退款失败，5：已退款 , 6:已失效") @RequestParam(required = false) String status,
@@ -62,7 +62,7 @@ public class TechOrderController {
         return response;
     }
 
-    @RequestMapping(value="sel_order_detail", method = RequestMethod.GET)
+    @RequestMapping(value={"/rest/tech/oms/order/sel_order_detail","/rest/expert/oms/order/sel_order_detail"}, method = RequestMethod.GET)
     @ApiOperation(value="查看订单详情",notes = "查看订单详情",response = Response.class)
     public Response selectTechDataDetail(@ApiParam(value = "订单编号")  @RequestParam String orderNo,
                                          @ApiParam(value = "商品类型 1：VIP服务套餐订单，2：技术培训，3：专家培训")  @RequestParam Long goodsType)

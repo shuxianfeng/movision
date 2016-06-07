@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.tech.oms;
+package com.zhuhuibao.business.oms.tech;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
