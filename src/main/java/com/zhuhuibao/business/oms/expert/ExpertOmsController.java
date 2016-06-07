@@ -237,4 +237,12 @@ public class ExpertOmsController {
         return response;
     }
 
+    @ApiOperation(value = "根据id查询专家全部信息", notes = "根据id查询专家全部信息", response = Response.class)
+    @RequestMapping(value = "sel_expert", method = RequestMethod.GET)
+    public Response queryExpertById(@ApiParam(value = "专家id") @RequestParam String id)  {
+        Response response = new Response();
+        Expert expert = expertService.queryExpertById(id);
+        response.setData(expert);
+        return response;
+    }
 }
