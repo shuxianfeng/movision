@@ -9,6 +9,7 @@ import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.common.pojo.OrderReqBean;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
@@ -75,15 +76,13 @@ public class TechCourseController {
 
         String buyerId = (String) paramMap.get("buyerId");
         if(StringUtils.isEmpty(buyerId)){
-            Subject currentUser = SecurityUtils.getSubject();
-            Session session = currentUser.getSession(false);
-            ShiroRealm.ShiroUser user = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            if (user == null) {
+            Long userId = ShiroUtil.getCreateID();
+            if (userId == null) {
                 log.error("用户未登陆");
                 throw new AuthException(MsgCodeConstant.un_login,
                         MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }else{
-                paramMap.put("buyerId",user.getId());
+                paramMap.put("buyerId",userId);
             }
         }
 

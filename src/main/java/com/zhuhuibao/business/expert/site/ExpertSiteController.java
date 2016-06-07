@@ -79,8 +79,13 @@ public class ExpertSiteController {
     public Response publishAchievement(@ModelAttribute Achievement achievement) throws Exception {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
-        achievement.setCreateId(createId.toString());
-        expertService.publishAchievement(achievement);
+        if(createId!=null){
+            achievement.setCreateId(createId.toString());
+            expertService.publishAchievement(achievement);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+
         return response;
     }
 
@@ -189,12 +194,16 @@ public class ExpertSiteController {
     public Response applyExpert(@ModelAttribute Expert expert) throws Exception {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
-        expert.setCreateId(createId.toString());
-        Expert expert1 = expertService.queryExpertByCreateid(createId.toString());
-        if(expert1==null){
-            expertService.applyExpert(expert);
+        if(createId!=null){
+            expert.setCreateId(createId.toString());
+            Expert expert1 = expertService.queryExpertByCreateid(createId.toString());
+            if(expert1==null){
+                expertService.applyExpert(expert);
+            }else {
+                throw new BusinessException(MsgCodeConstant.EXPERT_ISEXIST,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.EXPERT_ISEXIST)));
+            }
         }else {
-            throw new BusinessException(MsgCodeConstant.EXPERT_ISEXIST,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.EXPERT_ISEXIST)));
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -448,8 +457,13 @@ public class ExpertSiteController {
         expertSupport.setReason(reason);
         expertService.checkMobileCode(code,mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
         Long createId = ShiroUtil.getCreateID();
-        expertSupport.setCreateid(createId.toString());
-        expertService.applyExpertSupport(expertSupport);
+        if(createId!=null){
+            expertSupport.setCreateid(createId.toString());
+            expertService.applyExpertSupport(expertSupport);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+
         return response;
     }
 
@@ -548,6 +562,19 @@ public class ExpertSiteController {
 
         log.info("技术培训下单页面,请求参数:{}", json);
         Map paramMap = gson.fromJson(json, Map.class);
+
+        String buyerId = (String) paramMap.get("buyerId");
+        if(StringUtils.isEmpty(buyerId)){
+            Long userId = ShiroUtil.getCreateID();
+            if (userId == null) {
+                log.error("用户未登陆");
+                throw new AuthException(MsgCodeConstant.un_login,
+                        MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            }else{
+                paramMap.put("buyerId",userId);
+            }
+        }
+
         //特定参数
         paramMap.put("exterInvokeIp", ValidateUtils.getIpAddr(request));//客户端IP地址
         paramMap.put("alipay_goods_type", PayConstants.GoodsType.XNL.toString());//商品类型  0 , 1

@@ -61,21 +61,25 @@ public class ExpertController {
         map.put("title", title);
         map.put("status", status);
         Long createId = ShiroUtil.getCreateID();
-        map.put("createId", createId);
-        List<Achievement> achievementList = expertService.findAllAchievementList(pager, map);
-        List list = new ArrayList();
-        for(Achievement achievement:achievementList){
-            Map m = new HashMap();
-            m.put("id",achievement.getId());
-            m.put("title",achievement.getTitle());
-            m.put("systemName",achievement.getSystemName());
-            m.put("useAreaName",achievement.getUseAreaName());
-            m.put("updateTime",achievement.getUpdateTime());
-            m.put("status",achievement.getStatus());
-            list.add(m);
+        if(createId!=null){
+            map.put("createId", createId);
+            List<Achievement> achievementList = expertService.findAllAchievementList(pager, map);
+            List list = new ArrayList();
+            for(Achievement achievement:achievementList){
+                Map m = new HashMap();
+                m.put("id",achievement.getId());
+                m.put("title",achievement.getTitle());
+                m.put("systemName",achievement.getSystemName());
+                m.put("useAreaName",achievement.getUseAreaName());
+                m.put("updateTime",achievement.getUpdateTime());
+                m.put("status",achievement.getStatus());
+                list.add(m);
+            }
+            pager.result(list);
+            response.setData(pager);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-        pager.result(list);
-        response.setData(pager);
         return response;
     }
 
@@ -175,19 +179,23 @@ public class ExpertController {
         map.put("title", title);
         map.put("status", status);
         Long createId = ShiroUtil.getCreateID();
-        map.put("createId", createId);
-        List<Dynamic> dynamicList = expertService.findAllDynamicList(pager, map);
-        List list = new ArrayList();
-        for(Dynamic Dynamic:dynamicList){
-            Map m = new HashMap();
-            m.put("id",Dynamic.getId());
-            m.put("title",Dynamic.getTitle());
-            m.put("updateTime",Dynamic.getUpdateTime());
-            m.put("status",Dynamic.getStatus());
-            list.add(m);
+        if(createId!=null){
+            map.put("createId", createId);
+            List<Dynamic> dynamicList = expertService.findAllDynamicList(pager, map);
+            List list = new ArrayList();
+            for(Dynamic Dynamic:dynamicList){
+                Map m = new HashMap();
+                m.put("id",Dynamic.getId());
+                m.put("title",Dynamic.getTitle());
+                m.put("updateTime",Dynamic.getUpdateTime());
+                m.put("status",Dynamic.getStatus());
+                list.add(m);
+            }
+            pager.result(list);
+            response.setData(pager);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-        pager.result(list);
-        response.setData(pager);
         return response;
     }
 
@@ -223,10 +231,14 @@ public class ExpertController {
         Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<>();
         Long createId = ShiroUtil.getCreateID();
-        map.put("id",createId);
-        List<Map<String,String>> questionList = expertService.queryExpertQuestion(pager,map);
-        pager.result(questionList);
-        response.setData(pager);
+        if(createId!=null){
+            map.put("id",createId);
+            List<Map<String,String>> questionList = expertService.queryExpertQuestion(pager,map);
+            pager.result(questionList);
+            response.setData(pager);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
@@ -235,8 +247,12 @@ public class ExpertController {
     public Response answerQuestion(@ModelAttribute Answer answer)  {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
-        answer.setCreateid(createId.toString());
-        expertService.answerQuestion(answer);
+        if(createId!=null){
+            answer.setCreateid(createId.toString());
+            expertService.answerQuestion(answer);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
@@ -255,10 +271,14 @@ public class ExpertController {
         Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<>();
         Long createId = ShiroUtil.getCreateID();
-        map.put("id",createId);
-        List<Map<String,String>> questionList = expertService.queryMyAnswerQuestion(pager,map);
-        pager.result(questionList);
-        response.setData(pager);
+        if(createId!=null){
+            map.put("id",createId);
+            List<Map<String,String>> questionList = expertService.queryMyAnswerQuestion(pager,map);
+            pager.result(questionList);
+            response.setData(pager);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
@@ -277,10 +297,14 @@ public class ExpertController {
         Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<>();
         Long createId = ShiroUtil.getCreateID();
-        map.put("id",createId);
-        List<Map<String,String>> questionList = expertService.queryMyQuestion(pager,map);
-        pager.result(questionList);
-        response.setData(pager);
+        if(createId!=null){
+            map.put("id",createId);
+            List<Map<String,String>> questionList = expertService.queryMyQuestion(pager,map);
+            pager.result(questionList);
+            response.setData(pager);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 

@@ -152,11 +152,14 @@ public class Test extends BaseSpringContext {
 
 
 //        System.out.println(IdGenerator.createSNcode());
-        String sms = "AAAA_{0}_BBB_{1}";
+//        String sms = "AAAA_{0}_BBB_{1}";
 
-        String ss = MessageFormat.format(sms,"11","22");
+//        String ss = MessageFormat.format(sms,"11","22");
 
-        System.out.println(ss);
+//        System.out.println(ss);
+
+        String s = "100.00";
+        System.out.println(Long.valueOf(s));
     }
 
 

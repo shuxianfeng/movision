@@ -6,10 +6,10 @@ package com.zhuhuibao.common.constant;
 public class OrderConstants {
 
     /**
-     * 商品类型 1：VIP服务套餐订单，2：技术培训，3：专家培训
+     * 商品类型 3：VIP服务套餐订单，1：技术培训，2：专家培训
      */
     public enum GoodsType {
-        VIP("1"), JSPX("2"), ZJPX("3");
+        JSPX("1"), ZJPX("2"),VIP("3");
         public final String value;
 
         GoodsType(String value) {

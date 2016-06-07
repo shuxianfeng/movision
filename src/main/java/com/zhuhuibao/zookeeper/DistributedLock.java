@@ -1,12 +1,11 @@
 package com.zhuhuibao.zookeeper;
 
-import com.zhuhuibao.common.constant.ZookeeperConstants;
 import com.zhuhuibao.exception.LockException;
+import com.zhuhuibao.utils.PropertiesUtils;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -36,8 +35,6 @@ public class DistributedLock implements Lock, Watcher {
     private CountDownLatch latch;//计数器
     private List<Exception> exception = new ArrayList<>();
 
-    @Autowired
-    ZookeeperConstants constants;
 
     /**
      * 创建分布式锁,使用前请确认config配置的zookeeper服务可用
@@ -48,7 +45,8 @@ public class DistributedLock implements Lock, Watcher {
         this.lockName = lockName;
         // 创建一个与服务器的连接
         try {
-            zk = new ZooKeeper(constants.getHosts(), constants.getTimeout(), this);
+            zk = new ZooKeeper(PropertiesUtils.getValue("zookeeper_hosts"),
+                    Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")), this);
             Stat stat = zk.exists(root, false);
             if (stat == null) {
                 // 创建根节点
@@ -70,7 +68,7 @@ public class DistributedLock implements Lock, Watcher {
                 log.info("Thread " + Thread.currentThread().getId() + " " + myZnode + " get lock true");
                 return;
             } else {
-                waitForLock(waitNode, constants.getTimeout());//等待锁
+                waitForLock(waitNode, Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")));//等待锁
             }
         } catch (KeeperException | InterruptedException e) {
             throw new LockException(9999,e.getMessage());

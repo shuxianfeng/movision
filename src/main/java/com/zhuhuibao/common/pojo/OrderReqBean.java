@@ -23,11 +23,11 @@ public class OrderReqBean {
      * invoiceTitle : 发票抬头
      * invoiceType :  发票类型 1普通发票（纸质），2：增值发票
      */
-    @ApiModelProperty(value="下单会员ID",required = true)
+    @ApiModelProperty(value="下单会员ID",required = false)
     private String buyerId;
     @ApiModelProperty(value="商品ID",required = true)
     private String goodsId;
-    @ApiModelProperty(value="商品名称",required = true)
+    @ApiModelProperty(value="商品名称",required = false)
     private String goodsName;
     @ApiModelProperty(value="商品单价",required = false)
     private String goodsPrice;
@@ -39,7 +39,7 @@ public class OrderReqBean {
     private String payAmount;
     @ApiModelProperty(value="支付方式 1:支付宝",required = true)
     private String payMode;
-    @ApiModelProperty(value="商品类型 2:技术培训",required = true)
+    @ApiModelProperty(value="商品类型 1:技术培训 2:专家培训",required = true)
     private String goodsType;
     @ApiModelProperty(value="下单手机号",required = true)
     private String mobile;

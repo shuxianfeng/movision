@@ -57,8 +57,12 @@ public class JobController {
     public Response publishPosition(@ApiParam(value = "职位属性") Job job) throws IOException {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
-        job.setCreateid(createid.toString());
-        jobService.publishPosition(job);
+        if(createid!=null){
+            job.setCreateid(createid.toString());
+            jobService.publishPosition(job);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
@@ -76,10 +80,14 @@ public class JobController {
             pageSize = "10";
         }
         Long createid = ShiroUtil.getCreateID();
-        Paging<Job> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List list = jobService.findAllPositionByMemId(pager, createid.toString());
-        pager.result(list);
-        response.setData(pager);
+        if(createid!=null){
+            Paging<Job> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+            List list = jobService.findAllPositionByMemId(pager, createid.toString());
+            pager.result(list);
+            response.setData(pager);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
@@ -131,7 +139,12 @@ public class JobController {
     @RequestMapping(value = {"searchRecommendPosition","mc/position/sel_recommend_position"}, method = RequestMethod.GET)
     public Response searchRecommendPosition() throws IOException {
         Long createid = ShiroUtil.getCreateID();
-        Response response = jobService.searchRecommendPosition(createid.toString(), 6);
+        Response response = new Response();
+        if(createid!=null){
+            response = jobService.searchRecommendPosition(createid.toString(), 6);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
@@ -148,8 +161,13 @@ public class JobController {
             pageSize = "10";
         }
         Long createid = ShiroUtil.getCreateID();
-        Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        Response response = jobService.myApplyPosition(pager, createid.toString());
+        Response response = new Response();
+        if(createid!=null){
+            Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+            response = jobService.myApplyPosition(pager, createid.toString());
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 }
