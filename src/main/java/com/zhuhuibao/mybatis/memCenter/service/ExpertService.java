@@ -10,9 +10,7 @@ import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.*;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
-import com.zhuhuibao.utils.DateUtils;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
-import com.zhuhuibao.utils.VerifyCodeUtils;
+import com.zhuhuibao.utils.*;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
 import org.apache.shiro.SecurityUtils;
@@ -62,6 +60,9 @@ public class ExpertService {
 
     @Autowired
     private MemberRegService memberRegService;
+
+    @Autowired
+    private LookExpertRecordMapper lookExpertRecordMapper;
 
     /**
      * 发布技术成果
@@ -633,13 +634,11 @@ public class ExpertService {
         String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
         log.debug("verifyCode == " + verifyCode);
         //发送验证码到手机
-        if(type.equals(ExpertConstant.MOBILE_CODE_SESSION_TYPE_TRAIN)){
-            SDKSendTaoBaoSMS.sendExpertTrainSMS(mobile, verifyCode, Constants.sms_time);
-        }else if(type.equals(ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT)){
-            SDKSendTaoBaoSMS.sendExpertSupportSMS(mobile, verifyCode, Constants.sms_time);
-        }else if(type.equals(ExpertConstant.MOBILE_CODE_SESSION_TYPE_CLASS)){
-            SDKSendTaoBaoSMS.sendExpertClassSMS(mobile, verifyCode, Constants.sms_time);
-        }
+        Map map = new HashMap();
+        map.put("code",verifyCode);
+        map.put("time",Constants.sms_time);
+        String params = JsonUtils.getJsonStringFromMap(map);
+        SDKSendTaoBaoSMS.sendSMS(mobile, params, PropertiesUtils.getValue("zhuhuibao_check_mobile_template_code"));
 
         Validateinfo info = new Validateinfo();
         info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
@@ -648,5 +647,33 @@ public class ExpertService {
         memberRegService.inserValidateInfo(info);
         sess.setAttribute(type+mobile, verifyCode);
         return verifyCode;
+    }
+
+    /**
+     * 记录查看专家
+     * @return
+     */
+    public int addRecord(LookExpertRecord record){
+        try{
+            return lookExpertRecordMapper.addRecord(record);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 查询是否查看过该专家
+     * @return
+     */
+    public LookExpertRecord selectRecordByExpertIdCompanyId(LookExpertRecord record){
+        try{
+            return lookExpertRecordMapper.selectRecordByExpertIdCompanyId(record);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 }
