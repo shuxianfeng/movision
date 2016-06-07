@@ -19,6 +19,16 @@ public class PwdTicket {
 
     private Integer status;
 
+    private String ticketType;
+
+    public String getTicketType() {
+        return ticketType;
+    }
+
+    public void setTicketType(String ticketType) {
+        this.ticketType = ticketType;
+    }
+
     public Long getTicketId() {
         return ticketId;
     }

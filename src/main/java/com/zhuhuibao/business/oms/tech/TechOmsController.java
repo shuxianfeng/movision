@@ -66,6 +66,58 @@ public class TechOmsController {
 
     @Autowired
     TechDataService techDataService;
+
+
+    /**
+     * 单笔退款
+     * {detail_data 退款详细数据 必填(支付宝交易号^退款金额^备注)}
+     * @param response
+     * @param data
+     */
+    @ApiOperation(value = "培训课程单笔退款", notes = "培训课程单笔退款")
+    @RequestMapping(value = "refund", method = RequestMethod.POST)
+    public void doRefund(HttpServletResponse response, @ApiParam @ModelAttribute RefundItem data) throws Exception {
+        Gson gson = new Gson();
+        String json = gson.toJson(data);
+        log.info("技术培训批量退款页面,请求参数:{}", json);
+        Map paramMap = gson.fromJson(json, Map.class);
+        paramMap.put("partner", PARTNER);// {partner = seller_id}   商家支付宝ID  合作伙伴身份ID 签约账号
+
+        //拼装请求参数
+        //orderNos  operatorId refundDate totalFee batchNum   detailData
+        paramMap.put("batchNum",1);
+        Long userId = ShiroUtil.getOmsCreateID();
+        if (userId == null) {
+            log.error("用户未登陆");
+            throw new AuthException(MsgCodeConstant.un_login,
+                    MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        paramMap.put("operatorId",String.valueOf(userId));
+
+        String reason = data.getReason();
+        if (reason.contains("^") || reason.contains("|") || reason.contains("$") ||
+                reason.contains("#")) {
+            log.error("退款理由中不能包含 '^' ,'|', '$' ,'#' 等特殊字符");
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,
+                    "退款理由中不能包含 '^' ,'|', '$' ,'#' 等特殊字符");
+        }
+        Order order = orderService.findByOrderNo(data.getOrderNo());
+
+        paramMap.put("orderNos", data.getOrderNo());
+        paramMap.put("totalFee", data.getFee());
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        paramMap.put("refundDate", sf.format(new Date()));
+
+        //detailData 多条   原付款支付宝交易号^退款总金额^退款理由 #  原付款支付宝交易号^退款总金额^退款理由
+        String detailData = String.valueOf(order.getBuyerId()) + "^" + data.getFee() + "^" + reason;
+        paramMap.put("detailData", detailData);
+
+
+        log.debug("调用批量退款接口......");
+        alipayRefundService.doRefund(response, paramMap);
+
+    }
+
     /**
      * 批量退款接口
      * {detail_data 退款详细数据 必填(支付宝交易号^退款金额^备注)多笔请用#隔开}
@@ -73,8 +125,8 @@ public class TechOmsController {
      * @param data
      */
     @ApiOperation(value = "培训课程批量退款", notes = "培训课程批量退款")
-    @RequestMapping(value = "refund", method = RequestMethod.POST)
-    public void doRefund(HttpServletResponse response, @ApiParam @ModelAttribute RefundReqBean data) throws Exception {
+    @RequestMapping(value = "batch_refund", method = RequestMethod.POST)
+    public void doBatchRefund(HttpServletResponse response, @ApiParam @ModelAttribute RefundReqBean data) throws Exception {
 
         Gson gson = new Gson();
         String json = gson.toJson(data);
@@ -84,8 +136,6 @@ public class TechOmsController {
 
         //拼装请求参数
         //orderNos  operatorId refundDate totalFee batchNum   detailData
-        org.apache.shiro.subject.Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
 
         List<RefundItem> items = data.getItems();
         if (items.size() > 0) {
@@ -96,7 +146,7 @@ public class TechOmsController {
                 throw new AuthException(MsgCodeConstant.un_login,
                         MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
-            paramMap.put("operatorId",userId);
+            paramMap.put("operatorId",String.valueOf(userId));
             List<String> orderNoList = new ArrayList<>();
             BigDecimal totalFee = new BigDecimal(0);
             List<String> detailList = new ArrayList<>();

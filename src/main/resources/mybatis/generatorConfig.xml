@@ -56,8 +56,8 @@
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <table tableName="t_o_sms"
-               domainObjectName="OrderSms"
+        <table tableName="t_o_refund"
+               domainObjectName="Refund"
                enableCountByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"

@@ -10,9 +10,10 @@
     <result column="snCode" property="snCode" jdbcType="VARCHAR" />
     <result column="operateTime" property="operateTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="ticketType" property="ticketType" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    ticketId, operateId, orderNo, courseId, mobile, snCode, operateTime, status
+    ticketId, operateId, orderNo, courseId, mobile, snCode, operateTime, status,ticketType
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -33,10 +34,10 @@
   <insert id="insert" parameterType="com.zhuhuibao.mybatis.order.entity.PwdTicket" >
     insert into t_o_pwdticket (ticketId, operateId, orderNo, 
       courseId, mobile, snCode, 
-      operateTime, status)
+      operateTime, status,ticketType)
     values (#{ticketId,jdbcType=BIGINT}, #{operateId,jdbcType=BIGINT}, #{orderNo,jdbcType=BIGINT}, 
       #{courseId,jdbcType=BIGINT}, #{mobile,jdbcType=VARCHAR}, #{snCode,jdbcType=VARCHAR}, 
-      #{operateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER})
+      #{operateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER},#{ticketType,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.order.entity.PwdTicket" >
     insert into t_o_pwdticket
@@ -65,6 +66,9 @@
       <if test="status != null" >
         status,
       </if>
+      <if test="ticketType != null" >
+        ticketType,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="ticketId != null" >
@@ -90,6 +94,9 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="ticketType != null" >
+        #{ticketType,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -117,6 +124,9 @@
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="ticketType != null" >
+        #{ticketType,jdbcType=VARCHAR},
+      </if>
     </set>
     where ticketId = #{ticketId,jdbcType=BIGINT}
   </update>
@@ -128,7 +138,8 @@
       mobile = #{mobile,jdbcType=VARCHAR},
       snCode = #{snCode,jdbcType=VARCHAR},
       operateTime = #{operateTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=INTEGER}
+      status = #{status,jdbcType=INTEGER},
+      ticketType = #{ticketType,jdbcType=VARCHAR}
     where ticketId = #{ticketId,jdbcType=BIGINT}
   </update>
   <update id="updateStatusByCourseId">

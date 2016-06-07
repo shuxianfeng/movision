@@ -328,7 +328,7 @@ public class AlipayService {
                 || msgParam.get("goodsType").equals(OrderConstants.GoodsType.ZJPX.toString())) {
 
             //根据订单产品数量生成SN码
-            genSNcode(msgParam);
+            genSNcode(msgParam,msgParam.get("goodsType"));
 
             //修改课程库存数量
             updateSubStock(msgParam);
@@ -371,7 +371,7 @@ public class AlipayService {
      *
      * @param msgParam
      */
-    private void genSNcode(Map<String, String> msgParam) throws IOException {
+    private void genSNcode(Map<String, String> msgParam,String type) throws IOException {
 
         int num = Integer.valueOf(msgParam.get("number"));
         List<PwdTicket> list = new ArrayList<>();
@@ -383,6 +383,7 @@ public class AlipayService {
             pwdTicket.setMobile(msgParam.get("mobile"));
             pwdTicket.setOrderNo(msgParam.get("orderNo"));
             pwdTicket.setCourseId(Long.valueOf(msgParam.get("goodsId")));
+            pwdTicket.setTicketType(type);
             list.add(pwdTicket);
             snCodeList.add(snCode);
         }
