@@ -574,7 +574,7 @@ public class AlipayService {
         if (StringUtils.isEmpty(goodsPrice)) {
             throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "商品单价不能为空");
         }
-        String buyersid = msgParam.get("buyerId");//创建订单的会员ID
+        String buyersid = String.valueOf(msgParam.get("buyerId"));//创建订单的会员ID
         if (StringUtils.isEmpty(buyersid)) {
             throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "创建订单会员ID不能为空");
         }
