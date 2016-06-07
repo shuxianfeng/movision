@@ -44,10 +44,14 @@ public class WitkeySiteController {
     @ApiOperation(value="发布任务",notes="发布任务",response = Response.class)
     @RequestMapping(value = "add_witkey", method = RequestMethod.POST)
     public Response publishCooperation(Cooperation cooperation)  {
-        Long createId = ShiroUtil.getCreateID();
-        cooperation.setCreateId(createId.toString());
-        cooperationService.publishCooperation(cooperation);
         Response response = new Response();
+        Long createId = ShiroUtil.getCreateID();
+        if(createId!=null){
+            cooperation.setCreateId(String.valueOf(createId));
+            cooperationService.publishCooperation(cooperation);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 

@@ -80,7 +80,7 @@ public class ExpertSiteController {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){
-            achievement.setCreateId(createId.toString());
+            achievement.setCreateId(String.valueOf(createId));
             expertService.publishAchievement(achievement);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -195,7 +195,7 @@ public class ExpertSiteController {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){
-            expert.setCreateId(createId.toString());
+            expert.setCreateId(String.valueOf(createId));
             Expert expert1 = expertService.queryExpertByCreateid(createId.toString());
             if(expert1==null){
                 expertService.applyExpert(expert);
@@ -458,7 +458,7 @@ public class ExpertSiteController {
         expertService.checkMobileCode(code,mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){
-            expertSupport.setCreateid(createId.toString());
+            expertSupport.setCreateid(String.valueOf(createId));
             expertService.applyExpertSupport(expertSupport);
         }else {
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

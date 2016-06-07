@@ -47,7 +47,7 @@ public class ExpoSiteController {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){
-            meetingOrder.setCreateid(createId.toString());
+            meetingOrder.setCreateid(String.valueOf(createId));
             exhibitionService.publishMeetingOrder(meetingOrder);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -112,7 +112,7 @@ public class ExpoSiteController {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){
-            distributedOrder.setCreateid(createId.toString());
+            distributedOrder.setCreateid(String.valueOf(createId));
             exhibitionService.publishDistributedOrder(distributedOrder);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

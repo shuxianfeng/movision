@@ -140,7 +140,7 @@ public class EngineerSupplierController {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
-            message.setCreateid(createid.toString());
+            message.setCreateid(String.valueOf(createid));
             memberService.saveMessage(message);
         }else {
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

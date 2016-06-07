@@ -135,7 +135,7 @@ public class WitkeyController {
         Response response = new Response();
         Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
         Cooperation cooperation = new Cooperation();
-        cooperation.setCreateId(createId.toString());
+        cooperation.setCreateId(String.valueOf(createId));
         cooperation.setType(type);
         cooperation.setTitle(title);
         cooperation.setStatus(status);

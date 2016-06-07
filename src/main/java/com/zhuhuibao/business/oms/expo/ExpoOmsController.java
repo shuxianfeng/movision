@@ -48,7 +48,7 @@ public class ExpoOmsController {
         Response Response = new Response();
         Long createId = ShiroUtil.getOmsCreateID();
         if(createId!=null){
-            meetingOrder.setUpdateManId(createId.toString());
+            meetingOrder.setUpdateManId(String.valueOf(createId));
             exhibitionService.updateMeetingOrderStatus(meetingOrder);
         }else {
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -219,7 +219,7 @@ public class ExpoOmsController {
         Response Response = new Response();
         Long createId = ShiroUtil.getOmsCreateID();
         if(createId!=null){
-            distributedOrder.setUpdateManId(createId.toString());
+            distributedOrder.setUpdateManId(String.valueOf(createId));
             exhibitionService.updateDistributedStatus(distributedOrder);
         }else {
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

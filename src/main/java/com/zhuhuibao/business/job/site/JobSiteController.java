@@ -176,7 +176,7 @@ public class JobSiteController {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
-            map.put("createid",createid);
+            map.put("createid",String.valueOf(createid));
             map.put("id",id);
             response = job.queryPositionInfoByID(map);
             job.updateViews(id);

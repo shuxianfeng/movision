@@ -60,7 +60,7 @@ public class ExpoController {
         map.put("type",3);
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){
-            map.put("createId", createId);
+            map.put("createId", String.valueOf(createId));
             //查询
             List<Map<String,String>> exhibitionList = exhibitionService.findAllExhibition(pager,map);
             pager.result(exhibitionList);

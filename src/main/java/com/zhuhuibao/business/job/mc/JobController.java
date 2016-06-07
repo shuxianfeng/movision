@@ -58,7 +58,7 @@ public class JobController {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
-            job.setCreateid(createid.toString());
+            job.setCreateid(String.valueOf(createid));
             jobService.publishPosition(job);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -82,7 +82,7 @@ public class JobController {
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
             Paging<Job> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-            List list = jobService.findAllPositionByMemId(pager, createid.toString());
+            List list = jobService.findAllPositionByMemId(pager, String.valueOf(createid));
             pager.result(list);
             response.setData(pager);
         }else {
@@ -141,7 +141,7 @@ public class JobController {
         Long createid = ShiroUtil.getCreateID();
         Response response = new Response();
         if(createid!=null){
-            response = jobService.searchRecommendPosition(createid.toString(), 6);
+            response = jobService.searchRecommendPosition(String.valueOf(createid), 6);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
@@ -164,7 +164,7 @@ public class JobController {
         Response response = new Response();
         if(createid!=null){
             Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-            response = jobService.myApplyPosition(pager, createid.toString());
+            response = jobService.myApplyPosition(pager, String.valueOf(createid));
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }

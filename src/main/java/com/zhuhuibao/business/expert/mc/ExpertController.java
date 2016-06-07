@@ -62,7 +62,7 @@ public class ExpertController {
         map.put("status", status);
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){
-            map.put("createId", createId);
+            map.put("createId", String.valueOf(createId));
             List<Achievement> achievementList = expertService.findAllAchievementList(pager, map);
             List list = new ArrayList();
             for(Achievement achievement:achievementList){
@@ -180,7 +180,7 @@ public class ExpertController {
         map.put("status", status);
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){
-            map.put("createId", createId);
+            map.put("createId", String.valueOf(createId));
             List<Dynamic> dynamicList = expertService.findAllDynamicList(pager, map);
             List list = new ArrayList();
             for(Dynamic Dynamic:dynamicList){
@@ -232,7 +232,7 @@ public class ExpertController {
         Map<String, Object> map = new HashMap<>();
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){
-            map.put("id",createId);
+            map.put("id",String.valueOf(createId));
             List<Map<String,String>> questionList = expertService.queryExpertQuestion(pager,map);
             pager.result(questionList);
             response.setData(pager);
@@ -248,7 +248,7 @@ public class ExpertController {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){
-            answer.setCreateid(createId.toString());
+            answer.setCreateid(String.valueOf(createId));
             expertService.answerQuestion(answer);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -272,7 +272,7 @@ public class ExpertController {
         Map<String, Object> map = new HashMap<>();
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){
-            map.put("id",createId);
+            map.put("id",String.valueOf(createId));
             List<Map<String,String>> questionList = expertService.queryMyAnswerQuestion(pager,map);
             pager.result(questionList);
             response.setData(pager);
@@ -298,7 +298,7 @@ public class ExpertController {
         Map<String, Object> map = new HashMap<>();
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){
-            map.put("id",createId);
+            map.put("id",String.valueOf(createId));
             List<Map<String,String>> questionList = expertService.queryMyQuestion(pager,map);
             pager.result(questionList);
             response.setData(pager);
