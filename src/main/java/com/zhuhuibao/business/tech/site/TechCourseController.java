@@ -82,7 +82,7 @@ public class TechCourseController {
                 throw new AuthException(MsgCodeConstant.un_login,
                         MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }else{
-                paramMap.put("buyerId",userId);
+                paramMap.put("buyerId",String.valueOf(userId));
             }
         }
 
