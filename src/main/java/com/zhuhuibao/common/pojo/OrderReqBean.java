@@ -39,7 +39,7 @@ public class OrderReqBean {
     private String payAmount;
     @ApiModelProperty(value="支付方式 1:支付宝",required = true)
     private String payMode;
-    @ApiModelProperty(value="商品类型 2:技术培训",required = true)
+    @ApiModelProperty(value="商品类型 1:技术培训 2:专家培训",required = true)
     private String goodsType;
     @ApiModelProperty(value="下单手机号",required = true)
     private String mobile;
