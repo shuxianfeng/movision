@@ -76,6 +76,9 @@
       <if test="status != null">
         and gd.goodsName = #{status}
       </if>
+      <if test="goodsType != null">
+        and o.goodsType = #{goodsType}
+      </if>
     </where>
   </select>
 </mapper>

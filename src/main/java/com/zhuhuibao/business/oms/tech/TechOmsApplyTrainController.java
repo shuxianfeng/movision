@@ -28,14 +28,14 @@ import java.util.Map;
 @RestController
 @RequestMapping("/rest/tech/oms/train")
 @Api(value = "TechOmsTrainController",description = "申请技术培训课程")
-public class TechOmsTrainController {
+public class TechOmsApplyTrainController {
 
     @Autowired
     TechExpertCourseService techCourseService;
 
 
     @RequestMapping(value="upd_course", method = RequestMethod.POST)
-    @ApiOperation(value="技术培训课程",notes = "插入技术培训课程",response = Response.class)
+    @ApiOperation(value="更新技术培训课程",notes = "更新技术培训课程",response = Response.class)
     public Response updateTechTrainCourse(@ApiParam(value = "状态")  @RequestParam int status,
                                           @ApiParam(value = "培训课程ID")  @RequestParam Long techCourseId)
     {
@@ -63,12 +63,13 @@ public class TechOmsTrainController {
     @ApiOperation(value="运营管理平台搜索技术的申请开课",notes = "运营管理平台搜索申请开课",response = Response.class)
     public Response findAllTechDataPager(@ApiParam(value = "手机号") @RequestParam(required = false) String mobile,
                                          @ApiParam(value = "联系人") @RequestParam(required = false) String linkman,
+                                         @ApiParam(value = "课程类型：1：技术培训，2专家培训") @RequestParam String type,
                                          @ApiParam(value = "状态：1待处理，2已处理") @RequestParam(required = false) String status,
                                          @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
                                          @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
-        condition.put("type", TechConstant.COURSE_TYPE_TECH);
+        condition.put("type", type);
         condition.put("mobile", mobile);
         condition.put("linkman", linkman);
         if (StringUtils.isEmpty(pageNo)) {

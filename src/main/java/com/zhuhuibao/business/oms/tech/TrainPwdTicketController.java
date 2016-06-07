@@ -36,11 +36,13 @@ public class TrainPwdTicketController {
     public Response findAllTechDataPager(@ApiParam(value = "SN码") @RequestParam(required = false) String snCode,
                                          @ApiParam(value = "SN码状态:1有效，2已使用，3已过期，4已取消，5未生效") @RequestParam(required = false) String status,
                                          @ApiParam(value = "手机号码") @RequestParam(required = false) String mobile,
+                                         @ApiParam(value = "类型：1：技术培训 2：专家培训") @RequestParam String type,
                                          @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
                                          @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("status", status);
+        condition.put("type", type);
         if(snCode != null && !snCode.equals(""))
         {
             condition.put("snCode",snCode.replaceAll("_","\\_"));

@@ -42,6 +42,9 @@
       <if test="snCode != null">
         and pt.snCode = #{snCode}
       </if>
+      <if test="type != null">
+        and pt.ticketType = #{type}
+      </if>
       <if test="mobile != null">
         and pt.mobile = #{mobile}
       </if>

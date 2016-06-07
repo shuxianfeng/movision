@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 技术培训课程
+ * 发布技术培训课程
  *
  * @author Administrator
  * @version 2016/6/2 0002
@@ -91,13 +91,14 @@ public class TrainCourseOmsController {
     @ApiOperation(value="运营管理平台搜索技术的发布课程",notes = "运营管理平台搜索技术的发布课程",response = Response.class)
     public Response findAllTechDataPager(@ApiParam(value = "课程名称") @RequestParam(required = false) String title,
                                          @ApiParam(value = "状态：1未上架，2销售中，3待开课，4上课中，5已终止，6已完成") @RequestParam(required = false) String status,
+                                         @ApiParam(value = "课程类型：1：技术培训，2专家培训") @RequestParam String type,
                                          @ApiParam(value = "省") @RequestParam(required = false) String province,
                                          @ApiParam(value = "市") @RequestParam(required = false) String city,
                                          @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
                                          @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
-        condition.put("courseType", TechConstant.COURSE_TYPE_TECH);
+        condition.put("courseType", type);
         condition.put("mobile", province);
         condition.put("city", city);
         if(title != null && !title.equals(""))

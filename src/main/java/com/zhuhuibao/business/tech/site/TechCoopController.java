@@ -85,7 +85,7 @@ public class TechCoopController {
 
     @RequestMapping(value="sel_views_order", method = RequestMethod.GET)
     @ApiOperation(value="查询解决方案、技术资料，培训资料的点击排行",notes = "查询解决方案、技术资料，培训资料的点击排行",response = Response.class)
-    public Response findDataViewsOrder(@ApiParam(value="分类：1：行业解决方案，2：技术资料，3：培训资料") @RequestParam Integer categoryId)
+    public Response findDataViewsOrder()
     {
         Response response = new Response();
         Map<String,Object> map = new HashMap<String,Object>();
