@@ -17,9 +17,9 @@ public class SDKSendSms {
         String gateWay = PropertiesUtils.getValue("sms_gateway");
 
         if("alidayu".equals(gateWay)){
-            return SDKSendTaoBaoSMS.sendSMS(mobile,params,templateCode);
+            return SDKSendTaoBaoSMS.sendSMS(mobile,params,gateWay+"_"+ templateCode);
         } else if("yuntongxun".equals(gateWay)){
-            return SDKSendTemplateSMS.sendSMS(mobile,params,templateCode);
+            return SDKSendTemplateSMS.sendSMS(mobile,params,gateWay+"_"+ templateCode);
         }
 
         return false;
