@@ -68,4 +68,9 @@ public interface ExpertConstant {
      * 发送验证码时存在session的参数type
      */
     String MOBILE_CODE_SESSION_TYPE_SUPPORT = "expertSupport";
+
+    /**
+     * 发送验证码时存在session的参数type
+     */
+    String MOBILE_CODE_SESSION_TYPE_CLASS = "expertClass";
 }

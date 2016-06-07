@@ -637,6 +637,8 @@ public class ExpertService {
             SDKSendTaoBaoSMS.sendExpertTrainSMS(mobile, verifyCode, Constants.sms_time);
         }else if(type.equals(ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT)){
             SDKSendTaoBaoSMS.sendExpertSupportSMS(mobile, verifyCode, Constants.sms_time);
+        }else if(type.equals(ExpertConstant.MOBILE_CODE_SESSION_TYPE_CLASS)){
+            SDKSendTaoBaoSMS.sendExpertClassSMS(mobile, verifyCode, Constants.sms_time);
         }
 
         Validateinfo info = new Validateinfo();
