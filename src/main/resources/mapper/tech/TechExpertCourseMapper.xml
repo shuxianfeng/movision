@@ -21,9 +21,8 @@
   </resultMap>
 
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
-    select t.id, t.proposerId,t.operateId, t.title, t.teacher, ct.name city, t.linkman, date_format(t.startTime,'%Y-%m-%d') startTime,
+    select t.id, t.proposerId,t.operateId, t.title, t.teacher, t.city, t.linkman, date_format(t.startTime,'%Y-%m-%d') startTime,
     date_format(t.endTime,'%Y-%m-%d') endTime, t.mobile, t.status,t.notes from t_tech_expert_applyCourse t
-    left join t_dictionary_city ct on ct.code = t.city
     where t.id = #{id,jdbcType=BIGINT}
   </select>
 
@@ -162,9 +161,8 @@
   </update>
 
   <select id="findAllOMSTrainCoursePager" parameterType="java.util.Map" resultType="java.util.Map">
-  select t.id, t.title, t.teacher, ct.name city, t.linkman, date_format(t.publishTime,'%Y-%m-%d') publishTime,
+  select t.id, t.title, t.teacher, t.city, t.linkman, date_format(t.publishTime,'%Y-%m-%d') publishTime,
     date_format(t.updateTime,'%Y-%m-%d') updateTime, t.mobile, t.status from t_tech_expert_applyCourse t
-    left join t_dictionary_city ct on ct.code = t.city
     <where>
       t.status != 3
       <if test="type != null">
