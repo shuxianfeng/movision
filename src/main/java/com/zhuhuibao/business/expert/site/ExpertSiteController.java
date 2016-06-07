@@ -517,6 +517,7 @@ public class ExpertSiteController {
     @RequestMapping(value = "train/add_class", method = RequestMethod.POST)
     public Response startClassSave(@ApiParam(value = "开课申请保存")  @ModelAttribute(value="techCourse")TechExpertCourse techCourse)  {
         Response response = new Response();
+        expertService.checkMobileCode(techCourse.getCode(),techCourse.getMobile(),ExpertConstant.MOBILE_CODE_SESSION_TYPE_CLASS);
         Long createId = ShiroUtil.getCreateID();
         if(createId != null) {
             techCourse.setProposerId(createId);
@@ -524,6 +525,15 @@ public class ExpertSiteController {
         }else{
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
+        return response;
+    }
+
+    @ApiOperation(value="开课申请获取验证码",notes="开课申请获取验证码",response = Response.class)
+    @RequestMapping(value = "train/get_classMobileCode", method = RequestMethod.GET)
+    public Response get_classMobileCode(@RequestParam String mobile) throws IOException, ApiException{
+        Response response = new Response();
+        String verifyCode = expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_CLASS);
+        response.setData(verifyCode);
         return response;
     }
 
