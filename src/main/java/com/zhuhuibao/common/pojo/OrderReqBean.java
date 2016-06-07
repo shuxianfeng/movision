@@ -23,7 +23,7 @@ public class OrderReqBean {
      * invoiceTitle : 发票抬头
      * invoiceType :  发票类型 1普通发票（纸质），2：增值发票
      */
-    @ApiModelProperty(value="下单会员ID",required = true)
+    @ApiModelProperty(value="下单会员ID",required = false)
     private String buyerId;
     @ApiModelProperty(value="商品ID",required = true)
     private String goodsId;
