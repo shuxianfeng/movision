@@ -84,7 +84,7 @@ public class CourseService {
             //查询该课程相关订单(已支付)
             List<Order> orderList = orderService.findListByCourseIdAndStatus(courseId, PayConstants.OrderStatus.YZF.toString());
             //给用户发送短信
-            sendSMS(orderList, PropertiesUtils.getValue("course_begin_sms_template_code"));
+            sendSMS(orderList, "course_begin_sms_template_code");
 
 
         } else {
@@ -133,10 +133,10 @@ public class CourseService {
             List<Order> orderList = orderService.findListByCourseIdAndStatus(courseId, PayConstants.OrderStatus.YZF.toString());
             if(TechConstant.PublishCourseStatus.SALING.toString().equals(String.valueOf(course.getStatus()))) {
                 //销售中人工终止
-                sendSMS(orderList, PropertiesUtils.getValue("course_before_stop_sms_template_code"));
+                sendSMS(orderList, "course_before_stop_sms_template_code");
             }else if(TechConstant.PublishCourseStatus.PRECLASS.toString().equals(String.valueOf(course.getStatus()))) {
                 //待开课人工终止
-                sendSMS(orderList, PropertiesUtils.getValue("course_before_autostop_sms_template_code"));
+                sendSMS(orderList, "course_before_autostop_sms_template_code");
             }
 
 

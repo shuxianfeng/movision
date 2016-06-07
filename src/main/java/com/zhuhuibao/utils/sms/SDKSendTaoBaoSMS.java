@@ -1,5 +1,6 @@
 package com.zhuhuibao.utils.sms;
 
+import com.zhuhuibao.utils.PropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,7 @@ public class SDKSendTaoBaoSMS {
             req.setSmsFreeSignName("筑慧宝");
             req.setSmsParamString(params);
             req.setRecNum(mobile);
-            req.setSmsTemplateCode(templateCode);
+            req.setSmsTemplateCode(PropertiesUtils.getValue(templateCode));
             AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
             log.info("send sms response:" + rsp.getBody());
             return rsp.getResult().getSuccess();

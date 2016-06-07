@@ -79,8 +79,6 @@ public class AlipayService {
     @Autowired
     private OrderSmsService orderSmsService;
 
-    @Autowired
-    private ApiConstants constants;
 
     /**
      * 支付包支付请求
@@ -211,8 +209,7 @@ public class AlipayService {
                             PayConstants.NotifyType.SYNC.toString(), tradeType);
                     log.info("***同步回调：支付平台回调发起发支付方结果：" + resultMap);
                     if (resultMap != null
-                            && String
-                            .valueOf(PayConstants.HTTP_SUCCESS_CODE)
+                            && String.valueOf(PayConstants.HTTP_SUCCESS_CODE)
                             .equals(resultMap.get("statusCode"))) {
                         if ("SUCCESS".equals(resultMap.get("result"))) {
                             modelAndView.addObject("result", "success");
@@ -412,11 +409,11 @@ public class AlipayService {
         orderSms.setContent(content);
         orderSms.setStatus(OrderConstants.SmsStatus.WAITING.toString());
         //开课短信
-        orderSms.setTemplateCode(PropertiesUtils.getValue("course_begin_sms_template_code"));
+        orderSms.setTemplateCode("course_begin_sms_template_code");
         orderSmsService.insert(orderSms);
 
         //终止课程短信
-        orderSms.setTemplateCode(PropertiesUtils.getValue("course_before_stop_sms_template_code"));
+        orderSms.setTemplateCode("course_before_stop_sms_template_code");
         orderSmsService.insert(orderSms);
 
         //终止课程短信
