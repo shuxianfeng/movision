@@ -74,7 +74,6 @@ public class TrainCourseController {
     {
         Map<String,Object> condition = new HashMap<String,Object>();
         condition.put("courseid",courseId);
-        condition.put("courseType",TechConstant.COURSE_TYPE_TECH);
         List<Map<String,String>> courseList = ptCourseService.previewTrainCourseDetail(condition);
         Response response = new Response();
         response.setData(courseList);

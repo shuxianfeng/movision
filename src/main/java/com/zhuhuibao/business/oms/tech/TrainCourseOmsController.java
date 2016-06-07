@@ -64,7 +64,6 @@ public class TrainCourseOmsController {
     {
         Map<String,Object> condition = new HashMap<String,Object>();
         condition.put("courseid",courseId);
-        condition.put("courseType",TechConstant.COURSE_TYPE_TECH);
         TrainPublishCourse course = ptCourseService.selectTrainCourseInfo(condition);
         Response response = new Response();
         response.setData(course);
