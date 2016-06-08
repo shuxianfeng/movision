@@ -8,7 +8,7 @@ import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
+import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
 import com.zhuhuibao.mybatis.tech.service.TechExpertCourseService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;

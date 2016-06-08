@@ -6,17 +6,13 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder;
-import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
-import com.zhuhuibao.mybatis.memCenter.entity.MeetingOrder;
-import com.zhuhuibao.mybatis.memCenter.service.ExhibitionService;
-import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.mybatis.expo.entity.DistributedOrder;
+import com.zhuhuibao.mybatis.expo.entity.Exhibition;
+import com.zhuhuibao.mybatis.expo.entity.MeetingOrder;
+import com.zhuhuibao.mybatis.expo.service.ExpoService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +32,7 @@ public class ExpoSiteController {
     private static final Logger log = LoggerFactory.getLogger(ExpoSiteController.class);
 
     @Autowired
-    private ExhibitionService exhibitionService;
+    private ExpoService exhibitionService;
 
     /**
      * 发布一站式会展定制

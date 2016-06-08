@@ -13,24 +13,21 @@ import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
+import com.zhuhuibao.mybatis.expert.entity.*;
+import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
-import com.zhuhuibao.mybatis.memCenter.service.ExpertService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
-import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
-import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
 import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
 import com.zhuhuibao.mybatis.tech.service.PublishTCourseService;
 import com.zhuhuibao.mybatis.tech.service.TechExpertCourseService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
-import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ValidateUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
-import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -71,6 +68,9 @@ public class ExpertSiteController {
 
     @Autowired
     AlipayDirectService alipayDirectService;
+
+    @Autowired
+    MemberService memberService;
 
     private static final String PARTNER = AlipayPropertiesLoader.getPropertyValue("partner");
 
@@ -250,6 +250,33 @@ public class ExpertSiteController {
             list.add(m);
         }
         map.put("achievementList",list);
+
+        Long createid = ShiroUtil.getCreateID();
+        Long comanyId = ShiroUtil.getCompanyID();
+        if(createid!=null){
+            LookExpertRecord record = new LookExpertRecord();
+            record.setExpertId(id);
+            record.setCompanyId(String.valueOf(comanyId));
+            //查询该专家是否已被查看过
+            LookExpertRecord record1 = expertService.selectRecordByExpertIdCompanyId(record);
+            if(record1!=null){
+                map.put("address",expert.getAddress());
+                map.put("telephone",expert.getTelephone());
+                map.put("mobile",expert.getMobile());
+                map.put("isLook",true);
+            }else {
+                map.put("address","");
+                map.put("telephone","");
+                map.put("mobile","");
+                map.put("isLook",false);
+            }
+        }else {
+            map.put("address","");
+            map.put("telephone","");
+            map.put("mobile","");
+            map.put("isLook",false);
+        }
+
         response.setData(map);
         //点击率加1
         expert.setViews(String.valueOf(Integer.parseInt(expert.getViews())+1));
@@ -261,13 +288,27 @@ public class ExpertSiteController {
     @RequestMapping(value = "base/sel_expert_contact", method = RequestMethod.GET)
     public Response expertContactInfo(@ApiParam(value = "专家id")@RequestParam String id)  {
         Response response = new Response();
-        Expert expert = expertService.queryExpertById(id);
-        //返回到页面
-        Map map = new HashMap();
-        map.put("address",expert.getAddress());
-        map.put("telephone",expert.getTelephone());
-        map.put("mobile",expert.getMobile());
-        response.setData(map);
+        Long createid = ShiroUtil.getCreateID();
+        Long companyId = ShiroUtil.getCompanyID();
+        if(createid!=null){
+            //记录查看专家
+            LookExpertRecord record = new LookExpertRecord();
+            record.setExpertId(id);
+            record.setCreateId(String.valueOf(createid));
+            record.setCompanyId(String.valueOf(companyId));
+            expertService.addRecord(record);
+            //查询专家联系方式
+            Expert expert = expertService.queryExpertById(id);
+            //返回到页面
+            Map map = new HashMap();
+            map.put("address",expert.getAddress());
+            map.put("telephone",expert.getTelephone());
+            map.put("mobile",expert.getMobile());
+            response.setData(map);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+
         return response;
     }
 
@@ -618,6 +659,20 @@ public class ExpertSiteController {
     public Response get_trainPrice(@RequestParam String id) {
         Response response = new Response();
 
+        return response;
+    }
+
+    @ApiOperation(value="给专家留言",notes="给专家留言",response = Response.class)
+    @RequestMapping(value = "base/add_message", method = RequestMethod.POST)
+    public Response message(@ModelAttribute Message message) {
+        Response response = new Response();
+        Long createid = ShiroUtil.getCreateID();
+        if(createid!=null){
+            message.setCreateid(String.valueOf(createid));
+            memberService.saveMessage(message);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 }

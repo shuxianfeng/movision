@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.ExpertMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Expert" >
+<mapper namespace="com.zhuhuibao.mybatis.expert.mapper.ExpertMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.expert.entity.Expert" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="createId" property="createId" jdbcType="VARCHAR" />
     <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
@@ -69,7 +69,7 @@
     </if>
     order by e.updateTime desc
   </select>
-  <insert id="expertMapper" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Expert" >
+  <insert id="expertMapper" parameterType="com.zhuhuibao.mybatis.expert.entity.Expert" >
     insert into t_e_expert
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -188,7 +188,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateExpert" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Expert" >
+  <update id="updateExpert" parameterType="com.zhuhuibao.mybatis.expert.entity.Expert" >
     update t_e_expert
     <set >
         updateTime = now(),
@@ -243,7 +243,7 @@
     </set>
     where id = #{id}
   </update>
-  <update id="updateExpertViews" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Expert" >
+  <update id="updateExpertViews" parameterType="com.zhuhuibao.mybatis.expert.entity.Expert" >
     update t_e_expert
     <set >
       <if test="views != null" >

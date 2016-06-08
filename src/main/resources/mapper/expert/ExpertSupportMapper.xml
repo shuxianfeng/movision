@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.ExpertSupportMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.ExpertSupport" >
+<mapper namespace="com.zhuhuibao.mybatis.expert.mapper.ExpertSupportMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.expert.entity.ExpertSupport" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="createid" property="createid" jdbcType="VARCHAR" />
     <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
@@ -45,7 +45,7 @@
     order by e.publishTime desc
   </select>
 
-  <insert id="applyExpertSupport" parameterType="com.zhuhuibao.mybatis.memCenter.entity.ExpertSupport" >
+  <insert id="applyExpertSupport" parameterType="com.zhuhuibao.mybatis.expert.entity.ExpertSupport" >
     insert into t_e_expertSupport
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -98,7 +98,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateExpertSupport" parameterType="com.zhuhuibao.mybatis.memCenter.entity.ExpertSupport" >
+  <update id="updateExpertSupport" parameterType="com.zhuhuibao.mybatis.expert.entity.ExpertSupport" >
     update t_e_expertSupport
     <set >
         updateTime = now(),

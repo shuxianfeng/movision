@@ -36,6 +36,26 @@ public class ShiroUtil {
         return createID;
     }
 
+    public static Long getCompanyID() {
+        Long companyId = null;
+        try {
+            Subject currentUser = SecurityUtils.getSubject();
+            Session session = currentUser.getSession(false);
+            if (session != null) {
+                ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
+                if (principal != null) {
+                    companyId = principal.getCompanyId();
+                }
+            }
+        } catch (Exception e) {
+            log.error("get seesion user info error!", e);
+            throw new AuthException(MsgCodeConstant.un_login,
+                    MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+
+        }
+        return companyId;
+    }
+
     /**
      * 获取oms用户登陆ID
      *

@@ -202,6 +202,7 @@
     order by views desc
     limit #{count}
   </select>
+
   <!-- 查询咨询列表@author:gmli@since2016.05.09 -->
  <select id="findAllContentList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
 	select a.id,a.title,
@@ -252,5 +253,33 @@
     </set>
     where id = #{id}
   </update>
-  
+    <select id="findAllTechNewsList" resultType="java.util.Map" parameterType="java.util.Map" >
+    select t.id, t.title,ur.username ,date_format(t.createTime,'%Y-%m-%d %H:%i:%s') createTime,t.imgurl from t_oms_channel_news t
+    left join t_oms_user ur on ur.id = t.createid
+    <where>
+      <if test="channelid != null">
+        and channelid = #{channelid}
+      </if>
+      <if test="status != null">
+        and status = #{status}
+      </if>
+      <if test="sort != null">
+        and sort = #{sort}
+      </if>
+      <if test="createid != null">
+        and createid = #{createid}
+      </if>
+    </where>
+    order by createTime desc
+  </select>
+  <select id="previewNewsInfo" resultType="java.util.Map" parameterType="java.util.Map" >
+    select t.id, t.title,ur.username ,date_format(t.createTime,'%Y-%m-%d %H:%i:%s') createTime,t.imgurl,t.content,t.description from t_oms_channel_news t
+    left join t_oms_user ur on ur.id = t.createid
+    <where>
+      <if test="id != null">
+        and id = #{id}
+      </if>
+    </where>
+    order by createTime desc
+  </select>
 </mapper>

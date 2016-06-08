@@ -7,6 +7,7 @@ import com.zhuhuibao.mybatis.oms.mapper.ChannelNewsMapper;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,6 +172,45 @@ public class ChannelNewsService {
         catch(Exception e)
         {
             log.error("find all news List pager error!",e);
+        }
+        return newsList;
+    }
+
+    /**
+     * 查询技术频道的新技术播报
+     * @param channelMap  频道资讯页条件
+     * @return List<ChannelNews>
+     */
+    public List<Map<String,Object>> findAllTechNewsList(Paging<Map<String,Object>> pager,Map<String, Object> channelMap )
+    {
+        List<Map<String,Object>> newsList = null;
+        try
+        {
+            newsList =  channel.findAllTechNewsList(pager.getRowBounds(),channelMap);
+        }
+        catch(Exception e)
+        {
+            log.error("find all news List pager error!",e);
+        }
+        return newsList;
+    }
+
+    /**
+     * 预览技术频道的新技术播报
+     * @param channelMap  频道资讯页条件
+     * @return List<ChannelNews>
+     */
+    public Map<String,Object> previewNewsInfo(Map<String, Object> channelMap)
+    {
+        log.info("preview tech news info "+ StringUtils.mapToString(channelMap));
+        Map<String,Object> newsList = null;
+        try
+        {
+            newsList =  channel.previewNewsInfo(channelMap);
+        }
+        catch(Exception e)
+        {
+            log.error("preview tech news info error!",e);
         }
         return newsList;
     }

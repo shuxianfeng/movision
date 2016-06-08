@@ -36,7 +36,7 @@ public class SystemController {
      * @throws IOException
      */
 
-    @RequestMapping(value = "/rest/systemSearch", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/systemSearch","/rest/system/oms/category/sel_bigSystem"}, method = RequestMethod.GET)
     public Response systemSearch() throws Exception {
         Response response = new Response();
         List<ResultBean> systemList = categoryService.findSystemList();
@@ -52,7 +52,7 @@ public class SystemController {
      * @throws IOException
      */
 
-    @RequestMapping(value = "/rest/subSystemSearch", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/subSystemSearch","/rest/system/oms/category/sel_subSystem"}, method = RequestMethod.GET)
     public Response subSystemSearch(HttpServletRequest req) throws Exception {
         Response response = new Response();
         String parentId = req.getParameter("parentId");
@@ -69,7 +69,7 @@ public class SystemController {
      * @throws IOException
      */
 
-    @RequestMapping(value = "/rest/system/findSystem", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/system/findSystem","/rest/system/oms/category/sel_allSystem"}, method = RequestMethod.GET)
     public Response findSystem() throws IOException {
         return categoryService.findAllSystem();
     }
@@ -80,7 +80,7 @@ public class SystemController {
      * @throws IOException
      */
 
-    @RequestMapping(value = "/rest/system/addSystem", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/system/addSystem","/rest/system/oms/category/add_system"}, method = RequestMethod.POST)
     public Response addSystem(Category category) throws Exception {
         Response result = new Response();
         categoryService.addSystem(category);
@@ -93,7 +93,7 @@ public class SystemController {
      * @throws IOException
      */
 
-    @RequestMapping(value = "/rest/system/updateSystem", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/system/updateSystem","/rest/system/oms/category/upd_system"}, method = RequestMethod.POST)
     public Response updateSystem(Category category) throws Exception {
         Response result = new Response();
         categoryService.updateSystem(category);
@@ -106,7 +106,7 @@ public class SystemController {
      * @throws IOException
      */
 
-    @RequestMapping(value = "/rest/system/deleteSystem", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/system/deleteSystem","/rest/system/oms/category/del_system"}, method = RequestMethod.POST)
     public Response deleteSystem(Category category) throws Exception {
         Response result = new Response();
         Product product = productService.findProductBySystemId(category.getId().toString());

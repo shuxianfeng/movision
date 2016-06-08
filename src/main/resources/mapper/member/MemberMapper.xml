@@ -209,7 +209,7 @@
     (#{mobile},#{email},#{password},now(),1,case when #{identify} is null then 2 else #{identify} end,
     #{enterpriseEmployeeParentId},#{workType},#{personRealName})
   </insert>-->
-  <insert id="addMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Expert" >
+  <insert id="addMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" >
     insert into t_m_member
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="mobile != null" >

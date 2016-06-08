@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.expert.mapper.LookExpertRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.expert.entity.LookExpertRecord" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createId" property="createId" jdbcType="VARCHAR" />
+    <result column="companyId" property="companyId" jdbcType="VARCHAR" />
+    <result column="expertId" property="expertId" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, createId, companyId, expertId, time
+  </sql>
+  <select id="selectRecordByExpertIdCompanyId" resultMap="BaseResultMap" parameterType="com.zhuhuibao.mybatis.expert.entity.LookExpertRecord" >
+      SELECT * FROM t_e_lookExpert_record
+      WHERE expertId = #{expertId} and companyId = #{companyId}
+  </select>
+
+  <insert id="addRecord" parameterType="com.zhuhuibao.mybatis.expert.entity.LookExpertRecord" >
+    insert into t_e_lookExpert_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createId != null" >
+        createId,
+      </if>
+      <if test="companyId != null" >
+        companyId,
+      </if>
+      <if test="expertId != null" >
+        expertId,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="createId != null" >
+        #{createId},
+      </if>
+      <if test="companyId != null" >
+        #{companyId},
+      </if>
+      <if test="expertId != null" >
+        #{expertId},
+      </if>
+      <if test="time != null" >
+        now(),
+      </if>
+    </trim>
+  </insert>
+
+</mapper>
