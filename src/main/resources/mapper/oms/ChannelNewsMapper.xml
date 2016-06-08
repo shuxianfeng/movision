@@ -277,7 +277,7 @@
     left join t_oms_user ur on ur.id = t.createid
     <where>
       <if test="id != null">
-        and id = #{id}
+        and t.id = #{id}
       </if>
     </where>
     order by createTime desc
