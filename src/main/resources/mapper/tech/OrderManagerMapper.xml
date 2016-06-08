@@ -6,7 +6,13 @@
     t.amount, t.payAmount, date_format(t.dealTime,'%Y-%m-%d %H:%m:%s') dealTime,t.payMode,t.status,iv.invoiceType,
     iv.invoiceTitle,gd.goodsName,gd.goodsPrice,gd.number,date_format(pc.expiryDate,'%Y-%m-%d %H:%m:%s') expiryDate,
     date_format(pc.startTime,'%Y-%m-%d %H:%m:%s') startTime,date_format(pc.endTime,'%Y-%m-%d %H:%m:%s') endTime,pc.minBuyNumber,
-    concat(po.name,ct.name,ar.name,pc.address) address,pc.price coursePrice from t_o_order t
+    concat(po.name,ct.name,ar.name,pc.address) address,pc.price coursePrice,
+    t.descriptions,pt.mobile
+	 ,( select 
+    case when (locate(';',co.imgUrl) > 0) then substring(co.imgUrl,1,locate(';',co.imgUrl)-1) when locate(';',co.imgUrl) = 0 then imgUrl end as imgUrl
+    from t_p_group_publishCourse co where co.courseid=pt.courseId) as imgUrl 
+    
+     from t_o_order t
     left join t_m_member ur on ur.id = t.buyerId
     left join t_o_invoice iv on iv.orderNo = t.orderNo
     left join t_o_pwdticket pt on pt.orderNo = t.orderNo
