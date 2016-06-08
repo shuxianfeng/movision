@@ -254,8 +254,8 @@
     where id = #{id}
   </update>
     <select id="findAllTechNewsList" resultType="java.util.Map" parameterType="java.util.Map" >
-    select t.id, t.title,ur.username ,date_format(t.createTime,'%Y-%m-%d %H:%i:%s') createTime,t.imgurl from t_oms_channel_news t
-    left join t_oms_user ur on ur.id = t.createid
+      select t.id, t.title,ur.username ,date_format(t.createTime,'%Y-%m-%d %H:%i:%s') createTime,t.imgurl,t.content,t.description from t_oms_channel_news t
+      left join t_oms_user ur on ur.id = t.createid
     <where>
       <if test="channelid != null">
         and channelid = #{channelid}

@@ -3,6 +3,7 @@ package com.zhuhuibao.utils.sms;
 import java.io.IOException;
 import java.util.*;
 
+import com.google.gson.Gson;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.PropertiesUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -18,7 +19,7 @@ public class SDKSendTemplateSMS {
     private static final String PORT = "8883";
     private static final String ACCOUNT_SID = "8a48b55152a56fc20152eea1041e55f2";
     private static final String ACCOUNT_TOKEN = "1c51056e0ae74d7f8302d42b42a162e4";
-    private static final String APP_ID = "8a48b55152a56fc20152eea1f2d355fa";
+    private static final String APP_ID = "8a48b55152a56fc20152eea7373d5605";
 
 
     /**
@@ -31,8 +32,9 @@ public class SDKSendTemplateSMS {
      */
     public static Boolean sendSMS(String mobile, String params, String templateCode) {
         try {
+            Gson gson = new Gson();
             List<String> paramsList = new ArrayList<>();
-            Map<String, String> map = JsonUtils.getMapFromJsonString(params);
+            Map<String, String> map = gson.fromJson(params,Map.class);
             for (Map.Entry<String, String> entry : map.entrySet()) {
                 String value = entry.getValue();
                 paramsList.add(value);
