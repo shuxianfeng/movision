@@ -49,7 +49,7 @@ public class MemberRegService {
 	
 	@Autowired
 	MemberRegMapper memberMapper;
-	
+
 	/**
 	 * 注册验证码业务类
 	 */
@@ -478,9 +478,9 @@ public class MemberRegService {
 					{
 						this.registerMember(member);
 						this.deleteValidateInfo(info);
-						
+						LoginMember loginMember = this.getLoginMemberByAccount(member.getMobile());
 						ShiroUser shrioUser = new ShiroUser(member.getId(), member.getMobile(), member.getStatus(),
-								member.getIdentify(),"100","0");
+								member.getIdentify(),"100","0",loginMember.getCompanyId());
 						Subject currentUser = SecurityUtils.getSubject();
 						Session session = currentUser.getSession();
 						session.setAttribute("member", shrioUser);
