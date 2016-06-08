@@ -79,8 +79,6 @@ public class AlipayService {
     @Autowired
     private OrderSmsService orderSmsService;
 
-    @Autowired
-    private ApiConstants constants;
 
     /**
      * 支付包支付请求
@@ -211,8 +209,7 @@ public class AlipayService {
                             PayConstants.NotifyType.SYNC.toString(), tradeType);
                     log.info("***同步回调：支付平台回调发起发支付方结果：" + resultMap);
                     if (resultMap != null
-                            && String
-                            .valueOf(PayConstants.HTTP_SUCCESS_CODE)
+                            && String.valueOf(PayConstants.HTTP_SUCCESS_CODE)
                             .equals(resultMap.get("statusCode"))) {
                         if ("SUCCESS".equals(resultMap.get("result"))) {
                             modelAndView.addObject("result", "success");
@@ -264,10 +261,10 @@ public class AlipayService {
                     //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                     //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                     //如果有做过处理，不执行商户的业务程序
-                    if(tradeType.equals(PayConstants.TradeType.PAY.toString())){
+                    if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
                         Order order = orderService.findByOrderNo(params.get("out_trade_no"));
                         BigDecimal price = new BigDecimal(params.get("price"));
-                        BigDecimal totalFee =  price.multiply(new BigDecimal(params.get("quantity")));
+                        BigDecimal totalFee = price.multiply(new BigDecimal(params.get("quantity")));
 
                         if (!String.valueOf(order.getPayAmount()).equals(totalFee.toString())) {
                             log.error("支付宝返回交易金额[{}] 与 订单支付金额[{}] 不符合", totalFee.toString(), order.getPayAmount());
@@ -330,7 +327,7 @@ public class AlipayService {
                 || msgParam.get("goodsType").equals(OrderConstants.GoodsType.ZJPX.toString())) {
 
             //根据订单产品数量生成SN码
-            genSNcode(msgParam,msgParam.get("goodsType"));
+            genSNcode(msgParam, msgParam.get("goodsType"));
 
             //修改课程库存数量
             updateSubStock(msgParam);
@@ -345,7 +342,7 @@ public class AlipayService {
      */
     private void genInvoiceRecord(Map<String, String> msgParam) {
         String needInvoice = msgParam.get("needInvoice");
-        if ("true".equals(needInvoice)){
+        if ("true".equals(needInvoice)) {
             Invoice invoice = new Invoice();
             invoice.setCreateTime(new Date());
             invoice.setInvoiceTitle(msgParam.get("invoiceTitle"));
@@ -373,7 +370,7 @@ public class AlipayService {
      *
      * @param msgParam
      */
-    private void genSNcode(Map<String, String> msgParam,String type) throws IOException {
+    private void genSNcode(Map<String, String> msgParam, String type) throws IOException {
 
         int num = Integer.valueOf(msgParam.get("number"));
         List<PwdTicket> list = new ArrayList<>();
@@ -393,18 +390,18 @@ public class AlipayService {
 
         //短信记录
         PublishCourse course = publishCourseService.getCourseById(Long.valueOf(msgParam.get("goodsId")));
-        StringBuilder sb  = new StringBuilder();
-        for(String code : snCodeList){
-             sb.append(code).append(",");
+        StringBuilder sb = new StringBuilder();
+        for (String code : snCodeList) {
+            sb.append(code).append(",");
         }
         String temp = sb.toString();
         String codes = temp.substring(0, temp.length() - 1);
 
-        Map<String,String> smsMap = new HashMap<>();
-        smsMap.put("name",course.getTitle());
+        Map<String, String> smsMap = new HashMap<>();
+        smsMap.put("name", course.getTitle());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        smsMap.put("time",format.format(course.getSaleTime()));
-        smsMap.put("code",codes);
+        smsMap.put("time", format.format(course.getSaleTime()));
+        smsMap.put("code", codes);
         String content = JsonUtils.getJsonStringFromMap(smsMap);
         OrderSms orderSms = new OrderSms();
         orderSms.setOrderNo(msgParam.get("orderNo"));
@@ -500,12 +497,12 @@ public class AlipayService {
         sParaTemp.put("seller_id", msgParam.get("partner"));            //partner = seller_id
 
         //业务参数
-        sParaTemp.put("goods_type",msgParam.get("alipay_goods_type"));   //商品类型(0:虚拟类商品,1:实物类商品 默认为1)
+        sParaTemp.put("goods_type", msgParam.get("alipay_goods_type"));   //商品类型(0:虚拟类商品,1:实物类商品 默认为1)
         sParaTemp.put("out_trade_no", msgParam.get("orderNo"));          //商户网站唯一订单号
         sParaTemp.put("subject", msgParam.get("goodsName"));               //商品名称
 //        sParaTemp.put("total_fee", msgParam.get("total_fee"));         //交易金额
-        sParaTemp.put("price",msgParam.get("goodsPrice"));               //商品单价
-        sParaTemp.put("quantity",msgParam.get("number"));                //购买数量
+        sParaTemp.put("price", msgParam.get("goodsPrice"));               //商品单价
+        sParaTemp.put("quantity", msgParam.get("number"));                //购买数量
         sParaTemp.put("exter_invoke_ip", msgParam.get("exterInvokeIp")); //客户端IP
 
         // 防钓鱼时间戳

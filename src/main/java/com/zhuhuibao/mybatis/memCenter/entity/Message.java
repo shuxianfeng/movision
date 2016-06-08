@@ -7,7 +7,7 @@ public class Message {
 
     private String createid;
 
-    @ApiModelProperty(value="接收方ID")
+    @ApiModelProperty(value="接收方ID",required = true)
     private String receiveid;
 
     private String receiveName;

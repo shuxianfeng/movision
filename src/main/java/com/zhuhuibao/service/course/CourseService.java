@@ -53,9 +53,6 @@ public class CourseService {
     @Autowired
     OrderSmsService orderSmsService;
 
-    @Autowired
-    ApiConstants constants;
-
     /**
      * 开课
      *
@@ -131,10 +128,10 @@ public class CourseService {
             //短信通知会员 课程已终止 会全额退款  之后进入退款流程
             //查询该课程相关订单(已支付)
             List<Order> orderList = orderService.findListByCourseIdAndStatus(courseId, PayConstants.OrderStatus.YZF.toString());
-            if(TechConstant.PublishCourseStatus.SALING.toString().equals(String.valueOf(course.getStatus()))) {
+            if (TechConstant.PublishCourseStatus.SALING.toString().equals(String.valueOf(course.getStatus()))) {
                 //销售中人工终止
                 sendSMS(orderList, PropertiesUtils.getValue("course_before_stop_sms_template_code"));
-            }else if(TechConstant.PublishCourseStatus.PRECLASS.toString().equals(String.valueOf(course.getStatus()))) {
+            } else if (TechConstant.PublishCourseStatus.PRECLASS.toString().equals(String.valueOf(course.getStatus()))) {
                 //待开课人工终止
                 sendSMS(orderList, PropertiesUtils.getValue("course_before_autostop_sms_template_code"));
             }
@@ -145,7 +142,6 @@ public class CourseService {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "非[销售中,待开课]状态无法终止课程");
         }
     }
-
 
 
     /**
@@ -209,8 +205,8 @@ public class CourseService {
             //设置发送状态为发送失败
             orderSms.setStatus(OrderConstants.SmsStatus.FAIL.toString());
             orderSms.setUpdateTime(new Date());
-            orderSmsService.update(orderSms);
         }
+        orderSmsService.update(orderSms);
     }
 
 

@@ -94,7 +94,7 @@ public class ShiroRealm extends AuthorizingRealm {
         // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(
                 new ShiroUser(loginMember.getId(), loginMember.getAccount(),loginMember.getStatus(),
-                		loginMember.getIdentify(),loginMember.getRole(),loginMember.getIsexpert()), // 用户
+                		loginMember.getIdentify(),loginMember.getRole(),loginMember.getIsexpert(),loginMember.getCompanyId()), // 用户
                 loginMember.getPassword(), // 密码
 //                ByteSource.Util.bytes("123"),
                 getName() // realm name
@@ -123,14 +123,16 @@ public class ShiroRealm extends AuthorizingRealm {
         private String identify;
         private String role;
         private String isexpert;
+        private Long companyId;
 
-        public ShiroUser(Long id, String account, int status, String identify, String role,String isexpert) {
+        public ShiroUser(Long id, String account, int status, String identify, String role,String isexpert,Long companyId) {
             this.id = id;
             this.account = account;
             this.status = status;
             this.identify = identify;
             this.role = role;
             this.isexpert = isexpert;
+            this.companyId = companyId;
         }
         
 		public Long getId() {
@@ -180,7 +182,15 @@ public class ShiroRealm extends AuthorizingRealm {
 		public void setIsexpert(String isexpert) {
 			this.isexpert = isexpert;
 		}
-        
+
+        public Long getCompanyId() {
+            return companyId;
+        }
+
+        public void setCompanyId(Long companyId) {
+            this.companyId = companyId;
+        }
+
         /**
          * 重载equals,只计算id+account;
          */

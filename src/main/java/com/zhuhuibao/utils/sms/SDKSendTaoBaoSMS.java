@@ -1,5 +1,6 @@
 package com.zhuhuibao.utils.sms;
 
+import com.zhuhuibao.utils.PropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,24 +22,30 @@ public class SDKSendTaoBaoSMS {
     /**
      * 发送短信
      *
-     * @param mobile      短信接收号码 (支持单个或多个手机号码) 英文逗号分隔 最多200个
-     * @param params      短信模板参数
+     * @param mobile       短信接收号码 (支持单个或多个手机号码) 英文逗号分隔 最多200个
+     * @param params       短信模板参数
      * @param templateCode 短信模板编码
      * @return 成功失败 {true|false}
-     * @throws ApiException
      */
-    public static Boolean sendSMS(String mobile, String params, String templateCode) throws ApiException {
+    public static Boolean sendSMS(String mobile, String params, String templateCode){
         TaobaoClient client = new DefaultTaobaoClient(TAOBAO_CLIENT_URL, APPKEY, SECRET);
         AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
-        req.setExtend("123456");
-        req.setSmsType("normal");
-        req.setSmsFreeSignName("筑慧宝");
-        req.setSmsParamString(params);
-        req.setRecNum(mobile);
-        req.setSmsTemplateCode(templateCode);
-        AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
-        log.info("send sms response:" + rsp.getBody());
-        return rsp.getResult().getSuccess();
+        try {
+            req.setExtend("123456");
+            req.setSmsType("normal");
+            req.setSmsFreeSignName("筑慧宝");
+            req.setSmsParamString(params);
+            req.setRecNum(mobile);
+            req.setSmsTemplateCode(templateCode);
+            AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
+            log.info("send sms response:" + rsp.getBody());
+            return rsp.getResult().getSuccess();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("发送短信异常");
+            return false;
+        }
+
     }
 
 
@@ -109,49 +116,49 @@ public class SDKSendTaoBaoSMS {
     }
 
 
-	/**
-	 * * 申请专家支持时发送的短信验证码    支持，一次最多可提交200个手机号码；（温馨提示：手机号以英文逗号分开）
-	 * @param mobile  手机号
-	 * @param checkCode 验证码
-	 * @param time  过期时间
-	 * @throws ApiException
-	 */
-	public static void sendExpertSupportSMS(String mobile,String checkCode,String time) throws ApiException
-	{
-		log.info("send expertSupport sms mobile =  "+mobile+" checkcode = "+checkCode);
-		TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23361295", "752b6bcb411e07baf34e11e0b4ddb767");
-		AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
-		req.setExtend("123456");
-		req.setSmsType("normal");
-		req.setSmsFreeSignName("筑慧宝");
-		req.setSmsParamString("{\"code\":\""+checkCode+"\",\"time\":\""+time+"\"}");
-		req.setRecNum(mobile);
-		req.setSmsTemplateCode("SMS_8440019");
-		AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
-		System.out.println(rsp.getBody());
-	}
+    /**
+     * * 申请专家支持时发送的短信验证码    支持，一次最多可提交200个手机号码；（温馨提示：手机号以英文逗号分开）
+     *
+     * @param mobile    手机号
+     * @param checkCode 验证码
+     * @param time      过期时间
+     * @throws ApiException
+     */
+    public static void sendExpertSupportSMS(String mobile, String checkCode, String time) throws ApiException {
+        log.info("send expertSupport sms mobile =  " + mobile + " checkcode = " + checkCode);
+        TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23361295", "752b6bcb411e07baf34e11e0b4ddb767");
+        AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
+        req.setExtend("123456");
+        req.setSmsType("normal");
+        req.setSmsFreeSignName("筑慧宝");
+        req.setSmsParamString("{\"code\":\"" + checkCode + "\",\"time\":\"" + time + "\"}");
+        req.setRecNum(mobile);
+        req.setSmsTemplateCode("SMS_8440019");
+        AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
+        System.out.println(rsp.getBody());
+    }
 
-	/**
-	 * * 专家培训课程下单发送的短信验证码    支持，一次最多可提交200个手机号码；（温馨提示：手机号以英文逗号分开）
-	 * @param mobile  手机号
-	 * @param checkCode 验证码
-	 * @param time  过期时间
-	 * @throws ApiException
-	 */
-	public static void sendExpertTrainSMS(String mobile,String checkCode,String time) throws ApiException
-	{
-		log.info("send expertTrain sms mobile =  "+mobile+" checkcode = "+checkCode);
-		TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23361295", "752b6bcb411e07baf34e11e0b4ddb767");
-		AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
-		req.setExtend("123456");
-		req.setSmsType("normal");
-		req.setSmsFreeSignName("筑慧宝");
-		req.setSmsParamString("{\"code\":\""+checkCode+"\",\"time\":\""+time+"\"}");
-		req.setRecNum(mobile);
-		req.setSmsTemplateCode("SMS_8440019");
-		AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
-		System.out.println(rsp.getBody());
-	}
+    /**
+     * * 专家培训课程下单发送的短信验证码    支持，一次最多可提交200个手机号码；（温馨提示：手机号以英文逗号分开）
+     *
+     * @param mobile    手机号
+     * @param checkCode 验证码
+     * @param time      过期时间
+     * @throws ApiException
+     */
+    public static void sendExpertTrainSMS(String mobile, String checkCode, String time) throws ApiException {
+        log.info("send expertTrain sms mobile =  " + mobile + " checkcode = " + checkCode);
+        TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23361295", "752b6bcb411e07baf34e11e0b4ddb767");
+        AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
+        req.setExtend("123456");
+        req.setSmsType("normal");
+        req.setSmsFreeSignName("筑慧宝");
+        req.setSmsParamString("{\"code\":\"" + checkCode + "\",\"time\":\"" + time + "\"}");
+        req.setRecNum(mobile);
+        req.setSmsTemplateCode("SMS_8440019");
+        AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
+        System.out.println(rsp.getBody());
+    }
 
     /**
      * * 开课申请发送验证码   支持，一次最多可提交200个手机号码；（温馨提示：手机号以英文逗号分开）
@@ -178,7 +185,7 @@ public class SDKSendTaoBaoSMS {
     public static void main(String[] args) throws ApiException {
 
 		/*TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23326329", "eb3fa5d51db6e7f43cdc2210113f1a1d");
-		AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
+        AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
 		req.setExtend("123456");
 		req.setSmsType("normal");
 		req.setSmsFreeSignName("筑慧宝");

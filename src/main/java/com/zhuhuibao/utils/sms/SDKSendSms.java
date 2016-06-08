@@ -12,7 +12,7 @@ public class SDKSendSms {
 
 
 
-    public static Boolean sendSMS(String mobile, String params, String templateCode) throws Exception {
+    public static Boolean sendSMS(String mobile, String params, String templateCode){
 
         String gateWay = PropertiesUtils.getValue("sms_gateway");
 
