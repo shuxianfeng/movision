@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
 import com.zhuhuibao.mybatis.oms.entity.Notice;
 import com.zhuhuibao.mybatis.oms.service.NoticeService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
