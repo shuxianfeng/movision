@@ -55,7 +55,7 @@ public class TechDataMcController {
     }
 
     @RequestMapping(value="sel_tech_data", method = RequestMethod.GET)
-    @ApiOperation(value="运营管理平台搜索技术资料",notes = "运营管理平台搜索技术资料",response = Response.class)
+    @ApiOperation(value="搜索技术资料",notes = "搜索技术资料",response = Response.class)
     public Response findAllTechDataPager(@ApiParam(value = "一级分类") @RequestParam(required = false) String fCategory,
                                          @ApiParam(value = "标题") @RequestParam(required = false) String title,
                                          @ApiParam(value = "状态") @RequestParam(required = false) String status,
