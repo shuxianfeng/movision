@@ -69,4 +69,17 @@
       dowloadTime = #{dowloadTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="findAllDownloadData" resultType="java.util.Map" parameterType="java.util.Map">
+    select td.title,tc.name,date_format(t.dowloadTime,'%Y-%m-%d') dowloadTime,
+    case when ur.mobile != '' or ur.mobile != null then ur.mobile when ur.email!= '' or ur.email != null then ur.email end as  username
+    from t_tech_downloadReldata t
+    left join t_tech_data td on td.id = t.dataId
+    left join t_dictionary_techDataCategory tc on tc.code = td.fCategory
+    left join t_m_member ur on ur.id = td.createid
+    <where>
+      <if test="downloaderId != null">
+        and t.createid = #{downloaderId}
+      </if>
+    </where>
+  </select>
 </mapper>

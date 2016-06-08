@@ -25,6 +25,8 @@ import java.util.Map;
 
 /**
  * 技术合作
+ * @author pl
+ * @version 2016/6/8
  */
 @RestController
 @RequestMapping("/rest/tech/site/coop")
