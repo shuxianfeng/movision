@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.LookExpertRecordMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.LookExpertRecord" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.expert.entity.LookExpertRecord" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="createId" property="createId" jdbcType="VARCHAR" />
     <result column="companyId" property="companyId" jdbcType="VARCHAR" />
@@ -11,12 +11,12 @@
   <sql id="Base_Column_List" >
     id, createId, companyId, expertId, time
   </sql>
-  <select id="selectRecordByExpertIdCompanyId" resultMap="BaseResultMap" parameterType="com.zhuhuibao.mybatis.memCenter.entity.LookExpertRecord" >
+  <select id="selectRecordByExpertIdCompanyId" resultMap="BaseResultMap" parameterType="com.zhuhuibao.mybatis.expert.entity.LookExpertRecord" >
       SELECT * FROM t_e_lookExpert_record
       WHERE expertId = #{expertId} and companyId = #{companyId}
   </select>
 
-  <insert id="addRecord" parameterType="com.zhuhuibao.mybatis.memCenter.entity.LookExpertRecord" >
+  <insert id="addRecord" parameterType="com.zhuhuibao.mybatis.expert.entity.LookExpertRecord" >
     insert into t_e_lookExpert_record
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

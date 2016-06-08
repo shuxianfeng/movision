@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.CooperationMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.witkey.entity.Cooperation" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="createId" property="createId" jdbcType="VARCHAR" />
     <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
@@ -40,7 +40,7 @@
     id, createId, publishTime, updateTime, title, type, category, province, city, area, 
     price, endTime, isShow, companyName, linkMan, telephone,mobile, email,content,is_deleted,views
   </sql>
-  <insert id="publishCooperation" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
+  <insert id="publishCooperation" parameterType="com.zhuhuibao.mybatis.witkey.entity.Cooperation" >
     insert into t_c_cooperation
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -165,7 +165,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateCooperation" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
+  <update id="updateCooperation" parameterType="com.zhuhuibao.mybatis.witkey.entity.Cooperation" >
     update t_c_cooperation
     <set >
       <if test="createId != null" >
@@ -232,7 +232,7 @@
     </set>
     where id = #{id}
   </update>
-  <update id="updateCooperationViews" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
+  <update id="updateCooperationViews" parameterType="com.zhuhuibao.mybatis.witkey.entity.Cooperation" >
     update t_c_cooperation
     <set >
       <if test="views != null" >
@@ -241,7 +241,7 @@
     </set>
     where id = #{id}
   </update>
-  <update id="deleteCooperation" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Cooperation" >
+  <update id="deleteCooperation" parameterType="com.zhuhuibao.mybatis.witkey.entity.Cooperation" >
     UPDATE t_c_cooperation SET is_deleted = 1 WHERE id = #{id}
   </update>
   <select id="queryCooperationInfoById" resultMap="BaseResultMap" >

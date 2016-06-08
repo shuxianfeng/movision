@@ -1,6 +1,6 @@
-package com.zhuhuibao.mybatis.witkty.mapper;
+package com.zhuhuibao.mybatis.witkey.mapper;
 
-import com.zhuhuibao.mybatis.witkty.entity.CooperationType;
+import com.zhuhuibao.mybatis.witkey.entity.CooperationType;
 
 import java.util.List;
 

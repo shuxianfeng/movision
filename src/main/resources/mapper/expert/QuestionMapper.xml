@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.QuestionMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Question" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.expert.entity.Question" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="createid" property="createid" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
@@ -65,7 +65,7 @@
     where q.`status` = 2 and a.`status` = 0 and q.answerId = a.id order by q.publishTime desc limit 0,#{count}
   </select>
 
-  <insert id="askExpert" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Question" >
+  <insert id="askExpert" parameterType="com.zhuhuibao.mybatis.expert.entity.Question" >
     insert into t_e_question
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -104,7 +104,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateQuestionInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Question" >
+  <update id="updateQuestionInfo" parameterType="com.zhuhuibao.mybatis.expert.entity.Question" >
     update t_e_question
     <set >
       <if test="content != null" >

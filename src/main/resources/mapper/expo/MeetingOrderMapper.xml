@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.MeetingOrderMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.MeetingOrder" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.expo.entity.MeetingOrder" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="createid" property="createid" jdbcType="VARCHAR" />
     <result column="account" property="account" jdbcType="VARCHAR" />
@@ -65,7 +65,7 @@
     left join t_oms_user u on u.id = cm.updateManId
     where cm.id = #{id}
   </select>
-  <insert id="publishMeetingOrder" parameterType="com.zhuhuibao.mybatis.memCenter.entity.MeetingOrder" >
+  <insert id="publishMeetingOrder" parameterType="com.zhuhuibao.mybatis.expo.entity.MeetingOrder" >
     insert into t_c_meetingOrder
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -274,7 +274,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateMeetingOrderStatus" parameterType="com.zhuhuibao.mybatis.memCenter.entity.MeetingOrder" >
+  <update id="updateMeetingOrderStatus" parameterType="com.zhuhuibao.mybatis.expo.entity.MeetingOrder" >
     update t_c_meetingOrder
     <set >
       <if test="status != null" >

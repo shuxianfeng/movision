@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.DynamicMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Dynamic" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.expert.entity.Dynamic" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="createId" property="createId" jdbcType="VARCHAR" />
     <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
@@ -52,7 +52,7 @@
     </if>
     order by d.updateTime desc
   </select>
-  <insert id="publishDynamic" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Dynamic" >
+  <insert id="publishDynamic" parameterType="com.zhuhuibao.mybatis.expert.entity.Dynamic" >
     insert into t_e_dynamic
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -129,7 +129,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateDynamic" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Dynamic" >
+  <update id="updateDynamic" parameterType="com.zhuhuibao.mybatis.expert.entity.Dynamic" >
     update t_e_dynamic
     <set >
         updateTime = now(),

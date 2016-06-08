@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.DistributedOrderMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.expo.entity.DistributedOrder" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="createid" property="createid" jdbcType="VARCHAR" />
     <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
@@ -34,7 +34,7 @@
       and d.status = #{status}
     </if>
   </select>
-  <insert id="publishDistributedOrder" parameterType="com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder" >
+  <insert id="publishDistributedOrder" parameterType="com.zhuhuibao.mybatis.expo.entity.DistributedOrder" >
     insert into t_c_distributedOrder
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -87,7 +87,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateDistributedStatus" parameterType="com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder" >
+  <update id="updateDistributedStatus" parameterType="com.zhuhuibao.mybatis.expo.entity.DistributedOrder" >
     update t_c_distributedOrder
     <set >
         updateTime = now(),

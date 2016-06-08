@@ -1,6 +1,6 @@
-package com.zhuhuibao.mybatis.witkty.mapper;
+package com.zhuhuibao.mybatis.witkey.mapper;
 
-import com.zhuhuibao.mybatis.witkty.entity.Cooperation;
+import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;

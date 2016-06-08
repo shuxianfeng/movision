@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.ExhibitionMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Exhibition" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.expo.entity.Exhibition" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="createid" property="createid" jdbcType="VARCHAR" />
     <result column="createName" property="createName" jdbcType="VARCHAR" />
@@ -39,7 +39,7 @@
     left join t_dictionary_area a on a.code = e.area
     where e.id = #{id}
   </select>
-  <insert id="publishExhibition" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Exhibition" >
+  <insert id="publishExhibition" parameterType="com.zhuhuibao.mybatis.expo.entity.Exhibition" >
     insert into t_c_exhibition
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -152,7 +152,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateExhibitionInfoById" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Exhibition" >
+  <update id="updateExhibitionInfoById" parameterType="com.zhuhuibao.mybatis.expo.entity.Exhibition" >
     update t_c_exhibition
     <set >
       <if test="title != null" >
@@ -207,7 +207,7 @@
     </set>
     where id = #{id}
   </update>
-  <update id="updateExhibitionViews" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Exhibition" >
+  <update id="updateExhibitionViews" parameterType="com.zhuhuibao.mybatis.expo.entity.Exhibition" >
     update t_c_exhibition
     <set >
       <if test="views != null" >

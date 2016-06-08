@@ -1,4 +1,4 @@
-package com.zhuhuibao.mybatis.witkty.entity;
+package com.zhuhuibao.mybatis.witkey.entity;
 
 import com.wordnik.swagger.annotations.ApiModelProperty;
 

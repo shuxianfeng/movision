@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.AchievementMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Achievement" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.expert.entity.Achievement" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="createId" property="createId" jdbcType="VARCHAR" />
     <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
@@ -51,7 +51,7 @@
     WHERE a.is_deleted = 0 and a.status = 1
     ORDER by a.updateTime DESC limit 0,#{count}
   </select>
-  <select id="findAllAchievementList" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.Achievement">
+  <select id="findAllAchievementList" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.expert.entity.Achievement">
     select a.id,date_format(a.publishTime,'%Y-%m-%d') publishTime,date_format(a.updateTime,'%Y-%m-%d') updateTime,
     a.title,a.systemType,a.useArea,a.companyName,a.linkMan,a.telephone,a.email,a.province,a.city,a.area,a.address,a.cooperationType,a.status,
     a.introduce,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,
@@ -84,7 +84,7 @@
     </if>
     order by a.updateTime desc
   </select>
-  <insert id="publishAchievement" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Achievement" >
+  <insert id="publishAchievement" parameterType="com.zhuhuibao.mybatis.expert.entity.Achievement" >
     insert into t_e_achievement
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -197,7 +197,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateAchievement" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Achievement" >
+  <update id="updateAchievement" parameterType="com.zhuhuibao.mybatis.expert.entity.Achievement" >
     update t_e_achievement
     <set >
       <if test="updateTime != null" >

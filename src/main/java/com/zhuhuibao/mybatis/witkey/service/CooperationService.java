@@ -1,10 +1,10 @@
-package com.zhuhuibao.mybatis.witkty.service;
+package com.zhuhuibao.mybatis.witkey.service;
 
 import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.mybatis.witkty.entity.Cooperation;
-import com.zhuhuibao.mybatis.witkty.entity.CooperationType;
-import com.zhuhuibao.mybatis.witkty.mapper.CooperationMapper;
-import com.zhuhuibao.mybatis.witkty.mapper.CooperationTypeMapper;
+import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
+import com.zhuhuibao.mybatis.witkey.entity.CooperationType;
+import com.zhuhuibao.mybatis.witkey.mapper.CooperationMapper;
+import com.zhuhuibao.mybatis.witkey.mapper.CooperationTypeMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.zhuhuibao.mybatis.witkty.entity;
+package com.zhuhuibao.mybatis.witkey.entity;
 
 public class CooperationType {
     private Integer id;
