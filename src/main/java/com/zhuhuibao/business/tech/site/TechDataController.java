@@ -87,8 +87,14 @@ public class TechDataController {
     @ApiOperation(value="新增技术资料(行业解决方案，技术文档，培训资料)",notes = "新增技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)
     public Response insertTechData(@ApiParam(value = "技术资料:行业解决方案，技术文档，培训资料")  @ModelAttribute(value="techData")TechData techData)
     {
-        int result = techDataService.insertTechData(techData);
         Response response = new Response();
+        Long createId = ShiroUtil.getCreateID();
+        if(null != createId) {
+            techData.setCreateid(createId);
+            int result = techDataService.insertTechData(techData);
+        }else{
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
