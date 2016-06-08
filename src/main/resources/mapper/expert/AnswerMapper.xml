@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.AnswerMapper" >
+<mapper namespace="com.zhuhuibao.mybatis.expert.mapper.AnswerMapper" >
   <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.expert.entity.Answer" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="createid" property="createid" jdbcType="VARCHAR" />
