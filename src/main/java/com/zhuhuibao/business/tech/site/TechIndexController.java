@@ -11,6 +11,10 @@ import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
 import com.zhuhuibao.mybatis.tech.service.PublishTCourseService;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.mybatis.tech.service.TechDataService;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -68,6 +72,49 @@ public class TechIndexController {
         map.put("count", 5);
         List<ChannelNews> newsList = newsService.queryNewsByChannelInfo(map);
         response.setData(newsList);
+        return response;
+    }
+
+    /**
+     * 查询技术频道新技术播报
+     *
+     * @param pageNo
+     * @param pageSize
+     * @throws JsonGenerationException
+     * @throws JsonMappingException
+     * @throws IOException
+     */
+    @RequestMapping(value = "sel_all_news", method = RequestMethod.GET)
+    @ApiOperation(value = "分页查询新技术播报",notes = "分页查询新技术播报",response = Response.class)
+    public Response findAllTechNewsList(@ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
+                                        @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) throws IOException {
+        Response response = new Response();
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "5";
+        }
+        Paging<Map<String,Object>> pager = new Paging<Map<String,Object>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("channelid", 11);
+        map.put("sort", 1);
+        map.put("status", 1);
+        List<Map<String,Object>> channelList = newsService.findAllTechNewsList(pager, map);
+        pager.result(channelList);
+        response.setData(pager);
+
+        return response;
+    }
+
+    @RequestMapping(value = "sel_news_detail", method = RequestMethod.GET)
+    @ApiOperation(value = "查询新技术播报详情",notes = "查询新技术播报详情",response = Response.class)
+    public Response queryTechNewsDetail(@ApiParam(value = "新闻ID") @RequestParam String newsId) {
+        Response response = new Response();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("id",newsId);
+        Map<String,Object> list = newsService.previewNewsInfo(map);
+        response.setData(list);
         return response;
     }
 

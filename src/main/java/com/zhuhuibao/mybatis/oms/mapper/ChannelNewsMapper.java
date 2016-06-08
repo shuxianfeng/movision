@@ -27,4 +27,8 @@ public interface ChannelNewsMapper {
     List<ChannelNews> queryChannelList();
 
 	int batchDelNews(String id);
+
+    List<Map<String,Object>> findAllTechNewsList(RowBounds rowBounds, Map<String,Object> channelMap);
+
+    Map<String,Object> previewNewsInfo(Map<String,Object> channelMap);
 }
