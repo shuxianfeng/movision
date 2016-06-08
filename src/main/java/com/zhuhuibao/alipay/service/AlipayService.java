@@ -1,6 +1,7 @@
 package com.zhuhuibao.alipay.service;
 
 import com.google.common.collect.Maps;
+import com.google.gson.Gson;
 import com.zhuhuibao.alipay.config.AliPayConfig;
 import com.zhuhuibao.alipay.util.AlipayNotify;
 import com.zhuhuibao.alipay.util.AlipaySubmit;
@@ -34,11 +35,7 @@ import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+import java.util.*;
 
 /**
  * 支付宝服务入口
@@ -397,12 +394,13 @@ public class AlipayService {
         String temp = sb.toString();
         String codes = temp.substring(0, temp.length() - 1);
 
-        Map<String, String> smsMap = new HashMap<>();
+        Map<String, String> smsMap = new LinkedHashMap<>();
         smsMap.put("name", course.getTitle());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         smsMap.put("time", format.format(course.getSaleTime()));
         smsMap.put("code", codes);
-        String content = JsonUtils.getJsonStringFromMap(smsMap);
+        Gson gson = new Gson();
+        String content = gson.toJson(smsMap);
         OrderSms orderSms = new OrderSms();
         orderSms.setOrderNo(msgParam.get("orderNo"));
         orderSms.setMobile(msgParam.get("mobile"));
