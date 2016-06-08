@@ -6,10 +6,10 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.mybatis.memCenter.entity.DistributedOrder;
-import com.zhuhuibao.mybatis.memCenter.entity.Exhibition;
-import com.zhuhuibao.mybatis.memCenter.entity.MeetingOrder;
-import com.zhuhuibao.mybatis.memCenter.service.ExhibitionService;
+import com.zhuhuibao.mybatis.expo.entity.DistributedOrder;
+import com.zhuhuibao.mybatis.expo.entity.Exhibition;
+import com.zhuhuibao.mybatis.expo.entity.MeetingOrder;
+import com.zhuhuibao.mybatis.expo.service.ExpoService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -37,7 +37,7 @@ public class ExpoOmsController {
     private static final Logger log = LoggerFactory.getLogger(ExpoOmsController.class);
 
     @Autowired
-    private ExhibitionService exhibitionService;
+    private ExpoService exhibitionService;
 
     /**
      * 一站式会展定制申请处理
