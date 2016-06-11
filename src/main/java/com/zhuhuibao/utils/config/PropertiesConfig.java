@@ -1,13 +1,13 @@
 package com.zhuhuibao.utils.config;
 
+import com.zhuhuibao.fsearch.utils.FileUtil;
+import com.zhuhuibao.fsearch.utils.FileUtil.ReadLineHandler;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-
-import com.zhuhuibao.fsearch.utils.FileUtil;
-import com.zhuhuibao.fsearch.utils.FileUtil.ReadLineHandler;
 
 public class PropertiesConfig extends Config {
 

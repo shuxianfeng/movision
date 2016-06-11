@@ -1,13 +1,13 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
-import java.util.*;
-
-import org.apache.ibatis.session.RowBounds;
-
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferAskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferPrice;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
+import java.util.Map;
 
 public interface OfferPriceMapper {
     int deleteByPrimaryKey(Long id);

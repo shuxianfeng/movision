@@ -1,8 +1,9 @@
 package com.zhuhuibao.fsearch.pojo;
 
+import com.zhuhuibao.fsearch.utils.MyUtils;
+
 import java.util.Date;
 import java.util.List;
-import com.zhuhuibao.fsearch.utils.MyUtils;
 
 public class Product {
     private Long id;

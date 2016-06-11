@@ -30,7 +30,7 @@ import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 
 @RestController
-@RequestMapping("/rest/price")
+//@RequestMapping("/rest/price")
 @Api(value="OfferPrice", description="报价")
 public class OfferPriceController {
 	
@@ -43,7 +43,7 @@ public class OfferPriceController {
     ApiConstants ApiConstants;
 
 	@ApiOperation(value="我要报价(清单和单一产品)",notes="我要报价(清单和单一产品)",response = Response.class)
-	@RequestMapping(value="addOfferPrice", method = RequestMethod.POST)
+	@RequestMapping(value={"rest/price/addOfferPrice","rest/system/mc/quote/add_offerPrice"}, method = RequestMethod.POST)
 	public Response addOfferPrice(OfferPrice price) throws IOException
 	{
 		log.info("add offer price");
@@ -60,7 +60,7 @@ public class OfferPriceController {
 	}
 
 	@ApiOperation(value="询价需求功能：查询所有正在询价中的信息（分页）",notes="询价需求功能：查询所有正在询价中的信息（分页）",response = Response.class)
-	@RequestMapping(value="queryAskingPriceInfo",method = RequestMethod.GET)
+	@RequestMapping(value={"rest/price/queryAskingPriceInfo","rest/system/mc/quote/sel_askingPriceInfo"},method = RequestMethod.GET)
 	public Response queryAskingPriceInfo(AskPrice price,
 										 @RequestParam(required = false) String pageNo,
 										 @RequestParam(required = false) String pageSize) throws IOException
@@ -88,7 +88,7 @@ public class OfferPriceController {
 	}
 
 	@ApiOperation(value="我的报价：根据条件查询自己所有报价信息（分页）",notes="我的报价：根据条件查询自己所有报价信息（分页）",response = Response.class)
-	@RequestMapping(value="queryOfferedPriceInfo",method = RequestMethod.GET)
+	@RequestMapping(value={"rest/price/queryOfferedPriceInfo","rest/system/mc/quote/sel_offeredPriceInfo"},method = RequestMethod.GET)
 	public Response queryOfferedPriceInfo(@RequestParam(required = false) String title,
 										  @RequestParam(required = false) String startDate,
 										  @RequestParam(required = false) String endDate,
@@ -121,7 +121,7 @@ public class OfferPriceController {
 	}
 
 	@ApiOperation(value="公开，定向，单一产品报价查询",notes="公开，定向，单一产品报价查询",response = Response.class)
-	@RequestMapping(value="queryOfferPriceInfoByID", method = RequestMethod.GET)
+	@RequestMapping(value={"rest/price/queryOfferPriceInfoByID","rest/system/mc/quote/sel_offerPriceInfoByID"}, method = RequestMethod.GET)
 	public Response queryOfferPriceInfoByID(@RequestParam Long id) throws IOException
 	{
 		log.debug("query offer priece info by id ");
@@ -130,7 +130,7 @@ public class OfferPriceController {
 	}
 
 	@ApiOperation(value="下载报价单，询价单",notes="下载报价单，询价单",response = Response.class)
-	@RequestMapping(value="downloadBill", method = RequestMethod.GET)
+	@RequestMapping(value={"rest/price/downloadBill","rest/system/mc/quote/dl_bill"}, method = RequestMethod.GET)
 	public Response downloadBill(HttpServletResponse response, @RequestParam Long id, @RequestParam String type) throws IOException
 	{
 		Response jsonResult = new Response();
@@ -154,7 +154,7 @@ public class OfferPriceController {
 	}
 
 	@ApiOperation(value="查看某条询价信息的所有报价信息",notes="查看某条询价信息的所有报价信息",response = Response.class)
-	@RequestMapping(value="queryAllOfferPriceByAskID", method = RequestMethod.GET)
+	@RequestMapping(value={"rest/price/queryAllOfferPriceByAskID","rest/system/mc/quote/sel_allOfferPriceByAskID"}, method = RequestMethod.GET)
 	public Response queryAllOfferPriceByAskID(@RequestParam Long id) throws IOException
 	{
 		log.debug("query all offer priece by askid ");
@@ -162,7 +162,7 @@ public class OfferPriceController {
 	}
 
 	@ApiOperation(value="查看回复的具体某条报价信息(清单,单一产品)",notes="查看回复的具体某条报价信息(清单,单一产品)",response = Response.class)
-	@RequestMapping(value="queryOfferPriceByID", method = RequestMethod.GET)
+	@RequestMapping(value={"rest/price/queryOfferPriceByID","rest/system/mc/quote/sel_offerPriceByID"}, method = RequestMethod.GET)
 	public Response queryOfferPriceByID(@RequestParam Long id) throws IOException
 	{
 		log.debug("query offer priece info by id ");

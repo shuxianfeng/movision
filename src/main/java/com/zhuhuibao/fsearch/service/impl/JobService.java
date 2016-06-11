@@ -1,16 +1,14 @@
 package com.zhuhuibao.fsearch.service.impl;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import com.zhuhuibao.fsearch.service.IJobService;
+import com.zhuhuibao.utils.G;
+import com.zhuhuibao.utils.L;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-
-import com.zhuhuibao.fsearch.service.IJobService;
-import org.springframework.stereotype.Service;
-
-import com.zhuhuibao.utils.G;
-import com.zhuhuibao.utils.L;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Service
 public class JobService implements IJobService {

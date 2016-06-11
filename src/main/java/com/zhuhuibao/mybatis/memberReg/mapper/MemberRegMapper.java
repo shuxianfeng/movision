@@ -1,9 +1,9 @@
 package com.zhuhuibao.mybatis.memberReg.mapper;
 
-import java.util.*;
-
 import com.zhuhuibao.mybatis.memberReg.entity.LoginMember;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
+
+import java.util.List;
 
 public interface MemberRegMapper {
 	//注册会员

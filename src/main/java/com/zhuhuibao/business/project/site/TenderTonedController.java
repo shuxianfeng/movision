@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.project;/**
+package com.zhuhuibao.business.project.site;/**
  * @author Administrator
  * @version 2016/5/16 0016
  */
@@ -7,7 +7,6 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.oms.entity.TenderToned;
 import com.zhuhuibao.mybatis.oms.service.TenderTonedService;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -36,27 +35,7 @@ public class TenderTonedController {
     @Autowired
     TenderTonedService ttService;
 
-    @RequestMapping(value = "addTenderToned",method = RequestMethod.POST)
-    @ApiOperation(value="运营管理平台增加招中标",notes = "运营管理平台增加招中标",response = Response.class)
-    public Response addTenderToned(@ApiParam(value = "招中标信息") @ModelAttribute TenderToned tt) throws Exception {
-        Response response = new Response();
-        Long createId = ShiroUtil.getOmsCreateID();
-        if(createId != null) {
-            tt.setCreateid(createId);
-            ttService.insertTenderTone(tt);
-        }
-        return response;
-    }
-
-    @RequestMapping(value = "updateTenderToned",method = RequestMethod.POST)
-    @ApiOperation(value="运营管理平台修改招中标",notes = "运营管理平台修改招中标",response = Response.class)
-    public Response updateTenderToned(@ApiParam(value = "招中标信息") @ModelAttribute TenderToned tt) throws Exception {
-        Response response = new Response();
-        ttService.updateTenderTone(tt);
-        return response;
-    }
-
-    @RequestMapping(value = "searchTenderTonedPager",method = RequestMethod.GET)
+    @RequestMapping(value = {"searchTenderTonedPager","site/base/sel_tenderTonedPager"},method = RequestMethod.GET)
     @ApiOperation(value="查询招中标分页展示",notes = "根据条件查询招中标",response = Response.class)
     public Response searchTenderTonedPager(@ApiParam(value = "招中标公告名称") @RequestParam(required = false) String noticeName,
                                            @ApiParam(value="省代码") @RequestParam(required = false) String province,
@@ -94,8 +73,8 @@ public class TenderTonedController {
         return response;
     }
 
-    @RequestMapping(value = "previewTenderToned",method = RequestMethod.GET)
-    @ApiOperation(value="运营管理平台预览招中标信息",notes = "运营管理平台预览",response = Response.class)
+    @RequestMapping(value = {"previewTenderToned","site/base/sel_tenderToned"},method = RequestMethod.GET)
+    @ApiOperation(value="频道预览招中标信息",notes = "频道预览招中标信息",response = Response.class)
     public Response previewTenderToned(@ApiParam(value = "招中标信息ID") @RequestParam Long tenderTonedID) throws Exception {
         Response response = new Response();
         TenderToned tenderToned = ttService.queryTenderToneByID(tenderTonedID);
@@ -103,16 +82,7 @@ public class TenderTonedController {
         return response;
     }
     
-    @RequestMapping(value = "previewTenderTonedCode",method = RequestMethod.GET)
-    @ApiOperation(value="运营管理平台预览招中标信息地区code",notes = "运营管理平台预览",response = Response.class)
-    public Response previewTenderTonedCode(@ApiParam(value = "招中标信息ID") @RequestParam Long tenderTonedID) throws Exception {
-        Response response = new Response();
-        TenderToned tenderToned = ttService.queryTenderToneByIDCode(tenderTonedID);
-        response.setData(tenderToned);
-        return response;
-    }
-
-    @RequestMapping(value = "queryLatestTenderToned", method = RequestMethod.GET)
+    @RequestMapping(value = {"queryLatestTenderToned","site/base/sel_latestTenderToned"}, method = RequestMethod.GET)
     @ApiOperation(value = "最新招标或中标公告信息或搜索时的推荐，默认10条",notes = "最新招标或中标公告信息，默认10条",response = Response.class)
     public Response queryLatestTenderToned(@ApiParam(value="公告类型 1:招标公告，2：中标公告") @RequestParam() String type) throws Exception {
         Response response = new Response();

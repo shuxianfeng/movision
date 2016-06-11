@@ -5,7 +5,6 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.util.ConvertUtil;
-import com.zhuhuibao.mybatis.constants.entity.Constant;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

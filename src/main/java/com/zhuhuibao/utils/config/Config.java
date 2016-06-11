@@ -1,15 +1,15 @@
 package com.zhuhuibao.utils.config;
 
+import com.zhuhuibao.fsearch.utils.CollectionUtil;
+import com.zhuhuibao.fsearch.utils.FormatUtil;
+import com.zhuhuibao.fsearch.utils.JSONUtil;
+import com.zhuhuibao.fsearch.utils.StringUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.zhuhuibao.fsearch.utils.CollectionUtil;
-import com.zhuhuibao.fsearch.utils.FormatUtil;
-import com.zhuhuibao.fsearch.utils.JSONUtil;
-import com.zhuhuibao.fsearch.utils.StringUtil;
 
 public abstract class Config {
 

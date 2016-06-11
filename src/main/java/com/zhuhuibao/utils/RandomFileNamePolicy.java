@@ -5,8 +5,6 @@ import com.oreilly.servlet.multipart.FileRenamePolicy;
 import java.io.File;
 import java.util.Date;
 
-import org.apache.shiro.crypto.hash.Md5Hash;
-
 /**
  * 自定义的命名策略文件
  */

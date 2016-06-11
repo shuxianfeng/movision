@@ -25,21 +25,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *运营管理平台业务层
+ *会员中心我查看过的项目信息
  *@author pl
  *@create 2016/6/1 0001
  **/
 @RestController
 @RequestMapping(value="/rest/project/mc")
-@Api(value="projectoms",description = "运营管理平台项目信息")
-public class ProjectOmsController {
+@Api(value="projectMc",description = "会员中心我查看过的项目信息")
+public class ProjectMcController {
     @Autowired
     ProjectService projectService;
 
     /**
      * 根据条件查询项目分页信息
      */
-    @RequestMapping(value="sel_project_info", method = RequestMethod.GET)
+    @RequestMapping(value={"sel_project_info","base/sel_project_info"}, method = RequestMethod.GET)
     @ApiOperation(value = "查询我查看过的项目信息",notes = "查询我查看过的项目信息",response = Response.class)
     public Response searchProjectPage(@ApiParam(value = "项目名称") @RequestParam(required = false) String name,
                                       @ApiParam(value = "城市Code") @RequestParam(required = false) String city,

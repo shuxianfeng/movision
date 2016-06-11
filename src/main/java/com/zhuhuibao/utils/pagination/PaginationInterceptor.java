@@ -1,29 +1,24 @@
 package com.zhuhuibao.utils.pagination;
 
-import java.sql.Connection;
-import java.util.Properties;
-
 import com.zhuhuibao.utils.pagination.dialect.DatabaseDialectShortName;
-import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.dialect.Dialect;
 import com.zhuhuibao.utils.pagination.helper.DialectHelper;
 import com.zhuhuibao.utils.pagination.helper.SqlHelper;
+import com.zhuhuibao.utils.pagination.model.Paging;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.mapping.SqlSource;
-import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.plugin.Intercepts;
-import org.apache.ibatis.plugin.Invocation;
-import org.apache.ibatis.plugin.Plugin;
-import org.apache.ibatis.plugin.Signature;
+import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zhuhuibao.utils.pagination.dialect.Dialect;
+import java.sql.Connection;
+import java.util.Properties;
 
 /**
  * Date Created  2014-2-17

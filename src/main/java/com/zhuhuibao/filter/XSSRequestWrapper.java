@@ -1,10 +1,8 @@
 package com.zhuhuibao.filter;
 
-import java.util.Arrays;
-import java.util.regex.Pattern;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import java.util.regex.Pattern;
 
 /**
  * @author jianglz

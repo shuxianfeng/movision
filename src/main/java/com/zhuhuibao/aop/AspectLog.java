@@ -1,22 +1,19 @@
 package com.zhuhuibao.aop;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.zhuhuibao.mybatis.accessLog.entity.AccessLog;
+import com.zhuhuibao.mybatis.accessLog.service.AccessLogService;
+import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 
-import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
-import com.zhuhuibao.mybatis.accessLog.entity.AccessLog;
-import com.zhuhuibao.mybatis.accessLog.service.AccessLogService;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 平台访问日志

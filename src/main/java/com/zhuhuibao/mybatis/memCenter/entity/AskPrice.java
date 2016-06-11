@@ -2,8 +2,6 @@ package com.zhuhuibao.mybatis.memCenter.entity;
 
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
-import java.util.Date;
-
 public class AskPrice {
     private Long id;
 

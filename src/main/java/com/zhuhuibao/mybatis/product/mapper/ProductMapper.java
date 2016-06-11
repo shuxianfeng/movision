@@ -1,15 +1,15 @@
 package com.zhuhuibao.mybatis.product.mapper;
 
-import java.util.*;
-
-import com.zhuhuibao.mybatis.product.entity.ProductWithMember;
-import org.apache.ibatis.session.RowBounds;
-
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.oms.entity.CategoryAssemble;
 import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.mybatis.product.entity.ProductMap;
 import com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs;
+import com.zhuhuibao.mybatis.product.entity.ProductWithMember;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
+import java.util.Map;
 
 public interface ProductMapper {
     int deleteByPrimaryKey(Long id);

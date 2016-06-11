@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.City;
+
 import java.util.List;
 
 public interface CityMapper {

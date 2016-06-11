@@ -1,23 +1,16 @@
 package com.zhuhuibao.fsearch.repository.db;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.zhuhuibao.fsearch.repository.RepositoryException;
+import com.zhuhuibao.fsearch.utils.Pagination;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.sql.DataSource;
+import java.sql.*;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.sql.DataSource;
-
-import com.zhuhuibao.fsearch.repository.RepositoryException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.zhuhuibao.fsearch.utils.Pagination;
 
 public final class JdbcTemplate {
 	private static final Logger LOGGER = LoggerFactory

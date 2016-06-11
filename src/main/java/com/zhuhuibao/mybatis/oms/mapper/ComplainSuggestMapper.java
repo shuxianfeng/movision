@@ -1,11 +1,10 @@
 package com.zhuhuibao.mybatis.oms.mapper;
 
-import java.util.List;
-import java.util.Map;
-
+import com.zhuhuibao.mybatis.oms.entity.ComplainSuggest;
 import org.apache.ibatis.session.RowBounds;
 
-import com.zhuhuibao.mybatis.oms.entity.ComplainSuggest;
+import java.util.List;
+import java.util.Map;
 
 public interface ComplainSuggestMapper {
     int deleteByPrimaryKey(Long id);

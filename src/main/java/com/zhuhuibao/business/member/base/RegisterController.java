@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -43,6 +45,7 @@ import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
  * @since 15/12/12.
  */
 @RestController
+@Api(value="register", description="会员管理")
 public class RegisterController {
 	private static final Logger log = LoggerFactory.getLogger(RegisterController.class);
 
@@ -62,7 +65,8 @@ public class RegisterController {
 	  * 邮箱注册时的图形验证码
 	  * @param response
 	  */
-	@RequestMapping(value = "/rest/imgCode", method = RequestMethod.GET)
+	@ApiOperation(value="邮箱注册时的图形验证码",notes="邮箱注册时的图形验证码",response = Response.class)
+	@RequestMapping(value = {"/rest/imgCode","rest/member/site/base/sel_imgCode"}, method = RequestMethod.GET)
 	public void getCode(HttpServletResponse response) {
 		log.debug("获得验证码");
 //		getImageVerifyCode(req, response,100,40,4,"email");
@@ -89,6 +93,7 @@ public class RegisterController {
 	 * @param verifyCode
 	 * @param out
      */
+	@ApiOperation(value="生成图片码",notes="生成图片码",response = Response.class)
 	private void genImgCode(HttpServletResponse response, String verifyCode, ServletOutputStream out) {
 		try {
 			out = response.getOutputStream();
@@ -113,7 +118,8 @@ public class RegisterController {
 	  * @param response
 	  * @param model
 	  */
-	@RequestMapping(value = "/rest/getSeekPwdImgCode", method = RequestMethod.GET)
+	@RequestMapping(value = {"/rest/getSeekPwdImgCode","rest/member/site/base/sel_seekPwdImgCode"}, method = RequestMethod.GET)
+	@ApiOperation(value="找回密码的图形验证码",notes="找回密码的图形验证码",response = Response.class)
 	public void getSeekPwdImgCode(HttpServletRequest req, HttpServletResponse response,
 			Model model) {
 		log.debug("找回密码的图形验证码");
@@ -142,7 +148,8 @@ public class RegisterController {
 	 * @throws JsonGenerationException 
 	 * @throws ApiException 
 	 */
-	@RequestMapping(value = "/rest/mobileCode", method = RequestMethod.GET)
+	@ApiOperation(value="手机注册账号时发送的验证码",notes="手机注册账号时发送的验证码",response = Response.class)
+	@RequestMapping(value = {"/rest/mobileCode","rest/member/site/base/sel_mobileCode"}, method = RequestMethod.GET)
 	public Response getMobileCode(HttpServletRequest req) throws IOException, ApiException {
 		String mobile = req.getParameter("mobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
@@ -173,7 +180,8 @@ public class RegisterController {
 	 * @throws JsonGenerationException 
 	 * @throws ApiException 
 	 */
-	@RequestMapping(value = "/rest/getSeekPwdMobileCode", method = RequestMethod.GET)
+	@ApiOperation(value="找回密码时手机发送的验证码",notes="找回密码时手机发送的验证码",response = Response.class)
+	@RequestMapping(value = {"/rest/getSeekPwdMobileCode","rest/member/site/base/sel_seekPwdMobileCode"}, method = RequestMethod.GET)
 	public Response getSeekPwdMobileCode(HttpServletRequest req) throws IOException, ApiException {
 		String mobile = req.getParameter("mobile");
 		log.debug("获得手机验证码  mobile=="+mobile);
@@ -203,7 +211,8 @@ public class RegisterController {
      * @return
      * @throws IOException 
      */
-	@RequestMapping(value = "/rest/register", method = RequestMethod.POST)
+	@ApiOperation(value="会员注册",notes="会员注册",response = Response.class)
+	@RequestMapping(value = {"/rest/register","rest/member/site/base/add_register"}, method = RequestMethod.POST)
 	public Response register(Member member) throws Exception{
 		log.debug("注册  mobile=="+member.getMobile()+" email =="+member.getEmail());
 		Response result = new Response();
@@ -235,7 +244,8 @@ public class RegisterController {
      * @return
      * @throws IOException 
      */
-	@RequestMapping(value = "/rest/writeAccount", method = RequestMethod.POST)
+	 @ApiOperation(value="找回密码时填写账户名",notes="找回密码时填写账户名",response = Response.class)
+	@RequestMapping(value = {"/rest/writeAccount","rest/member/site/base/add_writeAccount"}, method = RequestMethod.POST)
 	public Response writeAccount(Member member) throws IOException {
 		log.debug("seek pwd write account");
 		Response result = new Response();
@@ -254,7 +264,8 @@ public class RegisterController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/mobileValidate", method = RequestMethod.POST)
+	@ApiOperation(value="手机验证身份",notes="手机验证身份",response = Response.class)
+	@RequestMapping(value = {"/rest/mobileValidate","rest/member/site/base/sel_mobileValidate"}, method = RequestMethod.POST)
 	public Response mobileValidate(Member member) throws IOException {
 		log.debug("找回密码  mobile =="+member.getMobile());
 		Subject currentUser = SecurityUtils.getSubject();
@@ -270,7 +281,8 @@ public class RegisterController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/sendValidateMail", method = RequestMethod.POST)
+	@ApiOperation(value="发送验证邮件密码重置",notes="发送验证邮件密码重置",response = Response.class)
+	@RequestMapping(value = {"/rest/sendValidateMail","rest/member/site/base/sel_sendValidateMail"}, method = RequestMethod.POST)
 	public Response sendValidateMail(Member member) throws IOException {
 		log.debug("找回密码  email =="+member.getEmail());
 		Response result = new Response();
@@ -296,7 +308,8 @@ public class RegisterController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/modifyPwd", method = RequestMethod.POST)
+	@ApiOperation(value="修改密码",notes="修改密码",response = Response.class)
+	@RequestMapping(value = {"/rest/modifyPwd","rest/member/site/base/upd_pwd"}, method = RequestMethod.POST)
 	public Response modifyPwd(Member member) throws IOException {
 		log.debug("重置密码");
 		Response response = new Response();
@@ -314,7 +327,8 @@ public class RegisterController {
 	 * @return
 	 * @throws UnsupportedEncodingException 
 	 */
-	@RequestMapping(value = "/rest/activateEmail", method = RequestMethod.GET)
+	@ApiOperation(value="邮件激活账户",notes="邮件激活账户",response = Response.class)
+	@RequestMapping(value = {"/rest/activateEmail","rest/member/site/base/sel_activateEmail"}, method = RequestMethod.GET)
 	public ModelAndView activateEmail(HttpServletRequest req) throws UnsupportedEncodingException {
 		log.debug("email activate start.....");
 		Response response = new Response();
@@ -345,7 +359,8 @@ public class RegisterController {
 	 * @return
 	 * @throws UnsupportedEncodingException 
 	 */
-	@RequestMapping(value = "/rest/validateMail", method = RequestMethod.GET)
+	@ApiOperation(value="点击重置密码邮件链接验证身份",notes="点击重置密码邮件链接验证身份",response = Response.class)
+	@RequestMapping(value = {"/rest/validateMail","rest/member/site/base/sel_validateMail"}, method = RequestMethod.GET)
 	public ModelAndView validateMail(HttpServletRequest req) throws UnsupportedEncodingException {
 		log.debug("validate mail start.....");
 		String vm = req.getParameter("vm");//获取email
@@ -377,7 +392,8 @@ public class RegisterController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/isValidatePass", method = RequestMethod.GET)
+	@ApiOperation(value="找回密码是否验证通过",notes="找回密码是否验证通过",response = Response.class)
+	@RequestMapping(value = {"/rest/isValidatePass","rest/member/site/base/sel_isValidatePass"}, method = RequestMethod.GET)
 	public Response isValidatePass(HttpServletRequest req) throws IOException {
 		log.debug("找回密码是否验证");
 		Response response = new Response();
@@ -401,7 +417,8 @@ public class RegisterController {
 	 * @param req
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/rest/watchMail", method = RequestMethod.GET)
+	@ApiOperation(value="查看激活邮件",notes="查看激活邮件",response = Response.class)
+	@RequestMapping(value = {"/rest/watchMail","rest/member/site/base/sel_watchMail"}, method = RequestMethod.GET)
 	public Response watchMail(HttpServletRequest req) throws IOException {
 		log.debug("找回密码是否验证");
 		Response response = new Response();

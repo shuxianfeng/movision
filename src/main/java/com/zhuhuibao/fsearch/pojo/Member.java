@@ -1,7 +1,5 @@
 package com.zhuhuibao.fsearch.pojo;
 
-import java.util.Date;
-
 public class Member {
     private Long id;
 

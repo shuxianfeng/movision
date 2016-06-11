@@ -1,10 +1,9 @@
 package com.zhuhuibao.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.zhuhuibao.fsearch.service.exception.ServiceException;
 import com.zhuhuibao.fsearch.service.exception.UnknownServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class L {
 	private static final Logger DEFAULT_LOGGER = LoggerFactory

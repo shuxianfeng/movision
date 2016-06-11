@@ -1,15 +1,14 @@
 package com.zhuhuibao.utils.captcha.servlet;
 
-import java.io.IOException;
+import com.zhuhuibao.utils.captcha.Captcha;
+import com.zhuhuibao.utils.captcha.text.renderer.DefaultWordRenderer;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.zhuhuibao.utils.captcha.Captcha;
-import com.zhuhuibao.utils.captcha.text.renderer.DefaultWordRenderer;
+import java.io.IOException;
 
 
 /**

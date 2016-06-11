@@ -1,11 +1,11 @@
 package com.zhuhuibao.utils.pagination.helper;
 
+import com.zhuhuibao.utils.pagination.dialect.DatabaseDialectShortName;
+import com.zhuhuibao.utils.pagination.dialect.Dialect;
+import com.zhuhuibao.utils.pagination.dialect.DialectFactory;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.zhuhuibao.utils.pagination.dialect.DatabaseDialectShortName;
-import com.zhuhuibao.utils.pagination.dialect.DialectFactory;
-import com.zhuhuibao.utils.pagination.dialect.Dialect;
 
 /**
  * Date Created  2014-2-18

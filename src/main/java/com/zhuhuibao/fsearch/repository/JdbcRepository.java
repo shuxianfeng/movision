@@ -1,15 +1,14 @@
 package com.zhuhuibao.fsearch.repository;
 
+import com.zhuhuibao.fsearch.repository.db.JdbcTemplate;
+import com.zhuhuibao.fsearch.utils.FormatUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-
-import com.zhuhuibao.fsearch.repository.db.JdbcTemplate;
-import com.zhuhuibao.fsearch.utils.FormatUtil;
 
 public class JdbcRepository {
 
