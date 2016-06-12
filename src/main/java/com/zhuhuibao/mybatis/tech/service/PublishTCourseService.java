@@ -1,5 +1,6 @@
 package com.zhuhuibao.mybatis.tech.service;
 
+import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
 import com.zhuhuibao.mybatis.tech.mapper.PublishTCourseMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -82,14 +83,37 @@ public class PublishTCourseService {
         	
         	if(course.getMaxBuyNumber()!=null)
         	{
-            //插入库存
-            course.setStorageNumber(Integer.parseInt(course.getMaxBuyNumber()));
+                //插入库存
+                course.setStorageNumber(Integer.parseInt(course.getMaxBuyNumber()));
         	}
         	if(course.getExpiryDate()!=null)
         	{
-            //截止日期
-            course.setExpiryDate(course.getExpiryDate()+" 23:59:59");
+                //截止日期
+                course.setExpiryDate(course.getExpiryDate()+" 23:59:59");
         	}
+            result = pCourseMapper.updateByPrimaryKeySelective(course);
+        }catch(Exception e)
+        {
+            log.error("update publish course info error!",e);
+            throw e;
+        }
+        return result;
+    }
+
+    /**
+     * 课程上架
+     * @param courseId 课程ID
+     * @return
+     */
+    public int publishCourse(String courseId,Long omsOperateId)
+    {
+        int result = 0;
+        log.info("publish courseId "+courseId);
+        try {
+            TrainPublishCourse course = new TrainPublishCourse();
+            course.setPublisherid(omsOperateId);
+            course.setCourseid(Long.valueOf(courseId));
+            course.setStatus(Integer.valueOf(TechConstant.PublishCourseStatus.SALING.toString()));
             result = pCourseMapper.updateByPrimaryKeySelective(course);
         }catch(Exception e)
         {
