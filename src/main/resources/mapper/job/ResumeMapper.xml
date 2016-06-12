@@ -164,6 +164,9 @@
       <if test="isPublic != null" >
         isPublic = #{isPublic},
       </if>
+      <if test="download != null" >
+        downloadCount = downloadCount+1,
+      </if>
     </set>
     where id = #{id}
   </update>

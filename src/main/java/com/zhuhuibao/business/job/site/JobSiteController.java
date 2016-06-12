@@ -129,6 +129,10 @@ public class JobSiteController {
         try {
             String path = req.getSession().getServletContext().getRealPath("/");
             log.info("base path = "+path);
+            Resume resumeBean=new Resume();
+            resumeBean.setDownload("1");
+            resumeBean.setId(String.valueOf(resumeID));
+            resume.updateResume(resumeBean);
             Map<String, String> resumeMap = resume.exportResume(String.valueOf(resumeID));
             if (!resumeMap.isEmpty()) {
                 response.setHeader("Content-disposition", "attachment; filename=\""
