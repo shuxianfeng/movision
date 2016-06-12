@@ -1,7 +1,6 @@
 package com.zhuhuibao.utils.captcha.backgrounds;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 

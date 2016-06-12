@@ -1,9 +1,8 @@
 package com.zhuhuibao.security.csrf;
 
-import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.UUID;
 
 public final class CSRFTokenManager {
     /**

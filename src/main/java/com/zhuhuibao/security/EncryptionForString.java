@@ -1,14 +1,13 @@
 package com.zhuhuibao.security;
 
-import java.security.Key;
-import java.security.SecureRandom;
-import java.security.Security;
+import com.sun.crypto.provider.SunJCE;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.IvParameterSpec;
-
-import com.sun.crypto.provider.SunJCE;
+import java.security.Key;
+import java.security.SecureRandom;
+import java.security.Security;
 
 public class EncryptionForString {
     public static final String ENCODING_BASE64 = "BASE64";

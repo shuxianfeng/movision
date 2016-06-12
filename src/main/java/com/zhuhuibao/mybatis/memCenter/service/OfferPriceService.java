@@ -1,21 +1,10 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import java.io.File;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.AskPriceBean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferAskPrice;
@@ -24,7 +13,16 @@ import com.zhuhuibao.mybatis.memCenter.mapper.AskPriceMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.OfferPriceMapper;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.common.constant.ApiConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 报价业务处理类

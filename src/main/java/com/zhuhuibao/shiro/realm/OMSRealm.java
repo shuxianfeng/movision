@@ -1,10 +1,7 @@
 package com.zhuhuibao.shiro.realm;
 
-import com.zhuhuibao.mybatis.memberReg.entity.Member;
-import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.mybatis.oms.entity.User;
 import com.zhuhuibao.mybatis.oms.service.UserService;
-
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;

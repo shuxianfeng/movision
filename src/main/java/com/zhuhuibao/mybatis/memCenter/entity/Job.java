@@ -3,8 +3,6 @@ package com.zhuhuibao.mybatis.memCenter.entity;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
-import java.util.Date;
-
 @ApiModel(value="职位",description = "职位属性")
 public class Job {
     @ApiModelProperty(value="职位ID",required = true)

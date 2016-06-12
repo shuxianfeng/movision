@@ -1,7 +1,5 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-import java.util.Date;
-
 public class Resume {
     private String id;
 

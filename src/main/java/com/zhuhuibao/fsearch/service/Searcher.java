@@ -1,21 +1,13 @@
 package com.zhuhuibao.fsearch.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.zhuhuibao.fsearch.utils.CollectionUtil;
-import com.zhuhuibao.fsearch.utils.EncryptUtil;
-import com.zhuhuibao.fsearch.utils.FormatUtil;
-import com.zhuhuibao.fsearch.utils.HttpClient;
-import com.zhuhuibao.fsearch.utils.JSONUtil;
+import com.zhuhuibao.fsearch.service.exception.DetailedServiceException;
 import com.zhuhuibao.fsearch.service.exception.ServiceException;
 import com.zhuhuibao.fsearch.service.exception.UnknownServiceException;
-import com.zhuhuibao.fsearch.service.exception.DetailedServiceException;
+import com.zhuhuibao.fsearch.utils.*;
 import com.zhuhuibao.utils.G;
 import com.zhuhuibao.utils.L;
+
+import java.util.*;
 
 public class Searcher {
 	private static String URL = null;

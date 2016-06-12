@@ -3,8 +3,6 @@ package com.zhuhuibao.mybatis.oms.entity;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
-
-import java.util.Date;
 /**
  * 招中标公告实体类
  * @author  penglong

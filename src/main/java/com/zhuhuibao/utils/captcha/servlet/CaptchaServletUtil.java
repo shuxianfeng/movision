@@ -1,11 +1,10 @@
 package com.zhuhuibao.utils.captcha.servlet;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
-
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletResponse;
 
 public final class CaptchaServletUtil {
 

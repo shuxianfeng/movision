@@ -1,5 +1,20 @@
 package com.zhuhuibao.fsearch.service.impl;
 
+import com.chenlb.mmseg4j.*;
+import com.zhuhuibao.fsearch.repository.JdbcRepository;
+import com.zhuhuibao.fsearch.repository.db.MapHandler;
+import com.zhuhuibao.fsearch.repository.db.StringPropertyHandler;
+import com.zhuhuibao.fsearch.service.IJobService;
+import com.zhuhuibao.fsearch.service.IWordService;
+import com.zhuhuibao.fsearch.service.impl.JobService.RepeatJob;
+import com.zhuhuibao.fsearch.utils.FileUtil;
+import com.zhuhuibao.fsearch.utils.StringUtil;
+import com.zhuhuibao.utils.G;
+import com.zhuhuibao.utils.L;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -7,27 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
-import com.zhuhuibao.fsearch.repository.JdbcRepository;
-import com.zhuhuibao.fsearch.service.IJobService;
-import com.zhuhuibao.fsearch.service.IWordService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.zhuhuibao.fsearch.repository.db.MapHandler;
-import com.zhuhuibao.fsearch.repository.db.StringPropertyHandler;
-import com.zhuhuibao.fsearch.utils.FileUtil;
-import com.zhuhuibao.fsearch.utils.StringUtil;
-import com.zhuhuibao.fsearch.service.impl.JobService.RepeatJob;
-import com.zhuhuibao.utils.G;
-import com.zhuhuibao.utils.L;
-import com.chenlb.mmseg4j.ComplexSeg;
-import com.chenlb.mmseg4j.Dictionary;
-import com.chenlb.mmseg4j.MMSeg;
-import com.chenlb.mmseg4j.Seg;
-import com.chenlb.mmseg4j.Word;
 
 @Component
 public class WordService extends JdbcRepository implements IWordService {

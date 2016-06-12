@@ -1,13 +1,12 @@
 package com.zhuhuibao.mybatis.accessLog.service;
 
+import com.zhuhuibao.mybatis.accessLog.entity.AccessLog;
+import com.zhuhuibao.mybatis.accessLog.mapper.AccessLogMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.zhuhuibao.mybatis.accessLog.mapper.AccessLogMapper;
-import com.zhuhuibao.mybatis.accessLog.entity.AccessLog;
 
 @Service
 @Transactional

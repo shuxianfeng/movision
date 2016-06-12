@@ -1,16 +1,5 @@
 package com.zhuhuibao.utils.captcha;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
-import javax.imageio.ImageIO;
-
 import com.zhuhuibao.utils.captcha.backgrounds.BackgroundProducer;
 import com.zhuhuibao.utils.captcha.backgrounds.TransparentBackgroundProducer;
 import com.zhuhuibao.utils.captcha.noise.CurvedLineNoiseProducer;
@@ -19,6 +8,14 @@ import com.zhuhuibao.utils.captcha.text.producer.DefaultTextProducer;
 import com.zhuhuibao.utils.captcha.text.producer.TextProducer;
 import com.zhuhuibao.utils.captcha.text.renderer.DefaultWordRenderer;
 import com.zhuhuibao.utils.captcha.text.renderer.WordRenderer;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 
 /**

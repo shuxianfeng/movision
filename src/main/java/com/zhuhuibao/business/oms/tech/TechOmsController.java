@@ -41,9 +41,10 @@ import java.util.*;
 
 /**
  *  技术后台运营系统
+ *  @Author pl
+ *  @version 2016/06/08
  */
 @RestController
-
 @RequestMapping("/rest/tech/oms")
 @Api(value = "techOms", description = "技术后台运营系统")
 public class TechOmsController {

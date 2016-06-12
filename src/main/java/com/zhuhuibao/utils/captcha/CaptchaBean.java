@@ -1,16 +1,14 @@
 package com.zhuhuibao.utils.captcha;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-
 import com.zhuhuibao.utils.captcha.backgrounds.BackgroundProducer;
 import com.zhuhuibao.utils.captcha.backgrounds.TransparentBackgroundProducer;
 import com.zhuhuibao.utils.captcha.noise.NoiseProducer;
 import com.zhuhuibao.utils.captcha.text.producer.TextProducer;
 import com.zhuhuibao.utils.captcha.text.renderer.DefaultWordRenderer;
 import com.zhuhuibao.utils.captcha.text.renderer.WordRenderer;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 
 /**

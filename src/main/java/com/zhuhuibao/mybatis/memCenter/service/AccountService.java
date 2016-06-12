@@ -13,7 +13,6 @@ import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.SendEmail;
-
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

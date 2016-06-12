@@ -1,15 +1,14 @@
 package com.zhuhuibao.mybatis.category.service;
 
-import java.util.List;
-
+import com.zhuhuibao.common.pojo.ResultBean;
+import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zhuhuibao.common.pojo.ResultBean;
-import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
+import java.util.List;
 
 @Service("cs")
 @Transactional

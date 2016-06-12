@@ -1,12 +1,12 @@
 package com.zhuhuibao.fsearch.repository.db;
 
+import com.zhuhuibao.fsearch.utils.StringUtil;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.zhuhuibao.fsearch.utils.StringUtil;
 
 public class MapHandler extends RowHandler<Map<String, Object>> {
 	private static final int TYPE_CASESENSITIVE = 1;

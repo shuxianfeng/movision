@@ -1,11 +1,10 @@
 package com.zhuhuibao.security.csrf;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.web.servlet.support.RequestDataValueProcessor;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CSRFRequestDataValueProcessor implements RequestDataValueProcessor {
 

@@ -1,8 +1,8 @@
 package com.zhuhuibao.utils.pagination.model;
 
-import java.util.List;
-
 import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
 
 /**
  * Date Created 2014-2-26

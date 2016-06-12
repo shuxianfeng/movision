@@ -1,18 +1,13 @@
 package com.zhuhuibao.utils.pagination.helper;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
+import com.zhuhuibao.utils.pagination.dialect.Dialect;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zhuhuibao.utils.pagination.dialect.Dialect;
+import java.sql.*;
 
 /**
  * Date Created  2014-2-25

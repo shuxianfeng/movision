@@ -1,5 +1,8 @@
 package com.zhuhuibao.fsearch.repository.db;
 
+import com.zhuhuibao.fsearch.utils.FormatUtil;
+import com.zhuhuibao.fsearch.utils.StringUtil;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,9 +10,6 @@ import java.sql.Statement;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-
-import com.zhuhuibao.fsearch.utils.FormatUtil;
-import com.zhuhuibao.fsearch.utils.StringUtil;
 
 public final class DBUtil {
 

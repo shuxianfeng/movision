@@ -4,8 +4,8 @@ package com.zhuhuibao.mybatis.oms.service;
  * Created by cxx on 2016/3/14 0014.
  */
 
-import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.pojo.SysBean;
 import com.zhuhuibao.mybatis.oms.entity.Category;

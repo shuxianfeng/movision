@@ -1,8 +1,7 @@
 package com.zhuhuibao.utils;
 
-import org.springframework.core.io.support.PropertiesLoaderUtils;
-
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import java.io.IOException;
 import java.util.Properties;

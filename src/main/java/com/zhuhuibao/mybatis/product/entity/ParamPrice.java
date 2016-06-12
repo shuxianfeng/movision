@@ -1,7 +1,6 @@
 package com.zhuhuibao.mybatis.product.entity;
 
 import java.io.Serializable;
-import java.util.*;
 
 /**
  * 参数价格混合结构类

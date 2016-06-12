@@ -1,8 +1,8 @@
 package com.zhuhuibao.mybatis.memberReg.entity;
 
-import java.io.Serializable;
-
 import org.apache.ibatis.type.Alias;
+
+import java.io.Serializable;
 
 /**
  * 会员信息结构

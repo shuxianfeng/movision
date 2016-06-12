@@ -1,7 +1,5 @@
 package com.zhuhuibao.mybatis.oms.entity;
 
-import java.util.Date;
-
 public class ComplainSuggest {
     private Long id;
 

@@ -1,20 +1,18 @@
 package com.zhuhuibao.utils;
-import java.awt.Color;  
-import java.awt.Font;  
-import java.awt.Graphics;  
-import java.awt.Graphics2D;  
-import java.awt.LinearGradientPaint;  
-import java.awt.Paint;  
-import java.awt.RenderingHints;  
-import java.awt.geom.AffineTransform;  
-import java.awt.image.BufferedImage;  
-import java.io.File;  
-import java.io.FileOutputStream;  
-import java.io.IOException;  
-import java.io.OutputStream;  
-import java.util.Arrays;  
-import java.util.Random;  
-  
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -213,13 +211,31 @@ public class VerifyCodeUtils {
           
         //绘制干扰线  
         Random random = new Random();  
+        BasicStroke stokeLine = new BasicStroke( 2.0f ); 
         g2.setColor(getRandColor(160, 200));// 设置线条的颜色  
         for (int i = 0; i < 20; i++) {  
             int x = random.nextInt(w - 1);  
             int y = random.nextInt(h - 1);  
             int xl = random.nextInt(6) + 1;  
-            int yl = random.nextInt(12) + 1;  
-            g2.drawLine(x, y, x + xl + 40, y + yl + 20);  
+            int yl = random.nextInt(12) + 1;
+            g2.setStroke(stokeLine);;
+            g2.drawLine(x, y, x + xl + 80, y + yl + 40);  
+           
+        }  
+          
+       
+        shear(g2, w, h, c);// 使图片扭曲  
+  
+        g2.setColor(getRandColor(100, 160));  
+        int fontSize = h-4;  
+        Font font = new Font("Algerian", Font.HANGING_BASELINE, fontSize);  
+        g2.setFont(font);  
+        char[] chars = code.toCharArray();  
+        for(int i = 0; i < verifySize; i++){  
+            AffineTransform affine = new AffineTransform();  
+            affine.setToRotation(Math.PI / 4 * rand.nextDouble() * (rand.nextBoolean() ? 1 : -1), (w / verifySize) * i + fontSize/2, h/2);  
+            g2.setTransform(affine);  
+            g2.drawChars(chars, i, 1, ((w-10) / verifySize) * i + 5, h/2 + fontSize/2 - 10);  
         }  
           
         // 添加噪点  
@@ -232,20 +248,7 @@ public class VerifyCodeUtils {
             image.setRGB(x, y, rgb);  
         }  
           
-        shear(g2, w, h, c);// 使图片扭曲  
-  
-        g2.setColor(getRandColor(100, 160));  
-        int fontSize = h-4;  
-        Font font = new Font("Algerian", Font.ITALIC, fontSize);  
-        g2.setFont(font);  
-        char[] chars = code.toCharArray();  
-        for(int i = 0; i < verifySize; i++){  
-            AffineTransform affine = new AffineTransform();  
-            affine.setToRotation(Math.PI / 4 * rand.nextDouble() * (rand.nextBoolean() ? 1 : -1), (w / verifySize) * i + fontSize/2, h/2);  
-            g2.setTransform(affine);  
-            g2.drawChars(chars, i, 1, ((w-10) / verifySize) * i + 5, h/2 + fontSize/2 - 10);  
-        }  
-          
+        
         g2.dispose();  
         ImageIO.write(image, "jpg", os);  
     }  

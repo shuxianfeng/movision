@@ -1,14 +1,6 @@
 package com.zhuhuibao.mybatis.memberReg.service;
 
-import java.util.Date;
-import java.util.List;
-
 import com.zhuhuibao.common.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
@@ -17,6 +9,13 @@ import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.SendEmail;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 注册短信验证，邮箱验证业务类

@@ -1,8 +1,8 @@
 package com.zhuhuibao.mybatis.product.mapper;
 
-import java.util.*;
-
 import com.zhuhuibao.mybatis.product.entity.ProductParam;
+
+import java.util.List;
 
 public interface ProductParamMapper {
     int deleteByPrimaryKey(Long id);

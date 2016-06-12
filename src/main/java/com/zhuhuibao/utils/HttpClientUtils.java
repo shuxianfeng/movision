@@ -1,11 +1,5 @@
 package com.zhuhuibao.utils;
 
-import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.alibaba.fastjson.JSON;
 import com.zhuhuibao.alipay.util.PayVerify;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +19,12 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class HttpClientUtils {
 

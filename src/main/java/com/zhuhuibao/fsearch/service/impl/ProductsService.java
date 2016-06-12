@@ -1,27 +1,22 @@
 package com.zhuhuibao.fsearch.service.impl;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.zhuhuibao.fsearch.pojo.Product;
 import com.zhuhuibao.fsearch.pojo.ProductGroup;
 import com.zhuhuibao.fsearch.pojo.ProductSearchSpec;
 import com.zhuhuibao.fsearch.service.IProductsService;
 import com.zhuhuibao.fsearch.service.IWordService;
 import com.zhuhuibao.fsearch.service.Searcher;
+import com.zhuhuibao.fsearch.service.exception.ServiceException;
+import com.zhuhuibao.fsearch.utils.*;
+import com.zhuhuibao.mybatis.category.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zhuhuibao.fsearch.utils.CollectionUtil;
-import com.zhuhuibao.fsearch.utils.FormatUtil;
-import com.zhuhuibao.fsearch.utils.JSONUtil;
-import com.zhuhuibao.fsearch.utils.Pagination;
-import com.zhuhuibao.fsearch.utils.StringUtil;
-import com.zhuhuibao.mybatis.category.service.CategoryService;
-import com.zhuhuibao.fsearch.service.exception.ServiceException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductsService implements IProductsService {

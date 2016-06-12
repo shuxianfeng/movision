@@ -4,10 +4,14 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.order.service.OrderService;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -21,6 +25,8 @@ import java.util.Map;
 
 /**
  * 技术合作
+ * @author pl
+ * @version 2016/6/8
  */
 @RestController
 @RequestMapping("/rest/tech/site/coop")
@@ -41,7 +47,13 @@ public class TechCoopController {
     public Response insertTechCooperation(@ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
     {
         log.info("insert tech cooperation");
-        int result = techService.insertTechCooperation(techCoop);
+        Long createId = ShiroUtil.getCreateID();
+        if(null != createId) {
+            techCoop.setCreateID(createId);
+            int result = techService.insertTechCooperation(techCoop);
+        }else{
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         Response response = new Response();
         return response;
     }
