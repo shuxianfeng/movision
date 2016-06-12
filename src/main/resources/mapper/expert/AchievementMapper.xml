@@ -200,9 +200,7 @@
   <update id="updateAchievement" parameterType="com.zhuhuibao.mybatis.expert.entity.Achievement" >
     update t_e_achievement
     <set >
-      <if test="updateTime != null" >
         updateTime = now(),
-      </if>
       <if test="title != null" >
         title = #{title},
       </if>
