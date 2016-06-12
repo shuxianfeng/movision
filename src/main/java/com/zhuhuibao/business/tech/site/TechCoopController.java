@@ -64,7 +64,7 @@ public class TechCoopController {
     public Response previewTechCooperation(@ApiParam(value = "技术合作成果、需求ID")  @RequestParam String techCoopId)
     {
 
-        TechCooperation techCoop = techService.previewTechCooperationDetail(techCoopId);
+        Map<String,Object> techCoop = techService.previewTechCooperationDetail(techCoopId);
         techService.updateTechCooperationViews(techCoopId);
         Response response = new Response();
         response.setData(techCoop);

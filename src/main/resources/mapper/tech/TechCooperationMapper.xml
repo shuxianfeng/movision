@@ -33,7 +33,7 @@
   <sql id="Blob_Column_List" >
     notes
   </sql>
-  <select id="previewTechCooperationDetail" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+  <select id="previewTechCooperationDetail" resultType="java.util.Map" parameterType="java.lang.Long" >
   select
   t.id, t.createID, date_format(t.publishTime,'%Y-%m-%d') publishTime, date_format(t.updateTime,'%Y-%m-%d') updateTime, t.title, dc.name systemCategory, dn.name applicationArea, t.linkman,
   t.companyName, t.telephone, t.email, po.name province,ct.name city,ar.name area, t.address, t.cooperation, t.type,
@@ -252,7 +252,7 @@
     where id = #{id}
   </update>
   <select id="findAllTechCooperationPager" parameterType="java.util.Map" resultType="java.util.Map">
-    select t.id, t.createID, t.title,dc.name systemCategory, dn.name applicationArea,
+    select t.id, t.createID, t.title,dc.name systemCategory, dn.name applicationAreaName,t.applicationArea
     concat(po.name,'-',ct.name) provincecity,t.cooperation from t_tech_cooperation t
     left join t_dictionary_province po on po.code = t.province
     left join t_dictionary_city ct on ct.code = t.city

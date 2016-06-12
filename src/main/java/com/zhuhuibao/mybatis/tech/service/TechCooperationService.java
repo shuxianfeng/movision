@@ -169,12 +169,12 @@ public class TechCooperationService {
      * @param id 技术合作ID
      * @return
      */
-    public TechCooperation previewTechCooperationDetail(String id)
+    public Map<String,Object> previewTechCooperationDetail(String id)
     {
-        TechCooperation techCoop;
+        Map<String,Object> techCoop;
         log.info("preview tech cooperation by id "+id);
         try{
-            techCoop = techMapper.selectByPrimaryKey(Long.valueOf(id));
+            techCoop = techMapper.previewTechCooperationDetail(Long.valueOf(id));
         }catch (Exception e){
             log.error("select tech cooperation by id error! ",e);
             throw e;

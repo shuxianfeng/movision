@@ -138,6 +138,7 @@ public class AlipayService {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         refund.setRefundDate(sf.parse(msgParam.get("refundDate")));
         refund.setTotalFee(Long.valueOf(msgParam.get("totalFee")));
+        //+一个退款理由 (reason)
 
         refundService.insert(refund);
 
