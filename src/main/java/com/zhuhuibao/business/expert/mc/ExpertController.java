@@ -110,27 +110,11 @@ public class ExpertController {
     @RequestMapping(value = "dynamic/add_dynamic", method = RequestMethod.POST)
     public Response publishDynamic(@ModelAttribute Dynamic dynamic)  {
         Response response = new Response();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
+        Long createId = ShiroUtil.getCreateID();
         //判断是否登陆
-        if(null != session) {
-            if ("1".equals(dynamic.getCreaterType())) {
-                OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
-                if (null != principal) {
-                    dynamic.setCreateId(principal.getId().toString());
-                    expertService.publishDynamic(dynamic);
-                } else {
-                    throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                }
-            }else{
-                ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser)session.getAttribute("member");
-                if(null != principal){
-                    dynamic.setCreateId(principal.getId().toString());
-                    expertService.publishDynamic(dynamic);
-                }else{
-                    throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                }
-            }
+        if(null != createId) {
+            dynamic.setCreateId(String.valueOf(createId));
+            expertService.publishDynamic(dynamic);
         } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }

@@ -168,7 +168,7 @@ public class CourseService {
      *
      * @param orderList 需要发短信的订单
      */
-    private void sendSMS(List<Order> orderList, String template) throws Exception {
+    public void sendSMS(List<Order> orderList, String template) throws Exception {
 
         List<String> orderNos = new ArrayList<>();
         for (Order order : orderList) {

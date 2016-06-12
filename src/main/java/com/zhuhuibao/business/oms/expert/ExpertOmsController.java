@@ -11,9 +11,14 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.expert.entity.*;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.shiro.realm.OMSRealm;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +39,6 @@ public class ExpertOmsController {
 
     @Autowired
     private ExpertService expertService;
-
-    @Autowired
-    private MemberService memberService;
 
     @ApiOperation(value="技术成果列表(运营分页)",notes="技术成果列表(运营分页)",response = Response.class)
     @RequestMapping(value = "sel_achievementList", method = RequestMethod.GET)
@@ -292,6 +294,21 @@ public class ExpertOmsController {
     public Response updateAchievement(@ModelAttribute Achievement achievement)  {
         Response response = new Response();
         expertService.updateAchievement(achievement);
+        return response;
+    }
+
+    @ApiOperation(value = "发布协会动态", notes = "发布协会动态", response = Response.class)
+    @RequestMapping(value = "dynamic/add_dynamic", method = RequestMethod.POST)
+    public Response publishDynamic(@ModelAttribute Dynamic dynamic)  {
+        Response response = new Response();
+        Long createId = ShiroUtil.getOmsCreateID();
+        //判断是否登陆
+        if(null != createId) {
+            dynamic.setCreateId(String.valueOf(createId));
+            expertService.publishDynamic(dynamic);
+        } else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 }

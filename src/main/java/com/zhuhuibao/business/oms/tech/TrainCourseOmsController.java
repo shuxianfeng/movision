@@ -12,6 +12,7 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
 import com.zhuhuibao.mybatis.tech.service.PublishTCourseService;
+import com.zhuhuibao.service.course.CourseService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 发布技术培训课程
+ * 运营管理平台技术培训课程管理
  *
  * @author Administrator
  * @version 2016/6/2 0002
@@ -41,6 +42,9 @@ public class TrainCourseOmsController {
 
     @Autowired
     UploadService uploadService;
+
+    @Autowired
+    CourseService courseServie;
 
     @RequestMapping(value="add_course", method = RequestMethod.POST)
     @ApiOperation(value="更新未发布的培训课程",notes = "插入发布的培训课程",response = Response.class)
@@ -82,6 +86,44 @@ public class TrainCourseOmsController {
         }else{
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
+        Response response = new Response();
+        return response;
+    }
+
+    @RequestMapping(value="upd_publishCourse", method = RequestMethod.POST)
+    @ApiOperation(value="上架",notes = "上架",response = Response.class)
+    public Response publishTrainCourse(@ApiParam(value = "课程ID")  @RequestParam String courseId)
+    {
+        Long omsOperateId = ShiroUtil.getOmsCreateID();
+        if(omsOperateId != null){
+            int result = ptCourseService.publishCourse(courseId,omsOperateId);
+        }else{
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        Response response = new Response();
+        return response;
+    }
+
+    @RequestMapping(value="upd_beginCourse", method = RequestMethod.POST)
+    @ApiOperation(value="开始上课",notes = "开始上课",response = Response.class)
+    public Response beginCourse(@ApiParam(value = "课程ID")  @RequestParam String courseId) throws Exception {
+        courseServie.begin(courseId);
+        Response response = new Response();
+        return response;
+    }
+
+    @RequestMapping(value="upd_stopCourse", method = RequestMethod.POST)
+    @ApiOperation(value="终止课程",notes = "终止课程",response = Response.class)
+    public Response stopCourse(@ApiParam(value = "课程ID")  @RequestParam String courseId) throws Exception {
+        courseServie.stop(courseId);
+        Response response = new Response();
+        return response;
+    }
+
+    @RequestMapping(value="upd_completeCourse", method = RequestMethod.POST)
+    @ApiOperation(value="完成课程",notes = "完成课程",response = Response.class)
+    public Response completeCourse(@ApiParam(value = "课程ID")  @RequestParam String courseId) throws Exception {
+        courseServie.complete(courseId);
         Response response = new Response();
         return response;
     }

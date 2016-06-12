@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.utils.sms.SDKSendSms;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -160,7 +162,13 @@ public class RegisterController {
 		log.debug("verifyCode == " + verifyCode);
 		//发送验证码到手机
 		//SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-		SDKSendTaoBaoSMS.sendRegisterSMS(mobile, verifyCode, Constants.sms_time);
+//		SDKSendTaoBaoSMS.sendRegisterSMS(mobile, verifyCode, Constants.sms_time);
+		Map<String,String> map = new LinkedHashMap<>();
+		map.put("code",verifyCode);
+		map.put("time",Constants.sms_time);
+		Gson gson = new Gson();
+		String json = gson.toJson(map);
+		SDKSendSms.sendSMS(mobile,json,PropertiesUtils.getValue("register_code_sms_template_code"));
 		Validateinfo info = new Validateinfo();
 		info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
 		info.setCheckCode(verifyCode);
