@@ -175,14 +175,10 @@ public class JobSiteController {
         Map<String,Object> map = new HashMap<String,Object>();
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
-        if(createid!=null){
-            map.put("createid",String.valueOf(createid));
-            map.put("id",id);
-            response = job.queryPositionInfoByID(map);
-            job.updateViews(id);
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        map.put("createid",String.valueOf(createid));
+        map.put("id",id);
+        response = job.queryPositionInfoByID(map);
+        job.updateViews(id);
         return response;
     }
 
