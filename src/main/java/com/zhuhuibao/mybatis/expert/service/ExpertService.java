@@ -1,5 +1,6 @@
 package com.zhuhuibao.mybatis.expert.service;
 
+import com.google.gson.Gson;
 import com.taobao.api.ApiException;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
@@ -7,7 +8,6 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.expert.entity.*;
 import com.zhuhuibao.mybatis.expert.mapper.*;
-import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.*;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
@@ -24,10 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 专家业务处理类
@@ -55,9 +52,6 @@ public class ExpertService {
 
     @Autowired
     private ExpertSupportMapper expertSupportMapper;
-
-    @Autowired
-    private WorkTypeMapper workTypeMapper;
 
     @Autowired
     private MemberRegService memberRegService;
@@ -572,21 +566,6 @@ public class ExpertService {
     }
 
     /**
-     * 查询专家对应workType code
-     * @param type
-     * @return
-     */
-    public WorkType findWordTypeByType(String type){
-        try{
-            return workTypeMapper.findWordTypeByType(type);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
-    /**
      * 验证验证码是否正确
      * @param type
      * @return
@@ -635,10 +614,11 @@ public class ExpertService {
         String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
         log.debug("verifyCode == " + verifyCode);
         //发送验证码到手机
-        Map map = new HashMap();
+        Map<String,String> map = new LinkedHashMap<>();
         map.put("code",verifyCode);
         map.put("time",Constants.sms_time);
-        String params = JsonUtils.getJsonStringFromMap(map);
+        Gson gson = new Gson();
+        String params = gson.toJson(map);
         SDKSendTaoBaoSMS.sendSMS(mobile, params, PropertiesUtils.getValue("zhuhuibao_check_mobile_template_code"));
 
         Validateinfo info = new Validateinfo();
