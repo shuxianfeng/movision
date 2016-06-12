@@ -231,10 +231,10 @@
       <if test="status != null">
         and t.status = #{status}
       </if>
-      <if test="fCategory != null">
+      <if test="fCategory != null and fCategory != ''">
         and t.fCategory = #{fCategory}
       </if>
-      <if test="sCategory != null">
+      <if test="sCategory != null and sCategory != ''">
         and t.sCategory = #{sCategory}
       </if>
     </where>
