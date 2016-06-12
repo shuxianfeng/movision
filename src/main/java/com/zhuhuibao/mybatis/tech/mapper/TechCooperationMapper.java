@@ -17,7 +17,7 @@ public interface TechCooperationMapper {
 
     TechCooperation selectByPrimaryKey(Long id);
 
-    TechCooperation previewTechCooperationDetail(Long id);
+    Map<String,Object> previewTechCooperationDetail(Long id);
 
     int updateByPrimaryKeySelective(TechCooperation record);
 
