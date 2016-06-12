@@ -29,5 +29,5 @@ public interface ProjectMapper {
 
     List<Map<String,String>> queryLatestProject(Map<String,Object> map);
 
-    List<Map<String,String>> queryOmsViewProject(Map<String,Object> map,RowBounds rowBounds);
+    List<Map<String,String>> findAllOmsViewProject(Map<String,Object> map,RowBounds rowBounds);
 }

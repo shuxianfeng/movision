@@ -271,7 +271,7 @@
       limit #{count}
     </if>
   </select>
-  <select id="queryOmsViewProject" parameterType="java.util.Map" resultType="java.util.Map">
+  <select id="findAllOmsViewProject" parameterType="java.util.Map" resultType="java.util.Map">
     SELECT
     t.id ,t.name,date_format(t.publishDate,'%Y-%m-%d') publishDate,
     date_format(t.updateDate,'%Y-%m-%d') updateDate,concat(pn.name,ct.name,ar.name,ifnull(t.address,'')) address,

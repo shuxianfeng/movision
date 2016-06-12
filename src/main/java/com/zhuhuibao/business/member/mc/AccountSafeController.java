@@ -1,5 +1,6 @@
 package com.zhuhuibao.business.member.mc;
 
+import com.google.gson.Gson;
 import com.taobao.api.ApiException;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
@@ -17,6 +18,7 @@ import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
+import com.zhuhuibao.utils.sms.SDKSendSms;
 import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -37,6 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -261,7 +264,13 @@ public class AccountSafeController {
         log.debug("verifyCode == " + verifyCode);
         //发送验证码到手机
         //SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-        SDKSendTaoBaoSMS.sendModifyBindMobileSMS(mobile, verifyCode, Constants.sms_time);
+        Map<String,String> map = new LinkedHashMap<>();
+        map.put("code",verifyCode);
+        map.put("time",Constants.sms_time);
+        Gson gson = new Gson();
+        String json = gson.toJson(map);
+        SDKSendSms.sendSMS(mobile,json,PropertiesUtils.getValue("modify_mobile_sms_template_code"));
+//        SDKSendTaoBaoSMS.sendModifyBindMobileSMS(mobile, verifyCode, Constants.sms_time);
         Validateinfo info = new Validateinfo();
         info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
         info.setCheckCode(verifyCode);
