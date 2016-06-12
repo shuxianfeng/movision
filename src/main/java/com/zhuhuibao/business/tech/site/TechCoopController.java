@@ -75,6 +75,7 @@ public class TechCoopController {
     @ApiOperation(value="频道页搜索技术合作(技术成果，技术需求)",notes = "频道页搜索技术合作(技术成果，技术需求)",response = Response.class)
     public Response findAllTechCooperationPager(@ApiParam(value = "系统分类") @RequestParam(required = false) String systemCategory,
                                                 @ApiParam(value = "应用领域") @RequestParam(required = false) String applicationArea,
+                                                @ApiParam(value = "类型：1成果，2需求") @RequestParam(required = false) String type,
                                                 @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
                                                 @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
         Response response = new Response();
@@ -86,6 +87,7 @@ public class TechCoopController {
             pageSize = "10";
         }
         Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        condition.put("type",type);
         condition.put("systemCategory", systemCategory);
         condition.put("applicationArea", applicationArea);
         condition.put("status", TechConstant.TechCooperationnStatus.AUDITPASS.toString());
