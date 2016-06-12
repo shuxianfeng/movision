@@ -1,8 +1,12 @@
 package com.zhuhuibao.exception;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.utils.JsonUtils;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,11 +41,13 @@ public class GlobalExceptionController {
      */
     @RequestMapping(value = "/error_401", produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "请求401错误", response = Response.class, notes = "401错误",httpMethod = "GET")
-    public Response error_401() throws Exception {
-        Response response = new Response();
-        response.setCode(401);
-        response.setMessage("请求无权限！");
-        return response;
+    public void error_401(HttpServletResponse response) throws Exception {
+        Response result = new Response();
+        result.setCode(401);
+        result.setMessage("请求无权限！");
+        response.setStatus(HttpServletResponse.SC_OK);
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
     }
 
     /**
