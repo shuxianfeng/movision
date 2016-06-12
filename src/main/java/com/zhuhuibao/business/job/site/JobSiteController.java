@@ -90,7 +90,7 @@ public class JobSiteController {
                     msgText.setMessageText(messageText);
                     msgText.setTypeID(resumeID);
                     msgText.setType(JobConstant.SITEMAIL_TYPE_JOB_ELEVEN);
-                    response = smService.addSiteMail(msgText);
+//                    response = smService.addSiteMail(msgText);
                     //删除有可能存在的简历和职位对应的关系
                     jrrService.deleteJobRelResume(map);
                     jrrService.insert(Long.valueOf(jobID), resumeID,createid);
