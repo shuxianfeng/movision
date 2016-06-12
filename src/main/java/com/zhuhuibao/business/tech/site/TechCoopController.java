@@ -96,7 +96,7 @@ public class TechCoopController {
     }
 
     @RequestMapping(value="sel_views_order", method = RequestMethod.GET)
-    @ApiOperation(value="查询解决方案、技术资料，培训资料的点击排行",notes = "查询解决方案、技术资料，培训资料的点击排行",response = Response.class)
+    @ApiOperation(value="技术合作的点击排行",notes = "技术合作的点击排行",response = Response.class)
     public Response findDataViewsOrder()
     {
         Response response = new Response();

@@ -80,10 +80,13 @@
       and (ur.mobile like concat('%',#{buyerName},'%') or ur.email like concat('%',#{buyerName},'%'))
       </if>
       <if test="status != null">
-        and gd.goodsName = #{status}
+        and o.status = #{status}
       </if>
       <if test="goodsType != null">
         and o.goodsType = #{goodsType}
+      </if>
+      <if test="buyerId != null">
+        and o.buyerId = #{buyerId}
       </if>
     </where>
   </select>

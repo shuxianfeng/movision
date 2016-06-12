@@ -80,7 +80,7 @@ public class TechOrderController {
 
     @RequestMapping(value={"/rest/tech/oms/order/upd_order_status","/rest/expert/oms/order/upd_order_status"}, method = RequestMethod.GET)
     @ApiOperation(value="更新订单详情",notes = "更新订单详情",response = Response.class)
-    public Response selectTechDataDetail(@ApiParam(value = "订单编号")  @RequestParam String orderNo,
+    public Response updateTechDataDetail(@ApiParam(value = "订单编号")  @RequestParam String orderNo,
                                          @ApiParam(value = "状态")  @RequestParam String status)
     {
         int result = orderService.updateByPrimaryKeySelective(orderNo,status);
