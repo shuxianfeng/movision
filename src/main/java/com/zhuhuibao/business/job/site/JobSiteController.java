@@ -65,7 +65,7 @@ public class JobSiteController {
     @Autowired
     ChannelNewsService newsService;
 
-    @RequestMapping(value={"/rest/jobsite/applyPosition","/rest/job/site/position/apply_position"}, method = RequestMethod.POST)
+    @RequestMapping(value={"/rest/jobsite/applyPosition","/rest/job/site/recruit/apply_position"}, method = RequestMethod.POST)
     @ApiOperation(value="应聘职位",notes = "应聘职位",response = Response.class)
     public Response applyPosition(@ApiParam(value = "职位ID") @RequestParam String jobID,
                                   @ApiParam(value = "发布职位企业ID") @RequestParam String recID,
@@ -147,7 +147,7 @@ public class JobSiteController {
         }
     }
 
-    @RequestMapping(value={"/rest/jobsite/queryCompanyInfo","/rest/job/site/base/sel_companyInfo"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/rest/jobsite/queryCompanyInfo","/rest/job/site/recruit/sel_companyInfo"}, method = RequestMethod.GET)
     @ApiOperation(value="公司详情",notes = "公司详情",response = Response.class)
     public Response queryCompanyInfo(@ApiParam(value = "创建者ID(会员ID)") @RequestParam(required = true) Long id) throws Exception
     {
@@ -156,7 +156,7 @@ public class JobSiteController {
         return response;
     }
 
-    @RequestMapping(value={"/rest/jobsite/queryAdvertisingPosition","/rest/job/site/base/sel_adv_position"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/rest/jobsite/queryAdvertisingPosition","/rest/job/site/recruit/sel_adv_position"}, method = RequestMethod.GET)
     @ApiOperation(value = "企业信息广告位",notes = "展示最新发布职位的企业信息，默认7条可配置",response = Response.class)
     public Response queryAdvertisingPosition() throws IOException
     {
@@ -168,7 +168,7 @@ public class JobSiteController {
         return response;
     }
 
-    @RequestMapping(value={"/rest/jobsite/queryPositionInfoByID","/rest/job/site/position/sel_position"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/rest/jobsite/queryPositionInfoByID","/rest/job/site/recruit/sel_position"}, method = RequestMethod.GET)
     @ApiOperation(value = "职位详情页面",notes = "职位搜索查看职位详情",response = Response.class)
     public Response queryPositionInfoByID(@ApiParam(value = "招聘职位ID") @RequestParam Long id)
     {
@@ -186,7 +186,7 @@ public class JobSiteController {
         return response;
     }
 
-    @RequestMapping(value={"/rest/jobsite/queryOtherPosition","/rest/job/site/position/sel_other_position"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/rest/jobsite/queryOtherPosition","/rest/job/site/recruit/sel_other_position"}, method = RequestMethod.GET)
     @ApiOperation(value = "职位详情中的其它职位",notes = "职位详情中的其它职位",response = Response.class)
     public Response queryOtherPosition(
                                    @ApiParam(value = "职位ID") @RequestParam(required = true) String jobID,
@@ -212,7 +212,7 @@ public class JobSiteController {
         return response;
     }
 
-    @RequestMapping(value={"/rest/jobsite/queryPublishPositionByID","/rest/job/site/position/sel_pub_position"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/rest/jobsite/queryPublishPositionByID","/rest/job/site/recruit/sel_pub_position"}, method = RequestMethod.GET)
     @ApiOperation(value="查询某个企业发布的职位",notes = "查询某个企业发布的职位",response = Response.class)
     public Response queryPublishPositionByID(
                                    @ApiParam(value = "企业ID") @RequestParam String enterpriseID,
@@ -239,7 +239,7 @@ public class JobSiteController {
         return response;
     }
 
-    @RequestMapping(value={"/rest/jobsite/queryAllPosition","/rest/job/site/position/sel_all_position"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/rest/jobsite/queryAllPosition","/rest/job/site/recruit/sel_all_position"}, method = RequestMethod.GET)
     @ApiOperation(value="职位搜索",notes = "职位频道页搜索",response = Response.class)
     public Response queryAllPosition(@ApiParam(value = "公司名称或企业名称") @RequestParam(required = false) String name,
                                      @ApiParam(value = "省代码") @RequestParam(required = false) String province,
@@ -337,7 +337,7 @@ public class JobSiteController {
     /**
      * 查询推荐感兴趣的职位
      */
-    @RequestMapping(value = {"/rest/jobsite/queryRecommendPosition","/rest/job/site/position/sel_recommend_position"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/jobsite/queryRecommendPosition","/rest/job/site/recruit/sel_recommend_position"}, method = RequestMethod.GET)
     @ApiOperation(value = "根据当前职位类别查询出其它公司的职位",notes = "查找按照最新时间排序",response = Response.class)
     public Response queryRecommendPosition(@ApiParam(value = "职位ID") @RequestParam String jobID,
                                            @ApiParam(value="职位类别ID") @RequestParam String postID) throws IOException {
@@ -354,7 +354,7 @@ public class JobSiteController {
     /**
      * 热门招聘
      */
-    @RequestMapping(value = {"/rest/jobsite/queryHotPosition","/rest/job/site/position/sel_hot_position"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/jobsite/queryHotPosition","/rest/job/site/recruit/sel_hot_position"}, method = RequestMethod.GET)
     @ApiOperation(value = "人才网首页热门招聘 默认9个",notes = "人才网首页热门招聘 默认9个",response = Response.class)
     public Response queryHotPosition() throws Exception {
         Map<String,Object> condition = new HashMap<String,Object>();
@@ -387,7 +387,7 @@ public class JobSiteController {
     /**
      * 最新招聘（按分类一起查询）
      */
-    @RequestMapping(value = {"/rest/jobsite/queryLatestJob","/rest/job/site/position/sel_latest_position"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/jobsite/queryLatestJob","/rest/job/site/recruit/sel_latest_position"}, method = RequestMethod.GET)
     @ApiOperation(value = "人才网首页最新招聘",notes = "人才网首页最新招聘",response = Response.class)
     public Response queryLatestJob() throws Exception {
         Response response = new Response();
@@ -400,7 +400,7 @@ public class JobSiteController {
     /**
      * 名企招聘
      */
-    @RequestMapping(value = {"/rest/jobsite/greatCompanyPosition","/rest/job/site/base/sel_greatCompany_position"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/jobsite/greatCompanyPosition","/rest/job/site/recruit/sel_greatCompany_position"}, method = RequestMethod.GET)
     @ApiOperation(value = "广告位名企招聘",notes = "广告位名企招聘",response = Response.class)
     public Response greatCompanyPosition() throws Exception {
         Response response = new Response();
@@ -409,14 +409,14 @@ public class JobSiteController {
         return response;
     }
 
-    @RequestMapping(value = {"/rest/jobsite/querySimilarCompany","/rest/job/site/base/sel_similar_company"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/jobsite/querySimilarCompany","/rest/job/site/recruit/sel_similar_company"}, method = RequestMethod.GET)
     @ApiOperation(value = "相似企业",notes = "相似企业",response = Response.class)
     public Response querySimilarCompany(@ApiParam(value = "企业ID(创建者ID)") @RequestParam String id) throws IOException {
         Response response = job.querySimilarCompany(id,4);
         return response;
     }
 
-    @RequestMapping(value = {"/rest/jobsite/queryEnterpriseHotPosition","/rest/job/site/position/sel_com_hot_position"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/jobsite/queryEnterpriseHotPosition","/rest/job/site/recruit/sel_com_hot_position"}, method = RequestMethod.GET)
     @ApiOperation(value="热门职位", notes="查询名企发布的热门职位", response=Response.class)
     public Response queryEnterpriseHotPosition() throws IOException {
         Response response = new Response();
@@ -464,7 +464,7 @@ public class JobSiteController {
         return response;
     }
 
-    @RequestMapping(value={"/rest/jobsite/isExistApplyPosition","/rest/job/site/base/isExist_apply_position"},method = RequestMethod.GET)
+    @RequestMapping(value={"/rest/jobsite/isExistApplyPosition","/rest/job/site/recruit/isExist_apply_position"},method = RequestMethod.GET)
     @ApiOperation(value="查看此职位是否已被同一个人申请，10天后可以再次申请",notes = "1:已申请，0：未申请",response = Response.class)
     public Response isExistApplyPosition(@ApiParam(value = "职位ID") @RequestParam String JobID,
                                          @ApiParam(value = "简历ID") @RequestParam String resumeID) throws Exception {
@@ -477,7 +477,7 @@ public class JobSiteController {
         return response;
     }
 
-    @RequestMapping(value={"/rest/jobsite/queryPublishJobCity","/rest/job/site/base/sel_pub_job_city"},method = RequestMethod.GET)
+    @RequestMapping(value={"/rest/jobsite/queryPublishJobCity","/rest/job/site/recruit/sel_pub_job_city"},method = RequestMethod.GET)
     @ApiOperation(value="查询某企业发布职位的城市",notes = "查询某企业发布职位的城市",response = Response.class)
     public Response queryPublishJobCity(@ApiParam(value = "企业ID(创建者ID)") @RequestParam String enterpriseID) throws Exception {
         Response response = new Response();
