@@ -53,6 +53,16 @@ public class CourseService {
     @Autowired
     OrderSmsService orderSmsService;
 
+
+    /**
+     * 购买培训课程
+     * @param courseId 课程ID
+     */
+    public void buy(String courseId){
+
+
+    }
+
     /**
      * 开课
      *

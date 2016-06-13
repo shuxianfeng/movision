@@ -13,6 +13,7 @@ import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.utils.*;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.sms.SDKSendSms;
 import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -619,7 +620,7 @@ public class ExpertService {
         map.put("time",Constants.sms_time);
         Gson gson = new Gson();
         String params = gson.toJson(map);
-        SDKSendTaoBaoSMS.sendSMS(mobile, params, PropertiesUtils.getValue("zhuhuibao_check_mobile_template_code"));
+        SDKSendSms.sendSMS(mobile, params, PropertiesUtils.getValue("zhuhuibao_check_mobile_template_code"));
 
         Validateinfo info = new Validateinfo();
         info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));

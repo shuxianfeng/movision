@@ -213,10 +213,8 @@ public class RegisterController {
 		info.setAccount(mobile);
 		memberService.inserValidateInfo(info);
 		sess.setAttribute("s"+mobile, verifyCode);
-		Response response = new Response();
-		response.setData(verifyCode);
 
-		return response;
+		return new Response();
 	}
 
     /**
