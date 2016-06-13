@@ -317,12 +317,13 @@ public class AlipayService {
         genOrderRecord(msgParam);
         //订单商品详情
         genOrderGoodsRecord(msgParam);
-        //发票信息
-        genInvoiceRecord(msgParam);
 
         //如果是技术培训 专家培训 需要记录订单SN码 t_o_pwdticket
         if (msgParam.get("goodsType").equals(OrderConstants.GoodsType.JSPX.toString())
                 || msgParam.get("goodsType").equals(OrderConstants.GoodsType.ZJPX.toString())) {
+
+            //发票信息
+            genInvoiceRecord(msgParam);
 
             //根据订单产品数量生成SN码
             genSNcode(msgParam, msgParam.get("goodsType"));
