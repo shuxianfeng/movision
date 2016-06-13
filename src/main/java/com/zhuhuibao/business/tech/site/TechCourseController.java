@@ -1,17 +1,21 @@
 package com.zhuhuibao.business.tech.site;
 
 import com.google.gson.Gson;
+import com.taobao.api.ApiException;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.alipay.service.direct.AlipayDirectService;
 import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.PayConstants;
+import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.pojo.OrderReqBean;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -23,21 +27,19 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 /**
  * 技术培训课程
  */
 @RestController
-@RequestMapping("/rest/tech/site/course")
-@Api(value = "techCourse", description = "技术培训接口")
+@RequestMapping("/rest/tech/site/courseOrder")
+@Api(value = "techCourse", description = "技术培训购买下单接口")
 public class TechCourseController {
     private static final Logger log = LoggerFactory.getLogger(TechCourseController.class);
 
@@ -49,6 +51,8 @@ public class TechCourseController {
     @Autowired
     TechCooperationService techService;
 
+    @Autowired
+    private ExpertService expertService;
 
     @ApiOperation(value = "培训课程下单支付", notes = "培训课程下单支付")
     @RequestMapping(value = "pay", method = RequestMethod.POST)
@@ -97,6 +101,21 @@ public class TechCourseController {
         alipayDirectService.doPay(response, paramMap);
     }
 
+    @ApiOperation(value="专家培训课程下单获取验证码",notes="专家培训课程下单获取验证码",response = Response.class)
+    @RequestMapping(value = "get_mobileCode", method = RequestMethod.GET)
+    public Response get_TrainMobileCode(@ApiParam(value = "手机号") @RequestParam String mobile) throws IOException, ApiException {
+        Response response = new Response();
+        expertService.getTrainMobileCode(mobile, TechConstant.MOBILE_CODE_SESSION_ORDER_CLASS);
+        return response;
+    }
 
+    @ApiOperation(value="专家培训课程下单验证验证码是否正确",notes="专家培训课程下单验证验证码是否正确",response = Response.class)
+    @RequestMapping(value = "check_mobileCode", method = RequestMethod.POST)
+    public Response check_mobileCode(@ApiParam(value = "验证码") @RequestParam String code,
+                                     @ApiParam(value = "手机号") @RequestParam String mobile)  {
+        Response response = new Response();
+        expertService.checkMobileCode(code,mobile,TechConstant.MOBILE_CODE_SESSION_ORDER_CLASS);
+        return response;
+    }
 
 }

@@ -101,6 +101,7 @@ public class TechDataController {
     @RequestMapping(value="sel_tech_data", method = RequestMethod.GET)
     @ApiOperation(value="运营管理平台搜索技术资料",notes = "运营管理平台搜索技术资料",response = Response.class)
     public Response findAllTechDataPager(@ApiParam(value = "1解决方案，2技术资料，3培训资料") @RequestParam(required = false) String fCategory,
+                                         @ApiParam(value = "资料标题") @RequestParam(required = false) String title,
                                          @ApiParam(value = "二级分类code") @RequestParam(required = false) String sCategory,
                                          @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
                                          @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
@@ -108,6 +109,10 @@ public class TechDataController {
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("fCategory", fCategory);
         condition.put("sCategory", sCategory);
+        if(null != title && !"".equals(title))
+        {
+            condition.put("title",title.replace("_","\\_"));
+        }
         //审核通过
         condition.put("status", TechConstant.TechDataStatus.AUDITPASS.toString());
         if (StringUtils.isEmpty(pageNo)) {
@@ -172,7 +177,7 @@ public class TechDataController {
     }
 
     @RequestMapping(value="sel_tech_data_detail", method = RequestMethod.GET)
-    @ApiOperation(value="预览解决方案、技术资料，培训资料行业类别",notes = "预览解决方案、技术资料，培训资料行业类别",response = Response.class)
+    @ApiOperation(value="预览解决方案、技术资料，培训资料详情页面",notes = "预览解决方案、技术资料，培训资料详情页面",response = Response.class)
     public Response previewTechDataDetail( @ApiParam(value = "技术资料ID")  @RequestParam() String techDataId)
     {
         Response response = new Response();
