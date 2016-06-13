@@ -18,4 +18,8 @@ public interface MessageLogMapper {
     int updateByPrimaryKey(MessageLog record);
 
     Integer queryUnreadMsgCount(Map<String,Object> map);
+
+    int addNewsToLog(Map<String,Object> map);
+
+    Integer selUnreadNewsCount(Map<String,Object> map);
 }
