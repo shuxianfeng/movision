@@ -74,6 +74,8 @@ public class Resume {
     private String attach;
 
     private String isPublic;
+    
+    private String download;
 
     public String getId() {
         return id;
@@ -370,4 +372,14 @@ public class Resume {
     public void setParentName(String parentName) {
         this.parentName = parentName;
     }
+
+	public String getDownload() {
+		return download;
+	}
+
+	public void setDownload(String download) {
+		this.download = download;
+	}
+    
+    
 }

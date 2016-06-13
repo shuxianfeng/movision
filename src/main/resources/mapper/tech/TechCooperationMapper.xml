@@ -252,7 +252,7 @@
     where id = #{id}
   </update>
   <select id="findAllTechCooperationPager" parameterType="java.util.Map" resultType="java.util.Map">
-    select t.id, t.createID, t.title,dc.name systemCategory, dn.name applicationAreaName,t.applicationArea
+    select t.id, t.createID, t.title,dc.name systemCategory, dn.name applicationAreaName,t.applicationArea,
     concat(po.name,'-',ct.name) provincecity,t.cooperation from t_tech_cooperation t
     left join t_dictionary_province po on po.code = t.province
     left join t_dictionary_city ct on ct.code = t.city
@@ -266,10 +266,10 @@
        <if test="title != null">
          and t.title like concat('%',#{title},'%')
        </if>
-       <if test="systemCategory != null">
+       <if test="systemCategory != null and systemCategory != ''">
        and t.systemCategory = #{systemCategory}
        </if>
-       <if test="applicationArea != null">
+       <if test="applicationArea != null and applicationArea != ''">
          and t.applicationArea = #{applicationArea}
        </if>
        <if test="type != null">
@@ -293,10 +293,10 @@
       <if test="title != null">
         and t.title like concat('%',#{title},'%')
       </if>
-      <if test="systemCategory != null">
+      <if test="systemCategory != null and systemCategory != ''">
         and t.systemCategory = #{systemCategory}
       </if>
-      <if test="applicationArea != null">
+      <if test="applicationArea != null and applicationArea != ''">
         and t.applicationArea = #{applicationArea}
       </if>
       <if test="type != null">

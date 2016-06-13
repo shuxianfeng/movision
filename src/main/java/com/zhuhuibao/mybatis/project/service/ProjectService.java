@@ -504,7 +504,7 @@ public class ProjectService {
 		log.info("search my viewer project info viewerId = "+ StringUtils.mapToString(map));
 		List<Map<String,String>> projectList;
 		try {
-			projectList = projectMapper.queryOmsViewProject(map,page.getRowBounds());
+			projectList = projectMapper.findAllOmsViewProject(map,page.getRowBounds());
 		}catch(Exception e)
 		{
 			log.error("search my viewer project info viewerId error!");

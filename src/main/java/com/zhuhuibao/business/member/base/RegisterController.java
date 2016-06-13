@@ -200,7 +200,13 @@ public class RegisterController {
 		log.debug("verifyCode == " + verifyCode);
 		//发送验证码到手机
 		//SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-		SDKSendTaoBaoSMS.sendFindPwdSMS(mobile, verifyCode, Constants.sms_time);
+		Map<String,String> map = new LinkedHashMap<>();
+		map.put("code",verifyCode);
+		map.put("time",Constants.sms_time);
+		Gson gson = new Gson();
+		String json = gson.toJson(map);
+		SDKSendSms.sendSMS(mobile,json,PropertiesUtils.getValue("forget_pwd_sms_template_code"));
+//		SDKSendTaoBaoSMS.sendFindPwdSMS(mobile, verifyCode, Constants.sms_time);
 		Validateinfo info = new Validateinfo();
 		info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
 		info.setCheckCode(verifyCode);
