@@ -46,7 +46,7 @@ public class ShiroRealm extends AuthorizingRealm {
     		
     		if(identity.equals("2")){
         		if(isexpert.equals("1")){
-        			role = "100,200";
+        			role = role + ",200";
         		}
     		}else{
         		if(identity.length() > 1){
@@ -91,10 +91,17 @@ public class ShiroRealm extends AuthorizingRealm {
             throw new UnknownAccountException();//  用户名不存在
         }
         
+        ShiroUser shiroUser = new ShiroUser(loginMember.getId(), loginMember.getAccount(),loginMember.getStatus(),
+        		loginMember.getIdentify(),loginMember.getRole(),loginMember.getIsexpert(),loginMember.getCompanyId());
+        
+		if(loginMember.getIdentify().equals("2")){
+    		if(loginMember.getIsexpert().equals("1")){
+    			shiroUser.setRole(shiroUser.getRole() + ",200");
+    		}
+		}
         // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(
-                new ShiroUser(loginMember.getId(), loginMember.getAccount(),loginMember.getStatus(),
-                		loginMember.getIdentify(),loginMember.getRole(),loginMember.getIsexpert(),loginMember.getCompanyId()), // 用户
+        		shiroUser, // 用户
                 loginMember.getPassword(), // 密码
 //                ByteSource.Util.bytes("123"),
                 getName() // realm name
