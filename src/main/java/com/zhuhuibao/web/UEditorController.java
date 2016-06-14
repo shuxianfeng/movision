@@ -34,13 +34,10 @@ public class UEditorController {
         response.setContentType("text/html;charset=utf-8");
 
         String rootPath = request.getSession().getServletContext().getRealPath("/");
-        System.out.println("rootPath:" + rootPath);
         PrintWriter out = null;
         try {
             out = response.getWriter();
-            String outHtml = new ActionEnter(request, rootPath).exec();
-            System.out.println("#####" + outHtml);
-            out.write(outHtml);
+            out.write(new ActionEnter(request, rootPath).exec());
 
         } catch (IOException e) {
             e.printStackTrace();
