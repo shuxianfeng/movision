@@ -67,4 +67,21 @@ public class PlatformStatService {
  
 		return resultStatMap;
 	}
+	/**
+	 * 待处理数据查询
+	 * 
+	 * @author gmli
+	 */
+	public Map<String, String> findAllPlatformWaitStat() {
+		Map<String, String> waitList=null;
+		try{
+			waitList=platformStatMapper.findAllPlatformWaitStat();
+		} catch (Exception e) {
+
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+		return waitList;
+	}
 }

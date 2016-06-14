@@ -6,9 +6,14 @@
     <result column="username" property="username" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="lastLoginTime" property="lastLoginTime" jdbcType="VARCHAR" />
+    <result column="lastLoginIp" property="lastLoginIp" jdbcType="VARCHAR" />
+    <result column="curLoginTime" property="curLoginTime" jdbcType="VARCHAR" />
+    <result column="lastLoginIp" property="lastLoginIp" jdbcType="VARCHAR" />
+    
   </resultMap>
   <sql id="Base_Column_List" >
-    id, username, password, createTime
+    id, username, password, createTime,date_format(curLoginTime,'%Y-%m-%d %H:%i:%s') curLoginTime,curLoginIp,date_format(lastLoginTime,'%Y-%m-%d %H:%i:%s') lastLoginTime,lastLoginIp
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -79,6 +84,14 @@
     set username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateRecordByPrimaryKey" parameterType="com.zhuhuibao.mybatis.oms.entity.User" >
+    update t_oms_user
+    set lastLoginTime=curLoginTime,
+    curLoginTime=now(),lastLoginIp=curLoginIp,
+    curLoginIp=#{curLoginIp,jdbcType=VARCHAR} 
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

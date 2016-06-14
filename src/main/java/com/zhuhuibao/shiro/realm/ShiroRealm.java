@@ -94,11 +94,6 @@ public class ShiroRealm extends AuthorizingRealm {
         ShiroUser shiroUser = new ShiroUser(loginMember.getId(), loginMember.getAccount(),loginMember.getStatus(),
         		loginMember.getIdentify(),loginMember.getRole(),loginMember.getIsexpert(),loginMember.getCompanyId());
         
-		if(loginMember.getIdentify().equals("2")){
-    		if(loginMember.getIsexpert().equals("1")){
-    			shiroUser.setRole(shiroUser.getRole() + ",200");
-    		}
-		}
         // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(
         		shiroUser, // 用户

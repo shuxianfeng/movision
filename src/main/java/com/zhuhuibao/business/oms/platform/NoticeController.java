@@ -135,4 +135,18 @@ public class NoticeController {
 	        }
 	        return Response;
 	    }
+	    /**
+	     * 查询最新10公告
+	     * @author gmli
+	     * @since 2016.5.26 
+	     */
+	    @ApiOperation(value="平台最新公告查询",notes="平台最新公告查询",response = Response.class)
+	    @RequestMapping(value = "sel_platform_newnotice", method = RequestMethod.GET)
+	    public Response queryPlatformNewNotice() {
+	    	 Response Response = new Response();
+	          //查询
+	          List<Notice> exhibitionList = noticeService.queryPlatformNewNotice();
+	          Response.setData(exhibitionList);
+	          return Response;
+	    }
 }

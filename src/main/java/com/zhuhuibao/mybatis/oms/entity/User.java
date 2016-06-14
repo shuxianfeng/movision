@@ -10,6 +10,14 @@ public class User {
     private String password;
 
     private Date createTime;
+    
+    private String curLoginIp;
+    
+    private String curLoginTime;
+    
+    private String lastLoginIp;
+    
+    private String lastLoginTime;
 
     public Integer getId() {
         return id;
@@ -42,4 +50,38 @@ public class User {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
+
+	public String getCurLoginIp() {
+		return curLoginIp;
+	}
+
+	public void setCurLoginIp(String curLoginIp) {
+		this.curLoginIp = curLoginIp;
+	}
+
+	public String getCurLoginTime() {
+		return curLoginTime;
+	}
+
+	public void setCurLoginTime(String curLoginTime) {
+		this.curLoginTime = curLoginTime;
+	}
+
+	public String getLastLoginIp() {
+		return lastLoginIp;
+	}
+
+	public void setLastLoginIp(String lastLoginIp) {
+		this.lastLoginIp = lastLoginIp;
+	}
+
+	public String getLastLoginTime() {
+		return lastLoginTime;
+	}
+
+	public void setLastLoginTime(String lastLoginTime) {
+		this.lastLoginTime = lastLoginTime;
+	}
+    
+    
 }

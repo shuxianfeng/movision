@@ -22,8 +22,10 @@ public interface NoticeMapper {
     int updateByPrimaryKeySelective(Notice record);
 
     int updateByPrimaryKey(Notice record);
-
+    
 	List<Notice> findAllNotice(RowBounds rowBounds, Map<String, Object> map);
-
+    //公告发布
 	void publishNotice(Notice notice);
+    //查询凭条最新公告
+	List<Notice> queryPlatformNewNotice();
 }

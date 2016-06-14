@@ -1,15 +1,16 @@
 package com.zhuhuibao.mybatis.oms.service;
 
-import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.mybatis.oms.entity.User;
-import com.zhuhuibao.mybatis.oms.mapper.UserMapper;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.mybatis.oms.entity.User;
+import com.zhuhuibao.mybatis.oms.mapper.UserMapper;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 
 /**
  * Created by Administrator on 2016/4/27 0027.
@@ -53,5 +54,24 @@ public class UserService {
             response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
         }
         return response;
+    }
+    /**
+     * 更新用户信息
+     * @param record
+     */
+    public void updateRecordByPrimaryKey(User record)
+    {
+        
+        try
+        {
+             userMapper.updateRecordByPrimaryKey(record);
+            
+        }
+        catch(Exception e)
+        {
+            log.error("query user by account error!",e);
+             
+        }
+        
     }
 }
