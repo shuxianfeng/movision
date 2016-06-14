@@ -26,4 +26,38 @@
     values (#{id}, #{receiveid},#{createid} ,#{receiveName}, #{title}, #{content}, #{isShow},
       #{companyName}, #{linkman}, #{telephone}, #{mobile},now(),#{type})
   </insert>
+
+  <select id="findAllMySendMsgList" parameterType="java.util.Map" resultType="java.util.Map">
+    select msg.id,msg.title,
+    case when m.identify = 2 then m.personRealName when m.identify!=2 then m.enterpriseName end as name,
+    date_format(msg.postDate,'%Y-%m-%d %H:%i:%s')postDate
+    from t_sys_message msg
+    left join t_m_member m on m.id = msg.receiveid
+    where msg.createid = #{id} and msg.sendDelete = 0
+  </select>
+
+  <select id="findAllMyReceiveMsgList" parameterType="java.util.Map" resultType="java.util.Map">
+    select msg.id,msg.title,
+    case when m.identify = 2 then m.personRealName when m.identify!=2 then m.enterpriseName end as name,
+    date_format(msg.postDate,'%Y-%m-%d %H:%i:%s')postDate
+    from t_sys_message msg
+    left join t_m_member m on m.id = msg.createid
+    where msg.receiveid = #{id} and msg.ReceiveDelete = 0
+  </select>
+
+  <update id="updateMessage" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Message" >
+    update t_sys_message
+    <set >
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="sendDelete != null" >
+        sendDelete = #{sendDelete},
+      </if>
+      <if test="ReceiveDelete != null" >
+        ReceiveDelete = #{ReceiveDelete},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
 </mapper>

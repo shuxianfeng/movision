@@ -34,7 +34,7 @@ import com.zhuhuibao.utils.pagination.util.StringUtils;
  *
  */
 @RestController
-@RequestMapping("/rest/oms")
+@RequestMapping("/rest/notice/oms")
 @Api(value="PlatForm")
 public class NoticeController {
 	 @Autowired
@@ -46,7 +46,7 @@ public class NoticeController {
 	     * @since 2016.5.26 
 	     */
 	    @ApiOperation(value="平台公告查询",notes="平台公告查询",response = Response.class)
-	    @RequestMapping(value = "queryPlatformNotice", method = RequestMethod.GET)
+	    @RequestMapping(value = "sel_platform_notice", method = RequestMethod.GET)
 	    public Response queryPlatformNotice(@ApiParam(value = "标题")@RequestParam(required = false) String title,
 	            @ApiParam(value = "状态")@RequestParam(required = false)String status,
 	    		@RequestParam(required = false)String pageNo,
@@ -76,7 +76,7 @@ public class NoticeController {
 	     * @since 2016.5.26
 	     */
 	    @ApiOperation(value="用户建议处理",notes="用户建议处理",response = Response.class)
-	    @RequestMapping(value = "updatePlatformNotice", method = RequestMethod.POST)
+	    @RequestMapping(value = "upd_platform_notice", method = RequestMethod.POST)
 	    public Response updatePlatformNotice(@ModelAttribute()Notice Notice)  {
 	        Response Response = new Response();
 	        Subject currentUser = SecurityUtils.getSubject();
@@ -100,7 +100,7 @@ public class NoticeController {
 	     * @since 2016.5.26
 	     */
 	    @ApiOperation(value="用户建议详情",notes="用户建议详情",response = Response.class)
-	    @RequestMapping(value = "queryPlatformNoticeById", method = RequestMethod.GET)
+	    @RequestMapping(value = "sel_platform_noticeById", method = RequestMethod.GET)
 	    public Response queryPlatformNoticeById(@RequestParam Long id)  {
 	        Response Response = new Response();
 	        Notice notice = noticeService.queryPlatformNoticeById(id);
@@ -114,7 +114,7 @@ public class NoticeController {
 	     * @since 2016.5.26 
 	     */
 	    @ApiOperation(value="发布公告信息",notes="发布公告信息",response = Response.class)
-	    @RequestMapping(value = "publishNotice", method = RequestMethod.POST)
+	    @RequestMapping(value = "add_notice", method = RequestMethod.POST)
 	    public Response publishNotice(@ModelAttribute()Notice notice) {
 	        Response Response = new Response();
 	        Subject currentUser = SecurityUtils.getSubject();

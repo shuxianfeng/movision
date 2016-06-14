@@ -3,10 +3,12 @@ package com.zhuhuibao.business.mail;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MessageConstant;
 import com.zhuhuibao.common.constant.MessageLogConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageLog;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -86,6 +88,8 @@ public class MailController {
 
             map.put("proCount",count1);
             map.put("actCount",count2);
+
+            response.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
@@ -121,7 +125,7 @@ public class MailController {
         return response;
     }
 
-    @ApiOperation(value="批量删除",notes="批量删除",response = Response.class)
+    @ApiOperation(value="批量删除消息",notes="批量删除消息",response = Response.class)
     @RequestMapping(value = "del_news", method = RequestMethod.POST)
     public Response del_news(@ApiParam(value = "消息ids,逗号隔开") @RequestParam String ids)  {
         Response response = new Response();
@@ -147,6 +151,84 @@ public class MailController {
             response.setData(siteMailService.selUnreadNewsCount(map));
         }else  {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @ApiOperation(value="我发送的留言",notes="我发送的留言",response = Response.class)
+    @RequestMapping(value = "sel_mySendMsg", method = RequestMethod.GET)
+    public Response sel_mySendMsg(@RequestParam(required = false)String pageNo,
+                                  @RequestParam(required = false)String pageSize)  {
+        Response response = new Response();
+        //设定默认分页pageSize
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Long memberId = ShiroUtil.getCreateID();
+        Map<String, Object> map = new HashMap<>();
+        if(memberId!=null){
+            map.put("id",memberId);
+            List<Map<String,String>> list = siteMailService.findAllMySendMsgList(pager,map);
+            response.setData(list);
+        }else  {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @ApiOperation(value="删除我发送的留言",notes="删除我发送的留言",response = Response.class)
+    @RequestMapping(value = "del_sendMessage", method = RequestMethod.POST)
+    public Response del_sendMessage(@ApiParam(value = "留言ids,逗号隔开") @RequestParam String ids)  {
+        Response response = new Response();
+        String[] idList = ids.split(",");
+        for (String id : idList) {
+            Message message = new Message();
+            message.setId(id);
+            message.setSendDelete(MessageConstant.MESSAGE_SEND_DELETE_ONE);
+            siteMailService.updateMessage(message);
+        }
+        return response;
+    }
+
+    @ApiOperation(value="我收到的留言",notes="我收到的留言",response = Response.class)
+    @RequestMapping(value = "sel_myReceiveMsg", method = RequestMethod.GET)
+    public Response sel_myReceiveMsg(@RequestParam(required = false)String pageNo,
+                                  @RequestParam(required = false)String pageSize)  {
+        Response response = new Response();
+        //设定默认分页pageSize
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Long memberId = ShiroUtil.getCreateID();
+        Map<String, Object> map = new HashMap<>();
+        if(memberId!=null){
+            map.put("id",memberId);
+            List<Map<String,String>> list = siteMailService.findAllMyReceiveMsgList(pager,map);
+            response.setData(list);
+        }else  {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @ApiOperation(value="删除我收到的留言",notes="删除我收到的留言",response = Response.class)
+    @RequestMapping(value = "del_receiveMessage", method = RequestMethod.POST)
+    public Response del_receiveMessage(@ApiParam(value = "留言ids,逗号隔开") @RequestParam String ids)  {
+        Response response = new Response();
+        String[] idList = ids.split(",");
+        for (String id : idList) {
+            Message message = new Message();
+            message.setId(id);
+            message.setReceiveDelete(MessageConstant.MESSAGE_RECEIVE_DELETE_ONE);
+            siteMailService.updateMessage(message);
         }
         return response;
     }
