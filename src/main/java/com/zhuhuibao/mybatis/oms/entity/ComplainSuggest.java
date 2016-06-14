@@ -20,6 +20,8 @@ public class ComplainSuggest {
     private String email;
     
     private String status;
+    
+    private String account;
 
     public Long getId() {
         return id;
@@ -99,6 +101,14 @@ public class ComplainSuggest {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getAccount() {
+		return account;
+	}
+
+	public void setAccount(String account) {
+		this.account = account;
 	}
     
 }
