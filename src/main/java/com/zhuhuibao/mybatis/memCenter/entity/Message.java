@@ -33,6 +33,12 @@ public class Message {
     @ApiModelProperty(value="留言類型：类型：1：商户留言；2：专家留言；3：合作留言；",required = true)
     private String type;
 
+    private String status;
+
+    private String sendDelete;
+
+    private String ReceiveDelete;
+
     public String getId() {
         return id;
     }
@@ -135,5 +141,29 @@ public class Message {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getSendDelete() {
+        return sendDelete;
+    }
+
+    public void setSendDelete(String sendDelete) {
+        this.sendDelete = sendDelete;
+    }
+
+    public String getReceiveDelete() {
+        return ReceiveDelete;
+    }
+
+    public void setReceiveDelete(String receiveDelete) {
+        ReceiveDelete = receiveDelete;
     }
 }

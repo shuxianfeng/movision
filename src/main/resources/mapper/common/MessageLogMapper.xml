@@ -61,16 +61,16 @@
     update t_sys_messageLog
     <set >
       <if test="recID != null" >
-        recID = #{recID,jdbcType=BIGINT},
+        recID = #{recID},
       </if>
       <if test="messageID != null" >
-        messageID = #{messageID,jdbcType=BIGINT},
+        messageID = #{messageID},
       </if>
       <if test="status != null" >
-        status = #{status,jdbcType=INTEGER},
+        status = #{status},
       </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageLog" >
     update t_sys_messageLog
@@ -92,5 +92,27 @@
        <if test="status != null">
          and mg.status = #{status}
        </if>
+  </select>
+  <insert id="addNewsToLog" parameterType="java.util.Map" >
+    insert into t_sys_messageLog (recID,messageID,status)
+    select #{id},mt.id,'1' from t_sys_messageText mt where mt.id not in (select ml.messageID from t_sys_messageLog ml where ml.recID = #{id})
+  </insert>
+  <select id="selUnreadNewsCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select msgCount1+msgCount2 as count from
+    (select count(mt.id)msgCount1 from t_sys_messageText mt where mt.id not in (select ml.messageID from
+    t_sys_messageLog ml where ml.recID = #{recID}))T1,
+    (select count(mg.recID) msgCount2
+    from t_sys_messageLog mg ,t_sys_messageText mt
+    where mt.id = mg.messageID
+    <if test="recID != null">
+      and mg.recID = #{recID}
+    </if>
+    <if test="type != null">
+      and mt.type = #{type}
+    </if>
+    <if test="status != null">
+      and mg.status = #{status}
+    </if>
+    )T2
   </select>
 </mapper>

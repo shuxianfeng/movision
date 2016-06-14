@@ -203,13 +203,13 @@
     left join t_dictionary_techDataCategory tc on tc.code = t.fCategory
     left join t_dictionary_techDataCategory td on td.code = t.sCategory
     where t.status != 4
-      <if test="status != null">
+      <if test="status != null and status != ''">
         and t.status = #{status}
       </if>
-      <if test="title != null">
+      <if test="title != null and title != ''">
         and t.title like concat('%',#{title},'%')
       </if>
-      <if test="fCategory != null">
+      <if test="fCategory != null and fCategory != ''">
         and t.fCategory = #{fCategory}
       </if>
       <if test="sCategory != null">
@@ -228,6 +228,9 @@
     left join t_dictionary_techDataCategory tc on tc.code = t.fCategory
     left join t_dictionary_techDataCategory td on td.code = t.sCategory
     <where>
+      <if test="title != null">
+        and t.title like concat('%',#{title},'%')
+      </if>
       <if test="status != null">
         and t.status = #{status}
       </if>

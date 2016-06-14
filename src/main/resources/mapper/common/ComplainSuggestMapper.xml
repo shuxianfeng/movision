@@ -12,15 +12,19 @@
     <result column="telephone" jdbcType="VARCHAR" property="telephone" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    
   </resultMap>
   <sql id="Base_Column_List">
     id, title, content, createId, date_format(time,'%Y-%m-%d %H:%i:%s') time, companyName, userName, telephone, email,status
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from t_sys_complain_suggest
-    where id = #{id,jdbcType=BIGINT}
+    
+    select  a.id, a.title, a.content, a.createId, date_format(a.time,'%Y-%m-%d %H:%i:%s') time, a.companyName, a.userName, a.telephone, a.email,a.status
+   ,case when m.mobile != '' or m.mobile != null then m.mobile when m.email!= '' or m.email != null then m.email end as account
+    from t_sys_complain_suggest a left JOIN t_m_member m  on a.createId=m.id
+     
+    where a.id = #{id,jdbcType=BIGINT}
   </select>
   
   <select id="findAllComplaintSuggest" resultMap="BaseResultMap" parameterType="java.util.Map" >
@@ -36,7 +40,7 @@
         and a.status = #{status}
       </if>
       <if test="userName != null">
-        and a.username = #{userName}
+        and a.username like CONCAT('%',#{userName},'%')
       </if>
     </where> 
 	order by a.time desc 

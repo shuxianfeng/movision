@@ -31,7 +31,7 @@ import java.util.Map;
  * 
  */
 @RestController
-@RequestMapping("/rest/oms")
+@RequestMapping("/rest/complain/oms")
 @Api(value="PlatForm")
 public class ComplainSuggestController {
     private static final Logger log = LoggerFactory.getLogger(ExpertOmsController.class);
@@ -45,7 +45,7 @@ public class ComplainSuggestController {
      * @since 2016.5.26 
      */
     @ApiOperation(value="用户建议查询",notes="用户建议查询",response = Response.class)
-    @RequestMapping(value = "queryComplaintSuggest", method = RequestMethod.POST)
+    @RequestMapping(value = "sel_complaint_suggest", method = RequestMethod.POST)
     public Response queryComplaintSuggest(@ApiParam(value = "标题")@RequestParam(required = false) String title,
             @ApiParam(value = "状态")@RequestParam(required = false)String status,
             @ApiParam(value = "联系人")@RequestParam(required = false) String userName,
@@ -77,7 +77,7 @@ public class ComplainSuggestController {
      * @since 2016.5.26
      */
     @ApiOperation(value="用户建议处理",notes="用户建议处理",response = Response.class)
-    @RequestMapping(value = "updateComplainSuggest", method = RequestMethod.POST)
+    @RequestMapping(value = "upd_complain_suggest", method = RequestMethod.POST)
     public Response updateComplainSuggest(@ModelAttribute()ComplainSuggest complainSuggest)  {
         Response Response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
@@ -101,7 +101,7 @@ public class ComplainSuggestController {
      * @since 2016.5.26
      */
     @ApiOperation(value="用户建议详情",notes="用户建议详情",response = Response.class)
-    @RequestMapping(value = "queryComplainSuggestById", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_complain_suggestById", method = RequestMethod.GET)
     public Response queryComplainSuggestById(@RequestParam Long id)  {
         Response Response = new Response();
         ComplainSuggest meetingOrder = complainSuggestService.queryComplainSuggestById(id);

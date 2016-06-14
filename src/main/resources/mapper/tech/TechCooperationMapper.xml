@@ -260,10 +260,10 @@
     left join t_dictionary_constant dc on dc.code = t.systemCategory and dc.type =19
     left join t_dictionary_constant dn on dn.code = t.applicationArea and dn.type =18
     where t.status != 4
-       <if test="status != null">
+       <if test="status != null and status != ''" >
           and t.status = #{status}
        </if>
-       <if test="title != null">
+       <if test="title != null and title != ''">
          and t.title like concat('%',#{title},'%')
        </if>
        <if test="systemCategory != null and systemCategory != ''">
@@ -287,10 +287,10 @@
     left join t_dictionary_constant dc on dc.code = t.systemCategory and dc.type =19
     left join t_dictionary_constant dn on dn.code = t.applicationArea and dn.type =18
     where t.status != 4
-      <if test="status != null">
+      <if test="status != null and status != ''">
         and t.status = #{status}
       </if>
-      <if test="title != null">
+      <if test="title != null and title != ''">
         and t.title like concat('%',#{title},'%')
       </if>
       <if test="systemCategory != null and systemCategory != ''">

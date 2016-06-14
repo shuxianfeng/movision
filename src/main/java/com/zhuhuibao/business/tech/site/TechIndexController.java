@@ -62,7 +62,7 @@ public class TechIndexController {
     }
 
     @RequestMapping(value = "sel_news", method = RequestMethod.GET)
-    @ApiOperation(value = "查询新技术播报",notes = "查询新技术播报",response = Response.class)
+    @ApiOperation(value = "查询首页banner新技术播报",notes = "查询首页banner新技术播报",response = Response.class)
     public Response queryNewsByChannelInfo() {
         Response response = new Response();
         Map<String, Object> map = new HashMap<String, Object>();

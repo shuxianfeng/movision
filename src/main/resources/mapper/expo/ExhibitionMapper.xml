@@ -218,7 +218,7 @@
   </update>
   <select id="findAllExhibition" resultType="java.util.Map" parameterType="java.util.Map" >
     select e.id,e.createid,e.title,c.name as type,e.subType,e.views,date_format(e.updateTime,'%Y-%m-%d') updateTime,
-    e.status,date_format(e.publishTime,'%Y-%m-%d') publishTime,e.startDate,e.endDate,e.imgUrl,e.address,e.introduce,
+    e.status,date_format(e.publishTime,'%Y-%m-%d') publishTime,e.startDate,e.endDate,e.imgUrl,e.address,e.introduce,e.company,
     case when e.createrType = 1 then (select u.username from t_oms_user u where u.id = e.createid)
     when e.createrType = 2 then (select m.enterpriseName from t_m_member m where m.id = e.createid) end as createName,
     ci.name as cityName,p.name as provinceName,a.name as areaName
