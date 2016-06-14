@@ -9,6 +9,7 @@
     <result column="createId" jdbcType="BIGINT" property="createId" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="userName" jdbcType="VARCHAR" property="userName" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
   </resultMap>
   <sql id="Base_Column_List">
     id, title, content, createId, date_format(time,'%Y-%m-%d %H:%i:%s') time,status
@@ -39,6 +40,15 @@
       </if>
     </where> 
 	order by a.time desc 
+  </select>
+  
+  
+  <select id="queryPlatformNewNotice" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+     id, title, content
+    ,DATE_FORMAT(time,'%Y-%m-%d') time 
+    from t_oms_notice a 
+    order by time desc LIMIT 10
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_oms_notice

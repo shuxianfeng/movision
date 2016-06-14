@@ -14,7 +14,15 @@ import com.zhuhuibao.mybatis.oms.entity.PlatformStatistics;
  */
 public interface PlatformStatMapper {
 	 
-
-	 List<PlatformStatistics> findAllPlatformStatistics();
+    /**
+     * 查询平台统计数据
+     * @return
+     */
+	List<PlatformStatistics> findAllPlatformStatistics();
+	/**
+	 * 统计待处理的数据
+	 * @return
+	 */
+	Map<String, String> findAllPlatformWaitStat();
  
 }

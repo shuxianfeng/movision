@@ -111,5 +111,22 @@ public class NoticeService {
 			log.error("publish Notice Notice  error!",e);
 		}
 	}
+	/**
+	 * 查询平台最新公告
+	 * @param notice
+	 */
+	public List<Notice> queryPlatformNewNotice() {
+		log.info("publish Notice ");
+		List<Notice> newNoticeList=null;
+		try
+		{
+			newNoticeList=noticeMapper.queryPlatformNewNotice();
+		}
+		catch(Exception e)
+		{
+			log.error("publish Notice Notice  error!",e);
+		}
+		return newNoticeList;
+	}
 
 }

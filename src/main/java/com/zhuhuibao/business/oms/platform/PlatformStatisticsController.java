@@ -31,7 +31,7 @@ public class PlatformStatisticsController {
 	 @Autowired
 	 private PlatformStatService platformStatService;
 	 
-	  /**
+	    /**
 	     * 平台信息统计
 	     * @author gmli
 	     * @since 2016.5.26 
@@ -44,6 +44,20 @@ public class PlatformStatisticsController {
 	    	  Map<String,List<PlatformStatistics>> platformStatisticsList = platformStatService.findAllPlatformStat();
 	        
 	          Response.setData(platformStatisticsList);
+	          return Response;
+	    }
+	    /**
+	     * 待处理数据统计
+	     * @author gmli
+	     * @since 2016.5.26 
+	     */
+	    @ApiOperation(value="平台信息统计",notes="平台信息统计",response = Response.class)
+	    @RequestMapping(value = "sel_platform_waitstat", method = RequestMethod.GET)
+	    public Response queryPlatformWaitStatistics() {
+	    	  Response Response = new Response(); 
+	          //查询待处理的数据
+	    	  Map<String,String> waitStatList = platformStatService.findAllPlatformWaitStat();
+	          Response.setData(waitStatList);
 	          return Response;
 	    }
 }

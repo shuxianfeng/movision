@@ -12,11 +12,20 @@
     <result column="stat_date" jdbcType="VARCHAR" property="stat_date" />
   </resultMap> 
  
-	
+  <!-- @author:gmli@since 2016.6.14 查询平台统计数据 -->
   <select id="findAllPlatformStatistics" resultMap="BaseResultMap" parameterType="java.util.Map" >
       select id,type,total,today_add_count,seven_days_add_count,thirty_days_add_count,stat_type,stat_date
 	   from  t_platform_statistics where stat_date=DATE_FORMAT(NOW(),'%Y-%m-%d')
   </select>
-  
+  <!-- @author:gmli@since 2016.6.14 查询平台待处理的数据 -->
+   <select id="findAllPlatformWaitStat" resultType="java.util.Map" parameterType="java.util.Map" >
+      select (select count(1) from t_c_exhibition w where w.status=0) exCount,
+		(select count(1) from t_certificate_record  w where w.status=0) crCount,
+		(select count(1) from t_e_expertSupport  w where w.status=0)  esCount,
+		(select count(1) from t_p_brand  w where w.status=2) pbCount,
+		(select count(1) from t_sys_complain_suggest  w where w.status=1) csCount,
+		(select count(1) from t_oms_channel_news  w where w.status=0) cnCount
+		 from dual
+  </select>
   
 </mapper>
