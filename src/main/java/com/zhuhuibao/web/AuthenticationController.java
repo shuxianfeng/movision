@@ -1,9 +1,11 @@
 package com.zhuhuibao.web;
 
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.pojo.AuthcMember;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.security.resubmit.TokenHelper;
 import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,13 +55,45 @@ public class AuthenticationController {
                 response.setMessage("you are rejected!");
                 map.put("authorized", false);
             } else {
-                response.setMsgCode(1);
-                response.setMessage("welcome you!");
-                map.put("authorized", true);
-                map.put("member", member);
+	        		String identity = member.getIdentify();
+	        		String role = member.getRole();
+	        		String isexpert = member.getIsexpert();
+	        		boolean bexpert = false;
+	        		if(identity.equals("2")){
+	            		if(isexpert.equals("1")){
+	            			bexpert = true;
+	            		}
+	        		}else{
+	            		if(identity.length() > 1){
+	            			String[] strs = identity.split(",");
+	            			if(Arrays.asList(strs).contains("3")){
+	            				identity = "3,1";
+	            			}else{
+	            				identity = "1";
+	            			}
+	            		}else if(!identity.equals("3")){
+	            			identity = "1";
+	            		}
+	            		
+	        			if(!role.equals("100")){
+	        				role = "300";
+	        			}
+	        		}
+	        		AuthcMember authcMember = new AuthcMember();
+	            	authcMember.setId(member.getId());
+	            	authcMember.setAccount(member.getAccount());
+	            	authcMember.setCompanyId(member.getCompanyId());
+	            	authcMember.setStatus(member.getStatus());
+	        		authcMember.setIdentify(identity);
+	        		authcMember.setRole(role);
+	        		authcMember.setIsexpert(bexpert);
+	        		
+	                response.setMsgCode(1);
+	                response.setMessage("welcome you!");
+	                map.put("authorized", true);
+	                map.put("member", authcMember);
+            	}
             }
-        }
-
         response.setData(map);
         log.debug("caijl:/rest/web/authc is called,msgcode=[" + response.getMsgCode() + "],Message=[" + response.getMessage() + "].");
         return response;

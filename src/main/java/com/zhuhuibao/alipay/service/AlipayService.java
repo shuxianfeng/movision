@@ -53,9 +53,6 @@ public class AlipayService {
     private OrderService orderService;
 
     @Autowired
-    private OrderGoodsService orderGoodsService;
-
-    @Autowired
     private AlipayCallbackLogService alipayCallbackLogService;
 
     @Autowired
@@ -65,40 +62,8 @@ public class AlipayService {
     private RefundService refundService;
 
     @Autowired
-    private PwdTickerService pwdTickerService;
+    private OrderFlowService orderFlowService;
 
-    @Autowired
-    private PublishCourseService publishCourseService;
-
-    @Autowired
-    private InvoiceService invoiceService;
-
-    @Autowired
-    private OrderSmsService orderSmsService;
-
-
-    /**
-     * 支付包支付请求
-     *
-     * @param msgParam 请求参数集合
-     * @param method   提交方式。两个值可选：post、get
-     * @return html
-     */
-    public String alipay(Map<String, String> msgParam, String method) throws Exception {
-
-        //生成订单号
-        String orderNo = IdGenerator.createOrderNo();
-        msgParam.put("orderNo", orderNo);
-
-        //支付请求参数校验
-        checkPayParams(msgParam);
-
-        //记录订单信息和其他相关处理
-        beforePayDeal(msgParam);
-
-        //支付操作
-        return doPay(msgParam, method);
-    }
 
     /**
      * 支付宝退款请求
@@ -303,178 +268,7 @@ public class AlipayService {
         }
     }
 
-    /**
-     * 订单相关操作  (t_o_order t_o_order_goods t_o_pwdticket t_p_group_publishCourse)
-     * 事务处理,异常回滚
-     *
-     * @param msgParam 请求参数
-     */
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    private void beforePayDeal(Map<String, String> msgParam) throws IOException {
-        log.info("request params:{}", msgParam.toString());
 
-        //订单记录
-        genOrderRecord(msgParam);
-        //订单商品详情
-        genOrderGoodsRecord(msgParam);
-
-        //如果是技术培训 专家培训 需要记录订单SN码 t_o_pwdticket
-        if (msgParam.get("goodsType").equals(OrderConstants.GoodsType.JSPX.toString())
-                || msgParam.get("goodsType").equals(OrderConstants.GoodsType.ZJPX.toString())) {
-
-            //发票信息
-            genInvoiceRecord(msgParam);
-
-            //根据订单产品数量生成SN码
-            genSNcode(msgParam, msgParam.get("goodsType"));
-
-            //修改课程库存数量
-            updateSubStock(msgParam);
-
-        }
-    }
-
-    /**
-     * 需要发票 生成发票记录
-     *
-     * @param msgParam
-     */
-    private void genInvoiceRecord(Map<String, String> msgParam) {
-        String needInvoice = msgParam.get("needInvoice");
-        if ("true".equals(needInvoice)) {
-            Invoice invoice = new Invoice();
-            invoice.setCreateTime(new Date());
-            invoice.setInvoiceTitle(msgParam.get("invoiceTitle"));
-            invoice.setInvoiceType(Integer.valueOf(msgParam.get("invoiceType")));
-            invoice.setOrderNo(msgParam.get("orderNo"));
-            invoiceService.insert(invoice);
-        }
-
-    }
-
-    /**
-     * 修改课程库存 {减库存}
-     *
-     * @param params
-     */
-    private void updateSubStock(Map<String, String> params) {
-        Long courseId = Long.valueOf(params.get("goodsId"));
-        int number = Integer.valueOf(params.get("number"));
-        publishCourseService.updateSubStockNum(courseId, number);
-
-    }
-
-    /**
-     * 根据订单生产SN码
-     *
-     * @param msgParam
-     */
-    private void genSNcode(Map<String, String> msgParam, String type) throws IOException {
-
-        int num = Integer.valueOf(msgParam.get("number"));
-        List<PwdTicket> list = new ArrayList<>();
-        List<String> snCodeList = new ArrayList<>();
-        for (int i = 0; i < num; i++) {
-            PwdTicket pwdTicket = new PwdTicket();
-            String snCode = IdGenerator.createSNcode();
-            pwdTicket.setSnCode(snCode);
-            pwdTicket.setMobile(msgParam.get("mobile"));
-            pwdTicket.setOrderNo(msgParam.get("orderNo"));
-            pwdTicket.setCourseId(Long.valueOf(msgParam.get("goodsId")));
-            pwdTicket.setTicketType(type);
-            list.add(pwdTicket);
-            snCodeList.add(snCode);
-        }
-        pwdTickerService.batchInsert(list);
-
-        //短信记录
-        PublishCourse course = publishCourseService.getCourseById(Long.valueOf(msgParam.get("goodsId")));
-        StringBuilder sb = new StringBuilder();
-        for (String code : snCodeList) {
-            sb.append(code).append(",");
-        }
-        String temp = sb.toString();
-        String codes = temp.substring(0, temp.length() - 1);
-
-        Map<String, String> smsMap = new LinkedHashMap<>();
-        smsMap.put("name", course.getTitle());
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        smsMap.put("time", format.format(course.getSaleTime()));
-        smsMap.put("code", codes);
-        Gson gson = new Gson();
-        String content = gson.toJson(smsMap);
-        OrderSms orderSms = new OrderSms();
-        orderSms.setOrderNo(msgParam.get("orderNo"));
-        orderSms.setMobile(msgParam.get("mobile"));
-        orderSms.setContent(content);
-        orderSms.setStatus(OrderConstants.SmsStatus.WAITING.toString());
-        //开课短信
-        orderSms.setTemplateCode(PropertiesUtils.getValue("course_begin_sms_template_code"));
-        orderSmsService.insert(orderSms);
-
-        //终止课程短信
-        orderSms.setTemplateCode(PropertiesUtils.getValue("course_before_stop_sms_template_code"));
-        orderSmsService.insert(orderSms);
-
-        //终止课程短信
-        orderSms.setTemplateCode(PropertiesUtils.getValue("course_before_autostop_sms_template_code"));
-        orderSmsService.insert(orderSms);
-
-        //终止课程短信
-        orderSms.setTemplateCode(PropertiesUtils.getValue("course_after_stop_sms_template_code"));
-        orderSmsService.insert(orderSms);
-
-
-    }
-
-    /**
-     * 生成订单商品详情记录
-     *
-     * @param msgParam
-     */
-    private void genOrderGoodsRecord(Map<String, String> msgParam) {
-        //订单商品
-        OrderGoods orderGoods = new OrderGoods();
-        orderGoods.setGoodsId(Long.valueOf(msgParam.get("goodsId")));
-        orderGoods.setGoodsName(msgParam.get("goodsName"));
-
-        orderGoods.setGoodsPrice(new BigDecimal(msgParam.get("goodsPrice")));
-        orderGoods.setNumber(Integer.valueOf(msgParam.get("number")));
-        orderGoods.setOrderNo(msgParam.get("orderNo"));
-        orderGoods.setCreateTime(new Date());
-
-        orderGoodsService.insert(orderGoods);
-    }
-
-    /**
-     * 生成订单记录
-     *
-     * @param msgParam
-     */
-    private void genOrderRecord(Map<String, String> msgParam) {
-        Order order = new Order();
-        order.setOrderNo(msgParam.get("orderNo"));
-        order.setBuyerId(Long.valueOf(msgParam.get("buyerId")));
-        order.setSellerId(msgParam.get("partner"));
-//        Date dealTime;
-//        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        dealTime = sf.parse(msgParam.get("dealTime"));
-//        order.setDealTime(dealTime);
-        order.setDealTime(new Date());
-        String payPrice = msgParam.get("goodsPrice");
-        String number = msgParam.get("number");
-        BigDecimal price = new BigDecimal(payPrice);
-        BigDecimal num = new BigDecimal(number);
-        BigDecimal amount = price.multiply(num);
-        order.setAmount(amount); //订单总金额
-//        String payAmount = msgParam.get("payAmount");
-        order.setPayAmount(amount);  //交易金额
-        order.setGoodsType(msgParam.get("goodsType"));
-        order.setPayMode(msgParam.get("payMode"));
-        order.setStatus(PayConstants.OrderStatus.WZF.toString());
-
-        orderService.insert(order);
-    }
 
 
     /**
@@ -484,7 +278,7 @@ public class AlipayService {
      * @param method   请求方法{get,post}
      * @return html
      */
-    private String doPay(Map<String, String> msgParam, String method) {
+    public String alipay(Map<String, String> msgParam, String method) {
 
         Map<String, String> sParaTemp = new HashMap<>();
         //基本参数
@@ -556,81 +350,6 @@ public class AlipayService {
         return AlipaySubmit.buildRequest(sParaTemp, method, "确认");
     }
 
-    /**
-     * 支付请求参数校验
-     *
-     * @param msgParam 请求参数
-     */
-    private void checkPayParams(Map<String, String> msgParam) {
-        String goodsId = msgParam.get("goodsId");//商品ID
-        if (StringUtils.isEmpty(goodsId)) {
-            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "商品ID不能为空");
-        }
-        String goodsName = msgParam.get("goodsName");//商品名称
-        if (StringUtils.isEmpty(goodsName)) {
-            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "商品名称不能为空");
-        }
-        String goodsPrice = msgParam.get("goodsPrice");//商品单价
-        if (StringUtils.isEmpty(goodsPrice)) {
-            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "商品单价不能为空");
-        }
-        String buyersid = String.valueOf(msgParam.get("buyerId"));//创建订单的会员ID
-        if (StringUtils.isEmpty(buyersid)) {
-            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "创建订单会员ID不能为空");
-        }
-        String number = msgParam.get("number");//订单商品数量
-        if (StringUtils.isEmpty(number)) {
-            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "订单商品数量不能为空");
-        }
-
-//        String amount = msgParam.get("amount");//订单商品总额
-//        if (StringUtils.isEmpty(amount)) {
-//            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "订单商品总额不能为空");
-//        }
-//        String payAmount = msgParam.get("payAmount");//订单交易金额
-//        if (StringUtils.isEmpty(payAmount)) {
-//            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "订单交易金额不能为空");
-//        }
-//        String mobile = msgParam.get("mobile");//手机号码
-//        if (StringUtils.isEmpty(mobile)) {
-//            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "手机号码不能为空");
-//        }
-
-        String paymode = msgParam.get("payMode");//支付方式
-        if (StringUtils.isEmpty(paymode)) {
-            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "支付方式不能为空");
-        }
-        String goodsType = msgParam.get("goodsType");//商品类型
-        if (StringUtils.isEmpty(goodsType)) {
-            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "商品类型不能为空");
-        }
-
-        String partner = msgParam.get("partner");// 卖方商家支付宝账号
-        if (StringUtils.isEmpty(partner)) {
-            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "卖方商家支付宝账号不能为空");
-        }
-
-//        String returnUrl = msgParam.get("returnUrl");// 同步通知
-//        if (StringUtils.isEmpty(returnUrl)) {
-//            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR,"同步通知地址不能为空");
-//        }
-
-        String notifyUrl = msgParam.get("notifyUrl");// 异步通知
-        if (StringUtils.isEmpty(notifyUrl)) {
-            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "异步通知地址不能为空");
-        }
-
-        String exterInvokeIp = msgParam.get("exterInvokeIp");// 客户端IP
-        if (StringUtils.isEmpty(exterInvokeIp)) {
-            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "客户端IP不能为空");
-        }
-
-        String service = msgParam.get("service");
-        if (StringUtils.isEmpty(service)) {
-            throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "接口名称不能为空");
-        }
-    }
-
 
     /**
      * 获取请求参数
@@ -683,8 +402,20 @@ public class AlipayService {
                 //即时到账支付
                 if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
                     recordPayAsyncCallbackLog(params);
-                    //2-> 修改订单状态为已支付
-                    order.setStatus(PayConstants.OrderStatus.YZF.toString());
+                    //2-> 判断是否存在筑慧币支付方式
+                    OrderFlow orderFlow =  orderFlowService.findByOrderNoAndTradeMode(params.get("out_trade_no"),
+                            PayConstants.PayMode.ZHBPAY.toString());
+                    if(orderFlow != null){
+                       String tradeStatus = orderFlow.getTradeStatus();
+                       if(tradeStatus.equals(PayConstants.OrderStatus.YZF.toString())){
+                           //3-> 修改订单状态为已支付
+                           order.setStatus(PayConstants.OrderStatus.YZF.toString());
+                       }
+                    }else{
+                        //3-> 修改订单状态为已支付
+                        order.setStatus(PayConstants.OrderStatus.YZF.toString());
+                    }
+
 
                 }
                 //即时到账退款
