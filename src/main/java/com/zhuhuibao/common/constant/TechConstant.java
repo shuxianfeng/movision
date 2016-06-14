@@ -120,4 +120,14 @@ public class TechConstant {
      * 技术合作点击排行数量10条
      */
     public static final int COOP_DOWNLOAD_COUNT_TEN = 10;
+
+    /**
+     * 发送验证码时存在session的参数type 申请开课
+     */
+    public static final String MOBILE_CODE_SESSION_TYPE_CLASS = "techClass";
+
+    /**
+     * 发送验证码时存在session的参数type 下单购买培训课程
+     */
+    public static final String MOBILE_CODE_SESSION_ORDER_CLASS = "techOrder";
 }

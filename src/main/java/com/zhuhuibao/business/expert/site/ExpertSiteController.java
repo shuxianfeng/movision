@@ -573,8 +573,7 @@ public class ExpertSiteController {
     @RequestMapping(value = "train/get_classMobileCode", method = RequestMethod.GET)
     public Response get_classMobileCode(@RequestParam String mobile) throws IOException, ApiException{
         Response response = new Response();
-        String verifyCode = expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_CLASS);
-        response.setData(verifyCode);
+        expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_CLASS);
         return response;
     }
 
@@ -641,8 +640,7 @@ public class ExpertSiteController {
     @RequestMapping(value = "train/get_mobileCode", method = RequestMethod.GET)
     public Response get_TrainMobileCode(@RequestParam String mobile) throws IOException, ApiException{
         Response response = new Response();
-        String verifyCode = expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_TRAIN);
-        response.setData(verifyCode);
+        expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_TRAIN);
         return response;
     }
 
