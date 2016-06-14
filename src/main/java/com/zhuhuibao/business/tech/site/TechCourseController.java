@@ -54,11 +54,9 @@ public class TechCourseController {
     TechCooperationService techService;
 
     @Autowired
-<<<<<<< HEAD
     CourseService courseService;
-=======
-    private ExpertService expertService;
->>>>>>> cb5dc1ec119d20d3c83fa69f797feda20ec767cd
+    @Autowired
+    ExpertService expertService;
 
 
     @ApiOperation(value = "培训课程下单", notes = "培训课程下单")
