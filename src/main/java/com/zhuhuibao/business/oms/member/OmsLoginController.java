@@ -1,11 +1,12 @@
 package com.zhuhuibao.business.oms.member;
 
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.Response;
-import com.zhuhuibao.security.EncodeUtil;
-import com.zhuhuibao.utils.JsonUtils;
-import com.zhuhuibao.utils.VerifyCodeUtils;
+import java.io.IOException;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -15,16 +16,21 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.mybatis.oms.entity.User;
+import com.zhuhuibao.mybatis.oms.service.UserService;
+import com.zhuhuibao.security.EncodeUtil;
+import com.zhuhuibao.shiro.realm.OMSRealm.ShiroOmsUser;
+import com.zhuhuibao.utils.JsonUtils;
+import com.zhuhuibao.utils.VerifyCodeUtils;
 
 /**
  * 运营管理系统登录
@@ -35,10 +41,13 @@ import java.io.IOException;
 public class OmsLoginController {
 	private static final Logger log = LoggerFactory.getLogger(OmsLoginController.class);
 	
+	@Autowired
+	private UserService userService;
+	
 	@RequestMapping(value = "/rest/oms/login", method = RequestMethod.POST)
 	@ApiOperation(value = "运营登录", notes = "运营登录", response = Response.class)
     public Response login(@ApiParam(value = "用户名") @RequestParam String username,
-            @ApiParam(value = "密码（Base64加密）") @RequestParam String password) throws IOException {
+            @ApiParam(value = "密码（Base64加密）") @RequestParam String password,HttpServletRequest req) throws IOException {
         log.info("oms login post 登录校验");
         Response jsonResult = new Response();
         Subject currentUser = SecurityUtils.getSubject();
@@ -81,6 +90,13 @@ public class OmsLoginController {
 
         if(currentUser.isAuthenticated()){
 			Session session = currentUser.getSession();
+			String curLoginIp=req.getRemoteAddr();
+			User record=new User();
+			record.setCurLoginIp(curLoginIp);
+			ShiroOmsUser user=(ShiroOmsUser)currentUser.getPrincipal();
+			 record.setId(user.getId());
+			 this.userService.updateRecordByPrimaryKey(record);
+			
 			session.setAttribute("oms", currentUser.getPrincipal());
             System.out.println("oms 用户[" + username + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
         }else{
