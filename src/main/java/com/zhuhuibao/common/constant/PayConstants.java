@@ -8,10 +8,10 @@ package com.zhuhuibao.common.constant;
 public class PayConstants {
 
     /**
-     * 支付方式  1支付宝，2银联支付，3微信支付
+     * 支付方式  1支付宝，2银联支付，3微信支付 ,4筑慧币支付
      */
     public enum PayMode {
-        ALIPAY("1"), YLPAY("2"), WXPAY("3");
+        ALIPAY("1"), YLPAY("2"), WXPAY("3"),ZHBPAY("4");
         public final String value;
 
         PayMode(String value) {
@@ -25,10 +25,10 @@ public class PayConstants {
     }
 
     /**
-     * 订单状态  1未支付，2：已支付，3：退款中，4，退款失败，5：已退款
+     * 订单状态  1未支付，2：已支付，3：退款中，4，退款失败，5：已退款 6:支付失败 7:已关闭
      */
     public enum OrderStatus {
-        WZF("1"), YZF("2"), TKZ("3"), TKSB("4"), YTK("5");
+        WZF("1"), YZF("2"), TKZ("3"), TKSB("4"), YTK("5"),FAIL("6"),CLOSED("7");
         public final String value;
 
         OrderStatus(String value) {

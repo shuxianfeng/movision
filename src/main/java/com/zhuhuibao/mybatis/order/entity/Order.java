@@ -18,7 +18,7 @@ public class Order {
 
     private Date updateTime;
 
-    private String payMode;
+//    private String payMode;
 
     private String status;
 
@@ -82,13 +82,13 @@ public class Order {
         this.updateTime = updateTime;
     }
 
-    public String getPayMode() {
-        return payMode;
-    }
-
-    public void setPayMode(String payMode) {
-        this.payMode = payMode == null ? null : payMode.trim();
-    }
+//    public String getPayMode() {
+//        return payMode;
+//    }
+//
+//    public void setPayMode(String payMode) {
+//        this.payMode = payMode == null ? null : payMode.trim();
+//    }
 
     public String getStatus() {
         return status;

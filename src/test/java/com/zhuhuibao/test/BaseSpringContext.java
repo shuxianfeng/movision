@@ -20,9 +20,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @since [产品/模块版本]
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring/applicationContext.xml",
-        "classpath:spring/applicationContext-shiro.xml",
-        "file:src/main/webapp/WEB-INF/spring-mvc.xml"})
+@ContextConfiguration(locations = {"classpath:spring/applicationContext.xml"//,
+//        "classpath:spring/applicationContext-shiro.xml",
+//        "file:src/main/webapp/WEB-INF/spring-mvc.xml"
+})
 public class BaseSpringContext {// extends
     // AbstractTransactionalJUnit4SpringContextTests
     // {

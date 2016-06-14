@@ -10,62 +10,58 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 public class OrderReqBean {
 
     /**
-     * buyerId :   下单会员ID
      * goodsId :   商品ID
-     * goodsName : 商品名称
-     * goodsPrice :商品单价
      * number :    购买数量
-     * amount :    订单总价
-     * payMode :   支付方式  1支付宝，2银联支付，3微信支付等
-     * goodsType : 商品类型 1：VIP服务套餐订单，2：技术培训，3：专家培训
+     * goodsType : 商品类型 1：技术培训，2：专家培训 ,3：VIP服务套餐订单，4:筑慧币
      * mobile :    下单手机号
      * needInvoice : 是否需要发票 true | false
      * invoiceTitle : 发票抬头
      * invoiceType :  发票类型 1普通发票（纸质），2：增值发票
      */
-    @ApiModelProperty(value="下单会员ID",required = false)
-    private String buyerId;
     @ApiModelProperty(value="商品ID",required = true)
     private String goodsId;
-    @ApiModelProperty(value="商品名称",required = false)
-    private String goodsName;
-    @ApiModelProperty(value="商品单价",required = false)
-    private String goodsPrice;
     @ApiModelProperty(value="商品数量",required = true)
     private String number;
-    @ApiModelProperty(value="订单总金额",required = false)
-    private String amount;
-    @ApiModelProperty(value="交易金额",required = false)
-    private String payAmount;
-    @ApiModelProperty(value="支付方式 1:支付宝",required = true)
-    private String payMode;
     @ApiModelProperty(value="商品类型 1:技术培训 2:专家培训",required = true)
     private String goodsType;
     @ApiModelProperty(value="下单手机号",required = true)
     private String mobile;
+
+    //发票信息
     @ApiModelProperty(value="是否需要发票(true|false)",required = true)
     private String needInvoice;
-    @ApiModelProperty(value="发票抬头")
-    private String invoiceTitle;
-    @ApiModelProperty(value="发票类型 1:普通 2:增值")
+    @ApiModelProperty(value="发票类型(1:增值税普通发票 2:增值税专用发票)")
     private String invoiceType;
-
-
-    public String getPayAmount() {
-        return payAmount;
-    }
-
-    public void setPayAmount(String payAmount) {
-        this.payAmount = payAmount;
-    }
-
-    public String getBuyerId() {
-        return buyerId;
-    }
-
-    public void setBuyerId(String buyerId) {
-        this.buyerId = buyerId;
-    }
+    @ApiModelProperty(value="发票抬头类型(1:个人 2:企业)")
+    private String invoiceTitleType;
+    @ApiModelProperty(value="发票抬头(企业名称)")
+    private String invoiceTitle;
+    @ApiModelProperty(value="发票收件人")
+    private String invoicePerson;
+    @ApiModelProperty(value="发票收件地址")
+    private String invoiceAddress;
+    @ApiModelProperty(value="发票收件人手机")
+    private String invoiceMobile;
+    @ApiModelProperty(value="发票收件人固话")
+    private String invoiceTel;
+    @ApiModelProperty(value="发票公司名称")
+    private String invoiceCompanyName;
+    @ApiModelProperty(value="发票公司纳税人识别码")
+    private String invoiceTaxpayerCode;
+    @ApiModelProperty(value="发票公司开户银行名称")
+    private String invoiceBank;
+    @ApiModelProperty(value="发票公司开户银行账号")
+    private String invoiceBankAccount;
+    @ApiModelProperty(value="发票公司注册场所地址")
+    private String invoiceComregAddr;
+    @ApiModelProperty(value="发票公司注册固定电话")
+    private String invoiceComregTel;
+    @ApiModelProperty(value="发票公司营业执照复印件")
+    private String invoiceBusiLic;
+    @ApiModelProperty(value="发票公司税务登记证复印件")
+    private String invoiceTaxLic;
+    @ApiModelProperty(value="发票公司纳税人资格认证复印件")
+    private String invoiceCertLic;
 
     public String getGoodsId() {
         return goodsId;
@@ -75,44 +71,12 @@ public class OrderReqBean {
         this.goodsId = goodsId;
     }
 
-    public String getGoodsName() {
-        return goodsName;
-    }
-
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
-    }
-
-    public String getGoodsPrice() {
-        return goodsPrice;
-    }
-
-    public void setGoodsPrice(String goodsPrice) {
-        this.goodsPrice = goodsPrice;
-    }
-
     public String getNumber() {
         return number;
     }
 
     public void setNumber(String number) {
         this.number = number;
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
-    public String getPayMode() {
-        return payMode;
-    }
-
-    public void setPayMode(String payMode) {
-        this.payMode = payMode;
     }
 
     public String getGoodsType() {
@@ -139,6 +103,23 @@ public class OrderReqBean {
         this.needInvoice = needInvoice;
     }
 
+
+    public String getInvoiceType() {
+        return invoiceType;
+    }
+
+    public void setInvoiceType(String invoiceType) {
+        this.invoiceType = invoiceType;
+    }
+
+    public String getInvoiceTitleType() {
+        return invoiceTitleType;
+    }
+
+    public void setInvoiceTitleType(String invoiceTitleType) {
+        this.invoiceTitleType = invoiceTitleType;
+    }
+
     public String getInvoiceTitle() {
         return invoiceTitle;
     }
@@ -147,11 +128,107 @@ public class OrderReqBean {
         this.invoiceTitle = invoiceTitle;
     }
 
-    public String getInvoiceType() {
-        return invoiceType;
+    public String getInvoicePerson() {
+        return invoicePerson;
     }
 
-    public void setInvoiceType(String invoiceType) {
-        this.invoiceType = invoiceType;
+    public void setInvoicePerson(String invoicePerson) {
+        this.invoicePerson = invoicePerson;
+    }
+
+    public String getInvoiceAddress() {
+        return invoiceAddress;
+    }
+
+    public void setInvoiceAddress(String invoiceAddress) {
+        this.invoiceAddress = invoiceAddress;
+    }
+
+    public String getInvoiceMobile() {
+        return invoiceMobile;
+    }
+
+    public void setInvoiceMobile(String invoiceMobile) {
+        this.invoiceMobile = invoiceMobile;
+    }
+
+    public String getInvoiceTel() {
+        return invoiceTel;
+    }
+
+    public void setInvoiceTel(String invoiceTel) {
+        this.invoiceTel = invoiceTel;
+    }
+
+    public String getInvoiceCompanyName() {
+        return invoiceCompanyName;
+    }
+
+    public void setInvoiceCompanyName(String invoiceCompanyName) {
+        this.invoiceCompanyName = invoiceCompanyName;
+    }
+
+    public String getInvoiceTaxpayerCode() {
+        return invoiceTaxpayerCode;
+    }
+
+    public void setInvoiceTaxpayerCode(String invoiceTaxpayerCode) {
+        this.invoiceTaxpayerCode = invoiceTaxpayerCode;
+    }
+
+    public String getInvoiceBank() {
+        return invoiceBank;
+    }
+
+    public void setInvoiceBank(String invoiceBank) {
+        this.invoiceBank = invoiceBank;
+    }
+
+    public String getInvoiceBankAccount() {
+        return invoiceBankAccount;
+    }
+
+    public void setInvoiceBankAccount(String invoiceBankAccount) {
+        this.invoiceBankAccount = invoiceBankAccount;
+    }
+
+    public String getInvoiceComregAddr() {
+        return invoiceComregAddr;
+    }
+
+    public void setInvoiceComregAddr(String invoiceComregAddr) {
+        this.invoiceComregAddr = invoiceComregAddr;
+    }
+
+    public String getInvoiceComregTel() {
+        return invoiceComregTel;
+    }
+
+    public void setInvoiceComregTel(String invoiceComregTel) {
+        this.invoiceComregTel = invoiceComregTel;
+    }
+
+    public String getInvoiceBusiLic() {
+        return invoiceBusiLic;
+    }
+
+    public void setInvoiceBusiLic(String invoiceBusiLic) {
+        this.invoiceBusiLic = invoiceBusiLic;
+    }
+
+    public String getInvoiceTaxLic() {
+        return invoiceTaxLic;
+    }
+
+    public void setInvoiceTaxLic(String invoiceTaxLic) {
+        this.invoiceTaxLic = invoiceTaxLic;
+    }
+
+    public String getInvoiceCertLic() {
+        return invoiceCertLic;
+    }
+
+    public void setInvoiceCertLic(String invoiceCertLic) {
+        this.invoiceCertLic = invoiceCertLic;
     }
 }
