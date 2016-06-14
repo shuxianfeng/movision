@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuhuibao.mybatis.oms.mapper.PlatformStatMapper">
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.oms.entity.PlatformStatistics">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="total" jdbcType="VARCHAR" property="total" />
+    <result column="today_add_count" jdbcType="VARCHAR" property="today_add_count" />
+    <result column="seven_days_add_count" jdbcType="VARCHAR" property="seven_days_add_count" />
+    <result column="thirty_days_add_count" jdbcType="VARCHAR" property="thirty_days_add_count" />
+    <result column="stat_type" jdbcType="VARCHAR" property="stat_type" />
+    <result column="stat_date" jdbcType="VARCHAR" property="stat_date" />
+  </resultMap> 
+ 
+	
+  <select id="findAllPlatformStatistics" resultMap="BaseResultMap" parameterType="java.util.Map" >
+      select id,type,total,today_add_count,seven_days_add_count,thirty_days_add_count,stat_type,stat_date
+	   from  t_platform_statistics where stat_date=DATE_FORMAT(NOW(),'%Y-%m-%d')
+  </select>
+  
+  
+</mapper>
