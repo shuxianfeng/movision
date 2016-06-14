@@ -22,7 +22,7 @@
         <!--<jdbcConnection driverClass="${jdbc_driver}"-->
         <!--connectionURL="${jdbc_url}" userId="${jdbc_user}" password="${jdbc_password}" />-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://139.196.189.100:3306/zhb_dev?useUnicode=true&amp;characterEncoding=utf-8"
+                        connectionURL="jdbc:mysql://139.196.189.100:3306/zhb_dev2?useUnicode=true&amp;characterEncoding=utf-8"
                         userId="root" password="zhb!216OK"/>
 
         <!-- 类型转换 -->
@@ -56,15 +56,15 @@
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <table tableName="t_o_refund"
-               domainObjectName="Refund"
+        <table tableName="t_zhb_account"
+               domainObjectName="ZhbAccount"
                enableCountByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false">
             <!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 enable*ByExample
                 是否生成 example类 -->
-            <property name="useActualColumnNames" value="true"/>
+            <property name="useActualColumnNames" value="false"/>
         </table>
 
 

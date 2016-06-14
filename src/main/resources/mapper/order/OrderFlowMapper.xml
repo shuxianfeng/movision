@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.order.mapper.OrderFlowMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.order.entity.OrderFlow" >
+    <result column="orderNo" property="orderNo" jdbcType="VARCHAR" />
+    <result column="tradeMode" property="tradeMode" jdbcType="CHAR" />
+    <result column="tradeFee" property="tradeFee" jdbcType="DECIMAL" />
+    <result column="tradeStatus" property="tradeStatus" jdbcType="CHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="tradeTime" property="tradeTime" jdbcType="TIMESTAMP" />
+    <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    orderNo, tradeMode, tradeFee, tradeStatus, createTime, tradeTime, endTime
+  </sql>
+  <insert id="insert" parameterType="com.zhuhuibao.mybatis.order.entity.OrderFlow" >
+    insert into t_o_order_flow (orderNo, tradeMode, tradeFee, 
+      tradeStatus, createTime, tradeTime, 
+      endTime)
+    values (#{orderNo,jdbcType=VARCHAR}, #{tradeMode,jdbcType=CHAR}, #{tradeFee,jdbcType=DECIMAL}, 
+      #{tradeStatus,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{tradeTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.order.entity.OrderFlow" >
+    insert into t_o_order_flow
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        orderNo,
+      </if>
+      <if test="tradeMode != null" >
+        tradeMode,
+      </if>
+      <if test="tradeFee != null" >
+        tradeFee,
+      </if>
+      <if test="tradeStatus != null" >
+        tradeStatus,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="tradeTime != null" >
+        tradeTime,
+      </if>
+      <if test="endTime != null" >
+        endTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeMode != null" >
+        #{tradeMode,jdbcType=CHAR},
+      </if>
+      <if test="tradeFee != null" >
+        #{tradeFee,jdbcType=DECIMAL},
+      </if>
+      <if test="tradeStatus != null" >
+        #{tradeStatus,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tradeTime != null" >
+        #{tradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="findByOrderNoAndTradeMode" resultType="com.zhuhuibao.mybatis.order.entity.OrderFlow">
+    select
+    <include refid="Base_Column_List" />
+    from t_o_order_flow
+    where orderNo = #{orderNo} and tradeMode = #{tradeMode}
+  </select>
+  <select id="findByOrderNo" resultType="com.zhuhuibao.mybatis.order.entity.OrderFlow">
+    select
+    <include refid="Base_Column_List" />
+    from t_o_order_flow
+    where orderNo = #{orderNo}
+  </select>
+</mapper>

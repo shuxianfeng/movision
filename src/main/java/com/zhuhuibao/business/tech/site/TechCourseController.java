@@ -12,11 +12,13 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.pojo.OrderReqBean;
+import com.zhuhuibao.common.pojo.PayReqBean;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
+import com.zhuhuibao.service.course.CourseService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ValidateUtils;
@@ -52,30 +54,50 @@ public class TechCourseController {
     TechCooperationService techService;
 
     @Autowired
-    private ExpertService expertService;
+    CourseService courseService;
+    @Autowired
+    ExpertService expertService;
 
-    @ApiOperation(value = "培训课程下单支付", notes = "培训课程下单支付")
-    @RequestMapping(value = "pay", method = RequestMethod.POST)
-    public void doPay(HttpServletRequest request, HttpServletResponse response,
-                      @ApiParam @ModelAttribute OrderReqBean order) throws Exception {
 
+    @ApiOperation(value = "培训课程下单", notes = "培训课程下单")
+    @RequestMapping(value = "order", method = RequestMethod.POST)
+    public void createOrder(@ApiParam @ModelAttribute OrderReqBean order){
         Gson gson = new Gson();
         String json = gson.toJson(order);
 
-        if ("true".equals(order.getNeedInvoice())) {
-            String invoiceTitle = order.getInvoiceTitle();
-            if (invoiceTitle == null) {
-                log.error("已选需要发票,发票抬头不能为空");
-                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "已选需要发票,发票抬头不能为空");
-            }
-            String invoiceType = order.getInvoiceType();
-            if (invoiceType == null) {
-                log.error("已选需要发票,发票类型不能为空");
-                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "已选需要发票,发票类型不能为空");
+        log.info("技术培训下单页面,请求参数:{}", json);
+        Map paramMap = gson.fromJson(json, Map.class);
+
+        String buyerId = (String) paramMap.get("buyerId");
+        if(StringUtils.isEmpty(buyerId)){
+            Long userId = ShiroUtil.getCreateID();
+            if (userId == null) {
+                log.error("用户未登陆");
+                throw new AuthException(MsgCodeConstant.un_login,
+                        MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            }else{
+                paramMap.put("buyerId",String.valueOf(userId));
             }
         }
+        paramMap.put("partner", PARTNER);//partner=seller_id     商家支付宝ID  合作伙伴身份ID 签约账号
 
-        log.info("技术培训下单页面,请求参数:{}", json);
+        log.debug("调用下单接口......");
+
+        courseService.createOrder(paramMap);
+
+    }
+
+
+    @ApiOperation(value = "培训课程支付", notes = "培训课程支付")
+    @RequestMapping(value = "pay", method = RequestMethod.POST)
+    public void doPay(HttpServletRequest request, HttpServletResponse response,
+                      @ApiParam @ModelAttribute PayReqBean pay) throws Exception {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(pay);
+
+
+        log.info("技术培训支付页面,请求参数:{}", json);
         Map paramMap = gson.fromJson(json, Map.class);
 
         String buyerId = (String) paramMap.get("buyerId");
@@ -97,8 +119,20 @@ public class TechCourseController {
 
         log.debug("调用立即支付接口......");
 
-        //需要判断购买数量是否 >= 产品剩余数量
-        alipayDirectService.doPay(response, paramMap);
+        //判断支付方式   是否使用筑慧币
+        String userZHB = pay.getUserZHB();
+
+        switch(userZHB){
+            case "true":
+                courseService.doPayMultiple(response,paramMap);
+                break;
+            case "false":
+                courseService.doPay(response,paramMap);
+                break;
+            default:
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"是否使用筑慧币,传参错误");
+        }
+
     }
 
     @ApiOperation(value="专家培训课程下单获取验证码",notes="专家培训课程下单获取验证码",response = Response.class)

@@ -495,7 +495,7 @@
                 <configuration>
                     <configurationFile>src/main/resources/mybatis/generatorConfig.xml</configurationFile>
                     <verbose>true</verbose>
-                    <overwrite>false</overwrite>
+                    <overwrite>true</overwrite>
                 </configuration>
                 <dependencies>
                     <dependency>

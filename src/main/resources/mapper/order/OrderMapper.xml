@@ -9,13 +9,13 @@
     <result column="payAmount" property="payAmount" jdbcType="DECIMAL" />
     <result column="dealTime" property="dealTime" jdbcType="TIMESTAMP" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="payMode" property="payMode" jdbcType="CHAR" />
+    <!--<result column="payMode" property="payMode" jdbcType="CHAR" />-->
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="goodsType" property="goodsType" jdbcType="CHAR" />
     <result column="descriptions" property="descriptions" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    orderNo, buyerId, sellerId, amount, payAmount, dealTime, updateTime, payMode, status,
+    orderNo, buyerId, sellerId, amount, payAmount, dealTime, updateTime, status,
     goodsType, descriptions
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -34,11 +34,11 @@
   <insert id="insert" parameterType="com.zhuhuibao.mybatis.order.entity.Order" >
     insert into t_o_order (orderNo, buyerId, sellerId,
       amount, payAmount, dealTime, 
-      updateTime, payMode, status, 
+      updateTime, status,
       goodsType, descriptions)
     values (#{orderNo,jdbcType=VARCHAR}, #{buyerId,jdbcType=BIGINT}, #{sellerId,jdbcType=VARCHAR},
       #{amount,jdbcType=DECIMAL}, #{payAmount,jdbcType=DECIMAL}, #{dealTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{payMode,jdbcType=CHAR}, #{status,jdbcType=CHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR},
       #{goodsType,jdbcType=CHAR}, #{descriptions,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.order.entity.Order" >
@@ -65,9 +65,9 @@
       <if test="updateTime != null" >
         updateTime,
       </if>
-      <if test="payMode != null" >
-        payMode,
-      </if>
+      <!--<if test="payMode != null" >-->
+        <!--payMode,-->
+      <!--</if>-->
       <if test="status != null" >
         status,
       </if>
@@ -100,9 +100,9 @@
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="payMode != null" >
-        #{payMode,jdbcType=CHAR},
-      </if>
+      <!--<if test="payMode != null" >-->
+        <!--#{payMode,jdbcType=CHAR},-->
+      <!--</if>-->
       <if test="status != null" >
         #{status,jdbcType=CHAR},
       </if>
@@ -135,9 +135,9 @@
       <if test="updateTime != null" >
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="payMode != null" >
-        payMode = #{payMode,jdbcType=CHAR},
-      </if>
+      <!--<if test="payMode != null" >-->
+        <!--payMode = #{payMode,jdbcType=CHAR},-->
+      <!--</if>-->
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
@@ -158,7 +158,7 @@
       payAmount = #{payAmount,jdbcType=DECIMAL},
       dealTime = #{dealTime,jdbcType=TIMESTAMP},
       updateTime = #{updateTime,jdbcType=TIMESTAMP},
-      payMode = #{payMode,jdbcType=CHAR},
+--       payMode = #{payMode,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
       goodsType = #{goodsType,jdbcType=CHAR},
       descriptions = #{descriptions,jdbcType=VARCHAR}
