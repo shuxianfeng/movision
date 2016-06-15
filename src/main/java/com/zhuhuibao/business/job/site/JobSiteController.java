@@ -487,4 +487,29 @@ public class JobSiteController {
         response.setData(jobList);
         return response;
     }
+
+    @ApiOperation(value = "公司查看简历", notes = "公司查看简历", response = Response.class)
+    @RequestMapping(value = "/rest/job/site/resume/preview_resume", method = RequestMethod.GET)
+    public Response previewResume(@ApiParam(value = "简历id") @RequestParam String id,
+                                  @ApiParam(value = "该投递简历记录的id,频道页不传，会员中心查看简历记录时候传") @RequestParam(required = false) String recordId) throws Exception {
+        Response response = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("id",recordId);
+        map.put("status",JobConstant.RESUME_STATUS_TWO);
+        jrrService.updateJobRelResume(map);
+        if(memberId!=null){
+            Map<String,Object> map1 = new HashMap<String,Object>();
+            map1.put("resumeID",id);
+            map1.put("companyID",memberId);
+            Resume resume1 = resume.searchMyResumeAllInfo(id);
+            map1.put("createId",resume1.getCreateid());
+            resume.addLookRecord(map1);
+            Resume resume2 = resume.previewResume(id);
+            response.setData(resume2);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
 }

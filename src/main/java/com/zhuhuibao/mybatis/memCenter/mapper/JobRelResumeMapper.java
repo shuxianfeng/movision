@@ -13,9 +13,9 @@ public interface JobRelResumeMapper {
 
     JobRelResume selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKeySelective(JobRelResume record);
-
     int updateByPrimaryKey(JobRelResume record);
 
     Integer isExistApplyPosition(Map<String,Object> map);
+
+    int updateJobRelResume(Map<String,Object> map);
 }
