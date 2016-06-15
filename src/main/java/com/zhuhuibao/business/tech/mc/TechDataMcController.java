@@ -5,6 +5,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.tech.entity.TechData;
@@ -51,6 +52,18 @@ public class TechDataMcController {
         TechData techData = techDataService.selectTechDataInfo(Long.parseLong(techDataId));
         Response response = new Response();
         response.setData(techData);
+        return response;
+    }
+
+    @RequestMapping(value="del_tech_data", method = RequestMethod.GET)
+    @ApiOperation(value="删除技术资料(行业解决方案，技术文档，培训资料)",notes = "删除技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)
+    public Response deleteTechData( @ApiParam(value = "技术资料ID")  @RequestParam() String techDataId)
+    {
+        Response response = new Response();
+        Map<String,Object> condition = new HashMap<String,Object>();
+        condition.put("id",techDataId);
+        condition.put("status", TechConstant.TechCooperationnStatus.DELETE.toString());
+        int result = techDataService.deleteTechData(condition);
         return response;
     }
 
