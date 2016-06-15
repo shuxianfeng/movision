@@ -53,6 +53,18 @@ public class ExpoSiteController {
     }
 
     /**
+     * 一站式会展定制查看
+     */
+    @ApiOperation(value="会展定制查看",notes="会展定制查看",response = Response.class)
+    @RequestMapping(value = "sel_meetingOrder", method = RequestMethod.GET)
+    public Response queryMeetingOrderInfoById(@RequestParam String id)  {
+        Response Response = new Response();
+        MeetingOrder meetingOrder = exhibitionService.queryMeetingOrderInfoById(id);
+        Response.setData(meetingOrder);
+        return Response;
+    }
+
+    /**
      * 会展信息列表(前台)
      */
     @ApiOperation(value="会展信息列表(前台)",notes="会展信息列表(前台)",response = Response.class)
