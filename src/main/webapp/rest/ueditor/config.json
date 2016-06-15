@@ -1,8 +1,7 @@
 /* 前后端通信相关的配置,注释只允许使用多行方式 */
 {
      /*上传文件服务器根路径*/
-    /* "uploadRoot":"/home/app",  */
-    "uploadRoot":"/Users/jianglz/MyFiles/data",
+    "uploadRoot":"/home/app",
 
     /* 上传图片配置项 */
     "imageActionName": "uploadimage", /* 执行上传图片的action名称 */
