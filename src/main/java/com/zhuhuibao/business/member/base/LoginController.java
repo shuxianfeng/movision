@@ -5,12 +5,15 @@ import java.io.IOException;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 
+import com.zhuhuibao.utils.VerifyCodeUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -21,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 登录
@@ -88,7 +92,18 @@ public class LoginController {
 
         return response;
     }
-    
+
+
+    @ApiOperation(value="邮箱注册时的图形验证码",notes="邮箱注册时的图形验证码",response = Response.class)
+    @RequestMapping(value = "/rest/loginImgCode", method = RequestMethod.GET)
+    public void getLoginImgCode(HttpServletResponse response) throws IOException {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
+        String verifyCode = VerifyCodeUtils.outputHttpVerifyImage(100,40,response, Constants.CHECK_IMG_CODE_SIZE);
+        log.debug("verifyCode == " + verifyCode);
+        sess.setAttribute(MemberConstant.SESSION_TYPE_LOGIN, verifyCode);
+    }
+
     @RequestMapping(value = "/rest/logout", method = RequestMethod.GET)
     public Response logout() throws IOException{
         SecurityUtils.getSubject().logout();

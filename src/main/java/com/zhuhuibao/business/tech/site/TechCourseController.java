@@ -8,6 +8,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.alipay.service.direct.AlipayDirectService;
 import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.common.constant.TechConstant;
@@ -22,6 +23,7 @@ import com.zhuhuibao.service.course.CourseService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ValidateUtils;
+import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -135,11 +137,19 @@ public class TechCourseController {
 
     }
 
-    @ApiOperation(value="专家培训课程下单获取验证码",notes="专家培训课程下单获取验证码",response = Response.class)
+    @ApiOperation(value="技术培训课程下单获取验证码",notes="技术培训课程下单获取验证码",response = Response.class)
     @RequestMapping(value = "get_mobileCode", method = RequestMethod.GET)
-    public Response get_TrainMobileCode(@ApiParam(value = "手机号") @RequestParam String mobile) throws IOException, ApiException {
+    public Response get_TrainMobileCode(@ApiParam(value = "手机号") @RequestParam String mobile,
+                                        @ApiParam(value ="图形验证码") @RequestParam String imgCode) throws IOException, ApiException {
         Response response = new Response();
-        expertService.getTrainMobileCode(mobile, TechConstant.MOBILE_CODE_SESSION_ORDER_CLASS);
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(true);
+        String sessImgCode = (String) sess.getAttribute(TechConstant.MOBILE_CODE_SESSION_ORDER_CLASS);
+        if(imgCode.equalsIgnoreCase(sessImgCode)) {
+            expertService.getTrainMobileCode(mobile, TechConstant.MOBILE_CODE_SESSION_ORDER_CLASS);
+        }else{
+            throw new BusinessException(MsgCodeConstant.validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
+        }
         return response;
     }
 
@@ -152,4 +162,16 @@ public class TechCourseController {
         return response;
     }
 
+    /**
+     * 邮箱注册时的图形验证码
+     * @param response
+     */
+    @ApiOperation(value="购买培训课程图形验证码",notes="购买培训课程图形验证码",response = Response.class)
+    @RequestMapping(value = "sel_imgCode", method = RequestMethod.GET)
+    public void getCode(HttpServletResponse response) throws IOException {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
+        String verifyCode = VerifyCodeUtils.outputHttpVerifyImage(100,40,response, Constants.CHECK_IMG_CODE_SIZE);
+        sess.setAttribute(TechConstant.MOBILE_CODE_SESSION_ORDER_CLASS, verifyCode);
+    }
 }

@@ -1,4 +1,8 @@
 package com.zhuhuibao.utils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -16,6 +20,8 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
 public class VerifyCodeUtils {
 	 //使用到Algerian字体，系统里没有的话需要安装字体，字体只显示大写，去掉了1,0,i,o几个容易混淆的字符  
     public static final String VERIFY_CODES = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";  
@@ -42,8 +48,8 @@ public class VerifyCodeUtils {
             sources = VERIFY_CODES;  
         }  
         int codesLen = sources.length();  
-        Random rand = new Random(System.currentTimeMillis());  
-        StringBuilder verifyCode = new StringBuilder(verifySize);  
+        Random rand = new Random(System.currentTimeMillis());
+        StringBuilder verifyCode = new StringBuilder(verifySize);
         for(int i = 0; i < verifySize; i++){  
             verifyCode.append(sources.charAt(rand.nextInt(codesLen-1)));  
         }  
@@ -78,8 +84,36 @@ public class VerifyCodeUtils {
         String verifyCode = generateVerifyCode(verifySize);  
         outputImage(w, h, os, verifyCode);  
         return verifyCode;  
-    }  
-      
+    }
+
+    /**
+     * 输出随机验证码图片流,并返回验证码值
+     * @param w
+     * @param h
+     * @param verifySize
+     * @return
+     * @throws IOException
+     */
+    public static String outputHttpVerifyImage(int w, int h, HttpServletResponse response, int verifySize) throws IOException{
+        response.setDateHeader("Expires", 0);
+        response.setHeader("Cache-Control",
+                "no-store, no-cache, must-revalidate");
+        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+        response.setHeader("Pragma", "no-cache");
+        response.setContentType("image/jpeg");
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(true);
+		/*// 生成随机字串
+		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
+		log.debug("verifyCode == " + verifyCode);
+		sess.setAttribute("email", verifyCode);*/
+
+        ServletOutputStream out = response.getOutputStream();
+        String verifyCode = generateVerifyCode(verifySize);
+        outputImage1(w, h, out, verifyCode);
+        return verifyCode;
+    }
+
     /** 
      * 生成指定验证码图像文件 
      * @param w 
@@ -114,7 +148,7 @@ public class VerifyCodeUtils {
      * @param code 
      * @throws IOException 
      */  
-    public static void outputImage(int w, int h, OutputStream os, String code) throws IOException{  
+    public static void outputImage(int w, int h, OutputStream os, String code) throws IOException{
         int verifySize = code.length();  
         BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);  
         Random rand = new Random();  

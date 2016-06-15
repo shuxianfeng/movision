@@ -510,11 +510,27 @@ public class ExpertSiteController {
 
     @ApiOperation(value="申請專家支持获取验证码",notes="申請專家支持获取验证码",response = Response.class)
     @RequestMapping(value = "base/get_mobileCode", method = RequestMethod.GET)
-    public Response get_mobileCode(@RequestParam String mobile)  throws IOException, ApiException {
+    public Response get_mobileCode(@ApiParam(value = "手机号码") @RequestParam String mobile,
+                                   @ApiParam(value ="图形验证码") @RequestParam String imgCode)  throws IOException, ApiException {
         Response response = new Response();
-        String verifyCode = expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
-        response.setData(verifyCode);
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(true);
+        String sessImgCode = (String) sess.getAttribute(TechConstant.MOBILE_CODE_SESSION_TYPE_CLASS);
+        if(imgCode.equalsIgnoreCase(sessImgCode)) {
+            String verifyCode = expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
+        }else{
+            throw new BusinessException(MsgCodeConstant.validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
+        }
         return response;
+    }
+
+    @ApiOperation(value="申請專家支持图形验证码",notes="申請專家支持图形验证码",response = Response.class)
+    @RequestMapping(value = "train/sel_supportImgCode", method = RequestMethod.GET)
+    public void getApplySupportCode(HttpServletResponse response) throws IOException {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
+        String verifyCode = VerifyCodeUtils.outputHttpVerifyImage(100,40,response, Constants.CHECK_IMG_CODE_SIZE);
+        sess.setAttribute(ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT, verifyCode);
     }
 
     @ApiOperation(value="最新专家培训",notes="最新专家培训",response = Response.class)
@@ -571,10 +587,28 @@ public class ExpertSiteController {
 
     @ApiOperation(value="开课申请获取验证码",notes="开课申请获取验证码",response = Response.class)
     @RequestMapping(value = "train/get_classMobileCode", method = RequestMethod.GET)
-    public Response get_classMobileCode(@RequestParam String mobile) throws IOException, ApiException{
+    public Response get_classMobileCode(@ApiParam(value = "手机号码") @RequestParam String mobile,
+                                        @ApiParam(value ="图形验证码") @RequestParam String imgCode) throws IOException, ApiException{
         Response response = new Response();
-        expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_CLASS);
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(true);
+        String sessImgCode = (String) sess.getAttribute(ExpertConstant.MOBILE_CODE_SESSION_TYPE_CLASS);
+        if(imgCode.equalsIgnoreCase(sessImgCode)) {
+            expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_CLASS);
+        }else{
+            throw new BusinessException(MsgCodeConstant.validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
+        }
         return response;
+    }
+
+
+    @ApiOperation(value="申请开课图形验证码",notes="申请开课的图形验证码",response = Response.class)
+    @RequestMapping(value = "train/sel_applyImgCode", method = RequestMethod.GET)
+    public void getApplyImgCode(HttpServletResponse response) throws IOException {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
+        String verifyCode = VerifyCodeUtils.outputHttpVerifyImage(100,40,response, Constants.CHECK_IMG_CODE_SIZE);
+        sess.setAttribute(ExpertConstant.MOBILE_CODE_SESSION_TYPE_CLASS, verifyCode);
     }
 
     @ApiOperation(value="专家培训详情",notes="专家培训详情",response = Response.class)
@@ -638,9 +672,17 @@ public class ExpertSiteController {
 
     @ApiOperation(value="专家培训课程下单获取验证码",notes="专家培训课程下单获取验证码",response = Response.class)
     @RequestMapping(value = "train/get_mobileCode", method = RequestMethod.GET)
-    public Response get_TrainMobileCode(@RequestParam String mobile) throws IOException, ApiException{
+    public Response get_TrainMobileCode(@ApiParam(value = "手机号码") @RequestParam String mobile,
+                                        @ApiParam(value ="图形验证码") @RequestParam String imgCode) throws IOException, ApiException{
         Response response = new Response();
-        expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_TRAIN);
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(true);
+        String sessImgCode = (String) sess.getAttribute(TechConstant.MOBILE_CODE_SESSION_TYPE_CLASS);
+        if(imgCode.equalsIgnoreCase(sessImgCode)) {
+            expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_TRAIN);
+        }else{
+            throw new BusinessException(MsgCodeConstant.validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
+        }
         return response;
     }
 
@@ -650,6 +692,19 @@ public class ExpertSiteController {
         Response response = new Response();
         expertService.checkMobileCode(code,mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_TRAIN);
         return response;
+    }
+
+    /**
+     * 邮箱注册时的图形验证码
+     * @param response
+     */
+    @ApiOperation(value="专家培训课程下单图形验证码",notes="专家培训课程下单图形验证码",response = Response.class)
+    @RequestMapping(value = "train/sel_orderImgCode", method = RequestMethod.GET)
+    public void getOrderImgCode(HttpServletResponse response) throws IOException {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
+        String verifyCode = VerifyCodeUtils.outputHttpVerifyImage(100,40,response, Constants.CHECK_IMG_CODE_SIZE);
+        sess.setAttribute(ExpertConstant.MOBILE_CODE_SESSION_TYPE_TRAIN, verifyCode);
     }
 
     @ApiOperation(value="计算专家培训课程下单时的价格",notes="计算专家培训课程下单时的价格",response = Response.class)

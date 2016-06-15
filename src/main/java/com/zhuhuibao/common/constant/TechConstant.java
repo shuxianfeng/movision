@@ -130,4 +130,6 @@ public class TechConstant {
      * 发送验证码时存在session的参数type 下单购买培训课程
      */
     public static final String MOBILE_CODE_SESSION_ORDER_CLASS = "techOrder";
+
+
 }

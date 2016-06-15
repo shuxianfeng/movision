@@ -355,4 +355,14 @@ public class Constants {
 			return this.value;
 		}
 	}
+
+	/**
+	 * 手机验证码的长度 6
+	 */
+	public static final Integer CHECK_MOBILE_CODE_SIZE = 6;
+
+	/**
+	 * 手机验证码的长度 4
+	 */
+	public static final Integer CHECK_IMG_CODE_SIZE = 4;
 }

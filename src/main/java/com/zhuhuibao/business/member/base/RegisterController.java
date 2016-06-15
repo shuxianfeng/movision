@@ -7,12 +7,16 @@ import java.util.*;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MemberConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.sms.SDKSendSms;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -22,9 +26,9 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -40,7 +44,6 @@ import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
-import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
 
 /**
  * @author jianglz
@@ -69,24 +72,12 @@ public class RegisterController {
 	  */
 	@ApiOperation(value="邮箱注册时的图形验证码",notes="邮箱注册时的图形验证码",response = Response.class)
 	@RequestMapping(value = {"/rest/imgCode","rest/member/site/base/sel_imgCode"}, method = RequestMethod.GET)
-	public void getCode(HttpServletResponse response) {
-		log.debug("获得验证码");
-//		getImageVerifyCode(req, response,100,40,4,"email");
-		response.setDateHeader("Expires", 0);
-		response.setHeader("Cache-Control",
-				"no-store, no-cache, must-revalidate");
-		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		response.setHeader("Pragma", "no-cache");
-		response.setContentType("image/jpeg");
+	public void getCode(HttpServletResponse response) throws IOException {
 		Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(true);
-		// 生成随机字串
-		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
+        Session sess = currentUser.getSession(false);
+		String verifyCode = VerifyCodeUtils.outputHttpVerifyImage(100,40,response,Constants.CHECK_IMG_CODE_SIZE);
 		log.debug("verifyCode == " + verifyCode);
-		sess.setAttribute("email", verifyCode);
-		
-		ServletOutputStream out = null;
-		genImgCode(response, verifyCode, out);
+		sess.setAttribute(MemberConstant.SESSION_TYPE_REGISTER, verifyCode);
 	}
 
 	/**
@@ -116,35 +107,20 @@ public class RegisterController {
 
 	/**
 	  * 找回密码的图形验证码
-	  * @param req
 	  * @param response
-	  * @param model
 	  */
 	@RequestMapping(value = {"/rest/getSeekPwdImgCode","rest/member/site/base/sel_seekPwdImgCode"}, method = RequestMethod.GET)
 	@ApiOperation(value="找回密码的图形验证码",notes="找回密码的图形验证码",response = Response.class)
-	public void getSeekPwdImgCode(HttpServletRequest req, HttpServletResponse response,
-			Model model) {
+	public void getSeekPwdImgCode( HttpServletResponse response) throws IOException {
 		log.debug("找回密码的图形验证码");
-//		getImageVerifyCode(req, response,100,40,4,"seekPwdCode");
-		response.setDateHeader("Expires", 0);
-		response.setHeader("Cache-Control",
-				"no-store, no-cache, must-revalidate");
-		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		response.setHeader("Pragma", "no-cache");
-		response.setContentType("image/jpeg");
+		String verifyCode = VerifyCodeUtils.outputHttpVerifyImage(100,40,response,Constants.CHECK_IMG_CODE_SIZE);
 		Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(true);
-		// 生成随机字串
-		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
-		log.debug("verifyCode == " + verifyCode);
-		sess.setAttribute("seekPwdCode", verifyCode);
-		ServletOutputStream out = null;
-		genImgCode(response, verifyCode, out);
+		Session sess = currentUser.getSession(false);
+		sess.setAttribute(MemberConstant.SESSION_TYPE_SEEKPWD, verifyCode);
 	}
 	
 	/**
 	 * 手机注册账号时发送的验证码
-	 * @param req
 	 * @throws IOException
 	 * @throws JsonMappingException 
 	 * @throws JsonGenerationException 
@@ -152,37 +128,37 @@ public class RegisterController {
 	 */
 	@ApiOperation(value="手机注册账号时发送的验证码",notes="手机注册账号时发送的验证码",response = Response.class)
 	@RequestMapping(value = {"/rest/mobileCode","rest/member/site/base/sel_mobileCode"}, method = RequestMethod.GET)
-	public Response getMobileCode(HttpServletRequest req) throws IOException, ApiException {
-		String mobile = req.getParameter("mobile");
+	public Response getMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile,
+								  @ApiParam(value = "图形验证码") @RequestParam String imgCode) throws IOException, ApiException {
 		log.debug("获得手机验证码  mobile=="+mobile);
 		Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(true);
-		// 生成随机字串
-		String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
-		log.debug("verifyCode == " + verifyCode);
-		//发送验证码到手机
-		//SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-//		SDKSendTaoBaoSMS.sendRegisterSMS(mobile, verifyCode, Constants.sms_time);
-		Map<String,String> map = new LinkedHashMap<>();
-		map.put("code",verifyCode);
-		map.put("time",Constants.sms_time);
-		Gson gson = new Gson();
-		String json = gson.toJson(map);
-		SDKSendSms.sendSMS(mobile,json,PropertiesUtils.getValue("register_code_sms_template_code"));
-		Validateinfo info = new Validateinfo();
-		info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
-		info.setCheckCode(verifyCode);
-		info.setAccount(mobile);
-		memberService.inserValidateInfo(info);
-		sess.setAttribute("r"+mobile, verifyCode);
+		Session sess = currentUser.getSession(true);
+		String sessionImgCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_REGISTER);
 		Response response = new Response();
-		response.setData(verifyCode);
+		if(imgCode.equalsIgnoreCase(sessionImgCode)) {
+			// 生成随机字串
+			String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
+			log.debug("verifyCode == " + verifyCode);
+			Map<String, String> map = new LinkedHashMap<>();
+			map.put("code", verifyCode);
+			map.put("time", Constants.sms_time);
+			Gson gson = new Gson();
+			String json = gson.toJson(map);
+			SDKSendSms.sendSMS(mobile, json, PropertiesUtils.getValue("register_code_sms_template_code"));
+			Validateinfo info = new Validateinfo();
+			info.setCreateTime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+			info.setCheckCode(verifyCode);
+			info.setAccount(mobile);
+			memberService.inserValidateInfo(info);
+			sess.setAttribute("r" + mobile, verifyCode);
+		}else {
+			throw new BusinessException(MsgCodeConstant.validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
+		}
 		return response;
 	}
 	
 	/**
 	 * 找回密码时手机发送的验证码
-	 * @param req
 	 * @throws IOException
 	 * @throws JsonMappingException 
 	 * @throws JsonGenerationException 
@@ -190,30 +166,34 @@ public class RegisterController {
 	 */
 	@ApiOperation(value="找回密码时手机发送的验证码",notes="找回密码时手机发送的验证码",response = Response.class)
 	@RequestMapping(value = {"/rest/getSeekPwdMobileCode","rest/member/site/base/sel_seekPwdMobileCode"}, method = RequestMethod.GET)
-	public Response getSeekPwdMobileCode(HttpServletRequest req) throws IOException, ApiException {
-		String mobile = req.getParameter("mobile");
+	public Response getSeekPwdMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile,
+										 @ApiParam(value = "图形验证码") @RequestParam String imgCode) throws IOException, ApiException {
 		log.debug("获得手机验证码  mobile=="+mobile);
 		Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(true);
-		// 生成随机字串
-		String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
-		log.debug("verifyCode == " + verifyCode);
-		//发送验证码到手机
-		//SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-		Map<String,String> map = new LinkedHashMap<>();
-		map.put("code",verifyCode);
-		map.put("time",Constants.sms_time);
-		Gson gson = new Gson();
-		String json = gson.toJson(map);
-		SDKSendSms.sendSMS(mobile,json,PropertiesUtils.getValue("forget_pwd_sms_template_code"));
-//		SDKSendTaoBaoSMS.sendFindPwdSMS(mobile, verifyCode, Constants.sms_time);
-		Validateinfo info = new Validateinfo();
-		info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
-		info.setCheckCode(verifyCode);
-		info.setAccount(mobile);
-		memberService.inserValidateInfo(info);
-		sess.setAttribute("s"+mobile, verifyCode);
-
+		String sessImgCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_SEEKPWD);
+		if(imgCode.equalsIgnoreCase(sessImgCode)) {
+			// 生成随机字串
+			String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
+			log.debug("verifyCode == " + verifyCode);
+			//发送验证码到手机
+			//SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
+			Map<String, String> map = new LinkedHashMap<>();
+			map.put("code", verifyCode);
+			map.put("time", Constants.sms_time);
+			Gson gson = new Gson();
+			String json = gson.toJson(map);
+			SDKSendSms.sendSMS(mobile, json, PropertiesUtils.getValue("forget_pwd_sms_template_code"));
+			//		SDKSendTaoBaoSMS.sendFindPwdSMS(mobile, verifyCode, Constants.sms_time);
+			Validateinfo info = new Validateinfo();
+			info.setCreateTime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+			info.setCheckCode(verifyCode);
+			info.setAccount(mobile);
+			memberService.inserValidateInfo(info);
+			sess.setAttribute("s" + mobile, verifyCode);
+		}else{
+			throw new BusinessException(MsgCodeConstant.validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
+		}
 		return new Response();
 	}
 
@@ -237,16 +217,9 @@ public class RegisterController {
 				result = memberService.registerMobileMember(member, verifyCode);
 			}
 			if (member.getEmailCheckCode() != null) {
-				String verifyCode = (String) sess.getAttribute("email");
+				String verifyCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_REGISTER);
 				result = memberService.registerMailMember(member, verifyCode);
 			}
-//		}
-/*		catch(BusinessException e)
-		{
-			result.setCode(400);
-			result.setMsgCode(Integer.parseInt(e.getMsgid()));
-			result.setMessage(e.getMessage());
-		}*/
 		return result;
 	}
 	
@@ -263,7 +236,7 @@ public class RegisterController {
 		Response result = new Response();
 		Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(false);
-		String seekCode = (String) sess.getAttribute("seekPwdCode");
+		String seekCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_SEEKPWD);
 		log.info("writeAccount seekCode === "+seekCode);
 		result = memberService.writeAccount(member, seekCode);
 
@@ -276,7 +249,7 @@ public class RegisterController {
 	 * @return
 	 * @throws IOException
 	 */
-	@ApiOperation(value="手机验证身份",notes="手机验证身份",response = Response.class)
+	@ApiOperation(value="找回密码手机验证身份",notes="找回密码手机验证身份",response = Response.class)
 	@RequestMapping(value = {"/rest/mobileValidate","rest/member/site/base/sel_mobileValidate"}, method = RequestMethod.POST)
 	public Response mobileValidate(Member member) throws IOException {
 		log.debug("找回密码  mobile =="+member.getMobile());
@@ -441,29 +414,4 @@ public class RegisterController {
 		return response;
 	}
 	
-	/**
-	 * 生成图片验证码
-	 * @param req
-	 * @param response
-	 * @param imgWidth  图片的宽度
-	 * @param imgheight 图片的高度
-	 * @param verifySize 验证码的长度
-	 * @param key session存储的关键字
-	 */
-	private void getImageVerifyCode(HttpServletRequest req,
-			HttpServletResponse response,int imgWidth,int imgheight,int verifySize,String key) {
-		response.setDateHeader("Expires", 0);
-		response.setHeader("Cache-Control",
-				"no-store, no-cache, must-revalidate");
-		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		response.setHeader("Pragma", "no-cache");
-		response.setContentType("image/jpeg");
-		HttpSession sess = req.getSession(true);
-		// 生成随机字串
-		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
-		log.debug("verifyCode == " + verifyCode);
-		sess.setAttribute(key, verifyCode);
-		ServletOutputStream out = null;
-		genImgCode(response, verifyCode, out);
-	}
 }

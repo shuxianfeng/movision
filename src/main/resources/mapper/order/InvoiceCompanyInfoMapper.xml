@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.order.mapper.InvoiceCompanyInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.order.entity.InvoiceCompanyInfo" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="invoiceId" property="invoiceId" jdbcType="INTEGER" />
+    <result column="companyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="taxpayerCode" property="taxpayerCode" jdbcType="VARCHAR" />
+    <result column="bankName" property="bankName" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="regAddress" property="regAddress" jdbcType="VARCHAR" />
+    <result column="regPhone" property="regPhone" jdbcType="VARCHAR" />
+    <result column="businessLicense" property="businessLicense" jdbcType="VARCHAR" />
+    <result column="taxCertificate" property="taxCertificate" jdbcType="VARCHAR" />
+    <result column="taxpayerCertificate" property="taxpayerCertificate" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.zhuhuibao.mybatis.order.entity.InvoiceCompanyInfo" >
+    insert into t_o_invoice_company_info (id, invoiceId, companyName, 
+      taxpayerCode, bankName, account, 
+      regAddress, regPhone, businessLicense, 
+      taxCertificate, taxpayerCertificate)
+    values (#{id,jdbcType=INTEGER}, #{invoiceId,jdbcType=INTEGER}, #{companyName,jdbcType=VARCHAR}, 
+      #{taxpayerCode,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
+      #{regAddress,jdbcType=VARCHAR}, #{regPhone,jdbcType=VARCHAR}, #{businessLicense,jdbcType=VARCHAR}, 
+      #{taxCertificate,jdbcType=VARCHAR}, #{taxpayerCertificate,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.order.entity.InvoiceCompanyInfo" >
+    insert into t_o_invoice_company_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="invoiceId != null" >
+        invoiceId,
+      </if>
+      <if test="companyName != null" >
+        companyName,
+      </if>
+      <if test="taxpayerCode != null" >
+        taxpayerCode,
+      </if>
+      <if test="bankName != null" >
+        bankName,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="regAddress != null" >
+        regAddress,
+      </if>
+      <if test="regPhone != null" >
+        regPhone,
+      </if>
+      <if test="businessLicense != null" >
+        businessLicense,
+      </if>
+      <if test="taxCertificate != null" >
+        taxCertificate,
+      </if>
+      <if test="taxpayerCertificate != null" >
+        taxpayerCertificate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceId != null" >
+        #{invoiceId,jdbcType=INTEGER},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="taxpayerCode != null" >
+        #{taxpayerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="regAddress != null" >
+        #{regAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="regPhone != null" >
+        #{regPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicense != null" >
+        #{businessLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="taxCertificate != null" >
+        #{taxCertificate,jdbcType=VARCHAR},
+      </if>
+      <if test="taxpayerCertificate != null" >
+        #{taxpayerCertificate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>
