@@ -38,9 +38,11 @@ public class ExpoService {
      * 发布一站式会展定制
      * @param meetingOrder
      */
-    public void publishMeetingOrder(MeetingOrder meetingOrder){
+    public String publishMeetingOrder(MeetingOrder meetingOrder){
         try {
             meetingOrderMapper.publishMeetingOrder(meetingOrder);
+            String id = meetingOrder.getId();
+            return id;
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();

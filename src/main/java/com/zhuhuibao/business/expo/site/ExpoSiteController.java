@@ -44,7 +44,8 @@ public class ExpoSiteController {
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){
             meetingOrder.setCreateid(String.valueOf(createId));
-            exhibitionService.publishMeetingOrder(meetingOrder);
+            String id = exhibitionService.publishMeetingOrder(meetingOrder);
+            response.setData(id);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
