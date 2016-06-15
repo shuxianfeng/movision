@@ -60,9 +60,12 @@
     select
     t.id, t.createID, date_format(t.publishTime,'%Y-%m-%d') publishTime, date_format(t.updateTime,'%Y-%m-%d') updateTime, t.title,
 	 t.systemCategory,dc.name systemCategoryName, t.applicationArea,dn.name applicationAreaName, t.linkman,
-    t.companyName, t.telephone, t.email, t.province,t.city,t.area, t.address, t.cooperation, t.type,
+    t.companyName, t.telephone, t.email, t.province,pv.name provinceName,t.city,ct.name cityName,t.area,ar.name areaName,t.address, t.cooperation, t.type,
     t.status,t.notes
     from t_tech_cooperation t
+    left join t_dictionary_province pv on pv.code = t.province
+    left join t_dictionary_city ct on ct.code = t.city
+    left join t_dictionary_area ar on ar.code = t.area
     left join t_dictionary_constant dc on dc.code = t.systemCategory and dc.type =19
     left join t_dictionary_constant dn on dn.code = t.applicationArea and dn.type =18
     where t.id = #{id,jdbcType=BIGINT}
@@ -311,7 +314,7 @@
       <if test="applicationArea != null and applicationArea != ''">
         and t.applicationArea = #{applicationArea}
       </if>
-      <if test="type != null">
+      <if test="type != null and type != ''">
         and t.type = #{type}
       </if>
     order by t.updateTime desc
