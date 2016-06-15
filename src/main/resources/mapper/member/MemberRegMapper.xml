@@ -103,6 +103,9 @@
         <if test="email != null and email != '' ">
             AND  a.email = #{email}
         </if>
+        <if test="id != null and id != '' ">
+            AND  a.id = #{id}
+        </if>
     </select>
 
 </mapper>

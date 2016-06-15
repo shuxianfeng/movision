@@ -64,4 +64,9 @@ public interface JobConstant {
      * 职位类型
      */
     String JOB_KEY_POSITIONTYPE = "positionType";
+
+    /**
+     * 简历已查看状态
+     */
+    String RESUME_STATUS_TWO = "2";
 }

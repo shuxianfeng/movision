@@ -2,13 +2,15 @@ package com.zhuhuibao.business.job.mc;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.ApiConstants;
-import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.expert.entity.Achievement;
+import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
+import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
@@ -24,12 +26,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,6 +54,9 @@ public class ResumeController {
 
     @Autowired
     ApiConstants ApiConstants;
+
+    @Autowired
+    JobRelResumeService jrrService;
     /**
      * 发布简历
      */
@@ -98,7 +105,10 @@ public class ResumeController {
     @ApiOperation(value = "预览简历", notes = "预览简历", response = Response.class)
     @RequestMapping(value = {"previewResume","mc/resume/preview_resume"}, method = RequestMethod.GET)
     public Response previewResume(String id) throws Exception {
-        return resumeService.previewResume(id);
+        Response response = new Response();
+        Resume resume = resumeService.previewResume(id);
+        response.setData(resume);
+        return response;
     }
 
     /**
@@ -131,7 +141,8 @@ public class ResumeController {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
-            response = resumeService.searchMyResumeAllInfo(createid.toString());
+            Resume resume = resumeService.searchMyResumeAllInfo(createid.toString());
+            response.setData(resume);
         }else {
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
@@ -153,10 +164,24 @@ public class ResumeController {
         Long createid = ShiroUtil.getCreateID();
         Response response = new Response();
         if(createid!=null){
-            Paging<Resume> pager = new Paging<Resume>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+            Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
             response = resumeService.receiveResume(pager,createid.toString());
         }else {
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "简历批量设为已查看", notes = "简历批量设为已查看", response = Response.class)
+    @RequestMapping(value = "mc/resume/upd_jobRelresume", method = RequestMethod.POST)
+    public Response upd_jobRelresume(@ApiParam(value = "ids,逗号隔开") @RequestParam String ids){
+        Response response = new Response();
+        String[] idList = ids.split(",");
+        for (String id : idList) {
+            Map<String,Object> map = new HashMap<String,Object>();
+            map.put("id",id);
+            map.put("status",JobConstant.RESUME_STATUS_TWO);
+            jrrService.updateJobRelResume(map);
         }
         return response;
     }
@@ -183,5 +208,29 @@ public class ResumeController {
         {
             log.error("download resume error! ",e);
         }
+    }
+
+    @ApiOperation(value = "HR通知列表", notes = "HR通知列表")
+    @RequestMapping(value = "mc/resume/sel_myResumeLookRecord", method = RequestMethod.GET)
+    public Response sel_myResumeLookRecord(@RequestParam(required = false)String pageNo, @RequestParam(required = false)String pageSize)
+            {
+        Response response = new Response();
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Long memberId = ShiroUtil.getCreateID();
+        Map<String,Object> map = new HashMap<String,Object>();
+        if(memberId!=null){
+            map.put("id",memberId);
+            List<Map<String,String>> list = resumeService.findAllMyResumeLookRecord(pager,map);
+            response.setData(list);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+                return response;
     }
 }

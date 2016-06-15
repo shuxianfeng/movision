@@ -7,6 +7,10 @@ import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +68,14 @@ public class InformationController {
 	public Response detailInfo(Member member)  {
 		Response result = new Response();
 		memberService.updateMemInfo(member);
+		Member loginMember = memberService.findMemById(member.getId().toString());
+		Subject currentUser = SecurityUtils.getSubject();
+		Session session = currentUser.getSession(false);
+		if (session != null) {
+			ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
+			principal.setStatus(loginMember.getStatus());
+			session.setAttribute("member", principal);
+		}
 		return result;
 	}
 

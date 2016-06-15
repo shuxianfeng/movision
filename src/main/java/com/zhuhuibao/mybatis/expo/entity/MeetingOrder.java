@@ -91,7 +91,7 @@ public class MeetingOrder {
     private String linkName;
 
     @ApiModelProperty(value="1:先生 0：女士")
-    private String call;
+    private String calls;
 
     @ApiModelProperty(value="手机")
     private String mobile;
@@ -332,12 +332,12 @@ public class MeetingOrder {
         this.linkName = linkName;
     }
 
-    public String getCall() {
-        return call;
+    public String getCalls() {
+        return calls;
     }
 
-    public void setCall(String call) {
-        this.call = call;
+    public void setCalls(String calls) {
+        this.calls = calls;
     }
 
     public String getMobile() {
