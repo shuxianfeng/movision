@@ -2,9 +2,12 @@ package com.zhuhuibao.business.member.mc;
 
 import com.google.gson.Gson;
 import com.taobao.api.ApiException;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.exception.BaseException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
@@ -31,11 +34,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -247,39 +252,48 @@ public class AccountSafeController {
 
     /**
      * 绑定手机时手机发送的验证码
-     * @param req
      * @throws IOException
      * @throws JsonMappingException
      * @throws JsonGenerationException
      * @throws ApiException
      */
     @RequestMapping(value = {"/rest/getModifyBindMobileSMS","/rest/member/mc/user/get_verifyCode"}, method = RequestMethod.GET)
-    public Response getModifyBindMobileSMS(HttpServletRequest req) throws IOException, ApiException {
-        String mobile = req.getParameter("mobile");
+    public Response getModifyBindMobileSMS(@ApiParam(value = "验证的手机号") @RequestParam String mobile,
+                                           @ApiParam(value = "图形验证码") @RequestParam String imgCode) throws IOException, ApiException {
         log.debug("获得手机验证码  mobile=="+mobile);
         Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(true);
-        // 生成随机字串
-        String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
-        log.debug("verifyCode == " + verifyCode);
-        //发送验证码到手机
-        //SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-        Map<String,String> map = new LinkedHashMap<>();
-        map.put("code",verifyCode);
-        map.put("time",Constants.sms_time);
-        Gson gson = new Gson();
-        String json = gson.toJson(map);
-        SDKSendSms.sendSMS(mobile,json,PropertiesUtils.getValue("modify_mobile_sms_template_code"));
-//        SDKSendTaoBaoSMS.sendModifyBindMobileSMS(mobile, verifyCode, Constants.sms_time);
-        Validateinfo info = new Validateinfo();
-        info.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
-        info.setCheckCode(verifyCode);
-        info.setAccount(mobile);
-        memberRegService.inserValidateInfo(info);
-        sess.setAttribute("s"+mobile, verifyCode);
         Response response = new Response();
-        response.setData(verifyCode);
-
+        Session sess = currentUser.getSession(true);
+        String sessionImgCode = (String) sess.getAttribute("bindingMobile");
+        if(imgCode.equalsIgnoreCase(sessionImgCode)) {
+            // 生成随机字串
+            String verifyCode = VerifyCodeUtils.generateVerifyCode(4, VerifyCodeUtils.VERIFY_CODES_DIGIT);
+            log.debug("verifyCode == " + verifyCode);
+            //发送验证码到手机
+            //SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
+            Map<String, String> map = new LinkedHashMap<>();
+            map.put("code", verifyCode);
+            map.put("time", Constants.sms_time);
+            Gson gson = new Gson();
+            String json = gson.toJson(map);
+            SDKSendSms.sendSMS(mobile, json, PropertiesUtils.getValue("modify_mobile_sms_template_code"));
+//        SDKSendTaoBaoSMS.sendModifyBindMobileSMS(mobile, verifyCode, Constants.sms_time);
+            Validateinfo info = new Validateinfo();
+            info.setCreateTime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+            info.setCheckCode(verifyCode);
+            info.setAccount(mobile);
+            memberRegService.inserValidateInfo(info);
+            sess.setAttribute("s" + mobile, verifyCode);
+        }
         return response;
+    }
+
+    @ApiOperation(value="绑定手机时图形验证码",notes="绑定手机时图形验证码",response = Response.class)
+    @RequestMapping(value = {"/rest/getImgCode","/rest/member/mc/user/check_pwd_account"}, method = RequestMethod.GET)
+    public void getCode(HttpServletResponse response) throws IOException {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
+        String verifyCode = VerifyCodeUtils.outputHttpVerifyImage(100,40,response, Constants.CHECK_IMG_CODE_SIZE);
+        sess.setAttribute("bindingMobile", verifyCode);
     }
 }

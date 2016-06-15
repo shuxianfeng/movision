@@ -4,6 +4,8 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.mybatis.order.entity.Invoice;
+import com.zhuhuibao.mybatis.order.service.InvoiceService;
 import com.zhuhuibao.mybatis.tech.service.OrderManagerService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -29,6 +31,9 @@ import java.util.Map;
 public class TechOrderController {
     @Autowired
     OrderManagerService orderService;
+
+    @Autowired
+    InvoiceService invoiceService;
 
     @RequestMapping(value={"/rest/tech/oms/order/sel_order","/rest/expert/oms/order/sel_order"}, method = RequestMethod.GET)
     @ApiOperation(value="运营管理平台技术培训订单管理",notes = "运营管理平台技术培训订单管理",response = Response.class)
@@ -78,12 +83,29 @@ public class TechOrderController {
         return response;
     }
 
-    @RequestMapping(value={"/rest/tech/oms/order/upd_order_status","/rest/expert/oms/order/upd_order_status"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/rest/tech/oms/order/upd_order_status","/rest/expert/oms/order/upd_order_status"}, method = RequestMethod.POST)
     @ApiOperation(value="更新订单详情",notes = "更新订单详情",response = Response.class)
     public Response updateTechDataDetail(@ApiParam(value = "订单编号")  @RequestParam String orderNo,
                                          @ApiParam(value = "状态")  @RequestParam String status)
     {
         int result = orderService.updateByPrimaryKeySelective(orderNo,status);
+        Response response = new Response();
+        return response;
+    }
+
+    @RequestMapping(value={"/rest/tech/oms/order/upd_invoice","/rest/expert/oms/order/upd_invoice"}, method = RequestMethod.POST)
+    @ApiOperation(value="更新发票信息",notes = "更新发票信息",response = Response.class)
+    public Response updateInvoiceInfo(@ApiParam(value = "订单编号")  @RequestParam String orderNo,
+                                         @ApiParam(value = "状态")  @RequestParam String status,
+                                         @ApiParam(value = "快递单号")  @RequestParam String expressNum,
+                                         @ApiParam(value = "发票编号")  @RequestParam String invoiceNum)
+    {
+        Invoice invoice = new Invoice();
+        invoice.setOrderNo(orderNo);
+        invoice.setStatus(status);
+        invoice.setExpressNum(expressNum);
+        invoice.setInvoiceNum(invoiceNum);
+        invoiceService.updateInvoice(invoice);
         Response response = new Response();
         return response;
     }

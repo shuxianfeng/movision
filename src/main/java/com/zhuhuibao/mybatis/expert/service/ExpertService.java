@@ -8,13 +8,11 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.expert.entity.*;
 import com.zhuhuibao.mybatis.expert.mapper.*;
-import com.zhuhuibao.mybatis.memCenter.mapper.*;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.utils.*;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.sms.SDKSendSms;
-import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -612,7 +610,7 @@ public class ExpertService {
         Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(true);
         // 生成随机字串
-        String verifyCode = VerifyCodeUtils.generateVerifyCode(4,VerifyCodeUtils.VERIFY_CODES_DIGIT);
+        String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE,VerifyCodeUtils.VERIFY_CODES_DIGIT);
         log.debug("verifyCode == " + verifyCode);
         //发送验证码到手机
         Map<String,String> map = new LinkedHashMap<>();
