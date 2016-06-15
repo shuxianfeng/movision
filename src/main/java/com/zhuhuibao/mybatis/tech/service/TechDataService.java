@@ -164,6 +164,24 @@ public class TechDataService {
     }
 
     /**
+     * 会员中心编辑技术资料信息
+     * @param id 技术资料ID
+     * @return
+     */
+    public Map<String,String> selectMCTechDataDetail(Long id)
+    {
+        Map<String,String> techData;
+        log.info("select mc tech data "+id);
+        try{
+            techData = techDataMapper.selectMCTechDataDetail(id);
+        }catch (Exception e){
+            log.error("select mc tech data error! ",e);
+            throw e;
+        }
+        return techData;
+    }
+
+    /**
      * 获取技术资料文件名称
      * @param id 技术资料ID
      * @return

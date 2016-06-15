@@ -65,7 +65,7 @@ public class TechCoopMcController {
     public Response selectTechCooperationById( @ApiParam(value = "技术合作成果、需求ID")  @RequestParam String techCoopId)
     {
         Response response = new Response();
-        TechCooperation techCoop = techService.selectTechCooperationById(techCoopId);
+        Map<String,String> techCoop = techService.selectMcCoopDetail(techCoopId);
         response.setData(techCoop);
         return response;
     }

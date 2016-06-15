@@ -49,7 +49,7 @@ public class TechDataMcController {
     @ApiOperation(value="查询技术资料详情(行业解决方案，技术文档，培训资料)",notes = "查询技术资料详情(行业解决方案，技术文档，培训资料)",response = Response.class)
     public Response selectTechDataDetail(@ApiParam(value = "技术资料ID")  @RequestParam String techDataId)
     {
-        TechData techData = techDataService.selectTechDataInfo(Long.parseLong(techDataId));
+        Map<String,String> techData = techDataService.selectMCTechDataDetail(Long.parseLong(techDataId));
         Response response = new Response();
         response.setData(techData);
         return response;
