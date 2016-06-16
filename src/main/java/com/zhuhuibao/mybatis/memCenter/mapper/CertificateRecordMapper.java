@@ -19,4 +19,6 @@ public interface CertificateRecordMapper {
 
     //资质查询(已认证的)
     List<CertificateRecord> certificateSearch1(CertificateRecord record);
+
+    CertificateRecord queryCertificateById(String id);
 }
