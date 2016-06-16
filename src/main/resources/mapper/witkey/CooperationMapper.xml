@@ -168,12 +168,6 @@
   <update id="updateCooperation" parameterType="com.zhuhuibao.mybatis.witkey.entity.Cooperation" >
     update t_c_cooperation
     <set >
-      <if test="createId != null" >
-        createId = #{createId},
-      </if>
-      <if test="publishTime != null" >
-        publishTime = #{publishTime},
-      </if>
         updateTime = now(),
       <if test="title != null" >
         title = #{title},
