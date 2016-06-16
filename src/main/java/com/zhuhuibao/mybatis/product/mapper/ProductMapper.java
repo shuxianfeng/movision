@@ -50,5 +50,5 @@ public interface ProductMapper {
     
     List<ResultBean> findSubSystem(String id);
 
-    Product findProductBySystemId(String id);
+    List<Product> findProductBySystemId(String id);
 }

@@ -169,7 +169,7 @@
         and type = #{type}
       </if>
       <if test="mobile != null">
-        and mobile = #{mobile}
+        and mobile like concat('%',#{mobile},'%')
       </if>
       <if test="linkman != null">
         and t.linkman like concat('%',#{linkman},'%')
