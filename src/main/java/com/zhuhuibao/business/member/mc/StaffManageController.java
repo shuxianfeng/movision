@@ -202,7 +202,7 @@ public class StaffManageController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/rest/member/mc/user/sel_workTypeList", method = RequestMethod.GET)
+	@RequestMapping(value = {"rest/workTypeList","/rest/member/mc/user/sel_workTypeList"}, method = RequestMethod.GET)
 	public Response workTypeList()  {
 		Response result = new Response();
 		List<WorkType> workType = memberService.findWorkTypeList();

@@ -160,4 +160,40 @@ public class SiteMailService {
             throw e;
         }
     }
+
+    public Map<String,String> queryNewsById(String id){
+        try
+        {
+            return msgLogMapper.queryNewsById(id);
+        }catch(Exception e)
+        {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public Map<String,String> queryMySendMsgById(String id){
+        try
+        {
+            return messageMapper.queryMySendMsgById(id);
+        }catch(Exception e)
+        {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public Map<String,String> queryMyReceiveMsgById(String id){
+        try
+        {
+            return messageMapper.queryMyReceiveMsgById(id);
+        }catch(Exception e)
+        {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

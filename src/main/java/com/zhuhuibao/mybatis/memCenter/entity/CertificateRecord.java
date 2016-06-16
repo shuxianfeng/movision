@@ -3,7 +3,7 @@ package com.zhuhuibao.mybatis.memCenter.entity;
 import java.util.Date;
 
 public class CertificateRecord {
-    private Long id;
+    private String id;
 
     private Integer mem_id;
 
@@ -25,11 +25,11 @@ public class CertificateRecord {
 
     private String status;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

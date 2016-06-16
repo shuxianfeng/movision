@@ -39,7 +39,7 @@ public class MailController {
 
     @ApiOperation(value="消息列表",notes="消息列表",response = Response.class)
     @RequestMapping(value = "sel_newsList", method = RequestMethod.GET)
-    public Response findAllNewsList(@ApiParam(value = "消息类型：1：产品消息；2：活动消息")@RequestParam(required = false)String type,
+    public Response findAllNewsList(@ApiParam(value = "状态：1：未读，2：已读")@RequestParam(required = false)String status,
                                     @RequestParam(required = false)String pageNo,
                                     @RequestParam(required = false)String pageSize)  {
         Response response = new Response();
@@ -52,7 +52,7 @@ public class MailController {
         }
         Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<>();
-        map.put("type",type);
+        map.put("status",status);
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
             map.put("recID",String.valueOf(memberId));
@@ -65,7 +65,21 @@ public class MailController {
         return response;
     }
 
-    @ApiOperation(value="查询产品跟活动未读消息条数",notes="查询产品跟活动未读消息条数",response = Response.class)
+    @ApiOperation(value="查看消息详情",notes="查看消息详情",response = Response.class)
+    @RequestMapping(value = "sel_news", method = RequestMethod.GET)
+    public Response sel_news(@RequestParam String id)  {
+        Response response = new Response();
+        //将这条消息设为已读
+        MessageLog messageLog = new MessageLog();
+        messageLog.setId(Long.parseLong(id));
+        messageLog.setStatus(MessageLogConstant.NEWS_STATUS_TWO);
+        siteMailService.updateNewsStatus(messageLog);
+
+        Map<String,String> map = siteMailService.queryNewsById(id);
+        response.setData(map);
+        return response;
+    }
+/*    @ApiOperation(value="查询产品跟活动未读消息条数",notes="查询产品跟活动未读消息条数",response = Response.class)
     @RequestMapping(value = "sel_unreadNews", method = RequestMethod.GET)
     public Response sel_unreadNews()  {
         Response response = new Response();
@@ -94,7 +108,7 @@ public class MailController {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
-    }
+    }*/
 
     @ApiOperation(value="同步消息到日志表",notes="同步消息到日志表",response = Response.class)
     @RequestMapping(value = "add_newsToLog", method = RequestMethod.POST)
@@ -111,7 +125,7 @@ public class MailController {
         return response;
     }
 
-    @ApiOperation(value="标记为已读",notes="标记为已读",response = Response.class)
+    @ApiOperation(value="批量标记为已读",notes="批量标记为已读",response = Response.class)
     @RequestMapping(value = "upd_news", method = RequestMethod.POST)
     public Response upd_news(@ApiParam(value = "消息ids,逗号隔开") @RequestParam String ids)  {
         Response response = new Response();
@@ -155,9 +169,9 @@ public class MailController {
         return response;
     }
 
-    @ApiOperation(value="我发送的留言",notes="我发送的留言",response = Response.class)
-    @RequestMapping(value = "sel_mySendMsg", method = RequestMethod.GET)
-    public Response sel_mySendMsg(@RequestParam(required = false)String pageNo,
+    @ApiOperation(value="我发送的留言列表",notes="我发送的留言列表",response = Response.class)
+    @RequestMapping(value = "sel_mySendMsgList", method = RequestMethod.GET)
+    public Response sel_mySendMsgList(@RequestParam(required = false)String pageNo,
                                   @RequestParam(required = false)String pageSize)  {
         Response response = new Response();
         //设定默认分页pageSize
@@ -180,6 +194,15 @@ public class MailController {
         return response;
     }
 
+    @ApiOperation(value="查看我发送的留言详情",notes="查看我发送的留言详情",response = Response.class)
+    @RequestMapping(value = "sel_mySendMsg", method = RequestMethod.GET)
+    public Response sel_mySendMsg(@RequestParam String id)  {
+        Response response = new Response();
+        Map<String,String> map = siteMailService.queryMySendMsgById(id);
+        response.setData(map);
+        return response;
+    }
+
     @ApiOperation(value="删除我发送的留言",notes="删除我发送的留言",response = Response.class)
     @RequestMapping(value = "del_sendMessage", method = RequestMethod.POST)
     public Response del_sendMessage(@ApiParam(value = "留言ids,逗号隔开") @RequestParam String ids)  {
@@ -194,9 +217,9 @@ public class MailController {
         return response;
     }
 
-    @ApiOperation(value="我收到的留言",notes="我收到的留言",response = Response.class)
-    @RequestMapping(value = "sel_myReceiveMsg", method = RequestMethod.GET)
-    public Response sel_myReceiveMsg(@RequestParam(required = false)String pageNo,
+    @ApiOperation(value="我收到的留言列表",notes="我收到的留言列表",response = Response.class)
+    @RequestMapping(value = "sel_myReceiveMsgList", method = RequestMethod.GET)
+    public Response sel_myReceiveMsgList(@RequestParam(required = false)String pageNo,
                                   @RequestParam(required = false)String pageSize)  {
         Response response = new Response();
         //设定默认分页pageSize
@@ -230,6 +253,15 @@ public class MailController {
             message.setReceiveDelete(MessageConstant.MESSAGE_RECEIVE_DELETE_ONE);
             siteMailService.updateMessage(message);
         }
+        return response;
+    }
+
+    @ApiOperation(value="查看我收到的留言详情",notes="查看我收到的留言详情",response = Response.class)
+    @RequestMapping(value = "sel_myReceiveMsg", method = RequestMethod.GET)
+    public Response sel_myReceiveMsg(@RequestParam String id)  {
+        Response response = new Response();
+        Map<String,String> map = siteMailService.queryMyReceiveMsgById(id);
+        response.setData(map);
         return response;
     }
 }
