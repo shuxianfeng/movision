@@ -183,6 +183,24 @@ public class TechCooperationService {
     }
 
     /**
+     * 会员中心编辑技术合作
+     * @param id 技术合作ID
+     * @return
+     */
+    public Map<String,String> selectMcCoopDetail(String id)
+    {
+        Map<String,String> techCoop;
+        log.info("preview mc tech cooperation by id "+id);
+        try{
+            techCoop = techMapper.selectMcCoopDetail(Long.valueOf(id));
+        }catch (Exception e){
+            log.error("select mc tech cooperation by id error! ",e);
+            throw e;
+        }
+        return techCoop;
+    }
+
+    /**
      * 查询技术合作的点击排行
      * @param map
      * @return

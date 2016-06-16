@@ -88,4 +88,26 @@ public class JobRelResumeService {
         }
         return result;
     }
+
+    public int updateJobRelResume(Map<String,Object> map){
+        try {
+            return jrrMapper.updateJobRelResume(map);
+        }catch(Exception e)
+        {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public JobRelResume selectByPrimaryKey(String id){
+        try {
+            return jrrMapper.selectByPrimaryKey(Long.parseLong(id));
+        }catch(Exception e)
+        {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

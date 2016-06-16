@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.pojo.OmsMemBean;
+import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -64,5 +65,14 @@ public class MemberOmsController {
 		Response result = omsMemService.getAllMemCertificate(pager,member);
 
 		return result;
+	}
+
+	@RequestMapping(value="/rest/member/oms/base/sel_certificate",method = RequestMethod.GET)
+	public Response queryCertificateById(String id) throws IOException
+	{
+		Response response = new Response();
+		CertificateRecord certificateRecord = omsMemService.queryCertificateById(id);
+		response.setData(certificateRecord);
+		return response;
 	}
 }

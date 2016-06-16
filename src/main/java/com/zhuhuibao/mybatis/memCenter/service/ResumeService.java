@@ -3,7 +3,10 @@ package com.zhuhuibao.mybatis.memCenter.service;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
+import com.zhuhuibao.mybatis.memCenter.mapper.JobRelResumeMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.ResumeLookRecordMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -33,6 +36,12 @@ public class ResumeService {
 
     @Autowired
     ApiConstants apiConstants;
+
+    @Autowired
+    private ResumeLookRecordMapper resumeLookRecordMapper;
+
+    @Autowired
+    private JobRelResumeMapper jobRelResumeMapper;
 
     /**
      * 发布简历
@@ -107,12 +116,8 @@ public class ResumeService {
     /**
      * 查询我创建的简历的全部信息
      */
-    public Response searchMyResumeAllInfo(String id){
-        Response response = new Response();
-        Resume resume = resumeMapper.searchMyResumeAllInfo(id);
-        response.setCode(200);
-        response.setData(resume);
-        return response;
+    public Resume searchMyResumeAllInfo(String id){
+        return resumeMapper.searchMyResumeAllInfo(id);
     }
 
     /**
@@ -139,17 +144,13 @@ public class ResumeService {
     /**
      * 预览简历
      */
-    public Response previewResume(String id) throws Exception{
-        Response response = new Response();
+    public Resume previewResume(String id) throws Exception{
         try {
-            Resume resume = resumeMapper.previewResume(id);
-            response.setCode(200);
-            response.setData(resume);
+            return resumeMapper.previewResume(id);
         }catch(Exception e)
         {
             throw e;
         }
-        return response;
     }
 
     /**
@@ -176,21 +177,10 @@ public class ResumeService {
     /**
      * 我收到的简历
      */
-    public Response receiveResume(Paging<Resume> pager, String id){
+    public Response receiveResume(Paging<Map<String,String>> pager, String id){
         Response response = new Response();
-        List<Resume> resumeList = resumeMapper.findAllReceiveResume(pager.getRowBounds(),id);
-        List list = new ArrayList();
-        for(int i=0;i<resumeList.size();i++){
-            Resume resume = resumeList.get(i);
-            Map map = new HashMap();
-            map.put(Constants.id,resume.getId());
-            map.put(Constants.name,resume.getName());
-            map.put(Constants.publishTime,resume.getPublishTime());
-            map.put(Constants.realName,resume.getRealName());
-            map.put(Constants.experienceYear,resume.getExperienceYear());
-            list.add(map);
-        }
-        pager.result(list);
+        List<Map<String,String>> resumeList = resumeMapper.findAllReceiveResume(pager.getRowBounds(),id);
+        pager.result(resumeList);
         response.setCode(200);
         response.setData(pager);
         return response;
@@ -314,4 +304,27 @@ public class ResumeService {
         }
         return isExist;
     }
+
+    public int addLookRecord(Map<String,Object> map){
+        try {
+            return resumeLookRecordMapper.addLookRecord(map);
+        }catch(Exception e)
+        {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public List<Map<String,String>> findAllMyResumeLookRecord(Paging<Map<String,String>> pager,Map<String,Object> map){
+        try {
+            return resumeLookRecordMapper.findAllMyResumeLookRecord(pager.getRowBounds(),map);
+        }catch(Exception e)
+        {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
 }

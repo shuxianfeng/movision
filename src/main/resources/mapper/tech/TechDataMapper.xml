@@ -27,12 +27,20 @@
     notes
   </sql>
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from t_tech_data
-    where id = #{id,jdbcType=BIGINT}
+  select
+  <include refid="Base_Column_List" />
+  ,
+  <include refid="Blob_Column_List" />
+  from t_tech_data
+  where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectMCTechDataDetail" resultType="java.util.Map" parameterType="java.lang.Long" >
+    select t.id, t.createid, date_format(t.publishTime,'%Y-%m-%d') publishTime, date_format(t.updateTime,'%Y-%m-%d') updateTime,
+    t.title, t.fCategory,tc.name fCategoryName,td.name sCategoryName, t.sCategory, t.tag, t.type, t.status,
+    t.views, t.download, t.attach,t.notes from t_tech_data t
+    left join t_dictionary_techDataCategory tc on tc.code = t.fCategory
+    left join t_dictionary_techDataCategory td on td.code = t.sCategory
+    where t.id = #{id}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.util.Map" >
     update t_tech_data

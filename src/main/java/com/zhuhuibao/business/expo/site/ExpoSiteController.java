@@ -44,11 +44,24 @@ public class ExpoSiteController {
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){
             meetingOrder.setCreateid(String.valueOf(createId));
-            exhibitionService.publishMeetingOrder(meetingOrder);
+            String id = exhibitionService.publishMeetingOrder(meetingOrder);
+            response.setData(id);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
+    }
+
+    /**
+     * 一站式会展定制查看
+     */
+    @ApiOperation(value="会展定制查看",notes="会展定制查看",response = Response.class)
+    @RequestMapping(value = "sel_meetingOrder", method = RequestMethod.GET)
+    public Response queryMeetingOrderInfoById(@RequestParam String id)  {
+        Response Response = new Response();
+        MeetingOrder meetingOrder = exhibitionService.queryMeetingOrderInfoById(id);
+        Response.setData(meetingOrder);
+        return Response;
     }
 
     /**

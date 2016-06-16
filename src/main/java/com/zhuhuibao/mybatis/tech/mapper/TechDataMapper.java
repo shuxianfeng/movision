@@ -19,6 +19,8 @@ public interface TechDataMapper {
 
     TechData selectByPrimaryKey(Long id);
 
+    Map<String,String> selectMCTechDataDetail(Long id);
+
     int updateByPrimaryKeySelective(TechData record);
 
     List<Map<String,String>> findAllOMSTechDataPager(RowBounds rowBounds,Map<String,Object> condition);
