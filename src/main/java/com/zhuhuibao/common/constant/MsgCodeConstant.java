@@ -106,6 +106,11 @@ public interface MsgCodeConstant {
 	 * 图形验证码不正确
 	 */
 	int validate_error = 10213;
+	
+	/**
+	 * 筑慧币余额不足
+	 */
+	int ZHB_AUTOPAYFOR_FAILED = 10302;
 
 	/**
 	 * 支付宝异常错误码 9000~9999
