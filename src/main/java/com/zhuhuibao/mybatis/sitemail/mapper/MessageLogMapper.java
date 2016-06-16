@@ -22,4 +22,6 @@ public interface MessageLogMapper {
     int addNewsToLog(Map<String,Object> map);
 
     Integer selUnreadNewsCount(Map<String,Object> map);
+
+    Map<String,String> queryNewsById(String id);
 }

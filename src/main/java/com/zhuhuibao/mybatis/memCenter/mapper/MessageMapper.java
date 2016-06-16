@@ -14,4 +14,8 @@ public interface MessageMapper {
     List<Map<String,String>> findAllMyReceiveMsgList(RowBounds rowBounds,Map<String,Object> map);
 
     int updateMessage(Message message);
+
+    Map<String,String> queryMySendMsgById(String id);
+
+    Map<String,String> queryMyReceiveMsgById(String id);
 }

@@ -38,7 +38,7 @@
 
   <select id="findAllMyReceiveMsgList" parameterType="java.util.Map" resultType="java.util.Map">
     select msg.id,msg.title,
-    case when m.identify = 2 then m.personRealName when m.identify!=2 then m.enterpriseName end as name,
+    CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile WHEN m.email IS NOT NULL and m.email != '' THEN m.email END AS account,
     date_format(msg.postDate,'%Y-%m-%d %H:%i:%s')postDate
     from t_sys_message msg
     left join t_m_member m on m.id = msg.createid
@@ -60,4 +60,30 @@
     </set>
     where id = #{id}
   </update>
+
+  <select id="queryMySendMsgById" parameterType="java.lang.String" resultType="java.util.Map">
+    select msg.id,msg.title,msg.content,msg.isShow,
+    case when msg.isShow = 1 THEN msg.companyName ELSE '' end as companyName,
+    case when msg.isShow = 1 THEN msg.linkman ELSE '' end as linkman,
+    case when msg.isShow = 1 THEN msg.telephone ELSE '' end as telephone,
+    case when msg.isShow = 1 THEN msg.mobile ELSE '' end as mobile,
+    case when m.identify = 2 then m.personRealName when m.identify!=2 then m.enterpriseName end as recevieName,
+    date_format(msg.postDate,'%Y-%m-%d %H:%i:%s')postDate
+    from t_sys_message msg
+    left join t_m_member m on m.id = msg.receiveid
+	where msg.id = #{id}
+  </select>
+
+  <select id="queryMyReceiveMsgById" parameterType="java.lang.String" resultType="java.util.Map">
+    select msg.id,msg.title,msg.content,msg.isShow,
+    case when msg.isShow = 1 THEN msg.companyName ELSE '' end as companyName,
+    case when msg.isShow = 1 THEN msg.linkman ELSE '' end as linkman,
+    case when msg.isShow = 1 THEN msg.telephone ELSE '' end as telephone,
+    case when msg.isShow = 1 THEN msg.mobile ELSE '' end as mobile,
+    CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile WHEN m.email IS NOT NULL and m.email != '' THEN m.email END AS account,
+    date_format(msg.postDate,'%Y-%m-%d %H:%i:%s')postDate
+    from t_sys_message msg
+    left join t_m_member m on m.id = msg.createid
+	where msg.id = #{id}
+  </select>
 </mapper>
