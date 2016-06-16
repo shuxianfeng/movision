@@ -83,7 +83,7 @@
     where
     mem_id = #{mem_id} and type = #{type} and is_deleted = 0 and status = 1
   </select>
-  <select id="queryCertificateById" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord" resultMap="BaseResultMap">
+  <select id="queryCertificateById" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     *
     from t_certificate_record
