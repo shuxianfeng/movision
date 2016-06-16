@@ -4,6 +4,7 @@ import com.mysql.jdbc.StringUtils;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.common.pojo.ResultBean;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
@@ -321,11 +322,16 @@ public class InformationController {
 	 * 上传头像，返回url，并保存数据库
 	 */
 	@RequestMapping(value = {"/rest/uploadHeadShot","/rest/member/mc/base/upload_headShot"}, method = RequestMethod.POST)
-	public Response uploadHeadShot(HttpServletRequest req, Member member) throws Exception {
+	public Response uploadHeadShot(HttpServletRequest req) throws Exception {
 		Response result = new Response();
 		String url = uploadService.upload(req,"img");
-		member.setHeadShot(url);
-		memberService.uploadHeadShot(member);
+		Long memberId = ShiroUtil.getCreateID();
+		if(memberId!=null){
+			Member member = new Member();
+			member.setId(memberId);
+			member.setHeadShot(url);
+			memberService.uploadHeadShot(member);
+		}
 		result.setData(url);
 		return result;
 	}
@@ -334,11 +340,16 @@ public class InformationController {
 	 * 上传公司logo，返回url，并保存数据库
 	 */
 	@RequestMapping(value = {"/rest/uploadLogo","/rest/member/mc/company/upload_logo"}, method = RequestMethod.POST)
-	public Response uploadLogo(HttpServletRequest req, Member member) throws Exception {
+	public Response uploadLogo(HttpServletRequest req) throws Exception {
 		Response result = new Response();
 		String url = uploadService.upload(req,"img");
-		member.setEnterpriseLogo(url);
-		memberService.uploadLogo(member);
+		Long memberId = ShiroUtil.getCreateID();
+		if(memberId!=null){
+			Member member = new Member();
+			member.setId(memberId);
+			member.setEnterpriseLogo(url);
+			memberService.uploadLogo(member);
+		}
 		result.setData(url);
 		return result;
 	}

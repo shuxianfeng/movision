@@ -299,15 +299,9 @@
     </if>
     order by c.updateTime desc
   </select>
-  <select id="queryHotCooperation" resultMap="BaseResultMap" >
-    select c.*, concat(p.name,ci.name,a.name)as cooperationArea,co.name as categoryName,coo.name as TypeName,coo.parentId,
-    (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName,
-    CASE WHEN m.identify = 2 THEN '个人' WHEN m.identify !=2 THEN '公司' END AS memberType,m.headShot
+  <select id="queryHotCooperation" resultType="java.util.Map" >
+    select c.id,c.price,c.title,coo.name as TypeName,m.headShot,c.type
     from t_c_cooperation c
-    left join t_dictionary_province p on p.code = c.province
-    left join t_dictionary_city ci on ci.code = c.city
-    left join t_dictionary_area a on a.code = c.area
-    left join t_dictionary_constant co on co.code = c.category and co.type = 9
     left join t_dictionary_cooperationType coo on coo.id = c.type
     LEFT JOIN t_m_member m on c.createId = m.id
     where coo.parentId = #{type}
