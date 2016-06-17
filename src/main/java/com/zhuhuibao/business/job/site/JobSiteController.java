@@ -511,10 +511,9 @@ public class JobSiteController {
             Map<String,Object> map1 = new HashMap<String,Object>();
             map1.put("resumeID",id);
             map1.put("companyID",memberId);
-            Resume resume1 = resume.searchMyResumeAllInfo(id);
-            map1.put("createId",resume1.getCreateid());
-            resume.addLookRecord(map1);
             Resume resume2 = resume.previewResume(id);
+            map1.put("createId",resume2.getCreateid());
+            resume.addLookRecord(map1);
             response = paymentService.viewGoodsRecord(Long.parseLong(id),resume2,"resume");
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

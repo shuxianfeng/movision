@@ -123,38 +123,4 @@ public class WitkeySiteController {
         return response;
     }
 
-
-    @ApiOperation(value = "首页威客信息（三个列表集合）", notes = "首页威客信息（三个列表集合）", response = Response.class)
-    @RequestMapping(value = "sel_three_serviceList", method = RequestMethod.GET)
-    public Response sel_witkey_service(@ApiParam(value = "条数") @RequestParam int count)  {
-        Response Response = new Response();
-        //任务
-        Map<String, Object> map = new HashMap<>();
-        map.put("count", count);
-        map.put("type", 1);
-        map.put("is_deleted", Constants.DeleteMark.NODELETE.toString());
-        map.put("status", CooperationConstants.Status.AUDITED.toString());
-        List<Map<String,String>> cooperation1 = cooperationService.queryHotCooperation(map);
-        //服务
-        Map<String, Object> map1 = new HashMap<>();
-        map1.put("count", count);
-        map1.put("type", 2);
-        map1.put("is_deleted", Constants.DeleteMark.NODELETE.toString());
-        map1.put("status", CooperationConstants.Status.AUDITED.toString());
-        List<Map<String,String>> cooperation2 = cooperationService.queryHotCooperation(map1);
-        //资质合作
-        Map<String, Object> map2 = new HashMap<>();
-        map2.put("count", count);
-        map2.put("type", 3);
-        map2.put("is_deleted", Constants.DeleteMark.NODELETE.toString());
-        map2.put("status", CooperationConstants.Status.AUDITED.toString());
-        List<Map<String,String>> cooperation3 = cooperationService.queryHotCooperation(map2);
-
-        Map map3 = new HashMap();
-        map3.put("list1",cooperation1);
-        map3.put("list2",cooperation2);
-        map3.put("list3",cooperation3);
-        Response.setData(map3);
-        return Response;
-    }
 }
