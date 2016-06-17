@@ -147,7 +147,7 @@ public class AccountSafeController {
         String md5Pwd = new Md5Hash(newPwd,null,2).toString();
         Member member = new Member();
         member.setPassword(md5Pwd);
-        member.setId(Long.parseLong(id));
+        member.setId(id);
         Response result = new Response();
         memberService.updateMember(member);
         return result;
@@ -238,7 +238,7 @@ public class AccountSafeController {
             {
                 String decodeVM = new String (EncodeUtil.decodeBase64(email));
                 member.setEmail(decodeVM);
-                member.setId(Long.parseLong(decodeId));
+                member.setId(decodeId);
                 memberService.updateMember(member);
                 redirectUrl = PropertiesUtils.getValue("host.ip")+"/"+ PropertiesUtils.getValue("email-active-bind.page");
             }

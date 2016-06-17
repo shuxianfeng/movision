@@ -74,20 +74,6 @@ public class MemberService {
 	}
 
 	/**
-	 * 更新会员状态
-	 */
-	public int updateStatus(Member member)
-	{
-		try{
-			return memberMapper.updateStatus(member);
-		}catch (Exception e){
-			log.error(e.getMessage());
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/**
 	 * 根据会员ID查询会员信息
 	 */
 	public Member findMemById(String id)
@@ -470,9 +456,9 @@ public class MemberService {
 				map.put("name",member1.getPersonRealName());
 				map.put("status",member1.getStatus());
 				String statusName = "";
-				if(member1.getStatus()==0){
+				if("0".equals(member1.getStatus())){
 					statusName = "未激活";
-				}else if(member1.getStatus()==1){
+				}else if("1".equals(member1.getStatus())){
 					statusName = "正常";
 				}else{
 					statusName = "注销";
@@ -604,7 +590,7 @@ public class MemberService {
 			}
 			address = provinceName + cityName + areaName;
 			CertificateRecord certificateRecord = new CertificateRecord();
-			certificateRecord.setMem_id(Integer.parseInt(id));
+			certificateRecord.setMem_id(id);
 			certificateRecord.setType(type);
 			List<CertificateRecord> certificateRecordList = certificateRecordMapper.certificateSearch1(certificateRecord);
 			Map map = new HashMap();

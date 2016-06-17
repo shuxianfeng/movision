@@ -189,7 +189,7 @@ public class StaffManageController {
 			Member member = new Member();
 			String md5Pwd = new Md5Hash("123456", null, 2).toString();
 			member.setPassword(md5Pwd);
-			member.setId(Long.parseLong(id));
+			member.setId(id);
 			memberService.resetPwd(member);
 		}
 

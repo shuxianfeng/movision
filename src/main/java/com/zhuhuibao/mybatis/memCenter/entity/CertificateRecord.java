@@ -5,7 +5,7 @@ import java.util.Date;
 public class CertificateRecord {
     private String id;
 
-    private Integer mem_id;
+    private String mem_id;
 
     private String certificate_number;
 
@@ -33,11 +33,11 @@ public class CertificateRecord {
         this.id = id;
     }
 
-    public Integer getMem_id() {
+    public String getMem_id() {
         return mem_id;
     }
 
-    public void setMem_id(Integer mem_id) {
+    public void setMem_id(String mem_id) {
         this.mem_id = mem_id;
     }
 

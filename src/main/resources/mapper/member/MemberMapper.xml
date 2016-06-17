@@ -85,131 +85,7 @@
     from t_m_member
     where id = #{id}
   </select>
-  <update id="updateMemInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
-    update t_m_member
-    <set>
-      <if test="mobile != null" >
-        mobile = #{mobile},
-      </if>
-      <if test="email != null" >
-        email = #{email},
-      </if>
-      <if test="emailCheckCode != null" >
-        emailCheckCode = #{emailCheckCode},
-      </if>
-      <if test="password != null" >
-        password = #{password},
-      </if>
-      <if test="registerTime != null" >
-        registerTime = #{registerTime},
-      </if>
-      <if test="status != null" >
-        status = (case when status = 4 then 4 when status=1 or status=3 then #{status} else status end ),
-      </if>
-      <if test="identify != null" >
-        identify = #{identify},
-      </if>
-      <if test="enterpriseName != null" >
-        enterpriseName = #{enterpriseName},
-      </if>
-      <if test="workType != null" >
-        workType = #{workType},
-      </if>
-      <if test="enterpriseEmployeeParentId != null" >
-        enterpriseEmployeeParentId = #{enterpriseEmployeeParentId},
-      </if>
-      <if test="province != null" >
-        province = #{province},
-      </if>
-      <if test="city != null" >
-        city = #{city},
-      </if>
-      <if test="area != null" >
-        area = #{area},
-      </if>
-      <if test="address != null" >
-        address = #{address},
-      </if>
-      <if test="enterpriseType != null" >
-        enterpriseType = #{enterpriseType},
-      </if>
-      <if test="enterpriseLogo != null" >
-        enterpriseLogo = #{enterpriseLogo},
-      </if>
-      <if test="enterpriseDesc != null" >
-        enterpriseDesc = #{enterpriseDesc},
-      </if>
-      <if test="headShot != null" >
-        headShot = #{headShot},
-      </if>
-      <if test="saleProductDesc != null" >
-        saleProductDesc = #{saleProductDesc},
-      </if>
-      <if test="enterpriseCreaterTime != null" >
-        enterpriseCreaterTime = #{enterpriseCreaterTime},
-      </if>
-      <if test="registerCapital != null" >
-        registerCapital = #{registerCapital},
-      </if>
-      <if test="employeeNumber != null" >
-        employeeNumber = #{employeeNumber},
-      </if>
-      <if test="companyBusinessLicenseImg != null" >
-        companyBusinessLicenseImg = #{companyBusinessLicenseImg},
-      </if>
-      <if test="enterpriseTelephone != null" >
-        enterpriseTelephone = #{enterpriseTelephone},
-      </if>
-      <if test="enterpriseFox != null" >
-        enterpriseFox = #{enterpriseFox},
-      </if>
-      <if test="enterpriseWebSite != null" >
-        enterpriseWebSite = #{enterpriseWebSite},
-      </if>
-      <if test="enterpriseLinkman != null" >
-        enterpriseLinkman = #{enterpriseLinkman},
-      </if>
-      <if test="enterpriseLMDep != null" >
-        enterpriseLMDep = #{enterpriseLMDep},
-      </if>
-      <if test="fixedTelephone != null" >
-        fixedTelephone = #{fixedTelephone},
-      </if>
-      <if test="fixedMobile != null" >
-        fixedMobile = #{fixedMobile},
-      </if>
-      <if test="QQ != null" >
-        QQ = #{QQ},
-      </if>
-      <if test="personRealName != null" >
-        personRealName = #{personRealName},
-      </if>
-      <if test="sex != null" >
-        sex = #{sex},
-      </if>
-      <if test="personCompanyType != null" >
-        personCompanyType = #{personCompanyType},
-      </if>
-      <if test="personIdentifyCard != null" >
-        personIdentifyCard = #{personIdentifyCard},
-      </if>
-      <if test="personIDFrontImgUrl != null" >
-        personIDFrontImgUrl = #{personIDFrontImgUrl},
-      </if>
-      <if test="personIDBackImgUrl != null" >
-        personIDBackImgUrl = #{personIDBackImgUrl},
-      </if>
-      <if test="isrecommend != null" >
-        isrecommend = #{isrecommend},
-      </if>
-    </set>
-    where id = #{id}
-  </update>
-<!--  <insert id="addMember" keyProperty="id" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" useGeneratedKeys="true">
-    insert into t_m_member(mobile,email,password,registerTime,status,identify,enterpriseEmployeeParentId,workType,personRealName) values
-    (#{mobile},#{email},#{password},now(),1,case when #{identify} is null then 2 else #{identify} end,
-    #{enterpriseEmployeeParentId},#{workType},#{personRealName})
-  </insert>-->
+
   <insert id="addMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" >
     insert into t_m_member
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -288,15 +164,7 @@
     </set>
     where id = #{id}
   </update>
-  <!--  <update id="disableMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
-      update t_m_member
-      <set>
-        <if test="status!= null">
-          status = 3,
-        </if>
-      </set>
-      where id = #{id}
-    </update>-->
+
   <update id="deleteMember">
     update t_m_member
     <set>
@@ -503,7 +371,7 @@
       and r.id = #{id}
     </if>
   </select>
-  <update id="updateStatus" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+  <update id="updateMemInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     update t_m_member
     <set>
       <if test="mobile != null" >

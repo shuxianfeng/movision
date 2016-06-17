@@ -33,8 +33,7 @@ public class BrandController {
     @Autowired
     ApiConstants ApiConstants;
 
-    @Autowired
-    UploadService uploadService;
+
     /**
      * 新建品牌
      * @return
@@ -181,18 +180,6 @@ public class BrandController {
         Brand brand = brandService.brandDetails(id);
         Response result = new Response();
         result.setData(brand);
-        return result;
-    }
-
-    /**
-     * 上传图片，返回url
-     */
-    @RequestMapping(value = {"/rest/uploadImg","/rest/system/mc/brand/upload_img"}, method = RequestMethod.POST)
-    public Response uploadImg(HttpServletRequest req) throws Exception {
-        //完成文件上传
-        Response result = new Response();
-        String url = uploadService.upload(req,"img");
-        result.setData(url);
         return result;
     }
 

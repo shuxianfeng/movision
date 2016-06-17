@@ -20,10 +20,10 @@
   </sql>
   <insert id="saveCertificate" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord" >
     insert into t_certificate_record (id, mem_id, certificate_number,certificate_id,
-    certificate_name, certificate_grade, certificate_url,type, time, is_deleted,status
+    certificate_name, certificate_grade, certificate_url,type, time
     )
-    values (#{id,jdbcType=BIGINT}, #{mem_id}, #{certificate_number},#{certificate_id},
-    #{certificate_name}, #{certificate_grade},  #{certificate_url}, #{type},#{time}, 0,0
+    values (#{id}, #{mem_id}, #{certificate_number},#{certificate_id},
+    #{certificate_name}, #{certificate_grade},  #{certificate_url}, #{type},now()
     )
   </insert>
   <update id="updateCertificate" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord">

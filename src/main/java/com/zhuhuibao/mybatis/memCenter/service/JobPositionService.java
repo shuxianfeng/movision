@@ -436,7 +436,7 @@ public class JobPositionService {
     {
         Response response = new Response();
         Member member = memberMapper.findMemById(id);
-        List<Job> companyList = jobMapper.querySimilarCompany(member.getEmployeeNumber(),member.getEnterpriseType(),id,count);
+        List<Job> companyList = jobMapper.querySimilarCompany(member.getEmployeeNumber(),Integer.parseInt(member.getEnterpriseType()),id,count);
         List list = new ArrayList();
         for(int i=0;i<companyList.size();i++){
             Job job = companyList.get(i);

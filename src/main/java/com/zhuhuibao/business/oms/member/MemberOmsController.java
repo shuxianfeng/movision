@@ -5,6 +5,8 @@ import java.io.IOException;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.pojo.OmsMemBean;
 import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -28,6 +30,9 @@ public class MemberOmsController {
 
 	@Autowired
 	private OmsMemService omsMemService;
+
+	@Autowired
+	private MemberService memberService;
 	/**
 	 * 查询全部会员（分页）
 	 * @param member
@@ -74,5 +79,18 @@ public class MemberOmsController {
 		CertificateRecord certificateRecord = omsMemService.queryCertificateById(id);
 		response.setData(certificateRecord);
 		return response;
+	}
+
+	/**
+	 * 会员状态审核
+	 * @param member
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = {"/rest/updateStatus","/rest/member/oms/base/upd_mem_status"}, method = RequestMethod.POST)
+	public Response updateStatus(Member member)  {
+		Response result = new Response();
+		memberService.updateMemInfo(member);
+		return result;
 	}
 }
