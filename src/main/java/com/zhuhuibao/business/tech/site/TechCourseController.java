@@ -20,7 +20,7 @@ import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.service.course.CourseService;
-import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.service.zhpay.ZhpayService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ValidateUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
@@ -57,6 +57,10 @@ public class TechCourseController {
 
     @Autowired
     CourseService courseService;
+
+    @Autowired
+    ZhpayService zhpayService;
+
     @Autowired
     ExpertService expertService;
 
@@ -126,10 +130,10 @@ public class TechCourseController {
 
         switch(userZHB){
             case "true":
-                courseService.doPayMultiple(response,paramMap);
+                zhpayService.doPayMultiple(response,paramMap);
                 break;
             case "false":
-                courseService.doPay(response,paramMap);
+                zhpayService.doPay(response,paramMap);
                 break;
             default:
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"是否使用筑慧币,传参错误");

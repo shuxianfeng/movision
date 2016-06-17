@@ -11,9 +11,9 @@ public class Refund {
 
     private Date refundDate;
 
-    private Integer batchNum;
-
     private Long totalFee;
+
+    private String reason;
 
     public String getBatchNo() {
         return batchNo;
@@ -47,19 +47,19 @@ public class Refund {
         this.refundDate = refundDate;
     }
 
-    public Integer getBatchNum() {
-        return batchNum;
-    }
-
-    public void setBatchNum(Integer batchNum) {
-        this.batchNum = batchNum;
-    }
-
     public Long getTotalFee() {
         return totalFee;
     }
 
     public void setTotalFee(Long totalFee) {
         this.totalFee = totalFee;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason == null ? null : reason.trim();
     }
 }

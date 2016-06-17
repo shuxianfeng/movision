@@ -126,6 +126,13 @@ public interface MsgCodeConstant {
 	 * 支付宝支付失败
 	 */
 	int ALIPAY_PAY_FAIL = 9003;
+
+	/**
+	 * 支付异常
+	 */
+	int PAY_ERROR = 9004;
+
+
 	/**
 	 * 支付宝支付成功
 	 */

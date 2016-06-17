@@ -8,18 +8,18 @@
     <result column="tradeStatus" property="tradeStatus" jdbcType="CHAR" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="tradeTime" property="tradeTime" jdbcType="TIMESTAMP" />
-    <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    orderNo, tradeMode, tradeFee, tradeStatus, createTime, tradeTime, endTime
+    orderNo, tradeMode, tradeFee, tradeStatus, createTime, tradeTime, updateTime
   </sql>
   <insert id="insert" parameterType="com.zhuhuibao.mybatis.order.entity.OrderFlow" >
     insert into t_o_order_flow (orderNo, tradeMode, tradeFee, 
       tradeStatus, createTime, tradeTime, 
-      endTime)
+      updateTime)
     values (#{orderNo,jdbcType=VARCHAR}, #{tradeMode,jdbcType=CHAR}, #{tradeFee,jdbcType=DECIMAL}, 
       #{tradeStatus,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{tradeTime,jdbcType=TIMESTAMP}, 
-      #{endTime,jdbcType=TIMESTAMP})
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.order.entity.OrderFlow" >
     insert into t_o_order_flow
@@ -42,8 +42,8 @@
       <if test="tradeTime != null" >
         tradeTime,
       </if>
-      <if test="endTime != null" >
-        endTime,
+      <if test="updateTime != null" >
+        updateTime,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -65,8 +65,8 @@
       <if test="tradeTime != null" >
         #{tradeTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endTime != null" >
-        #{endTime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>

@@ -35,7 +35,21 @@ public class Response implements Serializable{
 	 */
 	@ApiModelProperty(value="平台返回的消息码")
 	private int msgCode;
-	
+
+	public Response() {
+
+	}
+
+	public Response(String message) {
+		this.message = message;
+	}
+	public Response(int code, String message, Object data, int msgCode) {
+		this.code = code;
+		this.message = message;
+		this.data = data;
+		this.msgCode = msgCode;
+	}
+
 	public int getMsgCode() {
 		return msgCode;
 	}

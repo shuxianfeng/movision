@@ -30,14 +30,13 @@ public class InvoiceService {
 
     /**
      * 新增发票信息
-     * @param map  发票内容
+     * @param json  发票内容
      */
-    public void insertInvoice(Map<String,Object> map)
+    public void insertInvoice(String json)
     {
         int result;
         try{
             Gson gson = new Gson();
-            String json = gson.toJson(map);
             Invoice invoice = gson.fromJson(json,Invoice.class);
             result = invoiceMapper.insert(invoice);
             if (result != 1) {

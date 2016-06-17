@@ -37,7 +37,13 @@ public class OrderReqBean {
     @ApiModelProperty(value="发票抬头(企业名称)")
     private String invoiceTitle;
     @ApiModelProperty(value="发票收件人")
-    private String invoicePerson;
+    private String invoiceReceiveName;
+    @ApiModelProperty(value="发票收件地址(省份编码)")
+    private String invoiceProvince;
+    @ApiModelProperty(value="发票收件地址(市编码)")
+    private String invoiceCity;
+    @ApiModelProperty(value="发票收件地址(地区编码)")
+    private String invoiceArea;
     @ApiModelProperty(value="发票收件地址")
     private String invoiceAddress;
     @ApiModelProperty(value="发票收件人手机")
@@ -128,12 +134,36 @@ public class OrderReqBean {
         this.invoiceTitle = invoiceTitle;
     }
 
-    public String getInvoicePerson() {
-        return invoicePerson;
+    public String getInvoiceReceiveName() {
+        return invoiceReceiveName;
     }
 
-    public void setInvoicePerson(String invoicePerson) {
-        this.invoicePerson = invoicePerson;
+    public void setInvoiceReceiveName(String invoiceReceiveName) {
+        this.invoiceReceiveName = invoiceReceiveName;
+    }
+
+    public String getInvoiceProvince() {
+        return invoiceProvince;
+    }
+
+    public void setInvoiceProvince(String invoiceProvince) {
+        this.invoiceProvince = invoiceProvince;
+    }
+
+    public String getInvoiceCity() {
+        return invoiceCity;
+    }
+
+    public void setInvoiceCity(String invoiceCity) {
+        this.invoiceCity = invoiceCity;
+    }
+
+    public String getInvoiceArea() {
+        return invoiceArea;
+    }
+
+    public void setInvoiceArea(String invoiceArea) {
+        this.invoiceArea = invoiceArea;
     }
 
     public String getInvoiceAddress() {

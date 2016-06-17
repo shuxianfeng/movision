@@ -3,16 +3,14 @@ package com.zhuhuibao.test;
 import com.google.gson.Gson;
 import com.zhuhuibao.common.pojo.RefundReqBean;
 import com.zhuhuibao.fsearch.utils.StringUtil;
+import com.zhuhuibao.mybatis.order.entity.Invoice;
 import com.zhuhuibao.utils.IdGenerator;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author jianglz
@@ -158,8 +156,25 @@ public class Test extends BaseSpringContext {
 
 //        System.out.println(ss);
 
-        String s = "100.00";
-        System.out.println(Long.valueOf(s));
+//        String s = "100.00";
+//        System.out.println(Long.valueOf(s));
+        Invoice invoice = new Invoice();
+        invoice.setAddress("address1");
+        invoice.setArea("1");
+        invoice.setCity("2");
+        invoice.setCreateId((long) 1);
+        invoice.setCreateTime(new Date());
+        invoice.setInvoiceTitle("aaaaaa");
+        invoice.setInvoiceTitleType(2);
+        invoice.setMobile("18652093798");
+        invoice.setOrderNo("snddasdasdasda");
+        invoice.setProvince("232323");
+        invoice.setReceiveName("xxxxxxsd");
+
+        Gson gson = new Gson();
+        String json = gson.toJson(invoice);
+        System.out.println(json);
+
     }
 
 
