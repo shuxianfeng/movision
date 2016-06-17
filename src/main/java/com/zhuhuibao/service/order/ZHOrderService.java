@@ -2,10 +2,10 @@ package com.zhuhuibao.service.order;
 
 import com.google.gson.Gson;
 import com.zhuhuibao.alipay.service.refund.AlipayRefundService;
+import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
-import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.*;
 import com.zhuhuibao.mybatis.order.service.*;
@@ -31,6 +31,8 @@ import java.util.*;
 public class ZHOrderService {
     private final static Logger logger = LoggerFactory.getLogger(ZHOrderService.class);
 
+    private static final String PARTNER = AlipayPropertiesLoader.getPropertyValue("partner");
+
     @Autowired
     OrderService orderService;
 
@@ -55,6 +57,17 @@ public class ZHOrderService {
     @Autowired
     private AlipayRefundService alipayRefundService;
 
+
+    /**
+     * 购买筑慧币,VIP套餐 创建订单
+     * @param msgParam
+     */
+    public void createZHBOrder(Map<String, String> msgParam) {
+        String orderNo = IdGenerator.createOrderNo();
+        msgParam.put("orderNo", orderNo);
+        createOrder(msgParam);
+    }
+
     /**
      * 生成订单
      * (事务管理)
@@ -69,6 +82,8 @@ public class ZHOrderService {
         //记录订单商品表
         genOrderGoodsRecord(msgParam);
 
+        //发票信息
+        genInvoiceRecord(msgParam);
     }
 
     /**
@@ -80,7 +95,11 @@ public class ZHOrderService {
         Order order = new Order();
         order.setOrderNo(msgParam.get("orderNo"));
         order.setBuyerId(Long.valueOf(msgParam.get("buyerId")));
-        order.setSellerId(msgParam.get("partner"));
+        String partner = msgParam.get("partner");
+        if(StringUtils.isEmpty(partner)){
+            partner = PARTNER;
+        }
+        order.setSellerId(partner);
         order.setDealTime(new Date());
         String payPrice = msgParam.get("goodsPrice");
         String number = msgParam.get("number");
