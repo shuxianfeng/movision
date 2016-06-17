@@ -433,8 +433,19 @@ public class AlipayService {
                           map.put("orderNo",orderNo);
                           map.put("status", Objects.equals(endOrder.getStatus(), PayConstants.OrderStatus.YZF.toString()) ?"success":"fail");
                           String result = JsonUtils.getJsonStringFromMap(map);
+
+                          String zhbUrl = AlipayPropertiesLoader.getPropertyValue("zhb_return_url");
+                          String vipUrl = AlipayPropertiesLoader.getPropertyValue("vip_return_url");
+                          String url = "";
+                          if(order.getGoodsType().equals(OrderConstants.GoodsType.ZHB.toString())){
+                              url = zhbUrl;
+                          }else if(order.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString())){
+                              url = vipUrl;
+                          }
+                          url += "?result={result}";
+
                           String responseCode = restTemplate.postForObject(
-                                  AlipayPropertiesLoader.getPropertyValue("zhb_return_url") + "?result={result}",
+                                  url,
                                   null,String.class,result);
                           log.debug("回调状态:",responseCode);
                       }
