@@ -172,7 +172,7 @@ public class CooperationService {
     /**
      * 最热合作信息
      */
-    public List<Cooperation> queryHotCooperation(Map<String,Object> map){
+    public List<Map<String,String>> queryHotCooperation(Map<String,Object> map){
         try {
             return cooperationMapper.queryHotCooperation(map);
         }catch (Exception e){
@@ -181,4 +181,5 @@ public class CooperationService {
             throw e;
         }
     }
+
 }

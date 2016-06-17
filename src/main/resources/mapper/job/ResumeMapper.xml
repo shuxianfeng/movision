@@ -164,6 +164,9 @@
       <if test="isPublic != null" >
         isPublic = #{isPublic},
       </if>
+      <if test="views != null">
+        views = views + 1,
+      </if>
       <if test="download != null" >
         downloadCount = downloadCount+1,
       </if>
@@ -189,13 +192,8 @@
     FROM t_i_resume r
     where r.createid = #{id}
   </select>
-  <select id="searchMyResumeJobType" parameterType="java.lang.String" resultMap="ResultMap">
-    select group_concat(id) as code,parentId as name from(
-    select id,parentId from t_dictionary_position where find_in_set(id,#{post}) )a
-    group by a.parentId
-  </select>
   <select id="previewResume" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select r.id,r.title,r.realName,r.birthYear,dc.name education,r.photo,
+    select r.id,r.createid,r.title,r.realName,r.birthYear,dc.name education,r.photo,
     case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,
     case WHEN r.marriage =0 then '未婚' WHEN r.marriage =1 THEN '已婚' WHEN r.marriage =2 THEN '保密' END AS marriage,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
@@ -259,8 +257,9 @@
     </where>
     order by tr.updateTime desc
   </select>
-  <select id="findAllReceiveResume" parameterType="java.lang.String" resultMap="BaseResultMap">
-     select r.id,j.name,r.realName,re.publishDate as publishTime ,(DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear)  as experienceYear from t_i_resume r
+  <select id="findAllReceiveResume" parameterType="java.lang.String" resultType="java.util.Map">
+    select re.id as recordId,r.id,j.name,r.realName,re.publishDate as publishTime,re.status,(DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear)  as experienceYear
+    from t_i_resume r
     left join t_i_jobRelresume re on re.resumeID = r.id
     left join t_i_job j on j.id = re.jobID
     where re.jobID in (select id from t_i_job where createid=#{id}) order by publishTime desc

@@ -80,6 +80,9 @@ public class WitkeyController {
         if(cooperation.getEndTime()!=null){
             cooperation.setEndTime(cooperation.getEndTime()+" 23:59:59");
         }
+        if(cooperation.getPrice()==null){
+            cooperation.setPrice(Double.parseDouble("-1"));
+        }
         cooperationService.updateCooperation(cooperation);
         return response;
     }

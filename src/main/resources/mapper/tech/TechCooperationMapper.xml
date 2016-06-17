@@ -56,6 +56,21 @@
     where t.id = #{id,jdbcType=BIGINT}
   </select>
 
+  <select id="selectMcCoopDetail" resultType="java.util.Map" parameterType="java.lang.Long" >
+    select
+    t.id, t.createID, date_format(t.publishTime,'%Y-%m-%d') publishTime, date_format(t.updateTime,'%Y-%m-%d') updateTime, t.title,
+	 t.systemCategory,dc.name systemCategoryName, t.applicationArea,dn.name applicationAreaName, t.linkman,
+    t.companyName, t.telephone, t.email, t.province,pv.name provinceName,t.city,ct.name cityName,t.area,ar.name areaName,t.address, t.cooperation, t.type,
+    t.status,t.notes
+    from t_tech_cooperation t
+    left join t_dictionary_province pv on pv.code = t.province
+    left join t_dictionary_city ct on ct.code = t.city
+    left join t_dictionary_area ar on ar.code = t.area
+    left join t_dictionary_constant dc on dc.code = t.systemCategory and dc.type =19
+    left join t_dictionary_constant dn on dn.code = t.applicationArea and dn.type =18
+    where t.id = #{id,jdbcType=BIGINT}
+  </select>
+
   <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.tech.entity.TechCooperation" >
     insert into t_tech_cooperation
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -299,7 +314,7 @@
       <if test="applicationArea != null and applicationArea != ''">
         and t.applicationArea = #{applicationArea}
       </if>
-      <if test="type != null">
+      <if test="type != null and type != ''">
         and t.type = #{type}
       </if>
     order by t.updateTime desc
@@ -316,8 +331,10 @@
   </select>
 
   <select id="findIndexTechCooperation" parameterType="java.util.Map" resultType="java.util.Map">
-    select t.id, t.createID, t.title,t.applicationArea,t.type,
-    dc.name systemCategoryName, dn.name applicationAreaName,concat(po.name,'-',ct.name) provincecity,t.cooperation from t_tech_cooperation t
+    select
+    t.id, date_format(t.publishTime,'%Y-%m-%d') publishTime, date_format(t.updateTime,'%Y-%m-%d') updateTime, t.title, dc.name systemCategory, dn.name applicationArea, t.linkman,
+    t.companyName, t.telephone, t.email, po.name province,ct.name city,ar.name area, t.address, t.cooperation, t.notes
+    from t_tech_cooperation t
     left join t_dictionary_province po on po.code = t.province
     left join t_dictionary_city ct on ct.code = t.city
     left join t_dictionary_area ar on ar.code = t.area

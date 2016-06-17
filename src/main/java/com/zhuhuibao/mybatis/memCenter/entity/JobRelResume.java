@@ -11,6 +11,8 @@ public class JobRelResume {
 
     private String publishDate;
 
+    private String status;
+
     public Long getId() {
         return id;
     }
@@ -49,5 +51,13 @@ public class JobRelResume {
 
     public void setApplicantId(Long applicantId) {
         this.applicantId = applicantId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

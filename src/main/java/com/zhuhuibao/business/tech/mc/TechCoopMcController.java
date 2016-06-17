@@ -5,6 +5,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
@@ -64,7 +65,7 @@ public class TechCoopMcController {
     public Response selectTechCooperationById( @ApiParam(value = "技术合作成果、需求ID")  @RequestParam String techCoopId)
     {
         Response response = new Response();
-        TechCooperation techCoop = techService.selectTechCooperationById(techCoopId);
+        Map<String,String> techCoop = techService.selectMcCoopDetail(techCoopId);
         response.setData(techCoop);
         return response;
     }
@@ -90,6 +91,18 @@ public class TechCoopMcController {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         Response response = new Response();
+        return response;
+    }
+
+    @RequestMapping(value="del_tech_cooperation", method = RequestMethod.GET)
+    @ApiOperation(value="删除技术合作(技术成果，技术需求)",notes = "删除技术合作(技术成果，技术需求)",response = Response.class)
+    public Response deleteTechCooperation( @ApiParam(value = "技术合作ID")  @RequestParam() String techId)
+    {
+        Response response = new Response();
+        Map<String, Object> condition = new HashMap<String, Object>();
+        condition.put("id", techId);
+        condition.put("status", TechConstant.TechCooperationnStatus.DELETE.toString());
+        int result = techService.deleteTechCooperation(condition);
         return response;
     }
 }

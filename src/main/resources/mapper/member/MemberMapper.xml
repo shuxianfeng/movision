@@ -68,6 +68,7 @@
     <result column="certificate_number" property="certificate_number" jdbcType="VARCHAR" />
     <result column="certificate_url" property="certificate_url" jdbcType="VARCHAR" />
     <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, mobile, email, emailCheckCode, password, registerTime, status, identify,
@@ -475,7 +476,7 @@
     </if>
   </select>
   <select id="findAllMemCertificateByPager" resultMap="ResultMap2" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
-    select r.certificate_name,r.certificate_grade,r.time,r.status,r.id,r.certificate_url,r.certificate_number,
+    select r.certificate_name,r.certificate_grade,date_format(r.time,'%Y-%m-%d %H:%i:%s') time,r.status,r.id,r.certificate_url,r.certificate_number,
     CASE WHEN m.enterpriseName IS NOT NULL and m.enterpriseName != '' THEN m.enterpriseName
     WHEN m.personRealName IS NOT NULL and m.personRealName != '' THEN m.personRealName END AS memberName,
     CASE WHEN m.identify = 2 THEN '个人会员' WHEN m.identify != 2 then '企业会员' END AS memberType,

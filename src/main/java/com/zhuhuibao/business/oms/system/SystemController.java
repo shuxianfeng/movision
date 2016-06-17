@@ -109,8 +109,8 @@ public class SystemController {
     @RequestMapping(value = {"/rest/system/deleteSystem","/rest/system/oms/category/del_system"}, method = RequestMethod.POST)
     public Response deleteSystem(Category category) throws Exception {
         Response result = new Response();
-        Product product = productService.findProductBySystemId(category.getId().toString());
-        if(product!=null){
+        List<Product> list = productService.findProductBySystemId(category.getId().toString());
+        if(list.size()!=0){
             result.setCode(400);
             result.setMessage("该系统下有产品，无法删除");
         }else{

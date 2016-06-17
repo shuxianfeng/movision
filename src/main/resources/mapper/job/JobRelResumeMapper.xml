@@ -59,17 +59,20 @@
       current_date(),
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.JobRelResume" >
+  <update id="updateJobRelResume" parameterType="java.util.Map" >
     update t_i_jobRelresume
     <set >
       <if test="jobID != null" >
-        jobID = #{jobID,jdbcType=BIGINT},
+        jobID = #{jobID},
       </if>
       <if test="resumeID != null" >
-        resumeID = #{resumeID,jdbcType=BIGINT},
+        resumeID = #{resumeID},
+      </if>
+      <if test="status != null" >
+        status = #{status},
       </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.memCenter.entity.JobRelResume" >
     update t_i_jobRelresume

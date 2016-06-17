@@ -376,9 +376,12 @@
     LEFT JOIN t_p_category c ON p.scateid = c.id
     where p.brandid = #{id} and p.status = 1
   </select>
-  <select id="findProductBySystemId" resultType="com.zhuhuibao.mybatis.product.entity.Product" parameterType="java.lang.String">
-    SELECT *
-    FROM  t_p_product
-    where (fcateid = #{id} or scateid = #{id}) and status != 2
+  <select id="findProductBySystemId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+    select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
+	  price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service
+    FROM  t_p_product t
+    where (t.fcateid = #{id} or t.scateid = #{id}) and t.status != 2
   </select>
+  
+   
 </mapper>

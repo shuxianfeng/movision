@@ -10,6 +10,7 @@ import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
+import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -33,6 +34,9 @@ public class WitkeySiteController {
 
     @Autowired
     private CooperationService cooperationService;
+
+    @Autowired
+    private PaymentService paymentService;
 
     /**
      * 发布任务
@@ -91,7 +95,7 @@ public class WitkeySiteController {
      */
     @ApiOperation(value = "最热合作信息", notes = "最热合作信息", response = Response.class)
     @RequestMapping(value = "sel_hot_service", method = RequestMethod.GET)
-    public Response queryHotService(@ApiParam(value = "条数") @RequestParam(required = false) int count,
+    public Response queryHotService(@ApiParam(value = "条数") @RequestParam int count,
                                       @ApiParam(value = "合作类型：1：任务，2：服务，3：资质合作")@RequestParam String type)  {
         Response Response = new Response();
         Map<String, Object> map = new HashMap<>();
@@ -99,7 +103,7 @@ public class WitkeySiteController {
         map.put("type", type);
         map.put("is_deleted", Constants.DeleteMark.NODELETE.toString());
         map.put("status", CooperationConstants.Status.AUDITED.toString());
-        List<Cooperation> cooperations = cooperationService.queryHotCooperation(map);
+        List<Map<String,String>> cooperations = cooperationService.queryHotCooperation(map);
         Response.setData(cooperations);
         return Response;
     }
@@ -109,12 +113,14 @@ public class WitkeySiteController {
      */
     @ApiOperation(value="威客信息詳情",notes="威客信息詳情",response = Cooperation.class)
     @RequestMapping(value = "sel_witkey", method = RequestMethod.GET)
+    //    @ZhbAutoPayforAnnotation(goodsType=ZhbGoodsType.CKJSCG)
     public Response cooperationInfo(@RequestParam String id)  {
         Response response = new Response();
         Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
-        response.setData(cooperation);
+        response = paymentService.viewGoodsRecord(Long.parseLong(id),cooperation,"witkey");
         cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews())+1));
         cooperationService.updateCooperationViews(cooperation);
         return response;
     }
+
 }

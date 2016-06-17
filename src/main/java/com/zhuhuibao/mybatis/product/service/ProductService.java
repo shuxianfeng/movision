@@ -775,8 +775,8 @@ public class ProductService {
         
     }*/
 
-	public Product findProductBySystemId(String id){
-		Product product = productMapper.findProductBySystemId(id);
-		return product;
+	public List<Product> findProductBySystemId(String id){
+		return productMapper.findProductBySystemId(id);
+
 	}
 }

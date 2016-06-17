@@ -11,6 +11,7 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.order.service.OrderService;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
+import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -41,10 +42,12 @@ public class TechCoopController {
     @Autowired
     TechCooperationService techService;
 
+    @Autowired
+    PaymentService paymentService;
 
     @RequestMapping(value="add_tech_cooperation", method = RequestMethod.POST)
-    @ApiOperation(value="新增技术合作(技术成果，技术需求)",notes = "新增技术合作(技术成果，技术需求)",response = Response.class)
-    public Response insertTechCooperation(@ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
+    @ApiOperation(value="新增技术成果",notes = "新增技术技术成果",response = Response.class)
+    public Response insertTechCooperation(@ApiParam(value = "技术合作：技术成果")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
     {
         log.info("insert tech cooperation");
         Long createId = ShiroUtil.getCreateID();
@@ -58,15 +61,42 @@ public class TechCoopController {
         return response;
     }
 
+    @RequestMapping(value="add_tech_requirement", method = RequestMethod.POST)
+    @ApiOperation(value="新增技术需求",notes = "新增技术需求",response = Response.class)
+    public Response insertTechRequirement(@ApiParam(value = "技术合作：技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
+    {
+        log.info("insert tech requirement");
+        Long createId = ShiroUtil.getCreateID();
+        if(null != createId) {
+            techCoop.setCreateID(createId);
+            int result = techService.insertTechCooperation(techCoop);
+        }else{
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        Response response = new Response();
+        return response;
+    }
+
 
     @RequestMapping(value="sel_tech_cooperation_detail", method = RequestMethod.GET)
-    @ApiOperation(value="查看技术合作详情",notes = "查看技术合作详情",response = Response.class)
-    public Response previewTechCooperation(@ApiParam(value = "技术合作成果、需求ID")  @RequestParam String techCoopId)
+    @ApiOperation(value="查看技术需求详情",notes = "查看技术需求详情",response = Response.class)
+    public Response previewTechCooperation(@ApiParam(value = "技术需求ID")  @RequestParam String techCoopId)
     {
         Map<String,Object> techCoop = techService.previewTechCooperationDetail(techCoopId);
         techService.updateTechCooperationViews(techCoopId);
         Response response = new Response();
         response.setData(techCoop);
+        return response;
+    }
+
+    @RequestMapping(value="sel_tech_achievement_detail", method = RequestMethod.GET)
+    @ApiOperation(value="查看技术成果详情",notes = "查看技术成果详情",response = Response.class)
+//    @ZhbAutoPayforAnnotation(goodsType=ZhbGoodsType.CKJSCG)
+    public Response previewTechAchievement(@ApiParam(value = "技术成果ID")  @RequestParam String techCoopId)
+    {
+        Map<String,Object> techCoop = techService.previewTechCooperationDetail(techCoopId);
+        techService.updateTechCooperationViews(techCoopId);
+        Response response = paymentService.viewGoodsRecord(Long.parseLong(techCoopId),techCoop,"techcoop");
         return response;
     }
 

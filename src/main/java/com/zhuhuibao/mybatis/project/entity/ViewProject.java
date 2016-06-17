@@ -16,6 +16,8 @@ public class ViewProject {
     private Long id;
     @ApiModelProperty(value = "查看项目信息人的ID")
     private Long viewerId;
+    @ApiModelProperty(value = "查看项目信息人的企业ID")
+    private Long companyId;
     @ApiModelProperty(value = "项目ID")
     private Long prjId;
     @ApiModelProperty(value = "查看时间")
@@ -51,5 +53,13 @@ public class ViewProject {
 
     public void setViewTime(Date viewTime) {
         this.viewTime = viewTime;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 }

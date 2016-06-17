@@ -26,5 +26,5 @@ public interface CooperationMapper {
     List<Map<String,String>> findAllCooperationByPager(RowBounds rowBounds, Cooperation cooperation);
 
     //最热合作信息
-    List<Cooperation> queryHotCooperation(Map<String, Object> map);
+    List<Map<String,String>> queryHotCooperation(Map<String, Object> map);
 }

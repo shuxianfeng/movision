@@ -55,9 +55,6 @@ public class ExpertService {
     @Autowired
     private MemberRegService memberRegService;
 
-    @Autowired
-    private LookExpertRecordMapper lookExpertRecordMapper;
-
     /**
      * 发布技术成果
      * @param achievement
@@ -629,31 +626,4 @@ public class ExpertService {
         return verifyCode;
     }
 
-    /**
-     * 记录查看专家
-     * @return
-     */
-    public int addRecord(LookExpertRecord record){
-        try{
-            return lookExpertRecordMapper.addRecord(record);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
-    /**
-     * 查询是否查看过该专家
-     * @return
-     */
-    public LookExpertRecord selectRecordByExpertIdCompanyId(LookExpertRecord record){
-        try{
-            return lookExpertRecordMapper.selectRecordByExpertIdCompanyId(record);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
-            throw e;
-        }
-    }
 }

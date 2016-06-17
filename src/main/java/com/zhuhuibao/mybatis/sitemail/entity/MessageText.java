@@ -13,6 +13,8 @@ public class MessageText implements Serializable{
 
     private Long recID;
 
+    private String title;
+
     private String messageText;
 
     private Integer type;
@@ -75,5 +77,13 @@ public class MessageText implements Serializable{
 
     public void setRecID(Long recID) {
         this.recID = recID;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
