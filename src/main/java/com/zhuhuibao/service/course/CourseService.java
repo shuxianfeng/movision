@@ -1,6 +1,8 @@
 package com.zhuhuibao.service.course;
 
+import com.zhuhuibao.alipay.service.direct.AlipayDirectService;
 import com.zhuhuibao.common.constant.*;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.*;
@@ -10,6 +12,7 @@ import com.zhuhuibao.shiro.realm.OMSRealm;
 import com.zhuhuibao.utils.IdGenerator;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.PropertiesUtils;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import com.zhuhuibao.utils.sms.SDKSendSms;
 import com.zhuhuibao.zookeeper.DistributedLock;
 import org.apache.shiro.SecurityUtils;
@@ -22,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -114,6 +119,9 @@ public class CourseService {
         //记录订单SN码 t_o_pwdticket  扣减库存
         if (msgParam.get("goodsType").equals(OrderConstants.GoodsType.JSPX.toString())
                 || msgParam.get("goodsType").equals(OrderConstants.GoodsType.ZJPX.toString())) {
+
+            //发票信息
+            zhOrderService.genInvoiceRecord(msgParam);
 
             //根据订单产品数量生成SN码
             zhOrderService.genSNcode(msgParam, msgParam.get("goodsType"));
@@ -249,7 +257,7 @@ public class CourseService {
             //根据课程ID查询已支付的订单 t_o_order_goods
             List<String> orderNoList = orderGoodsService.findListByGoodsId(courseId);
             //修改订单状态 {已支付-->退款中} 进入退款环节
-            orderService.batchUpdateStatus(orderNoList, PayConstants.OrderStatus.DTK.toString());
+            orderService.batchUpdateStatus(orderNoList, PayConstants.OrderStatus.TKZ.toString());
             //短信通知会员 课程已终止 会全额退款  之后进入退款流程
             //查询该课程相关订单(已支付)
             List<Order> orderList = orderService.findListByCourseIdAndStatus(courseId, PayConstants.OrderStatus.YZF.toString());

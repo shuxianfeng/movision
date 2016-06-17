@@ -11,6 +11,9 @@
 #idea ide files
 .idea
 *.iml
+.classpath
+.project
+.settings/
 
 #resources files
 /src/main/resources/rebel.xml
