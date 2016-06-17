@@ -58,11 +58,12 @@ public class ZhpayService {
      * 单一方式支付(1.支付宝)
      *
      * @param resp
-     * @param msgParam
+     * @param orderNo
      * @throws Exception
      */
-    public void doPay(HttpServletResponse resp, Map<String, String> msgParam) throws Exception {
-
+    public void doPay(HttpServletResponse resp, String orderNo) throws Exception {
+        Map<String, String> msgParam = new HashMap<>();
+        msgParam.put("orderNo",orderNo);
         //记录支付流水
         prePayParam(msgParam);
 
