@@ -164,6 +164,9 @@
       <if test="isPublic != null" >
         isPublic = #{isPublic},
       </if>
+      <if test="views != null">
+        views = views + 1,
+      </if>
       <if test="download != null" >
         downloadCount = downloadCount+1,
       </if>
@@ -188,11 +191,6 @@
     where find_in_set(p.id,r.post)group by p.parentId)as parentName
     FROM t_i_resume r
     where r.createid = #{id}
-  </select>
-  <select id="searchMyResumeJobType" parameterType="java.lang.String" resultMap="ResultMap">
-    select group_concat(id) as code,parentId as name from(
-    select id,parentId from t_dictionary_position where find_in_set(id,#{post}) )a
-    group by a.parentId
   </select>
   <select id="previewResume" parameterType="java.lang.String" resultMap="BaseResultMap">
     select r.id,r.title,r.realName,r.birthYear,dc.name education,r.photo,

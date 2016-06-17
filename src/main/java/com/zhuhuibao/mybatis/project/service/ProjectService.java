@@ -404,13 +404,14 @@ public class ProjectService {
 	 * @param createId  查看人的Id
 	 * @throws Exception
 	 */
-	public int insertViewProject(Long projectId, Long createId){
+	public int insertViewProject(Long projectId, Long createId,Long companyId){
 		log.info("insert view project projectId = "+projectId+" createId = "+createId);
 		int result;
 		try {
 			ViewProject vp = new ViewProject();
 			vp.setPrjId(projectId);
 			vp.setViewerId(createId);
+			vp.setCompanyId(companyId);
 			result = viewProjectMapper.insertSelective(vp);
 		}catch(Exception e)
 		{

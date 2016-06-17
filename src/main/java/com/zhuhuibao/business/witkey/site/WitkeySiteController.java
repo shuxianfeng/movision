@@ -10,6 +10,7 @@ import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
+import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -33,6 +34,9 @@ public class WitkeySiteController {
 
     @Autowired
     private CooperationService cooperationService;
+
+    @Autowired
+    private PaymentService paymentService;
 
     /**
      * 发布任务
@@ -109,10 +113,11 @@ public class WitkeySiteController {
      */
     @ApiOperation(value="威客信息詳情",notes="威客信息詳情",response = Cooperation.class)
     @RequestMapping(value = "sel_witkey", method = RequestMethod.GET)
+    //    @ZhbAutoPayforAnnotation(goodsType=ZhbGoodsType.CKJSCG)
     public Response cooperationInfo(@RequestParam String id)  {
         Response response = new Response();
         Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
-        response.setData(cooperation);
+        response = paymentService.viewGoodsRecord(Long.parseLong(id),cooperation,"witkey");
         cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews())+1));
         cooperationService.updateCooperationViews(cooperation);
         return response;

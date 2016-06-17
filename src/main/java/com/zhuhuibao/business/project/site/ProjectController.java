@@ -9,11 +9,8 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
@@ -39,6 +36,9 @@ public class ProjectController {
 
 	 @Autowired
 	 private MemberService memberService;
+
+	@Autowired
+	PaymentService paymentService;
 
 	 /**
      * 根据条件查询项目分页信息
@@ -88,28 +88,14 @@ public class ProjectController {
 		return response;
     }
     
-	//vip减 项目条数减
 	@RequestMapping(value = {"previewProject","site/base/sel_project"},method = RequestMethod.GET)
 	@ApiOperation(value="项目信息详情",notes = "根据Id查看项目信息",response = Response.class)
+	//    @ZhbAutoPayforAnnotation(goodsType=ZhbGoodsType.CKJSCG)
 	public Response previewProject(@ApiParam(value = "项目信息ID") @RequestParam Long porjectID) throws Exception {
-		Response response = new Response();
 		Map<String,Object> map  = projectService.queryProjectDetail(porjectID);
-		Long createId = ShiroUtil.getCreateID();
-		if(createId != null) {
-			Map<String,Object> con = new HashMap<String,Object>();
-			con.put("viewerId",createId);
-			con.put("prjId",porjectID);
-			int viewNumber = projectService.checkIsViewProject(con);
-			if(viewNumber == 0) {
-				projectService.insertViewProject(porjectID, createId);
-			}
-		}else{
-			throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-		}
-		response.setData(map);
-		return response;
+		return paymentService.viewGoodsRecord(porjectID,map,"project");
 	}
-	
+
 	@RequestMapping(value = {"previewUnLoginProject","site/base/sel_unLoginProject"},method = RequestMethod.GET)
 	@ApiOperation(value="预览未登陆的项目信息",notes = "根据Id查看未登陆的项目信息",response = Response.class)
 	public Response previewUnLoginProject(@ApiParam(value = "项目信息ID") @RequestParam Long porjectID) throws Exception {

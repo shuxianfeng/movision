@@ -163,4 +163,10 @@ public interface MsgCodeConstant {
 	 * 已是专家
 	 */
 	int EXPERT_ISEXIST = 10204;
+
+	/**
+	 * 扣款
+	 */
+	int ZHB_PAYMENT_TRUE = 10070;
+
 }

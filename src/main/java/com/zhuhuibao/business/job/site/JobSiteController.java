@@ -17,6 +17,7 @@ import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
+import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.file.ExporDoc;
@@ -64,6 +65,9 @@ public class JobSiteController {
 
     @Autowired
     ChannelNewsService newsService;
+
+    @Autowired
+    private PaymentService paymentService;
 
     @RequestMapping(value={"/rest/jobsite/applyPosition","/rest/job/site/recruit/apply_position"}, method = RequestMethod.POST)
     @ApiOperation(value="应聘职位",notes = "应聘职位",response = Response.class)
@@ -490,6 +494,7 @@ public class JobSiteController {
 
     @ApiOperation(value = "公司查看简历", notes = "公司查看简历", response = Response.class)
     @RequestMapping(value = "/rest/job/site/resume/preview_resume", method = RequestMethod.GET)
+//    @ZhbAutoPayforAnnotation(goodsType=ZhbGoodsType.CKJSCG)
     public Response previewResume(@ApiParam(value = "简历id") @RequestParam String id,
                                   @ApiParam(value = "该投递简历记录的id,频道页不传，会员中心查看简历记录时候传") @RequestParam(required = false) String recordId) throws Exception {
         Response response = new Response();
@@ -498,6 +503,10 @@ public class JobSiteController {
         map.put("id",recordId);
         map.put("status",JobConstant.RESUME_STATUS_TWO);
         jrrService.updateJobRelResume(map);
+        Resume resumeBean=new Resume();
+        resumeBean.setViews("1");
+        resumeBean.setId(id);
+        resume.updateResume(resumeBean);
         if(memberId!=null){
             Map<String,Object> map1 = new HashMap<String,Object>();
             map1.put("resumeID",id);
@@ -506,7 +515,7 @@ public class JobSiteController {
             map1.put("createId",resume1.getCreateid());
             resume.addLookRecord(map1);
             Resume resume2 = resume.previewResume(id);
-            response.setData(resume2);
+            response = paymentService.viewGoodsRecord(Long.parseLong(id),resume2,"resume");
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }

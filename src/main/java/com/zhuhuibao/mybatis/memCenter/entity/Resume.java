@@ -77,6 +77,8 @@ public class Resume {
     
     private String download;
 
+    private String views;
+
     public String getId() {
         return id;
     }
@@ -380,6 +382,12 @@ public class Resume {
 	public void setDownload(String download) {
 		this.download = download;
 	}
-    
-    
+
+    public String getViews() {
+        return views;
+    }
+
+    public void setViews(String views) {
+        this.views = views;
+    }
 }

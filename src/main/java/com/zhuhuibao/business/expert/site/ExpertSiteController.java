@@ -18,10 +18,12 @@ import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.UploadService;
+import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
 import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
 import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
 import com.zhuhuibao.mybatis.tech.service.PublishTCourseService;
 import com.zhuhuibao.mybatis.tech.service.TechExpertCourseService;
+import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ValidateUtils;
@@ -72,6 +74,12 @@ public class ExpertSiteController {
     @Autowired
     MemberService memberService;
 
+    @Autowired
+    PaymentService paymentService;
+
+    @Autowired
+    PaymentGoodsService goodsService;
+
     private static final String PARTNER = AlipayPropertiesLoader.getPropertyValue("partner");
 
     @ApiOperation(value="发布技术成果",notes="发布技术成果",response = Response.class)
@@ -91,10 +99,10 @@ public class ExpertSiteController {
 
     @ApiOperation(value="技术成果详情",notes="技术成果详情",response = Response.class)
     @RequestMapping(value = "ach/sel_achievement", method = RequestMethod.GET)
+    //    @ZhbAutoPayforAnnotation(goodsType=ZhbGoodsType.CKJSCG)
     public Response queryAchievementById(@ApiParam(value = "技术成果ID")@RequestParam String id) throws Exception {
-        Response response = new Response();
         Map<String,String> map = expertService.queryAchievementById(id);
-        response.setData(map);
+        Response response = paymentService.viewGoodsRecord(Long.parseLong(id),map,"expertcoop");
         return response;
     }
 
@@ -258,8 +266,12 @@ public class ExpertSiteController {
             record.setExpertId(id);
             record.setCompanyId(String.valueOf(comanyId));
             //查询该专家是否已被查看过
-            LookExpertRecord record1 = expertService.selectRecordByExpertIdCompanyId(record);
-            if(record1!=null){
+            Map<String,Object> con = new HashMap<String,Object>();
+            con.put("goodsId",id);
+            con.put("companyId",comanyId);
+            con.put("type","expert");
+            int count = goodsService.checkIsViewGoods(con);
+            if(count > 0){
                 map.put("address",expert.getAddress());
                 map.put("telephone",expert.getTelephone());
                 map.put("mobile",expert.getMobile());
@@ -292,11 +304,7 @@ public class ExpertSiteController {
         Long companyId = ShiroUtil.getCompanyID();
         if(createid!=null){
             //记录查看专家
-            LookExpertRecord record = new LookExpertRecord();
-            record.setExpertId(id);
-            record.setCreateId(String.valueOf(createid));
-            record.setCompanyId(String.valueOf(companyId));
-            expertService.addRecord(record);
+            goodsService.insertViewProject(Long.parseLong(id),createid,companyId,"expert");
             //查询专家联系方式
             Expert expert = expertService.queryExpertById(id);
             //返回到页面

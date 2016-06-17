@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.project.entity.ViewProject" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="viewerId" property="viewerId" jdbcType="BIGINT" />
+    <result column="companyId" property="companyId" jdbcType="BIGINT" />
     <result column="prjId" property="prjId" jdbcType="BIGINT" />
     <result column="viewTime" property="viewTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -35,6 +36,9 @@
       <if test="viewerId != null" >
         viewerId,
       </if>
+      <if test="companyId != null" >
+        companyId,
+      </if>
       <if test="prjId != null" >
         prjId,
       </if>
@@ -46,6 +50,9 @@
       </if>
       <if test="viewerId != null" >
         #{viewerId,jdbcType=BIGINT},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=BIGINT},
       </if>
       <if test="prjId != null" >
         #{prjId,jdbcType=BIGINT},
@@ -69,13 +76,13 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.project.entity.ViewProject" >
-    update t_prj_viewProject
-    set viewerId = #{viewerId,jdbcType=BIGINT},
-      prjId = #{prjId,jdbcType=BIGINT},
-      viewTime = #{viewTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+  update t_prj_viewProject
+  set viewerId = #{viewerId,jdbcType=BIGINT},
+  prjId = #{prjId,jdbcType=BIGINT},
+  viewTime = #{viewTime,jdbcType=TIMESTAMP}
+  where id = #{id,jdbcType=BIGINT}
+</update>
   <select id="checkIsViewProject" parameterType="java.util.Map" resultType="java.lang.Integer">
-    select count(1) from t_prj_viewProject t where t.viewerId = #{viewerId} and t.prjId = #{prjId}
+    select count(1) from t_prj_viewProject t where t.companyId = #{companyId} and t.prjId = #{goodsId}
   </select>
 </mapper>
