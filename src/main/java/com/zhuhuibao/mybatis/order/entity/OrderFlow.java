@@ -16,7 +16,7 @@ public class OrderFlow {
 
     private Date tradeTime;
 
-    private Date endTime;
+    private Date updateTime;
 
     public String getOrderNo() {
         return orderNo;
@@ -66,11 +66,11 @@ public class OrderFlow {
         this.tradeTime = tradeTime;
     }
 
-    public Date getEndTime() {
-        return endTime;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

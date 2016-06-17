@@ -25,10 +25,10 @@ public class PayConstants {
     }
 
     /**
-     * 订单状态  1未支付，2：已支付，3：退款中，4，退款失败，5：已退款 6:支付失败 7:已关闭
+     * 订单状态 1未支付，2：已支付，3：支付失败 ，4：待退款，5：退款中，6：退款失败，7：已退款 ，8:已关闭
      */
     public enum OrderStatus {
-        WZF("1"), YZF("2"), TKZ("3"), TKSB("4"), YTK("5"),FAIL("6"),CLOSED("7");
+        WZF("1"), YZF("2"),FAIL("3"),DTK("4"), TKZ("5"), TKSB("6"), YTK("7"),CLOSED("8");
         public final String value;
 
         OrderStatus(String value) {

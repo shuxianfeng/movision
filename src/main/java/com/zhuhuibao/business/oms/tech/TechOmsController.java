@@ -22,6 +22,7 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.Order;
 import com.zhuhuibao.mybatis.order.service.OrderService;
+import com.zhuhuibao.service.order.ZHOrderService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
 import com.zhuhuibao.utils.CommonUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -40,9 +41,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- *  技术后台运营系统
- *  @Author pl
- *  @version 2016/06/08
+ * 技术后台运营系统
+ *
+ * @version 2016/06/08
+ * @Author pl
  */
 @RestController
 @RequestMapping("/rest/tech/oms")
@@ -54,7 +56,7 @@ public class TechOmsController {
     private static final String PARTNER = AlipayPropertiesLoader.getPropertyValue("partner");
 
     @Autowired
-    AlipayRefundService alipayRefundService;
+    ZHOrderService zhOrderService;
 
     @Autowired
     OrderService orderService;
@@ -72,28 +74,26 @@ public class TechOmsController {
     /**
      * 单笔退款
      * {detail_data 退款详细数据 必填(支付宝交易号^退款金额^备注)}
-     * @param response
+     *
+     * @param resp
      * @param data
      */
-    @ApiOperation(value = "培训课程单笔退款", notes = "培训课程单笔退款")
+    @ApiOperation(value = "培训课程单笔退款", notes = "培训课程单笔退款", response = Response.class)
     @RequestMapping(value = "refund", method = RequestMethod.POST)
-    public void doRefund(HttpServletResponse response, @ApiParam @ModelAttribute RefundItem data) throws Exception {
+    public Response doRefund(HttpServletResponse resp, @ApiParam @ModelAttribute RefundItem data) throws Exception {
         Gson gson = new Gson();
         String json = gson.toJson(data);
         log.info("技术培训批量退款页面,请求参数:{}", json);
         Map paramMap = gson.fromJson(json, Map.class);
         paramMap.put("partner", PARTNER);// {partner = seller_id}   商家支付宝ID  合作伙伴身份ID 签约账号
 
-        //拼装请求参数
-        //orderNos  operatorId refundDate totalFee batchNum   detailData
-        paramMap.put("batchNum",1);
         Long userId = ShiroUtil.getOmsCreateID();
         if (userId == null) {
             log.error("用户未登陆");
             throw new AuthException(MsgCodeConstant.un_login,
                     MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-        paramMap.put("operatorId",String.valueOf(userId));
+        paramMap.put("operatorId", String.valueOf(userId));
 
         String reason = data.getReason();
         if (reason.contains("^") || reason.contains("|") || reason.contains("$") ||
@@ -102,90 +102,30 @@ public class TechOmsController {
             throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,
                     "退款理由中不能包含 '^' ,'|', '$' ,'#' 等特殊字符");
         }
-        Order order = orderService.findByOrderNo(data.getOrderNo());
 
-        paramMap.put("orderNos", data.getOrderNo());
-        paramMap.put("totalFee", data.getFee());
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        paramMap.put("refundDate", sf.format(new Date()));
+        log.debug("调用退款接口......");
+        zhOrderService.requestRefund(resp, paramMap);
 
-        //detailData 多条   原付款支付宝交易号^退款总金额^退款理由 #  原付款支付宝交易号^退款总金额^退款理由
-        String detailData = String.valueOf(order.getBuyerId()) + "^" + data.getFee() + "^" + reason;
-        paramMap.put("detailData", detailData);
-
-
-        log.debug("调用批量退款接口......");
-        alipayRefundService.doRefund(response, paramMap);
-
+        return new Response();
     }
 
     /**
      * 批量退款接口
      * {detail_data 退款详细数据 必填(支付宝交易号^退款金额^备注)多笔请用#隔开}
-     * @param response
+     *
+     * @param resp
      * @param data
      */
-    @ApiOperation(value = "培训课程批量退款", notes = "培训课程批量退款")
+    @ApiOperation(value = "培训课程批量退款", notes = "培训课程批量退款", response = Response.class)
     @RequestMapping(value = "batch_refund", method = RequestMethod.POST)
-    public void doBatchRefund(HttpServletResponse response, @ApiParam @ModelAttribute RefundReqBean data) throws Exception {
-
-        Gson gson = new Gson();
-        String json = gson.toJson(data);
-        log.info("技术培训批量退款页面,请求参数:{}", json);
-        Map paramMap = gson.fromJson(json, Map.class);
-        paramMap.put("partner", PARTNER);// {partner = seller_id}   商家支付宝ID  合作伙伴身份ID 签约账号
-
-        //拼装请求参数
-        //orderNos  operatorId refundDate totalFee batchNum   detailData
-
-        List<RefundItem> items = data.getItems();
-        if (items.size() > 0) {
-            paramMap.put("batchNum", items.size());
-            Long userId = ShiroUtil.getOmsCreateID();
-            if (userId == null) {
-                log.error("用户未登陆");
-                throw new AuthException(MsgCodeConstant.un_login,
-                        MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-            paramMap.put("operatorId",String.valueOf(userId));
-            List<String> orderNoList = new ArrayList<>();
-            BigDecimal totalFee = new BigDecimal(0);
-            List<String> detailList = new ArrayList<>();
-            for (RefundItem item : items) {
-                String reason = item.getReason();
-                if (reason.contains("^") || reason.contains("|") || reason.contains("$") ||
-                        reason.contains("#")) {
-                    log.error("退款理由中不能包含 '^' ,'|', '$' ,'#' 等特殊字符");
-                    throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,
-                            "退款理由中不能包含 '^' ,'|', '$' ,'#' 等特殊字符");
-                }
-                Order order = orderService.findByOrderNo(item.getOrderNo());
-                detailList.add(String.valueOf(order.getBuyerId()) + "^" + item.getFee() + "^" + reason);
-
-                orderNoList.add(item.getOrderNo());
-                totalFee.add(new BigDecimal(item.getFee()));
-
-            }
-            String orderNos = CommonUtils.splice(orderNoList, ",");
-            paramMap.put("orderNos", orderNos);
-            paramMap.put("totalFee", totalFee.toString());
-            SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            paramMap.put("refundDate", sf.format(new Date()));
-
-            //detailData 多条   原付款支付宝交易号^退款总金额^退款理由 #  原付款支付宝交易号^退款总金额^退款理由
-            String detailData = CommonUtils.splice(detailList, "#");
-            paramMap.put("detailData", detailData);
-
-
-            log.debug("调用批量退款接口......");
-            alipayRefundService.doRefund(response, paramMap);
-        }
-
+    public Response doBatchRefund(HttpServletResponse resp, @ApiParam @ModelAttribute RefundReqBean data) throws Exception {
+        log.debug("暂不支持批量退款");
+        return new Response("暂不支持批量退款");
     }
 
 
-    @RequestMapping(value="coop/sel_tech_cooperation", method = RequestMethod.GET)
-    @ApiOperation(value="运营管理平台搜索技术合作(技术成果，技术需求)",notes = "运营管理平台技术合作(技术成果，技术需求)",response = Response.class)
+    @RequestMapping(value = "coop/sel_tech_cooperation", method = RequestMethod.GET)
+    @ApiOperation(value = "运营管理平台搜索技术合作(技术成果，技术需求)", notes = "运营管理平台技术合作(技术成果，技术需求)", response = Response.class)
     public Response findAllTechCooperationPager(@ApiParam(value = "系统分类") @RequestParam(required = false) String systemCategory,
                                                 @ApiParam(value = "应用领域") @RequestParam(required = false) String applicationArea,
                                                 @ApiParam(value = "标题") @RequestParam(required = false) String title,
@@ -215,29 +155,26 @@ public class TechOmsController {
         return response;
     }
 
-    @RequestMapping(value="coop/upd_tech_cooperation", method = RequestMethod.POST)
-    @ApiOperation(value="修改技术合作(技术成果，技术需求)",notes = "修改技术合作(技术成果，技术需求)",response = Response.class)
-    public Response updateTechCooperation( @ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
-    {
+    @RequestMapping(value = "coop/upd_tech_cooperation", method = RequestMethod.POST)
+    @ApiOperation(value = "修改技术合作(技术成果，技术需求)", notes = "修改技术合作(技术成果，技术需求)", response = Response.class)
+    public Response updateTechCooperation(@ApiParam(value = "技术合作：技术成果，技术需求") @ModelAttribute(value = "techCoop") TechCooperation techCoop) {
         Response response = new Response();
         int result = techService.updateTechCooperation(techCoop);
         return response;
     }
 
-    @RequestMapping(value="coop/sel_tech_cooperation_detail", method = RequestMethod.GET)
-    @ApiOperation(value="查询技术合作(技术成果，技术需求)",notes = "查询技术合作(技术成果，技术需求)",response = Response.class)
-    public Response selectTechCooperationById( @ApiParam(value = "技术合作成果、需求ID")  @RequestParam String techCoopId)
-    {
+    @RequestMapping(value = "coop/sel_tech_cooperation_detail", method = RequestMethod.GET)
+    @ApiOperation(value = "查询技术合作(技术成果，技术需求)", notes = "查询技术合作(技术成果，技术需求)", response = Response.class)
+    public Response selectTechCooperationById(@ApiParam(value = "技术合作成果、需求ID") @RequestParam String techCoopId) {
         Response response = new Response();
         TechCooperation techCoop = techService.selectTechCooperationById(techCoopId);
         response.setData(techCoop);
         return response;
     }
 
-    @RequestMapping(value="coop/del_tech_cooperation", method = RequestMethod.GET)
-    @ApiOperation(value="删除技术合作(技术成果，技术需求)",notes = "删除技术合作(技术成果，技术需求)",response = Response.class)
-    public Response deleteTechCooperation( @ApiParam(value = "技术合作ID")  @RequestParam() String techId)
-    {
+    @RequestMapping(value = "coop/del_tech_cooperation", method = RequestMethod.GET)
+    @ApiOperation(value = "删除技术合作(技术成果，技术需求)", notes = "删除技术合作(技术成果，技术需求)", response = Response.class)
+    public Response deleteTechCooperation(@ApiParam(value = "技术合作ID") @RequestParam() String techId) {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("id", techId);
@@ -246,66 +183,61 @@ public class TechOmsController {
         return response;
     }
 
-    @RequestMapping(value="data/del_tech_data", method = RequestMethod.GET)
-    @ApiOperation(value="删除技术资料(行业解决方案，技术文档，培训资料)",notes = "删除技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)
-    public Response deleteTechData( @ApiParam(value = "技术资料ID")  @RequestParam() String techDataId)
-    {
+    @RequestMapping(value = "data/del_tech_data", method = RequestMethod.GET)
+    @ApiOperation(value = "删除技术资料(行业解决方案，技术文档，培训资料)", notes = "删除技术资料(行业解决方案，技术文档，培训资料)", response = Response.class)
+    public Response deleteTechData(@ApiParam(value = "技术资料ID") @RequestParam() String techDataId) {
         Response response = new Response();
-        Map<String,Object> condition = new HashMap<String,Object>();
-        condition.put("id",techDataId);
+        Map<String, Object> condition = new HashMap<String, Object>();
+        condition.put("id", techDataId);
         condition.put("status", TechConstant.TechCooperationnStatus.DELETE.toString());
         int result = techDataService.deleteTechData(condition);
         return response;
     }
 
-    @RequestMapping(value="data/upd_tech_data", method = RequestMethod.POST)
-    @ApiOperation(value="修改技术资料(行业解决方案，技术文档，培训资料)",notes = "修改技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)
-    public Response updateTechData( @ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techData") TechData techData)
-    {
+    @RequestMapping(value = "data/upd_tech_data", method = RequestMethod.POST)
+    @ApiOperation(value = "修改技术资料(行业解决方案，技术文档，培训资料)", notes = "修改技术资料(行业解决方案，技术文档，培训资料)", response = Response.class)
+    public Response updateTechData(@ApiParam(value = "技术合作：技术成果，技术需求") @ModelAttribute(value = "techData") TechData techData) {
         Response response = new Response();
         int result = techDataService.updateTechData(techData);
         return response;
     }
 
-    @RequestMapping(value="data/sel_frist_category", method = RequestMethod.GET)
-    @ApiOperation(value="查询技术资料一级分类",notes = "查询技术资料一级分类",response = Response.class)
-    public Response selectFirstCategory()
-    {
+    @RequestMapping(value = "data/sel_frist_category", method = RequestMethod.GET)
+    @ApiOperation(value = "查询技术资料一级分类", notes = "查询技术资料一级分类", response = Response.class)
+    public Response selectFirstCategory() {
         Response response = new Response();
         List<DictionaryTechData> firstCategoryList = dicTDService.getFirstCategory();
         response.setData(firstCategoryList);
         return response;
     }
 
-    @RequestMapping(value="data/sel_second_category", method = RequestMethod.GET)
-    @ApiOperation(value="查询技术资料二级分类",notes = "查询技术资料二级分类",response = Response.class)
-    public Response selectSecondCategoryByFirstId( @ApiParam(value = "一级分类ID")  @RequestParam() String firstCategoryId)
-    {
+    @RequestMapping(value = "data/sel_second_category", method = RequestMethod.GET)
+    @ApiOperation(value = "查询技术资料二级分类", notes = "查询技术资料二级分类", response = Response.class)
+    public Response selectSecondCategoryByFirstId(@ApiParam(value = "一级分类ID") @RequestParam() String firstCategoryId) {
         Response response = new Response();
         List<DictionaryTechData> secondCategoryList = dicTDService.getSecondCategory(Integer.parseInt(firstCategoryId));
         response.setData(secondCategoryList);
         return response;
     }
 
-    @RequestMapping(value="data/sel_tech_data_detail", method = RequestMethod.GET)
-    @ApiOperation(value="查询技术资料详情(行业解决方案，技术文档，培训资料)",notes = "查询技术资料详情(行业解决方案，技术文档，培训资料)",response = Response.class)
-    public Response selectTechDataDetail(@ApiParam(value = "技术资料ID")  @RequestParam String techDataId)
-    {
+    @RequestMapping(value = "data/sel_tech_data_detail", method = RequestMethod.GET)
+    @ApiOperation(value = "查询技术资料详情(行业解决方案，技术文档，培训资料)", notes = "查询技术资料详情(行业解决方案，技术文档，培训资料)", response = Response.class)
+    public Response selectTechDataDetail(@ApiParam(value = "技术资料ID") @RequestParam String techDataId) {
         TechData techData = techDataService.selectTechDataInfo(Long.parseLong(techDataId));
         Response response = new Response();
         response.setData(techData);
         return response;
     }
 
-    @RequestMapping(value="data/sel_tech_data", method = RequestMethod.GET)
-    @ApiOperation(value="运营管理平台搜索技术资料",notes = "运营管理平台搜索技术资料",response = Response.class)
+    @RequestMapping(value = "data/sel_tech_data", method = RequestMethod.GET)
+    @ApiOperation(value = "运营管理平台搜索技术资料", notes = "运营管理平台搜索技术资料", response = Response.class)
     public Response findAllTechDataPager(@ApiParam(value = "一级分类") @RequestParam(required = false) String fCategory,
-                                                @ApiParam(value = "二级分类") @RequestParam(required = false) String sCategory,
-                                                @ApiParam(value = "标题") @RequestParam(required = false) String title,
-                                                @ApiParam(value = "类型：1:普通资料，2：付费资料") @RequestParam(required = false) String type,
-                                                @ApiParam(value = "状态") @RequestParam(required = false) String status,
-                                                @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-                                                @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
+                                         @ApiParam(value = "二级分类") @RequestParam(required = false) String sCategory,
+                                         @ApiParam(value = "标题") @RequestParam(required = false) String title,
+                                         @ApiParam(value = "类型：1:普通资料，2：付费资料") @RequestParam(required = false) String type,
+                                         @ApiParam(value = "状态") @RequestParam(required = false) String status,
+                                         @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
+                                         @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("fCategory", fCategory);

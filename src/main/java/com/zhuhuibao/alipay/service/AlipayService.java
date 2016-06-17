@@ -1,9 +1,9 @@
 package com.zhuhuibao.alipay.service;
 
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
 import com.zhuhuibao.alipay.config.AliPayConfig;
 import com.zhuhuibao.alipay.util.AlipayNotify;
+import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.alipay.util.AlipaySubmit;
 import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.exception.BusinessException;
@@ -21,8 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -95,17 +94,23 @@ public class AlipayService {
      */
     private void genRefundRecord(Map<String, String> msgParam) throws ParseException {
         log.debug("request params:{}", msgParam.toString());
-        Refund refund = new Refund();
-        refund.setBatchNo(msgParam.get("batchNo"));
-        refund.setBatchNum(Integer.valueOf(msgParam.get("batchNum")));
-        refund.setOperatorId(Integer.valueOf(msgParam.get("operatorId")));
-        refund.setOrderNo(msgParam.get("orderNos"));
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        refund.setRefundDate(sf.parse(msgParam.get("refundDate")));
-        refund.setTotalFee(Long.valueOf(msgParam.get("totalFee")));
-        //+一个退款理由 (reason)
+        int batchNum = Integer.valueOf(msgParam.get("batchNum"));
 
-        refundService.insert(refund);
+        if(batchNum == 1) {  //单笔退款
+            Refund refund = new Refund();
+            refund.setBatchNo(msgParam.get("batchNo"));
+            refund.setOperatorId(Integer.valueOf(msgParam.get("operatorId")));
+            refund.setOrderNo(msgParam.get("orderNos"));
+            SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            refund.setRefundDate(sf.parse(msgParam.get("refundDate")));
+            refund.setTotalFee(Long.valueOf(msgParam.get("totalFee")));
+            //+一个退款理由 (reason)
+            refund.setReason(msgParam.get("reason"));
+            refundService.insert(refund);
+        }else{
+            log.error("暂不支持批量退款");
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"暂不支持批量退款");
+        }
 
     }
 
@@ -269,8 +274,6 @@ public class AlipayService {
     }
 
 
-
-
     /**
      * 支付操作
      *
@@ -403,22 +406,50 @@ public class AlipayService {
                 if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
                     recordPayAsyncCallbackLog(params);
                     //2-> 判断是否存在筑慧币支付方式
-                    OrderFlow orderFlow =  orderFlowService.findByOrderNoAndTradeMode(params.get("out_trade_no"),
+                    OrderFlow orderFlow = orderFlowService.findByOrderNoAndTradeMode(params.get("out_trade_no"),
                             PayConstants.PayMode.ZHBPAY.toString());
-                    if(orderFlow != null){
-                       String tradeStatus = orderFlow.getTradeStatus();
-                       if(tradeStatus.equals(PayConstants.OrderStatus.YZF.toString())){
-                           //3-> 修改订单状态为已支付
-                           order.setStatus(PayConstants.OrderStatus.YZF.toString());
-                       }
-                    }else{
+                    if (orderFlow != null) {
+                        String tradeStatus = orderFlow.getTradeStatus();
+                        if (tradeStatus.equals(PayConstants.OrderStatus.YZF.toString())) {
+                            //3-> 修改订单状态为已支付
+                            order.setStatus(PayConstants.OrderStatus.YZF.toString());
+                        }
+                    } else {
                         //3-> 修改订单状态为已支付
                         order.setStatus(PayConstants.OrderStatus.YZF.toString());
                     }
 
+                    //购买筑慧币,VIP 需要回调
+                    String orderNo = params.get("out_trade_no");
+                    Order endOrder = orderService.findByOrderNo(orderNo);
+                    if(endOrder != null){
+                      if(endOrder.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString()) ||
+                              endOrder.getGoodsType().equals(OrderConstants.GoodsType.ZHB.toString())){
+                          RestTemplate restTemplate = new RestTemplate();
+                          Map<String,String> map = new HashMap<>();
+                          map.put("orderNo",orderNo);
+                          map.put("status", Objects.equals(endOrder.getStatus(), PayConstants.OrderStatus.YZF.toString()) ?"success":"fail");
+                          String result = JsonUtils.getJsonStringFromMap(map);
+
+                          String zhbUrl = AlipayPropertiesLoader.getPropertyValue("zhb_return_url");
+                          String vipUrl = AlipayPropertiesLoader.getPropertyValue("vip_return_url");
+                          String url = "";
+                          if(order.getGoodsType().equals(OrderConstants.GoodsType.ZHB.toString())){
+                              url = zhbUrl;
+                          }else if(order.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString())){
+                              url = vipUrl;
+                          }
+                          url += "?result={result}";
+
+                          String responseCode = restTemplate.postForObject(
+                                  url,
+                                  null,String.class,result);
+                          log.debug("回调状态:",responseCode);
+                      }
+                    }
 
                 }
-                //即时到账退款
+                //退款
                 if (tradeType.equals(PayConstants.TradeType.REFUND.toString())) {
                     recordRefundAsyncCallbackLog(params);
                     //修改订单状态为已支付
@@ -495,3 +526,4 @@ public class AlipayService {
         alipayCallbackLogService.insert(alipayCallbackLog);
     }
 }
+

@@ -56,15 +56,15 @@
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <table tableName="t_zhb_account"
-               domainObjectName="ZhbAccount"
+        <table tableName="t_o_refund"
+               domainObjectName="Refund"
                enableCountByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false">
             <!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 enable*ByExample
                 是否生成 example类 -->
-            <property name="useActualColumnNames" value="false"/>
+            <property name="useActualColumnNames" value="true"/>
         </table>
 
 
