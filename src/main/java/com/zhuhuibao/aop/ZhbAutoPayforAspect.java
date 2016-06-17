@@ -50,7 +50,7 @@ public class ZhbAutoPayforAspect {
 			if (null != goodsConfig && null != response.getGoodsId() && response.getGoodsId() > 0) {
 				int result = 0;
 				// 先判断是否可以自定义特权信息
-				if (vipInfoService.hadExtraPrivilege(member.getCompanyId(), goodsConfig.getPinyin())) {
+				if (vipInfoService.getExtraPrivilegeNum(member.getCompanyId(), goodsConfig.getPinyin()) > 0) {
 					result = vipInfoService.useExtraPrivilege(member.getCompanyId(), goodsConfig.getPinyin());
 				}
 

@@ -1,5 +1,8 @@
 package com.zhuhuibao.business.pay;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -13,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
+import com.zhuhuibao.mybatis.zhb.entity.ZhbGoodsConfig;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbRecord;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
@@ -31,8 +36,11 @@ public class ZhbController {
 	@Autowired
 	private ZhbService zhbService;
 
+	@Autowired
+	private VipInfoService vipInfoService;
+
 	@ApiOperation(value = "筑慧币充值", notes = "筑慧币充值", response = Response.class)
-	@RequestMapping(value = "ach/add_achievement", method = RequestMethod.POST)
+	@RequestMapping(value = "mc/upd_prepaid", method = RequestMethod.POST)
 	public Response zhbPrepaid(@ModelAttribute ZhbRecord zhbRecord) throws Exception {
 		Response response = new Response();
 
@@ -57,7 +65,7 @@ public class ZhbController {
 	}
 
 	@ApiOperation(value = "筑慧币余额查询", notes = "筑慧币余额查询", response = Response.class)
-	@RequestMapping(value = "ach/add_achievement", method = RequestMethod.GET)
+	@RequestMapping(value = "mc/sel_amount", method = RequestMethod.GET)
 	public Response getZhbAccount(@ApiParam(value = "会员ID") @RequestParam Long memberId) throws Exception {
 		Response response = new Response();
 
@@ -75,7 +83,7 @@ public class ZhbController {
 	}
 
 	@ApiOperation(value = "筑慧币支付", notes = "筑慧币支付", response = Response.class)
-	@RequestMapping(value = "ach/add_achievement", method = RequestMethod.GET)
+	@RequestMapping(value = "mc/upd_payfor", method = RequestMethod.POST)
 	public Response payForOrder(@ModelAttribute ZhbRecord zhbRecord) throws Exception {
 		Response response = new Response();
 
@@ -98,7 +106,7 @@ public class ZhbController {
 	}
 
 	@ApiOperation(value = "筑慧币退款", notes = "筑慧币退款", response = Response.class)
-	@RequestMapping(value = "ach/add_achievement", method = RequestMethod.POST)
+	@RequestMapping(value = "mc/upd_refund", method = RequestMethod.POST)
 	public Response refund(@ModelAttribute ZhbRecord zhbRecord) throws Exception {
 		Response response = new Response();
 
@@ -118,6 +126,34 @@ public class ZhbController {
 		}
 		return response;
 	}
-	
-	
+
+	@ApiOperation(value = "筑慧币余额及当前业务价格查询", notes = "筑慧币余额及当前业务价格查询", response = Response.class)
+	@RequestMapping(value = "zhb/sel_price", method = RequestMethod.POST)
+	public Response selZhbPriceAndAmount(@ApiParam(value = "服务类型") @RequestParam(required = true) String goodsType) throws Exception {
+		Response response = new Response();
+		Subject currentUser = SecurityUtils.getSubject();
+		Session session = currentUser.getSession(false);
+		ShiroUser member = (ShiroUser) session.getAttribute("member");
+		Map<String, String> zhbInfo = new HashMap<String, String>();
+		if (null != member) {
+			// 剩余特权数量
+			long privilegeNum = vipInfoService.getExtraPrivilegeNum(member.getCompanyId(), goodsType);
+			if (privilegeNum > 0) {
+				zhbInfo.put("privilegeNum", String.valueOf(privilegeNum));
+			} else {
+				// 筑慧币单价
+				ZhbGoodsConfig goodsConfig = zhbService.getZhbGoodsConfigByPinyin(goodsType);
+				zhbInfo.put("zhbPrice", goodsConfig.getPinyin().toString());
+				// 筑慧币余额
+				ZhbAccount account = zhbService.getZhbAccount(member.getCompanyId());
+				zhbInfo.put("zhbAmount", account.getAmount().toString());
+			}
+
+		} else {
+			response.setCode(400);
+		}
+		
+		response.setData(zhbInfo);
+		return response;
+	}
 }

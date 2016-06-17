@@ -73,25 +73,27 @@ public class VipInfoService {
 		return privilegeMap;
 	}
 
-	/**
-	 * 判断当前VIP级别是否具有相应特权
-	 * 
-	 * @param vipLevel
-	 * @param privilegePinyin
-	 * @return
-	 */
-	public boolean hadVipPrivilege(int vipLevel, String privilegePinyin) {
-		boolean hadVipPrivilege = false;
-		Map<String, VipPrivilege> privilegeMap = getVipPrivilegeMap(vipLevel);
-		if (MapUtils.isNotEmpty(privilegeMap)) {
-			VipPrivilege privilege = privilegeMap.get(privilegePinyin);
-			if (null != privilege && (VipPrivilegeType.DISCOUNT == privilege.getType() || (VipPrivilegeType.EXIST == privilege.getType() && "1".equals(privilege.getValue())))) {
-				hadVipPrivilege = true;
-			}
-		}
-
-		return hadVipPrivilege;
-	}
+	// /**
+	// * 判断当前VIP级别是否具有相应特权
+	// *
+	// * @param vipLevel
+	// * @param privilegePinyin
+	// * @return
+	// */
+	// public boolean vipHadPrivilege(int vipLevel, String privilegePinyin) {
+	// boolean hadVipPrivilege = false;
+	// Map<String, VipPrivilege> privilegeMap = getVipPrivilegeMap(vipLevel);
+	// if (MapUtils.isNotEmpty(privilegeMap)) {
+	// VipPrivilege privilege = privilegeMap.get(privilegePinyin);
+	// if (null != privilege && (VipPrivilegeType.DISCOUNT ==
+	// privilege.getType() || (VipPrivilegeType.EXIST == privilege.getType() &&
+	// "1".equals(privilege.getValue())))) {
+	// hadVipPrivilege = true;
+	// }
+	// }
+	//
+	// return hadVipPrivilege;
+	// }
 
 	/**
 	 * 获取用户自定义特权信息
@@ -101,8 +103,27 @@ public class VipInfoService {
 	 * @return
 	 */
 	public VipMemberPrivilege getVipMemberPrivilege(Long memberId, String privilegePinyin) {
+		privilegePinyin = StringUtils.isNotBlank(privilegePinyin) ? privilegePinyin.toLowerCase() : "";
 		Map<String, Object> param = MapUtil.convert2HashMap("memberId", memberId, "pinyin", privilegePinyin);
 		return vipInfoMapper.selectVipMemberPrivilege(param);
+	}
+
+	/**
+	 * 查询会员剩余额外特权数量
+	 * 
+	 * @param memberId
+	 * @param privilegePinyin
+	 * @return
+	 */
+	public long getExtraPrivilegeNum(Long memberId, String privilegePinyin) {
+		if (null != memberId && StringUtils.isNotBlank(privilegePinyin)) {
+			VipMemberPrivilege extraPrivilege = getVipMemberPrivilege(memberId, privilegePinyin.toLowerCase());
+			if (null != extraPrivilege && VipPrivilegeType.NUM == extraPrivilege.getType()) {
+				return extraPrivilege.getValue();
+			}
+		}
+
+		return 0;
 	}
 
 	/**
@@ -138,9 +159,8 @@ public class VipInfoService {
 		VipMemberPrivilege extraPrivilege = vipInfoMapper.selectVipMemberPrivilege(param);
 		if (null != extraPrivilege && VipPrivilegeType.NUM == extraPrivilege.getType() && extraPrivilege.getValue() > 0) {
 			extraPrivilege.setValue(extraPrivilege.getValue() - 1);
-			vipInfoMapper.updateVipMemberPrivilegeById(extraPrivilege);
-
-			result = 1;
+			extraPrivilege.setOldUpdateTime(extraPrivilege.getUpdateTime());
+			result = vipInfoMapper.updateVipMemberPrivilegeValue(extraPrivilege);
 		}
 
 		return result;

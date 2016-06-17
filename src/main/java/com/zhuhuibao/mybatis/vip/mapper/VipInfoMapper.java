@@ -14,6 +14,7 @@ import com.zhuhuibao.mybatis.vip.entity.VipPrivilege;
  */
 public interface VipInfoMapper {
 
+	// TODO
 	/**
 	 * 根据ID获取会员VIP信息
 	 * 
@@ -22,6 +23,7 @@ public interface VipInfoMapper {
 	 */
 	VipMemberInfo selectVipMemberInfoById(Long memberId);
 
+	// TODO
 	/**
 	 * 根据会员级别获取所有会员特权
 	 * 
@@ -39,6 +41,7 @@ public interface VipInfoMapper {
 	 */
 	VipMemberPrivilege selectVipMemberPrivilege(Map<String, Object> param);
 
+	// TODO
 	/**
 	 * 根据memberID获取自定义特权
 	 * 
@@ -47,6 +50,7 @@ public interface VipInfoMapper {
 	 */
 	List<VipMemberPrivilege> selectVipMemberPrivilegeList(Long memberId);
 
+	// TODO
 	/**
 	 * 添加会员自定义特权信息
 	 * 
@@ -54,10 +58,11 @@ public interface VipInfoMapper {
 	 */
 	void insertVipMemberPrivilege(VipMemberPrivilege vipMemberPrivilege);
 
+	// TODO
 	/**
 	 * 根据主键ID更新会员VIP自定义特权
 	 * 
 	 * @param vipMemberPrivilege
 	 */
-	void updateVipMemberPrivilegeById(VipMemberPrivilege vipMemberPrivilege);
+	int updateVipMemberPrivilegeValue(VipMemberPrivilege vipMemberPrivilege);
 }

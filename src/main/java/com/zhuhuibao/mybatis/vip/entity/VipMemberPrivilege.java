@@ -49,6 +49,8 @@ public class VipMemberPrivilege implements Serializable {
 	 */
 	private Date updateTime;
 
+	private Date oldUpdateTime;
+
 	public Long getId() {
 		return id;
 	}
@@ -119,6 +121,14 @@ public class VipMemberPrivilege implements Serializable {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public Date getOldUpdateTime() {
+		return oldUpdateTime;
+	}
+
+	public void setOldUpdateTime(Date oldUpdateTime) {
+		this.oldUpdateTime = oldUpdateTime;
 	}
 
 }
