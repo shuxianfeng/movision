@@ -85,4 +85,10 @@
   <select id="checkIsViewProject" parameterType="java.util.Map" resultType="java.lang.Integer">
     select count(1) from t_prj_viewProject t where t.companyId = #{companyId} and t.prjId = #{goodsId}
   </select>
+  
+  <select id="getAreaOrCity" parameterType="java.util.Map" resultType="java.util.Map"> 
+     select w.code,w.cityCode,c.provincecode from t_dictionary_area
+      w left join t_dictionary_city c on w.cityCode=c.code
+     where w.name=#{area} and c.name=#{city}
+  </select>
 </mapper>
