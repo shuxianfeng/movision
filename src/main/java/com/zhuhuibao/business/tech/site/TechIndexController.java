@@ -148,7 +148,7 @@ public class TechIndexController {
         return response;
     }
 
-    @RequestMapping(value="sel_latest_train_course", method = RequestMethod.POST)
+    @RequestMapping(value="sel_latest_train_course", method = RequestMethod.GET)
     @ApiOperation(value="查询最新发布的课程(默认5条)",notes = "查询最新发布的课程(默认5条)",response = Response.class)
     public Response findLatestPublishCourse()
     {
@@ -162,7 +162,7 @@ public class TechIndexController {
         return response;
     }
 
-    @RequestMapping(value="sel_site_info", method = RequestMethod.POST)
+    @RequestMapping(value="sel_site_info", method = RequestMethod.GET)
     @ApiOperation(value="查询技术频道登陆者信息",notes = "查询技术频道登陆者信息",response = Response.class)
     public Response findTechSiteInfo()
     {
