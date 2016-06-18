@@ -18,10 +18,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -87,13 +84,21 @@ public class IndividualController {
 
     @ApiOperation(value = "个人实名认证保存", notes = "个人实名认证保存", response = Response.class)
     @RequestMapping(value = "upd_mem_realName_info", method = RequestMethod.POST)
-    public Response upd_mem_realName_info(@ModelAttribute Member member)  {
+    public Response upd_mem_realName_info(@RequestParam String personRealName,
+                                          @RequestParam String personIdentifyCard,
+                                          @RequestParam String personIDFrontImgUrl,
+                                          @RequestParam String personIDBackImgUrl)  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
+        Member member = new Member();
         if(memberId!=null){
             member.setId(String.valueOf(memberId));
             //实名认证待审核
             member.setStatus(MemberConstant.MemberStatus.SMRZDSH.toString());
+            member.setPersonRealName(personRealName);
+            member.setPersonIdentifyCard(personIdentifyCard);
+            member.setPersonIDFrontImgUrl(personIDFrontImgUrl);
+            member.setPersonIDBackImgUrl(personIDBackImgUrl);
             memberService.updateMemInfo(member);
             Member loginMember = memberService.findMemById(String.valueOf(memberId));
             Subject currentUser = SecurityUtils.getSubject();

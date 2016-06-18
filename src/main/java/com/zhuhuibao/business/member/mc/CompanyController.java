@@ -79,13 +79,17 @@ public class CompanyController {
 
     @ApiOperation(value = "企业实名认证保存", notes = "企业实名认证保存", response = Response.class)
     @RequestMapping(value = "upd_mem_realName_info", method = RequestMethod.POST)
-    public Response upd_mem_realName_info(@ModelAttribute Member member)  {
+    public Response upd_mem_realName_info(@ApiParam(value = "")@RequestParam String coBusLicNum,
+                                          @RequestParam String companyBusinessLicenseImg)  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
+        Member member = new Member();
         if(memberId!=null){
             member.setId(String.valueOf(memberId));
             //实名认证待审核
             member.setStatus(MemberConstant.MemberStatus.SMRZDSH.toString());
+            member.setCoBusLicNum(coBusLicNum);
+            member.setCompanyBusinessLicenseImg(companyBusinessLicenseImg);
             memberService.updateMemInfo(member);
             Member loginMember = memberService.findMemById(String.valueOf(memberId));
             Subject currentUser = SecurityUtils.getSubject();
