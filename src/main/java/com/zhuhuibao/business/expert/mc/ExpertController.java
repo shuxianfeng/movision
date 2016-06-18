@@ -83,6 +83,15 @@ public class ExpertController {
         return response;
     }
 
+    @ApiOperation(value="技术成果详情",notes="技术成果详情",response = Response.class)
+    @RequestMapping(value = "ach/sel_achievement", method = RequestMethod.GET)
+    public Response queryAchievementById(@ApiParam(value = "技术成果ID")@RequestParam String id) throws Exception {
+        Response response = new Response();
+        Map<String,String> map = expertService.queryAchievementById(id);
+        response.setData(map);
+        return response;
+    }
+
     @ApiOperation(value = "删除技术成果", notes = "删除技术成果", response = Response.class)
     @RequestMapping(value = "ach/del_achievement", method = RequestMethod.POST)
     public Response deleteAchievement(@ApiParam(value = "技术成果ids,逗号隔开") @RequestParam String ids)

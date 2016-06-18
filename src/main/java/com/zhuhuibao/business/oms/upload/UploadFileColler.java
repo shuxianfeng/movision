@@ -82,7 +82,7 @@ public class UploadFileColler {
         	
         	String fileToBeRead=null;
 			try {
-				fileToBeRead = uploadService.upload(req,"doc");
+				fileToBeRead = uploadService.upload(req,"project");
 				 
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block

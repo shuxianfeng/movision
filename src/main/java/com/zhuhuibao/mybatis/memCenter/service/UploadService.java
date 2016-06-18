@@ -51,6 +51,10 @@ public class UploadService {
                 saveDirectory = ApiConstants.getUploadDoc() + "/price";
                 //指定所上传的文件最大上传文件大小
                 maxPostSize = ApiConstants.getUploadDocMaxPostSize();
+            } else if ("project".equals(type)) {
+                saveDirectory = ApiConstants.getUploadDoc() + "/project";
+                //指定所上传的文件最大上传文件大小
+                maxPostSize = ApiConstants.getUploadDocMaxPostSize();
             } else if ("techdoc".equals(type)) {
                 //技术资料
                 saveDirectory = ApiConstants.getUploadDoc() + "/tech/doc";
