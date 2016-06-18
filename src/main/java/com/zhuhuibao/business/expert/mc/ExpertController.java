@@ -144,6 +144,15 @@ public class ExpertController {
         return response;
     }
 
+    @ApiOperation(value="协会动态详情",notes="协会动态详情",response = Response.class)
+    @RequestMapping(value = "dynamic/sel_dynamic", method = RequestMethod.GET)
+    public Response queryDynamicById(@ApiParam(value = "协会动态Id")@RequestParam String id) throws Exception {
+        Response response = new Response();
+        Dynamic dynamic = expertService.queryDynamicById(id);
+        response.setData(dynamic);
+        return response;
+    }
+
     @ApiOperation(value = "我的协会动态(后台)", notes = "我的协会动态(后台)", response = Response.class)
     @RequestMapping(value = "dynamic/sel_myDynamicList", method = RequestMethod.GET)
     public Response myDynamicList(@ApiParam(value = "标题") @RequestParam(required = false) String title,
