@@ -239,6 +239,20 @@ public class MemberService {
 	}
 
 	/**
+	 * 资质查询
+	 */
+	public List<CertificateRecord> certificateSearch(CertificateRecord record)
+	{
+		try{
+			return certificateRecordMapper.certificateSearch(record);
+		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
 	 * 资质删除
 	 */
 	public int deleteCertificate(String id)
@@ -417,6 +431,8 @@ public class MemberService {
 			CertificateRecord certificateRecord = new CertificateRecord();
 			certificateRecord.setMem_id(id);
 			certificateRecord.setType(type);
+			certificateRecord.setIs_deleted(0);
+			certificateRecord.setStatus("1");
 			List<CertificateRecord> certificateRecordList = certificateRecordMapper.certificateSearch(certificateRecord);
 			Map map = new HashMap();
 			String createTime = "";

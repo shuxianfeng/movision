@@ -74,7 +74,18 @@
     <include refid="Base_Column_List" />
     from t_certificate_record
     where
-    mem_id = #{mem_id} and type = #{type} and is_deleted = 0 and status = 1
+    <if test="mem_id != null">
+      and mem_id = #{mem_id}
+    </if>
+    <if test="type != null">
+      and type = #{type}
+    </if>
+    <if test="is_deleted != null">
+      and is_deleted = #{is_deleted}
+    </if>
+    <if test="status != null">
+      and status = #{status}
+    </if>
   </select>
   <select id="queryCertificateById" parameterType="java.lang.String" resultMap="BaseResultMap">
     select

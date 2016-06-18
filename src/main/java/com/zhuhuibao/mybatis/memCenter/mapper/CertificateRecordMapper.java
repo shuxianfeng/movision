@@ -14,7 +14,7 @@ public interface CertificateRecordMapper {
     //资质删除
     int deleteCertificate(String id);
 
-    //资质查询(已认证的)
+    //资质查询
     List<CertificateRecord> certificateSearch(CertificateRecord record);
 
     CertificateRecord queryCertificateById(String id);

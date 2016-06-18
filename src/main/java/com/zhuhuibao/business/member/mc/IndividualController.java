@@ -129,4 +129,22 @@ public class IndividualController {
         }
         return result;
     }
+
+    @ApiOperation(value = "个人资质查询", notes = "个人资质查询", response = Response.class)
+    @RequestMapping(value = "sel_certificate", method = RequestMethod.GET)
+    public Response sel_certificate()  {
+        Response result = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            CertificateRecord record = new CertificateRecord();
+            record.setMem_id(String.valueOf(memberId));
+            record.setIs_deleted(0);
+            record.setType("3");
+            List<CertificateRecord> list = memberService.certificateSearch(record);
+            result.setData(list);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
 }

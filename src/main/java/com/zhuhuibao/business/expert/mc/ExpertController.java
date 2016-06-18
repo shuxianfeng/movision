@@ -113,6 +113,7 @@ public class ExpertController {
         Long createId = ShiroUtil.getCreateID();
         //判断是否登陆
         if(null != createId) {
+            dynamic.setCreaterType("2");
             dynamic.setCreateId(String.valueOf(createId));
             expertService.publishDynamic(dynamic);
         } else {

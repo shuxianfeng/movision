@@ -122,6 +122,23 @@ public class CompanyController {
         return result;
     }
 
+    @ApiOperation(value = "企业资质查询", notes = "企业资质查询", response = Response.class)
+    @RequestMapping(value = "sel_certificate", method = RequestMethod.GET)
+    public Response sel_certificate()  {
+        Response result = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            CertificateRecord record = new CertificateRecord();
+            record.setMem_id(String.valueOf(memberId));
+            record.setIs_deleted(0);
+            List<CertificateRecord> list = memberService.certificateSearch(record);
+            result.setData(list);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
+
     @ApiOperation(value = "资质类型", notes = "资质类型", response = Response.class)
     @RequestMapping(value = "sel_certificateList", method = RequestMethod.GET)
     public Response certificateList(@RequestParam String type)  {
