@@ -68,7 +68,7 @@ public class UploadFileColler {
 	String temp="";
 	List<Map<String,String>> typeList;
 	 
-	@RequestMapping(value = "upload_project", method = RequestMethod.GET)
+	@RequestMapping(value = "upload_project", method = RequestMethod.POST)
 	@ApiOperation(value = "导入项目工程信息", notes = "导入项目工程信息", response = Response.class)
 	public Response uploadProject(HttpServletRequest req) {
 		Response response = new Response(); 
