@@ -330,4 +330,7 @@
     from t_m_member a left join t_vip_member_info vip on vip.member_id = a.id
     where a.id = #{createId}
   </select>
+  <select id="findTechCount" resultType="java.util.Map">
+    select count(1) docTotal from t_tech_data t where t.status = 2
+  </select>
 </mapper>

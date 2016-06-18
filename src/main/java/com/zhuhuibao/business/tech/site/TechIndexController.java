@@ -178,8 +178,10 @@ public class TechIndexController {
             map.put("member",techSite);
         }else {
             response.setMsgCode(0);
+            Map<String,String> techSite = techDataService.findTechCount();
             response.setMessage("you are rejected!");
             map.put("authorized", false);
+            map.put("member",techSite);
         }
         response.setData(map);
         return response;

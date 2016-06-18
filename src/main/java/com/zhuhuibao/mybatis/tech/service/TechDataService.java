@@ -364,4 +364,22 @@ public class TechDataService {
         }
         return techMap;
     }
+
+    /**
+     * 查询技术频道资料总数
+     * @return
+     */
+    public Map<String,String> findTechCount()
+    {
+        log.info("find tech site total");
+        Map<String,String> techMap;
+        try{
+            techMap = techDataMapper.findTechCount();
+        }catch(Exception e)
+        {
+            log.error("find tech site total error1!",e);
+            throw e;
+        }
+        return techMap;
+    }
 }

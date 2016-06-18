@@ -40,4 +40,6 @@ public interface TechDataMapper {
     List<Map<String,String>> findIndexTechData(Map<String,Object> condition);
 
     Map<String,String> findTechSiteInfo(Long createId);
+
+    Map<String,String> findTechCount();
 }
