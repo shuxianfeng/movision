@@ -60,7 +60,7 @@ public class MemberService {
 	@Autowired
 	private MessageMapper messageMapper;
 	/**
-	 * 会员信息保存
+	 * 会员信息更新
 	 */
 	public int updateMemInfo(Member member)
 	{
@@ -102,87 +102,6 @@ public class MemberService {
 	}
 
 	/**
-	 * 修改员工
-	 */
-	public int updateMember(Member member)
-	{
-		try{
-			return memberMapper.updateMember(member);
-		}catch (Exception e){
-			log.error(e.getMessage());
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/**
-	 * 禁用员工
-	 */
-	/*public int disableMember(Member member)
-	{
-		log.debug("修改员工");
-		int result = 0;
-		result = memberMapper.disableMember(member);
-		return result;
-	}*/
-
-	/**
-	 * 删除员工
-	 */
-	public int deleteMember(String id)
-	{
-		try{
-			return memberMapper.deleteMember(id);
-		}catch (Exception e){
-			log.error(e.getMessage());
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/**
-	 * 员工密码重置
-	 */
-	public int resetPwd(Member member)
-	{
-		try{
-			return memberMapper.resetPwd(member);
-		}catch (Exception e){
-			log.error(e.getMessage());
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/**
-	 * 会员头像修改
-	 */
-	public int uploadHeadShot(Member member)
-	{
-		try{
-			return memberMapper.uploadHeadShot(member);
-		}catch (Exception e){
-			log.error(e.getMessage());
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/**
-	 * 公司logo修改
-	 */
-	public int uploadLogo(Member member)
-	{
-		try{
-			return memberMapper.uploadLogo(member);
-		}catch (Exception e){
-			log.error(e.getMessage());
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/**
 	 * 查询代理商
 	 */
 	public List<AccountBean> findAgentMember(String account, String type)
@@ -200,20 +119,6 @@ public class MemberService {
 	 * 根据会员账号查询会员
 	 */
 	public Member findMember(Member member)
-	{
-		try{
-			return memberMapper.findMember(member);
-		}catch (Exception e){
-			log.error(e.getMessage());
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/**
-	 * 根据会员账号查询会员
-	 */
-	public Member findMemer(Member member)
 	{
 		try{
 			return memberMapper.findMember(member);
@@ -277,16 +182,6 @@ public class MemberService {
 		}
 	}
 
-/*	*//**
-	 * 根据id查询工作类别
-	 *//*
-	public WorkType findWorkTypeById(String id)
-	{
-		log.debug("根据id查询工作类别");
-		WorkType workType = workTypeMapper.findWorkTypeById(id);
-		return workType;
-	}*/
-
 	/**
 	 * 人员规模
 	 */
@@ -330,48 +225,6 @@ public class MemberService {
 	}
 
 	/**
-	 * 查询省
-	 */
-	public List<ResultBean> findProvince()
-	{
-		try{
-			return provinceMapper.findProvince();
-		}catch (Exception e){
-			log.error(e.getMessage());
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/**
-	 * 根据省Code查询市
-	 */
-	public List<ResultBean> findCity(String provincecode)
-	{
-		try{
-			return cityMapper.findCity(provincecode);
-		}catch (Exception e){
-			log.error(e.getMessage());
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/**
-	 * 根据市Code查询县区
-	 */
-	public List<ResultBean> findArea(String cityCode)
-	{
-		try{
-			return areaMapper.findArea(cityCode);
-		}catch (Exception e){
-			log.error(e.getMessage());
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/**
 	 * 资质保存
 	 */
 	public int saveCertificate(CertificateRecord record)
@@ -386,40 +239,12 @@ public class MemberService {
 	}
 
 	/**
-	 * 资质编辑
-	 */
-	public int updateCertificate(CertificateRecord record)
-	{
-		try{
-			return certificateRecordMapper.updateCertificate(record);
-		}catch (Exception e){
-			log.error(e.getMessage());
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/**
 	 * 资质删除
 	 */
-	public int deleteCertificate(CertificateRecord record)
+	public int deleteCertificate(String id)
 	{
 		try{
-			return certificateRecordMapper.deleteCertificate(record);
-		}catch (Exception e){
-			log.error(e.getMessage());
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/**
-	 * 查询资质
-	 */
-	public List<CertificateRecord> certificateSearch(CertificateRecord record)
-	{
-		try{
-			return certificateRecordMapper.certificateSearch(record);
+			return certificateRecordMapper.deleteCertificate(id);
 		}catch (Exception e){
 			log.error(e.getMessage());
 			e.printStackTrace();
@@ -592,7 +417,7 @@ public class MemberService {
 			CertificateRecord certificateRecord = new CertificateRecord();
 			certificateRecord.setMem_id(id);
 			certificateRecord.setType(type);
-			List<CertificateRecord> certificateRecordList = certificateRecordMapper.certificateSearch1(certificateRecord);
+			List<CertificateRecord> certificateRecordList = certificateRecordMapper.certificateSearch(certificateRecord);
 			Map map = new HashMap();
 			String createTime = "";
 			if(member.getEnterpriseCreaterTime()!=null){

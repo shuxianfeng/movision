@@ -14,14 +14,14 @@ import javax.servlet.http.HttpServletRequest;
  * Created by cxx on 2016/6/17 0017.
  */
 @RestController
-@RequestMapping("/rest/common")
+/*@RequestMapping("/rest/common")*/
 public class CommonController {
 
     @Autowired
     UploadService uploadService;
 
     @ApiOperation(value = "上传图片，返回url", notes = "上传图片，返回url", response = Response.class)
-    @RequestMapping(value = "upload_img", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/uploadImg","/rest/common/upload_img"}, method = RequestMethod.POST)
     public Response uploadImg(HttpServletRequest req) throws Exception {
         //完成文件上传
         Response result = new Response();

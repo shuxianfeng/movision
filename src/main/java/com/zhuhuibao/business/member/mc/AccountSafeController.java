@@ -8,6 +8,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BaseException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
@@ -149,7 +150,7 @@ public class AccountSafeController {
         member.setPassword(md5Pwd);
         member.setId(id);
         Response result = new Response();
-        memberService.updateMember(member);
+        memberService.updateMemInfo(member);
         return result;
 
     }
@@ -165,7 +166,7 @@ public class AccountSafeController {
         String email = req.getParameter("email");
         Member member1 = new Member();
         member1.setEmail(email);
-        Member member = memberService.findMemer(member1);
+        Member member = memberService.findMember(member1);
         if(member!=null){
             result.setCode(400);
             result.setMessage("该邮箱已存在");
@@ -198,7 +199,11 @@ public class AccountSafeController {
     @RequestMapping(value = {"/rest/updateMobile","/rest/member/mc/user/upd_mobile"}, method = RequestMethod.POST)
     public Response updateMobile(Member member)  {
         Response result = new Response();
-        memberService.updateMember(member);
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            member.setId(String.valueOf(memberId));
+            memberService.updateMemInfo(member);
+        }
         return result;
     }
 
@@ -209,7 +214,7 @@ public class AccountSafeController {
     @RequestMapping(value = {"/rest/checkMobile","/rest/member/mc/user/check_mobile_isExist"}, method = RequestMethod.POST)
     public Response checkMobile(Member member)  {
         Response result = new Response();
-        Member member1 = memberService.findMemer(member);
+        Member member1 = memberService.findMember(member);
         if(member1!=null){
             throw new BaseException(MsgCodeConstant.member_mcode_account_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
         }else {
@@ -239,7 +244,7 @@ public class AccountSafeController {
                 String decodeVM = new String (EncodeUtil.decodeBase64(email));
                 member.setEmail(decodeVM);
                 member.setId(decodeId);
-                memberService.updateMember(member);
+                memberService.updateMemInfo(member);
                 redirectUrl = PropertiesUtils.getValue("host.ip")+"/"+ PropertiesUtils.getValue("email-active-bind.page");
             }
         }else{

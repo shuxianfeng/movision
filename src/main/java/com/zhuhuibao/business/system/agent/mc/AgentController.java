@@ -217,7 +217,7 @@ public class AgentController {
         String email = req.getParameter("email");
         Member member1 = new Member();
         member1.setEmail(email);
-        Member member2 = memberService.findMemer(member1);
+        Member member2 = memberService.findMember(member1);
         try{
             if(member2 == null){
                 accountService.sendInviteEmail(member,email);
