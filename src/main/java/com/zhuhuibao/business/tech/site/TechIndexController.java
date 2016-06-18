@@ -167,14 +167,21 @@ public class TechIndexController {
     public Response findTechSiteInfo()
     {
         Response response = new Response();
+        Map<String, Object> map = new HashMap<String, Object>();
         Long createId = ShiroUtil.getCreateID();
         if(createId != null)
         {
             Map<String,String> techSite = techDataService.findTechSiteInfo(createId);
-            response.setData(techSite);
-        }else{
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            response.setMsgCode(1);
+            response.setMessage("welcome you!");
+            map.put("authorized", true);
+            map.put("member",techSite);
+        }else {
+            response.setMsgCode(0);
+            response.setMessage("you are rejected!");
+            map.put("authorized", false);
         }
+        response.setData(map);
         return response;
     }
 
