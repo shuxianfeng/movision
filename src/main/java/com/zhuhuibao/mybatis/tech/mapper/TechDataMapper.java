@@ -25,7 +25,9 @@ public interface TechDataMapper {
 
     List<Map<String,String>> findAllOMSTechDataPager(RowBounds rowBounds,Map<String,Object> condition);
 
-    List<Map<String,String>> findAllTechDataPager(RowBounds rowBounds,Map<String,Object> condition);
+    List<TechData> findAllTechDataPager(RowBounds rowBounds,Map<String,Object> condition);
+
+    List<Map<String,String>> findScategory(Map<String,Object> condition);
 
     int updateTechDataViewsOrDL(Map<String,Object> map);
 
@@ -36,4 +38,6 @@ public interface TechDataMapper {
     List<Map<String,String>> findDownloadOrder(Map<String,Object> condition);
 
     List<Map<String,String>> findIndexTechData(Map<String,Object> condition);
+
+    Map<String,String> findTechSiteInfo(Long createId);
 }

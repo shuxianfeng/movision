@@ -3,6 +3,7 @@ package com.zhuhuibao.mybatis.tech.service;/**
  * @version 2016/5/31 0031
  */
 
+import com.zhuhuibao.mybatis.tech.entity.TechCategoryBean;
 import com.zhuhuibao.mybatis.tech.entity.TechData;
 import com.zhuhuibao.mybatis.tech.mapper.TechDataMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -58,15 +59,53 @@ public class TechDataService {
      * @param condition 搜索条件
      * @return
      */
-    public List<Map<String,String>> findAllTechDataPager(Paging<Map<String,String>> pager, Map<String,Object> condition)
+    public List<TechData> findAllTechDataPager(Paging<TechData> pager, Map<String,Object> condition)
     {
         log.info("find all tech data for pager "+ StringUtils.mapToString(condition));
-        List<Map<String,String>> techList = null;
+        List<TechData> techList = null;
         try{
             techList = techDataMapper.findAllTechDataPager(pager.getRowBounds(),condition);
+            List<Map<String,String>> scategoryList = techDataMapper.findScategory(condition);
+            if(!scategoryList.isEmpty())
+            {
+                List<TechCategoryBean> categoryList = new ArrayList<TechCategoryBean>();
+                for(Map<String,String> cate : scategoryList)
+                {
+                    TechCategoryBean bean = new TechCategoryBean();
+                    bean.setCode(String.valueOf(cate.get("sCategory")));
+                    bean.setName(cate.get("name"));
+                    categoryList.add(bean);
+                }
+                if(!techList.isEmpty())
+                {
+                    for(TechData tech : techList)
+                    {
+                        tech.setCategoryList(categoryList);
+                    }
+                }
+            }
         }catch(Exception e)
         {
             log.error("find all tech data for pager error!",e);
+            throw e;
+        }
+        return techList;
+    }
+
+    /**
+     * 技术频道搜索行业类别
+     * @param condition 搜索条件
+     * @return
+     */
+    public List<Map<String,String>> findScategory(Map<String,Object> condition)
+    {
+        log.info("find all scategory for pager "+ StringUtils.mapToString(condition));
+        List<Map<String,String>> techList = null;
+        try{
+            techList = techDataMapper.findScategory(condition);
+        }catch(Exception e)
+        {
+            log.error("find all scategory for pager error!",e);
             throw e;
         }
         return techList;
@@ -307,4 +346,22 @@ public class TechDataService {
         return map;
     }
 
+    /**
+     * 查询技术频道个人站点信息
+     * @param createId
+     * @return
+     */
+    public Map<String,String> findTechSiteInfo(Long createId)
+    {
+        log.info("find tech site info"+createId);
+        Map<String,String> techMap;
+        try{
+            techMap = techDataMapper.findTechSiteInfo(createId);
+        }catch(Exception e)
+        {
+            log.error("find tech site info error1!",e);
+            throw e;
+        }
+        return techMap;
+    }
 }

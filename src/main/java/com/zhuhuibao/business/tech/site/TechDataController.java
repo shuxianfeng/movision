@@ -121,8 +121,8 @@ public class TechDataController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Map<String, String>> techList = techDataService.findAllTechDataPager(pager, condition);
+        Paging<TechData> pager = new Paging<TechData>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<TechData> techList = techDataService.findAllTechDataPager(pager, condition);
         pager.result(techList);
         response.setData(pager);
         return response;

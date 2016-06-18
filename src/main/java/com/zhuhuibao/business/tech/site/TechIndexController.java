@@ -4,13 +4,17 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
 import com.zhuhuibao.mybatis.tech.service.PublishTCourseService;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.mybatis.tech.service.TechDataService;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
@@ -155,6 +159,22 @@ public class TechIndexController {
         List<Map<String,String>> courseList = ptCourseService.findLatestPublishCourse(condition);
         Response response = new Response();
         response.setData(courseList);
+        return response;
+    }
+
+    @RequestMapping(value="sel_site_info", method = RequestMethod.POST)
+    @ApiOperation(value="查询技术频道登陆者信息",notes = "查询技术频道登陆者信息",response = Response.class)
+    public Response findTechSiteInfo()
+    {
+        Response response = new Response();
+        Long createId = ShiroUtil.getCreateID();
+        if(createId != null)
+        {
+            Map<String,String> techSite = techDataService.findTechSiteInfo(createId);
+            response.setData(techSite);
+        }else{
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
