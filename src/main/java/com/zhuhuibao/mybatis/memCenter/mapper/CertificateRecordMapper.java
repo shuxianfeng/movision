@@ -12,13 +12,10 @@ public interface CertificateRecordMapper {
     int updateCertificate(CertificateRecord record);
 
     //资质删除
-    int deleteCertificate(CertificateRecord record);
-
-    //资质查询
-    List<CertificateRecord> certificateSearch(CertificateRecord record);
+    int deleteCertificate(String id);
 
     //资质查询(已认证的)
-    List<CertificateRecord> certificateSearch1(CertificateRecord record);
+    List<CertificateRecord> certificateSearch(CertificateRecord record);
 
     CertificateRecord queryCertificateById(String id);
 }

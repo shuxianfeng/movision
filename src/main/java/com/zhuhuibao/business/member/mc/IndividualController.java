@@ -119,6 +119,7 @@ public class IndividualController {
         rs = gson.fromJson(json, type);
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
+            memberService.deleteCertificate(String.valueOf(memberId));
             for(CertificateRecord record:rs){
                 record.setMem_id(String.valueOf(memberId));
                 memberService.saveCertificate(record);

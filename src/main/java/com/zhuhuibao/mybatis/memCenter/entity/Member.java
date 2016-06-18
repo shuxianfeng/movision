@@ -63,6 +63,9 @@ public class Member implements Serializable{
     @ApiModelProperty(value="企业成立时间")
     private String enterpriseCreaterTime;
 
+    @ApiModelProperty(value="货币类型：1人民币，2美元")
+    private String currency;
+
     @ApiModelProperty(value="企业注册资本")
     private String registerCapital;
 
@@ -502,5 +505,13 @@ public class Member implements Serializable{
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }
