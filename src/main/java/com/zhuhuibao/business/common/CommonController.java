@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by cxx on 2016/6/17 0017.
  */
 @RestController
-@RequestMapping("/rest/common")
+/*@RequestMapping("/rest/common")*/
 public class CommonController {
 
     @Autowired
