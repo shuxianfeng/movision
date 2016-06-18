@@ -54,7 +54,7 @@ public class TrainCourseController {
         return response;
     }
 
-    @RequestMapping(value="sel_latest_publish_course", method = RequestMethod.POST)
+    @RequestMapping(value="sel_latest_publish_course", method = RequestMethod.GET)
     @ApiOperation(value="查询最新发布的课程(默认3条)",notes = "查询最新发布的课程(默认3条)",response = Response.class)
     public Response findLatestPublishCourse()
     {
@@ -68,7 +68,7 @@ public class TrainCourseController {
         return response;
     }
 
-    @RequestMapping(value="sel_publish_course_detail", method = RequestMethod.POST)
+    @RequestMapping(value="sel_publish_course_detail", method = RequestMethod.GET)
     @ApiOperation(value="预览课程详情",notes = "预览课程详情",response = Response.class)
     public Response previewPublishCourseDetail(@ApiParam(value = "培训课程ID")  @RequestParam Long courseId)
     {
