@@ -100,7 +100,7 @@
     select
     m.*,p1.name provinceName,p2.name enterpriseProvinceName,c1.name cityName,c2.name enterpriseCityName,a1.name areaName,a2.name enterpriseAreaName,
     e.name employeeNumberName,et.name enterpriseTypeName,w.name workTypeName,
-    (select group_concat(name) from t_dictionary_identity where find_in_set(id,m.identify))as identityName
+    (select group_concat(name) from t_dictionary_identity where find_in_set(id,m.identify))as identifyName
     from t_m_member m
     LEFT JOIN t_dictionary_province p1 ON m.province = p1.code
     LEFT JOIN t_dictionary_province p2 ON m.enterpriseProvince = p2.code
