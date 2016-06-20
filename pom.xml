@@ -534,4 +534,24 @@
             <url>http://139.196.189.100:8081/nexus/content/repositories/releases</url>
         </repository>
     </repositories>
+    
+    <profiles>
+        <profile>
+            <id>development</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!-- <cfg.env>development</cfg.env> -->
+                <cfg.portablePath>src/main/resources</cfg.portablePath>
+            </properties>
+        </profile>
+        <profile>
+            <id>production</id>
+            <properties>
+                <cfg.portablePath>/zhb/etc</cfg.portablePath>
+            </properties>
+        </profile>
+    </profiles>
+    
 </project>
