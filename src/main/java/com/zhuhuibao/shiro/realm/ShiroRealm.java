@@ -92,7 +92,8 @@ public class ShiroRealm extends AuthorizingRealm {
         }
         
         ShiroUser shiroUser = new ShiroUser(loginMember.getId(), loginMember.getAccount(),loginMember.getStatus(),
-        		loginMember.getIdentify(),loginMember.getRole(),loginMember.getIsexpert(),loginMember.getCompanyId());
+        		loginMember.getIdentify(),loginMember.getRole(),loginMember.getIsexpert(),loginMember.getCompanyId(),
+                loginMember.getRegisterTime(),loginMember.getWorkType(),loginMember.getHeadShot(),loginMember.getNickname());
         
         // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(
@@ -126,8 +127,13 @@ public class ShiroRealm extends AuthorizingRealm {
         private String role;
         private String isexpert;
         private Long companyId;
+        private String registerTime;
+        private int workType;
+        private String headShot;
+        private String nickname;
 
-        public ShiroUser(Long id, String account, int status, String identify, String role,String isexpert,Long companyId) {
+        public ShiroUser(Long id, String account, int status, String identify, String role,String isexpert,Long companyId,
+                        String registerTime,int workType,String headShot,String nickname ) {
             this.id = id;
             this.account = account;
             this.status = status;
@@ -135,6 +141,10 @@ public class ShiroRealm extends AuthorizingRealm {
             this.role = role;
             this.isexpert = isexpert;
             this.companyId = companyId;
+            this.registerTime = registerTime;
+            this.workType = workType;
+            this.headShot = headShot;
+            this.nickname = nickname;
         }
         
 		public Long getId() {
@@ -191,6 +201,39 @@ public class ShiroRealm extends AuthorizingRealm {
 
         public void setCompanyId(Long companyId) {
             this.companyId = companyId;
+        }
+
+
+        public String getRegisterTime() {
+            return registerTime;
+        }
+
+        public void setRegisterTime(String registerTime) {
+            this.registerTime = registerTime;
+        }
+
+        public int getWorkType() {
+            return workType;
+        }
+
+        public void setWorkType(int workType) {
+            this.workType = workType;
+        }
+
+        public String getHeadShot() {
+            return headShot;
+        }
+
+        public void setHeadShot(String headShot) {
+            this.headShot = headShot;
+        }
+
+        public String getNickname() {
+            return nickname;
+        }
+
+        public void setNickname(String nickname) {
+            this.nickname = nickname;
         }
 
         /**

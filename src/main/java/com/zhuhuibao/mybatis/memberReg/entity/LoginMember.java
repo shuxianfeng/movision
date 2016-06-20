@@ -18,6 +18,43 @@ public class LoginMember {
     private int msgcount;
     private Long companyId;
 
+    private String registerTime;
+    private int workType;
+    private String headShot;
+    private String nickname;
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getRegisterTime() {
+        return registerTime;
+    }
+
+    public void setRegisterTime(String registerTime) {
+        this.registerTime = registerTime;
+    }
+
+    public int getWorkType() {
+        return workType;
+    }
+
+    public void setWorkType(int workType) {
+        this.workType = workType;
+    }
+
+    public String getHeadShot() {
+        return headShot;
+    }
+
+    public void setHeadShot(String headShot) {
+        this.headShot = headShot;
+    }
+
     public Long getId() {
         return id;
     }

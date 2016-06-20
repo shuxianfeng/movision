@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuhuibao.mybatis.advertising.mapper.SysAdvertisingMapper">
+    <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.advertising.entity.SysAdvertising">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="advAttrId" jdbcType="CHAR" property="advAttrId"/>
+        <result column="advType" jdbcType="VARCHAR" property="advType"/>
+        <result column="linkUrl" jdbcType="VARCHAR" property="linkUrl"/>
+        <result column="imgUrl" jdbcType="VARCHAR" property="imgUrl"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="operatorId" jdbcType="INTEGER" property="operatorId"/>
+        <result column="connectedId" jdbcType="VARCHAR" property="connectedId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, title, advAttrId, advType, linkUrl, imgUrl, createTime, operatorId, connectedId
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_sys_advertising
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="findListByCondition" resultType="com.zhuhuibao.mybatis.advertising.entity.SysAdvertising">
+        select * from t_sys_advertising adv
+        where adv.advAttrId in (
+        select a.id from t_sys_adv_attr a
+        where a.chanType = #{chanType}
+        and a.page = #{page}
+        and a.advArea = #{advArea}
+        )
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_sys_advertising
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.zhuhuibao.mybatis.advertising.entity.SysAdvertising">
+    insert into t_sys_advertising (id, title, advAttrId, 
+      advType, linkUrl, imgUrl, 
+      createTime, operatorId, connectedId
+      )
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{advAttrId,jdbcType=CHAR}, 
+      #{advType,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{operatorId,jdbcType=INTEGER}, #{connectedId,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.advertising.entity.SysAdvertising">
+        insert into t_sys_advertising
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="advAttrId != null">
+                advAttrId,
+            </if>
+            <if test="advType != null">
+                advType,
+            </if>
+            <if test="linkUrl != null">
+                linkUrl,
+            </if>
+            <if test="imgUrl != null">
+                imgUrl,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="operatorId != null">
+                operatorId,
+            </if>
+            <if test="connectedId != null">
+                connectedId,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="advAttrId != null">
+                #{advAttrId,jdbcType=CHAR},
+            </if>
+            <if test="advType != null">
+                #{advType,jdbcType=VARCHAR},
+            </if>
+            <if test="linkUrl != null">
+                #{linkUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="imgUrl != null">
+                #{imgUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="operatorId != null">
+                #{operatorId,jdbcType=INTEGER},
+            </if>
+            <if test="connectedId != null">
+                #{connectedId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.advertising.entity.SysAdvertising">
+        update t_sys_advertising
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="advAttrId != null">
+                advAttrId = #{advAttrId,jdbcType=CHAR},
+            </if>
+            <if test="advType != null">
+                advType = #{advType,jdbcType=VARCHAR},
+            </if>
+            <if test="linkUrl != null">
+                linkUrl = #{linkUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="imgUrl != null">
+                imgUrl = #{imgUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="operatorId != null">
+                operatorId = #{operatorId,jdbcType=INTEGER},
+            </if>
+            <if test="connectedId != null">
+                connectedId = #{connectedId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.advertising.entity.SysAdvertising">
+    update t_sys_advertising
+    set title = #{title,jdbcType=VARCHAR},
+      advAttrId = #{advAttrId,jdbcType=CHAR},
+      advType = #{advType,jdbcType=VARCHAR},
+      linkUrl = #{linkUrl,jdbcType=VARCHAR},
+      imgUrl = #{imgUrl,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      operatorId = #{operatorId,jdbcType=INTEGER},
+      connectedId = #{connectedId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>
