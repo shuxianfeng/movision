@@ -288,7 +288,7 @@
       <if test="status != null">
         and status = #{status}
       </if>
-      <if test="province != null">
+      <if test="province != null and province != ''">
         and province = #{province}
       </if>
     </where>

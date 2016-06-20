@@ -18,7 +18,7 @@ public class PayVerify {
 
     static {
         try {
-            properties = PropertiesLoaderUtils.loadAllProperties("web/alipay.properties");
+            properties = PropertiesLoaderUtils.loadAllProperties("web/pay.properties");
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("加载pay.properties属性文件出错：" + e.getMessage());

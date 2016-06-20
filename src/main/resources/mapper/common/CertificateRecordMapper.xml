@@ -20,10 +20,10 @@
   </sql>
   <insert id="saveCertificate" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord" >
     insert into t_certificate_record (id, mem_id, certificate_number,certificate_id,
-    certificate_name, certificate_grade, certificate_url,type, time, is_deleted,status
+    certificate_name, certificate_grade, certificate_url,type, time
     )
-    values (#{id,jdbcType=BIGINT}, #{mem_id}, #{certificate_number},#{certificate_id},
-    #{certificate_name}, #{certificate_grade},  #{certificate_url}, #{type},#{time}, 0,0
+    values (#{id}, #{mem_id}, #{certificate_number},#{certificate_id},
+    #{certificate_name}, #{certificate_grade},  #{certificate_url}, #{type},now()
     )
   </insert>
   <update id="updateCertificate" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord">
@@ -67,21 +67,25 @@
     <set>
         is_deleted = 1
     </set>
-    where id = #{id}
+    where mem_id = #{id}
   </update>
   <select id="certificateSearch" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord" resultMap="BaseResultMap">
     select
-      <include refid="Base_Column_List" />
-    from t_certificate_record
-    where
-      mem_id = #{mem_id} and type = #{type} and is_deleted = 0
-  </select>
-  <select id="certificateSearch1" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord" resultMap="BaseResultMap">
-    select
     <include refid="Base_Column_List" />
     from t_certificate_record
-    where
-    mem_id = #{mem_id} and type = #{type} and is_deleted = 0 and status = 1
+    where 1=1
+    <if test="mem_id != null">
+      and mem_id = #{mem_id}
+    </if>
+    <if test="type != null">
+      and type = #{type}
+    </if>
+    <if test="is_deleted != null">
+      and is_deleted = #{is_deleted}
+    </if>
+    <if test="status != null">
+      and status = #{status}
+    </if>
   </select>
   <select id="queryCertificateById" parameterType="java.lang.String" resultMap="BaseResultMap">
     select

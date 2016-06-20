@@ -8,6 +8,8 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BaseException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
@@ -69,21 +71,21 @@ public class AccountSafeController {
 
     /**
      * 根据账号验证会员密码是否正确
-     * @param req
      * @throws IOException
      */
     @RequestMapping(value = {"/rest/checkPwdById","/rest/member/mc/user/check_pwd_id"}, method = RequestMethod.GET)
-    public Response checkPwdById(HttpServletRequest req)  {
-        String id = req.getParameter("id");
-        //前台密码解密
-        String pwd = new String(EncodeUtil.decodeBase64(req.getParameter("pwd")));
-        String md5Pwd = new Md5Hash(pwd,null,2).toString();
-        Member member = memberService.findMemById(id);
-
+    public Response checkPwdById(@RequestParam String pwd)  {
+        Long memberId = ShiroUtil.getCreateID();
         //对比密码是否正确
         Response result = new Response();
-        result = checkPwd(md5Pwd, member, result);
-
+        if(memberId!=null){
+            //前台密码解密
+            String md5Pwd = new Md5Hash(new String(EncodeUtil.decodeBase64(pwd)),null,2).toString();
+            Member member = memberService.findMemById(String.valueOf(memberId));
+            result = checkPwd(md5Pwd, member, result);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return result;
     }
 
@@ -142,16 +144,19 @@ public class AccountSafeController {
      */
     @RequestMapping(value = {"/rest/saveNewPwd","/rest/member/mc/user/add_new_pwd"}, method = RequestMethod.POST)
     public Response saveNewPwd(HttpServletRequest req)  {
-        String id = req.getParameter("id");
-        String newPwd = new String(EncodeUtil.decodeBase64(req.getParameter("newPwd")));
-        String md5Pwd = new Md5Hash(newPwd,null,2).toString();
-        Member member = new Member();
-        member.setPassword(md5Pwd);
-        member.setId(Long.parseLong(id));
         Response result = new Response();
-        memberService.updateMember(member);
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            String newPwd = new String(EncodeUtil.decodeBase64(req.getParameter("newPwd")));
+            String md5Pwd = new Md5Hash(newPwd,null,2).toString();
+            Member member = new Member();
+            member.setPassword(md5Pwd);
+            member.setId(String.valueOf(memberId));
+            memberService.updateMemInfo(member);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return result;
-
     }
 
     /**
@@ -165,7 +170,7 @@ public class AccountSafeController {
         String email = req.getParameter("email");
         Member member1 = new Member();
         member1.setEmail(email);
-        Member member = memberService.findMemer(member1);
+        Member member = memberService.findMember(member1);
         if(member!=null){
             result.setCode(400);
             result.setMessage("该邮箱已存在");
@@ -198,7 +203,13 @@ public class AccountSafeController {
     @RequestMapping(value = {"/rest/updateMobile","/rest/member/mc/user/upd_mobile"}, method = RequestMethod.POST)
     public Response updateMobile(Member member)  {
         Response result = new Response();
-        memberService.updateMember(member);
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            member.setId(String.valueOf(memberId));
+            memberService.updateMemInfo(member);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return result;
     }
 
@@ -209,11 +220,9 @@ public class AccountSafeController {
     @RequestMapping(value = {"/rest/checkMobile","/rest/member/mc/user/check_mobile_isExist"}, method = RequestMethod.POST)
     public Response checkMobile(Member member)  {
         Response result = new Response();
-        Member member1 = memberService.findMemer(member);
+        Member member1 = memberService.findMember(member);
         if(member1!=null){
             throw new BaseException(MsgCodeConstant.member_mcode_account_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
-        }else {
-            result.setCode(200);
         }
         return result;
     }
@@ -238,8 +247,8 @@ public class AccountSafeController {
             {
                 String decodeVM = new String (EncodeUtil.decodeBase64(email));
                 member.setEmail(decodeVM);
-                member.setId(Long.parseLong(decodeId));
-                memberService.updateMember(member);
+                member.setId(decodeId);
+                memberService.updateMemInfo(member);
                 redirectUrl = PropertiesUtils.getValue("host.ip")+"/"+ PropertiesUtils.getValue("email-active-bind.page");
             }
         }else{

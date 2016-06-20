@@ -1,7 +1,6 @@
 package com.zhuhuibao.alipay.service;
 
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
 import com.zhuhuibao.alipay.config.AliPayConfig;
 import com.zhuhuibao.alipay.util.AlipayNotify;
 import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
@@ -22,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -433,8 +430,19 @@ public class AlipayService {
                           map.put("orderNo",orderNo);
                           map.put("status", Objects.equals(endOrder.getStatus(), PayConstants.OrderStatus.YZF.toString()) ?"success":"fail");
                           String result = JsonUtils.getJsonStringFromMap(map);
+
+                          String zhbUrl = AlipayPropertiesLoader.getPropertyValue("zhb_return_url");
+                          String vipUrl = AlipayPropertiesLoader.getPropertyValue("vip_return_url");
+                          String url = "";
+                          if(order.getGoodsType().equals(OrderConstants.GoodsType.ZHB.toString())){
+                              url = zhbUrl;
+                          }else if(order.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString())){
+                              url = vipUrl;
+                          }
+                          url += "?result={result}";
+
                           String responseCode = restTemplate.postForObject(
-                                  AlipayPropertiesLoader.getPropertyValue("zhb_return_url") + "?result={result}",
+                                  url,
                                   null,String.class,result);
                           log.debug("回调状态:",responseCode);
                       }
@@ -518,3 +526,4 @@ public class AlipayService {
         alipayCallbackLogService.insert(alipayCallbackLog);
     }
 }
+

@@ -4,13 +4,17 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
 import com.zhuhuibao.mybatis.tech.service.PublishTCourseService;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.mybatis.tech.service.TechDataService;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
@@ -144,7 +148,7 @@ public class TechIndexController {
         return response;
     }
 
-    @RequestMapping(value="sel_latest_train_course", method = RequestMethod.POST)
+    @RequestMapping(value="sel_latest_train_course", method = RequestMethod.GET)
     @ApiOperation(value="查询最新发布的课程(默认5条)",notes = "查询最新发布的课程(默认5条)",response = Response.class)
     public Response findLatestPublishCourse()
     {
@@ -155,6 +159,31 @@ public class TechIndexController {
         List<Map<String,String>> courseList = ptCourseService.findLatestPublishCourse(condition);
         Response response = new Response();
         response.setData(courseList);
+        return response;
+    }
+
+    @RequestMapping(value="sel_site_info", method = RequestMethod.GET)
+    @ApiOperation(value="查询技术频道登陆者信息",notes = "查询技术频道登陆者信息",response = Response.class)
+    public Response findTechSiteInfo()
+    {
+        Response response = new Response();
+        Map<String, Object> map = new HashMap<String, Object>();
+        Long createId = ShiroUtil.getCreateID();
+        if(createId != null)
+        {
+            Map<String,String> techSite = techDataService.findTechSiteInfo(createId);
+            response.setMsgCode(1);
+            response.setMessage("welcome you!");
+            map.put("authorized", true);
+            map.put("member",techSite);
+        }else {
+            response.setMsgCode(0);
+            Map<String,String> techSite = techDataService.findTechCount();
+            response.setMessage("you are rejected!");
+            map.put("authorized", false);
+            map.put("member",techSite);
+        }
+        response.setData(map);
         return response;
     }
 

@@ -1,7 +1,11 @@
 package com.zhuhuibao.mybatis.tech.service;
 
+import com.zhuhuibao.common.constant.OrderConstants;
+import com.zhuhuibao.mybatis.order.entity.OrderFlow;
+import com.zhuhuibao.mybatis.order.service.OrderFlowService;
 import com.zhuhuibao.mybatis.tech.entity.OrderOms;
 import com.zhuhuibao.mybatis.tech.mapper.OrderManagerMapper;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -10,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +32,9 @@ public class OrderManagerService {
 
     @Autowired
     OrderManagerMapper orderMapper;
+
+    @Autowired
+    OrderFlowService orderFlowService;
 
     /**
      * 查询已发布的课程
@@ -56,15 +64,34 @@ public class OrderManagerService {
     public Map<String,Object> selectOrderDetail(Map<String,Object> condition)
     {
         log.info("find all oms order for pager "+ StringUtils.mapToString(condition));
-        Map<String,Object> orderList;
+        Map<String,Object> orderMap;
         try{
-            orderList = orderMapper.selectByPrimaryKey(condition);
+            List<OrderFlow> orderFlows = orderFlowService.findByOrderNo((String) condition.get("orderNo"));
+            orderMap = orderMapper.selectByPrimaryKey(condition);
+            if(!orderFlows.isEmpty())
+            {
+                Map<String,Object> paymentInfo = new HashMap<String,Object>();
+                for(OrderFlow flow : orderFlows)
+                {
+                    if(OrderConstants.OrderFlowTradeMode.ALIPAY.toString().equals(flow.getTradeMode()) ) {
+                        paymentInfo.put("aliTradeMode", OrderConstants.OrderFlowTradeModeName.ALIPAY.toString());
+                        paymentInfo.put("aliTradeFee", flow.getTradeFee());
+                        paymentInfo.put("aliTradeTime", DateUtils.date2Str(flow.getTradeTime(), "yyyy-MM-dd HH:mm:ss"));
+                    }else if(OrderConstants.OrderFlowTradeMode.ZHB.toString().equals(flow.getTradeMode()))
+                    {
+                        paymentInfo.put("zhbTradeMode", OrderConstants.OrderFlowTradeModeName.ZHB.toString());
+                        paymentInfo.put("zhbTradeFee", flow.getTradeFee());
+                        paymentInfo.put("zhbTradeTime", DateUtils.date2Str(flow.getTradeTime(), "yyyy-MM-dd HH:mm:ss"));
+                    }
+                }
+                orderMap.put("paymentInfo",paymentInfo);
+            }
         }catch(Exception e)
         {
             log.error("find all oms order for pager error!",e);
             throw e;
         }
-        return orderList;
+        return orderMap;
     }
 
     /**

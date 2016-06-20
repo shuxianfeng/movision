@@ -22,7 +22,7 @@
     <context:property-placeholder
             ignore-unresolvable="true" location="classpath*:/spring/application.properties,
                 classpath*:web/message.properties,classpath*:web/config.properties,
-                classpath*:web/alipay.properties"/>
+                classpath*:web/pay.properties"/>
 
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

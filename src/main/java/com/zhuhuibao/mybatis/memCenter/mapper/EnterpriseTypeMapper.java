@@ -11,7 +11,7 @@ public interface EnterpriseTypeMapper {
 
     int insertSelective(EnterpriseType record);
 
-    EnterpriseType selectByPrimaryKey(Integer id);
+    EnterpriseType selectByPrimaryKey(String id);
 
     int updateByPrimaryKeySelective(EnterpriseType record);
 

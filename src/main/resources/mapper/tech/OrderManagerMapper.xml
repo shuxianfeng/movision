@@ -2,17 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.tech.mapper.OrderManagerMapper" >
   <select id="selectByPrimaryKey" resultType="java.util.Map" parameterType="java.util.Map" >
-    select distinct t.orderNo,case when ur.mobile != '' or ur.mobile != null then ur.mobile when ur.email!= '' or ur.email != null then ur.email end as  buyername,
-    t.amount, t.payAmount, date_format(t.dealTime,'%Y-%m-%d %H:%m:%s') dealTime,t.payMode,t.status,iv.invoiceType,
-    iv.invoiceTitle,gd.goodsName,gd.goodsPrice,gd.number,date_format(pc.expiryDate,'%Y-%m-%d %H:%m:%s') expiryDate,
-    date_format(pc.startTime,'%Y-%m-%d %H:%m:%s') startTime,date_format(pc.endTime,'%Y-%m-%d %H:%m:%s') endTime,pc.minBuyNumber,
-    concat(po.name,ct.name,ar.name,pc.address) address,pc.price coursePrice,
+    select distinct t.orderNo,t.status orderStatus,case when ur.mobile != '' or ur.mobile != null then ur.mobile when ur.email!= '' or ur.email != null then ur.email end as  buyername,
+    date_format(t.dealTime,'%Y-%m-%d %H:%m:%s') dealTime,
+    iv.invoiceType,iv.invoiceTitle,iv.receiveName invoiceRecName,concat(poi.name,cti.name,ari.name,iv.address) invoiceAddress,
+    iv.mobile invoiceMb,iv.telephone invoicePhone,iv.invoiceNum,iv.expressNum invoiceExpressNum,
+    t.amount, t.payAmount,gd.goodsName,gd.goodsPrice,gd.number,
+    date_format(pc.startTime,'%Y-%m-%d %H:%m:%s') courseStartTime,date_format(pc.endTime,'%Y-%m-%d %H:%m:%s') courseEndTime,pc.minBuyNumber courseCondition,
+    concat(po.name,ct.name,ar.name,pc.address) courseAddress,pc.price coursePrice,
     t.descriptions,pt.mobile
-	 ,( select 
+    ,( select
     case when (locate(';',co.imgUrl) > 0) then substring(co.imgUrl,1,locate(';',co.imgUrl)-1) when locate(';',co.imgUrl) = 0 then imgUrl end as imgUrl
-    from t_p_group_publishCourse co where co.courseid=pt.courseId) as imgUrl 
-    
-     from t_o_order t
+    from t_p_group_publishCourse co where co.courseid=pt.courseId) as goodsImgUrl
+
+    from t_o_order t
     left join t_m_member ur on ur.id = t.buyerId
     left join t_o_invoice iv on iv.orderNo = t.orderNo
     left join t_o_pwdticket pt on pt.orderNo = t.orderNo
@@ -21,6 +23,9 @@
     left join t_dictionary_province po on po.code = pc.province
     left join t_dictionary_city ct on ct.code = pc.city
     left join t_dictionary_area ar on ar.code = pc.area
+    left join t_dictionary_province poi on poi.code = iv.province
+    left join t_dictionary_city cti on cti.code = iv.city
+    left join t_dictionary_area ari on ari.code = iv.area
     <where>
       <if test="orderNo != null">
         and t.orderNo = #{orderNo}

@@ -83,6 +83,15 @@ public class ExpertController {
         return response;
     }
 
+    @ApiOperation(value="技术成果详情",notes="技术成果详情",response = Response.class)
+    @RequestMapping(value = "ach/sel_achievement", method = RequestMethod.GET)
+    public Response queryAchievementById(@ApiParam(value = "技术成果ID")@RequestParam String id) throws Exception {
+        Response response = new Response();
+        Map<String,String> map = expertService.queryAchievementById(id);
+        response.setData(map);
+        return response;
+    }
+
     @ApiOperation(value = "删除技术成果", notes = "删除技术成果", response = Response.class)
     @RequestMapping(value = "ach/del_achievement", method = RequestMethod.POST)
     public Response deleteAchievement(@ApiParam(value = "技术成果ids,逗号隔开") @RequestParam String ids)
@@ -113,6 +122,7 @@ public class ExpertController {
         Long createId = ShiroUtil.getCreateID();
         //判断是否登陆
         if(null != createId) {
+            dynamic.setCreaterType("2");
             dynamic.setCreateId(String.valueOf(createId));
             expertService.publishDynamic(dynamic);
         } else {
@@ -140,6 +150,15 @@ public class ExpertController {
     public Response updateDynamic(@ModelAttribute Dynamic dynamic)  {
         Response response = new Response();
         expertService.updateDynamic(dynamic);
+        return response;
+    }
+
+    @ApiOperation(value="协会动态详情",notes="协会动态详情",response = Response.class)
+    @RequestMapping(value = "dynamic/sel_dynamic", method = RequestMethod.GET)
+    public Response queryDynamicById(@ApiParam(value = "协会动态Id")@RequestParam String id) throws Exception {
+        Response response = new Response();
+        Dynamic dynamic = expertService.queryDynamicById(id);
+        response.setData(dynamic);
         return response;
     }
 

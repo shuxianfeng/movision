@@ -2,9 +2,12 @@ package com.zhuhuibao.mybatis.order.service;
 
 import com.google.gson.Gson;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.Invoice;
+import com.zhuhuibao.mybatis.order.entity.InvoiceRecord;
 import com.zhuhuibao.mybatis.order.mapper.InvoiceMapper;
+import com.zhuhuibao.mybatis.order.mapper.InvoiceRecordMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,9 @@ public class InvoiceService {
 
     @Autowired
     InvoiceMapper invoiceMapper;
+
+    @Autowired
+    InvoiceRecordMapper invoiceRecordMapper;
 
     /**
      * 新增发票信息
@@ -51,6 +57,23 @@ public class InvoiceService {
     }
 
     /**
+     * 查询发票信息
+     * @param id  发票ID
+     */
+    public Invoice queryInvoiceInfo(Long id)
+    {
+        Invoice invoice;
+        try{
+            invoice = invoiceMapper.selectByPrimaryKey(id);
+        }catch(Exception e)
+        {
+            log.error("query invoice error!",e);
+            throw e;
+        }
+        return invoice;
+    }
+
+    /**
      * 运营管理平台更新发票状态
      * @param invoice 发票信息
      */
@@ -66,6 +89,84 @@ public class InvoiceService {
         }catch(Exception e)
         {
             log.error("update invoice error!",e);
+            throw e;
+        }
+    }
+
+    /**
+     * 新增发票信息记录
+     * @param record  发票内容
+     */
+    public void insertInvoiceRecord(InvoiceRecord record)
+    {
+        int result;
+        try{
+            result = invoiceRecordMapper.insertSelective(record);
+            if (result != 1) {
+                log.error("t_o_invoice:插入数据失败");
+                throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
+            }
+        }catch(Exception e)
+        {
+            log.error("insert invoice error!",e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询最近使用的发票信息
+     * @param id  发票ID
+     */
+    public InvoiceRecord queryRecentUseInvoiceInfo(Long id)
+    {
+        InvoiceRecord invoiceRecord;
+        try{
+            invoiceRecord = invoiceRecordMapper.selectByPrimaryKey(id);
+        }catch(Exception e)
+        {
+            log.error("query invoice record error!",e);
+            throw e;
+        }
+        return invoiceRecord;
+    }
+
+    /**
+     * 运营管理平台更新发票状态
+     * @param invoiceRecord 发票信息
+     */
+    public void updateInvoiceRecord(InvoiceRecord invoiceRecord)
+    {
+        int result;
+        try{
+            invoiceRecord.setIsRecentUsed(OrderConstants.InvoiceIsRecentUsed.YES.toString());
+            result = invoiceRecordMapper.updateByPrimaryKeySelective(invoiceRecord);
+            if (result == 0) {
+                log.error("t_o_invoice_record:更新状态失败");
+                throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "更新状态失败");
+            }
+        }catch(Exception e)
+        {
+            log.error("update invoice record error!",e);
+            throw e;
+        }
+    }
+
+    /**
+     * 更新发票最近是否被使用
+     * @param invoiceRecord 发票信息
+     */
+    public void updateIsRecentUsed(InvoiceRecord invoiceRecord)
+    {
+        int result;
+        try{
+            result = invoiceRecordMapper.updateIsRecentUsed(invoiceRecord);
+            if (result == 0) {
+                log.error("t_o_invoice_record:更新最近被使用失败");
+                throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "更新最近被使用失败");
+            }
+        }catch(Exception e)
+        {
+            log.error("update invoice record error!",e);
             throw e;
         }
     }

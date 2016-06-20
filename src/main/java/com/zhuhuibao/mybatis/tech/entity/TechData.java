@@ -3,6 +3,9 @@ package com.zhuhuibao.mybatis.tech.entity;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 /**
  * 上传的技术资料
  * @author  penglong
@@ -42,6 +45,11 @@ public class TechData {
     private Long fileSize;
     @ApiModelProperty(value = "文件格式")
     private String fileFormat;
+    @ApiModelProperty(value = "价格")
+    private BigDecimal price;
+    private String sCategoryName;
+    private String username;
+    private List<TechCategoryBean> categoryList;
 
     public Long getId() {
         return id;
@@ -65,6 +73,30 @@ public class TechData {
 
     public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public String getsCategoryName() {
+        return sCategoryName;
+    }
+
+    public void setsCategoryName(String sCategoryName) {
+        this.sCategoryName = sCategoryName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getUpdateTime() {
@@ -169,5 +201,13 @@ public class TechData {
 
     public void setFileFormat(String fileFormat) {
         this.fileFormat = fileFormat;
+    }
+
+    public List<TechCategoryBean> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(List<TechCategoryBean> categoryList) {
+        this.categoryList = categoryList;
     }
 }

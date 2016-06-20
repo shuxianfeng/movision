@@ -40,9 +40,6 @@ public class ResumeService {
     @Autowired
     private ResumeLookRecordMapper resumeLookRecordMapper;
 
-    @Autowired
-    private JobRelResumeMapper jobRelResumeMapper;
-
     /**
      * 发布简历
      */

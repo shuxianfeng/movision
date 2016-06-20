@@ -1,23 +1,28 @@
 package com.zhuhuibao.mybatis.project.service;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.UUID;
 
-import com.zhuhuibao.common.constant.ProjectConstant;
-import com.zhuhuibao.mybatis.oms.service.OmsMemService;
-import com.zhuhuibao.mybatis.project.entity.ProjectLinkman;
-import com.zhuhuibao.mybatis.project.entity.ViewProject;
-import com.zhuhuibao.mybatis.project.mapper.ViewProjectMapper;
-import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.zhuhuibao.common.constant.ProjectConstant;
+import com.zhuhuibao.mybatis.oms.service.OmsMemService;
 import com.zhuhuibao.mybatis.project.entity.ProjectInfo;
+import com.zhuhuibao.mybatis.project.entity.ProjectLinkman;
+import com.zhuhuibao.mybatis.project.entity.ViewProject;
 import com.zhuhuibao.mybatis.project.mapper.ProjectMapper;
+import com.zhuhuibao.mybatis.project.mapper.ViewProjectMapper;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 
 /**
  * 项目信息业务处理类
@@ -539,5 +544,22 @@ public class ProjectService {
 		UUID uuid = UUID.randomUUID();
 		System.out.println(".{"+uuid.toString()+"}");
 
+	}
+    /**
+     * 获取地区
+     * @param areaOrCity
+     * @return
+     */
+	public Map<String,Object> getAreaOrCity(Map areaOrCityMap) {
+		Map<String,Object> codeMap;
+		try {
+			  codeMap = viewProjectMapper.getAreaOrCity(areaOrCityMap);
+			 
+		}catch(Exception e)
+		{
+			log.error("check isview project error!");
+			throw e;
+		}
+		return codeMap;
 	}
 }

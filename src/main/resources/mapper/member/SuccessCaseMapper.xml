@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.SuccessCaseMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.SuccessCase" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createid" property="createid" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="imgUrl" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
+    <result column="views" property="views" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="is_deleted" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, createid,title,imgUrl,content,publishTime,updateTime,views,status,is_deleted
+  </sql>
+  <select id="querySuccessCaseById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select * FROM t_m_success_case WHERE id = #{id}
+  </select>
+
+  <insert id="addSuccessCase" parameterType="com.zhuhuibao.mybatis.memCenter.entity.SuccessCase" >
+    insert into t_m_success_case
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createid != null" >
+        createid,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="imgUrl != null" >
+        imgUrl,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+        publishTime,
+        updateTime,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createid != null" >
+        #{createid},
+      </if>
+      <if test="title != null" >
+        #{title},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl},
+      </if>
+      <if test="content != null" >
+        #{content},
+      </if>
+        now(),
+        now(),
+    </trim>
+  </insert>
+  <update id="updateSuccessCase" parameterType="com.zhuhuibao.mybatis.memCenter.entity.SuccessCase" >
+    update t_m_success_case
+    <set >
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="imgUrl != null" >
+        imgUrl = #{imgUrl},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+      <if test="is_deleted != null" >
+        is_deleted = #{is_deleted},
+      </if>
+      <if test="views != null" >
+        views = #{views},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+        updateTime = now(),
+    </set>
+    where id = #{id}
+  </update>
+
+  <select id="findAllSuccessCaseList" resultType="java.util.Map" parameterType="java.util.Map" >
+    select c.id,c.title,date_format(c.updateTime,'%Y-%m-%d') updateTime,c.views,c.`status` from t_m_success_case c
+    where c.is_deleted = 0
+    <if test="title != null" >
+      and c.title like CONCAT('%',#{title},'%')
+    </if>
+    <if test="status != null" >
+      and c.status = #{status}
+    </if>
+    <if test="createid != null" >
+      and c.createid = #{createid}
+    </if>
+  </select>
+</mapper>

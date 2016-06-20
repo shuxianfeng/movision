@@ -40,13 +40,15 @@ public class TechOrderController {
     public Response findAllTechDataPager(@ApiParam(value = "课程名称") @RequestParam(required = false) String goodsName,
                                          @ApiParam(value = "订单状态：1未支付，2：已支付，3：退款中，4，退款失败，5：已退款 , 6:已失效") @RequestParam(required = false) String status,
                                          @ApiParam(value = "购买者名称") @RequestParam(required = false) String buyerName,
-                                         @ApiParam(value = "商品类型 :1：技术培训，2：专家培训 3：VIP服务套餐订单") String goodsType,
+                                         @ApiParam(value = "商品类型 1：技术培训，2：专家培训 3：VIP服务套餐 4：筑慧币") String goodsType,
+                                         @ApiParam(value="发票状态") @RequestParam(required = false) String invoiceStatus,
                                          @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
                                          @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("status", status);
         condition.put("goodsType", goodsType);
+        condition.put("invoiceStatus",invoiceStatus);
         if(goodsName != null && !goodsName.equals(""))
         {
             condition.put("goodsName",goodsName.replaceAll("_","\\_"));
@@ -96,9 +98,9 @@ public class TechOrderController {
     @RequestMapping(value={"/rest/tech/oms/order/upd_invoice","/rest/expert/oms/order/upd_invoice"}, method = RequestMethod.POST)
     @ApiOperation(value="更新发票信息",notes = "更新发票信息",response = Response.class)
     public Response updateInvoiceInfo(@ApiParam(value = "订单编号")  @RequestParam String orderNo,
-                                         @ApiParam(value = "状态")  @RequestParam String status,
-                                         @ApiParam(value = "快递单号")  @RequestParam String expressNum,
-                                         @ApiParam(value = "发票编号")  @RequestParam String invoiceNum)
+                                      @ApiParam(value = "状态：0未开票，1已开票")  @RequestParam String status,
+                                      @ApiParam(value = "快递单号")  @RequestParam String expressNum,
+                                      @ApiParam(value = "发票编号")  @RequestParam String invoiceNum)
     {
         Invoice invoice = new Invoice();
         invoice.setOrderNo(orderNo);

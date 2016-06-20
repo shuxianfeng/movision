@@ -8,16 +8,15 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.alipay.service.direct.AlipayDirectService;
 import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.PayConstants;
-import com.zhuhuibao.common.constant.TechConstant;
+import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.common.pojo.OrderReqBean;
 import com.zhuhuibao.common.pojo.PayReqBean;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
+import com.zhuhuibao.mybatis.order.entity.InvoiceRecord;
+import com.zhuhuibao.mybatis.order.service.InvoiceService;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.service.course.CourseService;
 import com.zhuhuibao.service.zhpay.ZhpayService;
@@ -64,6 +63,8 @@ public class TechCourseController {
     @Autowired
     ExpertService expertService;
 
+    @Autowired
+    InvoiceService invoiceService;
 
     @ApiOperation(value = "培训课程下单", notes = "培训课程下单")
     @RequestMapping(value = "order", method = RequestMethod.POST)
@@ -177,5 +178,99 @@ public class TechCourseController {
         Session sess = currentUser.getSession(false);
         String verifyCode = VerifyCodeUtils.outputHttpVerifyImage(100,40,response, Constants.CHECK_IMG_CODE_SIZE);
         sess.setAttribute(TechConstant.MOBILE_CODE_SESSION_ORDER_CLASS, verifyCode);
+    }
+
+    /**
+     * 记录发票信息
+     */
+    @ApiOperation(value="订单新增记录发票历史信息",notes="订单新增记录发票历史信息",response = Response.class)
+    @RequestMapping(value = "add_invoiceRecord", method = RequestMethod.GET)
+    public void insertInvoiceRecord(@ApiParam(value = "发票抬头类型：1个人，2企业") @RequestParam String invoiceTitleType,
+                                    @ApiParam(value = "发票抬头公司名称") @RequestParam String invoiceTitle,
+                                    @ApiParam(value = "发票类型：1增值税普通发票，2增值税专用发票") @RequestParam String invoiceType,
+                                    @ApiParam(value = "发票收件人名称") @RequestParam String receiveName,
+                                    @ApiParam(value = "省") @RequestParam String province,
+                                    @ApiParam(value = "市") @RequestParam String city,
+                                    @ApiParam(value = "区") @RequestParam String area,
+                                    @ApiParam(value = "地址") @RequestParam String address,
+                                    @ApiParam(value = "手机") @RequestParam String mobile,
+                                    @ApiParam(value = "收件人固定电话") @RequestParam(required = false) String telephone
+    ) {
+        Long createid = ShiroUtil.getCreateID();
+        if(createid != null) {
+            InvoiceRecord record = new InvoiceRecord();
+            record.setCreateId(createid);
+            record.setIsRecentUsed(OrderConstants.InvoiceIsRecentUsed.NO.toString());
+            //更新以前创建的记录为未使用
+            invoiceService.updateIsRecentUsed(record);
+            record.setInvoiceTitleType(Integer.parseInt(invoiceTitleType));
+            record.setInvoiceTitle(invoiceTitle);
+            record.setInvoiceType(invoiceType);
+            record.setReceiveName(receiveName);
+            record.setProvince(province);
+            record.setCity(city);
+            record.setArea(area);
+            record.setAddress(address);
+            record.setMobile(mobile);
+            record.setTelephone(telephone);
+            record.setIsRecentUsed(OrderConstants.InvoiceIsRecentUsed.YES.toString());
+            invoiceService.insertInvoiceRecord(record);
+        }else{
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+    }
+
+    /**
+     * 记录发票信息
+     */
+    @ApiOperation(value="订单更新记录发票历史信息",notes="订单更新记录发票历史信息",response = Response.class)
+    @RequestMapping(value = "upd_invoiceRecord", method = RequestMethod.GET)
+    public void updateInvoiceRecord(@ApiParam(value = "发票抬头类型：1个人，2企业") @RequestParam String invoiceTitleType,
+                                    @ApiParam(value = "发票抬头公司名称") @RequestParam String invoiceTitle,
+                                    @ApiParam(value = "发票类型：1增值税普通发票，2增值税专用发票") @RequestParam String invoiceType,
+                                    @ApiParam(value = "发票收件人名称") @RequestParam String receiveName,
+                                    @ApiParam(value = "省") @RequestParam String province,
+                                    @ApiParam(value = "市") @RequestParam String city,
+                                    @ApiParam(value = "区") @RequestParam String area,
+                                    @ApiParam(value = "地址") @RequestParam String address,
+                                    @ApiParam(value = "手机") @RequestParam String mobile,
+                                    @ApiParam(value = "收件人固定电话") @RequestParam String telephone
+    ) {
+        Long createid = ShiroUtil.getCreateID();
+        if(createid != null) {
+            InvoiceRecord record = new InvoiceRecord();
+            record.setCreateId(createid);
+            record.setIsRecentUsed(OrderConstants.InvoiceIsRecentUsed.NO.toString());
+            //更新以前创建的记录为未使用
+            invoiceService.updateIsRecentUsed(record);
+            record.setInvoiceTitleType(Integer.parseInt(invoiceTitleType));
+            record.setInvoiceTitle(invoiceTitle);
+            record.setInvoiceType(invoiceType);
+            record.setReceiveName(receiveName);
+            record.setProvince(province);
+            record.setCity(city);
+            record.setArea(area);
+            record.setAddress(address);
+            record.setMobile(mobile);
+            record.setTelephone(telephone);
+            record.setIsRecentUsed(OrderConstants.InvoiceIsRecentUsed.YES.toString());
+            invoiceService.updateInvoiceRecord(record);
+        }else{
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+    }
+
+    @ApiOperation(value="获取历史记录的发票信息",notes="获取历史记录的发票信息",response = Response.class)
+    @RequestMapping(value = "sel_invoiceRecord", method = RequestMethod.GET)
+    public Response getInvoiceRecord() throws IOException {
+        Long createid = ShiroUtil.getCreateID();
+        Response response = new Response();
+        if(createid != null) {
+            InvoiceRecord record = invoiceService.queryRecentUseInvoiceInfo(createid);
+            response.setData(record);
+        }else{
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
     }
 }

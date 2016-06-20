@@ -304,6 +304,7 @@ public class ExpertOmsController {
         Long createId = ShiroUtil.getOmsCreateID();
         //判断是否登陆
         if(null != createId) {
+            dynamic.setCreaterType("1");
             dynamic.setCreateId(String.valueOf(createId));
             expertService.publishDynamic(dynamic);
         } else {

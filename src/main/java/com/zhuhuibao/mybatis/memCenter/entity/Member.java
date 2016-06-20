@@ -1,15 +1,14 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class Member implements Serializable{
 
     private static final long serialVersionUID = -814949502085519570L;
 
-    private Long id;
+    private String id;
 
     private String mobile;
 
@@ -21,79 +20,130 @@ public class Member implements Serializable{
 
     private String registerTime;
 
-    private Integer status;
+    private String status;
 
+    @ApiModelProperty(value="企业身份")
     private String identify;
 
+    @ApiModelProperty(value="企业名称")
     private String enterpriseName;
 
-    private Integer workType;
+    @ApiModelProperty(value="工作类别")
+    private String workType;
 
     private String enterpriseEmployeeParentId;
 
+    @ApiModelProperty(value="注册地址：省")
     private String province;
 
+    @ApiModelProperty(value="注册地址：市")
     private String city;
 
+    @ApiModelProperty(value="注册地址：区")
     private String area;
 
+    @ApiModelProperty(value="注册地址")
     private String address;
 
-    private Integer enterpriseType;
+    @ApiModelProperty(value="企业性质")
+    private String enterpriseType;
 
+    @ApiModelProperty(value="企业LOGO")
     private String enterpriseLogo;
 
+    @ApiModelProperty(value="企业介绍")
     private String enterpriseDesc;
 
+    @ApiModelProperty(value="企业或者个人头像")
     private String headShot;
 
+    @ApiModelProperty(value="企业主营范围")
     private String saleProductDesc;
 
+    @ApiModelProperty(value="企业成立时间")
     private String enterpriseCreaterTime;
 
+    @ApiModelProperty(value="货币类型：1人民币，2美元")
+    private String currency;
+
+    @ApiModelProperty(value="企业注册资本")
     private String registerCapital;
 
+    @ApiModelProperty(value="企业人员规模")
     private String employeeNumber;
 
+    @ApiModelProperty(value="企业营业执照编号")
+    private String coBusLicNum;
+
+    @ApiModelProperty(value="公司所在省")
+    private String enterpriseProvince;
+
+    @ApiModelProperty(value="公司所在市")
+    private String enterpriseCity;
+
+    @ApiModelProperty(value="公司所在区")
+    private String enterpriseArea;
+
+    @ApiModelProperty(value="公司具体地址")
+    private String enterpriseAddress;
+
+    @ApiModelProperty(value="企业营业执照url")
     private String companyBusinessLicenseImg;
 
+    @ApiModelProperty(value="公司电话")
     private String enterpriseTelephone;
 
+    @ApiModelProperty(value="公司传真")
     private String enterpriseFox;
 
+    @ApiModelProperty(value="公司网址")
     private String enterpriseWebSite;
 
+    @ApiModelProperty(value="公司联系人名称")
     private String enterpriseLinkman;
 
+    @ApiModelProperty(value="公司联系人所在部门")
     private String enterpriseLMDep;
 
+    @ApiModelProperty(value="公司联系人或者个人座机")
     private String fixedTelephone;
 
+    @ApiModelProperty(value="公司联系人或者个人手机号码")
     private String fixedMobile;
 
+    @ApiModelProperty(value="公司联系人或者个人qq号码")
     private String QQ;
 
+    @ApiModelProperty(value="个人真实名称")
     private String personRealName;
 
+    @ApiModelProperty(value="个人昵称")
+    private String nickname;
+
+    @ApiModelProperty(value="性别：1：男，2：女(企业，个人统一使用)")
     private Integer sex;
 
+    @ApiModelProperty(value="个人工作单位类别")
     private Integer personCompanyType;
 
+    @ApiModelProperty(value="个人身份证号码")
     private String personIdentifyCard;
 
+    @ApiModelProperty(value="个人身份证正面上传图片的路径")
     private String personIDFrontImgUrl;
 
+    @ApiModelProperty(value="个人身份真反面图片上传的路径")
     private String personIDBackImgUrl;
 
     private String account;
 
     private String isrecommend;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -137,11 +187,11 @@ public class Member implements Serializable{
         this.registerTime = registerTime;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -201,11 +251,11 @@ public class Member implements Serializable{
         this.address = address == null ? null : address.trim();
     }
 
-    public Integer getEnterpriseType() {
+    public String getEnterpriseType() {
         return enterpriseType;
     }
 
-    public void setEnterpriseType(Integer enterpriseType) {
+    public void setEnterpriseType(String enterpriseType) {
         this.enterpriseType = enterpriseType;
     }
 
@@ -385,11 +435,11 @@ public class Member implements Serializable{
         this.personIDBackImgUrl = personIDBackImgUrl == null ? null : personIDBackImgUrl.trim();
     }
 
-    public Integer getWorkType() {
+    public String getWorkType() {
         return workType;
     }
 
-    public void setWorkType(Integer workType) {
+    public void setWorkType(String workType) {
         this.workType = workType;
     }
 
@@ -407,5 +457,61 @@ public class Member implements Serializable{
 
     public void setIsrecommend(String isrecommend) {
         this.isrecommend = isrecommend;
+    }
+
+    public String getCoBusLicNum() {
+        return coBusLicNum;
+    }
+
+    public void setCoBusLicNum(String coBusLicNum) {
+        this.coBusLicNum = coBusLicNum;
+    }
+
+    public String getEnterpriseProvince() {
+        return enterpriseProvince;
+    }
+
+    public void setEnterpriseProvince(String enterpriseProvince) {
+        this.enterpriseProvince = enterpriseProvince;
+    }
+
+    public String getEnterpriseCity() {
+        return enterpriseCity;
+    }
+
+    public void setEnterpriseCity(String enterpriseCity) {
+        this.enterpriseCity = enterpriseCity;
+    }
+
+    public String getEnterpriseArea() {
+        return enterpriseArea;
+    }
+
+    public void setEnterpriseArea(String enterpriseArea) {
+        this.enterpriseArea = enterpriseArea;
+    }
+
+    public String getEnterpriseAddress() {
+        return enterpriseAddress;
+    }
+
+    public void setEnterpriseAddress(String enterpriseAddress) {
+        this.enterpriseAddress = enterpriseAddress;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }

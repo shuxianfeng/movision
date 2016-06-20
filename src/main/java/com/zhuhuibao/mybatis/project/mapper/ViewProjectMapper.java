@@ -23,4 +23,6 @@ public interface ViewProjectMapper {
     int updateByPrimaryKey(ViewProject record);
 
     int checkIsViewProject(Map<String,Object> map);
+    
+    Map<String,Object> getAreaOrCity(Map areaOrCity);
 }
