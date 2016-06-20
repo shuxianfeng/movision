@@ -34,7 +34,7 @@ import java.util.Map;
  * @since 16/2/25.
  */
 @RestController
-@RequestMapping("/rest/member/mc/user")
+@RequestMapping("/rest/member/mc/company")
 public class StaffManageController {
 	private static final Logger log = LoggerFactory.getLogger(StaffManageController.class);
 

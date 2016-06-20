@@ -25,28 +25,40 @@ public class Member implements Serializable{
     @ApiModelProperty(value="企业身份")
     private String identify;
 
+    private String identifyName;
+
     @ApiModelProperty(value="企业名称")
     private String enterpriseName;
 
     @ApiModelProperty(value="工作类别")
     private String workType;
 
+    private String workTypeName;
+
     private String enterpriseEmployeeParentId;
 
     @ApiModelProperty(value="注册地址：省")
     private String province;
 
+    private String provinceName;
+
     @ApiModelProperty(value="注册地址：市")
     private String city;
 
+    private String cityName;
+
     @ApiModelProperty(value="注册地址：区")
     private String area;
+
+    private String areaName;
 
     @ApiModelProperty(value="注册地址")
     private String address;
 
     @ApiModelProperty(value="企业性质")
     private String enterpriseType;
+
+    private String enterpriseTypeName;
 
     @ApiModelProperty(value="企业LOGO")
     private String enterpriseLogo;
@@ -72,17 +84,25 @@ public class Member implements Serializable{
     @ApiModelProperty(value="企业人员规模")
     private String employeeNumber;
 
+    private String employeeNumberName;
+
     @ApiModelProperty(value="企业营业执照编号")
     private String coBusLicNum;
 
     @ApiModelProperty(value="公司所在省")
     private String enterpriseProvince;
 
+    private String enterpriseProvinceName;
+
     @ApiModelProperty(value="公司所在市")
     private String enterpriseCity;
 
+    private String enterpriseCityName;
+
     @ApiModelProperty(value="公司所在区")
     private String enterpriseArea;
+
+    private String enterpriseAreaName;
 
     @ApiModelProperty(value="公司具体地址")
     private String enterpriseAddress;
@@ -513,5 +533,85 @@ public class Member implements Serializable{
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public String getIdentifyName() {
+        return identifyName;
+    }
+
+    public void setIdentifyName(String identifyName) {
+        this.identifyName = identifyName;
+    }
+
+    public String getWorkTypeName() {
+        return workTypeName;
+    }
+
+    public void setWorkTypeName(String workTypeName) {
+        this.workTypeName = workTypeName;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+
+    public String getEnterpriseTypeName() {
+        return enterpriseTypeName;
+    }
+
+    public void setEnterpriseTypeName(String enterpriseTypeName) {
+        this.enterpriseTypeName = enterpriseTypeName;
+    }
+
+    public String getEmployeeNumberName() {
+        return employeeNumberName;
+    }
+
+    public void setEmployeeNumberName(String employeeNumberName) {
+        this.employeeNumberName = employeeNumberName;
+    }
+
+    public String getEnterpriseProvinceName() {
+        return enterpriseProvinceName;
+    }
+
+    public void setEnterpriseProvinceName(String enterpriseProvinceName) {
+        this.enterpriseProvinceName = enterpriseProvinceName;
+    }
+
+    public String getEnterpriseCityName() {
+        return enterpriseCityName;
+    }
+
+    public void setEnterpriseCityName(String enterpriseCityName) {
+        this.enterpriseCityName = enterpriseCityName;
+    }
+
+    public String getEnterpriseAreaName() {
+        return enterpriseAreaName;
+    }
+
+    public void setEnterpriseAreaName(String enterpriseAreaName) {
+        this.enterpriseAreaName = enterpriseAreaName;
     }
 }

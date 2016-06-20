@@ -58,9 +58,13 @@ public class IndividualController {
             map.put("sex",member.getSex());
             map.put("personCompanyType",member.getPersonCompanyType());
             map.put("workType",member.getWorkType());
+            map.put("workTypeName",member.getWorkTypeName());
             map.put("province",member.getProvince());
+            map.put("provinceName",member.getProvinceName());
             map.put("city",member.getCity());
+            map.put("cityName",member.getCityName());
             map.put("area",member.getArea());
+            map.put("areaName",member.getAreaName());
             map.put("address",member.getAddress());
             map.put("fixedTelephone",member.getFixedTelephone());
             map.put("fixedMobile",member.getFixedMobile());

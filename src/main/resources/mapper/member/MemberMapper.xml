@@ -10,14 +10,20 @@
     <result column="registerTime" property="registerTime" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="identify" property="identify" jdbcType="VARCHAR" />
+    <result column="identifyName" property="identifyName" jdbcType="VARCHAR" />
     <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
     <result column="workType" property="workType" jdbcType="VARCHAR" />
+    <result column="workTypeName" property="workTypeName" jdbcType="VARCHAR" />
     <result column="enterpriseEmployeeParentId" property="enterpriseEmployeeParentId" jdbcType="VARCHAR" />
     <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="provinceName" property="provinceName" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="cityName" property="cityName" jdbcType="VARCHAR" />
     <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="areaName" property="areaName" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="enterpriseType" property="enterpriseType" jdbcType="VARCHAR" />
+    <result column="enterpriseTypeName" property="enterpriseTypeName" jdbcType="VARCHAR" />
     <result column="enterpriseLogo" property="enterpriseLogo" jdbcType="VARCHAR" />
     <result column="enterpriseDesc" property="enterpriseDesc" jdbcType="VARCHAR" />
     <result column="headShot" property="headShot" jdbcType="VARCHAR" />
@@ -26,11 +32,15 @@
     <result column="registerCapital" property="registerCapital" jdbcType="VARCHAR" />
     <result column="currency" property="currency" jdbcType="VARCHAR" />
     <result column="employeeNumber" property="employeeNumber" jdbcType="VARCHAR" />
+    <result column="employeeNumberName" property="employeeNumberName" jdbcType="VARCHAR" />
     <result column="coBusLicNum" property="coBusLicNum" jdbcType="VARCHAR" />
     <result column="companyBusinessLicenseImg" property="companyBusinessLicenseImg" jdbcType="VARCHAR" />
     <result column="enterpriseProvince" property="enterpriseProvince" jdbcType="VARCHAR" />
+    <result column="enterpriseProvinceName" property="enterpriseProvinceName" jdbcType="VARCHAR" />
     <result column="enterpriseCity" property="enterpriseCity" jdbcType="VARCHAR" />
+    <result column="enterpriseCityName" property="enterpriseCityName" jdbcType="VARCHAR" />
     <result column="enterpriseArea" property="enterpriseArea" jdbcType="VARCHAR" />
+    <result column="enterpriseAreaName" property="enterpriseAreaName" jdbcType="VARCHAR" />
     <result column="enterpriseAddress" property="enterpriseAddress" jdbcType="VARCHAR" />
     <result column="enterpriseTelephone" property="enterpriseTelephone" jdbcType="VARCHAR" />
     <result column="enterpriseFox" property="enterpriseFox" jdbcType="VARCHAR" />
@@ -88,9 +98,20 @@
   </sql>
   <select id="findMemById" resultType="com.zhuhuibao.mybatis.memCenter.entity.Member">
     select
-    *
-    from t_m_member
-    where id = #{id}
+    m.*,p1.name provinceName,p2.name enterpriseProvinceName,c1.name cityName,c2.name enterpriseCityName,a1.name areaName,a2.name enterpriseAreaName,
+    e.name employeeNumberName,et.name enterpriseTypeName,w.name workTypeName,
+    (select group_concat(name) from t_dictionary_identity where find_in_set(id,m.identify))as identityName
+    from t_m_member m
+    LEFT JOIN t_dictionary_province p1 ON m.province = p1.code
+    LEFT JOIN t_dictionary_province p2 ON m.enterpriseProvince = p2.code
+    LEFT JOIN t_dictionary_city c1 ON m.city = c1.code
+    LEFT JOIN t_dictionary_city c2 ON m.enterpriseCity = c2.code
+    LEFT JOIN t_dictionary_area a1 ON m.area = a1.code
+    LEFT JOIN t_dictionary_area a2 on m.enterpriseArea = a2.code
+    LEFT JOIN t_dictionary_employeeSize e on m.employeeNumber = e.id
+    LEFT JOIN t_dictionary_enterpriseType et on m.enterpriseType = et.id
+    LEFT JOIN t_dictionary_workType w on m.workType = w.id
+    where m.id = #{id}
   </select>
 
   <insert id="addMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" >
@@ -366,7 +387,7 @@
   </insert>
   <select id="findAllByPager" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List" />
+    *
     from t_m_member
     where
     enterpriseEmployeeParentId = #{enterpriseEmployeeParentId} and status!=2
@@ -376,7 +397,7 @@
   </select>
   <select id="findStaffByParentId" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List" />
+    *
     from t_m_member
     where
     enterpriseEmployeeParentId = #{enterpriseEmployeeParentId} and status=1
@@ -386,7 +407,7 @@
   </select>
   <select id="findMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List" />
+    *
     from t_m_member
     where status != 2 and status != 0
     <if test="mobile != null and mobile != '' ">
