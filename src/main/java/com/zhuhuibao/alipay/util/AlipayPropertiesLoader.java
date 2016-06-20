@@ -16,10 +16,10 @@ public class AlipayPropertiesLoader {
     static {
         try {
             properties = PropertiesLoaderUtils
-                    .loadAllProperties("web/alipay.properties");
+                    .loadAllProperties("web/pay.properties");
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("加载alipay.properties属性文件出错：" + e.getMessage());
+            logger.error("加载pay.properties属性文件出错：" + e.getMessage());
         }
     }
 
