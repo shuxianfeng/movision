@@ -3,8 +3,10 @@ package com.zhuhuibao.mybatis.zhb.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
+
 import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
-import com.zhuhuibao.mybatis.zhb.entity.ZhbGoodsConfig;
+import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbRecord;
 
 /**
@@ -30,6 +32,14 @@ public interface ZhbMapper {
 	 * @return
 	 */
 	List<ZhbRecord> selectZhbRecordListByOrderNo(String orderNo);
+
+	/**
+	 * 查询会员筑慧币流水记录
+	 * 
+	 * @param param
+	 * @return
+	 */
+	List<Map<String, String>> selectZhbRecordList(RowBounds rowBounds, Map<String, Long> param);
 
 	/**
 	 * 增加筑慧币流水记录
@@ -58,7 +68,7 @@ public interface ZhbMapper {
 	 * 
 	 * @param zhbAccount
 	 */
-	void updateZhbAccountEmoney(ZhbAccount zhbAccount);
+	int updateZhbAccountEmoney(ZhbAccount zhbAccount);
 
 	/**
 	 * 根据拼音查询筑慧币物品信息
@@ -66,5 +76,13 @@ public interface ZhbMapper {
 	 * @param pinyin
 	 * @return
 	 */
-	ZhbGoodsConfig selectZhbGoodsConfigByPinyin(String pinyin);
+	DictionaryZhbgoods selectZhbGoodsByPinyin(String pinyin);
+
+	/**
+	 * 根据id查询筑慧币物品信息
+	 * 
+	 * @param pinyin
+	 * @return
+	 */
+	DictionaryZhbgoods selectZhbGoodsById(Long id);
 }

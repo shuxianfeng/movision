@@ -13,6 +13,64 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   
+  <resultMap id="VipMemberInfoResultMap" type="com.zhuhuibao.mybatis.vip.entity.VipMemberInfo" >
+  	<id column="id" property="id" jdbcType="BIGINT" />
+    <result column="member_id" property="memberId" jdbcType="BIGINT" />
+    <result column="vip_level" property="vipLevel" jdbcType="BIGINT" />
+    <result column="active_time" property="activeTime" jdbcType="TIMESTAMP" />
+    <result column="expire_time" property="expireTime" jdbcType="TIMESTAMP" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="selectVipMemberInfoById" parameterType = "java.lang.Long" resultMap="VipMemberInfoResultMap">
+  	SELECT 
+	  id,member_id,vip_level,active_time,expire_time,add_time,update_time 
+	FROM
+	  t_vip_member_info
+	WHERE member_id = #{memberId,jdbcType=BIGINT} 
+  </select>
+  
+  <insert id="insertVipMemberInfo" parameterType = "com.zhuhuibao.mybatis.vip.entity.VipMemberInfo">
+  	INSERT INTO t_vip_member_info (
+	  member_id,
+	  vip_level,
+	  active_time,
+	  expire_time,
+	  add_time,
+	  update_time
+	) 
+	VALUES
+	  (
+	  #{memberId,jdbcType=BIGINT},
+	  #{vipLevel,jdbcType=INTEGER},
+	  #{activeTime,jdbcType=TIMESTAMP},
+	  #{expireTime,jdbcType=TIMESTAMP},
+	  now(),
+	  now()
+	  )
+  </insert>
+  
+  <update id="updateVipMemberInfo" parameterType = "com.zhuhuibao.mybatis.vip.entity.VipMemberInfo">
+  	update t_vip_member_info
+  	<set>
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="vipLevel != null">
+        vip_level = #{vipLevel,jdbcType=INTEGER},
+      </if>
+      <if test="activeTime != null">
+        active_time = #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expireTime != null">
+        expire_time = #{expireTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    	update_time = now()
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
   <select id="selectVipMemberPrivilege" parameterType="java.util.Map" resultMap="VipMemberPrivilegeResultMap">
   	SELECT 
 	  id,member_id,type,pinyin,name,value,description,add_time,update_time 

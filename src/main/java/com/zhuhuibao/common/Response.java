@@ -38,15 +38,6 @@ public class Response implements Serializable {
 	@ApiModelProperty(value = "平台返回的消息码")
 	private int msgCode;
 
-	/**
-	 * 筑慧币的消息码
-	 */
-	@ApiModelProperty(value = "筑慧币的消息码,对应ZhbCode")
-	private int zhbCode;
-
-	@ApiModelProperty(value = "业务ID")
-	private Long goodsId;
-
 	public Response() {
 
 	}
@@ -99,22 +90,6 @@ public class Response implements Serializable {
 
 	public void setData(Object data) {
 		this.data = data;
-	}
-
-	public int getZhbCode() {
-		return zhbCode;
-	}
-
-	public void setZhbCode(int zhbCode) {
-		this.zhbCode = zhbCode;
-	}
-
-	public Long getGoodsId() {
-		return goodsId;
-	}
-
-	public void setGoodsId(Long goodsId) {
-		this.goodsId = goodsId;
 	}
 
 }

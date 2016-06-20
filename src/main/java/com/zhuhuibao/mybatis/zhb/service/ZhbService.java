@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.zhb.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -14,18 +15,28 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.PayConstants.OrderStatus;
+import com.zhuhuibao.common.constant.VipConstant;
 import com.zhuhuibao.common.constant.ZhbConstant.ZhbAccountStatus;
 import com.zhuhuibao.common.constant.ZhbConstant.ZhbRecordType;
-import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
+import com.zhuhuibao.mybatis.memCenter.mapper.WorkTypeMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.order.entity.Order;
+import com.zhuhuibao.mybatis.order.entity.OrderGoods;
+import com.zhuhuibao.mybatis.order.service.OrderGoodsService;
 import com.zhuhuibao.mybatis.order.service.OrderService;
+import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
+import com.zhuhuibao.mybatis.vip.service.VipInfoService;
+import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
-import com.zhuhuibao.mybatis.zhb.entity.ZhbGoodsConfig;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbRecord;
 import com.zhuhuibao.mybatis.zhb.mapper.ZhbMapper;
 import com.zhuhuibao.utils.MapUtil;
+import com.zhuhuibao.utils.pagination.model.Paging;
 
 /**
  * 筑慧币账户service
@@ -42,47 +53,126 @@ public class ZhbService {
 	private ZhbMapper zhbMapper;
 
 	@Autowired
+	private WorkTypeMapper workTypeMapper;
+
+	@Autowired
 	private MemberService memberService;
 
 	@Autowired
 	private OrderService orderService;
 
-	// TODO 判断接口调用者和当前数据属于同一人
+	@Autowired
+	private OrderGoodsService orderGoodsService;
+
+	@Autowired
+	private VipInfoService vipInfoService;
 
 	/**
-	 * 充值
+	 * 订单充值
 	 * 
-	 * @param orderMap
-	 *            :memberId/operaterId/amount/orderNo
+	 * @param orderNo
 	 * @return
 	 */
-	public int zhbPrepaid(ZhbRecord zhbRecord) {
+	public int zhbPrepaidByOrder(String orderNo) {
 		int result = 0;
 		try {
-			// 充值操作流水记录类型设置
-			zhbRecord.setType(ZhbRecordType.PREPAID);
+			Order order = orderService.findByOrderNo(orderNo);
+			OrderGoods orderGoods = orderGoodsService.findByOrderNo(orderNo);
+			// 订单不为空
+			// 订单类型为4：筑慧币
+			// 订单状态为已支付
+			// 订单购买人为当前操作账号的管理员账号
+			// 操作人为管理员
+			// 不存在该订单号对应的筑慧币流水记录
+			if (null != order && null != orderGoods && "4".equals(order.getGoodsType()) && OrderStatus.YZF.value.equals(order.getStatus())
+					&& order.getBuyerId() == ShiroUtil.getCompanyID() && ShiroUtil.getCompanyID() == ShiroUtil.getCreateID()
+					&& isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
+				DictionaryZhbgoods goods = getZhbGoodsById(orderGoods.getGoodsId());
+				BigDecimal amount = new BigDecimal(goods.getValue());
 
-			// 若数据正常，则进行充值操作
-			if (isNotExistsZhbRecord(zhbRecord.getOrderNo(), ZhbRecordType.PREPAID) && isRightZhbRecord(zhbRecord, OrderStatus.YZF)) {
-				// 增加充值流水
-				insertZhbRecord(zhbRecord, ZhbRecordType.PREPAID);
-
-				// 增加充值金额
-				ZhbAccount zhbAccount = zhbMapper.selectZhbAccount(zhbRecord.getBuyerId());
-				if (null != zhbAccount) {
-					// 将充值金额更新到账户
-					zhbAccount.setAmount(zhbAccount.getAmount().add(zhbRecord.getAmount()));
-					zhbMapper.updateZhbAccountEmoney(zhbAccount);
-				} else {
-					// 初次充值账户为空，将充值金额添加到账户
-					insertZhbAccount(zhbRecord.getBuyerId(), zhbRecord.getAmount());
+				// 订单中amount大于0
+				if (BigDecimal.ZERO.compareTo(amount) < 0) {
+					// 进行充值
+					result = execPrepaid(order.getOrderNo(), order.getBuyerId(), ShiroUtil.getCreateID(), amount);
 				}
-
-				result = 1;
 			}
 		} catch (Exception e) {
-			String msg = null == zhbRecord ? "null" : "orderNo=" + zhbRecord.getOrderNo() + ",buyerId=" + zhbRecord.getBuyerId();
-			log.error("ZhbAccountService::zhbPrepaid::" + msg, e);
+			log.error("ZhbAccountService::zhbPrepaidByOrder::" + "orderNo=" + orderNo + ",buyerId=" + ShiroUtil.getCreateID(), e);
+		}
+
+		return result >= 1 ? 1 : 0;
+	}
+
+	/**
+	 * 订单类型正确\订单状态正确\购买人为当前操作账号的管理员账号
+	 * 
+	 * @param order
+	 * @param goodsType
+	 * @param orderStatus
+	 * @return
+	 */
+	private boolean isRightOrder(Order order, String goodsType, String orderStatus) {
+		boolean result = false;
+		result = null != order && goodsType.equals(order.getGoodsType()) && orderStatus.equals(order.getStatus())
+				&& order.getBuyerId().compareTo(ShiroUtil.getCompanyID()) == 0;
+
+		return result;
+	}
+
+	/**
+	 * 判断当前登录者是否为企业管理员账号
+	 * 
+	 * @return
+	 */
+	private boolean isAdminLogin() {
+		return ShiroUtil.getCompanyID().compareTo(ShiroUtil.getCreateID()) == 0;
+	}
+
+	/**
+	 * 购买VIP服务
+	 * 
+	 * @param orderNo
+	 * @return
+	 */
+	public int openVipService(String orderNo) {
+		int result = 1;
+		try {
+			Order order = orderService.findByOrderNo(orderNo);
+			OrderGoods orderGoods = orderGoodsService.findByOrderNo(orderNo);
+			// 订单和订单物品不为空
+			// 订单类型为3：VIP套餐
+			// 订单状态为已支付
+			// 订单购买人为当前操作账号的管理员账号
+			// 操作人为管理员
+			// 不存在该订单号对应的筑慧币流水记录
+			if (null != order && null != orderGoods && isRightOrder(order, "3", OrderStatus.YZF.value) && isAdminLogin()
+					&& isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
+				DictionaryZhbgoods vipgoods = getZhbGoodsById(orderGoods.getGoodsId());
+				int buyVipLevel = Integer.parseInt(vipgoods.getValue());
+				BigDecimal amount = new BigDecimal(VipConstant.VIP_LEVEL_ZHB.get(String.valueOf(buyVipLevel)));
+
+				// 订单中amount大于0
+				// 筑慧币充值
+				if (amount.compareTo(BigDecimal.ZERO) > 0 && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
+					// 进行筑慧币充值
+					execPrepaid(order.getOrderNo(), order.getBuyerId(), ShiroUtil.getCompanyID(), amount);
+				}
+				// VIP升级
+				VipMemberInfo vipMemberInfo = vipInfoService.findVipMemberInfoById(ShiroUtil.getCompanyID());
+				if (null == vipMemberInfo) {
+					vipInfoService.insertVipMemberInfo(ShiroUtil.getCompanyID(), buyVipLevel, 1);
+				} else if (vipMemberInfo.getVipLevel() <= buyVipLevel) {
+					vipMemberInfo.setVipLevel(buyVipLevel);
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(vipMemberInfo.getExpireTime());
+					cal.add(Calendar.YEAR, 1);
+					vipInfoService.updateVipMemberInfo(vipMemberInfo);
+				}
+			}
+		} catch (Exception e) {
+			log.error("ZhbAccountService::buyVipService::orderNo=" + orderNo + ",buyerId=" + ShiroUtil.getCreateID(), e);
+			result = 0;
+			throw e;
 		}
 
 		return result;
@@ -99,68 +189,125 @@ public class ZhbService {
 	}
 
 	/**
+	 * 支付金额大于0，且小于或等于订单金额，筑慧币账户余额足够支付
+	 * 
+	 * @param zhbAmount
+	 * @param orderAmount
+	 * @param account
+	 * @return
+	 */
+	private boolean isRightAmount(BigDecimal zhbAmount, BigDecimal orderAmount, ZhbAccount account) {
+		return BigDecimal.ZERO.compareTo(zhbAmount) < 0 && zhbAmount.compareTo(orderAmount) <= 0 && null != account
+				&& account.getAmount().compareTo(zhbAmount) >= 0;
+	}
+
+	/**
+	 * 筑慧币支付订单
+	 * 
+	 * @param order
+	 * @param amount
+	 * @return
+	 */
+	public int payForOrder(String orderNo, BigDecimal zhbAmount) {
+		// TODO 支付功能
+		int resut = 0;
+		Order order = orderService.findByOrderNo(orderNo);
+		ZhbAccount account = getZhbAccount(ShiroUtil.getCompanyID());
+		// 订单不为空
+		// 订单状态为未支付
+		// 订单购买人为当前操作账号的管理员账号
+		// 支付金额大于0，且小于或等于订单金额
+		// 不存在该订单号对应的筑慧币流水记录
+		// 筑慧币账户余额足够支付
+		if (null != order && isRightOrder(order, order.getGoodsType(), OrderStatus.WZF.value) && isRightAmount(zhbAmount, order.getPayAmount(), account)
+				&& isNotExistsZhbRecord(orderNo, ZhbRecordType.PAYFOR)) {
+			ZhbRecord zhbRecord = new ZhbRecord();
+			zhbRecord.setOrderNo(order.getOrderNo());
+			zhbRecord.setBuyerId(order.getBuyerId());
+			zhbRecord.setOperaterId(ShiroUtil.getCreateID());
+			zhbRecord.setAmount(zhbAmount);
+			zhbRecord.setStatus("1");
+			zhbRecord.setType(ZhbRecordType.PAYFOR.toString());
+
+			zhbMapper.insertZhbRecord(zhbRecord);
+		}
+
+		return resut;
+	}
+
+	/**
 	 * 支付
 	 * 
-	 * @param zhbRecord
-	 *            :BuyerId/operaterId/amount/orderNo/goodsId/goodsType
+	 * @param orderNo
+	 * @param zhbAmount
 	 * @return 1:支付成功，0：支付失败
 	 */
-	public int payForOrder(ZhbRecord zhbRecord) {
+	public int payForGoods(Long goodsId, String goodsType) {
 		int result = 0;
 		try {
-			zhbRecord.setType(ZhbRecordType.PAYFOR);
 
-			// 验证是否可以支付:余额是否足够 且 zhbRecord对象数据正确
-			ZhbAccount account = getZhbAccount(zhbRecord.getBuyerId());
-			if (null != account && account.getAmount().compareTo(zhbRecord.getAmount()) >= 0 && isRightZhbRecord(zhbRecord, null)) {
+			DictionaryZhbgoods goods = zhbMapper.selectZhbGoodsByPinyin(goodsType.toLowerCase());
+
+			BigDecimal amount = goods.getPrice();
+
+			// 验证是否可以支付:余额是否足够，amount大于0
+			ZhbAccount account = getZhbAccount(ShiroUtil.getCompanyID());
+			if (null != account && account.getAmount().compareTo(amount) >= 0) {
 				// 增加流水记录
-				insertZhbRecord(zhbRecord, ZhbRecordType.PAYFOR);
-				// 修改筑慧币总额
-				account.setAmount(account.getAmount().subtract(zhbRecord.getAmount()));
+				insertZhbRecord("0", ShiroUtil.getCompanyID(), ShiroUtil.getCreateID(), amount, ZhbRecordType.PAYFOR.toString(), goodsId, goodsType);
 
-				// TODO where条件，account.getEmoney() = 原值 ;
-				// 判断更新条数!=1为异常，事务返回，支付失败
-				zhbMapper.updateZhbAccountEmoney(account);
+				// 修改筑慧币总额
+				account.setAmount(account.getAmount().subtract(amount));
+				// TODO 判断更新条数!=1为异常，事务返回，支付失败
+				int updateNum = zhbMapper.updateZhbAccountEmoney(account);
+				if (updateNum != 1) {
+					throw new BusinessException(MsgCodeConstant.ZHB_AUTOPAYFOR_FAILED, "筑慧币余额不足");
+				}
 
 				result = 1;
 			}
 		} catch (Exception e) {
-			String msg = null == zhbRecord ? "null" : "orderNo=" + zhbRecord.getOrderNo() + ",buyerId=" + zhbRecord.getBuyerId();
-			log.error("ZhbAccountService::payForOrder::" + msg, e);
+			String msg = "operaterId=" + ShiroUtil.getCreateID() + ",goodsId=" + goodsId + ",goodsType=" + goodsType;
+			log.error("ZhbAccountService::payForGoods::" + msg, e);
+			throw e;
 		}
 
 		return result;
 	}
 
 	/**
-	 * 退款
+	 * 运营退款
 	 * 
-	 * @param orderMap
-	 *            :memberId/operaterId/amount/orderNo
+	 * @param orderNo
+	 * 
 	 * @return
 	 */
-	public int refund(ZhbRecord zhbRecord) {
+	public int refundBySystem(String orderNo) {
 		int result = 0;
 		try {
-			zhbRecord.setType(ZhbRecordType.REFUND);
-			// 确认存在订单号对应的支付流水且不存在退款流水
-			List<ZhbRecord> recordList = listZhbRecordByOrderNo(zhbRecord.getOrderNo());
-			if (CollectionUtils.isNotEmpty(recordList) && recordList.size() == 1 && ZhbRecordType.PAYFOR == recordList.get(0).getType()
-					&& isRightZhbRecord(zhbRecord, OrderStatus.TKZ)) {
+			Order order = orderService.findByOrderNo(orderNo);
+			// 订单不为空
+			// 订单状态为退款中
+			// 不存在该订单号对应的筑慧币退款流水记录
+			// 存在该订单号对应的筑慧币支付流水记录
+			List<ZhbRecord> recordList = listZhbRecordByOrderNo(orderNo);
+			ZhbRecord parForRecord = CollectionUtils.isNotEmpty(recordList) ? recordList.get(0) : null;
+			if (null != order && OrderStatus.TKZ.value.equals(order.getStatus()) && null != parForRecord && recordList.size() == 1
+					&& ZhbRecordType.PAYFOR.toString().equals(parForRecord.getType())) {
 				// 添加退款流水记录
-				insertZhbRecord(zhbRecord, ZhbRecordType.REFUND);
+				insertZhbRecord(orderNo, order.getBuyerId(), ShiroUtil.getOmsCreateID(), parForRecord.getAmount(), ZhbRecordType.REFUND.toString(),
+						parForRecord.getGoodsId(), parForRecord.getGoodsType());
 				// 更新账户数据
-				ZhbAccount account = getZhbAccount(zhbRecord.getBuyerId());
+				ZhbAccount account = getZhbAccount(parForRecord.getBuyerId());
 				if (null != account) {
-					account.setAmount(account.getAmount().add(zhbRecord.getAmount()));
-					// TODO where条件，account.getEmoney() = 原值 ;
+					account.setAmount(account.getAmount().add(parForRecord.getAmount()));
 					zhbMapper.updateZhbAccountEmoney(account);
-
 					result = 1;
 				}
 			}
+
 		} catch (Exception e) {
-			String msg = null == zhbRecord ? "null" : "orderNo=" + zhbRecord.getOrderNo() + ",buyerId=" + zhbRecord.getBuyerId();
+			String msg = "orderNo=" + orderNo + ",operaterId=" + ShiroUtil.getOmsCreateID();
 			log.error("ZhbAccountService::refund::" + msg, e);
 		}
 		return result;
@@ -173,101 +320,124 @@ public class ZhbService {
 	 * @return
 	 */
 	@Cacheable(value = "zhbGoodsConfigCache", key = "#pinyin")
-	public ZhbGoodsConfig getZhbGoodsConfigByPinyin(String pinyin) {
+	public DictionaryZhbgoods getZhbGoodsByPinyin(String pinyin) {
 		if (StringUtils.isNotBlank(pinyin)) {
-			return zhbMapper.selectZhbGoodsConfigByPinyin(pinyin.toLowerCase());
+			return zhbMapper.selectZhbGoodsByPinyin(pinyin.toLowerCase());
 		}
 		return null;
 	}
-	
-	
-	
 
 	/**
-	 * 判断 record信息是否正确
+	 * 获取筑慧币物品配置信息
 	 * 
-	 * @param zhbRecord
-	 * @param correctStatus
+	 * @param pinyin
 	 * @return
 	 */
-	private boolean isRightZhbRecord(ZhbRecord zhbRecord, OrderStatus correctStatus) {
-		boolean isRight = false;
+	@Cacheable(value = "zhbGoodsConfigCache", key = "#id")
+	public DictionaryZhbgoods getZhbGoodsById(Long id) {
 
-		if (null != zhbRecord && StringUtils.isNotBlank(zhbRecord.getOrderNo()) && !"0".equals(zhbRecord.getOrderNo()) && null != correctStatus) {
-			// 存在订单的情况，判断是否正确
-			Order order = orderService.findByOrderNo(zhbRecord.getOrderNo());
-			if (null != order && null != zhbRecord.getAmount()) {
-				// 订单状态
-				boolean rightStatus = order.getStatus().equals(correctStatus.toString());
-				if (!rightStatus) {
-					return isRight;
-				}
+		return zhbMapper.selectZhbGoodsById(id);
+	}
 
-				// amount 充值的时候需一致
-				boolean rightAmount = zhbRecord.getAmount().compareTo(BigDecimal.ZERO) > 0 && order.getAmount().compareTo(zhbRecord.getAmount()) >= 0;
-				if (!rightAmount) {
-					return isRight;
-				}
+	/**
+	 * 按要求查询
+	 * 
+	 * @param pageNo
+	 * @param pageSize
+	 * @param recordType
+	 *            1:使用，2:获取
+	 * @return
+	 */
+	public List<Map<String, String>> getZhbDetails(String pageNo, String pageSize, String recordType) {
+		if (StringUtils.isEmpty(pageNo)) {
+			pageNo = "1";
+		}
+		if (StringUtils.isEmpty(pageSize)) {
+			pageSize = "10";
+		}
+		Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+		List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
 
-				// buyerId和operaterId的关系是否一致
-				boolean rightOperaterId = zhbRecord.getOperaterId() == zhbRecord.getBuyerId();
-				if (!rightOperaterId && ZhbRecordType.REFUND != zhbRecord.getType()) {
-					Member operater = memberService.findMemById(String.valueOf(zhbRecord.getOperaterId()));
-					rightOperaterId = null != operater && String.valueOf(zhbRecord.getBuyerId()).equals(operater.getEnterpriseEmployeeParentId());
-				}
-				if (!rightOperaterId) {
-					return isRight;
-				}
-
-				// buyerId 一致
-				boolean rightBuyerId = order.getBuyerId() == zhbRecord.getBuyerId();
-				if (!rightBuyerId) {
-					return isRight;
+		Map<String, Long> param = MapUtil.convert2HashMap("companyId", ShiroUtil.getCompanyID(), "operaterId", ShiroUtil.getCreateID(), "recordType",
+				recordType);
+		List<Map<String, String>> recordList = zhbMapper.selectZhbRecordList(pager.getRowBounds(), param);
+		if (CollectionUtils.isNotEmpty(recordList)) {
+			for (Map<String, String> record : recordList) {
+				// addTime 时间
+				// 行为
+				String orderNo = record.get("orderNo");
+				if ("0".equals(orderNo)) {
+					// 非订单流程购买商品
+					DictionaryZhbgoods goods = zhbMapper.selectZhbGoodsById(Long.valueOf(record.get("goodsId")));
+					record.put("behavior", goods.getName());
 				} else {
-					Member member = memberService.findMemById(String.valueOf(zhbRecord.getBuyerId()));
-					rightBuyerId = null != member && "0".equals(member.getEnterpriseEmployeeParentId());
-				}
-				if (!rightBuyerId) {
-					return isRight;
+					// 订单流程消费
+					OrderGoods goods = orderGoodsService.findByOrderNo(orderNo);
+					record.put("behavior", goods.getGoodsName());
 				}
 
-				// 最终结果
-				isRight = true;
-			}
-		} else if (null != zhbRecord && "0".equals(zhbRecord.getOrderNo())) {
-			// 无订单情况，类型为支付
-			if (ZhbRecordType.PAYFOR != zhbRecord.getType()) {
-				return isRight;
-			}
-
-			// amount 待消费的金额需大于0
-			boolean rightAmount = zhbRecord.getAmount().compareTo(BigDecimal.ZERO) > 0;
-			if (!rightAmount) {
-				return isRight;
-			}
-			// buyerId和operaterId的关系是否一致
-			if (zhbRecord.getOperaterId() != zhbRecord.getBuyerId()) {
-				Member operater = memberService.findMemById(String.valueOf(zhbRecord.getOperaterId()));
-				boolean rightOperaterId = null != operater && String.valueOf(zhbRecord.getBuyerId()).equals(operater.getEnterpriseEmployeeParentId());
-				if (!rightOperaterId) {
-					return isRight;
+				// amount 数量
+				if (ZhbRecordType.PAYFOR.toString().equals(record.get("type"))) {
+					record.put("amount", "-" + record.get("amount"));
+				}
+				// 操作人 account ，补充角色
+				WorkType workType = workTypeMapper.findWordTypeByType(record.get("workType"));
+				if (null != workType) {
+					record.put("account", record.get("account") + "(" + workType.getName() + ")");
 				}
 			}
-
-			// 判断BuyerId为管理员账号
-			if (zhbRecord.getOperaterId() == zhbRecord.getBuyerId()) {
-				Member member = memberService.findMemById(String.valueOf(zhbRecord.getBuyerId()));
-				boolean rightBuyerId = null != member && "0".equals(member.getEnterpriseEmployeeParentId());
-				if (!rightBuyerId) {
-					return isRight;
-				}
-			}
-
-			// 最终结果
-			isRight = true;
 		}
 
-		return isRight;
+		return resultList;
+	}
+
+	/**
+	 * 添加筑慧币流水记录
+	 * 
+	 * @param orderNo
+	 * @param orderBuyerId
+	 * @param amount
+	 * @param type
+	 */
+	private void insertZhbRecord(String orderNo, Long buyerId, Long operaterId, BigDecimal amount, String type, Long goodsId, String goodsType) {
+		ZhbRecord zhbRecord = new ZhbRecord();
+		zhbRecord.setOrderNo(orderNo);
+		zhbRecord.setBuyerId(buyerId);
+		zhbRecord.setOperaterId(operaterId);
+		zhbRecord.setAmount(amount);
+		zhbRecord.setStatus("1");
+		zhbRecord.setType(type);
+		zhbRecord.setGoodsId(goodsId);
+		zhbRecord.setGoodsType(goodsType);
+
+		zhbMapper.insertZhbRecord(zhbRecord);
+	}
+
+	/**
+	 * 进行充值操作
+	 * 
+	 * @param orderNo
+	 * @param orderBuyerId
+	 * @return
+	 */
+	private int execPrepaid(String orderNo, Long buyerId, Long operaterId, BigDecimal amount) {
+		int result = 0;
+		// 增加充值流水
+		insertZhbRecord(orderNo, buyerId, operaterId, amount, ZhbRecordType.PREPAID.toString(), null, null);
+
+		// 增加充值金额
+		ZhbAccount zhbAccount = zhbMapper.selectZhbAccount(buyerId);
+		if (null != zhbAccount) {
+			// 将充值金额更新到账户
+			zhbAccount.setAmount(zhbAccount.getAmount().add(amount));
+			result = zhbMapper.updateZhbAccountEmoney(zhbAccount);
+		} else {
+			// 初次充值账户为空，将充值金额添加到账户
+			insertZhbAccount(buyerId, amount);
+			result = 1;
+		}
+
+		return result >= 1 ? 1 : 0;
 	}
 
 	/**
@@ -288,28 +458,13 @@ public class ZhbService {
 	private void insertZhbAccount(Long memberId, BigDecimal amount) {
 		ZhbAccount zhbAccount = new ZhbAccount();
 		zhbAccount.setMemberId(memberId);
-		zhbAccount.setStatus(ZhbAccountStatus.ACTIVE);
+		zhbAccount.setStatus(ZhbAccountStatus.ACTIVE.toString());
 		zhbAccount.setAmount(amount);
 		Calendar cal = Calendar.getInstance();
 		zhbAccount.setAddTime(cal.getTime());
 		zhbAccount.setUpdateTime(cal.getTime());
 
 		zhbMapper.insertZhbAccount(zhbAccount);
-	}
-
-	/**
-	 * 添加筑慧币流水记录
-	 * 
-	 * @param zhbRecord
-	 * @param type
-	 */
-	private void insertZhbRecord(ZhbRecord zhbRecord, ZhbRecordType type) {
-		zhbRecord.setType(type);
-		Calendar cal = Calendar.getInstance();
-		zhbRecord.setAddTime(cal.getTime());
-		zhbRecord.setUpdateTime(cal.getTime());
-
-		zhbMapper.insertZhbRecord(zhbRecord);
 	}
 
 	/**

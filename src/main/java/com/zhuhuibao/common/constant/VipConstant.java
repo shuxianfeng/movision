@@ -1,5 +1,8 @@
 package com.zhuhuibao.common.constant;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class VipConstant {
 	/**
 	 * 特权类型（有无、折扣率、数量）
@@ -29,6 +32,58 @@ public class VipConstant {
 			return this.value;
 		}
 	}
+
+	public enum VipLevel {
+		/**
+		 * 个人免费
+		 */
+		PERSON_FREE(0),
+		/**
+		 * 个人黄金
+		 */
+		PERSON_GOLD(30),
+		/**
+		 * 个人铂金
+		 */
+		PERSON_PLATINUM(60),
+		/**
+		 * 企业免费
+		 */
+		ENTERPRISE_FREE(100),
+		/**
+		 * 企业黄金
+		 */
+		ENTERPRISE_GOLD(130),
+		/**
+		 * 企业铂金
+		 */
+		ENTERPRISE_PLATINUM(160);
+
+		public final int value;
+
+		private VipLevel(int value) {
+			this.value = value;
+		}
+
+		@Override
+		public String toString() {
+			return String.valueOf(value);
+		}
+	}
+
+	/**
+	 * VIP级别对应赠送筑慧币数量
+	 */
+	public final static Map<String, Long> VIP_LEVEL_ZHB = new HashMap<String, Long>() {
+		{
+			put(VipLevel.PERSON_FREE.toString(), 0L);
+			put(VipLevel.PERSON_GOLD.toString(), 350L);
+			put(VipLevel.PERSON_PLATINUM.toString(), 580L);
+			put(VipLevel.ENTERPRISE_FREE.toString(), 0L);
+			put(VipLevel.ENTERPRISE_GOLD.toString(), 3500L);
+			put(VipLevel.ENTERPRISE_PLATINUM.toString(), 6200L);
+		}
+	};
 
 	/**
 	 * 额外自定义特权-个人

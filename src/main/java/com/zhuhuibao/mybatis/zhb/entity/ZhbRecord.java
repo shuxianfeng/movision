@@ -41,8 +41,8 @@ public class ZhbRecord implements Serializable {
 	 */
 	private String status;
 
-	@ApiModelProperty(value = "记录类型，1：支出，2：收入", required = true)
-	private ZhbRecordType type;
+	@ApiModelProperty(value = "记录类型，1：支付，2：充值，3：退款", required = true)
+	private String type;
 
 	@ApiModelProperty(value = "购买的物品类型")
 	private String goodsType;
@@ -91,6 +91,10 @@ public class ZhbRecord implements Serializable {
 		return amount;
 	}
 
+	public double getAmountDoubleValue() {
+		return null != amount ? amount.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() : 0;
+	}
+
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
@@ -103,11 +107,11 @@ public class ZhbRecord implements Serializable {
 		this.status = status;
 	}
 
-	public ZhbRecordType getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(ZhbRecordType type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

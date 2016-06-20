@@ -39,14 +39,65 @@ public class CompanyController {
     @Autowired
     SuccessCaseService successCaseService;
 
-    @ApiOperation(value = "查询企业所有信息", notes = "查询企业所有信息", response = Response.class)
-    @RequestMapping(value = "sel_mem_info", method = RequestMethod.GET)
-    public Response info() {
+    @ApiOperation(value = "查询企业基本信息", notes = "查询企业基本信息", response = Response.class)
+    @RequestMapping(value = "sel_mem_basic_info", method = RequestMethod.GET)
+    public Response basicInfo() {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
             Member member = memberService.findMemById(String.valueOf(memberId));
-            result.setData(member);
+            Map map = new HashMap();
+            map.put("enterpriseName",member.getEnterpriseName());
+            map.put("enterpriseType",member.getEnterpriseType());
+            map.put("enterpriseTypeName",member.getEnterpriseTypeName());
+            map.put("identify",member.getIdentify());
+            map.put("identifyName",member.getIdentifyName());
+            map.put("enterpriseCreaterTime",member.getEnterpriseCreaterTime());
+            map.put("registerCapital",member.getRegisterCapital());
+            map.put("currency",member.getCurrency());
+            map.put("employeeNumber",member.getEmployeeNumber());
+            map.put("employeeNumberName",member.getEmployeeNumberName());
+            map.put("province",member.getProvince());
+            map.put("provinceName",member.getProvinceName());
+            map.put("city",member.getCity());
+            map.put("cityName",member.getCityName());
+            map.put("area",member.getArea());
+            map.put("areaName",member.getAreaName());
+            map.put("address",member.getAddress());
+            map.put("enterpriseLogo",member.getEnterpriseLogo());
+            map.put("headShot",member.getHeadShot());
+            map.put("saleProductDesc",member.getSaleProductDesc());
+            map.put("enterpriseDesc",member.getEnterpriseDesc());
+            map.put("enterpriseProvince",member.getEnterpriseProvince());
+            map.put("enterpriseProvinceName",member.getEnterpriseProvinceName());
+            map.put("enterpriseCity",member.getEnterpriseCity());
+            map.put("enterpriseCityName",member.getEnterpriseCityName());
+            map.put("enterpriseArea",member.getEnterpriseArea());
+            map.put("enterpriseAreaName",member.getEnterpriseAreaName());
+            map.put("enterpriseAddress",member.getEnterpriseAddress());
+            map.put("enterpriseTelephone",member.getEnterpriseTelephone());
+            map.put("enterpriseFox",member.getEnterpriseFox());
+            map.put("enterpriseWebSite",member.getEnterpriseWebSite());
+            map.put("status",member.getStatus());
+            result.setData(map);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "查询企业实名信息", notes = "查询企业实名信息", response = Response.class)
+    @RequestMapping(value = "sel_mem_realName_info", method = RequestMethod.GET)
+    public Response realNameInfo() {
+        Response result = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            Member member = memberService.findMemById(String.valueOf(memberId));
+            Map map = new HashMap();
+            map.put("coBusLicNum",member.getCoBusLicNum());
+            map.put("companyBusinessLicenseImg",member.getCompanyBusinessLicenseImg());
+            map.put("status",member.getStatus());
+            result.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
@@ -69,6 +120,7 @@ public class CompanyController {
             if (session != null) {
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
                 principal.setStatus(Integer.parseInt(loginMember.getStatus()));
+                principal.setIdentify(loginMember.getIdentify());
                 session.setAttribute("member", principal);
             }
         }else {
@@ -79,7 +131,7 @@ public class CompanyController {
 
     @ApiOperation(value = "企业实名认证保存", notes = "企业实名认证保存", response = Response.class)
     @RequestMapping(value = "upd_mem_realName_info", method = RequestMethod.POST)
-    public Response upd_mem_realName_info(@ApiParam(value = "")@RequestParam String coBusLicNum,
+    public Response upd_mem_realName_info(@RequestParam String coBusLicNum,
                                           @RequestParam String companyBusinessLicenseImg)  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
@@ -107,17 +159,25 @@ public class CompanyController {
 
     @ApiOperation(value = "企业资质保存", notes = "企业资质保存", response = Response.class)
     @RequestMapping(value = "add_certificate", method = RequestMethod.POST)
-    public Response certificateSave(String json)  {
+    public Response certificateSave(String json1,String json2)  {
         Response result = new Response();
         Gson gson=new Gson();
-        List<CertificateRecord> rs= new ArrayList<CertificateRecord>();
+        List<CertificateRecord> rs1= new ArrayList<CertificateRecord>();
+        List<CertificateRecord> rs2= new ArrayList<CertificateRecord>();
         Type type = new TypeToken<ArrayList<CertificateRecord>>() {}.getType();
-        rs = gson.fromJson(json, type);
+        rs1 = gson.fromJson(json1, type);
+        rs2 = gson.fromJson(json2, type);
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
             memberService.deleteCertificate(String.valueOf(memberId));
-            for(CertificateRecord record:rs){
+            for(CertificateRecord record:rs1){
                 record.setMem_id(String.valueOf(memberId));
+                record.setType("1");
+                memberService.saveCertificate(record);
+            }
+            for(CertificateRecord record:rs2){
+                record.setMem_id(String.valueOf(memberId));
+                record.setType("2");
                 memberService.saveCertificate(record);
             }
         }else {
@@ -132,11 +192,22 @@ public class CompanyController {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
-            CertificateRecord record = new CertificateRecord();
-            record.setMem_id(String.valueOf(memberId));
-            record.setIs_deleted(0);
-            List<CertificateRecord> list = memberService.certificateSearch(record);
-            result.setData(list);
+            CertificateRecord record1 = new CertificateRecord();
+            record1.setMem_id(String.valueOf(memberId));
+            record1.setIs_deleted(0);
+            record1.setType("1");
+            List<CertificateRecord> list1 = memberService.certificateSearch(record1);
+
+            CertificateRecord record2 = new CertificateRecord();
+            record2.setMem_id(String.valueOf(memberId));
+            record2.setIs_deleted(0);
+            record1.setType("2");
+            List<CertificateRecord> list2 = memberService.certificateSearch(record2);
+
+            Map map = new HashMap();
+            map.put("supplier",list1);
+            map.put("contractor",list2);
+            result.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
@@ -233,7 +304,7 @@ public class CompanyController {
     }
 
     @ApiOperation(value = "编辑更新成功案例信息", notes = "编辑更新成功案例信息", response = Response.class)
-    @RequestMapping(value = "upd_successCase", method = RequestMethod.GET)
+    @RequestMapping(value = "upd_successCase", method = RequestMethod.POST)
     public Response upd_successCase(@ModelAttribute SuccessCase successCase) {
         Response result = new Response();
         successCaseService.updateSuccessCase(successCase);
@@ -242,7 +313,7 @@ public class CompanyController {
     }
 
     @ApiOperation(value = "删除成功案例信息", notes = "删除成功案例信息", response = Response.class)
-    @RequestMapping(value = "del_successCase", method = RequestMethod.GET)
+    @RequestMapping(value = "del_successCase", method = RequestMethod.POST)
     public Response del_successCase(@ApiParam(value = "成功案例ids,逗号隔开") @RequestParam String ids) {
         Response result = new Response();
         String[] idList = ids.split(",");

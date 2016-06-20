@@ -34,7 +34,7 @@ import java.util.Map;
  * @since 16/2/25.
  */
 @RestController
-@RequestMapping("/rest/member/mc/user")
+@RequestMapping("/rest/member/mc/company")
 public class StaffManageController {
 	private static final Logger log = LoggerFactory.getLogger(StaffManageController.class);
 
@@ -78,14 +78,19 @@ public class StaffManageController {
 
 	@ApiOperation(value = "修改员工", notes = "修改员工", response = Response.class)
 	@RequestMapping(value = "upd_member", method = RequestMethod.POST)
-	public Response updateMember(HttpServletRequest req, Member member)  {
-		String account = req.getParameter("account");
+	public Response updateMember(@RequestParam String account,
+								 @RequestParam String workType,
+								 @RequestParam String enterpriseLinkman,
+								 @RequestParam String id)  {
+		Member member = new Member();
 		if(account.contains("@")){
 			member.setEmail(account);
 		}else{
 			member.setMobile(account);
 		}
-
+		member.setId(id);
+		member.setWorkType(workType);
+		member.setEnterpriseLinkman(enterpriseLinkman);
 		Response result = new Response();
 		memberService.updateMemInfo(member);
 		return result;

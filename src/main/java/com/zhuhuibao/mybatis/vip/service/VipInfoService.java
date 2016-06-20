@@ -1,12 +1,12 @@
 package com.zhuhuibao.mybatis.vip.service;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zhuhuibao.common.constant.VipConstant;
+import com.zhuhuibao.common.constant.VipConstant.VipLevel;
 import com.zhuhuibao.common.constant.VipConstant.VipPrivilegeType;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege;
@@ -61,7 +62,7 @@ public class VipInfoService {
 	 * @return
 	 */
 	@Cacheable(value = "vipPrivilegeCache", key = "#vipLevel")
-	public Map<String, VipPrivilege> getVipPrivilegeMap(int vipLevel) {
+	public Map<String, VipPrivilege> findVipPrivilegeMap(int vipLevel) {
 		Map<String, VipPrivilege> privilegeMap = new HashMap<String, VipPrivilege>();
 		List<VipPrivilege> list = listVipPrivilegeByLevel(vipLevel);
 		if (CollectionUtils.isNotEmpty(list)) {
@@ -102,7 +103,7 @@ public class VipInfoService {
 	 * @param privilegePinyin
 	 * @return
 	 */
-	public VipMemberPrivilege getVipMemberPrivilege(Long memberId, String privilegePinyin) {
+	public VipMemberPrivilege findVipMemberPrivilege(Long memberId, String privilegePinyin) {
 		privilegePinyin = StringUtils.isNotBlank(privilegePinyin) ? privilegePinyin.toLowerCase() : "";
 		Map<String, Object> param = MapUtil.convert2HashMap("memberId", memberId, "pinyin", privilegePinyin);
 		return vipInfoMapper.selectVipMemberPrivilege(param);
@@ -117,7 +118,7 @@ public class VipInfoService {
 	 */
 	public long getExtraPrivilegeNum(Long memberId, String privilegePinyin) {
 		if (null != memberId && StringUtils.isNotBlank(privilegePinyin)) {
-			VipMemberPrivilege extraPrivilege = getVipMemberPrivilege(memberId, privilegePinyin.toLowerCase());
+			VipMemberPrivilege extraPrivilege = findVipMemberPrivilege(memberId, privilegePinyin.toLowerCase());
 			if (null != extraPrivilege && VipPrivilegeType.NUM == extraPrivilege.getType()) {
 				return extraPrivilege.getValue();
 			}
@@ -135,7 +136,7 @@ public class VipInfoService {
 	 */
 	public boolean hadExtraPrivilege(Long memberId, String privilegePinyin) {
 		boolean hadExtraPrivilege = false;
-		VipMemberPrivilege extraPrivilege = getVipMemberPrivilege(memberId, privilegePinyin);
+		VipMemberPrivilege extraPrivilege = findVipMemberPrivilege(memberId, privilegePinyin);
 
 		if (null != extraPrivilege && VipPrivilegeType.NUM == extraPrivilege.getType() && extraPrivilege.getValue() > 0) {
 			hadExtraPrivilege = true;
@@ -173,15 +174,64 @@ public class VipInfoService {
 	 * @param identify
 	 */
 	public void initDefaultExtraPrivilege(Long memberId, String identify) {
-
-		List<VipMemberPrivilege> memberPrivilegeList = vipInfoMapper.selectVipMemberPrivilegeList(memberId);
-		if (CollectionUtils.isNotEmpty(memberPrivilegeList)) {
-			// 当会员自定义特权不为空时表示已存在，无需初始化
-			return;
+		int defaultPrivilegeLevel = StringUtils.contains(identify, "2") ? VipConstant.EXTRA_PRIVILEGE_LEVEL_PERSONAL
+				: VipConstant.EXTRA_PRIVILEGE_LEVEL_PERSONAL;
+		int freeLevel = StringUtils.contains(identify, "2") ? VipLevel.PERSON_FREE.value : VipLevel.ENTERPRISE_FREE.value;
+		VipMemberInfo vipMemberInfo = vipInfoMapper.selectVipMemberInfoById(memberId);
+		if (null == vipMemberInfo) {
+			insertVipMemberInfo(memberId, freeLevel, 50);
 		}
 
-		int defaultLevel = StringUtils.contains(identify, "2") ? VipConstant.EXTRA_PRIVILEGE_LEVEL_PERSONAL : VipConstant.EXTRA_PRIVILEGE_LEVEL_PERSONAL;
-		List<VipPrivilege> privilegeList = listVipPrivilegeByLevel(defaultLevel);
+		List<VipMemberPrivilege> memberPrivilegeList = vipInfoMapper.selectVipMemberPrivilegeList(memberId);
+		if (CollectionUtils.isEmpty(memberPrivilegeList)) {
+			insertExtraPrivilege(memberId, defaultPrivilegeLevel);
+		}
+	}
+
+	/**
+	 * 添加会员VIP信息
+	 * 
+	 * @param memberId
+	 * @param vipLevel
+	 * @param activeYears
+	 *            生效年份
+	 */
+	public VipMemberInfo insertVipMemberInfo(Long memberId, int vipLevel, int activeYears) {
+		VipMemberInfo vipMemberInfo = new VipMemberInfo();
+		vipMemberInfo.setMemberId(memberId);
+		vipMemberInfo.setVipLevel(vipLevel);
+
+		Calendar cal = Calendar.getInstance();
+		vipMemberInfo.setActiveTime(cal.getTime());
+
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.add(Calendar.YEAR, activeYears);
+		cal.add(Calendar.DATE, 1);
+		vipMemberInfo.setExpireTime(cal.getTime());
+		vipInfoMapper.insertVipMemberInfo(vipMemberInfo);
+
+		return vipMemberInfo;
+	}
+
+	/**
+	 * 修改会员VIP信息
+	 * 
+	 * @param vipMemberInfo
+	 */
+	public void updateVipMemberInfo(VipMemberInfo vipMemberInfo) {
+		vipInfoMapper.updateVipMemberInfo(vipMemberInfo);
+	}
+
+	/**
+	 * 添加对应级别的自定义特权
+	 * 
+	 * @param memberId
+	 * @param vipLevel
+	 */
+	private void insertExtraPrivilege(Long memberId, int vipLevel) {
+		List<VipPrivilege> privilegeList = listVipPrivilegeByLevel(vipLevel);
 		if (CollectionUtils.isNotEmpty(privilegeList)) {
 			for (VipPrivilege p : privilegeList) {
 				if (VipPrivilegeType.NUM == p.getType()) {
