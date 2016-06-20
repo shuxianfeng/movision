@@ -236,20 +236,57 @@ public class ZhbService {
 	}
 
 	/**
+	 * 消费自定义特权数量或者筑慧币进行业务操作
+	 * 
+	 * @param goodsId
+	 * @param goodsType
+	 * @return
+	 */
+	public int payForOperater(Long goodsId, String goodsType) {
+		int result = 0;
+
+		if (vipInfoService.hadExtraPrivilege(ShiroUtil.getCompanyID(), goodsType)) {
+			result = vipInfoService.useExtraPrivilege(ShiroUtil.getCompanyID(), goodsType);
+		}
+		if (0 == result) {
+			payForGoods(goodsId, goodsType);
+		}
+
+		return result;
+	}
+
+	/**
+	 * 判断是否可以使用特权数量或者筑慧币支付
+	 * 
+	 * @param goodsId
+	 * @param goodsType
+	 * @return
+	 */
+	public boolean canPayFor(Long goodsId, String goodsType) {
+		long privilegeNum = vipInfoService.getExtraPrivilegeNum(ShiroUtil.getCompanyID(), goodsType);
+		if (privilegeNum > 0) {
+			return true;
+		}
+
+		DictionaryZhbgoods goodsConfig = getZhbGoodsByPinyin(goodsType);
+		ZhbAccount account = getZhbAccount(ShiroUtil.getCompanyID());
+
+		return account.getAmount().compareTo(goodsConfig.getPrice()) > 0;
+	}
+
+	/**
 	 * 支付
 	 * 
-	 * @param orderNo
-	 * @param zhbAmount
-	 * @return 1:支付成功，0：支付失败
+	 * @param goodsId
+	 * @param goodsType
+	 * @return 1:成功，0或者exception为失败
 	 */
 	public int payForGoods(Long goodsId, String goodsType) {
 		int result = 0;
+
 		try {
-
 			DictionaryZhbgoods goods = zhbMapper.selectZhbGoodsByPinyin(goodsType.toLowerCase());
-
 			BigDecimal amount = goods.getPrice();
-
 			// 验证是否可以支付:余额是否足够，amount大于0
 			ZhbAccount account = getZhbAccount(ShiroUtil.getCompanyID());
 			if (null != account && account.getAmount().compareTo(amount) >= 0) {
