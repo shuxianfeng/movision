@@ -242,14 +242,14 @@ public class ZhbService {
 	 * @param goodsType
 	 * @return
 	 */
-	public int payForOperater(Long goodsId, String goodsType) {
+	public int payForGoods(Long goodsId, String goodsType) {
 		int result = 0;
 
 		if (vipInfoService.hadExtraPrivilege(ShiroUtil.getCompanyID(), goodsType)) {
 			result = vipInfoService.useExtraPrivilege(ShiroUtil.getCompanyID(), goodsType);
 		}
 		if (0 == result) {
-			payForGoods(goodsId, goodsType);
+			payForGoodsByZhb(goodsId, goodsType);
 		}
 
 		return result;
@@ -275,13 +275,13 @@ public class ZhbService {
 	}
 
 	/**
-	 * 支付
+	 * 使用筑慧币支付
 	 * 
 	 * @param goodsId
 	 * @param goodsType
 	 * @return 1:成功，0或者exception为失败
 	 */
-	public int payForGoods(Long goodsId, String goodsType) {
+	public int payForGoodsByZhb(Long goodsId, String goodsType) {
 		int result = 0;
 
 		try {

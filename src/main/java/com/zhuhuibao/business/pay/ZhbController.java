@@ -109,7 +109,7 @@ public class ZhbController {
 
 		int result = 0;
 		try {
-			result = zhbService.payForOperater(goodsId, goodsType);
+			result = zhbService.payForGoods(goodsId, goodsType);
 		} catch (Exception e) {
 			// 出现异常也为失败
 		}
