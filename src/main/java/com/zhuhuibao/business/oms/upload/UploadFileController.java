@@ -46,8 +46,8 @@ import com.zhuhuibao.utils.MsgPropertiesUtils;
 @RestController
 @RequestMapping("/rest/upload/oms")
 @Api(value = "upload", description = "上传文件")
-public class UploadFileColler {
-	private static final Logger log = LoggerFactory.getLogger(UploadFileColler.class);
+public class UploadFileController {
+	private static final Logger log = LoggerFactory.getLogger(UploadFileController.class);
  
 	@Autowired
 	ProjectService projectService;
