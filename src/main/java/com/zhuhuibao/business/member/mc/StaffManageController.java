@@ -78,14 +78,17 @@ public class StaffManageController {
 
 	@ApiOperation(value = "修改员工", notes = "修改员工", response = Response.class)
 	@RequestMapping(value = "upd_member", method = RequestMethod.POST)
-	public Response updateMember(HttpServletRequest req, Member member)  {
-		String account = req.getParameter("account");
+	public Response updateMember(@RequestParam String account,
+								 @RequestParam String workType,
+								 @RequestParam String enterpriseLinkman)  {
+		Member member = new Member();
 		if(account.contains("@")){
 			member.setEmail(account);
 		}else{
 			member.setMobile(account);
 		}
-
+		member.setWorkType(workType);
+		member.setEnterpriseLinkman(enterpriseLinkman);
 		Response result = new Response();
 		memberService.updateMemInfo(member);
 		return result;

@@ -369,7 +369,7 @@
     <include refid="Base_Column_List" />
     from t_m_member
     where
-    enterpriseEmployeeParentId = #{enterpriseEmployeeParentId} and status=1
+    enterpriseEmployeeParentId = #{enterpriseEmployeeParentId} and status!=2
     <if test="account != null and account != '' ">
       and (email like CONCAT('%',#{account},'%') or mobile like CONCAT('%',#{account},'%'))
     </if>

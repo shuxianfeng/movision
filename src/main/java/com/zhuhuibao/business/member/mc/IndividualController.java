@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 个人资料维护
@@ -44,14 +46,47 @@ public class IndividualController {
         return result;
     }
 
-    @ApiOperation(value = "查询个人所有信息", notes = "查询个人所有信息", response = Response.class)
-    @RequestMapping(value = "sel_mem_info", method = RequestMethod.GET)
-    public Response info() {
+    @ApiOperation(value = "查询个人基本信息", notes = "查询个人基本信息", response = Response.class)
+    @RequestMapping(value = "sel_mem_basic_info", method = RequestMethod.GET)
+    public Response basicInfo() {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
             Member member = memberService.findMemById(String.valueOf(memberId));
-            result.setData(member);
+            Map map = new HashMap();
+            map.put("nickname",member.getNickname());
+            map.put("sex",member.getSex());
+            map.put("personCompanyType",member.getPersonCompanyType());
+            map.put("workType",member.getWorkType());
+            map.put("province",member.getProvince());
+            map.put("city",member.getCity());
+            map.put("area",member.getArea());
+            map.put("address",member.getAddress());
+            map.put("fixedTelephone",member.getFixedTelephone());
+            map.put("fixedMobile",member.getFixedMobile());
+            map.put("QQ",member.getQQ());
+            map.put("status",member.getStatus());
+            result.setData(map);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "查询个人实名信息", notes = "查询个人实名信息", response = Response.class)
+    @RequestMapping(value = "sel_mem_realName_info", method = RequestMethod.GET)
+    public Response realNameInfo() {
+        Response result = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            Member member = memberService.findMemById(String.valueOf(memberId));
+            Map map = new HashMap();
+            map.put("personRealName",member.getPersonRealName());
+            map.put("personIdentifyCard",member.getPersonIdentifyCard());
+            map.put("personIDFrontImgUrl",member.getPersonIDFrontImgUrl());
+            map.put("personIDBackImgUrl",member.getPersonIDBackImgUrl());
+            map.put("status",member.getStatus());
+            result.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
@@ -127,6 +162,7 @@ public class IndividualController {
             memberService.deleteCertificate(String.valueOf(memberId));
             for(CertificateRecord record:rs){
                 record.setMem_id(String.valueOf(memberId));
+                record.setType("3");
                 memberService.saveCertificate(record);
             }
         }else {

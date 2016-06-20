@@ -292,17 +292,7 @@ public class MemberService {
 
 				map.put("role",workTypeName);
 				map.put("roleId",member1.getWorkType());
-				map.put("name",member1.getPersonRealName());
-				map.put("status",member1.getStatus());
-				String statusName = "";
-				if("0".equals(member1.getStatus())){
-					statusName = "未激活";
-				}else if("1".equals(member1.getStatus())){
-					statusName = "正常";
-				}else{
-					statusName = "注销";
-				}
-				map.put("statusName",statusName);
+				map.put("name",member1.getEnterpriseLinkman());
 				list.add(map);
 			}
 			return list;
