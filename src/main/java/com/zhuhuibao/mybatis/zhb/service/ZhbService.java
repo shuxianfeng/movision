@@ -155,11 +155,13 @@ public class ZhbService {
 				// 筑慧币充值
 				if (amount.compareTo(BigDecimal.ZERO) > 0 && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
 					// 进行筑慧币充值
-					execPrepaid(order.getOrderNo(), order.getBuyerId(), ShiroUtil.getCreateID(), amount);
+					execPrepaid(order.getOrderNo(), order.getBuyerId(), ShiroUtil.getCompanyID(), amount);
 				}
 				// VIP升级
-				VipMemberInfo vipMemberInfo = vipInfoService.findVipMemberInfoById(ShiroUtil.getCreateID());
-				if (vipMemberInfo.getVipLevel() <= buyVipLevel) {
+				VipMemberInfo vipMemberInfo = vipInfoService.findVipMemberInfoById(ShiroUtil.getCompanyID());
+				if (null == vipMemberInfo) {
+					vipInfoService.insertVipMemberInfo(ShiroUtil.getCompanyID(), buyVipLevel, 1);
+				} else if (vipMemberInfo.getVipLevel() <= buyVipLevel) {
 					vipMemberInfo.setVipLevel(buyVipLevel);
 					Calendar cal = Calendar.getInstance();
 					cal.setTime(vipMemberInfo.getExpireTime());
@@ -170,6 +172,7 @@ public class ZhbService {
 		} catch (Exception e) {
 			log.error("ZhbAccountService::buyVipService::orderNo=" + orderNo + ",buyerId=" + ShiroUtil.getCreateID(), e);
 			result = 0;
+			throw e;
 		}
 
 		return result;
@@ -224,7 +227,7 @@ public class ZhbService {
 			zhbRecord.setOperaterId(ShiroUtil.getCreateID());
 			zhbRecord.setAmount(zhbAmount);
 			zhbRecord.setStatus("1");
-			zhbRecord.setType(ZhbRecordType.PAYFOR);
+			zhbRecord.setType(ZhbRecordType.PAYFOR.toString());
 
 			zhbMapper.insertZhbRecord(zhbRecord);
 		}
@@ -239,15 +242,19 @@ public class ZhbService {
 	 * @param zhbAmount
 	 * @return 1:支付成功，0：支付失败
 	 */
-	public int payForGoods(Long goodsId, String goodsType, BigDecimal amount) {
+	public int payForGoods(Long goodsId, String goodsType) {
 		int result = 0;
 		try {
 
+			DictionaryZhbgoods goods = zhbMapper.selectZhbGoodsByPinyin(goodsType.toLowerCase());
+
+			BigDecimal amount = goods.getPrice();
+
 			// 验证是否可以支付:余额是否足够，amount大于0
 			ZhbAccount account = getZhbAccount(ShiroUtil.getCompanyID());
-			if (null != account && account.getAmount().compareTo(amount) >= 0 && BigDecimal.ZERO.compareTo(amount) < 0) {
+			if (null != account && account.getAmount().compareTo(amount) >= 0) {
 				// 增加流水记录
-				insertZhbRecord("0", ShiroUtil.getCompanyID(), ShiroUtil.getCreateID(), amount, ZhbRecordType.PAYFOR, goodsId, goodsType);
+				insertZhbRecord("0", ShiroUtil.getCompanyID(), ShiroUtil.getCreateID(), amount, ZhbRecordType.PAYFOR.toString(), goodsId, goodsType);
 
 				// 修改筑慧币总额
 				account.setAmount(account.getAmount().subtract(amount));
@@ -260,8 +267,9 @@ public class ZhbService {
 				result = 1;
 			}
 		} catch (Exception e) {
-			String msg = "operaterId=" + ShiroUtil.getCreateID() + ",goodsId=" + goodsId + ",goodsType=" + goodsType + ",amount=" + amount;
+			String msg = "operaterId=" + ShiroUtil.getCreateID() + ",goodsId=" + goodsId + ",goodsType=" + goodsType;
 			log.error("ZhbAccountService::payForGoods::" + msg, e);
+			throw e;
 		}
 
 		return result;
@@ -285,9 +293,9 @@ public class ZhbService {
 			List<ZhbRecord> recordList = listZhbRecordByOrderNo(orderNo);
 			ZhbRecord parForRecord = CollectionUtils.isNotEmpty(recordList) ? recordList.get(0) : null;
 			if (null != order && OrderStatus.TKZ.value.equals(order.getStatus()) && null != parForRecord && recordList.size() == 1
-					&& ZhbRecordType.PAYFOR == parForRecord.getType()) {
+					&& ZhbRecordType.PAYFOR.toString().equals(parForRecord.getType())) {
 				// 添加退款流水记录
-				insertZhbRecord(orderNo, order.getBuyerId(), ShiroUtil.getOmsCreateID(), parForRecord.getAmount(), ZhbRecordType.REFUND,
+				insertZhbRecord(orderNo, order.getBuyerId(), ShiroUtil.getOmsCreateID(), parForRecord.getAmount(), ZhbRecordType.REFUND.toString(),
 						parForRecord.getGoodsId(), parForRecord.getGoodsType());
 				// 更新账户数据
 				ZhbAccount account = getZhbAccount(parForRecord.getBuyerId());
@@ -377,9 +385,6 @@ public class ZhbService {
 				if (null != workType) {
 					record.put("account", record.get("account") + "(" + workType.getName() + ")");
 				}
-				// 备注 orderNo 为0，则显示id字段（流水号）
-				// TODO
-
 			}
 		}
 
@@ -394,7 +399,7 @@ public class ZhbService {
 	 * @param amount
 	 * @param type
 	 */
-	private void insertZhbRecord(String orderNo, Long buyerId, Long operaterId, BigDecimal amount, ZhbRecordType type, Long goodsId, String goodsType) {
+	private void insertZhbRecord(String orderNo, Long buyerId, Long operaterId, BigDecimal amount, String type, Long goodsId, String goodsType) {
 		ZhbRecord zhbRecord = new ZhbRecord();
 		zhbRecord.setOrderNo(orderNo);
 		zhbRecord.setBuyerId(buyerId);
@@ -418,7 +423,7 @@ public class ZhbService {
 	private int execPrepaid(String orderNo, Long buyerId, Long operaterId, BigDecimal amount) {
 		int result = 0;
 		// 增加充值流水
-		insertZhbRecord(orderNo, buyerId, operaterId, amount, ZhbRecordType.PREPAID, null, null);
+		insertZhbRecord(orderNo, buyerId, operaterId, amount, ZhbRecordType.PREPAID.toString(), null, null);
 
 		// 增加充值金额
 		ZhbAccount zhbAccount = zhbMapper.selectZhbAccount(buyerId);
@@ -453,7 +458,7 @@ public class ZhbService {
 	private void insertZhbAccount(Long memberId, BigDecimal amount) {
 		ZhbAccount zhbAccount = new ZhbAccount();
 		zhbAccount.setMemberId(memberId);
-		zhbAccount.setStatus(ZhbAccountStatus.ACTIVE);
+		zhbAccount.setStatus(ZhbAccountStatus.ACTIVE.toString());
 		zhbAccount.setAmount(amount);
 		Calendar cal = Calendar.getInstance();
 		zhbAccount.setAddTime(cal.getTime());

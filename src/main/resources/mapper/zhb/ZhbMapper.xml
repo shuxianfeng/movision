@@ -171,7 +171,7 @@
 	  status = #{status,jdbcType=VARCHAR},
 	  amount = #{amount,jdbcType=VARCHAR}, 
 	  update_time = now()
-	WHERE member_id = #{memberId,jdbcType=BIGINT}, 
+	WHERE member_id = #{memberId,jdbcType=BIGINT} 
 	  AND update_time =#{updateTime,jdbcType=TIMESTAMP}
  </update>
  

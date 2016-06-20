@@ -82,12 +82,12 @@ public class ZhbController {
 		Response response = new Response();
 		ZhbAccount zhbAccount = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
 		response.setData(zhbAccount);
-		
+
 		return response;
 	}
 
-	@ApiOperation(value = "筑慧币支付", notes = "筑慧币支付", response = Response.class)
-	@RequestMapping(value = "mc/upd_payfor", method = RequestMethod.POST)
+	@ApiOperation(value = "筑慧币订单支付", notes = "筑慧币订单支付", response = Response.class)
+	@RequestMapping(value = "mc/upd_payfororder", method = RequestMethod.POST)
 	public Response payForOrder(@ApiParam(value = "订单号") @RequestParam String orderNo, @ApiParam(value = "支付金额") @RequestParam BigDecimal zhbAmount)
 			throws Exception {
 		Response response = new Response();
@@ -98,6 +98,23 @@ public class ZhbController {
 		} else {
 			response.setCode(400);
 		}
+
+		return response;
+	}
+
+	@ApiOperation(value = "筑慧币业务消费支付", notes = "筑慧币业务消费支付", response = Response.class)
+	@RequestMapping(value = "mc/upd_payforgoods", method = RequestMethod.POST)
+	public Response payForGoods(@ApiParam(value = "订单号") @RequestParam Long goodsId, @ApiParam(value = "支付金额") @RequestParam String goodsType) throws Exception {
+		Response response = new Response();
+
+		int result = 0;
+		try {
+			result = zhbService.payForGoods(goodsId, goodsType);
+		} catch (Exception e) {
+			// 出现异常也为失败
+		}
+		
+		response.setData(result);
 
 		return response;
 	}

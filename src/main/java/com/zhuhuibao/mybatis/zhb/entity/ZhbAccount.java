@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.wordnik.swagger.annotations.ApiModelProperty;
-import com.zhuhuibao.common.constant.ZhbConstant.ZhbAccountStatus;
 
 /**
  * 筑慧币账户信息
@@ -29,7 +28,7 @@ public class ZhbAccount implements Serializable {
 	private Long memberId;
 
 	@ApiModelProperty(value = "账户状态，1：账户未冻结，2：账户已冻结", required = true)
-	private ZhbAccountStatus status;
+	private String status;
 
 	@ApiModelProperty(value = "筑慧币金额", required = true)
 	private BigDecimal amount;
@@ -54,11 +53,11 @@ public class ZhbAccount implements Serializable {
 		this.memberId = memberId;
 	}
 
-	public ZhbAccountStatus getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(ZhbAccountStatus status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

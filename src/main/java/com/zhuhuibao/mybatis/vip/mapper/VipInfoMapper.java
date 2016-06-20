@@ -14,7 +14,6 @@ import com.zhuhuibao.mybatis.vip.entity.VipPrivilege;
  */
 public interface VipInfoMapper {
 
-	// TODO
 	/**
 	 * 根据ID获取会员VIP信息
 	 * 
@@ -23,7 +22,6 @@ public interface VipInfoMapper {
 	 */
 	VipMemberInfo selectVipMemberInfoById(Long memberId);
 
-	// TODO
 	/**
 	 * 添加会员VIP信息
 	 * 
@@ -31,7 +29,6 @@ public interface VipInfoMapper {
 	 */
 	void insertVipMemberInfo(VipMemberInfo vipMemberInfo);
 
-	//TODO
 	/**
 	 * 更新会员VIP信息
 	 * 
