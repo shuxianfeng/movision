@@ -91,14 +91,22 @@
     id, mobile, email, emailCheckCode, password, registerTime, status, identify,
     enterpriseName, workType, enterpriseEmployeeParentId, province,
     city, area, address, enterpriseType, enterpriseLogo, enterpriseDesc, headShot, saleProductDesc,
-    enterpriseCreaterTime, registerCapital, employeeNumber, companyBusinessLicenseImg,
+    enterpriseCreaterTime, registerCapital,currency, employeeNumber, coBusLicNum,companyBusinessLicenseImg,
+    enterpriseProvince,enterpriseCity,enterpriseArea,enterpriseAddress,
     enterpriseTelephone, enterpriseFox, enterpriseWebSite, enterpriseLinkman, enterpriseLMDep,
-    fixedTelephone, fixedMobile, QQ, personRealName, sex, personCompanyType,
+    fixedTelephone, fixedMobile, QQ, personRealName, nickname,sex, personCompanyType,
     personIdentifyCard, personIDFrontImgUrl, personIDBackImgUrl,isrecommend
   </sql>
   <select id="findMemById" resultType="com.zhuhuibao.mybatis.memCenter.entity.Member">
-    select
-    m.*,p1.name provinceName,p2.name enterpriseProvinceName,c1.name cityName,c2.name enterpriseCityName,a1.name areaName,a2.name enterpriseAreaName,
+    select m.id, m.mobile, m.email, m.emailCheckCode, m.password, date_format(m.registerTime,'%Y-%m-%d %H:%i:%s') registerTime, m.status, m.identify,
+    m.enterpriseName, m.workType, m.enterpriseEmployeeParentId, m.province,
+    m.city, m.area, m.address, m.enterpriseType, m.enterpriseLogo, m.enterpriseDesc, m.headShot, m.saleProductDesc,
+    date_format(m.enterpriseCreaterTime,'%Y-%m-%d %H:%i:%s') enterpriseCreaterTime, m.registerCapital,m.currency, m.employeeNumber, m.coBusLicNum,m.companyBusinessLicenseImg,
+    m.enterpriseProvince,m.enterpriseCity,m.enterpriseArea,m.enterpriseAddress,
+    m.enterpriseTelephone, m.enterpriseFox, m.enterpriseWebSite, m.enterpriseLinkman, m.enterpriseLMDep,
+    m.fixedTelephone, m.fixedMobile, m.QQ, m.personRealName, m.nickname,m.sex, m.personCompanyType,
+    m.personIdentifyCard, m.personIDFrontImgUrl, m.personIDBackImgUrl,m.isrecommend,
+    p1.name provinceName,p2.name enterpriseProvinceName,c1.name cityName,c2.name enterpriseCityName,a1.name areaName,a2.name enterpriseAreaName,
     e.name employeeNumberName,et.name enterpriseTypeName,w.name workTypeName,
     (select group_concat(name) from t_dictionary_identity where find_in_set(id,m.identify))as identifyName
     from t_m_member m
