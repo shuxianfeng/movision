@@ -80,13 +80,15 @@ public class StaffManageController {
 	@RequestMapping(value = "upd_member", method = RequestMethod.POST)
 	public Response updateMember(@RequestParam String account,
 								 @RequestParam String workType,
-								 @RequestParam String enterpriseLinkman)  {
+								 @RequestParam String enterpriseLinkman,
+								 @RequestParam String id)  {
 		Member member = new Member();
 		if(account.contains("@")){
 			member.setEmail(account);
 		}else{
 			member.setMobile(account);
 		}
+		member.setId(id);
 		member.setWorkType(workType);
 		member.setEnterpriseLinkman(enterpriseLinkman);
 		Response result = new Response();

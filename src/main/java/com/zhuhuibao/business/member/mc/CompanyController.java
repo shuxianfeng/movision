@@ -304,7 +304,7 @@ public class CompanyController {
     }
 
     @ApiOperation(value = "编辑更新成功案例信息", notes = "编辑更新成功案例信息", response = Response.class)
-    @RequestMapping(value = "upd_successCase", method = RequestMethod.GET)
+    @RequestMapping(value = "upd_successCase", method = RequestMethod.POST)
     public Response upd_successCase(@ModelAttribute SuccessCase successCase) {
         Response result = new Response();
         successCaseService.updateSuccessCase(successCase);
@@ -313,7 +313,7 @@ public class CompanyController {
     }
 
     @ApiOperation(value = "删除成功案例信息", notes = "删除成功案例信息", response = Response.class)
-    @RequestMapping(value = "del_successCase", method = RequestMethod.GET)
+    @RequestMapping(value = "del_successCase", method = RequestMethod.POST)
     public Response del_successCase(@ApiParam(value = "成功案例ids,逗号隔开") @RequestParam String ids) {
         Response result = new Response();
         String[] idList = ids.split(",");
