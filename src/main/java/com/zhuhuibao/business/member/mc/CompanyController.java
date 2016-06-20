@@ -49,22 +49,31 @@ public class CompanyController {
             Map map = new HashMap();
             map.put("enterpriseName",member.getEnterpriseName());
             map.put("enterpriseType",member.getEnterpriseType());
+            map.put("enterpriseTypeName",member.getEnterpriseTypeName());
             map.put("identify",member.getIdentify());
+            map.put("identifyName",member.getIdentifyName());
             map.put("enterpriseCreaterTime",member.getEnterpriseCreaterTime());
             map.put("registerCapital",member.getRegisterCapital());
             map.put("currency",member.getCurrency());
             map.put("employeeNumber",member.getEmployeeNumber());
+            map.put("employeeNumberName",member.getEmployeeNumberName());
             map.put("province",member.getProvince());
+            map.put("provinceName",member.getProvinceName());
             map.put("city",member.getCity());
+            map.put("cityName",member.getCityName());
             map.put("area",member.getArea());
+            map.put("areaName",member.getAreaName());
             map.put("address",member.getAddress());
             map.put("enterpriseLogo",member.getEnterpriseLogo());
             map.put("headShot",member.getHeadShot());
             map.put("saleProductDesc",member.getSaleProductDesc());
             map.put("enterpriseDesc",member.getEnterpriseDesc());
             map.put("enterpriseProvince",member.getEnterpriseProvince());
+            map.put("enterpriseProvinceName",member.getEnterpriseProvinceName());
             map.put("enterpriseCity",member.getEnterpriseCity());
+            map.put("enterpriseCityName",member.getEnterpriseCityName());
             map.put("enterpriseArea",member.getEnterpriseArea());
+            map.put("enterpriseAreaName",member.getEnterpriseAreaName());
             map.put("enterpriseAddress",member.getEnterpriseAddress());
             map.put("enterpriseTelephone",member.getEnterpriseTelephone());
             map.put("enterpriseFox",member.getEnterpriseFox());
@@ -122,7 +131,7 @@ public class CompanyController {
 
     @ApiOperation(value = "企业实名认证保存", notes = "企业实名认证保存", response = Response.class)
     @RequestMapping(value = "upd_mem_realName_info", method = RequestMethod.POST)
-    public Response upd_mem_realName_info(@ApiParam(value = "")@RequestParam String coBusLicNum,
+    public Response upd_mem_realName_info(@RequestParam String coBusLicNum,
                                           @RequestParam String companyBusinessLicenseImg)  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
@@ -295,7 +304,7 @@ public class CompanyController {
     }
 
     @ApiOperation(value = "编辑更新成功案例信息", notes = "编辑更新成功案例信息", response = Response.class)
-    @RequestMapping(value = "upd_successCase", method = RequestMethod.GET)
+    @RequestMapping(value = "upd_successCase", method = RequestMethod.POST)
     public Response upd_successCase(@ModelAttribute SuccessCase successCase) {
         Response result = new Response();
         successCaseService.updateSuccessCase(successCase);
@@ -304,7 +313,7 @@ public class CompanyController {
     }
 
     @ApiOperation(value = "删除成功案例信息", notes = "删除成功案例信息", response = Response.class)
-    @RequestMapping(value = "del_successCase", method = RequestMethod.GET)
+    @RequestMapping(value = "del_successCase", method = RequestMethod.POST)
     public Response del_successCase(@ApiParam(value = "成功案例ids,逗号隔开") @RequestParam String ids) {
         Response result = new Response();
         String[] idList = ids.split(",");
