@@ -51,8 +51,6 @@ public class ZhpayService {
     @Autowired
     OrderFlowService orderFlowService;
 
-    @Autowired
-    private PublishCourseService publishCourseService;
 
     /**
      * 单一方式支付(1.支付宝)
@@ -142,10 +140,12 @@ public class ZhpayService {
                     alipayDirectService.doPay(resp, msgParam);
 
                 } else if (PayConstants.PayMode.ZHBPAY.toString().equals(flow.getTradeMode())) {//筑慧币支付
-                    //参数准备
+                    //参数准备  校验
                     preZhPayParams(msgParam);
                     //调用筑慧币支付平台
-//                    zhbPayService.doPay(msgParam);
+//                    String orderNo = flow.getOrderNo();
+//                    String payFee = flow.getTradeFee().toString();
+//                    zhbPayService.doPay(orderNo,payFee);
                 } else {
                     log.error("不支持的支付方式");
                     throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "不支持的支付方式");
@@ -237,8 +237,6 @@ public class ZhpayService {
     }
 
 
-
-
     /**
      * 筑慧币支付参数准备
      *
@@ -246,13 +244,9 @@ public class ZhpayService {
      */
     private void preZhPayParams(Map<String, String> msgParam) {
 
-        //根据商品ID查询商品信息
-        Long courseId = Long.valueOf(msgParam.get("goodsId"));
-        PublishCourse publishCourse = publishCourseService.getCourseById(courseId);
-        if (publishCourse != null) {
-            msgParam.put("goodsName", publishCourse.getTitle());
-
-        } else {
+        //根据订单编号查询商品信息
+        OrderGoods goods = orderGoodsService.findByOrderNo(msgParam.get("orderNo"));
+        if (goods == null) {
             log.error("商品不存在");
             throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "商品不存在");
         }
@@ -267,10 +261,9 @@ public class ZhpayService {
         msgParam.put("alipay_goods_type", "0");//商品类型(0:虚拟类商品,1:实物类商品 默认为1)
 
         //根据商品ID查询商品信息
-        Long courseId = Long.valueOf(msgParam.get("goodsId"));
-        PublishCourse publishCourse = publishCourseService.getCourseById(courseId);
-        if (publishCourse != null) {
-            msgParam.put("goodsName", publishCourse.getTitle());
+        OrderGoods goods = orderGoodsService.findByOrderNo(msgParam.get("orderNo"));
+        if (goods != null) {
+            msgParam.put("goodsName", goods.getGoodsName());
 
         } else {
             log.error("商品不存在");
