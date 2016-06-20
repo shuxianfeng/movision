@@ -57,7 +57,7 @@
     <context:property-placeholder
             ignore-unresolvable="true" location="classpath*:/spring/application.properties,
                 classpath*:web/message.properties,classpath*:web/config.properties,
-                classpath*:web/alipay.properties"/>
+                classpath*:web/pay.properties"/>
 
     <!--视图解释器-->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
