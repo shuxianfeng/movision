@@ -25,7 +25,7 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   
-  <resultMap id="ZhbGoodsConfigMap" type="com.zhuhuibao.mybatis.zhb.entity.ZhbGoodsConfig" >
+  <resultMap id="ZhbGoodsMap" type="com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods" >
   	<id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="pinyin" property="pinyin" jdbcType="VARCHAR" />
@@ -51,6 +51,48 @@
 	  t_zhb_record 
 	WHERE order_no = #{orderNo,jdbcType=VARCHAR}
  </select>
+ 
+ <select id="selectZhbRecordList" parameterType="java.util.Map"  resultType="java.util.Map" >
+ 	SELECT 
+	  z.id,
+	  z.order_no AS orderNo,
+	  z.buyer_id AS buyerId,
+	  z.operater_id AS operaterId,
+	  CASE
+	    WHEN m.mobile IS NOT NULL 
+	    AND m.mobile != '' 
+	    THEN m.mobile 
+	    WHEN m.email IS NOT NULL 
+	    AND m.email != '' 
+	    THEN m.email 
+	  END AS account,
+	  m.workType,
+	  z.amount,
+	  z.status,
+	  z.type,
+	  z.goods_type AS goodsType,
+	  z.goods_id AS goodsId,
+	  z.description,
+	  z.add_time AS addTime,
+	  z.update_time AS updateTime 
+	FROM
+	  t_zhb_record z 
+	  LEFT JOIN t_m_member m 
+	    ON m.id = z.operater_id 
+	WHERE 
+	  <if test="companyId == operaterId">
+	  	z.buyer_id = #{companyId,jdbcType=BIGINT}
+	  </if>
+	  <if test="companyId != operaterId">
+	  	z.operater_id = #{operaterId,jdbcType=BIGINT}
+	  </if>
+	  <if test="recordType == 1">
+	  	and z.type = '1'
+	  </if>
+	  <if test="recordType == 1">
+	  	and z.type in ('2','3')
+	  </if>
+ </select>
 
  <insert id="insertZhbRecord" parameterType="com.zhuhuibao.mybatis.zhb.entity.ZhbRecord">
  	INSERT INTO t_zhb_record
@@ -63,10 +105,10 @@
 	  type,
 	  add_time,
 	  update_time,
-	  <if test="goods_type != null" >
+	  <if test="goodsType != null" >
         goods_type,
       </if>
-      <if test="goods_id != null" >
+      <if test="goodsId != null" >
         goods_id,
       </if>
       <if test="description != null" >
@@ -82,10 +124,10 @@
 	  #{type,jdbcType=VARCHAR},
 	  now(),
 	  now(),
-	  <if test="goods_type != null" >
+	  <if test="goodsType != null" >
         #{goodsType,jdbcType=VARCHAR},
       </if>
-      <if test="goods_id != null" >
+      <if test="goodsId != null" >
         #{goodsId,jdbcType=VARCHAR},
       </if>
       <if test="description != null" >
@@ -128,16 +170,25 @@
 	SET
 	  status = #{status,jdbcType=VARCHAR},
 	  amount = #{amount,jdbcType=VARCHAR}, 
+	  update_time = now()
 	WHERE member_id = #{memberId,jdbcType=BIGINT}, 
 	  AND update_time =#{updateTime,jdbcType=TIMESTAMP}
  </update>
  
- <select id="selectZhbGoodsConfigByPinyin" resultMap="ZhbGoodsConfigMap">
+ <select id="selectZhbGoodsConfigByPinyin" resultMap="ZhbGoodsMap">
  	SELECT 
 	  id,name,pinyin,type,value,price,add_time
 	FROM
 	  t_zhb_goods_config 
 	WHERE pinyin = #{pinyin,jdbcType=VARCHAR}
+ </select>
+ 
+ <select id="selectZhbGoodsById" resultMap="ZhbGoodsMap">
+ 	SELECT 
+	  id,name,pinyin,type,value,price,add_time
+	FROM
+	  t_dictionary_zhbgoods 
+	WHERE id = #{id,jdbcType=BIGINT}
  </select>
 	
 </mapper>

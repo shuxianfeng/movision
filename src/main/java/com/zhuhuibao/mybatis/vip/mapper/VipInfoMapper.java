@@ -25,6 +25,23 @@ public interface VipInfoMapper {
 
 	// TODO
 	/**
+	 * 添加会员VIP信息
+	 * 
+	 * @param vipMemberInfo
+	 */
+	void insertVipMemberInfo(VipMemberInfo vipMemberInfo);
+
+	//TODO
+	/**
+	 * 更新会员VIP信息
+	 * 
+	 * @param vipMemberInfo
+	 * @return
+	 */
+	int updateVipMemberInfo(VipMemberInfo vipMemberInfo);
+
+	// TODO
+	/**
 	 * 根据会员级别获取所有会员特权
 	 * 
 	 * @param vipLevel
