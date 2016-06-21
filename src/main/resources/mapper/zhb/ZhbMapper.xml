@@ -175,11 +175,11 @@
 	  AND update_time =#{updateTime,jdbcType=TIMESTAMP}
  </update>
  
- <select id="selectZhbGoodsConfigByPinyin" resultMap="ZhbGoodsMap">
+ <select id="selectZhbGoodsByPinyin" resultMap="ZhbGoodsMap">
  	SELECT 
 	  id,name,pinyin,type,value,price,add_time
 	FROM
-	  t_zhb_goods_config 
+	  t_dictionary_zhbgoods 
 	WHERE pinyin = #{pinyin,jdbcType=VARCHAR}
  </select>
  

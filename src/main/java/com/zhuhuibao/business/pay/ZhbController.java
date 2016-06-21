@@ -113,7 +113,7 @@ public class ZhbController {
 		} catch (Exception e) {
 			// 出现异常也为失败
 		}
-		
+
 		response.setData(result);
 
 		return response;
@@ -141,9 +141,8 @@ public class ZhbController {
 		Map<String, String> zhbInfo = new HashMap<String, String>();
 		// 剩余特权数量
 		long privilegeNum = vipInfoService.getExtraPrivilegeNum(ShiroUtil.getCompanyID(), goodsType);
-		if (privilegeNum > 0) {
-			zhbInfo.put("privilegeNum", String.valueOf(privilegeNum));
-		} else {
+		zhbInfo.put("privilegeNum", String.valueOf(privilegeNum));
+		if (privilegeNum <= 0) {
 			// 筑慧币单价
 			DictionaryZhbgoods goodsConfig = zhbService.getZhbGoodsByPinyin(goodsType);
 			zhbInfo.put("zhbPrice", goodsConfig.getPinyin().toString());
