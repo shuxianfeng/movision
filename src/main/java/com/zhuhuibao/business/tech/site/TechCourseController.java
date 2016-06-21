@@ -150,7 +150,7 @@ public class TechCourseController {
     @RequestMapping(value = "sel_cashierDesk", method = RequestMethod.GET)
     public Response selectCashierDeskInfo(@ApiParam(value = "订单编号") @RequestParam String orderNo)
     {
-        Map<String,Object> cashierDesk = orderManagerService.selectCashierDeskInfo(orderNo);
+        Map<String,Object> cashierDesk = orderManagerService.selectCashierDeskInfo(orderNo,TechConstant.IsUseZhb.YES.toString(),TechConstant.CASHIER_PAYMENT_DURATION);
         Response response = new Response();
         response.setData(cashierDesk);
         return response;

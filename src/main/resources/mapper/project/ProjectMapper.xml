@@ -289,13 +289,13 @@
     date_format(t.updateDate,'%Y-%m-%d') updateDate,concat(pn.name,ct.name,ar.name,ifnull(t.address,'')) address,
     t.price,date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate,
     (select group_concat(name) from t_dictionary_constant where find_in_set(code,t.category) and type=8) as categoryName
-    FROM t_prj_viewProject vp
-    left join t_prj_project t on t.id = prjId
+    FROM t_zhb_viewGoods vp
+    left join t_prj_project t on t.id = vp.goodsId
     left join t_dictionary_province pn on pn.code = t.province
     left join t_dictionary_city ct on ct.code = t.city
     left join t_dictionary_area ar on ar.code = t.area
     <where>
-      t.is_deleted = 0
+      t.is_deleted = 0 and vp.type = #{type}
       <if test="name != null and name != ''">
         and t.name like concat('%',#{name},'%')
       </if>
@@ -312,5 +312,10 @@
         and vp.viewerId = #{viewerId}
       </if>
     </where>
+  </select>
+  <select id="getAreaOrCity" parameterType="java.util.Map" resultType="java.util.Map">
+    select w.code,w.cityCode,c.provincecode from t_dictionary_area
+    w left join t_dictionary_city c on w.cityCode=c.code
+    where w.name=#{area} and c.name=#{city}
   </select>
 </mapper>

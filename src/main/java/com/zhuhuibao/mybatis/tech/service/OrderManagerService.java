@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.tech.service;
 
 import com.zhuhuibao.common.constant.OrderConstants;
+import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.OrderFlow;
@@ -126,24 +127,28 @@ public class OrderManagerService {
     }
 
     /**
-     * 查询收银台初始信息
-     * @param orderNo
+     * 查询收银台初始信息  1:培训课程购买使用筑慧币消费的情况.  0:VIP充值，筑慧币购买不使用筑慧币的情况
+     * @param orderNo  订单编号
+     * @param isUseZhb 是否使用筑慧币 0:否，1：是
+     * @param time 支付时长
      * @return
      */
-    public Map<String,Object> selectCashierDeskInfo(String orderNo)
+    public Map<String,Object> selectCashierDeskInfo(String orderNo,String isUseZhb,String time)
     {
         log.info("select casher desk init info orderNo = "+orderNo);
         Map<String,Object> deskInfoMap = orderMapper.selectCashierDeskInfo(orderNo);
-        if(!deskInfoMap.isEmpty())
-        {
-            ZhbAccount zhbAccount = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
-            if(zhbAccount != null) {
-                deskInfoMap.put("zhb", zhbAccount.getAmount());
-            }else
-            {
-                deskInfoMap.put("zhb", "");
+        //1:使用筑慧币消费的情况.  0:VIP充值，筑慧币购买不使用筑慧币的情况
+        if(TechConstant.IsUseZhb.YES.toString().equals(isUseZhb)) {
+            if (!deskInfoMap.isEmpty()) {
+                ZhbAccount zhbAccount = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
+                if (zhbAccount != null) {
+                    deskInfoMap.put("zhb", zhbAccount.getAmount());
+                } else {
+                    deskInfoMap.put("zhb", "");
+                }
             }
         }
+        deskInfoMap.put("duration",time);
         return deskInfoMap;
     }
 

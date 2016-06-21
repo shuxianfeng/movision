@@ -141,7 +141,7 @@ public class ResumeService {
     /**
      * 预览简历
      */
-    public Resume previewResume(String id) throws Exception{
+    public Resume previewResume(String id) {
         try {
             return resumeMapper.previewResume(id);
         }catch(Exception e)
