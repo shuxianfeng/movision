@@ -249,7 +249,7 @@ public class ZhbService {
 			result = vipInfoService.useExtraPrivilege(ShiroUtil.getCompanyID(), goodsType);
 		}
 		if (0 == result) {
-			payForGoodsByZhb(goodsId, goodsType);
+			result = payForGoodsByZhb(goodsId, goodsType);
 		}
 
 		return result;
