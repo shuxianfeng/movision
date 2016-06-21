@@ -27,7 +27,7 @@ public class VipMemberPrivilege implements Serializable {
 	private Long memberId;
 
 	@ApiModelProperty(value = "特权类型,1:是否具有相应特权；2：折扣率；3:数量", required = true)
-	private VipPrivilegeType type;
+	private String type;
 
 	@ApiModelProperty(value = "特权拼音", required = true)
 	private String pinyin;
@@ -67,11 +67,11 @@ public class VipMemberPrivilege implements Serializable {
 		this.memberId = memberId;
 	}
 
-	public VipPrivilegeType getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(VipPrivilegeType type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

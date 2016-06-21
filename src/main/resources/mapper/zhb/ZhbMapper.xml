@@ -128,10 +128,9 @@
         #{goodsType,jdbcType=VARCHAR},
       </if>
       <if test="goodsId != null" >
-        #{goodsId,jdbcType=VARCHAR},
+        #{goodsId,jdbcType=BIGINT},
       </if>
       <if test="description != null" >
-        description,
         #{description,jdbcType=VARCHAR},
       </if>
  	</trim>
@@ -175,11 +174,11 @@
 	  AND update_time =#{updateTime,jdbcType=TIMESTAMP}
  </update>
  
- <select id="selectZhbGoodsConfigByPinyin" resultMap="ZhbGoodsMap">
+ <select id="selectZhbGoodsByPinyin" resultMap="ZhbGoodsMap">
  	SELECT 
 	  id,name,pinyin,type,value,price,add_time
 	FROM
-	  t_zhb_goods_config 
+	  t_dictionary_zhbgoods 
 	WHERE pinyin = #{pinyin,jdbcType=VARCHAR}
  </select>
  

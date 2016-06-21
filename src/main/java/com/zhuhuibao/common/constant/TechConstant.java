@@ -72,6 +72,19 @@ public class TechConstant {
     }
 
     /**
+     * 是否使用筑慧币
+     */
+    public enum IsUseZhb{
+        YES(1),NO(0);
+        public final Integer value;
+        IsUseZhb(Integer value){this.value = value;}
+        @Override
+        public String toString() {
+            return String.valueOf(this.value);
+        }
+    }
+
+    /**
      * 上传技术资料附件的路径  /tech/doc
      */
     public static final String UPLOAD_TECH_DOC_URL = "/tech/doc";
@@ -132,4 +145,8 @@ public class TechConstant {
     public static final String MOBILE_CODE_SESSION_ORDER_CLASS = "techOrder";
 
 
+    /**
+     * 收银台支付时长 0.5小时
+     */
+    public static final String CASHIER_PAYMENT_DURATION = "0.5";
 }

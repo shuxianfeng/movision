@@ -94,8 +94,8 @@ public class ShiroRealm extends AuthorizingRealm {
         ShiroUser shiroUser = new ShiroUser(loginMember.getId(), loginMember.getAccount(),loginMember.getStatus(),
         		loginMember.getIdentify(),loginMember.getRole(),loginMember.getIsexpert(),loginMember.getCompanyId(),
                 loginMember.getRegisterTime(),loginMember.getWorkType(),loginMember.getHeadShot(),
-                loginMember.getNickname(),loginMember.getCompanyName());
-        
+                loginMember.getNickname(),loginMember.getCompanyName(),loginMember.getVipLevel());
+
         // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(
         		shiroUser, // 用户
@@ -134,8 +134,11 @@ public class ShiroRealm extends AuthorizingRealm {
         private String headShot;
         private String nickname;
 
+        private int vipLevel;
+
         public ShiroUser(Long id, String account, int status, String identify, String role,String isexpert,Long companyId,
-                        String registerTime,int workType,String headShot,String nickname,String companyName ) {
+                        String registerTime,int workType,String headShot,String nickname,String companyName,int vipLevel ) {
+
             this.id = id;
             this.account = account;
             this.status = status;
@@ -148,16 +151,9 @@ public class ShiroRealm extends AuthorizingRealm {
             this.headShot = headShot;
             this.nickname = nickname;
             this.companyName = companyName;
+            this.vipLevel = vipLevel;
         }
 
-
-        public String getCompanyName() {
-            return companyName;
-        }
-
-        public void setCompanyName(String companyName) {
-            this.companyName = companyName;
-        }
 
         public Long getId() {
             return id;
@@ -166,7 +162,7 @@ public class ShiroRealm extends AuthorizingRealm {
         public void setId(Long id) {
             this.id = id;
         }
-        
+
         public String getAccount() {
             return account;
         }
@@ -174,7 +170,7 @@ public class ShiroRealm extends AuthorizingRealm {
         public void setAccount(String account) {
             this.account = account;
         }
-        
+
         public int getStatus() {
             return status;
         }
@@ -182,7 +178,7 @@ public class ShiroRealm extends AuthorizingRealm {
         public void setStatus(int status) {
             this.status = status;
         }
-        
+
         public String getIdentify() {
             return identify;
         }
@@ -199,13 +195,13 @@ public class ShiroRealm extends AuthorizingRealm {
             this.role = role;
         }
 
-		public String getIsexpert() {
-			return isexpert;
-		}
+        public String getIsexpert() {
+            return isexpert;
+        }
 
-		public void setIsexpert(String isexpert) {
-			this.isexpert = isexpert;
-		}
+        public void setIsexpert(String isexpert) {
+            this.isexpert = isexpert;
+        }
 
         public Long getCompanyId() {
             return companyId;
@@ -215,6 +211,13 @@ public class ShiroRealm extends AuthorizingRealm {
             this.companyId = companyId;
         }
 
+        public String getCompanyName() {
+            return companyName;
+        }
+
+        public void setCompanyName(String companyName) {
+            this.companyName = companyName;
+        }
 
         public String getRegisterTime() {
             return registerTime;
@@ -246,6 +249,14 @@ public class ShiroRealm extends AuthorizingRealm {
 
         public void setNickname(String nickname) {
             this.nickname = nickname;
+        }
+
+        public int getVipLevel() {
+            return vipLevel;
+        }
+
+        public void setVipLevel(int vipLevel) {
+            this.vipLevel = vipLevel;
         }
 
         /**

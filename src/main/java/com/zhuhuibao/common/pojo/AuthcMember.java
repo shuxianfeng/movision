@@ -15,55 +15,9 @@ public class AuthcMember {
     private String nickname;
     private String companyName;
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
     private int msgCount;
 
-    public int getMsgCount() {
-        return msgCount;
-    }
-
-    public void setMsgCount(int msgCount) {
-        this.msgCount = msgCount;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getRegisterTime() {
-        return registerTime;
-    }
-
-    public void setRegisterTime(String registerTime) {
-        this.registerTime = registerTime;
-    }
-
-    public int getWorkType() {
-        return workType;
-    }
-
-    public void setWorkType(int workType) {
-        this.workType = workType;
-    }
-
-    public String getHeadShot() {
-        return headShot;
-    }
-
-    public void setHeadShot(String headShot) {
-        this.headShot = headShot;
-    }
+    private int vipLevel;
 
     public Long getId() {
         return id;
@@ -105,7 +59,7 @@ public class AuthcMember {
         this.role = role;
     }
 
-    public boolean getIsexpert() {
+    public boolean isexpert() {
         return isexpert;
     }
 
@@ -119,5 +73,61 @@ public class AuthcMember {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public String getRegisterTime() {
+        return registerTime;
+    }
+
+    public void setRegisterTime(String registerTime) {
+        this.registerTime = registerTime;
+    }
+
+    public int getWorkType() {
+        return workType;
+    }
+
+    public void setWorkType(int workType) {
+        this.workType = workType;
+    }
+
+    public String getHeadShot() {
+        return headShot;
+    }
+
+    public void setHeadShot(String headShot) {
+        this.headShot = headShot;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public int getVipLevel() {
+        return vipLevel;
+    }
+
+    public void setVipLevel(int vipLevel) {
+        this.vipLevel = vipLevel;
+    }
+
+    public int getMsgCount() {
+        return msgCount;
+    }
+
+    public void setMsgCount(int msgCount) {
+        this.msgCount = msgCount;
     }
 }

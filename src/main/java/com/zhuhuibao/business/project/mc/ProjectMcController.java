@@ -5,6 +5,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.project.service.ProjectService;
@@ -60,6 +61,7 @@ public class ProjectMcController {
             map.put("province", province);
             map.put("category",category);
             map.put("viewerId",createId);
+            map.put("type", ZhbConstant.ZhbGoodsType.CKXMXX.toString());
             if (StringUtils.isEmpty(pageNo)) {
                 pageNo = "1";
             }

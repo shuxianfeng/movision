@@ -1,6 +1,7 @@
 package com.zhuhuibao.business.member.mc;
 
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
@@ -99,10 +100,10 @@ public class StaffManageController {
 
 	@ApiOperation(value = "删除员工", notes = "删除员工", response = Response.class)
 	@RequestMapping(value = "del_member", method = RequestMethod.POST)
-	public Response deleteMember(HttpServletRequest req)  {
-		String ids[] = req.getParameterValues("ids");
+	public Response deleteMember(@ApiParam(value = "员工ids,逗号隔开") @RequestParam String ids)  {
+		String[] idList = ids.split(",");
 		Response result = new Response();
-		for (String id : ids) {
+		for (String id : idList) {
 			Member member = new Member();
 			member.setId(id);
 			member.setStatus("2");
@@ -113,32 +114,42 @@ public class StaffManageController {
 
 	@ApiOperation(value = "员工搜索", notes = "员工搜索", response = Response.class)
 	@RequestMapping(value = "sel_memberList", method = RequestMethod.GET)
-	public Response staffSearch(Member member, String pageNo, String pageSize)  {
+	public Response staffSearch(@RequestParam(required = false) String account,
+								@RequestParam(required = false) String pageNo,
+								@RequestParam(required = false) String pageSize)  {
 		Response response = new Response();
-		if(member.getAccount()!=null){
-			if(member.getAccount().contains("_")){
-				member.setAccount(member.getAccount().replace("_","\\_"));
-			}
-		}
 		if (StringUtils.isEmpty(pageNo)) {
 			pageNo = "1";
 		}
 		if (StringUtils.isEmpty(pageSize)) {
 			pageSize = "10";
 		}
-		Paging<Member> pager = new Paging<Member>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-		List list = memberService.findStaffByParentId(pager,member);
-		pager.result(list);
-		response.setData(pager);
+		Map<String, Object> map = new HashMap<>();
+		if(account!=null){
+			if(account.contains("_")){
+				account = account.replace("_","\\_");
+			}
+		}
+		map.put("account",account);
+		Long memberId = ShiroUtil.getCreateID();
+		if(memberId!=null){
+			map.put("enterpriseEmployeeParentId",String.valueOf(memberId));
+			Paging<Member> pager = new Paging<Member>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+			List list = memberService.findStaffByParentId(pager,map);
+			pager.result(list);
+			response.setData(pager);
+		}else {
+			throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+		}
 		return response;
 	}
 
 	@ApiOperation(value = "员工密码重置", notes = "员工密码重置", response = Response.class)
 	@RequestMapping(value = "reset_pwd", method = RequestMethod.POST)
-	public Response resetPwd(HttpServletRequest req)  {
-		String ids[] = req.getParameterValues("ids");
+	public Response resetPwd(@ApiParam(value = "员工ids,逗号隔开") @RequestParam String ids)  {
 		Response result = new Response();
-		for (String id : ids) {
+		String[] idList = ids.split(",");
+		for (String id : idList) {
 			Member member = new Member();
 			String md5Pwd = new Md5Hash("123456", null, 2).toString();
 			member.setPassword(md5Pwd);

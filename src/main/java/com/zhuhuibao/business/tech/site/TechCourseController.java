@@ -17,6 +17,7 @@ import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.order.entity.InvoiceRecord;
 import com.zhuhuibao.mybatis.order.service.InvoiceService;
+import com.zhuhuibao.mybatis.tech.service.OrderManagerService;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.service.course.CourseService;
 import com.zhuhuibao.service.zhpay.ZhpayService;
@@ -65,6 +66,9 @@ public class TechCourseController {
 
     @Autowired
     InvoiceService invoiceService;
+
+    @Autowired
+    OrderManagerService orderManagerService;
 
     @ApiOperation(value = "培训课程下单", notes = "培训课程下单")
     @RequestMapping(value = "order", method = RequestMethod.POST)
@@ -142,6 +146,27 @@ public class TechCourseController {
 
     }
 
+    @ApiOperation(value="收银台页面信息",notes="收银台页面信息",response = Response.class)
+    @RequestMapping(value = "sel_cashierDesk", method = RequestMethod.GET)
+    public Response selectCashierDeskInfo(@ApiParam(value = "订单编号") @RequestParam String orderNo)
+    {
+        Map<String,Object> cashierDesk = orderManagerService.selectCashierDeskInfo(orderNo,TechConstant.IsUseZhb.YES.toString(),TechConstant.CASHIER_PAYMENT_DURATION);
+        Response response = new Response();
+        response.setData(cashierDesk);
+        return response;
+    }
+
+    @ApiOperation(value="收银台页面使用筑慧币",notes="收银台页面使用筑慧币",response = Response.class)
+    @RequestMapping(value = "sel_cashierDeskUseZhb", method = RequestMethod.GET)
+    public Response useZhbCashierDesk(@ApiParam(value = "订单编号") @RequestParam String orderNo,
+                                          @ApiParam(value = "是否使用筑慧币 0：未使用，1:使用") @RequestParam String isUseZhb)
+    {
+        Map<String,Object> cashierDesk = orderManagerService.useZhbByCashierDesk(orderNo,Integer.parseInt(isUseZhb));
+        Response response = new Response();
+        response.setData(cashierDesk);
+        return response;
+    }
+
     @ApiOperation(value="技术培训课程下单获取验证码",notes="技术培训课程下单获取验证码",response = Response.class)
     @RequestMapping(value = "get_mobileCode", method = RequestMethod.GET)
     public Response get_TrainMobileCode(@ApiParam(value = "手机号") @RequestParam String mobile,
@@ -184,7 +209,7 @@ public class TechCourseController {
      * 记录发票信息
      */
     @ApiOperation(value="订单新增记录发票历史信息",notes="订单新增记录发票历史信息",response = Response.class)
-    @RequestMapping(value = "add_invoiceRecord", method = RequestMethod.GET)
+    @RequestMapping(value = "add_invoiceRecord", method = RequestMethod.POST)
     public void insertInvoiceRecord(@ApiParam(value = "发票抬头类型：1个人，2企业") @RequestParam String invoiceTitleType,
                                     @ApiParam(value = "发票抬头公司名称") @RequestParam String invoiceTitle,
                                     @ApiParam(value = "发票类型：1增值税普通发票，2增值税专用发票") @RequestParam String invoiceType,
@@ -224,8 +249,9 @@ public class TechCourseController {
      * 记录发票信息
      */
     @ApiOperation(value="订单更新记录发票历史信息",notes="订单更新记录发票历史信息",response = Response.class)
-    @RequestMapping(value = "upd_invoiceRecord", method = RequestMethod.GET)
-    public void updateInvoiceRecord(@ApiParam(value = "发票抬头类型：1个人，2企业") @RequestParam String invoiceTitleType,
+    @RequestMapping(value = "upd_invoiceRecord", method = RequestMethod.POST)
+    public void updateInvoiceRecord(@ApiParam(value = "发票ID") @RequestParam String invoiceId,
+                                    @ApiParam(value = "发票抬头类型：1个人，2企业") @RequestParam String invoiceTitleType,
                                     @ApiParam(value = "发票抬头公司名称") @RequestParam String invoiceTitle,
                                     @ApiParam(value = "发票类型：1增值税普通发票，2增值税专用发票") @RequestParam String invoiceType,
                                     @ApiParam(value = "发票收件人名称") @RequestParam String receiveName,
@@ -234,7 +260,7 @@ public class TechCourseController {
                                     @ApiParam(value = "区") @RequestParam String area,
                                     @ApiParam(value = "地址") @RequestParam String address,
                                     @ApiParam(value = "手机") @RequestParam String mobile,
-                                    @ApiParam(value = "收件人固定电话") @RequestParam String telephone
+                                    @ApiParam(value = "收件人固定电话") @RequestParam(required = false) String telephone
     ) {
         Long createid = ShiroUtil.getCreateID();
         if(createid != null) {
@@ -266,7 +292,7 @@ public class TechCourseController {
         Long createid = ShiroUtil.getCreateID();
         Response response = new Response();
         if(createid != null) {
-            InvoiceRecord record = invoiceService.queryRecentUseInvoiceInfo(createid);
+            InvoiceRecord record = invoiceService.queryRecentUseInvoiceInfo(createid,OrderConstants.InvoiceIsRecentUsed.YES.toString());
             response.setData(record);
         }else{
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

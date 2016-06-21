@@ -141,7 +141,7 @@ public class ResumeService {
     /**
      * 预览简历
      */
-    public Resume previewResume(String id) throws Exception{
+    public Resume previewResume(String id) {
         try {
             return resumeMapper.previewResume(id);
         }catch(Exception e)
@@ -264,7 +264,7 @@ public class ResumeService {
                 map.put(Constants.logo, resume.getPhoto());
                 map.put(Constants.status, resume.getStatus());
                 map.put(Constants.area, resume.getJobCity());
-                map.put(Constants.name, resume.getRealName());
+                map.put(Constants.name, resume.getRealName().subSequence(0,1)+"**");
                 map.put(Constants.position, resume.getPost());
                 map.put(Constants.experienceYear, resume.getWorkYear());
                 map.put(Constants.age, resume.getBirthYear());

@@ -309,6 +309,8 @@ public class Constants {
 
 	public static final String code = "code";
 
+	public static final String hot = "hot";
+
 	public static final String subPositionList = "subPositionList";
 
 	public static final String realName = "realName";

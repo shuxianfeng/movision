@@ -1,10 +1,15 @@
 package com.zhuhuibao.mybatis.tech.service;
 
 import com.zhuhuibao.common.constant.OrderConstants;
+import com.zhuhuibao.common.constant.TechConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.OrderFlow;
 import com.zhuhuibao.mybatis.order.service.OrderFlowService;
 import com.zhuhuibao.mybatis.tech.entity.OrderOms;
 import com.zhuhuibao.mybatis.tech.mapper.OrderManagerMapper;
+import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -14,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +41,9 @@ public class OrderManagerService {
 
     @Autowired
     OrderFlowService orderFlowService;
+
+    @Autowired
+    ZhbService zhbService;
 
     /**
      * 查询已发布的课程
@@ -115,5 +124,69 @@ public class OrderManagerService {
             throw e;
         }
         return result;
+    }
+
+    /**
+     * 查询收银台初始信息  1:培训课程购买使用筑慧币消费的情况.  0:VIP充值，筑慧币购买不使用筑慧币的情况
+     * @param orderNo  订单编号
+     * @param isUseZhb 是否使用筑慧币 0:否，1：是
+     * @param time 支付时长
+     * @return
+     */
+    public Map<String,Object> selectCashierDeskInfo(String orderNo,String isUseZhb,String time)
+    {
+        log.info("select casher desk init info orderNo = "+orderNo);
+        Map<String,Object> deskInfoMap = orderMapper.selectCashierDeskInfo(orderNo);
+        //1:使用筑慧币消费的情况.  0:VIP充值，筑慧币购买不使用筑慧币的情况
+        if(TechConstant.IsUseZhb.YES.toString().equals(isUseZhb)) {
+            if (!deskInfoMap.isEmpty()) {
+                ZhbAccount zhbAccount = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
+                if (zhbAccount != null) {
+                    deskInfoMap.put("zhb", zhbAccount.getAmount());
+                } else {
+                    deskInfoMap.put("zhb", "");
+                }
+            }
+        }
+        deskInfoMap.put("duration",time);
+        return deskInfoMap;
+    }
+
+    /**
+     * 查询收银台使用筑慧币支付
+     * @param orderNo
+     * @return
+     */
+    public Map<String,Object> useZhbByCashierDesk(String orderNo,int isUseZhb)
+    {
+        log.info("use zhb by casher desk orderNo = "+orderNo);
+        Map<String,Object> deskInfoMap = orderMapper.selectCashierDeskInfo(orderNo);
+        Map<String,Object> useZhbMap = new HashMap<String,Object>();
+        if(!deskInfoMap.isEmpty())
+        {
+            //实付金额
+            BigDecimal payAmount = (BigDecimal) deskInfoMap.get("payAmount");
+            if(isUseZhb == 1) {
+                ZhbAccount zhbAccount = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
+                if (zhbAccount != null && zhbAccount.getAmount() != null) {
+                    BigDecimal zhbAmount = zhbAccount.getAmount();
+                    //筑慧币小于支付金额
+                    if (zhbAmount.compareTo(payAmount) == -1) {
+                        useZhbMap.put("zhb", zhbAmount);
+                        BigDecimal alipay = payAmount.subtract(zhbAmount);
+                        useZhbMap.put("alipay", alipay);
+                    }
+                    //1:筑慧币大于支付金额,0:筑慧币等于支付金额
+                    else if (zhbAmount.compareTo(payAmount) == 1 || zhbAmount.compareTo(payAmount) == 0) {
+                        useZhbMap.put("zhb", payAmount);
+                    }
+                }else{
+                    useZhbMap.put("alipay", payAmount);
+                }
+            }else{
+                useZhbMap.put("alipay", payAmount);
+            }
+        }
+        return useZhbMap;
     }
 }

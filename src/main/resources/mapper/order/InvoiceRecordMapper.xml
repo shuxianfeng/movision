@@ -22,15 +22,15 @@
     id, createId, invoiceTitleType, invoiceTitle, invoiceType, createTime, updateTime,
     receiveName, province, city, area, address, mobile, telephone, isRecentUsed
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.util.Map" >
     select 
     <include refid="Base_Column_List" />
     from t_o_invoice_record
-    where createId = #{createId} and isRecentUsed = 1
+    where createId = #{createId} and isRecentUsed = #{isRecentUsed}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+  <delete id="deleteByPrimaryKey" parameterType="java.util.Map" >
     delete from t_o_invoice_record
-    where id = #{id,jdbcType=BIGINT}
+    where createId  = #{createId} and invoiceTitleType = #{invoiceTitleType}
   </delete>
   <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.order.entity.InvoiceRecord" >
     insert into t_o_invoice_record
@@ -120,6 +120,9 @@
         #{isRecentUsed,jdbcType=CHAR},
       </if>
     </trim>
+    ON DUPLICATE KEY UPDATE isRecentUsed=1,invoiceTitleType = #{invoiceTitleType},invoiceTitle=#{invoiceTitle},
+    invoiceType=#{invoiceType},receiveName = #{receiveName},province=#{province},city=#{city},area=#{area},
+    address=#{address},mobile=#{mobile},telephone=#{telephone},isRecentUsed=#{isRecentUsed}
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.order.entity.InvoiceRecord" >
     update t_o_invoice_record
@@ -165,7 +168,7 @@
         isRecentUsed = #{isRecentUsed,jdbcType=CHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where createId = #{createId} and invoiceTitleType = #{invoiceTitleType}
   </update>
 
   <update id="updateIsRecentUsed" parameterType="com.zhuhuibao.mybatis.order.entity.InvoiceRecord" >

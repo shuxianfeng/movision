@@ -93,6 +93,7 @@ public class AuthenticationController {
                 authcMember.setIdentify(identity);
                 authcMember.setRole(role);
                 authcMember.setIsexpert(bexpert);
+                authcMember.setVipLevel(member.getVipLevel());
 
                 authcMember.setRegisterTime(member.getRegisterTime());
                 authcMember.setWorkType(member.getWorkType());
@@ -112,13 +113,15 @@ public class AuthenticationController {
                 response.setMessage("welcome you!");
                 map.put("authorized", true);
                 map.put("member", authcMember);
+
             }
         }
-        response.setData(map);
-        log.debug("caijl:/rest/web/authc is called,msgcode=[" + response.getMsgCode() + "],Message=[" + response.getMessage() + "].");
-        return response;
 
-    }
+    response.setData(map);
+    log.debug("caijl:/rest/web/authc is called,msgcode=["+response.getMsgCode()+"],Message=["+response.getMessage()+"].");
+    return response;
+
+}
 
 
     @RequestMapping(value = "/rest/getToken", method = RequestMethod.GET)

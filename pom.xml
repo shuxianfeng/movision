@@ -483,6 +483,24 @@
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>copy-portable-resource</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/classes</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${cfg.portablePath}</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -566,7 +584,6 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <!-- <cfg.env>development</cfg.env> -->
                 <cfg.portablePath>src/main/resources</cfg.portablePath>
             </properties>
         </profile>

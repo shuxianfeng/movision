@@ -180,7 +180,7 @@ public class JobPositionService {
      * 职位类别
      */
     public List positionType(){
-        List<Position> positionList = positionMapper.findPosition(8);
+        List<Position> positionList = positionMapper.findPosition(7);
         List<Position> subPositionList = positionMapper.findSubPosition();
         List list1 = new ArrayList();
         for(int i=0;i<positionList.size();i++){
@@ -195,6 +195,7 @@ public class JobPositionService {
                     Map map1 = new HashMap();
                     map1.put(Constants.code,subPosition.getId());
                     map1.put(Constants.name,subPosition.getName());
+                    map1.put(Constants.hot,subPosition.getHot());
                     list.add(map1);
                 }
             }

@@ -94,8 +94,9 @@
         case WHEN a.workType = 100 and a.identify !=2 THEN a.id
         WHEN a.workType !=100 and a.identify !=2 THEN a.enterpriseEmployeeParentId
         WHEN a.identify = 2 THEN a.id
-        end as companyId ,a.registerTime ,a.workType,a.headShot,a.nickname,a.enterpriseName as companyName
+        end as companyId ,a.registerTime ,a.workType,a.headShot,a.nickname,a.enterpriseName as companyName ,vip.vip_level
 		from t_m_member a left outer join t_e_expert b on a.id=b.createId and b.status=1 and b.is_deleted=0
+        left join t_vip_member_info vip on a.id = vip.member_id
 		WHERE a.status != 0 and a.status != 2
         <if test="mobile != null and mobile != '' ">
             AND  a.mobile = #{mobile}

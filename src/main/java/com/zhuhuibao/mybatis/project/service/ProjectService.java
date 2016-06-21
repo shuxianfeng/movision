@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +17,7 @@ import com.zhuhuibao.common.constant.ProjectConstant;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
 import com.zhuhuibao.mybatis.project.entity.ProjectInfo;
 import com.zhuhuibao.mybatis.project.entity.ProjectLinkman;
-import com.zhuhuibao.mybatis.project.entity.ViewProject;
 import com.zhuhuibao.mybatis.project.mapper.ProjectMapper;
-import com.zhuhuibao.mybatis.project.mapper.ViewProjectMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 
@@ -39,9 +36,9 @@ public class ProjectService {
 
 	@Autowired
 	private ProjectLinkmanService linkmanService;
+	
+ 
 
-	@Autowired
-	private ViewProjectMapper viewProjectMapper;
 
    /**
     * 查询项目信息
@@ -403,28 +400,6 @@ public class ProjectService {
 		}
 	}
 
-	/**
-	 * 插入我查看过的项目信息
-	 * @param projectId  项目ID
-	 * @param createId  查看人的Id
-	 * @throws Exception
-	 */
-	public int insertViewProject(Long projectId, Long createId,Long companyId){
-		log.info("insert view project projectId = "+projectId+" createId = "+createId);
-		int result;
-		try {
-			ViewProject vp = new ViewProject();
-			vp.setPrjId(projectId);
-			vp.setViewerId(createId);
-			vp.setCompanyId(companyId);
-			result = viewProjectMapper.insertSelective(vp);
-		}catch(Exception e)
-		{
-			log.error("insert view project error!",e);
-			throw e;
-		}
-		return result;
-	}
 
 	/**
 	 * 修改项目信息
@@ -501,6 +476,25 @@ public class ProjectService {
 	}
 
 	/**
+	 * 首页查询最新项目信息
+	 * @param map 项目信息搜素条件 count：指定项目信息条数
+	 * @return
+	 */
+	public List<Map<String,String>> queryHomepageLatestProject(Map<String,Object> map)
+	{
+		log.info("query homepage latest project info condition = "+ StringUtils.mapToString(map));
+		List<Map<String,String>> projectList = null;
+		try {
+			projectList = projectMapper.queryHomepageLatestProject(map);
+		}catch(Exception e)
+		{
+			log.error("query homepage latest project info error!");
+			throw e;
+		}
+		return projectList;
+	}
+
+	/**
 	 * 根据条件查询项目分页信息
 	 * @param map 查询条件
 	 * @return
@@ -519,32 +513,6 @@ public class ProjectService {
 		return projectList;
 	}
 
-	/**
-	 * 是否存在查看过项目信息
-	 * @param map 查询条件
-	 * @return
-	 */
-	public int checkIsViewProject(Map<String,Object> map)
-	{
-		log.info("check isview project "+ StringUtils.mapToString(map));
-		int isExist;
-		try {
-			isExist = viewProjectMapper.checkIsViewProject(map);
-		}catch(Exception e)
-		{
-			log.error("check isview project error!");
-			throw e;
-		}
-		return isExist;
-	}
-
-	public static void main(String[] args)
-	{
-
-		UUID uuid = UUID.randomUUID();
-		System.out.println(".{"+uuid.toString()+"}");
-
-	}
     /**
      * 获取地区
      * @param areaOrCity
@@ -553,7 +521,7 @@ public class ProjectService {
 	public Map<String,Object> getAreaOrCity(Map areaOrCityMap) {
 		Map<String,Object> codeMap;
 		try {
-			  codeMap = viewProjectMapper.getAreaOrCity(areaOrCityMap);
+			  codeMap = projectMapper.getAreaOrCity(areaOrCityMap);
 			 
 		}catch(Exception e)
 		{
@@ -561,5 +529,35 @@ public class ProjectService {
 			throw e;
 		}
 		return codeMap;
+	}
+	/**
+     * 项目类别
+     * @param areaOrCity
+     * @return
+     */
+	public Map<String, String> getCatagoryByValue(List list) {
+		Map<String, String>  codeMap;
+		try {
+			  codeMap = projectMapper.getCatagoryByValue(list);
+			 
+		}catch(Exception e)
+		{
+			log.error("check isview project error!");
+			throw e;
+		}
+		return codeMap;
+	}
+
+	public List<Map<String, String>> findPrjectByName(Map<String, Object> map) {
+		log.info("search my viewer project info viewerId = "+ StringUtils.mapToString(map));
+		List<Map<String,String>> projectList;
+		try {
+			projectList = projectMapper.findPrjectByName(map);
+		}catch(Exception e)
+		{
+			log.error("search my viewer project info viewerId error!");
+			throw e;
+		}
+		return projectList;
 	}
 }

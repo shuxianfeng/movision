@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -99,13 +100,8 @@ public class InvoiceService {
      */
     public void insertInvoiceRecord(InvoiceRecord record)
     {
-        int result;
         try{
-            result = invoiceRecordMapper.insertSelective(record);
-            if (result != 1) {
-                log.error("t_o_invoice:插入数据失败");
-                throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
-            }
+            invoiceRecordMapper.insertSelective(record);
         }catch(Exception e)
         {
             log.error("insert invoice error!",e);
@@ -115,13 +111,16 @@ public class InvoiceService {
 
     /**
      * 查询最近使用的发票信息
-     * @param id  发票ID
+     * @param con  发票条件
      */
-    public InvoiceRecord queryRecentUseInvoiceInfo(Long id)
+    public InvoiceRecord queryRecentUseInvoiceInfo(Long createId,String isRecentUsed)
     {
         InvoiceRecord invoiceRecord;
         try{
-            invoiceRecord = invoiceRecordMapper.selectByPrimaryKey(id);
+            Map<String,Object> con = new HashMap<String,Object>();
+            con.put("createId",createId);
+            con.put("isRecentUsed",isRecentUsed);
+            invoiceRecord = invoiceRecordMapper.selectByPrimaryKey(con);
         }catch(Exception e)
         {
             log.error("query invoice record error!",e);
@@ -157,13 +156,12 @@ public class InvoiceService {
      */
     public void updateIsRecentUsed(InvoiceRecord invoiceRecord)
     {
-        int result;
         try{
-            result = invoiceRecordMapper.updateIsRecentUsed(invoiceRecord);
-            if (result == 0) {
+            invoiceRecordMapper.updateIsRecentUsed(invoiceRecord);
+            /*if (result == 0) {
                 log.error("t_o_invoice_record:更新最近被使用失败");
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "更新最近被使用失败");
-            }
+            }*/
         }catch(Exception e)
         {
             log.error("update invoice record error!",e);
