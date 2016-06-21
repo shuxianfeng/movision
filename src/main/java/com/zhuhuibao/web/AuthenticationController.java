@@ -87,7 +87,7 @@ public class AuthenticationController {
 	        		authcMember.setIdentify(identity);
 	        		authcMember.setRole(role);
 	        		authcMember.setIsexpert(bexpert);
-	        		
+	        		authcMember.setVipLevel(member.getVipLevel());
 	                response.setMsgCode(1);
 	                response.setMessage("welcome you!");
 	                map.put("authorized", true);

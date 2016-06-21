@@ -23,4 +23,9 @@ public class ProjectConstant {
             return this.value;
         }
     }
+
+    /**
+     * 首页显示的项目数量 7个
+     */
+    public final static Integer PROJECT_HOMEPAGE_COUNT_SEVEN = 7;
 }

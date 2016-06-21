@@ -17,6 +17,7 @@ public class LoginMember {
     private int ordercount;
     private int msgcount;
     private Long companyId;
+    private int vipLevel;
 
     public Long getId() {
         return id;
@@ -96,5 +97,13 @@ public class LoginMember {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public int getVipLevel() {
+        return vipLevel;
+    }
+
+    public void setVipLevel(int vipLevel) {
+        this.vipLevel = vipLevel;
     }
 }

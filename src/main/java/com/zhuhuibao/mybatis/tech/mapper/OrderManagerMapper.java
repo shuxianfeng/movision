@@ -12,4 +12,6 @@ public interface OrderManagerMapper {
     int updateByPrimaryKeySelective(OrderOms record);
 
     List<Map<String,String>> findAllOmsTechOrder(RowBounds rowBounds, Map<String,Object> condition);
+
+    Map<String,Object> selectCashierDeskInfo(String orderNo);
 }
