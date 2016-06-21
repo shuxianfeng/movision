@@ -21,6 +21,8 @@ public interface TechCooperationMapper {
 
     Map<String,Object> previewTechCooperationDetail(Long id);
 
+    Map<String,Object> previewUnloginTechCoopDetail(Long id);
+
     int updateByPrimaryKeySelective(TechCooperation record);
 
     List<Map<String,String>> findAllTechCooperationPager(RowBounds rowBounds,Map<String, Object> condition);

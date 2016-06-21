@@ -87,6 +87,21 @@ public class ExpertService {
     }
 
     /**
+     * 未登录技术成果详情
+     * @param id
+     * @return
+     */
+    public Map<String,String> queryUnloginAchievementById(String id){
+        try{
+            return achievementMapper.queryUnLoginAchievementById(id);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
      * 技术成果列表(分页)
      */
     public List<Achievement> findAllAchievementList(Paging<Achievement> pager,Map<String,Object> map){

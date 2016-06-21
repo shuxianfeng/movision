@@ -214,7 +214,7 @@
 
   </select>
   <select id="findAllResume" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select tr.* from (select t.id,t.title,t.realName,t.jobCity,dc.name hopeSalary,m.headShot as photo,dt.name,
+    select tr.* from (select t.id,t.title,concat(substring(t.realName,1,1),'**') realName,t.jobCity,dc.name hopeSalary,m.headShot as photo,dt.name,
     date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,date_format(t.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,t.experienceYear,t.education,t.isPublic,
     (DATE_FORMAT( current_date(),'%Y' )-birthYear) birthYear,
     (DATE_FORMAT( current_date(),'%Y' )-workYear) workYear,

@@ -183,6 +183,24 @@ public class TechCooperationService {
     }
 
     /**
+     * 未登录预览技术合作详情
+     * @param id 技术合作ID
+     * @return
+     */
+    public Map<String,Object> previewUnloginTechCoopDetail(String id)
+    {
+        Map<String,Object> techCoop;
+        log.info("preview unlogin tech cooperation "+id);
+        try{
+            techCoop = techMapper.previewUnloginTechCoopDetail(Long.valueOf(id));
+        }catch (Exception e){
+            log.error("preview unlogin tech cooperation error! ",e);
+            throw e;
+        }
+        return techCoop;
+    }
+
+    /**
      * 会员中心编辑技术合作
      * @param id 技术合作ID
      * @return

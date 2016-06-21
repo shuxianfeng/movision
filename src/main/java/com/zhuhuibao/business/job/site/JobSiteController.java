@@ -16,6 +16,7 @@ import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
+import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.service.payment.PaymentService;
@@ -69,6 +70,9 @@ public class JobSiteController {
 
     @Autowired
     private PaymentService paymentService;
+
+    @Autowired
+    PaymentGoodsService goodsService;
 
     @RequestMapping(value={"/rest/jobsite/applyPosition","/rest/job/site/recruit/apply_position"}, method = RequestMethod.POST)
     @ApiOperation(value="应聘职位",notes = "应聘职位",response = Response.class)
@@ -493,12 +497,13 @@ public class JobSiteController {
         return response;
     }
 
-    @ApiOperation(value = "公司查看简历 会员中心我收到的简历", notes = "公司查看简历 会员中心我收到的简历", response = Response.class)
+    @ApiOperation(value = "会员中心查看我收到的简历", notes = "会员中心查看我收到的简历", response = Response.class)
     @RequestMapping(value = "/rest/job/site/resume/preview_resume", method = RequestMethod.GET)
     public Response previewResume(@ApiParam(value = "简历id") @RequestParam String id,
                                   @ApiParam(value = "该投递简历记录的id,频道页不传，会员中心查看简历记录时候传") @RequestParam(required = false) String recordId) throws Exception {
-        Response response = new Response();
         Long memberId = ShiroUtil.getCreateID();
+        Long companyId = ShiroUtil.getCompanyID();
+        Response response = new Response();
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("id",recordId);
         map.put("status",JobConstant.RESUME_STATUS_TWO);
@@ -507,14 +512,16 @@ public class JobSiteController {
         resumeBean.setViews("1");
         resumeBean.setId(id);
         resume.updateResume(resumeBean);
+        //发布招聘职位已付过钱，查看应聘的简历，也属于付费查看过的简历,需要增加到已付费信息表。这部分信息不需要付费
+        goodsService.insertViewProject(Long.parseLong(id), memberId,companyId,ZhbPaymentConstant.goodsType.CXXZJL.toString());
         if(memberId!=null){
             Map<String,Object> map1 = new HashMap<String,Object>();
             map1.put("resumeID",id);
-            map1.put("companyID",memberId);
+            map1.put("companyID",companyId);
             Resume resume2 = resume.previewResume(id);
             map1.put("createId",resume2.getCreateid());
             resume.addLookRecord(map1);
-            response = paymentService.viewGoodsRecord(Long.parseLong(id),resume2, ZhbPaymentConstant.goodsType.CXXZJL.toString());
+            response.setData(resume2);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }

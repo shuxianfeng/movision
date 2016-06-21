@@ -89,13 +89,13 @@ public class ProjectController {
 		return response;
     }
     
-	@RequestMapping(value = {"previewProject","site/base/sel_project"},method = RequestMethod.GET)
+/*	@RequestMapping(value = {"previewProject","site/base/sel_project"},method = RequestMethod.GET)
 	@ApiOperation(value="项目信息详情",notes = "根据Id查看项目信息",response = Response.class)
 	//    @ZhbAutoPayforAnnotation(goodsType=ZhbGoodsType.CKJSCG)
 	public Response previewProject(@ApiParam(value = "项目信息ID") @RequestParam Long porjectID) throws Exception {
 		Map<String,Object> map  = projectService.queryProjectDetail(porjectID);
 		return paymentService.viewGoodsRecord(porjectID,map, ZhbPaymentConstant.goodsType.CKXMXX.toString());
-	}
+	}*/
 
 	@RequestMapping(value = {"previewUnLoginProject","site/base/sel_unLoginProject"},method = RequestMethod.GET)
 	@ApiOperation(value="预览未登陆的项目信息",notes = "根据Id查看未登陆的项目信息",response = Response.class)
