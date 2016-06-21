@@ -159,25 +159,17 @@ public class CompanyController {
 
     @ApiOperation(value = "企业资质保存", notes = "企业资质保存", response = Response.class)
     @RequestMapping(value = "add_certificate", method = RequestMethod.POST)
-    public Response certificateSave(String json1,String json2)  {
+    public Response certificateSave(@RequestParam String json)  {
         Response result = new Response();
         Gson gson=new Gson();
-        List<CertificateRecord> rs1= new ArrayList<CertificateRecord>();
-        List<CertificateRecord> rs2= new ArrayList<CertificateRecord>();
+        List<CertificateRecord> rs= new ArrayList<CertificateRecord>();
         Type type = new TypeToken<ArrayList<CertificateRecord>>() {}.getType();
-        rs1 = gson.fromJson(json1, type);
-        rs2 = gson.fromJson(json2, type);
+        rs = gson.fromJson(json, type);
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
             memberService.deleteCertificate(String.valueOf(memberId));
-            for(CertificateRecord record:rs1){
+            for(CertificateRecord record:rs){
                 record.setMem_id(String.valueOf(memberId));
-                record.setType("1");
-                memberService.saveCertificate(record);
-            }
-            for(CertificateRecord record:rs2){
-                record.setMem_id(String.valueOf(memberId));
-                record.setType("2");
                 memberService.saveCertificate(record);
             }
         }else {

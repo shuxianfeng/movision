@@ -7,6 +7,8 @@ public class Position {
 
     private String parentId;
 
+    private String hot;
+
     public String getId() {
         return id;
     }
@@ -29,5 +31,13 @@ public class Position {
 
     public void setParentId(String parentId) {
         this.parentId = parentId;
+    }
+
+    public String getHot() {
+        return hot;
+    }
+
+    public void setHot(String hot) {
+        this.hot = hot;
     }
 }
