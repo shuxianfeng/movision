@@ -33,7 +33,7 @@ public class ProjectInfo {
 	@ApiModelProperty(value = "地址")
 	private String address;
 	@ApiModelProperty(value = " 项目类别 type=8")
-	private Integer category;
+	private String category;
 	@ApiModelProperty(value = "项目类别名称")
 	private String categoryName;
 	@ApiModelProperty(value = " 工程造价")
@@ -133,11 +133,11 @@ public class ProjectInfo {
 		this.address = address;
 	}
 
-	public Integer getCategory() {
+	public String getCategory() {
 		return category;
 	}
 
-	public void setCategory(Integer category) {
+	public void setCategory(String category) {
 		this.category = category;
 	}
 

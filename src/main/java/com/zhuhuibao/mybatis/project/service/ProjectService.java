@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,8 @@ public class ProjectService {
 
 	@Autowired
 	private ProjectLinkmanService linkmanService;
-
+	
+ 
 
 
    /**
@@ -529,5 +529,35 @@ public class ProjectService {
 			throw e;
 		}
 		return codeMap;
+	}
+	/**
+     * 项目类别
+     * @param areaOrCity
+     * @return
+     */
+	public Map<String, String> getCatagoryByValue(List list) {
+		Map<String, String>  codeMap;
+		try {
+			  codeMap = projectMapper.getCatagoryByValue(list);
+			 
+		}catch(Exception e)
+		{
+			log.error("check isview project error!");
+			throw e;
+		}
+		return codeMap;
+	}
+
+	public List<Map<String, String>> findPrjectByName(Map<String, Object> map) {
+		log.info("search my viewer project info viewerId = "+ StringUtils.mapToString(map));
+		List<Map<String,String>> projectList;
+		try {
+			projectList = projectMapper.findPrjectByName(map);
+		}catch(Exception e)
+		{
+			log.error("search my viewer project info viewerId error!");
+			throw e;
+		}
+		return projectList;
 	}
 }

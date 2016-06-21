@@ -313,9 +313,53 @@
       </if>
     </where>
   </select>
-  <select id="getAreaOrCity" parameterType="java.util.Map" resultType="java.util.Map">
-    select w.code,w.cityCode,c.provincecode from t_dictionary_area
-    w left join t_dictionary_city c on w.cityCode=c.code
-    where w.name=#{area} and c.name=#{city}
+   <select id="getAreaOrCity" parameterType="java.util.Map" resultType="java.util.Map"> 
+     select w.code,w.cityCode,c.provincecode from t_dictionary_area
+      w left join t_dictionary_city c on w.cityCode=c.code
+     where w.name=#{area} and c.name=#{city}
+  </select>
+   <select id="findPrjectByName" parameterType="java.util.Map" resultMap="list">
+    SELECT
+    t.id ,t.name,date_format(t.publishDate,'%Y-%m-%d') publishDate,
+    date_format(t.updateDate,'%Y-%m-%d') updateDate,concat(pn.name,ct.name,ar.name,case when  ISNULL(t.address) then '' else t.address end) address,ct.name city,
+    t.price,date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate,
+    (select cs.name from t_dictionary_constant cs where cs.code = t.category and cs.type=8) as categoryName
+    FROM t_prj_project t
+    left join t_dictionary_province pn on pn.code = t.province
+    left join t_dictionary_city ct on ct.code = t.city
+    left join t_dictionary_area ar on ar.code = t.area
+    <where>
+      t.is_deleted=0 
+      <if test="name != null and name != ''">
+        and t.name like concat('%',#{name},'%')
+      </if>
+      <if test="category !=null">
+        and t.category = #{category}
+      </if>
+      <if test="province != null and province != ''">
+        and t.province = #{province}
+      </if>
+      <if test="city != null and city != ''">
+        and t.city = #{city}
+      </if>
+      <if test="startDateA != null and startDateB != null">
+        and t.startDate &gt;= date_format(#{startDateA},'%Y-%m-%d') and t.startDate &lt;= date_format(#{startDateB},'%Y-%m-%d')
+      </if>
+      <if test="endDateA != null and endDateB != null">
+        and t.endDate &gt;= date_format(#{endDateA},'%Y-%m-%d') and t.endDate &lt;= date_format(#{endDateB},'%Y-%m-%d')
+      </if>
+    </where>
+    order by t.updateDate desc
+  </select>
+    <select id="getCatagoryByValue" parameterType="java.util.Map" resultType="java.util.Map"> 
+     select GROUP_CONCAT(type) type from  t_dictionary_type where sendname 
+     
+     
+     in
+     <foreach item="typeList" index="index" collection="list"
+      open="(" separator="," close=")">
+        #{typeList}
+      </foreach>
+    group by SPACE(type)  
   </select>
 </mapper>
