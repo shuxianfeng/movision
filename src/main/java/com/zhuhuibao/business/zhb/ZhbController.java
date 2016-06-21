@@ -1,4 +1,4 @@
-package com.zhuhuibao.business.pay;
+package com.zhuhuibao.business.zhb;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -36,11 +36,18 @@ public class ZhbController {
 	@Autowired
 	private VipInfoService vipInfoService;
 
+	@ApiOperation(value = "进入筑慧币充值页", notes = "进入筑慧币充值页", response = Response.class)
+	@RequestMapping(value = "mc/sel_prepaid", method = RequestMethod.GET)
+	public Response enterZhbPrepaid(@ApiParam(value = "订单编号") @RequestParam(required = true) String orderNo) throws Exception {
+		Response response = new Response();
+		
+		return response;
+	}
+
 	@ApiOperation(value = "筑慧币充值", notes = "筑慧币充值，返回0：失败，1：成功", response = Response.class)
 	@RequestMapping(value = "mc/upd_prepaid", method = RequestMethod.POST)
 	public Response zhbPrepaid(@ApiParam(value = "订单编号") @RequestParam(required = true) String orderNo) throws Exception {
 		Response response = new Response();
-		// 判断登录者与操作数据是否属于同一人
 		int result = 0;
 		try {
 			result = zhbService.zhbPrepaidByOrder(orderNo);
@@ -94,7 +101,8 @@ public class ZhbController {
 
 	@ApiOperation(value = "筑慧币业务消费支付", notes = "筑慧币业务消费支付", response = Response.class)
 	@RequestMapping(value = "mc/upd_payforgoods", method = RequestMethod.POST)
-	public Response payForGoods(@ApiParam(value = "物品ID") @RequestParam Long goodsId, @ApiParam(value = "物品类型") @RequestParam String goodsType) throws Exception {
+	public Response payForGoods(@ApiParam(value = "物品ID") @RequestParam Long goodsId, @ApiParam(value = "物品类型") @RequestParam String goodsType)
+			throws Exception {
 		Response response = new Response();
 
 		int result = 0;
@@ -148,6 +156,23 @@ public class ZhbController {
 	@ApiOperation(value = "筑慧币明细记录", notes = "筑慧币明细记录", response = Response.class)
 	@RequestMapping(value = "mc/record/sel_recordList", method = RequestMethod.POST)
 	public Response getRecordList(@ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
+			@ApiParam(value = "每页显示的条数") @RequestParam(required = false) String pageSize,
+			@ApiParam(value = "数据类型，1:使用,2:获取,null:所有") @RequestParam(required = false) String recordType) throws Exception {
+		Response response = new Response();
+		List<Map<String, String>> zhbDetails = zhbService.getZhbDetails(pageNo, pageSize, recordType);
+		ZhbAccount account = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
+
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("zhbDetails", zhbDetails);
+		result.put("account", account);
+		response.setData(result);
+
+		return response;
+	}
+
+	@ApiOperation(value = "筑慧币明细记录", notes = "筑慧币明细记录", response = Response.class)
+	@RequestMapping(value = "mc/record/sel_recordList", method = RequestMethod.POST)
+	public Response get223List(@ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
 			@ApiParam(value = "每页显示的条数") @RequestParam(required = false) String pageSize,
 			@ApiParam(value = "数据类型，1:使用,2:获取,null:所有") @RequestParam(required = false) String recordType) throws Exception {
 		Response response = new Response();

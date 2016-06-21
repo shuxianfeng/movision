@@ -293,7 +293,7 @@ public class ZhbService {
 		int result = 0;
 
 		try {
-			DictionaryZhbgoods goods = zhbMapper.selectZhbGoodsByPinyin(goodsType.toLowerCase());
+			DictionaryZhbgoods goods = zhbMapper.selectZhbGoodsByPinyin(goodsType.toUpperCase());
 			BigDecimal amount = goods.getPrice();
 			// 验证是否可以支付:余额是否足够，amount大于0
 			ZhbAccount account = getZhbAccount(ShiroUtil.getCompanyID());
@@ -368,11 +368,11 @@ public class ZhbService {
 	@Cacheable(value = "zhbGoodsConfigCache", key = "#pinyin")
 	public DictionaryZhbgoods getZhbGoodsByPinyin(String pinyin) {
 		if (StringUtils.isNotBlank(pinyin)) {
-			return zhbMapper.selectZhbGoodsByPinyin(pinyin.toLowerCase());
+			return zhbMapper.selectZhbGoodsByPinyin(pinyin.toUpperCase());
 		}
 		return null;
 	}
-
+	
 	/**
 	 * 获取筑慧币物品配置信息
 	 * 

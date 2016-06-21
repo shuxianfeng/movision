@@ -103,7 +103,7 @@ public class VipInfoService {
 	 * @return
 	 */
 	public VipMemberPrivilege findVipMemberPrivilege(Long memberId, String privilegePinyin) {
-		privilegePinyin = StringUtils.isNotBlank(privilegePinyin) ? privilegePinyin.toLowerCase() : "";
+		privilegePinyin = StringUtils.isNotBlank(privilegePinyin) ? privilegePinyin.toUpperCase() : "";
 		Map<String, Object> param = MapUtil.convert2HashMap("memberId", memberId, "pinyin", privilegePinyin);
 		return vipInfoMapper.selectVipMemberPrivilege(param);
 	}
@@ -117,7 +117,7 @@ public class VipInfoService {
 	 */
 	public long getExtraPrivilegeNum(Long memberId, String privilegePinyin) {
 		if (null != memberId && StringUtils.isNotBlank(privilegePinyin)) {
-			VipMemberPrivilege extraPrivilege = findVipMemberPrivilege(memberId, privilegePinyin.toLowerCase());
+			VipMemberPrivilege extraPrivilege = findVipMemberPrivilege(memberId, privilegePinyin.toUpperCase());
 			if (null != extraPrivilege && VipPrivilegeType.NUM.toString().equals(extraPrivilege.getType())) {
 				return extraPrivilege.getValue();
 			}
@@ -136,7 +136,6 @@ public class VipInfoService {
 	public boolean hadExtraPrivilege(Long memberId, String privilegePinyin) {
 		boolean hadExtraPrivilege = false;
 		VipMemberPrivilege extraPrivilege = findVipMemberPrivilege(memberId, privilegePinyin);
-
 		if (null != extraPrivilege && VipPrivilegeType.NUM.toString().equals(extraPrivilege.getType()) && extraPrivilege.getValue() > 0) {
 			hadExtraPrivilege = true;
 		} else if (null != extraPrivilege && !VipPrivilegeType.NUM.toString().equals(extraPrivilege.getType())) {

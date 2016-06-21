@@ -10,8 +10,7 @@ public class DictionaryZhbgoods implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -7091609233482668048L;
-	
-	
+
 	private Long id;
 	private String name;
 	private String pinyin;
@@ -63,6 +62,7 @@ public class DictionaryZhbgoods implements Serializable {
 	public BigDecimal getPrice() {
 		return price;
 	}
+
 	/**
 	 * 获得账户余额的double值，保留两位小数
 	 * 
@@ -83,5 +83,4 @@ public class DictionaryZhbgoods implements Serializable {
 	public void setAddTime(Date addTime) {
 		this.addTime = addTime;
 	}
-
 }
