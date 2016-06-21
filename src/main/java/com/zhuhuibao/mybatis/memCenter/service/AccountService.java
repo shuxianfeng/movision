@@ -56,12 +56,12 @@ public class AccountService {
         sb.append("<p>请使用以下链接激活该邮箱：</p>");
         sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"");
         sb.append(serverIp);
-        sb.append("/rest/updateEmail?email=");
+        sb.append("/rest/member/mc/user/upd_email?email=");
         sb.append(new String(EncodeUtil.encodeBase64(email))+"&time="+new String(EncodeUtil.encodeBase64(currentTime)));
         sb.append("&id="+new String(EncodeUtil.encodeBase64(id)));
         sb.append("\">");
         sb.append(serverIp);
-        sb.append("/rest/updateEmail?email=");
+        sb.append("/rest/member/mc/user/upd_email?email=");
         sb.append(new String(EncodeUtil.encodeBase64(email))+"&time="+new String(EncodeUtil.encodeBase64(currentTime)));
         sb.append("&id="+new String(EncodeUtil.encodeBase64(id)));
         sb.append("</a>");

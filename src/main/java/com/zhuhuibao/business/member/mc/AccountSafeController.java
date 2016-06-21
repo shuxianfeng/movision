@@ -54,6 +54,7 @@ import java.util.Map;
  * Created by cxx on 2016/3/11 0011.
  */
 @RestController
+@RequestMapping("/rest/member/mc/user")
 public class AccountSafeController {
     private static final Logger log = LoggerFactory.getLogger(AccountSafeController.class);
 
@@ -69,11 +70,8 @@ public class AccountSafeController {
     @Autowired
     private MemberRegService memberRegService;
 
-    /**
-     * 根据账号验证会员密码是否正确
-     * @throws IOException
-     */
-    @RequestMapping(value = {"/rest/checkPwdById","/rest/member/mc/user/check_pwd_id"}, method = RequestMethod.GET)
+    @ApiOperation(value = "根据会员id验证会员密码是否正确", notes = "根据会员id验证会员密码是否正确", response = Response.class)
+    @RequestMapping(value = "check_pwd_by_id", method = RequestMethod.GET)
     public Response checkPwdById(@RequestParam String pwd)  {
         Long memberId = ShiroUtil.getCreateID();
         //对比密码是否正确
@@ -99,8 +97,6 @@ public class AccountSafeController {
         if(member!=null){
             if(!md5Pwd.equals(member.getPassword())){
                 throw new BusinessException(MsgCodeConstant.member_mcode_usernameorpwd_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_usernameorpwd_error)));
-            }else{
-                result.setCode(200);
             }
         }else{
             throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
@@ -109,25 +105,19 @@ public class AccountSafeController {
         return  result;
     }
 
-    /**
-     * 根据账号验证会员密码是否正确
-     * @param req
-     * @throws IOException
-     */
-    @RequestMapping(value = {"/rest/checkPwdByAccount","/rest/member/mc/user/check_pwd_account"}, method = RequestMethod.GET)
-    public Response checkPwdByAccount(HttpServletRequest req)  {
-        //账号：手机或邮箱
-        String account = req.getParameter("account");
+    @ApiOperation(value = "根据账号验证会员密码是否正确", notes = "根据账号验证会员密码是否正确", response = Response.class)
+    @RequestMapping(value = "check_pwd_by_account", method = RequestMethod.GET)
+    public Response checkPwdByAccount(@RequestParam String account,@RequestParam String pwd)  {
         //前台密码解密
-        String pwd = new String(EncodeUtil.decodeBase64(req.getParameter("pwd")));
-        String md5Pwd = new Md5Hash(pwd,null,2).toString();
+        String password = new String(EncodeUtil.decodeBase64(pwd));
+        String md5Pwd = new Md5Hash(password,null,2).toString();
 
         //根据账号查询会员信息
         Member member = new Member();
         if(account.contains("@")){
-            member.setEmail("account");
+            member.setEmail(account);
         }else{
-            member.setMobile("account");
+            member.setMobile(account);
         }
         Member mem = memberService.findMember(member);
 
@@ -137,18 +127,14 @@ public class AccountSafeController {
         return result;
     }
 
-    /**
-     * 更新密码
-     * @param req
-     * @throws IOException
-     */
-    @RequestMapping(value = {"/rest/saveNewPwd","/rest/member/mc/user/add_new_pwd"}, method = RequestMethod.POST)
-    public Response saveNewPwd(HttpServletRequest req)  {
+    @ApiOperation(value = "更新密码", notes = "更新密码", response = Response.class)
+    @RequestMapping(value = "add_new_pwd", method = RequestMethod.POST)
+    public Response saveNewPwd(@RequestParam String newPwd)  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
-            String newPwd = new String(EncodeUtil.decodeBase64(req.getParameter("newPwd")));
-            String md5Pwd = new Md5Hash(newPwd,null,2).toString();
+            String newPassword= new String(EncodeUtil.decodeBase64(newPwd));
+            String md5Pwd = new Md5Hash(newPassword,null,2).toString();
             Member member = new Member();
             member.setPassword(md5Pwd);
             member.setId(String.valueOf(memberId));
@@ -159,53 +145,46 @@ public class AccountSafeController {
         return result;
     }
 
-    /**
-     * 发送更改邮箱邮件
-     * @param req
-     * @throws IOException
-     */
-    @RequestMapping(value = {"/rest/sendChangeEmail","/rest/member/mc/user/send_email"}, method = RequestMethod.POST)
-    public Response sendChangeEmail(HttpServletRequest req) {
+    @ApiOperation(value = "发送更改邮箱邮件", notes = "发送更改邮箱邮件", response = Response.class)
+    @RequestMapping(value = "send_email", method = RequestMethod.POST)
+    public Response sendChangeEmail(@RequestParam String email) {
         Response result = new Response();
-        String email = req.getParameter("email");
         Member member1 = new Member();
         member1.setEmail(email);
         Member member = memberService.findMember(member1);
         if(member!=null){
-            result.setCode(400);
-            result.setMessage("该邮箱已存在");
+            throw new BusinessException(MsgCodeConstant.member_mcode_mail_registered,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_registered)));
         }else {
-            String id = req.getParameter("id");
-            log.debug("更改邮箱  email =="+ email);
-
-            as.sendChangeEmail(email,id);
-            String mail = ds.findMailAddress(email);
-            Map<String,String> map = new HashMap<String,String>();
-            if(mail != null && !mail.equals(""))
-            {
-                map.put("button", "true");
+            Long id = ShiroUtil.getCreateID();
+            if(id!=null){
+                as.sendChangeEmail(email,String.valueOf(id));
+                String mail = ds.findMailAddress(email);
+                Map<String,String> map = new HashMap<String,String>();
+                if(mail != null && !mail.equals(""))
+                {
+                    map.put("button", "true");
+                }
+                else
+                {
+                    map.put("button", "false");
+                }
+                result.setData(map);
+            }else {
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
-            else
-            {
-                map.put("button", "false");
-            }
-            result.setData(map);
-            result.setCode(200);
         }
-
         return result;
     }
 
-    /**
-     * 更改手机号
-     * @throws IOException
-     */
-    @RequestMapping(value = {"/rest/updateMobile","/rest/member/mc/user/upd_mobile"}, method = RequestMethod.POST)
-    public Response updateMobile(Member member)  {
+    @ApiOperation(value = "更改手机号", notes = "更改手机号", response = Response.class)
+    @RequestMapping(value = "upd_mobile", method = RequestMethod.POST)
+    public Response updateMobile(@RequestParam String mobile)  {
         Response result = new Response();
+        Member member = new Member();
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
             member.setId(String.valueOf(memberId));
+            member.setMobile(mobile);
             memberService.updateMemInfo(member);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -213,13 +192,12 @@ public class AccountSafeController {
         return result;
     }
 
-    /**
-     * 验证手机号是否存在
-     * @throws IOException
-     */
-    @RequestMapping(value = {"/rest/checkMobile","/rest/member/mc/user/check_mobile_isExist"}, method = RequestMethod.POST)
-    public Response checkMobile(Member member)  {
+    @ApiOperation(value = "验证手机号是否存在", notes = "验证手机号是否存在", response = Response.class)
+    @RequestMapping(value = "check_mobile_isExist", method = RequestMethod.POST)
+    public Response checkMobile(@RequestParam String mobile)  {
         Response result = new Response();
+        Member member = new Member();
+        member.setMobile(mobile);
         Member member1 = memberService.findMember(member);
         if(member1!=null){
             throw new BaseException(MsgCodeConstant.member_mcode_account_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
@@ -227,18 +205,13 @@ public class AccountSafeController {
         return result;
     }
 
-    /**
-     * 点击邮箱链接更改邮箱
-     * @param req
-     * @throws IOException
-     */
-    @RequestMapping(value = {"/rest/updateEmail","/rest/member/mc/user/upd_email"}, method = RequestMethod.GET)
-    public ModelAndView updateEmail(HttpServletRequest req)  {
+    @ApiOperation(value = "点击邮箱链接更改邮箱", notes = "点击邮箱链接更改邮箱", response = Response.class)
+    @RequestMapping(value = "upd_email", method = RequestMethod.GET)
+    public ModelAndView updateEmail(@RequestParam String time,@RequestParam String email,@RequestParam String id)  {
         ModelAndView modelAndView = new ModelAndView();
         Member member = new Member();
-        String email = req.getParameter("email");//获取email
-        String decodeTime = new String (EncodeUtil.decodeBase64(req.getParameter("time")));
-        String decodeId = new String (EncodeUtil.decodeBase64(req.getParameter("id")));
+        String decodeTime = new String (EncodeUtil.decodeBase64(time));
+        String decodeId = new String (EncodeUtil.decodeBase64(id));
         Date currentTime = new Date();//获取当前时间
         Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(decodeTime,"yyyy-MM-dd HH:mm:ss"),5,1);
         String redirectUrl ="";
@@ -259,14 +232,8 @@ public class AccountSafeController {
         return modelAndView;
     }
 
-    /**
-     * 绑定手机时手机发送的验证码
-     * @throws IOException
-     * @throws JsonMappingException
-     * @throws JsonGenerationException
-     * @throws ApiException
-     */
-    @RequestMapping(value = {"/rest/getModifyBindMobileSMS","/rest/member/mc/user/get_verifyCode"}, method = RequestMethod.GET)
+    @ApiOperation(value = "绑定手机时手机发送的验证码", notes = "绑定手机时手机发送的验证码", response = Response.class)
+    @RequestMapping(value = "get_verifyCode", method = RequestMethod.GET)
     public Response getModifyBindMobileSMS(@ApiParam(value = "验证的手机号") @RequestParam String mobile,
                                            @ApiParam(value = "图形验证码") @RequestParam String imgCode) throws IOException, ApiException {
         log.debug("获得手机验证码  mobile=="+mobile);
@@ -298,7 +265,7 @@ public class AccountSafeController {
     }
 
     @ApiOperation(value="绑定手机时图形验证码",notes="绑定手机时图形验证码",response = Response.class)
-    @RequestMapping(value = {"/rest/getImgCode","/rest/member/mc/user/check_pwd_account"}, method = RequestMethod.GET)
+    @RequestMapping(value = "get_img_code", method = RequestMethod.GET)
     public void getCode(HttpServletResponse response) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(false);

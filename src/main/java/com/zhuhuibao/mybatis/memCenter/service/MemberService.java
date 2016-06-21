@@ -269,19 +269,19 @@ public class MemberService {
 	/**
 	 * 根据父类ID查询公司下属员工
 	 */
-	public List findStaffByParentId(Paging<Member> pager, Member member)
+	public List findStaffByParentId(Paging<Member> pager, Map<String, Object> map)
 	{
 		try {
-			List<Member> memberList = memberMapper.findAllByPager(pager.getRowBounds(),member);
+			List<Member> memberList = memberMapper.findAllByPager(pager.getRowBounds(),map);
 			List list = new ArrayList();
 			for(int i=0;i<memberList.size();i++){
-				Map map = new HashMap();
+				Map map1 = new HashMap();
 				Member member1 = memberList.get(i);
-				map.put("id",member1.getId());
+				map1.put("id",member1.getId());
 				if(member1.getMobile()!=null){
-					map.put("account",member1.getMobile());
+					map1.put("account",member1.getMobile());
 				}else{
-					map.put("account",member1.getEmail());
+					map1.put("account",member1.getEmail());
 				}
 
 				String workTypeName = "";
@@ -290,10 +290,10 @@ public class MemberService {
 					workTypeName = workType.getName();
 				}
 
-				map.put("role",workTypeName);
-				map.put("roleId",member1.getWorkType());
-				map.put("name",member1.getEnterpriseLinkman());
-				list.add(map);
+				map1.put("role",workTypeName);
+				map1.put("roleId",member1.getWorkType());
+				map1.put("name",member1.getEnterpriseLinkman());
+				list.add(map1);
 			}
 			return list;
 		}catch (Exception e){

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MemberMapper {
     //根据会员ID找到会员信息
@@ -20,7 +21,7 @@ public interface MemberMapper {
     int addMember(Member member);
 
     /* 根据父类ID查询公司下属员工 */
-    List<Member> findAllByPager(RowBounds rowBounds, Member member);
+    List<Member> findAllByPager(RowBounds rowBounds, Map<String, Object> map);
 
     List<Member> findStaffByParentId(Member member);
 
