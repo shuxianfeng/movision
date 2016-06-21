@@ -160,19 +160,21 @@ public final class ConfigManager {
         }
 
         this.parentPath = file.getParent();
-
+        System.out.println("-----------caijl:ConfigManager.initEnv parentPath="+this.parentPath);
         String configContent = this.readFile(this.getConfigPath());
-
+        System.out.println("-----------caijl:ConfigManager.initEnv configContent="+configContent);
         try {
             this.jsonConfig = new JSONObject(configContent);
         } catch (Exception e) {
             this.jsonConfig = null;
+            System.out.println("-----------caijl:ConfigManager.initEnv this.jsonConfig exception ="+this.jsonConfig);
         }
 
     }
 
     private String getConfigPath() {
-        return this.parentPath + File.separator + ConfigManager.configFileName;
+        //return this.parentPath + File.separator + ConfigManager.configFileName;
+    	return this.rootPath + "WEB-INF/classes/web/" + ConfigManager.configFileName;
     }
 
     private String[] getArray(String key) throws JSONException {
