@@ -93,7 +93,8 @@ public class ShiroRealm extends AuthorizingRealm {
         
         ShiroUser shiroUser = new ShiroUser(loginMember.getId(), loginMember.getAccount(),loginMember.getStatus(),
         		loginMember.getIdentify(),loginMember.getRole(),loginMember.getIsexpert(),loginMember.getCompanyId(),
-                loginMember.getRegisterTime(),loginMember.getWorkType(),loginMember.getHeadShot(),loginMember.getNickname());
+                loginMember.getRegisterTime(),loginMember.getWorkType(),loginMember.getHeadShot(),
+                loginMember.getNickname(),loginMember.getCompanyName());
         
         // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(
@@ -127,13 +128,14 @@ public class ShiroRealm extends AuthorizingRealm {
         private String role;
         private String isexpert;
         private Long companyId;
+        private String companyName;
         private String registerTime;
         private int workType;
         private String headShot;
         private String nickname;
 
         public ShiroUser(Long id, String account, int status, String identify, String role,String isexpert,Long companyId,
-                        String registerTime,int workType,String headShot,String nickname ) {
+                        String registerTime,int workType,String headShot,String nickname,String companyName ) {
             this.id = id;
             this.account = account;
             this.status = status;
@@ -145,9 +147,19 @@ public class ShiroRealm extends AuthorizingRealm {
             this.workType = workType;
             this.headShot = headShot;
             this.nickname = nickname;
+            this.companyName = companyName;
         }
-        
-		public Long getId() {
+
+
+        public String getCompanyName() {
+            return companyName;
+        }
+
+        public void setCompanyName(String companyName) {
+            this.companyName = companyName;
+        }
+
+        public Long getId() {
             return id;
         }
 

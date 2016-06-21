@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ *
+ * 广告
  * @author jianglz
  * @since 16/6/20.
  */

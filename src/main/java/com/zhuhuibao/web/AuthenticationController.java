@@ -105,6 +105,8 @@ public class AuthenticationController {
 
                 authcMember.setMsgCount(count);
                 authcMember.setNickname(member.getNickname());
+                authcMember.setCompanyName(member.getCompanyName());
+
 
                 response.setMsgCode(1);
                 response.setMessage("welcome you!");

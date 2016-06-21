@@ -13,6 +13,15 @@ public class AuthcMember {
     private int workType;
     private String headShot;
     private String nickname;
+    private String companyName;
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
 
     private int msgCount;
 

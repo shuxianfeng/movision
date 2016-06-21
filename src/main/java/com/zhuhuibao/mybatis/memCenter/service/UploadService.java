@@ -1,28 +1,31 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-/**
- * Created by cxx on 2016/3/7 0007.
- */
 
 import com.oreilly.servlet.MultipartRequest;
 import com.zhuhuibao.common.constant.ApiConstants;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.utils.RandomFileNamePolicy;
 import com.zhuhuibao.utils.PropertiesUtils;
+import com.zhuhuibao.utils.file.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 上传处理
- * @author cxx
  *
+ * @author cxx
  */
 @Service
 @Transactional
@@ -32,17 +35,87 @@ public class UploadService {
     @Autowired
     ApiConstants ApiConstants;
 
+    public Map<String, String> upload(MultipartFile file, String type, String chann) {
+        Map<String, String> result = new HashMap<>();
+
+        try {
+            String saveDirectory;
+            int maxPostSize;
+            String host = PropertiesUtils.getValue("host.ip");
+            String fileName = FileUtil.renameFile(file.getOriginalFilename());
+            String data;
+            switch (type) {
+                case "img":
+                    if (chann != null) {
+                        saveDirectory = ApiConstants.getUploadDir() + "/" + chann + "/img";
+                        maxPostSize = ApiConstants.getUploadPicMaxPostSize();
+                        data = host + "/upload/" + chann + "/img/" + fileName;
+                    } else {
+                        saveDirectory = ApiConstants.getUploadDir();
+                        maxPostSize = ApiConstants.getUploadPicMaxPostSize();
+                        data = host + "/upload/" + fileName;
+                    }
+
+                    break;
+                case "doc":
+                    if (chann != null) {
+                        saveDirectory = ApiConstants.getUploadDoc() + "/" + chann + "/doc";
+                        maxPostSize = ApiConstants.getUploadDocMaxPostSize();
+                        if (chann.equals("tech")) {
+                            maxPostSize = ApiConstants.getUploadTechMaxPostSize();
+                        }
+                    } else {
+                        saveDirectory = ApiConstants.getUploadDoc();
+                        maxPostSize = ApiConstants.getUploadDocMaxPostSize();
+                    }
+                    data = fileName;
+                    break;
+                default:
+                    log.error("上传类型不支持");
+                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传类型不支持");
+            }
+
+
+            //目录不存在则创建
+            File dir = new File(saveDirectory);
+            if (!dir.exists() && !dir.isDirectory()) {
+                dir.mkdirs();
+                log.info("mk dir susscess dirName = " + saveDirectory);
+            }
+
+            long size = file.getSize();
+            if (size > maxPostSize) {
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过限制");
+            }
+
+
+            File upfile = new File(saveDirectory + "/" + fileName);
+            file.transferTo(upfile);
+
+
+            result.put("status", "success");
+            result.put("data", data);
+
+        } catch (Exception e) {
+            log.error("upload error!", e);
+
+            result.put("status", "fail");
+
+        }
+        return result;
+    }
+
+
     /**
+     * cos插件
      * 上传图片，返回url
      */
-
-    public String upload(HttpServletRequest req,String type)throws IOException
-    {
+    public String upload(HttpServletRequest req, String type) throws IOException {
         //指定所上传的文件，上传成功后，在服务器的保存位置
         String url = "";
         try {
-            String saveDirectory ="";
-            int maxPostSize = 0 ;
+            String saveDirectory;
+            int maxPostSize;
             if ("img".equals(type)) {
                 saveDirectory = ApiConstants.getUploadDir() + "/img";
                 //指定所上传的文件最大上传文件大小
@@ -105,41 +178,11 @@ public class UploadService {
 
                 }
             }
-        }catch(Exception e){
-            log.error("upload error!",e);
+        } catch (Exception e) {
+            log.error("upload error!", e);
         }
         return url;
     }
 
-    /**
-     * 获得文件的后缀
-     * @param req
-     * @throws IOException
-     */
-   /* private String getFileSuffix(HttpServletRequest req) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader((ServletInputStream) req.getInputStream()));
-        String line = null;
-        while ((line = br.readLine()) != null) {
-            if( line.toLowerCase().indexOf("filename") > -1)
-            {
-                break;
-            }
-        }
-        log.info(line);
-        StringTokenizer st = new StringTokenizer(line);
-        String filename = "";
-        while (st.hasMoreTokens()) {
-            filename = st.nextToken();
-            if(filename.toLowerCase().indexOf("filename") > -1)
-            {
-                break;
-            }
-        }
-        log.info(filename);
-        String[] arr = filename.split("=");
-        String suffix = arr[1];
-        suffix = suffix.replace("\"", "");
-        return suffix.substring(suffix.lastIndexOf("."));
-    }*/
 
 }

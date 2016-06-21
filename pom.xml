@@ -20,7 +20,8 @@
         <spring.data.redis.version>1.2.1.RELEASE</spring.data.redis.version>
         <redis.jedis.version>2.4.2</redis.jedis.version>
         <guava.version>17.0</guava.version>
-        <mybatis.generator.configurationFile>src/main/resources/mybatis/generatorConfig.xml</mybatis.generator.configurationFile>
+        <mybatis.generator.configurationFile>src/main/resources/mybatis/generatorConfig.xml
+        </mybatis.generator.configurationFile>
     </properties>
 
     <dependencies>
@@ -159,9 +160,9 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>c3p0</groupId>-->
-            <!--<artifactId>c3p0</artifactId>-->
-            <!--<version>0.9.1.2</version>-->
+        <!--<groupId>c3p0</groupId>-->
+        <!--<artifactId>c3p0</artifactId>-->
+        <!--<version>0.9.1.2</version>-->
         <!--</dependency>-->
 
         <dependency>
@@ -383,11 +384,15 @@
         </dependency>
 
         <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
-            <version>2.2.1</version>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.4.1</version>
+        </dependency>
         <!--alipay-->
         <dependency>
             <groupId>commons-codec</groupId>
@@ -432,11 +437,30 @@
             <version>20090211</version>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>com.baidu</groupId>-->
-            <!--<artifactId>ueditor</artifactId>-->
-            <!--<version>1.1.2</version>-->
-        <!--</dependency>-->
+        <!-- aliyun-oss-->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>2.2.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-green</artifactId>
+            <version>1.1.0</version>
+        </dependency>
 
     </dependencies>
     <build>
@@ -534,7 +558,7 @@
             <url>http://139.196.189.100:8081/nexus/content/repositories/releases</url>
         </repository>
     </repositories>
-    
+
     <profiles>
         <profile>
             <id>development</id>
@@ -553,5 +577,5 @@
             </properties>
         </profile>
     </profiles>
-    
+
 </project>

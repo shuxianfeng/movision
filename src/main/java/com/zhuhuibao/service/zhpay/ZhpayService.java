@@ -188,7 +188,7 @@ public class ZhpayService {
 
             if (zhbAccount != null) {
                 //有筑慧币  判断筑慧币余额 和 应付金额的大小
-                BigDecimal zhbNum = zhbAccount.geteMoney();
+                BigDecimal zhbNum = zhbAccount.getAmount();
                 int result = payPrice.compareTo(zhbNum);
                 if (result == 0 || result == -1) { //筑慧币余额==应付金额  或者   筑慧币>应付金额
                     //全部筑慧币方式支付
