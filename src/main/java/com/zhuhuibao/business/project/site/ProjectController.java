@@ -9,6 +9,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -93,7 +94,7 @@ public class ProjectController {
 	//    @ZhbAutoPayforAnnotation(goodsType=ZhbGoodsType.CKJSCG)
 	public Response previewProject(@ApiParam(value = "项目信息ID") @RequestParam Long porjectID) throws Exception {
 		Map<String,Object> map  = projectService.queryProjectDetail(porjectID);
-		return paymentService.viewGoodsRecord(porjectID,map,"project");
+		return paymentService.viewGoodsRecord(porjectID,map, ZhbPaymentConstant.goodsType.CKXMXX.toString());
 	}
 
 	@RequestMapping(value = {"previewUnLoginProject","site/base/sel_unLoginProject"},method = RequestMethod.GET)

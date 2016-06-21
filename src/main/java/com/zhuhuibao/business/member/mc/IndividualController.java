@@ -155,7 +155,7 @@ public class IndividualController {
 
     @ApiOperation(value = "个人资质保存", notes = "个人资质保存", response = Response.class)
     @RequestMapping(value = "add_certificate", method = RequestMethod.POST)
-    public Response certificateSave(String json)  {
+    public Response certificateSave(@RequestParam String json)  {
         Response result = new Response();
         Gson gson=new Gson();
         List<CertificateRecord> rs= new ArrayList<CertificateRecord>();
@@ -166,7 +166,6 @@ public class IndividualController {
             memberService.deleteCertificate(String.valueOf(memberId));
             for(CertificateRecord record:rs){
                 record.setMem_id(String.valueOf(memberId));
-                record.setType("3");
                 memberService.saveCertificate(record);
             }
         }else {

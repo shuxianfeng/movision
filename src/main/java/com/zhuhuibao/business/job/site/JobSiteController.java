@@ -7,6 +7,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
@@ -492,9 +493,8 @@ public class JobSiteController {
         return response;
     }
 
-    @ApiOperation(value = "公司查看简历", notes = "公司查看简历", response = Response.class)
+    @ApiOperation(value = "公司查看简历 会员中心我收到的简历", notes = "公司查看简历 会员中心我收到的简历", response = Response.class)
     @RequestMapping(value = "/rest/job/site/resume/preview_resume", method = RequestMethod.GET)
-//    @ZhbAutoPayforAnnotation(goodsType=ZhbGoodsType.CKJSCG)
     public Response previewResume(@ApiParam(value = "简历id") @RequestParam String id,
                                   @ApiParam(value = "该投递简历记录的id,频道页不传，会员中心查看简历记录时候传") @RequestParam(required = false) String recordId) throws Exception {
         Response response = new Response();
@@ -514,7 +514,7 @@ public class JobSiteController {
             Resume resume2 = resume.previewResume(id);
             map1.put("createId",resume2.getCreateid());
             resume.addLookRecord(map1);
-            response = paymentService.viewGoodsRecord(Long.parseLong(id),resume2,"resume");
+            response = paymentService.viewGoodsRecord(Long.parseLong(id),resume2, ZhbPaymentConstant.goodsType.CXXZJL.toString());
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }

@@ -6,12 +6,14 @@ package com.zhuhuibao.mybatis.project.mapper;
  */
 import java.util.List;
 import java.util.Map;
+
 /**
  * 项目工程信息查询接口
  * @author 李光明
  * @since 2019.5.10
  */
 import com.zhuhuibao.mybatis.project.entity.ProjectInfo;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
@@ -32,4 +34,10 @@ public interface ProjectMapper {
     List<Map<String,String>> findAllOmsViewProject(Map<String,Object> map,RowBounds rowBounds);
 
     List<Map<String,String>> queryHomepageLatestProject(Map<String,Object> map);
+
+    Map<String,Object> getAreaOrCity(Map areaOrCity);
+	
+	List<Map<String, String>> findPrjectByName(Map<String, Object> map);
+	
+	Map<String, String> getCatagoryByValue(List list);
 }
