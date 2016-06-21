@@ -63,6 +63,14 @@ public class DictionaryZhbgoods implements Serializable {
 	public BigDecimal getPrice() {
 		return price;
 	}
+	/**
+	 * 获得账户余额的double值，保留两位小数
+	 * 
+	 * @return
+	 */
+	public double getPriceDoubleValue() {
+		return null != price ? price.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() : 0;
+	}
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;

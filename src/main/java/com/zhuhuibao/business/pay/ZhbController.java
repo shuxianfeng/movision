@@ -145,10 +145,10 @@ public class ZhbController {
 		if (privilegeNum <= 0) {
 			// 筑慧币单价
 			DictionaryZhbgoods goodsConfig = zhbService.getZhbGoodsByPinyin(goodsType);
-			zhbInfo.put("zhbPrice", goodsConfig.getPinyin().toString());
+			zhbInfo.put("zhbPrice", null != goodsConfig ? String.valueOf(goodsConfig.getPriceDoubleValue()) : "999");
 			// 筑慧币余额
 			ZhbAccount account = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
-			zhbInfo.put("zhbAmount", account.getAmount().toString());
+			zhbInfo.put("zhbAmount", null != account ? account.getAmount().toString() : "0");
 		}
 
 		response.setData(zhbInfo);
