@@ -45,6 +45,13 @@
     LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
     where a.id = #{id}
   </select>
+  <select id="queryUnLoginAchievementById" parameterType="java.lang.String" resultType="java.util.Map">
+     select a.id,a.title,a.introduce,con.name as systemName,co.name as useAreaName,a.cooperationType
+    from t_e_achievement a
+    LEFT JOIN t_dictionary_constant con on con.code = a.systemType and con.type = 19
+    LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
+    where a.id = #{id}
+  </select>
   <select id="findAchievementListByCount" resultType="java.util.Map">
     select a.id,a.title,date_format(a.updateTime,'%Y-%m-%d') updateTime
     from t_e_achievement a
