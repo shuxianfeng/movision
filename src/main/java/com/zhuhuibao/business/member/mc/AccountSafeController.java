@@ -71,7 +71,7 @@ public class AccountSafeController {
     private MemberRegService memberRegService;
 
     @ApiOperation(value = "根据会员id验证会员密码是否正确", notes = "根据会员id验证会员密码是否正确", response = Response.class)
-    @RequestMapping(value = "check_pwd_by_id", method = RequestMethod.GET)
+    @RequestMapping(value = "check_pwd_by_id", method = RequestMethod.POST)
     public Response checkPwdById(@RequestParam String pwd)  {
         Long memberId = ShiroUtil.getCreateID();
         //对比密码是否正确
@@ -106,7 +106,7 @@ public class AccountSafeController {
     }
 
     @ApiOperation(value = "根据账号验证会员密码是否正确", notes = "根据账号验证会员密码是否正确", response = Response.class)
-    @RequestMapping(value = "check_pwd_by_account", method = RequestMethod.GET)
+    @RequestMapping(value = "check_pwd_by_account", method = RequestMethod.POST)
     public Response checkPwdByAccount(@RequestParam String account,@RequestParam String pwd)  {
         //前台密码解密
         String password = new String(EncodeUtil.decodeBase64(pwd));
