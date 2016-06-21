@@ -1,7 +1,6 @@
 package com.zhuhuibao.mybatis.vip.service;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,7 +118,7 @@ public class VipInfoService {
 	public long getExtraPrivilegeNum(Long memberId, String privilegePinyin) {
 		if (null != memberId && StringUtils.isNotBlank(privilegePinyin)) {
 			VipMemberPrivilege extraPrivilege = findVipMemberPrivilege(memberId, privilegePinyin.toLowerCase());
-			if (null != extraPrivilege && VipPrivilegeType.NUM == extraPrivilege.getType()) {
+			if (null != extraPrivilege && VipPrivilegeType.NUM.toString().equals(extraPrivilege.getType())) {
 				return extraPrivilege.getValue();
 			}
 		}
@@ -138,9 +137,9 @@ public class VipInfoService {
 		boolean hadExtraPrivilege = false;
 		VipMemberPrivilege extraPrivilege = findVipMemberPrivilege(memberId, privilegePinyin);
 
-		if (null != extraPrivilege && VipPrivilegeType.NUM == extraPrivilege.getType() && extraPrivilege.getValue() > 0) {
+		if (null != extraPrivilege && VipPrivilegeType.NUM.toString().equals(extraPrivilege.getType()) && extraPrivilege.getValue() > 0) {
 			hadExtraPrivilege = true;
-		} else if (null != extraPrivilege && VipPrivilegeType.NUM != extraPrivilege.getType()) {
+		} else if (null != extraPrivilege && !VipPrivilegeType.NUM.toString().equals(extraPrivilege.getType())) {
 			hadExtraPrivilege = true;
 		}
 
@@ -158,7 +157,7 @@ public class VipInfoService {
 		int result = 0;
 		Map<String, Object> param = MapUtil.convert2HashMap("memberId", memberId, "pinyin", privilegePinyin);
 		VipMemberPrivilege extraPrivilege = vipInfoMapper.selectVipMemberPrivilege(param);
-		if (null != extraPrivilege && VipPrivilegeType.NUM == extraPrivilege.getType() && extraPrivilege.getValue() > 0) {
+		if (null != extraPrivilege && !VipPrivilegeType.NUM.equals(extraPrivilege.getType()) && extraPrivilege.getValue() > 0) {
 			extraPrivilege.setValue(extraPrivilege.getValue() - 1);
 			extraPrivilege.setOldUpdateTime(extraPrivilege.getUpdateTime());
 			result = vipInfoMapper.updateVipMemberPrivilegeValue(extraPrivilege);
@@ -175,7 +174,7 @@ public class VipInfoService {
 	 */
 	public void initDefaultExtraPrivilege(Long memberId, String identify) {
 		int defaultPrivilegeLevel = StringUtils.contains(identify, "2") ? VipConstant.EXTRA_PRIVILEGE_LEVEL_PERSONAL
-				: VipConstant.EXTRA_PRIVILEGE_LEVEL_PERSONAL;
+				: VipConstant.EXTRA_PRIVILEGE_LEVEL_ENTERPRISE;
 		int freeLevel = StringUtils.contains(identify, "2") ? VipLevel.PERSON_FREE.value : VipLevel.ENTERPRISE_FREE.value;
 		VipMemberInfo vipMemberInfo = vipInfoMapper.selectVipMemberInfoById(memberId);
 		if (null == vipMemberInfo) {
@@ -234,7 +233,7 @@ public class VipInfoService {
 		List<VipPrivilege> privilegeList = listVipPrivilegeByLevel(vipLevel);
 		if (CollectionUtils.isNotEmpty(privilegeList)) {
 			for (VipPrivilege p : privilegeList) {
-				if (VipPrivilegeType.NUM == p.getType()) {
+				if (VipPrivilegeType.NUM.toString().equals(p.getType())) {
 					VipMemberPrivilege memberPrivilege = initVipMemberPrivilege(memberId, p);
 					vipInfoMapper.insertVipMemberPrivilege(memberPrivilege);
 				}

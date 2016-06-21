@@ -23,6 +23,18 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   
+  <resultMap id="VipPrivilegeResultMap" type="com.zhuhuibao.mybatis.vip.entity.VipPrivilege" >
+  	<id column="id" property="id" jdbcType="BIGINT" />
+    <result column="vip_level" property="vipLevel" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="pinyin" property="pinyin" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="value" property="value" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
   <select id="selectVipMemberInfoById" parameterType = "java.lang.Long" resultMap="VipMemberInfoResultMap">
   	SELECT 
 	  id,member_id,vip_level,active_time,expire_time,add_time,update_time 
@@ -66,8 +78,8 @@
       <if test="expireTime != null">
         expire_time = #{expireTime,jdbcType=TIMESTAMP},
       </if>
+      update_time = now(),
     </set>
-    	update_time = now()
     where id = #{id,jdbcType=BIGINT}
   </update>
   
@@ -80,15 +92,71 @@
 	  AND pinyin = #{pinyin,jdbcType=VARCHAR}
   </select>
   
-  <update id="updateVipMemberPrivilegeValue" parameterType="com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege">
-  	UPDATE 
+  <select id="selectVipMemberPrivilegeList" parameterType="java.lang.Long" resultMap="VipMemberPrivilegeResultMap">
+  	SELECT 
+	  id,member_id,type,pinyin,name,value,description,add_time,update_time 
+	FROM
 	  t_vip_member_privilege 
-	SET
-	  value = #{value,jdbcType=VARCHAR} ,
-	  update_time = NOW() 
 	WHERE member_id = #{memberId,jdbcType=BIGINT} 
-	  AND pinyin = #{pinyin,jdbcType=VARCHAR} 
-	  AND update_time = #{updateTime,jdbcType=TIMESTAMP}
+  </select>
+  
+  <select id="selectVipPrivilegeListByLevel" parameterType="java.lang.Integer" resultMap="VipPrivilegeResultMap">
+  	SELECT 
+	  id,vip_level,type,pinyin,name,value,description,add_time,update_time
+	FROM
+	  t_vip_privilege 
+	WHERE vip_level = #{vipLevel,jdbcType=INTEGER}
+  </select>
+  
+  <insert id="insertVipMemberPrivilege" parameterType="com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege" >
+  	INSERT INTO t_vip_member_privilege (
+	  member_id,
+	  type,
+	  pinyin,
+	  name,
+	  value,
+	  description,
+	  add_time,
+	  update_time
+	) 
+	VALUES
+	  (
+	  	#{memberId,jdbcType=BIGINT},
+	  	#{type,jdbcType=VARCHAR},
+	  	#{pinyin,jdbcType=VARCHAR},
+	  	#{name,jdbcType=VARCHAR},
+	  	#{value,jdbcType=VARCHAR},
+	  	#{description,jdbcType=VARCHAR},
+	  	now(),
+	  	now()
+	  )
+  </insert>
+  
+  <update id="updateVipMemberPrivilegeValue" parameterType="com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege">
+  	update t_vip_member_privilege
+  	<set>
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="pinyin != null">
+        pinyin = #{pinyin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=TIMESTAMP},
+      </if>
+      <if test="value != null">
+        value = #{value,jdbcType=TIMESTAMP},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=TIMESTAMP},
+      </if>
+      update_time = now(),
+    </set>
+    where id = #{id,jdbcType=BIGINT}
   </update>
+  
   
 </mapper>

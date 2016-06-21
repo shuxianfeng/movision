@@ -37,7 +37,6 @@ public interface VipInfoMapper {
 	 */
 	int updateVipMemberInfo(VipMemberInfo vipMemberInfo);
 
-	// TODO
 	/**
 	 * 根据会员级别获取所有会员特权
 	 * 
@@ -55,7 +54,6 @@ public interface VipInfoMapper {
 	 */
 	VipMemberPrivilege selectVipMemberPrivilege(Map<String, Object> param);
 
-	// TODO
 	/**
 	 * 根据memberID获取自定义特权
 	 * 
@@ -64,7 +62,6 @@ public interface VipInfoMapper {
 	 */
 	List<VipMemberPrivilege> selectVipMemberPrivilegeList(Long memberId);
 
-	// TODO
 	/**
 	 * 添加会员自定义特权信息
 	 * 
@@ -72,7 +69,6 @@ public interface VipInfoMapper {
 	 */
 	void insertVipMemberPrivilege(VipMemberPrivilege vipMemberPrivilege);
 
-	// TODO
 	/**
 	 * 根据主键ID更新会员VIP自定义特权
 	 * 
