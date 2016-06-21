@@ -122,7 +122,7 @@ public class FileUtil {
      * @param fileurl  文件完整路径
      * @throws IOException
      */
-    private static Response downloadFile(HttpServletResponse response, String fileurl) throws IOException {
+    public static Response downloadFile(HttpServletResponse response, String fileurl) throws IOException {
         Response result = new Response();
         try {
             File file = new File(fileurl);
