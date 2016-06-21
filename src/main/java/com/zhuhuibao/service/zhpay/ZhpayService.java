@@ -13,6 +13,7 @@ import com.zhuhuibao.mybatis.order.service.OrderFlowService;
 import com.zhuhuibao.mybatis.order.service.OrderGoodsService;
 import com.zhuhuibao.mybatis.order.service.PublishCourseService;
 import com.zhuhuibao.mybatis.order.service.ZhbAccountService;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.order.ZHOrderService;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -51,6 +52,8 @@ public class ZhpayService {
     @Autowired
     OrderFlowService orderFlowService;
 
+    @Autowired
+    ZhbService zhbService;
 
     /**
      * 单一方式支付(1.支付宝)
@@ -143,9 +146,8 @@ public class ZhpayService {
                     //参数准备  校验
                     preZhPayParams(msgParam);
                     //调用筑慧币支付平台
-//                    String orderNo = flow.getOrderNo();
-//                    String payFee = flow.getTradeFee().toString();
-//                    zhbPayService.doPay(orderNo,payFee);
+                    String orderNo = flow.getOrderNo();
+                    zhbService.zhbPrepaidByOrder(orderNo);
                 } else {
                     log.error("不支持的支付方式");
                     throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "不支持的支付方式");
@@ -188,7 +190,7 @@ public class ZhpayService {
 
             if (zhbAccount != null) {
                 //有筑慧币  判断筑慧币余额 和 应付金额的大小
-                BigDecimal zhbNum = zhbAccount.geteMoney();
+                BigDecimal zhbNum = zhbAccount.getAmount();
                 int result = payPrice.compareTo(zhbNum);
                 if (result == 0 || result == -1) { //筑慧币余额==应付金额  或者   筑慧币>应付金额
                     //全部筑慧币方式支付

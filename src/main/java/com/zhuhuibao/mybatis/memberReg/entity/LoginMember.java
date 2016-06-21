@@ -19,6 +19,52 @@ public class LoginMember {
     private Long companyId;
     private int vipLevel;
 
+    private String registerTime;
+    private int workType;
+    private String headShot;
+    private String nickname;
+    private String companyName;
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getRegisterTime() {
+        return registerTime;
+    }
+
+    public void setRegisterTime(String registerTime) {
+        this.registerTime = registerTime;
+    }
+
+    public int getWorkType() {
+        return workType;
+    }
+
+    public void setWorkType(int workType) {
+        this.workType = workType;
+    }
+
+    public String getHeadShot() {
+        return headShot;
+    }
+
+    public void setHeadShot(String headShot) {
+        this.headShot = headShot;
+    }
+
     public Long getId() {
         return id;
     }

@@ -10,7 +10,7 @@ public class ZhbAccount {
 
     private String status;
 
-    private BigDecimal eMoney;
+    private BigDecimal amount;
 
     private Date addTime;
 
@@ -40,12 +40,12 @@ public class ZhbAccount {
         this.status = status == null ? null : status.trim();
     }
 
-    public BigDecimal geteMoney() {
-        return eMoney;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void seteMoney(BigDecimal eMoney) {
-        this.eMoney = eMoney;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
     public Date getAddTime() {

@@ -97,14 +97,14 @@ public class ExpertSiteController {
         return response;
     }
 
-    @ApiOperation(value="技术成果详情",notes="技术成果详情",response = Response.class)
+  /*  @ApiOperation(value="技术成果详情",notes="技术成果详情",response = Response.class)
     @RequestMapping(value = "ach/sel_achievement", method = RequestMethod.GET)
     //    @ZhbAutoPayforAnnotation(goodsType=ZhbGoodsType.CKJSCG)
     public Response queryAchievementById(@ApiParam(value = "技术成果ID")@RequestParam String id) throws Exception {
         Map<String,String> map = expertService.queryAchievementById(id);
         Response response = paymentService.viewGoodsRecord(Long.parseLong(id),map,"expertcoop");
         return response;
-    }
+    }*/
 
     @ApiOperation(value="技术成果列表(前台分页)",notes="技术成果列表(前台分页)",response = Response.class)
     @RequestMapping(value = "ach/sel_achievementList", method = RequestMethod.GET)

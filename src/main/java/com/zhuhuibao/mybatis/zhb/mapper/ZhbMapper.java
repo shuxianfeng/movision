@@ -85,4 +85,5 @@ public interface ZhbMapper {
 	 * @return
 	 */
 	DictionaryZhbgoods selectZhbGoodsById(Long id);
+
 }

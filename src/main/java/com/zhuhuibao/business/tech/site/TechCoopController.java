@@ -89,7 +89,7 @@ public class TechCoopController {
         return response;
     }
 
-    @RequestMapping(value="sel_tech_achievement_detail", method = RequestMethod.GET)
+/*    @RequestMapping(value="sel_tech_achievement_detail", method = RequestMethod.GET)
     @ApiOperation(value="查看技术成果详情",notes = "查看技术成果详情",response = Response.class)
 //    @ZhbAutoPayforAnnotation(goodsType=ZhbGoodsType.CKJSCG)
     public Response previewTechAchievement(@ApiParam(value = "技术成果ID")  @RequestParam String techCoopId)
@@ -98,7 +98,7 @@ public class TechCoopController {
         techService.updateTechCooperationViews(techCoopId);
         Response response = paymentService.viewGoodsRecord(Long.parseLong(techCoopId),techCoop,"techcoop");
         return response;
-    }
+    }*/
 
     @RequestMapping(value="sel_tech_cooperation", method = RequestMethod.GET)
     @ApiOperation(value="频道页搜索技术合作(技术成果，技术需求)",notes = "频道页搜索技术合作(技术成果，技术需求)",response = Response.class)

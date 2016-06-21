@@ -27,16 +27,18 @@ public class PaymentGoodsService {
 
     /**
      * 插入我查看过的项目信息
-     * @param projectId  项目ID
+     * @param goodsId  商品ID
      * @param createId  查看人的Id
+     * @Param companyId 企业ID
+     * @Param type 商品类型
      * @throws Exception
      */
-    public int insertViewProject(Long projectId, Long createId,Long companyId,String type){
-        log.info("insert view project projectId = "+projectId+" createId = "+createId);
+    public int insertViewProject(Long goodsId, Long createId,Long companyId,String type){
+        log.info("insert view project projectId = "+goodsId+" createId = "+createId+" type = "+type);
         int result;
         try {
             PaymentGoods vp = new PaymentGoods();
-            vp.setGoodsId(projectId);
+            vp.setGoodsId(goodsId);
             vp.setViewerId(createId);
             vp.setCompanyId(companyId);
             vp.setType(type);
@@ -52,7 +54,7 @@ public class PaymentGoodsService {
     /**
      * 是否存在查看过商品信息
      * @param map 查询条件
-     * @return
+     * @return  0:未查看过，1：已
      */
     public int checkIsViewGoods(Map<String,Object> map)
     {

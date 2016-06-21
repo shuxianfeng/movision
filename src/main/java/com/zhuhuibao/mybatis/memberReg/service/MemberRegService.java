@@ -480,7 +480,9 @@ public class MemberRegService {
 						this.deleteValidateInfo(info);
 						LoginMember loginMember = this.getLoginMemberByAccount(member.getMobile());
 						ShiroUser shrioUser = new ShiroUser(member.getId(), member.getMobile(), member.getStatus(),
-								member.getIdentify(),"100","0",loginMember.getCompanyId(),loginMember.getVipLevel());
+								member.getIdentify(),"100","0",loginMember.getCompanyId(),loginMember.getRegisterTime(),
+								loginMember.getWorkType(),loginMember.getHeadShot(),loginMember.getNickname(),
+								loginMember.getCompanyName(),loginMember.getVipLevel());
 						Subject currentUser = SecurityUtils.getSubject();
 						Session session = currentUser.getSession();
 						session.setAttribute("member", shrioUser);

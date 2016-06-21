@@ -46,6 +46,10 @@ public class Response implements Serializable {
 		this.message = message;
 	}
 
+	public Response(Object data){
+		this.data = data;
+	}
+
 	public Response(int code, String message, Object data, int msgCode) {
 		this.code = code;
 		this.message = message;

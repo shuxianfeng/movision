@@ -47,6 +47,15 @@
   where t.id = #{id,jdbcType=BIGINT}
 </select>
 
+  <select id="previewUnloginTechCoopDetail" resultType="java.util.Map" parameterType="java.lang.Long" >
+   select
+   t.id, t.title, dc.name systemCategory, dn.name applicationArea,t.cooperation,t.notes
+   from t_tech_cooperation t
+   left join t_dictionary_constant dc on dc.code = t.systemCategory and dc.type =19
+   left join t_dictionary_constant dn on dn.code = t.applicationArea and dn.type =18
+    where t.id = #{id,jdbcType=BIGINT}
+  </select>
+
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
     select
     t.id, t.createID, date_format(t.publishTime,'%Y-%m-%d') publishTime, date_format(t.updateTime,'%Y-%m-%d') updateTime, t.title, t.systemCategory, t.applicationArea, t.linkman,

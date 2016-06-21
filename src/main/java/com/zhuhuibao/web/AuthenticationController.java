@@ -1,8 +1,10 @@
 package com.zhuhuibao.web;
 
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MessageLogConstant;
 import com.zhuhuibao.common.pojo.AuthcMember;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
+import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.security.resubmit.TokenHelper;
 import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
 
@@ -36,6 +38,10 @@ public class AuthenticationController {
     @Autowired
     private MemberRegService memberService;
 
+    @Autowired
+    SiteMailService siteMailService;
+
+
     @RequestMapping(value = "/rest/web/authc", method = RequestMethod.GET)
     public Response isLogin() throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
@@ -55,50 +61,67 @@ public class AuthenticationController {
                 response.setMessage("you are rejected!");
                 map.put("authorized", false);
             } else {
-	        		String identity = member.getIdentify();
-	        		String role = member.getRole();
-	        		String isexpert = member.getIsexpert();
-	        		boolean bexpert = false;
-	        		if(identity.equals("2")){
-	            		if(isexpert.equals("1")){
-	            			bexpert = true;
-	            		}
-	        		}else{
-	            		if(identity.length() > 1){
-	            			String[] strs = identity.split(",");
-	            			if(Arrays.asList(strs).contains("3")){
-	            				identity = "3,1";
-	            			}else{
-	            				identity = "1";
-	            			}
-	            		}else if(!identity.equals("3")){
-	            			identity = "1";
-	            		}
-	            		
-	        			if(!role.equals("100")){
-	        				role = "300";
-	        			}
-	        		}
-	        		AuthcMember authcMember = new AuthcMember();
-	            	authcMember.setId(member.getId());
-	            	authcMember.setAccount(member.getAccount());
-	            	authcMember.setCompanyId(member.getCompanyId());
-	            	authcMember.setStatus(member.getStatus());
-	        		authcMember.setIdentify(identity);
-	        		authcMember.setRole(role);
-	        		authcMember.setIsexpert(bexpert);
-	        		authcMember.setVipLevel(member.getVipLevel());
-	                response.setMsgCode(1);
-	                response.setMessage("welcome you!");
-	                map.put("authorized", true);
-	                map.put("member", authcMember);
-            	}
-            }
-        response.setData(map);
-        log.debug("caijl:/rest/web/authc is called,msgcode=[" + response.getMsgCode() + "],Message=[" + response.getMessage() + "].");
-        return response;
+                String identity = member.getIdentify();
+                String role = member.getRole();
+                String isexpert = member.getIsexpert();
+                boolean bexpert = false;
+                if (identity.equals("2")) {
+                    if (isexpert.equals("1")) {
+                        bexpert = true;
+                    }
+                } else {
+                    if (identity.length() > 1) {
+                        String[] strs = identity.split(",");
+                        if (Arrays.asList(strs).contains("3")) {
+                            identity = "3,1";
+                        } else {
+                            identity = "1";
+                        }
+                    } else if (!identity.equals("3")) {
+                        identity = "1";
+                    }
 
-    }
+                    if (!role.equals("100")) {
+                        role = "300";
+                    }
+                }
+                AuthcMember authcMember = new AuthcMember();
+                authcMember.setId(member.getId());
+                authcMember.setAccount(member.getAccount());
+                authcMember.setCompanyId(member.getCompanyId());
+                authcMember.setStatus(member.getStatus());
+                authcMember.setIdentify(identity);
+                authcMember.setRole(role);
+                authcMember.setIsexpert(bexpert);
+                authcMember.setVipLevel(member.getVipLevel());
+
+                authcMember.setRegisterTime(member.getRegisterTime());
+                authcMember.setWorkType(member.getWorkType());
+                authcMember.setHeadShot(member.getHeadShot());
+
+                Map<String, Object> nMap = new HashMap<>();
+                nMap.put("recID", String.valueOf(member.getId()));
+                nMap.put("status", MessageLogConstant.NEWS_STATUS_ONE);
+                int count = siteMailService.selUnreadNewsCount(nMap);
+
+                authcMember.setMsgCount(count);
+                authcMember.setNickname(member.getNickname());
+                authcMember.setCompanyName(member.getCompanyName());
+
+
+                response.setMsgCode(1);
+                response.setMessage("welcome you!");
+                map.put("authorized", true);
+                map.put("member", authcMember);
+
+            }
+        }
+
+    response.setData(map);
+    log.debug("caijl:/rest/web/authc is called,msgcode=["+response.getMsgCode()+"],Message=["+response.getMessage()+"].");
+    return response;
+
+}
 
 
     @RequestMapping(value = "/rest/getToken", method = RequestMethod.GET)

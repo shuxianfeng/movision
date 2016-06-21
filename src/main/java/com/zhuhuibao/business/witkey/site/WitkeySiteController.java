@@ -108,9 +108,9 @@ public class WitkeySiteController {
         return Response;
     }
 
-    /**
+   /* *//**
      * 威客信息詳情
-     */
+     *//*
     @ApiOperation(value="威客信息詳情",notes="威客信息詳情",response = Cooperation.class)
     @RequestMapping(value = "sel_witkey", method = RequestMethod.GET)
     //    @ZhbAutoPayforAnnotation(goodsType=ZhbGoodsType.CKJSCG)
@@ -121,6 +121,6 @@ public class WitkeySiteController {
         cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews())+1));
         cooperationService.updateCooperationViews(cooperation);
         return response;
-    }
+    }*/
 
 }

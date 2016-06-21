@@ -12,6 +12,8 @@ public interface AchievementMapper {
 
     Map<String,String> queryAchievementById(String id);
 
+    Map<String,String> queryUnLoginAchievementById(String id);
+
     //分页
     List<Achievement> findAllAchievementList(RowBounds rowBounds, Map<String, Object> map);
 
