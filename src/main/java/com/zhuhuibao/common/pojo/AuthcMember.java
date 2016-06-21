@@ -8,6 +8,7 @@ public class AuthcMember {
         private String role;
         private boolean isexpert;
         private Long companyId;
+        private int vipLevel;
         
 		public Long getId() {
             return id;
@@ -64,4 +65,12 @@ public class AuthcMember {
         public void setCompanyId(Long companyId) {
             this.companyId = companyId;
         }
+
+    public int getVipLevel() {
+        return vipLevel;
+    }
+
+    public void setVipLevel(int vipLevel) {
+        this.vipLevel = vipLevel;
+    }
 }

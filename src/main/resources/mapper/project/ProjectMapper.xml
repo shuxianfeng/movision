@@ -227,7 +227,7 @@
     t.id ,t.name,date_format(t.publishDate,'%Y-%m-%d') publishDate,
     date_format(t.updateDate,'%Y-%m-%d') updateDate,concat(pn.name,ct.name,ar.name,case when  ISNULL(t.address) then '' else t.address end) address,ct.name city,
     t.price,date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate,
-    (select cs.name from t_dictionary_constant cs where cs.code = t.category and cs.type=8) as categoryName
+    (select group_concat(name) from t_dictionary_constant where find_in_set(code,t.category) and type=8) as categoryName
     FROM t_prj_project t
     left join t_dictionary_province pn on pn.code = t.province
     left join t_dictionary_city ct on ct.code = t.city
@@ -238,7 +238,7 @@
         and t.name like concat('%',#{name},'%')
       </if>
       <if test="category !=null">
-        and t.category = #{category}
+        and find_in_set(#{category},t.category)
       </if>
       <if test="province != null and province != ''">
         and t.province = #{province}
@@ -271,12 +271,24 @@
       limit #{count}
     </if>
   </select>
+  <select id="queryHomepageLatestProject" parameterType="java.util.Map" resultType="java.util.Map">
+    SELECT
+    t.id,t.name,date_format(t.publishDate,'%Y-%m-%d') publishDate,
+    date_format(t.updateDate,'%Y-%m-%d') updateDate,ct.name city
+    FROM t_prj_project t
+    left join t_dictionary_city ct on ct.code = t.city
+    where t.is_deleted = 0
+    order by t.updateDate desc
+    <if test="count !=null">
+      limit #{count}
+    </if>
+  </select>
   <select id="findAllOmsViewProject" parameterType="java.util.Map" resultType="java.util.Map">
     SELECT
     t.id ,t.name,date_format(t.publishDate,'%Y-%m-%d') publishDate,
     date_format(t.updateDate,'%Y-%m-%d') updateDate,concat(pn.name,ct.name,ar.name,ifnull(t.address,'')) address,
     t.price,date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate,
-    (select cs.name from t_dictionary_constant cs where cs.code = t.category and cs.type=8) as categoryName
+    (select group_concat(name) from t_dictionary_constant where find_in_set(code,t.category) and type=8) as categoryName
     FROM t_prj_viewProject vp
     left join t_prj_project t on t.id = prjId
     left join t_dictionary_province pn on pn.code = t.province
@@ -288,7 +300,7 @@
         and t.name like concat('%',#{name},'%')
       </if>
       <if test="category !=null">
-        and t.category = #{category}
+        and find_in_set(#{category},t.category)
       </if>
       <if test="province != null and province != ''">
         and t.province = #{province}

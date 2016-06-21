@@ -92,7 +92,7 @@ public class ShiroRealm extends AuthorizingRealm {
         }
         
         ShiroUser shiroUser = new ShiroUser(loginMember.getId(), loginMember.getAccount(),loginMember.getStatus(),
-        		loginMember.getIdentify(),loginMember.getRole(),loginMember.getIsexpert(),loginMember.getCompanyId());
+        		loginMember.getIdentify(),loginMember.getRole(),loginMember.getIsexpert(),loginMember.getCompanyId(),loginMember.getVipLevel());
         
         // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(
@@ -126,8 +126,10 @@ public class ShiroRealm extends AuthorizingRealm {
         private String role;
         private String isexpert;
         private Long companyId;
+        private int vipLevel;
 
-        public ShiroUser(Long id, String account, int status, String identify, String role,String isexpert,Long companyId) {
+        public ShiroUser(Long id, String account, int status, String identify, String role,
+                         String isexpert,Long companyId,int vipLevel) {
             this.id = id;
             this.account = account;
             this.status = status;
@@ -135,6 +137,7 @@ public class ShiroRealm extends AuthorizingRealm {
             this.role = role;
             this.isexpert = isexpert;
             this.companyId = companyId;
+            this.vipLevel = vipLevel;
         }
         
 		public Long getId() {
@@ -191,6 +194,14 @@ public class ShiroRealm extends AuthorizingRealm {
 
         public void setCompanyId(Long companyId) {
             this.companyId = companyId;
+        }
+
+        public int getVipLevel() {
+            return vipLevel;
+        }
+
+        public void setVipLevel(int vipLevel) {
+            this.vipLevel = vipLevel;
         }
 
         /**

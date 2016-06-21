@@ -501,6 +501,25 @@ public class ProjectService {
 	}
 
 	/**
+	 * 首页查询最新项目信息
+	 * @param map 项目信息搜素条件 count：指定项目信息条数
+	 * @return
+	 */
+	public List<Map<String,String>> queryHomepageLatestProject(Map<String,Object> map)
+	{
+		log.info("query homepage latest project info condition = "+ StringUtils.mapToString(map));
+		List<Map<String,String>> projectList = null;
+		try {
+			projectList = projectMapper.queryHomepageLatestProject(map);
+		}catch(Exception e)
+		{
+			log.error("query homepage latest project info error!");
+			throw e;
+		}
+		return projectList;
+	}
+
+	/**
 	 * 根据条件查询项目分页信息
 	 * @param map 查询条件
 	 * @return
