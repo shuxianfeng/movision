@@ -309,7 +309,7 @@ public class ExpertSiteController {
         Long companyId = ShiroUtil.getCompanyID();
         if(createid!=null){
             //记录查看专家
-            goodsService.insertViewProject(Long.parseLong(id),createid,companyId,"expert");
+            goodsService.insertViewGoods(Long.parseLong(id),createid,companyId,"expert");
             //查询专家联系方式
             Expert expert = expertService.queryExpertById(id);
             //返回到页面
