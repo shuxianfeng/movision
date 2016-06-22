@@ -70,7 +70,7 @@ public class UploadFileController {
 	int isAdd=0;
 	int sucCount=0;
 	int failCount=0;
-	int rowsCount=500;
+	int rowsCount=1;
 	@RequestMapping(value = "upload_project", method = RequestMethod.POST)
 	@ApiOperation(value = "导入项目工程信息", notes = "导入项目工程信息", response = Response.class)
 	public Response uploadProject(HttpServletRequest req) {
@@ -106,7 +106,7 @@ public class UploadFileController {
     			 List<ProjectInfo> projectList=new ArrayList<ProjectInfo>();
     			 
     			 fialList=new ArrayList<String>();
-    			if(rowsCount<=1)
+    			if(rowsCount<=0)
     			{
     				failReason="项目格式导入内容不正确，请重与管理员联系！";
     				Map<String, Object> result=new HashMap<String, Object>();
@@ -117,7 +117,8 @@ public class UploadFileController {
     			}else{
 
     				//解析数据
-    				
+    				sucCount=0;
+    				failCount=0;
     				for(int i=1;i<=rowsCount;i++)
     				{
     					HSSFRow row = sheet.getRow(i);
@@ -211,7 +212,32 @@ public class UploadFileController {
 		
 		if(!isEmpty(row.getCell(3))){
 			String address=row.getCell(3).toString();
-			int areaIndex=address.indexOf("县")>0?address.indexOf("县"):address.indexOf("区");
+			int areaIndex=address.indexOf("区");
+			if(areaIndex<=0)
+			{
+				areaIndex=address.indexOf("县");
+			}
+			
+			if(areaIndex<=0)
+			{
+				areaIndex=address.indexOf("市");
+			}
+			
+			if(areaIndex<=0)
+			{
+				areaIndex=address.indexOf("州");
+			}
+			
+			if(areaIndex<=0)
+			{
+				areaIndex=address.indexOf("盟");
+			}
+			
+			if(areaIndex<=0)
+			{
+				areaIndex=address.indexOf("旗");
+			}
+			 
             String areaOrCity=address.substring(0,areaIndex+1);
             Map<String, String> areaOrCityMap=new HashMap<String, String>();
             areaOrCityMap.put("area", areaOrCity);
@@ -294,6 +320,10 @@ public class UploadFileController {
 			{
 				startDate=startDate+"01";
 			}
+			if(startDate.length()==5)
+			{
+				startDate=startDate.replace("-", "-01-01");
+			}
 		 
 			projectInfo.setStartDate(startDate);
 		}
@@ -320,6 +350,10 @@ public class UploadFileController {
 			if(endDate.length()==8)
 			{
 				endDate=endDate+"01";
+			}
+			if(endDate.length()==5)
+			{
+				endDate=endDate.replace("-", "-12-31");
 			}
 			projectInfo.setEndDate(endDate);
 		}
@@ -350,7 +384,7 @@ public class UploadFileController {
 			partyContentList=partyContent.replace("\n联系人备注", "联系人备注").split("\n\n");
 			
 			List<ProjectLinkman> partyAList= new ArrayList<ProjectLinkman>();
-			String deptType="";
+			 
 			for(int i=0;i<partyContentList.length;i++)
 			{
 				String[] partyList=partyContentList[i].split("\n"); 
@@ -358,8 +392,8 @@ public class UploadFileController {
 				linkma.setPartyType(Long.valueOf("1"));
 				if(partyList.length==3)
 				{
-					deptType=partyList[0];
-					linkma.setDeptType(deptType);
+				 
+					linkma.setDeptType(partyList[0]);
 					linkma.setName(partyList[1]); 
 					details=partyList[2].replace("联系人备注", "备注");
 					
@@ -384,9 +418,9 @@ public class UploadFileController {
 						
 					} 
 					partyAList.add(linkma);
-				}else if(deptType!=""){
+				}else if(partyList.length==2){
 					
-					linkma.setDeptType(deptType);
+					 
 					linkma.setName(partyList[0]);
 					
 					if(partyList.length<3)
@@ -451,24 +485,35 @@ public class UploadFileController {
 		
           partyBList=new ArrayList<ProjectLinkman>();
            //封装乙方信息 建筑师 / 设计师
-           if(!isEmpty(row.getCell(11))){ 
-        	   
-        	setPartBList(row.getCell(11).toString(), rowsNum, projectInfo,"1"); 
+           if(!isEmpty(row.getCell(12))){ 
+        	   if(!"".equals(row.getCell(12).toString()))
+	        	{
+        		   setPartBList(row.getCell(12).toString(), rowsNum, projectInfo,"1"); 
+	        	}
 		   }
            
            //封装乙方信息 工程师 / 技术顾问
-           if(!isEmpty(row.getCell(12))){ 
-        	setPartBList(row.getCell(12).toString(), rowsNum, projectInfo,"2");  
+           if(!isEmpty(row.getCell(13))){ 
+        	   if(!"".equals(row.getCell(13).toString()))
+	        	{
+        		   setPartBList(row.getCell(13).toString(), rowsNum, projectInfo,"2");  
+	        	}
 		   }
            
            //封装乙方信息 承建商
-           if(!isEmpty(row.getCell(13))){ 
-        	setPartBList(row.getCell(13).toString(), rowsNum, projectInfo,"3"); 
+           if(!isEmpty(row.getCell(14))){ 
+	        	if(!"".equals(row.getCell(14).toString()))
+	        	{
+	        	 setPartBList(row.getCell(14).toString(), rowsNum, projectInfo,"3"); 
+	        	}
 		   }
            
            //封装乙方信息 分包商
-           if(!isEmpty(row.getCell(14))){ 
-        	setPartBList(row.getCell(14).toString(), rowsNum, projectInfo,"4"); 
+           if(!isEmpty(row.getCell(15))){ 
+        	   if(!"".equals(row.getCell(15).toString()))
+	        	{
+        		   	setPartBList(row.getCell(15).toString(), rowsNum, projectInfo,"4"); 
+	        	}
 		   }
            
            projectInfo.setPartyBList(partyBList);
@@ -512,7 +557,7 @@ public class UploadFileController {
 		String partyContent="";
 		String [] partyContentList =rowContetnt.replace("\n联系人备注", "联系人备注").replace("\n中标价:", "\t中标价:").split("\n\n");
 		
-		String deptType="";
+		 
 		for(int i=0;i<partyContentList.length;i++)
 		{
 			String[] partyList=partyContentList[i].split("\n"); 
@@ -521,8 +566,8 @@ public class UploadFileController {
 			linkma.setTypePartyB(Integer.valueOf(type));
 			if(partyList.length==3)
 			{
-				deptType=partyList[0];
-				linkma.setDeptType(deptType);
+				 
+				linkma.setDeptType(partyList[0]);
 				linkma.setName(partyList[1]);
 				partyContent=partyList[2];
 				if(partyContent.indexOf(";")>0&&partyContent.substring(partyContent.lastIndexOf(":")-3,partyContent.lastIndexOf(":"))=="中标价")
@@ -555,9 +600,9 @@ public class UploadFileController {
 					
 				} 
 				partyBList.add(linkma);
-			}else if(deptType!=""){
+			}else if(partyList.length==2){
 				
-				linkma.setDeptType(deptType);
+				 
 				linkma.setName(partyList[0]);
 				
 				if(partyList.length<3)
@@ -633,43 +678,7 @@ public class UploadFileController {
 					
 				}
 				partyBList.add(linkma);
-			}else if(deptType=="" && partyList.length==2){
-				linkma.setName(partyList[0]);
-				if("联系人".equals(partyList[1].substring(0,3)))
-				{
-					details=partyList[1];
-					
-					partyContent=partyList[1];
-					if(partyContent.indexOf(";")>0)
-					{
-						String startStr= partyContent.substring(0,partyContent.indexOf(";")+1);
-						String endStr= partyContent.substring(partyContent.indexOf(";")+1,partyContent.length()); 
-						String zbTitle=	startStr.substring(startStr.lastIndexOf("\t"),startStr.length()); 
-						partyContent=startStr.replace(zbTitle, "")+endStr.replace("联系人备注:","联系人备注:"+ zbTitle.replace("\n", ""));
-					} 
-					
-					details=partyContent.replace("\t", "");
-					int index=details.indexOf(":")+1; 
-					temp=this.subStr(details, index);
-					if("联系人:".equals(temp))
-					{
-						details=details.replace("联系人:", "");
-						index=details.indexOf(":")+1; 
-						String linkName=this.subStr(details, index);
-						
-						temp=linkName.substring(linkName.length()-3,linkName.length());
-						linkma.setLinkman(linkName.replace(temp, ""));
-						details=details.replace(linkName, "");
-						int result=0;
-						while(result<4)
-						{
-							linkma=setLinkMan(linkma);
-							result++;
-						}
-					}
-				}else{
-			      linkma.setNote(partyList[1]);
-				}
+			 
 			}else{
 				if("1".equals(type)){
 				failReason="第"+rowsNum+"行，第12列:业主 / 开发商格式错误;";
