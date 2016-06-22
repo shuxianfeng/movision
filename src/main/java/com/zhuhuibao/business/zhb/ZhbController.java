@@ -40,7 +40,8 @@ public class ZhbController {
 	@RequestMapping(value = "mc/sel_prepaid", method = RequestMethod.GET)
 	public Response enterZhbPrepaid(@ApiParam(value = "订单编号") @RequestParam(required = true) String orderNo) throws Exception {
 		Response response = new Response();
-		
+		// List<DictionaryZhbgoods> goodsList =
+		// zhbService.listZhbGoodsByType(type);
 		return response;
 	}
 
@@ -169,22 +170,4 @@ public class ZhbController {
 
 		return response;
 	}
-
-	@ApiOperation(value = "筑慧币明细记录", notes = "筑慧币明细记录", response = Response.class)
-	@RequestMapping(value = "mc/record/sel_recordList", method = RequestMethod.POST)
-	public Response get223List(@ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-			@ApiParam(value = "每页显示的条数") @RequestParam(required = false) String pageSize,
-			@ApiParam(value = "数据类型，1:使用,2:获取,null:所有") @RequestParam(required = false) String recordType) throws Exception {
-		Response response = new Response();
-		List<Map<String, String>> zhbDetails = zhbService.getZhbDetails(pageNo, pageSize, recordType);
-		ZhbAccount account = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
-
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("zhbDetails", zhbDetails);
-		result.put("account", account);
-		response.setData(result);
-
-		return response;
-	}
-
 }

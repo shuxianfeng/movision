@@ -92,6 +92,7 @@
 	  <if test="recordType == 1">
 	  	and z.type in ('2','3')
 	  </if>
+	  order by add_time desc
  </select>
 
  <insert id="insertZhbRecord" parameterType="com.zhuhuibao.mybatis.zhb.entity.ZhbRecord">
@@ -174,7 +175,7 @@
 	  AND update_time =#{updateTime,jdbcType=TIMESTAMP}
  </update>
  
- <select id="selectZhbGoodsByPinyin" resultMap="ZhbGoodsMap">
+ <select id="selectZhbGoodsByPinyin" parameterType="java.lang.String" resultMap="ZhbGoodsMap">
  	SELECT 
 	  id,name,pinyin,type,value,price,add_time
 	FROM
@@ -182,12 +183,14 @@
 	WHERE pinyin = #{pinyin,jdbcType=VARCHAR}
  </select>
  
- <select id="selectZhbGoodsById" resultMap="ZhbGoodsMap">
+ <select id="selectZhbGoodsById" parameterType="java.lang.Long" resultMap="ZhbGoodsMap">
  	SELECT 
 	  id,name,pinyin,type,value,price,add_time
 	FROM
 	  t_dictionary_zhbgoods 
 	WHERE id = #{id,jdbcType=BIGINT}
  </select>
+ 
+
 	
 </mapper>
