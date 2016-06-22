@@ -10,9 +10,9 @@ import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.service.PriceService;
-import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.oss.ZhbOssClient;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +45,7 @@ public class PriceController {
     private PriceService priceService;
 
     @Autowired
-    private UploadService uploadService;
+    ZhbOssClient zhbOssClient;
     /**
      * 询价保存
      */
@@ -76,12 +76,12 @@ public class PriceController {
      */
     @ApiOperation(value="上传询价单（定向，公开），上传报价单",notes="上传询价单（定向，公开），上传报价单",response = Response.class)
     @RequestMapping(value = {"/rest/price/uploadAskList","/rest/system/mc/enquiry/upload_enquiryList"}, method = RequestMethod.POST)
-    public Response uploadAskList(HttpServletRequest req) throws IOException {
+    public Response uploadAskList(@RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         Response result = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session){
-            String url = uploadService.upload(req,"doc");
+            String url = zhbOssClient.uploadObject(file,"doc","price");
             Map map = new HashMap();
             map.put(Constants.name,url);
             result.setData(map);

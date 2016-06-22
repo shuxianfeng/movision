@@ -20,7 +20,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -32,6 +34,7 @@ import com.zhuhuibao.mybatis.project.entity.ProjectInfo;
 import com.zhuhuibao.mybatis.project.entity.ProjectLinkman;
 import com.zhuhuibao.mybatis.project.service.ProjectService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
+import com.zhuhuibao.utils.oss.ZhbOssClient;
 
 /**
  * 申请技术培训课程业务处理类
@@ -50,6 +53,9 @@ public class UploadFileController {
 	
     @Autowired
     ApiConstants ApiConstants;
+    
+    @Autowired
+    ZhbOssClient zhbOssClient;
 	
 	@Autowired
     ConstantService service;
@@ -73,7 +79,7 @@ public class UploadFileController {
 	int rowsCount=1;
 	@RequestMapping(value = "upload_project", method = RequestMethod.POST)
 	@ApiOperation(value = "导入项目工程信息", notes = "导入项目工程信息", response = Response.class)
-	public Response uploadProject(HttpServletRequest req) {
+	public Response uploadProject(HttpServletRequest req,@RequestParam(value = "file", required = false) MultipartFile file) {
 		Response response = new Response(); 
 		Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
@@ -85,9 +91,9 @@ public class UploadFileController {
         	
         	String fileToBeRead=null;
 			try {
-				fileToBeRead = uploadService.upload(req,"project");
+				fileToBeRead =  zhbOssClient.uploadObject(file,"doc","project");
 				 
-			} catch (IOException e1) {
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
            
@@ -96,7 +102,7 @@ public class UploadFileController {
              //fileToBeRead="D:/workspace/zhuhuibao/target/classes/com/zhuhuibao/business/oms/upload/南京-项目信息.xls";
     		try {
     			// 创建对Excel工作簿文件的引用
-    			HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream( ApiConstants.getUploadDoc() + "/project/"+
+    			HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream( ApiConstants.getUploadDoc() + "/project/doc/"+
     					fileToBeRead));
     			// 创建对工作表的引用。 
     			HSSFSheet sheet = workbook.getSheetAt(0);

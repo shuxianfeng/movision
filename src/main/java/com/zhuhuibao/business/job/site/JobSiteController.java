@@ -10,10 +10,13 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.memCenter.entity.EmployeeSize;
+import com.zhuhuibao.mybatis.memCenter.entity.EnterpriseType;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
@@ -69,10 +72,10 @@ public class JobSiteController {
     ChannelNewsService newsService;
 
     @Autowired
-    private PaymentService paymentService;
+    PaymentGoodsService goodsService;
 
     @Autowired
-    PaymentGoodsService goodsService;
+    private MemberService memberService;
 
     @RequestMapping(value={"/rest/jobsite/applyPosition","/rest/job/site/recruit/apply_position"}, method = RequestMethod.POST)
     @ApiOperation(value="应聘职位",notes = "应聘职位",response = Response.class)
@@ -526,5 +529,23 @@ public class JobSiteController {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
+    }
+
+    @ApiOperation(value = "企业性质", notes = "企业性质", response = Response.class)
+    @RequestMapping(value = "/rest/job/site/base/sel_enterpriseTypeList", method = RequestMethod.GET)
+    public Response enterpriseTypeList()  {
+        Response result = new Response();
+        List<EnterpriseType> enterpriseType = memberService.findEnterpriseTypeList();
+        result.setData(enterpriseType);
+        return result;
+    }
+
+    @ApiOperation(value = "人员规模", notes = "人员规模", response = Response.class)
+    @RequestMapping(value = "/rest/job/site/base/sel_employeeSizeList", method = RequestMethod.GET)
+    public Response employeeSizeList()  {
+        Response result = new Response();
+        List<EmployeeSize> employeeSizeList = memberService.findEmployeeSizeList();
+        result.setData(employeeSizeList);
+        return result;
     }
 }

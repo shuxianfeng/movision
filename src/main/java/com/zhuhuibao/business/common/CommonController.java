@@ -4,11 +4,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
-import com.zhuhuibao.utils.PropertiesUtils;
-import com.zhuhuibao.utils.oss.AliOSSClient;
 import com.zhuhuibao.utils.oss.ZhbOssClient;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -21,10 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.InputStream;
-import java.util.Map;
 
 /**
  * 上传

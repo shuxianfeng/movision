@@ -7,15 +7,12 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.mybatis.expert.entity.Achievement;
-import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
-import com.zhuhuibao.mybatis.memCenter.service.UploadService;
-import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.file.FileUtil;
+import com.zhuhuibao.utils.oss.ZhbOssClient;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -28,8 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
@@ -50,13 +47,16 @@ public class ResumeController {
     private ResumeService resumeService;
 
     @Autowired
-    private UploadService uploadService;
-
-    @Autowired
     ApiConstants ApiConstants;
 
     @Autowired
     JobRelResumeService jrrService;
+
+    @Autowired
+    ZhbOssClient zhbOssClient;
+
+    @Autowired
+    FileUtil fileUtil;
     /**
      * 发布简历
      */
@@ -116,12 +116,12 @@ public class ResumeController {
      */
     @ApiOperation(value = "上传简历附件", notes = "上传简历附件", response = Response.class)
     @RequestMapping(value = {"uploadResume","mc/resume/upload_resume"}, method = RequestMethod.POST)
-    public Response uploadResume(HttpServletRequest req) throws IOException {
+    public Response uploadResume(@RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         Response result = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session){
-            String url = uploadService.upload(req,"job");
+            String url = zhbOssClient.uploadObject(file,"doc","job");
             Map map = new HashMap();
             map.put(Constants.name,url);
             result.setData(map);
@@ -201,8 +201,8 @@ public class ResumeController {
             response.addHeader("Cache-Control", "post-check=0, pre-check=0");
             response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
             response.setContentType("application/octet-stream");
-            fileurl = ApiConstants.getUploadDoc() + Constants.upload_job_document_url + "/" + fileurl;
-            jsonResult = FileUtil.downloadFile(response, fileurl);
+//            fileurl = ApiConstants.getUploadDoc() + Constants.upload_job_document_url + "/" + fileurl;
+            jsonResult = fileUtil.downloadObject(response, fileurl,"doc","job");
         }
         catch(Exception e)
         {

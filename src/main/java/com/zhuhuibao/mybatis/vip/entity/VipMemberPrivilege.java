@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.wordnik.swagger.annotations.ApiModelProperty;
-import com.zhuhuibao.common.constant.VipConstant.VipPrivilegeType;
 
 /**
  * 会员自定义特权信息

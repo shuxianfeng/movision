@@ -100,9 +100,7 @@
         status,
       </if>
         publishTime,
-      <if test="lastmodified != null">
         lastmodified,
-      </if>
       <if test="price != null and price != ''">
         price,
       </if>
@@ -157,9 +155,7 @@
         #{status,jdbcType=INTEGER},
       </if>
       now(),
-      <if test="lastmodified != null">
-        #{lastmodified,jdbcType=TIMESTAMP},
-      </if>
+      now(),
        <if test="price != null and price != ''">
         #{price,jdbcType=DOUBLE},
       </if>
@@ -382,6 +378,46 @@
     FROM  t_p_product t
     where (t.fcateid = #{id} or t.scateid = #{id}) and t.status != 2
   </select>
-  
-   
+
+  <select id="queryProductTypeListByCompanyId" resultType="java.util.Map" parameterType="java.util.Map">
+    select distinct p.fcateid,c.name from t_p_product p
+    left join t_p_category c on p.fcateid = c.id
+    where p.createid = #{createid} and p.status = #{status} order by p.fcateid
+  </select>
+
+  <select id="queryHotProductListByCompanyId" resultType="java.util.Map" parameterType="java.util.Map">
+    select id,name,price,
+    case when (locate(';',imgUrl) > 0) then substring(imgUrl,1,locate(';',imgUrl)-1) when locate(';',imgUrl) = 0 then imgUrl end as imgUrl
+    from t_p_product
+    where createid = #{createid} and status = #{status}
+    order by hit desc
+    limit 0,#{count}
+  </select>
+
+  <select id="queryLatestProductListByCompanyId" resultType="java.util.Map" parameterType="java.util.Map">
+    select id,name,price,
+    case when (locate(';',imgUrl) > 0) then substring(imgUrl,1,locate(';',imgUrl)-1) when locate(';',imgUrl) = 0 then imgUrl end as imgUrl
+    from t_p_product
+    where createid = #{createid} and status = #{status}
+    order by lastmodified desc
+    limit 0,#{count}
+  </select>
+
+  <select id="findAllProductListByProductType" resultType="java.util.Map" parameterType="java.util.Map">
+    select id,name,price,fcateid,
+    case when (locate(';',imgUrl) > 0) then substring(imgUrl,1,locate(';',imgUrl)-1) when locate(';',imgUrl) = 0 then imgUrl end as imgUrl
+    from t_p_product
+    <where>
+      <if test="fcateid != null">
+        and fcateid = #{fcateid}
+      </if>
+      <if test="createid != null">
+        and createid = #{createid}
+      </if>
+      <if test="status != null">
+        and status = #{status}
+      </if>
+    </where>
+    order by lastmodified desc
+  </select>
 </mapper>

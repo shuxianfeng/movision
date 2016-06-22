@@ -22,6 +22,7 @@ import com.zhuhuibao.common.constant.ZhbConstant.ZhbAccountStatus;
 import com.zhuhuibao.common.constant.ZhbConstant.ZhbRecordType;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
 import com.zhuhuibao.mybatis.memCenter.mapper.WorkTypeMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.order.entity.Order;
@@ -213,7 +214,6 @@ public class ZhbService {
 	 * @return
 	 */
 	public int payForOrder(String orderNo, BigDecimal zhbAmount) throws Exception {
-		// TODO 支付功能
 		int resut = 0;
 		try {
 			Order order = orderService.findByOrderNo(orderNo);
@@ -272,7 +272,7 @@ public class ZhbService {
 	 * @param goodsType
 	 * @return
 	 */
-	public boolean canPayFor(Long goodsId, String goodsType) {
+	public boolean canPayFor(String goodsType) {
 		boolean result = false;
 		try {
 			long privilegeNum = vipInfoService.getExtraPrivilegeNum(ShiroUtil.getCompanyID(), goodsType);
@@ -309,7 +309,6 @@ public class ZhbService {
 
 				// 修改筑慧币总额
 				account.setAmount(account.getAmount().subtract(amount));
-				// TODO 判断更新条数!=1为异常，事务返回，支付失败
 				int updateNum = zhbMapper.updateZhbAccountEmoney(account);
 				if (updateNum != 1) {
 					throw new BusinessException(MsgCodeConstant.ZHB_AUTOPAYFOR_FAILED, "筑慧币余额不足");
@@ -379,9 +378,15 @@ public class ZhbService {
 		return null;
 	}
 
-	// public List<DictionaryZhbgoods> listZhbGoodsByType(String type) {
-	// return zhbMapper.selectZhbGoodsListById(type);
-	// }
+	/**
+	 * 根据类型获取筑慧币物品配置信息
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public List<DictionaryZhbgoods> listZhbGoodsByType(String type) {
+		return zhbMapper.selectZhbGoodsListById(type);
+	}
 
 	/**
 	 * 获取筑慧币物品配置信息
@@ -438,12 +443,10 @@ public class ZhbService {
 						record.put("amount", "-" + record.get("amount"));
 					}
 					// 操作人 account ，补充角色
-					// WorkType workType =
-					// workTypeMapper.findWordTypeByType(record.get("workType"));
-					// if (null != workType) {
-					// record.put("account", record.get("account") + "(" +
-					// workType.getName() + ")");
-					// }
+					WorkType workType = workTypeMapper.findWordTypeByType(record.get("workType"));
+					if (null != workType) {
+						record.put("account", record.get("account") + "(" + workType.getName() + ")");
+					}
 				}
 			}
 		} catch (Exception e) {

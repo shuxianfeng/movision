@@ -58,6 +58,7 @@
     <result column="personIDFrontImgUrl" property="personIDFrontImgUrl" jdbcType="VARCHAR" />
     <result column="personIDBackImgUrl" property="personIDBackImgUrl" jdbcType="VARCHAR" />
     <result column="isrecommend" property="isrecommend" jdbcType="VARCHAR" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.AccountBean" >
     <result column="id" property="id" jdbcType="VARCHAR" />
@@ -101,11 +102,11 @@
     select m.id, m.mobile, m.email, m.emailCheckCode, m.password, date_format(m.registerTime,'%Y-%m-%d %H:%i:%s') registerTime, m.status, m.identify,
     m.enterpriseName, m.workType, m.enterpriseEmployeeParentId, m.province,
     m.city, m.area, m.address, m.enterpriseType, m.enterpriseLogo, m.enterpriseDesc, m.headShot, m.saleProductDesc,
-    date_format(m.enterpriseCreaterTime,'%Y-%m-%d %H:%i:%s') enterpriseCreaterTime, m.registerCapital,m.currency, m.employeeNumber, m.coBusLicNum,m.companyBusinessLicenseImg,
+    date_format(m.enterpriseCreaterTime,'%Y-%m-%d') enterpriseCreaterTime, m.registerCapital,m.currency, m.employeeNumber, m.coBusLicNum,m.companyBusinessLicenseImg,
     m.enterpriseProvince,m.enterpriseCity,m.enterpriseArea,m.enterpriseAddress,
     m.enterpriseTelephone, m.enterpriseFox, m.enterpriseWebSite, m.enterpriseLinkman, m.enterpriseLMDep,
     m.fixedTelephone, m.fixedMobile, m.QQ, m.personRealName, m.nickname,m.sex, m.personCompanyType,
-    m.personIdentifyCard, m.personIDFrontImgUrl, m.personIDBackImgUrl,m.isrecommend,
+    m.personIdentifyCard, m.personIDFrontImgUrl, m.personIDBackImgUrl,m.isrecommend,m.reason,
     p1.name provinceName,p2.name enterpriseProvinceName,c1.name cityName,c2.name enterpriseCityName,a1.name areaName,a2.name enterpriseAreaName,
     e.name employeeNumberName,et.name enterpriseTypeName,w.name workTypeName,
     (select group_concat(name) from t_dictionary_identity where find_in_set(id,m.identify))as identifyName

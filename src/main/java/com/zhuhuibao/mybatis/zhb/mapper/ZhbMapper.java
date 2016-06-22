@@ -86,11 +86,12 @@ public interface ZhbMapper {
 	 */
 	DictionaryZhbgoods selectZhbGoodsById(Long id);
 	
-//	/**
-//	 * 根据类型查询筑慧币物品信息
-//	 * @param id
-//	 * @return
-//	 */
-//	List<DictionaryZhbgoods> selectZhbGoodsListById(String type);
+	/**
+	 * 根据类型查询筑慧币物品信息
+	 * 
+	 * @param id
+	 * @return
+	 */
+	List<DictionaryZhbgoods> selectZhbGoodsListById(String type);
 
 }

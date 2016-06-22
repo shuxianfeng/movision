@@ -59,6 +59,11 @@ public class StaffManageController {
 			}
 			member.setWorkType(workType);
 			member.setEnterpriseLinkman(enterpriseLinkman);
+			member.setEnterpriseLMDep("");
+			member.setFixedTelephone("");
+			member.setFixedMobile("");
+			member.setQQ("");
+			member.setSex("");
 
 			String md5Pwd = new Md5Hash("123456",null,2).toString();
 			member.setPassword(md5Pwd);

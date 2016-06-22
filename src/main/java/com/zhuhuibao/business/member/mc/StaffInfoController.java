@@ -59,7 +59,7 @@ public class StaffInfoController {
         if(memberId!=null){
             member.setId(String.valueOf(memberId));
             member.setEnterpriseLinkman(enterpriseLinkman);
-            member.setSex(Integer.parseInt(sex));
+            member.setSex(sex);
             member.setEnterpriseLMDep(enterpriseLMDep);
             member.setFixedTelephone(fixedTelephone);
             member.setFixedMobile(fixedMobile);
