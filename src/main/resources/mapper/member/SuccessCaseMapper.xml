@@ -17,7 +17,7 @@
     id, createid,title,imgUrl,content,publishTime,updateTime,views,status,is_deleted
   </sql>
   <select id="querySuccessCaseById" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select createid,title,imgUrl,content,date_format(updateTime,'%Y-%m-%d') updateTime,date_format(publishTime,'%Y-%m-%d') publishTime,
+    select id,createid,title,imgUrl,content,date_format(updateTime,'%Y-%m-%d') updateTime,date_format(publishTime,'%Y-%m-%d') publishTime,
     views,status,is_deleted
     FROM t_m_success_case WHERE id = #{id}
   </select>

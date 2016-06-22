@@ -59,7 +59,12 @@ public class CompanyInfoController {
         Map map = new HashMap();
         map.put("companyName",member.getEnterpriseName());
         map.put("webSite",member.getEnterpriseWebSite());
-        map.put("address",member.getProvinceName()+member.getCityName()+member.getAreaName()+member.getAddress());
+        if(member.getProvince()!=null){
+            map.put("address",member.getProvinceName()+member.getCityName()+member.getAreaName()+member.getAddress());
+        }else {
+            map.put("address","");
+        }
+
         map.put("telephone",member.getEnterpriseTelephone());
         map.put("fax",member.getEnterpriseFox());
         map.put("introduce",member.getEnterpriseDesc());
@@ -72,7 +77,7 @@ public class CompanyInfoController {
     @ApiOperation(value = "热销商品", notes = "热销商品")
     @RequestMapping(value = "sel_company_hot_product", method = RequestMethod.GET)
     public Response sel_company_hot_product(@ApiParam(value = "商户id")@RequestParam String id,
-                                            @ApiParam(value = "条数")@RequestParam String count)  {
+                                            @ApiParam(value = "条数")@RequestParam int count)  {
         Response response = new Response();
 
         //查询公司热销产品
@@ -89,7 +94,7 @@ public class CompanyInfoController {
     @ApiOperation(value = "最新供应商品", notes = "最新供应商品")
     @RequestMapping(value = "sel_company_latest_product", method = RequestMethod.GET)
     public Response sel_company_latest_product(@ApiParam(value = "商户id")@RequestParam String id,
-                                            @ApiParam(value = "条数")@RequestParam String count)  {
+                                            @ApiParam(value = "条数")@RequestParam int count)  {
         Response response = new Response();
 
         //查询公司最新供应商品
@@ -106,7 +111,7 @@ public class CompanyInfoController {
     @ApiOperation(value = "优秀案例", notes = "优秀案例")
     @RequestMapping(value = "sel_company_great_case", method = RequestMethod.GET)
     public Response sel_company_great_case(@ApiParam(value = "商户id")@RequestParam String id,
-                                               @ApiParam(value = "条数")@RequestParam String count)  {
+                                               @ApiParam(value = "条数")@RequestParam int count)  {
         Response response = new Response();
 
         //查询公司优秀案例
@@ -143,7 +148,7 @@ public class CompanyInfoController {
         }else{
             map.put("registerCapital",member.getRegisterCapital()+"万美元");
         }
-        if(member.getProvince()!=null){
+        if(member.getEnterpriseProvince()!=null){
             map.put("address",member.getEnterpriseProvinceName()+member.getEnterpriseCityName()+member.getEnterpriseAreaName());
         }else {
             map.put("address","");
@@ -171,7 +176,11 @@ public class CompanyInfoController {
         Map map = new HashMap();
         map.put("companyName",member.getEnterpriseName());
         map.put("webSite",member.getEnterpriseWebSite());
-        map.put("address",member.getProvinceName()+member.getCityName()+member.getAreaName()+member.getAddress());
+        if(member.getProvince()!=null){
+            map.put("address",member.getProvinceName()+member.getCityName()+member.getAreaName()+member.getAddress());
+        }else {
+            map.put("address","");
+        }
         map.put("telephone",member.getEnterpriseTelephone());
         map.put("fax",member.getEnterpriseFox());
 
@@ -218,8 +227,9 @@ public class CompanyInfoController {
         queryMap.put("status", "1");
         queryMap.put("createid",id);
         List<Map<String,String>> caseList = successCaseService.findAllSuccessCaseList(pager,queryMap);
+        pager.result(caseList);
 
-        response.setData(caseList);
+        response.setData(pager);
         return response;
     }
 
@@ -253,9 +263,10 @@ public class CompanyInfoController {
         queryMap.put("status", "1");
         queryMap.put("createid",id);
         queryMap.put("fcateid",fcateid);
-        List<Map<String,String>> productList = productService.queryProductListByProductType(pager,queryMap);
+        List<Map<String,String>> productList = productService.findAllProductListByProductType(pager,queryMap);
+        pager.result(productList);
 
-        response.setData(productList);
+        response.setData(pager);
         return response;
     }
 }

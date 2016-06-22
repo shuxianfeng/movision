@@ -811,9 +811,9 @@ public class ProductService {
 		}
 	}
 
-	public List<Map<String,String>> queryProductListByProductType(Paging<Map<String,String>> pager,Map<String,Object> queryMap){
+	public List<Map<String,String>> findAllProductListByProductType(Paging<Map<String,String>> pager,Map<String,Object> queryMap){
 		try{
-			return productMapper.queryProductListByProductType(pager.getRowBounds(),queryMap);
+			return productMapper.findAllProductListByProductType(pager.getRowBounds(),queryMap);
 		}catch (Exception e){
 			log.error(e.getMessage());
 			e.printStackTrace();
