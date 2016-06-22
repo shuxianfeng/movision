@@ -79,6 +79,7 @@ public class CompanyController {
             map.put("enterpriseFox",member.getEnterpriseFox());
             map.put("enterpriseWebSite",member.getEnterpriseWebSite());
             map.put("status",member.getStatus());
+            map.put("reason",member.getReason());
             result.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -97,6 +98,7 @@ public class CompanyController {
             map.put("coBusLicNum",member.getCoBusLicNum());
             map.put("companyBusinessLicenseImg",member.getCompanyBusinessLicenseImg());
             map.put("status",member.getStatus());
+            map.put("reason",member.getReason());
             result.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -159,19 +161,49 @@ public class CompanyController {
 
     @ApiOperation(value = "企业资质保存", notes = "企业资质保存", response = Response.class)
     @RequestMapping(value = "add_certificate", method = RequestMethod.POST)
-    public Response certificateSave(@RequestParam String json)  {
+    public Response add_certificate(@ApiParam(value = "证书编号")@RequestParam String certificate_number,
+                                    @ApiParam(value = "证书id")@RequestParam String certificate_id,
+                                    @ApiParam(value = "资质名称")@RequestParam String certificate_name,
+                                    @ApiParam(value = "资质等级")@RequestParam(required = false) String certificate_grade,
+                                    @ApiParam(value = "资质证书图片url")@RequestParam String certificate_url,
+                                    @ApiParam(value = "资质类型：1：供应商资质；2：工程商资质；")@RequestParam String type)  {
         Response result = new Response();
-        Gson gson=new Gson();
-        List<CertificateRecord> rs= new ArrayList<CertificateRecord>();
-        Type type = new TypeToken<ArrayList<CertificateRecord>>() {}.getType();
-        rs = gson.fromJson(json, type);
+        CertificateRecord record = new CertificateRecord();
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
-            memberService.deleteCertificate(String.valueOf(memberId));
-            for(CertificateRecord record:rs){
-                record.setMem_id(String.valueOf(memberId));
-                memberService.saveCertificate(record);
-            }
+            record.setMem_id(String.valueOf(memberId));
+            record.setType(type);
+            record.setCertificate_grade(certificate_grade);
+            record.setCertificate_id(certificate_id);
+            record.setCertificate_name(certificate_name);
+            record.setCertificate_number(certificate_number);
+            record.setCertificate_url(certificate_url);
+            memberService.saveCertificate(record);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "企业资质编辑", notes = "企业资质编辑", response = Response.class)
+    @RequestMapping(value = "upd_certificate", method = RequestMethod.POST)
+    public Response update_certificate(@RequestParam String id,
+                                    @RequestParam String certificate_number,
+                                    @RequestParam String certificate_id,
+                                    @RequestParam String certificate_name,
+                                    @RequestParam(required = false) String certificate_grade,
+                                    @RequestParam String certificate_url)  {
+        Response result = new Response();
+        CertificateRecord record = new CertificateRecord();
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            record.setId(id);
+            record.setCertificate_grade(certificate_grade);
+            record.setCertificate_id(certificate_id);
+            record.setCertificate_name(certificate_name);
+            record.setCertificate_number(certificate_number);
+            record.setCertificate_url(certificate_url);
+            memberService.updateCertificate(record);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }

@@ -50,9 +50,7 @@
       <if test="type != null">
         type = #{type},
       </if>
-      <if test="time != null">
-        time = #{time},
-      </if>
+        time = now(),
       <if test="is_deleted != null">
         is_deleted = #{is_deleted},
       </if>

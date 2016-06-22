@@ -810,4 +810,14 @@ public class ProductService {
 			throw e;
 		}
 	}
+
+	public List<Map<String,String>> findAllProductListByProductType(Paging<Map<String,String>> pager,Map<String,Object> queryMap){
+		try{
+			return productMapper.findAllProductListByProductType(pager.getRowBounds(),queryMap);
+		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

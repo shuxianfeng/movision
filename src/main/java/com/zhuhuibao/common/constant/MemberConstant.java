@@ -41,4 +41,22 @@ public class MemberConstant {
         }
 
     }
+
+    /**
+     * 商铺状态
+     */
+    public enum ShopStatus {
+        DSH("1"),YSH("2"),YJJ("3"),YZX("4");
+        public final String value;
+
+        ShopStatus(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return  this.value;
+        }
+
+    }
 }

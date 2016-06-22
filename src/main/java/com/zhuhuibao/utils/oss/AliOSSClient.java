@@ -145,10 +145,10 @@ public class AliOSSClient {
             if (chann != null) {
                 fileKey = chann + "/" + type + "/" + fileName2;
 
-                if(type.equals("doc") && chann.equals("tech")){
+                if (type.equals("doc") && chann.equals("tech")) {
                     String maxSize = PropertiesUtils.getValue("uploadTechMaxPostSize");
-                    if(size > Long.valueOf(maxSize)){
-                        throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"文件大小超过最大限制");
+                    if (size > Long.valueOf(maxSize)) {
+                        throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
                     }
                 }
             } else {
@@ -161,8 +161,8 @@ public class AliOSSClient {
                 domain = PropertiesUtils.getValue("img.domain");
                 data = domain + "/" + fileKey;
                 String maxSize = PropertiesUtils.getValue("uploadPicMaxPostSize");
-                if(size > Long.valueOf(maxSize)){
-                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"文件大小超过最大限制");
+                if (size > Long.valueOf(maxSize)) {
+                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
                 }
 
             } else if (type.equals("doc")) {
@@ -170,8 +170,8 @@ public class AliOSSClient {
 //                domain = PropertiesUtils.getValue("file.domain");
                 data = fileName2;
                 String maxSize = PropertiesUtils.getValue("uploadDocMaxPostSize");
-                if(size > Long.valueOf(maxSize)){
-                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"文件大小超过最大限制");
+                if (size > Long.valueOf(maxSize)) {
+                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
                 }
 
             }
@@ -266,7 +266,7 @@ public class AliOSSClient {
     /**
      * 下载文件
      *
-     * @param file
+     * @param fileName
      * @param type
      * @param chann
      * @return
@@ -284,9 +284,9 @@ public class AliOSSClient {
             }
 
             String objKey;
-            if(chann != null){
+            if (chann != null) {
                 objKey = chann + "/" + type + "/" + fileName;
-            }else{
+            } else {
                 objKey = fileName;
             }
 
@@ -318,13 +318,15 @@ public class AliOSSClient {
     //test
     public static void main(String[] args) {
         AliOSSClient client = new AliOSSClient();
-        String fileName = "/Users/jianglz/Downloads/1.txt";
-        File file = new File(fileName);
-        Map<String, String> result = client.uploadLocalFile(file, "doc", "job");
-        System.out.println(result);
+        String fileName = "11466507049775111.txt";
+//        File file = new File(fileName);
+//        Map<String, String> result = client.uploadLocalFile(file, "doc", "job");
+//        System.out.println(result);
 //        String name = file.getName();
 //        String a = FileUtil.renameFile(name);
 //        System.out.println(a);
+        Map<String, Object> map = client.downloadStream(fileName, "doc", "job");
+        System.out.println(map);
     }
 
 }

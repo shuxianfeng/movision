@@ -318,6 +318,12 @@
       w left join t_dictionary_city c on w.cityCode=c.code
      where w.name=#{area} and c.name=#{city}
   </select>
+  
+  <select id="getCity" parameterType="java.util.Map" resultType="java.util.Map"> 
+     select c.code cityCode,c.provincecode from t_dictionary_city c
+     where c.name=#{city}
+  </select>
+  
    <select id="findPrjectByName" parameterType="java.util.Map" resultMap="list">
     SELECT
     t.id ,t.name,date_format(t.publishDate,'%Y-%m-%d') publishDate,

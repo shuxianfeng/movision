@@ -402,4 +402,22 @@
     order by lastmodified desc
     limit 0,#{count}
   </select>
+
+  <select id="findAllProductListByProductType" resultType="java.util.Map" parameterType="java.util.Map">
+    select id,name,price,fcateid,
+    case when (locate(';',imgUrl) > 0) then substring(imgUrl,1,locate(';',imgUrl)-1) when locate(';',imgUrl) = 0 then imgUrl end as imgUrl
+    from t_p_product
+    <where>
+      <if test="fcateid != null">
+        and fcateid = #{fcateid}
+      </if>
+      <if test="createid != null">
+        and createid = #{createid}
+      </if>
+      <if test="status != null">
+        and status = #{status}
+      </if>
+    </where>
+    order by lastmodified desc
+  </select>
 </mapper>

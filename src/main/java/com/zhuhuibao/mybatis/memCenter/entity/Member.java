@@ -155,6 +155,8 @@ public class Member implements Serializable{
     @ApiModelProperty(value="个人身份真反面图片上传的路径")
     private String personIDBackImgUrl;
 
+    private String reason;
+
     private String account;
 
     private String isrecommend;
@@ -613,5 +615,13 @@ public class Member implements Serializable{
 
     public void setEnterpriseAreaName(String enterpriseAreaName) {
         this.enterpriseAreaName = enterpriseAreaName;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

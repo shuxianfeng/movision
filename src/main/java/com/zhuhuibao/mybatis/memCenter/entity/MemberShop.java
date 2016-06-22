@@ -1,0 +1,95 @@
+package com.zhuhuibao.mybatis.memCenter.entity;
+
+import java.util.Date;
+
+public class MemberShop {
+    private Integer id;
+
+    private String shopName;
+
+    private Integer companyId;
+
+    private String companyName;
+
+    private String companyAccount;
+
+    private String bannerUrl;
+
+    private Date updateTime;
+
+    private Integer opreatorId;
+
+    private String status;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName == null ? null : shopName.trim();
+    }
+
+    public Integer getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Integer companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName == null ? null : companyName.trim();
+    }
+
+    public String getCompanyAccount() {
+        return companyAccount;
+    }
+
+    public void setCompanyAccount(String companyAccount) {
+        this.companyAccount = companyAccount == null ? null : companyAccount.trim();
+    }
+
+    public String getBannerUrl() {
+        return bannerUrl;
+    }
+
+    public void setBannerUrl(String bannerUrl) {
+        this.bannerUrl = bannerUrl == null ? null : bannerUrl.trim();
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Integer getOpreatorId() {
+        return opreatorId;
+    }
+
+    public void setOpreatorId(Integer opreatorId) {
+        this.opreatorId = opreatorId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
+    }
+}
