@@ -28,6 +28,7 @@ import com.zhuhuibao.mybatis.order.entity.Order;
 import com.zhuhuibao.mybatis.order.entity.OrderGoods;
 import com.zhuhuibao.mybatis.order.service.OrderGoodsService;
 import com.zhuhuibao.mybatis.order.service.OrderService;
+import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
@@ -65,6 +66,9 @@ public class ZhbService {
 
 	@Autowired
 	private VipInfoService vipInfoService;
+
+	@Autowired
+	private PaymentGoodsService paymentGoodsService;
 
 	/**
 	 * 订单充值
@@ -256,6 +260,8 @@ public class ZhbService {
 			result = payForGoodsByZhb(goodsId, goodsType);
 		}
 
+		//记录已进行的操作
+		paymentGoodsService.insertViewProject(goodsId, ShiroUtil.getCreateID(), ShiroUtil.getCompanyID(), goodsType);
 		return result;
 	}
 
@@ -372,7 +378,7 @@ public class ZhbService {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 获取筑慧币物品配置信息
 	 * 
