@@ -147,7 +147,7 @@ public class ZhpayService {
                     preZhPayParams(msgParam);
                     //调用筑慧币支付平台
                     String orderNo = flow.getOrderNo();
-                    zhbService.payForOrder(orderNo,null);
+                    zhbService.payForOrder(orderNo);
                 } else {
                     log.error("不支持的支付方式");
                     throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "不支持的支付方式");
