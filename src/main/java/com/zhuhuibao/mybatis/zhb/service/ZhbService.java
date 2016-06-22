@@ -260,7 +260,7 @@ public class ZhbService {
 			result = payForGoodsByZhb(goodsId, goodsType);
 		}
 
-		//记录已进行的操作
+		// 记录已进行的操作
 		paymentGoodsService.insertViewProject(goodsId, ShiroUtil.getCreateID(), ShiroUtil.getCompanyID(), goodsType);
 		return result;
 	}
@@ -378,6 +378,10 @@ public class ZhbService {
 		}
 		return null;
 	}
+
+	// public List<DictionaryZhbgoods> listZhbGoodsByType(String type) {
+	// return zhbMapper.selectZhbGoodsListById(type);
+	// }
 
 	/**
 	 * 获取筑慧币物品配置信息
