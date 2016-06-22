@@ -10,7 +10,6 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.mybatis.tech.entity.DictionaryTechData;
 import com.zhuhuibao.mybatis.tech.entity.TechData;
 import com.zhuhuibao.mybatis.tech.service.DictionaryTechDataService;
@@ -18,6 +17,7 @@ import com.zhuhuibao.mybatis.tech.service.TechDataService;
 import com.zhuhuibao.mybatis.tech.service.TechDownloadDataService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.file.FileUtil;
+import com.zhuhuibao.utils.oss.ZhbOssClient;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,9 +45,6 @@ public class TechDataController {
     private static final Logger log = LoggerFactory.getLogger(TechDataController.class);
 
     @Autowired
-    UploadService uploadService;
-
-    @Autowired
     TechDataService techDataService;
 
     @Autowired
@@ -58,14 +56,20 @@ public class TechDataController {
     @Autowired
     TechDownloadDataService dlService;
 
+    @Autowired
+    ZhbOssClient zhbOssClient;
+
+    @Autowired
+    FileUtil fileUtil;
+
     @ApiOperation(value="上传技术资料(行业解决方案，技术文档，培训资料)",notes="上传技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)
     @RequestMapping(value = "upload_tech_data", method = RequestMethod.POST)
-    public Response uploadTechData(HttpServletRequest req) throws Exception {
+    public Response uploadTechData(HttpServletRequest req,@RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         Response result = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session){
-            String url = uploadService.upload(req,"techdoc");
+            String url = zhbOssClient.uploadObject(file,"doc","tech");
             Map map = new HashMap();
             map.put(Constants.name,url);
             if(url.lastIndexOf(".")!= -1) {
@@ -74,7 +78,7 @@ public class TechDataController {
             {
                 map.put(TechConstant.FILE_FORMAT, "");
             }
-            map.put(TechConstant.FILE_SIZE,req.getContentLength());
+            map.put(TechConstant.FILE_SIZE,file.getSize());
             result.setData(map);
             result.setCode(200);
         }else{
@@ -156,8 +160,8 @@ public class TechDataController {
                 response.addHeader("Cache-Control", "post-check=0, pre-check=0");
                 response.setHeader("Content-disposition", "attachment;filename=" + attachName);
                 response.setContentType("application/octet-stream");
-                attachName = ApiConstants.getUploadDoc() + TechConstant.UPLOAD_TECH_DOC_URL + "/" + attachName;
-                jsonResult = FileUtil.downloadFile(response, attachName);
+//                attachName = ApiConstants.getUploadDoc() + TechConstant.UPLOAD_TECH_DOC_URL + "/" + attachName;
+                jsonResult = fileUtil.downloadObject(response, attachName,"doc","tech");
                 //插入我的下载资料
                 dlService.insertDownloadData(techDataId,createId);
                 //更新下载率

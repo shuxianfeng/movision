@@ -54,6 +54,9 @@ public class ResumeController {
 
     @Autowired
     ZhbOssClient zhbOssClient;
+
+    @Autowired
+    FileUtil fileUtil;
     /**
      * 发布简历
      */
@@ -198,8 +201,8 @@ public class ResumeController {
             response.addHeader("Cache-Control", "post-check=0, pre-check=0");
             response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
             response.setContentType("application/octet-stream");
-            fileurl = ApiConstants.getUploadDoc() + Constants.upload_job_document_url + "/" + fileurl;
-            jsonResult = FileUtil.downloadFile(response, fileurl);
+//            fileurl = ApiConstants.getUploadDoc() + Constants.upload_job_document_url + "/" + fileurl;
+            jsonResult = fileUtil.downloadObject(response, fileurl,"doc","job");
         }
         catch(Exception e)
         {
