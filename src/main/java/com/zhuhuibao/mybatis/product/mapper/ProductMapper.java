@@ -51,4 +51,10 @@ public interface ProductMapper {
     List<ResultBean> findSubSystem(String id);
 
     List<Product> findProductBySystemId(String id);
+
+    List<Map<String,String>> queryProductTypeListByCompanyId(Map<String,Object> queryMap);
+
+    List<Map<String,String>> queryHotProductListByCompanyId(Map<String,Object> queryMap);
+
+    List<Map<String,String>> queryLatestProductListByCompanyId(Map<String,Object> queryMap);
 }

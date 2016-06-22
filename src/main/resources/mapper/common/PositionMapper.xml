@@ -5,6 +5,7 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="parentId" property="parentId" jdbcType="INTEGER" />
+    <result column="hot" property="hot" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, name, parentId

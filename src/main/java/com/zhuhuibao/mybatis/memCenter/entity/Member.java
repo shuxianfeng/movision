@@ -141,7 +141,7 @@ public class Member implements Serializable{
     private String nickname;
 
     @ApiModelProperty(value="性别：1：男，2：女(企业，个人统一使用)")
-    private Integer sex;
+    private String sex;
 
     @ApiModelProperty(value="个人工作单位类别")
     private Integer personCompanyType;
@@ -415,11 +415,11 @@ public class Member implements Serializable{
         this.personRealName = personRealName == null ? null : personRealName.trim();
     }
 
-    public Integer getSex() {
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(Integer sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 

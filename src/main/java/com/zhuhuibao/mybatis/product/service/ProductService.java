@@ -779,4 +779,35 @@ public class ProductService {
 		return productMapper.findProductBySystemId(id);
 
 	}
+
+
+	public List<Map<String,String>> queryProductTypeListByCompanyId(Map<String,Object> queryMap){
+		try{
+			return productMapper.queryProductTypeListByCompanyId(queryMap);
+		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	public List<Map<String,String>> queryHotProductListByCompanyId(Map<String,Object> queryMap){
+		try{
+			return productMapper.queryHotProductListByCompanyId(queryMap);
+		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	public List<Map<String,String>> queryLatestProductListByCompanyId(Map<String,Object> queryMap){
+		try{
+			return productMapper.queryLatestProductListByCompanyId(queryMap);
+		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }
