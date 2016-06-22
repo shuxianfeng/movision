@@ -9,6 +9,7 @@ import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.*;
 import com.zhuhuibao.mybatis.order.service.*;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.IdGenerator;
 import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -54,6 +55,9 @@ public class ZHOrderService {
 
     @Autowired
     private AlipayRefundService alipayRefundService;
+
+    @Autowired
+    ZhbService zhbService;
 
     /**
      * 生成订单
@@ -275,7 +279,6 @@ public class ZHOrderService {
     }
 
 
-
     /**
      * 退款请求
      *
@@ -348,7 +351,7 @@ public class ZHOrderService {
         }
         //先处理筑慧币退款
         OrderFlow zhbOrderFlow = map.get("zhbpay_order");
-        boolean suc = processZHBPayRefund(msgParam,zhbOrderFlow);
+        boolean suc = processZHBPayRefund(msgParam, zhbOrderFlow);
         if (suc) {
             //退款成功处理支付宝退款请求
             OrderFlow alipayOrderFlow = map.get("alipay_order");
@@ -359,6 +362,7 @@ public class ZHOrderService {
 
     /**
      * 处理支付宝退款请求
+     *
      * @param resp
      * @param msgParam
      * @param orderNo
@@ -370,12 +374,12 @@ public class ZHOrderService {
                                      String orderNo, Order order, OrderFlow alipayOrderFlow) throws Exception {
         logger.debug("进入支付宝退款接口");
 
-        String tradeStatus =  alipayOrderFlow.getTradeStatus();
+        String tradeStatus = alipayOrderFlow.getTradeStatus();
         if (tradeStatus.equals(PayConstants.OrderStatus.DTK.toString())) {
             //准备支付宝退款请求参数
             preAlipayRefundParam(msgParam, orderNo, order, alipayOrderFlow);
             alipayRefundService.doRefund(resp, msgParam);
-        }else{
+        } else {
             logger.error("非[待退款]状态,不支持退款操作");
             throw new BusinessException(MsgCodeConstant.PAY_ERROR, "非[待退款]状态,不支持退款操作");
         }
@@ -383,16 +387,22 @@ public class ZHOrderService {
 
     /**
      * 处理筑慧币退款请求
+     *
      * @param zhbOrderFlow
      * @return
      */
-    private boolean processZHBPayRefund(Map<String, String> msgParam,OrderFlow zhbOrderFlow) {
+    private boolean processZHBPayRefund(Map<String, String> msgParam, OrderFlow zhbOrderFlow) {
 
         String tradeStatus = zhbOrderFlow.getTradeStatus();
         if (tradeStatus.equals(PayConstants.OrderStatus.DTK.toString())) {
             logger.debug("进入筑慧币退款接口");
-//          return  zhbPayService.doRefund(msgParam);
-            return true;
+            try {
+                return zhbService.refundBySystem(msgParam.get("OrderNo")) == 1;
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.error("筑慧币退款失败");
+                throw new BusinessException(MsgCodeConstant.PAY_ERROR,"筑慧币退款失败");
+            }
         } else {
             logger.error("非[待退款]状态,不支持退款操作");
             throw new BusinessException(MsgCodeConstant.PAY_ERROR, "非[待退款]状态,不支持退款操作");
@@ -447,7 +457,7 @@ public class ZHOrderService {
             //有且只有筑慧币支付方式
             //筑慧币支付方式 调用筑慧宝退款接口
             logger.debug("进入筑慧宝退款接口");
-            processZHBPayRefund(msgParam,orderFlows.get(0));
+            processZHBPayRefund(msgParam, orderFlows.get(0));
             return;
         } else if (orderFlows.get(0).getTradeMode().equals(PayConstants.PayMode.ZHBPAY.toString())) {
             //有且只有支付宝支付
