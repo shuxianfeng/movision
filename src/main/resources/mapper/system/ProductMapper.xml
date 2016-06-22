@@ -100,9 +100,7 @@
         status,
       </if>
         publishTime,
-      <if test="lastmodified != null">
         lastmodified,
-      </if>
       <if test="price != null and price != ''">
         price,
       </if>
@@ -157,9 +155,7 @@
         #{status,jdbcType=INTEGER},
       </if>
       now(),
-      <if test="lastmodified != null">
-        #{lastmodified,jdbcType=TIMESTAMP},
-      </if>
+      now(),
        <if test="price != null and price != ''">
         #{price,jdbcType=DOUBLE},
       </if>
