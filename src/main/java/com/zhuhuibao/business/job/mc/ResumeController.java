@@ -16,6 +16,7 @@ import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.file.FileUtil;
+import com.zhuhuibao.utils.oss.ZhbOssClient;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -57,6 +59,9 @@ public class ResumeController {
 
     @Autowired
     JobRelResumeService jrrService;
+
+    @Autowired
+    ZhbOssClient zhbOssClient;
     /**
      * 发布简历
      */
@@ -116,12 +121,12 @@ public class ResumeController {
      */
     @ApiOperation(value = "上传简历附件", notes = "上传简历附件", response = Response.class)
     @RequestMapping(value = {"uploadResume","mc/resume/upload_resume"}, method = RequestMethod.POST)
-    public Response uploadResume(HttpServletRequest req) throws IOException {
+    public Response uploadResume(@RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         Response result = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session){
-            String url = uploadService.upload(req,"job");
+            String url = zhbOssClient.uploadObject(file,"doc","job");
             Map map = new HashMap();
             map.put(Constants.name,url);
             result.setData(map);
