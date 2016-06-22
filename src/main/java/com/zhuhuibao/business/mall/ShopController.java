@@ -64,6 +64,13 @@ public class ShopController {
         }
 
         Long companyId = ShiroUtil.getCompanyID();
+
+        //检查商铺是否已存在
+        MemberShop shop = memShopService.findByCompanyID(companyId);
+        if(shop != null){
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"商铺已经存在");
+        }
+
         Member member =  memberService.findMemById(String.valueOf(memberId));
 
         String account = member.getMobile() == null ? member.getEmail() : member.getMobile();
@@ -104,8 +111,8 @@ public class ShopController {
 
     /**
      * 验证商铺是否为登陆用户所在企业商铺
-     * @param shopId
-     * @return
+     * @param shopId  商铺ID
+     * @return  memberShop
      */
     private MemberShop check(@ApiParam("商铺ID") @RequestParam String shopId) {
         Long companyId = ShiroUtil.getCompanyID();
