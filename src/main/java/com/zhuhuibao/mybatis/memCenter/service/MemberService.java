@@ -267,6 +267,20 @@ public class MemberService {
 	}
 
 	/**
+	 * 资质删除
+	 */
+	public int updateCertificate(CertificateRecord record)
+	{
+		try{
+			return certificateRecordMapper.updateCertificate(record);
+		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
 	 * 根据父类ID查询公司下属员工
 	 */
 	public List findStaffByParentId(Paging<Member> pager, Map<String, Object> map)
