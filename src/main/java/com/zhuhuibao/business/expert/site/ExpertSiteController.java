@@ -28,6 +28,7 @@ import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ValidateUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
+import com.zhuhuibao.utils.oss.ZhbOssClient;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -37,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -79,6 +81,9 @@ public class ExpertSiteController {
 
     @Autowired
     PaymentGoodsService goodsService;
+
+    @Autowired
+    ZhbOssClient zhbOssClient;
 
     private static final String PARTNER = AlipayPropertiesLoader.getPropertyValue("partner");
 
@@ -218,9 +223,9 @@ public class ExpertSiteController {
 
     @ApiOperation(value="专家上传照片",notes="专家上传照片",response = Response.class)
     @RequestMapping(value = "base/upload_photo", method = RequestMethod.POST)
-    public Response uploadPhoto(HttpServletRequest req) throws Exception {
+    public Response uploadPhoto(@RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         Response response = new Response();
-        String url = uploadService.upload(req,"expert");
+        String url = zhbOssClient.uploadObject(file,"img","expert");
         response.setData(url);
         return response;
     }
