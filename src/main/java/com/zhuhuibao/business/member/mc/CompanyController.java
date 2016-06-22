@@ -79,6 +79,7 @@ public class CompanyController {
             map.put("enterpriseFox",member.getEnterpriseFox());
             map.put("enterpriseWebSite",member.getEnterpriseWebSite());
             map.put("status",member.getStatus());
+            map.put("reason",member.getReason());
             result.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -97,6 +98,7 @@ public class CompanyController {
             map.put("coBusLicNum",member.getCoBusLicNum());
             map.put("companyBusinessLicenseImg",member.getCompanyBusinessLicenseImg());
             map.put("status",member.getStatus());
+            map.put("reason",member.getReason());
             result.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

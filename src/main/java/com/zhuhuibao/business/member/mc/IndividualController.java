@@ -71,6 +71,7 @@ public class IndividualController {
             map.put("fixedMobile",member.getFixedMobile());
             map.put("QQ",member.getQQ());
             map.put("status",member.getStatus());
+            map.put("reason",member.getReason());
             result.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -91,6 +92,7 @@ public class IndividualController {
             map.put("personIDFrontImgUrl",member.getPersonIDFrontImgUrl());
             map.put("personIDBackImgUrl",member.getPersonIDBackImgUrl());
             map.put("status",member.getStatus());
+            map.put("reason",member.getReason());
             result.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
