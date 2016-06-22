@@ -94,4 +94,12 @@
       and c.createid = #{createid}
     </if>
   </select>
+
+  <select id="queryGreatCaseListByCompanyId" resultType="java.util.Map" parameterType="java.util.Map" >
+    select c.id,c.imgUrl
+    from t_m_success_case c
+    where c.is_deleted = #{is_deleted} and c.status = #{status} and c.createid = #{createid}
+    order by c.updateTime desc
+    limit 0,#{count}
+  </select>
 </mapper>

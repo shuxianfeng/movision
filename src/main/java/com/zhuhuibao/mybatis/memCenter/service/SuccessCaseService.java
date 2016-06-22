@@ -63,4 +63,14 @@ public class SuccessCaseService {
             throw e;
         }
     }
+
+    public List<Map<String,String>> queryGreatCaseListByCompanyId(Map<String, Object> map){
+        try {
+            return successCaseMapper.queryGreatCaseListByCompanyId(map);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }
