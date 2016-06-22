@@ -76,114 +76,117 @@ public class UploadFileController {
 	int isAdd=0;
 	int sucCount=0;
 	int failCount=0;
-	int rowsCount=1;
+	int rowsCount=10000;
+	String fileToBeRead=null;
 	@RequestMapping(value = "upload_project", method = RequestMethod.POST)
 	@ApiOperation(value = "导入项目工程信息", notes = "导入项目工程信息", response = Response.class)
 	public Response uploadProject(HttpServletRequest req,@RequestParam(value = "file", required = false) MultipartFile file) {
 		Response response = new Response(); 
 		Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        rowsCount=1;
+        rowsCount=10000;
         if(null == session){
             response.setMessage("you are not login!");
         }
         else {
-            OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
-        	
-        	String fileToBeRead=null;
+            
 			try {
 				fileToBeRead =  zhbOssClient.uploadObject(file,"doc","project");
-				 
-			} catch (Exception e1) {
+				response.setCode(200);
+		   	 } catch (Exception e1) {
 				e1.printStackTrace();
+			} 
+           
+        } 
+
+		return response;
+	}
+	
+	@RequestMapping(value = "upload_dataproject", method = RequestMethod.POST)
+	@ApiOperation(value = "导入项目工程信息", notes = "导入项目工程信息", response = Response.class)
+	public Response saveDataProject() {
+		 Subject currentUser = SecurityUtils.getSubject();
+         Session session = currentUser.getSession(false);
+		 OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
+		 Response response = new Response();
+		try {
+			// 创建对Excel工作簿文件的引用
+			HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream( ApiConstants.getUploadDoc() + "/project/doc/"+
+					fileToBeRead));
+			// 创建对工作表的引用。 
+			HSSFSheet sheet = workbook.getSheetAt(0);
+			// 获取sheet页数据行
+			  rowsCount=sheet.getLastRowNum();
+			
+			 List<ProjectInfo> projectList=new ArrayList<ProjectInfo>();
+			 
+			 fialList=new ArrayList<String>();
+			if(rowsCount<=0)
+			{
+				failReason="项目格式导入内容不正确，请重与管理员联系！";
+				Map<String, Object> result=new HashMap<String, Object>();
+				fialList.add(failReason);
+				result.put("fialList", fialList);
+		        response.setCode(200);  
+				response.setData(result);
+			}else{
+
+				//解析数据
+				sucCount=0;
+				failCount=0;
+				for(int i=1;i<=rowsCount;i++)
+				{
+					HSSFRow row = sheet.getRow(i);
+					isAdd=0;
+					ProjectInfo projectInfo=null;
+					try { 
+					    projectInfo= this.rowToPrjectInfo(row,i,principal.getId());
+					  } catch (Exception e) {
+						  failCount+=1;
+						  fialList.add("第"+i+"行格式转换异常");
+						  log.error("projectInfo:转换异常",e);
+						  continue;
+				    }
+				 
+					projectList.add(projectInfo);
+					//解析后数据入库
+					if(projectInfo!=null&&isAdd==0){
+						 
+						try { 
+						   projectService.addProjectInfo(projectInfo);
+						   sucCount+=1;
+						 } catch (Exception e) {
+							 failCount+=1;
+							 
+							 fialList.add("第"+i+"行插入异常");
+						     log.error("projectInfo:转换异常",e);
+						     continue;
+				        } 
+						
+					}else if(isAdd==2){
+						sucCount+=1;
+					}else{
+						failCount+=1;
+					}
+				
+				
+				}
+				
+				Map<String, Object> result=new HashMap<String, Object>();
+				result.put("sucCount", sucCount);
+				result.put("failCount", failCount);
+				result.put("msg", "本次上传:"+(rowsCount)+"条项目信息,成功:"+sucCount+"失败:"+failCount);
+				result.put("fialList", fialList);
+				response.setCode(200); 
+				
+				response.setData(result);
 			}
-           
-	            
-        	
-             //fileToBeRead="D:/workspace/zhuhuibao/target/classes/com/zhuhuibao/business/oms/upload/南京-项目信息.xls";
-    		try {
-    			// 创建对Excel工作簿文件的引用
-    			HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream( ApiConstants.getUploadDoc() + "/project/doc/"+
-    					fileToBeRead));
-    			// 创建对工作表的引用。 
-    			HSSFSheet sheet = workbook.getSheetAt(0);
-    			// 获取sheet页数据行
-    			  rowsCount=sheet.getLastRowNum();
-    			
-    			 List<ProjectInfo> projectList=new ArrayList<ProjectInfo>();
-    			 
-    			 fialList=new ArrayList<String>();
-    			if(rowsCount<=0)
-    			{
-    				failReason="项目格式导入内容不正确，请重与管理员联系！";
-    				Map<String, Object> result=new HashMap<String, Object>();
-    				fialList.add(failReason);
-    				result.put("fialList", fialList);
-                    response.setCode(200);  
-    				response.setData(result);
-    			}else{
-
-    				//解析数据
-    				sucCount=0;
-    				failCount=0;
-    				for(int i=1;i<=rowsCount;i++)
-    				{
-    					HSSFRow row = sheet.getRow(i);
-    					isAdd=0;
-    					ProjectInfo projectInfo=null;
-    					try { 
-    					    projectInfo= this.rowToPrjectInfo(row,i,principal.getId());
-    					  } catch (Exception e) {
-    						  failCount+=1;
-    						  fialList.add("第"+i+"行格式转换异常");
-    						  log.error("projectInfo:转换异常",e);
-    						  continue;
-    				    }
-    				 
-    					projectList.add(projectInfo);
-    					//解析后数据入库
-    					if(projectInfo!=null&&isAdd==0){
-    						 
-    						try { 
-    						   projectService.addProjectInfo(projectInfo);
-    						   sucCount+=1;
-    						 } catch (Exception e) {
-    							 failCount+=1;
-    							 
-    							 fialList.add("第"+i+"行插入异常");
-       						     log.error("projectInfo:转换异常",e);
-       						     continue;
-       				        } 
-    						
-    					}else if(isAdd==2){
-    						sucCount+=1;
-    					}else{
-    						failCount+=1;
-    					}
-    				
-    				
-    				}
-    				
-    				Map<String, Object> result=new HashMap<String, Object>();
-    				result.put("sucCount", sucCount);
-    				result.put("failCount", failCount);
-    				result.put("msg", "本次上传:"+(rowsCount)+"条项目信息,成功:"+sucCount+"失败:"+failCount);
-    				result.put("fialList", fialList);
-    				response.setCode(200); 
-    				
-    				response.setData(result);
-    			}
-    			
-    	 
-    			
-    		} catch (Exception e) {
-    			log.error(e.getMessage(),e);
-    		}
-           
-        }
-        
-		
-
+			
+  	 
+			
+		} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
 		return response;
 	}
 	 
