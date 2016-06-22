@@ -101,7 +101,7 @@
     select m.id, m.mobile, m.email, m.emailCheckCode, m.password, date_format(m.registerTime,'%Y-%m-%d %H:%i:%s') registerTime, m.status, m.identify,
     m.enterpriseName, m.workType, m.enterpriseEmployeeParentId, m.province,
     m.city, m.area, m.address, m.enterpriseType, m.enterpriseLogo, m.enterpriseDesc, m.headShot, m.saleProductDesc,
-    date_format(m.enterpriseCreaterTime,'%Y-%m-%d %H:%i:%s') enterpriseCreaterTime, m.registerCapital,m.currency, m.employeeNumber, m.coBusLicNum,m.companyBusinessLicenseImg,
+    date_format(m.enterpriseCreaterTime,'%Y-%m-%d') enterpriseCreaterTime, m.registerCapital,m.currency, m.employeeNumber, m.coBusLicNum,m.companyBusinessLicenseImg,
     m.enterpriseProvince,m.enterpriseCity,m.enterpriseArea,m.enterpriseAddress,
     m.enterpriseTelephone, m.enterpriseFox, m.enterpriseWebSite, m.enterpriseLinkman, m.enterpriseLMDep,
     m.fixedTelephone, m.fixedMobile, m.QQ, m.personRealName, m.nickname,m.sex, m.personCompanyType,
