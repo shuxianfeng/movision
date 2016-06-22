@@ -261,7 +261,7 @@ public class ZhbService {
 		}
 
 		// 记录已进行的操作
-		paymentGoodsService.insertViewProject(goodsId, ShiroUtil.getCreateID(), ShiroUtil.getCompanyID(), goodsType);
+		paymentGoodsService.insertViewGoods(goodsId, ShiroUtil.getCreateID(), ShiroUtil.getCompanyID(), goodsType);
 		return result;
 	}
 

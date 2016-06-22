@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
+import static com.zhuhuibao.common.constant.ZhbPaymentConstant.goodsType.*;
+
 /**
  * 查看过的商品信息
  *
@@ -33,19 +35,22 @@ public class PaymentGoodsService {
      * @Param type 商品类型
      * @throws Exception
      */
-    public int insertViewProject(Long goodsId, Long createId,Long companyId,String type){
-        log.info("insert view project projectId = "+goodsId+" createId = "+createId+" type = "+type);
-        int result;
+    public int insertViewGoods(Long goodsId, Long createId, Long companyId, String type){
+        log.info("insert view goodsId = "+goodsId+" createId = "+createId+" type = "+type);
+        int result = 0;
         try {
-            PaymentGoods vp = new PaymentGoods();
-            vp.setGoodsId(goodsId);
-            vp.setViewerId(createId);
-            vp.setCompanyId(companyId);
-            vp.setType(type);
-            result = paymentMapper.insertSelective(vp);
+            if(CXXZJL.toString().equals(type) || CKXMXX.toString().equals(type) || CKWKRW.equals(type)
+                    || CKJSCG.equals(type) || CKZJJSCG.equals(type) || CKZJXX.equals(type)) {
+                PaymentGoods vp = new PaymentGoods();
+                vp.setGoodsId(goodsId);
+                vp.setViewerId(createId);
+                vp.setCompanyId(companyId);
+                vp.setType(type);
+                result = paymentMapper.insertSelective(vp);
+            }
         }catch(Exception e)
         {
-            log.error("insert view project error!",e);
+            log.error("insert view goodsId error!",e);
             throw e;
         }
         return result;

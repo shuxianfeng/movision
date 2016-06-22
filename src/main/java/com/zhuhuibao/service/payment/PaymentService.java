@@ -78,7 +78,7 @@ public class PaymentService {
             int viewNumber = goodsService.checkIsViewGoods(con);
             if(viewNumber == 0) {
 //                map  = projectService.queryProjectDetail(goodsID);
-//                goodsService.insertViewProject(goodsID, createId,companyId,type);
+//                goodsService.insertViewGoods(goodsID, createId,companyId,type);
 //                response.setData(goodsInfo);
 //                response.setMsgCode(MsgCodeConstant.ZHB_PAYMENT_TRUE);
                 if(CKXMXX.equals(type))//查看项目信息

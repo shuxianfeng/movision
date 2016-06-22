@@ -14,6 +14,7 @@ import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
 import com.zhuhuibao.mybatis.tech.service.PublishTCourseService;
 import com.zhuhuibao.service.course.CourseService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.oss.ZhbOssClient;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -21,6 +22,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -41,7 +43,7 @@ public class TrainCourseOmsController {
     PublishTCourseService ptCourseService;
 
     @Autowired
-    UploadService uploadService;
+    ZhbOssClient zhbOssClient;
 
     @Autowired
     CourseService courseServie;
@@ -162,12 +164,12 @@ public class TrainCourseOmsController {
 
     @ApiOperation(value="上传培训轮播图",notes="上传培训轮播图",response = Response.class)
     @RequestMapping(value = "upload_img", method = RequestMethod.POST)
-    public Response uploadImg(HttpServletRequest req) throws Exception {
+    public Response uploadImg(@RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         Response result = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null != session){
-            String url = uploadService.upload(req,"techimg"); 
+            String url = zhbOssClient.uploadObject(file,"img","tech");
             result.setData(url);
             result.setCode(200);
         }else{

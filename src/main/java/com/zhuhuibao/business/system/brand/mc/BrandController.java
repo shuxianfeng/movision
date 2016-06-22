@@ -5,7 +5,6 @@ import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
-import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;

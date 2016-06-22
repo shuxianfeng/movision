@@ -29,6 +29,11 @@ import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 
+/**
+ * 报价
+ * @author  pl
+ * date : 2016
+ */
 @RestController
 //@RequestMapping("/rest/price")
 @Api(value="OfferPrice", description="报价")
@@ -41,6 +46,9 @@ public class OfferPriceController {
 	
 	@Autowired
     ApiConstants ApiConstants;
+
+	@Autowired
+	FileUtil fileUtil;
 
 	@ApiOperation(value="我要报价(清单和单一产品)",notes="我要报价(清单和单一产品)",response = Response.class)
 	@RequestMapping(value={"rest/price/addOfferPrice","rest/system/mc/quote/add_offerPrice"}, method = RequestMethod.POST)
@@ -143,8 +151,8 @@ public class OfferPriceController {
 			response.addHeader("Cache-Control", "post-check=0, pre-check=0");
 			response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
 			response.setContentType("application/octet-stream");
-			fileurl = ApiConstants.getUploadDoc() + Constants.upload_price_document_url + "/" + fileurl;
-			jsonResult = FileUtil.downloadFile(response, fileurl);
+//			fileurl = ApiConstants.getUploadDoc() + Constants.upload_price_document_url + "/" + fileurl;
+			jsonResult = fileUtil.downloadObject(response, fileurl,"doc","price");
 		}
 		catch(Exception e)
 		{

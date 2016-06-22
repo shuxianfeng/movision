@@ -17,7 +17,6 @@ import com.zhuhuibao.mybatis.expert.entity.*;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
-import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
 import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
 import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
@@ -28,6 +27,7 @@ import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ValidateUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
+import com.zhuhuibao.utils.oss.ZhbOssClient;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -60,9 +61,6 @@ public class ExpertSiteController {
     private ConstantService constantService;
 
     @Autowired
-    private UploadService uploadService;
-
-    @Autowired
     TechExpertCourseService techCourseService;
 
     @Autowired
@@ -79,6 +77,9 @@ public class ExpertSiteController {
 
     @Autowired
     PaymentGoodsService goodsService;
+
+    @Autowired
+    ZhbOssClient zhbOssClient;
 
     private static final String PARTNER = AlipayPropertiesLoader.getPropertyValue("partner");
 
@@ -218,9 +219,9 @@ public class ExpertSiteController {
 
     @ApiOperation(value="专家上传照片",notes="专家上传照片",response = Response.class)
     @RequestMapping(value = "base/upload_photo", method = RequestMethod.POST)
-    public Response uploadPhoto(HttpServletRequest req) throws Exception {
+    public Response uploadPhoto(@RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         Response response = new Response();
-        String url = uploadService.upload(req,"expert");
+        String url = zhbOssClient.uploadObject(file,"img","expert");
         response.setData(url);
         return response;
     }
@@ -304,7 +305,7 @@ public class ExpertSiteController {
         Long companyId = ShiroUtil.getCompanyID();
         if(createid!=null){
             //记录查看专家
-            goodsService.insertViewProject(Long.parseLong(id),createid,companyId,"expert");
+            goodsService.insertViewGoods(Long.parseLong(id),createid,companyId,"expert");
             //查询专家联系方式
             Expert expert = expertService.queryExpertById(id);
             //返回到页面
