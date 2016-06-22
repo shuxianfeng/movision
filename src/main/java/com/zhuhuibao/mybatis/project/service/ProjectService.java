@@ -560,4 +560,21 @@ public class ProjectService {
 		}
 		return projectList;
 	}
+    /**
+     * 获取省市
+     * @param areaOrCityMap
+     * @return
+     */
+	public Map<String, Object> getCity(Map<String, String> areaOrCityMap) {
+		Map<String,Object> codeMap;
+		try {
+			  codeMap = projectMapper.getCity(areaOrCityMap);
+			 
+		}catch(Exception e)
+		{
+			log.error("check isview project error!");
+			throw e;
+		}
+		return codeMap;
+	}
 }

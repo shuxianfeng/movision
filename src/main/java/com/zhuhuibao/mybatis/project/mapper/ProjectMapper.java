@@ -7,6 +7,7 @@ package com.zhuhuibao.mybatis.project.mapper;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * 项目工程信息查询接口
  * @author 李光明
@@ -40,4 +41,6 @@ public interface ProjectMapper {
 	List<Map<String, String>> findPrjectByName(Map<String, Object> map);
 	
 	Map<String, String> getCatagoryByValue(List list);
+	
+	Map<String, Object> getCity(Map<String, String> areaOrCityMap);
 }

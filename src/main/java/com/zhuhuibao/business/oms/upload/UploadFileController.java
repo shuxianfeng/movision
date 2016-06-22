@@ -83,6 +83,7 @@ public class UploadFileController {
 		Response response = new Response(); 
 		Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
+        rowsCount=1;
         if(null == session){
             response.setMessage("you are not login!");
         }
@@ -136,6 +137,7 @@ public class UploadFileController {
     						  failCount+=1;
     						  fialList.add("第"+i+"行格式转换异常");
     						  log.error("projectInfo:转换异常",e);
+    						  continue;
     				    }
     				 
     					projectList.add(projectInfo);
@@ -144,11 +146,13 @@ public class UploadFileController {
     						 
     						try { 
     						   projectService.addProjectInfo(projectInfo);
-    						  sucCount+=1;
+    						   sucCount+=1;
     						 } catch (Exception e) {
     							 failCount+=1;
+    							 
     							 fialList.add("第"+i+"行插入异常");
-       						  log.error("projectInfo:转换异常",e);
+       						     log.error("projectInfo:转换异常",e);
+       						     continue;
        				        } 
     						
     					}else if(isAdd==2){
@@ -187,6 +191,7 @@ public class UploadFileController {
 	 * row 转换成项目信息
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private ProjectInfo rowToPrjectInfo(HSSFRow row,int rowsNum,Integer id){
 		
 		ProjectInfo projectInfo= new ProjectInfo(); 
@@ -194,7 +199,7 @@ public class UploadFileController {
 		
 		projectInfo.setCreateid(Long.valueOf(id));
 		String name;
-		failReason="第"+rowsNum+"行";
+		failReason="第"+(rowsNum+1)+"行";
 		if(!isEmpty(row.getCell(0))){
 			name=row.getCell(0).toString();
 			try {
@@ -218,28 +223,29 @@ public class UploadFileController {
 		
 		if(!isEmpty(row.getCell(3))){
 			String address=row.getCell(3).toString();
-			int areaIndex=address.indexOf("区");
-			if(areaIndex<=0)
+			int areaIndex=address.indexOf("市")>=0?address.indexOf("市"):10000;
+			
+			if(areaIndex>address.indexOf("区") && address.indexOf("区")>=0)
+			{
+				areaIndex=address.indexOf("区");
+			}
+			
+			if(areaIndex>address.indexOf("县") && address.indexOf("县")>=0)
 			{
 				areaIndex=address.indexOf("县");
 			}
 			
-			if(areaIndex<=0)
-			{
-				areaIndex=address.indexOf("市");
-			}
-			
-			if(areaIndex<=0)
+			if(areaIndex>address.indexOf("州") && address.indexOf("州")>=0)
 			{
 				areaIndex=address.indexOf("州");
 			}
 			
-			if(areaIndex<=0)
+			if(areaIndex>address.indexOf("盟") && address.indexOf("盟")>=0)
 			{
 				areaIndex=address.indexOf("盟");
 			}
 			
-			if(areaIndex<=0)
+			if(areaIndex>address.indexOf("旗") && address.indexOf("旗")>=0)
 			{
 				areaIndex=address.indexOf("旗");
 			}
@@ -255,8 +261,17 @@ public class UploadFileController {
 				projectInfo.setProvince(codeMap.get("provincecode").toString());
 				projectInfo.setAddress(address.substring(areaIndex+1,address.length()));
             }else{
-            	isAdd=1;
-            	failReason+= ",第4列，项目地址不正确，导入失败;"; 
+            	
+            	codeMap=projectService.getCity(areaOrCityMap);
+            	
+            	projectInfo.setCity(codeMap.get("cityCode").toString());
+				projectInfo.setProvince(codeMap.get("provincecode").toString());
+            	if(codeMap!=null){
+            		projectInfo.setAddress(address);
+            	}else{
+	            	isAdd=1;
+	            	failReason+= ",第4列，项目地址不正确，导入失败;"; 
+            	}
             }
 			
 		} 
@@ -416,7 +431,7 @@ public class UploadFileController {
 						linkma.setLinkman(linkName.replace(temp, ""));
 						details=details.replace(linkName, "");
 						int result=0;
-						while(result<4)
+						while(result<5)
 						{
 							linkma=setLinkMan(linkma);
 							result++;
@@ -448,7 +463,7 @@ public class UploadFileController {
 								linkma.setLinkman(linkName.replace(temp, ""));
 								details=details.replace(linkName, "");
 								int result=0;
-								while(result<4)
+								while(result<5)
 								{
 									linkma=setLinkMan(linkma);
 									result++;
@@ -472,7 +487,7 @@ public class UploadFileController {
 							linkma.setLinkman(linkName.replace(temp, ""));
 							details=details.replace(linkName, "");
 							int result=0;
-							while(result<4)
+							while(result<5)
 							{
 								linkma=setLinkMan(linkma);
 								result++;
@@ -502,7 +517,7 @@ public class UploadFileController {
            if(!isEmpty(row.getCell(13))){ 
         	   if(!"".equals(row.getCell(13).toString()))
 	        	{
-        		   setPartBList(row.getCell(13).toString(), rowsNum, projectInfo,"2");  
+        		   setPartBList(row.getCell(13).toString(), rowsNum, projectInfo,"3");  
 	        	}
 		   }
            
@@ -510,7 +525,7 @@ public class UploadFileController {
            if(!isEmpty(row.getCell(14))){ 
 	        	if(!"".equals(row.getCell(14).toString()))
 	        	{
-	        	 setPartBList(row.getCell(14).toString(), rowsNum, projectInfo,"3"); 
+	        	 setPartBList(row.getCell(14).toString(), rowsNum, projectInfo,"2"); 
 	        	}
 		   }
            
@@ -570,6 +585,18 @@ public class UploadFileController {
 			ProjectLinkman linkma=new ProjectLinkman();
 			linkma.setPartyType(Long.valueOf("2"));
 			linkma.setTypePartyB(Integer.valueOf(type));
+			
+			if(partyList.length==4)
+			{
+				List<String> list =null;
+				list=new ArrayList<String>();
+				list.add(partyList[0]+"/"+partyList[1]);
+				list.add(partyList[2]);
+				list.add(partyList[3]);
+				partyList=list.toArray(new String[1]);
+				 
+				
+			}
 			if(partyList.length==3)
 			{
 				 
@@ -598,9 +625,11 @@ public class UploadFileController {
 					linkma.setLinkman(linkName.replace(temp, ""));
 					details=details.replace(linkName, "");
 					int result=0;
-					while(result<4)
+					while(result<5)
 					{
+						 
 						linkma=setLinkMan(linkma);
+				 
 						result++;
 					}
 					
@@ -686,12 +715,13 @@ public class UploadFileController {
 				partyBList.add(linkma);
 			 
 			}else{
+				rowsNum=rowsNum+1;
 				if("1".equals(type)){
 				failReason="第"+rowsNum+"行，第12列:业主 / 开发商格式错误;";
 				}else if("2".equals(type)){
-				failReason="第"+rowsNum+"行，第13列:工程师 / 技术顾问:格式错误;";
+				failReason="第"+rowsNum+"行，第13列:承建商格式错误格式错误;";
 				}else if("3".equals(type)){
-					failReason="第"+rowsNum+"行，第14列:承建商格式错误;";
+					failReason="第"+rowsNum+"行，第14列:工程师 / 技术顾问;";
 				}else if("4".equals(type)){
 					failReason="第"+rowsNum+"行，第15列:分包商格式错误;";
 				}
@@ -749,7 +779,7 @@ public class UploadFileController {
 				linkma.setFax(fax);
 			}
 			//项目地址
-		}else if("地址:".equals(temp.trim())){
+		}else if("地址:".equals(temp)){
 			index=details.indexOf(":")+1; 
 			if(index==0)
 			{
@@ -768,10 +798,10 @@ public class UploadFileController {
 			temp=interAdd.substring(interAdd.length()-3,interAdd.length());
 			details=details.replace(interAdd, ""); 
 			 
-		}else{ 
-		 
-			linkma.setNote(details);
-		}
+		}else if("备注:".equals(temp.trim())){ 
+				linkma.setNote(details);
+			 
+		} 
 		return linkma;
 	}
 	/**
