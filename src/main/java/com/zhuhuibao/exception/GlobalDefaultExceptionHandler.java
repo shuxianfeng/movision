@@ -44,6 +44,10 @@ public class GlobalDefaultExceptionHandler {
                     result.setCode(400);
                     result.setMsgCode(((BusinessException) ex).getMsgid());
                     break;
+                case "BaseException":
+                    result.setCode(400);
+                    result.setMsgCode(((BusinessException) ex).getMsgid());
+                    break;
                 case "DataAccessException":
                     result.setCode(400);
                     result.setMessage("数据库访问异常");

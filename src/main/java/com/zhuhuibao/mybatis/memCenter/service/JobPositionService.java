@@ -3,12 +3,15 @@ package com.zhuhuibao.mybatis.memCenter.service;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.constant.JobConstant;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.PositionMapper;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -41,13 +44,20 @@ public class JobPositionService {
     @Autowired
     private MemberMapper memberMapper;
 
-
+    @Autowired
+    ZhbService zhbService;
     /**
      * 发布职位
      */
-    public int publishPosition(Job job){
+    public void publishPosition(Job job) throws Exception {
         try{
-            return jobMapper.publishPosition(job);
+            boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.YGZH.toString());
+            if(bool) {
+                jobMapper.publishPosition(job);
+                zhbService.payForGoods(Long.parseLong(job.getId()),ZhbPaymentConstant.goodsType.FBZW.toString());
+            }else{//支付失败稍后重试，联系客服
+                throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+            }
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();

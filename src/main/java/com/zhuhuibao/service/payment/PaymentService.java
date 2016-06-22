@@ -77,21 +77,21 @@ public class PaymentService {
             //项目是否已经被同企业账号查看过
             int viewNumber = goodsService.checkIsViewGoods(con);
             if(viewNumber == 0) {
-//                map  = projectService.queryProjectDetail(goodsID);
-//                goodsService.insertViewGoods(goodsID, createId,companyId,type);
-//                response.setData(goodsInfo);
-//                response.setMsgCode(MsgCodeConstant.ZHB_PAYMENT_TRUE);
-                if(CKXMXX.equals(type))//查看项目信息
+                if(CKXMXX.toString().equals(type))//查看项目信息
                 {
                     Map<String,Object> map  = projectService.previewUnLoginProject(goodsID);
                     dataMap.put("info",map);
-                }else if(CKJSCG.equals(type))//查看技术成果
+                }else if(CKJSCG.toString().equals(type))//查看技术成果
                 {
                     Map<String,Object> techCoop = techService.previewUnloginTechCoopDetail(String.valueOf(goodsID));
                     dataMap.put("info",techCoop);
-                }else if(CKZJJSCG.equals(type))
+                }else if(CKZJJSCG.toString().equals(type))//查看专家技术成果
                 {
                     Map<String,String> map = expertService.queryUnloginAchievementById(String.valueOf(goodsID));
+                    dataMap.put("info",map);
+                }else if(CKZJXX.toString().equals(type))//查看专家信息
+                {
+                    Map map = expertService.getExpertDetail(String.valueOf(goodsID),viewNumber);
                     dataMap.put("info",map);
                 }
                 dataMap.put("payment", ZhbPaymentConstant.PAY_ZHB_NON_PURCHASE);
@@ -117,26 +117,29 @@ public class PaymentService {
                 {
                     Map<String,Object> map  = projectService.queryProjectDetail(goodsID);
                     dataMap.put("info",map);
-                }else if(CKWKRW.equals(type))//查看威客任务
+                }else if(CKWKRW.toString().equals(type))//查看威客任务
                 {
                     Cooperation cooperation = cooperationService.queryCooperationInfoById(String.valueOf(goodsID));
                     dataMap.put("info",cooperation);
                     cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews())+1));
                     cooperationService.updateCooperationViews(cooperation);
-                }else if(CKJSCG.equals(type))//查看技术成果
+                }else if(CKJSCG.toString().equals(type))//查看技术成果
                 {
                     Map<String,Object> techCoop = techService.previewTechCooperationDetail(String.valueOf(goodsID));
                     techService.updateTechCooperationViews(String.valueOf(goodsID));
                     dataMap.put("info",techCoop);
-                }else if(CKZJJSCG.equals(type))//查看专家技术成果
+                }else if(CKZJJSCG.toString().equals(type))//查看专家技术成果
                 {
                     Map<String,String> map = expertService.queryAchievementById(String.valueOf(goodsID));
+                    dataMap.put("info",map);
+                }else if(CKZJXX.toString().equals(type))//查看专家信息
+                {
+                    Map map = expertService.getExpertDetail(String.valueOf(goodsID),viewNumber);
                     dataMap.put("info",map);
                 }
                 dataMap.put("payment", ZhbPaymentConstant.PAY_ZHB_PURCHASE);
 
                 response.setData(dataMap);
-//                map  = projectService.queryProjectDetail(goodsID);
             }
         }else{
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

@@ -81,8 +81,7 @@ public class TechCoopMcController {
 
     @RequestMapping(value="add_tech_cooperation", method = RequestMethod.POST)
     @ApiOperation(value="新增技术合作(技术成果，技术需求)",notes = "新增技术合作(技术成果，技术需求)",response = Response.class)
-    public Response insertTechCooperation(@ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
-    {
+    public Response insertTechCooperation(@ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop) throws Exception {
         Long createId = ShiroUtil.getCreateID();
         if(null != createId) {
             techCoop.setCreateID(createId);

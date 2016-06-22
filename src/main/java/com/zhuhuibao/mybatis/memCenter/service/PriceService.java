@@ -3,15 +3,20 @@ package com.zhuhuibao.mybatis.memCenter.service;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.AskPriceBean;
 import com.zhuhuibao.common.pojo.AskPriceResultBean;
 import com.zhuhuibao.common.pojo.AskPriceSearchBean;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.AgentMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.AskPriceMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ProvinceMapper;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,19 +51,29 @@ public class PriceService {
     MemberMapper memberMapper;
 
     @Autowired
+    ZhbService zhbService;
+
+    @Autowired
+    FileUtil fileUtil;
+
+    @Autowired
     com.zhuhuibao.common.constant.ApiConstants ApiConstants;
     /**
      * 询价保存
      */
-    public Response saveAskPrice(AskPrice askPrice){
+    public Response saveAskPrice(AskPrice askPrice) throws Exception {
         log.debug("询价保存");
         Response result = new Response();
         if(askPrice.getBillurl()!=null && !askPrice.getBillurl().equals("")){
             String fileUrl = askPrice.getBillurl();
-            fileUrl = ApiConstants.getUploadDoc()+ Constants.upload_price_document_url+"/"+fileUrl;
-            File file = new File(fileUrl);
-            if(file.exists()){
-                askPriceMapper.saveAskPrice(askPrice);
+            if(fileUtil.isExistFile(fileUrl,"doc","price")){
+                boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.YGZH.toString());
+                if(bool) {
+                    askPriceMapper.saveAskPrice(askPrice);
+                    zhbService.payForGoods(askPrice.getId(),ZhbPaymentConstant.goodsType.XJFB.toString());
+                }else{//支付失败稍后重试，联系客服
+                    throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+                }
                 result.setCode(200);
             }
             else

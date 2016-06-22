@@ -1,7 +1,12 @@
 package com.zhuhuibao.mybatis.tech.service;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
 import com.zhuhuibao.mybatis.tech.mapper.TechCooperationMapper;
 import com.zhuhuibao.mybatis.tech.mapper.TechDataMapper;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -35,17 +40,29 @@ public class TechCooperationService {
     @Autowired
     TechDataService tdService;
 
+    @Autowired
+    ZhbService zhbService;
+
     /**
      * 插入技术成果或者技术需求
      * @param tech
      * @return
      */
-    public int insertTechCooperation(TechCooperation tech)
-    {
+    public int insertTechCooperation(TechCooperation tech) throws Exception {
         int result = 0;
         log.info("insert tech cooperation info "+ StringUtils.beanToString(tech));
-        try {
-            result = techMapper.insertSelective(tech);
+        try {//2-技术需求 发布需要筑慧币
+            if("2".equals(tech.getType())){
+                boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.YGZH.toString());
+                if(bool) {
+                    result = techMapper.insertSelective(tech);
+                    zhbService.payForGoods(tech.getId(),ZhbPaymentConstant.goodsType.FBJSXQ.toString());
+                }else{//支付失败稍后重试，联系客服
+                    throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+                }
+            }else {//1-技术成果
+                result = techMapper.insertSelective(tech);
+            }
         }catch(Exception e)
         {
             log.error("insert tech cooperation info error!",e);

@@ -1,10 +1,15 @@
 package com.zhuhuibao.mybatis.witkey.service;
 
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import com.zhuhuibao.mybatis.witkey.entity.CooperationType;
 import com.zhuhuibao.mybatis.witkey.mapper.CooperationMapper;
 import com.zhuhuibao.mybatis.witkey.mapper.CooperationTypeMapper;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +35,35 @@ public class CooperationService {
 
     @Autowired
     private CooperationTypeMapper cooperationTypeMapper;
+
+    @Autowired
+    ZhbService zhbService;
     /**
      * 发布任务
      */
-    public int publishCooperation(Cooperation cooperation){
+    public void publishCooperation(Cooperation cooperation) throws Exception {
         try{
-            return cooperationMapper.publishCooperation(cooperation);
+            //发布威客服务需要付费
+            if(cooperation.getType().matches("[7,8,9,13]")) {
+                boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.YGZH.toString());
+                if(bool) {
+                    cooperationMapper.publishCooperation(cooperation);
+                    zhbService.payForGoods(Long.parseLong(cooperation.getId()),ZhbPaymentConstant.goodsType.FBWKFW.toString());
+                }else{//支付失败稍后重试，联系客服
+                    throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+                }
+            }else if(cooperation.getType().matches("[10,11]")){//发布资质合作需要付费
+                boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.YGZH.toString());
+                if(bool) {
+                    cooperationMapper.publishCooperation(cooperation);
+                    zhbService.payForGoods(Long.parseLong(cooperation.getId()),ZhbPaymentConstant.goodsType.FBZZHZ.toString());
+                }else{//支付失败稍后重试，联系客服
+                    throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+                }
+            }
+            else{
+                cooperationMapper.publishCooperation(cooperation);
+            }
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();
@@ -180,6 +208,12 @@ public class CooperationService {
             e.printStackTrace();
             throw e;
         }
+    }
+
+    public static void main(String[] args)
+    {
+        String str = "2";
+        System.out.println(str.matches("[1,2,3,4,5]"));
     }
 
 }

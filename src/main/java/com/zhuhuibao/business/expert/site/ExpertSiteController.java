@@ -22,6 +22,7 @@ import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
 import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
 import com.zhuhuibao.mybatis.tech.service.PublishTCourseService;
 import com.zhuhuibao.mybatis.tech.service.TechExpertCourseService;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -80,6 +81,9 @@ public class ExpertSiteController {
 
     @Autowired
     ZhbOssClient zhbOssClient;
+
+    @Autowired
+    ZhbService zhbService;
 
     private static final String PARTNER = AlipayPropertiesLoader.getPropertyValue("partner");
 
@@ -226,7 +230,7 @@ public class ExpertSiteController {
         return response;
     }
 
-    @ApiOperation(value="专家详情(前台)",notes="专家详情(前台)",response = Response.class)
+   /* @ApiOperation(value="专家详情(前台)",notes="专家详情(前台)",response = Response.class)
     @RequestMapping(value = "base/sel_expert", method = RequestMethod.GET)
     public Response expertInfo(@ApiParam(value = "专家id")@RequestParam String id) {
         Response response = new Response();
@@ -263,9 +267,6 @@ public class ExpertSiteController {
         Long createid = ShiroUtil.getCreateID();
         Long comanyId = ShiroUtil.getCompanyID();
         if(createid!=null){
-            LookExpertRecord record = new LookExpertRecord();
-            record.setExpertId(id);
-            record.setCompanyId(String.valueOf(comanyId));
             //查询该专家是否已被查看过
             Map<String,Object> con = new HashMap<String,Object>();
             con.put("goodsId",id);
@@ -295,9 +296,9 @@ public class ExpertSiteController {
         expert.setViews(String.valueOf(Integer.parseInt(expert.getViews())+1));
         expertService.updateExpertViews(expert);
         return response;
-    }
+    }*/
 
-    @ApiOperation(value="专家联系方式详情(前台)",notes="专家联系方式详情(前台)",response = Response.class)
+  /*  @ApiOperation(value="专家联系方式详情(前台)",notes="专家联系方式详情(前台)",response = Response.class)
     @RequestMapping(value = "base/sel_expert_contact", method = RequestMethod.GET)
     public Response expertContactInfo(@ApiParam(value = "专家id")@RequestParam String id)  {
         Response response = new Response();
@@ -319,7 +320,7 @@ public class ExpertSiteController {
         }
 
         return response;
-    }
+    }*/
 
     @ApiOperation(value="专家列表(前台分页)",notes="专家列表(前台分页)",response = Response.class)
     @RequestMapping(value = "base/sel_expertList", method = RequestMethod.GET)
@@ -726,12 +727,18 @@ public class ExpertSiteController {
 
     @ApiOperation(value="给专家留言",notes="给专家留言",response = Response.class)
     @RequestMapping(value = "base/add_message", method = RequestMethod.POST)
-    public Response message(@ModelAttribute Message message) {
+    public Response message(@ModelAttribute Message message) throws Exception {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
             message.setCreateid(String.valueOf(createid));
-            memberService.saveMessage(message);
+            boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.YGZH.toString());
+            if(bool) {
+                memberService.saveMessage(message);
+                zhbService.payForGoods(Long.parseLong(message.getId()),ZhbPaymentConstant.goodsType.GZJLY.toString());
+            }else{//支付失败稍后重试，联系客服
+                throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+            }
         }else {
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }

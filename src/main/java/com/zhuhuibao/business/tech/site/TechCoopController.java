@@ -47,8 +47,7 @@ public class TechCoopController {
 
     @RequestMapping(value="add_tech_cooperation", method = RequestMethod.POST)
     @ApiOperation(value="新增技术成果",notes = "新增技术技术成果",response = Response.class)
-    public Response insertTechCooperation(@ApiParam(value = "技术合作：技术成果")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
-    {
+    public Response insertTechCooperation(@ApiParam(value = "技术合作：技术成果")  @ModelAttribute(value="techCoop")TechCooperation techCoop) throws Exception {
         log.info("insert tech cooperation");
         Long createId = ShiroUtil.getCreateID();
         if(null != createId) {
@@ -63,8 +62,7 @@ public class TechCoopController {
 
     @RequestMapping(value="add_tech_requirement", method = RequestMethod.POST)
     @ApiOperation(value="新增技术需求",notes = "新增技术需求",response = Response.class)
-    public Response insertTechRequirement(@ApiParam(value = "技术合作：技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
-    {
+    public Response insertTechRequirement(@ApiParam(value = "技术合作：技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop) throws Exception {
         log.info("insert tech requirement");
         Long createId = ShiroUtil.getCreateID();
         if(null != createId) {

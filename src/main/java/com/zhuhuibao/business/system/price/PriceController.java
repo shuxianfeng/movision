@@ -51,7 +51,7 @@ public class PriceController {
      */
     @ApiOperation(value="询价保存",notes="询价保存",response = Response.class)
     @RequestMapping(value = {"/rest/price/saveAskPrice","/rest/system/mc/enquiry/add_enquiry"}, method = RequestMethod.POST)
-    public Response saveAskPrice(AskPrice askPrice) throws IOException {
+    public Response saveAskPrice(AskPrice askPrice) throws Exception {
         Response result = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);

@@ -1,10 +1,15 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.AccountBean;
 import com.zhuhuibao.common.pojo.ResultBean;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.*;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +64,9 @@ public class MemberService {
 
 	@Autowired
 	private MessageMapper messageMapper;
+
+	@Autowired
+	ZhbService zhbService;
 	/**
 	 * 会员信息更新
 	 */
@@ -90,15 +98,22 @@ public class MemberService {
 	/**
 	 * 新建员工
 	 */
-	public int addMember(Member member)
-	{
+	public int addMember(Member member) throws Exception {
+		int result = 0;
 		try{
-			return memberMapper.addMember(member);
+			boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.YGZH.toString());
+			if(bool) {
+				result = memberMapper.addMember(member);
+				zhbService.payForGoods(Long.parseLong(member.getId()),ZhbPaymentConstant.goodsType.YGZH.toString());
+			}else{//支付失败稍后重试，联系客服
+				throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+			}
 		}catch (Exception e){
 			log.error(e.getMessage());
 			e.printStackTrace();
 			throw e;
 		}
+		return result;
 	}
 
 	/**

@@ -54,7 +54,7 @@ public class JobController {
      */
     @ApiOperation(value = "发布职位", notes = "发布职位", response = Response.class)
     @RequestMapping(value = {"publishPosition","mc/recruit/add_position"}, method = RequestMethod.POST)
-    public Response publishPosition(@ApiParam(value = "职位属性") Job job) throws IOException {
+    public Response publishPosition(@ApiParam(value = "职位属性") Job job) throws Exception {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){

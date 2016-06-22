@@ -186,4 +186,9 @@ public interface MsgCodeConstant {
 	 */
 	int ZHB_PAYMENT_TRUE = 10070;
 
+	/**
+	 * 筑慧币支付失败稍后重试或联系客服
+	 */
+	int ZHB_PAYMENT_FAILURE = 10080;
+
 }

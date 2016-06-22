@@ -16,6 +16,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.sms.SDKSendSms;
 import org.apache.shiro.SecurityUtils;
@@ -65,11 +66,14 @@ public class RegisterController {
 	 */
 	@Autowired
 	private RegisterValidateService rvService;
-	
-	 /**
-	  * 邮箱注册时的图形验证码
-	  * @param response
-	  */
+
+	@Autowired
+	VipInfoService vipInfoService;
+
+	/**
+     * 邮箱注册时的图形验证码
+     * @param response
+     */
 	@ApiOperation(value="邮箱注册时的图形验证码",notes="邮箱注册时的图形验证码",response = Response.class)
 	@RequestMapping(value = {"/rest/imgCode","rest/member/site/base/sel_imgCode"}, method = RequestMethod.GET)
 	public void getCode(HttpServletResponse response) throws IOException {
@@ -220,6 +224,8 @@ public class RegisterController {
 				String verifyCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_REGISTER);
 				result = memberService.registerMailMember(member, verifyCode);
 			}
+		//会员注册初始化特权
+		vipInfoService.initDefaultExtraPrivilege(member.getId(),member.getIdentify());
 		return result;
 	}
 	

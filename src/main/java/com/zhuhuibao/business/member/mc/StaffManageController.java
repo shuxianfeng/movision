@@ -44,7 +44,7 @@ public class StaffManageController {
 
 	@ApiOperation(value = "新建员工", notes = "新建员工", response = Response.class)
 	@RequestMapping(value = "add_member", method = RequestMethod.POST)
-	public Response addMember(@RequestParam String account,@RequestParam String workType,@RequestParam String enterpriseLinkman)  {
+	public Response addMember(@RequestParam String account,@RequestParam String workType,@RequestParam String enterpriseLinkman) throws Exception {
 		Response result = new Response();
 
 		Long memberId = ShiroUtil.getCreateID();
@@ -63,7 +63,7 @@ public class StaffManageController {
 			member.setFixedTelephone("");
 			member.setFixedMobile("");
 			member.setQQ("");
-			member.setSex("");
+			member.setSex(null);
 
 			String md5Pwd = new Md5Hash("123456",null,2).toString();
 			member.setPassword(md5Pwd);
