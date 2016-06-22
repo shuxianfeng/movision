@@ -17,7 +17,6 @@ import com.zhuhuibao.mybatis.expert.entity.*;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
-import com.zhuhuibao.mybatis.memCenter.service.UploadService;
 import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
 import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
 import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
@@ -60,9 +59,6 @@ public class ExpertSiteController {
 
     @Autowired
     private ConstantService constantService;
-
-    @Autowired
-    private UploadService uploadService;
 
     @Autowired
     TechExpertCourseService techCourseService;
