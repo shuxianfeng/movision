@@ -513,7 +513,7 @@ public class JobSiteController {
         resumeBean.setId(id);
         resume.updateResume(resumeBean);
         //发布招聘职位已付过钱，查看应聘的简历，也属于付费查看过的简历,需要增加到已付费信息表。这部分信息不需要付费
-        goodsService.insertViewProject(Long.parseLong(id), memberId,companyId,ZhbPaymentConstant.goodsType.CXXZJL.toString());
+        goodsService.insertViewGoods(Long.parseLong(id), memberId,companyId,ZhbPaymentConstant.goodsType.CXXZJL.toString());
         if(memberId!=null){
             Map<String,Object> map1 = new HashMap<String,Object>();
             map1.put("resumeID",id);
