@@ -129,7 +129,7 @@ public class FileUtil {
             if (file.exists()) {   //如果文件存在
                 FileInputStream inputStream = new FileInputStream(file);
                 byte[] data = new byte[(int) file.length()];
-//                int length = inputStream.read(data);
+                int length = inputStream.read(data);
                 inputStream.close();
                 ServletOutputStream stream = response.getOutputStream();
                 stream.write(data);
