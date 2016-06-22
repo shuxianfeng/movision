@@ -73,8 +73,8 @@
 	  z.goods_type AS goodsType,
 	  z.goods_id AS goodsId,
 	  z.description,
-	  z.add_time AS addTime,
-	  z.update_time AS updateTime 
+	  date_format(z.add_time,'%Y-%m-%d %H:%i:%s') AS addTime,
+	  date_format(z.update_time,'%Y-%m-%d %H:%i:%s') AS updateTime
 	FROM
 	  t_zhb_record z 
 	  LEFT JOIN t_m_member m 
@@ -83,7 +83,7 @@
 	  <if test="companyId == operaterId">
 	  	z.buyer_id = #{companyId,jdbcType=BIGINT}
 	  </if>
-	  <if test="companyId != operaterId">
+	  <if test="operaterId != operaterId">
 	  	z.operater_id = #{operaterId,jdbcType=BIGINT}
 	  </if>
 	  <if test="recordType == 1">
