@@ -191,6 +191,12 @@
 	WHERE id = #{id,jdbcType=BIGINT}
  </select>
  
-
+  <select id="selectZhbGoodsListById" parameterType="java.lang.String" resultMap="ZhbGoodsMap">
+ 	SELECT 
+	  id,name,pinyin,type,value,price,add_time
+	FROM
+	  t_dictionary_zhbgoods 
+	WHERE type = #{type,jdbcType=VARCHAR}
+ </select>
 	
 </mapper>

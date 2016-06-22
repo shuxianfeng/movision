@@ -40,8 +40,11 @@ public class ZhbController {
 	@RequestMapping(value = "mc/sel_prepaid", method = RequestMethod.GET)
 	public Response enterZhbPrepaid(@ApiParam(value = "订单编号") @RequestParam(required = true) String orderNo) throws Exception {
 		Response response = new Response();
-		// List<DictionaryZhbgoods> goodsList =
-		// zhbService.listZhbGoodsByType(type);
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<DictionaryZhbgoods> goodsList = zhbService.listZhbGoodsByType("1");
+		result.put("goodsList", goodsList);
+		result.put("account", ShiroUtil.getMember().getAccount());
+		response.setData(result);
 		return response;
 	}
 
@@ -55,6 +58,8 @@ public class ZhbController {
 		} catch (Exception e) {
 		}
 		response.setData(result);
+
+		response.setCode(1 == result ? 200 : 400);
 
 		return response;
 	}
@@ -70,6 +75,7 @@ public class ZhbController {
 		} catch (Exception e) {
 		}
 		response.setData(result);
+		response.setCode(1 == result ? 200 : 400);
 
 		return response;
 	}
@@ -96,6 +102,7 @@ public class ZhbController {
 		} catch (Exception e) {
 		}
 		response.setData(result);
+		response.setCode(1 == result ? 200 : 400);
 
 		return response;
 	}
@@ -113,6 +120,7 @@ public class ZhbController {
 		}
 
 		response.setData(result);
+		response.setCode(1 == result ? 200 : 400);
 
 		return response;
 	}
@@ -129,6 +137,7 @@ public class ZhbController {
 		}
 
 		response.setData(result);
+		response.setCode(1 == result ? 200 : 400);
 
 		return response;
 	}

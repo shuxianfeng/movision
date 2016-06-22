@@ -379,9 +379,15 @@ public class ZhbService {
 		return null;
 	}
 
-	// public List<DictionaryZhbgoods> listZhbGoodsByType(String type) {
-	// return zhbMapper.selectZhbGoodsListById(type);
-	// }
+	/**
+	 * 根据类型获取筑慧币物品配置信息
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public List<DictionaryZhbgoods> listZhbGoodsByType(String type) {
+		return zhbMapper.selectZhbGoodsListById(type);
+	}
 
 	/**
 	 * 获取筑慧币物品配置信息
