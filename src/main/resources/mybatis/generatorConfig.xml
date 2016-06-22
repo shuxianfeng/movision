@@ -33,7 +33,7 @@
 
         <!-- 生成实体类地址 -->
 
-        <javaModelGenerator targetPackage="com.zhuhuibao.mybatis.advertising.entity"
+        <javaModelGenerator targetPackage="com.zhuhuibao.mybatis.memCenter.entity"
                             targetProject="${project}">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
@@ -42,22 +42,22 @@
         </javaModelGenerator>
 
         <!-- 生成mapxml文件 -->
-        <sqlMapGenerator targetPackage="mapper/advertising"
+        <sqlMapGenerator targetPackage="mapper/member"
                          targetProject="${resources}">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
         <!-- 生成mapxml对应client，也就是接口dao -->
-        <javaClientGenerator targetPackage="com.zhuhuibao.mybatis.advertising.mapper"
+        <javaClientGenerator targetPackage="com.zhuhuibao.mybatis.memCenter.mapper"
                              targetProject="${project}" type="XMLMAPPER">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <table tableName="t_sys_advertising"
-               domainObjectName="SysAdvertising"
+        <table tableName="t_m_shop"
+               domainObjectName="MemberShop"
                enableCountByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"
