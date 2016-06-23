@@ -397,7 +397,7 @@ public class UploadFileController {
         	
 			String partyContent= "";
 			String  rowContetnt = row.getCell(11).toString();
-			
+			rowContetnt=rowContetnt.replaceAll("\n联系人备注:", "").replaceAll("\n中标价:", "备注:");
 	 
 			String [] partyContentList;
 			if(rowContetnt.indexOf(";")>0)
@@ -584,6 +584,10 @@ public class UploadFileController {
 	private void setPartBList(String rowContetnt, int rowsNum, ProjectInfo ProjectInfo,String type) {
 		
 		String partyContent="";
+		if(rowContetnt.indexOf("\n中标价:")>0)
+		{
+			rowContetnt=rowContetnt.replaceAll("\n联系人备注:", "").replaceAll("\n中标价:", "备注:");
+		}
 		String [] partyContentList =rowContetnt.replaceAll("\n联系人备注", "备注").replaceAll("联系人备注", "备注").replace("\n中标价:", "\t中标价:").split("\n\n");
 		
 		 
