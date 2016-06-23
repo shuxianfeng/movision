@@ -1,7 +1,9 @@
 package com.zhuhuibao.business.oms.upload;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -78,26 +80,25 @@ public class UploadFileController {
 	int failCount=0;
 	int rowsCount=10000;
 	String fileToBeRead=null;
+	InputStream fileStream=null;
 	@RequestMapping(value = "upload_project", method = RequestMethod.POST)
 	@ApiOperation(value = "导入项目工程信息", notes = "导入项目工程信息", response = Response.class)
 	public Response uploadProject(HttpServletRequest req,@RequestParam(value = "file", required = false) MultipartFile file) {
 		Response response = new Response(); 
 		Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        rowsCount=10000;
         if(null == session){
             response.setMessage("you are not login!");
-        }
-        else {
-            
-			try {
-				fileToBeRead =  zhbOssClient.uploadObject(file,"doc","project");
+        }else{
+        rowsCount=10000;
+	        try {
+				fileStream=file.getInputStream();
 				response.setCode(200);
-		   	 } catch (Exception e1) {
-				e1.printStackTrace();
-			} 
-           
-        } 
+			} catch (IOException e) {
+				 
+				e.printStackTrace();
+			}
+        }
 
 		return response;
 	}
@@ -111,8 +112,8 @@ public class UploadFileController {
 		 Response response = new Response();
 		try {
 			// 创建对Excel工作簿文件的引用
-			HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream( ApiConstants.getUploadDoc() + "/project/doc/"+
-					fileToBeRead));
+			HSSFWorkbook workbook = new HSSFWorkbook(fileStream);
+			 
 			// 创建对工作表的引用。 
 			HSSFSheet sheet = workbook.getSheetAt(0);
 			// 获取sheet页数据行
@@ -134,13 +135,15 @@ public class UploadFileController {
 				//解析数据
 				sucCount=0;
 				failCount=0;
+				synchronized(currentUser){
+					
 				for(int i=1;i<=rowsCount;i++)
 				{
 					HSSFRow row = sheet.getRow(i);
 					isAdd=0;
 					ProjectInfo projectInfo=null;
 					try { 
-					    projectInfo= this.rowToPrjectInfo(row,i,principal.getId());
+					    projectInfo= this.rowToPrjectInfo(row,i+1,principal.getId());
 					  } catch (Exception e) {
 						  failCount+=1;
 						  fialList.add("第"+i+"行格式转换异常");
@@ -171,7 +174,9 @@ public class UploadFileController {
 				
 				
 				}
+				}
 				
+			 
 				Map<String, Object> result=new HashMap<String, Object>();
 				result.put("sucCount", sucCount);
 				result.put("failCount", failCount);
@@ -202,7 +207,7 @@ public class UploadFileController {
 		
 		projectInfo.setCreateid(Long.valueOf(id));
 		String name;
-		failReason="第"+(rowsNum+1)+"行";
+		failReason="第"+rowsNum+"行";
 		if(!isEmpty(row.getCell(0))){
 			name=row.getCell(0).toString();
 			try {
@@ -400,12 +405,12 @@ public class UploadFileController {
 				String startStr= rowContetnt.substring(0,rowContetnt.indexOf(";")+1);
 				String endStr= rowContetnt.substring(rowContetnt.indexOf(";")+1,rowContetnt.length()); 
 				String zbTitle=	startStr.substring(startStr.lastIndexOf("\n"),startStr.length()); 
-				partyContent=startStr.replace(zbTitle, "")+endStr.replace("联系人备注:","联系人备注:"+ zbTitle.replace("\n", ""));
+				partyContent=startStr.replace(zbTitle, "")+endStr.replace("联系人备注:","备注:"+ zbTitle.replace("\n", ""));
 			}else{
 				partyContent=rowContetnt;
 			}
 					
-			partyContentList=partyContent.replace("\n联系人备注", "联系人备注").split("\n\n");
+			partyContentList=partyContent.replaceAll("\n联系人备注", "备注").replace("联系人备注", "备注").split("\n\n");
 			
 			List<ProjectLinkman> partyAList= new ArrayList<ProjectLinkman>();
 			 
@@ -419,7 +424,7 @@ public class UploadFileController {
 				 
 					linkma.setDeptType(partyList[0]);
 					linkma.setName(partyList[1]); 
-					details=partyList[2].replace("联系人备注", "备注");
+					details=partyList[2];
 					
 					int index=details.indexOf(":")+1; 
 					
@@ -579,7 +584,7 @@ public class UploadFileController {
 	private void setPartBList(String rowContetnt, int rowsNum, ProjectInfo ProjectInfo,String type) {
 		
 		String partyContent="";
-		String [] partyContentList =rowContetnt.replace("\n联系人备注", "联系人备注").replace("\n中标价:", "\t中标价:").split("\n\n");
+		String [] partyContentList =rowContetnt.replaceAll("\n联系人备注", "备注").replaceAll("联系人备注", "备注").replace("\n中标价:", "\t中标价:").split("\n\n");
 		
 		 
 		for(int i=0;i<partyContentList.length;i++)
@@ -611,9 +616,9 @@ public class UploadFileController {
 					String startStr= partyContent.substring(0,partyContent.indexOf(";")+1);
 					String endStr= partyContent.substring(partyContent.indexOf(";")+1,partyContent.length()); 
 					String zbTitle=	startStr.substring(startStr.lastIndexOf("\t"),startStr.length()); 
-					partyContent=startStr.replace(zbTitle, "")+endStr.replace("联系人备注:","联系人备注:"+ zbTitle.replace("\n", ""));
+					partyContent=startStr.replace(zbTitle, "")+endStr.replace("备注:","备注:"+ zbTitle.replace("\n", ""));
 				}
-				details=partyContent.replace("联系人备注", "备注").replace("\t", "");
+				details=partyContent.replace("\t", "");
 				
 				int index=details.indexOf(":")+1; 
 				
@@ -656,10 +661,10 @@ public class UploadFileController {
 							String startStr= partyContent.substring(0,partyContent.indexOf(";")+1);
 							String endStr= partyContent.substring(partyContent.indexOf(";")+1,partyContent.length()); 
 							String zbTitle=	startStr.substring(startStr.lastIndexOf("\t"),startStr.length()); 
-							partyContent=startStr.replace(zbTitle, "")+endStr.replace("联系人备注:","联系人备注:"+ zbTitle.replace("\n", ""));
+							partyContent=startStr.replace(zbTitle, "")+endStr.replace("备注:","备注:"+ zbTitle.replace("\n", ""));
 						} 
 						
-						details=partyContent.replace("\t", "");
+						details=partyContent.replace("\t", ""); 
 						int index=details.indexOf(":")+1; 
 						temp=this.subStr(details, index);
 						if("联系人:".equals(temp))
@@ -689,7 +694,7 @@ public class UploadFileController {
 						String startStr= partyContent.substring(0,partyContent.indexOf(";")+1);
 						String endStr= partyContent.substring(partyContent.indexOf(";")+1,partyContent.length()); 
 						String zbTitle=	startStr.substring(startStr.lastIndexOf("\t"),startStr.length()); 
-						partyContent=startStr.replace(zbTitle, "")+endStr.replace("联系人备注:","联系人备注:"+ zbTitle.replace("\n", ""));
+						partyContent=startStr.replace(zbTitle, "")+endStr.replace("备注:","备注:"+ zbTitle.replace("\n", ""));
 					} 
 					
 					details=partyContent.replace("\t", "");
@@ -718,7 +723,7 @@ public class UploadFileController {
 				partyBList.add(linkma);
 			 
 			}else{
-				rowsNum=rowsNum+1;
+				 
 				if("1".equals(type)){
 				failReason="第"+rowsNum+"行，第12列:业主 / 开发商格式错误;";
 				}else if("2".equals(type)){
