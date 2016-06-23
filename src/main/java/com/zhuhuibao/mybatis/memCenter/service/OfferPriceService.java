@@ -66,7 +66,6 @@ public class OfferPriceService {
 			if(price.getBillurl() != null && !price.getBillurl().equals(""))
 			{
 				String fileUrl = price.getBillurl();
-				fileUrl = ApiConstants.getUploadDoc()+ Constants.upload_price_document_url+"/"+fileUrl;
 				File file = new File(fileUrl);
 				if(fileUtil.isExistFile(fileUrl,"doc","price")){
 					boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.YGZH.toString());
