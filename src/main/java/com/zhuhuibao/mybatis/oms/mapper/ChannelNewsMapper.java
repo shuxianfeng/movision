@@ -31,4 +31,6 @@ public interface ChannelNewsMapper {
     List<Map<String,Object>> findAllTechNewsList(RowBounds rowBounds, Map<String,Object> channelMap);
 
     Map<String,Object> previewNewsInfo(Map<String,Object> channelMap);
+
+    List<Map<String,String>> queryHomepageTechnologyList(Map<String, Object> map);
 }

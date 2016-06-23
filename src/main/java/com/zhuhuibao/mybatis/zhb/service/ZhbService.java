@@ -186,7 +186,7 @@ public class ZhbService {
 				result = 1;
 			}
 		} catch (Exception e) {
-			log.error("ZhbAccountService::buyVipService::orderNo=" + orderNo + ",buyerId=" + ShiroUtil.getCreateID(), e);
+			log.error("ZhbAccountService::openVipService::orderNo=" + orderNo + ",buyerId=" + ShiroUtil.getCreateID(), e);
 			throw e;
 		}
 
@@ -497,7 +497,7 @@ public class ZhbService {
 	private int execPrepaid(String orderNo, Long buyerId, Long operaterId, BigDecimal amount, String goodsType, Long goodsId) throws Exception {
 		int result = 0;
 		// 增加充值流水
-		insertZhbRecord(orderNo, buyerId, operaterId, amount, ZhbRecordType.PREPAID.toString(), null, null);
+		insertZhbRecord(orderNo, buyerId, operaterId, amount, ZhbRecordType.PREPAID.toString(), goodsId, goodsType);
 
 		// 增加充值金额
 		ZhbAccount zhbAccount = zhbMapper.selectZhbAccount(buyerId);

@@ -28,7 +28,7 @@ import java.util.Map;
  * Created by cxx on 2016/6/22 0022.
  */
 @RestController
-@RequestMapping("/rest/supplier/site")
+@RequestMapping("/rest/mall/site")
 public class CompanyInfoController {
     private static final Logger log = LoggerFactory.getLogger(CompanyInfoController.class);
 

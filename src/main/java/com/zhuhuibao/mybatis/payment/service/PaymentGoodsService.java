@@ -39,8 +39,8 @@ public class PaymentGoodsService {
         log.info("insert view goodsId = "+goodsId+" createId = "+createId+" type = "+type);
         int result = 0;
         try {
-            if(CXXZJL.toString().equals(type) || CKXMXX.toString().equals(type) || CKWKRW.equals(type)
-                    || CKJSCG.equals(type) || CKZJJSCG.equals(type) || CKZJXX.equals(type)) {
+            if(CXXZJL.toString().equals(type) || CKXMXX.toString().equals(type) || CKWKRW.toString().equals(type)
+                    || CKJSCG.toString().equals(type) || CKZJJSCG.toString().equals(type) || CKZJXX.toString().equals(type)) {
                 PaymentGoods vp = new PaymentGoods();
                 vp.setGoodsId(goodsId);
                 vp.setViewerId(createId);

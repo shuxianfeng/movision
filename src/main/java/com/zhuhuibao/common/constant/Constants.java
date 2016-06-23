@@ -359,6 +359,23 @@ public class Constants {
 	}
 
 	/**
+	 * 状态标识 0：未审核，1：已审核，2：已拒绝
+	 */
+	public enum StatusMark {
+		WSH ("0"),YSH("1"),YJJ ("2");
+		public final String value;
+
+		StatusMark(String value) {
+			this.value = value;
+		}
+
+		@Override
+		public String toString() {
+			return this.value;
+		}
+	}
+
+	/**
 	 * 手机验证码的长度 6
 	 */
 	public static final Integer CHECK_MOBILE_CODE_SIZE = 6;

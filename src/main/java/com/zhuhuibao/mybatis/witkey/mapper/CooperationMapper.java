@@ -22,6 +22,8 @@ public interface CooperationMapper {
     //查询一条任务的信息
     Cooperation queryCooperationInfoById(String id);
 
+    Map<String,Object> queryUnloginCooperationInfo(String id);
+
     //根据条件查询任务信息列表（分页）
     List<Map<String,String>> findAllCooperationByPager(RowBounds rowBounds, Cooperation cooperation);
 
