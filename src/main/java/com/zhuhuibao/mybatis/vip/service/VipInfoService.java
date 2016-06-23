@@ -50,6 +50,7 @@ public class VipInfoService {
 	 * @param vipLevel
 	 * @return
 	 */
+	@Cacheable(value = "vipPrivilegeCache", key = "#vipLevel")
 	public List<VipPrivilege> listVipPrivilegeByLevel(int vipLevel) {
 		return vipInfoMapper.selectVipPrivilegeListByLevel(vipLevel);
 	}
@@ -60,7 +61,6 @@ public class VipInfoService {
 	 * @param vipLevel
 	 * @return
 	 */
-	@Cacheable(value = "vipPrivilegeCache", key = "#vipLevel")
 	public Map<String, VipPrivilege> findVipPrivilegeMap(int vipLevel) {
 		Map<String, VipPrivilege> privilegeMap = new HashMap<String, VipPrivilege>();
 		List<VipPrivilege> list = listVipPrivilegeByLevel(vipLevel);
@@ -118,7 +118,7 @@ public class VipInfoService {
 	public long getExtraPrivilegeNum(Long memberId, String privilegePinyin) {
 		if (null != memberId && StringUtils.isNotBlank(privilegePinyin)) {
 			VipMemberPrivilege extraPrivilege = findVipMemberPrivilege(memberId, privilegePinyin.toUpperCase());
-			if (null != extraPrivilege && VipPrivilegeType.NUM.toString().equals(extraPrivilege.getType())) {
+			if (null != extraPrivilege && VipConstant.VipPrivilegeType.NUM.toString().equals(extraPrivilege.getType())) {
 				return extraPrivilege.getValue();
 			}
 		}
@@ -136,7 +136,7 @@ public class VipInfoService {
 	public boolean hadExtraPrivilege(Long memberId, String privilegePinyin) {
 		boolean hadExtraPrivilege = false;
 		VipMemberPrivilege extraPrivilege = findVipMemberPrivilege(memberId, privilegePinyin);
-		if (null != extraPrivilege && VipPrivilegeType.NUM.toString().equals(extraPrivilege.getType()) && extraPrivilege.getValue() > 0) {
+		if (null != extraPrivilege && VipConstant.VipPrivilegeType.NUM.toString().equals(extraPrivilege.getType()) && extraPrivilege.getValue() > 0) {
 			hadExtraPrivilege = true;
 		} else if (null != extraPrivilege && !VipPrivilegeType.NUM.toString().equals(extraPrivilege.getType())) {
 			hadExtraPrivilege = true;
@@ -156,7 +156,7 @@ public class VipInfoService {
 		int result = 0;
 		Map<String, Object> param = MapUtil.convert2HashMap("memberId", memberId, "pinyin", privilegePinyin);
 		VipMemberPrivilege extraPrivilege = vipInfoMapper.selectVipMemberPrivilege(param);
-		if (null != extraPrivilege && !VipPrivilegeType.NUM.equals(extraPrivilege.getType()) && extraPrivilege.getValue() > 0) {
+		if (null != extraPrivilege && !VipConstant.VipPrivilegeType.NUM.toString().equals(extraPrivilege.getType()) && extraPrivilege.getValue() > 0) {
 			extraPrivilege.setValue(extraPrivilege.getValue() - 1);
 			extraPrivilege.setOldUpdateTime(extraPrivilege.getUpdateTime());
 			result = vipInfoMapper.updateVipMemberPrivilegeValue(extraPrivilege);
@@ -174,7 +174,7 @@ public class VipInfoService {
 	public void initDefaultExtraPrivilege(Long memberId, String identify) {
 		int defaultPrivilegeLevel = StringUtils.contains(identify, "2") ? VipConstant.EXTRA_PRIVILEGE_LEVEL_PERSONAL
 				: VipConstant.EXTRA_PRIVILEGE_LEVEL_ENTERPRISE;
-		int freeLevel = StringUtils.contains(identify, "2") ? VipLevel.PERSON_FREE.value : VipLevel.ENTERPRISE_FREE.value;
+		int freeLevel = StringUtils.contains(identify, "2") ? VipConstant.VipLevel.PERSON_FREE.value : VipLevel.ENTERPRISE_FREE.value;
 		VipMemberInfo vipMemberInfo = vipInfoMapper.selectVipMemberInfoById(memberId);
 		if (null == vipMemberInfo) {
 			insertVipMemberInfo(memberId, freeLevel, 50);
@@ -232,8 +232,8 @@ public class VipInfoService {
 		List<VipPrivilege> privilegeList = listVipPrivilegeByLevel(vipLevel);
 		if (CollectionUtils.isNotEmpty(privilegeList)) {
 			for (VipPrivilege p : privilegeList) {
-				if (VipPrivilegeType.NUM.toString().equals(p.getType())) {
-					VipMemberPrivilege memberPrivilege = initVipMemberPrivilege(memberId, p);
+				if (VipConstant.VipPrivilegeType.NUM.toString().equals(p.getType())) {
+					VipMemberPrivilege memberPrivilege = buildVipMemberPrivilege(memberId, p);
 					vipInfoMapper.insertVipMemberPrivilege(memberPrivilege);
 				}
 			}
@@ -247,7 +247,7 @@ public class VipInfoService {
 	 * @param vipPrivilege
 	 * @return
 	 */
-	private VipMemberPrivilege initVipMemberPrivilege(Long memberId, VipPrivilege vipPrivilege) {
+	private VipMemberPrivilege buildVipMemberPrivilege(Long memberId, VipPrivilege vipPrivilege) {
 		VipMemberPrivilege memberPrivilege = new VipMemberPrivilege();
 
 		memberPrivilege.setMemberId(memberId);

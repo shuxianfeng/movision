@@ -72,6 +72,20 @@ public class VipConstant {
 	}
 
 	/**
+	 * VIP级别对应的名称
+	 */
+	public final static Map<String, String> VIP_LEVEL_NAME = new HashMap<String, String>() {
+		{
+			put(VipLevel.PERSON_FREE.toString(), "个人普通会员");
+			put(VipLevel.PERSON_GOLD.toString(), "个人黄金VIP会员");
+			put(VipLevel.PERSON_PLATINUM.toString(), "个人铂金VIP会员");
+			put(VipLevel.ENTERPRISE_FREE.toString(), "企业普通会员");
+			put(VipLevel.ENTERPRISE_GOLD.toString(), "企业黄金VIP会员");
+			put(VipLevel.ENTERPRISE_PLATINUM.toString(), "企业铂金VIP会员");
+		}
+	};
+
+	/**
 	 * VIP级别对应赠送筑慧币数量
 	 */
 	public final static Map<String, Long> VIP_LEVEL_ZHB = new HashMap<String, Long>() {

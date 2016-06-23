@@ -22,4 +22,6 @@ public interface ExpertMapper {
     List<Expert> queryHotExpert(int count);
 
     List<Expert> queryLatestExpert(int count);
+
+    List<Map<String,String>> queryHomepageExpertList(Map<String, Object> map);
 }

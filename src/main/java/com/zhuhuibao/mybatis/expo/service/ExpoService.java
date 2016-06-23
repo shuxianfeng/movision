@@ -230,4 +230,14 @@ public class ExpoService {
             throw e;
         }
     }
+
+    public List<Map<String,String>> queryHomepageExhibitionList(Map<String, Object> map){
+        try{
+            return exhibitionMapper.queryHomepageExhibitionList(map);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

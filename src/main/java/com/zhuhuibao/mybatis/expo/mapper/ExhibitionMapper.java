@@ -19,4 +19,6 @@ public interface ExhibitionMapper {
 
     List<Map<String,String>> findNewExhibition(Map<String, Object> map);
 
+    List<Map<String,String>> queryHomepageExhibitionList(Map<String, Object> map);
+
 }

@@ -1,6 +1,5 @@
 package com.zhuhuibao.business.zhb;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +47,7 @@ public class ZhbController {
 		return response;
 	}
 
-	@ApiOperation(value = "筑慧币充值", notes = "筑慧币充值，返回0：失败，1：成功", response = Response.class)
+	@ApiOperation(value = "筑慧币充值", notes = "筑慧币充值 ", response = Response.class)
 	@RequestMapping(value = "mc/upd_prepaid", method = RequestMethod.POST)
 	public Response zhbPrepaid(@ApiParam(value = "订单编号") @RequestParam(required = true) String orderNo) throws Exception {
 		Response response = new Response();
@@ -64,7 +63,7 @@ public class ZhbController {
 		return response;
 	}
 
-	@ApiOperation(value = "VIP服务开通", notes = "VIP服务开通，返回1：成功，0：失败", response = Response.class)
+	@ApiOperation(value = "VIP服务开通", notes = "VIP服务开通 ", response = Response.class)
 	@RequestMapping(value = "mc/upd_openvip", method = RequestMethod.POST)
 	public Response openVipService(@ApiParam(value = "订单编号") @RequestParam(required = true) String orderNo) throws Exception {
 		Response response = new Response();
@@ -90,7 +89,7 @@ public class ZhbController {
 		return response;
 	}
 
-	@ApiOperation(value = "筑慧币订单支付", notes = "筑慧币订单支付，返回0：失败，1：成功", response = Response.class)
+	@ApiOperation(value = "筑慧币订单支付", notes = "筑慧币订单支付 ", response = Response.class)
 	@RequestMapping(value = "mc/upd_payfororder", method = RequestMethod.POST)
 	public Response payForOrder(@ApiParam(value = "订单号") @RequestParam String orderNo) throws Exception {
 		Response response = new Response();
@@ -124,7 +123,7 @@ public class ZhbController {
 		return response;
 	}
 
-	@ApiOperation(value = "筑慧币退款", notes = "筑慧币退款，返回0：失败，1：成功", response = Response.class)
+	@ApiOperation(value = "筑慧币退款", notes = "筑慧币退款 ", response = Response.class)
 	@RequestMapping(value = "mc/upd_refund", method = RequestMethod.POST)
 	public Response refund(@ApiParam(value = "订单号") @RequestParam String orderNo) throws Exception {
 		Response response = new Response();
@@ -142,7 +141,7 @@ public class ZhbController {
 	}
 
 	@ApiOperation(value = "筑慧币余额及当前业务价格查询", notes = "筑慧币余额及当前业务价格查询", response = Response.class)
-	@RequestMapping(value = "/sel_price", method = RequestMethod.GET)
+	@RequestMapping(value = "site/sel_price", method = RequestMethod.GET)
 	public Response selZhbPriceAndAmount(@ApiParam(value = "物品类型") @RequestParam(required = true) String goodsType) throws Exception {
 		Response response = new Response();
 		Map<String, String> zhbInfo = new HashMap<String, String>();

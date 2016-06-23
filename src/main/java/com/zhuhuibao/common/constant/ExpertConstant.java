@@ -15,6 +15,15 @@ public interface ExpertConstant {
     String EXPERT_DELETE_ONE = "1";
 
     /**
+     * 专家频道删除标识 0：不删除
+     */
+    String EXPERT_DELETE_ZERO = "0";
+    /**
+     * 专家频道状态标识 1：已审核
+     */
+    String EXPERT_STATUS_ONE = "1";
+
+    /**
      * 专家频道问题状态标识 2：已关闭
      */
     String EXPERT_QUESTION_STATUS_TWO = "2";
