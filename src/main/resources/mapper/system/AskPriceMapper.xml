@@ -62,7 +62,7 @@
     <include refid="Base_Column_List" />
     from t_p_ask_price
   </select>
-  <insert id="saveAskPrice" parameterType="com.zhuhuibao.mybatis.memCenter.entity.AskPrice" >
+  <insert id="saveAskPrice" parameterType="com.zhuhuibao.mybatis.memCenter.entity.AskPrice" useGeneratedKeys="true" keyProperty="id">
     insert into t_p_ask_price
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

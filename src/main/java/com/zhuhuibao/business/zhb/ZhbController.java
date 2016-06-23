@@ -92,13 +92,12 @@ public class ZhbController {
 
 	@ApiOperation(value = "筑慧币订单支付", notes = "筑慧币订单支付，返回0：失败，1：成功", response = Response.class)
 	@RequestMapping(value = "mc/upd_payfororder", method = RequestMethod.POST)
-	public Response payForOrder(@ApiParam(value = "订单号") @RequestParam String orderNo, @ApiParam(value = "支付金额") @RequestParam BigDecimal zhbAmount)
-			throws Exception {
+	public Response payForOrder(@ApiParam(value = "订单号") @RequestParam String orderNo) throws Exception {
 		Response response = new Response();
 
 		int result = 0;
 		try {
-			result = zhbService.payForOrder(orderNo, zhbAmount);
+			result = zhbService.payForOrder(orderNo);
 		} catch (Exception e) {
 		}
 		response.setData(result);

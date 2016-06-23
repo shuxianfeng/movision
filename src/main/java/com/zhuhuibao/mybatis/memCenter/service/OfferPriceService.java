@@ -4,14 +4,18 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.AskPriceBean;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferAskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferPrice;
 import com.zhuhuibao.mybatis.memCenter.mapper.AskPriceMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.OfferPriceMapper;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +46,12 @@ public class OfferPriceService {
 
 	@Autowired
 	ApiConstants ApiConstants;
+
+	@Autowired
+	FileUtil fileUtil;
+
+	@Autowired
+	ZhbService zhbService;
 	
 	/**
 	 * 我要报价
@@ -58,8 +68,14 @@ public class OfferPriceService {
 				String fileUrl = price.getBillurl();
 				fileUrl = ApiConstants.getUploadDoc()+ Constants.upload_price_document_url+"/"+fileUrl;
 				File file = new File(fileUrl);
-				if(file.exists()){
-					priceMapper.insertSelective(price);
+				if(fileUtil.isExistFile(fileUrl,"doc","price")){
+					boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.YGZH.toString());
+					if(bool) {
+						priceMapper.insertSelective(price);
+						zhbService.payForGoods(price.getId(),ZhbPaymentConstant.goodsType.BJFB.toString());
+					}else{//支付失败稍后重试，联系客服
+						throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+					}
 				}
 				else
 				{
@@ -138,6 +154,7 @@ public class OfferPriceService {
     	String fileurl = "";
 		try
 		{
+			//报价单
 			if(type.equals("2"))
 			{
 				OfferPrice price = priceMapper.selectByPrimaryKey(id);
@@ -145,7 +162,7 @@ public class OfferPriceService {
 				{
 					fileurl = price.getBillurl();
 				}
-			}
+			}//询价单
 			else if(type.equals("1"))
 			{
 				AskPriceBean askPrice = askPriceMapper.queryAskPriceByID(String.valueOf(id));

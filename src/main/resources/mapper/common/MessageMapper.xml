@@ -20,7 +20,7 @@
     id, receiveid, receiveName, title, content, isShow, companyName, linkman, telephone, 
     mobile,createid,type
   </sql>
-  <insert id="saveMessage" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Message" >
+  <insert id="saveMessage" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Message" useGeneratedKeys="true" keyProperty="id">
     insert into t_sys_message (id, receiveid,createid, receiveName, title, content, isShow,
       companyName, linkman, telephone, mobile,postDate,type)
     values (#{id}, #{receiveid},#{createid} ,#{receiveName}, #{title}, #{content}, #{isShow},

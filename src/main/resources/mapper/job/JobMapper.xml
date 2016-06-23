@@ -28,7 +28,7 @@
     <result column="profession" property="profession" jdbcType="VARCHAR" />
     <result column="is_deleted" property="is_deleted" jdbcType="INTEGER" />
   </resultMap>
-  <insert id="publishPosition" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Job" >
+  <insert id="publishPosition" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Job" useGeneratedKeys="true" keyProperty="id">
     insert into t_i_job (id, createid, publishTime, updateTime, name, salary, province, city, area,
       education, experience, age, description, welfare, department, superior, number, profession,is_deleted,positionType
       )

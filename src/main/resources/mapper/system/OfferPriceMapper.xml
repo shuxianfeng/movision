@@ -24,7 +24,7 @@
     delete from t_p_offer_price
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.OfferPrice" >
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.OfferPrice" useGeneratedKeys="true" keyProperty="id">
     insert into t_p_offer_price
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

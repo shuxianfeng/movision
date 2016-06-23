@@ -2,14 +2,19 @@ package com.zhuhuibao.mybatis.expert.service;
 
 import com.google.gson.Gson;
 import com.taobao.api.ApiException;
+import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.expert.entity.*;
 import com.zhuhuibao.mybatis.expert.mapper.*;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
+import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
 import com.zhuhuibao.utils.*;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.sms.SDKSendSms;
@@ -21,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.*;
@@ -54,6 +60,9 @@ public class ExpertService {
 
     @Autowired
     private MemberRegService memberRegService;
+
+    @Autowired
+    PaymentGoodsService goodsService;
 
     /**
      * 发布技术成果
@@ -639,6 +648,75 @@ public class ExpertService {
         memberRegService.inserValidateInfo(info);
         sess.setAttribute(type+mobile, verifyCode);
         return verifyCode;
+    }
+
+    /**
+     * 专家库获得专家详情
+     * @param id 专家ID
+     * @return
+     */
+    public Map getExpertDetail(String id,int viewNumber) {
+        Expert expert = this.queryExpertById(id);
+        //返回到页面
+        Map map = new HashMap();
+        map.put("id",expert.getId());
+        map.put("name",expert.getName());
+        map.put("company",expert.getCompany());
+        map.put("position",expert.getPosition());
+        map.put("title",expert.getTitle());
+        map.put("photo",expert.getPhotoUrl());
+        map.put("province",expert.getProvinceName());
+        map.put("city",expert.getCityName());
+        map.put("area",expert.getAreaName());
+        map.put("hot",expert.getViews());
+        map.put("introduce",expert.getIntroduce());
+        //技术成果
+        Map<String,Object> achievementMap = new HashMap<>();
+        //查询传参
+        achievementMap.put("createId",expert.getCreateId());
+        achievementMap.put("status", ExpertConstant.EXPERT_ACHIEVEMENT_STATUS_ONE);
+        List<Achievement> achievementList = this.findAchievementList(achievementMap);
+        List list = new ArrayList();
+        for(Achievement achievement:achievementList){
+            Map m = new HashMap();
+            m.put("id",achievement.getId());
+            m.put("title",achievement.getTitle());
+            m.put("updateTime",achievement.getUpdateTime());
+            list.add(m);
+        }
+        map.put("achievementList",list);
+
+        Long createid = ShiroUtil.getCreateID();
+        Long comanyId = ShiroUtil.getCompanyID();
+        if(createid!=null){
+           /* //查询该专家是否已被查看过
+            Map<String,Object> con = new HashMap<String,Object>();
+            con.put("goodsId",id);
+            con.put("companyId",comanyId);
+            con.put("type","expert");
+            int count = goodsService.checkIsViewGoods(con);*/
+            if(viewNumber > 0){
+                map.put("address",expert.getAddress());
+                map.put("telephone",expert.getTelephone());
+                map.put("mobile",expert.getMobile());
+                map.put("isLook",true);
+            }else {
+                map.put("address","");
+                map.put("telephone","");
+                map.put("mobile","");
+                map.put("isLook",false);
+            }
+        }else {
+            map.put("address","");
+            map.put("telephone","");
+            map.put("mobile","");
+            map.put("isLook",false);
+        }
+
+        //点击率加1
+        expert.setViews(String.valueOf(Integer.parseInt(expert.getViews())+1));
+        this.updateExpertViews(expert);
+        return map;
     }
 
 }

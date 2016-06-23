@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.utils.file.FileUtil;
@@ -139,7 +140,8 @@ public class OfferPriceController {
 
 	@ApiOperation(value="下载报价单，询价单",notes="下载报价单，询价单",response = Response.class)
 	@RequestMapping(value={"rest/price/downloadBill","rest/system/mc/quote/dl_bill"}, method = RequestMethod.GET)
-	public Response downloadBill(HttpServletResponse response, @RequestParam Long id, @RequestParam String type) throws IOException
+	public Response downloadBill(HttpServletResponse response, @RequestParam Long id,
+								 @ApiParam(value = "类型 1:询价单，2：报价单")@RequestParam String type) throws IOException
 	{
 		Response jsonResult = new Response();
 		log.debug("query offer priece info by id ");

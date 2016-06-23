@@ -2,6 +2,7 @@ package com.zhuhuibao.utils.file;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ApiConstants;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -29,6 +30,9 @@ public class FileUtil {
 
     @Autowired
     AliOSSClient aliOSSClient;
+
+    @Autowired
+    ApiConstants ApiConstants;
 
     /**
      * 下载文件
@@ -129,7 +133,7 @@ public class FileUtil {
             if (file.exists()) {   //如果文件存在
                 FileInputStream inputStream = new FileInputStream(file);
                 byte[] data = new byte[(int) file.length()];
-//                int length = inputStream.read(data);
+                int length = inputStream.read(data);
                 inputStream.close();
                 ServletOutputStream stream = response.getOutputStream();
                 stream.write(data);
@@ -191,5 +195,36 @@ public class FileUtil {
             postfix = "";
         }
         return body + timer + postfix;
+    }
+
+    /**
+     * 判断文件是否存在 防止上传时篡改文件名称
+     * @param fileName  文件名称
+     * @param type  文件类型： img,doc
+     * @param chann 频道关键字
+     * @return
+     */
+    public boolean isExistFile(String fileName,String type,String chann){
+        String uploadMode = PropertiesUtils.getValue("upload.mode");
+        switch (uploadMode) {
+            case "alioss":
+                Map<String, Object> map = aliOSSClient.downloadStream(fileName, type,chann);
+                String status = (String) map.get("status");
+                return status.equals("success");
+            case "zhb":
+                String fileUrl = ApiConstants.getUploadDoc()+ "/"+chann+"/"+type+"/"+fileName;
+                File file = new File(fileUrl);
+                return file.exists();
+            default:return false;
+        }
+    }
+
+    public static void main(String[] args) {
+        FileUtil fileUtil = new FileUtil();
+        boolean bool = fileUtil.isExistFile("111","doc","tech");
+        System.out.println(bool);
+//        String name = file.getName();
+//        String a = FileUtil.renameFile(name);
+//        System.out.println(a);
     }
 }

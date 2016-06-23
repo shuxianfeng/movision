@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.common.constant.PayConstants.OrderStatus;
 import com.zhuhuibao.common.constant.VipConstant;
 import com.zhuhuibao.common.constant.ZhbConstant.ZhbAccountStatus;
@@ -26,7 +27,9 @@ import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
 import com.zhuhuibao.mybatis.memCenter.mapper.WorkTypeMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.order.entity.Order;
+import com.zhuhuibao.mybatis.order.entity.OrderFlow;
 import com.zhuhuibao.mybatis.order.entity.OrderGoods;
+import com.zhuhuibao.mybatis.order.service.OrderFlowService;
 import com.zhuhuibao.mybatis.order.service.OrderGoodsService;
 import com.zhuhuibao.mybatis.order.service.OrderService;
 import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
@@ -66,6 +69,9 @@ public class ZhbService {
 	private OrderGoodsService orderGoodsService;
 
 	@Autowired
+	private OrderFlowService orderFlowService;
+
+	@Autowired
 	private VipInfoService vipInfoService;
 
 	@Autowired
@@ -97,7 +103,7 @@ public class ZhbService {
 				// 订单中amount大于0
 				if (BigDecimal.ZERO.compareTo(amount) < 0) {
 					// 进行充值
-					result = execPrepaid(order.getOrderNo(), order.getBuyerId(), ShiroUtil.getCreateID(), amount);
+					result = execPrepaid(order.getOrderNo(), order.getBuyerId(), ShiroUtil.getCreateID(), amount, goods.getPinyin(), goods.getId());
 				}
 			}
 		} catch (Exception e) {
@@ -160,7 +166,11 @@ public class ZhbService {
 				// 筑慧币充值
 				if (amount.compareTo(BigDecimal.ZERO) > 0 && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
 					// 进行筑慧币充值
-					execPrepaid(order.getOrderNo(), order.getBuyerId(), ShiroUtil.getCompanyID(), amount);
+					int prepaidResult = execPrepaid(order.getOrderNo(), order.getBuyerId(), ShiroUtil.getCompanyID(), amount, vipgoods.getPinyin(),
+							vipgoods.getId());
+					if (0 == prepaidResult) {
+						throw new BusinessException(MsgCodeConstant.ZHB_AUTOPAYFOR_FAILED, "充值失败");
+					}
 				}
 				// VIP升级
 				VipMemberInfo vipMemberInfo = vipInfoService.findVipMemberInfoById(ShiroUtil.getCompanyID());
@@ -213,10 +223,12 @@ public class ZhbService {
 	 * @param amount
 	 * @return
 	 */
-	public int payForOrder(String orderNo, BigDecimal zhbAmount) throws Exception {
+	public int payForOrder(String orderNo) throws Exception {
 		int resut = 0;
 		try {
+
 			Order order = orderService.findByOrderNo(orderNo);
+			OrderFlow orderFlow = orderFlowService.findByOrderNoAndTradeMode(orderNo, PayConstants.PayMode.ZHBPAY.toString());
 			ZhbAccount account = getZhbAccount(ShiroUtil.getCompanyID());
 			// 订单不为空
 			// 订单状态为未支付
@@ -224,16 +236,12 @@ public class ZhbService {
 			// 支付金额大于0，且小于或等于订单金额
 			// 不存在该订单号对应的筑慧币流水记录
 			// 筑慧币账户余额足够支付
-			if (null != order && isRightOrder(order, order.getGoodsType(), OrderStatus.WZF.value) && isRightAmount(zhbAmount, order.getPayAmount(), account)
-					&& isNotExistsZhbRecord(orderNo, ZhbRecordType.PAYFOR)) {
-				ZhbRecord zhbRecord = new ZhbRecord();
-				zhbRecord.setOrderNo(order.getOrderNo());
-				zhbRecord.setBuyerId(order.getBuyerId());
-				zhbRecord.setOperaterId(ShiroUtil.getCreateID());
-				zhbRecord.setAmount(zhbAmount);
-				zhbRecord.setStatus("1");
-				zhbRecord.setType(ZhbRecordType.PAYFOR.toString());
-				zhbMapper.insertZhbRecord(zhbRecord);
+			if (null != order && null != orderFlow && isRightOrder(order, order.getGoodsType(), OrderStatus.WZF.value)
+					&& isRightAmount(orderFlow.getTradeFee(), order.getPayAmount(), account) && isNotExistsZhbRecord(orderNo, ZhbRecordType.PAYFOR)) {
+
+				insertZhbRecord(orderNo, order.getBuyerId(), ShiroUtil.getCreateID(), orderFlow.getTradeFee(), ZhbRecordType.PAYFOR.toString(), null, "");
+				account.setAmount(account.getAmount().subtract(orderFlow.getTradeFee()));
+				zhbMapper.updateZhbAccountEmoney(account);
 			}
 		} catch (Exception e) {
 			log.error("ZhbAccountService::payForOrder::orderNo=" + orderNo + ",buyerId=" + ShiroUtil.getCreateID(), e);
@@ -426,8 +434,9 @@ public class ZhbService {
 			if (CollectionUtils.isNotEmpty(recordList)) {
 				for (Map<String, String> record : recordList) {
 					// addTime 时间
+					String a = record.get("addTime");
 					// 行为
-					String orderNo = record.get("orderNo");
+					String orderNo = (String) record.get("orderNo");
 					if ("0".equals(orderNo)) {
 						// 非订单流程购买商品
 						DictionaryZhbgoods goods = zhbMapper.selectZhbGoodsById(Long.valueOf(record.get("goodsId")));
@@ -443,7 +452,7 @@ public class ZhbService {
 						record.put("amount", "-" + record.get("amount"));
 					}
 					// 操作人 account ，补充角色
-					WorkType workType = workTypeMapper.findWordTypeByType(record.get("workType"));
+					WorkType workType = workTypeMapper.findWorkTypeById(record.get("workType"));
 					if (null != workType) {
 						record.put("account", record.get("account") + "(" + workType.getName() + ")");
 					}
@@ -485,7 +494,7 @@ public class ZhbService {
 	 * @param orderBuyerId
 	 * @return
 	 */
-	private int execPrepaid(String orderNo, Long buyerId, Long operaterId, BigDecimal amount) throws Exception {
+	private int execPrepaid(String orderNo, Long buyerId, Long operaterId, BigDecimal amount, String goodsType, Long goodsId) throws Exception {
 		int result = 0;
 		// 增加充值流水
 		insertZhbRecord(orderNo, buyerId, operaterId, amount, ZhbRecordType.PREPAID.toString(), null, null);

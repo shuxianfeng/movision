@@ -40,7 +40,7 @@
     id, createId, publishTime, updateTime, title, type, category, province, city, area, 
     price, endTime, isShow, companyName, linkMan, telephone,mobile, email,content,is_deleted,views
   </sql>
-  <insert id="publishCooperation" parameterType="com.zhuhuibao.mybatis.witkey.entity.Cooperation" >
+  <insert id="publishCooperation" parameterType="com.zhuhuibao.mybatis.witkey.entity.Cooperation" useGeneratedKeys="true" keyProperty="id">
     insert into t_c_cooperation
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

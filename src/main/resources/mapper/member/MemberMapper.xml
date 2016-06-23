@@ -123,7 +123,7 @@
     where m.id = #{id}
   </select>
 
-  <insert id="addMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" >
+  <insert id="addMember" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" useGeneratedKeys="true" keyProperty="id">
     insert into t_m_member
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="mobile != null" >

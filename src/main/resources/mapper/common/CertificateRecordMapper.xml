@@ -44,6 +44,9 @@
       <if test="certificate_grade != null">
         certificate_grade = #{certificate_grade},
       </if>
+      <if test="certificate_grade == null">
+        certificate_grade = null,
+      </if>
       <if test="certificate_url != null">
         certificate_url = #{certificate_url},
       </if>
