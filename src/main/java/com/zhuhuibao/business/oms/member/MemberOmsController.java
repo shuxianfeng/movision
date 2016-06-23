@@ -1,10 +1,13 @@
 package com.zhuhuibao.business.oms.member;
 
 import java.io.IOException;
+import java.util.List;
 
+import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.pojo.OmsMemBean;
 import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
+import com.zhuhuibao.mybatis.memCenter.entity.Identity;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
@@ -91,6 +94,15 @@ public class MemberOmsController {
 	public Response updateStatus(Member member)  {
 		Response result = new Response();
 		memberService.updateMemInfo(member);
+		return result;
+	}
+
+	@ApiOperation(value = "企业身份", notes = "企业身份", response = Response.class)
+	@RequestMapping(value = "/rest/member/oms/base/sel_identityList", method = RequestMethod.GET)
+	public Response identityList()  {
+		Response result = new Response();
+		List<Identity> identity = memberService.findIdentityList();
+		result.setData(identity);
 		return result;
 	}
 }
