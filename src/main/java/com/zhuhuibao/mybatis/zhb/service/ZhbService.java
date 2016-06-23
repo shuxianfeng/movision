@@ -19,6 +19,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.common.constant.PayConstants.OrderStatus;
 import com.zhuhuibao.common.constant.VipConstant;
+import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.common.constant.ZhbConstant.ZhbAccountStatus;
 import com.zhuhuibao.common.constant.ZhbConstant.ZhbRecordType;
 import com.zhuhuibao.common.util.ShiroUtil;
@@ -107,7 +108,7 @@ public class ZhbService {
 				}
 			}
 		} catch (Exception e) {
-			log.error("ZhbAccountService::zhbPrepaidByOrder::" + "orderNo=" + orderNo + ",buyerId=" + ShiroUtil.getCreateID(), e);
+			log.error("ZhbService::zhbPrepaidByOrder::" + "orderNo=" + orderNo + ",buyerId=" + ShiroUtil.getCreateID(), e);
 			throw e;
 		}
 
@@ -186,7 +187,7 @@ public class ZhbService {
 				result = 1;
 			}
 		} catch (Exception e) {
-			log.error("ZhbAccountService::openVipService::orderNo=" + orderNo + ",buyerId=" + ShiroUtil.getCreateID(), e);
+			log.error("ZhbService::openVipService::orderNo=" + orderNo + ",buyerId=" + ShiroUtil.getCreateID(), e);
 			throw e;
 		}
 
@@ -213,7 +214,7 @@ public class ZhbService {
 	 */
 	private boolean isRightAmount(BigDecimal zhbAmount, BigDecimal orderAmount, ZhbAccount account) {
 		return BigDecimal.ZERO.compareTo(zhbAmount) < 0 && zhbAmount.compareTo(orderAmount) <= 0 && null != account
-				&& account.getAmount().compareTo(zhbAmount) >= 0;
+				&& account.getAmount().compareTo(zhbAmount) >= 0 && ZhbConstant.ZhbAccountStatus.ACTIVE.toString().equals(account.getStatus());
 	}
 
 	/**
@@ -241,10 +242,14 @@ public class ZhbService {
 
 				insertZhbRecord(orderNo, order.getBuyerId(), ShiroUtil.getCreateID(), orderFlow.getTradeFee(), ZhbRecordType.PAYFOR.toString(), null, "");
 				account.setAmount(account.getAmount().subtract(orderFlow.getTradeFee()));
-				zhbMapper.updateZhbAccountEmoney(account);
+				int updateNum = zhbMapper.updateZhbAccountEmoney(account);
+				if (1 != updateNum) {
+					throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, "支付失败");
+				}
+				resut = 1;
 			}
 		} catch (Exception e) {
-			log.error("ZhbAccountService::payForOrder::orderNo=" + orderNo + ",buyerId=" + ShiroUtil.getCreateID(), e);
+			log.error("ZhbService::payForOrder::orderNo=" + orderNo + ",buyerId=" + ShiroUtil.getCreateID(), e);
 			throw e;
 		}
 
@@ -311,7 +316,7 @@ public class ZhbService {
 			BigDecimal amount = goods.getPrice();
 			// 验证是否可以支付:余额是否足够，amount大于0
 			ZhbAccount account = getZhbAccount(ShiroUtil.getCompanyID());
-			if (null != account && account.getAmount().compareTo(amount) >= 0) {
+			if (null != account && ZhbConstant.ZhbAccountStatus.ACTIVE.toString().equals(account.getStatus()) && account.getAmount().compareTo(amount) >= 0) {
 				// 增加流水记录
 				insertZhbRecord("0", ShiroUtil.getCompanyID(), ShiroUtil.getCreateID(), amount, ZhbRecordType.PAYFOR.toString(), goodsId, goodsType);
 
@@ -326,7 +331,7 @@ public class ZhbService {
 			}
 		} catch (Exception e) {
 			String msg = "operaterId=" + ShiroUtil.getCreateID() + ",goodsId=" + goodsId + ",goodsType=" + goodsType;
-			log.error("ZhbAccountService::payForGoods::" + msg, e);
+			log.error("ZhbService::payForGoods::" + msg, e);
 			throw e;
 		}
 
@@ -366,7 +371,7 @@ public class ZhbService {
 
 		} catch (Exception e) {
 			String msg = "orderNo=" + orderNo + ",operaterId=" + ShiroUtil.getOmsCreateID();
-			log.error("ZhbAccountService::refund::" + msg, e);
+			log.error("ZhbService::refund::" + msg, e);
 			throw e;
 		}
 		return result;
@@ -459,7 +464,7 @@ public class ZhbService {
 				}
 			}
 		} catch (Exception e) {
-			log.error("ZhbAccountService::getZhbDetails::memberId=" + ShiroUtil.getCreateID(), e);
+			log.error("ZhbService::getZhbDetails::memberId=" + ShiroUtil.getCreateID(), e);
 		}
 
 		return resultList;
@@ -496,11 +501,15 @@ public class ZhbService {
 	 */
 	private int execPrepaid(String orderNo, Long buyerId, Long operaterId, BigDecimal amount, String goodsType, Long goodsId) throws Exception {
 		int result = 0;
+		ZhbAccount zhbAccount = zhbMapper.selectZhbAccount(buyerId);
+		if (null != zhbAccount && !ZhbConstant.ZhbAccountStatus.ACTIVE.toString().equals(zhbAccount.getStatus())) {
+			return result;
+		}
 		// 增加充值流水
 		insertZhbRecord(orderNo, buyerId, operaterId, amount, ZhbRecordType.PREPAID.toString(), goodsId, goodsType);
 
 		// 增加充值金额
-		ZhbAccount zhbAccount = zhbMapper.selectZhbAccount(buyerId);
+
 		if (null != zhbAccount) {
 			// 将充值金额更新到账户
 			zhbAccount.setAmount(zhbAccount.getAmount().add(amount));
