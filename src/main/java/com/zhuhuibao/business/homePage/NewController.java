@@ -114,7 +114,7 @@ public class NewController {
         technologyMap.put("page",page);
         technologyMap.put("advArea",advArea);
         technologyMap.put("advType","technology");
-        technologyMap.put("status", Constants.StatusMark.YSH);
+        technologyMap.put("status", Constants.StatusMark.YSH.toString());
         List<Map<String,String>> technologyList = channelNewsService.queryHomepageTechnologyList(technologyMap);
 
         //查询筑慧会展
