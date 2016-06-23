@@ -38,7 +38,7 @@ import java.util.Map;
  * Created by cxx on 2016/4/19 0019.
  */
 @RestController
-@RequestMapping("/rest/job")
+@RequestMapping("/rest/job/mc/resume")
 @Api(value="Resume", description="会员中心-简历管理")
 public class ResumeController {
     private static final Logger log = LoggerFactory.getLogger(ResumeController.class);
@@ -61,7 +61,7 @@ public class ResumeController {
      * 发布简历
      */
     @ApiOperation(value = "发布简历", notes = "发布简历", response = Response.class)
-    @RequestMapping(value = {"setUpResume","mc/resume/add_resume"}, method = RequestMethod.POST)
+    @RequestMapping(value = "add_resume", method = RequestMethod.POST)
     public Response setUpResume(Resume resume) throws IOException {
         Long createid = ShiroUtil.getCreateID();
         Response response = new Response();
@@ -78,7 +78,7 @@ public class ResumeController {
      * 查询我创建的简历
      */
     @ApiOperation(value = "查询我创建的简历", notes = "查询我创建的简历", response = Response.class)
-    @RequestMapping(value = {"searchMyResume","mc/resume/sel_my_resume"}, method = RequestMethod.GET)
+    @RequestMapping(value = "sel_my_resume", method = RequestMethod.GET)
     public Response searchMyResume() throws IOException {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
@@ -94,7 +94,7 @@ public class ResumeController {
      * 更新简历,刷新简历
      */
     @ApiOperation(value = "更新简历", notes = "更新简历", response = Response.class)
-    @RequestMapping(value = {"updateResume","mc/resume/upd_resume"}, method = RequestMethod.POST)
+    @RequestMapping(value = "upd_resume", method = RequestMethod.POST)
     public Response updateResume(Resume resume) throws IOException {
         return resumeService.updateResume(resume);
     }
@@ -103,7 +103,7 @@ public class ResumeController {
      * 预览简历
      */
     @ApiOperation(value = "预览简历", notes = "预览简历", response = Response.class)
-    @RequestMapping(value = {"previewResume","mc/resume/preview_resume"}, method = RequestMethod.GET)
+    @RequestMapping(value = "preview_resume", method = RequestMethod.GET)
     public Response previewResume(String id) throws Exception {
         Response response = new Response();
         Resume resume = resumeService.previewResume(id);
@@ -115,7 +115,7 @@ public class ResumeController {
      * 上传简历附件
      */
     @ApiOperation(value = "上传简历附件", notes = "上传简历附件", response = Response.class)
-    @RequestMapping(value = {"uploadResume","mc/resume/upload_resume"}, method = RequestMethod.POST)
+    @RequestMapping(value = "upload_resume", method = RequestMethod.POST)
     public Response uploadResume(@RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         Response result = new Response();
         Subject currentUser = SecurityUtils.getSubject();
@@ -136,7 +136,7 @@ public class ResumeController {
      * 查询我创建的简历的全部信息
      */
     @ApiOperation(value = "查询我创建的简历的全部信息", notes = "查询我创建的简历的全部信息", response = Response.class)
-    @RequestMapping(value = {"searchMyResumeAllInfo","mc/resume/sel_my_resume_info"}, method = RequestMethod.GET)
+    @RequestMapping(value = "sel_my_resume_info", method = RequestMethod.GET)
     public Response searchMyResumeAllInfo() throws IOException {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
@@ -153,7 +153,7 @@ public class ResumeController {
      * 我收到的简历
      */
     @ApiOperation(value = "我收到的简历", notes = "我收到的简历", response = Response.class)
-    @RequestMapping(value = {"receiveResume","mc/resume/sel_receive_resume"}, method = RequestMethod.GET)
+    @RequestMapping(value = "sel_receive_resume", method = RequestMethod.GET)
     public Response receiveResume(String pageNo, String pageSize) throws IOException {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -173,7 +173,7 @@ public class ResumeController {
     }
 
     @ApiOperation(value = "简历批量设为已查看", notes = "简历批量设为已查看", response = Response.class)
-    @RequestMapping(value = "mc/resume/upd_jobRelresume", method = RequestMethod.POST)
+    @RequestMapping(value = "upd_jobRelresume", method = RequestMethod.POST)
     public Response upd_jobRelresume(@ApiParam(value = "ids,逗号隔开") @RequestParam String ids){
         Response response = new Response();
         String[] idList = ids.split(",");
@@ -190,7 +190,7 @@ public class ResumeController {
      * 下载简历附件
      */
     @ApiOperation(value = "下载简历附件", notes = "下载简历附件")
-    @RequestMapping(value = {"downLoadResume","mc/resume/download_resume"}, method = RequestMethod.GET)
+    @RequestMapping(value = "download_resume", method = RequestMethod.GET)
     public void downLoadResume(HttpServletResponse response, String id) throws IOException {
         Response jsonResult = new Response();
         try {
@@ -211,7 +211,7 @@ public class ResumeController {
     }
 
     @ApiOperation(value = "HR通知列表", notes = "HR通知列表")
-    @RequestMapping(value = "mc/resume/sel_myResumeLookRecord", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_myResumeLookRecord", method = RequestMethod.GET)
     public Response sel_myResumeLookRecord(@RequestParam(required = false)String pageNo, @RequestParam(required = false)String pageSize)
             {
         Response response = new Response();

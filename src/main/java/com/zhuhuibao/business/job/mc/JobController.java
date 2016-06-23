@@ -29,7 +29,7 @@ import java.util.List;
  * Created by cxx on 2016/4/18 0018.
  */
 @RestController
-@RequestMapping("/rest/job")
+@RequestMapping("/rest/job/mc/recruit")
 @Api(value = "Jobs", description = "会员中心-招聘管理")
 public class JobController {
     private static final Logger log = LoggerFactory.getLogger(JobController.class);
@@ -41,7 +41,7 @@ public class JobController {
      * 职位类别
      */
     @ApiOperation(value = "获取职位类别", notes = "获取职位类别", response = Response.class)
-    @RequestMapping(value = {"positionType","/mc/recruit/sel_positionType"}, method = RequestMethod.GET)
+    @RequestMapping(value = "sel_positionType", method = RequestMethod.GET)
     public Response positionType() {
         Response response = new Response();
         List list = jobService.positionType();
@@ -53,7 +53,7 @@ public class JobController {
      * 发布职位
      */
     @ApiOperation(value = "发布职位", notes = "发布职位", response = Response.class)
-    @RequestMapping(value = {"publishPosition","mc/recruit/add_position"}, method = RequestMethod.POST)
+    @RequestMapping(value = "add_position", method = RequestMethod.POST)
     public Response publishPosition(@ApiParam(value = "职位属性") Job job) throws Exception {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
@@ -70,7 +70,7 @@ public class JobController {
      * 查询公司已发布的职位
      */
     @ApiOperation(value = "查询公司已发布的职位", notes = "查询公司已发布的职位", response = Response.class)
-    @RequestMapping(value = {"searchPositionByMemId","mc/recruit/sel_positionList"}, method = RequestMethod.GET)
+    @RequestMapping(value = "sel_positionList", method = RequestMethod.GET)
     public Response searchPositionByMemId(String pageNo, String pageSize) throws IOException {
         Response response = new Response();
         if (StringUtils.isEmpty(pageNo)) {
@@ -96,7 +96,7 @@ public class JobController {
      */
     //@RequiresRoles("admin")
     @ApiOperation(value = "查询公司发布的某条职位的信息", notes = "查询公司发布的某条职位的信息", response = Response.class)
-    @RequestMapping(value = {"getPositionByPositionId","mc/recruit/sel_position"}, method = RequestMethod.GET)
+    @RequestMapping(value = "sel_position", method = RequestMethod.GET)
     public Response getPositionByPositionId(String id) {
         Response response = new Response();
         Job job = jobService.getPositionByPositionId(id);
@@ -108,7 +108,7 @@ public class JobController {
      * 删除已发布的职位
      */
     @ApiOperation(value = "删除已发布的职位", notes = "删除已发布的职位", response = Response.class)
-    @RequestMapping(value = {"deletePosition","mc/recruit/del_position"}, method = RequestMethod.POST)
+    @RequestMapping(value = "del_position", method = RequestMethod.POST)
     public Response deletePosition(HttpServletRequest req) throws IOException {
         String ids[] = req.getParameterValues("ids");
         return jobService.deletePosition(ids);
@@ -118,7 +118,7 @@ public class JobController {
      * 更新编辑已发布的职位
      */
     @ApiOperation(value = "更新编辑已发布的职位", notes = "更新编辑已发布的职位", response = Response.class)
-    @RequestMapping(value = {"updatePosition","mc/recruit/upd_position"}, method = RequestMethod.POST)
+    @RequestMapping(value = "upd_position", method = RequestMethod.POST)
     public Response updatePosition(Job job) throws IOException {
         return jobService.updatePosition(job);
     }
@@ -127,7 +127,7 @@ public class JobController {
      * 查询最新招聘职位
      */
     @ApiOperation(value = "查询最新招聘职位", notes = "查询最新招聘职位", response = Response.class)
-    @RequestMapping(value = {"searchNewPosition","mc/recruit/sel_latest_position"}, method = RequestMethod.GET)
+    @RequestMapping(value = "sel_latest_position", method = RequestMethod.GET)
     public Response searchNewPosition() throws IOException {
         return jobService.searchNewPosition(6);
     }
@@ -136,7 +136,7 @@ public class JobController {
      * 查询推荐职位
      */
     @ApiOperation(value = "查询推荐职位", notes = "查询推荐职位", response = Response.class)
-    @RequestMapping(value = {"searchRecommendPosition","mc/recruit/sel_recommend_position"}, method = RequestMethod.GET)
+    @RequestMapping(value = "sel_recommend_position", method = RequestMethod.GET)
     public Response searchRecommendPosition() throws IOException {
         Long createid = ShiroUtil.getCreateID();
         Response response = new Response();
@@ -152,7 +152,7 @@ public class JobController {
      * 我申请的职位
      */
     @ApiOperation(value = "我申请的职位", notes = "我申请的职位", response = Response.class)
-    @RequestMapping(value = {"myApplyPosition","mc/recruit/sel_my_position"}, method = RequestMethod.GET)
+    @RequestMapping(value = "sel_my_position", method = RequestMethod.GET)
     public Response myApplyPosition(String pageNo, String pageSize) throws IOException {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
