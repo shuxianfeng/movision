@@ -106,6 +106,7 @@
 	FROM
 	  t_vip_privilege 
 	WHERE vip_level = #{vipLevel,jdbcType=INTEGER}
+	ORDER BY id ASC
   </select>
   
   <insert id="insertVipMemberPrivilege" parameterType="com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege" >

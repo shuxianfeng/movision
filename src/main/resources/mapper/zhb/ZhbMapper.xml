@@ -50,6 +50,7 @@
 	FROM
 	  t_zhb_record 
 	WHERE order_no = #{orderNo,jdbcType=VARCHAR}
+	order by add_time desc
  </select>
  
  <select id="selectZhbRecordList" parameterType="java.util.Map"  resultType="java.util.Map" >
@@ -92,7 +93,7 @@
 	  <if test="recordType == 1">
 	  	and z.type in ('2','3')
 	  </if>
-	  order by add_time desc
+	  order by z.add_time desc
  </select>
 
  <insert id="insertZhbRecord" parameterType="com.zhuhuibao.mybatis.zhb.entity.ZhbRecord">
@@ -197,6 +198,7 @@
 	FROM
 	  t_dictionary_zhbgoods 
 	WHERE type = #{type,jdbcType=VARCHAR}
+	ORDER BY id
  </select>
 	
 </mapper>
