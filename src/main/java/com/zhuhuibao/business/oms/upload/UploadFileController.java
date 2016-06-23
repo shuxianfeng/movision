@@ -1,7 +1,9 @@
 package com.zhuhuibao.business.oms.upload;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -78,26 +80,25 @@ public class UploadFileController {
 	int failCount=0;
 	int rowsCount=10000;
 	String fileToBeRead=null;
+	InputStream fileStream=null;
 	@RequestMapping(value = "upload_project", method = RequestMethod.POST)
 	@ApiOperation(value = "导入项目工程信息", notes = "导入项目工程信息", response = Response.class)
 	public Response uploadProject(HttpServletRequest req,@RequestParam(value = "file", required = false) MultipartFile file) {
 		Response response = new Response(); 
 		Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        rowsCount=10000;
         if(null == session){
             response.setMessage("you are not login!");
-        }
-        else {
-            
-			try {
-				fileToBeRead =  zhbOssClient.uploadObject(file,"doc","project");
+        }else{
+        rowsCount=10000;
+	        try {
+				fileStream=file.getInputStream();
 				response.setCode(200);
-		   	 } catch (Exception e1) {
-				e1.printStackTrace();
-			} 
-           
-        } 
+			} catch (IOException e) {
+				 
+				e.printStackTrace();
+			}
+        }
 
 		return response;
 	}
@@ -111,8 +112,8 @@ public class UploadFileController {
 		 Response response = new Response();
 		try {
 			// 创建对Excel工作簿文件的引用
-			HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream( ApiConstants.getUploadDoc() + "/project/doc/"+
-					fileToBeRead));
+			HSSFWorkbook workbook = new HSSFWorkbook(fileStream);
+			 
 			// 创建对工作表的引用。 
 			HSSFSheet sheet = workbook.getSheetAt(0);
 			// 获取sheet页数据行
@@ -175,6 +176,7 @@ public class UploadFileController {
 				}
 				}
 				
+			 
 				Map<String, Object> result=new HashMap<String, Object>();
 				result.put("sucCount", sucCount);
 				result.put("failCount", failCount);
