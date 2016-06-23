@@ -7,7 +7,10 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.memCenter.entity.ForbidKeyWords;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
+import com.zhuhuibao.mybatis.memCenter.service.ForbidKeyWordsService;
 import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -57,6 +60,9 @@ public class ResumeController {
 
     @Autowired
     FileUtil fileUtil;
+
+    @Autowired
+    ForbidKeyWordsService forbidKeyWordsService;
     /**
      * 发布简历
      */
@@ -232,5 +238,70 @@ public class ResumeController {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
                 return response;
+    }
+
+    @ApiOperation(value = "增加屏蔽企业关键字", notes = "增加屏蔽企业关键字")
+    @RequestMapping(value = "add_forbidKeyWords", method = RequestMethod.POST)
+    public Response add_forbidKeyWords(@RequestParam(required = false)String keyWords)
+    {
+        Response response = new Response();
+        Long createid = ShiroUtil.getCreateID();
+        ForbidKeyWords forbidKeyWords = new ForbidKeyWords();
+        Map<String,Object> map = new HashMap<>();
+        if(createid!=null){
+            map.put("create_id",String.valueOf(createid));
+            map.put("is_deleted",Constants.DeleteMark.NODELETE.toString());
+            List<Map<String,String>> list = forbidKeyWordsService.queryKeyWordsList(map);
+            if(list.size()==10){
+                throw new BusinessException(MsgCodeConstant.FORBID_KEYWORDS_LIMIT, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.FORBID_KEYWORDS_LIMIT)));
+            }else {
+                for(int i=0;i<list.size();i++){
+                    if(list.get(i).get("key_words").contains(keyWords)){
+                        throw new BusinessException(MsgCodeConstant.FORBID_KEYWORDS_REPEAT, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.FORBID_KEYWORDS_REPEAT)));
+                    }
+                }
+                forbidKeyWords.setCreate_id(String.valueOf(createid));
+                forbidKeyWords.setKey_words(keyWords);
+                forbidKeyWordsService.addForbidKeyWords(forbidKeyWords);
+            }
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "查询屏蔽关键字", notes = "查询屏蔽关键字")
+    @RequestMapping(value = "sel_forbidKeyWords", method = RequestMethod.GET)
+    public Response sel_forbidKeyWords()
+    {
+        Response response = new Response();
+        Long createid = ShiroUtil.getCreateID();
+        Map<String,Object> map = new HashMap<>();
+        if(createid!=null){
+            map.put("create_id",String.valueOf(createid));
+            map.put("is_deleted",Constants.DeleteMark.NODELETE.toString());
+            List<Map<String,String>> list = forbidKeyWordsService.queryKeyWordsList(map);
+            response.setData(list);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "删除屏蔽关键字", notes = "删除屏蔽关键字")
+    @RequestMapping(value = "del_forbidKeyWords", method = RequestMethod.POST)
+    public Response del_forbidKeyWords(@RequestParam String id)
+    {
+        Response response = new Response();
+        Long createid = ShiroUtil.getCreateID();
+        if(createid!=null){
+            ForbidKeyWords forbidKeyWords = new ForbidKeyWords();
+            forbidKeyWords.setId(id);
+            forbidKeyWords.setIs_deleted(Constants.DeleteMark.DELETE.toString());
+            forbidKeyWordsService.deletleForbidKeyWords(forbidKeyWords);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
     }
 }

@@ -191,4 +191,14 @@ public interface MsgCodeConstant {
 	 */
 	int ZHB_PAYMENT_FAILURE = 10080;
 
+	/**
+	 * 简历增加屏蔽企业关键字超限
+	 */
+	int FORBID_KEYWORDS_LIMIT = 10215;
+
+	/**
+	 * 简历增加屏蔽企业关键字重复
+	 */
+	int FORBID_KEYWORDS_REPEAT = 10216;
+
 }
