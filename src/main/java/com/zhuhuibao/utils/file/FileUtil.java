@@ -7,6 +7,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.PropertiesUtils;
+import com.zhuhuibao.utils.UUIDGenerator;
 import com.zhuhuibao.utils.oss.AliOSSClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -182,7 +183,7 @@ public class FileUtil {
     public static String renameFile(String fileName) {
 
         int index = fileName.lastIndexOf(".");
-        String body = fileName.substring(0, index);
+        String body = UUIDGenerator.genShortUuid();//fileName.substring(0, index);
         String postfix;
         String timer;
 
@@ -220,11 +221,12 @@ public class FileUtil {
     }
 
     public static void main(String[] args) {
-        FileUtil fileUtil = new FileUtil();
-        boolean bool = fileUtil.isExistFile("111","doc","tech");
-        System.out.println(bool);
+//        FileUtil fileUtil = new FileUtil();
+//        boolean bool = fileUtil.isExistFile("111","doc","tech");
+//        System.out.println(bool);
 //        String name = file.getName();
 //        String a = FileUtil.renameFile(name);
 //        System.out.println(a);
+        System.out.println(renameFile("xxxx.xlsx"));
     }
 }

@@ -9,6 +9,9 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.file.FileUtil;
+import com.zhuhuibao.utils.ueditor.define.AppInfo;
+import com.zhuhuibao.utils.ueditor.define.BaseState;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,6 +124,108 @@ public class AliOSSClient {
     /**
      * 上传文件流
      *
+     * @param in
+     * @param type
+     * @param chann 频道
+     * @return
+     */
+    public Map<String, String> uploadStream(InputStream in, String fileName, long maxSize, String type, String chann) {
+        Map<String, String> result = new HashMap<>();
+
+        log.info("阿里云OSS上传Started");
+        OSSClient ossClient = init();
+
+        try {
+
+            long size = getFileSize(in);
+            if (size > maxSize) {
+                result.put("status", "fail");
+                result.put("message", "文件大小超过限制");
+                return result;
+            }
+
+            // 上传文件流
+            String domain;
+            String fileKey;
+            String fileName2 = FileUtil.renameFile(fileName);
+            if (chann != null) {
+                fileKey = chann + "/" + type + "/" + fileName2;
+
+            } else {
+                fileKey = fileName2;
+            }
+
+            String data = "";
+            if (type.equals("img")) {
+                bucketName = PropertiesUtils.getValue("img.bucket");
+                domain = PropertiesUtils.getValue("img.domain");
+                data = "//" + domain + "/" + fileKey;
+
+
+            } else if (type.equals("doc")) {
+                bucketName = PropertiesUtils.getValue("file.bucket");
+                domain = PropertiesUtils.getValue("file.domain");
+                data = "//" + domain + "/" + fileKey;
+            }
+
+            ossClient.putObject(bucketName, fileKey, in);
+
+            log.debug("Object：" + fileKey + "存入OSS成功。");
+            result.put("status", "success");
+            result.put("data", data);
+
+        } catch (OSSException oe) {
+            oe.printStackTrace();
+            result.put("status", "fail");
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("status", "fail");
+            return result;
+        } finally {
+            ossClient.shutdown();
+        }
+
+        log.info("阿里云OSS上传Completed");
+
+        return result;
+    }
+
+    private long getFileSize(InputStream is) {
+        File tmpFile = getTmpFile();
+        int bufSize = 8192;
+        byte[] dataBuf = new byte[2048];
+        BufferedInputStream bis = new BufferedInputStream(is, bufSize);
+
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(
+                    new FileOutputStream(tmpFile), bufSize);
+
+            int count;
+            while ((count = bis.read(dataBuf)) != -1) {
+                bos.write(dataBuf, 0, count);
+            }
+            bos.flush();
+            bos.close();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            tmpFile.delete();
+        }
+        return tmpFile.length();
+    }
+
+    private static File getTmpFile() {
+        File tmpDir = FileUtils.getTempDirectory();
+        String tmpFileName = (Math.random() * 10000 + "").replace(".", "");
+        return new File(tmpDir, tmpFileName);
+    }
+
+    /**
+     * 上传文件流
+     *
      * @param file
      * @param type
      * @param chann 频道
@@ -159,7 +264,7 @@ public class AliOSSClient {
             if (type.equals("img")) {
                 bucketName = PropertiesUtils.getValue("img.bucket");
                 domain = PropertiesUtils.getValue("img.domain");
-                data = domain + "/" + fileKey;
+                data = "//" + domain + "/" + fileKey;
                 String maxSize = PropertiesUtils.getValue("uploadPicMaxPostSize");
                 if (size > Long.valueOf(maxSize)) {
                     throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
@@ -230,7 +335,7 @@ public class AliOSSClient {
             if (type.equals("img")) {
                 bucketName = PropertiesUtils.getValue("img.bucket");
                 domain = PropertiesUtils.getValue("img.domain");
-                data = domain + "/" + fileKey;
+                data = "//" + domain + "/" + fileKey;
 
             } else if (type.equals("doc")) {
                 bucketName = PropertiesUtils.getValue("file.bucket");

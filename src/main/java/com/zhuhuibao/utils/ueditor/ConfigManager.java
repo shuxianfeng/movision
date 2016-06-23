@@ -95,6 +95,7 @@ public final class ConfigManager {
                 conf.put("maxSize", this.jsonConfig.getLong("fileMaxSize"));
                 conf.put("allowFiles", this.getArray("fileAllowFiles"));
                 conf.put("fieldName", this.jsonConfig.getString("fileFieldName"));
+                conf.put("actionType","file");
                 savePath = this.jsonConfig.getString("filePathFormat");
                 break;
 
@@ -103,6 +104,7 @@ public final class ConfigManager {
                 conf.put("maxSize", this.jsonConfig.getLong("imageMaxSize"));
                 conf.put("allowFiles", this.getArray("imageAllowFiles"));
                 conf.put("fieldName", this.jsonConfig.getString("imageFieldName"));
+                conf.put("actionType","img");
                 savePath = this.jsonConfig.getString("imagePathFormat");
                 break;
 
@@ -110,6 +112,7 @@ public final class ConfigManager {
                 conf.put("maxSize", this.jsonConfig.getLong("videoMaxSize"));
                 conf.put("allowFiles", this.getArray("videoAllowFiles"));
                 conf.put("fieldName", this.jsonConfig.getString("videoFieldName"));
+                conf.put("actionType","video");
                 savePath = this.jsonConfig.getString("videoPathFormat");
                 break;
 
@@ -118,6 +121,7 @@ public final class ConfigManager {
                 conf.put("maxSize", this.jsonConfig.getLong("scrawlMaxSize"));
                 conf.put("fieldName", this.jsonConfig.getString("scrawlFieldName"));
                 conf.put("isBase64", "true");
+                conf.put("actionType","scrawl");
                 savePath = this.jsonConfig.getString("scrawlPathFormat");
                 break;
 
@@ -171,7 +175,8 @@ public final class ConfigManager {
 
     private String getConfigPath() {
         //return this.parentPath + File.separator + ConfigManager.configFileName;
-    	return this.rootPath + "WEB-INF/classes/web/" + ConfigManager.configFileName;
+        String classpath = this.getClass().getClassLoader().getResource("/").getPath();
+    	return classpath + "/web/" +ConfigManager.configFileName;
     }
 
     private String[] getArray(String key) throws JSONException {
