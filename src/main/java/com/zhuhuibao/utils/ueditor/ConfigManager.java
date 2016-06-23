@@ -174,7 +174,7 @@ public final class ConfigManager {
     }
 
     private String getConfigPath() {
-        //return this.parentPath + File.separator + ConfigManager.configFileName;
+//        return this.parentPath + File.separator + ConfigManager.configFileName;
         String classpath = this.getClass().getClassLoader().getResource("/").getPath();
     	return classpath + "/web/" +ConfigManager.configFileName;
     }

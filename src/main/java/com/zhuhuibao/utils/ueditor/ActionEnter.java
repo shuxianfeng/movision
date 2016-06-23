@@ -8,6 +8,7 @@ import com.zhuhuibao.utils.ueditor.hunter.FileManager;
 import com.zhuhuibao.utils.ueditor.hunter.ImageHunter;
 import com.zhuhuibao.utils.ueditor.upload.Uploader;
 import org.json.JSONException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -25,8 +26,11 @@ public class ActionEnter {
 	
 	private ConfigManager configManager = null;
 
-	public ActionEnter ( HttpServletRequest request, String rootPath ) {
-		
+	private MultipartFile upfile = null;
+
+	public ActionEnter ( HttpServletRequest request, String rootPath,MultipartFile upfile) {
+
+		this.upfile = upfile;
 		this.request = request;
 		this.rootPath = rootPath;
 		this.actionType = request.getParameter( "action" );
@@ -79,7 +83,7 @@ public class ActionEnter {
 			case ActionMap.UPLOAD_VIDEO:
 			case ActionMap.UPLOAD_FILE:
 				conf = this.configManager.getConfig(actionCode );
-				state = new Uploader( request, conf ).doExec();
+				state = new Uploader( request, conf ,upfile).doExec();
 				break;
 				
 			case ActionMap.CATCH_IMAGE:

@@ -124,12 +124,12 @@ public class AliOSSClient {
     /**
      * 上传文件流
      *
-     * @param in
+     * @param file
      * @param type
      * @param chann 频道
      * @return
      */
-    public Map<String, String> uploadStream(InputStream in, String fileName, long maxSize, String type, String chann) {
+    public Map<String, String> uploadStream(MultipartFile file,long maxSize, String type, String chann) {
         Map<String, String> result = new HashMap<>();
 
         log.info("阿里云OSS上传Started");
@@ -137,15 +137,16 @@ public class AliOSSClient {
 
         try {
 
-            long size = getFileSize(in);
-            if (size > maxSize) {
-                result.put("status", "fail");
-                result.put("message", "文件大小超过限制");
-                return result;
+            long size = file.getSize();
+
+            if (size > Long.valueOf(maxSize)) {
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
             }
 
             // 上传文件流
             String domain;
+            InputStream in = file.getInputStream();
+            String fileName = file.getOriginalFilename();
             String fileKey;
             String fileName2 = FileUtil.renameFile(fileName);
             if (chann != null) {
@@ -166,6 +167,7 @@ public class AliOSSClient {
                 bucketName = PropertiesUtils.getValue("file.bucket");
                 domain = PropertiesUtils.getValue("file.domain");
                 data = "//" + domain + "/" + fileKey;
+
             }
 
             ossClient.putObject(bucketName, fileKey, in);
@@ -191,37 +193,9 @@ public class AliOSSClient {
         return result;
     }
 
-    private long getFileSize(InputStream is) {
-        File tmpFile = getTmpFile();
-        int bufSize = 8192;
-        byte[] dataBuf = new byte[2048];
-        BufferedInputStream bis = new BufferedInputStream(is, bufSize);
-
-        try {
-            BufferedOutputStream bos = new BufferedOutputStream(
-                    new FileOutputStream(tmpFile), bufSize);
-
-            int count;
-            while ((count = bis.read(dataBuf)) != -1) {
-                bos.write(dataBuf, 0, count);
-            }
-            bos.flush();
-            bos.close();
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            tmpFile.delete();
-        }
-        return tmpFile.length();
-    }
 
-    private static File getTmpFile() {
-        File tmpDir = FileUtils.getTempDirectory();
-        String tmpFileName = (Math.random() * 10000 + "").replace(".", "");
-        return new File(tmpDir, tmpFileName);
-    }
 
     /**
      * 上传文件流
