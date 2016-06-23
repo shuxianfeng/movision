@@ -146,27 +146,6 @@ public class TechCourseController {
 
     }
 
-    @ApiOperation(value="收银台页面信息",notes="收银台页面信息",response = Response.class)
-    @RequestMapping(value = "sel_cashierDesk", method = RequestMethod.GET)
-    public Response selectCashierDeskInfo(@ApiParam(value = "订单编号") @RequestParam String orderNo)
-    {
-        Map<String,Object> cashierDesk = orderManagerService.selectCashierDeskInfo(orderNo,TechConstant.IsUseZhb.YES.toString(),TechConstant.CASHIER_PAYMENT_DURATION);
-        Response response = new Response();
-        response.setData(cashierDesk);
-        return response;
-    }
-
-    @ApiOperation(value="收银台页面使用筑慧币",notes="收银台页面使用筑慧币",response = Response.class)
-    @RequestMapping(value = "sel_cashierDeskUseZhb", method = RequestMethod.GET)
-    public Response useZhbCashierDesk(@ApiParam(value = "订单编号") @RequestParam String orderNo,
-                                          @ApiParam(value = "是否使用筑慧币 0：未使用，1:使用") @RequestParam String isUseZhb)
-    {
-        Map<String,Object> cashierDesk = orderManagerService.useZhbByCashierDesk(orderNo,Integer.parseInt(isUseZhb));
-        Response response = new Response();
-        response.setData(cashierDesk);
-        return response;
-    }
-
     @ApiOperation(value="技术培训课程下单获取验证码",notes="技术培训课程下单获取验证码",response = Response.class)
     @RequestMapping(value = "get_mobileCode", method = RequestMethod.GET)
     public Response get_TrainMobileCode(@ApiParam(value = "手机号") @RequestParam String mobile,

@@ -129,64 +129,64 @@ public class OrderManagerService {
     /**
      * 查询收银台初始信息  1:培训课程购买使用筑慧币消费的情况.  0:VIP充值，筑慧币购买不使用筑慧币的情况
      * @param orderNo  订单编号
-     * @param isUseZhb 是否使用筑慧币 0:否，1：是
-     * @param time 支付时长
      * @return
      */
-    public Map<String,Object> selectCashierDeskInfo(String orderNo,String isUseZhb,String time)
+    public Map<String,Object> selectCashierDeskInfo(String orderNo)
     {
         log.info("select casher desk init info orderNo = "+orderNo);
         Map<String,Object> deskInfoMap = orderMapper.selectCashierDeskInfo(orderNo);
         //1:使用筑慧币消费的情况.  0:VIP充值，筑慧币购买不使用筑慧币的情况
-        if(TechConstant.IsUseZhb.YES.toString().equals(isUseZhb)) {
-            if (!deskInfoMap.isEmpty()) {
-                ZhbAccount zhbAccount = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
-                if (zhbAccount != null) {
-                    deskInfoMap.put("zhb", zhbAccount.getAmount());
-                } else {
-                    deskInfoMap.put("zhb", "");
-                }
+        if (!deskInfoMap.isEmpty()) {
+            String duration = OrderConstants.CASHIER_PAYMENT_DURATION_24;
+            if(OrderConstants.GoodsType.VIP.toString().equals(deskInfoMap.get("goodsType")) || OrderConstants.GoodsType.ZHB.toString().equals(deskInfoMap.get("goodsType")))
+            {
+                this.useZhbByCashierDesk(deskInfoMap,0);
             }
+            else if(OrderConstants.GoodsType.JSPX.toString().equals(deskInfoMap.get("goodsType")) || OrderConstants.GoodsType.ZJPX.toString().equals(deskInfoMap.get("goodsType")))
+            {
+                this.useZhbByCashierDesk(deskInfoMap,1);
+                duration = OrderConstants.CASHIER_PAYMENT_DURATION_HALF;
+            }
+            deskInfoMap.put("duration",duration);
+            deskInfoMap.put("currency",OrderConstants.CASHIER_PAYMENT_CURRENCY_YUAN);
+            deskInfoMap.remove("goodsType");
         }
-        deskInfoMap.put("duration",time);
         return deskInfoMap;
     }
 
     /**
      * 查询收银台使用筑慧币支付
-     * @param orderNo
      * @return
      */
-    public Map<String,Object> useZhbByCashierDesk(String orderNo,int isUseZhb)
+    public Map<String,Object> useZhbByCashierDesk(Map<String,Object> deskInfoMap,int isUseZhb)
     {
-        log.info("use zhb by casher desk orderNo = "+orderNo);
-        Map<String,Object> deskInfoMap = orderMapper.selectCashierDeskInfo(orderNo);
-        Map<String,Object> useZhbMap = new HashMap<String,Object>();
         if(!deskInfoMap.isEmpty())
         {
             //实付金额
             BigDecimal payAmount = (BigDecimal) deskInfoMap.get("payAmount");
+            Map<String,Object> payMap = null;
             if(isUseZhb == 1) {
                 ZhbAccount zhbAccount = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
                 if (zhbAccount != null && zhbAccount.getAmount() != null) {
+                    deskInfoMap.put("zhbtotal", zhbAccount.getAmount());
+                    payMap = new HashMap<String,Object>();
                     BigDecimal zhbAmount = zhbAccount.getAmount();
                     //筑慧币小于支付金额
                     if (zhbAmount.compareTo(payAmount) == -1) {
-                        useZhbMap.put("zhb", zhbAmount);
+                        payMap.put("zhb", zhbAmount);
                         BigDecimal alipay = payAmount.subtract(zhbAmount);
-                        useZhbMap.put("alipay", alipay);
+                        payMap.put("pay", alipay);
                     }
                     //1:筑慧币大于支付金额,0:筑慧币等于支付金额
                     else if (zhbAmount.compareTo(payAmount) == 1 || zhbAmount.compareTo(payAmount) == 0) {
-                        useZhbMap.put("zhb", payAmount);
+                        payMap.put("zhb", payAmount);
                     }
                 }else{
-                    useZhbMap.put("alipay", payAmount);
                 }
             }else{
-                useZhbMap.put("alipay", payAmount);
             }
+            deskInfoMap.put("pay",payMap);
         }
-        return useZhbMap;
+        return deskInfoMap;
     }
 }

@@ -139,7 +139,7 @@ public class RegisterController {
 		Session sess = currentUser.getSession(true);
 		String sessionImgCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_REGISTER);
 		Response response = new Response();
-		if(imgCode.equalsIgnoreCase(sessionImgCode)) {
+//		if(imgCode.equalsIgnoreCase(sessionImgCode)) {
 			// 生成随机字串
 			String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
 			log.debug("verifyCode == " + verifyCode);
@@ -155,9 +155,9 @@ public class RegisterController {
 			info.setAccount(mobile);
 			memberService.inserValidateInfo(info);
 			sess.setAttribute("r" + mobile, verifyCode);
-		}else {
+		/*}else {
 			throw new BusinessException(MsgCodeConstant.validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
-		}
+		}*/
 		return response;
 	}
 	
