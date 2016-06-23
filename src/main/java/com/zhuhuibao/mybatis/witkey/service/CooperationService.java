@@ -184,6 +184,20 @@ public class CooperationService {
     }
 
     /**
+     * 未登录时查询威客任务信息
+     */
+    public Map<String,Object> queryUnloginCooperationInfo(String id){
+        try{
+            Map<String,Object> cooperation = cooperationMapper.queryUnloginCooperationInfo(id);
+            return cooperation;
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
      * 根据条件查询任务信息列表（分页）
      */
     public List<Map<String,String>> findAllCooperationByPager( Paging<Map<String,String>> pager,Cooperation cooperation){
