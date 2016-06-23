@@ -144,9 +144,4 @@ public class TechConstant {
      */
     public static final String MOBILE_CODE_SESSION_ORDER_CLASS = "techOrder";
 
-
-    /**
-     * 收银台支付时长 0.5小时
-     */
-    public static final String CASHIER_PAYMENT_DURATION = "0.5";
 }
