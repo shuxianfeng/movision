@@ -108,24 +108,20 @@ public class WitkeySiteController {
         return Response;
     }
 
-   /* *//**
-     * 威客信息詳情
-     *//*
     @ApiOperation(value="威客信息詳情",notes="威客信息詳情",response = Cooperation.class)
     @RequestMapping(value = "sel_witkey", method = RequestMethod.GET)
-    //    @ZhbAutoPayforAnnotation(goodsType=ZhbGoodsType.CKJSCG)
     public Response cooperationInfo(@RequestParam String id)  {
         Response response = new Response();
         Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
-        response = paymentService.viewGoodsRecord(Long.parseLong(id),cooperation,"witkey");
         cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews())+1));
         cooperationService.updateCooperationViews(cooperation);
+        response.setData(cooperation);
         return response;
-    }*/
+    }
 
     @ApiOperation(value="未登陆查看威客任务",notes="未登陆查看威客任务",response = Cooperation.class)
     @RequestMapping(value = "base/sel_witkeyTask", method = RequestMethod.GET)
-    public Response cooperationInfo(@ApiParam(value = "任务ID")@RequestParam String id)  {
+    public Response unlogineWitkeyInfo(@ApiParam(value = "任务ID")@RequestParam String id)  {
         Response response = new Response();
         Map<String,Object> cooperation = cooperationService.queryUnloginCooperationInfo(id);
         response.setData(cooperation);

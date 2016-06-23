@@ -109,4 +109,19 @@ public class OrderConstants {
             return this.value;
         }
     }
+
+    /**
+     * 收银台支付时长 0.5小时
+     */
+    public static final String CASHIER_PAYMENT_DURATION_HALF = "0.5";
+
+    /**
+     * 收银台支付时长 24小时
+     */
+    public static final String CASHIER_PAYMENT_DURATION_24 = "24";
+
+    /**
+     * 货币单位 元
+     */
+    public static final String CASHIER_PAYMENT_CURRENCY_YUAN = "元";
 }

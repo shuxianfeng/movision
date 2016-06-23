@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +28,7 @@ public class UEditorController {
 
     @RequestMapping(value="uploadimage")
     @ApiOperation(value = "百度上传", notes = "百度上传")
-    public void uploadimage(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+    public void uploadimage(HttpServletRequest request, HttpServletResponse response,MultipartFile upfile) throws UnsupportedEncodingException {
 
         request.setCharacterEncoding("utf-8");
         response.setHeader("Content-Type" , "text/html");
@@ -37,7 +38,7 @@ public class UEditorController {
         PrintWriter out = null;
         try {
             out = response.getWriter();
-            out.write(new ActionEnter(request, rootPath).exec());
+            out.write(new ActionEnter(request, rootPath,upfile).exec());
 
         } catch (IOException e) {
             e.printStackTrace();
