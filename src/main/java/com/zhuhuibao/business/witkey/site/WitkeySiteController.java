@@ -124,7 +124,7 @@ public class WitkeySiteController {
     }*/
 
     @ApiOperation(value="未登陆查看威客任务",notes="未登陆查看威客任务",response = Cooperation.class)
-    @RequestMapping(value = "sel_witkeyTask", method = RequestMethod.GET)
+    @RequestMapping(value = "base/sel_witkeyTask", method = RequestMethod.GET)
     public Response cooperationInfo(@ApiParam(value = "任务ID")@RequestParam String id)  {
         Response response = new Response();
         Map<String,Object> cooperation = cooperationService.queryUnloginCooperationInfo(id);
