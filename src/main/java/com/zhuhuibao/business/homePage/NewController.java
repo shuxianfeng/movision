@@ -90,7 +90,7 @@ public class NewController {
 
     @ApiOperation(value = "首页第三屏权威专家，前沿技术，筑慧会展（个数运营控制）",
             notes = "首页第三屏权威专家，前沿技术，筑慧会展（个数运营控制）", response = Response.class)
-    @RequestMapping(value = "sel_expertList", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_expert_tech_expo_List", method = RequestMethod.GET)
     public Response sel_expertList(@ApiParam(value="频道类型 1:平台主站")@RequestParam String chanType,
                                    @ApiParam(value="频道下子页面.index:首页;") @RequestParam String page,
                                    @ApiParam(value="广告所在区域:F3:第三屏") @RequestParam String advArea)
