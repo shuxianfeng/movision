@@ -236,7 +236,6 @@ public class ChannelNewsService {
     
     /**
      * 查询所说项目
-     * @param channelMap  频道资讯页条件
      * @return Response
      */
     public Response queryChannelList()
@@ -267,6 +266,14 @@ public class ChannelNewsService {
 		result = channel.batchDelNews(id);
 		return result;
 	}
-    
 
+    public List<Map<String,String>> queryHomepageTechnologyList(Map<String, Object> map){
+        try{
+            return channel.queryHomepageTechnologyList(map);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

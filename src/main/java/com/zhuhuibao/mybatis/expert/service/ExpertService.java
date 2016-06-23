@@ -719,4 +719,14 @@ public class ExpertService {
         return map;
     }
 
+
+    public List<Map<String,String>> queryHomepageExpertList(Map<String, Object> map){
+        try{
+            return expertMapper.queryHomepageExpertList(map);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }
