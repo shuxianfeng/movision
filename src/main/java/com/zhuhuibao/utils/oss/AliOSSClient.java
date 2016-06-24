@@ -37,7 +37,7 @@ public class AliOSSClient {
     // 链接地址是：https://help.aliyun.com/document_detail/oss/user_guide/oss_concept/endpoint.html?spm=5176.docoss/user_guide/endpoint_region
     // endpoint的格式形如“http://oss-cn-hangzhou.aliyuncs.com/”，注意http://后不带bucket名称，
     // 比如“http://bucket-name.oss-cn-hangzhou.aliyuncs.com”，是错误的endpoint，请去掉其中的“bucket-name”。
-    private static String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
+    private static String endpoint = "http://oss-cn-hangzhou-internal.aliyuncs.com";//"http://oss-cn-hangzhou.aliyuncs.com";
 
     // accessKeyId和accessKeySecret是OSS的访问密钥，您可以在控制台上创建和查看，
     // 创建和查看访问密钥的链接地址是：https://ak-console.aliyun.com/#/。
@@ -397,15 +397,15 @@ public class AliOSSClient {
     //test
     public static void main(String[] args) {
         AliOSSClient client = new AliOSSClient();
-        String fileName = "11466507049775111.txt";
-//        File file = new File(fileName);
-//        Map<String, String> result = client.uploadLocalFile(file, "doc", "job");
-//        System.out.println(result);
+        String fileName = "/Users/jianglz/Downloads/1111.jpg";
+        File file = new File(fileName);
+        Map<String, String> result = client.uploadLocalFile(file, "doc", null);
+        System.out.println(result);
 //        String name = file.getName();
 //        String a = FileUtil.renameFile(name);
 //        System.out.println(a);
-        Map<String, Object> map = client.downloadStream(fileName, "doc", "job");
-        System.out.println(map);
+//        Map<String, Object> map = client.downloadStream(fileName, "doc", "job");
+//        System.out.println(map);
     }
 
 }
