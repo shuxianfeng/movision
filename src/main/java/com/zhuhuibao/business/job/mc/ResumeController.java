@@ -12,6 +12,7 @@ import com.zhuhuibao.mybatis.memCenter.entity.ForbidKeyWords;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.ForbidKeyWordsService;
 import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.file.FileUtil;
@@ -63,6 +64,9 @@ public class ResumeController {
 
     @Autowired
     ForbidKeyWordsService forbidKeyWordsService;
+
+    @Autowired
+    MemberService memberService;
     /**
      * 发布简历
      */
@@ -240,9 +244,9 @@ public class ResumeController {
                 return response;
     }
 
-    @ApiOperation(value = "增加屏蔽企业关键字", notes = "增加屏蔽企业关键字")
+    @ApiOperation(value = "增加屏蔽企业", notes = "增加屏蔽企业")
     @RequestMapping(value = "add_forbidKeyWords", method = RequestMethod.POST)
-    public Response add_forbidKeyWords(@RequestParam(required = false)String keyWords)
+    public Response add_forbidKeyWords(@ApiParam(value = "公司id")@RequestParam(required = false)String company_id)
     {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
@@ -256,12 +260,12 @@ public class ResumeController {
                 throw new BusinessException(MsgCodeConstant.FORBID_KEYWORDS_LIMIT, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.FORBID_KEYWORDS_LIMIT)));
             }else {
                 for(int i=0;i<list.size();i++){
-                    if(list.get(i).get("key_words").contains(keyWords)){
+                    if(list.get(i).get("company_id").contains(company_id)){
                         throw new BusinessException(MsgCodeConstant.FORBID_KEYWORDS_REPEAT, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.FORBID_KEYWORDS_REPEAT)));
                     }
                 }
                 forbidKeyWords.setCreate_id(String.valueOf(createid));
-                forbidKeyWords.setKey_words(keyWords);
+                forbidKeyWords.setCompany_id(company_id);
                 forbidKeyWordsService.addForbidKeyWords(forbidKeyWords);
             }
         }else {
@@ -270,7 +274,7 @@ public class ResumeController {
         return response;
     }
 
-    @ApiOperation(value = "查询屏蔽关键字", notes = "查询屏蔽关键字")
+    @ApiOperation(value = "查询屏蔽企业", notes = "查询屏蔽企业")
     @RequestMapping(value = "sel_forbidKeyWords", method = RequestMethod.GET)
     public Response sel_forbidKeyWords()
     {
@@ -288,7 +292,7 @@ public class ResumeController {
         return response;
     }
 
-    @ApiOperation(value = "删除屏蔽关键字", notes = "删除屏蔽关键字")
+    @ApiOperation(value = "删除屏蔽企业", notes = "删除屏蔽企业")
     @RequestMapping(value = "del_forbidKeyWords", method = RequestMethod.POST)
     public Response del_forbidKeyWords(@RequestParam String id)
     {
@@ -302,6 +306,16 @@ public class ResumeController {
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
+        return response;
+    }
+
+    @ApiOperation(value = "根据关键字获取企业", notes = "根据关键字获取企业")
+    @RequestMapping(value = "sel_company_by_keywords", method = RequestMethod.GET)
+    public Response sel_company_by_keywords(@RequestParam(required = false)String keywords)
+    {
+        Response response = new Response();
+        List<Map<String,String>> list = memberService.queryCompanyByKeywords(keywords);
+        response.setData(list);
         return response;
     }
 }

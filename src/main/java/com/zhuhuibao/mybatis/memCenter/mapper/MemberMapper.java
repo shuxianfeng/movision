@@ -42,4 +42,6 @@ public interface MemberMapper {
     List<OmsMemBean> findAllMemberByPager(RowBounds rowBounds,OmsMemBean member);
 
     List<OmsMemBean> findAllMemCertificateByPager(RowBounds rowBounds,OmsMemBean member);
+
+    List<Map<String,String>> queryCompanyByKeywords(String keywords);
 }

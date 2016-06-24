@@ -4,13 +4,16 @@
   <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.ForbidKeyWords" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="create_id" property="create_id" jdbcType="VARCHAR" />
+    <result column="company_id" property="company_id" jdbcType="VARCHAR" />
     <result column="create_time" property="create_time" jdbcType="VARCHAR" />
     <result column="key_words" property="key_words" jdbcType="VARCHAR" />
     <result column="is_deleted" property="is_deleted" jdbcType="VARCHAR" />
   </resultMap>
   <select id="queryKeyWordsList" resultType="java.util.Map" parameterType="java.util.Map">
-    SELECT  id,key_words FROM t_i_forbid_key_words
-    where create_id = #{create_id} and is_deleted = #{is_deleted}
+    SELECT  t.id,t.company_id, m.enterpriseName
+    FROM t_i_forbid_key_words t
+    LEFT JOIN t_m_member m on t.company_id = m.id
+    where t.create_id = #{create_id} and t.is_deleted = #{is_deleted}
   </select>
   <insert id="addForbidKeyWords" parameterType="com.zhuhuibao.mybatis.memCenter.entity.ForbidKeyWords" >
     insert into t_i_forbid_key_words
@@ -24,6 +27,9 @@
         create_time,
       <if test="key_words != null" >
         key_words,
+      </if>
+      <if test="company_id != null" >
+        company_id,
       </if>
       <if test="is_deleted != null" >
         is_deleted,
@@ -40,6 +46,9 @@
       <if test="key_words != null" >
         #{key_words},
       </if>
+      <if test="company_id != null" >
+        #{company_id},
+      </if>
       <if test="is_deleted != null" >
         #{is_deleted},
       </if>
@@ -50,6 +59,9 @@
     <set >
       <if test="key_words != null" >
         key_words = #{key_words},
+      </if>
+      <if test="company_id != null" >
+        company_id = #{company_id},
       </if>
       <if test="is_deleted != null" >
         is_deleted = #{is_deleted},

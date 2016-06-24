@@ -1,7 +1,5 @@
 package com.zhuhuibao.business.oms.upload;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -70,6 +68,7 @@ public class UploadFileController {
 	List<String> fialList=null;
 	
 	List<ProjectLinkman> partyBList= null;
+	Map<String, Object> result= null;
 
 	String details="";
 	String temp="";
@@ -125,11 +124,10 @@ public class UploadFileController {
 			if(rowsCount<=0)
 			{
 				failReason="项目格式导入内容不正确，请重与管理员联系！";
-				Map<String, Object> result=new HashMap<String, Object>();
+				result=new HashMap<String, Object>();
 				fialList.add(failReason);
 				result.put("fialList", fialList);
-		        response.setCode(200);  
-				response.setData(result);
+		        response.setCode(200);
 			}else{
 
 				//解析数据
@@ -177,14 +175,12 @@ public class UploadFileController {
 				}
 				
 			 
-				Map<String, Object> result=new HashMap<String, Object>();
+				result=new HashMap<String, Object>();
 				result.put("sucCount", sucCount);
 				result.put("failCount", failCount);
 				result.put("msg", "本次上传:"+(rowsCount)+"条项目信息,成功:"+sucCount+"失败:"+failCount);
 				result.put("fialList", fialList);
 				response.setCode(200); 
-				
-				response.setData(result);
 			}
 			
   	 
@@ -542,6 +538,18 @@ public class UploadFileController {
 		   }
            
            projectInfo.setPartyBList(partyBList);
+           if(projectInfo.getPartyAList()==null)
+           {
+        	   failReason="第"+rowsNum+"行，第12列：业主 / 开发商必须填写;";
+        	   isAdd=1;
+           }
+           
+           projectInfo.setPartyBList(partyBList);
+           if(projectInfo.getPartyBList()==null)
+           {
+        	   failReason="第"+rowsNum+"行，建筑师/设计师，工程师/技术顾问，承建商，分包商 至少有一项不能为空;";
+        	   isAdd=1;
+           }
            if(isAdd==1)
            {
         	   fialList.add(failReason);
@@ -564,8 +572,11 @@ public class UploadFileController {
 		 
 		if(this.sucCount+this.failCount>=total){
 			proc=100;
+			result.put("opResult", this.result);
 		}
 		result.put("progress", proc); 
+		 
+		 
 		response.setCode(200); 
 		
 		response.setData(result);
