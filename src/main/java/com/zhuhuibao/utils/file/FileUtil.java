@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
@@ -37,6 +38,7 @@ public class FileUtil {
 
     /**
      * 下载文件
+     *
      * @param response
      * @param fileName
      * @param type
@@ -76,13 +78,13 @@ public class FileUtil {
 
         } else if (uploadMode.equals("alioss")) {
             byte[] bytes;
-            Map<String,Object> map  = aliOSSClient.downloadStream(fileName, type, chann);
-            String status =String.valueOf(map.get("status"));
-            if(status.equals("success")){
+            Map<String, Object> map = aliOSSClient.downloadStream(fileName, type, chann);
+            String status = String.valueOf(map.get("status"));
+            if (status.equals("success")) {
 
                 bytes = (byte[]) map.get("data");
-                result = downloadFile(response,bytes);
-            }else{
+                result = downloadFile(response, bytes);
+            } else {
                 result.setCode(MsgCodeConstant.response_status_400);
                 result.setMsgCode(MsgCodeConstant.file_download_error);
                 result.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.file_download_error))));
@@ -97,6 +99,7 @@ public class FileUtil {
 
     /**
      * 文件下载 (流模式)
+     *
      * @param response
      * @param bytes
      * @return
@@ -104,12 +107,12 @@ public class FileUtil {
     private static Response downloadFile(HttpServletResponse response, byte[] bytes) {
         Response result = new Response();
 
-        try{
+        try {
             ServletOutputStream stream = response.getOutputStream();
             stream.write(bytes);
             stream.flush();
             stream.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("download file error!");
             result.setCode(MsgCodeConstant.response_status_400);
             result.setMsgCode(MsgCodeConstant.file_download_error);
@@ -200,24 +203,69 @@ public class FileUtil {
 
     /**
      * 判断文件是否存在 防止上传时篡改文件名称
-     * @param fileName  文件名称
-     * @param type  文件类型： img,doc
-     * @param chann 频道关键字
+     *
+     * @param fileName 文件名称
+     * @param type     文件类型： img,doc
+     * @param chann    频道关键字
      * @return
      */
-    public boolean isExistFile(String fileName,String type,String chann){
+    public boolean isExistFile(String fileName, String type, String chann) {
         String uploadMode = PropertiesUtils.getValue("upload.mode");
         switch (uploadMode) {
             case "alioss":
-                Map<String, Object> map = aliOSSClient.downloadStream(fileName, type,chann);
+                Map<String, Object> map = aliOSSClient.downloadStream(fileName, type, chann);
                 String status = (String) map.get("status");
                 return status.equals("success");
             case "zhb":
-                String fileUrl = ApiConstants.getUploadDoc()+ "/"+chann+"/"+type+"/"+fileName;
+                String fileUrl = ApiConstants.getUploadDoc() + "/" + chann + "/" + type + "/" + fileName;
                 File file = new File(fileUrl);
                 return file.exists();
-            default:return false;
+            default:
+                return false;
         }
+    }
+
+
+    /**
+     * 获取文件名后缀
+     *
+     * @param fileName
+     * @return
+     */
+    public static String getSuffix(String fileName) {
+        int index = fileName.lastIndexOf(".");
+        return fileName.substring(index + 1, fileName.length());
+    }
+
+    /**
+     * 获取允许的文件后缀名组
+     *
+     * @param type
+     * @return
+     */
+    public static String[] getAllowSuffixs(String type) {
+        if ("img".equals(type)) {
+            String allowImgSuffix = PropertiesUtils.getValue("allowed.img.suffix");
+            return allowImgSuffix.split(",");
+        } else if ("doc".equals(type)) {
+            String allowFileSuffix = PropertiesUtils.getValue("allowed.file.suffix");
+            return allowFileSuffix.split(",");
+        }
+        return null;
+    }
+
+    /**
+     * 判断上传文件 是否允许的后缀名
+     * @param fileName
+     * @param type
+     * @return
+     */
+    public static boolean isAllowed(String fileName, String type) {
+        String suffix = getSuffix(fileName);
+        String[] allows = getAllowSuffixs(type);
+
+        return allows != null && Arrays.asList(allows).contains(suffix);
+
     }
 
     public static void main(String[] args) {
@@ -227,6 +275,6 @@ public class FileUtil {
 //        String name = file.getName();
 //        String a = FileUtil.renameFile(name);
 //        System.out.println(a);
-        System.out.println(renameFile("xxxx.xlsx"));
+        System.out.println(getSuffix("xxxx.xlsx"));
     }
 }
