@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.tech.service;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
 import com.zhuhuibao.mybatis.tech.mapper.TechCooperationMapper;
@@ -183,15 +184,15 @@ public class TechCooperationService {
 
     /**
      * 预览技术合作详情
-     * @param id 技术合作ID
+     * @param condition 技术合作ID
      * @return
      */
-    public Map<String,Object> previewTechCooperationDetail(String id)
+    public Map<String,Object> previewTechCooperationDetail(Map<String,Object> condition)
     {
         Map<String,Object> techCoop;
-        log.info("preview tech cooperation by id "+id);
+        log.info("preview tech cooperation by id "+ StringUtils.mapToString(condition));
         try{
-            techCoop = techMapper.previewTechCooperationDetail(Long.valueOf(id));
+            techCoop = techMapper.previewTechCooperationDetail(condition);
         }catch (Exception e){
             log.error("select tech cooperation by id error! ",e);
             throw e;

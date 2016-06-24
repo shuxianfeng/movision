@@ -124,6 +124,7 @@ public class ResumeSiteController {
         {
             map.put("title",title.replace("_","\\_"));
         }
+        map.put("company_id",ShiroUtil.getCreateID());
         map.put("jobCity",jobCity);
         map.put("expYearBefore",expYearBefore);
         map.put("expYearBehind",expYearBehind);
