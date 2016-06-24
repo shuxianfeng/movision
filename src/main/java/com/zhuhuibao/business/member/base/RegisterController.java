@@ -132,8 +132,9 @@ public class RegisterController {
 	 */
 	@ApiOperation(value="手机注册账号时发送的验证码",notes="手机注册账号时发送的验证码",response = Response.class)
 	@RequestMapping(value = {"/rest/mobileCode","rest/member/site/base/sel_mobileCode"}, method = RequestMethod.GET)
-	public Response getMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile,
-								  @ApiParam(value = "图形验证码") @RequestParam String imgCode) throws IOException, ApiException {
+	public Response getMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile
+//			, @ApiParam(value = "图形验证码") @RequestParam() String imgCode
+	) throws IOException, ApiException {
 		log.debug("获得手机验证码  mobile=="+mobile);
 		Subject currentUser = SecurityUtils.getSubject();
 		Session sess = currentUser.getSession(true);
