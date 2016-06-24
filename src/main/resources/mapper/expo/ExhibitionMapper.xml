@@ -177,7 +177,7 @@
       <if test="type != null" >
         type = #{type},
       </if>
-      <if test="subType != null" >
+      <if test="subType != null AND subType!='' " >
         subType = #{subType},
       </if>
       <if test="company != null" >
