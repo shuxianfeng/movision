@@ -397,18 +397,14 @@ public class UploadFileController {
         	
 			String partyContent= "";
 			String  rowContetnt = row.getCell(11).toString();
-			rowContetnt=rowContetnt.replaceAll("\n联系人备注:", "").replaceAll("\n中标价:", "备注:");
+			 
 	 
-			String [] partyContentList;
-			if(rowContetnt.indexOf(";")>0)
+			if(rowContetnt.indexOf("\n中标价:")>0)
 			{
-				String startStr= rowContetnt.substring(0,rowContetnt.indexOf(";")+1);
-				String endStr= rowContetnt.substring(rowContetnt.indexOf(";")+1,rowContetnt.length()); 
-				String zbTitle=	startStr.substring(startStr.lastIndexOf("\n"),startStr.length()); 
-				partyContent=startStr.replace(zbTitle, "")+endStr.replace("联系人备注:","备注:"+ zbTitle.replace("\n", ""));
-			}else{
-				partyContent=rowContetnt;
+				rowContetnt=rowContetnt.replaceAll("\n联系人备注:", "").replaceAll("联系人备注:", "").replaceAll("\n中标价:", "备注:");
 			}
+			
+			String [] partyContentList; 
 					
 			partyContentList=partyContent.replaceAll("\n联系人备注", "备注").replace("联系人备注", "备注").split("\n\n");
 			
@@ -582,11 +578,10 @@ public class UploadFileController {
 	 * @param ProjectInfo
 	 */
 	private void setPartBList(String rowContetnt, int rowsNum, ProjectInfo ProjectInfo,String type) {
-		
-		String partyContent="";
+ 
 		if(rowContetnt.indexOf("\n中标价:")>0)
 		{
-			rowContetnt=rowContetnt.replaceAll("\n联系人备注:", "").replaceAll("\n中标价:", "备注:");
+			rowContetnt=rowContetnt.replaceAll("\n联系人备注:", "").replaceAll("联系人备注:", "").replaceAll("\n中标价:", "备注:");
 		}
 		String [] partyContentList =rowContetnt.replaceAll("\n联系人备注", "备注").replaceAll("联系人备注", "备注").replace("\n中标价:", "\t中标价:").split("\n\n");
 		
@@ -614,15 +609,8 @@ public class UploadFileController {
 				 
 				linkma.setDeptType(partyList[0]);
 				linkma.setName(partyList[1]);
-				partyContent=partyList[2];
-				if(partyContent.indexOf(";")>0&&partyContent.substring(partyContent.lastIndexOf(":")-3,partyContent.lastIndexOf(":"))=="中标价")
-				{
-					String startStr= partyContent.substring(0,partyContent.indexOf(";")+1);
-					String endStr= partyContent.substring(partyContent.indexOf(";")+1,partyContent.length()); 
-					String zbTitle=	startStr.substring(startStr.lastIndexOf("\t"),startStr.length()); 
-					partyContent=startStr.replace(zbTitle, "")+endStr.replace("备注:","备注:"+ zbTitle.replace("\n", ""));
-				}
-				details=partyContent.replace("\t", "");
+				details=partyList[2];
+			
 				
 				int index=details.indexOf(":")+1; 
 				
@@ -659,16 +647,8 @@ public class UploadFileController {
 					{
 						details=partyList[1];
 						
-						partyContent=partyList[1];
-						if(partyContent.indexOf(";")>0)
-						{
-							String startStr= partyContent.substring(0,partyContent.indexOf(";")+1);
-							String endStr= partyContent.substring(partyContent.indexOf(";")+1,partyContent.length()); 
-							String zbTitle=	startStr.substring(startStr.lastIndexOf("\t"),startStr.length()); 
-							partyContent=startStr.replace(zbTitle, "")+endStr.replace("备注:","备注:"+ zbTitle.replace("\n", ""));
-						} 
-						
-						details=partyContent.replace("\t", ""); 
+						 
+						 
 						int index=details.indexOf(":")+1; 
 						temp=this.subStr(details, index);
 						if("联系人:".equals(temp))
@@ -692,16 +672,8 @@ public class UploadFileController {
 					}
 				}else{
 					 
-					 partyContent=partyList[1];
-					if(partyContent.indexOf(";")>0)
-					{
-						String startStr= partyContent.substring(0,partyContent.indexOf(";")+1);
-						String endStr= partyContent.substring(partyContent.indexOf(";")+1,partyContent.length()); 
-						String zbTitle=	startStr.substring(startStr.lastIndexOf("\t"),startStr.length()); 
-						partyContent=startStr.replace(zbTitle, "")+endStr.replace("备注:","备注:"+ zbTitle.replace("\n", ""));
-					} 
-					
-					details=partyContent.replace("\t", "");
+					details=partyList[1];
+					 
 					
 					int index=details.indexOf(":")+1; 
 					
