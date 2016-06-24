@@ -125,7 +125,9 @@ public class PaymentService {
                     cooperationService.updateCooperationViews(cooperation);
                 }else if(CKJSCG.toString().equals(type))//查看技术成果
                 {
-                    Map<String,Object> techCoop = techService.previewTechCooperationDetail(String.valueOf(goodsID));
+                    Map<String,Object> techMap = new HashMap<String,Object>();
+                    techMap.put("id",goodsID);
+                    Map<String,Object> techCoop = techService.previewTechCooperationDetail(techMap);
                     techService.updateTechCooperationViews(String.valueOf(goodsID));
                     dataMap.put("info",techCoop);
                 }else if(CKZJJSCG.toString().equals(type))//查看专家技术成果

@@ -19,7 +19,7 @@ public interface TechCooperationMapper {
 
     Map<String,String> selectMcCoopDetail(Long id);
 
-    Map<String,Object> previewTechCooperationDetail(Long id);
+    Map<String,Object> previewTechCooperationDetail(Map<String,Object> condition);
 
     Map<String,Object> previewUnloginTechCoopDetail(Long id);
 
