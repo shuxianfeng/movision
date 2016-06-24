@@ -510,4 +510,23 @@ public class JobPositionService {
     public Map<String,Object> findById(String id){
        return positionMapper.findById(id);
     }
+
+    /**
+     * 设置为热门职位
+     * @param positionId
+     */
+    public void updateHot(String positionId,String hot) {
+
+        int count = 0;
+        try{
+            count =  positionMapper.setupHotPosition(positionId,hot);
+            if(count != 1){
+                throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL,"更新t_dictionary_position失败");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage());
+            throw e;
+        }
+    }
 }

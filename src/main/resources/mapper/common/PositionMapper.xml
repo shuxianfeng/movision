@@ -10,6 +10,11 @@
   <sql id="Base_Column_List" >
     id, name, parentId
   </sql>
+  <update id="setupHotPosition">
+    update t_dictionary_position
+    set hot = #{hot}
+    where id = #{positionId}
+  </update>
   <select id="findPosition" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

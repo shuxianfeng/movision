@@ -9,6 +9,8 @@ public class ForbidKeyWords {
 
     private String create_id;
 
+    private String company_id;
+
     private String create_time;
 
     private String key_words;
@@ -53,5 +55,13 @@ public class ForbidKeyWords {
 
     public void setIs_deleted(String is_deleted) {
         this.is_deleted = is_deleted;
+    }
+
+    public String getCompany_id() {
+        return company_id;
+    }
+
+    public void setCompany_id(String company_id) {
+        this.company_id = company_id;
     }
 }

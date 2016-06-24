@@ -12,4 +12,6 @@ public interface PositionMapper {
     List<Position> findSubPosition();
 
     Map<String,Object> findById(@Param("id") String id);
+
+    int setupHotPosition(@Param("positionId") String positionId, @Param("hot") String hot);
 }
