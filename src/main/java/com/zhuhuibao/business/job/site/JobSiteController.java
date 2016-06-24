@@ -54,6 +54,15 @@ public class JobSiteController {
     @Autowired
     PaymentGoodsService goodsService;
 
+    @ApiOperation(value = "获取职位类别", notes = "获取职位类别", response = Response.class)
+    @RequestMapping(value = "sel_positionType", method = RequestMethod.GET)
+    public Response positionType() {
+        Response response = new Response();
+        List list = job.positionType();
+        response.setData(list);
+        return response;
+    }
+
     @RequestMapping(value="apply_position", method = RequestMethod.POST)
     @ApiOperation(value="应聘职位",notes = "应聘职位",response = Response.class)
     public Response applyPosition(@ApiParam(value = "职位ID") @RequestParam String jobID,
