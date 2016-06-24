@@ -254,6 +254,9 @@
         find_in_set(#{item},tr.postID)
       </foreach>
       </if>
+      <if test="company_id">
+        and tr.createId not in (select t.create_id from t_i_forbid_key_words t where t.company_id = #{company_id})
+      </if>
     </where>
     order by tr.updateTime desc
   </select>
