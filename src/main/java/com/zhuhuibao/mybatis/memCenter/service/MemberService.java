@@ -533,4 +533,15 @@ public class MemberService {
 			throw e;
 		}
 	}
+
+	public List<Map<String,String>> queryCompanyByKeywords(String keywords){
+		try {
+			return memberMapper.queryCompanyByKeywords(keywords);
+		}
+		catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }
