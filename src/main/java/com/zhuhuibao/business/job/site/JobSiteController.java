@@ -3,12 +3,14 @@ package com.zhuhuibao.business.job.site;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
@@ -53,6 +55,9 @@ public class JobSiteController {
 
     @Autowired
     PaymentGoodsService goodsService;
+
+    @Autowired
+    MemberService memberService;
 
     @ApiOperation(value = "获取职位类别", notes = "获取职位类别", response = Response.class)
     @RequestMapping(value = "sel_positionType", method = RequestMethod.GET)
@@ -113,7 +118,7 @@ public class JobSiteController {
         return response;
     }
 
-    @RequestMapping(value="sel_adv_position", method = RequestMethod.GET)
+/*    @RequestMapping(value="sel_adv_position", method = RequestMethod.GET)
     @ApiOperation(value = "企业信息广告位",notes = "展示最新发布职位的企业信息，默认7条可配置",response = Response.class)
     public Response queryAdvertisingPosition() throws IOException
     {
@@ -123,7 +128,7 @@ public class JobSiteController {
         map.put("count",7);
         Response response = job.queryAdvertisingPosition(map);
         return response;
-    }
+    }*/
 
     @RequestMapping(value="sel_position", method = RequestMethod.GET)
     @ApiOperation(value = "职位详情页面",notes = "职位搜索查看职位详情",response = Response.class)
@@ -327,6 +332,25 @@ public class JobSiteController {
         map.put("enterpriseID",enterpriseID);
         List<Map<String,String>> jobList = job.queryPublishJobCity(map);
         response.setData(jobList);
+        return response;
+    }
+
+    @RequestMapping(value="sel_adv_position", method = RequestMethod.GET)
+    @ApiOperation(value = "人才网企业广告",notes = "人才网企业广告",response = Response.class)
+    public Response queryAdvertisingPosition(@ApiParam(value="频道类型 6:人才")@RequestParam String chanType,
+    @ApiParam(value="频道下子页面.position:职位;meeting:招聘会;hunter:猎头") @RequestParam String page,
+    @ApiParam(value="广告所在区域:F1:职位列表页右侧企业广告;F2:职位企业介绍页右下侧广告;" +
+            "F3:招聘会列表页右下侧广告;F4:猎头页底部合作企业") @RequestParam String advArea)
+    {
+        Response response = new Response();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("chanType",chanType);
+        map.put("page",page);
+        map.put("advArea",advArea);
+        List<Map<String,String>> companyList = memberService.queryCompanyList(map);
+
+        response.setData(companyList);
         return response;
     }
 }

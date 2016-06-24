@@ -544,4 +544,15 @@ public class MemberService {
 			throw e;
 		}
 	}
+
+	public List<Map<String,String>> queryCompanyList(Map<String, Object> map){
+		try {
+			return memberMapper.queryCompanyList(map);
+		}
+		catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

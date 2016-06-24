@@ -175,13 +175,13 @@
     where t.id =  #{id} limit 1
   </select>
 
-  <resultMap id="adList" type="java.util.LinkedHashMap">
+<!--  <resultMap id="adList" type="java.util.LinkedHashMap">
     <result property="imgUrl" column="imgUrl" />
     <result property="id" column="id" />
   </resultMap>
   <select id="queryAdvertisingPosition" parameterType="java.util.Map" resultMap="adList">
     select t.imgUrl,t.linkUrl id from t_ad_advertising t where t.channelId = 1 and t.sort = 1
-  </select>
+  </select>-->
 
   <select id="queryPositionInfoByID" parameterType="java.util.Map" resultType="java.util.Map">
     select t.id,t.createid,date_format(t.publishTime,'%Y-%m-%d') publishTime,date_format(t.updateTime,'%Y-%m-%d') updateTime,t.name,t.positionType,ps.name positionTypeName,t.description,

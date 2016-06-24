@@ -715,4 +715,14 @@
   <select id="queryCompanyByKeywords" resultType="java.util.Map" parameterType="java.lang.String">
     SELECT id,enterpriseName FROM t_m_member where enterpriseName like CONCAT('%',#{keywords},'%') and status !=2 and identify !=2
   </select>
+
+  <select id="queryCompanyList" resultType="java.util.Map" parameterType="java.util.Map">
+    SELECT m.id,m.enterpriseLogo
+    FROM t_sys_advertising ad
+    LEFT JOIN t_sys_adv_attr at on at.id = ad.advAttrId
+    LEFT JOIN t_m_member m on ad.connectedId = m.id
+    where at.chanType = #{chanType}
+    and at.page = #{page}
+    and at.advArea = #{advArea}
+  </select>
 </mapper>

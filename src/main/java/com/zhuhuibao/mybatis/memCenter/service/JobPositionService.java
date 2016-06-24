@@ -241,7 +241,7 @@ public class JobPositionService {
      * @param map 查询条件
      * @return
      */
-    public Response queryAdvertisingPosition(Map<String,Object> map)
+/*    public Response queryAdvertisingPosition(Map<String,Object> map)
     {
         Response response = new Response();
         try
@@ -258,7 +258,7 @@ public class JobPositionService {
             return response;
         }
         return response;
-    }
+    }*/
 
     /**
      * 查询企业发布的职位详情

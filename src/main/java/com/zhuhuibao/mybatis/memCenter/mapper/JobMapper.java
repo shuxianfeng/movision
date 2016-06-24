@@ -40,7 +40,7 @@ public interface JobMapper {
     //查询发布职位企业的信息
     MemberDetails queryCompanyInfo(Long id);
 
-    List<MemberDetails> queryAdvertisingPosition(Map<String,Object> map);
+    /*List<MemberDetails> queryAdvertisingPosition(Map<String,Object> map);*/
 
     Map<String,Object> queryPositionInfoByID(Map<String,Object> map);
 
