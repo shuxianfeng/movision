@@ -47,12 +47,12 @@ public class OmsShopController {
 
     @ApiOperation(value = "查询商户店铺信息", notes = "查询商户店铺信息")
     @RequestMapping(value = "sel_shop1", method = RequestMethod.GET)
-    public Response searchOne(@ApiParam("商铺ID") @RequestParam String shopId){
+    public Response searchOne(@ApiParam("商铺ID") @RequestParam String shopId) {
 
         MemberShop shop = memShopService.findByID(shopId);
 
-        if(shop == null){
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"商铺不存在");
+        if (shop == null) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "商铺不存在");
         }
         return new Response(shop);
     }
@@ -63,7 +63,7 @@ public class OmsShopController {
                                @ApiParam("企业名称") @RequestParam(required = false) String companyName,
                                @ApiParam("店铺名称") @RequestParam(required = false) String shopName,
                                @ApiParam("审核状态") @RequestParam(required = false) String status,
-                               @RequestParam(required = false)String pageNo, @RequestParam(required = false)String pageSize) {
+                               @RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) {
         log.debug("搜索商铺...");
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -73,23 +73,23 @@ public class OmsShopController {
         }
 
 
-        Map<String,String> paramMap = new HashMap<>();
+        Map<String, String> paramMap = new HashMap<>();
 
-        if(!StringUtils.isEmpty(account)){
-            paramMap.put("account",account);
+        if (!StringUtils.isEmpty(account)) {
+            paramMap.put("account", account);
         }
-        if(!StringUtils.isEmpty(companyName)){
-            paramMap.put("companyName",companyName);
+        if (!StringUtils.isEmpty(companyName)) {
+            paramMap.put("companyName", companyName);
         }
-        if(!StringUtils.isEmpty(shopName)){
-            paramMap.put("shopName",shopName);
+        if (!StringUtils.isEmpty(shopName)) {
+            paramMap.put("shopName", shopName);
         }
-        if(!StringUtils.isEmpty(status)){
-            paramMap.put("status",status);
+        if (!StringUtils.isEmpty(status)) {
+            paramMap.put("status", status);
         }
         Paging<MemberShop> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 
-        List<MemberShop> list = memShopService.findAllByCondition(pager,paramMap);
+        List<MemberShop> list = memShopService.findAllByCondition(pager, paramMap);
         pager.result(list);
 
         return new Response(pager);
@@ -99,11 +99,19 @@ public class OmsShopController {
     @ApiOperation(value = "更新商户店铺状态", notes = "更新商户店铺状态")
     @RequestMapping(value = "upd_shop_st", method = RequestMethod.POST)
     public Response uploadStatus(@ApiParam("商铺ID") @RequestParam String shopId,
-                                 @ApiParam("状态") @RequestParam String status) {
+                                 @ApiParam("状态 1：待审核 2：已审核  3：已拒绝 4：已注销") @RequestParam  String status,
+                                 @ApiParam("拒绝理由") @RequestParam(required = false)  String reason) {
         MemberShop shop = check(shopId);
 
         shop.setUpdateTime(new Date());
         shop.setStatus(status);
+
+        if ("3".equals(status)) {
+            if (StringUtils.isEmpty(reason)) {
+                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "拒绝理由不能为空");
+            }
+            shop.setReason(reason);
+        }
 
         memShopService.upload(shop);
 

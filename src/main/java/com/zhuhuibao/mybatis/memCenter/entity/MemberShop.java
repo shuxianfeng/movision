@@ -21,6 +21,8 @@ public class MemberShop {
 
     private String status;
 
+    private String reason;
+
     public Integer getId() {
         return id;
     }
@@ -91,5 +93,13 @@ public class MemberShop {
 
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }
