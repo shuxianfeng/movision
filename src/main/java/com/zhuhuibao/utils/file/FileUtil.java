@@ -234,7 +234,8 @@ public class FileUtil {
      */
     public static String getSuffix(String fileName) {
         int index = fileName.lastIndexOf(".");
-        return fileName.substring(index + 1, fileName.length());
+        String suffix = fileName.substring(index + 1, fileName.length());
+        return suffix.toLowerCase();
     }
 
     /**

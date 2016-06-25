@@ -18,9 +18,9 @@ import java.util.Map;
  */
 public class TokenInterceptor extends HandlerInterceptorAdapter {
     private static final Logger log = LoggerFactory.getLogger(TokenInterceptor.class);
-    private static Map<String , String> viewUrls = new HashMap<String , String>();
-    private static Map<String , String> actionUrls = new HashMap<String , String>();
-    private Object clock = new Object();
+    private static Map<String, String> viewUrls = new HashMap<String, String>();
+    private static Map<String, String> actionUrls = new HashMap<String, String>();
+    private final Object clock = new Object();
 
 //    static
 //    {
@@ -48,23 +48,21 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         return !method.equals("POST") || handleToken(request, response, handler);
     }
 
-    protected boolean handleToken(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
-        synchronized(clock)
-        {
-            if(!TokenHelper.validToken(request))
-            {
-                System.out.println("未通过验证...");
-                return handleInvalidToken(request, response, handler);
+    protected boolean handleToken(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        synchronized (clock) {
+            if (!TokenHelper.validToken(request)) {
+                log.debug("未通过验证...");
+                return handleInvalidToken(request,response,handler);
             }
         }
-        System.out.println("通过验证...");
-        return handleValidToken(request, response, handler);
+        log.debug("通过验证...");
+        return handleValidToken(request,response,handler);
     }
 
     /**
      * 当出现一个非法令牌时调用
      */
-    protected boolean handleInvalidToken(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
+    protected boolean handleInvalidToken(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Response result = new Response();
         result.setCode(400);
         result.setMessage("请不要频繁操作");
@@ -75,18 +73,15 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     /**
      * 当发现一个合法令牌时调用.
      */
-    protected boolean handleValidToken(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
+    protected boolean handleValidToken(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         return true;
     }
 
     private void writeMessageUtf8(HttpServletResponse response, Response json) throws IOException {
-        try
-        {
+        try {
             response.setCharacterEncoding("UTF-8");
             response.getWriter().print(JsonUtils.getJsonStringFromObj(json));
-        }
-        finally
-        {
+        } finally {
             response.getWriter().close();
         }
     }
