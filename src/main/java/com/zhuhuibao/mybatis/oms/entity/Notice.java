@@ -23,7 +23,7 @@ public class Notice {
 	private Long createId;
 	@ApiModelProperty(value = "用户名称")
 	private String userName;
-	
+	private String reason;
 
 	public Long getId() {
 		return id;
@@ -80,5 +80,12 @@ public class Notice {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 }

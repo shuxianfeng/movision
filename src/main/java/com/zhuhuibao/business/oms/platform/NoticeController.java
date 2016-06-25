@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
+import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -39,7 +43,7 @@ import com.zhuhuibao.utils.pagination.util.StringUtils;
 public class NoticeController {
 	 @Autowired
 	 private  NoticeService noticeService;
-	 
+
 	    /**
 	     * 投诉建议管理
 	     * @author gmli
@@ -77,15 +81,14 @@ public class NoticeController {
 	     */
 	    @ApiOperation(value="用户建议处理",notes="用户建议处理",response = Response.class)
 	    @RequestMapping(value = "upd_platform_notice", method = RequestMethod.POST)
-	    public Response updatePlatformNotice(@ModelAttribute()Notice Notice)  {
+	    public Response updatePlatformNotice(@ModelAttribute()Notice notice)  {
 	        Response Response = new Response();
 	        Subject currentUser = SecurityUtils.getSubject();
 	        Session session = currentUser.getSession(false);
 	        if(null != session) {
 	            OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
 	            if(null != principal){
-	                
-	            	noticeService.updatePlatformNotice(Notice);
+	            	noticeService.updatePlatformNotice(notice);
 	            }else{
 	                throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
 	            }

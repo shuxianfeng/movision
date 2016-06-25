@@ -60,6 +60,9 @@
       <if test="status != null">
         status = #{status},
       </if>
+      <if test="reason != null">
+        reason = #{reason},
+      </if>
     </set>
     where id = #{id}
   </update>

@@ -1,7 +1,11 @@
 package com.zhuhuibao.mybatis.oms.service;
 
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.oms.entity.Notice;
 import com.zhuhuibao.mybatis.oms.mapper.NoticeMapper;
+import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
+import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,21 +30,9 @@ public class NoticeService {
 	private static final Logger log = LoggerFactory.getLogger(ComplainSuggestService.class);
 	@Autowired
 	NoticeMapper noticeMapper;
-	
-	public int insert(Notice notice)
-	{
-		log.info("insert Notice ");
-		int result =0;
-		try
-		{
-			result = noticeMapper.insert(notice);
-		}
-		catch(Exception e)
-		{
-			log.error("insert Notice  error!",e);
-		}
-		return result;
-	}
+
+	@Autowired
+	SiteMailService siteMailService;
 	/**
 	 * 公告信息修改
 	 * 
@@ -49,6 +41,10 @@ public class NoticeService {
 	public void updatePlatformNotice(Notice notice) {
 		try {
 			noticeMapper.updateByPrimaryKeySelective(notice);
+			if("3".equals(notice.getStatus()))
+			{
+				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),notice.getCreateId(),notice.getReason());
+			}
 		} catch (Exception e) {
 
 			log.error(e.getMessage());
@@ -113,7 +109,6 @@ public class NoticeService {
 	}
 	/**
 	 * 查询平台最新公告
-	 * @param notice
 	 */
 	public List<Notice> queryPlatformNewNotice() {
 		log.info("publish Notice ");

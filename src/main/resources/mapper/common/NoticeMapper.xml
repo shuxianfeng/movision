@@ -111,6 +111,9 @@
       <if test="status != null">
         status = #{status,jdbcType=VARCHAR},
       </if>
+      <if test="reason != null">
+        reason = #{reason},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>

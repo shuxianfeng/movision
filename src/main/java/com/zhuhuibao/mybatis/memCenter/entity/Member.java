@@ -155,6 +155,7 @@ public class Member implements Serializable{
     @ApiModelProperty(value="个人身份真反面图片上传的路径")
     private String personIDBackImgUrl;
 
+    @ApiModelProperty(value="拒绝理由")
     private String reason;
 
     private String account;

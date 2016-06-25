@@ -204,6 +204,9 @@
       <if test="is_deleted != null" >
         is_deleted = #{is_deleted},
       </if>
+      <if test="reason != null">
+        reason = #{reason},
+      </if>
     </set>
     where id = #{id}
   </update>

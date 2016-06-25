@@ -72,6 +72,8 @@ public class Exhibition {
     private String createrType;
 
     private String is_deleted;
+    @ApiModelProperty(value="拒绝理由")
+    private String reason;
 
     public String getId() {
         return id;
@@ -263,5 +265,13 @@ public class Exhibition {
 
     public void setSubType(String subType) {
         this.subType = subType;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

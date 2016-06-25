@@ -25,10 +25,8 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.jmx.export.annotation.ManagedAttribute;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -72,7 +70,7 @@ public class ResumeController {
      */
     @ApiOperation(value = "发布简历", notes = "发布简历", response = Response.class)
     @RequestMapping(value = "add_resume", method = RequestMethod.POST)
-    public Response setUpResume(Resume resume) throws IOException {
+    public Response setUpResume(@ModelAttribute Resume resume) throws IOException {
         Long createid = ShiroUtil.getCreateID();
         Response response = new Response();
         if(createid!=null){
@@ -105,7 +103,7 @@ public class ResumeController {
      */
     @ApiOperation(value = "更新简历", notes = "更新简历", response = Response.class)
     @RequestMapping(value = "upd_resume", method = RequestMethod.POST)
-    public Response updateResume(Resume resume) throws IOException {
+    public Response updateResume(@ModelAttribute Resume resume) throws IOException {
         return resumeService.updateResume(resume);
     }
 
@@ -114,7 +112,7 @@ public class ResumeController {
      */
     @ApiOperation(value = "预览简历", notes = "预览简历", response = Response.class)
     @RequestMapping(value = "preview_resume", method = RequestMethod.GET)
-    public Response previewResume(String id) throws Exception {
+    public Response previewResume(@RequestParam String id) throws Exception {
         Response response = new Response();
         Resume resume = resumeService.previewResume(id);
         response.setData(resume);
@@ -164,7 +162,7 @@ public class ResumeController {
      */
     @ApiOperation(value = "我收到的简历", notes = "我收到的简历", response = Response.class)
     @RequestMapping(value = "sel_receive_resume", method = RequestMethod.GET)
-    public Response receiveResume(String pageNo, String pageSize) throws IOException {
+    public Response receiveResume(@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }

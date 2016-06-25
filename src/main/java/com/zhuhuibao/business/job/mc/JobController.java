@@ -54,7 +54,7 @@ public class JobController {
      */
     @ApiOperation(value = "发布职位", notes = "发布职位", response = Response.class)
     @RequestMapping(value = "add_position", method = RequestMethod.POST)
-    public Response publishPosition(@ApiParam(value = "职位属性") Job job) throws Exception {
+    public Response publishPosition(@ApiParam(value = "职位属性")@ModelAttribute() Job job) throws Exception {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
@@ -71,7 +71,7 @@ public class JobController {
      */
     @ApiOperation(value = "查询公司已发布的职位", notes = "查询公司已发布的职位", response = Response.class)
     @RequestMapping(value = "sel_positionList", method = RequestMethod.GET)
-    public Response searchPositionByMemId(String pageNo, String pageSize) throws IOException {
+    public Response searchPositionByMemId(@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
         Response response = new Response();
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -109,8 +109,7 @@ public class JobController {
      */
     @ApiOperation(value = "删除已发布的职位", notes = "删除已发布的职位", response = Response.class)
     @RequestMapping(value = "del_position", method = RequestMethod.POST)
-    public Response deletePosition(HttpServletRequest req) throws IOException {
-        String ids[] = req.getParameterValues("ids");
+    public Response deletePosition(@RequestParam String ids) throws IOException {
         return jobService.deletePosition(ids);
     }
 
@@ -119,7 +118,7 @@ public class JobController {
      */
     @ApiOperation(value = "更新编辑已发布的职位", notes = "更新编辑已发布的职位", response = Response.class)
     @RequestMapping(value = "upd_position", method = RequestMethod.POST)
-    public Response updatePosition(Job job) throws IOException {
+    public Response updatePosition(@ModelAttribute() Job job) throws IOException {
         return jobService.updatePosition(job);
     }
 
@@ -153,7 +152,7 @@ public class JobController {
      */
     @ApiOperation(value = "我申请的职位", notes = "我申请的职位", response = Response.class)
     @RequestMapping(value = "sel_my_position", method = RequestMethod.GET)
-    public Response myApplyPosition(String pageNo, String pageSize) throws IOException {
+    public Response myApplyPosition(@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }

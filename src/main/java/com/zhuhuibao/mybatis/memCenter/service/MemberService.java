@@ -5,9 +5,12 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.AccountBean;
 import com.zhuhuibao.common.pojo.ResultBean;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.*;
+import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
+import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -67,13 +70,20 @@ public class MemberService {
 
 	@Autowired
 	ZhbService zhbService;
+
+	@Autowired
+	SiteMailService siteMailService;
 	/**
 	 * 会员信息更新
 	 */
-	public int updateMemInfo(Member member)
+	public void updateMemInfo(Member member)
 	{
 		try{
-			return memberMapper.updateMemInfo(member);
+
+			memberMapper.updateMemInfo(member);
+			if("7".equals(member.getStatus()) || "11".equals(member.getStatus())) {
+				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),Long.parseLong(member.getId()),member.getReason());
+			}
 		}catch (Exception e){
 			log.error(e.getMessage());
 			e.printStackTrace();
@@ -282,12 +292,15 @@ public class MemberService {
 	}
 
 	/**
-	 * 资质删除
+	 * 更新资质
 	 */
-	public int updateCertificate(CertificateRecord record)
+	public void updateCertificate(CertificateRecord record)
 	{
 		try{
-			return certificateRecordMapper.updateCertificate(record);
+			certificateRecordMapper.updateCertificate(record);
+			if("2".equals(record.getStatus())) {
+				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),Long.parseLong(record.getMem_id()),record.getReason());
+			}
 		}catch (Exception e){
 			log.error(e.getMessage());
 			e.printStackTrace();
