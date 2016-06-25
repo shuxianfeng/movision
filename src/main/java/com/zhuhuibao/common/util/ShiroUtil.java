@@ -42,12 +42,10 @@ public class ShiroUtil {
 				if (principal != null) {
 					createID = principal.getId();
 				}
-			}else{
-//				throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
 			}
 		} catch (Exception e) {
 			log.error("get seesion user info error!", e);
-//			throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+			throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
 
 		}
 		return createID;
@@ -63,8 +61,6 @@ public class ShiroUtil {
 				if (principal != null) {
 					companyId = principal.getCompanyId();
 				}
-			} else{
-				throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
 			}
 			return companyId;
 		} catch (Exception e) {
