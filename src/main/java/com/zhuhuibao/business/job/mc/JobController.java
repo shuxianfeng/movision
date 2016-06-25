@@ -109,8 +109,7 @@ public class JobController {
      */
     @ApiOperation(value = "删除已发布的职位", notes = "删除已发布的职位", response = Response.class)
     @RequestMapping(value = "del_position", method = RequestMethod.POST)
-    public Response deletePosition(HttpServletRequest req) throws IOException {
-        String ids[] = req.getParameterValues("ids");
+    public Response deletePosition(@RequestParam String ids) throws IOException {
         return jobService.deletePosition(ids);
     }
 
@@ -119,7 +118,7 @@ public class JobController {
      */
     @ApiOperation(value = "更新编辑已发布的职位", notes = "更新编辑已发布的职位", response = Response.class)
     @RequestMapping(value = "upd_position", method = RequestMethod.POST)
-    public Response updatePosition(Job job) throws IOException {
+    public Response updatePosition(@ModelAttribute() Job job) throws IOException {
         return jobService.updatePosition(job);
     }
 

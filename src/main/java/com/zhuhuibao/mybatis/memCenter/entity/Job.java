@@ -8,7 +8,7 @@ public class Job {
     @ApiModelProperty(value="职位ID",required = true)
     private String id;
 
-    @ApiModelProperty(value="发布人ID",required = true)
+    @ApiModelProperty(value="发布人ID")
     private String createid;
 
     @ApiModelProperty(value="发布时间")

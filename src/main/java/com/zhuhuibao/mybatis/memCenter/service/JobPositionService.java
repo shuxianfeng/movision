@@ -100,21 +100,14 @@ public class JobPositionService {
     /**
      * 删除已发布的职位
      */
-    public Response deletePosition(String ids[]){
+    public Response deletePosition(String ids){
         Response response = new Response();
-        int isDelete = 0;
-        for(int i = 0; i < ids.length; i++){
-            String id = ids[i];
-            isDelete = jobMapper.deletePosition(id);
+        String[] idList = ids.split(",");
+        for(String id : idList){
             try{
-                if(isDelete==1){
-                    response.setCode(200);
-                }else {
-                    response.setCode(400);
-                    response.setMessage("删除失败");
-                }
+                jobMapper.deletePosition(id);
             }catch (Exception e){
-                log.error("deletePosition error",e);
+                log.error(e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -126,16 +119,10 @@ public class JobPositionService {
      */
     public Response updatePosition(Job job){
         Response result = new Response();
-        int isUpdate = jobMapper.updatePosition(job);
         try{
-            if(isUpdate==1){
-                result.setCode(200);
-            }else {
-                result.setCode(400);
-                result.setMessage("更新失败");
-            }
+            jobMapper.updatePosition(job);
         }catch (Exception e){
-            log.error("deletePosition error",e);
+            log.error(e.getMessage());
             e.printStackTrace();
         }
         return result;
