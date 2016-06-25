@@ -138,10 +138,10 @@
           class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
     </bean>
 
-    <!-- token拦截器
+    <!-- resubmit token拦截器
     <mvc:interceptors>
         <bean class="com.zhuhuibao.security.resubmit.TokenInterceptor"/>
-    </mvc:interceptors>-->
+    </mvc:interceptors>  -->
 
     <!--AOP-->
     <aop:config proxy-target-class="true"/>

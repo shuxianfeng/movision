@@ -1,11 +1,15 @@
 package com.zhuhuibao.security.resubmit;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -17,29 +21,41 @@ public class TokenHelper {
     private static final Logger log = LoggerFactory.getLogger(TokenHelper.class);
 
     /**
+     * 保存token值的默认命名空间
+     */
+    public static final String TOKEN_NAMESPACE = "zhb.tokens";
+
+    /**
      * 持有token名称的字段名
      */
-    public static final String TOKEN_NAME_FIELD = "zhb.token.name";
+    public static final String TOKEN_NAME_FIELD = "resToken";
 
     private static final Random RANDOM = new Random();
 
 
     /**
-     *使用随机字串作为token名字保存token
+     * 使用随机字串作为token名字保存token
+     *
+     * @param request
+     * @return token
      */
-    public static  String  setToken(HttpServletRequest req)
-    {
+    public static String setToken(HttpServletRequest request) {
+        return setToken(request, generateGUID());
+    }
+
+    /**
+     * 使用随机字串作为token名字保存token
+     */
+    public static String setToken(HttpServletRequest req, String tokenName) {
         String token = generateGUID();
-        try
-        {
-//            Subject currentUser = SecurityUtils.getSubject();
-//            Session session = currentUser.getSession(false);
-//            session.setAttribute(TOKEN_NAME_FIELD,token);
-            HttpSession session = req.getSession(false);
-            session.setAttribute(TOKEN_NAME_FIELD,token);
-        }
-        catch(IllegalStateException e)
-        {
+        try {
+            Subject currentUser = SecurityUtils.getSubject();
+            Session session = currentUser.getSession(true);
+//            HttpSession session = req.getSession(false);
+            session.setAttribute(TOKEN_NAME_FIELD, tokenName);
+            session.setAttribute(tokenName, token);
+
+        } catch (IllegalStateException e) {
             String msg = "Error creating HttpSession due response is commited to client. You can use the CreateSessionInterceptor or create the HttpSession from your action before the result is rendered to the client: " + e.getMessage();
             log.error(msg, e);
             throw new IllegalArgumentException(msg);
@@ -53,17 +69,14 @@ public class TokenHelper {
      * @param tokenName
      * @return the token String or null, if the token could not be found
      */
-    public static String getToken(HttpServletRequest request, String tokenName)
-    {
-        if(tokenName == null)
-        {
+    public static String getToken(HttpServletRequest request, String tokenName) {
+        if (tokenName == null) {
             return null;
         }
         Map params = request.getParameterMap();
         String[] tokens = (String[]) params.get(tokenName);
         String token;
-        if((tokens == null) || (tokens.length < 1))
-        {
+        if ((tokens == null) || (tokens.length < 1)) {
             log.warn("Could not find token mapped to token name " + tokenName);
             return null;
         }
@@ -77,12 +90,10 @@ public class TokenHelper {
      *
      * @return the token name found in the params, or null if it could not be found
      */
-    public static String getTokenName(HttpServletRequest request)
-    {
+    public static String getTokenName(HttpServletRequest request) {
         Map params = request.getParameterMap();
 
-        if(!params.containsKey(TOKEN_NAME_FIELD))
-        {
+        if (!params.containsKey(TOKEN_NAME_FIELD)) {
             log.warn("Could not find token name in params.");
             return null;
         }
@@ -90,8 +101,7 @@ public class TokenHelper {
         String[] tokenNames = (String[]) params.get(TOKEN_NAME_FIELD);
         String tokenName;
 
-        if((tokenNames == null) || (tokenNames.length < 1))
-        {
+        if ((tokenNames == null) || (tokenNames.length < 1)) {
             log.warn("Got a null or empty token name.");
             return null;
         }
@@ -105,43 +115,38 @@ public class TokenHelper {
      *
      * @return 验证结果
      */
-    public static boolean validToken(HttpServletRequest request)
-    {
+    public static boolean validToken(HttpServletRequest request) {
 //        String tokenName = getTokenName(request);
-//        if(tokenName == null)
-//        {
+//        if (tokenName == null) {
 //            log.debug("no token name found -> Invalid token ");
 //            return false;
 //        }
-
-        String token = request.getParameter("rsToken");
-                //getToken(request, tokenName);
-//        if(token == null)
-//        {
-//            if(log.isDebugEnabled())
-//            {
+//
+//        String token = getToken(request, tokenName);
+//        if (token == null) {
+//            if (log.isDebugEnabled()) {
 //                log.debug("no token found for token name " + tokenName + " -> Invalid token ");
 //            }
 //            return false;
 //        }
+        String token = request.getParameter(TOKEN_NAME_FIELD);
 
-//        Subject currentUser = SecurityUtils.getSubject();
-//        Session session = currentUser.getSession(false);
-        HttpSession session = request.getSession(false);
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+//        HttpSession session = request.getSession(false);
         String cacheToken = (String) session.getAttribute(TOKEN_NAME_FIELD);
-        if(!token.equals(cacheToken))
-        {
+        if (!token.equals(cacheToken)) {
             log.warn("zhb.token Form token " + token + " does not match the session token " + cacheToken + ".");
             return false;
         }
         // remove the token so it won't be used again
-        session.removeAttribute(cacheToken);
+//        session.removeAttribute(cacheToken);
+        session.removeAttribute(TOKEN_NAME_FIELD);
 
         return true;
     }
 
-    public static String generateGUID()
-    {
+    public static String generateGUID() {
         return new BigInteger(165, RANDOM).toString(36).toUpperCase();
     }
 }
