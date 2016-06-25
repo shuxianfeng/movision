@@ -2,8 +2,10 @@ package com.zhuhuibao.mybatis.oms.service;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.mapper.ChannelNewsMapper;
+import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
@@ -28,6 +30,9 @@ public class ChannelNewsService {
 
     @Autowired
     ChannelNewsMapper channel;
+
+    @Autowired
+    SiteMailService siteMailService;
 
     /**
      * 增加频道信息
@@ -59,6 +64,10 @@ public class ChannelNewsService {
         try
         {
             channel.updateByPrimaryKeySelective(channelNews);
+            if("2".equals(String.valueOf(channelNews.getStatus())))
+            {
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),channelNews.getCreateid(),channelNews.getReason());
+            }
         }
         catch(Exception e)
         {

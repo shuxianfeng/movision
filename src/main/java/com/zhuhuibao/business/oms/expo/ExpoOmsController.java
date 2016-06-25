@@ -233,7 +233,7 @@ public class ExpoOmsController {
      */
     @ApiOperation(value="根據id查詢会展详情",notes="根據id查詢会展详情",response = Response.class)
     @RequestMapping(value = "sel_expo", method = RequestMethod.GET)
-    public Response queryExhibitionInfoById(@RequestParam String id)  {
+    public Response queryExhibitionInfoById(@RequestParam String id){
         Response response = new Response();
         Exhibition exhibition = exhibitionService.queryExhibitionInfoById(id);
         response.setData(exhibition);

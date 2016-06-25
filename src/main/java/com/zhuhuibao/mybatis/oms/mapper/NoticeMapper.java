@@ -13,16 +13,12 @@ import java.util.Map;
 public interface NoticeMapper {
 	int deleteByPrimaryKey(Long id);
 
-    int insert(Notice record);
-
     int insertSelective(Notice record);
 
     Notice selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(Notice record);
 
-    int updateByPrimaryKey(Notice record);
-    
 	List<Notice> findAllNotice(RowBounds rowBounds, Map<String, Object> map);
     //公告发布
 	void publishNotice(Notice notice);

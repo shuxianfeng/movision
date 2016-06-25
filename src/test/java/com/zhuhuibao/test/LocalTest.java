@@ -1,5 +1,6 @@
 package com.zhuhuibao.test;
 
+import com.zhuhuibao.utils.file.FileUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -8,12 +9,21 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.*;
 
-public class LocalTest {
+public class LocalTest extends BaseSpringContext {
 
+    @Autowired
+    FileUtil fileUtil;
+
+    @Test
+    public void test(){
+        boolean bool = fileUtil.isExistFile("11466507049775.txt","doc","job");
+        System.out.println(bool);
+    }
 
     public void testContants() {
         CloseableHttpClient httpclient = HttpClients.custom()

@@ -1,11 +1,15 @@
 package com.zhuhuibao.mybatis.expo.service;
 
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.expo.entity.DistributedOrder;
 import com.zhuhuibao.mybatis.expo.entity.Exhibition;
 import com.zhuhuibao.mybatis.expo.entity.MeetingOrder;
 import com.zhuhuibao.mybatis.expo.mapper.DistributedOrderMapper;
 import com.zhuhuibao.mybatis.expo.mapper.ExhibitionMapper;
 import com.zhuhuibao.mybatis.expo.mapper.MeetingOrderMapper;
+import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
+import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +37,9 @@ public class ExpoService {
 
     @Autowired
     private DistributedOrderMapper distributedOrderMapper;
+
+    @Autowired
+    SiteMailService siteMailService;
 
     /**
      * 发布一站式会展定制
@@ -140,6 +147,10 @@ public class ExpoService {
     public void updateExhibitionInfoById(Exhibition exhibition){
         try {
             exhibitionMapper.updateExhibitionInfoById(exhibition);
+            if("2".equals(exhibition.getStatus()))
+            {
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),Long.parseLong(exhibition.getCreateid()),exhibition.getReason());
+            }
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();

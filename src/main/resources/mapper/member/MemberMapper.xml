@@ -709,6 +709,9 @@
       <if test="isrecommend != null" >
         isrecommend = #{isrecommend},
       </if>
+      <if test="reason != null">
+        reason = #{reason},
+      </if>
     </set>
     where id = #{id}
   </update>

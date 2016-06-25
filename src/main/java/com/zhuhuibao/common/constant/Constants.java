@@ -384,4 +384,9 @@ public class Constants {
 	 * 手机验证码的长度 4
 	 */
 	public static final Integer CHECK_IMG_CODE_SIZE = 4;
+
+	/**
+	 * 站内信类型：3
+	 */
+	public static final Integer SITE_MAIL_TYPE_THREE = 3;
 }

@@ -1,7 +1,10 @@
 package com.zhuhuibao.mybatis.sitemail.service;
 
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.mapper.MessageMapper;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageLog;
@@ -47,7 +50,6 @@ public class SiteMailService {
         Response response = new Response();
         try
         {
-
             msgTextMapper.insertSelective(siteMail);
             MessageLog msgLog = new MessageLog();
             msgLog.setRecID(siteMail.getRecID());
@@ -63,6 +65,34 @@ public class SiteMailService {
             response.setMsgCode(MsgCodeConstant.mcode_common_failure);
             response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
             return response;
+        }
+        return response;
+    }
+
+    /**
+     * 插入拒绝理由站内信
+     * @param sendId 发送者ID
+     * @param recId 接收者ID
+     * @param reason 拒绝理由
+     * @return
+     */
+    public Response addRefuseReasonMail(Long sendId,Long recId,String reason)
+    {
+        Response response = new Response();
+        try
+        {
+            MessageText msgText = new MessageText();
+            msgText.setType(Constants.SITE_MAIL_TYPE_THREE);
+            msgText.setMessageText(reason);
+            msgText.setTitle(reason);
+            msgText.setSendID(sendId);
+            msgText.setRecID(recId);
+            this.addSiteMail(msgText);
+        }
+        catch(Exception e)
+        {
+            log.error(e.getMessage());
+            throw new BusinessException(MsgCodeConstant.mcode_common_failure,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
         }
         return response;
     }

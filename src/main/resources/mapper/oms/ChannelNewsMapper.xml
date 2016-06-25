@@ -133,6 +133,9 @@
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
+      <if test="reason != null">
+        reason = #{reason}
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
