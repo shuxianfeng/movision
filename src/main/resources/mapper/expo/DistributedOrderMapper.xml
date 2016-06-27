@@ -22,7 +22,10 @@
     where id = #{id}
   </select>
   <select id="findAllDistributedOrder" resultMap="BaseResultMap" parameterType="java.util.Map" >
-    SELECT * FROM t_c_distributedOrder d
+    SELECT 
+      id, createid, date_format(publishTime,'%Y-%m-%d %H:%i:%s') publishTime, date_format(updateTime,'%Y-%m-%d %H:%i:%s') updateTime, updateManId, linkName, mobile, status, type
+
+    FROM t_c_distributedOrder d
     where 1=1
     <if test="mobile != null">
       and d.mobile like CONCAT('%',#{mobile},'%')
