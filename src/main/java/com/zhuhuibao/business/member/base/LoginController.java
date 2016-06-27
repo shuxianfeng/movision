@@ -11,6 +11,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.security.EncodeUtil;
+import com.zhuhuibao.security.resubmit.AvoidDuplicateSubmission;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 
 import com.zhuhuibao.utils.VerifyCodeUtils;
@@ -35,7 +36,8 @@ public class LoginController {
 
     @Autowired
     MemberRegService memberService;
-    
+
+//    @AvoidDuplicateSubmission(removeToken = true)
     @RequestMapping(value = "/rest/login", method = RequestMethod.POST)
     @ApiOperation(value = "登录", notes = "登录", response = Response.class)
     public Response login(HttpServletRequest req,@ApiParam(value = "用户名") @RequestParam String account,

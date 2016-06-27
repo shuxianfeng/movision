@@ -5,6 +5,7 @@ import com.zhuhuibao.common.constant.MessageLogConstant;
 import com.zhuhuibao.common.pojo.AuthcMember;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
+import com.zhuhuibao.security.resubmit.AvoidDuplicateSubmission;
 import com.zhuhuibao.security.resubmit.TokenHelper;
 import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
 
@@ -124,6 +125,7 @@ public class AuthenticationController {
 }
 
 
+//    @AvoidDuplicateSubmission(saveToken = true)
     @RequestMapping(value = "/rest/getToken", method = RequestMethod.GET)
     public Response getToken(HttpServletRequest req, HttpServletResponse rsp) {
         Response result = new Response();
