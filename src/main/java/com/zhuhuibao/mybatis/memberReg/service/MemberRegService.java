@@ -79,7 +79,7 @@ public class MemberRegService {
 	    			member.setStatus(1);
 	    		}
 	    		member.setRegisterTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
-	    		//个人注册成功的默认为“管理员”类型
+	    		//个人注册成功的默认为“其他”类型
 				if(MemberConstant.MemberIdentify.GR.toString().equals(member.getIdentify())) {
 					member.setWorkType(217);
 				}else{//个人注册成功的默认为“管理员”类型
