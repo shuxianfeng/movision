@@ -129,15 +129,15 @@ public class RegisterController {
 	 */
 	@ApiOperation(value="手机注册账号时发送的验证码",notes="手机注册账号时发送的验证码",response = Response.class)
 	@RequestMapping(value = {"/rest/mobileCode","rest/member/site/base/sel_mobileCode"}, method = RequestMethod.GET)
-	public Response getMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile
-//			, @ApiParam(value = "图形验证码") @RequestParam() String imgCode
+	public Response getMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile,
+								  @ApiParam(value = "图形验证码") @RequestParam() String imgCode
 	) throws IOException, ApiException {
 		log.debug("获得手机验证码  mobile=="+mobile);
 		Subject currentUser = SecurityUtils.getSubject();
 		Session sess = currentUser.getSession(true);
 		String sessionImgCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_REGISTER);
 		Response response = new Response();
-//		if(imgCode.equalsIgnoreCase(sessionImgCode)) {
+		if(imgCode.equalsIgnoreCase(sessionImgCode)) {
 			// 生成随机字串
 			String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
 			log.debug("verifyCode == " + verifyCode);
@@ -153,9 +153,9 @@ public class RegisterController {
 			info.setAccount(mobile);
 			memberService.inserValidateInfo(info);
 			sess.setAttribute("r" + mobile, verifyCode);
-		/*}else {
+		}else {
 			throw new BusinessException(MsgCodeConstant.validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
-		}*/
+		}
 		return response;
 	}
 	
