@@ -168,8 +168,7 @@ public class RegisterController {
 	 */
 	@ApiOperation(value="找回密码时手机发送的验证码",notes="找回密码时手机发送的验证码",response = Response.class)
 	@RequestMapping(value = {"/rest/getSeekPwdMobileCode","rest/member/site/base/sel_seekPwdMobileCode"}, method = RequestMethod.GET)
-	public Response getSeekPwdMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile,
-										 @ApiParam(value = "图形验证码") @RequestParam String imgCode) throws IOException, ApiException {
+	public Response getSeekPwdMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile) throws IOException, ApiException {
 		log.debug("获得手机验证码  mobile=="+mobile);
 		Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(true);
@@ -232,7 +231,7 @@ public class RegisterController {
      */
 	 @ApiOperation(value="找回密码时填写账户名",notes="找回密码时填写账户名",response = Response.class)
 	@RequestMapping(value = {"/rest/writeAccount","rest/member/site/base/add_writeAccount"}, method = RequestMethod.POST)
-	public Response writeAccount(Member member) throws IOException {
+	public Response writeAccount(@ApiParam(value = "会员信息") @ModelAttribute Member member) throws IOException {
 		log.debug("seek pwd write account");
 		Response result = new Response();
 		Subject currentUser = SecurityUtils.getSubject();

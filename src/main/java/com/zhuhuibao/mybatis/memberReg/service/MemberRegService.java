@@ -56,8 +56,7 @@ public class MemberRegService {
 	 */
 	@Autowired
 	private RegisterValidateService rvService;
-	
-	
+
 	/**
      * 注册用户
      */
@@ -284,16 +283,12 @@ public class MemberRegService {
 						Member dbmember = memberRegMapper.findMemberByAccount(member);
 				    	if(dbmember == null)
 				    	{
-				    		result.setCode(400);
-				    		result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
-				    		result.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
+							throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
 				    	}
 					}
 					else
 					{
-						result.setCode(400);
-						result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
-						result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+						throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
 					}
 	    		}
 	    		else
@@ -305,9 +300,7 @@ public class MemberRegService {
 	    				Member dbmember = memberRegMapper.findMemberByAccount(member);
 	    		    	if(dbmember == null)
 	    		    	{
-	    		    		result.setCode(400);
-	    		    		result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
-	    		    		result.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
+							throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
 	    		    	}
 	    		    	else
 	    		    	{
@@ -317,9 +310,7 @@ public class MemberRegService {
 	    			}
 	    			else
 	    			{
-	    				result.setCode(400);
-	    				result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_error)));
-	    				result.setMsgCode(MsgCodeConstant.member_mcode_mail_validate_error);
+						throw new BusinessException(MsgCodeConstant.member_mcode_mail_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_error)));
 	    			}
 	    		}
 			}
