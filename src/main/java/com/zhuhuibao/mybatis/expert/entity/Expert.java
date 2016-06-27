@@ -62,6 +62,8 @@ public class Expert {
 
     private String areaName;
 
+    private String reason;
+
     public String getId() {
         return id;
     }
@@ -244,5 +246,13 @@ public class Expert {
 
     public void setAreaName(String areaName) {
         this.areaName = areaName;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

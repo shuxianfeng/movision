@@ -262,6 +262,9 @@
       <if test="notes != null" >
         notes = #{notes,jdbcType=LONGVARCHAR},
       </if>
+      <if test="reason != null">
+        reason = #{reason},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>

@@ -15,6 +15,7 @@ import com.zhuhuibao.mybatis.expert.mapper.*;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
+import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.utils.*;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.sms.SDKSendSms;
@@ -63,6 +64,9 @@ public class ExpertService {
 
     @Autowired
     PaymentGoodsService goodsService;
+
+    @Autowired
+    SiteMailService siteMailService;
 
     /**
      * 发布技术成果
@@ -153,13 +157,19 @@ public class ExpertService {
      * 更新技术成果
      */
     public int updateAchievement(Achievement achievement){
+        int result = 0;
         try{
-            return achievementMapper.updateAchievement(achievement);
+            result =  achievementMapper.updateAchievement(achievement);
+            if("2".equals(achievement.getStatus()))
+            {
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),Long.parseLong(achievement.getCreateId()),achievement.getReason());
+            }
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
+        return result;
     }
 
     /**
@@ -196,13 +206,19 @@ public class ExpertService {
      * 更新协会动态
      */
     public int updateDynamic(Dynamic dynamic){
+        int result = 0;
         try{
-            return dynamicMapper.updateDynamic(dynamic);
+            result =  dynamicMapper.updateDynamic(dynamic);
+            if("2".equals(dynamic.getStatus()))
+            {
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),Long.parseLong(dynamic.getCreateId()),dynamic.getReason());
+            }
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
+        return result;
     }
 
     /**
@@ -282,13 +298,19 @@ public class ExpertService {
      * @return
      */
     public int updateExpert(Expert expert){
+        int result = 0;
         try{
-            return expertMapper.updateExpert(expert);
+            result = expertMapper.updateExpert(expert);
+            if("2".equals(String.valueOf(expert.getStatus())))
+            {
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),Long.parseLong(expert.getCreateId()),expert.getReason());
+            }
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
+        return result;
     }
 
     /**

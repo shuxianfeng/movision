@@ -72,8 +72,7 @@ public class TechCoopMcController {
 
     @RequestMapping(value="upd_tech_cooperation", method = RequestMethod.POST)
     @ApiOperation(value="修改技术合作(技术成果，技术需求)",notes = "修改技术合作(技术成果，技术需求)",response = Response.class)
-    public Response updateTechCooperation( @ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop)
-    {
+    public Response updateTechCooperation( @ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop) throws Exception {
         Response response = new Response();
         int result = techService.updateTechCooperation(techCoop);
         return response;

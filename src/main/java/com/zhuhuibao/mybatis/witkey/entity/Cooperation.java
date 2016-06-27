@@ -59,6 +59,9 @@ public class Cooperation {
 
     private String views;
 
+    @ApiModelProperty(value="拒绝理由")
+    private String reason;
+
     @ApiModelProperty(value="发布类型，1：发布任务，2：发布服务，3：发布资质合作")
     private String parentId;
 
@@ -323,5 +326,13 @@ public class Cooperation {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

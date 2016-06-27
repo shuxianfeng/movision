@@ -3,7 +3,9 @@ package com.zhuhuibao.mybatis.witkey.service;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import com.zhuhuibao.mybatis.witkey.entity.CooperationType;
 import com.zhuhuibao.mybatis.witkey.mapper.CooperationMapper;
@@ -38,6 +40,9 @@ public class CooperationService {
 
     @Autowired
     ZhbService zhbService;
+
+    @Autowired
+    SiteMailService siteMailService;
     /**
      * 发布任务
      */
@@ -131,13 +136,19 @@ public class CooperationService {
      * 编辑任务
      */
     public int updateCooperation(Cooperation cooperation){
+        int result = 0;
         try{
-            return cooperationMapper.updateCooperation(cooperation);
+            result = cooperationMapper.updateCooperation(cooperation);
+            if("2".equals(cooperation.getStatus()))
+            {
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),Long.parseLong(cooperation.getCreateId()),cooperation.getReason());
+            }
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
+        return result;
     }
 
     /**

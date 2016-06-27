@@ -50,6 +50,8 @@ public class TechCooperation {
     private Long views;
     @ApiModelProperty(value = "成果简介")
     private String notes;
+    @ApiModelProperty(value = "成果简介")
+    private String reason;
 
     public Long getId() {
         return id;
@@ -209,5 +211,13 @@ public class TechCooperation {
 
     public void setNotes(String notes) {
         this.notes = notes == null ? null : notes.trim();
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

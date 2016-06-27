@@ -37,6 +37,9 @@ public class Dynamic {
     @ApiModelProperty(value="发布人类型：1：运营人员；2：会员",required = true)
     private String createrType;
 
+    @ApiModelProperty(value="拒绝理由")
+    private String reason;
+
     public String getId() {
         return id;
     }
@@ -147,5 +150,13 @@ public class Dynamic {
 
     public void setCreaterType(String createrType) {
         this.createrType = createrType;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

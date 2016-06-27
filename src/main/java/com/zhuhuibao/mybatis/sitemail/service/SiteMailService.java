@@ -45,7 +45,7 @@ public class SiteMailService {
      * @param siteMail  站内信信息
      * @return
      */
-    public Response addSiteMail(MessageText siteMail)
+    public Response addSiteMail(MessageText siteMail) throws Exception
     {
         Response response = new Response();
         try
@@ -60,11 +60,7 @@ public class SiteMailService {
         catch(Exception e)
         {
             log.error(e.getMessage());
-            e.printStackTrace();
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return response;
+            throw new BusinessException(MsgCodeConstant.mcode_common_failure,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
         }
         return response;
     }
@@ -96,7 +92,6 @@ public class SiteMailService {
         }
         return response;
     }
-
 
     public Integer queryUnreadMsgCount(Map<String,Object> map)
     {

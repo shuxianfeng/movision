@@ -223,6 +223,9 @@
       <if test="views != null" >
         views = #{views},
       </if>
+      <if test="reason != null">
+        reason = #{reason}
+      </if>
     </set>
     where id = #{id}
   </update>
