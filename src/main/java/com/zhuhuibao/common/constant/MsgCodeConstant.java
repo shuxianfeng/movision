@@ -166,6 +166,8 @@ public interface MsgCodeConstant {
 	 */
 	int DB_UPDATE_FAIL = 2001;
 
+
+	int DB_SELECT_FAIL = 2002;
 	/**
 	 * 参数校验错误
 	 */

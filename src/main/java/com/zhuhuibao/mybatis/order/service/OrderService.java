@@ -39,7 +39,7 @@ public class OrderService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            throw e;
+            throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
         }
     }
 
@@ -57,7 +57,7 @@ public class OrderService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            throw e;
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询数据失败");
         }
         return order;
     }
@@ -81,7 +81,7 @@ public class OrderService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            throw e;
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "更新数据失败");
         }
     }
 

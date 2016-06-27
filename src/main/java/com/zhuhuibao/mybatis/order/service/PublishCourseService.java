@@ -28,7 +28,7 @@ public class PublishCourseService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            throw e;
+            throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
         }
         return course;
     }
@@ -50,7 +50,7 @@ public class PublishCourseService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            throw e;
+            throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
         }
 
     }
@@ -72,7 +72,7 @@ public class PublishCourseService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            throw e;
+            throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
         }
 
     }
@@ -92,7 +92,7 @@ public class PublishCourseService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            throw e;
+            throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
         }
     }
 }
