@@ -405,7 +405,7 @@ public class MemberRegService {
     }
     
     /**
-     * 邮件验证
+     * 手机验证身份
      * @param member  会员信息
      * @param seekMobileCode 图形验证码
      * @return
@@ -489,32 +489,24 @@ public class MemberRegService {
 					}
 					else
 					{
-						result.setCode(400);
-						result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
-						result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+						throw new BusinessException(MsgCodeConstant.member_mcode_account_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
 					}
 				}
 				else
 				{
-					result.setCode(400);
-					result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
-					result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+					throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
 				}
 				log.debug("mobile verifyCode == " + member.getMobileCheckCode());
 			}
 			else
 			{
 				this.deleteValidateInfo(info);
-				result.setCode(400);
-				result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_sms_timeout)));
-				result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
+				throw new BusinessException(MsgCodeConstant.member_mcode_sms_timeout,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_sms_timeout)));
 			}
 		}
 		else
 		{
-			result.setCode(400);
-			result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
-			result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+			throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
 		}
 		return result;
 	}
@@ -551,18 +543,13 @@ public class MemberRegService {
 				}
 				else
 				{
-				/*	result.setCode(400);
-					result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
-					result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);*/
 					throw new BusinessException(MsgCodeConstant.member_mcode_account_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
 				}
 			}
 		}
 		else
 		{
-			result.setCode(400);
-			result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_error)));
-			result.setMsgCode(MsgCodeConstant.member_mcode_mail_validate_error);
+			throw new BusinessException(MsgCodeConstant.member_mcode_mail_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_error)));
 		}
 		log.debug("email verifyCode == " + member.getEmailCheckCode());
 		return result;
@@ -584,10 +571,7 @@ public class MemberRegService {
 		catch(Exception e)
 		{
 			log.error("find member info error!",e);
-			response.setCode(MsgCodeConstant.response_status_400);
-    		response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-    		response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-    		return response;
+			throw new BusinessException(MsgCodeConstant.mcode_common_failure,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
 		}
 		return response;
 	}
