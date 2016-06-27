@@ -116,6 +116,10 @@ public class ShopController {
      */
     private MemberShop check(@ApiParam("商铺ID") @RequestParam String shopId) {
         Long companyId = ShiroUtil.getCompanyID();
+        if(companyId==null){
+            throw new AuthException(MsgCodeConstant.un_login,
+                    MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         //验证店铺ID是否为该用户所在企业的店铺
         MemberShop shop =  memShopService.findByCompanyID(companyId);
         if(shop == null){

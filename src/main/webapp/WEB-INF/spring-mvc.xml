@@ -141,7 +141,11 @@
     <!-- resubmit token拦截器
     <mvc:interceptors>
         <bean class="com.zhuhuibao.security.resubmit.TokenInterceptor"/>
-    </mvc:interceptors>  -->
+    </mvc:interceptors> -->
+    <!--
+    <mvc:interceptors>
+        <bean class="com.zhuhuibao.security.resubmit.AvoidDuplicateSubmissionInterceptor"/>
+    </mvc:interceptors>-->
 
     <!--AOP-->
     <aop:config proxy-target-class="true"/>
