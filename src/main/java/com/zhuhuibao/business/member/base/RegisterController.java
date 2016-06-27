@@ -27,10 +27,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -90,7 +87,7 @@ public class RegisterController {
 	 * @param verifyCode
 	 * @param out
      */
-	@ApiOperation(value="生成图片码",notes="生成图片码",response = Response.class)
+	/*@ApiOperation(value="生成图片码",notes="生成图片码",response = Response.class)
 	private void genImgCode(HttpServletResponse response, String verifyCode, ServletOutputStream out) {
 		try {
 			out = response.getOutputStream();
@@ -107,7 +104,7 @@ public class RegisterController {
 				e.printStackTrace();
 			}
 		}
-	}
+	}*/
 
 	/**
 	  * 找回密码的图形验证码
@@ -210,7 +207,7 @@ public class RegisterController {
      */
 	@ApiOperation(value="会员注册",notes="会员注册",response = Response.class)
 	@RequestMapping(value = {"/rest/register","rest/member/site/base/add_register"}, method = RequestMethod.POST)
-	public Response register(Member member) throws Exception{
+	public Response register(@ApiParam(value = "会员信息") @ModelAttribute Member member) throws Exception{
 		log.debug("注册  mobile=="+member.getMobile()+" email =="+member.getEmail());
 		Response result = new Response();
 //		try {
@@ -226,7 +223,9 @@ public class RegisterController {
 				result = memberService.registerMailMember(member, verifyCode);
 			}
 		//会员注册初始化特权
-		vipInfoService.initDefaultExtraPrivilege(member.getId(),member.getIdentify());
+		if(member.getId() != null) {
+			vipInfoService.initDefaultExtraPrivilege(member.getId(), member.getIdentify());
+		}
 		return result;
 	}
 	
