@@ -78,4 +78,14 @@ public class MemberConstant {
         }
 
     }
+
+    /**
+     * 企业注册时的身份管理员
+     */
+    public static final int MEMBER_WORK_TYPE_100 = 100;
+
+    /**
+     * 个人注册时的身份
+     */
+    public static final int MEMBER_WORK_TYPE_217 = 217;
 }

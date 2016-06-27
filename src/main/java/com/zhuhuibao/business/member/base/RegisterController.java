@@ -173,29 +173,24 @@ public class RegisterController {
 		log.debug("获得手机验证码  mobile=="+mobile);
 		Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(true);
-		String sessImgCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_SEEKPWD);
-		if(imgCode.equalsIgnoreCase(sessImgCode)) {
-			// 生成随机字串
-			String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
-			log.debug("verifyCode == " + verifyCode);
-			//发送验证码到手机
-			//SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-			Map<String, String> map = new LinkedHashMap<>();
-			map.put("code", verifyCode);
-			map.put("time", Constants.sms_time);
-			Gson gson = new Gson();
-			String json = gson.toJson(map);
-			SDKSendSms.sendSMS(mobile, json, PropertiesUtils.getValue("forget_pwd_sms_template_code"));
-			//		SDKSendTaoBaoSMS.sendFindPwdSMS(mobile, verifyCode, Constants.sms_time);
-			Validateinfo info = new Validateinfo();
-			info.setCreateTime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
-			info.setCheckCode(verifyCode);
-			info.setAccount(mobile);
-			memberService.inserValidateInfo(info);
-			sess.setAttribute("s" + mobile, verifyCode);
-		}else{
-			throw new BusinessException(MsgCodeConstant.validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
-		}
+		// 生成随机字串
+		String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
+		log.debug("verifyCode == " + verifyCode);
+		//发送验证码到手机
+		//SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
+		Map<String, String> map = new LinkedHashMap<>();
+		map.put("code", verifyCode);
+		map.put("time", Constants.sms_time);
+		Gson gson = new Gson();
+		String json = gson.toJson(map);
+		SDKSendSms.sendSMS(mobile, json, PropertiesUtils.getValue("forget_pwd_sms_template_code"));
+		//		SDKSendTaoBaoSMS.sendFindPwdSMS(mobile, verifyCode, Constants.sms_time);
+		Validateinfo info = new Validateinfo();
+		info.setCreateTime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+		info.setCheckCode(verifyCode);
+		info.setAccount(mobile);
+		memberService.inserValidateInfo(info);
+		sess.setAttribute("s" + mobile, verifyCode);
 		return new Response();
 	}
 

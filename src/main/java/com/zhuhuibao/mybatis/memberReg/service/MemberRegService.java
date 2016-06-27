@@ -69,21 +69,20 @@ public class MemberRegService {
     	{
 	    	if(member != null)
 	    	{
-	    		//前台传过来的base64密码解密
 	    		String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
 	    		String md5Pwd = new Md5Hash(pwd,null,2).toString();
 				member.setPassword(md5Pwd);
 	    		if(member.getMobile() != null)
 	    		{
-	    			//默认状态为“0”
-	    			member.setStatus(1);
+	    			//手机默认注册成功
+	    			member.setStatus(Integer.parseInt(MemberConstant.MemberStatus.ZCCG.toString()));
 	    		}
 	    		member.setRegisterTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
 	    		//个人注册成功的默认为“其他”类型
 				if(MemberConstant.MemberIdentify.GR.toString().equals(member.getIdentify())) {
-					member.setWorkType(217);
+					member.setWorkType(MemberConstant.MEMBER_WORK_TYPE_217);
 				}else{//个人注册成功的默认为“管理员”类型
-					member.setWorkType(100);
+					member.setWorkType(MemberConstant.MEMBER_WORK_TYPE_100);
 				}
 	    		memberId = memberRegMapper.registerMember(member);
 	    	}
