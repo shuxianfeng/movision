@@ -234,6 +234,9 @@
     <if test="title != null and title != ''">
       and e.title like CONCAT('%',#{title},'%')
     </if>
+    <if test="createId != null and createId != ''">
+      and e.createid = #{createId}
+    </if>
     <if test="status != null and status != ''">
       and e.status = #{status}
     </if>

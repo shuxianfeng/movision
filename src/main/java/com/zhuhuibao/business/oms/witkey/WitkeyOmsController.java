@@ -20,7 +20,7 @@ import java.util.Map;
  * Created by cxx on 2016/5/4 0004.
  */
 @RestController
-@RequestMapping("/rest/witkey/oms")
+@RequestMapping("/rest/witkey/oms/base")
 public class WitkeyOmsController {
     private static final Logger log = LoggerFactory.getLogger(WitkeyOmsController.class);
 
@@ -58,6 +58,23 @@ public class WitkeyOmsController {
         List<Map<String,String>> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
         pager.result(cooperationList);
         response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 编辑任务
+     */
+    @ApiOperation(value="编辑任务",notes="编辑任务",response = Response.class)
+    @RequestMapping(value = "upd_witkey", method = RequestMethod.POST)
+    public Response updateCooperation(Cooperation cooperation)  {
+        Response response = new Response();
+        if(cooperation.getEndTime()!=null){
+            cooperation.setEndTime(cooperation.getEndTime()+" 23:59:59");
+        }
+        if(cooperation.getPrice()==null){
+            cooperation.setPrice(Double.parseDouble("-1"));
+        }
+        cooperationService.updateCooperation(cooperation);
         return response;
     }
 }

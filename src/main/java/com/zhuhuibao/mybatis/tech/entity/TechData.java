@@ -49,6 +49,7 @@ public class TechData {
     private BigDecimal price;
     private String sCategoryName;
     private String username;
+    private String reason;
     private List<TechCategoryBean> categoryList;
 
     public Long getId() {
@@ -209,5 +210,13 @@ public class TechData {
 
     public void setCategoryList(List<TechCategoryBean> categoryList) {
         this.categoryList = categoryList;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

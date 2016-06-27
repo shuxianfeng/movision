@@ -3,6 +3,8 @@ package com.zhuhuibao.mybatis.tech.service;/**
  * @version 2016/5/31 0031
  */
 
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.mybatis.tech.entity.TechCategoryBean;
 import com.zhuhuibao.mybatis.tech.entity.TechData;
 import com.zhuhuibao.mybatis.tech.mapper.TechDataMapper;
@@ -34,6 +36,9 @@ public class TechDataService {
 
     @Autowired
     TechDataMapper techDataMapper;
+
+    @Autowired
+    SiteMailService siteMailService;
 
     /**
      * 运营管理平台技术资料搜索
@@ -159,6 +164,10 @@ public class TechDataService {
         log.info("update oms tech data "+StringUtils.beanToString(techData));
         try{
             result = techDataMapper.updateByPrimaryKeySelective(techData);
+            if("3".equals(String.valueOf(techData.getStatus())))
+            {
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), techData.getCreateid(),techData.getReason());
+            }
         }catch (Exception e){
             log.error("update oms tech data error! ",e);
             throw e;

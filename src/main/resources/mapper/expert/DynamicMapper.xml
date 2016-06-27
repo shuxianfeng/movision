@@ -157,6 +157,9 @@
       <if test="content != null" >
         content = #{content},
       </if>
+      <if test="reason != null">
+        reason = #{reason}
+      </if>
     </set>
     where id = #{id}
   </update>

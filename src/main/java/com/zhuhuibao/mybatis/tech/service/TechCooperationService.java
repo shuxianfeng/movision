@@ -3,6 +3,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
 import com.zhuhuibao.mybatis.tech.mapper.TechCooperationMapper;
 import com.zhuhuibao.mybatis.tech.mapper.TechDataMapper;
@@ -16,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +42,9 @@ public class TechCooperationService {
 
     @Autowired
     ZhbService zhbService;
+
+    @Autowired
+    SiteMailService siteMailService;
 
     /**
      * 插入技术成果或者技术需求
@@ -115,15 +117,18 @@ public class TechCooperationService {
      * @param tech
      * @return
      */
-    public int updateTechCooperation(TechCooperation tech)
-    {
+    public int updateTechCooperation(TechCooperation tech) throws Exception {
         int result;
         log.info("update oms tech cooperation "+StringUtils.beanToString(tech));
         try{
             result = techMapper.updateByPrimaryKeySelective(tech);
+            if("3".equals(String.valueOf(tech.getStatus())))
+            {
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),tech.getCreateID(),tech.getReason());
+            }
         }catch (Exception e){
             log.error("update oms tech cooperation error! ",e);
-            throw e;
+            throw new BusinessException(MsgCodeConstant.mcode_common_failure,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
         }
         return result;
     }

@@ -253,6 +253,9 @@
       <if test="introduce != null" >
         introduce = #{introduce},
       </if>
+      <if test="reason != null">
+        reason = #{reason}
+      </if>
     </set>
     where id = #{id}
   </update>

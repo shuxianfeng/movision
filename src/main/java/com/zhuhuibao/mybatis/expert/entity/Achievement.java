@@ -66,6 +66,8 @@ public class Achievement {
 
     private String createName;
 
+    private String reason;
+
     public String getId() {
         return id;
     }
@@ -264,5 +266,13 @@ public class Achievement {
 
     public void setCreateName(String createName) {
         this.createName = createName;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

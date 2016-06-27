@@ -57,13 +57,13 @@ public class FileUtil {
                     if (chann != null) {
                         downloadDir = PropertiesUtils.getValue("uploadDir") + "/" + chann + "/img";
                     } else {
-                        downloadDir = PropertiesUtils.getValue("uploadDoc");
+                        downloadDir = PropertiesUtils.getValue("uploadDir");
                     }
 
                     break;
                 case "doc":
                     if (chann != null) {
-                        downloadDir = PropertiesUtils.getValue("uploadDir") + "/" + chann + "/doc";
+                        downloadDir = PropertiesUtils.getValue("uploadDoc") + "/" + chann + "/doc";
 
                     } else {
                         downloadDir = PropertiesUtils.getValue("uploadDoc");
