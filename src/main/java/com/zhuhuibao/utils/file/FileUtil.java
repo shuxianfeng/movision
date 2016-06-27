@@ -167,7 +167,7 @@ public class FileUtil {
     public static File renameFile(File file) {
 
         int index = file.getName().lastIndexOf("."); //获取文件名中【.】的下标
-        String body = file.getName().substring(0, index);//文件名
+        String body = UUIDGenerator.genShortUuid();//file.getName().substring(0, index);//文件名
         String postfix; //表示文件名的后缀，即【.ccc】
         String timer; //代表当前系统时间的数字
 
