@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.dictionary.mapper.DictionaryMapper">
-	<select id="findMailAddress" parameterType="String" resultType="String">
+	<select id="findMailAddress" parameterType="java.lang.String" resultType="java.lang.String">
 	    select primaryemail from t_dictionary_email t where t.memberemail = #{memberemail}
 	  </select>  
 </mapper>
