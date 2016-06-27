@@ -12,6 +12,7 @@ import com.zhuhuibao.utils.oss.AliOSSClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletOutputStream;
@@ -25,7 +26,7 @@ import java.util.Date;
 import java.util.Map;
 
 
-@Service
+@Component
 public class FileUtil {
     private static Logger log = LoggerFactory.getLogger(FileUtil.class);
 
@@ -34,7 +35,7 @@ public class FileUtil {
     AliOSSClient aliOSSClient;
 
     @Autowired
-    ApiConstants ApiConstants;
+    ApiConstants apiConstants;
 
     /**
      * 下载文件
@@ -217,7 +218,7 @@ public class FileUtil {
                 String status = (String) map.get("status");
                 return status.equals("success");
             case "zhb":
-                String fileUrl = ApiConstants.getUploadDoc() + "/" + chann + "/" + type + "/" + fileName;
+                String fileUrl = apiConstants.getUploadDoc() + "/" + chann + "/" + type + "/" + fileName;
                 File file = new File(fileUrl);
                 return file.exists();
             default:

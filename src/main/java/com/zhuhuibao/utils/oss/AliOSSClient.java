@@ -121,6 +121,68 @@ public class AliOSSClient {
         return result;
     }
 
+
+    /**
+     *  上传文件流
+     * @param is
+     * @param maxSize
+     * @param type
+     * @param chann
+     * @return
+     */
+    public Map<String,String> uploadStream(InputStream is ,String fileName,long maxSize,String type,String chann){
+        Map<String, String> result = new HashMap<>();
+
+        log.info("阿里云OSS上传Started");
+        OSSClient ossClient = init();
+
+        try{
+
+//            long size = file.getSize();
+//
+//            if (size > maxSize) {
+//                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
+//            }
+
+            String fileKey;
+            String fileName2 = FileUtil.renameFile(fileName);
+            if (chann != null) {
+                fileKey = chann + "/" + type + "/" + fileName2;
+
+            } else {
+                fileKey = fileName2;
+            }
+
+            if (type.equals("img")) {
+                bucketName = PropertiesUtils.getValue("img.bucket");
+
+            } else if (type.equals("doc")) {
+                bucketName = PropertiesUtils.getValue("file.bucket");
+            }
+
+            ossClient.putObject(bucketName, fileKey, is);
+
+            log.debug("Object：" + fileKey + "存入OSS成功。");
+            result.put("status", "success");
+            result.put("data", fileKey);
+
+        }catch (OSSException oe) {
+            oe.printStackTrace();
+            result.put("status", "fail");
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("status", "fail");
+            return result;
+        }  finally {
+            ossClient.shutdown();
+        }
+
+        log.info("阿里云OSS上传Completed");
+
+        return result;
+    }
+
     /**
      * 上传文件流
      *
@@ -144,7 +206,7 @@ public class AliOSSClient {
             }
 
             // 上传文件流
-            String domain;
+//            String domain;
             InputStream in = file.getInputStream();
             String fileName = file.getOriginalFilename();
             String fileKey;

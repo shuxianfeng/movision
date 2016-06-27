@@ -1,11 +1,15 @@
 package com.zhuhuibao.security.resubmit;
 
+import com.alibaba.fastjson.JSON;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.utils.JsonUtils;
+import com.zhuhuibao.utils.redis.RedisClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,13 +26,19 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     private static Map<String, String> actionUrls = new HashMap<String, String>();
     private final Object clock = new Object();
 
-//    static
+    @Resource
+    private RedisClient redisCacheClient;
+
+    //    static
 //    {
 //        viewUrls.put("/rest/mobileCode", "GET");
 //
 //        actionUrls.put("/rest/register", "POST");
 //
 //    }
+    {
+        TokenHelper.setRedisCacheClient(redisCacheClient);
+    }
 
     /**
      * 拦截方法，添加or验证token
@@ -52,11 +62,11 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         synchronized (clock) {
             if (!TokenHelper.validToken(request)) {
                 log.debug("未通过验证...");
-                return handleInvalidToken(request,response,handler);
+                return handleInvalidToken(request, response, handler);
             }
         }
         log.debug("通过验证...");
-        return handleValidToken(request,response,handler);
+        return handleValidToken(request, response, handler);
     }
 
     /**
@@ -80,7 +90,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     private void writeMessageUtf8(HttpServletResponse response, Response json) throws IOException {
         try {
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().print(JsonUtils.getJsonStringFromObj(json));
+            response.getWriter().print(JSON.toJSON(json));
         } finally {
             response.getWriter().close();
         }
