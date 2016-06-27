@@ -139,7 +139,7 @@ public class AliOSSClient {
 
             long size = file.getSize();
 
-            if (size > Long.valueOf(maxSize)) {
+            if (size > maxSize) {
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
             }
 
@@ -156,25 +156,24 @@ public class AliOSSClient {
                 fileKey = fileName2;
             }
 
-            String data = "";
+//            String data = "";
             if (type.equals("img")) {
                 bucketName = PropertiesUtils.getValue("img.bucket");
-                domain = PropertiesUtils.getValue("img.domain");
-                data = "//" + domain + "/" + fileKey;
+//                domain = PropertiesUtils.getValue("img.domain");
+//                data = "//" + domain + "/" + fileKey;
 
 
             } else if (type.equals("doc")) {
                 bucketName = PropertiesUtils.getValue("file.bucket");
-                domain = PropertiesUtils.getValue("file.domain");
-                data = "//" + domain + "/" + fileKey;
-
+//                domain = PropertiesUtils.getValue("file.domain");
+//                data = "//" + domain + "/" + fileKey;
             }
 
             ossClient.putObject(bucketName, fileKey, in);
 
             log.debug("Object：" + fileKey + "存入OSS成功。");
             result.put("status", "success");
-            result.put("data", data);
+            result.put("data", fileKey);
 
         } catch (OSSException oe) {
             oe.printStackTrace();

@@ -27,10 +27,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -90,7 +87,7 @@ public class RegisterController {
 	 * @param verifyCode
 	 * @param out
      */
-	@ApiOperation(value="生成图片码",notes="生成图片码",response = Response.class)
+	/*@ApiOperation(value="生成图片码",notes="生成图片码",response = Response.class)
 	private void genImgCode(HttpServletResponse response, String verifyCode, ServletOutputStream out) {
 		try {
 			out = response.getOutputStream();
@@ -107,7 +104,7 @@ public class RegisterController {
 				e.printStackTrace();
 			}
 		}
-	}
+	}*/
 
 	/**
 	  * 找回密码的图形验证码
@@ -132,15 +129,15 @@ public class RegisterController {
 	 */
 	@ApiOperation(value="手机注册账号时发送的验证码",notes="手机注册账号时发送的验证码",response = Response.class)
 	@RequestMapping(value = {"/rest/mobileCode","rest/member/site/base/sel_mobileCode"}, method = RequestMethod.GET)
-	public Response getMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile
-//			, @ApiParam(value = "图形验证码") @RequestParam() String imgCode
+	public Response getMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile,
+								  @ApiParam(value = "图形验证码") @RequestParam() String imgCode
 	) throws IOException, ApiException {
 		log.debug("获得手机验证码  mobile=="+mobile);
 		Subject currentUser = SecurityUtils.getSubject();
 		Session sess = currentUser.getSession(true);
 		String sessionImgCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_REGISTER);
 		Response response = new Response();
-//		if(imgCode.equalsIgnoreCase(sessionImgCode)) {
+		if(imgCode.equalsIgnoreCase(sessionImgCode)) {
 			// 生成随机字串
 			String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
 			log.debug("verifyCode == " + verifyCode);
@@ -156,9 +153,9 @@ public class RegisterController {
 			info.setAccount(mobile);
 			memberService.inserValidateInfo(info);
 			sess.setAttribute("r" + mobile, verifyCode);
-		/*}else {
+		}else {
 			throw new BusinessException(MsgCodeConstant.validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
-		}*/
+		}
 		return response;
 	}
 	
@@ -171,34 +168,28 @@ public class RegisterController {
 	 */
 	@ApiOperation(value="找回密码时手机发送的验证码",notes="找回密码时手机发送的验证码",response = Response.class)
 	@RequestMapping(value = {"/rest/getSeekPwdMobileCode","rest/member/site/base/sel_seekPwdMobileCode"}, method = RequestMethod.GET)
-	public Response getSeekPwdMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile,
-										 @ApiParam(value = "图形验证码") @RequestParam String imgCode) throws IOException, ApiException {
+	public Response getSeekPwdMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile) throws IOException, ApiException {
 		log.debug("获得手机验证码  mobile=="+mobile);
 		Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(true);
-		String sessImgCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_SEEKPWD);
-		if(imgCode.equalsIgnoreCase(sessImgCode)) {
-			// 生成随机字串
-			String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
-			log.debug("verifyCode == " + verifyCode);
-			//发送验证码到手机
-			//SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
-			Map<String, String> map = new LinkedHashMap<>();
-			map.put("code", verifyCode);
-			map.put("time", Constants.sms_time);
-			Gson gson = new Gson();
-			String json = gson.toJson(map);
-			SDKSendSms.sendSMS(mobile, json, PropertiesUtils.getValue("forget_pwd_sms_template_code"));
-			//		SDKSendTaoBaoSMS.sendFindPwdSMS(mobile, verifyCode, Constants.sms_time);
-			Validateinfo info = new Validateinfo();
-			info.setCreateTime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
-			info.setCheckCode(verifyCode);
-			info.setAccount(mobile);
-			memberService.inserValidateInfo(info);
-			sess.setAttribute("s" + mobile, verifyCode);
-		}else{
-			throw new BusinessException(MsgCodeConstant.validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
-		}
+		// 生成随机字串
+		String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
+		log.debug("verifyCode == " + verifyCode);
+		//发送验证码到手机
+		//SDKSendTemplateSMS.sendSMS(mobile, verifyCode);
+		Map<String, String> map = new LinkedHashMap<>();
+		map.put("code", verifyCode);
+		map.put("time", Constants.sms_time);
+		Gson gson = new Gson();
+		String json = gson.toJson(map);
+		SDKSendSms.sendSMS(mobile, json, PropertiesUtils.getValue("forget_pwd_sms_template_code"));
+		//		SDKSendTaoBaoSMS.sendFindPwdSMS(mobile, verifyCode, Constants.sms_time);
+		Validateinfo info = new Validateinfo();
+		info.setCreateTime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+		info.setCheckCode(verifyCode);
+		info.setAccount(mobile);
+		memberService.inserValidateInfo(info);
+		sess.setAttribute("s" + mobile, verifyCode);
 		return new Response();
 	}
 
@@ -210,7 +201,7 @@ public class RegisterController {
      */
 	@ApiOperation(value="会员注册",notes="会员注册",response = Response.class)
 	@RequestMapping(value = {"/rest/register","rest/member/site/base/add_register"}, method = RequestMethod.POST)
-	public Response register(Member member) throws Exception{
+	public Response register(@ApiParam(value = "会员信息") @ModelAttribute Member member) throws Exception{
 		log.debug("注册  mobile=="+member.getMobile()+" email =="+member.getEmail());
 		Response result = new Response();
 //		try {
@@ -226,7 +217,9 @@ public class RegisterController {
 				result = memberService.registerMailMember(member, verifyCode);
 			}
 		//会员注册初始化特权
-		vipInfoService.initDefaultExtraPrivilege(member.getId(),member.getIdentify());
+		if(member.getId() != null) {
+			vipInfoService.initDefaultExtraPrivilege(member.getId(), member.getIdentify());
+		}
 		return result;
 	}
 	
@@ -238,7 +231,7 @@ public class RegisterController {
      */
 	 @ApiOperation(value="找回密码时填写账户名",notes="找回密码时填写账户名",response = Response.class)
 	@RequestMapping(value = {"/rest/writeAccount","rest/member/site/base/add_writeAccount"}, method = RequestMethod.POST)
-	public Response writeAccount(Member member) throws IOException {
+	public Response writeAccount(@ApiParam(value = "会员信息") @ModelAttribute Member member) throws IOException {
 		log.debug("seek pwd write account");
 		Response result = new Response();
 		Subject currentUser = SecurityUtils.getSubject();

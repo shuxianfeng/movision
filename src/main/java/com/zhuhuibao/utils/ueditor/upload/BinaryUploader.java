@@ -17,12 +17,15 @@ import com.zhuhuibao.utils.ueditor.define.BaseState;
 import com.zhuhuibao.utils.ueditor.define.FileType;
 import com.zhuhuibao.utils.ueditor.define.State;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 public class BinaryUploader {
 
 
-    public static final State saveToObject(Map<String, Object> conf, MultipartFile upfile) {
+    public static final State saveToObject(HttpServletRequest request, Map<String, Object> conf) {
         String uploadMode = PropertiesUtils.getValue("upload.mode");
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        MultipartFile upfile = multipartRequest.getFile("upfile");
         if ("zhb".equals(uploadMode)) {
             return save(conf, upfile);
         } else if ("alioss".equals(uploadMode)) {
@@ -32,42 +35,13 @@ public class BinaryUploader {
         }
     }
 
+
     public static final State saveToAliOSS(Map<String, Object> conf, MultipartFile upfile) {
-//        FileItemStream fileStream = null;
-//        boolean isAjaxUpload = request.getHeader("X_Requested_With") != null;
-//
-//        if (!ServletFileUpload.isMultipartContent(request)) {
-//            return new BaseState(false, AppInfo.NOT_MULTIPART_CONTENT);
-//        }
-//
-//        ServletFileUpload upload = new ServletFileUpload(
-//                new DiskFileItemFactory());
-//
-//        if (isAjaxUpload) {
-//            upload.setHeaderEncoding("UTF-8");
-//        }
-
-        //            FileItemIterator iterator = upload.getItemIterator(request);
-//
-//            while (iterator.hasNext()) {
-//                fileStream = iterator.next();
-//
-//                if (!fileStream.isFormField())
-//                    break;
-//                fileStream = null;
-//            }
-//
-//            if (fileStream == null) {
-//                return new BaseState(false, AppInfo.NOTFOUND_UPLOAD_DATA);
-//            }
-
-//            String savePath = (String) conf.get("savePath");
-        String originFileName = upfile.getOriginalFilename();//fileStream.getName();
+        String originFileName = upfile.getOriginalFilename();
         String suffix = FileType.getSuffixByFilename(originFileName);
 
         originFileName = originFileName.substring(0,
                 originFileName.length() - suffix.length());
-//            savePath = savePath + suffix;
 
         long maxSize = (Long) conf.get("maxSize");
 
@@ -111,7 +85,7 @@ public class BinaryUploader {
                     originFileName.length() - suffix.length());
             savePath = savePath + suffix;
 
-            long maxSize = ((Long) conf.get("maxSize")).longValue();
+            long maxSize = (Long) conf.get("maxSize");
 
             if (!validType(suffix, (String[]) conf.get("allowFiles"))) {
                 return new BaseState(false, AppInfo.NOT_ALLOW_FILE_TYPE);
@@ -127,14 +101,13 @@ public class BinaryUploader {
             is.close();
 
             if (storageState.isSuccess()) {
-                storageState.putInfo("url", PropertiesUtils.getValue("host.ip") + PathFormat.format(savePath));
+                storageState.putInfo("url", PathFormat.format(savePath));
                 storageState.putInfo("type", suffix);
                 storageState.putInfo("original", originFileName + suffix);
             }
 
             return storageState;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             return new BaseState(false, AppInfo.PARSE_REQUEST_ERROR);
         }
     }

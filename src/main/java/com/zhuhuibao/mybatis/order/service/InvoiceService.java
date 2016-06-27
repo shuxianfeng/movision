@@ -37,135 +37,134 @@ public class InvoiceService {
 
     /**
      * 新增发票信息
-     * @param json  发票内容
+     *
+     * @param json 发票内容
      */
-    public void insertInvoice(String json)
-    {
+    public void insertInvoice(String json) {
         int result;
-        try{
+        try {
             Gson gson = new Gson();
-            Invoice invoice = gson.fromJson(json,Invoice.class);
+            Invoice invoice = gson.fromJson(json, Invoice.class);
             result = invoiceMapper.insert(invoice);
             if (result != 1) {
                 log.error("t_o_invoice:插入数据失败");
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
             }
-        }catch(Exception e)
-        {
-            log.error("insert invoice error!",e);
-            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("insert invoice error!", e);
+            throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
         }
     }
 
     /**
      * 查询发票信息
-     * @param id  发票ID
+     *
+     * @param id 发票ID
      */
-    public Invoice queryInvoiceInfo(Long id)
-    {
+    public Invoice queryInvoiceInfo(Long id) {
         Invoice invoice;
-        try{
+        try {
             invoice = invoiceMapper.selectByPrimaryKey(id);
-        }catch(Exception e)
-        {
-            log.error("query invoice error!",e);
-            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("query invoice error!", e);
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询数据失败");
         }
         return invoice;
     }
 
     /**
      * 运营管理平台更新发票状态
+     *
      * @param invoice 发票信息
      */
-    public void updateInvoice(Invoice invoice)
-    {
+    public void updateInvoice(Invoice invoice) {
         int result;
-        try{
+        try {
             result = invoiceMapper.updateByPrimaryKeySelective(invoice);
             if (result != 1) {
                 log.error("t_o_invoice:更新状态失败");
-                throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "更新状态失败");
+                throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新状态失败");
             }
-        }catch(Exception e)
-        {
-            log.error("update invoice error!",e);
-            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("update invoice error!", e);
+            throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新状态失败");
         }
     }
 
     /**
      * 新增发票信息记录
-     * @param record  发票内容
+     *
+     * @param record 发票内容
      */
-    public void insertInvoiceRecord(InvoiceRecord record)
-    {
-        try{
+    public void insertInvoiceRecord(InvoiceRecord record) {
+        try {
             invoiceRecordMapper.insertSelective(record);
-        }catch(Exception e)
-        {
-            log.error("insert invoice error!",e);
-            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("insert invoice error!", e);
+            throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新状态失败");
         }
     }
 
     /**
      * 查询最近使用的发票信息
-     * @param con  发票条件
+     *
      */
-    public InvoiceRecord queryRecentUseInvoiceInfo(Long createId,String isRecentUsed)
-    {
+    public InvoiceRecord queryRecentUseInvoiceInfo(Long createId, String isRecentUsed) {
         InvoiceRecord invoiceRecord;
-        try{
-            Map<String,Object> con = new HashMap<String,Object>();
-            con.put("createId",createId);
-            con.put("isRecentUsed",isRecentUsed);
+        try {
+            Map<String, Object> con = new HashMap<String, Object>();
+            con.put("createId", createId);
+            con.put("isRecentUsed", isRecentUsed);
             invoiceRecord = invoiceRecordMapper.selectByPrimaryKey(con);
-        }catch(Exception e)
-        {
-            log.error("query invoice record error!",e);
-            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("query invoice record error!", e);
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询状态失败");
         }
         return invoiceRecord;
     }
 
     /**
      * 运营管理平台更新发票状态
+     *
      * @param invoiceRecord 发票信息
      */
-    public void updateInvoiceRecord(InvoiceRecord invoiceRecord)
-    {
+    public void updateInvoiceRecord(InvoiceRecord invoiceRecord) {
         int result;
-        try{
+        try {
             invoiceRecord.setIsRecentUsed(OrderConstants.InvoiceIsRecentUsed.YES.toString());
             result = invoiceRecordMapper.updateByPrimaryKeySelective(invoiceRecord);
             if (result == 0) {
                 log.error("t_o_invoice_record:更新状态失败");
-                throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "更新状态失败");
+                throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新状态失败");
             }
-        }catch(Exception e)
-        {
-            log.error("update invoice record error!",e);
-            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("update invoice record error!", e);
+            throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新状态失败");
         }
     }
 
     /**
      * 更新发票最近是否被使用
+     *
      * @param invoiceRecord 发票信息
      */
-    public void updateIsRecentUsed(InvoiceRecord invoiceRecord)
-    {
-        try{
+    public void updateIsRecentUsed(InvoiceRecord invoiceRecord) {
+        try {
             invoiceRecordMapper.updateIsRecentUsed(invoiceRecord);
             /*if (result == 0) {
                 log.error("t_o_invoice_record:更新最近被使用失败");
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "更新最近被使用失败");
             }*/
-        }catch(Exception e)
-        {
-            log.error("update invoice record error!",e);
-            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("update invoice record error!", e);
+            throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新状态失败");
         }
     }
 

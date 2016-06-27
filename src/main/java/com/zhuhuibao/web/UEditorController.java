@@ -28,7 +28,7 @@ public class UEditorController {
 
     @RequestMapping(value="uploadimage")
     @ApiOperation(value = "百度上传", notes = "百度上传")
-    public void uploadimage(HttpServletRequest request, HttpServletResponse response,MultipartFile upfile) throws UnsupportedEncodingException {
+    public void uploadimage(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
 
         request.setCharacterEncoding("utf-8");
         response.setHeader("Content-Type" , "text/html");
@@ -38,7 +38,7 @@ public class UEditorController {
         PrintWriter out = null;
         try {
             out = response.getWriter();
-            out.write(new ActionEnter(request, rootPath,upfile).exec());
+            out.write(new ActionEnter(request, rootPath).exec());
 
         } catch (IOException e) {
             e.printStackTrace();

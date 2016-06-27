@@ -9,12 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 public class Uploader {
 	private HttpServletRequest request = null;
 	private Map<String, Object> conf = null;
-	private MultipartFile upfile;
 
-	public Uploader(HttpServletRequest request, Map<String, Object> conf,MultipartFile upfile) {
+	public Uploader(HttpServletRequest request, Map<String, Object> conf) {
 		this.request = request;
 		this.conf = conf;
-		this.upfile = upfile;
 
 	}
 
@@ -26,7 +24,7 @@ public class Uploader {
 			state = Base64Uploader.save(this.request.getParameter(filedName),
 					this.conf);
 		} else {
-			state = BinaryUploader.saveToObject(this.conf,upfile);
+			state = BinaryUploader.saveToObject(request,this.conf);
 		}
 
 		return state;

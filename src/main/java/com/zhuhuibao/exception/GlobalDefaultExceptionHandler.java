@@ -30,7 +30,7 @@ public class GlobalDefaultExceptionHandler {
         Response result = new Response();
 
         String exceptionName = ex.getClass().getSimpleName();
-        log.error(exceptionName);
+//        log.error(exceptionName);
         result.setMessage(ex.getMessage());
 
         try {
@@ -86,7 +86,7 @@ public class GlobalDefaultExceptionHandler {
                     break;
                 default:
                     result.setCode(500);
-                    result.setMessage("服务器繁忙," + ex.getMessage());
+                    result.setMessage("服务器繁忙");
                     break;
             }
 
