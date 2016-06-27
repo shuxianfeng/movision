@@ -3,6 +3,7 @@ package com.zhuhuibao.mybatis.memberReg.service;
 import java.util.*;
 
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.exception.BusinessException;
 
 import org.apache.shiro.SecurityUtils;
@@ -55,8 +56,7 @@ public class MemberRegService {
 	 */
 	@Autowired
 	private RegisterValidateService rvService;
-	
-	
+
 	/**
      * 注册用户
      */
@@ -68,18 +68,21 @@ public class MemberRegService {
     	{
 	    	if(member != null)
 	    	{
-	    		//前台传过来的base64密码解密
 	    		String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
 	    		String md5Pwd = new Md5Hash(pwd,null,2).toString();
 				member.setPassword(md5Pwd);
 	    		if(member.getMobile() != null)
 	    		{
-	    			//默认状态为“0”
-	    			member.setStatus(1);
+	    			//手机默认注册成功
+	    			member.setStatus(Integer.parseInt(MemberConstant.MemberStatus.ZCCG.toString()));
 	    		}
 	    		member.setRegisterTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
-	    		//注册成功的默认为“管理员”类型
-	    		member.setWorkType(100);
+	    		//个人注册成功的默认为“其他”类型
+				if(MemberConstant.MemberIdentify.GR.toString().equals(member.getIdentify())) {
+					member.setWorkType(MemberConstant.MEMBER_WORK_TYPE_217);
+				}else{//个人注册成功的默认为“管理员”类型
+					member.setWorkType(MemberConstant.MEMBER_WORK_TYPE_100);
+				}
 	    		memberId = memberRegMapper.registerMember(member);
 	    	}
     	}
@@ -280,16 +283,12 @@ public class MemberRegService {
 						Member dbmember = memberRegMapper.findMemberByAccount(member);
 				    	if(dbmember == null)
 				    	{
-				    		result.setCode(400);
-				    		result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
-				    		result.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
+							throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
 				    	}
 					}
 					else
 					{
-						result.setCode(400);
-						result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
-						result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+						throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
 					}
 	    		}
 	    		else
@@ -301,9 +300,7 @@ public class MemberRegService {
 	    				Member dbmember = memberRegMapper.findMemberByAccount(member);
 	    		    	if(dbmember == null)
 	    		    	{
-	    		    		result.setCode(400);
-	    		    		result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
-	    		    		result.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
+							throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
 	    		    	}
 	    		    	else
 	    		    	{
@@ -313,9 +310,7 @@ public class MemberRegService {
 	    			}
 	    			else
 	    			{
-	    				result.setCode(400);
-	    				result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_error)));
-	    				result.setMsgCode(MsgCodeConstant.member_mcode_mail_validate_error);
+						throw new BusinessException(MsgCodeConstant.member_mcode_mail_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_error)));
 	    			}
 	    		}
 			}
