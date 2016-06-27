@@ -1,5 +1,7 @@
 package com.zhuhuibao.mybatis.order.service;
 
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.ZhbAccount;
 import com.zhuhuibao.mybatis.order.mapper.ZhbAccountMapper;
 import org.slf4j.Logger;
@@ -30,7 +32,7 @@ public class ZhbAccountService {
         }catch (Exception e){
             e.printStackTrace();
             log.error(e.getMessage());
-            throw e;
+            throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "查询数据失败");
         }
         return account;
     }

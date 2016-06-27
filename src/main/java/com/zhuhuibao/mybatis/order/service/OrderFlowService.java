@@ -35,7 +35,7 @@ public class OrderFlowService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            throw e;
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询数据失败");
         }
         return orderFlows;
     }
@@ -54,7 +54,7 @@ public class OrderFlowService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            throw e;
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询数据失败");
         }
         return orderFlow;
     }
@@ -75,7 +75,7 @@ public class OrderFlowService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            throw e;
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询数据失败");
         }
     }
 }

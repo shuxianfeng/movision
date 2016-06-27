@@ -40,7 +40,7 @@ public class PwdTickerService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            throw e;
+            throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
         }
     }
 
