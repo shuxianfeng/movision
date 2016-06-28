@@ -68,6 +68,7 @@ public class IndividualController {
             map.put("nickname",member.getNickname());
             map.put("sex",member.getSex());
             map.put("personCompanyType",member.getPersonCompanyType());
+            map.put("personCompanyTypeName",member.getPersonCompanyTypeName());
             map.put("workType",member.getWorkType());
             map.put("workTypeName",member.getWorkTypeName());
             map.put("province",member.getProvince());
