@@ -38,7 +38,7 @@ public class MemberOmsController {
 	@Autowired
 	private MemberService memberService;
 
-	@ApiOperation(value="查询全部会员（分页）",notes="查询全部会员（分页）",response = Response.class)
+	@ApiOperation(value="查询会员（分页）",notes="查询会员（分页）",response = Response.class)
 	@RequestMapping(value="sel_allMember",method = RequestMethod.GET)
 	public Response getAllMemInfo(@ModelAttribute OmsMemBean member, @RequestParam(required = false) String pageNo,
 								  @RequestParam(required = false) String pageSize)
