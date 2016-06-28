@@ -268,58 +268,50 @@ public class MemberRegService {
     public Response writeAccount(Member member, String seekPwdCode)
     {
     	Response result = new Response();
-    	try
-    	{
-	    	String data = "";
-	    	//手机
-	    	if(member.getAccount() != null && member.getCheckCode() != null)
+
+		String data = "";
+		//手机
+		if(member.getAccount() != null && member.getCheckCode() != null)
+		{
+			if(member.getAccount().indexOf("@") == -1)
 			{
-	    		if(member.getAccount().indexOf("@") == -1)
-	    		{
-		    		data = member.getMobile();
-					if(member.getCheckCode().equalsIgnoreCase(seekPwdCode))
+				if(member.getCheckCode().equalsIgnoreCase(seekPwdCode))
+				{
+					member.setMobile(member.getAccount());
+					Member dbmember = memberRegMapper.findMemberByAccount(member);
+					if(dbmember == null)
 					{
-						member.setMobile(member.getAccount());
-						Member dbmember = memberRegMapper.findMemberByAccount(member);
-				    	if(dbmember == null)
-				    	{
-							throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
-				    	}
+						throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
+					}
+				}
+				else
+				{
+					throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
+				}
+			}
+			else
+			{
+				if(member.getCheckCode().equalsIgnoreCase(seekPwdCode))
+				{
+					member.setEmail(member.getAccount());
+					Member dbmember = memberRegMapper.findMemberByAccount(member);
+					if(dbmember == null)
+					{
+						throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
 					}
 					else
 					{
-						throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
+						member.setEmailCheckCode(member.getCheckCode());
+						memberRegMapper.updateEmailCode(member);
 					}
-	    		}
-	    		else
-	    		{
-	    			data = member.getEmail();
-	    			if(member.getCheckCode().equalsIgnoreCase(seekPwdCode))
-	    			{
-	    				member.setEmail(member.getAccount());
-	    				Member dbmember = memberRegMapper.findMemberByAccount(member);
-	    		    	if(dbmember == null)
-	    		    	{
-							throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
-	    		    	}
-	    		    	else
-	    		    	{
-	    		    		member.setEmailCheckCode(member.getCheckCode());
-	    		    		memberRegMapper.updateEmailCode(member);
-	    		    	}
-	    			}
-	    			else
-	    			{
-						throw new BusinessException(MsgCodeConstant.member_mcode_mail_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_error)));
-	    			}
-	    		}
+				}
+				else
+				{
+					throw new BusinessException(MsgCodeConstant.member_mcode_mail_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_error)));
+				}
 			}
-			result.setData(data);
-    	}
-    	catch(Exception e)
-    	{
-    		log.error("write account error!");
-    	}
+		}
+		result.setData(member.getAccount());
     	return result;
     }
     
