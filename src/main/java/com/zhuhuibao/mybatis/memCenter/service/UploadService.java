@@ -59,11 +59,11 @@ public class UploadService {
                     if (chann != null) {
                         saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/img";
                         maxPostSize = apiConstants.getUploadPicMaxPostSize();
-                        data = imgDomain + "/upload/" + chann + "/img/" + fileName;
+                        data = "//"+imgDomain + "/upload/" + chann + "/img/" + fileName;
                     } else {
                         saveDirectory = apiConstants.getUploadDir();
                         maxPostSize = apiConstants.getUploadPicMaxPostSize();
-                        data = imgDomain + "/upload/" + fileName;
+                        data = "//"+imgDomain + "/upload/" + fileName;
                     }
 
                     break;
@@ -104,7 +104,7 @@ public class UploadService {
 
 
             result.put("status", "success");
-            result.put("data", "//"+data);
+            result.put("data", data);
 
         } catch (Exception e) {
             log.error("upload error!", e);
