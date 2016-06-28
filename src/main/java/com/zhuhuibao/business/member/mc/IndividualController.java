@@ -202,6 +202,7 @@ public class IndividualController {
                                        @RequestParam String certificate_number,
                                        @RequestParam String certificate_id,
                                        @RequestParam String certificate_name,
+                                       @RequestParam(required = false) String certificate_grade,
                                        @RequestParam String certificate_url)  {
         Response result = new Response();
         CertificateRecord record = new CertificateRecord();
@@ -212,6 +213,7 @@ public class IndividualController {
             record.setCertificate_name(certificate_name);
             record.setCertificate_number(certificate_number);
             record.setCertificate_url(certificate_url);
+            record.setCertificate_grade(certificate_grade);
             memberService.updateCertificate(record);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
