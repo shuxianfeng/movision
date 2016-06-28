@@ -111,17 +111,20 @@ public class CompanyController {
     public Response upd_mem_basic_info(@ModelAttribute Member member)  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
+        ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
         if(memberId!=null){
             member.setId(String.valueOf(memberId));
             //基本资料待审核
-            member.setStatus(MemberConstant.MemberStatus.WSZLDSH.toString());
+            if(loginMember.getStatus()==1||loginMember.getStatus()==7){
+                member.setStatus(MemberConstant.MemberStatus.WSZLDSH.toString());
+            }
             memberService.updateMemInfo(member);
-            Member loginMember = memberService.findMemById(String.valueOf(memberId));
+            Member mem = memberService.findMemById(String.valueOf(memberId));
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             if (session != null) {
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-                principal.setStatus(Integer.parseInt(loginMember.getStatus()));
+                principal.setStatus(Integer.parseInt(mem.getStatus()));
                 principal.setIdentify(loginMember.getIdentify());
                 session.setAttribute("member", principal);
             }
@@ -137,20 +140,23 @@ public class CompanyController {
                                           @RequestParam String companyBusinessLicenseImg)  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
+        ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
         Member member = new Member();
         if(memberId!=null){
             member.setId(String.valueOf(memberId));
             //实名认证待审核
-            member.setStatus(MemberConstant.MemberStatus.SMRZDSH.toString());
+            if(loginMember.getStatus()==6||loginMember.getStatus()==11){
+                member.setStatus(MemberConstant.MemberStatus.SMRZDSH.toString());
+            }
             member.setCoBusLicNum(coBusLicNum);
             member.setCompanyBusinessLicenseImg(companyBusinessLicenseImg);
             memberService.updateMemInfo(member);
-            Member loginMember = memberService.findMemById(String.valueOf(memberId));
+            Member mem = memberService.findMemById(String.valueOf(memberId));
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             if (session != null) {
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-                principal.setStatus(Integer.parseInt(loginMember.getStatus()));
+                principal.setStatus(Integer.parseInt(mem.getStatus()));
                 session.setAttribute("member", principal);
             }
         }else {

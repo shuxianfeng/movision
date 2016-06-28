@@ -116,17 +116,20 @@ public class IndividualController {
     public Response upd_mem_basic_info(@ModelAttribute Member member)  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
+        ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
         if(memberId!=null){
             member.setId(String.valueOf(memberId));
             //基本资料待审核
-            member.setStatus(MemberConstant.MemberStatus.WSZLDSH.toString());
+            if(loginMember.getStatus()==1||loginMember.getStatus()==7){
+                member.setStatus(MemberConstant.MemberStatus.WSZLDSH.toString());
+            }
             memberService.updateMemInfo(member);
-            Member loginMember = memberService.findMemById(String.valueOf(memberId));
+            Member mem = memberService.findMemById(String.valueOf(memberId));
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             if (session != null) {
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-                principal.setStatus(Integer.parseInt(loginMember.getStatus()));
+                principal.setStatus(Integer.parseInt(mem.getStatus()));
                 session.setAttribute("member", principal);
             }
         }else {
@@ -143,22 +146,25 @@ public class IndividualController {
                                           @RequestParam String personIDBackImgUrl)  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
+        ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
         Member member = new Member();
         if(memberId!=null){
             member.setId(String.valueOf(memberId));
             //实名认证待审核
-            member.setStatus(MemberConstant.MemberStatus.SMRZDSH.toString());
+            if(loginMember.getStatus()==6||loginMember.getStatus()==11){
+                member.setStatus(MemberConstant.MemberStatus.SMRZDSH.toString());
+            }
             member.setPersonRealName(personRealName);
             member.setPersonIdentifyCard(personIdentifyCard);
             member.setPersonIDFrontImgUrl(personIDFrontImgUrl);
             member.setPersonIDBackImgUrl(personIDBackImgUrl);
             memberService.updateMemInfo(member);
-            Member loginMember = memberService.findMemById(String.valueOf(memberId));
+            Member mem = memberService.findMemById(String.valueOf(memberId));
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             if (session != null) {
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-                principal.setStatus(Integer.parseInt(loginMember.getStatus()));
+                principal.setStatus(Integer.parseInt(mem.getStatus()));
                 session.setAttribute("member", principal);
             }
         }else {
@@ -229,5 +235,14 @@ public class IndividualController {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
+    }
+
+    @ApiOperation(value = "个人资质类型", notes = "个人资质类型", response = Response.class)
+    @RequestMapping(value = "sel_certificateList", method = RequestMethod.GET)
+    public Response certificateList(@ApiParam(value = "个人type:3")@RequestParam String type)  {
+        Response response = new Response();
+        List list = memberService.findCertificateList(type);
+        response.setData(list);
+        return response;
     }
 }
