@@ -539,7 +539,10 @@
       and m.status = #{status}
     </if>
     <if test="type != null and type == 1">
-      and m.status in (4,5,6)
+      and m.status in (9,10,11)
+    </if>
+    <if test="type != null and type == 2">
+      and m.status in (5,6,7)
     </if>
   </select>
   <select id="findAllMemCertificateByPager" resultMap="ResultMap2" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
