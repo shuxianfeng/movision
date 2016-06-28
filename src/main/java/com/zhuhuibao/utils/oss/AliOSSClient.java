@@ -121,68 +121,6 @@ public class AliOSSClient {
         return result;
     }
 
-
-    /**
-     *  上传文件流
-     * @param is
-     * @param maxSize
-     * @param type
-     * @param chann
-     * @return
-     */
-    public Map<String,String> uploadStream(InputStream is ,String fileName,long maxSize,String type,String chann){
-        Map<String, String> result = new HashMap<>();
-
-        log.info("阿里云OSS上传Started");
-        OSSClient ossClient = init();
-
-        try{
-
-//            long size = file.getSize();
-//
-//            if (size > maxSize) {
-//                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
-//            }
-
-            String fileKey;
-            String fileName2 = FileUtil.renameFile(fileName);
-            if (chann != null) {
-                fileKey = chann + "/" + type + "/" + fileName2;
-
-            } else {
-                fileKey = fileName2;
-            }
-
-            if (type.equals("img")) {
-                bucketName = PropertiesUtils.getValue("img.bucket");
-
-            } else if (type.equals("doc")) {
-                bucketName = PropertiesUtils.getValue("file.bucket");
-            }
-
-            ossClient.putObject(bucketName, fileKey, is);
-
-            log.debug("Object：" + fileKey + "存入OSS成功。");
-            result.put("status", "success");
-            result.put("data", fileKey);
-
-        }catch (OSSException oe) {
-            oe.printStackTrace();
-            result.put("status", "fail");
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-            result.put("status", "fail");
-            return result;
-        }  finally {
-            ossClient.shutdown();
-        }
-
-        log.info("阿里云OSS上传Completed");
-
-        return result;
-    }
-
     /**
      * 上传文件流
      *
@@ -191,7 +129,7 @@ public class AliOSSClient {
      * @param chann 频道
      * @return
      */
-    public Map<String, String> uploadStream(MultipartFile file,long maxSize, String type, String chann) {
+    public Map<String, String> uploadStream(MultipartFile file, long maxSize, String type, String chann) {
         Map<String, String> result = new HashMap<>();
 
         log.info("阿里云OSS上传Started");
@@ -212,30 +150,30 @@ public class AliOSSClient {
             String fileKey;
             String fileName2 = FileUtil.renameFile(fileName);
             if (chann != null) {
-                fileKey = chann + "/" + type + "/" + fileName2;
+                fileKey = "upload/" + chann + "/" + type + "/" + fileName2;
 
             } else {
-                fileKey = fileName2;
+                fileKey = "upload/" + fileName2;
             }
 
-//            String data = "";
+            String data = "";
             if (type.equals("img")) {
                 bucketName = PropertiesUtils.getValue("img.bucket");
 //                domain = PropertiesUtils.getValue("img.domain");
-//                data = "//" + domain + "/" + fileKey;
+                data = fileKey;
 
 
             } else if (type.equals("doc")) {
                 bucketName = PropertiesUtils.getValue("file.bucket");
 //                domain = PropertiesUtils.getValue("file.domain");
-//                data = "//" + domain + "/" + fileKey;
+                data = fileName2;
             }
 
             ossClient.putObject(bucketName, fileKey, in);
 
             log.debug("Object：" + fileKey + "存入OSS成功。");
             result.put("status", "success");
-            result.put("data", fileKey);
+            result.put("data", data);
 
         } catch (OSSException oe) {
             oe.printStackTrace();
@@ -253,9 +191,6 @@ public class AliOSSClient {
 
         return result;
     }
-
-
-
 
 
     /**
@@ -283,7 +218,7 @@ public class AliOSSClient {
             String fileKey;
             String fileName2 = FileUtil.renameFile(fileName);
             if (chann != null) {
-                fileKey = chann + "/" + type + "/" + fileName2;
+                fileKey = "upload/" + chann + "/" + type + "/" + fileName2;
 
                 if (type.equals("doc") && chann.equals("tech")) {
                     String maxSize = PropertiesUtils.getValue("uploadTechMaxPostSize");
@@ -292,7 +227,7 @@ public class AliOSSClient {
                     }
                 }
             } else {
-                fileKey = fileName2;
+                fileKey = "upload/" + fileName2;
             }
 
             String data = "";
@@ -361,9 +296,9 @@ public class AliOSSClient {
             String domain;
             String fileName = FileUtil.renameFile(file).getName();
             if (chann != null) {
-                fileKey = chann + "/" + type + "/" + fileName;
+                fileKey = "upload/" + chann + "/" + type + "/" + fileName;
             } else {
-                fileKey = fileName;
+                fileKey = "upload/" + fileName;
             }
 
             String data = "";
@@ -425,9 +360,9 @@ public class AliOSSClient {
 
             String objKey;
             if (chann != null) {
-                objKey = chann + "/" + type + "/" + fileName;
+                objKey = "upload/" + chann + "/" + type + "/" + fileName;
             } else {
-                objKey = fileName;
+                objKey = "upload/" + fileName;
             }
 
 
