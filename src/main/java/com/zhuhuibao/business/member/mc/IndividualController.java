@@ -10,6 +10,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
+import com.zhuhuibao.mybatis.memCenter.entity.Identity;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
@@ -44,6 +45,15 @@ public class IndividualController {
         Response result = new Response();
         List<WorkType> workType = memberService.findIndividualWorkTypeList();
         result.setData(workType);
+        return result;
+    }
+
+    @ApiOperation(value = "工作单位类别", notes = "工作单位类别", response = Response.class)
+    @RequestMapping(value = "sel_identityList", method = RequestMethod.GET)
+    public Response identityList()  {
+        Response result = new Response();
+        List<Identity> identity = memberService.findIdentityList();
+        result.setData(identity);
         return result;
     }
 
