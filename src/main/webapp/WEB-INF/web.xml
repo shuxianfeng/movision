@@ -56,7 +56,7 @@
     <!--XSS攻击过滤器
     <filter>
         <filter-name>XSSFilter</filter-name>
-        <filter-class>com.zhuhuibao.filter.XSSFilter</filter-class>
+        <filter-class>com.zhuhuibao.security.xss.XSSFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>XSSFilter</filter-name>
@@ -97,7 +97,7 @@
 
 
     <session-config>
-        <session-timeout>60</session-timeout>
+        <session-timeout>720</session-timeout>
     </session-config>
 
     <welcome-file-list>

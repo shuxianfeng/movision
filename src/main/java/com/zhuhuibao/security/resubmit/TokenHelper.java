@@ -1,5 +1,6 @@
 package com.zhuhuibao.security.resubmit;
 
+import com.zhuhuibao.utils.redis.RedisClient;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -32,6 +33,11 @@ public class TokenHelper {
 
     private static final Random RANDOM = new Random();
 
+    private static RedisClient  redisCacheClient;// 缓存调用,代替session,支持分布式
+
+    public static void setRedisCacheClient(RedisClient redisCacheClient) {
+        TokenHelper.redisCacheClient = redisCacheClient;
+    }
 
     /**
      * 使用随机字串作为token名字保存token
@@ -44,23 +50,46 @@ public class TokenHelper {
     }
 
     /**
-     * 使用随机字串作为token名字保存token
+     * 使用给定的字串作为token名字保存token
+     *
+     * @param request
+     * @param tokenName
+     * @return token
      */
-    public static String setToken(HttpServletRequest req, String tokenName) {
+    private static String setToken(HttpServletRequest request, String tokenName) {
         String token = generateGUID();
-        try {
-            Subject currentUser = SecurityUtils.getSubject();
-            Session session = currentUser.getSession(true);
-//            HttpSession session = req.getSession(false);
-            session.setAttribute(TOKEN_NAME_FIELD, tokenName);
-            session.setAttribute(tokenName, token);
+        setCacheToken(request, tokenName, token);
+        return token;
+    }
 
+    /**
+     * 保存一个给定名字和值的token
+     *
+     * @param request
+     * @param tokenName
+     * @param token
+     */
+    public static void setCacheToken(HttpServletRequest request, String tokenName, String token) {
+        try {
+            String tokenName0 = buildTokenCacheAttributeName(tokenName);
+            redisCacheClient.set(tokenName0, token);
+            request.setAttribute(TOKEN_NAME_FIELD, tokenName);
+            request.setAttribute(tokenName, token);
         } catch (IllegalStateException e) {
             String msg = "Error creating HttpSession due response is commited to client. You can use the CreateSessionInterceptor or create the HttpSession from your action before the result is rendered to the client: " + e.getMessage();
             log.error(msg, e);
             throw new IllegalArgumentException(msg);
         }
-        return token;
+    }
+
+    /**
+     * 构建一个基于token名字的带有命名空间为前缀的token名字
+     *
+     * @param tokenName
+     * @return the name space prefixed session token name
+     */
+    public static String buildTokenCacheAttributeName(String tokenName) {
+        return TOKEN_NAMESPACE + "." + tokenName;
     }
 
     /**
@@ -116,32 +145,28 @@ public class TokenHelper {
      * @return 验证结果
      */
     public static boolean validToken(HttpServletRequest request) {
-//        String tokenName = getTokenName(request);
-//        if (tokenName == null) {
-//            log.debug("no token name found -> Invalid token ");
-//            return false;
-//        }
-//
-//        String token = getToken(request, tokenName);
-//        if (token == null) {
-//            if (log.isDebugEnabled()) {
-//                log.debug("no token found for token name " + tokenName + " -> Invalid token ");
-//            }
-//            return false;
-//        }
-        String token = request.getParameter(TOKEN_NAME_FIELD);
+        String tokenName = getTokenName(request);
+        if (tokenName == null) {
+            log.debug("no token name found -> Invalid token ");
+            return false;
+        }
 
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-//        HttpSession session = request.getSession(false);
-        String cacheToken = (String) session.getAttribute(TOKEN_NAME_FIELD);
+        String token = getToken(request, tokenName);
+        if (token == null) {
+            if (log.isDebugEnabled()) {
+                log.debug("no token found for token name " + tokenName + " -> Invalid token ");
+            }
+            return false;
+        }
+
+        String tokenCacheName = buildTokenCacheAttributeName(tokenName);
+        String cacheToken = (String) redisCacheClient.get(tokenCacheName);
+
         if (!token.equals(cacheToken)) {
             log.warn("zhb.token Form token " + token + " does not match the session token " + cacheToken + ".");
             return false;
         }
         // remove the token so it won't be used again
-//        session.removeAttribute(cacheToken);
-        session.removeAttribute(TOKEN_NAME_FIELD);
 
         return true;
     }
@@ -149,4 +174,6 @@ public class TokenHelper {
     public static String generateGUID() {
         return new BigInteger(165, RANDOM).toString(36).toUpperCase();
     }
+
+
 }

@@ -21,7 +21,8 @@ public class LocalTest extends BaseSpringContext {
 
     @Test
     public void test(){
-        boolean bool = fileUtil.isExistFile("11466507049775.txt","doc","job");
+        boolean bool = FileUtil.isAllowed("/Users/jianglz/Downloads/aaa.ppt", "doc");
+                //fileUtil.isExistFile("11466507049775.txt","doc","job");
         System.out.println(bool);
     }
 

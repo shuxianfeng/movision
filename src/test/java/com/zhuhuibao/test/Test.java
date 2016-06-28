@@ -183,6 +183,7 @@ public class Test extends BaseSpringContext {
 
         String status = ImageUtil.syncImageDetection("http://sandbox.zhuhui8.com/upload/img/1926145411463400712827.jpg");
         System.out.println(status);
+
     }
 
 
