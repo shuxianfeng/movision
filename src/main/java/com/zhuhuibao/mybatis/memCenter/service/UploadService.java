@@ -104,7 +104,7 @@ public class UploadService {
 
 
             result.put("status", "success");
-            result.put("data", data);
+            result.put("data", "//"+data);
 
         } catch (Exception e) {
             log.error("upload error!", e);
