@@ -33,7 +33,7 @@ public class UploadService {
     private static final Logger log = LoggerFactory.getLogger(UploadService.class);
 
     @Autowired
-    ApiConstants ApiConstants;
+    ApiConstants apiConstants;
 
 
     /**
@@ -49,7 +49,7 @@ public class UploadService {
         try {
             String saveDirectory;
             int maxPostSize;
-            String imgDomain = PropertiesUtils.getValue("img.domain ");
+            String imgDomain = PropertiesUtils.getValue("img.domain");
 //            String docDomain = PropertiesUtils.getValue("doc.domain");
 
             String fileName = FileUtil.renameFile(file.getOriginalFilename());
@@ -57,26 +57,26 @@ public class UploadService {
             switch (type) {
                 case "img":
                     if (chann != null) {
-                        saveDirectory = ApiConstants.getUploadDir() + "/" + chann + "/img";
-                        maxPostSize = ApiConstants.getUploadPicMaxPostSize();
+                        saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/img";
+                        maxPostSize = apiConstants.getUploadPicMaxPostSize();
                         data = imgDomain + "/upload/" + chann + "/img/" + fileName;
                     } else {
-                        saveDirectory = ApiConstants.getUploadDir();
-                        maxPostSize = ApiConstants.getUploadPicMaxPostSize();
+                        saveDirectory = apiConstants.getUploadDir();
+                        maxPostSize = apiConstants.getUploadPicMaxPostSize();
                         data = imgDomain + "/upload/" + fileName;
                     }
 
                     break;
                 case "doc":
                     if (chann != null) {
-                        saveDirectory = ApiConstants.getUploadDir() + "/" + chann + "/doc";
-                        maxPostSize = ApiConstants.getUploadDocMaxPostSize();
+                        saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/doc";
+                        maxPostSize = apiConstants.getUploadDocMaxPostSize();
                         if (chann.equals("tech")) {
-                            maxPostSize = ApiConstants.getUploadTechMaxPostSize();
+                            maxPostSize = apiConstants.getUploadTechMaxPostSize();
                         }
                     } else {
-                        saveDirectory = ApiConstants.getUploadDir();
-                        maxPostSize = ApiConstants.getUploadDocMaxPostSize();
+                        saveDirectory = apiConstants.getUploadDir();
+                        maxPostSize = apiConstants.getUploadDocMaxPostSize();
                     }
                     data = fileName;
                     break;
@@ -104,7 +104,7 @@ public class UploadService {
 
 
             result.put("status", "success");
-            result.put("data", data);
+            result.put("data", "//"+data);
 
         } catch (Exception e) {
             log.error("upload error!", e);
@@ -128,34 +128,34 @@ public class UploadService {
             String saveDirectory;
             int maxPostSize;
             if ("img".equals(type)) {
-                saveDirectory = ApiConstants.getUploadDir() + "/img";
+                saveDirectory = apiConstants.getUploadDir() + "/img";
                 //指定所上传的文件最大上传文件大小
-                maxPostSize = ApiConstants.getUploadPicMaxPostSize();
+                maxPostSize = apiConstants.getUploadPicMaxPostSize();
             } else if ("doc".equals(type)) {
-                saveDirectory = ApiConstants.getUploadDoc() + "/price";
+                saveDirectory = apiConstants.getUploadDoc() + "/price";
                 //指定所上传的文件最大上传文件大小
-                maxPostSize = ApiConstants.getUploadDocMaxPostSize();
+                maxPostSize = apiConstants.getUploadDocMaxPostSize();
             } else if ("project".equals(type)) {
-                saveDirectory = ApiConstants.getUploadDoc() + "/project";
+                saveDirectory = apiConstants.getUploadDoc() + "/project";
                 //指定所上传的文件最大上传文件大小
-                maxPostSize = ApiConstants.getUploadDocMaxPostSize();
+                maxPostSize = apiConstants.getUploadDocMaxPostSize();
             } else if ("techdoc".equals(type)) {
                 //技术资料
-                saveDirectory = ApiConstants.getUploadDoc() + "/tech/doc";
+                saveDirectory = apiConstants.getUploadDoc() + "/tech/doc";
                 //技术资料最大1G
-                maxPostSize = ApiConstants.getUploadTechMaxPostSize();
+                maxPostSize = apiConstants.getUploadTechMaxPostSize();
             } else if ("techimg".equals(type)) {
-                saveDirectory = ApiConstants.getUploadDir() + "/tech/img";
+                saveDirectory = apiConstants.getUploadDir() + "/tech/img";
                 //指定所上传的文件最大上传文件大小
-                maxPostSize = ApiConstants.getUploadPicMaxPostSize();
+                maxPostSize = apiConstants.getUploadPicMaxPostSize();
             } else if ("expert".equals(type)) {
                 //技术资料
-                saveDirectory = ApiConstants.getUploadDir() + "/expert";
+                saveDirectory = apiConstants.getUploadDir() + "/expert";
                 //技术资料最大1G
-                maxPostSize = ApiConstants.getUploadPicMaxPostSize();
+                maxPostSize = apiConstants.getUploadPicMaxPostSize();
             } else {
-                saveDirectory = ApiConstants.getUploadDoc() + "/job";
-                maxPostSize = ApiConstants.getUploadDocMaxPostSize();
+                saveDirectory = apiConstants.getUploadDoc() + "/job";
+                maxPostSize = apiConstants.getUploadDocMaxPostSize();
             }
             //目录不存在则创建
             File dir = new File(saveDirectory);

@@ -8,9 +8,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.pojo.OmsMemBean;
-import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
-import com.zhuhuibao.mybatis.memCenter.entity.Identity;
-import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -112,6 +110,24 @@ public class MemberOmsController {
 		Response result = new Response();
 		Member member = memberService.findMemById(mem_id);
 		result.setData(member);
+		return result;
+	}
+
+	@ApiOperation(value = "企业性质", notes = "企业性质", response = Response.class)
+	@RequestMapping(value = "sel_enterpriseTypeList", method = RequestMethod.GET)
+	public Response enterpriseTypeList()  {
+		Response result = new Response();
+		List<EnterpriseType> enterpriseType = memberService.findEnterpriseTypeList();
+		result.setData(enterpriseType);
+		return result;
+	}
+
+	@ApiOperation(value = "工作类别", notes = "工作类别", response = Response.class)
+	@RequestMapping(value = "sel_workTypeList", method = RequestMethod.GET)
+	public Response workTypeList()  {
+		Response result = new Response();
+		List<WorkType> workType = memberService.findIndividualWorkTypeList();
+		result.setData(workType);
 		return result;
 	}
 }

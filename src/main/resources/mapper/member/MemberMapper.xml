@@ -508,7 +508,7 @@
     </if>
   </select>
   <select id="findAllMemberByPager" resultMap="ResultMap2" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
-    select m.id,m.registerTime,m.isrecommend,
+    select m.id,date_format(m.registerTime,'%Y-%m-%d %H:%i:%s') registerTime,m.isrecommend,
     CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile WHEN m.email IS NOT NULL and m.email != '' THEN m.email END AS account,
     m.enterpriseLinkman,
     CASE WHEN m.enterpriseName IS NOT NULL and m.enterpriseName != '' THEN m.enterpriseName
