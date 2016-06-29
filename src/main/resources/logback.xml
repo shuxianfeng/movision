@@ -2,7 +2,7 @@
 <configuration debug="false">
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径 /home/app/log/zhuhuibao/logs -->
     <property name="LOG_HOME" value=" /home/app/log/zhuhuibao/logs"/>
-    <property name="BUSI_LOG_HOME" value=" /home/app/log/zhuhuibao/busi/logs "/>
+    <property name="BUSI_LOG_HOME" value=" /home/app/log/zhuhuibao/logs/busi "/>
     <!-- 控制台输出 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
