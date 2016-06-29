@@ -234,9 +234,9 @@ public class MemberRegService {
     	try
     	{
 			Validateinfo vInfo = new Validateinfo();
-			vInfo.setAccount(member.getEmail());
+			vInfo.setAccount(member.getAccount());
 			vInfo = this.findMemberValidateInfo(vInfo);
-			if(vInfo != null && vInfo.getId() != null && vInfo.getValid() == 0) {
+			if(vInfo != null && vInfo.getId() != null && vInfo.getValid() == 1) {
 				String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
 				String md5Pwd = new Md5Hash(pwd, null, 2).toString();
 				member.setPassword(md5Pwd);
