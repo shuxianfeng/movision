@@ -37,7 +37,7 @@
       )
   </insert>
   <select id="findAllByPager" resultMap="BaseResultMap" parameterType="java.lang.String">
-    SELECT j.id,j.name,co.name as salaryName,concat(p.name,c.name,a.name)as workArea,j.publishTime FROM t_i_job j
+    SELECT j.id,j.name,co.name as salaryName,concat(p.name,c.name,a.name)as workArea,j.updateTime,j.publishTime FROM t_i_job j
     LEFT JOIN t_dictionary_constant co on j.salary = co.code
     LEFT JOIN t_dictionary_province p on j.province = p.code
     LEFT JOIN t_dictionary_city c on j.city = c.code
