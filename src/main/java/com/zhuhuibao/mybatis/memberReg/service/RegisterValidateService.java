@@ -176,15 +176,16 @@ public class RegisterValidateService {
 	
 	/**
 	 * 发送邮件重置密码
-	 * @param member 会员信息
+	 * @param mail 邮箱地址
 	 */
-	public void sendValidateMail(Member member,String serverIp){
+	public void sendValidateMail(String mail,String serverIp){
+		log.info("send validate mail = "+mail);
 		Validateinfo vInfo = new Validateinfo();
-		vInfo.setAccount(member.getEmail());
+		vInfo.setAccount(mail);
 		vInfo = memberService.findMemberValidateInfo(vInfo);
 		if(vInfo != null && vInfo.getId() != null && vInfo.getValid() == 0) {
 			String currentTime = DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss");
-			String url = serverIp + "/rest/validateMail?vm=" + new String(EncodeUtil.encodeBase64("validate," + member.getEmail() + "," + currentTime));
+			String url = serverIp + "/rest/validateMail?vm=" + new String(EncodeUtil.encodeBase64("validate," + mail + "," + currentTime));
 			StringBuffer sb = new StringBuffer("");
 			sb.append("<div style=\"line-height:40px;height:40px\">");
 			sb.append("</div>");
@@ -214,7 +215,7 @@ public class RegisterValidateService {
 			sb.append("</p>");
 			log.info("send email link == " + sb.toString());
 			//发送邮件
-			SendEmail.send(member.getEmail(), sb.toString(), "筑慧宝-找回账户密码");
+			SendEmail.send(mail, sb.toString(), "筑慧宝-找回账户密码");
 			vInfo.setCheckCode(url);
 			memberService.updateValidateInfo(vInfo);
 		}else {

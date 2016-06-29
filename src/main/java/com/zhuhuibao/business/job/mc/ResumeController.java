@@ -261,7 +261,7 @@ public class ResumeController {
                 for(int i=0;i<list.size();i++){
                     Map map1 = (Map)list.get(i);
                     String id = map1.get("company_id").toString();
-                    if(id.contains(company_id)){
+                    if(id.equals(company_id)){
                         throw new BusinessException(MsgCodeConstant.FORBID_KEYWORDS_REPEAT, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.FORBID_KEYWORDS_REPEAT)));
                     }
                 }

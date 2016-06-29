@@ -273,7 +273,9 @@ public class MemberRegService {
     public Response writeAccount(Member member, String seekPwdCode)
     {
     	Response result = new Response();
-
+		Validateinfo vinfo = new Validateinfo();
+		vinfo.setAccount(member.getAccount());
+		this.deleteValidateInfo(vinfo);
 		String data = "";
 		//手机
 		if(member.getAccount() != null && member.getCheckCode() != null)
@@ -308,7 +310,7 @@ public class MemberRegService {
 					{
 						member.setEmailCheckCode(member.getCheckCode());
 						memberRegMapper.updateEmailCode(member);
-						Validateinfo vinfo = new Validateinfo();
+						vinfo = new Validateinfo();
 						vinfo.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
 						vinfo.setValid(0);
 						vinfo.setAccount(member.getAccount());
@@ -602,4 +604,29 @@ public class MemberRegService {
     	return loginMember;
     }
 
+	/**
+	 *  发送验证邮件密码重置
+	 * @param member
+	 * @return
+     */
+	public Response sendValidateMail(Member member) {
+		Response result = new Response();
+		Subject currentUser = SecurityUtils.getSubject();
+		Session sess = currentUser.getSession(false);
+		if(sess != null) {
+			String seekMail = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_SEEKPWD_USERNAME);
+			rvService.sendValidateMail(seekMail, PropertiesUtils.getValue("host.ip"));
+			String mail = ds.findMailAddress(member.getEmail());
+			Map<String, String> map = new HashMap<String, String>();
+			if (mail != null && !mail.equals("")) {
+				map.put("button", "true");
+			} else {
+				map.put("button", "false");
+			}
+			result.setData(map);
+		}else{
+			throw new BusinessException(MsgCodeConstant.mcode_common_failure,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
+		}
+		return result;
+	}
 }
