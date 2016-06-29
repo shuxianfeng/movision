@@ -6,6 +6,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.exception.BusinessException;
 
+import com.zhuhuibao.utils.SendEmail;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.session.Session;
@@ -232,29 +233,33 @@ public class MemberRegService {
     	int result = 0;
     	try
     	{
-	    	String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
-			String md5Pwd = new Md5Hash(pwd,null,2).toString();
-			member.setPassword(md5Pwd);
-			if(member.getAccount() != null)
-			{
-				if(member.getAccount().indexOf("@") >= 0)
-				{
-					member.setEmail(member.getAccount());
-					result = memberRegMapper.updateMemberPwd(member);
+			Validateinfo vInfo = new Validateinfo();
+			vInfo.setAccount(member.getEmail());
+			vInfo = this.findMemberValidateInfo(vInfo);
+			if(vInfo != null && vInfo.getId() != null && vInfo.getValid() == 0) {
+				String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
+				String md5Pwd = new Md5Hash(pwd, null, 2).toString();
+				member.setPassword(md5Pwd);
+				if (member.getAccount() != null) {
+					if (member.getAccount().indexOf("@") >= 0) {
+						member.setEmail(member.getAccount());
+						result = memberRegMapper.updateMemberPwd(member);
+					} else {
+						member.setMobile(member.getAccount());
+						result = memberRegMapper.updateMemberPwd(member);
+					}
+					Validateinfo info = new Validateinfo();
+					info.setAccount(member.getAccount());
+					this.deleteValidateInfo(info);
 				}
-				else
-				{
-					member.setMobile(member.getAccount());
-					result = memberRegMapper.updateMemberPwd(member);
-				}
-				Validateinfo info = new Validateinfo();
-				info.setAccount(member.getAccount());
-				this.deleteValidateInfo(info);
+			}else {
+				throw new BusinessException(MsgCodeConstant.MEMBER_SEED_PWD_ERROR,"找回密码错误");
 			}
     	}
     	catch(Exception e)
     	{
     		log.error("modify password error!",e);
+			throw e;
     	}
     	return result;
     }
@@ -303,6 +308,11 @@ public class MemberRegService {
 					{
 						member.setEmailCheckCode(member.getCheckCode());
 						memberRegMapper.updateEmailCode(member);
+						Validateinfo vinfo = new Validateinfo();
+						vinfo.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+						vinfo.setValid(0);
+						vinfo.setAccount(member.getAccount());
+						this.inserValidateInfo(vinfo);
 					}
 				}
 				else

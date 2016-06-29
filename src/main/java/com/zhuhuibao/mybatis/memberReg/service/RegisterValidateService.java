@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.memberReg.service;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.security.EncodeUtil;
@@ -28,7 +29,7 @@ public class RegisterValidateService {
 	private static final Logger log = LoggerFactory.getLogger(RegisterValidateService.class);
 	
 	@Autowired
-	private MemberRegService memberService;
+	MemberRegService memberService;
 	
 	/**
 	 * 发送邮件激活验证码
@@ -178,44 +179,47 @@ public class RegisterValidateService {
 	 * @param member 会员信息
 	 */
 	public void sendValidateMail(Member member,String serverIp){
-		String currentTime = DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss");
-		String url = serverIp+"/rest/validateMail?vm="+new String(EncodeUtil.encodeBase64("validate,"+member.getEmail()+","+currentTime));
-		StringBuffer sb=new StringBuffer("");
-        sb.append("<div style=\"line-height:40px;height:40px\">");
-        sb.append("</div>");
-        sb.append("<p style=\"padding:0px\"");
-        sb.append("<strong style=\"font-size:14px;line-height:24px;color:#333333;font-family:arial,sans-serif\"");
-        sb.append("亲爱的用户：");
-        sb.append("</strong>");
-        sb.append("<p>您好！");
-        sb.append("</p>");
-        sb.append("<p>您收到这封电子邮件是因为您 (也可能是某人冒充您的名义) 申请了一个新的密码。假如这不是您本人所申请, 请不用理会这封电子邮件, 但是如果您持续收到这类的信件骚扰, 请您尽快联络管理员。</p>");
-        sb.append("<p>请使用以下链接修改密码：</p>");
-        sb.append("<p style=\"padding:0px\">");
-        sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"");
-        sb.append(url);
-        sb.append("\">");
-        sb.append(url);
-        sb.append("</a>"); 
-        sb.append("</p>");
-        sb.append("<p style=\"padding:0px;line-height:24px;font-size:12px;color:#979797;font-family:arial,sans-serif\">");
-        sb.append("(如果您无法点击此链接，请将它复制到浏览器地址栏后访问)");
-        sb.append("</p>");
-        sb.append("</p>为了保障您帐号的安全性，请在24小时内完成密码重置！</p>");
-        sb.append("<div style=\"line-height:80px;height:80px\" </div>");
-        sb.append("<p>筑慧宝团队</p>");
-        sb.append("<p>");
-        sb.append(DateUtils.date2Str(new Date(), "yyyy-MM-dd"));
-        sb.append("</p>");
-        log.info("send email link == "+sb.toString());
-        //发送邮件
-        SendEmail.send(member.getEmail(), sb.toString(),"筑慧宝-找回账户密码");
-        Validateinfo vinfo = new Validateinfo();
-        vinfo.setCreateTime(currentTime);
-        vinfo.setCheckCode(url);
-        vinfo.setValid(0);
-        vinfo.setAccount(member.getEmail());
-        memberService.inserValidateInfo(vinfo);
+		Validateinfo vInfo = new Validateinfo();
+		vInfo.setAccount(member.getEmail());
+		vInfo = memberService.findMemberValidateInfo(vInfo);
+		if(vInfo != null && vInfo.getId() != null && vInfo.getValid() == 0) {
+			String currentTime = DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss");
+			String url = serverIp + "/rest/validateMail?vm=" + new String(EncodeUtil.encodeBase64("validate," + member.getEmail() + "," + currentTime));
+			StringBuffer sb = new StringBuffer("");
+			sb.append("<div style=\"line-height:40px;height:40px\">");
+			sb.append("</div>");
+			sb.append("<p style=\"padding:0px\"");
+			sb.append("<strong style=\"font-size:14px;line-height:24px;color:#333333;font-family:arial,sans-serif\"");
+			sb.append("亲爱的用户：");
+			sb.append("</strong>");
+			sb.append("<p>您好！");
+			sb.append("</p>");
+			sb.append("<p>您收到这封电子邮件是因为您 (也可能是某人冒充您的名义) 申请了一个新的密码。假如这不是您本人所申请, 请不用理会这封电子邮件, 但是如果您持续收到这类的信件骚扰, 请您尽快联络管理员。</p>");
+			sb.append("<p>请使用以下链接修改密码：</p>");
+			sb.append("<p style=\"padding:0px\">");
+			sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"");
+			sb.append(url);
+			sb.append("\">");
+			sb.append(url);
+			sb.append("</a>");
+			sb.append("</p>");
+			sb.append("<p style=\"padding:0px;line-height:24px;font-size:12px;color:#979797;font-family:arial,sans-serif\">");
+			sb.append("(如果您无法点击此链接，请将它复制到浏览器地址栏后访问)");
+			sb.append("</p>");
+			sb.append("</p>为了保障您帐号的安全性，请在24小时内完成密码重置！</p>");
+			sb.append("<div style=\"line-height:80px;height:80px\" </div>");
+			sb.append("<p>筑慧宝团队</p>");
+			sb.append("<p>");
+			sb.append(DateUtils.date2Str(new Date(), "yyyy-MM-dd"));
+			sb.append("</p>");
+			log.info("send email link == " + sb.toString());
+			//发送邮件
+			SendEmail.send(member.getEmail(), sb.toString(), "筑慧宝-找回账户密码");
+			vInfo.setCheckCode(url);
+			memberService.updateValidateInfo(vInfo);
+		}else {
+			throw new BusinessException(MsgCodeConstant.MEMBER_SEED_PWD_ERROR,"找回密码错误");
+		}
     }
 	
 	/**
@@ -224,56 +228,54 @@ public class RegisterValidateService {
 	 * @return
 	 */
 	public Response processValidate(String validateInfo){
-        //数据访问层，通过email获取用户信息
-		String decodeInfo = new String (EncodeUtil.decodeBase64(validateInfo));
-		String[] arr = decodeInfo.split(",");
-		String email = arr[1];
-		String url = PropertiesUtils.getValue("host.ip")+"/rest/validateMail?vm="+validateInfo;
-        Member user = memberService.findMemberByAccount(email);
-        Response result = new Response();
-        int code = 200;
-        int msgCode = MsgCodeConstant.mcode_common_success;
-        String id = "0";
-        String message = "";
-        //验证用户是否存在 
-        if(user!=null && (user.getStatus() != 0 || user.getStatus() != 2 )) {
-        	Validateinfo vinfo = new Validateinfo();
-        	vinfo.setCheckCode(url);
-        	vinfo = memberService.findMemberValidateInfo(vinfo);
-        	if(vinfo != null && vinfo.getValid() == 0 && vinfo.getCreateTime() != null)
-        	{
-	            Date currentTime = new Date();//获取当前时间  
-	            //验证链接是否过期 24小时
-	            Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(vinfo.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
-	            if(currentTime.before(registerDate)) {
-	        	    message = "通过身份验证";
-	        	    id=String.valueOf(vinfo.getId());
-	            } else { 
-	        	    //验证已过期
-	        	    message = MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_expire));
-	        	    code = 400;
-	        	    msgCode = MsgCodeConstant.member_mcode_mail_validate_expire;
-	            }  
-        	}
-        	else
-        	{
-        		memberService.deleteValidateInfo(vinfo);
-        		message= MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_url_invalid));
-        		code = 400;
-        		msgCode = MsgCodeConstant.member_mcode_mail_url_invalid;
-        	}
-       } else {
-    	   //该邮箱未注册（邮箱地址不存在）！
-    	   code = 400;
-    	   message = MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_unregister));
-    	   msgCode = MsgCodeConstant.member_mcode_mail_unregister;
-       }  
-        result.setCode(code);
-        result.setMessage(message);
-        String[] str = {email,id};
-        result.setData(str);
-        result.setMsgCode(msgCode);
-        return result;
+		Validateinfo vinfo = new Validateinfo();
+		String url = PropertiesUtils.getValue("host.ip") + "/rest/validateMail?vm=" + validateInfo;
+		vinfo.setCheckCode(url);
+		vinfo = memberService.findMemberValidateInfo(vinfo);
+		if(vinfo.getId() != null && vinfo.getValid() == 0) {
+			//数据访问层，通过email获取用户信息
+			String decodeInfo = new String(EncodeUtil.decodeBase64(validateInfo));
+			String[] arr = decodeInfo.split(",");
+			String email = arr[1];
+			Member user = memberService.findMemberByAccount(email);
+			Response result = new Response();
+			int code = 200;
+			int msgCode = MsgCodeConstant.mcode_common_success;
+			String id = "0";
+			String message = "";
+			//验证用户是否存在
+			if (user != null && (user.getStatus() != 0 || user.getStatus() != 2)) {
+				/*Validateinfo vinfo = new Validateinfo();
+				vinfo.setCheckCode(url);
+				vinfo = memberService.findMemberValidateInfo(vinfo);*/
+				if (vinfo != null && vinfo.getValid() == 0 && vinfo.getCreateTime() != null) {
+					Date currentTime = new Date();//获取当前时间
+					//验证链接是否过期 24小时
+					Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(vinfo.getCreateTime(), "yyyy-MM-dd HH:mm:ss"), 5, 1);
+					if (currentTime.before(registerDate)) {
+						message = "通过身份验证";
+						id = String.valueOf(vinfo.getId());
+					} else {
+						//验证已过期
+						throw new BusinessException(MsgCodeConstant.member_mcode_mail_validate_expire,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_expire)));
+					}
+				} else {
+					memberService.deleteValidateInfo(vinfo);
+					throw new BusinessException(MsgCodeConstant.member_mcode_mail_url_invalid,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_url_invalid)));
+				}
+			} else {
+				//该邮箱未注册（邮箱地址不存在）！
+				throw new BusinessException(MsgCodeConstant.member_mcode_mail_unregister,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_unregister)));
+			}
+			result.setCode(code);
+			result.setMessage(message);
+			String[] str = {email, id};
+			result.setData(str);
+			result.setMsgCode(msgCode);
+			return result;
+		}else{
+			throw new BusinessException(MsgCodeConstant.MEMBER_SEED_PWD_ERROR,"找回密码错误");
+		}
    }
 		
 	/**

@@ -239,7 +239,6 @@ public class RegisterController {
 		String seekCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_SEEKPWD);
 		log.info("writeAccount seekCode === "+seekCode);
 		result = memberService.writeAccount(member, seekCode);
-
 		return result;
 	}
 	
@@ -251,7 +250,7 @@ public class RegisterController {
 	 */
 	@ApiOperation(value="找回密码手机验证身份",notes="找回密码手机验证身份",response = Response.class)
 	@RequestMapping(value = {"/rest/mobileValidate","rest/member/site/base/sel_mobileValidate"}, method = RequestMethod.POST)
-	public Response mobileValidate(Member member) throws IOException {
+	public Response mobileValidate(@ApiParam(value = "会员信息") @ModelAttribute Member member) throws IOException {
 		log.debug("找回密码  mobile =="+member.getMobile());
 		Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(false);
@@ -268,7 +267,7 @@ public class RegisterController {
 	 */
 	@ApiOperation(value="发送验证邮件密码重置",notes="发送验证邮件密码重置",response = Response.class)
 	@RequestMapping(value = {"/rest/sendValidateMail","rest/member/site/base/sel_sendValidateMail"}, method = RequestMethod.POST)
-	public Response sendValidateMail(Member member) throws IOException {
+	public Response sendValidateMail(@ApiParam(value = "会员信息") @ModelAttribute Member member) throws IOException {
 		log.debug("找回密码  email =="+member.getEmail());
 		Response result = new Response();
 		rvService.sendValidateMail(member, PropertiesUtils.getValue("host.ip"));

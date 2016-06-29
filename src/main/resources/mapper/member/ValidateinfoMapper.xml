@@ -10,7 +10,7 @@
   <select id="findMemberValidateInfo" parameterType="validateInfo" resultType="validateInfo">
 	  select id,account,valid,date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,checkCode from t_m_validateinfo  
 	  <where>
-	  	<if test="id != 0"> 
+	  	<if test="id != null">
 	  		AND id = #{id}
 	  	</if>
 	  	<if test="account != null"> 
@@ -26,8 +26,14 @@
   update t_m_validateinfo 
   	<set>
 	    <if test="valid!= null" >
-	    	valid = #{valid}
+	    	valid = #{valid},
 	    </if>
+		<if test="account != null">
+			account = #{account},
+		</if>
+		<if test="checkCode != null">
+			checkCode = #{checkCode},
+		</if>
     </set>
     where id = #{id}
   </update>
