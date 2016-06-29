@@ -64,10 +64,10 @@ public class FileUtil {
                     break;
                 case "doc":
                     if (chann != null) {
-                        downloadDir = PropertiesUtils.getValue("uploadDoc") + "/" + chann + "/doc";
+                        downloadDir = PropertiesUtils.getValue("uploadDir") + "/" + chann + "/doc";
 
                     } else {
-                        downloadDir = PropertiesUtils.getValue("uploadDoc");
+                        downloadDir = PropertiesUtils.getValue("uploadDir");
                     }
                     break;
                 default:
@@ -86,9 +86,7 @@ public class FileUtil {
                 bytes = (byte[]) map.get("data");
                 result = downloadFile(response, bytes);
             } else {
-                result.setCode(MsgCodeConstant.response_status_400);
-                result.setMsgCode(MsgCodeConstant.file_download_error);
-                result.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.file_download_error))));
+                genErrorMessage(result);
                 return result;
             }
 
@@ -115,12 +113,16 @@ public class FileUtil {
             stream.close();
         } catch (Exception e) {
             log.error("download file error!");
-            result.setCode(MsgCodeConstant.response_status_400);
-            result.setMsgCode(MsgCodeConstant.file_download_error);
-            result.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.file_download_error))));
+            genErrorMessage(result);
             return result;
         }
         return result;
+    }
+
+    private static void genErrorMessage(Response result) {
+        result.setCode(MsgCodeConstant.response_status_400);
+        result.setMsgCode(MsgCodeConstant.file_download_error);
+        result.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.file_download_error))));
     }
 
 
@@ -151,9 +153,7 @@ public class FileUtil {
             }
         } catch (Exception e) {
             log.error("download file error!");
-            result.setCode(MsgCodeConstant.response_status_400);
-            result.setMsgCode(MsgCodeConstant.file_download_error);
-            result.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.file_download_error))));
+            genErrorMessage(result);
             return result;
         }
         return result;
@@ -218,7 +218,7 @@ public class FileUtil {
                 String status = (String) map.get("status");
                 return status.equals("success");
             case "zhb":
-                String fileUrl = apiConstants.getUploadDoc() + "/" + chann + "/" + type + "/" + fileName;
+                String fileUrl = apiConstants.getUploadDir() + "/" + chann + "/" + type + "/" + fileName;
                 File file = new File(fileUrl);
                 return file.exists();
             default:

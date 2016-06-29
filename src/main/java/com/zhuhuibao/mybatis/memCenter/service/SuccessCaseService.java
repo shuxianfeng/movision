@@ -73,4 +73,14 @@ public class SuccessCaseService {
             throw e;
         }
     }
+
+    public int queryMySuccessCaseListSize(Map<String,Object> map){
+        try {
+            return successCaseMapper.queryMySuccessCaseListSize(map);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

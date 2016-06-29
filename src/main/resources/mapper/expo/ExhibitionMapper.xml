@@ -287,4 +287,9 @@
     and e.is_deleted = #{is_deleted}
     and e.status = #{status}
   </select>
+
+  <select id="queryMyExhibitionListSize" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select count(*) FROM t_c_exhibition
+    where createid = #{createId} and type = #{type}
+  </select>
 </mapper>

@@ -20,4 +20,6 @@ public interface SuccessCaseMapper {
     int updateSuccessCase(SuccessCase successCase);
 
     List<Map<String,String>> queryGreatCaseListByCompanyId(Map<String, Object> map);
+
+    int queryMySuccessCaseListSize(Map<String,Object> map);
 }

@@ -4,10 +4,6 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.utils.JsonUtils;
 import com.zhuhuibao.utils.UUIDGenerator;
 import com.zhuhuibao.utils.redis.RedisClient;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -47,10 +43,7 @@ public class AvoidDuplicateSubmissionInterceptor extends HandlerInterceptorAdapt
                 boolean needRemoveSession = annotation.removeToken();
                 if (needRemoveSession) {
                     if (isRepeatSubmit(request)) {
-                        Response result = new Response();
-                        result.setCode(400);
-                        result.setMessage("请不要频繁操作");
-                        writeMessageUtf8(response, result);
+                        outErrorMessage(response);
                         return false;
                     }
 //                    Subject currentUser = SecurityUtils.getSubject();
@@ -61,6 +54,13 @@ public class AvoidDuplicateSubmissionInterceptor extends HandlerInterceptorAdapt
             }
         }
         return true;
+    }
+
+    private void outErrorMessage(HttpServletResponse response) throws IOException {
+        Response result = new Response();
+        result.setCode(400);
+        result.setMessage("请不要频繁操作");
+        writeMessageUtf8(response, result);
     }
 
     private boolean isRepeatSubmit(HttpServletRequest request) {

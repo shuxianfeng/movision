@@ -18,6 +18,11 @@ public class MemberConstant {
     public static final String SESSION_TYPE_SEEKPWD = "seekPwdCode";
 
     /**
+     * 找回密码时的用户名
+     */
+    public static final String SESSION_TYPE_SEEKPWD_USERNAME = "SEEKUSERNAME";
+
+    /**
      * 登陆
      */
     public static final String SESSION_TYPE_LOGIN = "memberLogin";

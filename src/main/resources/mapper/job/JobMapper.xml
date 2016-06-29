@@ -37,7 +37,7 @@
       )
   </insert>
   <select id="findAllByPager" resultMap="BaseResultMap" parameterType="java.lang.String">
-    SELECT j.id,j.name,co.name as salaryName,concat(p.name,c.name,a.name)as workArea,j.publishTime FROM t_i_job j
+    SELECT j.id,j.name,co.name as salaryName,concat(p.name,c.name,a.name)as workArea,j.updateTime,j.publishTime FROM t_i_job j
     LEFT JOIN t_dictionary_constant co on j.salary = co.code
     LEFT JOIN t_dictionary_province p on j.province = p.code
     LEFT JOIN t_dictionary_city c on j.city = c.code
@@ -165,7 +165,8 @@
   <select id="queryCompanyInfo" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.memCenter.entity.MemberDetails">
     select t.id,t.enterpriseName,t.enterpriseLogo,t.enterpriseDesc,
     (select group_concat(name) from t_dictionary_constant where type=5 ) as welfare,
-    concat(pv.name,ct.name,ar.name,t.address) address,ep.name enterpriseTypeName,es.name employeeNumber from t_m_member t
+    concat(ifnull(pv.name,''),ifnull(ct.name,''),ifnull(ar.name,''),ifnull(t.address,'')) address,
+    ep.name enterpriseTypeName,es.name employeeNumber from t_m_member t
     left join t_dictionary_province pv on pv.code = t.province
     left join t_dictionary_city ct on ct.code = t.city
     left join t_dictionary_area ar on ar.code = t.area

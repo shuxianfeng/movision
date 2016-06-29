@@ -191,7 +191,7 @@ public class ResumeService {
         Resume resume = resumeMapper.previewResume(id);
         if(resume != null && resume.getAttach() != null)
         {
-            String url = apiConstants.getUploadDoc()+"/job/"+resume.getAttach();
+            String url = apiConstants.getUploadDir()+"/job/"+resume.getAttach();
             resume.setAttach(url);
             resumeMap.put("title",resume.getTitle());
             resumeMap.put("name",resume.getRealName());

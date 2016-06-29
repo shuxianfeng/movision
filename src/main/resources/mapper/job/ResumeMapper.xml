@@ -265,7 +265,7 @@
     from t_i_resume r
     left join t_i_jobRelresume re on re.resumeID = r.id
     left join t_i_job j on j.id = re.jobID
-    where re.jobID in (select id from t_i_job where createid=#{id}) order by publishTime desc
+    where re.jobID in (select id from t_i_job where createid=#{id}) order by re.status asc,re.publishDate desc
   </select>
   <select id="searchResumeById" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT * from t_i_resume WHERE id = #{id}

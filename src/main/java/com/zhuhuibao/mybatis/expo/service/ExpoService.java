@@ -251,4 +251,14 @@ public class ExpoService {
             throw e;
         }
     }
+
+    public int queryMyExhibitionListSize(Map<String, Object> map){
+        try{
+            return exhibitionMapper.queryMyExhibitionListSize(map);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

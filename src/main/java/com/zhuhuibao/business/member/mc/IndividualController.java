@@ -10,6 +10,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
+import com.zhuhuibao.mybatis.memCenter.entity.Identity;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
@@ -47,6 +48,15 @@ public class IndividualController {
         return result;
     }
 
+    @ApiOperation(value = "工作单位类别", notes = "工作单位类别", response = Response.class)
+    @RequestMapping(value = "sel_identityList", method = RequestMethod.GET)
+    public Response identityList()  {
+        Response result = new Response();
+        List<Identity> identity = memberService.findIdentityList();
+        result.setData(identity);
+        return result;
+    }
+
     @ApiOperation(value = "查询个人基本信息", notes = "查询个人基本信息", response = Response.class)
     @RequestMapping(value = "sel_mem_basic_info", method = RequestMethod.GET)
     public Response basicInfo() {
@@ -58,6 +68,7 @@ public class IndividualController {
             map.put("nickname",member.getNickname());
             map.put("sex",member.getSex());
             map.put("personCompanyType",member.getPersonCompanyType());
+            map.put("personCompanyTypeName",member.getPersonCompanyTypeName());
             map.put("workType",member.getWorkType());
             map.put("workTypeName",member.getWorkTypeName());
             map.put("province",member.getProvince());
@@ -105,17 +116,20 @@ public class IndividualController {
     public Response upd_mem_basic_info(@ModelAttribute Member member)  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
+        ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
         if(memberId!=null){
             member.setId(String.valueOf(memberId));
             //基本资料待审核
-            member.setStatus(MemberConstant.MemberStatus.WSZLDSH.toString());
+            if(loginMember.getStatus()==1||loginMember.getStatus()==7){
+                member.setStatus(MemberConstant.MemberStatus.WSZLDSH.toString());
+            }
             memberService.updateMemInfo(member);
-            Member loginMember = memberService.findMemById(String.valueOf(memberId));
+            Member mem = memberService.findMemById(String.valueOf(memberId));
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             if (session != null) {
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-                principal.setStatus(Integer.parseInt(loginMember.getStatus()));
+                principal.setStatus(Integer.parseInt(mem.getStatus()));
                 session.setAttribute("member", principal);
             }
         }else {
@@ -132,22 +146,25 @@ public class IndividualController {
                                           @RequestParam String personIDBackImgUrl)  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
+        ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
         Member member = new Member();
         if(memberId!=null){
             member.setId(String.valueOf(memberId));
             //实名认证待审核
-            member.setStatus(MemberConstant.MemberStatus.SMRZDSH.toString());
+            if(loginMember.getStatus()==6||loginMember.getStatus()==11){
+                member.setStatus(MemberConstant.MemberStatus.SMRZDSH.toString());
+            }
             member.setPersonRealName(personRealName);
             member.setPersonIdentifyCard(personIdentifyCard);
             member.setPersonIDFrontImgUrl(personIDFrontImgUrl);
             member.setPersonIDBackImgUrl(personIDBackImgUrl);
             memberService.updateMemInfo(member);
-            Member loginMember = memberService.findMemById(String.valueOf(memberId));
+            Member mem = memberService.findMemById(String.valueOf(memberId));
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             if (session != null) {
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-                principal.setStatus(Integer.parseInt(loginMember.getStatus()));
+                principal.setStatus(Integer.parseInt(mem.getStatus()));
                 session.setAttribute("member", principal);
             }
         }else {
@@ -185,6 +202,7 @@ public class IndividualController {
                                        @RequestParam String certificate_number,
                                        @RequestParam String certificate_id,
                                        @RequestParam String certificate_name,
+                                       @RequestParam(required = false) String certificate_grade,
                                        @RequestParam String certificate_url)  {
         Response result = new Response();
         CertificateRecord record = new CertificateRecord();
@@ -195,6 +213,7 @@ public class IndividualController {
             record.setCertificate_name(certificate_name);
             record.setCertificate_number(certificate_number);
             record.setCertificate_url(certificate_url);
+            record.setCertificate_grade(certificate_grade);
             memberService.updateCertificate(record);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -218,5 +237,14 @@ public class IndividualController {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
+    }
+
+    @ApiOperation(value = "个人资质类型", notes = "个人资质类型", response = Response.class)
+    @RequestMapping(value = "sel_certificateList", method = RequestMethod.GET)
+    public Response certificateList(@ApiParam(value = "个人type:3")@RequestParam String type)  {
+        Response response = new Response();
+        List list = memberService.findCertificateList(type);
+        response.setData(list);
+        return response;
     }
 }

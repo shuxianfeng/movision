@@ -6,6 +6,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.exception.BusinessException;
 
+import com.zhuhuibao.utils.SendEmail;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.session.Session;
@@ -232,29 +233,33 @@ public class MemberRegService {
     	int result = 0;
     	try
     	{
-	    	String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
-			String md5Pwd = new Md5Hash(pwd,null,2).toString();
-			member.setPassword(md5Pwd);
-			if(member.getAccount() != null)
-			{
-				if(member.getAccount().indexOf("@") >= 0)
-				{
-					member.setEmail(member.getAccount());
-					result = memberRegMapper.updateMemberPwd(member);
+			Validateinfo vInfo = new Validateinfo();
+			vInfo.setAccount(member.getAccount());
+			vInfo = this.findMemberValidateInfo(vInfo);
+			if(vInfo != null && vInfo.getId() != null && vInfo.getValid() == 1) {
+				String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
+				String md5Pwd = new Md5Hash(pwd, null, 2).toString();
+				member.setPassword(md5Pwd);
+				if (member.getAccount() != null) {
+					if (member.getAccount().indexOf("@") >= 0) {
+						member.setEmail(member.getAccount());
+						result = memberRegMapper.updateMemberPwd(member);
+					} else {
+						member.setMobile(member.getAccount());
+						result = memberRegMapper.updateMemberPwd(member);
+					}
+					Validateinfo info = new Validateinfo();
+					info.setAccount(member.getAccount());
+					this.deleteValidateInfo(info);
 				}
-				else
-				{
-					member.setMobile(member.getAccount());
-					result = memberRegMapper.updateMemberPwd(member);
-				}
-				Validateinfo info = new Validateinfo();
-				info.setAccount(member.getAccount());
-				this.deleteValidateInfo(info);
+			}else {
+				throw new BusinessException(MsgCodeConstant.MEMBER_SEED_PWD_ERROR,"找回密码错误");
 			}
     	}
     	catch(Exception e)
     	{
     		log.error("modify password error!",e);
+			throw e;
     	}
     	return result;
     }
@@ -268,58 +273,57 @@ public class MemberRegService {
     public Response writeAccount(Member member, String seekPwdCode)
     {
     	Response result = new Response();
-    	try
-    	{
-	    	String data = "";
-	    	//手机
-	    	if(member.getAccount() != null && member.getCheckCode() != null)
+		Validateinfo vinfo = new Validateinfo();
+		vinfo.setAccount(member.getAccount());
+		this.deleteValidateInfo(vinfo);
+		String data = "";
+		//手机
+		if(member.getAccount() != null && member.getCheckCode() != null)
+		{
+			if(member.getAccount().indexOf("@") == -1)
 			{
-	    		if(member.getAccount().indexOf("@") == -1)
-	    		{
-		    		data = member.getMobile();
-					if(member.getCheckCode().equalsIgnoreCase(seekPwdCode))
+				if(member.getCheckCode().equalsIgnoreCase(seekPwdCode))
+				{
+					member.setMobile(member.getAccount());
+					Member dbmember = memberRegMapper.findMemberByAccount(member);
+					if(dbmember == null)
 					{
-						member.setMobile(member.getAccount());
-						Member dbmember = memberRegMapper.findMemberByAccount(member);
-				    	if(dbmember == null)
-				    	{
-							throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
-				    	}
+						throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
+					}
+				}
+				else
+				{
+					throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
+				}
+			}
+			else
+			{
+				if(member.getCheckCode().equalsIgnoreCase(seekPwdCode))
+				{
+					member.setEmail(member.getAccount());
+					Member dbmember = memberRegMapper.findMemberByAccount(member);
+					if(dbmember == null)
+					{
+						throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
 					}
 					else
 					{
-						throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
+						member.setEmailCheckCode(member.getCheckCode());
+						memberRegMapper.updateEmailCode(member);
+						vinfo = new Validateinfo();
+						vinfo.setCreateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+						vinfo.setValid(0);
+						vinfo.setAccount(member.getAccount());
+						this.inserValidateInfo(vinfo);
 					}
-	    		}
-	    		else
-	    		{
-	    			data = member.getEmail();
-	    			if(member.getCheckCode().equalsIgnoreCase(seekPwdCode))
-	    			{
-	    				member.setEmail(member.getAccount());
-	    				Member dbmember = memberRegMapper.findMemberByAccount(member);
-	    		    	if(dbmember == null)
-	    		    	{
-							throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
-	    		    	}
-	    		    	else
-	    		    	{
-	    		    		member.setEmailCheckCode(member.getCheckCode());
-	    		    		memberRegMapper.updateEmailCode(member);
-	    		    	}
-	    			}
-	    			else
-	    			{
-						throw new BusinessException(MsgCodeConstant.member_mcode_mail_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_error)));
-	    			}
-	    		}
+				}
+				else
+				{
+					throw new BusinessException(MsgCodeConstant.member_mcode_mail_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_error)));
+				}
 			}
-			result.setData(data);
-    	}
-    	catch(Exception e)
-    	{
-    		log.error("write account error!");
-    	}
+		}
+		result.setData(member.getAccount());
     	return result;
     }
     
@@ -475,7 +479,7 @@ public class MemberRegService {
 						this.deleteValidateInfo(info);
 						LoginMember loginMember = this.getLoginMemberByAccount(member.getMobile());
 						ShiroUser shrioUser = new ShiroUser(member.getId(), member.getMobile(), member.getStatus(),
-								member.getIdentify(),"100","0",loginMember.getCompanyId(),loginMember.getRegisterTime(),
+								member.getIdentify(),loginMember.getRole(),"0",loginMember.getCompanyId(),loginMember.getRegisterTime(),
 								loginMember.getWorkType(),loginMember.getHeadShot(),loginMember.getNickname(),
 								loginMember.getCompanyName(),loginMember.getVipLevel());
 						Subject currentUser = SecurityUtils.getSubject();
@@ -600,4 +604,29 @@ public class MemberRegService {
     	return loginMember;
     }
 
+	/**
+	 *  发送验证邮件密码重置
+	 * @param member
+	 * @return
+     */
+	public Response sendValidateMail(Member member) {
+		Response result = new Response();
+		Subject currentUser = SecurityUtils.getSubject();
+		Session sess = currentUser.getSession(false);
+		if(sess != null) {
+			String seekMail = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_SEEKPWD_USERNAME);
+			rvService.sendValidateMail(seekMail, PropertiesUtils.getValue("host.ip"));
+			String mail = ds.findMailAddress(member.getEmail());
+			Map<String, String> map = new HashMap<String, String>();
+			if (mail != null && !mail.equals("")) {
+				map.put("button", "true");
+			} else {
+				map.put("button", "false");
+			}
+			result.setData(map);
+		}else{
+			throw new BusinessException(MsgCodeConstant.mcode_common_failure,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
+		}
+		return result;
+	}
 }

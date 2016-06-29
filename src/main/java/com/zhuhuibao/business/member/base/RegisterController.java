@@ -237,9 +237,9 @@ public class RegisterController {
 		Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(false);
 		String seekCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_SEEKPWD);
-		log.info("writeAccount seekCode === "+seekCode);
+		 sess.setAttribute(MemberConstant.SESSION_TYPE_SEEKPWD_USERNAME,member.getAccount());
+		log.info("writeAccount seek username  === "+member.getAccount()+" session = "+sess.getAttribute(MemberConstant.SESSION_TYPE_SEEKPWD_USERNAME));
 		result = memberService.writeAccount(member, seekCode);
-
 		return result;
 	}
 	
@@ -270,23 +270,9 @@ public class RegisterController {
 	@RequestMapping(value = {"/rest/sendValidateMail","rest/member/site/base/sel_sendValidateMail"}, method = RequestMethod.POST)
 	public Response sendValidateMail(Member member) throws IOException {
 		log.debug("找回密码  email =="+member.getEmail());
-		Response result = new Response();
-		rvService.sendValidateMail(member, PropertiesUtils.getValue("host.ip"));
-		String mail = ds.findMailAddress(member.getEmail());
-		Map<String,String> map = new HashMap<String,String>();
-		if(mail != null && !mail.equals(""))
-		{
-			map.put("button", "true");
-		}
-		else
-		{
-			map.put("button", "false");
-		}
-		result.setData(map);
-
-		return result;
+		return memberService.sendValidateMail(member);
 	}
-	
+
 	/**
 	 * 修改密码
 	 * @param member
@@ -302,7 +288,6 @@ public class RegisterController {
 		Validateinfo info = new Validateinfo();
 		info.setAccount(member.getAccount());
 		memberService.deleteValidateInfo(info);
-
 		return response;
 	}
 	
@@ -318,24 +303,16 @@ public class RegisterController {
 		log.debug("email activate start.....");
 		Response response = new Response();
 		ModelAndView modelAndView = new ModelAndView(); 
-		try
-        {
-			String vm = req.getParameter("vm");//获取email
-			if(vm != null & !vm.equals(""))
-			{
-				String decodeVM = new String (EncodeUtil.decodeBase64(vm));
-	        	response = rvService.processActivate(decodeVM);
-	        	modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(response.getData()).getBytes()));
-	        	RedirectView rv = new RedirectView(rvService.getRedirectUrl(response, "active"));
-	        	modelAndView.setView(rv);
-			}
-        }
-        catch(Exception e)
-        {
-        	log.error("email activate member error!",e);
-        }
-       
-        return modelAndView; 
+		String vm = req.getParameter("vm");//获取email
+		if(vm != null & !vm.equals(""))
+		{
+			String decodeVM = new String (EncodeUtil.decodeBase64(vm));
+			response = rvService.processActivate(decodeVM);
+			modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(response.getData()).getBytes()));
+			RedirectView rv = new RedirectView(rvService.getRedirectUrl(response, "active"));
+			modelAndView.setView(rv);
+		}
+        return modelAndView;
 	}
 	
 	/**
@@ -353,19 +330,12 @@ public class RegisterController {
 		if(vm != null & !vm.equals(""))
 		{
 			Response response = new Response();
-	        try
-	        {
-	        	response = rvService.processValidate(vm);
-	        	String[] array = (String[]) response.getData();
-	        	modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(array[0].getBytes()));
-	        	modelAndView.addObject("id",EncodeUtil.encodeBase64ToString(array[1].getBytes()));
-	        	RedirectView rv = new RedirectView(rvService.getRedirectUrl(response,"validate"));
-	 	        modelAndView.setView(rv);
-	        }
-	        catch(Exception e)
-	        {
-	        	log.error("email activate member error!",e);
-	        }
+			response = rvService.processValidate(vm);
+			String[] array = (String[]) response.getData();
+			modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(array[0].getBytes()));
+			modelAndView.addObject("id",EncodeUtil.encodeBase64ToString(array[1].getBytes()));
+			RedirectView rv = new RedirectView(rvService.getRedirectUrl(response,"validate"));
+			modelAndView.setView(rv);
 		}
         return modelAndView;
 	}

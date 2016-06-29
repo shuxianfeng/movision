@@ -153,7 +153,6 @@ public class OfferPriceController {
 			response.addHeader("Cache-Control", "post-check=0, pre-check=0");
 			response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
 			response.setContentType("application/octet-stream");
-//			fileurl = ApiConstants.getUploadDoc() + Constants.upload_price_document_url + "/" + fileurl;
 			jsonResult = fileUtil.downloadObject(response, fileurl,"doc","price");
 		}
 		catch(Exception e)

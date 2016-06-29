@@ -29,4 +29,6 @@ public interface CooperationMapper {
 
     //最热合作信息
     List<Map<String,String>> queryHotCooperation(Map<String, Object> map);
+
+    int queryMyWitkeyListSize(Map<String,Object> map);
 }

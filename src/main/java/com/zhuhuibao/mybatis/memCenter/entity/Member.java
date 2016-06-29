@@ -144,7 +144,9 @@ public class Member implements Serializable{
     private String sex;
 
     @ApiModelProperty(value="个人工作单位类别")
-    private Integer personCompanyType;
+    private String personCompanyType;
+
+    private String personCompanyTypeName;
 
     @ApiModelProperty(value="个人身份证号码")
     private String personIdentifyCard;
@@ -426,11 +428,11 @@ public class Member implements Serializable{
         this.sex = sex;
     }
 
-    public Integer getPersonCompanyType() {
+    public String getPersonCompanyType() {
         return personCompanyType;
     }
 
-    public void setPersonCompanyType(Integer personCompanyType) {
+    public void setPersonCompanyType(String personCompanyType) {
         this.personCompanyType = personCompanyType;
     }
 
@@ -624,5 +626,13 @@ public class Member implements Serializable{
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String getPersonCompanyTypeName() {
+        return personCompanyTypeName;
+    }
+
+    public void setPersonCompanyTypeName(String personCompanyTypeName) {
+        this.personCompanyTypeName = personCompanyTypeName;
     }
 }
