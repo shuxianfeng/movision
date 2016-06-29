@@ -187,6 +187,16 @@ public class VipInfoService {
 	}
 
 	/**
+	 * 自定义特权列表
+	 * 
+	 * @param memberId
+	 * @return
+	 */
+	public List<VipMemberPrivilege> listVipMemberPrivilege(Long memberId) {
+		return vipInfoMapper.selectVipMemberPrivilegeList(memberId);
+	}
+
+	/**
 	 * 添加会员VIP信息
 	 * 
 	 * @param memberId

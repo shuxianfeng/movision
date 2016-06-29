@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.wordnik.swagger.annotations.ApiModelProperty;
-import com.zhuhuibao.common.constant.ZhbConstant.ZhbRecordType;
 
 /**
  * 筑慧币流水
