@@ -81,6 +81,11 @@ public interface MsgCodeConstant {
 	 * 用户名或密码错误
 	 */
 	int member_mcode_usernameorpwd_error = 10012;
+
+	/**
+	 * 找回密码错误
+	 */
+	int MEMBER_SEED_PWD_ERROR = 10214;
 	
 	/**
 	 * 短信验证码超时
@@ -106,7 +111,7 @@ public interface MsgCodeConstant {
 	 * 图形验证码不正确
 	 */
 	int validate_error = 10213;
-	
+
 	/**
 	 * 筑慧币余额不足
 	 */

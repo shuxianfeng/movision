@@ -235,7 +235,8 @@ public class ResumeController {
         if(memberId!=null){
             map.put("id",memberId);
             List<Map<String,String>> list = resumeService.findAllMyResumeLookRecord(pager,map);
-            response.setData(list);
+            pager.result(list);
+            response.setData(pager);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }

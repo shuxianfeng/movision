@@ -100,7 +100,7 @@
   <select id="selUnreadNewsCount" parameterType="java.util.Map" resultType="java.lang.Integer">
     select msgCount1+msgCount2 as count from
     (select count(mt.id)msgCount1 from t_sys_messageText mt where mt.id not in (select ml.messageID from
-    t_sys_messageLog ml where ml.recID = #{recID}))T1,
+    t_sys_messageLog ml))T1,
     (select count(mg.recID) msgCount2
     from t_sys_messageLog mg ,t_sys_messageText mt
     where mt.id = mg.messageID
