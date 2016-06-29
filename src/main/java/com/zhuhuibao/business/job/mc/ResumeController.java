@@ -259,7 +259,9 @@ public class ResumeController {
                 throw new BusinessException(MsgCodeConstant.FORBID_KEYWORDS_LIMIT, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.FORBID_KEYWORDS_LIMIT)));
             }else {
                 for(int i=0;i<list.size();i++){
-                    if(list.get(i).get("company_id").contains(company_id)){
+                    Map map1 = (Map)list.get(0);
+                    String id = map1.get("company_id").toString();
+                    if(id.contains(company_id)){
                         throw new BusinessException(MsgCodeConstant.FORBID_KEYWORDS_REPEAT, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.FORBID_KEYWORDS_REPEAT)));
                     }
                 }

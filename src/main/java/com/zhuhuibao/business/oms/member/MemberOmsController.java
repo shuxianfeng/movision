@@ -130,4 +130,13 @@ public class MemberOmsController {
 		result.setData(workType);
 		return result;
 	}
+
+	@ApiOperation(value = "人员规模", notes = "人员规模", response = Response.class)
+	@RequestMapping(value = "sel_employeeSizeList", method = RequestMethod.GET)
+	public Response employeeSizeList()  {
+		Response result = new Response();
+		List<EmployeeSize> employeeSizeList = memberService.findEmployeeSizeList();
+		result.setData(employeeSizeList);
+		return result;
+	}
 }
