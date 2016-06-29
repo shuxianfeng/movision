@@ -104,4 +104,9 @@
     order by c.updateTime desc
     limit 0,#{count}
   </select>
+
+  <select id="queryMySuccessCaseListSize" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    SELECT count(*) FROM t_m_success_case
+    WHERE createid = #{createid} and is_deleted = 0
+  </select>
 </mapper>

@@ -317,4 +317,10 @@
     and c.status = #{status}
     order by c.views desc limit 0,#{count}
   </select>
+
+  <select id="queryMyWitkeyListSize" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select count(*) FROM t_c_cooperation c
+    left join t_dictionary_cooperationType ct on c.type = ct.id
+    WHERE c.createId = #{createId} and c.is_deleted = 0 and ct.parentId = #{parentId}
+  </select>
 </mapper>

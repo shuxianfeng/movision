@@ -21,4 +21,6 @@ public interface ExhibitionMapper {
 
     List<Map<String,String>> queryHomepageExhibitionList(Map<String, Object> map);
 
+    int queryMyExhibitionListSize(Map<String, Object> map);
+
 }
