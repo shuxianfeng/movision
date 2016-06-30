@@ -134,7 +134,10 @@ public class ResumeSiteController {
             map.put("company_id", ShiroUtil.getCreateID());
         }
         map.put("jobCity",jobCity);
-        map.put("expYearBefore",expYearBefore);
+        if(expYearBefore != null && !expYearBefore.equals("") && expYearBehind == null && expYearBehind.equals("")) {
+            map.put("expYearBeforeFlag", "true");
+            map.put("expYearBefore", expYearBefore);
+        }
         map.put("expYearBehind",expYearBehind);
         map.put("education",education);
         if(isPublic==null)

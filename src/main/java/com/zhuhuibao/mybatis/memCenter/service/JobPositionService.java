@@ -51,7 +51,7 @@ public class JobPositionService {
      */
     public void publishPosition(Job job) throws Exception {
         try{
-            boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.YGZH.toString());
+            boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.FBZW.toString());
             if(bool) {
                 jobMapper.publishPosition(job);
                 zhbService.payForGoods(Long.parseLong(job.getId()),ZhbPaymentConstant.goodsType.FBZW.toString());

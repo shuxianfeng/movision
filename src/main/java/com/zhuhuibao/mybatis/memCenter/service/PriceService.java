@@ -67,7 +67,7 @@ public class PriceService {
         if(askPrice.getBillurl()!=null && !askPrice.getBillurl().equals("")){
             String fileUrl = askPrice.getBillurl();
             if(fileUtil.isExistFile(fileUrl,"doc","price")){
-                boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.YGZH.toString());
+                boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.XJFB.toString());
                 if(bool) {
                     askPriceMapper.saveAskPrice(askPrice);
                     zhbService.payForGoods(askPrice.getId(),ZhbPaymentConstant.goodsType.XJFB.toString());

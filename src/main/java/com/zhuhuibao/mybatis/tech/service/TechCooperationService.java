@@ -56,7 +56,7 @@ public class TechCooperationService {
         log.info("insert tech cooperation info "+ StringUtils.beanToString(tech));
         try {//2-技术需求 发布需要筑慧币
             if("2".equals(tech.getType())){
-                boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.YGZH.toString());
+                boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.FBJSXQ.toString());
                 if(bool) {
                     result = techMapper.insertSelective(tech);
                     zhbService.payForGoods(tech.getId(),ZhbPaymentConstant.goodsType.FBJSXQ.toString());

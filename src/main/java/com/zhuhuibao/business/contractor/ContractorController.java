@@ -1,5 +1,6 @@
 package com.zhuhuibao.business.contractor;
 
+import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
@@ -25,6 +26,8 @@ import java.util.Map;
  * Created by cxx on 2016/4/11 0011.
  */
 @RestController
+@RequestMapping("/rest/contractor/site/base")
+@Api(value = "Contractor",description = "工程商频道")
 public class ContractorController {
     private static final Logger log = LoggerFactory.getLogger(ContractorController.class);
 
@@ -38,6 +41,7 @@ public class ContractorController {
      * @return
      * @throws IOException
      */
+    @ApiOperation(value = "")
     @RequestMapping(value = {"/rest/engineerSupplier/newEngineer","/rest/contractor/site/sel_new_engineer"}, method = RequestMethod.GET)
     public Response newEngineer()  {
         String type = "4";
