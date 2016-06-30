@@ -336,4 +336,9 @@
   <select id="findTechCount" resultType="java.util.Map">
     select count(1) docTotal from t_tech_data t where t.status = 2
   </select>
+
+  <select id="queryDataUploadDownloadCount" parameterType="java.lang.Long" resultType="java.util.Map">
+    select count(1) count from t_tech_data t where t.status = 2 and t.createid = #{createId} union all
+    select count(1) count from t_tech_downloadReldata where createid = #{createId}
+  </select>
 </mapper>

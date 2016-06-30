@@ -231,7 +231,7 @@ public class CompanyController {
             CertificateRecord record2 = new CertificateRecord();
             record2.setMem_id(String.valueOf(memberId));
             record2.setIs_deleted(0);
-            record1.setType("2");
+            record2.setType("2");
             List<CertificateRecord> list2 = memberService.certificateSearch(record2);
 
             Map map = new HashMap();

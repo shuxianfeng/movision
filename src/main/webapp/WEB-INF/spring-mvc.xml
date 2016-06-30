@@ -127,7 +127,6 @@
     <bean id="xlsxExcelView" class="com.zhuhuibao.common.view.XlsxExcelView">
     </bean>
 
-    <aop:config proxy-target-class="true"/>
     <bean
             class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager"/>
@@ -149,14 +148,14 @@
 
     <!--AOP-->
     <aop:config proxy-target-class="true"/>
-    <bean id="aspectLog" class="com.zhuhuibao.aop.AspectLog"/>
-    <aop:config>
-        <aop:pointcut expression="@annotation(org.springframework.web.bind.annotation.RequestMapping)"
-                      id="logPointcut"/>
-        <aop:aspect id="zhblog" ref="aspectLog">
-            <aop:around method="aroundLog" pointcut-ref="logPointcut"/>
-        </aop:aspect>
-    </aop:config>
+    <!--<bean id="aspectLog" class="com.zhuhuibao.aop.AspectLog"/>-->
+    <!--<aop:config>-->
+        <!--<aop:pointcut expression="@annotation(org.springframework.web.bind.annotation.RequestMapping)"-->
+                      <!--id="logPointcut"/>-->
+        <!--<aop:aspect id="zhblog" ref="aspectLog">-->
+            <!--<aop:around method="aroundLog" pointcut-ref="logPointcut"/>-->
+        <!--</aop:aspect>-->
+    <!--</aop:config>-->
 
     <!--swagger-->
     <bean id="apiConfig" class="com.zhuhuibao.common.util.SwaggerConfig"/>

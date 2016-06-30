@@ -255,7 +255,7 @@
       </foreach>
       </if>
       <if test="company_id != null">
-        and tr.createId not in (select t.create_id from t_i_forbid_key_words t where t.company_id = #{company_id})
+        and tr.createId not in (select t.create_id from t_i_forbid_key_words t where t.company_id = #{company_id} and t.is_deleted = 0)
       </if>
     </where>
     order by tr.updateTime desc
@@ -265,7 +265,7 @@
     from t_i_resume r
     left join t_i_jobRelresume re on re.resumeID = r.id
     left join t_i_job j on j.id = re.jobID
-    where re.jobID in (select id from t_i_job where createid=#{id}) order by publishTime desc
+    where re.jobID in (select id from t_i_job where createid=#{id}) order by re.status asc,re.publishDate desc
   </select>
   <select id="searchResumeById" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT * from t_i_resume WHERE id = #{id}
@@ -295,5 +295,9 @@
   </select>
   <select id="isExistResume" parameterType="java.lang.Long" resultType="java.lang.Integer">
     select count(1) from t_i_resume t where t.createid = #{createID}
+  </select>
+  <select id="queryJobCount" parameterType="java.lang.Long" resultType="java.util.Map">
+    select count(1) count from t_i_job t where t.createID = #{createId} and t.is_deleted = 0 union all
+    select count(1) count from t_i_jobRelresume j where j.jobID in (select id from t_i_job where createid=#{createId})
   </select>
 </mapper>

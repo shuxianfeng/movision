@@ -73,6 +73,7 @@ public class IndividualController {
             map.put("workTypeName",member.getWorkTypeName());
             map.put("province",member.getProvince());
             map.put("provinceName",member.getProvinceName());
+            map.put("headShot",member.getHeadShot());
             map.put("city",member.getCity());
             map.put("cityName",member.getCityName());
             map.put("area",member.getArea());

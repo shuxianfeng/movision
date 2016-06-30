@@ -132,6 +132,7 @@ public class MemberOmsController {
 		result.setData(workType);
 		return result;
 	}
+
 	
 	@ApiOperation(value = "员工密码重置", notes = "员工密码重置", response = Response.class)
 	@RequestMapping(value = "reset_pwd", method = RequestMethod.POST)
@@ -145,6 +146,14 @@ public class MemberOmsController {
 			member.setId(id);
 			memberService.updateMemInfo(member);
 		}
+
+
+	@ApiOperation(value = "人员规模", notes = "人员规模", response = Response.class)
+	@RequestMapping(value = "sel_employeeSizeList", method = RequestMethod.GET)
+	public Response employeeSizeList()  {
+		Response result = new Response();
+		List<EmployeeSize> employeeSizeList = memberService.findEmployeeSizeList();
+		result.setData(employeeSizeList);
 
 		return result;
 	}

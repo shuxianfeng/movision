@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -225,5 +226,28 @@ public class OfferPriceService {
 		}
 		return response;
     }
-    
+
+	/**
+	 * 会员中心首页询报价相关信息
+	 * @param createId
+	 * @return
+     */
+	public Map<String,Object> queryEnqueryQuoteCount(Long createId)
+	{
+		Map<String,Object> resultMap = new HashMap<String,Object>();
+		try{
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("createId",createId);
+			//收到的报价
+			Integer recQuoteCount = priceMapper.queryRecQuoteCount(map);
+			resultMap.put("recQuoteCount",recQuoteCount);
+			//等我报价
+			Integer quoteCount = priceMapper.queryQuoteCount(map);
+			resultMap.put("quoteCount",quoteCount);
+		}catch (Exception e) {
+			log.error("query enquery quote count error!",e);
+			throw new BusinessException(MsgCodeConstant.mcode_common_failure, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
+		}
+		return resultMap;
+	}
 }

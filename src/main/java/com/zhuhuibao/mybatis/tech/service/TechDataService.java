@@ -391,4 +391,25 @@ public class TechDataService {
         }
         return techMap;
     }
+
+    /**
+     * 会员中心首页查询技术资料信息
+     * @param createId
+     * @return
+     */
+    public Map<String,Object> findDataUploadDownloadCount(Long createId)
+    {
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        try {
+            List<Map<String, Object>> mapList = techDataMapper.queryDataUploadDownloadCount(createId);
+            Map<String,Object> map1 = mapList.get(0);
+            resultMap.put("uploadCount",map1.get("count"));
+            Map<String,Object> map2 = mapList.get(1);
+            resultMap.put("downloadCount",map2.get("count"));
+        }catch(Exception e){
+            log.error("find data upload download error!",e);
+            throw e;
+        }
+        return resultMap;
+    }
 }

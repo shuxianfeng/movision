@@ -241,4 +241,14 @@ public class CooperationService {
         System.out.println(str.matches("[1,2,3,4,5]"));
     }
 
+
+    public int queryMyWitkeyListSize(Map<String,Object> map){
+        try {
+            return cooperationMapper.queryMyWitkeyListSize(map);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

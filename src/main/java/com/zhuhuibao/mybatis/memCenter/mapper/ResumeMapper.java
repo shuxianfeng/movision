@@ -39,4 +39,6 @@ public interface ResumeMapper {
 
     //是否存在简历
     int isExistResume(Long createID);
+
+    List<Map<String,Object>> queryJobCount(Long createId);
 }

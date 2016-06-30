@@ -42,4 +42,6 @@ public interface TechDataMapper {
     Map<String,String> findTechSiteInfo(Long createId);
 
     Map<String,String> findTechCount();
+
+    List<Map<String,Object>> queryDataUploadDownloadCount(Long createId);
 }

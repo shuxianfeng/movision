@@ -176,15 +176,16 @@ public class RegisterValidateService {
 	
 	/**
 	 * 发送邮件重置密码
-	 * @param member 会员信息
+	 * @param mail 邮箱地址
 	 */
-	public void sendValidateMail(Member member,String serverIp){
+	public void sendValidateMail(String mail,String serverIp){
+		log.info("send validate mail = "+mail);
 		Validateinfo vInfo = new Validateinfo();
-		vInfo.setAccount(member.getEmail());
+		vInfo.setAccount(mail);
 		vInfo = memberService.findMemberValidateInfo(vInfo);
 		if(vInfo != null && vInfo.getId() != null && vInfo.getValid() == 0) {
 			String currentTime = DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss");
-			String url = serverIp + "/rest/validateMail?vm=" + new String(EncodeUtil.encodeBase64("validate," + member.getEmail() + "," + currentTime));
+			String url = serverIp + "/rest/validateMail?vm=" + new String(EncodeUtil.encodeBase64("validate," + mail + "," + currentTime));
 			StringBuffer sb = new StringBuffer("");
 			sb.append("<div style=\"line-height:40px;height:40px\">");
 			sb.append("</div>");
@@ -214,7 +215,7 @@ public class RegisterValidateService {
 			sb.append("</p>");
 			log.info("send email link == " + sb.toString());
 			//发送邮件
-			SendEmail.send(member.getEmail(), sb.toString(), "筑慧宝-找回账户密码");
+			SendEmail.send(mail, sb.toString(), "筑慧宝-找回账户密码");
 			vInfo.setCheckCode(url);
 			memberService.updateValidateInfo(vInfo);
 		}else {
@@ -228,54 +229,54 @@ public class RegisterValidateService {
 	 * @return
 	 */
 	public Response processValidate(String validateInfo){
-		Validateinfo vinfo = new Validateinfo();
 		String url = PropertiesUtils.getValue("host.ip") + "/rest/validateMail?vm=" + validateInfo;
-		vinfo.setCheckCode(url);
-		vinfo = memberService.findMemberValidateInfo(vinfo);
-		if(vinfo.getId() != null && vinfo.getValid() == 0) {
-			//数据访问层，通过email获取用户信息
-			String decodeInfo = new String(EncodeUtil.decodeBase64(validateInfo));
-			String[] arr = decodeInfo.split(",");
-			String email = arr[1];
-			Member user = memberService.findMemberByAccount(email);
-			Response result = new Response();
-			int code = 200;
-			int msgCode = MsgCodeConstant.mcode_common_success;
-			String id = "0";
-			String message = "";
-			//验证用户是否存在
-			if (user != null && (user.getStatus() != 0 || user.getStatus() != 2)) {
-				/*Validateinfo vinfo = new Validateinfo();
-				vinfo.setCheckCode(url);
-				vinfo = memberService.findMemberValidateInfo(vinfo);*/
-				if (vinfo != null && vinfo.getValid() == 0 && vinfo.getCreateTime() != null) {
-					Date currentTime = new Date();//获取当前时间
-					//验证链接是否过期 24小时
-					Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(vinfo.getCreateTime(), "yyyy-MM-dd HH:mm:ss"), 5, 1);
-					if (currentTime.before(registerDate)) {
-						message = "通过身份验证";
-						id = String.valueOf(vinfo.getId());
-					} else {
-						//验证已过期
-						throw new BusinessException(MsgCodeConstant.member_mcode_mail_validate_expire,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_expire)));
-					}
+		//数据访问层，通过email获取用户信息
+		String decodeInfo = new String(EncodeUtil.decodeBase64(validateInfo));
+		String[] arr = decodeInfo.split(",");
+		String email = arr[1];
+		Member user = memberService.findMemberByAccount(email);
+		Response result = new Response();
+		int code = 200;
+		int msgCode = MsgCodeConstant.mcode_common_success;
+		String id = "0";
+		String message = "";
+		//验证用户是否存在
+		if (user != null && (user.getStatus() != 0 || user.getStatus() != 2)) {
+			Validateinfo vinfo = new Validateinfo();
+			vinfo.setCheckCode(url);
+			vinfo = memberService.findMemberValidateInfo(vinfo);
+			if (vinfo != null && vinfo.getValid() == 0 && vinfo.getCreateTime() != null) {
+				Date currentTime = new Date();//获取当前时间
+				//验证链接是否过期 24小时
+				Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(vinfo.getCreateTime(), "yyyy-MM-dd HH:mm:ss"), 5, 1);
+				if (currentTime.before(registerDate)) {
+					message = "通过身份验证";
+					id = String.valueOf(vinfo.getId());
 				} else {
-					memberService.deleteValidateInfo(vinfo);
-					throw new BusinessException(MsgCodeConstant.member_mcode_mail_url_invalid,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_url_invalid)));
+					//验证已过期
+					message = MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_expire));
+					code = 400;
+					msgCode = MsgCodeConstant.member_mcode_mail_validate_expire;
 				}
 			} else {
-				//该邮箱未注册（邮箱地址不存在）！
-				throw new BusinessException(MsgCodeConstant.member_mcode_mail_unregister,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_unregister)));
+				memberService.deleteValidateInfo(vinfo);
+				message= MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_url_invalid));
+				code = 400;
+				msgCode = MsgCodeConstant.member_mcode_mail_url_invalid;
 			}
-			result.setCode(code);
-			result.setMessage(message);
-			String[] str = {email, id};
-			result.setData(str);
-			result.setMsgCode(msgCode);
-			return result;
-		}else{
-			throw new BusinessException(MsgCodeConstant.MEMBER_SEED_PWD_ERROR,"找回密码错误");
+		} else {
+			//该邮箱未注册（邮箱地址不存在）！
+			code = 400;
+			message = MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_unregister));
+			msgCode = MsgCodeConstant.member_mcode_mail_unregister;
 		}
+		result.setCode(code);
+		result.setMessage(message);
+		String[] str = {email, id};
+		result.setData(str);
+		result.setMsgCode(msgCode);
+		return result;
+
    }
 		
 	/**

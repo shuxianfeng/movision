@@ -9,6 +9,7 @@ import com.zhuhuibao.mybatis.product.entity.Product;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BrandMapper {
 
@@ -41,4 +42,6 @@ public interface BrandMapper {
     List<SuggestBrand> SuggestBrand();
 
     BrandDetailBean details(String id);
+
+    List<Map<String,Object>> queryBrandProductAgentCount(Long createId);
 }

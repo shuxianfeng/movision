@@ -324,4 +324,24 @@ public class ResumeService {
         }
     }
 
+    /**
+     * 会员中心首页查询招聘信息
+     * @param createId
+     * @return
+     */
+    public Map<String,Object> queryJobCount(Long createId)
+    {
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        try{
+            List<Map<String,Object>> resultList = resumeMapper.queryJobCount(createId);
+            Map<String,Object> map1 = resultList.get(0);
+            resultMap.put("positionCount",map1.get("count"));
+            Map<String,Object> map2 = resultList.get(1);
+            resultMap.put("resumeCount",map2.get("count"));
+        }catch(Exception e){
+            log.error("find data upload download error!",e);
+            throw e;
+        }
+        return resultMap;
+    }
 }

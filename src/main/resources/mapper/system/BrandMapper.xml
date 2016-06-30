@@ -214,4 +214,9 @@
     LEFT JOIN t_m_member m on b.createid = m.id
     where b.id = #{id}
   </select>
+  <select id="queryBrandProductAgentCount" parameterType="java.lang.Long" resultType="java.util.Map">
+    select count(1) count from t_p_brand t where t.status = 1 and t.createid = #{createId} union all
+    select count(1) count from t_p_product p where p.status = 1 and p.createid = #{createId} union all
+    select count(1) count from t_p_brand_agent a where a.status = 0 and a.createid = #{createId}
+  </select>
 </mapper>
