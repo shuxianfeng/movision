@@ -6,7 +6,8 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.expo.service.ExpoService;
-import com.zhuhuibao.mybatis.memCenter.service.SuccessCaseService;
+import com.zhuhuibao.mybatis.memCenter.service.*;
+import com.zhuhuibao.mybatis.tech.service.TechDataService;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,21 @@ public class MemberIndexController {
 
     @Autowired
     private CooperationService cooperationService;
+
+    @Autowired
+    BrandService brandService;
+
+    @Autowired
+    OfferPriceService offerPriceService;
+
+    @Autowired
+    TechDataService techDataService;
+
+    @Autowired
+    ResumeService resumeService;
+
+    @Autowired
+    IndexService indexService;
 
     @ApiOperation(value = "宣传推广相关信息", notes = "宣传推广相关信息", response = Response.class)
     @RequestMapping(value = "sel_campaign_info_size", method = RequestMethod.GET)
@@ -87,6 +103,76 @@ public class MemberIndexController {
             map.put("cooperationSize",size3);
 
             result.setData(map);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "产品相关信息", notes = "产品相关信息", response = Response.class)
+    @RequestMapping(value = "sel_productInfoSize", method = RequestMethod.GET)
+    public Response sel_productInfoSize() {
+        Response result = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            Map<String,Object> resultMap = brandService.queryBrandProductAgentCount(memberId);
+            result.setData(resultMap);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "询报价相关信息", notes = "询报价相关信息", response = Response.class)
+    @RequestMapping(value = "sel_enqueryQuoteCount", method = RequestMethod.GET)
+    public Response sel_enqueryQuoteCount() {
+        Response result = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            Map<String,Object> resultMap = offerPriceService.queryEnqueryQuoteCount(memberId);
+            result.setData(resultMap);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "技术资料信息", notes = "技术资料信息", response = Response.class)
+    @RequestMapping(value = "sel_dataUploadDLCount", method = RequestMethod.GET)
+    public Response sel_dataUploadDLCount() {
+        Response result = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            Map<String,Object> resultMap = techDataService.findDataUploadDownloadCount(memberId);
+            result.setData(resultMap);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "招聘信息", notes = "招聘信息", response = Response.class)
+    @RequestMapping(value = "sel_jobCount", method = RequestMethod.GET)
+    public Response sel_jobCount() {
+        Response result = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            Map<String,Object> resultMap = resumeService.queryJobCount(memberId);
+            result.setData(resultMap);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "筑慧币信息", notes = "筑慧币信息", response = Response.class)
+    @RequestMapping(value = "sel_zhbInfo", method = RequestMethod.GET)
+    public Response sel_zhbInfo() {
+        Response result = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            Map<String,Object> resultMap = indexService.getZhbInfo(memberId);
+            result.setData(resultMap);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }

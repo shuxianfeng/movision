@@ -1,12 +1,15 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.BrandBean;
 import com.zhuhuibao.common.pojo.BrandDetailBean;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.pojo.SuggestBrand;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
 import com.zhuhuibao.mybatis.product.entity.Product;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 品牌业务处理
@@ -231,4 +236,30 @@ public class BrandService {
             throw e;
         }
     }
+
+    /**
+     * 会员中心首页获得产品相关信息 品牌数量，在线产品数量，关联的代理商
+     * @param createId
+     * @return
+     */
+    public Map<String,Object> queryBrandProductAgentCount(Long createId)
+    {
+        log.info("query brand product agent count");
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        try {
+            List<Map<String,Object>> mapList = brandMapper.queryBrandProductAgentCount(createId);
+            Map<String,Object> map1 = mapList.get(0);
+            resultMap.put("brandCount",map1.get("count"));
+            Map<String,Object> map2 = mapList.get(1);
+            resultMap.put("productCount",map2.get("count"));
+            Map<String,Object> map3 = mapList.get(2);
+            resultMap.put("agentCount",map3.get("count"));
+        }catch(Exception e)
+        {
+            log.error("query brand product agent count error!",e);
+            throw new BusinessException(MsgCodeConstant.mcode_common_failure, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
+        }
+        return resultMap;
+    }
+
 }

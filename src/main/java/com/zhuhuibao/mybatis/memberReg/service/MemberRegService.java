@@ -516,39 +516,45 @@ public class MemberRegService {
      * @param verifyCode
      * @return
      */
-    public Response registerMailMember(Member member, String verifyCode) throws BusinessException{
+    public Response registerMailMember(Member member, String verifyCode){
     	Response result = new Response();
-		if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getEmailCheckCode()) )			{
-			if(member.getEmail().indexOf("@")>=0)
-			{
-				int isExist = this.isExistAccount(member);
-				if(isExist == 0)
+		try{
+			if(verifyCode != null && verifyCode.equalsIgnoreCase(member.getEmailCheckCode()) )			{
+				if(member.getEmail().indexOf("@")>=0)
 				{
-					this.registerMember(member);
-					//发送激活链接给此邮件
-					rvService.sendMailActivateCode(member, PropertiesUtils.getValue("host.ip"));
-					//是否显示“立即激活按钮”
-					String mail = ds.findMailAddress(member.getEmail());
-					Map<String,String> map = new HashMap<String,String>();
-					if(mail != null && !mail.equals(""))
+					int isExist = this.isExistAccount(member);
+					if(isExist == 0)
 					{
-						map.put("button", "true");
+						this.registerMember(member);
+						//发送激活链接给此邮件
+						rvService.sendMailActivateCode(member, PropertiesUtils.getValue("host.ip"));
+						//是否显示“立即激活按钮”
+						String mail = ds.findMailAddress(member.getEmail());
+						Map<String,String> map = new HashMap<String,String>();
+						if(mail != null && !mail.equals(""))
+						{
+							map.put("button", "true");
+						}
+						else
+						{
+							map.put("button", "false");
+						}
+						result.setData(map);
 					}
 					else
 					{
-						map.put("button", "false");
+						throw new BusinessException(MsgCodeConstant.member_mcode_account_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
 					}
-					result.setData(map);
-				}
-				else
-				{
-					throw new BusinessException(MsgCodeConstant.member_mcode_account_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
 				}
 			}
-		}
-		else
+			else
+			{
+				throw new BusinessException(MsgCodeConstant.member_mcode_mail_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_error)));
+			}
+		}catch(Exception e)
 		{
-			throw new BusinessException(MsgCodeConstant.member_mcode_mail_validate_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_validate_error)));
+			log.error("register mail error!",e);
+			throw e;
 		}
 		log.debug("email verifyCode == " + member.getEmailCheckCode());
 		return result;

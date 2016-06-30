@@ -25,4 +25,10 @@ public interface OfferPriceMapper {
     List<AskPriceSimpleBean> queryAllOfferPriceByAskID(Long id);
     
     OfferAskPrice queryOfferPriceInfoByID(Long id);
+
+    /*收到的报价*/
+    Integer queryRecQuoteCount(Map<String,Object> map);
+
+    /*等我报价的数量*/
+    Integer queryQuoteCount(Map<String,Object> map);
 }

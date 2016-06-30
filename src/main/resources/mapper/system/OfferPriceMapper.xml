@@ -201,4 +201,20 @@
     left join t_p_category ct on ct.id = a.fcateid
     where t.id = #{id}
   </select>
+
+  <select id="queryRecQuoteCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(1)  from t_p_offer_price o where o.askid in (select t.id from t_p_ask_price t where t.createId = #{createId})
+  </select>
+
+  <select id="queryQuoteCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(1) from t_p_ask_price t
+      left join t_m_member mm on mm.id = t.createid
+      where date_format(now(),'%Y-%m-%d') &lt;= date_format(t.endTime,'%Y-%m-%d')
+      and case when t.supplierid is NULL then '1=1' when t.supplierid = '' then '1=1' else find_in_set(#{createId},t.supplierid) end
+      and t.id not in (select askid from t_p_offer_price t where createid = #{createId})
+      and t.createid != #{createId}
+      and t.createid not in (select mc.enterpriseEmployeeParentId from t_m_member mc where id = #{createId})
+      and t.createid not in (select id from t_m_member mc where mc.enterpriseEmployeeParentId = #{createId})
+      and (case when mm.enterpriseEmployeeParentId != 0 then (mm.enterpriseEmployeeParentId not in (select mc.enterpriseEmployeeParentId from t_m_member mc where id = #{createId})) else '1=1' end )
+  </select>
 </mapper>
