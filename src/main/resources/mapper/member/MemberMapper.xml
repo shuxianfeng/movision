@@ -724,10 +724,9 @@
   </select>
 
   <select id="queryCompanyList" resultType="java.util.Map" parameterType="java.util.Map">
-    SELECT m.id,m.enterpriseLogo
+    SELECT ad.connectedId as id,ad.imgUrl as enterpriseLogo
     FROM t_sys_advertising ad
     LEFT JOIN t_sys_adv_attr at on at.id = ad.advAttrId
-    LEFT JOIN t_m_member m on ad.connectedId = m.id
     where at.chanType = #{chanType}
     and at.page = #{page}
     and at.advArea = #{advArea}
