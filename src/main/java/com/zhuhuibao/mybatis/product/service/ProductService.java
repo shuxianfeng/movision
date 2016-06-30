@@ -820,4 +820,14 @@ public class ProductService {
 			throw e;
 		}
 	}
+
+	public List<Map<String,String>> queryHotProduct(Map<String,Object> queryMap){
+		try{
+			return productMapper.queryHotProduct(queryMap);
+		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

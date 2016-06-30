@@ -44,4 +44,6 @@ public interface BrandMapper {
     BrandDetailBean details(String id);
 
     List<Map<String,Object>> queryBrandProductAgentCount(Long createId);
+
+    List<Map<String,String>> queryRecommendBrand(Map<String,Object> map);
 }

@@ -262,4 +262,14 @@ public class BrandService {
         return resultMap;
     }
 
+
+    public List<Map<String,String>> queryRecommendBrand(Map<String,Object> map){
+        try {
+            return brandMapper.queryRecommendBrand(map);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }
