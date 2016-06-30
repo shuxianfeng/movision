@@ -156,7 +156,7 @@ public class VipInfoService {
 		int result = 0;
 		Map<String, Object> param = MapUtil.convert2HashMap("memberId", memberId, "pinyin", privilegePinyin);
 		VipMemberPrivilege extraPrivilege = vipInfoMapper.selectVipMemberPrivilege(param);
-		if (null != extraPrivilege && !VipConstant.VipPrivilegeType.NUM.toString().equals(extraPrivilege.getType()) && extraPrivilege.getValue() > 0) {
+		if (null != extraPrivilege && VipConstant.VipPrivilegeType.NUM.toString().equals(extraPrivilege.getType()) && extraPrivilege.getValue() > 0) {
 			extraPrivilege.setValue(extraPrivilege.getValue() - 1);
 			extraPrivilege.setOldUpdateTime(extraPrivilege.getUpdateTime());
 			result = vipInfoMapper.updateVipMemberPrivilegeValue(extraPrivilege);

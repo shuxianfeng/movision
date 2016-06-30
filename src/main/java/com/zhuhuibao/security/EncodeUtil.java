@@ -34,7 +34,7 @@ public class EncodeUtil {
     	System.out.println(encodeBase64ToString("zhaowoxing@126.com".getBytes()));
     	System.out.println(encodeBase64ToString("416372489@qq.com".getBytes()));
     	System.out.println(encodeBase64ToString("123qwe".getBytes()));
-    	System.out.println(encodeBase64ToString("caijl@456".getBytes()));
+    	System.out.println(encodeBase64ToString("yu1234".getBytes()));
 //		System.out.println(decodeBase64ToString(encodeBase64ToString("123".getBytes())));
 //      System.out.println(new Md5Hash("123456a",null,2).toString());
 	}
