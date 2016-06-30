@@ -126,9 +126,13 @@ public class OmsShopController {
      * @return
      */
     private MemberShop check(@ApiParam("商铺ID") @RequestParam String shopId) {
-        Long companyID = ShiroUtil.getCompanyID();
+//        Long companyID =ShiroUtil.getCompanyID();
+//        if(companyID == null){
+//            throw new BusinessException(MsgCodeConstant.un_login, "请登录");
+//        }
         //验证店铺ID是否为该用户所在企业的店铺
-        MemberShop shop = memShopService.findByCompanyID(companyID);
+        MemberShop shop = memShopService.findByID(shopId);
+                //.findByCompanyID(companyID);
         if (shop == null) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "用户商铺不存在");
         } else {
