@@ -46,4 +46,6 @@ public interface MemberMapper {
     List<Map<String,String>> queryCompanyByKeywords(String keywords);
 
     List<Map<String,String>> queryCompanyList(Map<String, Object> map);
+
+    List<Map<String,String>> queryGreatCompany(Map<String, Object> map);
 }

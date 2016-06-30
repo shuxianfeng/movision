@@ -59,4 +59,6 @@ public interface ProductMapper {
     List<Map<String,String>> queryLatestProductListByCompanyId(Map<String,Object> queryMap);
 
     List<Map<String,String>> findAllProductListByProductType(RowBounds rowBounds,Map<String,Object> queryMap);
+
+    List<Map<String,String>> queryHotProduct(Map<String,Object> queryMap);
 }

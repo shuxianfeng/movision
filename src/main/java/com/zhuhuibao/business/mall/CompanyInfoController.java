@@ -7,6 +7,7 @@ import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.SuccessCase;
+import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.SuccessCaseService;
 import com.zhuhuibao.mybatis.product.service.ProductService;
@@ -40,6 +41,9 @@ public class CompanyInfoController {
 
     @Autowired
     private SuccessCaseService successCaseService;
+
+    @Autowired
+    private BrandService brandService;
 
     @ApiOperation(value = "商户主页相关信息", notes = "商户主页相关信息")
     @RequestMapping(value = "sel_index_companyInfo", method = RequestMethod.GET)
@@ -267,6 +271,52 @@ public class CompanyInfoController {
         pager.result(productList);
 
         response.setData(pager);
+        return response;
+    }
+
+
+    @ApiOperation(value = "优秀厂商,代理商,渠道商", notes = "优秀厂商,代理商,渠道商")
+    @RequestMapping(value = "sel_great_company", method = RequestMethod.GET)
+    public Response sel_great_manufacturer(@ApiParam(value="频道类型 3：商城")@RequestParam String chanType,
+                                           @ApiParam(value="频道下子页面.manufacturer:厂商;channel:渠道商;agent:代理商") @RequestParam String page,
+                                           @ApiParam(value="广告所在区域:F1:优秀厂商,渠道商,代理商") @RequestParam String advArea)  {
+        Response response = new Response();
+        Map<String,Object> map = new HashMap();
+        map.put("chanType",chanType);
+        map.put("page",page);
+        map.put("advArea",advArea);
+        List<Map<String,String>> list = memberService.queryGreatCompany(map);
+        response.setData(list);
+        return response;
+    }
+
+    @ApiOperation(value = "热门产品", notes = "热门产品")
+    @RequestMapping(value = "sel_hot_product", method = RequestMethod.GET)
+    public Response sel_hot_product(@ApiParam(value="频道类型 3：商城")@RequestParam String chanType,
+                                    @ApiParam(value="频道下子页面.index:首页;manufacturer:厂商;channel:渠道商") @RequestParam String page,
+                                    @ApiParam(value="广告所在区域:F2:厂商渠道商热门产品;F10:首页十楼（热门产品)") @RequestParam String advArea)  {
+        Response response = new Response();
+        Map<String,Object> map = new HashMap();
+        map.put("chanType",chanType);
+        map.put("page",page);
+        map.put("advArea",advArea);
+        List<Map<String,String>> list = productService.queryHotProduct(map);
+        response.setData(list);
+        return response;
+    }
+
+    @ApiOperation(value = "推荐品牌", notes = "推荐品牌")
+    @RequestMapping(value = "sel_recommend_brand", method = RequestMethod.GET)
+    public Response sel_recommend_brand(@ApiParam(value="频道类型 3：商城")@RequestParam String chanType,
+                                    @ApiParam(value="频道下子页面.agent:代理商") @RequestParam String page,
+                                    @ApiParam(value="广告所在区域:F2:推荐品牌") @RequestParam String advArea)  {
+        Response response = new Response();
+        Map<String,Object> map = new HashMap();
+        map.put("chanType",chanType);
+        map.put("page",page);
+        map.put("advArea",advArea);
+        List<Map<String,String>> list = brandService.queryRecommendBrand(map);
+        response.setData(list);
         return response;
     }
 }

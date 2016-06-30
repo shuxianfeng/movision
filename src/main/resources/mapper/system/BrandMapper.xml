@@ -219,4 +219,14 @@
     select count(1) count from t_p_product p where p.status = 1 and p.createid = #{createId} union all
     select count(1) count from t_p_brand_agent a where a.status = 0 and a.createid = #{createId}
   </select>
+
+  <select id="queryRecommendBrand" parameterType="java.util.Map" resultType="java.util.Map">
+    SELECT ad.connectedId as id,ad.imgUrl as brandLogo,b.CNName
+    FROM t_sys_advertising ad
+    LEFT JOIN t_sys_adv_attr at on at.id = ad.advAttrId
+    LEFT JOIN t_p_brand b on b.id = ad.connectedId
+    where at.chanType = #{chanType}
+    and at.page = #{page}
+    and at.advArea = #{advArea}
+  </select>
 </mapper>
