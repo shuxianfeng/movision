@@ -13,6 +13,8 @@ import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,6 +130,22 @@ public class MemberOmsController {
 		Response result = new Response();
 		List<WorkType> workType = memberService.findIndividualWorkTypeList();
 		result.setData(workType);
+		return result;
+	}
+	
+	@ApiOperation(value = "员工密码重置", notes = "员工密码重置", response = Response.class)
+	@RequestMapping(value = "reset_pwd", method = RequestMethod.POST)
+	public Response resetPwd(@ApiParam(value = "员工ids,逗号隔开") @RequestParam String ids)  {
+		Response result = new Response();
+		String[] idList = ids.split(",");
+		for (String id : idList) {
+			Member member = new Member();
+			String md5Pwd = new Md5Hash("123456", null, 2).toString();
+			member.setPassword(md5Pwd);
+			member.setId(id);
+			memberService.updateMemInfo(member);
+		}
+
 		return result;
 	}
 }

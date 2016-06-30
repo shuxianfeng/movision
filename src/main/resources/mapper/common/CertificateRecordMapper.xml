@@ -13,6 +13,7 @@
     <result column="time" property="time" jdbcType="TIMESTAMP" />
     <result column="is_deleted" property="is_deleted" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="INTEGER" />
+     <result column="memberName" property="memberName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, mem_id, certificate_number, certificate_name, certificate_grade,certificate_id,
@@ -93,9 +94,11 @@
   </select>
   <select id="queryCertificateById" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
-    *
-    from t_certificate_record
+      a.id, a.mem_id, a.certificate_number, a.certificate_name, a.certificate_grade,a.certificate_id,
+     a.certificate_url,a.type, a.time, a.is_deleted,a.status,(case when isnull(b.personRealName) then b.enterpriseName else b.personRealName end) memberName
+    
+    from t_certificate_record a left join t_m_member  b on a.mem_id=b.id
     where
-    id = #{id}
+    a.id = #{id}
   </select>
 </mapper>
