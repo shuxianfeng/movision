@@ -5,6 +5,7 @@ import com.zhuhuibao.common.pojo.SysBean;
 import com.zhuhuibao.mybatis.oms.entity.Category;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CategoryMapper {
 
@@ -33,4 +34,6 @@ public interface CategoryMapper {
     ResultBean querySystem(String id);
 
     ResultBean querySystemByScateid(String id);
+
+    List<Map<String,String>> findSubSystemByPid(String id);
 }
