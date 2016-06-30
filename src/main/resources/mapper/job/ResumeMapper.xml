@@ -255,7 +255,7 @@
       </foreach>
       </if>
       <if test="company_id != null">
-        and tr.createId not in (select t.create_id from t_i_forbid_key_words t where t.company_id = #{company_id})
+        and tr.createId not in (select t.create_id from t_i_forbid_key_words t where t.company_id = #{company_id} and t.is_deleted = 0)
       </if>
     </where>
     order by tr.updateTime desc
