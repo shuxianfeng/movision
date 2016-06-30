@@ -147,6 +147,8 @@ public class MemberOmsController {
 			memberService.updateMemInfo(member);
 		}
 
+		return result;
+	}
 
 	@ApiOperation(value = "人员规模", notes = "人员规模", response = Response.class)
 	@RequestMapping(value = "sel_employeeSizeList", method = RequestMethod.GET)
