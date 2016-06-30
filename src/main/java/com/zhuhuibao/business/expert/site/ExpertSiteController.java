@@ -682,7 +682,7 @@ public class ExpertSiteController {
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
             message.setCreateid(String.valueOf(createid));
-            boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.YGZH.toString());
+            boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.GZJLY.toString());
             if(bool) {
                 memberService.saveMessage(message);
                 zhbService.payForGoods(Long.parseLong(message.getId()),ZhbPaymentConstant.goodsType.GZJLY.toString());

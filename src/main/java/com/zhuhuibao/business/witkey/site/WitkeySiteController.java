@@ -43,7 +43,7 @@ public class WitkeySiteController {
      */
     @ApiOperation(value="发布任务",notes="发布任务",response = Response.class)
     @RequestMapping(value = "add_witkey", method = RequestMethod.POST)
-    public Response publishCooperation(Cooperation cooperation) throws Exception {
+    public Response publishCooperation(@ApiParam(value = "威客信息")  @ModelAttribute(value="cooperation") Cooperation cooperation) throws Exception {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){

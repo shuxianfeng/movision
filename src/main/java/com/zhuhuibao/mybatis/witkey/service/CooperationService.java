@@ -50,7 +50,7 @@ public class CooperationService {
         try{
             //发布威客服务需要付费
             if(cooperation.getType().matches("[7,8,9,13]")) {
-                boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.YGZH.toString());
+                boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.FBWKFW.toString());
                 if(bool) {
                     cooperationMapper.publishCooperation(cooperation);
                     zhbService.payForGoods(Long.parseLong(cooperation.getId()),ZhbPaymentConstant.goodsType.FBWKFW.toString());
@@ -58,7 +58,7 @@ public class CooperationService {
                     throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
                 }
             }else if(cooperation.getType().matches("[10,11]")){//发布资质合作需要付费
-                boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.YGZH.toString());
+                boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.FBZZHZ.toString());
                 if(bool) {
                     cooperationMapper.publishCooperation(cooperation);
                     zhbService.payForGoods(Long.parseLong(cooperation.getId()),ZhbPaymentConstant.goodsType.FBZZHZ.toString());
