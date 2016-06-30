@@ -4,10 +4,20 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.fsearch.pojo.SupplierSearchSpec;
+import com.zhuhuibao.fsearch.service.impl.MembersService;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
 import com.zhuhuibao.mybatis.advertising.service.SysAdvertisingService;
+import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +49,9 @@ public class MallIndexController {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    MembersService membersService;
 
     @ApiOperation(value = "首页广告区域信息展示", notes = "首页广告区域信息展示")
     @RequestMapping(value = "indexfloor", method = RequestMethod.GET)
@@ -132,4 +146,6 @@ public class MallIndexController {
 
         return  new Response(result);
     }
+
+
 }
