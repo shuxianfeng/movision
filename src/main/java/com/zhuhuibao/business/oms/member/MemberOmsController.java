@@ -13,6 +13,8 @@ import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,12 +133,30 @@ public class MemberOmsController {
 		return result;
 	}
 
+	
+	@ApiOperation(value = "员工密码重置", notes = "员工密码重置", response = Response.class)
+	@RequestMapping(value = "reset_pwd", method = RequestMethod.POST)
+	public Response resetPwd(@ApiParam(value = "员工ids,逗号隔开") @RequestParam String ids)  {
+		Response result = new Response();
+		String[] idList = ids.split(",");
+		for (String id : idList) {
+			Member member = new Member();
+			String md5Pwd = new Md5Hash("123456", null, 2).toString();
+			member.setPassword(md5Pwd);
+			member.setId(id);
+			memberService.updateMemInfo(member);
+		}
+
+		return result;
+	}
+
 	@ApiOperation(value = "人员规模", notes = "人员规模", response = Response.class)
 	@RequestMapping(value = "sel_employeeSizeList", method = RequestMethod.GET)
 	public Response employeeSizeList()  {
 		Response result = new Response();
 		List<EmployeeSize> employeeSizeList = memberService.findEmployeeSizeList();
 		result.setData(employeeSizeList);
+
 		return result;
 	}
 }

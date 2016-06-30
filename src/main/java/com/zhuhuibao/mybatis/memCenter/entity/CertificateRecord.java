@@ -26,6 +26,8 @@ public class CertificateRecord {
     private String status;
 
     private String reason;
+    
+    private String  memberName;
 
     public String getId() {
         return id;
@@ -122,4 +124,14 @@ public class CertificateRecord {
     public void setReason(String reason) {
         this.reason = reason;
     }
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+    
+    
 }
