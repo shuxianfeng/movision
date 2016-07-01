@@ -623,9 +623,9 @@ public class ExpertSiteController {
         Map<String,Object> condition = new HashMap<String,Object>();
         condition.put("courseid",id);
         condition.put("courseType",ExpertConstant.COURSE_TYPE_EXPERT);
-        List<Map<String,String>> courseList = ptCourseService.previewTrainCourseDetail(condition);
+        Map<String,String> course = ptCourseService.previewTrainCourseDetail(condition);
         Response response = new Response();
-        response.setData(courseList);
+        response.setData(course);
         return response;
     }
 
