@@ -89,7 +89,9 @@ public class ResumeSiteController {
                         + URLEncoder.encode(resumeMap.get("title"), "UTF-8") + ".doc\""); //
                 HWPFDocument document = ExporDoc.replaceDoc(path + "resumeTemplate.doc", resumeMap);
                 ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-                document.write(ostream);
+                if (document != null) {
+                    document.write(ostream);
+                }
                 ServletOutputStream stream = response.getOutputStream();
                 stream.write(ostream.toByteArray());
                 stream.flush();
