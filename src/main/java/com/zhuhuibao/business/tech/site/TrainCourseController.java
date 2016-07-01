@@ -38,7 +38,7 @@ public class TrainCourseController {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("province",province);
-        condition.put("type", TechConstant.COURSE_TYPE_TECH);
+        condition.put("courseType", TechConstant.COURSE_TYPE_TECH);
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -74,9 +74,9 @@ public class TrainCourseController {
     {
         Map<String,Object> condition = new HashMap<String,Object>();
         condition.put("courseid",courseId);
-        List<Map<String,String>> courseList = ptCourseService.previewTrainCourseDetail(condition);
+        Map<String,String> course = ptCourseService.previewTrainCourseDetail(condition);
         Response response = new Response();
-        response.setData(courseList);
+        response.setData(course);
         return response;
     }
 }

@@ -187,18 +187,16 @@ public class PublishTCourseService {
      * @param condition
      * @return
      */
-    public List<Map<String,String>> previewTrainCourseDetail(Map<String,Object> condition)
+    public Map<String,String> previewTrainCourseDetail(Map<String,Object> condition)
     {
         log.info("find Latest publish train course "+ StringUtils.mapToString(condition));
-        List<Map<String,String>> courseList = null;
         try{
-            courseList = pCourseMapper.previewTrainCourseDetail(condition);
+            return pCourseMapper.previewTrainCourseDetail(condition);
         }catch(Exception e)
         {
             log.error("find Latest publish train course error!",e);
             throw e;
         }
-        return courseList;
     }
 
 }

@@ -560,7 +560,7 @@ public class ExpertSiteController {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("province",province);
-        condition.put("type", ExpertConstant.COURSE_TYPE_EXPERT);
+        condition.put("courseType", ExpertConstant.COURSE_TYPE_EXPERT);
         //销售中
         condition.put("status", TechConstant.PublishCourseStatus.SALING.toString());
         if (StringUtils.isEmpty(pageNo)) {
@@ -623,9 +623,9 @@ public class ExpertSiteController {
         Map<String,Object> condition = new HashMap<String,Object>();
         condition.put("courseid",id);
         condition.put("courseType",ExpertConstant.COURSE_TYPE_EXPERT);
-        List<Map<String,String>> courseList = ptCourseService.previewTrainCourseDetail(condition);
+        Map<String,String> course = ptCourseService.previewTrainCourseDetail(condition);
         Response response = new Response();
-        response.setData(courseList);
+        response.setData(course);
         return response;
     }
 
