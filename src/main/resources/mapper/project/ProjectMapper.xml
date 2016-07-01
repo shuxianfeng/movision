@@ -316,7 +316,8 @@
    <select id="getAreaOrCity" parameterType="java.util.Map" resultType="java.util.Map"> 
      select w.code,w.cityCode,c.provincecode from t_dictionary_area
       w left join t_dictionary_city c on w.cityCode=c.code
-     where w.name=#{area} and c.name=#{city}
+     where w.name=#{area} and c.name like CONCAT('%',#{city},'%')
+     
   </select>
   
   <select id="getCity" parameterType="java.util.Map" resultType="java.util.Map"> 
