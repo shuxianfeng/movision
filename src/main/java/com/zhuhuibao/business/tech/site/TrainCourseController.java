@@ -38,7 +38,7 @@ public class TrainCourseController {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("province",province);
-        condition.put("type", TechConstant.COURSE_TYPE_TECH);
+        condition.put("courseType", TechConstant.COURSE_TYPE_TECH);
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }

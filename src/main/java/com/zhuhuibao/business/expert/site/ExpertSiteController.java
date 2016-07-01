@@ -560,7 +560,7 @@ public class ExpertSiteController {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("province",province);
-        condition.put("type", ExpertConstant.COURSE_TYPE_EXPERT);
+        condition.put("courseType", ExpertConstant.COURSE_TYPE_EXPERT);
         //销售中
         condition.put("status", TechConstant.PublishCourseStatus.SALING.toString());
         if (StringUtils.isEmpty(pageNo)) {
