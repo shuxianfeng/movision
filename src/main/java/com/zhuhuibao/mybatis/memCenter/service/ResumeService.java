@@ -184,9 +184,9 @@ public class ResumeService {
      * 导出简历
      */
     public Map<String, String> exportResume(String id) {
-        Map<String, String> resumeMap = new HashMap<String, String>();
+        Map<String, String> resumeMap = new HashMap<>();
         Resume resume = resumeMapper.previewResume(id);
-        if (resume != null && resume.getAttach() != null) {
+        if (resume != null) {
 
             resumeMap.put("title", resume.getTitle() != null && StringUtils.isEmpty(resume.getTitle()) ? resume.getTitle() : "");
             resumeMap.put("name", resume.getRealName() != null && StringUtils.isEmpty(resume.getRealName()) ? resume.getRealName() : "");
