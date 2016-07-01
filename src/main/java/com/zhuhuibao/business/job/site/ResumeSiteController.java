@@ -82,10 +82,9 @@ public class ResumeSiteController {
 
             Map<String, String> resumeMap = resume.exportResume(String.valueOf(resumeID));
             if (!resumeMap.isEmpty()) {
-                String fileName =  StringUtils.isEmpty(resumeMap.get("title")) ? resumeMap.get("title") :"简历";
-
+                String fileName =  !StringUtils.isEmpty(resumeMap.get("title")) ? resumeMap.get("title") :"简历";
                 response.setHeader("Content-disposition", "attachment; filename=\""
-                        + URLEncoder.encode(fileName, "UTF-8") + ".doc\""); //
+                        + URLEncoder.encode(fileName, "UTF-8") + ".doc\"");
                 HWPFDocument document = ExporDoc.replaceDoc(path + "resumeTemplate.doc", resumeMap);
                 ByteArrayOutputStream ostream = new ByteArrayOutputStream();
                 if (document != null) {

@@ -188,33 +188,33 @@ public class ResumeService {
         Resume resume = resumeMapper.previewResume(id);
         if (resume != null) {
 
-            resumeMap.put("title", resume.getTitle() != null && StringUtils.isEmpty(resume.getTitle()) ? resume.getTitle() : "");
+            resumeMap.put("title", resume.getTitle() != null && !StringUtils.isEmpty(resume.getTitle()) ? resume.getTitle() : "");
             resumeMap.put("name", resume.getRealName() != null && StringUtils.isEmpty(resume.getRealName()) ? resume.getRealName() : "");
-            resumeMap.put("sex", resume.getSex() != null && StringUtils.isEmpty(resume.getSex()) ? resume.getSex() : "");
-            resumeMap.put("marriage", resume.getMarriage() != null && StringUtils.isEmpty(resume.getMarriage()) ? resume.getMarriage() : "");
-            resumeMap.put("birthYear", resume.getBirthYear() != null && StringUtils.isEmpty(resume.getBirthYear()) ? resume.getBirthYear() : "");
-            resumeMap.put("education", resume.getEducation() != null && StringUtils.isEmpty(resume.getEducation()) ? resume.getEducation() : "");
-            resumeMap.put("liveArea", resume.getLiveArea() != null && StringUtils.isEmpty(resume.getLiveArea()) ? resume.getLiveArea() : "");
-            resumeMap.put("workYear", resume.getWorkYear() != null && StringUtils.isEmpty(resume.getWorkYear()) ? resume.getWorkYear() : "");
-            resumeMap.put("mobile", resume.getMobile() != null && StringUtils.isEmpty(resume.getMobile()) ? resume.getMobile() : "");
-            resumeMap.put("email", resume.getEmail() != null && StringUtils.isEmpty(resume.getEmail()) ? resume.getEmail() : "");
-            resumeMap.put("jobNature", resume.getJobNature() != null && StringUtils.isEmpty(resume.getJobNature()) ? resume.getJobNature() : "");
-            resumeMap.put("post", resume.getPost() != null && StringUtils.isEmpty(resume.getPost()) ? resume.getPost() : "");
-            resumeMap.put("jobArea", resume.getJobArea() != null && StringUtils.isEmpty(resume.getJobArea()) ? resume.getJobArea() : "");
-            resumeMap.put("hopeSalary", resume.getHopeSalary() != null && StringUtils.isEmpty(resume.getHopeSalary()) ? resume.getHopeSalary() : "");
-            resumeMap.put("status", resume.getStatus() != null && StringUtils.isEmpty(resume.getStatus()) ? resume.getStatus() : "");
+            resumeMap.put("sex", resume.getSex() != null && !StringUtils.isEmpty(resume.getSex()) ? resume.getSex() : "");
+            resumeMap.put("marriage", resume.getMarriage() != null && !StringUtils.isEmpty(resume.getMarriage()) ? resume.getMarriage() : "");
+            resumeMap.put("birthYear", resume.getBirthYear() != null && !StringUtils.isEmpty(resume.getBirthYear()) ? resume.getBirthYear() : "");
+            resumeMap.put("education", resume.getEducation() != null && !StringUtils.isEmpty(resume.getEducation()) ? resume.getEducation() : "");
+            resumeMap.put("liveArea", resume.getLiveArea() != null && !StringUtils.isEmpty(resume.getLiveArea()) ? resume.getLiveArea() : "");
+            resumeMap.put("workYear", resume.getWorkYear() != null && !StringUtils.isEmpty(resume.getWorkYear()) ? resume.getWorkYear() : "");
+            resumeMap.put("mobile", resume.getMobile() != null && !StringUtils.isEmpty(resume.getMobile()) ? resume.getMobile() : "");
+            resumeMap.put("email", resume.getEmail() != null && !StringUtils.isEmpty(resume.getEmail()) ? resume.getEmail() : "");
+            resumeMap.put("jobNature", resume.getJobNature() != null && !StringUtils.isEmpty(resume.getJobNature()) ? resume.getJobNature() : "");
+            resumeMap.put("post", resume.getPost() != null && !StringUtils.isEmpty(resume.getPost()) ? resume.getPost() : "");
+            resumeMap.put("jobArea", resume.getJobArea() != null &&! StringUtils.isEmpty(resume.getJobArea()) ? resume.getJobArea() : "");
+            resumeMap.put("hopeSalary", resume.getHopeSalary() != null && !StringUtils.isEmpty(resume.getHopeSalary()) ? resume.getHopeSalary() : "");
+            resumeMap.put("status", resume.getStatus() != null && !StringUtils.isEmpty(resume.getStatus()) ? resume.getStatus() : "");
             //表格内的使用“(char)11”换行，ascii码的制表符.表格外的参数使用“\r”换行
-            if (resume.getEduExperience() != null && StringUtils.isEmpty(resume.getEduExperience())) {
+            if (resume.getEduExperience() != null && !StringUtils.isEmpty(resume.getEduExperience())) {
                 resumeMap.put("eduExperience", resume.getEduExperience().replaceAll("<br/>", String.valueOf((char) 11)));
             } else {
                 resumeMap.put("eduExperience", "");
             }
-            if (resume.getJobExperience() != null && StringUtils.isEmpty(resume.getJobExperience())) {
+            if (resume.getJobExperience() != null && !StringUtils.isEmpty(resume.getJobExperience())) {
                 resumeMap.put("jobExperience", resume.getJobExperience().replaceAll("<br/>", String.valueOf((char) 11)));
             } else {
                 resumeMap.put("jobExperience", "");
             }
-            if (resume.getProjectExperience() != null && StringUtils.isEmpty(resume.getProjectExperience())) {
+            if (resume.getProjectExperience() != null && !StringUtils.isEmpty(resume.getProjectExperience())) {
                 resumeMap.put("projectExperience", resume.getProjectExperience().replaceAll("<br/>", String.valueOf((char) 11)));
             } else {
                 resumeMap.put("projectExperience", "");
