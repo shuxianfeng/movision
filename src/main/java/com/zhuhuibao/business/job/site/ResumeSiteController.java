@@ -79,22 +79,28 @@ public class ResumeSiteController {
         try {
             String path = req.getSession().getServletContext().getRealPath("/");
             log.info("base path = "+path);
-            Resume resumeBean=new Resume();
-            resumeBean.setDownload("1");
-            resumeBean.setId(String.valueOf(resumeID));
-            resume.updateResume(resumeBean);
+
             Map<String, String> resumeMap = resume.exportResume(String.valueOf(resumeID));
             if (!resumeMap.isEmpty()) {
+                String fileName =  !StringUtils.isEmpty(resumeMap.get("title")) ? resumeMap.get("title") :"简历";
                 response.setHeader("Content-disposition", "attachment; filename=\""
-                        + URLEncoder.encode(resumeMap.get("title"), "UTF-8") + ".doc\""); //
+                        + URLEncoder.encode(fileName, "UTF-8") + ".doc\"");
                 HWPFDocument document = ExporDoc.replaceDoc(path + "resumeTemplate.doc", resumeMap);
                 ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-                document.write(ostream);
+                if (document != null) {
+                    document.write(ostream);
+                }
                 ServletOutputStream stream = response.getOutputStream();
                 stream.write(ostream.toByteArray());
                 stream.flush();
                 stream.close();
                 stream.close();
+
+                Resume resumeBean=new Resume();
+                resumeBean.setDownload("1");
+                resumeBean.setId(String.valueOf(resumeID));
+                resume.updateResume(resumeBean);
+
             }
         }catch(IOException e){
             e.printStackTrace();

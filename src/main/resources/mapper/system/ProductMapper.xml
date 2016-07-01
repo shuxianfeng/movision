@@ -420,4 +420,14 @@
     </where>
     order by lastmodified desc
   </select>
+
+  <select id="queryHotProduct" resultType="java.util.Map" parameterType="java.util.Map">
+    SELECT ad.connectedId as id,ad.imgUrl as productLogo,p.name,p.price
+    FROM t_sys_advertising ad
+    LEFT JOIN t_sys_adv_attr at on at.id = ad.advAttrId
+    LEFT JOIN t_p_product p on p.id = ad.connectedId
+    where at.chanType = #{chanType}
+    and at.page = #{page}
+    and at.advArea = #{advArea}
+  </select>
 </mapper>

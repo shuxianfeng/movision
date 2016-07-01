@@ -236,12 +236,12 @@ public class MemberRegService {
 			Validateinfo vInfo = new Validateinfo();
 			vInfo.setAccount(member.getAccount());
 			vInfo = this.findMemberValidateInfo(vInfo);
-			if(vInfo != null && vInfo.getId() != null && vInfo.getValid() == 1) {
+			if(vInfo != null && vInfo.getId() != null) {
 				String pwd = new String(EncodeUtil.decodeBase64(member.getPassword()));
 				String md5Pwd = new Md5Hash(pwd, null, 2).toString();
 				member.setPassword(md5Pwd);
 				if (member.getAccount() != null) {
-					if (member.getAccount().indexOf("@") >= 0) {
+					if (member.getAccount().contains("@")) {
 						member.setEmail(member.getAccount());
 						result = memberRegMapper.updateMemberPwd(member);
 					} else {
@@ -280,7 +280,7 @@ public class MemberRegService {
 		//手机
 		if(member.getAccount() != null && member.getCheckCode() != null)
 		{
-			if(member.getAccount().indexOf("@") == -1)
+			if(!member.getAccount().contains("@"))
 			{
 				if(member.getCheckCode().equalsIgnoreCase(seekPwdCode))
 				{

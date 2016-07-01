@@ -544,11 +544,11 @@ public class ExpertSiteController {
     public Response queryLatestExpertTrain(@ApiParam(value = "条数")@RequestParam int count)  {
         Response response = new Response();
         Map<String,Object> condition = new HashMap<String,Object>();
-        condition.put("status", TechConstant.PublishCourseStatus.SALING);
+        condition.put("status", TechConstant.PublishCourseStatus.SALING.toString());
         condition.put("courseType",ExpertConstant.COURSE_TYPE_EXPERT);
         condition.put("count",count);
-        TrainPublishCourse course = ptCourseService.selectTrainCourseInfo(condition);
-        response.setData(course);
+        List<Map<String,String>> courseList = ptCourseService.findLatestPublishCourse(condition);
+        response.setData(courseList);
         return response;
     }
 
@@ -560,7 +560,7 @@ public class ExpertSiteController {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("province",province);
-        condition.put("type", ExpertConstant.COURSE_TYPE_EXPERT);
+        condition.put("courseType", ExpertConstant.COURSE_TYPE_EXPERT);
         //销售中
         condition.put("status", TechConstant.PublishCourseStatus.SALING.toString());
         if (StringUtils.isEmpty(pageNo)) {
@@ -623,9 +623,9 @@ public class ExpertSiteController {
         Map<String,Object> condition = new HashMap<String,Object>();
         condition.put("courseid",id);
         condition.put("courseType",ExpertConstant.COURSE_TYPE_EXPERT);
-        List<Map<String,String>> courseList = ptCourseService.previewTrainCourseDetail(condition);
+        Map<String,String> course = ptCourseService.previewTrainCourseDetail(condition);
         Response response = new Response();
-        response.setData(courseList);
+        response.setData(course);
         return response;
     }
 
@@ -665,14 +665,6 @@ public class ExpertSiteController {
         Session sess = currentUser.getSession(false);
         String verifyCode = VerifyCodeUtils.outputHttpVerifyImage(100,40,response, Constants.CHECK_IMG_CODE_SIZE);
         sess.setAttribute(ExpertConstant.MOBILE_CODE_SESSION_TYPE_TRAIN, verifyCode);
-    }
-
-    @ApiOperation(value="计算专家培训课程下单时的价格",notes="计算专家培训课程下单时的价格",response = Response.class)
-    @RequestMapping(value = "train/get_trainPrice", method = RequestMethod.GET)
-    public Response get_trainPrice(@RequestParam String id) {
-        Response response = new Response();
-
-        return response;
     }
 
     @ApiOperation(value="给专家留言",notes="给专家留言",response = Response.class)

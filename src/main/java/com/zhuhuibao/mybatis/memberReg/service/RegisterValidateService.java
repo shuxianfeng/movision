@@ -239,7 +239,7 @@ public class RegisterValidateService {
 		int code = 200;
 		int msgCode = MsgCodeConstant.mcode_common_success;
 		String id = "0";
-		String message = "";
+		String message;
 		//验证用户是否存在
 		if (user != null && (user.getStatus() != 0 || user.getStatus() != 2)) {
 			Validateinfo vinfo = new Validateinfo();

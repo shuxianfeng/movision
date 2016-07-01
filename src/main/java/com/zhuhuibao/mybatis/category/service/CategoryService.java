@@ -1,6 +1,8 @@
 package com.zhuhuibao.mybatis.category.service;
 
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.ResultBean;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service("cs")
 @Transactional
@@ -34,5 +37,28 @@ public class CategoryService {
 			log.error("getFcateByScate",ex);
 		}
 		return fcate;
+	}
+
+	/**
+	 * 根据大系统id查询子系统
+	 */
+	public List<ResultBean> findSubSystemList(String id){
+		try{
+			return categoryMapper.findSubSystemList(id);
+		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
+		}
+	}
+
+	public List<Map<String,String>> findSubSystemByPid(String id){
+		try{
+			return categoryMapper.findSubSystemByPid(id);
+		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
+		}
 	}
 }
