@@ -350,15 +350,13 @@ public class RegisterController {
         log.debug("validate mail start.....");
         ModelAndView modelAndView = new ModelAndView();
         String vm = req.getParameter("vm");//获取email
-        if (vm != null) {
-            if (StringUtils.isEmpty(vm)) {
+        if (vm != null &&!StringUtils.isEmpty(vm)) {
                 Response response = rvService.processValidate(vm);
                 String[] array = (String[]) response.getData();
                 modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(array[0].getBytes()));
                 modelAndView.addObject("id", EncodeUtil.encodeBase64ToString(array[1].getBytes()));
                 RedirectView rv = new RedirectView(rvService.getRedirectUrl(response, "validate"));
                 modelAndView.setView(rv);
-            }
         } else {
             modelAndView.setView(new RedirectView(PropertiesUtils.getValue("host.ip")+"/404.html"));
         }
