@@ -189,7 +189,7 @@ public class ResumeService {
         if (resume != null) {
 
             resumeMap.put("title", resume.getTitle() != null && !StringUtils.isEmpty(resume.getTitle()) ? resume.getTitle() : "");
-            resumeMap.put("name", resume.getRealName() != null && StringUtils.isEmpty(resume.getRealName()) ? resume.getRealName() : "");
+            resumeMap.put("name", resume.getRealName() != null && !StringUtils.isEmpty(resume.getRealName()) ? resume.getRealName() : "");
             resumeMap.put("sex", resume.getSex() != null && !StringUtils.isEmpty(resume.getSex()) ? resume.getSex() : "");
             resumeMap.put("marriage", resume.getMarriage() != null && !StringUtils.isEmpty(resume.getMarriage()) ? resume.getMarriage() : "");
             resumeMap.put("birthYear", resume.getBirthYear() != null && !StringUtils.isEmpty(resume.getBirthYear()) ? resume.getBirthYear() : "");
