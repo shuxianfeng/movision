@@ -52,19 +52,19 @@
     LEFT JOIN t_dictionary_city c on e.city = c.code
     LEFT JOIN t_dictionary_area ar on e.area = ar.code
     WHERE e.is_deleted = 0
-    <if test="province != null">
+    <if test="province != null and province !=''">
       and e.province = #{province}
     </if>
-    <if test="expertType != null">
+    <if test="expertType != null and expertType !=''">
       and e.expertType = #{expertType}
     </if>
-    <if test="status != null">
+    <if test="status != null and status !=''">
       and e.status = #{status}
     </if>
-    <if test="name != null">
+    <if test="name != null and name !=''">
       and e.name like CONCAT('%',#{name},'%')
     </if>
-    <if test="type != null">
+    <if test="type != null and type !=''">
       and e.status = 1
     </if>
     order by e.updateTime desc
