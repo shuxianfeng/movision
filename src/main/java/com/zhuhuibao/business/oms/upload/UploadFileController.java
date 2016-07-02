@@ -253,30 +253,57 @@ public class UploadFileController {
 			{
 				areaIndex=address.indexOf("旗");
 			}
-			 
-            String areaOrCity=address.substring(0,areaIndex+1);
-            Map<String, String> areaOrCityMap=new HashMap<String, String>();
-            areaOrCityMap.put("area", areaOrCity);
-            areaOrCityMap.put("city", row.getCell(2).toString());
-            Map<String,Object> codeMap=projectService.getAreaOrCity(areaOrCityMap);
-            if(codeMap!=null){
-				projectInfo.setArea(codeMap.get("code").toString());
-				projectInfo.setCity(codeMap.get("cityCode").toString());
-				projectInfo.setProvince(codeMap.get("provincecode").toString());
-				projectInfo.setAddress(address.substring(areaIndex+1,address.length()));
-            }else{
-            	
-            	codeMap=projectService.getCity(areaOrCityMap);
-            	
-            	projectInfo.setCity(codeMap.get("cityCode").toString());
-				projectInfo.setProvince(codeMap.get("provincecode").toString());
-            	if(codeMap!=null){
-            		projectInfo.setAddress(address);
-            	}else{
-	            	isAdd=1;
-	            	failReason+= ",第4列，项目地址不正确，导入失败;"; 
-            	}
-            }
+			
+			if(areaIndex!=10000)
+			{
+				 
+	            String areaOrCity=address.substring(0,areaIndex+1);
+	            Map<String, String> areaOrCityMap=new HashMap<String, String>();
+	            areaOrCityMap.put("area", areaOrCity);
+	            areaOrCityMap.put("city", row.getCell(2).toString());
+	            Map<String,Object> codeMap=projectService.getAreaOrCity(areaOrCityMap);
+	            if(codeMap!=null){
+					projectInfo.setArea(codeMap.get("code").toString());
+					projectInfo.setCity(codeMap.get("cityCode").toString());
+					projectInfo.setProvince(codeMap.get("provincecode").toString());
+					projectInfo.setAddress(address.substring(areaIndex+1,address.length()));
+	            }else{
+	            	
+	            	codeMap=projectService.getCity(areaOrCityMap);
+	            	
+	            	projectInfo.setCity(codeMap.get("cityCode").toString());
+					projectInfo.setProvince(codeMap.get("provincecode").toString());
+	            	if(codeMap!=null){
+	            		projectInfo.setAddress(address);
+	            	}else{
+		            	isAdd=1;
+		            	failReason+= ",第4列，项目地址不正确，导入失败;"; 
+	            	}
+	            }
+			}else{
+				 
+				Map<String, String> areaOrCityMap=new HashMap<String, String>();
+	            areaOrCityMap.put("area", row.getCell(2).toString());
+	            areaOrCityMap.put("city", row.getCell(1).toString());
+	            Map<String,Object> codeMap=projectService.getAreaOrCity(areaOrCityMap);
+	            if(codeMap!=null){
+					projectInfo.setArea(codeMap.get("code").toString());
+					projectInfo.setCity(codeMap.get("cityCode").toString());
+					projectInfo.setProvince(codeMap.get("provincecode").toString());
+					projectInfo.setAddress(address);
+	            }else{
+	            	
+	            	codeMap=projectService.getCity(areaOrCityMap); 
+	            	if(codeMap!=null){
+	            		projectInfo.setCity(codeMap.get("cityCode").toString());
+	    				projectInfo.setProvince(codeMap.get("provincecode").toString()); 
+	            	}else{
+	            		projectInfo.setAddress(address);
+		            	 
+	            	}
+	            }
+			}
+			
 			
 		} 
 		

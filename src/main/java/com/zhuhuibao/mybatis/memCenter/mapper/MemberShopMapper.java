@@ -23,4 +23,6 @@ public interface MemberShopMapper {
     MemberShop findByCompanyID(@Param("companyId") Long companyId);
 
     List<MemberShop> findAllByCondition(RowBounds rowBounds, Map<String, String> paramMap);
+
+    Map<String,String> queryShopBanner(String id);
 }
