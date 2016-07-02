@@ -65,6 +65,7 @@ public class CompanyInfoController {
 
         //页面展示
         Map map = new HashMap();
+        map.put("logo",member.getEnterpriseLogo());
         map.put("companyName",member.getEnterpriseName());
         map.put("webSite",member.getEnterpriseWebSite());
         if(member.getProvince()!=null){

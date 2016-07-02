@@ -408,7 +408,7 @@
     case when (locate(';',imgUrl) > 0) then substring(imgUrl,1,locate(';',imgUrl)-1) when locate(';',imgUrl) = 0 then imgUrl end as imgUrl
     from t_p_product
     <where>
-      <if test="fcateid != null">
+      <if test="fcateid != null and fcateid !=''">
         and fcateid = #{fcateid}
       </if>
       <if test="createid != null">
