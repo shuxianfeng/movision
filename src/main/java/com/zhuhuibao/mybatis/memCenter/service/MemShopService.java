@@ -110,4 +110,14 @@ public class MemShopService {
             throw e;
         }
     }
+
+    public Map<String,String> queryShopBanner(String id){
+        try {
+            return mapper.queryShopBanner(id);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

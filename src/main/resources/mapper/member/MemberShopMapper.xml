@@ -175,4 +175,11 @@
       reason = #{reason,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <select id="queryShopBanner" resultType="java.util.Map">
+        select
+        shopName,bannerUrl
+        from t_m_shop
+        where companyId = #{id} and status = 2
+    </select>
 </mapper>
