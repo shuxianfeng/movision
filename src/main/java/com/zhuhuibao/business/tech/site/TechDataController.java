@@ -211,4 +211,33 @@ public class TechDataController {
         response.setData(techDataList);
         return response;
     }
+
+
+    @ApiOperation(value = "解决方案，技术资料，培训资料 列表(分页)", notes = "解决方案，技术资料，培训资料 列表(分页)", response = Response.class)
+    @RequestMapping(value = "list_tech_data", method = RequestMethod.GET)
+    public Response listTechDataPage(@ApiParam(value = "类别ID:1:解决方案 2:技术资料 3:培训资料") @RequestParam String fcateId,
+                                     @ApiParam(value = "子类别ID") @RequestParam(required = false) String scateId,
+                                     @ApiParam(value = "页码") @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                     @ApiParam(value = "每页显示的数目") @RequestParam(required = false,defaultValue = "10") String pageSize) {
+
+        Map<String,Object>    conditionMap = new HashMap<>();
+        conditionMap.put("fCategory",fcateId);
+        if(StringUtils.isEmpty(scateId)){
+            conditionMap.put("sCategory",scateId);
+        }
+
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Map<String,String>> techList = techDataService.findAllTechDataOnlyPager(pager, conditionMap);
+        pager.result(techList);
+
+        return new Response(pager);
+    }
+
+    @ApiOperation(value = "根据父类查询子类别信息", notes = "根据父类查询子类别信息", response = Response.class)
+    @RequestMapping(value = "sel_scate_byfid", method = RequestMethod.GET)
+    public Response getScategoryByFid(@ApiParam(value = "类别ID:1:解决方案 2:技术资料 3:培训资料") @RequestParam String fcateId) {
+
+        List<DictionaryTechData> slist = dicTDService.getSecondCategory(Integer.valueOf(fcateId));
+        return new Response(slist);
+    }
 }

@@ -46,7 +46,7 @@ public class TechCoopController {
     PaymentService paymentService;
 
     @RequestMapping(value="add_tech_cooperation", method = RequestMethod.POST)
-    @ApiOperation(value="新增技术成果",notes = "新增技术技术成果",response = Response.class)
+    @ApiOperation(value="发布技术成果",notes = "新增技术技术成果",response = Response.class)
     public Response insertTechCooperation(@ApiParam(value = "技术合作：技术成果")  @ModelAttribute(value="techCoop")TechCooperation techCoop) throws Exception {
         log.info("insert tech cooperation");
         Long createId = ShiroUtil.getCreateID();
@@ -56,12 +56,11 @@ public class TechCoopController {
         }else{
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-        Response response = new Response();
-        return response;
+        return new Response();
     }
 
     @RequestMapping(value="add_tech_requirement", method = RequestMethod.POST)
-    @ApiOperation(value="新增技术需求",notes = "新增技术需求",response = Response.class)
+    @ApiOperation(value="发布技术需求",notes = "新增技术需求",response = Response.class)
     public Response insertTechRequirement(@ApiParam(value = "技术合作：技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop) throws Exception {
         log.info("insert tech requirement");
         Long createId = ShiroUtil.getCreateID();
@@ -71,8 +70,7 @@ public class TechCoopController {
         }else{
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-        Response response = new Response();
-        return response;
+        return new Response();
     }
 
 
@@ -80,7 +78,7 @@ public class TechCoopController {
     @ApiOperation(value="查看技术需求详情",notes = "查看技术需求详情",response = Response.class)
     public Response previewTechCooperation(@ApiParam(value = "技术需求ID")  @RequestParam String techCoopId)
     {
-        Map<String,Object> map = new HashMap<String,Object>();
+        Map<String,Object> map = new HashMap<>();
         map.put("id",techCoopId);
         map.put("type",2);
         Map<String,Object> techCoop = techService.previewTechCooperationDetail(map);
@@ -89,17 +87,6 @@ public class TechCoopController {
         response.setData(techCoop);
         return response;
     }
-
-/*    @RequestMapping(value="sel_tech_achievement_detail", method = RequestMethod.GET)
-    @ApiOperation(value="查看技术成果详情",notes = "查看技术成果详情",response = Response.class)
-//    @ZhbAutoPayforAnnotation(goodsType=ZhbGoodsType.CKJSCG)
-    public Response previewTechAchievement(@ApiParam(value = "技术成果ID")  @RequestParam String techCoopId)
-    {
-        Map<String,Object> techCoop = techService.previewTechCooperationDetail(techCoopId);
-        techService.updateTechCooperationViews(techCoopId);
-        Response response = paymentService.viewGoodsRecord(Long.parseLong(techCoopId),techCoop,"techcoop");
-        return response;
-    }*/
 
     @RequestMapping(value="sel_tech_cooperation", method = RequestMethod.GET)
     @ApiOperation(value="频道页搜索技术合作(技术成果，技术需求)",notes = "频道页搜索技术合作(技术成果，技术需求)",response = Response.class)
