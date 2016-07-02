@@ -168,7 +168,7 @@
         views = views + 1,
       </if>
       <if test="download != null" >
-        downloadCount = downloadCount+1,
+        downloadCount = downloadCount+#{download},
       </if>
     </set>
     where id = #{id}

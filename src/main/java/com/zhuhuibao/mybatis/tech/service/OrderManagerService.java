@@ -93,6 +93,10 @@ public class OrderManagerService {
                         paymentInfo.put("zhbTradeTime", DateUtils.date2Str(flow.getTradeTime(), "yyyy-MM-dd HH:mm:ss"));
                     }
                 }
+                if(orderMap==null)
+                {
+                	orderMap=new HashMap<String,Object>();
+                }
                 orderMap.put("paymentInfo",paymentInfo);
             }
         }catch(Exception e)

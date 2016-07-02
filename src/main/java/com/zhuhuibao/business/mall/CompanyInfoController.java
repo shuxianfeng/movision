@@ -8,6 +8,7 @@ import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.SuccessCase;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
+import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.SuccessCaseService;
 import com.zhuhuibao.mybatis.product.service.ProductService;
@@ -45,6 +46,9 @@ public class CompanyInfoController {
     @Autowired
     private BrandService brandService;
 
+    @Autowired
+    MemShopService memShopService;
+
     @ApiOperation(value = "商户主页相关信息", notes = "商户主页相关信息")
     @RequestMapping(value = "sel_index_companyInfo", method = RequestMethod.GET)
     public Response companyInfo(@ApiParam(value = "商户id")@RequestParam String id)  {
@@ -61,6 +65,7 @@ public class CompanyInfoController {
 
         //页面展示
         Map map = new HashMap();
+        map.put("logo",member.getEnterpriseLogo());
         map.put("companyName",member.getEnterpriseName());
         map.put("webSite",member.getEnterpriseWebSite());
         if(member.getProvince()!=null){
@@ -317,6 +322,15 @@ public class CompanyInfoController {
         map.put("advArea",advArea);
         List<Map<String,String>> list = brandService.queryRecommendBrand(map);
         response.setData(list);
+        return response;
+    }
+
+    @ApiOperation(value = "获取商铺banner及名称", notes = "获取商铺banner及名称")
+    @RequestMapping(value = "sel_shop_banner", method = RequestMethod.GET)
+    public Response sel_shop_banner(@ApiParam(value = "商户id")@RequestParam String id)  {
+        Response response = new Response();
+        Map<String,String> map = memShopService.queryShopBanner(id);
+        response.setData(map);
         return response;
     }
 }
