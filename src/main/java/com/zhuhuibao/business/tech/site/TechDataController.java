@@ -62,48 +62,46 @@ public class TechDataController {
     @Autowired
     FileUtil fileUtil;
 
-    @ApiOperation(value="上传技术资料(行业解决方案，技术文档，培训资料)",notes="上传技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)
+    @ApiOperation(value = "上传技术资料(行业解决方案，技术文档，培训资料)", notes = "上传技术资料(行业解决方案，技术文档，培训资料)", response = Response.class)
     @RequestMapping(value = "upload_tech_data", method = RequestMethod.POST)
-    public Response uploadTechData(HttpServletRequest req,@RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
+    public Response uploadTechData(@RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         Response result = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        if(null != session){
-            String url = zhbOssClient.uploadObject(file,"doc","tech");
+        if (null != session) {
+            String url = zhbOssClient.uploadObject(file, "doc", "tech");
             Map map = new HashMap();
-            map.put(Constants.name,url);
-            if(url.lastIndexOf(".")!= -1) {
+            map.put(Constants.name, url);
+            if (url.lastIndexOf(".") != -1) {
                 map.put(TechConstant.FILE_FORMAT, url.substring(url.lastIndexOf(".")));
-            }else
-            {
+            } else {
                 map.put(TechConstant.FILE_FORMAT, "");
             }
-            map.put(TechConstant.FILE_SIZE,file.getSize());
+            map.put(TechConstant.FILE_SIZE, file.getSize());
             result.setData(map);
             result.setCode(200);
-        }else{
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
     }
 
-    @RequestMapping(value="add_Tech_data", method = RequestMethod.POST)
-    @ApiOperation(value="新增技术资料(行业解决方案，技术文档，培训资料)",notes = "新增技术资料(行业解决方案，技术文档，培训资料)",response = Response.class)
-    public Response insertTechData(@ApiParam(value = "技术资料:行业解决方案，技术文档，培训资料")  @ModelAttribute(value="techData")TechData techData)
-    {
+    @RequestMapping(value = "add_Tech_data", method = RequestMethod.POST)
+    @ApiOperation(value = "新增技术资料(行业解决方案，技术文档，培训资料)", notes = "新增技术资料(行业解决方案，技术文档，培训资料)", response = Response.class)
+    public Response insertTechData(@ApiParam(value = "技术资料:行业解决方案，技术文档，培训资料") @ModelAttribute(value = "techData") TechData techData) {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
-        if(null != createId) {
+        if (null != createId) {
             techData.setCreateid(createId);
             int result = techDataService.insertTechData(techData);
-        }else{
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
 
-    @RequestMapping(value="sel_tech_data", method = RequestMethod.GET)
-    @ApiOperation(value="运营管理平台搜索技术资料",notes = "运营管理平台搜索技术资料",response = Response.class)
+    @RequestMapping(value = "sel_tech_data", method = RequestMethod.GET)
+    @ApiOperation(value = "运营管理平台搜索技术资料", notes = "运营管理平台搜索技术资料", response = Response.class)
     public Response findAllTechDataPager(@ApiParam(value = "1解决方案，2技术资料，3培训资料") @RequestParam(required = false) String fCategory,
                                          @ApiParam(value = "资料标题") @RequestParam(required = false) String title,
                                          @ApiParam(value = "二级分类code") @RequestParam(required = false) String sCategory,
@@ -113,9 +111,8 @@ public class TechDataController {
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("fCategory", fCategory);
         condition.put("sCategory", sCategory);
-        if(null != title && !"".equals(title))
-        {
-            condition.put("title",title.replace("_","\\_"));
+        if (null != title && !"".equals(title)) {
+            condition.put("title", title.replace("_", "\\_"));
         }
         //审核通过
         condition.put("status", TechConstant.TechDataStatus.AUDITPASS.toString());
@@ -132,27 +129,25 @@ public class TechDataController {
         return response;
     }
 
-    @RequestMapping(value="sel_second_category", method = RequestMethod.GET)
-    @ApiOperation(value="查询解决方案、技术资料，培训资料行业类别",notes = "查询解决方案、技术资料，培训资料行业类别",response = Response.class)
-    public Response selectSecondCategoryByFirstId()
-    {
+    @RequestMapping(value = "sel_second_category", method = RequestMethod.GET)
+    @ApiOperation(value = "查询解决方案、技术资料，培训资料行业类别", notes = "查询解决方案、技术资料，培训资料行业类别", response = Response.class)
+    public Response selectSecondCategoryByFirstId() {
         Response response = new Response();
-        List<Map<String,Object>> categoryList = dicTDService.selectCategoryInfo(0);
+        List<Map<String, Object>> categoryList = dicTDService.selectCategoryInfo(0);
         response.setData(categoryList);
         return response;
     }
 
     //vip减 项目条数减
-    @ApiOperation(value="下载技术资料",notes="下载技术资料",response = Response.class)
-    @RequestMapping(value="downloadFile", method = RequestMethod.GET)
+    @ApiOperation(value = "下载技术资料", notes = "下载技术资料", response = Response.class)
+    @RequestMapping(value = "downloadFile", method = RequestMethod.GET)
     public Response downloadBill(HttpServletResponse response,
-                                 @ApiParam(value = "技术资料ID")@RequestParam String techDataId) throws Exception
-    {
+                                 @ApiParam(value = "技术资料ID") @RequestParam String techDataId) throws Exception {
         Response jsonResult = new Response();
         log.debug("download tech data");
         try {
             Long createId = ShiroUtil.getCreateID();
-            if(createId != null) {
+            if (createId != null) {
                 String attachName = techDataService.selectTechDataAttachName(Long.parseLong(techDataId));
                 response.setDateHeader("Expires", 0);
                 response.setHeader("Cache-Control",
@@ -161,63 +156,58 @@ public class TechDataController {
                 response.setHeader("Content-disposition", "attachment;filename=" + attachName);
                 response.setContentType("application/octet-stream");
 //                attachName = ApiConstants.getUploadDoc() + TechConstant.UPLOAD_TECH_DOC_URL + "/" + attachName;
-                jsonResult = fileUtil.downloadObject(response, attachName,"doc","tech");
+                jsonResult = fileUtil.downloadObject(response, attachName, "doc", "tech");
                 //插入我的下载资料
-                dlService.insertDownloadData(techDataId,createId);
+                dlService.insertDownloadData(techDataId, createId);
                 //更新下载率
-                Map<String,Object> map = new HashMap<String,Object>();
-                map.put("views","views");
-                map.put("id",techDataId);
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("views", "views");
+                map.put("id", techDataId);
                 techDataService.updateTechDataViewsOrDL(map);
-            }else{
+            } else {
                 throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
-        }
-        catch(Exception e)
-        {
-            log.error("download tech data error! ",e);
+        } catch (Exception e) {
+            log.error("download tech data error! ", e);
         }
         return jsonResult;
     }
 
-    @RequestMapping(value="sel_tech_data_detail", method = RequestMethod.GET)
-    @ApiOperation(value="预览解决方案、技术资料，培训资料详情页面",notes = "预览解决方案、技术资料，培训资料详情页面",response = Response.class)
-    public Response previewTechDataDetail( @ApiParam(value = "技术资料ID")  @RequestParam() String techDataId)
-    {
+    @RequestMapping(value = "sel_tech_data_detail", method = RequestMethod.GET)
+    @ApiOperation(value = "预览解决方案、技术资料，培训资料详情页面", notes = "预览解决方案、技术资料，培训资料详情页面", response = Response.class)
+    public Response previewTechDataDetail(@ApiParam(value = "技术资料ID") @RequestParam() String techDataId) {
         Response response = new Response();
-        List<Map<String,String>> techDataList = techDataService.previewTechDataDetail(Long.parseLong(techDataId));
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("views","views");
-        map.put("id",techDataId);
+        List<Map<String, String>> techDataList = techDataService.previewTechDataDetail(Long.parseLong(techDataId));
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("views", "views");
+        map.put("id", techDataId);
         techDataService.updateTechDataViewsOrDL(map);
         response.setData(techDataList);
         return response;
     }
 
-    @RequestMapping(value="sel_views_order", method = RequestMethod.GET)
-    @ApiOperation(value="查询解决方案、技术资料，培训资料的点击排行",notes = "查询解决方案、技术资料，培训资料的点击排行",response = Response.class)
-    public Response findDataViewsOrder(@ApiParam(value="分类：1：行业解决方案，2：技术资料，3：培训资料") @RequestParam Integer categoryId)
-    {
+    @RequestMapping(value = "sel_views_order", method = RequestMethod.GET)
+    @ApiOperation(value = "查询解决方案、技术资料，培训资料的点击排行", notes = "查询解决方案、技术资料，培训资料的点击排行", response = Response.class)
+    public Response findDataViewsOrder(@ApiParam(value = "分类：1：行业解决方案，2：技术资料，3：培训资料") @RequestParam Integer categoryId) {
         Response response = new Response();
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("status",TechConstant.TechDataStatus.AUDITPASS.toString());
-        map.put("categoryId",categoryId);
-        map.put("count",TechConstant.DATA_VIEWS_COUNT_TEN);
-        List<Map<String,String>> techDataList = techDataService.findDataViewsOrder(map);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("status", TechConstant.TechDataStatus.AUDITPASS.toString());
+        map.put("categoryId", categoryId);
+        map.put("count", TechConstant.DATA_VIEWS_COUNT_TEN);
+        List<Map<String, String>> techDataList = techDataService.findDataViewsOrder(map);
         response.setData(techDataList);
         return response;
     }
 
-    @RequestMapping(value="sel_download_order", method = RequestMethod.GET)
-    @ApiOperation(value="查询解决方案、技术资料，培训资料的下载排行",notes = "查询解决方案、技术资料，培训资料的下载排行",response = Response.class)
-    public Response findDownloadOrder(@ApiParam(value="分类：1：行业解决方案，2：技术资料，3：培训资料") @RequestParam Integer categoryId)
-    {
+    @RequestMapping(value = "sel_download_order", method = RequestMethod.GET)
+    @ApiOperation(value = "查询解决方案、技术资料，培训资料的下载排行", notes = "查询解决方案、技术资料，培训资料的下载排行", response = Response.class)
+    public Response findDownloadOrder(@ApiParam(value = "分类：1：行业解决方案，2：技术资料，3：培训资料") @RequestParam Integer categoryId) {
         Response response = new Response();
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("status",TechConstant.TechDataStatus.AUDITPASS.toString());
-        map.put("categoryId",categoryId);
-        map.put("count",TechConstant.DATA_DOWNLOAD_COUNT_TEN);
-        List<Map<String,String>> techDataList = techDataService.findDownloadOrder(map);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("status", TechConstant.TechDataStatus.AUDITPASS.toString());
+        map.put("categoryId", categoryId);
+        map.put("count", TechConstant.DATA_DOWNLOAD_COUNT_TEN);
+        List<Map<String, String>> techDataList = techDataService.findDownloadOrder(map);
         response.setData(techDataList);
         return response;
     }

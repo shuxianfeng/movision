@@ -335,18 +335,16 @@ public class TechDataService {
      * @return
      */
     public Map<String,List<Map<String,String>>> generateDataInfo(List<Map<String, String>> dataList,String type) {
-        Map<String, List<Map<String, String>>> map = new HashMap<String, List<Map<String, String>>>();
+        Map<String, List<Map<String, String>>> map = new HashMap<>();
         if(!dataList.isEmpty()) {
-            int size = dataList.size();
             List<Map<String, String>> infoList;
-            for (int i = 0; i < size; i++) {
-                Map<String, String> tData = dataList.get(i);
+            for (Map<String, String> tData : dataList) {
                 String sCategory = String.valueOf(tData.get(type));
                 if (map.get(sCategory) != null) {
                     infoList = map.get(sCategory);
                     infoList.add(tData);
                 } else {
-                    infoList = new ArrayList<Map<String, String>>();
+                    infoList = new ArrayList<>();
                     infoList.add(tData);
                     map.put(sCategory, infoList);
                 }
