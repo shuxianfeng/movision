@@ -24,7 +24,7 @@
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select t.id, t.noticeName, t.createid, date_format(t.publishDate,'%Y-%m-%d') publishDate,
-    date_format(t.updateDate,'%Y-%m-%d') updateDate, t.projectName, concat(pn.name,ct.name,ar.name) area,ct.name city,
+    date_format(t.updateDate,'%Y-%m-%d') updateDate, t.projectName, concat(pn.name,ct.name,ar.name) area,ct.name city,pn.name province,
     t.type, date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate, t.content
     from t_prj_tender_toned t
     left join t_dictionary_province pn on pn.code = t.province

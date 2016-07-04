@@ -81,31 +81,26 @@ public class DictionaryTechDataService {
             if(!categoryList.isEmpty())
             {
                 int size = categoryList.size();
-                for(int i=0;i<size;i++)
-                {
-                    Map<String,Object> category = categoryList.get(i);
+                for (Map<String, Object> category : categoryList) {
                     Integer parentId = (Integer) category.get("parentId");
-                    if(fcateMap != null && fcateMap.get("fCode")!= null && fcateMap.get("fCode") == parentId)
-                    {
+                    if (fcateMap != null && fcateMap.get("fCode") != null && fcateMap.get("fCode") == parentId) {
                         scateList = (List<Map<String, Object>>) fcateMap.get("list");
-                        scateMap = new HashMap<String,Object>();
-                        scateMap.put("sName",category.get("name"));
-                        scateMap.put("sCode",category.get("code"));
+                        scateMap = new HashMap<>();
+                        scateMap.put("sName", category.get("name"));
+                        scateMap.put("sCode", category.get("code"));
                         scateList.add(scateMap);
-                        fcateMap.put("list",scateList);
-                    }
-                    else
-                    {
+                        fcateMap.put("list", scateList);
+                    } else {
 
-                        fcateMap =  new HashMap<String,Object>();
-                        fcateMap.put("fName",category.get("firstName"));
-                        fcateMap.put("fCode",category.get("parentId"));
-                        scateMap = new HashMap<String,Object>();
-                        scateList = new ArrayList<Map<String,Object>>();
-                        scateMap.put("sName",category.get("name"));
-                        scateMap.put("sCode",category.get("code"));
+                        fcateMap = new HashMap<>();
+                        fcateMap.put("fName", category.get("firstName"));
+                        fcateMap.put("fCode", category.get("parentId"));
+                        scateMap = new HashMap<>();
+                        scateList = new ArrayList<>();
+                        scateMap.put("sName", category.get("name"));
+                        scateMap.put("sCode", category.get("code"));
                         scateList.add(scateMap);
-                        fcateMap.put("list",scateList);
+                        fcateMap.put("list", scateList);
                         fcateList.add(fcateMap);
                     }
                 }

@@ -365,6 +365,6 @@
     <if test="type != null">
       and t.type = #{type}
     </if>
-    order by type,t.updateTime desc
+    order by t.type,t.updateTime desc
   </select>
 </mapper>

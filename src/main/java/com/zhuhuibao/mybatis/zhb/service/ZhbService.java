@@ -281,7 +281,6 @@ public class ZhbService {
 	/**
 	 * 判断是否可以使用特权数量或者筑慧币支付
 	 * 
-	 * @param goodsId
 	 * @param goodsType
 	 * @return
 	 */
