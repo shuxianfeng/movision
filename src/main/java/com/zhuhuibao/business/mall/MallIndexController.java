@@ -159,4 +159,13 @@ public class MallIndexController {
 
         return  new Response(result);
     }
+
+    @ApiOperation(value = "资质类型", notes = "资质类型", response = Response.class)
+    @RequestMapping(value = "sel_certificateList", method = RequestMethod.GET)
+    public Response certificateList(@RequestParam String type)  {
+        Response response = new Response();
+        List list = memberService.findCertificateList(type);
+        response.setData(list);
+        return response;
+    }
 }
