@@ -165,7 +165,7 @@ public class TechIndexController {
     @ApiOperation(value = "查询最新发布的课程(默认5条)", notes = "查询最新发布的课程(默认5条)", response = Response.class)
     public Response findLatestPublishCourse() {
         Map<String, Object> condition = new HashMap<>();
-        condition.put("status", TechConstant.PublishCourseStatus.SALING);
+        condition.put("status", TechConstant.PublishCourseStatus.SALING.toString());
         condition.put("courseType", TechConstant.COURSE_TYPE_TECH);
         condition.put("count", TechConstant.INDEX_LATEST_COUNT_FIVE);
         List<Map<String, String>> courseList = ptCourseService.findLatestPublishCourse(condition);
