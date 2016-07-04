@@ -59,7 +59,7 @@ public class AuthcMember {
         this.role = role;
     }
 
-    public boolean isexpert() {
+    public boolean getIsexpert() {
         return isexpert;
     }
 
