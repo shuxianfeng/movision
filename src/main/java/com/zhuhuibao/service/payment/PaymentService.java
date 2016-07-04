@@ -67,8 +67,8 @@ public class PaymentService {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
         Long companyId = ShiroUtil.getCompanyID();
+        Map<String,Object> dataMap = new HashMap<String,Object>();
         if(createId != null) {
-            Map<String,Object> dataMap = new HashMap<String,Object>();
             Map<String,Object> con = new HashMap<String,Object>();
             //商品ID
             con.put("goodsId", goodsID);
@@ -140,12 +140,29 @@ public class PaymentService {
                     dataMap.put("info",map);
                 }
                 dataMap.put("payment", ZhbPaymentConstant.PAY_ZHB_PURCHASE);
-
                 response.setData(dataMap);
             }
         }else{
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            if(CKJSCG.toString().equals(type)){//查看技术成果
+                Map<String,Object> techCoop = techService.previewUnloginTechCoopDetail(String.valueOf(goodsID));
+                techService.updateTechCooperationViews(String.valueOf(goodsID));
+                dataMap.put("info",techCoop);
+                response.setData(dataMap);
+            }else if(CKZJJSCG.toString().equals(type))//查看专家技术成果
+            {
+                Map<String,String> map = expertService.queryUnloginAchievementById(String.valueOf(goodsID));
+                dataMap.put("info",map);
+                response.setData(dataMap);
+            }else if(CKZJXX.toString().equals(type))//查看专家信息
+            {
+                Map map = expertService.getExpertDetail(String.valueOf(goodsID),0);
+                dataMap.put("info",map);
+                response.setData(dataMap);
+            }else {
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            }
         }
+
         return response;
     }
 }

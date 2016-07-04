@@ -252,6 +252,7 @@ public class ExpertController {
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null){
             answer.setCreateid(String.valueOf(createId));
+            answer.setStatus("0");
             expertService.answerQuestion(answer);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

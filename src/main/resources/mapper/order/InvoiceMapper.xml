@@ -199,7 +199,7 @@
         invoiceNum = #{invoiceNum,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where orderNo = #{orderNo,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.order.entity.Invoice" >
     update t_o_invoice
