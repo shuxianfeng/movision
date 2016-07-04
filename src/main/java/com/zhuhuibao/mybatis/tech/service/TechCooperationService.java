@@ -265,18 +265,20 @@ public class TechCooperationService {
      * @param map
      * @return
      */
-    public Map<String,List<Map<String,String>>> findIndexTechCooperation(Map<String,Object> map)
+    public List<Map<String,String>> findIndexTechCooperation(Map<String,Object> map)
     {
         log.info("find home page tech cooperation "+StringUtils.mapToString(map));
-        Map<String,List<Map<String,String>>> coopMap;
+//        Map<String,List<Map<String,String>>> coopMap;
+        List<Map<String,String>> coopList;
         try{
-            List<Map<String,String>> coopList = techMapper.findIndexTechCooperation(map);
-            coopMap = tdService.generateDataInfo(coopList,"type");
+            coopList = techMapper.findIndexTechCooperation(map);
+//            coopMap = tdService.generateDataInfo(coopList,"type");
         }catch(Exception e)
         {
             log.error("find home page tech data error!",e);
             throw e;
         }
-        return coopMap;
+//        return coopMap;
+        return coopList;
     }
 }

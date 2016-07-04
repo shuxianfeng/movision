@@ -155,7 +155,8 @@ public class TechIndexController {
         map.put("status", TechConstant.TechCooperationnStatus.AUDITPASS.toString());
         map.put("type", type);
         map.put("count", 6);
-        Map<String, List<Map<String, String>>> dataList = coopService.findIndexTechCooperation(map);
+//        Map<String, List<Map<String, String>>> dataList = coopService.findIndexTechCooperation(map);
+         List<Map<String, String>> dataList = coopService.findIndexTechCooperation(map);
         response.setData(dataList);
         return response;
     }
