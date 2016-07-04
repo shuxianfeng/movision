@@ -23,6 +23,7 @@ import com.zhuhuibao.mybatis.vip.entity.VipPrivilege;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.pagination.model.Paging;
 
 /**
  * vip
@@ -88,6 +89,40 @@ public class VipController {
 		result.put("privilegeList", privilegeList);
 
 		response.setData(result);
+		return response;
+	}
+
+	@ApiOperation(value = "运营管理系统-VIP会员", notes = "运营管理系统-VIP会员", response = Response.class)
+	@RequestMapping(value = "oms/sel_allvip", method = RequestMethod.GET)
+	public Response omsAllvip(@ApiParam(value = "登陆账号") @RequestParam(required = false) String account,
+			@ApiParam(value = "姓名/企业名称") @RequestParam(required = false) String name,
+			@ApiParam(value = "Vip会员等级") @RequestParam(required = false) String vipLevel,
+			@ApiParam(value = "Vip会员状态") @RequestParam(required = false) String status, @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
+			@ApiParam(value = "每页显示的条数") @RequestParam(required = false) String pageSize) throws Exception {
+		Response response = new Response();
+		if (StringUtils.isEmpty(pageNo)) {
+			pageNo = "1";
+		}
+		if (StringUtils.isEmpty(pageSize)) {
+			pageSize = "10";
+		}
+		List<Map<String, String>> viplist = new ArrayList<Map<String, String>>();
+		Map<String, String> m = new HashMap<String, String>();
+		m.put("id", "1");
+		m.put("buyTime", "2016-7-4");
+		m.put("account", "loginAccount");
+		m.put("name", "筑慧宝");
+		m.put("vipLevel", "个人黄金会员");
+		m.put("activeTime", "1");
+		m.put("price", "496");
+		m.put("status", "496");
+
+		viplist.add(m);
+
+		Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+
+		pager.result(viplist);
+		response.setData(pager);
 		return response;
 	}
 }
