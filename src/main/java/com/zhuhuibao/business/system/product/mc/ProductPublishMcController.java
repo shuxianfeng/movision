@@ -34,7 +34,7 @@ import java.util.*;
  *
  */
 @RestController
-@Api(value = "productPublishMc",description = "发布产品")
+@Api(value = "productPublishMc",description = "产品(个人中心)")
 public class ProductPublishMcController {
 
 	private static final Logger log = LoggerFactory.getLogger(ProductPublishMcController.class);
@@ -124,7 +124,7 @@ public class ProductPublishMcController {
 	 * @throws JsonGenerationException
 	 */
 	@RequestMapping(value = {"/rest/findAllProduct", "/rest/system/mc/product/sel_allProduct"}, method = RequestMethod.GET)
-	@ApiOperation(value = "产品详情页面预览产品参数", notes = "产品详情页面预览产品参数", response = Response.class)
+	@ApiOperation(value = "我的产品", notes = "我的产品", response = Response.class)
 	public Response findAllProduct(ProductWithBLOBs product, String pageNo, String pageSize) throws IOException {
 		Response response = new Response();
 		if (StringUtils.isEmpty(pageNo)) {

@@ -27,7 +27,7 @@ import com.zhuhuibao.mybatis.product.service.ProductService;
  *
  */
 @RestController
-@Api(value = "productPublish",description = "发布产品")
+@Api(value = "productSite",description = "产品(前台页面)")
 public class ProductPublishController {
 	
 	private static final Logger log = LoggerFactory.getLogger(ProductPublishController.class);
