@@ -159,10 +159,10 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   
-  <select id="selectAllVipInfoList" resultType="java.util.Map" parameterType="java.util.Map">
+  <select id="findAllVipInfoList" resultType="java.util.Map" parameterType="java.util.Map">
   	SELECT 
 	  o.buyerId AS id,
-	  o.dealTime AS buyTime,
+	  date_format(o.dealTime,'%Y-%m-%d %H:%i:%s') AS buyTime,
 	  CASE
 	    WHEN m.mobile IS NOT NULL 
 	    AND m.mobile != '' 
