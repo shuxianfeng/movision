@@ -421,16 +421,8 @@ public class ZhbService {
 	 *            1:使用，2:获取
 	 * @return
 	 */
-	public List<Map<String, String>> getZhbDetails(String pageNo, String pageSize, String recordType) {
-		if (StringUtils.isEmpty(pageNo)) {
-			pageNo = "1";
-		}
-		if (StringUtils.isEmpty(pageSize)) {
-			pageSize = "10";
-		}
-		Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+	public List<Map<String, String>> getZhbDetails(Paging<Map<String, String>> pager, String recordType) {
 		List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
-
 		try {
 			Map<String, Long> param = MapUtil.convert2HashMap("companyId", ShiroUtil.getCompanyID(), "operaterId", ShiroUtil.getCreateID(), "recordType",
 					recordType);
@@ -464,6 +456,7 @@ public class ZhbService {
 			}
 		} catch (Exception e) {
 			log.error("ZhbService::getZhbDetails::memberId=" + ShiroUtil.getCreateID(), e);
+			throw e;
 		}
 
 		return resultList;

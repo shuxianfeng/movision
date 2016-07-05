@@ -3,6 +3,8 @@ package com.zhuhuibao.mybatis.vip.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
+
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege;
 import com.zhuhuibao.mybatis.vip.entity.VipPrivilege;
@@ -75,4 +77,12 @@ public interface VipInfoMapper {
 	 * @param vipMemberPrivilege
 	 */
 	int updateVipMemberPrivilegeValue(VipMemberPrivilege vipMemberPrivilege);
+
+	/**
+	 * 运营管理系统-VIP会员列表
+	 * 
+	 * @param param
+	 * @return
+	 */
+	List<Map<String, String>> selectAllVipInfoList(RowBounds rowBounds, Map<String, String> param);
 }

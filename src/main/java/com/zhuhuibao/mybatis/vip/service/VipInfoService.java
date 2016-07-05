@@ -1,11 +1,16 @@
 package com.zhuhuibao.mybatis.vip.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,6 +25,7 @@ import com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege;
 import com.zhuhuibao.mybatis.vip.entity.VipPrivilege;
 import com.zhuhuibao.mybatis.vip.mapper.VipInfoMapper;
 import com.zhuhuibao.utils.MapUtil;
+import com.zhuhuibao.utils.pagination.model.Paging;
 
 /**
  * VIP特权服务
@@ -271,4 +277,34 @@ public class VipInfoService {
 
 		return memberPrivilege;
 	}
+
+	/**
+	 * 运营管理系统-VIP会员
+	 * 
+	 * @param account
+	 * @param name
+	 * @param vipLevel
+	 * @param status
+	 * @param pager
+	 * @return
+	 */
+	public List<Map<String, String>> listAllVipInfo(String account, String name, String vipLevel, String status, Paging<Map<String, String>> pager) {
+		List<Map<String, String>> viplist = new ArrayList<Map<String, String>>();
+		Map<String, String> param = MapUtil.convert2HashMap("account", account, "name", name, "vipLevel", vipLevel, "status", status);
+		viplist = vipInfoMapper.selectAllVipInfoList(pager.getRowBounds(), param);
+		String[] chargeVipLevel =  {"30","60","130","160"};
+		if (CollectionUtils.isNotEmpty(viplist)) {
+			for (Map<String, String> vip : viplist) {
+				String level = String.valueOf(vip.get("vip_level"));
+				if (StringUtils.isNotBlank(level) && ArrayUtils.contains(chargeVipLevel, level)) {
+					vip.put("status", "1");
+				} else {
+					vip.put("status", "0");
+				}
+			}
+		}
+
+		return viplist;
+	}
+	
 }
