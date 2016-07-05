@@ -291,7 +291,7 @@ public class VipInfoService {
 	public List<Map<String, String>> listAllVipInfo(String account, String name, String vipLevel, String status, Paging<Map<String, String>> pager) {
 		List<Map<String, String>> viplist = new ArrayList<Map<String, String>>();
 		Map<String, String> param = MapUtil.convert2HashMap("account", account, "name", name, "vipLevel", vipLevel, "status", status);
-		viplist = vipInfoMapper.selectAllVipInfoList(pager.getRowBounds(), param);
+		viplist = vipInfoMapper.findAllVipInfoList(pager.getRowBounds(), param);
 		String[] chargeVipLevel =  {"30","60","130","160"};
 		if (CollectionUtils.isNotEmpty(viplist)) {
 			for (Map<String, String> vip : viplist) {

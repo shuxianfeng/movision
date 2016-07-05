@@ -33,7 +33,7 @@ public class TechCoopMcController {
     @Autowired
     TechCooperationService techService;
 
-    @RequestMapping(value={"sel_tech_cooperation","cg/sel_tech_cooperation","xq/sel_tech_cooperation"}, method = RequestMethod.GET)
+    @RequestMapping(value="sel_tech_cooperation", method = RequestMethod.GET)
     @ApiOperation(value="运营管理平台搜索技术合作(技术成果，技术需求)",notes = "运营管理平台技术合作(技术成果，技术需求)",response = Response.class)
     public Response findAllTechCooperationPager(@ApiParam(value = "标题") @RequestParam(required = false) String title,
                                                 @ApiParam(value = "类型：1成果，2需求") @RequestParam(required = false) String type,
@@ -60,7 +60,7 @@ public class TechCoopMcController {
         return response;
     }
 
-    @RequestMapping(value={"sel_tech_cooperation_detail","cg/sel_tech_cooperation_detail","xq/sel_tech_cooperation_detail"}, method = RequestMethod.GET)
+    @RequestMapping(value="sel_tech_cooperation_detail", method = RequestMethod.GET)
     @ApiOperation(value="查询技术合作(技术成果，技术需求)",notes = "查询技术合作(技术成果，技术需求)",response = Response.class)
     public Response selectTechCooperationById( @ApiParam(value = "技术合作成果、需求ID")  @RequestParam String techCoopId)
     {
@@ -70,7 +70,7 @@ public class TechCoopMcController {
         return response;
     }
 
-    @RequestMapping(value={"upd_tech_cooperation","cg/upd_tech_cooperation","xq/upd_tech_cooperation"}, method = RequestMethod.POST)
+    @RequestMapping(value="upd_tech_cooperation", method = RequestMethod.POST)
     @ApiOperation(value="修改技术合作(技术成果，技术需求)",notes = "修改技术合作(技术成果，技术需求)",response = Response.class)
     public Response updateTechCooperation( @ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop) throws Exception {
         Response response = new Response();
@@ -78,7 +78,7 @@ public class TechCoopMcController {
         return response;
     }
 
-    @RequestMapping(value={"add_tech_cooperation","cg/add_tech_cooperation","xq/add_tech_cooperation"}, method = RequestMethod.POST)
+    @RequestMapping(value="add_tech_cooperation", method = RequestMethod.POST)
     @ApiOperation(value="新增技术合作(技术成果，技术需求)",notes = "新增技术合作(技术成果，技术需求)",response = Response.class)
     public Response insertTechCooperation(@ApiParam(value = "技术合作：技术成果，技术需求")  @ModelAttribute(value="techCoop")TechCooperation techCoop) throws Exception {
         Long createId = ShiroUtil.getCreateID();
@@ -92,7 +92,7 @@ public class TechCoopMcController {
         return response;
     }
 
-    @RequestMapping(value={"del_tech_cooperation","cg/del_tech_cooperation","xq/del_tech_cooperation"}, method = RequestMethod.GET)
+    @RequestMapping(value="del_tech_cooperation", method = RequestMethod.GET)
     @ApiOperation(value="删除技术合作(技术成果，技术需求)",notes = "删除技术合作(技术成果，技术需求)",response = Response.class)
     public Response deleteTechCooperation( @ApiParam(value = "技术合作ID")  @RequestParam() String techId)
     {

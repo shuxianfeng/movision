@@ -216,17 +216,12 @@ public class ExpertController {
         return response;
     }
 
-    @ApiOperation(value = "查询自己专家全部信息", notes = "查询自己专家全部信息", response = Response.class)
+    @ApiOperation(value = "根据id查询专家全部信息", notes = "根据id查询专家全部信息", response = Response.class)
     @RequestMapping(value = "base/sel_expert", method = RequestMethod.GET)
-    public Response queryExpertById()  {
+    public Response queryExpertById(@ApiParam(value = "专家id") @RequestParam String id)  {
         Response response = new Response();
-        Long createId = ShiroUtil.getCreateID();
-        if(createId!=null){
-            Expert expert = expertService.queryExpertById(String.valueOf(createId));
-            response.setData(expert);
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        Expert expert = expertService.queryExpertById(id);
+        response.setData(expert);
         return response;
     }
 
@@ -353,8 +348,8 @@ public class ExpertController {
         question.setId(questionId);
         //設置採納答案id
         question.setAnswerId(answerId);
-        //狀態設為已采纳
-        question.setStatus(ExpertConstant.EXPERT_QUESTION_STATUS_FOUR);
+        //狀態設為已關閉
+        question.setStatus(ExpertConstant.EXPERT_QUESTION_STATUS_TWO);
         expertService.updateQuestionInfo(question);
         return response;
     }

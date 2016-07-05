@@ -157,7 +157,28 @@ public class ResumeController {
         return response;
     }
 
-
+    /**
+     * 我收到的简历
+     */
+    @ApiOperation(value = "我收到的简历", notes = "我收到的简历", response = Response.class)
+    @RequestMapping(value = "sel_receive_resume", method = RequestMethod.GET)
+    public Response receiveResume(@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Long createid = ShiroUtil.getCreateID();
+        Response response = new Response();
+        if(createid!=null){
+            Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+            response = resumeService.receiveResume(pager,createid.toString());
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
 
     @ApiOperation(value = "简历批量设为已查看", notes = "简历批量设为已查看", response = Response.class)
     @RequestMapping(value = "upd_jobRelresume", method = RequestMethod.POST)
@@ -296,30 +317,6 @@ public class ResumeController {
         Response response = new Response();
         List<Map<String,String>> list = memberService.queryCompanyByKeywords(keywords);
         response.setData(list);
-        return response;
-    }
-
-
-    /**
-     * 我收到的简历    (老接口,之后废弃)
-     */
-    @ApiOperation(value = "我收到的简历", notes = "我收到的简历", response = Response.class)
-    @RequestMapping(value = "sel_receive_resume", method = RequestMethod.GET)
-    public Response receiveResume(@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Long createid = ShiroUtil.getCreateID();
-        Response response = new Response();
-        if(createid!=null){
-            Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-            response = resumeService.receiveResume(pager,createid.toString());
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
         return response;
     }
 }

@@ -1,15 +1,17 @@
 package com.zhuhuibao.mybatis.order.service;
 
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.order.entity.Order;
-import com.zhuhuibao.mybatis.order.mapper.OrderMapper;
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.order.entity.Order;
+import com.zhuhuibao.mybatis.order.mapper.OrderMapper;
 
 
 /**
@@ -90,8 +92,10 @@ public class OrderService {
      * @param orderNoList 订单编号
      * @param status      状态
      */
-    public void batchUpdateStatus(List<String> orderNoList, String status) {
-       for(String orderNo : orderNoList ){
+    public void batchUpdateStatus(List orderNoList, String status) {
+       for(int i=0;i<orderNoList.size();i++ ){
+    	   Map map=(Map)orderNoList.get(i);
+    	   String orderNo=(String)map.get("orderNo");
            Order order = new Order();
            order.setOrderNo(orderNo);
            order.setStatus(status);
