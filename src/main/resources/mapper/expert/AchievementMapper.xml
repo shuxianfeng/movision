@@ -35,7 +35,7 @@
   <select id="queryAchievementById" parameterType="java.lang.String" resultType="java.util.Map">
     select a.id,date_format(a.publishTime,'%Y-%m-%d') publishTime,date_format(a.updateTime,'%Y-%m-%d') updateTime,
     a.title,a.systemType,a.useArea,a.companyName,a.linkMan,a.telephone,a.email,a.province,a.city,a.area,a.address,a.cooperationType,a.status,
-    a.introduce,
+    a.introduce,a.createId,a.reason,
     p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,co.name as useAreaName
     from t_e_achievement a
     LEFT JOIN t_dictionary_province p on a.province = p.code

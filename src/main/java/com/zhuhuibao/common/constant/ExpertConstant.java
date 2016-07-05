@@ -29,11 +29,6 @@ public interface ExpertConstant {
     String EXPERT_QUESTION_STATUS_TWO = "2";
 
     /**
-     * 专家频道问题状态标识 4：已采纳
-     */
-    String EXPERT_QUESTION_STATUS_FOUR = "4";
-
-    /**
      * 专家频道区分前台跟会员中心 1：前台
      */
     String EXPERT_TYPE_ONE = "1";

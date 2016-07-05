@@ -84,5 +84,5 @@ public interface VipInfoMapper {
 	 * @param param
 	 * @return
 	 */
-	List<Map<String, String>> selectAllVipInfoList(RowBounds rowBounds, Map<String, String> param);
+	List<Map<String, String>> findAllVipInfoList(RowBounds rowBounds, Map<String, String> param);
 }

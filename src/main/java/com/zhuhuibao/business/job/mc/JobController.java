@@ -41,6 +41,7 @@ public class JobController {
 
     @Autowired
     private ResumeService resumeService;
+
     /**
      * 职位类别
      */
@@ -152,6 +153,30 @@ public class JobController {
     }
 
     /**
+     * 我收到的简历
+     */
+    @ApiOperation(value = "我收到的简历", notes = "我收到的简历", response = Response.class)
+    @RequestMapping(value = "sel_receive_resume", method = RequestMethod.GET)
+    public Response receiveResume(@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Long createid = ShiroUtil.getCreateID();
+        Response response = new Response();
+        if(createid!=null){
+            Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+            response = resumeService.receiveResume(pager,createid.toString());
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+
+    /**
      * 我申请的职位  (老接口,之后废弃)
      */
     @ApiOperation(value = "我申请的职位", notes = "我申请的职位", response = Response.class)
@@ -174,26 +199,4 @@ public class JobController {
         return response;
     }
 
-    /**
-     * 我收到的简历
-     */
-    @ApiOperation(value = "我收到的简历", notes = "我收到的简历", response = Response.class)
-    @RequestMapping(value = "sel_receive_resume", method = RequestMethod.GET)
-    public Response receiveResume(@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Long createid = ShiroUtil.getCreateID();
-        Response response = new Response();
-        if(createid!=null){
-            Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-            response = resumeService.receiveResume(pager,createid.toString());
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
-        return response;
-    }
 }

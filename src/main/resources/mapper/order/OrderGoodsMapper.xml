@@ -25,7 +25,9 @@
         from t_o_order_goods
         where orderNo = #{orderNo,jdbcType=VARCHAR}
     </select>
-    <select id="findListByGoodsId" resultType="java.lang.String">
+
+    <select id="findListByGoodsId" resultType="java.util.Map" parameterType="java.lang.String" >
+
     select
     orderNo
     from t_o_order_goods

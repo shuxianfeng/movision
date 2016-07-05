@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:cache="http://www.springframework.org/schema/cache" xmlns:util="http://www.springframework.org/schema/util"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
        default-lazy-init="true">
     <description>安全配置</description>
 
@@ -29,7 +31,7 @@
     </bean>
 
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-        <property name="sessionDAO" ref="redisSessionDAO" />
+        <property name="sessionDAO" ref="redisSessionDAO"/>
     </bean>
 
     <!-- shiro redisManager -->
@@ -41,12 +43,12 @@
 
     <!-- redisSessionDAO -->
     <bean id="redisSessionDAO" class="org.crazycake.shiro.RedisSessionDAO">
-        <property name="redisManager" ref="redisManager" />
+        <property name="redisManager" ref="redisManager"/>
     </bean>
 
     <!-- cacheManager -->
     <bean id="cacheManager" class="org.crazycake.shiro.RedisCacheManager">
-        <property name="redisManager" ref="redisManager" />
+        <property name="redisManager" ref="redisManager"/>
     </bean>
 
     <!-- 安全管理器 配置权限管理器 -->
@@ -54,8 +56,8 @@
         <!--<property name="realm" ref="userRealm"/>-->
         <property name="realms">
             <list>
-                <ref bean="userRealm" />
-                <ref bean="omsRealm" />
+                <ref bean="userRealm"/>
+                <ref bean="omsRealm"/>
             </list>
         </property>
         <property name="sessionManager" ref="sessionManager"/>
@@ -90,41 +92,57 @@
         <property name="successUrl" value="/index.html"/>
         <property name="filters">
             <util:map>
-                <entry key="authc" value-ref="formAuthenticationFilter" />
-                <entry key="orroles" value-ref="orRolesAuthorizationFilter" />
-                <entry key="orperms" value-ref="orPermissionsAuthorizationFilter" />
+                <entry key="authc" value-ref="formAuthenticationFilter"/>
+                <entry key="orroles" value-ref="orRolesAuthorizationFilter"/>
+                <entry key="orperms" value-ref="orPermissionsAuthorizationFilter"/>
             </util:map>
         </property>
         <property name="filterChainDefinitions">
             <value>
-                
-                <!--/** = authz-->
+
                 <!--url = orroles[status]
-                status:0-未激活(只针对邮件) 1-注册成功 2-注销 3-完善资料  4-待认证会员 5-已认证会员-->
+                status:会员状态 0：未激活(只针对邮件)，1：注册成功，2：注销，5：完善资料待审核 6：完善资料已审核，
+                                7：资料审核已拒绝，9：实名认证待审核，10：实名认证已认证  11：实名认证已拒绝-->
                 <!--url = orperms[identity:role:status]
                 identity:1-企业 2-个人 3-厂家;
                 role:100-管理员 200-专家 300-员工;
-                status:3-完善资料  4-待认证会员 5-已认证会员-->
+                status:6-完善资料已审核   9-实名认证待审核 10-实名认证已认证-->
+
                 <!-- 具备“完善资料”权限的配置-->
-               <!-- /rest/system/mc/enquiry/** = orroles["3,4,5"]
-                /rest/system/mc/product/** = orroles["3,4,5"]
-                &lt;!&ndash; 具备“厂家+角色不限+实名认证”权限的配置&ndash;&gt;
-                /rest/system/mc/brand/** = orperms["3:100:5,3:300:5"]
-                /rest/system/mc/agent/** = orperms["3:100:5,3:300:5"]-->
+                /rest/system/mc/enquiry/** = orroles["6,9,10,11"]
+                /rest/system/mc/product/** = orroles["6,9,10,11"]
+                /rest/system/mc/quote/** =  orroles["6,9,10,11"]
+                /rest/tech/mc/data/**  =   orroles["6,9,10,11"]
+                /rest/tech/mc/coop/cg/**  =   orroles["6,9,10,11"]
+
+                <!--具备“厂家+角色不限+实名认证”权限的配置-->
+                /rest/system/mc/brand/** = orperms["3:100:10,3:300:10"]
+                /rest/system/mc/agent/** = orperms["3:100:10,3:300:10"]
+
+                <!--具备“企业+角色不限+完善资料”权限的配置-->
+                /rest/expo/mc/** =  orperms["1:100:6,1:100:9,1:100:10,1:100:11,1:300:6,1:300:9,1:300:10,1:300:11"]
+                /rest/tech/mc/coop/xq/** =  orperms["1:100:6,1:100:9,1:100:10,1:100:11,1:300:6,1:300:9,1:300:10,1:300:11"]
+
                 <!-- 具备“企业+角色不限+实名认证”权限的配置-->
-                <!--/rest/job/mc/recruit/** = orperms["1:100:5,1:300:5,3:100:5,3:300:5"]-->
+                /rest/job/mc/recruit/** = orperms["1:100:10,1:300:10"]
+
                 <!-- 具备“个人+角色不限+状态不限”权限的配置-->
-                <!--/rest/job/mc/resume/** = orperms["2:100:1,2:100:3,2:100:4,2:100:5,2:200:1,2:200:3,2:200:4,2:200:5"]-->
+                /rest/job/mc/resume/** = orperms["2:100:1,2:100:5,2:100:6,2:100:7,2:100:9,2:100:10,2:100:11,2:200:1,2:200:5,2:200:6,2:200:7,2:200:9,2:200:10,2:200:11"]
+                /rest/member/mc/individual/base/** = orperms["2:100:1,2:100:5,2:100:6,2:100:7,2:100:9,2:100:10,2:100:11,2:200:1,2:200:5,2:200:6,2:200:7,2:200:9,2:200:10,2:200:11"]
+
+                <!--具备"个人+角色不限+完善资料"权限的配置-->
+                /rest/member/mc/individual/real/** =   orperms["2:100:6,2:100:9,2:100:10,2:100:11,2:200:6,2:200:9,2:200:10,2:200:11"]
+
+                <!--具备"个人+角色不限+实名认证"权限的配置-->
+                rest/member/mc/individual/cert/** = orperms["2:100:10,2:200:10"]
+
                 <!-- 具备“个人+专家+状态不限”权限的配置-->
-               <!-- /rest/expert/mc/** = orperms["2:200:1,2:200:3,2:200:4,2:200:5"]
-                &lt;!&ndash; 具备“企业+角色不限+完善资料”权限的配置&ndash;&gt;
-                /rest/expo/mc/** = orperms["1:100:3,1:100:4,1:100:5,1:300:3,1:300:4,1:300:5,3:100:3,3:100:4,3:100:5,3:300:3,3:300:4,3:300:5"]-->
-                
-                <!--/** = authc-->
+                /rest/expert/mc/** = orperms["2:200:1,2:200:5,2:200:6,2:200:7,2:200:9,2:200:10,2:200:11"]
+
+
                 /logout = logout
-                <!--/** = user-->
                 /swagger/** = anon
-                
+
             </value>
         </property>
 
