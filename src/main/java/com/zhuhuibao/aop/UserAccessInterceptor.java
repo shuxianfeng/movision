@@ -24,7 +24,7 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        UserAccess annotation = null;
+        UserAccess annotation;
 
         if (handler instanceof HandlerMethod) {
             annotation = ((HandlerMethod) handler).getMethodAnnotation(UserAccess.class);
