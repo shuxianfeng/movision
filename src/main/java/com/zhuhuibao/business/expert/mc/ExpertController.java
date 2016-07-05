@@ -206,7 +206,13 @@ public class ExpertController {
     @RequestMapping(value = "base/upd_expert", method = RequestMethod.POST)
     public Response updateExpert(@ModelAttribute Expert expert)  {
         Response response = new Response();
-        expertService.updateExpert(expert);
+        Long createId = ShiroUtil.getCreateID();
+        if(createId!=null) {
+            expert.setId(String.valueOf(createId));
+            expertService.updateExpert(expert);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
