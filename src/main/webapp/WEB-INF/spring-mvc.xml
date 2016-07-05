@@ -146,6 +146,10 @@
         <bean class="com.zhuhuibao.security.resubmit.AvoidDuplicateSubmissionInterceptor"/>
     </mvc:interceptors>-->
 
+    <mvc:interceptors>
+        <bean class="com.zhuhuibao.aop.UserAccessInterceptor"/>
+    </mvc:interceptors>
+
     <!--AOP-->
     <aop:config proxy-target-class="true"/>
     <!--<bean id="aspectLog" class="com.zhuhuibao.aop.AspectLog"/>-->

@@ -2,6 +2,7 @@ package com.zhuhuibao.business.member.mc;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.aop.UserAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
@@ -42,6 +43,7 @@ public class StaffManageController {
 	@Autowired
 	private MemberService memberService;
 
+	@UserAccess
 	@ApiOperation(value = "新建员工", notes = "新建员工", response = Response.class)
 	@RequestMapping(value = "add_member", method = RequestMethod.POST)
 	public Response addMember(@RequestParam String account,@RequestParam String workType,@RequestParam String enterpriseLinkman) throws Exception {
