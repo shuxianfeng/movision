@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +19,7 @@ import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.pagination.model.Paging;
 
 /**
  * 筑慧币
@@ -167,11 +169,19 @@ public class ZhbController {
 			@ApiParam(value = "每页显示的条数") @RequestParam(required = false) String pageSize,
 			@ApiParam(value = "数据类型，1:使用,2:获取,null:所有") @RequestParam(required = false) String recordType) throws Exception {
 		Response response = new Response();
-		List<Map<String, String>> zhbDetails = zhbService.getZhbDetails(pageNo, pageSize, recordType);
+		if (StringUtils.isEmpty(pageNo)) {
+			pageNo = "1";
+		}
+		if (StringUtils.isEmpty(pageSize)) {
+			pageSize = "10";
+		}
+		Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+		List<Map<String, String>> zhbDetails = zhbService.getZhbDetails(pager, recordType);
+		pager.result(zhbDetails);
 		ZhbAccount account = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
-
+		
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("zhbDetails", zhbDetails);
+		result.put("zhbDetails", pager);
 		result.put("account", account);
 		response.setData(result);
 

@@ -143,21 +143,71 @@
         type = #{type,jdbcType=INTEGER},
       </if>
       <if test="pinyin != null">
-        pinyin = #{pinyin,jdbcType=TIMESTAMP},
+        pinyin = #{pinyin,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
-        name = #{name,jdbcType=TIMESTAMP},
+        name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="value != null">
-        value = #{value,jdbcType=TIMESTAMP},
+        value = #{value,jdbcType=VARCHAR},
       </if>
       <if test="description != null">
-        description = #{description,jdbcType=TIMESTAMP},
+        description = #{description,jdbcType=VARCHAR},
       </if>
       update_time = now(),
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
   
+  <select id="selectAllVipInfoList" resultType="java.util.Map" parameterType="java.util.Map">
+  	SELECT 
+	  o.buyerId AS id,
+	  o.dealTime AS buyTime,
+	  CASE
+	    WHEN m.mobile IS NOT NULL 
+	    AND m.mobile != '' 
+	    THEN m.mobile 
+	    WHEN m.email IS NOT NULL 
+	    AND m.email != '' 
+	    THEN m.email 
+	  END AS account,
+	  m.enterpriseName AS NAME,
+	  g.goodsId,
+	  g.goodsName AS vipLevel,
+	  1 AS activeTime,
+	  o.payAmount price,
+	  v.vip_level
+	FROM
+	  t_o_order o 
+	  LEFT JOIN t_m_member m 
+	    ON o.buyerId = m.id 
+	  LEFT JOIN t_o_order_goods g 
+	    ON o.orderNo = g.orderNo 
+	  LEFT JOIN t_vip_member_info v 
+	    ON o.buyerId = v.member_id 
+	WHERE o.goodsType = '3' 
+	  AND NOT EXISTS 
+	  (SELECT 
+	    1 
+	  FROM
+	    t_o_order o1 
+	  WHERE o1.buyerId = o.buyerId 
+	    AND o1.dealTime > o.dealTime)
+	    <if test="account != null">
+	    AND (m.mobile = #{account,jdbcType=VARCHAR} OR m.email = #{account,jdbcType=VARCHAR})
+	    </if>
+	    <if test="name != null">
+	    AND m.enterpriseName = #{name,jdbcType=VARCHAR}
+	    </if>
+	    <if test="vipLevel != null">
+	    AND g.goodsId = #{vipLevel,jdbcType=BIGINT}
+	    </if>
+	    <if test="status == 1">
+	    AND (v.vip_level IN (30,60,130,160))
+	    </if>
+	    <if test="status == 0">
+	    AND (v.vip_level IN (0,100))
+	    </if>
+  </select>
   
 </mapper>

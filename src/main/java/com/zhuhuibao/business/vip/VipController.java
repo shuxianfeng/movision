@@ -106,22 +106,12 @@ public class VipController {
 		if (StringUtils.isEmpty(pageSize)) {
 			pageSize = "10";
 		}
-		List<Map<String, String>> viplist = new ArrayList<Map<String, String>>();
-		Map<String, String> m = new HashMap<String, String>();
-		m.put("id", "1");
-		m.put("buyTime", "2016-7-4");
-		m.put("account", "loginAccount");
-		m.put("name", "筑慧宝");
-		m.put("vipLevel", "个人黄金会员");
-		m.put("activeTime", "1");
-		m.put("price", "496");
-		m.put("status", "496");
 
-		viplist.add(m);
+		List<Map<String, String>> vipList = new ArrayList<Map<String, String>>();
 
 		Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-
-		pager.result(viplist);
+		vipList = vipInfoService.listAllVipInfo(account, name, vipLevel, status, pager);
+		pager.result(vipList);
 		response.setData(pager);
 		return response;
 	}
