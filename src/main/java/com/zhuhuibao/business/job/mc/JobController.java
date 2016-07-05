@@ -152,7 +152,7 @@ public class JobController {
     }
 
     /**
-     * 我申请的职位
+     * 我申请的职位  (老接口,之后废弃)
      */
     @ApiOperation(value = "我申请的职位", notes = "我申请的职位", response = Response.class)
     @RequestMapping(value = "sel_my_position", method = RequestMethod.GET)

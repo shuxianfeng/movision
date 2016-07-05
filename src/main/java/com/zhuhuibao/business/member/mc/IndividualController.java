@@ -1,7 +1,5 @@
 package com.zhuhuibao.business.member.mc;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
@@ -22,8 +20,6 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +54,7 @@ public class IndividualController {
     }
 
     @ApiOperation(value = "查询个人基本信息", notes = "查询个人基本信息", response = Response.class)
-    @RequestMapping(value = "sel_mem_basic_info", method = RequestMethod.GET)
+    @RequestMapping(value ={ "base/sel_mem_basic_info","sel_mem_basic_info"}, method = RequestMethod.GET)
     public Response basicInfo() {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
@@ -91,26 +87,6 @@ public class IndividualController {
         return result;
     }
 
-    @ApiOperation(value = "查询个人实名信息", notes = "查询个人实名信息", response = Response.class)
-    @RequestMapping(value = "sel_mem_realName_info", method = RequestMethod.GET)
-    public Response realNameInfo() {
-        Response result = new Response();
-        Long memberId = ShiroUtil.getCreateID();
-        if(memberId!=null){
-            Member member = memberService.findMemById(String.valueOf(memberId));
-            Map map = new HashMap();
-            map.put("personRealName",member.getPersonRealName());
-            map.put("personIdentifyCard",member.getPersonIdentifyCard());
-            map.put("personIDFrontImgUrl",member.getPersonIDFrontImgUrl());
-            map.put("personIDBackImgUrl",member.getPersonIDBackImgUrl());
-            map.put("status",member.getStatus());
-            map.put("reason",member.getReason());
-            result.setData(map);
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
-        return result;
-    }
 
     @ApiOperation(value = "个人基本资料保存", notes = "个人基本资料保存", response = Response.class)
     @RequestMapping(value = "upd_mem_basic_info", method = RequestMethod.POST)
@@ -139,8 +115,31 @@ public class IndividualController {
         return result;
     }
 
+
+    @ApiOperation(value = "查询个人实名信息", notes = "查询个人实名信息", response = Response.class)
+    @RequestMapping(value ={ "sel_mem_realName_info","real/sel_mem_realName_info"}, method = RequestMethod.GET)
+    public Response realNameInfo() {
+        Response result = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            Member member = memberService.findMemById(String.valueOf(memberId));
+            Map map = new HashMap();
+            map.put("personRealName",member.getPersonRealName());
+            map.put("personIdentifyCard",member.getPersonIdentifyCard());
+            map.put("personIDFrontImgUrl",member.getPersonIDFrontImgUrl());
+            map.put("personIDBackImgUrl",member.getPersonIDBackImgUrl());
+            map.put("status",member.getStatus());
+            map.put("reason",member.getReason());
+            result.setData(map);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
+
+
     @ApiOperation(value = "个人实名认证保存", notes = "个人实名认证保存", response = Response.class)
-    @RequestMapping(value = "upd_mem_realName_info", method = RequestMethod.POST)
+    @RequestMapping(value = {"upd_mem_realName_info","real/upd_mem_realName_info"}, method = RequestMethod.POST)
     public Response upd_mem_realName_info(@RequestParam String personRealName,
                                           @RequestParam String personIdentifyCard,
                                           @RequestParam String personIDFrontImgUrl,
@@ -175,7 +174,7 @@ public class IndividualController {
     }
 
     @ApiOperation(value = "个人资质保存", notes = "个人资质保存", response = Response.class)
-    @RequestMapping(value = "add_certificate", method = RequestMethod.POST)
+    @RequestMapping(value ={ "add_certificate","cert/add_certificate"}, method = RequestMethod.POST)
     public Response add_certificate(@ApiParam(value = "证书编号")@RequestParam String certificate_number,
                                     @ApiParam(value = "证书id")@RequestParam String certificate_id,
                                     @ApiParam(value = "资质名称")@RequestParam String certificate_name,
@@ -198,7 +197,7 @@ public class IndividualController {
     }
 
     @ApiOperation(value = "个人资质编辑", notes = "个人资质编辑", response = Response.class)
-    @RequestMapping(value = "upd_certificate", method = RequestMethod.POST)
+    @RequestMapping(value = {"upd_certificate","cert/upd_certificate"}, method = RequestMethod.POST)
     public Response update_certificate(@RequestParam String id,
                                        @RequestParam String certificate_number,
                                        @RequestParam String certificate_id,
@@ -223,7 +222,7 @@ public class IndividualController {
     }
 
     @ApiOperation(value = "个人资质查询", notes = "个人资质查询", response = Response.class)
-    @RequestMapping(value = "sel_certificate", method = RequestMethod.GET)
+    @RequestMapping(value ={ "sel_certificate","cert/sel_certificate"}, method = RequestMethod.GET)
     public Response sel_certificate()  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
@@ -241,7 +240,7 @@ public class IndividualController {
     }
 
     @ApiOperation(value = "个人资质类型", notes = "个人资质类型", response = Response.class)
-    @RequestMapping(value = "sel_certificateList", method = RequestMethod.GET)
+    @RequestMapping(value ={ "sel_certificateList","cert/sel_certificateList"}, method = RequestMethod.GET)
     public Response certificateList(@ApiParam(value = "个人type:3")@RequestParam String type)  {
         Response response = new Response();
         List list = memberService.findCertificateList(type);

@@ -9,11 +9,9 @@ import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.ForbidKeyWords;
+import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
-import com.zhuhuibao.mybatis.memCenter.service.ForbidKeyWordsService;
-import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
-import com.zhuhuibao.mybatis.memCenter.service.MemberService;
-import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
+import com.zhuhuibao.mybatis.memCenter.service.*;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.oss.ZhbOssClient;
@@ -47,6 +45,9 @@ public class ResumeController {
 
     @Autowired
     private ResumeService resumeService;
+
+    @Autowired
+    private JobPositionService jobService;
 
     @Autowired
     ApiConstants ApiConstants;
@@ -296,6 +297,29 @@ public class ResumeController {
         Response response = new Response();
         List<Map<String,String>> list = memberService.queryCompanyByKeywords(keywords);
         response.setData(list);
+        return response;
+    }
+
+    /**
+     * 我申请的职位
+     */
+    @ApiOperation(value = "我申请的职位", notes = "我申请的职位", response = Response.class)
+    @RequestMapping(value = "sel_my_position", method = RequestMethod.GET)
+    public Response myApplyPosition(@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Long createid = ShiroUtil.getCreateID();
+        Response response = new Response();
+        if(createid!=null){
+            Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+            response = jobService.myApplyPosition(pager, String.valueOf(createid));
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
