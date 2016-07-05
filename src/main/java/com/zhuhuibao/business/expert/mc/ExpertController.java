@@ -208,8 +208,8 @@ public class ExpertController {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null) {
-            expert.setId(String.valueOf(createId));
-            expertService.updateExpert(expert);
+            expert.setCreateId(String.valueOf(createId));
+            expertService.updateExpertByCreateid(expert);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
@@ -222,7 +222,7 @@ public class ExpertController {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
         if(createId!=null) {
-            Expert expert = expertService.queryExpertById(String.valueOf(createId));
+            Expert expert = expertService.queryExpertByCreateId(String.valueOf(createId));
             response.setData(expert);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

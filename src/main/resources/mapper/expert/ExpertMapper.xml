@@ -37,6 +37,13 @@
     LEFT JOIN t_dictionary_area ar on e.area = ar.code
     WHERE e.id = #{id}
   </select>
+  <select id="queryExpertByCreateId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT e.*,p.name as provinceName,c.name as cityName,ar.name as areaName FROM t_e_expert e
+    LEFT JOIN t_dictionary_province p on e.province = p.code
+    LEFT JOIN t_dictionary_city c on e.city = c.code
+    LEFT JOIN t_dictionary_area ar on e.area = ar.code
+    WHERE e.createId = #{id}
+  </select>
   <select id="queryExpertByCreateid" resultMap="BaseResultMap" >
     SELECT * FROM t_e_expert WHERE createid = #{createid} and is_deleted = 0 and status = 1
   </select>
@@ -245,6 +252,64 @@
       </if>
     </set>
     where id = #{id}
+  </update>
+  <update id="updateExpertByCreateid" parameterType="com.zhuhuibao.mybatis.expert.entity.Expert" >
+    update t_e_expert
+    <set >
+      updateTime = now(),
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="company != null" >
+        company = #{company},
+      </if>
+      <if test="position != null" >
+        position = #{position},
+      </if>
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="expertType != null" >
+        expertType = #{expertType},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile},
+      </if>
+      <if test="province != null" >
+        province = #{province},
+      </if>
+      <if test="city != null" >
+        city = #{city},
+      </if>
+      <if test="area != null" >
+        area = #{area},
+      </if>
+      <if test="address != null" >
+        address = #{address},
+      </if>
+      <if test="photoUrl != null" >
+        photoUrl = #{photoUrl},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="is_deleted != null" >
+        is_deleted = #{is_deleted},
+      </if>
+      <if test="views != null" >
+        views = #{views},
+      </if>
+      <if test="introduce != null" >
+        introduce = #{introduce},
+      </if>
+      <if test="reason != null">
+        reason = #{reason}
+      </if>
+    </set>
+    where createId = #{id}
   </update>
   <update id="updateExpertViews" parameterType="com.zhuhuibao.mybatis.expert.entity.Expert" >
     update t_e_expert

@@ -277,6 +277,16 @@ public class ExpertService {
         }
     }
 
+    public Expert queryExpertByCreateId(String id){
+        try{
+            return expertMapper.queryExpertByCreateId(id);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     /**
      * 根据createid查询专家是否存在
      * @param createid
@@ -305,6 +315,18 @@ public class ExpertService {
             {
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),Long.parseLong(expert.getCreateId()),expert.getReason());
             }
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+        return result;
+    }
+
+    public int updateExpertByCreateid(Expert expert){
+        int result = 0;
+        try{
+            result = expertMapper.updateExpertByCreateid(expert);
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();
