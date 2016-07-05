@@ -309,7 +309,7 @@
         reason = #{reason}
       </if>
     </set>
-    where createId = #{id}
+    where createId = #{createId}
   </update>
   <update id="updateExpertViews" parameterType="com.zhuhuibao.mybatis.expert.entity.Expert" >
     update t_e_expert
