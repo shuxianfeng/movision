@@ -312,4 +312,12 @@ public class ExpertOmsController {
         }
         return response;
     }
+
+    @ApiOperation(value="技术成果详情",notes="技术成果详情",response = Response.class)
+    @RequestMapping(value = "ach/sel_achievement", method = RequestMethod.GET)
+    public Response queryAchievementById(@ApiParam(value = "技术成果ID")@RequestParam String id) throws Exception {
+        Map<String,String> map = expertService.queryAchievementById(id);
+
+        return new Response(map);
+    }
 }
