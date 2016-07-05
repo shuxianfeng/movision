@@ -11,9 +11,13 @@ public interface ExpertMapper {
 
     Expert queryExpertById(String id);
 
+    Expert queryExpertByCreateId(String id);
+
     Expert queryExpertByCreateid(String createid);
 
     int updateExpert(Expert expert);
+
+    int updateExpertByCreateid(Expert expert);
 
     int updateExpertViews(Expert expert);
 
