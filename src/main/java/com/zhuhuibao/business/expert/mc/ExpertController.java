@@ -218,10 +218,16 @@ public class ExpertController {
 
     @ApiOperation(value = "根据id查询专家全部信息", notes = "根据id查询专家全部信息", response = Response.class)
     @RequestMapping(value = "base/sel_expert", method = RequestMethod.GET)
-    public Response queryExpertById(@ApiParam(value = "专家id") @RequestParam String id)  {
+    public Response queryExpertById()  {
         Response response = new Response();
-        Expert expert = expertService.queryExpertById(id);
-        response.setData(expert);
+        Long createId = ShiroUtil.getCreateID();
+        if(createId!=null) {
+            Expert expert = expertService.queryExpertById(String.valueOf(createId));
+            response.setData(expert);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+
         return response;
     }
 
