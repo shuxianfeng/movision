@@ -77,6 +77,27 @@ public class IndexService {
         try{
             Member member = memberService.findMemById(id);
 
+            if("2".equals(member.getIdentify())){
+                if(member.getNickname()!=null && !member.getNickname().isEmpty()){
+                    resultMap.put("name",member.getNickname());
+                }else{
+                    if(member.getMobile()!=null && !member.getMobile().isEmpty()){
+                        resultMap.put("name",member.getMobile());
+                    }else {
+                        resultMap.put("name",member.getEmail());
+                    }
+                }
+            }else{
+                if(member.getEnterpriseName()!=null && !member.getEnterpriseName().isEmpty()){
+                    resultMap.put("name",member.getEnterpriseName());
+                }else{
+                    if(member.getMobile()!=null && !member.getMobile().isEmpty()){
+                        resultMap.put("name",member.getMobile());
+                    }else {
+                        resultMap.put("name",member.getEmail());
+                    }
+                }
+            }
             if(member.getMobile()!=null || !StringUtils.isEmpty(member.getMobile())){
                 resultMap.put("isBindMobile",true);
             }else {
