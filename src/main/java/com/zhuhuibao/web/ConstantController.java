@@ -49,23 +49,4 @@ public class ConstantController {
     }
 
 
-    @RequestMapping(value = "findJobByID", method = RequestMethod.GET)
-    @ApiOperation(value = "测试", notes = "测试", response = Response.class)
-    public Response findJobByID(@ApiParam(value = "id") @RequestParam String id) {
-        Response result = new Response();
-        try {
-
-            Map<String, Object> map = service.findJobByID(id);
-            map = ConvertUtil.execute(map, "positionType", "jobPositionService", "findById", new Object[]{String.valueOf(map.get("positionType"))});
-            map = ConvertUtil.execute(map, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(map.get("salary"))});
-
-            result.setData(map);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-        }
-
-        return result;
-    }
-
 }

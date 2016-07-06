@@ -81,9 +81,10 @@ public class ProjectController {
 		if (StringUtils.isEmpty(pageSize)) {
 			pageSize = "10";
 		}
-		Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+		Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 		//调用查询接口
-		List<Map<String,String>> projectList = projectService.findAllPrjectPager(map,pager);
+		List<Map<String,String>> projectList =   projectService.findAllProject(map,pager);
+				//projectService.findAllPrjectPager(map,pager);
 		pager.result(projectList);
 		response.setData(pager);
 		return response;

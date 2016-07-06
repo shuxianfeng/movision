@@ -389,4 +389,27 @@ public class Constants {
 	 * 站内信类型：3
 	 */
 	public static final Integer SITE_MAIL_TYPE_THREE = 3;
+
+	/**
+	 * 1：薪资，2：学历，3：工作经验，4：年龄，5：福利待遇，6：工作状态，7：工作性质，
+	 * 8：项目信息类别，9：威客项目类别，10：乙方类型，11：时长，12：会议类型，
+	 * 13：场馆要求，14：场地布局，15：用餐类型，16：用餐标准单位，17：会展所属栏目，
+	 * 18：技术成果应用领域，19：技术成果系统分类，20：专家类型，21：筑慧活动子栏目，22：会展定制类型
+	 */
+	public enum ConstantType {
+		XZ ("1"),XL("2"),GZJY ("3"),NL("4"),FLDY("5"),GZZT("6"),GZXZ("7"),
+		XMXXLB("8"),WKXMLB("9"),YFLX("10"),SC("11"),HYLX("12"),
+		CGYQ("13"),CDBJ("14"),YCLX("15"),YCBZDW("16"),HZSSLM("17"),
+		JSCGYYLY("18"),JSCGXTFL("19"),ZJLX("20"),ZHHDZLM("21"),HZDZLX("22");
+		public final String value;
+
+		ConstantType(String value) {
+			this.value = value;
+		}
+
+		@Override
+		public String toString() {
+			return this.value;
+		}
+	}
 }

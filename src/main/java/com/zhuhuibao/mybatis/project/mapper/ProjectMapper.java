@@ -43,4 +43,6 @@ public interface ProjectMapper {
 	Map<String, String> getCatagoryByValue(List list);
 	
 	Map<String, Object> getCity(Map<String, String> areaOrCityMap);
+
+    List<Map<String,String>> findAllPrject(Map<String, Object> map, RowBounds rowBounds);
 }

@@ -87,13 +87,14 @@ public class ConstantService {
         return constantMapper.deleteByPrimaryKey(id);
     }
 
+
     /**
-     * 测试 -- 可忽略
-     * {test}
-     * @param id {1....}
-     * @return
+     * 根据组合code 和 type 查询对应name 组合
+     * @param codes code组合 {1,2,3....}
+     * @param type    {1.....21}
+     * @return    names
      */
-    public Map<String, Object> findJobByID(String id) {
-        return jobMapper.findJobByID(id);
+    public String selectNameByJoinCode(String codes, String type) {
+        return constantMapper.selectNameByJoinCode(codes,type);
     }
 }
