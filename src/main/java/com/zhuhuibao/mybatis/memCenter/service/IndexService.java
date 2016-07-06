@@ -1,15 +1,14 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.mysql.jdbc.StringUtils;
 import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,8 +42,7 @@ public class IndexService {
 
     public Map<String,Object> getZhbInfo(Long createId)
     {
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-    public Map<String, Object> getZhbInfo(Long createId) {
+
         Map<String, Object> resultMap = new HashMap<String, Object>();
         ZhbAccount zhbCount = zhbService.getZhbAccount(createId);
         if (zhbCount != null) {
@@ -79,13 +77,13 @@ public class IndexService {
         try{
             Member member = memberService.findMemById(id);
 
-            if(member.getMobile()!=null || !StringUtils.isNullOrEmpty(member.getMobile())){
+            if(member.getMobile()!=null || !StringUtils.isEmpty(member.getMobile())){
                 resultMap.put("isBindMobile",true);
             }else {
                 resultMap.put("isBindMobile",false);
             }
 
-            if(member.getEmail()!=null || !StringUtils.isNullOrEmpty(member.getEmail())){
+            if(member.getEmail()!=null || !StringUtils.isEmpty(member.getEmail())){
                 resultMap.put("isBindEmail",true);
             }else{
                 resultMap.put("isBindEmail",true);
