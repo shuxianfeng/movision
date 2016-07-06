@@ -1,9 +1,14 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
+import com.mysql.jdbc.StringUtils;
+import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +27,17 @@ import java.util.Map;
 @Service
 @Transactional
 public class IndexService {
+
+    private static final Logger log = LoggerFactory.getLogger(IndexService.class);
+
     @Autowired
     ZhbService zhbService;
 
     @Autowired
     VipInfoService vipInfoService;
+
+    @Autowired
+    MemberService memberService;
 
     public Map<String,Object> getZhbInfo(Long createId)
     {
@@ -40,6 +51,40 @@ public class IndexService {
         }
         List<VipMemberPrivilege> vipList =  vipInfoService.listVipMemberPrivilege(createId);
         resultMap.put("service",vipList);
+        return resultMap;
+    }
+
+    public Map<String,Object> getMemInfo(String id){
+        Map<String,Object> resultMap = new HashMap<>();
+        try{
+            Member member = memberService.findMemById(id);
+
+            if(member.getMobile()!=null || !StringUtils.isNullOrEmpty(member.getMobile())){
+                resultMap.put("isBindMobile",true);
+            }else {
+                resultMap.put("isBindMobile",false);
+            }
+
+            if(member.getEmail()!=null || !StringUtils.isNullOrEmpty(member.getEmail())){
+                resultMap.put("isBindEmail",true);
+            }else{
+                resultMap.put("isBindEmail",true);
+            }
+
+            CertificateRecord record = new CertificateRecord();
+            record.setMem_id(id);
+            record.setIs_deleted(0);
+            record.setStatus("1");
+            List<CertificateRecord> list = memberService.certificateSearch(record);
+
+            resultMap.put("certificateCount",list.size());
+
+
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
         return resultMap;
     }
 }
