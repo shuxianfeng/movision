@@ -15,7 +15,7 @@ public class MemberShop {
 
     private String bannerUrl;
 
-    private Date updateTime;
+    private String updateTime;
 
     private Integer opreatorId;
 
@@ -71,11 +71,11 @@ public class MemberShop {
         this.bannerUrl = bannerUrl == null ? null : bannerUrl.trim();
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

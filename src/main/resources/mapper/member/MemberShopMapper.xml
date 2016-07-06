@@ -8,13 +8,13 @@
         <result column="companyName" property="companyName" jdbcType="VARCHAR"/>
         <result column="companyAccount" property="companyAccount" jdbcType="VARCHAR"/>
         <result column="bannerUrl" property="bannerUrl" jdbcType="VARCHAR"/>
-        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="updateTime" property="updateTime" jdbcType="VARCHAR"/>
         <result column="opreatorId" property="opreatorId" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="CHAR"/>
         <result column="reason" property="reason" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, shopName, companyId, companyName, companyAccount, bannerUrl, updateTime, opreatorId, 
+    id, shopName, companyId, companyName, companyAccount, bannerUrl, date_format(updateTime,'%Y-%m-%d %H:%i:%s') updateTime, opreatorId, 
     status,reason
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -83,7 +83,7 @@
             <if test="bannerUrl != null">
                 bannerUrl,
             </if>
-            <if test="updateTime != null">
+            <if test="1!=2">
                 updateTime,
             </if>
             <if test="opreatorId != null">
@@ -115,8 +115,8 @@
             <if test="bannerUrl != null">
                 #{bannerUrl,jdbcType=VARCHAR},
             </if>
-            <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
+            <if test="1!=2">
+                now(),
             </if>
             <if test="opreatorId != null">
                 #{opreatorId,jdbcType=INTEGER},
@@ -147,9 +147,9 @@
             <if test="bannerUrl != null">
                 bannerUrl = #{bannerUrl,jdbcType=VARCHAR},
             </if>
-            <if test="updateTime != null">
-                updateTime = #{updateTime,jdbcType=TIMESTAMP},
-            </if>
+           
+                updateTime = now(),
+           
             <if test="opreatorId != null">
                 opreatorId = #{opreatorId,jdbcType=INTEGER},
             </if>

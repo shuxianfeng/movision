@@ -103,7 +103,7 @@ public class OmsShopController {
                                  @ApiParam("拒绝理由") @RequestParam(required = false)  String reason) {
         MemberShop shop = check(shopId);
 
-        shop.setUpdateTime(new Date());
+      
         shop.setStatus(status);
 
         if ("3".equals(status)) {
