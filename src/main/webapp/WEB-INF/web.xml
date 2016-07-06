@@ -80,7 +80,7 @@
         <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
 
-    <!--防盗链-->
+    <!--防盗链
     <filter>
         <filter-name>refererFilter</filter-name>
         <filter-class>com.zhuhuibao.security.filter.RefererFilter</filter-class>
@@ -88,7 +88,7 @@
     <filter-mapping>
         <filter-name>refererFilter</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping>       -->
 
 
     <servlet>
