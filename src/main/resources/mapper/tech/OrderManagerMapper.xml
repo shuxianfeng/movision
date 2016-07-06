@@ -6,6 +6,7 @@
     date_format(t.dealTime,'%Y-%m-%d %H:%m:%s') dealTime,
     iv.invoiceType,iv.invoiceTitle,iv.receiveName invoiceRecName,concat(poi.name,cti.name,ari.name,iv.address) invoiceAddress,
     iv.mobile invoiceMb,iv.telephone invoicePhone,iv.invoiceNum,iv.expressNum invoiceExpressNum,
+    iv.status invoiceStatus,
     t.amount, t.payAmount,gd.goodsName,gd.goodsPrice,gd.number,
     date_format(pc.startTime,'%Y-%m-%d %H:%m:%s') courseStartTime,date_format(pc.endTime,'%Y-%m-%d %H:%m:%s') courseEndTime,pc.minBuyNumber courseCondition,
     concat(po.name,ct.name,ar.name,pc.address) courseAddress,pc.price coursePrice,
