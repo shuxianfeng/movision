@@ -165,7 +165,7 @@ public class MemberIndexController {
         return result;
     }
 
-    @ApiOperation(value = "筑慧币信息", notes = "筑慧币信息", response = Response.class)
+    @ApiOperation(value = "账号数字资产", notes = "账号数字资产", response = Response.class)
     @RequestMapping(value = "sel_zhbInfo", method = RequestMethod.GET)
     public Response sel_zhbInfo() {
         Response result = new Response();
