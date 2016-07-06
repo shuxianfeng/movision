@@ -2,7 +2,6 @@ package com.zhuhuibao.business.member.mc;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.aop.UserAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
@@ -10,7 +9,6 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BaseException;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
-import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -24,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +39,6 @@ public class StaffManageController {
 	@Autowired
 	private MemberService memberService;
 
-	@UserAccess
 	@ApiOperation(value = "新建员工", notes = "新建员工", response = Response.class)
 	@RequestMapping(value = "add_member", method = RequestMethod.POST)
 	public Response addMember(@RequestParam String account,@RequestParam String workType,@RequestParam String enterpriseLinkman) throws Exception {

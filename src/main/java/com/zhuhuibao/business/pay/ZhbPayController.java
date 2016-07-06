@@ -55,7 +55,7 @@ public class ZhbPayController {
         Gson gson = new Gson();
         String json = gson.toJson(order);
 
-        log.info("技术培训下单页面,请求参数:{}", json);
+        log.info("培训下单页面,请求参数:{}", json);
         Map paramMap = gson.fromJson(json, Map.class);
 
         String buyerId = (String) paramMap.get("buyerId");
