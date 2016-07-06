@@ -81,7 +81,7 @@ public class ShopController {
         memberShop.setCompanyId(companyId.intValue());
         memberShop.setCompanyAccount(account);
         memberShop.setCompanyName(companyName);
-        memberShop.setUpdateTime(new Date());
+       // memberShop.setUpdateTime(new Date());
         memberShop.setStatus(MemberConstant.ShopStatus.DSH.toString());
         memberShop.setShopName(shopName);
         memberShop.setBannerUrl(bannerUrl);
@@ -100,7 +100,7 @@ public class ShopController {
 
         MemberShop shop = check(shopId);
 
-        shop.setUpdateTime(new Date());
+       // shop.setUpdateTime(new Date());
         shop.setBannerUrl(bannderUrl);
 
         memShopService.upload(shop);
