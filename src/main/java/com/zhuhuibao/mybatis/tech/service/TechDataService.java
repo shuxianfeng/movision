@@ -372,6 +372,8 @@ public class TechDataService {
         Map<String, String> techMap;
         try {
             techMap = techDataMapper.findTechSiteInfo(createId);
+            String vipLevel = techMap.get("vip_level");
+            techMap.put("vip_level",StringUtils.isEmpty(vipLevel) ? "0" : vipLevel);
         } catch (Exception e) {
             log.error("find tech site info error1!", e);
             throw e;
