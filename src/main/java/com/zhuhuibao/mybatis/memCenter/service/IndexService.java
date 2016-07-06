@@ -86,7 +86,7 @@ public class IndexService {
             if(member.getEmail()!=null || !StringUtils.isEmpty(member.getEmail())){
                 resultMap.put("isBindEmail",true);
             }else{
-                resultMap.put("isBindEmail",true);
+                resultMap.put("isBindEmail",false);
             }
 
             CertificateRecord record = new CertificateRecord();
