@@ -178,4 +178,18 @@ public class MemberIndexController {
         }
         return result;
     }
+
+    @ApiOperation(value = "会员相关信息", notes = "会员相关信息", response = Response.class)
+    @RequestMapping(value = "sel_mem_info", method = RequestMethod.GET)
+    public Response sel_mem_info() {
+        Response result = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            Map<String,Object> resultMap = indexService.getMemInfo(String.valueOf(memberId));
+            result.setData(resultMap);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
 }
