@@ -230,6 +230,7 @@ public class OrderManagerService {
             SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             Date dtime = order.getDealTime();
             baseInfoMap.put("dealTime", sf.format(dtime));
+            baseInfoMap.put("goodsType",order.getGoodsType());
 
             detailMap.put("baseInfo", baseInfoMap);
 
@@ -293,7 +294,6 @@ public class OrderManagerService {
             goodsMap.put("goodsName", orderGoods.getGoodsName());
             goodsMap.put("goodsPrice", orderGoods.getGoodsPrice().toString());
             goodsMap.put("number", orderGoods.getNumber());
-
             //课程详细信息
             if (goodsType.equals(OrderConstants.GoodsType.JSPX.toString()) ||
                     goodsType.equals(OrderConstants.GoodsType.ZJPX.toString())) {
