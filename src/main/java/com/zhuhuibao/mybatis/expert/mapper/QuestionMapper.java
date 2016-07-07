@@ -14,9 +14,15 @@ public interface QuestionMapper {
 
     List<Map<String,String>> findAllExpertQuestion(RowBounds rowBounds, Map<String, Object> map);
 
+    List<Map<String,String>> findAllExpertQuestion(Map<String, Object> map);
+
     List<Map<String,String>> findAllMyAnswerQuestion(RowBounds rowBounds, Map<String, Object> map);
 
+    List<Map<String,String>> findAllMyAnswerQuestion(Map<String, Object> map);
+
     List<Map<String,String>> findAllMyQuestion(RowBounds rowBounds, Map<String, Object> map);
+
+    List<Map<String,String>> findAllMyQuestion(Map<String, Object> map);
 
     List<Map<String,String>> findAllQuestionListOms(RowBounds rowBounds);
 
