@@ -72,6 +72,17 @@
     </set>
     where id = #{id}
   </update>
+
+  <update id="updateNewsStatus" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageLog" >
+    update t_sys_messageLog
+    <set >
+      <if test="status != null" >
+        status = #{status},
+      </if>
+    </set>
+    where messageID = #{messageID}
+  </update>
+
   <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageLog" >
     update t_sys_messageLog
     set recID = #{recID,jdbcType=BIGINT},
