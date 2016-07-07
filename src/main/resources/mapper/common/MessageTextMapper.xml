@@ -105,7 +105,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="findAllNewsList" resultType="java.util.Map" parameterType="java.util.Map">
-    select ml.id,mt.title,mt.`type`,date_format(mt.sendTime,'%Y-%m-%d %H:%i:%s') sendTime,
+    select mt.id,mt.title,mt.`type`,date_format(mt.sendTime,'%Y-%m-%d %H:%i:%s') sendTime,
     ml.`status`,case when mt.type = 1 then '产品消息' when mt.type = 2 then '活动消息' WHEN mt.type = 3 THEN '拒绝理由'end as typeName
     from t_sys_messageLog ml
     left join t_sys_messageText mt on mt.id = ml.messageID
