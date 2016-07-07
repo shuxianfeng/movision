@@ -1,18 +1,14 @@
 package com.zhuhuibao.service.course;
 
-import com.zhuhuibao.alipay.service.direct.AlipayDirectService;
 import com.zhuhuibao.common.constant.*;
-import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.*;
 import com.zhuhuibao.mybatis.order.service.*;
 import com.zhuhuibao.service.order.ZHOrderService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
-import com.zhuhuibao.utils.IdGenerator;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.PropertiesUtils;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
 import com.zhuhuibao.utils.sms.SDKSendSms;
 import com.zhuhuibao.zookeeper.DistributedLock;
 import org.apache.shiro.SecurityUtils;
@@ -25,8 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -48,7 +42,7 @@ public class CourseService {
     PublishCourseService courseService;
 
     @Autowired
-    PwdTickerService pwdTickerService;
+    PwdTicketService pwdTicketService;
 
     @Autowired
     OrderGoodsService orderGoodsService;
@@ -113,8 +107,8 @@ public class CourseService {
         //库存校验
         checkRepertory(msgParam);
 
-        String orderNo = IdGenerator.createOrderNo();
-        msgParam.put("orderNo", orderNo);
+//        String orderNo = IdGenerator.createOrderNo();
+//        msgParam.put("orderNo", orderNo);
 
         //记录订单SN码 t_o_pwdticket  扣减库存
         if (msgParam.get("goodsType").equals(OrderConstants.GoodsType.JSPX.toString())
@@ -207,7 +201,7 @@ public class CourseService {
                 throw new AuthException(MsgCodeConstant.un_login,
                         MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
-            pwdTickerService.updateStatusByCourseId(course.getCourseid(), TechConstant.SNStatus.EFFECT.toString(),
+            pwdTicketService.updateStatusByCourseId(course.getCourseid(), TechConstant.SNStatus.EFFECT.toString(),
                     user.getId());
 
 
@@ -250,7 +244,7 @@ public class CourseService {
                 throw new AuthException(MsgCodeConstant.un_login,
                         MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
-            pwdTickerService.updateStatusByCourseId(course.getCourseid(), TechConstant.SNStatus.CANCELED.toString(),
+            pwdTicketService.updateStatusByCourseId(course.getCourseid(), TechConstant.SNStatus.CANCELED.toString(),
                     user.getId());
 
             //对已支付的订单进行退款操作

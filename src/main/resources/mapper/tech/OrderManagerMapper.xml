@@ -104,4 +104,7 @@
     left join t_o_order_goods gd on gd.orderNo = t.orderNo
      where t.orderNo = #{orderNo}
   </select>
+  <select id="findByOrderNo" resultType="com.zhuhuibao.mybatis.order.entity.Order">
+    select * from t_o_order where orderNo = #{orderNo}
+  </select>
 </mapper>

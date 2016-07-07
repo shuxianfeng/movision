@@ -22,4 +22,6 @@ public interface PwdTicketMapper {
 
     void updateStatusByCourseId(@Param("courseId") Long courseId, @Param("status") String status,
                                 @Param("operateId") Integer operateId);
+
+    List<PwdTicket> findByOrderNo(@Param("orderNo") String orderNo);
 }

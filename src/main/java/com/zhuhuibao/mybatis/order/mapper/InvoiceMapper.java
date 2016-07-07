@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.order.mapper;
 
 import com.zhuhuibao.mybatis.order.entity.Invoice;
+import org.apache.ibatis.annotations.Param;
 
 public interface InvoiceMapper {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +15,6 @@ public interface InvoiceMapper {
     int updateByPrimaryKeySelective(Invoice record);
 
     int updateByPrimaryKey(Invoice record);
+
+    Invoice findByOrderNo(@Param("orderNo") String orderNo);
 }

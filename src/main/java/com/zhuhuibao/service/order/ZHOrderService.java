@@ -5,7 +5,6 @@ import com.zhuhuibao.alipay.service.refund.AlipayRefundService;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
-import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.*;
 import com.zhuhuibao.mybatis.order.service.*;
@@ -39,7 +38,7 @@ public class ZHOrderService {
     OrderGoodsService orderGoodsService;
 
     @Autowired
-    private PwdTickerService pwdTickerService;
+    private PwdTicketService pwdTicketService;
 
     @Autowired
     private PublishCourseService publishCourseService;
@@ -238,7 +237,7 @@ public class ZHOrderService {
             list.add(pwdTicket);
             snCodeList.add(snCode);
         }
-        pwdTickerService.batchInsert(list);
+        pwdTicketService.batchInsert(list);
 
         //短信记录
         PublishCourse course = publishCourseService.getCourseById(Long.valueOf(msgParam.get("goodsId")));

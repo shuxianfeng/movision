@@ -91,8 +91,9 @@ public class ZhbPayController {
 
         //提交订单
         zhOrderService.createOrder(paramMap);
-
-        return new Response();
+       Response response = new Response();
+        response.setData(orderNo);
+        return response;
     }
 
     @ApiOperation(value = "培训课程下单", notes = "培训课程下单", response = Response.class)
@@ -109,10 +110,14 @@ public class ZhbPayController {
         paramMap.put("partner", PARTNER);//partner=seller_id     商家支付宝ID  合作伙伴身份ID 签约账号
 
         log.debug("调用下单接口......");
+        String orderNo = IdGenerator.createOrderNo();
+        paramMap.put("orderNo", orderNo);
 
         courseService.createOrder(paramMap);
 
-        return  new Response();
+        Response response = new Response();
+        response.setData(orderNo);
+        return response;
     }
 
     /**

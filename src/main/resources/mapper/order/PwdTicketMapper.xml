@@ -27,6 +27,12 @@
     from t_o_pwdticket
     where courseId = #{courseId,jdbcType=BIGINT}
   </select>
+  <select id="findByOrderNo" resultType="com.zhuhuibao.mybatis.order.entity.PwdTicket">
+    select
+    <include refid="Base_Column_List" />
+    from t_o_pwdticket
+    where orderNo = #{orderNo}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from t_o_pwdticket
     where ticketId = #{ticketId,jdbcType=BIGINT}

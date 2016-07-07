@@ -3,6 +3,7 @@ package com.zhuhuibao.mybatis.vip.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
@@ -85,4 +86,6 @@ public interface VipInfoMapper {
 	 * @return
 	 */
 	List<Map<String, String>> findAllVipInfoList(RowBounds rowBounds, Map<String, String> param);
+
+	List<Map<String,String>> findVipInfoByID(@Param("goodsId") Long goodsId);
 }

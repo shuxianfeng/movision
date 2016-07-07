@@ -168,4 +168,21 @@ public class InvoiceService {
         }
     }
 
+    /**
+     * 根据订单查询发票信息
+     * @param orderNo
+     * @return
+     */
+    public Invoice findByOrderNo(String orderNo) {
+        Invoice invoice;
+        try{
+
+            invoice = invoiceMapper.findByOrderNo(orderNo);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("查询 t_o_invoice 失败");
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
+        }
+        return invoice;
+    }
 }

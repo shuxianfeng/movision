@@ -306,5 +306,14 @@ public class VipInfoService {
 
 		return viplist;
 	}
-	
+
+	/**
+	 * 根据商品查询VIP信息
+	 * @param goodsId
+	 * @return
+     */
+	public List<Map<String, String>> findVipInfoByID(Long goodsId) {
+
+		return vipInfoMapper.findVipInfoByID(goodsId);
+	}
 }
