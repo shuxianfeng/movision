@@ -9,7 +9,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.common.pojo.CourseOrderReqBean;
-import com.zhuhuibao.common.pojo.OrderReqBean;
+import com.zhuhuibao.common.pojo.ZHBOrderReqBean;
 import com.zhuhuibao.common.pojo.PayReqBean;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
@@ -61,7 +61,7 @@ public class ZhbPayController {
 
     @ApiOperation(value = "筑慧币购买提交订单", notes = "筑慧币购买提交订单", response = Response.class)
     @RequestMapping(value = "do_zhb_order", method = RequestMethod.POST)
-    public Response doZHBOrder(@ApiParam @ModelAttribute OrderReqBean order) {
+    public Response doZHBOrder(@ApiParam @ModelAttribute ZHBOrderReqBean order) {
         Gson gson = new Gson();
         String json = gson.toJson(order);
 
