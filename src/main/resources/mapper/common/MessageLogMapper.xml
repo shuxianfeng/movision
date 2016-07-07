@@ -95,7 +95,7 @@
   </select>
   <insert id="addNewsToLog" parameterType="java.util.Map" >
     insert into t_sys_messageLog (recID,messageID,status)
-    select #{id},mt.id,'1' from t_sys_messageText mt where mt.id not in (select ml.messageID from t_sys_messageLog ml where ml.recID = #{id})
+    select #{recID},mt.id,'1' from t_sys_messageText mt where mt.id not in (select ml.messageID from t_sys_messageLog ml where ml.recID = #{recID})
   </insert>
   <select id="selUnreadNewsCount" parameterType="java.util.Map" resultType="java.lang.Integer">
     select msgCount1+msgCount2 as count from

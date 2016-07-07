@@ -56,6 +56,7 @@ public class MailController {
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
             map.put("recID",String.valueOf(memberId));
+            siteMailService.addNewsToLog(map);
             List<Map<String,String>> list = siteMailService.findAllNewsList(pager,map);
             pager.result(list);
             response.setData(pager);
@@ -110,7 +111,7 @@ public class MailController {
         return response;
     }*/
 
-    @ApiOperation(value="同步消息到日志表",notes="同步消息到日志表",response = Response.class)
+    /*@ApiOperation(value="同步消息到日志表",notes="同步消息到日志表",response = Response.class)
     @RequestMapping(value = "add_newsToLog", method = RequestMethod.POST)
     public Response addNewsToLog()  {
         Response response = new Response();
@@ -123,7 +124,7 @@ public class MailController {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
-    }
+    }*/
 
     @ApiOperation(value="批量标记为已读",notes="批量标记为已读",response = Response.class)
     @RequestMapping(value = "upd_news", method = RequestMethod.POST)
