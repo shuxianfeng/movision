@@ -6,6 +6,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.expo.service.ExpoService;
+import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.*;
 import com.zhuhuibao.mybatis.tech.service.TechDataService;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
@@ -186,6 +187,48 @@ public class MemberIndexController {
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
             Map<String,Object> resultMap = indexService.getMemInfo(String.valueOf(memberId));
+            result.setData(resultMap);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "个人求职信息", notes = "个人求职信息", response = Response.class)
+    @RequestMapping(value = "sel_job_info_count", method = RequestMethod.GET)
+    public Response sel_job_info_count() {
+        Response result = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            Map<String,Object> resultMap = indexService.getMemJobInfo(String.valueOf(memberId));
+            result.setData(resultMap);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "普通个人专家问答", notes = "普通个人专家问答", response = Response.class)
+    @RequestMapping(value = "sel_individual_question_count", method = RequestMethod.GET)
+    public Response sel_individual_question_count() {
+        Response result = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            Map<String,Object> resultMap = indexService.getIndividualQuestionInfo(String.valueOf(memberId));
+            result.setData(resultMap);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "专家个人专家问答", notes = "专家个人专家问答", response = Response.class)
+    @RequestMapping(value = "sel_expert_question_count", method = RequestMethod.GET)
+    public Response sel_expert_question_count() {
+        Response result = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            Map<String,Object> resultMap = indexService.getExpertQuestionInfo(String.valueOf(memberId));
             result.setData(resultMap);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

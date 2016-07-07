@@ -1,7 +1,12 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
+import com.zhuhuibao.mybatis.expert.mapper.QuestionMapper;
 import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
+import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.entity.Resume;
+import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
@@ -39,6 +44,15 @@ public class IndexService {
 
     @Autowired
     MemberService memberService;
+
+    @Autowired
+    ResumeMapper resumeMapper;
+
+    @Autowired
+    JobMapper jobMapper;
+
+    @Autowired
+    QuestionMapper questionMapper;
 
     public Map<String,Object> getZhbInfo(Long createId)
     {
@@ -125,5 +139,64 @@ public class IndexService {
             throw e;
         }
         return resultMap;
+    }
+
+    public Map<String,Object> getMemJobInfo(String id){
+
+        Map<String,Object> resultMap = new HashMap<>();
+
+        try{
+            Resume resume = resumeMapper.searchMyResume(id);
+            if(resume!=null){
+                resultMap.put("isCreateResume",true);
+            }else {
+                resultMap.put("isCreateResume",false);
+            }
+
+            List<Job> list = jobMapper.findAllMyApplyPosition(id);
+            resultMap.put("jobWantedCount",list.size());
+            return resultMap;
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public Map<String,Object> getIndividualQuestionInfo(String id){
+
+        Map<String,Object> resultMap = new HashMap<>();
+
+        try{
+            Map<String, Object> map = new HashMap<>();
+            map.put("id",id);
+            List<Map<String,String>> list = questionMapper.findAllMyQuestion(map);
+
+            resultMap.put("questionCount",list.size());
+            return resultMap;
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public Map<String,Object> getExpertQuestionInfo(String id){
+
+        Map<String,Object> resultMap = new HashMap<>();
+
+        try{
+            Map<String, Object> map = new HashMap<>();
+            map.put("id",id);
+            List<Map<String,String>> list = questionMapper.findAllExpertQuestion(map);
+            List<Map<String,String>> list1 = questionMapper.findAllMyAnswerQuestion(map);
+            resultMap.put("unAnswerCount",list.size());
+            resultMap.put("answerCount",list1.size());
+            return resultMap;
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

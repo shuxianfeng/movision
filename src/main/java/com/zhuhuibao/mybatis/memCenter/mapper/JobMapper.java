@@ -48,6 +48,8 @@ public interface JobMapper {
 
     List<Job> findAllMyApplyPosition(RowBounds rowBounds,@Param("id") String id);
 
+    List<Job> findAllMyApplyPosition(@Param("id") String id);
+
     //热门招聘
     List<Job> queryHotPosition(Map<String,Object> map);
 
