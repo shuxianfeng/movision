@@ -4,7 +4,6 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.mybatis.tech.service.OrderManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,13 +27,13 @@ public class OrderController {
     @Autowired
     OrderManagerService orderManagerService;
 
-    @ApiOperation(value="收银台页面信息",notes="收银台页面信息",response = Response.class)
+    @ApiOperation(value = "收银台页面信息", notes = "收银台页面信息", response = Response.class)
     @RequestMapping(value = "cashier/sel_cashierDesk", method = RequestMethod.GET)
-    public Response selectCashierDeskInfo(@ApiParam(value = "订单编号") @RequestParam String orderNo)
-    {
-        Map<String,Object> cashierDesk = orderManagerService.selectCashierDeskInfo(orderNo);
+    public Response selectCashierDeskInfo(@ApiParam(value = "订单编号") @RequestParam String orderNo) {
+        Map<String, Object> cashierDesk = orderManagerService.selectCashierDeskInfo(orderNo);
         Response response = new Response();
         response.setData(cashierDesk);
         return response;
     }
+
 }

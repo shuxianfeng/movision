@@ -72,7 +72,8 @@ public class ZHOrderService {
         genOrderRecord(msgParam);
         //记录订单商品表
         genOrderGoodsRecord(msgParam);
-
+        //记录发票信息
+        genInvoiceRecord(msgParam);
     }
 
     /**
@@ -81,22 +82,28 @@ public class ZHOrderService {
      * @param msgParam
      */
     private void genOrderRecord(Map<String, String> msgParam) {
-        Order order = new Order();
-        order.setOrderNo(msgParam.get("orderNo"));
-        order.setBuyerId(Long.valueOf(msgParam.get("buyerId")));
-        order.setSellerId(msgParam.get("partner"));
-        order.setDealTime(new Date());
-        String payPrice = msgParam.get("goodsPrice");
-        String number = msgParam.get("number");
-        BigDecimal price = new BigDecimal(payPrice);
-        BigDecimal num = new BigDecimal(number);
-        BigDecimal amount = price.multiply(num);
-        order.setAmount(amount); //订单总金额
-        order.setPayAmount(amount);  //交易金额
-        order.setGoodsType(msgParam.get("goodsType"));
-        order.setStatus(PayConstants.OrderStatus.WZF.toString());
+        try{
+            Order order = new Order();
+            order.setOrderNo(msgParam.get("orderNo"));
+            order.setBuyerId(Long.valueOf(msgParam.get("buyerId")));
+            order.setSellerId(msgParam.get("partner"));
+            order.setDealTime(new Date());
+            String payPrice = msgParam.get("goodsPrice");
+            String number = msgParam.get("number");
+            BigDecimal price = new BigDecimal(payPrice);
+            BigDecimal num = new BigDecimal(number);
+            BigDecimal amount = price.multiply(num);
+            order.setAmount(amount); //订单总金额
+            order.setPayAmount(amount);  //交易金额
+            order.setGoodsType(msgParam.get("goodsType"));
+            order.setStatus(PayConstants.OrderStatus.WZF.toString());
 
-        orderService.insert(order);
+            orderService.insert(order);
+        } catch (Exception e){
+              e.printStackTrace();
+            logger.error(e.getMessage());
+               throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,e.getMessage());
+        }
     }
 
     /**
@@ -105,17 +112,24 @@ public class ZHOrderService {
      * @param msgParam
      */
     private void genOrderGoodsRecord(Map<String, String> msgParam) {
-        //订单商品
-        OrderGoods orderGoods = new OrderGoods();
-        orderGoods.setGoodsId(Long.valueOf(msgParam.get("goodsId")));
-        orderGoods.setGoodsName(msgParam.get("goodsName"));
+        try{
+            //订单商品
+            OrderGoods orderGoods = new OrderGoods();
+            orderGoods.setGoodsId(Long.valueOf(msgParam.get("goodsId")));
+            orderGoods.setGoodsName(msgParam.get("goodsName"));
 
-        orderGoods.setGoodsPrice(new BigDecimal(msgParam.get("goodsPrice")));
-        orderGoods.setNumber(Integer.valueOf(msgParam.get("number")));
-        orderGoods.setOrderNo(msgParam.get("orderNo"));
-        orderGoods.setCreateTime(new Date());
+            orderGoods.setGoodsPrice(new BigDecimal(msgParam.get("goodsPrice")));
+            orderGoods.setNumber(Integer.valueOf(msgParam.get("number")));
+            orderGoods.setOrderNo(msgParam.get("orderNo"));
+            orderGoods.setCreateTime(new Date());
 
-        orderGoodsService.insert(orderGoods);
+            orderGoodsService.insert(orderGoods);
+        } catch (Exception e){
+            e.printStackTrace();
+            logger.error(e.getMessage());
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,e.getMessage());
+        }
+
     }
 
 
@@ -125,32 +139,39 @@ public class ZHOrderService {
      * @param msgParam
      */
     public void genInvoiceRecord(Map<String, String> msgParam) {
-        //交易发票信息
-        if ("true".equals(msgParam.get("needInvoice"))) {
-            checkInvoiceParams(msgParam);
-            //录入发票信息
-            logger.debug("录入发票信息~");
-            Map<String, String> jsonMap = new HashMap<>();
+        try {
+
+            //交易发票信息
+            if ("true".equals(msgParam.get("needInvoice"))) {
+                checkInvoiceParams(msgParam);
+                //录入发票信息
+                logger.debug("录入发票信息~");
+                Map<String, String> jsonMap = new HashMap<>();
 
 //            jsonMap.put("createId",String.valueOf(ShiroUtil.getCreateID()));
 
-            jsonMap.put("orderNo", msgParam.get("orderNo"));
-            jsonMap.put("invoiceType", msgParam.get("invoiceType"));
-            jsonMap.put("invoiceTitle", msgParam.get("invoiceTitle"));
-            jsonMap.put("invoiceTitleType", msgParam.get("invoiceTitleType"));
-            jsonMap.put("receiveName", msgParam.get("invoiceReceiveName"));
-            jsonMap.put("address", msgParam.get("invoiceAddress"));
-            jsonMap.put("mobile", msgParam.get("invoiceMobile"));
-            jsonMap.put("province", msgParam.get("invoiceProvince"));
-            jsonMap.put("city", msgParam.get("invoiceCity"));
-            jsonMap.put("area", msgParam.get("invoiceArea"));
+                jsonMap.put("orderNo", msgParam.get("orderNo"));
+                jsonMap.put("invoiceType", msgParam.get("invoiceType"));
+                jsonMap.put("invoiceTitle", msgParam.get("invoiceTitle"));
+                jsonMap.put("invoiceTitleType", msgParam.get("invoiceTitleType"));
+                jsonMap.put("receiveName", msgParam.get("invoiceReceiveName"));
+                jsonMap.put("address", msgParam.get("invoiceAddress"));
+                jsonMap.put("mobile", msgParam.get("invoiceMobile"));
+                jsonMap.put("province", msgParam.get("invoiceProvince"));
+                jsonMap.put("city", msgParam.get("invoiceCity"));
+                jsonMap.put("area", msgParam.get("invoiceArea"));
 
-            Gson gson = new Gson();
-            String jsonParam = gson.toJson(jsonMap);
+                Gson gson = new Gson();
+                String jsonParam = gson.toJson(jsonMap);
 
-            invoiceService.insertInvoice(jsonParam);
+                invoiceService.insertInvoice(jsonParam);
+            }
+
+        } catch (Exception e){
+            e.printStackTrace();
+            logger.error(e.getMessage());
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,e.getMessage());
         }
-
 
     }
 
@@ -259,7 +280,6 @@ public class ZHOrderService {
         orderSms.setTemplateCode(PropertiesUtils.getValue("course_after_stop_sms_template_code"));
         orderSmsService.insert(orderSms);
 
-
     }
 
 
@@ -269,13 +289,20 @@ public class ZHOrderService {
      * @param msgParam
      */
     public void createOrderFlow(Map<String, String> msgParam) {
-        OrderFlow orderFlow = new OrderFlow();
-        orderFlow.setOrderNo(msgParam.get("orderNo"));
-        orderFlow.setTradeMode(msgParam.get("tradeMode"));
-        orderFlow.setTradeFee(new BigDecimal(msgParam.get("price")));
-        orderFlow.setTradeStatus(PayConstants.OrderStatus.WZF.toString());
-        orderFlow.setCreateTime(new Date());
-        orderFlowService.insert(orderFlow);
+        try{
+            OrderFlow orderFlow = new OrderFlow();
+            orderFlow.setOrderNo(msgParam.get("orderNo"));
+            orderFlow.setTradeMode(msgParam.get("tradeMode"));
+            orderFlow.setTradeFee(new BigDecimal(msgParam.get("price")));
+            orderFlow.setTradeStatus(PayConstants.OrderStatus.WZF.toString());
+            orderFlow.setCreateTime(new Date());
+            orderFlowService.insert(orderFlow);
+        } catch (Exception e){
+            e.printStackTrace();
+            logger.error(e.getMessage());
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,e.getMessage());
+        }
+
     }
 
 

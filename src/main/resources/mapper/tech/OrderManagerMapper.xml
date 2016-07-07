@@ -10,7 +10,7 @@
     t.amount, t.payAmount,gd.goodsName,gd.goodsPrice,gd.number,
     date_format(pc.startTime,'%Y-%m-%d %H:%m:%s') courseStartTime,date_format(pc.endTime,'%Y-%m-%d %H:%m:%s') courseEndTime,pc.minBuyNumber courseCondition,
     concat(po.name,ct.name,ar.name,pc.address) courseAddress,pc.price coursePrice,
-    t.descriptions,pt.mobile
+    t.descriptions,pt.mobile ,t.goodsType
     ,( select
     case when (locate(';',co.imgUrl) > 0) then substring(co.imgUrl,1,locate(';',co.imgUrl)-1) when locate(';',co.imgUrl) = 0 then imgUrl end as imgUrl
     from t_p_group_publishCourse co where co.courseid=pt.courseId) as goodsImgUrl

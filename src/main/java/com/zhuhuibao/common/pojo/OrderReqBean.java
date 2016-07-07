@@ -4,7 +4,7 @@ import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
 /**
- * 技术培训 订单请求参数
+ * 订单请求参数
  */
 @ApiModel(value="订单请求参数")
 public class OrderReqBean {
@@ -22,10 +22,9 @@ public class OrderReqBean {
     private String goodsId;
     @ApiModelProperty(value="商品数量",required = true)
     private String number;
-    @ApiModelProperty(value="商品类型 1:技术培训 2:专家培训",required = true)
+    @ApiModelProperty(value="商品类型 4：筑慧币",required = true)
     private String goodsType;
-    @ApiModelProperty(value="下单手机号",required = true)
-    private String mobile;
+
 
     //发票信息
     @ApiModelProperty(value="是否需要发票(true|false)",required = true)
@@ -91,14 +90,6 @@ public class OrderReqBean {
 
     public void setGoodsType(String goodsType) {
         this.goodsType = goodsType;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
     }
 
     public String getNeedInvoice() {

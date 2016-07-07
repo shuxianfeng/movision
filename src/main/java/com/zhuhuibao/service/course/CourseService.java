@@ -121,7 +121,7 @@ public class CourseService {
                 || msgParam.get("goodsType").equals(OrderConstants.GoodsType.ZJPX.toString())) {
 
             //发票信息
-            zhOrderService.genInvoiceRecord(msgParam);
+//            zhOrderService.genInvoiceRecord(msgParam);
 
             //根据订单产品数量生成SN码
             zhOrderService.genSNcode(msgParam, msgParam.get("goodsType"));
