@@ -129,7 +129,7 @@ public class SiteMailService {
 
     public int updateNewsStatus(MessageLog messageLog){
         try{
-            return msgLogMapper.updateNewsStatus(messageLog);
+            return msgLogMapper.updateByPrimaryKeySelective(messageLog);
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();

@@ -72,7 +72,7 @@ public class MailController {
         Response response = new Response();
         //将这条消息设为已读
         MessageLog messageLog = new MessageLog();
-        messageLog.setMessageID(Long.parseLong(id));
+        messageLog.setId(Long.parseLong(id));
         messageLog.setStatus(MessageLogConstant.NEWS_STATUS_TWO);
         siteMailService.updateNewsStatus(messageLog);
 
