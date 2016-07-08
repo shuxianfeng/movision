@@ -139,16 +139,16 @@
 
     <!-- resubmit token拦截器
     <mvc:interceptors>
-        <bean class="com.zhuhuibao.security.resubmit.TokenInterceptor"/>
-    </mvc:interceptors> -->
-    <!--
-    <mvc:interceptors>
+       <bean class="com.zhuhuibao.security.resubmit.TokenInterceptor"/>
         <bean class="com.zhuhuibao.security.resubmit.AvoidDuplicateSubmissionInterceptor"/>
     </mvc:interceptors>-->
 
     <mvc:interceptors>
+        <!--<bean class="com.zhuhuibao.aop.TimeoutInterceptor"/>-->
         <bean class="com.zhuhuibao.aop.UserAccessInterceptor"/>
     </mvc:interceptors>
+
+
 
     <!--AOP-->
     <aop:config proxy-target-class="true"/>

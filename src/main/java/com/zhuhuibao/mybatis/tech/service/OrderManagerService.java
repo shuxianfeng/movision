@@ -390,7 +390,7 @@ public class OrderManagerService {
             invoiceinfoMap.put("invoiceNum", invoice.getInvoiceNum());
             invoiceinfoMap.put("expressNum", invoice.getExpressNum());
 
-            detailMap.put("invoiceinfo", invoiceinfoMap);
+            detailMap.put("invoiceInfo", invoiceinfoMap);
         } else {
             detailMap.put("invoiceInfo", "");
         }

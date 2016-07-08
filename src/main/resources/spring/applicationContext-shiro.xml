@@ -31,6 +31,9 @@
     </bean>
 
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="globalSessionTimeout" value="43200000"/>
+        <property name="deleteInvalidSessions" value="true"/>
+        <property name="sessionValidationSchedulerEnabled" value="true"/>
         <property name="sessionDAO" ref="redisSessionDAO"/>
     </bean>
 
@@ -113,7 +116,7 @@
                 /rest/system/mc/product/** = orroles["6,9,10,11"]
                 /rest/system/mc/quote/** =  orroles["6,9,10,11"]
                 /rest/tech/mc/data/**  =   orroles["6,9,10,11"]
-                /rest/tech/mc/coop/cg/**  =   orroles["6,9,10,11"]      -->
+                /rest/tech/mc/coop/cg/**  =   orroles["6,9,10,11"]       -->
 
                 <!--具备“厂家+角色不限+实名认证”权限的配置
                 /rest/system/mc/brand/** = orperms["3:100:10,3:300:10"]
