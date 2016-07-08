@@ -741,4 +741,26 @@
     and at.page = #{page}
     and at.advArea = #{advArea}
   </select>
+
+  <select id="findMemberOms" resultType="java.util.Map" parameterType="java.util.Map">
+    SELECT m.id from t_m_member m
+    left join t_vip_member_info vm on m.id = vm.member_id
+    <where>
+      <if test="accounts !=null and account !=''">
+        and (find_in_set(m.mobile,#{accounts}) or find_in_set(m.email,#{accounts}))
+      </if>
+      <if test="memberType !=null and memberType == 1">
+        and m.identify != 2
+      </if>
+      <if test="memberType !=null and memberType == 2">
+        and m.identify = 2
+      </if>
+      <if test="identify !=null and identify != ''">
+        and m.identify like CONCAT('%',#{identify},'%')
+      </if>
+      <if test="level !=null and level !=''">
+        and vm.vip_level = #{level}
+      </if>
+    </where>
+  </select>
 </mapper>

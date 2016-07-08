@@ -48,4 +48,6 @@ public interface MemberMapper {
     List<Map<String,String>> queryCompanyList(Map<String, Object> map);
 
     List<Map<String,String>> queryGreatCompany(Map<String, Object> map);
+
+    List<Map<String,String>> findMemberOms(Map<String, Object> map);
 }

@@ -6,7 +6,9 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
+import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MessageMapper;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageLog;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.mapper.MessageLogMapper;
@@ -39,6 +41,9 @@ public class SiteMailService {
 
     @Autowired
     MessageMapper messageMapper;
+
+    @Autowired
+    MemberMapper memberMapper;
 
     /**
      * 插入站内信信息
@@ -214,6 +219,42 @@ public class SiteMailService {
         try
         {
             return messageMapper.queryMyReceiveMsgById(id);
+        }catch(Exception e)
+        {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public List<Map<String,String>> findMember(Map<String, Object> map){
+        try
+        {
+            return memberMapper.findMemberOms(map);
+        }catch(Exception e)
+        {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public Long addMsgText(MessageText messageText){
+        try
+        {
+            return msgTextMapper.insertSelective(messageText);
+        }catch(Exception e)
+        {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public int addMsgLog(MessageLog messageLog){
+        try
+        {
+            return msgLogMapper.insertSelective(messageLog);
         }catch(Exception e)
         {
             log.error(e.getMessage());
