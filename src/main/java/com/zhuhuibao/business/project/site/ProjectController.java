@@ -8,6 +8,7 @@ import java.util.Map;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.aop.UserAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;

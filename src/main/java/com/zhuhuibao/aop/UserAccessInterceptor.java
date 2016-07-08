@@ -13,6 +13,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author jianglz
@@ -43,8 +45,21 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
                 String identify = member.getIdentify();
                 if (value.equals("ADMIN")) {
                     log.debug("需要管理员权限操作");
-                    if(!identify.equals("2") && workType==100)   {              //企业用户 && 管理员
-                        return true;
+                    if(!identify.equals("2") && workType==100)   { //企业用户 && 管理员
+
+                         //VIP权限判断 130 : 企业黄金VIP会员,160:    企业铂金VIP会员
+                        String viplevel =   annotation.viplevel();
+                        String[] viplevels = viplevel.split(",");
+                        List<String> vipList =  Arrays.asList(viplevels);
+
+                        int vipLevel = member.getVipLevel();
+                        if(!vipList.contains(String.valueOf(vipLevel))){
+                            log.error("用户无权限");
+                            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"用户无权限");
+                        }else{
+                            return true;
+                        }
+
                     }else{
                         log.error("需要管理员权限");
                         throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"需要管理员权限");

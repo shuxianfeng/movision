@@ -38,7 +38,7 @@ public class ZhbController {
 	@Autowired
 	private VipInfoService vipInfoService;
 
-	@UserAccess
+	@UserAccess(viplevel="130,160")
 	@ApiOperation(value = "进入筑慧币充值页", notes = "进入筑慧币充值页", response = Response.class)
 	@RequestMapping(value = "mc/sel_prepaid", method = RequestMethod.GET)
 	public Response enterZhbPrepaid(@ApiParam(value = "订单编号") @RequestParam(required = true) String orderNo) throws Exception {
@@ -51,7 +51,7 @@ public class ZhbController {
 		return response;
 	}
 
-	@UserAccess
+//	@UserAccess
 	@ApiOperation(value = "筑慧币充值", notes = "筑慧币充值 ", response = Response.class)
 	@RequestMapping(value = "mc/upd_prepaid", method = RequestMethod.POST)
 	public Response zhbPrepaid(@ApiParam(value = "订单编号") @RequestParam(required = true) String orderNo) throws Exception {
@@ -94,7 +94,7 @@ public class ZhbController {
 		return response;
 	}
 
-	@UserAccess
+//	@UserAccess
 	@ApiOperation(value = "筑慧币订单支付", notes = "筑慧币订单支付 ", response = Response.class)
 	@RequestMapping(value = "mc/upd_payfororder", method = RequestMethod.POST)
 	public Response payForOrder(@ApiParam(value = "订单号") @RequestParam String orderNo) throws Exception {

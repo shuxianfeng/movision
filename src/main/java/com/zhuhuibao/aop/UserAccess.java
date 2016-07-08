@@ -14,4 +14,6 @@ import java.lang.annotation.Target;
 public @interface UserAccess {
 
     String value() default "ADMIN";
+
+    String viplevel();
 }
