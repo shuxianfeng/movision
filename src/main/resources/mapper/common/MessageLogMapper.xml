@@ -72,6 +72,7 @@
     </set>
     where id = #{id}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageLog" >
     update t_sys_messageLog
     set recID = #{recID,jdbcType=BIGINT},
@@ -116,8 +117,8 @@
     )T2
   </select>
   <select id="queryNewsById" parameterType="java.lang.String" resultType="java.util.Map">
-    select mt.title,mt.messageText,date_format(mt.sendTime,'%Y-%m-%d %H:%i:%s') sendTime from t_sys_messageLog ml
-    left join t_sys_messageText mt on ml.messageID = mt.id
+    select mt.title,mt.messageText,date_format(mt.sendTime,'%Y-%m-%d %H:%i:%s') sendTime
+    from t_sys_messageText mt
     where mt.id = #{id}
   </select>
 </mapper>

@@ -62,7 +62,7 @@
     from t_e_question q
     left join t_e_answer a on q.id = a.questionId
     left join t_e_expert e on e.createid = a.createid
-    where q.`status` = 2 and a.`status` = 0 and q.answerId = a.id order by q.publishTime desc limit 0,#{count}
+    where q.`status` = 4 and a.`status` = 0 and q.answerId = a.id order by q.publishTime desc limit 0,#{count}
   </select>
 
   <insert id="askExpert" parameterType="com.zhuhuibao.mybatis.expert.entity.Question" >
