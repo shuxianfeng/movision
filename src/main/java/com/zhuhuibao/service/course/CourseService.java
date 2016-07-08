@@ -338,6 +338,8 @@ public class CourseService {
 
         boolean suc = SDKSendSms.sendSMS(sms.getMobile(), sms.getContent(), template);
         OrderSms orderSms = new OrderSms();
+        orderSms.setTemplateCode(template);
+        orderSms.setMobile(sms.getMobile());
         orderSms.setOrderNo(sms.getOrderNo());
         if (suc) {//发送成功
             orderSms.setStatus(OrderConstants.SmsStatus.SUCCESS.toString());

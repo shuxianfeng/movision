@@ -68,7 +68,14 @@ public class OrderSmsService {
      * @return
      */
     public List<OrderSms> findByOrderNoAndStatusCode(List<String> orderNos, String status,String templateCode) {
-        return mapper.findByOrderNoAndStatusCode(orderNos,status,templateCode);
+        List<OrderSms> smsList;
+        try{
+            smsList =   mapper.findByOrderNoAndStatusCode(orderNos,status,templateCode);
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
+        }
+        return  smsList;
     }
 
 }

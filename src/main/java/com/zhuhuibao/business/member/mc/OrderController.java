@@ -39,6 +39,7 @@ public class OrderController {
     @Autowired
     OrderManagerService orderService;
 
+    @Autowired
     CourseService courseService;
 
     @RequestMapping(value = "sel_orderlist", method = RequestMethod.GET)
@@ -81,17 +82,17 @@ public class OrderController {
         return new Response(orderDetail);
     }
 
-    @RequestMapping(value = "upd_sendSNCode", method = RequestMethod.GET)
+    @RequestMapping(value = "upd_sendSNCode", method = RequestMethod.POST)
     @ApiOperation(value = "再次发送SN码", notes = "再次发送SN码", response = Response.class)
     public Response sendSNCode(@ApiParam(value = "订单编号") @RequestParam String orderNo) throws Exception {
         Order order = new Order();
         order.setOrderNo(orderNo);
-        List<Order> orderList = new ArrayList<Order>();
+        List<Order> orderList = new ArrayList<>();
         orderList.add(order);
         courseService.sendSMS(orderList, PropertiesUtils.getValue("course_begin_sms_template_code"));
-        Response response = new Response();
-        response.setData(orderList);
-        return response;
+//        Response response = new Response();
+//        response.setData(orderList);
+        return new Response();
     }
 
 }

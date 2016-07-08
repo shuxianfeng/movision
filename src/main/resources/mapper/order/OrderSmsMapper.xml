@@ -119,12 +119,11 @@
     Select
     <include refid="Base_Column_List" />
     from t_o_sms where orderNo in
-    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+    <foreach close=")" collection="orderNos" index="index" item="item" open="(" separator=",">
       #{item}
     </foreach>
-    and o.orderNo = og.orderNo
-    and o.status = #{status}
-    and og.templateCode = #{templateCode}
+    and status = #{status}
+    and templateCode = #{templateCode}
   </select>
 
 </mapper>
