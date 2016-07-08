@@ -242,7 +242,9 @@ public class SiteMailService {
     public Long addMsgText(MessageText messageText){
         try
         {
-            return msgTextMapper.insertSelective(messageText);
+            msgTextMapper.insertSelective(messageText);
+            Long id = messageText.getId();
+            return id;
         }catch(Exception e)
         {
             log.error(e.getMessage());

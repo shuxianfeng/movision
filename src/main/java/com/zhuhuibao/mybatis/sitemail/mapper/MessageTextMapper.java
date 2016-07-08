@@ -11,7 +11,7 @@ public interface MessageTextMapper {
 
     int insert(MessageText record);
 
-    Long insertSelective(MessageText record);
+    int insertSelective(MessageText record);
 
     MessageText selectByPrimaryKey(Long id);
 
