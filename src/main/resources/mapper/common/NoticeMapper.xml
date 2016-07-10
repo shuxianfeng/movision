@@ -8,11 +8,12 @@
     <result column="time" jdbcType="TIMESTAMP" property="time" />
     <result column="createId" jdbcType="BIGINT" property="createId" />
     <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="userName" jdbcType="VARCHAR" property="userName" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+     <result column="userName" jdbcType="VARCHAR" property="userName" />
     <result column="time" jdbcType="VARCHAR" property="time" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, title, content, createId, date_format(time,'%Y-%m-%d %H:%i:%s') time,status
+    id, title, content, createId, date_format(time,'%Y-%m-%d %H:%i:%s') time,status,reason
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
