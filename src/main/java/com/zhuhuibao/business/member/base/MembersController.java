@@ -29,7 +29,7 @@ public class MembersController {
 	@Autowired
 	MembersService membersService;
 	
-	@RequestMapping(value="/rest/searchContractors", method = RequestMethod.GET)
+	@RequestMapping(value={"/rest/searchContractors","/rest/member/site/sel_contractors"}, method = RequestMethod.GET)
 	public Response searchContractors(ContractorSearchSpec spec) throws IOException
 	{
 		if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
@@ -52,7 +52,7 @@ public class MembersController {
 		return response;
 	}
 	
-	@RequestMapping(value="/rest/searchSuppliers", method = RequestMethod.GET)
+	@RequestMapping(value={"/rest/searchSuppliers","/rest/membe/site/sel_suppliers"}, method = RequestMethod.GET)
 	public Response searchSuppliers(SupplierSearchSpec spec) throws IOException
 	{
 		if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
@@ -60,7 +60,7 @@ public class MembersController {
 		}
 		Response response = new Response();
 		response.setCode(200);
-		Map<String, Object> ret = null;
+		Map<String, Object> ret;
 		try{
 			ret = membersService.searchSuppliers(spec);
 			response.setMsgCode(1);

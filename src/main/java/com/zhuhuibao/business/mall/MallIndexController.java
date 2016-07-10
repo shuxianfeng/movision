@@ -88,7 +88,13 @@ public class MallIndexController {
 
                     comMap.put("comId", id);
                     Member member = memberService.findMemById(id);
-                    comMap.put("comName", member.getEnterpriseName());
+                    if(member != null){
+                        String comName =  member.getEnterpriseName();
+                        comMap.put("comName", comName == null ? "" : comName);
+                    }else{
+                        comMap.put("comName", "");
+                    }
+
                     comList.add(comMap);
                     break;
                 case "brand":
