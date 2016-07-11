@@ -92,7 +92,7 @@ public class ProjectController {
     }
 
 
-	@RequestMapping(value={"searchProjectPage","site/base/sel_project_page"}, method = RequestMethod.GET)
+	@RequestMapping(value={"searchProjectPage1","site/base/sel_project_page"}, method = RequestMethod.GET)
 	@ApiOperation(value = "根据条件查询项目信息(分页)",notes = "根据条件查询项目信息(分页)",response = Response.class)
 	public Response searchProjectPage(@ApiParam("搜索条件")  @ModelAttribute ProjectSearchSpec spec){
         if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
