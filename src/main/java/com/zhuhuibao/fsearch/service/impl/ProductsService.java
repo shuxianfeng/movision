@@ -3,7 +3,7 @@ package com.zhuhuibao.fsearch.service.impl;
 
 import com.zhuhuibao.fsearch.pojo.Product;
 import com.zhuhuibao.fsearch.pojo.ProductGroup;
-import com.zhuhuibao.fsearch.pojo.ProductSearchSpec;
+import com.zhuhuibao.fsearch.pojo.spec.ProductSearchSpec;
 import com.zhuhuibao.fsearch.service.IProductsService;
 import com.zhuhuibao.fsearch.service.IWordService;
 import com.zhuhuibao.fsearch.service.Searcher;

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.fsearch.pojo.ContractorSearchSpec;
-import com.zhuhuibao.fsearch.pojo.SupplierSearchSpec;
+import com.zhuhuibao.fsearch.pojo.spec.SupplierSearchSpec;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

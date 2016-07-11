@@ -4,7 +4,7 @@ package com.zhuhuibao.fsearch.service.impl;
 import com.zhuhuibao.fsearch.pojo.ContractorSearchSpec;
 import com.zhuhuibao.fsearch.pojo.Member;
 import com.zhuhuibao.fsearch.pojo.ProductGroup;
-import com.zhuhuibao.fsearch.pojo.SupplierSearchSpec;
+import com.zhuhuibao.fsearch.pojo.spec.SupplierSearchSpec;
 import com.zhuhuibao.fsearch.service.IMembersService;
 import com.zhuhuibao.fsearch.service.Searcher;
 import com.zhuhuibao.fsearch.service.exception.ServiceException;

@@ -1,6 +1,6 @@
 package com.zhuhuibao.fsearch.service;
 
-import com.zhuhuibao.fsearch.pojo.ProductSearchSpec;
+import com.zhuhuibao.fsearch.pojo.spec.ProductSearchSpec;
 import com.zhuhuibao.fsearch.service.exception.ServiceException;
 
 import java.util.Map;

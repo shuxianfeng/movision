@@ -6,7 +6,7 @@ import java.util.Map;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.fsearch.pojo.ProductSearchSpec;
+import com.zhuhuibao.fsearch.pojo.spec.ProductSearchSpec;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

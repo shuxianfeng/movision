@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class DateUtils {
 
@@ -77,6 +79,39 @@ public class DateUtils {
         return (endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000);
     }
 
+    public static String dateToString(Date date, String resolution) {
+        int formatLen;
+        switch (resolution){
+            case "YEAR":
+                formatLen = 4;
+                break;
+            case "MONTH":
+                formatLen = 6;
+                break;
+            case "DAY":
+                formatLen = 8;
+                break;
+            case "HOUR":
+                formatLen = 10;
+                break;
+            case "MINUTE":
+                formatLen = 12;
+                break;
+            case "SECOND":
+                formatLen = 14;
+                break;
+            case "MILLISECOND":
+                formatLen = 17;
+                break;
+            default:
+                formatLen = 0;
+        }
+        SimpleDateFormat format;
+        format = new SimpleDateFormat("yyyyMMddHHmmssSSS".substring(0, formatLen), Locale.ROOT);
+        return format.format(date);
+    }
+
+
     public static void main(String[] args) throws ParseException {
 //        Date date = DateUtils.date2Sub(DateUtils.str2Date("2016-03-02 20:16:21", "yyyy-MM-dd HH:mm:ss"), 12, 10);
 //        System.out.println(date);
@@ -91,4 +126,6 @@ public class DateUtils {
         long days = dayDiff(startTime, endTime);
         System.out.println(days);
     }
+
+
 }
