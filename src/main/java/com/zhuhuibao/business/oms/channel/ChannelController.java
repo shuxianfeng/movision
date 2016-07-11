@@ -86,7 +86,7 @@ public class ChannelController {
         return response;
     }
 
-    @RequestMapping(value = "/rest/oms/queryNewsByChannelInfo", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/contractor/site/sel_news_by_channel","/rest/oms/queryNewsByChannelInfo"}, method = RequestMethod.GET)
     public Response queryNewsByChannelInfo(ChannelNews channelNews) throws IOException {
         Response response = new Response();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -100,7 +100,7 @@ public class ChannelController {
         } else if (channelNews.getSort() == 2) {
             map.put("count", 2);
         } else if (channelNews.getSort() == 3) {
-            map.put("count", 3);
+            map.put("count", 4);
         }else if (channelNews.getChannelid() == 11) {//技术频道新技术播报
             map.put("count", 5);
         }
@@ -117,7 +117,7 @@ public class ChannelController {
      * @throws JsonMappingException
      * @throws IOException
      */
-    @RequestMapping(value = "/rest/oms/queryPersonVisit", method = RequestMethod.GET)
+    @RequestMapping(value ={ "/rest/contractor/site/sel_personvisit","/rest/oms/queryPersonVisit"}, method = RequestMethod.GET)
     public Response queryPersonVisit(ChannelNews channelNews) throws IOException {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("channelid", channelNews.getChannelid());
