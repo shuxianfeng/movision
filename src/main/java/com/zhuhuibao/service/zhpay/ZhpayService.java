@@ -97,7 +97,7 @@ public class ZhpayService {
             flowMap.put("orderNo", msgParam.get("orderNo"));
             flowMap.put("tradeMode", msgParam.get("tradeMode"));
             flowMap.put("price", payPrice.toString());
-            zhOrderService.createOrderFlow(msgParam);
+            zhOrderService.createOrderFlow(flowMap);
 
         } else {
             log.error("订单不存在");
