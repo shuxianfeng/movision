@@ -65,7 +65,7 @@ public class VipController {
 			for (DictionaryZhbgoods goods : allVipLevel) {
 				if (isPerson && Integer.valueOf(goods.getValue()) < 100) {
 					vipLevels.add(goods);
-				} else if (Integer.valueOf(goods.getValue()) > 100) {
+				} else if (!isPerson && Integer.valueOf(goods.getValue()) > 100) {
 					vipLevels.add(goods);
 				}
 			}
