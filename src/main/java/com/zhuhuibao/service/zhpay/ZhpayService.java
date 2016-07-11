@@ -139,6 +139,7 @@ public class ZhpayService {
             for (OrderFlow flow : orderFlows) {
                 if (PayConstants.PayMode.ALIPAY.toString().equals(flow.getTradeMode())) { //支付宝支付
                     //支付宝支付参数准备
+                    msgParam.put("goodsPrice",flow.getTradeFee().toString());
                     preAliPayParams(msgParam);
                     //调用支付宝支付
                     alipayDirectService.doPay(resp, msgParam);
