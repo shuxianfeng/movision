@@ -55,12 +55,12 @@ public class VipController {
 
 	@ApiOperation(value = "VIP购买确认页", notes = "VIP购买确认页", response = Response.class)
 	@RequestMapping(value = "site/sel_buyvippack", method = RequestMethod.GET)
-	public Response buyVipPack() throws Exception {
+	public Response buyVipPack(@ApiParam(value = "个人版VIP标志(1:个人，0：企业)") @RequestParam(required = false) String personFlag) throws Exception {
 		Response response = new Response();
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<DictionaryZhbgoods> allVipLevel = zhbService.listZhbGoodsByType("2");
 		List<DictionaryZhbgoods> vipLevels = new ArrayList<DictionaryZhbgoods>();
-		boolean isPerson = StringUtils.contains(ShiroUtil.getMember().getIdentify(), "2");
+		boolean isPerson = "1".equals(personFlag);
 		if (CollectionUtils.isNotEmpty(allVipLevel)) {
 			for (DictionaryZhbgoods goods : allVipLevel) {
 				if (isPerson && Integer.valueOf(goods.getValue()) < 100) {
