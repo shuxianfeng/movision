@@ -7,14 +7,12 @@ import com.zhuhuibao.fsearch.service.IProjectService;
 import com.zhuhuibao.fsearch.service.Searcher;
 import com.zhuhuibao.fsearch.service.exception.ServiceException;
 import com.zhuhuibao.fsearch.utils.*;
+import com.zhuhuibao.utils.DateUtils;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author jianglz
@@ -51,11 +49,17 @@ public class ProjectFSService implements IProjectService {
                 map.put("id", FormatUtil.parseString(itemAsMap.get("id")));
                 map.put("categoryName", FormatUtil.parseString(itemAsMap.get("categoryName")));
                 map.put("city", FormatUtil.parseString(itemAsMap.get("cityName")));
-                map.put("startDate", FormatUtil.parseString(itemAsMap.get("startDate")));
+                String startDate = FormatUtil.parseString(itemAsMap.get("startDate"));
+                Date start = DateUtils.str2Date(startDate, "yyyy-MM-dd");
+                startDate = DateUtils.date2Str(start, "yyyy-MM-dd");
+                map.put("startDate", startDate);
                 map.put("price", FormatUtil.parseString(itemAsMap.get("price")));
                 map.put("address", FormatUtil.parseString(itemAsMap.get("address")));
                 map.put("name", FormatUtil.parseString(itemAsMap.get("name")));
-                map.put("updateDate", FormatUtil.parseString(itemAsMap.get("updateDate")));
+                String updateDate = FormatUtil.parseString(itemAsMap.get("updateDate"));
+                Date update = DateUtils.str2Date(updateDate,"yyyy-MM-dd");
+                updateDate = DateUtils.date2Str(update,"yyyy-MM-dd");
+                map.put("updateDate", updateDate);
                 map.put("publishDate", FormatUtil.parseString(itemAsMap.get("publishDate")));
 
                 projects.add(map);
@@ -89,7 +93,7 @@ public class ProjectFSService implements IProjectService {
                 sortorder = spec.getSortorder();
                 result.put("sortorder", spec.getSortorder());
             }
-            if (sort.equals("updateDate1")) {
+            if (sort.equals("updateDate")) {
                 sortField.put("field", sort);
                 sortField.put("type", "LONG");
                 sortField.put("reverse",

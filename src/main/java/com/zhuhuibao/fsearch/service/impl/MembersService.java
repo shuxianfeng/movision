@@ -101,6 +101,7 @@ public class MembersService implements IMembersService {
 							.get("address")));
 					member.setSaleProductDesc(FormatUtil.parseString(itemAsMap
 							.get("saleProductDesc")));
+					member.setViplevel(FormatUtil.parseString(itemAsMap.get("viplevel")));
 				}
 				members.add(member);
 			}
@@ -209,6 +210,7 @@ public class MembersService implements IMembersService {
 							.get("address")));
 					member.setSaleProductDesc(FormatUtil.parseString(itemAsMap
 							.get("saleProductDesc")));
+                    member.setViplevel(FormatUtil.parseString(itemAsMap.get("viplevel")));
 				}
 				members.add(member);
 			}

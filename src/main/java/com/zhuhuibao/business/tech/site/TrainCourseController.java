@@ -5,6 +5,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.TechConstant;
+import com.zhuhuibao.mybatis.order.service.OrderService;
 import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
 import com.zhuhuibao.mybatis.tech.service.PublishTCourseService;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -24,20 +25,23 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/tech/site/publish")
-@Api(value = "trainCourse",description = "技术频道培训课程业务类")
+@Api(value = "trainCourse", description = "技术频道培训课程业务类")
 public class TrainCourseController {
 
     @Autowired
     PublishTCourseService ptCourseService;
 
-    @RequestMapping(value="sel_publish_course", method = RequestMethod.GET)
-    @ApiOperation(value="技术频道搜索培训课程",notes = "技术频道搜索培训课程",response = Response.class)
+    @Autowired
+    OrderService orderService;
+
+    @RequestMapping(value = "sel_publish_course", method = RequestMethod.GET)
+    @ApiOperation(value = "技术频道搜索培训课程", notes = "技术频道搜索培训课程", response = Response.class)
     public Response findAllTechDataPager(@ApiParam(value = "省") @RequestParam(required = false) String province,
                                          @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
                                          @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
         Response response = new Response();
         Map<String, Object> condition = new HashMap<String, Object>();
-        condition.put("province",province);
+        condition.put("province", province);
         condition.put("courseType", TechConstant.COURSE_TYPE_TECH);
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -54,29 +58,35 @@ public class TrainCourseController {
         return response;
     }
 
-    @RequestMapping(value="sel_latest_publish_course", method = RequestMethod.GET)
-    @ApiOperation(value="查询最新发布的课程(默认3条)",notes = "查询最新发布的课程(默认3条)",response = Response.class)
-    public Response findLatestPublishCourse()
-    {
-        Map<String,Object> condition = new HashMap<String,Object>();
-        condition.put("status",TechConstant.PublishCourseStatus.SALING);
-        condition.put("courseType",TechConstant.COURSE_TYPE_TECH);
-        condition.put("count",TechConstant.COURSE_LATEST_COUNT_THREE);
-        List<Map<String,String>> courseList = ptCourseService.findLatestPublishCourse(condition);
+    @RequestMapping(value = "sel_latest_publish_course", method = RequestMethod.GET)
+    @ApiOperation(value = "查询最新发布的课程(默认3条)", notes = "查询最新发布的课程(默认3条)", response = Response.class)
+    public Response findLatestPublishCourse() {
+        Map<String, Object> condition = new HashMap<String, Object>();
+        condition.put("status", TechConstant.PublishCourseStatus.SALING);
+        condition.put("courseType", TechConstant.COURSE_TYPE_TECH);
+        condition.put("count", TechConstant.COURSE_LATEST_COUNT_THREE);
+        List<Map<String, String>> courseList = ptCourseService.findLatestPublishCourse(condition);
         Response response = new Response();
         response.setData(courseList);
         return response;
     }
 
-    @RequestMapping(value="sel_publish_course_detail", method = RequestMethod.GET)
-    @ApiOperation(value="预览课程详情",notes = "预览课程详情",response = Response.class)
-    public Response previewPublishCourseDetail(@ApiParam(value = "培训课程ID")  @RequestParam Long courseId)
-    {
-        Map<String,Object> condition = new HashMap<String,Object>();
-        condition.put("courseid",courseId);
-        Map<String,String> course = ptCourseService.previewTrainCourseDetail(condition);
+    @RequestMapping(value = "sel_publish_course_detail", method = RequestMethod.GET)
+    @ApiOperation(value = "预览课程详情", notes = "预览课程详情", response = Response.class)
+    public Response previewPublishCourseDetail(@ApiParam(value = "培训课程ID") @RequestParam Long courseId) {
+        Map<String, Object> condition = new HashMap<String, Object>();
+        condition.put("courseid", courseId);
+        Map<String, String> course = ptCourseService.previewTrainCourseDetail(condition);
         Response response = new Response();
         response.setData(course);
         return response;
+    }
+
+    @RequestMapping(value = "sel_hot_buy", method = RequestMethod.GET)
+    @ApiOperation(value = "购买排行", notes = "购买排行", response = Response.class)
+    public Response  hotBuyTopTen(@ApiParam(value = "商品类型:1：技术培训，2：专家培训 ") @RequestParam String goodsType){
+
+        Map<String,String> result = orderService.findHotbuyTopten(goodsType);
+        return new Response(result);
     }
 }

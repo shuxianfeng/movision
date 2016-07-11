@@ -4,6 +4,7 @@ import com.zhuhuibao.mybatis.order.entity.Order;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderMapper {
     int deleteByPrimaryKey(String orderNo);
@@ -19,4 +20,6 @@ public interface OrderMapper {
     int updateByPrimaryKey(Order record);
 
     List<Order> findListByCourseIdAndStatus(@Param("courseId") String courseId, @Param("status") String status);
+
+    Map<String,String> findHotbuyTopten(@Param("goodsType") String goodsType);
 }

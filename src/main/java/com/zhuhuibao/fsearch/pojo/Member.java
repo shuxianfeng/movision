@@ -31,7 +31,17 @@ public class Member {
     
     private String enterpriseLinkman;
 
-	public Long getId() {
+	private String viplevel;
+
+    public String getViplevel() {
+        return viplevel;
+    }
+
+    public void setViplevel(String viplevel) {
+        this.viplevel = viplevel;
+    }
+
+    public Long getId() {
 		return id;
 	}
 

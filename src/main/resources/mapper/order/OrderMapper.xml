@@ -27,6 +27,12 @@
   <select id="findListByCourseIdAndStatus" resultType="com.zhuhuibao.mybatis.order.entity.Order">
      select o.* from t_o_order_goods og,t_o_order o where og.goodsId= #{courseId} and o.orderNo=og.orderNo and o.status = #{status} ;
   </select>
+  <select id="findHotbuyTopten" resultType="java.util.Map">
+    select og.goodsId,og.goodsName
+    from t_o_order o,t_o_order_goods og
+    where o.orderNo = og.orderNo and  o.goodsType = #{goodsType}
+     order by number desc limit 10
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from t_o_order
     where orderNo = #{orderNo,jdbcType=VARCHAR}

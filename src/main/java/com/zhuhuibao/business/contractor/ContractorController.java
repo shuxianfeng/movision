@@ -26,7 +26,7 @@ import java.util.Map;
  * Created by cxx on 2016/4/11 0011.
  */
 @RestController
-@RequestMapping("/rest/contractor/site/base")
+//@RequestMapping("/rest/contractor/site/base")
 @Api(value = "Contractor",description = "工程商频道")
 public class ContractorController {
     private static final Logger log = LoggerFactory.getLogger(ContractorController.class);

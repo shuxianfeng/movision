@@ -1,5 +1,6 @@
 package com.zhuhuibao.mybatis.order.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -93,14 +94,14 @@ public class OrderService {
      * @param status      状态
      */
     public void batchUpdateStatus(List orderNoList, String status) {
-       for(int i=0;i<orderNoList.size();i++ ){
-    	   Map map=(Map)orderNoList.get(i);
-    	   String orderNo=(String)map.get("orderNo");
-           Order order = new Order();
-           order.setOrderNo(orderNo);
-           order.setStatus(status);
-           update(order);
-       }
+        for (Object anOrderNoList : orderNoList) {
+            Map map = (Map) anOrderNoList;
+            String orderNo = (String) map.get("orderNo");
+            Order order = new Order();
+            order.setOrderNo(orderNo);
+            order.setStatus(status);
+            update(order);
+        }
     }
 
     /**
@@ -112,5 +113,23 @@ public class OrderService {
     public List<Order> findListByCourseIdAndStatus(String courseId, String status) {
 
         return mapper.findListByCourseIdAndStatus(courseId,status);
+    }
+
+
+    /**
+     * 查询购买排行top10
+     * @param goodsType
+     * @return
+     */
+    public Map<String, String> findHotbuyTopten(String goodsType) {
+        Map<String,String> resultMap;
+        try{
+            resultMap = mapper.findHotbuyTopten(goodsType);
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error("查询失败");
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
+        }
+        return resultMap;
     }
 }
