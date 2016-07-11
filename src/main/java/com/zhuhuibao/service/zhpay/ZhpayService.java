@@ -286,14 +286,14 @@ public class ZhpayService {
         if (StringUtils.isEmpty(goodsId)) {
             throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "商品ID不能为空");
         }
-        String goodsName = msgParam.get("goodsName");//商品名称
-        if (StringUtils.isEmpty(goodsName)) {
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "商品名称不能为空");
-        }
-        String goodsPrice = msgParam.get("goodsPrice");//商品单价
-        if (StringUtils.isEmpty(goodsPrice)) {
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "商品单价不能为空");
-        }
+//        String goodsName = msgParam.get("goodsName");//商品名称
+//        if (StringUtils.isEmpty(goodsName)) {
+//            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "商品名称不能为空");
+//        }
+//        String goodsPrice = msgParam.get("goodsPrice");//商品单价
+//        if (StringUtils.isEmpty(goodsPrice)) {
+//            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "商品单价不能为空");
+//        }
         String buyersid = String.valueOf(msgParam.get("buyerId"));//创建订单的会员ID
         if (StringUtils.isEmpty(buyersid)) {
             throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "创建订单会员ID不能为空");
@@ -302,10 +302,10 @@ public class ZhpayService {
         if (StringUtils.isEmpty(number)) {
             throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "订单商品数量不能为空");
         }
-        String goodsType = msgParam.get("goodsType");//商品类型
-        if (StringUtils.isEmpty(goodsType)) {
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "商品类型不能为空");
-        }
+//        String goodsType = msgParam.get("goodsType");//商品类型
+//        if (StringUtils.isEmpty(goodsType)) {
+//            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "商品类型不能为空");
+//        }
 
     }
 }
