@@ -27,6 +27,7 @@ import java.util.*;
 /**
  * 订单流程服务
  */
+@Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
 @Service
 public class ZHOrderService {
     private final static Logger logger = LoggerFactory.getLogger(ZHOrderService.class);
@@ -80,7 +81,7 @@ public class ZHOrderService {
      *
      * @param msgParam
      */
-    private void genOrderRecord(Map<String, String> msgParam) {
+    public void genOrderRecord(Map<String, String> msgParam) {
         try{
             Order order = new Order();
             order.setOrderNo(msgParam.get("orderNo"));
@@ -110,7 +111,7 @@ public class ZHOrderService {
      *
      * @param msgParam
      */
-    private void genOrderGoodsRecord(Map<String, String> msgParam) {
+    public void genOrderGoodsRecord(Map<String, String> msgParam) {
         try{
             //订单商品
             OrderGoods orderGoods = new OrderGoods();
@@ -365,7 +366,7 @@ public class ZHOrderService {
      * @param orderFlows
      * @throws Exception
      */
-    private void hasZHBPayMode(HttpServletResponse resp, Map<String, String> msgParam, String orderNo, Order order, List<OrderFlow> orderFlows) throws Exception {
+    public void hasZHBPayMode(HttpServletResponse resp, Map<String, String> msgParam, String orderNo, Order order, List<OrderFlow> orderFlows) throws Exception {
         Map<String, OrderFlow> map = new HashMap<>();
         for (OrderFlow flow : orderFlows) {
             String tradeMode = flow.getTradeMode();
@@ -396,7 +397,7 @@ public class ZHOrderService {
      * @param alipayOrderFlow
      * @throws Exception
      */
-    private void processAlipayRefunc(HttpServletResponse resp, Map<String, String> msgParam,
+    public void processAlipayRefunc(HttpServletResponse resp, Map<String, String> msgParam,
                                      String orderNo, Order order, OrderFlow alipayOrderFlow) throws Exception {
         logger.debug("进入支付宝退款接口");
 
@@ -417,7 +418,7 @@ public class ZHOrderService {
      * @param zhbOrderFlow
      * @return
      */
-    private boolean processZHBPayRefund(Map<String, String> msgParam, OrderFlow zhbOrderFlow) {
+    public boolean processZHBPayRefund(Map<String, String> msgParam, OrderFlow zhbOrderFlow) {
 
         String tradeStatus = zhbOrderFlow.getTradeStatus();
         if (tradeStatus.equals(PayConstants.OrderStatus.DTK.toString())) {
@@ -446,7 +447,7 @@ public class ZHOrderService {
      * @param orderFlows
      * @throws Exception
      */
-    private void noZHBPayMode(HttpServletResponse resp, Map<String, String> msgParam, String orderNo, Order order, List<OrderFlow> orderFlows) throws Exception {
+    public void noZHBPayMode(HttpServletResponse resp, Map<String, String> msgParam, String orderNo, Order order, List<OrderFlow> orderFlows) throws Exception {
         for (OrderFlow flow : orderFlows) {
             String tradeStatus = flow.getTradeStatus();
             if (tradeStatus.equals(PayConstants.OrderStatus.DTK.toString())) {
@@ -478,7 +479,7 @@ public class ZHOrderService {
      * @param orderFlows
      * @throws Exception
      */
-    private void onlyOnePayMode(HttpServletResponse resp, Map<String, String> msgParam, String orderNo, Order order, List<OrderFlow> orderFlows) throws Exception {
+    public void onlyOnePayMode(HttpServletResponse resp, Map<String, String> msgParam, String orderNo, Order order, List<OrderFlow> orderFlows) throws Exception {
         if (orderFlows.get(0).getTradeMode().equals(PayConstants.PayMode.ZHBPAY.toString())) {
             //有且只有筑慧币支付方式
             //筑慧币支付方式 调用筑慧宝退款接口
@@ -503,7 +504,7 @@ public class ZHOrderService {
      * @param order
      * @param flow
      */
-    private void preAlipayRefundParam(Map<String, String> msgParam, String orderNo, Order order, OrderFlow flow) {
+    public void preAlipayRefundParam(Map<String, String> msgParam, String orderNo, Order order, OrderFlow flow) {
         //拼装请求参数
         //orderNos  operatorId refundDate totalFee batchNum   detailData
         msgParam.put("orderNos", orderNo);

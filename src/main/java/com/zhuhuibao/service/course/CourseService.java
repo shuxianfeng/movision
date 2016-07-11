@@ -26,6 +26,7 @@ import java.util.*;
 /**
  * 培训课程开课流程
  */
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 @Service
 public class CourseService {
     private final static Logger log = LoggerFactory.getLogger(CourseService.class);
@@ -136,7 +137,7 @@ public class CourseService {
      *
      * @param msgParam
      */
-    private void preOrderParams(Map<String, String> msgParam) {
+    public void preOrderParams(Map<String, String> msgParam) {
         //根据商品ID查询商品信息
         Long courseId = Long.valueOf(msgParam.get("goodsId"));
         PublishCourse publishCourse = publishCourseService.getCourseById(courseId);
@@ -158,7 +159,7 @@ public class CourseService {
      * @param msgParam
      * @throws Exception
      */
-    private void checkRepertory(Map<String, String> msgParam) {
+    public  void checkRepertory(Map<String, String> msgParam) {
         //技术培训 专家培训购买
         //需要判断购买数量是否>=产品剩余数量
         if (msgParam.get("goodsType").equals(OrderConstants.GoodsType.JSPX.toString()) ||
@@ -334,7 +335,7 @@ public class CourseService {
      *
      * @param sms
      */
-    private void sendSms(OrderSms sms, String template) throws Exception {
+    public void sendSms(OrderSms sms, String template) throws Exception {
 
         boolean suc = SDKSendSms.sendSMS(sms.getMobile(), sms.getContent(), template);
         OrderSms orderSms = new OrderSms();
