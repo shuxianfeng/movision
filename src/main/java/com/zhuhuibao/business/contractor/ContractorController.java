@@ -22,11 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by cxx on 2016/4/11 0011.
- */
+
 @RestController
-//@RequestMapping("/rest/contractor/site/base")
+@RequestMapping("/rest/contractor/site")
 @Api(value = "Contractor",description = "工程商频道")
 public class ContractorController {
     private static final Logger log = LoggerFactory.getLogger(ContractorController.class);
@@ -42,7 +40,7 @@ public class ContractorController {
      * @throws IOException
      */
     @ApiOperation(value = "")
-    @RequestMapping(value = {"/rest/engineerSupplier/newEngineer","/rest/contractor/site/sel_new_engineer"}, method = RequestMethod.GET)
+    @RequestMapping(value = "sel_new_engineer", method = RequestMethod.GET)
     public Response newEngineer()  {
         String type = "4";
         Response response = new Response();
@@ -56,7 +54,7 @@ public class ContractorController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = {"/rest/engineerSupplier/introduce","/rest/contractor/site/sel_simple_introduce"}, method = RequestMethod.GET)
+    @RequestMapping(value = "sel_simple_introduce", method = RequestMethod.GET)
     public Response introduce(String id, String type) {
         Response response = new Response();
         Map map = memberService.introduce(id,type);
@@ -65,20 +63,13 @@ public class ContractorController {
     }
 
     @ApiOperation(value = "公司成功案例（分页）", notes = "公司成功案例（分页）")
-    @RequestMapping(value = "/rest/contractor/site/sel_company_success_caseList", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_company_success_caseList", method = RequestMethod.GET)
     public Response sel_company_success_caseList(@ApiParam(value = "公司id")@RequestParam String id,
-                                                 @RequestParam(required = false) String pageNo,
-                                                 @RequestParam(required = false) String pageSize)  {
+                                                 @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                                 @RequestParam(required = false,defaultValue = "10") String pageSize)  {
         Response response = new Response();
 
-        //设定默认分页pageSize
-        if (com.zhuhuibao.utils.pagination.util.StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (com.zhuhuibao.utils.pagination.util.StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 
         //查询公司优秀案例
         Map<String,Object> queryMap = new HashMap<>();
@@ -96,7 +87,7 @@ public class ContractorController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = {"/rest/engineerSupplier/greatCompany","/rest/contractor/site/sel_great_company"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"sel_great_company"}, method = RequestMethod.GET)
     public Response greatCompany(String type) {
         Response response = new Response();
         List list = memberService.greatCompany(type);
@@ -109,7 +100,7 @@ public class ContractorController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = {"/rest/engineerSupplier/newIdentifyEngineer","/rest/contractor/site/sel_new_identify_engineer"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"sel_new_identify_engineer"}, method = RequestMethod.GET)
     public Response newIdentifyEngineer(String type)  {
         Response response = new Response();
         List list = memberService.findnewIdentifyEngineer(type);
@@ -123,7 +114,7 @@ public class ContractorController {
      * @throws IOException
      */
     @ApiOperation(value="留言",notes="留言",response = Response.class)
-    @RequestMapping(value = {"/rest/engineerSupplier/message","/rest/contractor/site/add_message"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"add_message"}, method = RequestMethod.POST)
     public Response message(@ModelAttribute Message message) {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
