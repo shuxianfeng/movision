@@ -22,7 +22,7 @@ public class ZHBOrderReqBean {
     private String goodsId;
     @ApiModelProperty(value="商品数量",required = true)
     private String number;
-    @ApiModelProperty(value="商品类型 4：筑慧币",required = true)
+    @ApiModelProperty(value="商品类型 3：VIP服务套餐订单 4：筑慧币",required = true)
     private String goodsType;
 
 

@@ -7,7 +7,9 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
+import com.zhuhuibao.common.constant.VipConstant;
 import com.zhuhuibao.common.pojo.CourseOrderReqBean;
 import com.zhuhuibao.common.pojo.ZHBOrderReqBean;
 import com.zhuhuibao.common.pojo.PayReqBean;
@@ -19,10 +21,14 @@ import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.course.CourseService;
 import com.zhuhuibao.service.order.ZHOrderService;
 import com.zhuhuibao.service.zhpay.ZhpayService;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.IdGenerator;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ValidateUtils;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +65,7 @@ public class ZhbPayController {
     ZhbService zhbService;
 
 
-    @ApiOperation(value = "筑慧币购买提交订单", notes = "筑慧币购买提交订单", response = Response.class)
+    @ApiOperation(value = "筑慧币|VIP购买提交订单", notes = "筑慧币|VIP购买提交订单", response = Response.class)
     @RequestMapping(value = "do_zhb_order", method = RequestMethod.POST)
     public Response doZHBOrder(@ApiParam @ModelAttribute ZHBOrderReqBean order) {
         Gson gson = new Gson();
@@ -67,6 +73,8 @@ public class ZhbPayController {
 
         log.info("筑慧币下单页面,请求参数:{}", json);
         Map paramMap = gson.fromJson(json, Map.class);
+
+        checkUserLogin(paramMap);
 
         //根据商品ID查询商品价格
         DictionaryZhbgoods zhbgoods = zhbService.getZhbGoodsById(Long.valueOf(order.getGoodsId()));
@@ -76,14 +84,16 @@ public class ZhbPayController {
         }
         BigDecimal price =  zhbgoods.getPrice();
         if(price == null){
-            log.error("价格为设置");
+            log.error("价格未设置");
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"价格未设置");
         }
+        //购买VIP套餐判断  个人VIP和企业VIP只能购买对应的VIP套餐
+        checkVip(order.getGoodsType(), zhbgoods.getValue());
+
 
         paramMap.put("goodsPrice",price.toString());
         paramMap.put("goodsName",zhbgoods.getName());
 
-        checkUserLogin(paramMap);
         paramMap.put("partner", PARTNER);//partner=seller_id     商家支付宝ID  合作伙伴身份ID 签约账号
         //生成订单编号
         String orderNo = IdGenerator.createOrderNo();
@@ -94,6 +104,31 @@ public class ZhbPayController {
        Response response = new Response();
         response.setData(orderNo);
         return response;
+    }
+
+    /**
+     * 判断用户是否具有改VIP套餐
+     * @param goodsType
+     * @param value viplevel
+     */
+    private void checkVip( String goodsType ,  String value) {
+        if(goodsType.equals(OrderConstants.GoodsType.VIP.toString())){
+            Subject currentUser = SecurityUtils.getSubject();
+            Session session = currentUser.getSession(false);
+            ShiroRealm.ShiroUser user = (ShiroRealm.ShiroUser) session.getAttribute("member");
+            String  identify = user.getIdentify();
+            if(identify.equals("2")){     //个人
+                if(!value.equals(VipConstant.VipLevel.PERSON_GOLD.toString())
+                        || !value.equals(VipConstant.VipLevel.PERSON_PLATINUM.toString())){
+                    throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"个人用户无此VIP套餐");
+                }
+            }else{  //企业
+                if(!value.equals(VipConstant.VipLevel.ENTERPRISE_GOLD.toString())
+                        || !value.equals(VipConstant.VipLevel.ENTERPRISE_PLATINUM.toString())) {
+                    throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"企业用户无此VIP套餐");
+                }
+            }
+        }
     }
 
     @ApiOperation(value = "培训课程下单", notes = "培训课程下单", response = Response.class)

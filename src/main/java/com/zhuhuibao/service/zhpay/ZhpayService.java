@@ -32,6 +32,7 @@ import java.util.Map;
 /**
  * 支付服务
  */
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 @Service
 public class ZhpayService {
     private final static Logger log = LoggerFactory.getLogger(ZhpayService.class);
@@ -126,7 +127,7 @@ public class ZhpayService {
      * @param msgParam
      * @throws Exception
      */
-    private void confirmPay(HttpServletResponse resp, Map<String, String> msgParam) throws Exception {
+    public void confirmPay(HttpServletResponse resp, Map<String, String> msgParam) throws Exception {
 
         //校验参数
         checkParams(msgParam);
@@ -167,7 +168,7 @@ public class ZhpayService {
      * @param msgParam
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = RuntimeException.class)
-    private void judgePayMode(Map<String, String> msgParam) {
+    public void judgePayMode(Map<String, String> msgParam) {
 
         //根据订单编号查询相关信息
         OrderGoods orderGoods = orderGoodsService.findByOrderNo(msgParam.get("orderNo"));

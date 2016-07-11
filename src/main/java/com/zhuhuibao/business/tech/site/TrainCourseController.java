@@ -86,7 +86,7 @@ public class TrainCourseController {
     @ApiOperation(value = "购买排行", notes = "购买排行", response = Response.class)
     public Response  hotBuyTopTen(@ApiParam(value = "商品类型:1：技术培训，2：专家培训 ") @RequestParam String goodsType){
 
-        Map<String,String> result = orderService.findHotbuyTopten(goodsType);
+        List<Map<String,String>> result = orderService.findHotbuyTopten(goodsType);
         return new Response(result);
     }
 }

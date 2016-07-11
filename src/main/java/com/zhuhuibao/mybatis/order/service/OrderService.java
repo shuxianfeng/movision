@@ -121,15 +121,15 @@ public class OrderService {
      * @param goodsType
      * @return
      */
-    public Map<String, String> findHotbuyTopten(String goodsType) {
-        Map<String,String> resultMap;
+    public List<Map<String, String>> findHotbuyTopten(String goodsType) {
+        List<Map<String,String>> list;
         try{
-            resultMap = mapper.findHotbuyTopten(goodsType);
+            list = mapper.findHotbuyTopten(goodsType);
         } catch (Exception e){
             e.printStackTrace();
             log.error("查询失败");
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
         }
-        return resultMap;
+        return list;
     }
 }

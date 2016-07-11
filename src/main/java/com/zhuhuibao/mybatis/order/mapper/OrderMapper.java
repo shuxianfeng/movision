@@ -21,5 +21,5 @@ public interface OrderMapper {
 
     List<Order> findListByCourseIdAndStatus(@Param("courseId") String courseId, @Param("status") String status);
 
-    Map<String,String> findHotbuyTopten(@Param("goodsType") String goodsType);
+    List<Map<String,String>> findHotbuyTopten(@Param("goodsType") String goodsType);
 }
