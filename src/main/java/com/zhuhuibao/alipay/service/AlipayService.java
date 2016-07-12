@@ -401,7 +401,7 @@ public class AlipayService {
             order.setUpdateTime(new Date());
             //异步通知
             if (notifyType.equals(PayConstants.NotifyType.ASYNC.toString())) {
-                log.info("异步通知返回记录处理...");
+                log.error("异步通知返回记录处理...[{}]",params.get("out_trade_no"));
                 //即时到账支付
                 if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
                     recordPayAsyncCallbackLog(params);

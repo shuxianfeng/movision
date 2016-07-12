@@ -76,10 +76,10 @@ public class OrderService {
 
         try {
             count = mapper.updateByPrimaryKeySelective(order);
-            if (count != 1) {
-                log.error("t_o_order:更新数据失败");
-                throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
-            }
+//            if (count != 1) {
+//                log.error("t_o_order:更新数据失败");
+//                throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();

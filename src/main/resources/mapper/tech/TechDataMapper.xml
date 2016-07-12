@@ -245,7 +245,7 @@
         left join t_dictionary_techDataCategory td on td.code = t.sCategory
         <where>
             <if test="title != null">
-                and (t.title like concat('%',#{title},'%') or t.notes like concat('%',#{title},'%'))
+                and t.title like concat('%',#{title},'%')
             </if>
             <if test="status != null">
                 and t.status = #{status}
