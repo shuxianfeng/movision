@@ -434,9 +434,9 @@ public class AlipayService {
                           String zhbUrl = AlipayPropertiesLoader.getPropertyValue("zhb_return_url");
                           String vipUrl = AlipayPropertiesLoader.getPropertyValue("vip_return_url");
                           String url = "";
-                          if(order.getGoodsType().equals(OrderConstants.GoodsType.ZHB.toString())){
+                          if(endOrder.getGoodsType().equals(OrderConstants.GoodsType.ZHB.toString())){
                               url = zhbUrl;
-                          }else if(order.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString())){
+                          }else if(endOrder.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString())){
                               url = vipUrl;
                           }
                           url += "?result={result}";

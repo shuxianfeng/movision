@@ -1,5 +1,6 @@
 package com.zhuhuibao.mybatis.order.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class AlipayCallbackLog {
@@ -41,9 +42,9 @@ public class AlipayCallbackLog {
 
     private String buyerId;
 
-    private Long price;
+    private BigDecimal price;
 
-    private Long totalFee;
+    private BigDecimal totalFee;
 
     private Integer quantity;
 
@@ -211,19 +212,19 @@ public class AlipayCallbackLog {
         this.buyerId = buyerId == null ? null : buyerId.trim();
     }
 
-    public Long getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public Long getTotalFee() {
+    public BigDecimal getTotalFee() {
         return totalFee;
     }
 
-    public void setTotalFee(Long totalFee) {
+    public void setTotalFee(BigDecimal totalFee) {
         this.totalFee = totalFee;
     }
 
