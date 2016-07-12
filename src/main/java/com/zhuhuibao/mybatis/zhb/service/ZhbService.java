@@ -95,9 +95,8 @@ public class ZhbService {
 			// 订单购买人为当前操作账号的管理员账号
 			// 操作人为管理员
 			// 不存在该订单号对应的筑慧币流水记录
-			if (null != order && null != orderGoods && "4".equals(order.getGoodsType()) && OrderStatus.YZF.value.equals(order.getStatus())
-					&& order.getBuyerId().compareTo(ShiroUtil.getCompanyID()) == 0 && ShiroUtil.getCompanyID().compareTo(ShiroUtil.getCreateID()) == 0
-					&& isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
+			if (null != order && null != orderGoods && "4".equals(order.getGoodsType()) && order.getBuyerId().compareTo(ShiroUtil.getCompanyID()) == 0
+					&& ShiroUtil.getCompanyID().compareTo(ShiroUtil.getCreateID()) == 0 && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
 				DictionaryZhbgoods goods = getZhbGoodsById(orderGoods.getGoodsId());
 				BigDecimal amount = new BigDecimal(goods.getValue());
 
@@ -132,6 +131,21 @@ public class ZhbService {
 	}
 
 	/**
+	 * 订单类型正确\订单状态正确\购买人为当前操作账号的管理员账号
+	 * 
+	 * @param order
+	 * @param goodsType
+	 * @param orderStatus
+	 * @return
+	 */
+	private boolean isRightOrder(Order order, String goodsType) {
+		boolean result = false;
+		result = null != order && goodsType.equals(order.getGoodsType()) && order.getBuyerId().compareTo(ShiroUtil.getCompanyID()) == 0;
+
+		return result;
+	}
+
+	/**
 	 * 判断当前登录者是否为企业管理员账号
 	 * 
 	 * @return
@@ -157,8 +171,7 @@ public class ZhbService {
 			// 订单购买人为当前操作账号的管理员账号
 			// 操作人为管理员
 			// 不存在该订单号对应的筑慧币流水记录
-			if (null != order && null != orderGoods && isRightOrder(order, "3", OrderStatus.YZF.value) && isAdminLogin()
-					&& isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
+			if (null != order && null != orderGoods && isRightOrder(order, "3") && isAdminLogin() && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
 				DictionaryZhbgoods vipgoods = getZhbGoodsById(orderGoods.getGoodsId());
 				int buyVipLevel = Integer.parseInt(vipgoods.getValue());
 				BigDecimal amount = new BigDecimal(VipConstant.VIP_LEVEL_ZHB.get(String.valueOf(buyVipLevel)));
