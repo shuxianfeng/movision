@@ -210,6 +210,7 @@ public class AlipayService {
      * @param response  response
      * @param tradeType 交易流水类型 1:支付 2:退款
      */
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public void asyncNotify(HttpServletRequest request, HttpServletResponse response, String tradeType) {
         ServletOutputStream out = null;
         try {
