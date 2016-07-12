@@ -8,6 +8,7 @@ import com.zhuhuibao.common.constant.CooperationConstants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
 import com.zhuhuibao.service.payment.PaymentService;
@@ -36,7 +37,7 @@ public class WitkeySiteController {
     private CooperationService cooperationService;
 
     @Autowired
-    private PaymentService paymentService;
+    private MemberService memberService;
 
     /**
      * 发布任务
@@ -125,6 +126,24 @@ public class WitkeySiteController {
         Response response = new Response();
         Map<String,Object> cooperation = cooperationService.queryUnloginCooperationInfo(id);
         response.setData(cooperation);
+        return response;
+    }
+
+    @RequestMapping(value="sel_adv_company", method = RequestMethod.GET)
+    @ApiOperation(value = "威客广告位",notes = "威客广告位",response = Response.class)
+    public Response queryAdvertisingPosition(@ApiParam(value="频道类型 5:威客")@RequestParam String chanType,
+                                             @ApiParam(value="频道下子页面.task:接任务;service:找服务;cooperation:资质合作") @RequestParam String page,
+                                             @ApiParam(value="广告所在区域:F1:右下角企业广告") @RequestParam String advArea)
+    {
+        Response response = new Response();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("chanType",chanType);
+        map.put("page",page);
+        map.put("advArea",advArea);
+        List<Map<String,String>> companyList = memberService.queryCompanyList(map);
+
+        response.setData(companyList);
         return response;
     }
 }
