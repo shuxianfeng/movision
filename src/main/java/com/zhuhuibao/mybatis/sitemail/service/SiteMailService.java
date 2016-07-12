@@ -142,6 +142,16 @@ public class SiteMailService {
         }
     }
 
+    public int updateStatus(MessageLog messageLog){
+        try{
+            return msgLogMapper.updateNewsStatus(messageLog);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     public Integer selUnreadNewsCount(Map<String,Object> map)
     {
         try
