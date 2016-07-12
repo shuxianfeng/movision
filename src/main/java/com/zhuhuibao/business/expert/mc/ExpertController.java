@@ -355,7 +355,7 @@ public class ExpertController {
         //設置採納答案id
         question.setAnswerId(answerId);
         //狀態設為已關閉
-        question.setStatus(ExpertConstant.EXPERT_QUESTION_STATUS_TWO);
+        question.setStatus(ExpertConstant.EXPERT_QUESTION_STATUS_FOUR);
         expertService.updateQuestionInfo(question);
         return response;
     }
