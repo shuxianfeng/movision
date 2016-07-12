@@ -429,12 +429,13 @@ public class AlipayService {
                         alFlow.setTradeTime(new Date());
                         alFlow.setUpdateTime(new Date());
                         orderFlowService.update(alFlow);
+                        log.error("修改t_o_order_flow status>>>");
                         order.setStatus(PayConstants.OrderStatus.YZF.toString());
                     }
 
                     //2. 修改订单状态
                     boolean suc = orderService.update(order);
-
+                     log.error("update t_o_order status :>>>>" + suc);
                     //购买筑慧币,VIP 需要回调
                     if (suc) {
                         String orderNo = params.get("out_trade_no");
