@@ -233,8 +233,7 @@ public class ZhbService {
 	/**
 	 * 筑慧币支付订单
 	 * 
-	 * @param order
-	 * @param amount
+	 * @param orderNo
 	 * @return
 	 */
 	public int payForOrder(String orderNo) throws Exception {
@@ -416,7 +415,7 @@ public class ZhbService {
 	/**
 	 * 获取筑慧币物品配置信息
 	 * 
-	 * @param pinyin
+	 * @param id
 	 * @return
 	 */
 	@Cacheable(value = "zhbGoodsConfigCache", key = "#id")
@@ -428,8 +427,7 @@ public class ZhbService {
 	/**
 	 * 按要求查询
 	 * 
-	 * @param pageNo
-	 * @param pageSize
+	 * @param pager
 	 * @param recordType
 	 *            1:使用，2:获取
 	 * @return
@@ -477,12 +475,14 @@ public class ZhbService {
 
 	/**
 	 * 添加筑慧币流水记录
-	 * 
 	 * @param orderNo
-	 * @param orderBuyerId
+	 * @param buyerId
+	 * @param operaterId
 	 * @param amount
 	 * @param type
-	 */
+	 * @param goodsId
+     * @param goodsType
+     */
 	private void insertZhbRecord(String orderNo, Long buyerId, Long operaterId, BigDecimal amount, String type, Long goodsId, String goodsType) {
 		ZhbRecord zhbRecord = new ZhbRecord();
 		zhbRecord.setOrderNo(orderNo);
@@ -499,11 +499,15 @@ public class ZhbService {
 
 	/**
 	 * 进行充值操作
-	 * 
 	 * @param orderNo
-	 * @param orderBuyerId
-	 * @return
-	 */
+	 * @param buyerId
+	 * @param operaterId
+	 * @param amount
+	 * @param goodsType
+	 * @param goodsId
+     * @return
+     * @throws Exception
+     */
 	private int execPrepaid(String orderNo, Long buyerId, Long operaterId, BigDecimal amount, String goodsType, Long goodsId) throws Exception {
 		int result = 0;
 		ZhbAccount zhbAccount = zhbMapper.selectZhbAccount(buyerId);

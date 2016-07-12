@@ -432,8 +432,11 @@ public class AlipayService {
                     boolean suc =  orderService.update(order);
 
                     //购买筑慧币,VIP 需要回调
-                    callbackZhbPay(params);
-
+                    if(suc){
+                        callbackZhbPay(params);
+                    } else{
+                        throw new BusinessException(MsgCodeConstant.PAY_ERROR,"业务处理失败");
+                    }
 
                 }
                 //退款
