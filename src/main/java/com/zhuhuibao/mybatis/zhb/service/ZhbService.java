@@ -95,15 +95,16 @@ public class ZhbService {
 			// 订单购买人为当前操作账号的管理员账号
 			// 操作人为管理员
 			// 不存在该订单号对应的筑慧币流水记录
-			if (null != order && null != orderGoods && "4".equals(order.getGoodsType()) && order.getBuyerId().compareTo(ShiroUtil.getCompanyID()) == 0
-					&& ShiroUtil.getCompanyID().compareTo(ShiroUtil.getCreateID()) == 0 && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
+//			order.getBuyerId().compareTo(ShiroUtil.getCompanyID()) == 0
+//			&& ShiroUtil.getCompanyID().compareTo(ShiroUtil.getCreateID()) == 0 &&
+			if (null != order && null != orderGoods && "4".equals(order.getGoodsType()) && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
 				DictionaryZhbgoods goods = getZhbGoodsById(orderGoods.getGoodsId());
 				BigDecimal amount = new BigDecimal(goods.getValue());
 
 				// 订单中amount大于0
 				if (BigDecimal.ZERO.compareTo(amount) < 0) {
 					// 进行充值
-					result = execPrepaid(order.getOrderNo(), order.getBuyerId(), ShiroUtil.getCreateID(), amount, goods.getPinyin(), goods.getId());
+					result = execPrepaid(order.getOrderNo(), order.getBuyerId(), order.getBuyerId(), amount, goods.getPinyin(), goods.getId());
 				}
 			}
 		} catch (Exception e) {
@@ -135,12 +136,12 @@ public class ZhbService {
 	 * 
 	 * @param order
 	 * @param goodsType
-	 * @param orderStatus
 	 * @return
 	 */
 	private boolean isRightOrder(Order order, String goodsType) {
 		boolean result = false;
-		result = null != order && goodsType.equals(order.getGoodsType()) && order.getBuyerId().compareTo(ShiroUtil.getCompanyID()) == 0;
+		result = null != order && goodsType.equals(order.getGoodsType());
+//		&& order.getBuyerId().compareTo(ShiroUtil.getCompanyID()) == 0;
 
 		return result;
 	}
@@ -170,8 +171,8 @@ public class ZhbService {
 			// 订单状态为已支付
 			// 订单购买人为当前操作账号的管理员账号
 			// 操作人为管理员
-			// 不存在该订单号对应的筑慧币流水记录
-			if (null != order && null != orderGoods && isRightOrder(order, "3") && isAdminLogin() && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
+			// 不存在该订单号对应的筑慧币流水记录            && isAdminLogin()
+			if (null != order && null != orderGoods && isRightOrder(order, "3") && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
 				DictionaryZhbgoods vipgoods = getZhbGoodsById(orderGoods.getGoodsId());
 				int buyVipLevel = Integer.parseInt(vipgoods.getValue());
 				BigDecimal amount = new BigDecimal(VipConstant.VIP_LEVEL_ZHB.get(String.valueOf(buyVipLevel)));
