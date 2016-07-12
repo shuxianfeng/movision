@@ -210,6 +210,7 @@ public class AlipayService {
      * @param response  response
      * @param tradeType 交易流水类型 1:支付 2:退款
      */
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public void asyncNotify(HttpServletRequest request, HttpServletResponse response, String tradeType) {
         ServletOutputStream out = null;
         try {
@@ -389,6 +390,7 @@ public class AlipayService {
      * @param notifyType 通知类型
      * @return
      */
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public Map<String, String> tradeSuccessDeal(Map<String, String> params, String notifyType, String tradeType) throws ParseException {
         log.info("支付返回成功,业务逻辑处理...");
         Map<String, String> resultMap = new HashMap<>();
@@ -427,36 +429,11 @@ public class AlipayService {
                     }
 
                     //2. 修改订单状态
-                    orderService.update(order);
+                    boolean suc =  orderService.update(order);
 
                     //购买筑慧币,VIP 需要回调
-                    String orderNo = params.get("out_trade_no");
-                    Order endOrder = orderService.findByOrderNo(orderNo);
-                    if(endOrder != null){
-                      if(endOrder.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString()) ||
-                              endOrder.getGoodsType().equals(OrderConstants.GoodsType.ZHB.toString())){
-                          RestTemplate restTemplate = new RestTemplate();
-//                          Map<String,String> map = new HashMap<>();
-//                          map.put("orderNo",orderNo);
-//                          map.put("status", Objects.equals(endOrder.getStatus(), PayConstants.OrderStatus.YZF.toString()) ?"success":"fail");
-//                          String result = JsonUtils.getJsonStringFromMap(map);
+                    callbackZhbPay(params);
 
-                          String zhbUrl = AlipayPropertiesLoader.getPropertyValue("zhb_return_url");
-                          String vipUrl = AlipayPropertiesLoader.getPropertyValue("vip_return_url");
-                          String url = "";
-                          if(endOrder.getGoodsType().equals(OrderConstants.GoodsType.ZHB.toString())){
-                              url = zhbUrl;
-                          }else if(endOrder.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString())){
-                              url = vipUrl;
-                          }
-                          url += "?orderNo={orderNo}";
-
-                          String responseCode = restTemplate.postForObject(
-                                  url,
-                                  null,String.class,orderNo);
-                          log.debug("回调状态:",responseCode);
-                      }
-                    }
 
                 }
                 //退款
@@ -484,6 +461,47 @@ public class AlipayService {
 
 
         return resultMap;
+    }
+
+    /**
+     * 回调筑慧币VIP购买
+     * @param params
+     */
+    private void callbackZhbPay(Map<String, String> params) {
+        try{
+            String orderNo = params.get("out_trade_no");
+            Order endOrder = orderService.findByOrderNo(orderNo);
+            if(endOrder != null){
+                if(endOrder.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString()) ||
+                        endOrder.getGoodsType().equals(OrderConstants.GoodsType.ZHB.toString())){
+                    RestTemplate restTemplate = new RestTemplate();
+//                          Map<String,String> map = new HashMap<>();
+//                          map.put("orderNo",orderNo);
+//                          map.put("status", Objects.equals(endOrder.getStatus(), PayConstants.OrderStatus.YZF.toString()) ?"success":"fail");
+//                          String result = JsonUtils.getJsonStringFromMap(map);
+
+                    String zhbUrl = AlipayPropertiesLoader.getPropertyValue("zhb_return_url");
+                    String vipUrl = AlipayPropertiesLoader.getPropertyValue("vip_return_url");
+                    String url = "";
+                    if(endOrder.getGoodsType().equals(OrderConstants.GoodsType.ZHB.toString())){
+                        url = zhbUrl;
+                    }else if(endOrder.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString())){
+                        url = vipUrl;
+                    }
+                    url += "?orderNo={orderNo}";
+
+                    String responseCode = restTemplate.postForObject(
+                            url,null,String.class,orderNo);
+                    log.debug("回调状态:",responseCode);
+                    if(!responseCode.equals("200")){
+                           throw new BusinessException(MsgCodeConstant.PAY_ERROR,"筑慧币充值失败");
+                    }
+                }
+            }
+        } catch (Exception e){
+             e.printStackTrace();
+             log.error("筑慧币充值失败:" + e.getMessage());
+        }
     }
 
     /**

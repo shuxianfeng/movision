@@ -160,8 +160,8 @@ public class TechDataController {
                 //插入我的下载资料
                 dlService.insertDownloadData(techDataId, createId);
                 //更新下载率
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("views", "views");
+                Map<String, Object> map = new HashMap<>();
+                map.put("download", "download");
                 map.put("id", techDataId);
                 techDataService.updateTechDataViewsOrDL(map);
             } else {
