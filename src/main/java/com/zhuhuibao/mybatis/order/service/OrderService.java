@@ -80,7 +80,7 @@ public class OrderService {
 //                log.error("t_o_order:更新数据失败");
 //                throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
 //            }
-
+            log.error("update t_o_order : [count] >>>> {}",count);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
