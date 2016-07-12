@@ -13,4 +13,6 @@ public interface OrderFlowMapper {
     OrderFlow findByOrderNoAndTradeMode(@Param("orderNo") String orderNo, @Param("tradeMode") String tradeMode);
 
     List<OrderFlow> findByOrderNo(@Param("orderNo") String orderNo);
+
+    int update(OrderFlow alFlow);
 }

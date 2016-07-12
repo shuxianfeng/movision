@@ -75,7 +75,27 @@ public class OrderFlowService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询数据失败");
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "插入数据失败");
+        }
+    }
+
+    /**
+     * 更新记录
+     * @param alFlow
+     */
+    public void update(OrderFlow alFlow) {
+        int count;
+        try {
+            count = mapper.update(alFlow);
+//            if (count != 1) {
+//                log.error("t_o_order_flow:更新数据失败");
+//                throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "更新数据失败");
+//            }
+            log.debug("t_o_order_flow 更新count>>>[{}]",count);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "更新数据失败");
         }
     }
 }

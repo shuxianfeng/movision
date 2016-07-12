@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,7 +41,7 @@ import java.util.*;
  * 支付宝服务入口
  */
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
 public class AlipayService {
     private static final Logger log = LoggerFactory.getLogger(AlipayService.class);
 
@@ -92,7 +93,7 @@ public class AlipayService {
      *
      * @param msgParam params
      */
-    private void genRefundRecord(Map<String, String> msgParam) throws ParseException {
+    public void genRefundRecord(Map<String, String> msgParam) throws ParseException {
         log.debug("request params:{}", msgParam.toString());
         int batchNum = Integer.valueOf(msgParam.get("batchNum"));
 
@@ -119,7 +120,7 @@ public class AlipayService {
      *
      * @param msgParam 请求参数集合
      */
-    private void checkRefundParams(Map<String, String> msgParam) {
+    public void checkRefundParams(Map<String, String> msgParam) {
         String orderNo = msgParam.get("orderNos");//退款订单编号  逗号隔开
         if (StringUtils.isEmpty(orderNo)) {
             throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "退款订单编号不能为空");
@@ -328,7 +329,7 @@ public class AlipayService {
      * @param method   请求方法{get,post}
      * @return html
      */
-    private String doRefund(Map<String, String> msgParam, String method) {
+    public String doRefund(Map<String, String> msgParam, String method) {
         Map<String, String> sParaTemp = new HashMap<>();
         //基本参数
         sParaTemp.put("_input_charset", aliPayConfig.getInputCharset());//编码格式
@@ -416,6 +417,12 @@ public class AlipayService {
                         }
                     } else {
                         //3-> 修改订单状态为已支付
+                        OrderFlow alFlow = new OrderFlow();
+                        alFlow.setOrderNo(params.get("out_trade_no"));
+                        alFlow.setTradeStatus(PayConstants.OrderStatus.YZF.toString());
+                        alFlow.setTradeTime(new Date());
+                        alFlow.setUpdateTime(new Date());
+                        orderFlowService.update(alFlow);
                         order.setStatus(PayConstants.OrderStatus.YZF.toString());
                     }
 
@@ -481,7 +488,7 @@ public class AlipayService {
      *
      * @param params
      */
-    private void recordRefundAsyncCallbackLog(Map<String, String> params) {
+    public void recordRefundAsyncCallbackLog(Map<String, String> params) {
         log.info("支付宝即时到账退款接口,异步通知返回记录 入表操作...");
         AlipayRefundCallbackLog refundCallbackLog = new AlipayRefundCallbackLog();
         ConvertUtils.register(new DateConvert(), Date.class);
@@ -506,7 +513,7 @@ public class AlipayService {
      *
      * @param params
      */
-    private void recordPayAsyncCallbackLog(Map<String, String> params) {
+    public void recordPayAsyncCallbackLog(Map<String, String> params) {
         log.info("支付宝即时到账接口 ,异步通知返回记录 入表操作... ");
         AlipayCallbackLog alipayCallbackLog = new AlipayCallbackLog();
         ConvertUtils.register(new DateConvert(), Date.class);
@@ -514,8 +521,8 @@ public class AlipayService {
         for (String key : params.keySet()) {
             pMap.put(CommonUtils.getCamelString(key), params.get(key));
         }
-        pMap.put("price", new BigDecimal(pMap.get("price")).toString());
-        pMap.put("totalFee", new BigDecimal(pMap.get("totalFee")).toString());
+        pMap.put("price",String.valueOf(new BigDecimal(pMap.get("price")).multiply(new BigDecimal(1000)).longValue()));
+        pMap.put("totalFee",String.valueOf(new BigDecimal(pMap.get("totalFee")).multiply(new BigDecimal(1000)).longValue()));
         log.info("需转换为bean的pMap=" + pMap);
         try {
             BeanUtils.populate(alipayCallbackLog, pMap);
