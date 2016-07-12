@@ -8,6 +8,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.tech.entity.TechData;
 import com.zhuhuibao.mybatis.tech.service.TechDataService;
 import com.zhuhuibao.mybatis.tech.service.TechDownloadDataService;
@@ -88,6 +89,14 @@ public class TechDataMcController {
             condition.put("title", title.replace("_", "\\_"));
         }
         condition.put("status", status);
+
+        //登录用户
+        Long createid = ShiroUtil.getCreateID();
+        if(createid == null) {
+            throw new AuthException(MsgCodeConstant.un_login,"请登录");
+        }
+        condition.put("createid",createid);
+
         List<Map<String, String>> techList = techDataService.findAllOMSTechCooperationPager(pager, condition);
         pager.result(techList);
         response.setData(pager);
