@@ -70,22 +70,23 @@ public class OrderService {
      *
      * @param order 订单信息
      */
-    public void update(Order order) {
+    public boolean update(Order order) {
 
         int count;
 
         try {
             count = mapper.updateByPrimaryKeySelective(order);
-//            if (count != 1) {
-//                log.error("t_o_order:更新数据失败");
-//                throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
-//            }
+            if (count  == 0) {
+                log.error("t_o_order:更新数据失败");
+                throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
+            }
             log.error("update t_o_order : [count] >>>> {}",count);
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.getMessage());
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "更新数据失败");
         }
+        return count > 0;
     }
 
     /**
