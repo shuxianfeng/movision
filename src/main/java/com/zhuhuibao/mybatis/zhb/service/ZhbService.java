@@ -96,7 +96,7 @@ public class ZhbService {
 			// 操作人为管理员
 			// 不存在该订单号对应的筑慧币流水记录
 			if (null != order && null != orderGoods && "4".equals(order.getGoodsType()) && OrderStatus.YZF.value.equals(order.getStatus())
-					&& order.getBuyerId() == ShiroUtil.getCompanyID() && ShiroUtil.getCompanyID() == ShiroUtil.getCreateID()
+					&& order.getBuyerId() == ShiroUtil.getCompanyID() && ShiroUtil.getCompanyID().compareTo(ShiroUtil.getCreateID()) == 0
 					&& isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
 				DictionaryZhbgoods goods = getZhbGoodsById(orderGoods.getGoodsId());
 				BigDecimal amount = new BigDecimal(goods.getValue());
