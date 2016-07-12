@@ -123,14 +123,21 @@ public class ProjectController {
 		return response;
 	}
 
-	@RequestMapping(value = {"greatCompany","site/base/sel_greatCompany"}, method = RequestMethod.GET)
-	@ApiOperation(value = "优秀工程商",notes = "优秀工程商",response = Response.class)
-	public Response greatCompany(@ApiParam("工程商类型=2") @RequestParam String type) throws Exception {
-		Response response = new Response();
-		List list = memberService.greatCompany(type);
-		response.setData(list);
-		return response;
-	}
+
+    @RequestMapping(value = {"greatCompany","site/base/sel_greatCompany"}, method = RequestMethod.GET)
+    @ApiOperation(value = "优秀工程商",notes = "优秀工程商",response = Response.class)
+    public Response sel_great_manufacturer(@ApiParam(value="频道类型 4：项目")@RequestParam String chanType,
+                                           @ApiParam(value="频道下子页面:index") @RequestParam String page,
+                                           @ApiParam(value="广告所在区域:F1:优秀工程商") @RequestParam String advArea)  {
+        Response response = new Response();
+        Map<String,Object> map = new HashMap();
+        map.put("chanType",chanType);
+        map.put("page",page);
+        map.put("advArea",advArea);
+        List<Map<String,String>> list = memberService.queryGreatCompany(map);
+        response.setData(list);
+        return response;
+    }
 
 	@RequestMapping(value = {"queryLatestProject","site/base/sel_latestProject"}, method = RequestMethod.GET)
 	@ApiOperation(value = "查询最新项目信息或者搜索时的推荐，默认10条",notes = "查询最新项目信息，默认10条",response = Response.class)
