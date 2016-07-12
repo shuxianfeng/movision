@@ -70,6 +70,30 @@
       </if>
     </trim>
   </insert>
+  <update id="update">
+    update t_o_order_flow
+    <set >
+      <if test="tradeMode != null" >
+        tradeMode = #{tradeMode,jdbcType=CHAR},
+      </if>
+      <if test="tradeFee != null" >
+        tradeFee = #{tradeFee,jdbcType=DECIMAL},
+      </if>
+      <if test="tradeStatus != null" >
+        tradeStatus = #{tradeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tradeTime != null" >
+        tradeTime = #{tradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where orderNo = #{orderNo,jdbcType=VARCHAR}
+  </update>
   <select id="findByOrderNoAndTradeMode" resultType="com.zhuhuibao.mybatis.order.entity.OrderFlow">
     select
     <include refid="Base_Column_List" />

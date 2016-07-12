@@ -426,6 +426,9 @@ public class AlipayService {
                         order.setStatus(PayConstants.OrderStatus.YZF.toString());
                     }
 
+                    //2. 修改订单状态
+                    orderService.update(order);
+
                     //购买筑慧币,VIP 需要回调
                     String orderNo = params.get("out_trade_no");
                     Order endOrder = orderService.findByOrderNo(orderNo);
@@ -433,10 +436,10 @@ public class AlipayService {
                       if(endOrder.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString()) ||
                               endOrder.getGoodsType().equals(OrderConstants.GoodsType.ZHB.toString())){
                           RestTemplate restTemplate = new RestTemplate();
-                          Map<String,String> map = new HashMap<>();
-                          map.put("orderNo",orderNo);
-                          map.put("status", Objects.equals(endOrder.getStatus(), PayConstants.OrderStatus.YZF.toString()) ?"success":"fail");
-                          String result = JsonUtils.getJsonStringFromMap(map);
+//                          Map<String,String> map = new HashMap<>();
+//                          map.put("orderNo",orderNo);
+//                          map.put("status", Objects.equals(endOrder.getStatus(), PayConstants.OrderStatus.YZF.toString()) ?"success":"fail");
+//                          String result = JsonUtils.getJsonStringFromMap(map);
 
                           String zhbUrl = AlipayPropertiesLoader.getPropertyValue("zhb_return_url");
                           String vipUrl = AlipayPropertiesLoader.getPropertyValue("vip_return_url");
@@ -446,11 +449,11 @@ public class AlipayService {
                           }else if(endOrder.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString())){
                               url = vipUrl;
                           }
-                          url += "?result={result}";
+                          url += "?orderNo={orderNo}";
 
                           String responseCode = restTemplate.postForObject(
                                   url,
-                                  null,String.class,result);
+                                  null,String.class,orderNo);
                           log.debug("回调状态:",responseCode);
                       }
                     }
@@ -461,15 +464,15 @@ public class AlipayService {
                     recordRefundAsyncCallbackLog(params);
                     //修改订单状态为已支付
                     order.setStatus(PayConstants.OrderStatus.YTK.toString());
+
+                    //2. 修改订单状态
+                    orderService.update(order);
                 }
             }
             //同步通知
             if (notifyType.equals(PayConstants.NotifyType.SYNC.toString())) {
                 log.info("同步通知返回记录处理...");
             }
-
-            //2. 修改订单状态
-            orderService.update(order);
 
             resultMap.put("statusCode", String.valueOf(PayConstants.HTTP_SUCCESS_CODE));
 
