@@ -24,4 +24,10 @@ public interface NoticeMapper {
 	void publishNotice(Notice notice);
     //查询凭条最新公告
 	List<Notice> queryPlatformNewNotice();
+
+    List<Map<String,String>> queryNoticeList(Map<String, Object> map);
+
+    List<Map<String,String>> findAllNoticeList(RowBounds rowBounds);
+
+    Map<String,String> queryNoticeById(String id);
 }

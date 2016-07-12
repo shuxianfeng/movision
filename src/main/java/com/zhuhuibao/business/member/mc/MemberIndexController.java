@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -230,6 +231,24 @@ public class MemberIndexController {
         if(memberId!=null){
             Map<String,Object> resultMap = indexService.getExpertQuestionInfo(String.valueOf(memberId));
             result.setData(resultMap);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "消息公告", notes = "消息公告", response = Response.class)
+    @RequestMapping(value = "sel_news_notice", method = RequestMethod.GET)
+    public Response sel_news_notice() {
+        Response result = new Response();
+        Long memberId = ShiroUtil.getCreateID();
+        Map map = new HashMap();
+        if(memberId!=null){
+            List<Map<String,String>> noticeList = indexService.queryNoticeList();
+            List<Map<String,String>> newsList = indexService.queryNewsList(String.valueOf(memberId));
+            map.put("noticeList",noticeList);
+            map.put("newsList",newsList);
+            result.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }

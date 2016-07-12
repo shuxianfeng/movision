@@ -9,6 +9,7 @@ import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MessageMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.mybatis.oms.mapper.NoticeMapper;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageLog;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.mapper.MessageLogMapper;
@@ -44,6 +45,9 @@ public class SiteMailService {
 
     @Autowired
     MemberMapper memberMapper;
+
+    @Autowired
+    NoticeMapper noticeMapper;
 
     /**
      * 插入站内信信息
@@ -267,6 +271,30 @@ public class SiteMailService {
         try
         {
             return msgLogMapper.insertSelective(messageLog);
+        }catch(Exception e)
+        {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public List<Map<String,String>> findAllNoticeList(Paging<Map<String,String>> pager){
+        try
+        {
+            return noticeMapper.findAllNoticeList(pager.getRowBounds());
+        }catch(Exception e)
+        {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public Map<String,String> queryNoticeById(String id){
+        try
+        {
+            return noticeMapper.queryNoticeById(id);
         }catch(Exception e)
         {
             log.error(e.getMessage());

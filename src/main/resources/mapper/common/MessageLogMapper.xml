@@ -129,4 +129,10 @@
     from t_sys_messageText mt
     where mt.id = #{id}
   </select>
+
+  <select id="queryNewsList" parameterType="java.util.Map" resultType="java.util.Map">
+    SELECT mt.id,mt.title FROM t_sys_messageText mt
+    LEFT JOIN t_sys_messageLog ml on mt.id = ml.messageID
+    WHERE ml.recID = #{recID} and ml.status != 3 order by ml.status,mt.sendTime desc limit 0,#{count}
+  </select>
 </mapper>

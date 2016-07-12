@@ -273,4 +273,32 @@ public class MailController {
         response.setData(map);
         return response;
     }
+
+    @ApiOperation(value="公告列表",notes="公告列表",response = Response.class)
+    @RequestMapping(value = "sel_noticeList", method = RequestMethod.GET)
+    public Response sel_noticeList(@RequestParam(required = false)String pageNo,
+                                   @RequestParam(required = false)String pageSize)  {
+        Response response = new Response();
+        //设定默认分页pageSize
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Map<String,String>> list = siteMailService.findAllNoticeList(pager);
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+    @ApiOperation(value="公告详情",notes="公告详情",response = Response.class)
+    @RequestMapping(value = "sel_notice", method = RequestMethod.GET)
+    public Response sel_notice(@RequestParam(required = false)String id)  {
+        Response response = new Response();
+        Map<String,String> map = siteMailService.queryNoticeById(id);
+        response.setData(map);
+        return response;
+    }
 }
