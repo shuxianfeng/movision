@@ -70,14 +70,20 @@ public class MailController {
     @RequestMapping(value = "sel_news", method = RequestMethod.GET)
     public Response sel_news(@RequestParam String id)  {
         Response response = new Response();
-        //将这条消息设为已读
-        MessageLog messageLog = new MessageLog();
-        messageLog.setId(Long.parseLong(id));
-        messageLog.setStatus(MessageLogConstant.NEWS_STATUS_TWO);
-        siteMailService.updateNewsStatus(messageLog);
+        Long memberId = ShiroUtil.getCreateID();
+        if(memberId!=null){
+            //将这条消息设为已读
+            MessageLog messageLog = new MessageLog();
+            messageLog.setRecID(memberId);
+            messageLog.setMessageID(Long.parseLong(id));
+            messageLog.setStatus(MessageLogConstant.NEWS_STATUS_TWO);
+            siteMailService.updateStatus(messageLog);
 
-        Map<String,String> map = siteMailService.queryNewsById(id);
-        response.setData(map);
+            Map<String,String> map = siteMailService.queryNewsById(id);
+            response.setData(map);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 /*    @ApiOperation(value="查询产品跟活动未读消息条数",notes="查询产品跟活动未读消息条数",response = Response.class)
