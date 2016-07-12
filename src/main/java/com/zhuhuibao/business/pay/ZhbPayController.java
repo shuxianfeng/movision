@@ -174,7 +174,7 @@ public class ZhbPayController {
     }
 
     @ApiOperation(value = "筑慧币单独支付", notes = "筑慧币单独支付")
-    @RequestMapping(value = "do_pay", method = RequestMethod.POST)
+    @RequestMapping(value = "do_zhb_pay", method = RequestMethod.POST)
     public Response doZhbPay(@ApiParam("订单号") @RequestParam String orderNo) {
          Response response = new Response();
         try {
