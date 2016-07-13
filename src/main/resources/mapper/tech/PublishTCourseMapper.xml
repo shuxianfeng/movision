@@ -314,10 +314,10 @@
     courseid, publisherid, title, teacher, date_format(startTime,'%Y-%m-%d %H:%i:%s') startTime,
     date_format(endTime,'%Y-%m-%d %H:%i:%s') endTime, concat(pv.name,ct.name,ar.name,address) address, price, storageNumber, minBuyNumber, maxBuyNumber,
     date_format(expiryDate,'%Y-%m-%d') expiryDate, imgUrl, notice, courseType, t.status,notes,
-    (select sum(gd.number)  FROM t_p_group_publishCourse pc
-    left join t_o_order_goods gd on gd.goodsId = pc.courseid
-    LEFT JOIN t_o_order o on o.orderNo = gd.orderNo and o.goodsType = #{courseType} and o.`status` = 2
-    where courseid = #{courseid}) as number
+    (
+    select sum(number) from t_o_order_goods
+    where goodsId = #{courseid} and  orderNo in (select orderNo from t_o_order where status in (1,2) and goodsType =#{courseType})
+    ) as number
     from t_p_group_publishCourse t
     left join t_dictionary_province pv on pv.code = t.province
     left join t_dictionary_city ct on ct.code = t.city
