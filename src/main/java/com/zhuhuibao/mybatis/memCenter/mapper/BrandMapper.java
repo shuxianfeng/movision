@@ -29,7 +29,7 @@ public interface BrandMapper {
 
     int findBrandSize(Brand brand);
 
-    Brand brandDetails(int id);
+    Brand brandDetails(String id);
 
     List<ResultBean> findAllBrand(Product product);
 

@@ -179,14 +179,14 @@ public class BrandSiteController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = {"/rest/brand/details","/rest/system/site/brand/sel_brand_info"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/brand/details","/rest/system/site/brand/sel_brand"}, method = RequestMethod.GET)
     public Response details(String id, String scateid)  {
         Map map1 = new HashMap();
         Map map2 = new HashMap();
         Map map3 = new HashMap();
         //品牌详情
         BrandDetailBean brand = brandService.details(id);
-        Brand brand1 = brandService.brandDetails(Integer.parseInt(id));
+        Brand brand1 = brandService.brandDetails(id);
         if(brand1.getViews()==null){
             brand1.setViews(1);
         }else{

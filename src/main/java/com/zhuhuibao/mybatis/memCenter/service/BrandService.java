@@ -226,7 +226,7 @@ public class BrandService {
     /**
      * 查询品牌详情
      */
-    public Brand brandDetails(int id)
+    public Brand brandDetails(String id)
     {
         try {
             return brandMapper.brandDetails(id);
