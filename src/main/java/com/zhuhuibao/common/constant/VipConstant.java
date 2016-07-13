@@ -107,4 +107,6 @@ public class VipConstant {
 	 * 额外自定义特权-企业
 	 */
 	public final static int EXTRA_PRIVILEGE_LEVEL_ENTERPRISE = 201;
+	
+	public final static String[] CHARGE_VIP_LEVEL =  {"30","60","130","160"};
 }
