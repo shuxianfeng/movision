@@ -642,24 +642,27 @@ public class ExpertService {
             info.setCheckCode(code);
             info = memberRegService.findMemberValidateInfo(info);
             Date currentTime = new Date();
-            Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
-
-            //判断验证码是否过期
-            if(currentTime.before(sendSMStime))
-            {
-                Subject currentUser = SecurityUtils.getSubject();
-                Session session = currentUser.getSession(false);
-                if (null != session) {
-                    String verifyCode = (String) session.getAttribute(type + mobile);
-                    //判断验证码是否正确
-                    if (!code.equals(verifyCode)) {
-                        throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
+            if(info!=null){
+                Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(),"yyyy-MM-dd HH:mm:ss"),12,10);
+                //判断验证码是否过期
+                if(currentTime.before(sendSMStime))
+                {
+                    Subject currentUser = SecurityUtils.getSubject();
+                    Session session = currentUser.getSession(false);
+                    if (null != session) {
+                        String verifyCode = (String) session.getAttribute(type + mobile);
+                        //判断验证码是否正确
+                        if (!code.equals(verifyCode)) {
+                            throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
+                        }
+                    }else {
+                        throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
                     }
                 }else {
-                    throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                    throw new BusinessException(MsgCodeConstant.member_mcode_sms_timeout, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_sms_timeout)));
                 }
             }else {
-                throw new BusinessException(MsgCodeConstant.member_mcode_sms_timeout, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_sms_timeout)));
+                throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
             }
         }else {
             throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
