@@ -227,7 +227,7 @@ public class OrderManagerService {
             Map<String, Object> baseInfoMap = new HashMap<>();
             baseInfoMap.put("orderNo", order.getOrderNo());
             baseInfoMap.put("status", order.getStatus());
-            SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date dtime = order.getDealTime();
             baseInfoMap.put("dealTime", sf.format(dtime));
             baseInfoMap.put("goodsType",order.getGoodsType());
@@ -300,7 +300,7 @@ public class OrderManagerService {
 
                 PublishCourse course = publishCourseService.getCourseById(orderGoods.getGoodsId());
                 Map<String, Object> courseMap = new HashMap<>();
-                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 courseMap.put("startTime", sf.format(course.getStartTime()));
                 courseMap.put("endTime", sf.format(course.getEndTime()));
                 String address = genAddress(course.getProvince(), course.getCity(), course.getArea(), course.getAddress());
@@ -356,7 +356,7 @@ public class OrderManagerService {
                 payinfoMap.put("tradeMode", flow.getTradeMode());
                 payinfoMap.put("tradeStatus", flow.getTradeStatus());
                 payinfoMap.put("tradeFee", flow.getTradeFee().toString());
-                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 payinfoMap.put("tradeTime", sf.format(flow.getTradeTime()));
 
                 payinfoList.add(payinfoMap);
