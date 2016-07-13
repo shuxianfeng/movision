@@ -165,9 +165,13 @@ public class TechDataController {
                 map.put("id", techDataId);
                 techDataService.updateTechDataViewsOrDL(map);
             } else {
-                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                jsonResult.setCode(401);
+                jsonResult.setMsgCode(MsgCodeConstant.un_login);
+                jsonResult.setMessage( MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                return  jsonResult;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("download tech data error! ", e);
         }
         return jsonResult;
