@@ -418,7 +418,7 @@ public class UploadFileController {
         //甲方信息
         if(!isEmpty(row.getCell(11))){
         	
-			String partyContent= "";
+			 
 			String  rowContetnt = row.getCell(11).toString();
 			 
 	 
@@ -429,7 +429,7 @@ public class UploadFileController {
 			
 			String [] partyContentList; 
 					
-			partyContentList=partyContent.replaceAll("\n联系人备注", "备注").replace("联系人备注", "备注").split("\n\n");
+			partyContentList=rowContetnt.replaceAll("\n联系人备注", "备注").replace("联系人备注", "备注").split("\n\n");
 			
 			List<ProjectLinkman> partyAList= new ArrayList<ProjectLinkman>();
 			 
