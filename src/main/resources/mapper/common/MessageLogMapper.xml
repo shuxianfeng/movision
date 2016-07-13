@@ -72,7 +72,15 @@
     </set>
     where id = #{id}
   </update>
-
+  <update id="updateNewsStatus" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageLog" >
+    update t_sys_messageLog
+    <set >
+      <if test="status != null" >
+        status = #{status},
+      </if>
+    </set>
+    where messageID = #{messageID} and recID = #{recID}
+  </update>
   <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageLog" >
     update t_sys_messageLog
     set recID = #{recID,jdbcType=BIGINT},
@@ -96,7 +104,7 @@
   </select>
   <insert id="addNewsToLog" parameterType="java.util.Map" >
     insert into t_sys_messageLog (recID,messageID,status)
-    select #{recID},mt.id,'1' from t_sys_messageText mt where mt.id not in (select ml.messageID from t_sys_messageLog ml where ml.recID = #{recID})
+    select #{recID},mt.id,'1' from t_sys_messageText mt where mt.sendID is null and mt.id not in (select ml.messageID from t_sys_messageLog ml where ml.recID = #{recID})
   </insert>
   <select id="selUnreadNewsCount" parameterType="java.util.Map" resultType="java.lang.Integer">
     select msgCount1+msgCount2 as count from
@@ -120,5 +128,11 @@
     select mt.title,mt.messageText,date_format(mt.sendTime,'%Y-%m-%d %H:%i:%s') sendTime
     from t_sys_messageText mt
     where mt.id = #{id}
+  </select>
+
+  <select id="queryNewsList" parameterType="java.util.Map" resultType="java.util.Map">
+    SELECT mt.id,mt.title FROM t_sys_messageText mt
+    LEFT JOIN t_sys_messageLog ml on mt.id = ml.messageID
+    WHERE ml.recID = #{recID} and ml.status != 3 order by ml.status,mt.sendTime desc limit 0,#{count}
   </select>
 </mapper>

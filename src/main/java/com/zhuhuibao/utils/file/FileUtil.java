@@ -147,9 +147,12 @@ public class FileUtil {
                 stream.flush();
                 stream.close();
             } else {
-                result.setCode(MsgCodeConstant.response_status_400);
-                result.setMsgCode(MsgCodeConstant.file_not_exist);
-                result.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.file_not_exist))));
+//                result.setCode(MsgCodeConstant.response_status_400);
+//                result.setMsgCode(MsgCodeConstant.file_not_exist);
+//                result.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.file_not_exist))));
+                log.error("文件不存在");
+                throw new BusinessException(MsgCodeConstant.file_not_exist,
+                        MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.file_not_exist)));
             }
         } catch (Exception e) {
             log.error("download file error!");

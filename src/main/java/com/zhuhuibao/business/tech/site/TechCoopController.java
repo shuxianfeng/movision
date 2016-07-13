@@ -8,6 +8,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.service.OrderService;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
@@ -67,10 +68,14 @@ public class TechCoopController {
         if(null != createId) {
             techCoop.setCreateID(createId);
             int result = techService.insertTechCooperation(techCoop);
+            if(result != 0 ){
+                return new Response();
+            } else{
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"发布失败");
+            }
         }else{
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-        return new Response();
     }
 
 

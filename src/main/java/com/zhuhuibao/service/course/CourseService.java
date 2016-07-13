@@ -159,7 +159,7 @@ public class CourseService {
      * @param msgParam
      * @throws Exception
      */
-    public  void checkRepertory(Map<String, String> msgParam) {
+    public void checkRepertory(Map<String, String> msgParam) {
         //技术培训 专家培训购买
         //需要判断购买数量是否>=产品剩余数量
         if (msgParam.get("goodsType").equals(OrderConstants.GoodsType.JSPX.toString()) ||
@@ -250,9 +250,10 @@ public class CourseService {
 
             //对已支付的订单进行退款操作
             //根据课程ID查询已支付的订单 t_o_order_goods
-            List<String> orderNoList = orderGoodsService.findListByGoodsId(courseId);
-            //修改订单状态 {已支付-->退款中} 进入退款环节
-            orderService.batchUpdateStatus(orderNoList, PayConstants.OrderStatus.TKZ.toString());
+            List<Map<String,String>> orderNoList = orderGoodsService.findListByGoodsId(courseId);
+            //修改订单状态 {已支付-->待退款} 进入退款环节       {未支付-->已关闭}
+            orderService.batchUpdateStatus(orderNoList);
+
             //短信通知会员 课程已终止 会全额退款  之后进入退款流程
             //查询该课程相关订单(已支付)
             List<Order> orderList = orderService.findListByCourseIdAndStatus(courseId, PayConstants.OrderStatus.YZF.toString());
@@ -291,8 +292,6 @@ public class CourseService {
     }
 
 
-
-
     /**
      * 修改课程库存 {减库存}
      *
@@ -312,21 +311,25 @@ public class CourseService {
      */
     public void sendSMS(List<Order> orderList, String template) throws Exception {
 
-        List<String> orderNos = new ArrayList<>();
-        for (Order order : orderList) {
-            //查询相关订单的短信记录(待发送状态)
-            orderNos.add(order.getOrderNo());
-        }
+        if (orderList.size() > 0) {
+            List<String> orderNos = new ArrayList<>();
+            for (Order order : orderList) {
+                //查询相关订单的短信记录(待发送状态)
+                orderNos.add(order.getOrderNo());
+            }
 
-        //开课通知短信
-        List<OrderSms> smsList = orderSmsService.findByOrderNoAndStatusCode(
-                orderNos,
-                OrderConstants.SmsStatus.WAITING.toString(),
-                template);
+            //开课通知短信
+            List<OrderSms> smsList = orderSmsService.findByOrderNoAndStatusCode(
+                    orderNos,
+                    OrderConstants.SmsStatus.WAITING.toString(),
+                    template);
 
-        for (OrderSms sms : smsList) {
-            //发送短信
-            sendSms(sms, template);
+            for (OrderSms sms : smsList) {
+                //发送短信
+                sendSms(sms, template);
+            }
+        } else {
+            log.error("无订单");
         }
     }
 

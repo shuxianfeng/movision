@@ -3,6 +3,7 @@ package com.zhuhuibao.mybatis.order.mapper;
 import com.zhuhuibao.mybatis.order.entity.OrderGoods;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderGoodsMapper {
     int deleteByPrimaryKey(Long id);
@@ -19,5 +20,5 @@ public interface OrderGoodsMapper {
 
     OrderGoods findByOrderNo(String orderNo);
 
-    List<String> findListByGoodsId(String goodsId);
+    List<Map<String,String>> findListByGoodsId(String goodsId);
 }

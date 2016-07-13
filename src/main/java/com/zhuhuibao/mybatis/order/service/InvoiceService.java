@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +46,8 @@ public class InvoiceService {
         try {
             Gson gson = new Gson();
             Invoice invoice = gson.fromJson(json, Invoice.class);
-            result = invoiceMapper.insert(invoice);
+            invoice.setCreateTime(new Date());
+            result = invoiceMapper.insertSelective(invoice);
             if (result != 1) {
                 log.error("t_o_invoice:插入数据失败");
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");

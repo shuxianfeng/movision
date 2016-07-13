@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.common.constant.OrderConstants;
+import com.zhuhuibao.common.constant.PayConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,15 +94,21 @@ public class OrderService {
     /**
      * 批量修改订单状态
      * @param orderNoList 订单编号
-     * @param status      状态
      */
-    public void batchUpdateStatus(List orderNoList, String status) {
-        for (Object anOrderNoList : orderNoList) {
-            Map map = (Map) anOrderNoList;
-            String orderNo = (String) map.get("orderNo");
+    public void batchUpdateStatus(List<Map<String,String>> orderNoList) {
+        for (Map<String,String>  map : orderNoList) {
             Order order = new Order();
-            order.setOrderNo(orderNo);
-            order.setStatus(status);
+            String orderNo = map.get("orderNo");
+            if(orderNo == null){
+                continue;
+            }
+            order.setOrderNo(map.get("orderNo"));
+            String orderStatus = map.get("status");
+            if(orderStatus.equals(PayConstants.OrderStatus.YZF.toString()))  {
+                order.setStatus(PayConstants.OrderStatus.DTK.toString());
+            } else if(orderStatus.equals(PayConstants.OrderStatus.WZF.toString())){
+                order.setStatus(PayConstants.OrderStatus.CLOSED.toString());
+            }
             update(order);
         }
     }

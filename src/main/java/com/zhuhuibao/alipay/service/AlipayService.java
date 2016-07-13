@@ -9,6 +9,7 @@ import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.*;
 import com.zhuhuibao.mybatis.order.service.*;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.CommonUtils;
 import com.zhuhuibao.utils.IdGenerator;
 import com.zhuhuibao.utils.JsonUtils;
@@ -41,7 +42,7 @@ import java.util.*;
  * 支付宝服务入口
  */
 @Service
-@Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class AlipayService {
     private static final Logger log = LoggerFactory.getLogger(AlipayService.class);
 
@@ -63,6 +64,9 @@ public class AlipayService {
 
     @Autowired
     private OrderFlowService orderFlowService;
+
+    @Autowired
+    ZhbService zhbService;
 
 
     /**
@@ -97,7 +101,7 @@ public class AlipayService {
         log.debug("request params:{}", msgParam.toString());
         int batchNum = Integer.valueOf(msgParam.get("batchNum"));
 
-        if(batchNum == 1) {  //单笔退款
+        if (batchNum == 1) {  //单笔退款
             Refund refund = new Refund();
             refund.setBatchNo(msgParam.get("batchNo"));
             refund.setOperatorId(Integer.valueOf(msgParam.get("operatorId")));
@@ -108,9 +112,9 @@ public class AlipayService {
             //+一个退款理由 (reason)
             refund.setReason(msgParam.get("reason"));
             refundService.insert(refund);
-        }else{
+        } else {
             log.error("暂不支持批量退款");
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"暂不支持批量退款");
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "暂不支持批量退款");
         }
 
     }
@@ -210,7 +214,7 @@ public class AlipayService {
      * @param response  response
      * @param tradeType 交易流水类型 1:支付 2:退款
      */
-    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void asyncNotify(HttpServletRequest request, HttpServletResponse response, String tradeType) {
         ServletOutputStream out = null;
         try {
@@ -233,9 +237,9 @@ public class AlipayService {
                     //如果有做过处理，不执行商户的业务程序
                     if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
                         Order order = orderService.findByOrderNo(params.get("out_trade_no"));
-                        BigDecimal price = new BigDecimal(params.get("price"));
-                        BigDecimal totalFee = price.multiply(new BigDecimal(params.get("quantity")));
-
+//                        BigDecimal price = new BigDecimal(params.get("price"));
+//                        BigDecimal totalFee = price.multiply(new BigDecimal(params.get("quantity")));
+                        BigDecimal totalFee = new BigDecimal(params.get("total_fee"));
                         if (!String.valueOf(order.getPayAmount()).equals(totalFee.toString())) {
                             log.error("支付宝返回交易金额[{}] 与 订单支付金额[{}] 不符合", totalFee.toString(), order.getPayAmount());
                             out.println("fail");
@@ -299,9 +303,9 @@ public class AlipayService {
         sParaTemp.put("goods_type", msgParam.get("alipay_goods_type"));   //商品类型(0:虚拟类商品,1:实物类商品 默认为1)
         sParaTemp.put("out_trade_no", msgParam.get("orderNo"));          //商户网站唯一订单号
         sParaTemp.put("subject", msgParam.get("goodsName"));               //商品名称
-//        sParaTemp.put("total_fee", msgParam.get("total_fee"));         //交易金额
-        sParaTemp.put("price", msgParam.get("goodsPrice"));               //商品单价
-        sParaTemp.put("quantity", msgParam.get("number"));                //购买数量
+        sParaTemp.put("total_fee", msgParam.get("goodsPrice"));         //交易金额
+//        sParaTemp.put("price", msgParam.get("goodsPrice"));               //商品单价
+//        sParaTemp.put("quantity", msgParam.get("number"));                //购买数量
         sParaTemp.put("exter_invoke_ip", msgParam.get("exterInvokeIp")); //客户端IP
 
         // 防钓鱼时间戳
@@ -390,7 +394,7 @@ public class AlipayService {
      * @param notifyType 通知类型
      * @return
      */
-    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Map<String, String> tradeSuccessDeal(Map<String, String> params, String notifyType, String tradeType) throws ParseException {
         log.info("支付返回成功,业务逻辑处理...");
         Map<String, String> resultMap = new HashMap<>();
@@ -404,7 +408,7 @@ public class AlipayService {
             order.setUpdateTime(new Date());
             //异步通知
             if (notifyType.equals(PayConstants.NotifyType.ASYNC.toString())) {
-                log.error("异步通知返回记录处理...[{}]",params.get("out_trade_no"));
+                log.error("异步通知返回记录处理...[{}]", params.get("out_trade_no"));
                 //即时到账支付
                 if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
                     recordPayAsyncCallbackLog(params);
@@ -425,15 +429,20 @@ public class AlipayService {
                         alFlow.setTradeTime(new Date());
                         alFlow.setUpdateTime(new Date());
                         orderFlowService.update(alFlow);
+                        log.error("修改t_o_order_flow status>>>");
                         order.setStatus(PayConstants.OrderStatus.YZF.toString());
                     }
 
                     //2. 修改订单状态
-                    boolean suc =  orderService.update(order);
-
+                    boolean suc = orderService.update(order);
+                     log.error("update t_o_order status :>>>>" + suc);
                     //购买筑慧币,VIP 需要回调
-                    callbackZhbPay(params);
-
+                    if (suc) {
+                        String orderNo = params.get("out_trade_no");
+                        callbackZhbPay(orderNo);
+                    } else {
+                        throw new BusinessException(MsgCodeConstant.PAY_ERROR, "业务处理失败");
+                    }
 
                 }
                 //退款
@@ -465,42 +474,30 @@ public class AlipayService {
 
     /**
      * 回调筑慧币VIP购买
-     * @param params
+     *
+     * @param orderNo
      */
-    private void callbackZhbPay(Map<String, String> params) {
-        try{
-            String orderNo = params.get("out_trade_no");
+    private void callbackZhbPay(String orderNo) {
+        try {
+
             Order endOrder = orderService.findByOrderNo(orderNo);
-            if(endOrder != null){
-                if(endOrder.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString()) ||
-                        endOrder.getGoodsType().equals(OrderConstants.GoodsType.ZHB.toString())){
-                    RestTemplate restTemplate = new RestTemplate();
-//                          Map<String,String> map = new HashMap<>();
-//                          map.put("orderNo",orderNo);
-//                          map.put("status", Objects.equals(endOrder.getStatus(), PayConstants.OrderStatus.YZF.toString()) ?"success":"fail");
-//                          String result = JsonUtils.getJsonStringFromMap(map);
+            if (endOrder != null) {
+                if (endOrder.getGoodsType().equals(OrderConstants.GoodsType.ZHB.toString())) {
 
-                    String zhbUrl = AlipayPropertiesLoader.getPropertyValue("zhb_return_url");
-                    String vipUrl = AlipayPropertiesLoader.getPropertyValue("vip_return_url");
-                    String url = "";
-                    if(endOrder.getGoodsType().equals(OrderConstants.GoodsType.ZHB.toString())){
-                        url = zhbUrl;
-                    }else if(endOrder.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString())){
-                        url = vipUrl;
+                    int result = zhbService.zhbPrepaidByOrder(orderNo);
+                    if (result == 0) {
+                        throw new BusinessException(MsgCodeConstant.PAY_ERROR, "筑慧币充值失败");
                     }
-                    url += "?orderNo={orderNo}";
-
-                    String responseCode = restTemplate.postForObject(
-                            url,null,String.class,orderNo);
-                    log.debug("回调状态:",responseCode);
-                    if(!responseCode.equals("200")){
-                           throw new BusinessException(MsgCodeConstant.PAY_ERROR,"筑慧币充值失败");
+                } else if (endOrder.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString())) {
+                    int result = zhbService.openVipService(orderNo);
+                    if (result == 0) {
+                        throw new BusinessException(MsgCodeConstant.PAY_ERROR, "VIP购买失败失败");
                     }
                 }
             }
-        } catch (Exception e){
-             e.printStackTrace();
-             log.error("筑慧币充值失败:" + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("筑慧币充值失败:" + e.getMessage());
         }
     }
 
@@ -542,8 +539,8 @@ public class AlipayService {
         for (String key : params.keySet()) {
             pMap.put(CommonUtils.getCamelString(key), params.get(key));
         }
-        pMap.put("price",String.valueOf(new BigDecimal(pMap.get("price")).multiply(new BigDecimal(1000)).longValue()));
-        pMap.put("totalFee",String.valueOf(new BigDecimal(pMap.get("totalFee")).multiply(new BigDecimal(1000)).longValue()));
+        pMap.put("price", String.valueOf(new BigDecimal(pMap.get("price")).multiply(new BigDecimal(1000)).longValue()));
+        pMap.put("totalFee", String.valueOf(new BigDecimal(pMap.get("totalFee")).multiply(new BigDecimal(1000)).longValue()));
         log.info("需转换为bean的pMap=" + pMap);
         try {
             BeanUtils.populate(alipayCallbackLog, pMap);

@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.sitemail.mapper;
 
 import com.zhuhuibao.mybatis.sitemail.entity.MessageLog;
 
+import java.util.List;
 import java.util.Map;
 
 public interface MessageLogMapper {
@@ -15,6 +16,8 @@ public interface MessageLogMapper {
 
     int updateByPrimaryKeySelective(MessageLog record);
 
+    int updateNewsStatus(MessageLog record);
+
     int updateByPrimaryKey(MessageLog record);
 
     Integer queryUnreadMsgCount(Map<String,Object> map);
@@ -24,4 +27,6 @@ public interface MessageLogMapper {
     Integer selUnreadNewsCount(Map<String,Object> map);
 
     Map<String,String> queryNewsById(String id);
+
+    List<Map<String,String>> queryNewsList(Map<String,Object> map);
 }

@@ -39,7 +39,7 @@ public class ContractorController {
      * @return
      * @throws IOException
      */
-    @ApiOperation(value = "")
+    @ApiOperation(value = "最新工程商",notes = "最新工程商")
     @RequestMapping(value = "sel_new_engineer", method = RequestMethod.GET)
     public Response newEngineer()  {
         String type = "4";
@@ -54,10 +54,11 @@ public class ContractorController {
      * @return
      * @throws IOException
      */
+    @ApiOperation(value = "工程商简版介绍", notes = "工程商简版介绍")
     @RequestMapping(value = "sel_simple_introduce", method = RequestMethod.GET)
-    public Response introduce(String id, String type) {
+    public Response introduce(@ApiParam("id") @RequestParam String id) {
         Response response = new Response();
-        Map map = memberService.introduce(id,type);
+        Map map = memberService.introduce(id,"2"); //资质类型：1：供应商资质；2：工程商资质；3：个人资质
         response.setData(map);
         return response;
     }
@@ -87,10 +88,11 @@ public class ContractorController {
      * @return
      * @throws IOException
      */
+    @ApiOperation(value="优秀工程商",notes="优秀工程商",response = Response.class)
     @RequestMapping(value = {"sel_great_company"}, method = RequestMethod.GET)
-    public Response greatCompany(String type) {
+    public Response greatCompany() {
         Response response = new Response();
-        List list = memberService.greatCompany(type);
+        List list = memberService.greatCompany("2");    //2:工程商
         response.setData(list);
         return response;
     }
@@ -100,30 +102,12 @@ public class ContractorController {
      * @return
      * @throws IOException
      */
+    @ApiOperation(value="最新认证工程商",notes="最新认证工程商",response = Response.class)
     @RequestMapping(value = {"sel_new_identify_engineer"}, method = RequestMethod.GET)
-    public Response newIdentifyEngineer(String type)  {
+    public Response newIdentifyEngineer()  {
         Response response = new Response();
-        List list = memberService.findnewIdentifyEngineer(type);
+        List list = memberService.findnewIdentifyEngineer("2");   //2:工程商
         response.setData(list);
-        return response;
-    }
-
-    /**
-     *留言
-     * @return
-     * @throws IOException
-     */
-    @ApiOperation(value="留言",notes="留言",response = Response.class)
-    @RequestMapping(value = {"add_message"}, method = RequestMethod.POST)
-    public Response message(@ModelAttribute Message message) {
-        Response response = new Response();
-        Long createid = ShiroUtil.getCreateID();
-        if(createid!=null){
-            message.setCreateid(String.valueOf(createid));
-            memberService.saveMessage(message);
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
         return response;
     }
 

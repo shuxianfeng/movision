@@ -120,6 +120,7 @@ public class TechIndexController {
         Map<String, Object> map = new HashMap<>();
         map.put("id", newsId);
         Map<String, Object> list = newsService.previewNewsInfo(map);
+        newsService.updateViews(Long.valueOf(newsId));
         response.setData(list);
         return response;
     }

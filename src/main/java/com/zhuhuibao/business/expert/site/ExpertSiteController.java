@@ -521,7 +521,7 @@ public class ExpertSiteController {
         Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(true);
-        String sessImgCode = (String) sess.getAttribute(TechConstant.MOBILE_CODE_SESSION_TYPE_CLASS);
+        String sessImgCode = (String) sess.getAttribute(ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
         if(imgCode.equalsIgnoreCase(sessImgCode)) {
             String verifyCode = expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
         }else{
@@ -637,7 +637,7 @@ public class ExpertSiteController {
         Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(true);
-        String sessImgCode = (String) sess.getAttribute(TechConstant.MOBILE_CODE_SESSION_TYPE_CLASS);
+        String sessImgCode = (String) sess.getAttribute(ExpertConstant.MOBILE_CODE_SESSION_TYPE_TRAIN);
         if(imgCode.equalsIgnoreCase(sessImgCode)) {
             expertService.getTrainMobileCode(mobile,ExpertConstant.MOBILE_CODE_SESSION_TYPE_TRAIN);
         }else{

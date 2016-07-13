@@ -116,7 +116,7 @@
   </update>
 
   <select id="findByOrderNoAndStatusCode" resultType="com.zhuhuibao.mybatis.order.entity.OrderSms">
-    Select
+    select
     <include refid="Base_Column_List" />
     from t_o_sms where orderNo in
     <foreach close=")" collection="orderNos" index="index" item="item" open="(" separator=",">

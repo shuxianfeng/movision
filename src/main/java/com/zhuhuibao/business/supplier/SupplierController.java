@@ -35,6 +35,7 @@ public class SupplierController {
      * @return
      * @throws IOException
      */
+    @Deprecated
     @RequestMapping(value = {"/rest/engineerSupplier/newManufacturer","/rest/supplier/site/sel_new_manufacturer"}, method = RequestMethod.GET)
     public Response newManufacturer()  {
         String type = "1";
@@ -49,6 +50,7 @@ public class SupplierController {
      * @return
      * @throws IOException
      */
+    @Deprecated
     @RequestMapping(value = {"/rest/engineerSupplier/newAgent","/rest/supplier/site/sel_new_agent"}, method = RequestMethod.GET)
     public Response newAgent()  {
         String type = "2";
@@ -63,6 +65,7 @@ public class SupplierController {
      * @return
      * @throws IOException
      */
+    @Deprecated
     @RequestMapping(value = {"/rest/engineerSupplier/newChannel","/rest/supplier/site/sel_new_channel"}, method = RequestMethod.GET)
     public Response newChannel()  {
         String type = "3";
@@ -77,6 +80,7 @@ public class SupplierController {
      * @return
      * @throws IOException
      */
+    @Deprecated
     @RequestMapping(value = "/rest/supplier/site/sel_simple_introduce", method = RequestMethod.GET)
     public Response introduce(String id, String type) {
         Response response = new Response();
@@ -90,6 +94,7 @@ public class SupplierController {
      * @return
      * @throws IOException
      */
+    @Deprecated
     @RequestMapping(value = "/rest/supplier/site/sel_great_company", method = RequestMethod.GET)
     public Response greatCompany(String type) {
         Response response = new Response();
@@ -103,6 +108,7 @@ public class SupplierController {
      * @return
      * @throws IOException
      */
+    @Deprecated
     @RequestMapping(value = "/rest/supplier/site/sel_new_identify_engineer", method = RequestMethod.GET)
     public Response newIdentifyEngineer(String type)  {
         Response response = new Response();
@@ -111,22 +117,4 @@ public class SupplierController {
         return response;
     }
 
-    /**
-     *留言
-     * @return
-     * @throws IOException
-     */
-    @ApiOperation(value="留言",notes="留言",response = Response.class)
-    @RequestMapping(value = "/rest/supplier/site/add_message", method = RequestMethod.POST)
-    public Response message(@ModelAttribute Message message) {
-        Response response = new Response();
-        Long createid = ShiroUtil.getCreateID();
-        if(createid!=null){
-            message.setCreateid(String.valueOf(createid));
-            memberService.saveMessage(message);
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
-        return response;
-    }
 }

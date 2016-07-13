@@ -287,14 +287,12 @@
   </select>
 
   <select id="queryHomepageTechnologyList" resultType="java.util.Map" parameterType="java.util.Map" >
-    select c.id,c.title,c.imgUrl
+    select a.connectedId as id,a.imgUrl,a.title
     from t_sys_advertising a
     left join t_sys_adv_attr at on at.id = a.advAttrId
-    left join t_oms_channel_news c on a.connectedId = c.id
     where at.chanType = #{chanType}
     and at.page = #{page}
     and at.advArea = #{advArea}
     and at.advType = #{advType}
-    and c.status = #{status}
   </select>
 </mapper>

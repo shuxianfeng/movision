@@ -118,4 +118,25 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="queryNoticeList" resultType="java.util.Map" parameterType="java.util.Map" >
+    select
+    id, title
+    from t_oms_notice a
+    order by time desc LIMIT 0,#{count}
+  </select>
+
+  <select id="findAllNoticeList" resultType="java.util.Map" >
+    select
+    id, title,date_format(time,'%Y-%m-%d %H:%i:%s') time
+    from t_oms_notice
+    order by time desc
+  </select>
+
+  <select id="queryNoticeById" resultType="java.util.Map" >
+    select
+    id, title,date_format(time,'%Y-%m-%d %H:%i:%s') time,content
+    from t_oms_notice
+    WHERE id = #{id}
+  </select>
 </mapper>

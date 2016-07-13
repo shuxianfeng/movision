@@ -160,7 +160,8 @@ public class ZHOrderService {
                 jsonMap.put("province", msgParam.get("invoiceProvince"));
                 jsonMap.put("city", msgParam.get("invoiceCity"));
                 jsonMap.put("area", msgParam.get("invoiceArea"));
-
+                jsonMap.put("createId",msgParam.get("buyerId"));
+                //createTime
                 Gson gson = new Gson();
                 String jsonParam = gson.toJson(jsonMap);
 
