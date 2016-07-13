@@ -3,7 +3,10 @@ package com.zhuhuibao.business.common;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.memCenter.entity.Message;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.oss.ZhbOssClient;
 import org.apache.shiro.SecurityUtils;
@@ -12,11 +15,10 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * 上传
@@ -26,7 +28,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class CommonController {
     private static final Logger log = LoggerFactory.getLogger(CommonController.class);
 
-
+    @Autowired
+    MemberService memberService;
 
     @Autowired
     ZhbOssClient zhbOssClient;
@@ -47,5 +50,24 @@ public class CommonController {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
 
+    }
+
+    /**
+     *留言
+     * @return
+     * @throws IOException
+     */
+    @ApiOperation(value="留言",notes="留言",response = Response.class)
+    @RequestMapping(value = "/rest/common/add_message", method = RequestMethod.POST)
+    public Response message(@ModelAttribute Message message) {
+        Response response = new Response();
+        Long createid = ShiroUtil.getCreateID();
+        if(createid!=null){
+            message.setCreateid(String.valueOf(createid));
+            memberService.saveMessage(message);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
     }
 }

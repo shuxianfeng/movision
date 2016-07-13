@@ -117,22 +117,4 @@ public class SupplierController {
         return response;
     }
 
-    /**
-     *留言
-     * @return
-     * @throws IOException
-     */
-    @ApiOperation(value="留言",notes="留言",response = Response.class)
-    @RequestMapping(value = "/rest/supplier/site/add_message", method = RequestMethod.POST)
-    public Response message(@ModelAttribute Message message) {
-        Response response = new Response();
-        Long createid = ShiroUtil.getCreateID();
-        if(createid!=null){
-            message.setCreateid(String.valueOf(createid));
-            memberService.saveMessage(message);
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
-        return response;
-    }
 }
