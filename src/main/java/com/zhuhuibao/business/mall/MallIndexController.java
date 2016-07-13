@@ -10,7 +10,9 @@ import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
 import com.zhuhuibao.mybatis.advertising.service.SysAdvertisingService;
 import com.zhuhuibao.mybatis.category.service.CategoryService;
+import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -46,6 +48,7 @@ public class MallIndexController {
 
     @Autowired
     private CategoryService categoryService;
+
 
     @ApiOperation(value = "首页广告区域信息展示", notes = "首页广告区域信息展示")
     @RequestMapping(value = "indexfloor", method = RequestMethod.GET)
@@ -101,13 +104,14 @@ public class MallIndexController {
                     brandMap.put("imgUrl", advertising.getImgUrl());
                     brandMap.put("linkUrl", advertising.getLinkUrl());
                     brandMap.put("title", advertising.getTitle());
+                    brandMap.put("id",advertising.getConnectedId());
                     brandList.add(brandMap);
                     break;
                 case "other":
                     otherMap.put("imgUrl", advertising.getImgUrl());
                     otherMap.put("linkUrl", advertising.getLinkUrl());
                     otherMap.put("title", advertising.getTitle());
-                    otherMap.put("connectedId",advertising.getConnectedId());
+                    otherMap.put("id",advertising.getConnectedId());
                     otherList.add(otherMap);
                     break;
             }
@@ -150,13 +154,14 @@ public class MallIndexController {
                     brandMap.put("imgUrl", advertising.getImgUrl());
                     brandMap.put("linkUrl", advertising.getLinkUrl());
                     brandMap.put("title", advertising.getTitle());
+                    brandMap.put("id",advertising.getConnectedId());
                     brandList.add(brandMap);
                     break;
                 case "other":
                     otherMap.put("imgUrl", advertising.getImgUrl());
                     otherMap.put("linkUrl", advertising.getLinkUrl());
                     otherMap.put("title", advertising.getTitle());
-                    otherMap.put("connectedId",advertising.getConnectedId());
+                    otherMap.put("id",advertising.getConnectedId());
                     otherList.add(otherMap);
                     break;
             }
