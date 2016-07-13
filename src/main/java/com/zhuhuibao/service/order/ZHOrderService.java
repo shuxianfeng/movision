@@ -161,8 +161,6 @@ public class ZHOrderService {
                 jsonMap.put("city", msgParam.get("invoiceCity"));
                 jsonMap.put("area", msgParam.get("invoiceArea"));
                 jsonMap.put("createId",msgParam.get("buyerId"));
-                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                jsonMap.put("createTime",sf.format(new Date()));
                 //createTime
                 Gson gson = new Gson();
                 String jsonParam = gson.toJson(jsonMap);
