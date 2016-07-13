@@ -317,7 +317,8 @@ public class CompanyController {
         if(createid!=null){
             map.put("createid",String.valueOf(createid));
             List<Map<String,String>> list = successCaseService.findAllSuccessCaseList(pager,map);
-            result.setData(list);
+            pager.result(list);
+            result.setData(pager);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
