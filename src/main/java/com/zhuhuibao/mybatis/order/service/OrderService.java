@@ -94,10 +94,8 @@ public class OrderService {
      * @param orderNoList 订单编号
      * @param status      状态
      */
-    public void batchUpdateStatus(List orderNoList, String status) {
-        for (Object anOrderNoList : orderNoList) {
-            Map map = (Map) anOrderNoList;
-            String orderNo = (String) map.get("orderNo");
+    public void batchUpdateStatus(List<String> orderNoList, String status) {
+        for (String  orderNo : orderNoList) {
             Order order = new Order();
             order.setOrderNo(orderNo);
             order.setStatus(status);
