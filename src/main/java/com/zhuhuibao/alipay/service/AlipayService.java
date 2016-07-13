@@ -237,9 +237,9 @@ public class AlipayService {
                     //如果有做过处理，不执行商户的业务程序
                     if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
                         Order order = orderService.findByOrderNo(params.get("out_trade_no"));
-                        BigDecimal price = new BigDecimal(params.get("price"));
-                        BigDecimal totalFee = price.multiply(new BigDecimal(params.get("quantity")));
-
+//                        BigDecimal price = new BigDecimal(params.get("price"));
+//                        BigDecimal totalFee = price.multiply(new BigDecimal(params.get("quantity")));
+                        BigDecimal totalFee = new BigDecimal(params.get("total_fee"));
                         if (!String.valueOf(order.getPayAmount()).equals(totalFee.toString())) {
                             log.error("支付宝返回交易金额[{}] 与 订单支付金额[{}] 不符合", totalFee.toString(), order.getPayAmount());
                             out.println("fail");
@@ -303,9 +303,9 @@ public class AlipayService {
         sParaTemp.put("goods_type", msgParam.get("alipay_goods_type"));   //商品类型(0:虚拟类商品,1:实物类商品 默认为1)
         sParaTemp.put("out_trade_no", msgParam.get("orderNo"));          //商户网站唯一订单号
         sParaTemp.put("subject", msgParam.get("goodsName"));               //商品名称
-//        sParaTemp.put("total_fee", msgParam.get("total_fee"));         //交易金额
-        sParaTemp.put("price", msgParam.get("goodsPrice"));               //商品单价
-        sParaTemp.put("quantity", msgParam.get("number"));                //购买数量
+        sParaTemp.put("total_fee", msgParam.get("goodsPrice"));         //交易金额
+//        sParaTemp.put("price", msgParam.get("goodsPrice"));               //商品单价
+//        sParaTemp.put("quantity", msgParam.get("number"));                //购买数量
         sParaTemp.put("exter_invoke_ip", msgParam.get("exterInvokeIp")); //客户端IP
 
         // 防钓鱼时间戳
