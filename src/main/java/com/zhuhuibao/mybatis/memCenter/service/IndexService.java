@@ -7,6 +7,9 @@ import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
+import com.zhuhuibao.mybatis.oms.mapper.NoticeMapper;
+import com.zhuhuibao.mybatis.sitemail.entity.MessageLog;
+import com.zhuhuibao.mybatis.sitemail.mapper.MessageLogMapper;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
@@ -53,6 +56,12 @@ public class IndexService {
 
     @Autowired
     QuestionMapper questionMapper;
+
+    @Autowired
+    NoticeMapper noticeMapper;
+
+    @Autowired
+    MessageLogMapper messageLogMapper;
 
     public Map<String,Object> getZhbInfo(Long createId)
     {
@@ -193,6 +202,31 @@ public class IndexService {
             resultMap.put("unAnswerCount",list.size());
             resultMap.put("answerCount",list1.size());
             return resultMap;
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public List<Map<String,String>> queryNoticeList(){
+        try{
+            Map<String, Object> map = new HashMap<>();
+            map.put("count",3);
+            return noticeMapper.queryNoticeList(map);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public List<Map<String,String>> queryNewsList(String id){
+        try{
+            Map<String, Object> map = new HashMap<>();
+            map.put("count",3);
+            map.put("recID",id);
+            return messageLogMapper.queryNewsList(map);
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();
