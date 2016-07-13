@@ -317,7 +317,8 @@ public class CompanyController {
         if(createid!=null){
             map.put("createid",String.valueOf(createid));
             List<Map<String,String>> list = successCaseService.findAllSuccessCaseList(pager,map);
-            result.setData(list);
+            pager.result(list);
+            result.setData(pager);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
@@ -338,7 +339,6 @@ public class CompanyController {
     public Response upd_successCase(@ModelAttribute SuccessCase successCase) {
         Response result = new Response();
         successCaseService.updateSuccessCase(successCase);
-        result.setData(successCase);
         return result;
     }
 
