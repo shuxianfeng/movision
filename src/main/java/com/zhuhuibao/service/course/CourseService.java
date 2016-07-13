@@ -250,9 +250,10 @@ public class CourseService {
 
             //对已支付的订单进行退款操作
             //根据课程ID查询已支付的订单 t_o_order_goods
-            List<String> orderNoList = orderGoodsService.findListByGoodsId(courseId);
-            //修改订单状态 {已支付-->退款中} 进入退款环节
-            orderService.batchUpdateStatus(orderNoList, PayConstants.OrderStatus.TKZ.toString());
+            List<Map<String,String>> orderNoList = orderGoodsService.findListByGoodsId(courseId);
+            //修改订单状态 {已支付-->待退款} 进入退款环节       {未支付-->已关闭}
+            orderService.batchUpdateStatus(orderNoList);
+
             //短信通知会员 课程已终止 会全额退款  之后进入退款流程
             //查询该课程相关订单(已支付)
             List<Order> orderList = orderService.findListByCourseIdAndStatus(courseId, PayConstants.OrderStatus.YZF.toString());
