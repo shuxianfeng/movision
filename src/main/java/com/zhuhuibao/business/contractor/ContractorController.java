@@ -39,7 +39,7 @@ public class ContractorController {
      * @return
      * @throws IOException
      */
-    @ApiOperation(value = "")
+    @ApiOperation(value = "最新工程商",notes = "最新工程商")
     @RequestMapping(value = "sel_new_engineer", method = RequestMethod.GET)
     public Response newEngineer()  {
         String type = "4";
@@ -88,10 +88,11 @@ public class ContractorController {
      * @return
      * @throws IOException
      */
+    @ApiOperation(value="优秀工程商",notes="优秀工程商",response = Response.class)
     @RequestMapping(value = {"sel_great_company"}, method = RequestMethod.GET)
-    public Response greatCompany(String type) {
+    public Response greatCompany() {
         Response response = new Response();
-        List list = memberService.greatCompany(type);
+        List list = memberService.greatCompany("2");    //2:工程商
         response.setData(list);
         return response;
     }
@@ -101,10 +102,11 @@ public class ContractorController {
      * @return
      * @throws IOException
      */
+    @ApiOperation(value="最新认证工程商",notes="最新认证工程商",response = Response.class)
     @RequestMapping(value = {"sel_new_identify_engineer"}, method = RequestMethod.GET)
-    public Response newIdentifyEngineer(String type)  {
+    public Response newIdentifyEngineer()  {
         Response response = new Response();
-        List list = memberService.findnewIdentifyEngineer(type);
+        List list = memberService.findnewIdentifyEngineer("2");   //2:工程商
         response.setData(list);
         return response;
     }
