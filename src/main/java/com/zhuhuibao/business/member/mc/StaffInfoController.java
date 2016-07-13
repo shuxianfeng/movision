@@ -30,8 +30,28 @@ public class StaffInfoController {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
-            Member member = memberService.findMemById(String.valueOf(memberId));
             Map map = new HashMap();
+            Member member = memberService.findMemById(String.valueOf(memberId));
+            if("0".equals(member.getEnterpriseEmployeeParentId())){
+                if(member.getMobile()!=null){
+                    map.put("companyAccount",member.getMobile());
+                }else {
+                    map.put("companyAccount",member.getEmail());
+                }
+            }else {
+                Member company = memberService.findMemById(member.getEnterpriseEmployeeParentId());
+
+                if(company.getMobile()!=null){
+                    map.put("companyAccount",company.getMobile());
+                }else {
+                    map.put("companyAccount",company.getEmail());
+                }
+            }
+
+            map.put("companyName",member.getEnterpriseName());
+            String role = memberService.queryWorkTypeById(member.getWorkType());
+            map.put("role",role);
+            map.put("enterpriseLinkman",member.getEnterpriseLinkman());
             map.put("enterpriseLinkman",member.getEnterpriseLinkman());
             map.put("sex",member.getSex());
             map.put("enterpriseLMDep",member.getEnterpriseLMDep());
