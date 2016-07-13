@@ -339,7 +339,6 @@ public class CompanyController {
     public Response upd_successCase(@ModelAttribute SuccessCase successCase) {
         Response result = new Response();
         successCaseService.updateSuccessCase(successCase);
-        result.setData(successCase);
         return result;
     }
 

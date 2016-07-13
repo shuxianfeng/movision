@@ -276,16 +276,13 @@
   </select>
 
   <select id="queryHomepageExhibitionList" resultType="java.util.Map" parameterType="java.util.Map" >
-    select e.id,e.title,e.imgUrl
+    select a.connectedId as id,a.imgUrl,a.title
     from t_sys_advertising a
     left join t_sys_adv_attr at on at.id = a.advAttrId
-    left join t_c_exhibition e on a.connectedId = e.id
     where at.chanType = #{chanType}
     and at.page = #{page}
     and at.advArea = #{advArea}
     and at.advType = #{advType}
-    and e.is_deleted = #{is_deleted}
-    and e.status = #{status}
   </select>
 
   <select id="queryMyExhibitionListSize" resultType="java.lang.Integer" parameterType="java.util.Map" >
