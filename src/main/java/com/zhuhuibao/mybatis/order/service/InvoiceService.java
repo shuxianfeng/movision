@@ -45,7 +45,7 @@ public class InvoiceService {
         try {
             Gson gson = new Gson();
             Invoice invoice = gson.fromJson(json, Invoice.class);
-            result = invoiceMapper.insert(invoice);
+            result = invoiceMapper.insertSelective(invoice);
             if (result != 1) {
                 log.error("t_o_invoice:插入数据失败");
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
