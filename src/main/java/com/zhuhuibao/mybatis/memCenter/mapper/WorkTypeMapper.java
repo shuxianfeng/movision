@@ -11,7 +11,7 @@ public interface WorkTypeMapper {
 
     int insertSelective(WorkType record);
 
-    WorkType selectByPrimaryKey(Integer id);
+    WorkType selectByPrimaryKey(String id);
 
     int updateByPrimaryKeySelective(WorkType record);
 

@@ -292,11 +292,10 @@ public class VipInfoService {
 		List<Map<String, String>> viplist = new ArrayList<Map<String, String>>();
 		Map<String, String> param = MapUtil.convert2HashMap("account", account, "name", name, "vipLevel", vipLevel, "status", status);
 		viplist = vipInfoMapper.findAllVipInfoList(pager.getRowBounds(), param);
-		String[] chargeVipLevel =  {"30","60","130","160"};
 		if (CollectionUtils.isNotEmpty(viplist)) {
 			for (Map<String, String> vip : viplist) {
 				String level = String.valueOf(vip.get("vip_level"));
-				if (StringUtils.isNotBlank(level) && ArrayUtils.contains(chargeVipLevel, level)) {
+				if (StringUtils.isNotBlank(level) && ArrayUtils.contains(VipConstant.CHARGE_VIP_LEVEL, level)) {
 					vip.put("status", "1");
 				} else {
 					vip.put("status", "0");
