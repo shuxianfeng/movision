@@ -54,10 +54,11 @@ public class ContractorController {
      * @return
      * @throws IOException
      */
+    @ApiOperation(value = "工程商简版介绍", notes = "工程商简版介绍")
     @RequestMapping(value = "sel_simple_introduce", method = RequestMethod.GET)
-    public Response introduce(String id, String type) {
+    public Response introduce(@ApiParam("id") @RequestParam String id) {
         Response response = new Response();
-        Map map = memberService.introduce(id,type);
+        Map map = memberService.introduce(id,"2"); //资质类型：1：供应商资质；2：工程商资质；3：个人资质
         response.setData(map);
         return response;
     }
