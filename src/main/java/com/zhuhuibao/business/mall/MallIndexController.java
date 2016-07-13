@@ -107,6 +107,7 @@ public class MallIndexController {
                     otherMap.put("imgUrl", advertising.getImgUrl());
                     otherMap.put("linkUrl", advertising.getLinkUrl());
                     otherMap.put("title", advertising.getTitle());
+                    otherMap.put("connectedId",advertising.getConnectedId());
                     otherList.add(otherMap);
                     break;
             }
@@ -155,6 +156,7 @@ public class MallIndexController {
                     otherMap.put("imgUrl", advertising.getImgUrl());
                     otherMap.put("linkUrl", advertising.getLinkUrl());
                     otherMap.put("title", advertising.getTitle());
+                    otherMap.put("connectedId",advertising.getConnectedId());
                     otherList.add(otherMap);
                     break;
             }

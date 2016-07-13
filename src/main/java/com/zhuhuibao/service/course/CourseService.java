@@ -159,7 +159,7 @@ public class CourseService {
      * @param msgParam
      * @throws Exception
      */
-    public  void checkRepertory(Map<String, String> msgParam) {
+    public void checkRepertory(Map<String, String> msgParam) {
         //技术培训 专家培训购买
         //需要判断购买数量是否>=产品剩余数量
         if (msgParam.get("goodsType").equals(OrderConstants.GoodsType.JSPX.toString()) ||
@@ -291,8 +291,6 @@ public class CourseService {
     }
 
 
-
-
     /**
      * 修改课程库存 {减库存}
      *
@@ -312,21 +310,25 @@ public class CourseService {
      */
     public void sendSMS(List<Order> orderList, String template) throws Exception {
 
-        List<String> orderNos = new ArrayList<>();
-        for (Order order : orderList) {
-            //查询相关订单的短信记录(待发送状态)
-            orderNos.add(order.getOrderNo());
-        }
+        if (orderList.size() > 0) {
+            List<String> orderNos = new ArrayList<>();
+            for (Order order : orderList) {
+                //查询相关订单的短信记录(待发送状态)
+                orderNos.add(order.getOrderNo());
+            }
 
-        //开课通知短信
-        List<OrderSms> smsList = orderSmsService.findByOrderNoAndStatusCode(
-                orderNos,
-                OrderConstants.SmsStatus.WAITING.toString(),
-                template);
+            //开课通知短信
+            List<OrderSms> smsList = orderSmsService.findByOrderNoAndStatusCode(
+                    orderNos,
+                    OrderConstants.SmsStatus.WAITING.toString(),
+                    template);
 
-        for (OrderSms sms : smsList) {
-            //发送短信
-            sendSms(sms, template);
+            for (OrderSms sms : smsList) {
+                //发送短信
+                sendSms(sms, template);
+            }
+        } else {
+            log.error("无订单");
         }
     }
 
