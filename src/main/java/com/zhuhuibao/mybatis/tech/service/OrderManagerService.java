@@ -221,7 +221,7 @@ public class OrderManagerService {
         try {
             //订单信息
             Order order = orderMapper.findByOrderNo(orderNo);
-            if (order == null) {
+            if (order == null || (order.getBuyerId().compareTo(ShiroUtil.getCompanyID()) != 0 && order.getBuyerId().compareTo(ShiroUtil.getCreateID()) != 0)) {
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "订单不存在");
             }
             Map<String, Object> baseInfoMap = new HashMap<>();
