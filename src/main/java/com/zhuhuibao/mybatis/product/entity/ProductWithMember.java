@@ -4,6 +4,9 @@ package com.zhuhuibao.mybatis.product.entity;
  * Created by Administrator on 2016/4/11 0011.
  */
 public class ProductWithMember extends ProductWithBLOBs {
+
+    private String memberId;
+
     private String identify;
 
     private String memberName;
@@ -13,6 +16,14 @@ public class ProductWithMember extends ProductWithBLOBs {
     private String enterpriseLogo;
 
     private String enterpriseWebSite;
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
 
     public String getAddress() {
         return address;

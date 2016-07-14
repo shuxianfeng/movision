@@ -4,6 +4,8 @@ import java.util.*;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
+import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
 import com.zhuhuibao.mybatis.product.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +35,9 @@ public class ProductService {
 
     @Autowired
     ProductParamService paramService;
+
+    @Autowired
+    MemShopService memShopService;
 
     /**
      * 插入产品
@@ -339,6 +344,14 @@ public class ProductService {
         memberMap.put("enterpriseLogo", product.getEnterpriseLogo());
         memberMap.put("enterpriseWebSite", product.getEnterpriseWebSite());
         memberMap.put("address", product.getAddress());
+        //查询企业商铺
+         MemberShop shop =  memShopService.findByCompanyID(Long.valueOf(product.getMemberId()));
+        if(shop != null){
+            memberMap.put("shopID",shop.getId());
+        } else{
+            memberMap.put("shopID","");
+        }
+
         productMap.put("member", memberMap);
     }
 

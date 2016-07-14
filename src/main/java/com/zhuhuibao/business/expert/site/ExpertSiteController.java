@@ -40,6 +40,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -580,6 +582,9 @@ public class ExpertSiteController {
     @RequestMapping(value = "train/add_class", method = RequestMethod.POST)
     public Response startClassSave(@ApiParam(value = "开课申请保存")  @ModelAttribute(value="techCourse")TechExpertCourse techCourse)  {
         Response response = new Response();
+        //时间格式校验
+        checkParams(techCourse);
+
         expertService.checkMobileCode(techCourse.getCode(),techCourse.getMobile(),ExpertConstant.MOBILE_CODE_SESSION_TYPE_CLASS);
         Long createId = ShiroUtil.getCreateID();
         if(createId != null) {
@@ -589,6 +594,29 @@ public class ExpertSiteController {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
+    }
+
+    /**
+     * 参数校验
+     * @param techCourse
+     */
+    private void checkParams(TechExpertCourse techCourse) {
+        //时间格式校验
+        String startTime = techCourse.getStartTime();
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            sf.parse(startTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"开始时间格式不正确");
+        }
+        String endTime = techCourse.getEndTime();
+        try {
+            sf.parse(endTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"结束时间格式不正确");
+        }
     }
 
     @ApiOperation(value="开课申请获取验证码",notes="开课申请获取验证码",response = Response.class)

@@ -472,7 +472,7 @@
       limit 0,2
     </if>
     <if test="type == 4">
-      limit 0,4
+      limit 0,6
     </if>
   </select>
   <select id="findnewIdentifyEngineer" resultMap="BaseResultMap">
