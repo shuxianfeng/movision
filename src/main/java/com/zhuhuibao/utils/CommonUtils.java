@@ -1,5 +1,6 @@
 package com.zhuhuibao.utils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import java.util.ArrayList;
@@ -63,6 +64,25 @@ public class CommonUtils {
     }
 
 
+    /**
+     *
+     * @param bytes
+     * @return
+     */
+    public static String bytes2kb(long bytes) {
+        BigDecimal filesize = new BigDecimal(bytes);
+        BigDecimal megabyte = new BigDecimal(1024 * 1024);
+        float returnValue = filesize.divide(megabyte, 2, BigDecimal.ROUND_UP)
+                .floatValue();
+        if (returnValue > 1)
+            return (returnValue + "MB");
+        BigDecimal kilobyte = new BigDecimal(1024);
+        returnValue = filesize.divide(kilobyte, 2, BigDecimal.ROUND_UP)
+                .floatValue();
+        return (returnValue + "KB");
+    }
+
+
     public static void main(String[] args) {
 //        List<String> list = new ArrayList<>();
 //        list.add("aaa");
@@ -70,6 +90,8 @@ public class CommonUtils {
 //        list.add("ccc");
 //        String s = splice(list,"#");
 //        System.out.println(s);
-       System.out.println( getCountAppearInString("aaa#bbb#ccc","#"));
+//       System.out.println( getCountAppearInString("aaa#bbb#ccc","#"));
+       String s = CommonUtils.bytes2kb(323);
+        System.out.println(s);
     }
 }

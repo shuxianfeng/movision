@@ -8,6 +8,7 @@ import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.mybatis.tech.entity.TechCategoryBean;
 import com.zhuhuibao.mybatis.tech.entity.TechData;
 import com.zhuhuibao.mybatis.tech.mapper.TechDataMapper;
+import com.zhuhuibao.utils.CommonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -270,11 +271,19 @@ public class TechDataService {
      */
     public List<Map<String, String>> previewTechDataDetail(Long id) {
         log.info("preview tech data detail id = " + id);
-        List<Map<String, String>> techList = null;
+        List<Map<String, String>> techList;
         try {
             techList = techDataMapper.previewTechDataDetail(id);
+            for(Map<String,String> map:techList){
+                String fileSize = String.valueOf(map.get("fileSize"));
+                if(fileSize != null){
+                    fileSize = CommonUtils.bytes2kb(Long.valueOf(fileSize));
+                    map.put("fileSize",fileSize);
+                }
+            }
         } catch (Exception e) {
             log.error("preview tech data detail error!", e);
+            e.printStackTrace();
             throw e;
         }
         return techList;

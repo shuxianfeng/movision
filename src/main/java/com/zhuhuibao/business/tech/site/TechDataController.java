@@ -15,6 +15,7 @@ import com.zhuhuibao.mybatis.tech.entity.TechData;
 import com.zhuhuibao.mybatis.tech.service.DictionaryTechDataService;
 import com.zhuhuibao.mybatis.tech.service.TechDataService;
 import com.zhuhuibao.mybatis.tech.service.TechDownloadDataService;
+import com.zhuhuibao.utils.CommonUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.oss.ZhbOssClient;
@@ -182,10 +183,12 @@ public class TechDataController {
     public Response previewTechDataDetail(@ApiParam(value = "技术资料ID") @RequestParam() String techDataId) {
         Response response = new Response();
         List<Map<String, String>> techDataList = techDataService.previewTechDataDetail(Long.parseLong(techDataId));
-        Map<String, Object> map = new HashMap<String, Object>();
+
+        Map<String, Object> map = new HashMap<>();
         map.put("views", "views");
         map.put("id", techDataId);
         techDataService.updateTechDataViewsOrDL(map);
+
         response.setData(techDataList);
         return response;
     }

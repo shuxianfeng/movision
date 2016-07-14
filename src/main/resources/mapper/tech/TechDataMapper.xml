@@ -325,14 +325,12 @@
             <if test="fCategory != null">
                 and fCategory = #{fCategory}
             </if>
-            <if test="count != null">
-                and #{count} >= (select count(*) from t_tech_data t2 where t.sCategory = t2.sCategory and t.id > t2.id)
-            </if>
             <if test="status != null">
                 and status = #{status}
             </if>
         </where>
         order by sCategory,updateTime desc
+        limit #{count}
     </select>
 
     <select id="findTechSiteInfo" parameterType="java.lang.Long" resultType="java.util.Map">
