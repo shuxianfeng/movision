@@ -95,8 +95,9 @@ public class ZhbService {
 			// 订单购买人为当前操作账号的管理员账号
 			// 操作人为管理员
 			// 不存在该订单号对应的筑慧币流水记录
-//			order.getBuyerId().compareTo(ShiroUtil.getCompanyID()) == 0
-//			&& ShiroUtil.getCompanyID().compareTo(ShiroUtil.getCreateID()) == 0 &&
+			// order.getBuyerId().compareTo(ShiroUtil.getCompanyID()) == 0
+			// && ShiroUtil.getCompanyID().compareTo(ShiroUtil.getCreateID()) ==
+			// 0 &&
 			if (null != order && null != orderGoods && "4".equals(order.getGoodsType()) && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
 				DictionaryZhbgoods goods = getZhbGoodsById(orderGoods.getGoodsId());
 				BigDecimal amount = new BigDecimal(goods.getValue());
@@ -141,7 +142,7 @@ public class ZhbService {
 	private boolean isRightOrder(Order order, String goodsType) {
 		boolean result = false;
 		result = null != order && goodsType.equals(order.getGoodsType());
-//		&& order.getBuyerId().compareTo(ShiroUtil.getCompanyID()) == 0;
+		// && order.getBuyerId().compareTo(ShiroUtil.getCompanyID()) == 0;
 
 		return result;
 	}
@@ -171,7 +172,7 @@ public class ZhbService {
 			// 订单状态为已支付
 			// 订单购买人为当前操作账号的管理员账号
 			// 操作人为管理员
-			// 不存在该订单号对应的筑慧币流水记录            && isAdminLogin()
+			// 不存在该订单号对应的筑慧币流水记录 && isAdminLogin()
 			if (null != order && null != orderGoods && isRightOrder(order, "3") && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
 				DictionaryZhbgoods vipgoods = getZhbGoodsById(orderGoods.getGoodsId());
 				int buyVipLevel = Integer.parseInt(vipgoods.getValue());
@@ -438,16 +439,14 @@ public class ZhbService {
 		try {
 			Map<String, Long> param = MapUtil.convert2HashMap("companyId", ShiroUtil.getCompanyID(), "operaterId", ShiroUtil.getCreateID(), "recordType",
 					recordType);
-			List<Map<String, String>> recordList = zhbMapper.selectZhbRecordList(pager.getRowBounds(), param);
+			List<Map> recordList = zhbMapper.selectZhbRecordList(pager.getRowBounds(), param);
 			if (CollectionUtils.isNotEmpty(recordList)) {
-				for (Map<String, String> record : recordList) {
-					// addTime 时间
-					String a = record.get("addTime");
+				for (Map record : recordList) {
 					// 行为
 					String orderNo = (String) record.get("orderNo");
 					if ("0".equals(orderNo)) {
 						// 非订单流程购买商品
-						DictionaryZhbgoods goods = zhbMapper.selectZhbGoodsById(Long.valueOf(record.get("goodsId")));
+						DictionaryZhbgoods goods = zhbMapper.selectZhbGoodsByPinyin((String) record.get("goodsType"));
 						record.put("behavior", goods.getName());
 					} else {
 						// 订单流程消费
@@ -460,10 +459,11 @@ public class ZhbService {
 						record.put("amount", "-" + record.get("amount"));
 					}
 					// 操作人 account ，补充角色
-					WorkType workType = workTypeMapper.findWorkTypeById(record.get("workType"));
+					WorkType workType = workTypeMapper.findWorkTypeById(((Integer) record.get("workType")).toString());
 					if (null != workType) {
 						record.put("account", record.get("account") + "(" + workType.getName() + ")");
 					}
+					resultList.add(record);
 				}
 			}
 		} catch (Exception e) {
@@ -476,14 +476,15 @@ public class ZhbService {
 
 	/**
 	 * 添加筑慧币流水记录
+	 * 
 	 * @param orderNo
 	 * @param buyerId
 	 * @param operaterId
 	 * @param amount
 	 * @param type
 	 * @param goodsId
-     * @param goodsType
-     */
+	 * @param goodsType
+	 */
 	private void insertZhbRecord(String orderNo, Long buyerId, Long operaterId, BigDecimal amount, String type, Long goodsId, String goodsType) {
 		ZhbRecord zhbRecord = new ZhbRecord();
 		zhbRecord.setOrderNo(orderNo);
@@ -500,15 +501,16 @@ public class ZhbService {
 
 	/**
 	 * 进行充值操作
+	 * 
 	 * @param orderNo
 	 * @param buyerId
 	 * @param operaterId
 	 * @param amount
 	 * @param goodsType
 	 * @param goodsId
-     * @return
-     * @throws Exception
-     */
+	 * @return
+	 * @throws Exception
+	 */
 	private int execPrepaid(String orderNo, Long buyerId, Long operaterId, BigDecimal amount, String goodsType, Long goodsId) throws Exception {
 		int result = 0;
 		ZhbAccount zhbAccount = zhbMapper.selectZhbAccount(buyerId);
