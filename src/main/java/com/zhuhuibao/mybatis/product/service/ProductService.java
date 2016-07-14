@@ -239,33 +239,37 @@ public class ProductService {
      * @param id
      * @return
      */
-    public Response queryProductInfoById(Long id) {
-        Response response = new Response();
+    public Map<String, Object> queryProductInfoById(Long id) {
         //保存参数值信息
-        Map<String, Object> paramValuesMap = new TreeMap<String, Object>();
-        Map<String, Object> productMap = new TreeMap<String, Object>();
-        ProductWithMember product = null;
+        Map<String, Object> paramValuesMap = new TreeMap<>();
+        Map<String, Object> productMap = new TreeMap<>();
+        ProductWithMember product;
         try {
             product = productMapper.selectProductMemberByid(id);
-            //组成参数列表
-            if (product.getParamIDs() != null && product.getParamIDs().length() > 0) {
-                setMemberInfo(productMap, product);
-                setProductParamInfo(paramValuesMap, productMap, product);
-                List<Product> productList = productMapper.queryProductByParamIDs(product.getParamIDs());
+            if (product != null) {
+                //组成参数列表
+                if (product.getParamIDs() != null && product.getParamIDs().length() > 0) {
+                    setMemberInfo(productMap, product);
+                    setProductParamInfo(paramValuesMap, productMap, product);
+                    List<Product> productList = productMapper.queryProductByParamIDs(product.getParamIDs());
 
-                if (!productList.isEmpty()) {
-                    setProductImgs(productMap, productList);
-                    setProductList(id, paramValuesMap, productMap, productList);
+                    if (!productList.isEmpty()) {
+                        setProductImgs(productMap, productList);
+                        setProductList(id, paramValuesMap, productMap, productList);
+                    }
+                } else {
+                    setSingleProductInfo(productMap, product);
                 }
             } else {
-                setSingleProductInfo(productMap, product);
+                log.error("产品不存在");
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "产品不存在");
             }
-            response.setData(productMap);
+
         } catch (Exception e) {
             log.error("update product error", e);
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
-        return response;
+        return productMap;
     }
 
     /**
@@ -552,25 +556,21 @@ public class ProductService {
      * @param product
      * @return
      */
-    public Response queryRecommendHotProduct(Map<String, Object> product) {
-        Response response = new Response();
-        List<ProductMap> productList = null;
+    public List<ProductMap> queryRecommendHotProduct(Map<String, Object> product) {
+        List<ProductMap> productList;
         try {
             productList = productMapper.queryRecommendHotProduct(product);
-            response.setData(productList);
         } catch (Exception e) {
             log.error("update product error", e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return response;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询失败");
         }
-        return response;
+        return productList;
     }
 
 
     /**
      * 产品详情页面预览产品参数
+     *
      * @param id
      * @return
      */
@@ -581,22 +581,22 @@ public class ProductService {
 
         try {
             product = productMapper.selectByPrimaryKey(id);
-            if (product != null){
+            if (product != null) {
 
                 map.put(Constants.product_field_id, product.getId());
                 map.put(Constants.product_field_detailDesc, product.getDetailDesc());
                 map.put(Constants.product_field_paras, product.getParas());
                 map.put(Constants.product_field_service, product.getService());
                 response.setData(map);
-            }else{
+            } else {
                 log.error("产品不存在");
-                throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"产品不存在");
+                throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "产品不存在");
             }
 
         } catch (Exception e) {
-               e.printStackTrace();
-                log.error("查询失败:{}",e.getMessage());
-                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询失败");
+            e.printStackTrace();
+            log.error("查询失败:{}", e.getMessage());
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
         return map;
     }
