@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,8 @@ import java.util.Map;
 public class MailOmsController {
 
     private final static Logger log = LoggerFactory.getLogger(MailOmsController.class);
+
+    private static int num = 0;
 
     @Autowired
     SiteMailService siteMailService;
@@ -76,11 +79,25 @@ public class MailOmsController {
                 messageLog.setRecID(Long.parseLong(id));
                 messageLog.setStatus(1);
                 siteMailService.addMsgLog(messageLog);
+                num = num + 1;
             }
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
 
+        return response;
+    }
+
+
+    @ApiOperation(value="统计发送进度",notes="统计发送进度",response = Response.class)
+    @RequestMapping(value = "send_news_speed", method = RequestMethod.GET)
+    public Response send_news_speed(@RequestParam(required = false)String ids)  {
+        Response response = new Response();
+        String[] idList = ids.split(",");
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        numberFormat.setMaximumFractionDigits(0);
+        String result = numberFormat.format((float) num / (float) idList.length * 100);
+        response.setData(result);
         return response;
     }
 }
