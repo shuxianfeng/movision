@@ -247,6 +247,9 @@ public class CompanyInfoController {
     public Response sel_company_success_case(@ApiParam(value = "案例id")@RequestParam String id)  {
         Response response = new Response();
         SuccessCase successCase = successCaseService.querySuccessCaseById(id);
+        //点击率加1
+        successCase.setViews(String.valueOf(Integer.parseInt(successCase.getViews())+1));
+        successCaseService.updateSuccessCase(successCase);
         response.setData(successCase);
         return response;
     }
