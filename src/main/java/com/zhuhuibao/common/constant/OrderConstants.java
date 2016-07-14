@@ -111,6 +111,24 @@ public class OrderConstants {
     }
 
     /**
+     * 发票开票状态
+     */
+    public enum InvoiceIsStatus {
+        WKP("0"), YKP("1");
+
+        private final String value;
+
+        InvoiceIsStatus(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
+
+    /**
      * 收银台支付时长 0.5小时
      */
     public static final String CASHIER_PAYMENT_DURATION_HALF = "0.5";

@@ -6,6 +6,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.fsearch.utils.StringUtil;
 import com.zhuhuibao.mybatis.order.entity.*;
 import com.zhuhuibao.mybatis.order.service.*;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
@@ -157,11 +158,12 @@ public class ZHOrderService {
                 jsonMap.put("receiveName", msgParam.get("invoiceReceiveName"));
                 jsonMap.put("address", msgParam.get("invoiceAddress"));
                 jsonMap.put("mobile", msgParam.get("invoiceMobile"));
+                jsonMap.put("telephone", StringUtil.isNotEmpty(msgParam.get("invoiceTel"))?msgParam.get("invoiceTel"):"");
                 jsonMap.put("province", msgParam.get("invoiceProvince"));
                 jsonMap.put("city", msgParam.get("invoiceCity"));
                 jsonMap.put("area", msgParam.get("invoiceArea"));
                 jsonMap.put("createId",msgParam.get("buyerId"));
-                //createTime
+                jsonMap.put("status",OrderConstants.InvoiceIsStatus.WKP.toString());//默认未开票
                 Gson gson = new Gson();
                 String jsonParam = gson.toJson(jsonMap);
 
