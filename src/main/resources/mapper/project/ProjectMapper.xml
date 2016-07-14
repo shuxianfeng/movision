@@ -330,7 +330,7 @@
 
     <select id="getCity" parameterType="java.util.Map" resultType="java.util.Map">
      select c.code cityCode,c.provincecode from t_dictionary_city c
-     where c.name=#{city}
+     where c.name like CONCAT('%',#{city},'%')
   </select>
 
     <select id="findPrjectByName" parameterType="java.util.Map" resultMap="list">

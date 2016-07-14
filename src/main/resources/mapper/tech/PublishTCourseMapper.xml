@@ -30,8 +30,8 @@
   </resultMap>
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
     select
-    courseid, publisherid, title, teacher, date_format(startTime,'%Y-%m-%d %h:%m:%s') startTime,
-    date_format(endTime,'%Y-%m-%d %h:%m:%s') endTime, province, area, address, city, price, storageNumber, minBuyNumber, maxBuyNumber,
+    courseid, publisherid, title, teacher, date_format(startTime,'%Y-%m-%d %H:%i:%s') startTime,
+    date_format(endTime,'%Y-%m-%d %H:%i:%s') endTime, province, area, address, city, price, storageNumber, minBuyNumber, maxBuyNumber,
     date_format(expiryDate,'%Y-%m-%d') expiryDate, imgUrl, notice, courseType, status,notes
     from t_p_group_publishCourse
     <where>

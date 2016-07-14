@@ -208,12 +208,12 @@ public class UploadFileController {
 			name=row.getCell(0).toString();
 			try {
 				map.put("name", name);
-				List<Map<String,String>> list=projectService.findPrjectByName(map);
-				if(list!=null&&list.size()>0)
-				{
-					isAdd=2; 
-					//failReason+= ",第1列，项目已导入"; 
-				}
+//				List<Map<String,String>> list=projectService.findPrjectByName(map);
+//				if(list!=null&&list.size()>0)
+//				{
+//					isAdd=2; 
+//					//failReason+= ",第1列，项目已导入"; 
+//				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -271,13 +271,30 @@ public class UploadFileController {
 	            	
 	            	codeMap=projectService.getCity(areaOrCityMap);
 	            	
-	            	projectInfo.setCity(codeMap.get("cityCode").toString());
-					projectInfo.setProvince(codeMap.get("provincecode").toString());
-	            	if(codeMap!=null){
-	            		projectInfo.setAddress(address);
+	            	if(codeMap==null)
+	            	{
+	            		areaOrCityMap.put("area",  row.getCell(2).toString());
+	    	            areaOrCityMap.put("city", row.getCell(1).toString());
+	            		codeMap=projectService.getCity(areaOrCityMap); 
+	            		
+		            	if(codeMap!=null){
+		            		projectInfo.setCity(codeMap.get("cityCode").toString());
+							projectInfo.setProvince(codeMap.get("provincecode").toString());
+		            		projectInfo.setAddress(address);
+		            	}else{
+			            	isAdd=1;
+			            	failReason+= ",第4列，项目地址不正确，导入失败;"; 
+		            	}
+	            		
 	            	}else{
-		            	isAdd=1;
-		            	failReason+= ",第4列，项目地址不正确，导入失败;"; 
+		            	projectInfo.setCity(codeMap.get("cityCode").toString());
+						projectInfo.setProvince(codeMap.get("provincecode").toString());
+		            	if(codeMap!=null){
+		            		projectInfo.setAddress(address);
+		            	}else{
+			            	isAdd=1;
+			            	failReason+= ",第4列，项目地址不正确，导入失败;"; 
+		            	}
 	            	}
 	            }
 			}else{
