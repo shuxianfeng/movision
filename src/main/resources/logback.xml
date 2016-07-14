@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
-    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径 /home/app/log/zhuhuibao/logs -->
-    <!--<property name="LOG_HOME" value="/Users/jianglz/Downloads/log"/>-->
-    <!--<property name="BUSI_LOG_HOME" value="/Users/jianglz/Downloads/busi "/>-->
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径  -->
+    <!--<property name="LOG_HOME" value="/Users/jianglz/Downloads/logs"/>-->
+    <!--<property name="BUSI_LOG_HOME" value="/Users/jianglz/Downloads/logs/busi "/>-->
     <property name="LOG_HOME" value=" /home/app/log/zhuhuibao/logs"/>
     <property name="BUSI_LOG_HOME" value=" /home/app/log/zhuhuibao/logs/busi "/>
     <!-- 控制台输出 -->
@@ -78,7 +78,7 @@
         <appender-ref ref="BUSI_FILE"/>
     </logger>
     <!-- 日志输出级别 DEBUG-->
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE" />
     </root>
