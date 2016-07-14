@@ -25,7 +25,7 @@
     where orderNo = #{orderNo,jdbcType=VARCHAR}
   </select>
   <select id="findListByCourseIdAndStatus" resultType="com.zhuhuibao.mybatis.order.entity.Order">
-     select o.* from t_o_order_goods og,t_o_order o where og.goodsId= #{courseId} and o.orderNo=og.orderNo and o.status = #{status} ;
+     select o.* from t_o_order_goods og,t_o_order o where og.goodsId= #{courseId} and o.orderNo=og.orderNo and o.status = #{status}
   </select>
   <select id="findHotbuyTopten" resultType="java.util.Map">
     select og.goodsId,og.goodsName
