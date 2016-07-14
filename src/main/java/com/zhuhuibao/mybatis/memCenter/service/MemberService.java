@@ -193,6 +193,19 @@ public class MemberService {
 		}
 	}
 
+	public String queryWorkTypeById(String id)
+	{
+		try{
+			WorkType workType = workTypeMapper.selectByPrimaryKey(id);
+			String name = workType.getName();
+			return name;
+		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
 	/**
 	 * 工作类别
 	 */

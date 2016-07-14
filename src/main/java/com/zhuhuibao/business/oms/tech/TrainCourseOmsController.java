@@ -18,6 +18,7 @@ import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.oss.ZhbOssClient;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.apache.regexp.RESyntaxException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -108,8 +109,7 @@ public class TrainCourseOmsController {
         } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-        Response response = new Response();
-        return response;
+        return new Response();
     }
 
     @RequestMapping(value = "upd_publishCourse", method = RequestMethod.POST)
@@ -121,32 +121,28 @@ public class TrainCourseOmsController {
         } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-        Response response = new Response();
-        return response;
+        return new Response();
     }
 
     @RequestMapping(value = "upd_beginCourse", method = RequestMethod.POST)
     @ApiOperation(value = "开始上课", notes = "开始上课", response = Response.class)
     public Response beginCourse(@ApiParam(value = "课程ID") @RequestParam String courseId) throws Exception {
         courseServie.begin(courseId);
-        Response response = new Response();
-        return response;
+        return new Response();
     }
 
     @RequestMapping(value = "upd_stopCourse", method = RequestMethod.POST)
     @ApiOperation(value = "终止课程", notes = "终止课程", response = Response.class)
     public Response stopCourse(@ApiParam(value = "课程ID") @RequestParam String courseId) throws Exception {
         courseServie.stop(courseId);
-        Response response = new Response();
-        return response;
+        return new Response();
     }
 
     @RequestMapping(value = "upd_completeCourse", method = RequestMethod.POST)
     @ApiOperation(value = "完成课程", notes = "完成课程", response = Response.class)
     public Response completeCourse(@ApiParam(value = "课程ID") @RequestParam String courseId) throws Exception {
         courseServie.complete(courseId);
-        Response response = new Response();
-        return response;
+        return new Response();
     }
 
     @RequestMapping(value = "sel_publish_course", method = RequestMethod.GET)

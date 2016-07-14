@@ -1,6 +1,7 @@
 package com.zhuhuibao.business.system.agent.mc;
 
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.pojo.*;
 import com.zhuhuibao.mybatis.memCenter.entity.Agent;
@@ -15,13 +16,10 @@ import com.zhuhuibao.security.EncodeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,13 +49,10 @@ public class AgentController {
     @Autowired
     private AccountService accountService;
 
-    /**
-     * 根据品牌查询它所属的大系统，子系统
-     * @return
-     * @throws IOException
-     */
+    @ApiOperation(value = "根据品牌查询它所属的大系统，子系统",
+            notes = "根据品牌查询它所属的大系统，子系统", response = Response.class)
     @RequestMapping(value = {"/rest/agent/category","/rest/system/mc/agent/sel_category"}, method = RequestMethod.GET)
-    public Response category(String id)  {
+    public Response category(@RequestParam String id)  {
         Response result = new Response();
         List list = new ArrayList();
         List<ResultBean> resultBeanList = categoryService.findSystemByBrand(id);
@@ -83,13 +78,10 @@ public class AgentController {
         return result;
     }
 
-    /**
-     * 根据会员id查询其品牌
-     * @return
-     * @throws IOException
-     */
+    @ApiOperation(value = "根据会员id查询其品牌",
+            notes = "根据会员id查询其品牌", response = Response.class)
     @RequestMapping(value = {"/rest/agent/brand","/rest/system/mc/agent/sel_brand_by_memId"}, method = RequestMethod.GET)
-    public Response brand(Brand brand)  {
+    public Response brand(@ModelAttribute Brand brand)  {
         Response result = new Response();
         List list = new ArrayList();
         List<Brand> brands = brandService.searchBrandByStatus(brand);
@@ -103,32 +95,23 @@ public class AgentController {
         return result;
     }
 
-    /**
-     * 根据账号，公司名称查询代理商会员
-     * @param req
-     * @return
-     * @throws IOException
-     */
+    @ApiOperation(value = "根据账号，公司名称查询代理商会员",
+            notes = "根据账号，公司名称查询代理商会员", response = Response.class)
     @RequestMapping(value = {"/rest/agent/searchAgent","/rest/system/mc/agent/sel_agent_by_account"}, method = RequestMethod.GET)
-    public Response searchAgent(HttpServletRequest req)  {
+    public Response searchAgent(@RequestParam String account,@ApiParam(value = "1:账号;2:公司名称")@RequestParam String type)  {
         Response result = new Response();
-        String account = req.getParameter("account");
         if(account.contains("_")){
             account = account.replace("_","\\_");
         }
-        String type = req.getParameter("type");
         List<AccountBean> memList = memberService.findAgentMember(account,type);
         result.setData(memList);
         return result;
     }
 
-    /**
-     * 关联代理商保存
-     * @return
-     * @throws IOException
-     */
+    @ApiOperation(value = "关联代理商保存",
+            notes = "关联代理商保存", response = Response.class)
     @RequestMapping(value = {"/rest/agent/agentSave","/rest/system/mc/agent/add_agent"}, method = RequestMethod.POST)
-    public Response agentSave(Agent agent)  {
+    public Response agentSave(@ModelAttribute Agent agent)  {
         Response result = new Response();
         Agent agent1 = agentService.find(agent);
         if(agent1==null){
@@ -140,36 +123,26 @@ public class AgentController {
         return result;
     }
 
-    /**
-     * 关联代理商编辑更新
-     * @return
-     * @throws IOException
-     */
+    @ApiOperation(value = "关联代理商编辑更新",
+            notes = "关联代理商编辑更新", response = Response.class)
     @RequestMapping(value = {"/rest/agent/agentUpdate","/rest/system/mc/agent/upd_agent"}, method = RequestMethod.POST)
-    public Response agentUpdate(Agent agent)  {
+    public Response agentUpdate(@ModelAttribute Agent agent)  {
         Response result = new Response();
         agentService.agentUpdate(agent);
         return result;
     }
 
-    /**
-     * 取消关联代理商
-     * @return
-     * @throws IOException
-     */
+    @ApiOperation(value = "取消关联代理商",
+            notes = "取消关联代理商", response = Response.class)
     @RequestMapping(value = {"/rest/agent/cancelAgent","/rest/system/mc/agent/cancel_agent"}, method = RequestMethod.POST)
-    public Response cancelAgent(Agent agent)  {
+    public Response cancelAgent(@ModelAttribute Agent agent)  {
         Response result = new Response();
         agent.setStatus("1");
         agentService.agentUpdate(agent);
         return result;
     }
 
-    /**
-     * 区域按首拼分类
-     * @return
-     * @throws IOException
-     */
+    @ApiOperation(value = "区域按首拼分类",notes = "区域按首拼分类", response = Response.class)
     @RequestMapping(value = {"/rest/agent/province","/rest/system/mc/agent/sel_province_by_pinyin"}, method = RequestMethod.GET)
     public Response province()  {
         Response result = new Response();
@@ -204,17 +177,11 @@ public class AgentController {
         return result;
     }
 
-    /**
-     * 邀请代理商入驻
-     * @param req
-     * @return
-     * @throws IOException
-     */
+    @ApiOperation(value = "邀请代理商入驻",notes = "邀请代理商入驻", response = Response.class)
     @RequestMapping(value = {"/rest/agent/inviteAgent","/rest/system/mc/agent/invite_agent"}, method = RequestMethod.POST)
-    public Response inviteAgent(HttpServletRequest req, String id) {
+    public Response inviteAgent(@RequestParam String email, @RequestParam String id) {
         Response result = new Response();
         Member member = memberService.findMemById(id);
-        String email = req.getParameter("email");
         Member member1 = new Member();
         member1.setEmail(email);
         Member member2 = memberService.findMember(member1);
@@ -230,13 +197,9 @@ public class AgentController {
         return result;
     }
 
-    /**
-     * 查询我的代理商
-     * @return
-     * @throws IOException
-     */
+    @ApiOperation(value = "查询我的代理商",notes = "查询我的代理商", response = Response.class)
     @RequestMapping(value = {"/rest/agent/myAgent","/rest/system/mc/agent/sel_my_agent"}, method = RequestMethod.GET)
-    public Response myAgent(String id) {
+    public Response myAgent(@RequestParam String id) {
         Response result = new Response();
         List<AgentBean> list = agentService.findAgentByMemId(id);
         result.setData(list);
@@ -244,20 +207,14 @@ public class AgentController {
         return result;
     }
 
-    /**
-     * 代理商邀请邮件点击注册
-     * @param req
-     * @return
-     * @throws IOException
-     */
+    @ApiOperation(value = "代理商邀请邮件点击注册",notes = "代理商邀请邮件点击注册", response = Response.class)
     @RequestMapping(value = {"/rest/agent/agentRegister","/rest/system/mc/agent/agent_register"}, method = RequestMethod.GET)
-    public ModelAndView agentRegister(HttpServletRequest req) throws IOException {
+    public ModelAndView agentRegister(@RequestParam String vm) throws IOException {
         log.debug("email agentRegister start.....");
         Response result = new Response();
         ModelAndView modelAndView = new ModelAndView();
         try
         {
-            String vm = req.getParameter("vm");//获取email
             if(vm != null & !vm.equals(""))
             {
                 String decodeVM = new String (EncodeUtil.decodeBase64(vm));
@@ -276,13 +233,9 @@ public class AgentController {
 
     }
 
-    /**
-     * 代理商编辑，参数，id
-     * @return
-     * @throws IOException
-     */
+    @ApiOperation(value = "根据id查询代理商信息",notes = "根据id查询代理商信息", response = Response.class)
     @RequestMapping(value = {"/rest/agent/updateAgentById","/rest/system/mc/agent/sel_agent_by_id"}, method = RequestMethod.GET)
-    public Response updateAgentById(String id)  {
+    public Response updateAgentById(@RequestParam String id)  {
         Response response = new Response();
         Map map = agentService.updateAgentById(id);
         response.setData(map);

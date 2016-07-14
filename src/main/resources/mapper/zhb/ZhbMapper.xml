@@ -84,7 +84,7 @@
 	  <if test="companyId == operaterId">
 	  	z.buyer_id = #{companyId,jdbcType=BIGINT}
 	  </if>
-	  <if test="operaterId != operaterId">
+	  <if test="companyId != operaterId">
 	  	z.operater_id = #{operaterId,jdbcType=BIGINT}
 	  </if>
 	  <if test="recordType == 1">

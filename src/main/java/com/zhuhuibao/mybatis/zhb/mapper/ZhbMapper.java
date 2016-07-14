@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 
-import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
 import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
+import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbRecord;
 
 /**
@@ -39,7 +39,7 @@ public interface ZhbMapper {
 	 * @param param
 	 * @return
 	 */
-	List<Map<String, String>> selectZhbRecordList(RowBounds rowBounds, Map<String, Long> param);
+	List<Map> selectZhbRecordList(RowBounds rowBounds, Map<String, Long> param);
 
 	/**
 	 * 增加筑慧币流水记录

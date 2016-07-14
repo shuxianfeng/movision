@@ -40,4 +40,6 @@ public class CooperationConstants {
         }
     }
 
+    public final static String[] COOPERATION_SERVICE =  {"7","8","9","13"};
+    public final static String[] COOPERATION_QUALIFICATION =  {"10","11"};
 }

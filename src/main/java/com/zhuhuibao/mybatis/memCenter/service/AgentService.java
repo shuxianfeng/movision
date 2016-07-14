@@ -100,7 +100,7 @@ public class AgentService {
 
     /**
      * 代理商编辑，参数，id
-     * @param
+     * @param   id
      * @return
      */
     public Map updateAgentById(String id){
@@ -116,12 +116,12 @@ public class AgentService {
             map.put("province",agent.getProvince());
             String agentRange[] = agent.getAgentRange().split(",");
             List list = new ArrayList();
-            for(int i=0;i<agentRange.length;i++){
+            for (String anAgentRange : agentRange) {
                 Map map2 = new HashMap();
-                ResultBean result1 = categoryMapper.querySystem(agentRange[i]);
-                ResultBean result2 = categoryMapper.querySystemByScateid(agentRange[i]);
-                map2.put("id",result1.getCode());
-                map2.put("name",result2.getName()+">"+result1.getName());
+                ResultBean result1 = categoryMapper.querySystem(anAgentRange);
+                ResultBean result2 = categoryMapper.querySystemByScateid(anAgentRange);
+                map2.put("id", result1.getCode());
+                map2.put("name", result2.getName() + ">" + result1.getName());
                 list.add(map2);
             }
             map.put("product",list);
@@ -153,28 +153,29 @@ public class AgentService {
             List list = new ArrayList();
             Map map = new HashMap();
             Map map3 = new HashMap();
-            map3.put(Constants.id,member.getId());
-            map3.put(Constants.name,member.getEnterpriseName());
-            map3.put(Constants.logo,member.getEnterpriseLogo());
-            map3.put(Constants.webSite,member.getEnterpriseWebSite());
-            map3.put(Constants.address,member.getAddress());
+            if(member != null){
+                map3.put(Constants.id,member.getId());
+                map3.put(Constants.name,member.getEnterpriseName());
+                map3.put(Constants.logo,member.getEnterpriseLogo());
+                map3.put(Constants.webSite,member.getEnterpriseWebSite());
+                map3.put(Constants.address,member.getAddress());
+            }
             map.put("manufactor",map3);
-            for(int i=0;i<provinceList.size();i++){
-                ResultBean province = provinceList.get(i);
+
+            for (ResultBean province : provinceList) {
                 Map map1 = new HashMap();
-                map1.put(Constants.id,province.getCode());
-                map1.put(Constants.name,province.getName());
+                map1.put(Constants.id, province.getCode());
+                map1.put(Constants.name, province.getName());
                 List list1 = new ArrayList();
-                for(int j=0;j<agentList.size();j++){
-                    ResultBean agent = agentList.get(j);
+                for (ResultBean agent : agentList) {
                     Map map2 = new HashMap();
-                    if(agent.getSmallIcon().contains(province.getCode())){
-                        map2.put(Constants.id,agent.getCode());
-                        map2.put(Constants.name,agent.getName());
+                    if (agent.getSmallIcon().contains(province.getCode())) {
+                        map2.put(Constants.id, agent.getCode());
+                        map2.put(Constants.name, agent.getName());
                         list1.add(map2);
                     }
                 }
-                map1.put("agentList",list1);
+                map1.put("agentList", list1);
                 list.add(map1);
             }
             map.put("agent",list);
@@ -220,22 +221,20 @@ public class AgentService {
             map3.put(Constants.id,resultBean.getCode());
             map3.put(Constants.name,resultBean.getName());
             map.put("manufactor",map3);
-            for(int i=0;i<provinceList.size();i++){
-                ResultBean province = provinceList.get(i);
+            for (ResultBean province : provinceList) {
                 Map map1 = new HashMap();
-                map1.put(Constants.id,province.getCode());
-                map1.put(Constants.name,province.getName());
+                map1.put(Constants.id, province.getCode());
+                map1.put(Constants.name, province.getName());
                 List list1 = new ArrayList();
-                for(int j=0;j<agentList.size();j++){
-                    ResultBean agent = agentList.get(j);
+                for (ResultBean agent : agentList) {
                     Map map2 = new HashMap();
-                    if(agent.getSmallIcon().contains(province.getCode())){
-                        map2.put(Constants.id,agent.getCode());
-                        map2.put(Constants.name,agent.getName());
+                    if (agent.getSmallIcon().contains(province.getCode())) {
+                        map2.put(Constants.id, agent.getCode());
+                        map2.put(Constants.name, agent.getName());
                         list1.add(map2);
                     }
                 }
-                map1.put("agentList",list1);
+                map1.put("agentList", list1);
                 list.add(map1);
             }
             map.put("agent",list);

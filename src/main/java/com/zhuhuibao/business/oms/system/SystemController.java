@@ -1,11 +1,16 @@
 package com.zhuhuibao.business.oms.system;
 
+import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.pojo.ResultBean;
+import com.zhuhuibao.mybatis.memCenter.entity.Brand;
+import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.oms.entity.Category;
 import com.zhuhuibao.mybatis.oms.service.CategoryService;
 import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.mybatis.product.service.ProductService;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +35,9 @@ public class SystemController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private BrandService brandService;
     /**
      * 查询大系统类目
      * @return
@@ -121,4 +129,33 @@ public class SystemController {
         return result;
     }
 
+    /**
+     * 查询品牌(系统所有的品牌，分页，运营系统用)
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = {"/rest/searchBrandByPager","/rest/system/oms/brand/sel_all_brand"}, method = RequestMethod.GET)
+    public Response searchBrandByPager(Brand brand, String pageNo, String pageSize)  {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Brand> pager = new Paging<Brand>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        List<Brand> brandList = brandService.searchBrandByPager(pager,brand);
+        pager.result(brandList);
+        Response result = new Response();
+        result.setData(pager);
+        return result;
+    }
+
+    @ApiOperation(value = "品牌数量(运营系统，系统所有品牌)",notes = "品牌数量(运营系统，系统所有品牌)", response = Response.class)
+    @RequestMapping(value = {"/rest/findBrandSize","/rest/system/oms/brand/sel_brand_size"}, method = RequestMethod.GET)
+    public Response findBrandSize(Brand brand){
+        int size = brandService.findBrandSize(brand);
+        Response result = new Response();
+        result.setData(size);
+        return result;
+    }
 }

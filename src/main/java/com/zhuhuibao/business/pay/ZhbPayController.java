@@ -118,15 +118,19 @@ public class ZhbPayController {
             ShiroRealm.ShiroUser user = (ShiroRealm.ShiroUser) session.getAttribute("member");
             String  identify = user.getIdentify();
             if(identify.equals("2")){     //个人
-                if(!value.equals(VipConstant.VipLevel.PERSON_GOLD.toString())
-                        || !value.equals(VipConstant.VipLevel.PERSON_PLATINUM.toString())){
+                boolean suc1 = value.equals(VipConstant.VipLevel.PERSON_GOLD.toString());
+                boolean suc2 =  value.equals(VipConstant.VipLevel.PERSON_PLATINUM.toString());
+                if(!(!suc1 || !suc2)){
                     throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"个人用户无此VIP套餐");
                 }
             }else{  //企业
-                if(!value.equals(VipConstant.VipLevel.ENTERPRISE_GOLD.toString())
-                        || !value.equals(VipConstant.VipLevel.ENTERPRISE_PLATINUM.toString())) {
+                boolean suc1 = value.equals(VipConstant.VipLevel.ENTERPRISE_GOLD.toString());
+                boolean suc2 =   value.equals(VipConstant.VipLevel.ENTERPRISE_PLATINUM.toString());
+
+                if(!(suc1 || suc2)){
                     throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"企业用户无此VIP套餐");
                 }
+
             }
         }
     }
