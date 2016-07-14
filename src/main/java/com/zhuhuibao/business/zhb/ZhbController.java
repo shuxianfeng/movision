@@ -168,7 +168,7 @@ public class ZhbController {
 	}
 
 	@ApiOperation(value = "筑慧币明细记录", notes = "筑慧币明细记录", response = Response.class)
-	@RequestMapping(value = "mc/record/sel_recordList", method = RequestMethod.POST)
+	@RequestMapping(value = "mc/record/sel_recordList", method = RequestMethod.GET)
 	public Response getRecordList(@ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
 			@ApiParam(value = "每页显示的条数") @RequestParam(required = false) String pageSize,
 			@ApiParam(value = "数据类型，1:使用,2:获取,null:所有") @RequestParam(required = false) String recordType) throws Exception {
