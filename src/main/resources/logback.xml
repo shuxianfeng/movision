@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径  -->
-    <!--<property name="LOG_HOME" value="/Users/jianglz/Downloads/logs"/>-->
-    <!--<property name="BUSI_LOG_HOME" value="/Users/jianglz/Downloads/logs/busi "/>-->
     <property name="LOG_HOME" value=" /home/app/log/zhuhuibao/logs"/>
     <property name="BUSI_LOG_HOME" value=" /home/app/log/zhuhuibao/logs/busi "/>
     <!-- 控制台输出 -->
@@ -53,18 +51,18 @@
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <!--日志文件最大的大小 -->
-                <maxFileSize>64MB</maxFileSize>
+                <maxFileSize>10MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
         <encoder>
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} |-%level [%thread] %logger{20} [%file:%line] - %msg%n</pattern>
         </encoder>
-        <!--日志文件最大的大小 -->
+        <!--日志文件最大的大小
         <triggeringPolicy
                 class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
-        </triggeringPolicy>
+        </triggeringPolicy> -->
     </appender>
 
     <!--myibatis log configure-->
@@ -79,7 +77,7 @@
     </logger>
     <!-- 日志输出级别 DEBUG-->
     <root level="INFO">
-        <appender-ref ref="STDOUT"/>
+        <!--<appender-ref ref="STDOUT"/>-->
         <appender-ref ref="FILE" />
     </root>
 
