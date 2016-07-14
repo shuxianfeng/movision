@@ -122,14 +122,15 @@
   <select id="queryNoticeList" resultType="java.util.Map" parameterType="java.util.Map" >
     select
     id, title
-    from t_oms_notice a
+    from t_oms_notice
+    where status = 1
     order by time desc LIMIT 0,#{count}
   </select>
 
   <select id="findAllNoticeList" resultType="java.util.Map" >
     select
     id, title,date_format(time,'%Y-%m-%d %H:%i:%s') time
-    from t_oms_notice
+    from t_oms_notice where status = 1
     order by time desc
   </select>
 
