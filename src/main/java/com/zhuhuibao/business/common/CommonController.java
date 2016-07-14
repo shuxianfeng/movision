@@ -1,10 +1,13 @@
 package com.zhuhuibao.business.common;
 
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.common.entity.SysResearch;
+import com.zhuhuibao.mybatis.common.service.SysResearchService;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -33,6 +36,9 @@ public class CommonController {
 
     @Autowired
     ZhbOssClient zhbOssClient;
+
+    @Autowired
+    SysResearchService sysResearchService;
 
     @ApiOperation(value = "上传图片，返回url", notes = "上传图片，返回url", response = Response.class)
     @RequestMapping(value = {"/rest/uploadImg","/rest/common/upload_img"}, method = RequestMethod.POST)
@@ -69,5 +75,14 @@ public class CommonController {
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
+    }
+
+    @ApiOperation(value="提升计划",notes="提升计划",response = Response.class)
+    @RequestMapping(value = "/rest/common/add_research", method = RequestMethod.POST)
+    public Response addResearch(@ApiParam @ModelAttribute  SysResearch sysResearch){
+
+        sysResearchService.insert(sysResearch);
+
+        return new Response();
     }
 }
