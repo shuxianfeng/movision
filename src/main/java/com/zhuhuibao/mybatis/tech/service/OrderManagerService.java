@@ -308,6 +308,7 @@ public class OrderManagerService {
                 courseMap.put("price", course.getPrice().toString());
                 courseMap.put("minBuyNumber", course.getMinBuyNumber());
                 courseMap.put("imgUrl", course.getImgUrl());
+                courseMap.put("courseStatus",course.getStatus());
 
                 goodsMap.put("courseDetailInfo", courseMap);
             } else if (goodsType.equals(OrderConstants.GoodsType.VIP.toString())) {
