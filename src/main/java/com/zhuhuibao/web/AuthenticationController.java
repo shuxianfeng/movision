@@ -3,6 +3,8 @@ package com.zhuhuibao.web;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MessageLogConstant;
 import com.zhuhuibao.common.pojo.AuthcMember;
+import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
+import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.security.resubmit.AvoidDuplicateSubmission;
@@ -42,6 +44,8 @@ public class AuthenticationController {
     @Autowired
     SiteMailService siteMailService;
 
+    @Autowired
+    MemShopService shopService;
 
     @RequestMapping(value = "/rest/web/authc", method = RequestMethod.GET)
     public Response isLogin() throws IOException {
@@ -109,6 +113,12 @@ public class AuthenticationController {
                 authcMember.setNickname(member.getNickname());
                 authcMember.setCompanyName(member.getCompanyName());
 
+                MemberShop shop = shopService.findByCompanyID(member.getCompanyId());
+                if(shop != null){
+                        authcMember.setShopId(String.valueOf(shop.getId()));
+                }else{
+                    authcMember.setShopId("");
+                }
 
                 response.setMsgCode(1);
                 response.setMessage("welcome you!");
