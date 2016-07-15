@@ -118,7 +118,7 @@ public class TechCoopController {
     @ApiOperation(value = "技术合作的点击排行", notes = "技术合作的点击排行", response = Response.class)
     public Response findDataViewsOrder() {
         Response response = new Response();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("status", TechConstant.TechCooperationnStatus.AUDITPASS.toString());
         map.put("count", TechConstant.COOP_DOWNLOAD_COUNT_TEN);
         List<Map<String, String>> techDataList = techService.findCoopViewsOrder(map);

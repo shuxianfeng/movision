@@ -344,6 +344,7 @@ public class ExpertSiteController {
         List list = new ArrayList();
         for (Expert expert : expertList) {
             Map expertMap = new HashMap();
+            expertMap.put("createid", expert.getCreateId());
             expertMap.put("id", expert.getId());
             expertMap.put("name", expert.getName());
             expertMap.put("company", expert.getCompany());
@@ -385,6 +386,7 @@ public class ExpertSiteController {
         List list = new ArrayList();
         for (Expert expert : expertList) {
             Map expertMap = new HashMap();
+            expertMap.put("createid", expert.getCreateId());
             expertMap.put("id", expert.getId());
             expertMap.put("name", expert.getName());
             expertMap.put("company", expert.getCompany());

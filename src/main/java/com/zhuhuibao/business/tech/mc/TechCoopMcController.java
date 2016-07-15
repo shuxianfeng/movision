@@ -8,6 +8,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.fsearch.utils.StringUtil;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -48,11 +49,16 @@ public class TechCoopMcController {
         }
         condition.put("createID",createID);
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        if (title != null && !"".equals(title)) {
+        if (StringUtil.isNotEmpty(title)) {
             condition.put("title", title.replace("_", "\\_"));
         }
-        condition.put("type", type);
-        condition.put("status", status);
+        if(StringUtil.isNotEmpty(type)){
+            condition.put("type", type);
+        }
+         if(StringUtil.isNotEmpty(status)){
+             condition.put("status", status);
+         }
+
         List<Map<String, String>> techList = techService.findAllTechCooperationPager(pager, condition);
         pager.result(techList);
         response.setData(pager);
