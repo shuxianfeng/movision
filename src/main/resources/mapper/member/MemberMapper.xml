@@ -461,6 +461,7 @@
     <if test="type == 4">
       identify like '%6%'
     </if>
+    and enterpriseLogo is not null
     order by registerTime desc
     <if test="type==1">
       limit 0,2
@@ -507,6 +508,7 @@
     <if test="type == 4">
       identify like '%6%'
     </if>
+    and enterpriseLogo is not null
   </select>
   <select id="findAllMemberByPager" resultMap="ResultMap2" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
     select m.id,date_format(m.registerTime,'%Y-%m-%d %H:%i:%s') registerTime,m.isrecommend,
