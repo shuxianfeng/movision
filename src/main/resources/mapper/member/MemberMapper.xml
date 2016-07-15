@@ -765,4 +765,16 @@
       </if>
     </where>
   </select>
+
+  <select id="queryEngineerList" resultType="java.util.Map" parameterType="java.util.Map">
+    SELECT ad.connectedId as id,
+    ad.imgUrl as logo,m.enterpriseName as companyName,
+    m.enterpriseWebSite as webSite,m.saleProductDesc,m.address
+    FROM t_sys_advertising ad
+    LEFT JOIN t_sys_adv_attr at on at.id = ad.advAttrId
+    LEFT JOIN t_m_member m on m.id = ad.connectedId
+    where at.chanType = #{chanType}
+    and at.page = #{page}
+    and at.advArea = #{advArea}
+  </select>
 </mapper>
