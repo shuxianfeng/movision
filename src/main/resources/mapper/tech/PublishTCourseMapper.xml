@@ -293,6 +293,7 @@
         and province = #{province}
       </if>
     </where>
+      order by t.updateTime desc
   </select>
   <select id="findLatestPublishCourse" parameterType="java.util.Map" resultType="java.util.Map">
     select t.courseid,t.title,t.notes,
