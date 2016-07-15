@@ -344,13 +344,14 @@ public class ProductService {
         memberMap.put("enterpriseLogo", product.getEnterpriseLogo());
         memberMap.put("enterpriseWebSite", product.getEnterpriseWebSite());
         memberMap.put("address", product.getAddress());
+        memberMap.put("shopID", product.getMemberId());
         //查询企业商铺
-         MemberShop shop =  memShopService.findByCompanyID(Long.valueOf(product.getMemberId()));
+        /* MemberShop shop =  memShopService.findByCompanyID(Long.valueOf(product.getMemberId()));
         if(shop != null){
             memberMap.put("shopID",shop.getId());
         } else{
             memberMap.put("shopID","");
-        }
+        }*/
 
         productMap.put("member", memberMap);
     }
