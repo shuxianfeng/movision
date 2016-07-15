@@ -289,7 +289,10 @@
     left join t_dictionary_area ar on ar.code = t.area
     left join t_dictionary_constant dc on dc.code = t.systemCategory and dc.type =19
     left join t_dictionary_constant dn on dn.code = t.applicationArea and dn.type =18
-    where t.status != 4    and t.createID = #{createID}
+    where t.status != 4
+    <if test="createID != null and createID != ''" >
+      and t.createID = #{createID}
+    </if>
        <if test="status != null and status != ''" >
           and t.status = #{status}
        </if>

@@ -98,17 +98,12 @@ public class TechCoopController {
     public Response findAllTechCooperationPager(@ApiParam(value = "系统分类") @RequestParam(required = false) String systemCategory,
                                                 @ApiParam(value = "应用领域") @RequestParam(required = false) String applicationArea,
                                                 @ApiParam(value = "类型：1成果，2需求") @RequestParam(required = false) String type,
-                                                @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-                                                @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
+                                                @ApiParam(value = "页码") @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                                @ApiParam(value = "每页显示的数目") @RequestParam(required = false,defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Map<String, Object> condition = new HashMap<String, Object>();
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String, Object> condition = new HashMap<>();
+
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         condition.put("type", type);
         condition.put("systemCategory", systemCategory);
         condition.put("applicationArea", applicationArea);
