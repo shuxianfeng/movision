@@ -13,6 +13,7 @@ import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
 import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -44,8 +45,8 @@ public class ShopController {
     MemberService memberService;
 
 
-    @ApiOperation(value = "新增商户店铺", notes = "新增商户店铺")
-    @RequestMapping(value = "add_shop", method = RequestMethod.POST)
+    @ApiOperation(value = "编辑商户店铺", notes = "编辑商户店铺")
+    @RequestMapping(value = "upd_shop", method = RequestMethod.POST)
     public Response addShop(@ApiParam("商铺名称") @RequestParam String shopName,
                             @ApiParam("banner图片URL") @RequestParam String bannerUrl){
 
@@ -66,9 +67,9 @@ public class ShopController {
         Long companyId = ShiroUtil.getCompanyID();
 
         //检查商铺是否已存在
-        MemberShop shop = memShopService.findByCompanyID(companyId);
-        if(shop != null){
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"商铺已经存在");
+        MemberShop memberShop = memShopService.findByCompanyID(companyId);
+        if(memberShop == null){
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"商铺不存在");
         }
 
         Member member =  memberService.findMemById(String.valueOf(memberId));
@@ -76,17 +77,17 @@ public class ShopController {
         String account = member.getMobile() == null ? member.getEmail() : member.getMobile();
         String companyName = member.getEnterpriseName() == null ? "" : member.getEnterpriseName();
 
-        MemberShop memberShop = new MemberShop();
+
         memberShop.setOpreatorId(memberId.intValue());
         memberShop.setCompanyId(companyId.intValue());
         memberShop.setCompanyAccount(account);
         memberShop.setCompanyName(companyName);
-       // memberShop.setUpdateTime(new Date());
+        memberShop.setUpdateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
         memberShop.setStatus(MemberConstant.ShopStatus.DSH.toString());
         memberShop.setShopName(shopName);
         memberShop.setBannerUrl(bannerUrl);
 
-        memShopService.insert(memberShop);
+        memShopService.update(memberShop);
 
         return new Response();
     }
@@ -100,10 +101,11 @@ public class ShopController {
 
         MemberShop shop = check(shopId);
 
-       // shop.setUpdateTime(new Date());
+        shop.setUpdateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+        shop.setStatus(MemberConstant.ShopStatus.DSH.toString());
         shop.setBannerUrl(bannderUrl);
 
-        memShopService.upload(shop);
+        memShopService.update(shop);
 
         return new Response();
     }

@@ -20,8 +20,10 @@ import com.zhuhuibao.common.pojo.RefundReqBean;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.service.OrderService;
+import com.zhuhuibao.mybatis.tech.service.TechDownloadDataService;
 import com.zhuhuibao.service.order.ZHOrderService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -62,7 +64,11 @@ public class TechOmsController {
     @Autowired
     TechDataService techDataService;
 
+    @Autowired
+    TechDownloadDataService dlService;
 
+    @Autowired
+    FileUtil fileUtil;
     /**
      * 单笔退款
      * {detail_data 退款详细数据 必填(支付宝交易号^退款金额^备注)}
@@ -250,5 +256,38 @@ public class TechOmsController {
         pager.result(techList);
         response.setData(pager);
         return response;
+    }
+
+    @ApiOperation(value = "下载技术资料", notes = "下载技术资料", response = Response.class)
+    @RequestMapping(value = "downloadFile", method = RequestMethod.GET)
+    public Response downloadBill(HttpServletResponse response,
+                                 @ApiParam(value = "技术资料ID") @RequestParam String techDataId) throws Exception {
+        Response jsonResult = new Response();
+        log.debug("OMS download tech data");
+        try {
+            Long createId = ShiroUtil.getOmsCreateID();
+            if (createId != null) {
+                String attachName = techDataService.selectTechDataAttachName(Long.parseLong(techDataId));
+                response.setDateHeader("Expires", 0);
+                response.setHeader("Cache-Control",
+                        "no-store, no-cache, must-revalidate");
+                response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+                response.setHeader("Content-disposition", "attachment;filename=" + attachName);
+                response.setContentType("application/octet-stream");
+                jsonResult = fileUtil.downloadObject(response, attachName, "doc", "tech");
+                //插入我的下载资料
+                dlService.insertDownloadData(techDataId, createId);
+
+            } else {
+                jsonResult.setCode(401);
+                jsonResult.setMsgCode(MsgCodeConstant.un_login);
+                jsonResult.setMessage( MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                return  jsonResult;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("download tech data error! ", e);
+        }
+        return jsonResult;
     }
 }

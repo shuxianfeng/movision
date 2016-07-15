@@ -113,7 +113,7 @@ public class OmsShopController {
             shop.setReason(reason);
         }
 
-        memShopService.upload(shop);
+        memShopService.update(shop);
 
         return new Response();
     }

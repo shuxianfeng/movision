@@ -89,6 +89,13 @@ public class MemberOmsController {
 		return result;
 	}
 
+	@RequestMapping(value = "upd_mem_data", method = RequestMethod.POST)
+	@ApiOperation(value="完善资料审核",notes="完善资料审核",response = Response.class)
+	public Response updateMemData(@ApiParam(value = "会员信息") @ModelAttribute(value="member")Member member)  {
+		memberService.updateMemData(member);
+		return new Response();
+	}
+
 	@RequestMapping(value = "upd_certificate_status", method = RequestMethod.POST)
 	@ApiOperation(value="资质审核",notes="资质审核",response = Response.class)
 	public Response updateCertificate(@ApiParam(value = "资质信息") @ModelAttribute(value="record")CertificateRecord record)  {

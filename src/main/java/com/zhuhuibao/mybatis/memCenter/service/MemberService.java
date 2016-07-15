@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.AccountBean;
@@ -12,6 +13,7 @@ import com.zhuhuibao.mybatis.memCenter.mapper.*;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -20,10 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 会员中心业务处理
@@ -73,6 +72,9 @@ public class MemberService {
 
 	@Autowired
 	SiteMailService siteMailService;
+
+	@Autowired
+	MemShopService shopService;
 	/**
 	 * 会员信息更新
 	 */
@@ -587,6 +589,39 @@ public class MemberService {
 			return memberMapper.queryGreatCompany(map);
 		}
 		catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
+	 * 完善资料审核
+	 * @param member
+     */
+	public void updateMemData(Member member) {
+		try{
+			String status = member.getStatus();
+			if(status.equals(MemberConstant.MemberStatus.WSZLYSH.toString())) {       //完善审核通过
+				//查询该用户是否存在商铺
+				String companyId = member.getId();
+				MemberShop shop = shopService.findByCompanyID(Long.valueOf(companyId));
+			    if(shop == null) {
+					shop = new MemberShop();
+					shop.setCompanyId(Integer.valueOf(companyId));
+					shop.setCompanyName(member.getEnterpriseName() != null ?member.getEnterpriseName() : "");
+					shop.setCompanyAccount(member.getAccount());
+					shop.setUpdateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+					shop.setStatus(MemberConstant.ShopStatus.YSH.toString());
+					shopService.insert(shop);
+				}else{
+					 shop.setStatus(MemberConstant.ShopStatus.YSH.toString());
+					 shopService.update(shop);
+				}
+			}
+
+			updateMemInfo(member);
+		}catch (Exception e){
 			log.error(e.getMessage());
 			e.printStackTrace();
 			throw e;

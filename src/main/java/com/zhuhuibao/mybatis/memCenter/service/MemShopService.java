@@ -65,7 +65,7 @@ public class MemShopService {
      *
      * @param record
      */
-    public void upload(MemberShop record) {
+    public void update(MemberShop record) {
         int num;
         try {
             num = mapper.updateByPrimaryKeySelective(record);
@@ -120,4 +120,5 @@ public class MemShopService {
             throw e;
         }
     }
+
 }
