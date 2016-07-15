@@ -603,7 +603,7 @@ public class ExpertSiteController {
     private void checkParams(TechExpertCourse techCourse) {
         //时间格式校验
         String startTime = techCourse.getStartTime();
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         try {
             sf.parse(startTime);
         } catch (ParseException e) {
