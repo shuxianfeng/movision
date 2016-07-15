@@ -343,7 +343,7 @@
     </select>
 
     <select id="findCoopViewsOrder" parameterType="java.util.Map" resultType="java.util.Map">
-        select id,createid,title from t_tech_cooperation
+        select id,createid,title,type from t_tech_cooperation
         <where>
             <if test="status != null">
                 and status = #{status}
