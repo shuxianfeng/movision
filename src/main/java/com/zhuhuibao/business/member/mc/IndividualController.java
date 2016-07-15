@@ -177,6 +177,7 @@ public class IndividualController {
     @RequestMapping(value ={ "add_certificate","cert/add_certificate"}, method = RequestMethod.POST)
     public Response add_certificate(@ApiParam(value = "证书编号")@RequestParam String certificate_number,
                                     @ApiParam(value = "证书id")@RequestParam String certificate_id,
+                                    @RequestParam(required = false) String certificate_grade,
                                     @ApiParam(value = "资质名称")@RequestParam String certificate_name,
                                     @ApiParam(value = "资质证书图片url")@RequestParam String certificate_url)  {
         Response result = new Response();
@@ -187,6 +188,7 @@ public class IndividualController {
             record.setType("3");
             record.setCertificate_id(certificate_id);
             record.setCertificate_name(certificate_name);
+            record.setCertificate_grade(certificate_grade);
             record.setCertificate_number(certificate_number);
             record.setCertificate_url(certificate_url);
             memberService.saveCertificate(record);
@@ -214,6 +216,7 @@ public class IndividualController {
             record.setCertificate_number(certificate_number);
             record.setCertificate_url(certificate_url);
             record.setCertificate_grade(certificate_grade);
+            record.setStatus("0");
             memberService.updateCertificate(record);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

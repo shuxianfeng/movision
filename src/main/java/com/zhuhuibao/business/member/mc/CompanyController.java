@@ -209,6 +209,7 @@ public class CompanyController {
             record.setCertificate_name(certificate_name);
             record.setCertificate_number(certificate_number);
             record.setCertificate_url(certificate_url);
+            record.setStatus("0");
             memberService.updateCertificate(record);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

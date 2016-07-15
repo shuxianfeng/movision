@@ -335,7 +335,7 @@ public class MemberService {
 				Map map1 = new HashMap();
 				Member member1 = memberList.get(i);
 				map1.put("id",member1.getId());
-				if(member1.getMobile()!=null){
+				if(member1.getMobile()!=null && !"".equals(member1.getMobile())){
 					map1.put("account",member1.getMobile());
 				}else{
 					map1.put("account",member1.getEmail());
