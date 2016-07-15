@@ -189,9 +189,9 @@ public class ZhbService {
 					}
 				}
 				// VIP升级
-				VipMemberInfo vipMemberInfo = vipInfoService.findVipMemberInfoById(ShiroUtil.getCompanyID());
+				VipMemberInfo vipMemberInfo = vipInfoService.findVipMemberInfoById(order.getBuyerId());
 				if (null == vipMemberInfo) {
-					vipInfoService.insertVipMemberInfo(ShiroUtil.getCompanyID(), buyVipLevel, 1);
+					vipInfoService.insertVipMemberInfo(order.getBuyerId(), buyVipLevel, 1);
 				} else if (vipMemberInfo.getVipLevel() <= buyVipLevel) {
 					vipMemberInfo.setVipLevel(buyVipLevel);
 					Calendar cal = Calendar.getInstance();
