@@ -47,7 +47,7 @@ public class ShopController {
 
     @ApiOperation(value = "编辑商户店铺", notes = "编辑商户店铺")
     @RequestMapping(value = "upd_shop", method = RequestMethod.POST)
-    public Response addShop(@ApiParam("商铺名称") @RequestParam String shopName,
+    public Response updateStop(@ApiParam("商铺名称") @RequestParam String shopName,
                             @ApiParam("banner图片URL") @RequestParam String bannerUrl){
 
 
@@ -93,22 +93,22 @@ public class ShopController {
     }
 
 
-    @ApiOperation(value = "更新商户店铺", notes = "更新商户店铺")
-    @RequestMapping(value = "upd_shop", method = RequestMethod.POST)
-    public Response updateShop(@ApiParam("商铺ID") @RequestParam String shopId,
-                               @ApiParam("Banner图片URL")@RequestParam String bannderUrl){
-        log.debug("更新商铺...");
-
-        MemberShop shop = check(shopId);
-
-        shop.setUpdateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
-        shop.setStatus(MemberConstant.ShopStatus.DSH.toString());
-        shop.setBannerUrl(bannderUrl);
-
-        memShopService.update(shop);
-
-        return new Response();
-    }
+//    @ApiOperation(value = "更新商户店铺", notes = "更新商户店铺")
+//    @RequestMapping(value = "upd_shop", method = RequestMethod.POST)
+//    public Response updateShop(@ApiParam("商铺ID") @RequestParam String shopId,
+//                               @ApiParam("Banner图片URL")@RequestParam String bannderUrl){
+//        log.debug("更新商铺...");
+//
+//        MemberShop shop = check(shopId);
+//
+//        shop.setUpdateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+//        shop.setStatus(MemberConstant.ShopStatus.DSH.toString());
+//        shop.setBannerUrl(bannderUrl);
+//
+//        memShopService.update(shop);
+//
+//        return new Response();
+//    }
 
 
     /**
