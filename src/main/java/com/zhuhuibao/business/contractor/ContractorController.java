@@ -111,4 +111,20 @@ public class ContractorController {
         return response;
     }
 
+    @ApiOperation(value = "工程商信息广告位",notes = "工程商信息广告位")
+    @RequestMapping(value = "sel_adv_engineer", method = RequestMethod.GET)
+    public Response sel_adv_engineer(@ApiParam(value="频道类型 2:工程商")@RequestParam String chanType,
+                                     @ApiParam(value="频道下子页面.index:首页;") @RequestParam String page,
+                                     @ApiParam(value="广告所在区域:F2:工程商信息") @RequestParam String advArea)  {
+        Response response = new Response();
+        Map<String, Object> map = new HashMap<>();
+        map.put("chanType",chanType);
+        map.put("page",page);
+        map.put("advArea",advArea);
+        List<Map<String,String>> companyList = memberService.queryEngineerList(map);
+
+        response.setData(companyList);
+        return response;
+    }
+
 }

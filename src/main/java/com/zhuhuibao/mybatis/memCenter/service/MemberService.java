@@ -628,4 +628,17 @@ public class MemberService {
 			throw e;
 		}
 	}
+
+
+	public List<Map<String,String>> queryEngineerList(Map<String,Object> map){
+		try {
+			return memberMapper.queryEngineerList(map);
+		}
+		catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
 }
