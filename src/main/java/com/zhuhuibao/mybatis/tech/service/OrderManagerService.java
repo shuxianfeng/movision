@@ -358,7 +358,11 @@ public class OrderManagerService {
                 payinfoMap.put("tradeStatus", flow.getTradeStatus());
                 payinfoMap.put("tradeFee", flow.getTradeFee().toString());
                 SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                payinfoMap.put("tradeTime", sf.format(flow.getTradeTime()));
+                if(flow.getTradeTime() != null){
+                    payinfoMap.put("tradeTime", sf.format(flow.getTradeTime()));
+                }else{
+                    payinfoMap.put("tradeTime", "");
+                }
 
                 payinfoList.add(payinfoMap);
             }

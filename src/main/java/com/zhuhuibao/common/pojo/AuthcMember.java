@@ -15,9 +15,20 @@ public class AuthcMember {
     private String nickname;
     private String companyName;
 
+
     private int msgCount;
 
     private int vipLevel;
+
+    private String shopId;
+
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
+    }
 
     public Long getId() {
         return id;
