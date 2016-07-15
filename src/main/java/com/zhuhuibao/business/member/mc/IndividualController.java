@@ -89,7 +89,7 @@ public class IndividualController {
 
 
     @ApiOperation(value = "个人基本资料保存", notes = "个人基本资料保存", response = Response.class)
-    @RequestMapping(value = "upd_mem_basic_info", method = RequestMethod.POST)
+    @RequestMapping(value = "base/upd_mem_basic_info", method = RequestMethod.POST)
     public Response upd_mem_basic_info(@ModelAttribute Member member)  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
