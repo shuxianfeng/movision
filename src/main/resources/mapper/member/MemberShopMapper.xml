@@ -178,8 +178,8 @@
 
     <select id="queryShopBanner" resultType="java.util.Map">
         select
-        shopName,bannerUrl
+        shopName,bannerUrl,status
         from t_m_shop
-        where companyId = #{id} and status = 2
+        where companyId = #{id}
     </select>
 </mapper>
