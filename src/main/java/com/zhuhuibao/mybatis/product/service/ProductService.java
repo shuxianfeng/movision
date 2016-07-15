@@ -684,4 +684,20 @@ public class ProductService {
             throw e;
         }
     }
+
+    /**
+     *
+     * @param brandId
+     * @return
+     */
+    public List<String> findScateIdByBrandId(String brandId) {
+        List<String> list;
+        try{
+            list = productMapper.findScateByBrandId(brandId);
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new  BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
+        }
+        return list;
+    }
 }

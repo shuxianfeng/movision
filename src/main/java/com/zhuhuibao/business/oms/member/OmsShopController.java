@@ -63,15 +63,9 @@ public class OmsShopController {
                                @ApiParam("企业名称") @RequestParam(required = false) String companyName,
                                @ApiParam("店铺名称") @RequestParam(required = false) String shopName,
                                @ApiParam("审核状态") @RequestParam(required = false) String status,
-                               @RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) {
+                               @RequestParam(required = false,defaultValue = "1") String pageNo,
+                               @RequestParam(required = false,defaultValue = "10") String pageSize) {
         log.debug("搜索商铺...");
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-
 
         Map<String, String> paramMap = new HashMap<>();
 

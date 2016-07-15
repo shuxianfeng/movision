@@ -6,6 +6,7 @@ import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.mybatis.product.entity.ProductMap;
 import com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs;
 import com.zhuhuibao.mybatis.product.entity.ProductWithMember;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -61,4 +62,6 @@ public interface ProductMapper {
     List<Map<String,String>> findAllProductListByProductType(RowBounds rowBounds,Map<String,Object> queryMap);
 
     List<Map<String,String>> queryHotProduct(Map<String,Object> queryMap);
+
+    List<String> findScateByBrandId(@Param("brandId") String brandId);
 }

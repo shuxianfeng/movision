@@ -610,6 +610,7 @@ public class MemberService {
 					shop = new MemberShop();
 					shop.setCompanyId(Integer.valueOf(companyId));
 					shop.setCompanyName(member.getEnterpriseName() != null ?member.getEnterpriseName() : "");
+					shop.setShopName(member.getEnterpriseName() != null ?member.getEnterpriseName() : "");
 					shop.setCompanyAccount(member.getAccount());
 					shop.setUpdateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
 					shop.setStatus(MemberConstant.ShopStatus.YSH.toString());

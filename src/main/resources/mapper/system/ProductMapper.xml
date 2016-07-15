@@ -430,4 +430,7 @@
     and at.page = #{page}
     and at.advArea = #{advArea}
   </select>
+  <select id="findScateByBrandId" resultType="java.lang.String">
+      select DISTINCT scateid from t_p_product  p where brandid = #{brandId}
+  </select>
 </mapper>

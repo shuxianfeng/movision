@@ -9,8 +9,10 @@ import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
 import com.zhuhuibao.mybatis.product.entity.Product;
+import com.zhuhuibao.mybatis.product.service.ProductService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class BrandService {
 
     @Autowired
     private BrandMapper brandMapper;
+
+    @Autowired
+    ProductService productService;
 
     /**
      * 根据会员id，状态status(可以为空)查询品牌
@@ -264,12 +269,23 @@ public class BrandService {
 
 
     public List<Map<String,String>> queryRecommendBrand(Map<String,Object> map){
+        List<Map<String,String>>  list;
         try {
-            return brandMapper.queryRecommendBrand(map);
+            list =  brandMapper.queryRecommendBrand(map);
+            for(Map<String,String> item : list){
+                List<String> scateIds = productService.findScateIdByBrandId(item.get("id"));
+                if(scateIds.size() > 0){
+                    item.put("scateid", StringUtils.isEmpty(scateIds.get(0)) ? "" : scateIds.get(0));
+                }else{
+                    item.put("scateid","");
+                }
+
+            }
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();
             throw e;
         }
+        return list;
     }
 }
