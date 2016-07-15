@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -182,8 +183,7 @@ public class ZhbService {
 				// 筑慧币充值
 				if (amount.compareTo(BigDecimal.ZERO) > 0 && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
 					// 进行筑慧币充值
-					int prepaidResult = execPrepaid(order.getOrderNo(), order.getBuyerId(),order.getBuyerId(), amount, vipgoods.getPinyin(),
-							vipgoods.getId());
+					int prepaidResult = execPrepaid(order.getOrderNo(), order.getBuyerId(), order.getBuyerId(), amount, vipgoods.getPinyin(), vipgoods.getId());
 					if (0 == prepaidResult) {
 						throw new BusinessException(MsgCodeConstant.ZHB_AUTOPAYFOR_FAILED, "充值失败");
 					}
@@ -193,10 +193,18 @@ public class ZhbService {
 				if (null == vipMemberInfo) {
 					vipInfoService.insertVipMemberInfo(order.getBuyerId(), buyVipLevel, 1);
 				} else if (vipMemberInfo.getVipLevel() <= buyVipLevel) {
-					vipMemberInfo.setVipLevel(buyVipLevel);
 					Calendar cal = Calendar.getInstance();
-					cal.setTime(vipMemberInfo.getExpireTime());
+					//若原本是收费会员，则需要在原过期时间上增加1年
+					if (ArrayUtils.contains(VipConstant.CHARGE_VIP_LEVEL, String.valueOf(vipMemberInfo.getVipLevel()))) {
+						cal.setTime(vipMemberInfo.getExpireTime());
+					}
 					cal.add(Calendar.YEAR, 1);
+					cal.set(Calendar.HOUR_OF_DAY, 0);
+					cal.set(Calendar.MINUTE, 0);
+					cal.set(Calendar.SECOND, 0);
+					cal.add(Calendar.DATE, 1);
+					vipMemberInfo.setExpireTime(cal.getTime());
+					vipMemberInfo.setVipLevel(buyVipLevel);
 					vipInfoService.updateVipMemberInfo(vipMemberInfo);
 				}
 				result = 1;
