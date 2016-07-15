@@ -115,7 +115,7 @@ public class TechDataMcController {
             if (StringUtils.isEmpty(pageSize)) {
                 pageSize = "10";
             }
-            Paging<Map<String, Object>> pager = new Paging<Map<String, Object>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+            Paging<Map<String, Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
             List<Map<String, Object>> techList = downloadService.findAllDownloadData(pager, condition);
             pager.result(techList);
             response.setData(pager);

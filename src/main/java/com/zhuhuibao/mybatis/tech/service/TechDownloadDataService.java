@@ -58,7 +58,7 @@ public class TechDownloadDataService {
     public List<Map<String,Object>> findAllDownloadData(Paging<Map<String,Object>> pager,Map<String,String> map)
     {
         log.info("find all download data "+ StringUtils.mapToString(map));
-        List<Map<String,Object>> techList = null;
+        List<Map<String,Object>> techList;
         try{
             techList = dlMapper.findAllDownloadData(pager.getRowBounds(),map);
         }catch(Exception e)

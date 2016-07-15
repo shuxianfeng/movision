@@ -34,27 +34,26 @@ public class TechCoopMcController {
     TechCooperationService techService;
 
     @RequestMapping(value={"sel_tech_cooperation","cg/sel_tech_cooperation","xq/sel_tech_cooperation"}, method = RequestMethod.GET)
-    @ApiOperation(value="运营管理平台搜索技术合作(技术成果，技术需求)",notes = "运营管理平台技术合作(技术成果，技术需求)",response = Response.class)
+    @ApiOperation(value="搜索技术合作(技术成果，技术需求)",notes = "搜索技术合作(技术成果，技术需求)",response = Response.class)
     public Response findAllTechCooperationPager(@ApiParam(value = "标题") @RequestParam(required = false) String title,
                                                 @ApiParam(value = "类型：1成果，2需求") @RequestParam(required = false) String type,
                                                 @ApiParam(value = "状态") @RequestParam(required = false) String status,
-                                                @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-                                                @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
+                                                @ApiParam(value = "页码") @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                                @ApiParam(value = "每页显示的数目") @RequestParam(required = false,defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Map<String, Object> condition = new HashMap<String, Object>();
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
+        Map<String, Object> condition = new HashMap<>();
+        Long createID = ShiroUtil.getCreateID();
+        if(createID == null){
+            throw new AuthException(MsgCodeConstant.un_login,"请登录");
         }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        condition.put("createID",createID);
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         if (title != null && !"".equals(title)) {
             condition.put("title", title.replace("_", "\\_"));
         }
         condition.put("type", type);
         condition.put("status", status);
-        List<Map<String, String>> techList = techService.findAllOMSTechCooperationPager(pager, condition);
+        List<Map<String, String>> techList = techService.findAllTechCooperationPager(pager, condition);
         pager.result(techList);
         response.setData(pager);
         return response;
