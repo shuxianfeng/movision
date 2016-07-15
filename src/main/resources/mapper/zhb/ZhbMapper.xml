@@ -90,7 +90,7 @@
 	  <if test="recordType == 1">
 	  	and z.type = '1'
 	  </if>
-	  <if test="recordType == 1">
+	  <if test="recordType == 2">
 	  	and z.type in ('2','3')
 	  </if>
 	  order by z.add_time desc
