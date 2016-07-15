@@ -447,7 +447,7 @@ public class ZhbService {
 		try {
 			Map<String, Long> param = MapUtil.convert2HashMap("companyId", ShiroUtil.getCompanyID(), "operaterId", ShiroUtil.getCreateID(), "recordType",
 					recordType);
-			List<Map> recordList = zhbMapper.selectZhbRecordList(pager.getRowBounds(), param);
+			List<Map> recordList = zhbMapper.findAllZhbRecordList(pager.getRowBounds(), param);
 			if (CollectionUtils.isNotEmpty(recordList)) {
 				for (Map record : recordList) {
 					// 行为

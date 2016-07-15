@@ -39,7 +39,7 @@ public interface ZhbMapper {
 	 * @param param
 	 * @return
 	 */
-	List<Map> selectZhbRecordList(RowBounds rowBounds, Map<String, Long> param);
+	List<Map> findAllZhbRecordList(RowBounds rowBounds, Map<String, Long> param);
 
 	/**
 	 * 增加筑慧币流水记录

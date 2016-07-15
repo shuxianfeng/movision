@@ -179,7 +179,7 @@ public class ZhbController {
 		if (StringUtils.isEmpty(pageSize)) {
 			pageSize = "10";
 		}
-		Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+		Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 		List<Map<String, String>> zhbDetails = zhbService.getZhbDetails(pager, recordType);
 		pager.result(zhbDetails);
 		ZhbAccount account = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
