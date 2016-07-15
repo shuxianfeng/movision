@@ -182,7 +182,7 @@ public class ZhbService {
 				// 筑慧币充值
 				if (amount.compareTo(BigDecimal.ZERO) > 0 && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
 					// 进行筑慧币充值
-					int prepaidResult = execPrepaid(order.getOrderNo(), order.getBuyerId(), ShiroUtil.getCompanyID(), amount, vipgoods.getPinyin(),
+					int prepaidResult = execPrepaid(order.getOrderNo(), order.getBuyerId(),order.getBuyerId(), amount, vipgoods.getPinyin(),
 							vipgoods.getId());
 					if (0 == prepaidResult) {
 						throw new BusinessException(MsgCodeConstant.ZHB_AUTOPAYFOR_FAILED, "充值失败");
