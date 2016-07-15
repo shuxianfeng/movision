@@ -275,6 +275,7 @@
         and city = #{city}
       </if>
     </where>
+    order by t.updateTime desc
   </select>
 
   <select id="findAllPublishCoursePager" parameterType="java.util.Map" resultType="java.util.Map">
