@@ -53,7 +53,7 @@
 	order by add_time desc
  </select>
  
- <select id="selectZhbRecordList" parameterType="java.util.Map"  resultType="java.util.Map" >
+ <select id="findAllZhbRecordList" parameterType="java.util.Map"  resultType="java.util.Map" >
  	SELECT 
 	  z.id,
 	  z.order_no AS orderNo,
