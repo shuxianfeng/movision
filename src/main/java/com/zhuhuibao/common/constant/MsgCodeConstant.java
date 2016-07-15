@@ -186,7 +186,7 @@ public interface MsgCodeConstant {
 	/**
 	 * 已是专家
 	 */
-	int EXPERT_ISEXIST = 10204;
+	int EXPERT_ISEXIST = 10214;
 
 	/**
 	 * 扣款
