@@ -39,8 +39,8 @@ public class TechDownloadDataService {
         int result;
         try{
             TechDownLoadData dlData = new TechDownLoadData();
-            dlData.setCreateId(Long.parseLong(dataId));
-            dlData.setDataId(createId);
+            dlData.setCreateId(createId);
+            dlData.setDataId(Long.parseLong(dataId));
             result = dlMapper.insertSelective(dlData);
         }catch(Exception e)
         {
