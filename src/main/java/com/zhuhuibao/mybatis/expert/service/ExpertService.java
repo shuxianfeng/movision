@@ -706,6 +706,7 @@ public class ExpertService {
         Expert expert = this.queryExpertById(id);
         //返回到页面
         Map map = new HashMap();
+        map.put("createid", expert.getCreateId());
         map.put("id",expert.getId());
         map.put("name",expert.getName());
         map.put("company",expert.getCompany());
