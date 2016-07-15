@@ -16,6 +16,7 @@ import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -446,30 +447,29 @@ public class MemberService {
 			String address = "";
 			String employeeSizeName="";
 			String identifyName = "";
-			if(member.getEnterpriseType()!=null){
+			if(!StringUtils.isEmpty(member.getEnterpriseType())){
 				EnterpriseType enterpriseType = enterpriseTypeMapper.selectByPrimaryKey(member.getEnterpriseType());
 				enterpriseTypeName = enterpriseType.getName();
 			}
-			if(member.getProvince()!=null){
+			if(!StringUtils.isEmpty(member.getProvince())){
 				Province province = provinceMapper.getProInfo(member.getProvince());
 				provinceName = province.getName();
 			}
-			if(member.getCity()!=null){
+			if(!StringUtils.isEmpty(member.getCity())){
 				City city = cityMapper.getCityInfo(member.getCity());
 				cityName = city.getName();
 			}
-			if(member.getArea()!=null){
+			if(!StringUtils.isEmpty(member.getArea())){
 				Area area = areaMapper.getAreaInfo(member.getArea());
 				areaName = area.getName();
 			}
-			if(member.getEmployeeNumber()!=null){
+			if(!StringUtils.isEmpty(member.getEmployeeNumber())){
 				EmployeeSize employeeSize = employeeSizeMapper.selectByPrimaryKey(Integer.parseInt(member.getEmployeeNumber()));
 				employeeSizeName = employeeSize.getName();
 			}
-			if(member.getIdentify()!=null){
+			if(!StringUtils.isEmpty(member.getIdentify())){
 				String identifys[] = member.getIdentify().split(",");
-				for(int i=0;i<identifys.length;i++){
-					String identify = identifys[i];
+				for (String identify : identifys) {
 					Identity identityInfo = identityMapper.selectByPrimaryKey(Integer.parseInt(identify));
 					identifyName = identityInfo.getName() + "  " + identifyName;
 				}
@@ -483,7 +483,7 @@ public class MemberService {
 			List<CertificateRecord> certificateRecordList = certificateRecordMapper.certificateSearch(certificateRecord);
 			Map map = new HashMap();
 			String createTime = "";
-			if(member.getEnterpriseCreaterTime()!=null){
+			if(!StringUtils.isEmpty(member.getEnterpriseCreaterTime())){
 				createTime = member.getEnterpriseCreaterTime().substring(0,10);
 			}
 			map.put(Constants.companyName,member.getEnterpriseName());
