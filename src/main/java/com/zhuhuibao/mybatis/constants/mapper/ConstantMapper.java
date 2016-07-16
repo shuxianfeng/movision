@@ -19,7 +19,7 @@ public interface ConstantMapper {
 
     int updateByPrimaryKey(Constant record);
 
-    Map<String,String> selectByTypeCode(String type, String code);
+    Map<String,String> selectByTypeCode(@Param("type") String type, @Param("code") String code);
 
     List<Map<String,String>> selectByType(String type);
 
