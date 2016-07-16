@@ -113,12 +113,12 @@ public class AuthenticationController {
                 authcMember.setNickname(member.getNickname());
                 authcMember.setCompanyName(member.getCompanyName());
 
-                MemberShop shop = shopService.findByCompanyID(member.getCompanyId());
-                if(shop != null){
-                        authcMember.setShopId(String.valueOf(shop.getId()));
-                }else{
-                    authcMember.setShopId("");
-                }
+//                MemberShop shop = shopService.findByCompanyID(member.getCompanyId());
+//                if(shop != null){
+//                        authcMember.setShopId(String.valueOf(shop.getId()));
+//                }else{
+//                    authcMember.setShopId("");
+//                }
 
                 response.setMsgCode(1);
                 response.setMessage("welcome you!");
