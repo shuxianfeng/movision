@@ -74,4 +74,6 @@ public interface JobMapper {
     Map<String,Object> findJobByID(String id);
 
     List<Map<String,String>> queryPublishJobCity(Map<String,Object> map);
+
+    Map<String,Object> findJobByJobID(@Param("jobID") String jobID);
 }

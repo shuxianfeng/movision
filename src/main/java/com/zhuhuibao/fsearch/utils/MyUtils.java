@@ -15,9 +15,9 @@ public class MyUtils {
 		if (type == 0) {
 			return list == null ? new ArrayList<String>(0) : list;
 		} else if (type == 1) {
-			return Arrays.asList("upload/img/product.png");
+			return Arrays.asList("//image.zhuhui8.com/upload/default/product.jpg");
 		} else if (type == 2) {
-			return Arrays.asList("upload/img/userface.png");
+			return Arrays.asList("//image.zhuhui8.com/upload/default/userface.png");
 		} else {
 			return new ArrayList<String>(0);
 		}

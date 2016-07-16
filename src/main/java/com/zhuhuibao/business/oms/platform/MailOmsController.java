@@ -69,6 +69,7 @@ public class MailOmsController {
             MessageText messageText = new MessageText();
             messageText.setMessageText(content);
             messageText.setType(Integer.parseInt(type));
+            messageText.setSendID(createid);
             messageText.setTitle(title);
             Long messageID = siteMailService.addMsgText(messageText);
 

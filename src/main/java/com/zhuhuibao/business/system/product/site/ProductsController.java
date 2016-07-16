@@ -40,7 +40,7 @@ public class ProductsController {
 		}
 		Response response = new Response();
 		response.setCode(200);
-		Map<String, Object> ret = null;
+		Map<String, Object> ret;
 		try{
 			ret = productsService.search(spec);
 			response.setMsgCode(1);

@@ -3,7 +3,10 @@ package com.zhuhuibao.business.system.agent.mc;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.*;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.Agent;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
@@ -179,9 +182,15 @@ public class AgentController {
 
     @ApiOperation(value = "邀请代理商入驻",notes = "邀请代理商入驻", response = Response.class)
     @RequestMapping(value = {"/rest/agent/inviteAgent","/rest/system/mc/agent/invite_agent"}, method = RequestMethod.POST)
-    public Response inviteAgent(@RequestParam String email, @RequestParam String id) {
+    public Response inviteAgent(@RequestParam String email) {
         Response result = new Response();
-        Member member = memberService.findMemById(id);
+
+        Long createId = ShiroUtil.getCreateID();
+        if(createId == null){
+            throw new AuthException(MsgCodeConstant.un_login,"请登录");
+        }
+
+        Member member = memberService.findMemById(String.valueOf(createId));
         Member member1 = new Member();
         member1.setEmail(email);
         Member member2 = memberService.findMember(member1);

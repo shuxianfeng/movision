@@ -6,12 +6,14 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.constant.JobConstant;
+import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.PositionMapper;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -515,5 +517,40 @@ public class JobPositionService {
             log.error(e.getMessage());
             throw e;
         }
+    }
+
+    /**
+     * 查询职位信息
+     * @param jobID
+     * @return
+     */
+    public Map<String, Object> findJobByID(String jobID) {
+        Map<String,Object> map;
+        try{
+            map = jobMapper.findJobByJobID(jobID);
+            String welfare = (String) map.get("welfare");
+            String welfarename = "";
+            if(welfare != null){
+                 String[] welfares = welfare.split(",");
+                 StringBuilder sb = new StringBuilder();
+                 for(String wf : welfares){
+                     Map<String,Object> tmp = new HashMap<>();
+                     tmp.put("welfare",wf);
+                     tmp = ConvertUtil.execute(tmp, "welfare", "constantService", "findByTypeCode", new Object[]{"5",String.valueOf(tmp.get("welfare"))});
+                     String welfaceName = (String) tmp.get("welfareName");
+                     sb.append(welfaceName).append(",");
+                 }
+                welfarename = sb.toString();
+                welfarename = welfarename.substring(0,welfarename.length() -1);
+            }
+            map.put("welfare",welfarename);
+            map = ConvertUtil.execute(map, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(map.get("salary"))});
+            map.put("salary",map.get("salaryName"));
+
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
+        }
+        return map;
     }
 }

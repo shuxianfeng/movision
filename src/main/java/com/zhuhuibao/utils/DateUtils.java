@@ -51,6 +51,21 @@ public class DateUtils {
         }
     }
 
+
+    public static String str2DateFormat(String src,String pattern) {
+        if (src == null || "".equals(src)) {
+            return "";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        try {
+            long seconds;
+            seconds = Long.parseLong(src);
+            return sdf.format(new Date(seconds));
+        } catch (NumberFormatException e) {
+            return src;
+        }
+    }
+
     /**
      * 时间加减计算
      *
@@ -118,13 +133,15 @@ public class DateUtils {
 //        Date date1 = new Date();
 //        System.out.println(date1);
 //        System.out.println(date1.before(date));
-        String start = "2016-06-20 16:42:41";
-        String end = "2017-06-21 00:00:00";
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-        Date startTime = sf.parse(start);
-        Date endTime = sf.parse(end);
-        long days = dayDiff(startTime, endTime);
-        System.out.println(days);
+//        String start = "2016-06-20 16:42:41";
+//        String end = "2017-06-21 00:00:00";
+//        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+//        Date startTime = sf.parse(start);
+//        Date endTime = sf.parse(end);
+//        long days = dayDiff(startTime, endTime);
+//        System.out.println(days);
+        String s = DateUtils.str2DateFormat("1468466182000","yyyy-MM-dd");
+        System.out.println(s);
     }
 
 
