@@ -529,7 +529,9 @@ public class MemberRegService {
 				member.setMobile(memberAccount);
 			}
 			loginMember = memberRegMapper.getLoginMemberByAccount(member);
-			if (null != loginMember && VipConstant.VipLevel.PERSON_FREE.value == loginMember.getVipLevel()
+			if (null != loginMember && loginMember.getParentVipLevel() > loginMember.getVipLevel()) {
+				loginMember.setVipLevel(loginMember.getParentVipLevel());
+			} else if (null != loginMember && VipConstant.VipLevel.PERSON_FREE.value == loginMember.getVipLevel()
 					&& !MemberConstant.MemberIdentify.GR.toString().equals(loginMember.getIdentify())) {
 				loginMember.setVipLevel(VipConstant.VipLevel.ENTERPRISE_FREE.value);
 			}
