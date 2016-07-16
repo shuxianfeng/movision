@@ -266,7 +266,7 @@ public class JobSiteController {
 //        return response;
 //    }
     @RequestMapping(value = "sel_hot_position", method = RequestMethod.GET)
-    @ApiOperation(value = "人才网首页热门招聘 默认9个", notes = "人才网首页热门招聘 默认9个", response = Response.class)
+    @ApiOperation(value = "人才网首页热门招聘 默认7个", notes = "人才网首页热门招聘 默认7个", response = Response.class)
     public Response queryHotPosition(@ApiParam(value = "频道类型 6：人才") @RequestParam String chanType,
                                      @ApiParam(value = "频道下子页面.index:首页") @RequestParam String page,
                                      @ApiParam(value = "广告所在区域:F1") @RequestParam String advArea) {
@@ -278,6 +278,15 @@ public class JobSiteController {
             String jobID = item.getConnectedId();
             Map<String, Object> map = job.findJobByID(jobID);
             map.put("logo",item.getImgUrl());
+            String publishTime = (String) map.get("publishTime");
+            String updateTime = (String) map.get("updateTime");
+            if(!StringUtils.isEmpty(publishTime)) {
+                map.put("publishTime",DateUtils.str2DateFormat(publishTime,"yyyy-MM-dd"));
+            }
+            if(!StringUtils.isEmpty(updateTime)) {
+                map.put("updateTime",DateUtils.str2DateFormat(updateTime,"yyyy-MM-dd"));
+            }
+
             list.add(map);
         }
         return new Response(list);
