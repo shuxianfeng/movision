@@ -278,15 +278,6 @@ public class JobSiteController {
             String jobID = item.getConnectedId();
             Map<String, Object> map = job.findJobByID(jobID);
             map.put("logo",item.getImgUrl());
-            String publishTime = (String) map.get("publishTime");
-            String updateTime = (String) map.get("updateTime");
-            if(!StringUtils.isEmpty(publishTime)) {
-                map.put("publishTime",DateUtils.str2DateFormat(publishTime,"yyyy-MM-dd"));
-            }
-            if(!StringUtils.isEmpty(updateTime)) {
-                map.put("updateTime",DateUtils.str2DateFormat(updateTime,"yyyy-MM-dd"));
-            }
-
             list.add(map);
         }
         return new Response(list);
