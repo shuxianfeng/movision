@@ -386,7 +386,7 @@ public class TechDataService {
             nMap.put("recID", String.valueOf(createId));
             nMap.put("status", MessageLogConstant.NEWS_STATUS_ONE);
             int count = siteMailService.selUnreadNewsCount(nMap);
-            nMap.put("msgCount",count);
+            techMap.put("msgCount",String.valueOf(count));
 
         } catch (Exception e) {
             log.error("find tech site info error1!", e);
