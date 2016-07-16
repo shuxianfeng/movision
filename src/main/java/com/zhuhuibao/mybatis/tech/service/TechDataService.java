@@ -3,6 +3,7 @@ package com.zhuhuibao.mybatis.tech.service;/**
  * @version 2016/5/31 0031
  */
 
+import com.zhuhuibao.common.constant.MessageLogConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.mybatis.tech.entity.TechCategoryBean;
@@ -381,6 +382,12 @@ public class TechDataService {
         Map<String, String> techMap;
         try {
             techMap = techDataMapper.findTechSiteInfo(createId);
+            Map<String, Object> nMap = new HashMap<>();
+            nMap.put("recID", String.valueOf(createId));
+            nMap.put("status", MessageLogConstant.NEWS_STATUS_ONE);
+            int count = siteMailService.selUnreadNewsCount(nMap);
+            nMap.put("msgCount",count);
+
         } catch (Exception e) {
             log.error("find tech site info error1!", e);
             throw e;
