@@ -16,6 +16,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
+
 /**
  * 数据字典业务处理
  *
@@ -70,6 +72,20 @@ public class DictionaryService {
         try {
 
             city = cityMapper.getCityInfo(cityCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("t_dictionary_city select error : " + e.getMessage());
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
+        }
+        return city;
+    }
+
+    @Cacheable(value = "mapcityCode", key = "'map_'+#cityCode")
+    public Map<String,String> findCityByCode(String cityCode) {
+        Map<String,String>  city;
+        try {
+
+            city = cityMapper.findCityByCode(cityCode);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("t_dictionary_city select error : " + e.getMessage());

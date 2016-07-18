@@ -352,7 +352,7 @@
     <select id="findJobByJobID" resultType="java.util.Map">
       select j.id,j.createID as createid,m.`enterpriseName` as companyName,
      DATE_FORMAT( j.publishTime,'%Y-%m-%d') as  publishTime, DATE_FORMAT(j.updateTime,'%Y-%m-%d') as updateTime,
-      j.name,j.positionType,j.welfare,j.salary
+      j.name,j.positionType,j.welfare,j.salary,j.city
       from `t_i_job` j,t_m_member m where j.createID = m.id     and j.id = #{jobID}
   </select>
 </mapper>

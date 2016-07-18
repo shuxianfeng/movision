@@ -205,17 +205,12 @@ public class JobSiteController {
                                      @ApiParam(value = "发布时间") @RequestParam(required = false) String days,
                                      @ApiParam(value = "薪资") @RequestParam(required = false) String salary,
                                      @ApiParam(value = "职位类别") @RequestParam(required = false) String positionType,
-                                     @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-                                     @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) throws IOException {
+                                     @ApiParam(value = "页码") @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                     @ApiParam(value = "每页显示的数目") @RequestParam(required = false,defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
         log.info("query position info by id");
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Map<String, Object> map = new HashMap<String, Object>();
+
+        Map<String, Object> map = new HashMap<>();
         if (name != null && !"".equals(name)) {
             map.put("name", name.replace("_", "\\_"));
         }
@@ -252,19 +247,6 @@ public class JobSiteController {
         return response;
     }
 
-    //        @RequestMapping(value = "sel_hot_position", method = RequestMethod.GET)
-//    @ApiOperation(value = "人才网首页热门招聘 默认9个",notes = "人才网首页热门招聘 默认9个",response = Response.class)
-//    public Response queryHotPosition() throws Exception {
-//        Map<String,Object> condition = new HashMap<String,Object>();
-//        condition.put("count",JobConstant.JOB_HOTPOSITION_COUNT_NINE);
-//        condition.put("delete",JobConstant.JOB_DELETE_ZERO);
-//        condition.put("salary",JobConstant.JOB_TYPE_SALARY);
-//        condition.put("status",JobConstant.JOB_MEMBER_STATUS_LOGOUT);
-//        List jobList = job.queryHotPosition(condition);
-//        Response response = new Response();
-//        response.setData(jobList);
-//        return response;
-//    }
     @RequestMapping(value = "sel_hot_position", method = RequestMethod.GET)
     @ApiOperation(value = "人才网首页热门招聘 默认7个", notes = "人才网首页热门招聘 默认7个", response = Response.class)
     public Response queryHotPosition(@ApiParam(value = "频道类型 6：人才") @RequestParam String chanType,

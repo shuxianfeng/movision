@@ -544,8 +544,19 @@ public class JobPositionService {
                 welfarename = welfarename.substring(0,welfarename.length() -1);
             }
             map.put("welfare",welfarename);
+
             map = ConvertUtil.execute(map, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(map.get("salary"))});
             map.put("salary",map.get("salaryName"));
+
+            String cityCode = (String) map.get("city");
+            if(cityCode != null){
+                map = ConvertUtil.execute(map,"city","dictionaryService","findCityByCode",new Object[]{cityCode});
+                map.put("city",map.get("cityName"));
+
+            }else{
+                map.put("city","");
+            }
+
 
         }catch (Exception e){
             e.printStackTrace();

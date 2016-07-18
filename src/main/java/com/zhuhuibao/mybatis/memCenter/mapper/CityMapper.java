@@ -2,8 +2,10 @@ package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.City;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CityMapper {
     int deleteByPrimaryKey(Integer id);
@@ -21,4 +23,6 @@ public interface CityMapper {
     List<ResultBean> findCity(String provincecode);
 
     City getCityInfo(String code);
+
+    Map<String,String> findCityByCode(@Param("cityCode") String cityCode);
 }
