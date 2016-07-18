@@ -44,7 +44,7 @@ public interface JobMapper {
 
     Map<String,Object> queryPositionInfoByID(Map<String,Object> map);
 
-    List<Job> findAllOtherPosition(RowBounds rowBounds,Map<String,Object> map);
+    List<Map<String,Object>> findAllOtherPosition(RowBounds rowBounds,Map<String,Object> map);
 
     List<Job> findAllMyApplyPosition(RowBounds rowBounds,@Param("id") String id);
 

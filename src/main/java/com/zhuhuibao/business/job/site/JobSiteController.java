@@ -5,6 +5,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.JobConstant;
+import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
 import com.zhuhuibao.mybatis.advertising.service.SysAdvertisingService;
@@ -157,12 +158,12 @@ public class JobSiteController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String,Object>> pager = new Paging<Map<String,Object>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("createID", createID);
         map.put("jobID", jobID);
         Response response = new Response();
-        List<Job> jobList = job.findAllOtherPosition(pager, map);
+        List<Map<String,Object>> jobList = job.findAllOtherPosition(pager, map);
         pager.result(jobList);
         response.setData(pager);
         return response;
@@ -182,13 +183,13 @@ public class JobSiteController {
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String,Object>> pager = new Paging<Map<String,Object>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("createID", enterpriseID);
         map.put("city", city);
         map.put("name", name);
         Response response = new Response();
-        List<Job> jobList = job.findAllOtherPosition(pager, map);
+        List<Map<String,Object>> jobList = job.findAllOtherPosition(pager, map);
         pager.result(jobList);
         response.setData(pager);
         return response;
@@ -225,8 +226,8 @@ public class JobSiteController {
             map.put("publishTime", publishTime);
         }
         map.put("salary", salary);
-        Paging<Job> pager = new Paging<Job>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Job> jobList = job.findAllOtherPosition(pager, map);
+        Paging<Map<String,Object>> pager = new Paging<Map<String,Object>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Map<String,Object>> jobList = job.findAllOtherPosition(pager, map);
         pager.result(jobList);
         response.setData(pager);
         return response;

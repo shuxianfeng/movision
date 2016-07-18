@@ -278,19 +278,67 @@ public class JobPositionService {
      * @param map 查询条件
      * @return
      */
-    public List<Job> findAllOtherPosition(Paging<Job> pager,Map<String,Object> map)
+    public List<Map<String,Object>> findAllOtherPosition(Paging<Map<String,Object>> pager,Map<String,Object> map)
     {
-        List<Job> jobList = new ArrayList<Job>();
+        List<Map<String,Object>> list = new ArrayList<>();
         try
         {
-            jobList = jobMapper.findAllOtherPosition(pager.getRowBounds(),map);
+            List<Map<String,Object>> jobList = jobMapper.findAllOtherPosition(pager.getRowBounds(),map);
+            for (Map<String,Object> job : jobList) {
+                Map<String,Object> result = new HashMap<>();
+                String welfare = (String) job.get("welfare");
+                String welfarename = "";
+                if(!StringUtils.isEmpty(welfare)){
+                    String[] welfares = welfare.split(",");
+                    StringBuilder sb = new StringBuilder();
+                    for(String wf : welfares){
+                        Map<String,Object> tmp = new HashMap<>();
+                        tmp.put("welfare",wf);
+                        tmp = ConvertUtil.execute(tmp, "welfare", "constantService", "findByTypeCode", new Object[]{"5",String.valueOf(tmp.get("welfare"))});
+                        String welfaceName = (String) tmp.get("welfareName");
+                        sb.append(welfaceName).append(",");
+                    }
+                    welfarename = sb.toString();
+                    welfarename = welfarename.substring(0,welfarename.length() -1);
+                }
+                result.put("welfare",welfarename);
+
+                job = ConvertUtil.execute(job, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(job.get("salary"))});
+                result.put("salaryName",job.get("salaryName"));
+
+                String cityCode = (String) job.get("city");
+                if(!StringUtils.isEmpty(cityCode)){
+                    job = ConvertUtil.execute(job,"city","dictionaryService","findCityByCode",new Object[]{cityCode});
+                    result.put("workArea",job.get("cityName"));
+                }else{
+                    String provinceCode = (String) job.get("province");
+                    if(!StringUtils.isEmpty(provinceCode)){
+                        job = ConvertUtil.execute(job,"province","dictionaryService","findProvinceByCode",new Object[]{provinceCode});
+                        result.put("workArea",job.get("provinceName"));
+                    }else {
+                        result.put("workArea","");
+                    }
+                }
+
+                job = ConvertUtil.execute(job, "education", "constantService", "findByTypeCode", new Object[]{"2", String.valueOf(job.get("education"))});
+                result.put("educationName",job.get("educationName"));
+                job = ConvertUtil.execute(job, "experience", "constantService", "findByTypeCode", new Object[]{"3", String.valueOf(job.get("experience"))});
+                result.put("experienceName",job.get("experienceName"));
+                result.put("id",job.get("id"));
+                result.put("createid",job.get("createid"));
+                result.put("name",job.get("name"));
+                result.put("positionType",job.get("positionType"));
+                result.put("publishTime",job.get("publishTime"));
+                result.put("updateTime",job.get("updateTime"));
+                result.put("enterpriseName",job.get("enterpriseName"));
+                list.add(result);
+            }
         }
         catch(Exception e)
         {
-            log.error("add offer price error!",e);
-
+            log.error("error!",e);
         }
-        return jobList;
+        return list;
     }
 
     /**
@@ -530,7 +578,7 @@ public class JobPositionService {
             map = jobMapper.findJobByJobID(jobID);
             String welfare = (String) map.get("welfare");
             String welfarename = "";
-            if(welfare != null){
+            if(!StringUtils.isEmpty(welfare)){
                  String[] welfares = welfare.split(",");
                  StringBuilder sb = new StringBuilder();
                  for(String wf : welfares){
@@ -549,7 +597,7 @@ public class JobPositionService {
             map.put("salary",map.get("salaryName"));
 
             String cityCode = (String) map.get("city");
-            if(cityCode != null){
+            if(!StringUtils.isEmpty(cityCode)){
                 map = ConvertUtil.execute(map,"city","dictionaryService","findCityByCode",new Object[]{cityCode});
                 map.put("city",map.get("cityName"));
 

@@ -109,4 +109,18 @@ public class DictionaryService {
         return area;
     }
 
+
+    @Cacheable(value = "mapProvinceCode", key = "#provinceCode")
+    public Map<String,String> findProvinceByCode(String provinceCode) {
+        Map<String,String> province;
+        try {
+            province = provinceMapper.findProInfo(provinceCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("t_dictionary_province select error : " + e.getMessage());
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
+        }
+        return province;
+    }
+
 }

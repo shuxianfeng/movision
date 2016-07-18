@@ -5,6 +5,7 @@ import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Province;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProvinceMapper {
     List<ResultBean> findProvince();
@@ -12,4 +13,6 @@ public interface ProvinceMapper {
     List<CommonBean> searchProvinceByPinYin();
 
     Province getProInfo(String code);
+
+    Map<String,String> findProInfo(String provinceCode);
 }
