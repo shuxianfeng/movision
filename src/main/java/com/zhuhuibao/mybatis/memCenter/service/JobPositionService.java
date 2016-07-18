@@ -579,7 +579,7 @@ public class JobPositionService {
             list = jobMapper.findNewPositions(count);
 
             for (Map<String, Object> map : list) {
-                String createID = (String) map.get("createID");
+                String createID = String.valueOf(map.get("createID")) ;
                 if (!StringUtils.isEmpty(createID)) {
                     Member member = memberMapper.findMemById(createID);
                     if (member != null) {
@@ -591,7 +591,7 @@ public class JobPositionService {
                 } else {
                     map.put("enterpriseName", "");
                 }
-                String salary = (String) map.get("salary");
+                String salary = String.valueOf( map.get("salary"));
                 if(!StringUtils.isEmpty(salary)){
                     map = ConvertUtil.execute(map, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(map.get("salary"))});
                 } else{
@@ -601,7 +601,7 @@ public class JobPositionService {
                 String welfarename = "";
                 genWelfaceName(map, welfare, welfarename);
 
-                String cityCode = (String) map.get("city");
+                String cityCode = String.valueOf( map.get("city"));
                 if(!StringUtils.isEmpty(cityCode)){
                     map = ConvertUtil.execute(map, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
                     map.put("city", map.get("cityName"));
