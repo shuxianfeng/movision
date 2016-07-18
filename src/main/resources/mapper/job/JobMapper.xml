@@ -347,7 +347,7 @@
       from `t_i_job` j,t_m_member m where j.createID = m.id     and j.id = #{jobID}
   </select>
     <select id="findNewPositions" resultType="java.util.Map">
-        select id, DATE_FORMAT( publishTime,'%Y-%m-%d') as  publishTime,name,city,salary,createID,positionType,welfare from t_i_job
+        select id, DATE_FORMAT( publishTime,'%Y-%m-%d') as  publishTime,name,city,province,salary,createID,positionType,welfare from t_i_job
         where is_deleted = 0
         order by updateTime desc limit 0,#{count}
     </select>
