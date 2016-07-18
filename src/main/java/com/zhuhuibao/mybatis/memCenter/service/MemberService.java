@@ -465,7 +465,11 @@ public class MemberService {
 			}
 			if(!StringUtils.isEmpty(member.getEmployeeNumber())){
 				EmployeeSize employeeSize = employeeSizeMapper.selectByPrimaryKey(Integer.parseInt(member.getEmployeeNumber()));
-				employeeSizeName = employeeSize.getName();
+				if(employeeSize==null){
+					employeeSizeName = member.getEmployeeNumber();
+				}else {
+					employeeSizeName = employeeSize.getName();
+				}
 			}
 			if(!StringUtils.isEmpty(member.getIdentify())){
 				String identifys[] = member.getIdentify().split(",");
