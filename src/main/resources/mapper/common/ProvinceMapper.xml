@@ -40,4 +40,11 @@
     from t_dictionary_province
     where code = #{code}
   </select>
+
+  <select id="findProInfo" resultType="java.util.Map">
+    select
+    id,code,name
+    from t_dictionary_province
+    where code = #{code}
+  </select>
 </mapper>
