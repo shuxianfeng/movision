@@ -609,7 +609,7 @@ public class JobPositionService {
                     String provinceCode = String.valueOf(map.get("province"));
                     if(!StringUtils.isEmpty(provinceCode)){
                         map = ConvertUtil.execute(map, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
-                        map.put("city", map.get("cityName"));
+                        map.put("city", map.get("provinceName"));
                     }else{
                         map.put("city","");
                     }
