@@ -117,10 +117,8 @@ public class ProjectController {
 	@RequestMapping(value = {"previewUnLoginProject","site/base/sel_unLoginProject"},method = RequestMethod.GET)
 	@ApiOperation(value="预览未登陆的项目信息",notes = "根据Id查看未登陆的项目信息",response = Response.class)
 	public Response previewUnLoginProject(@ApiParam(value = "项目信息ID") @RequestParam Long porjectID) throws Exception {
-		Response response = new Response();
 		Map<String,Object> map  = projectService.previewUnLoginProject(porjectID);
-		response.setData(map);
-		return response;
+		return new Response(map);
 	}
 
 

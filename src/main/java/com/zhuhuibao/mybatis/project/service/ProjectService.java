@@ -100,7 +100,7 @@ public class ProjectService {
      * @return 项目信息
      */
     public Map<String, Object> queryProjectDetail(Long projectID) throws Exception {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         log.info("query project detail info projectId = " + projectID);
         try {
             ProjectInfo projectInfo = queryProjectInfoByID(projectID);
@@ -110,19 +110,17 @@ public class ProjectService {
             List<ProjectLinkman> linkmanList = linkmanService.queryProjectLinkmanByProjectID(projectID);
             if (!linkmanList.isEmpty()) {
                 //甲方信息
-                Map<String, List<ProjectLinkman>> partyAMap = new HashMap<String, List<ProjectLinkman>>();
-                List<ProjectLinkman> partyAList = new ArrayList<ProjectLinkman>();
+                List<ProjectLinkman> partyAList = new ArrayList<>();
                 //乙方中的设计师信息
-                List<ProjectLinkman> partyBDesignList = new ArrayList<ProjectLinkman>();
+                List<ProjectLinkman> partyBDesignList = new ArrayList<>();
                 //乙方中的工程商信息
-                List<ProjectLinkman> partyBFirstList = new ArrayList<ProjectLinkman>();
+                List<ProjectLinkman> partyBFirstList = new ArrayList<>();
                 //乙方中的工程商信息
-                List<ProjectLinkman> partyBWorkList = new ArrayList<ProjectLinkman>();
+                List<ProjectLinkman> partyBWorkList = new ArrayList<>();
                 //乙方中的分包商信息
-                List<ProjectLinkman> partyBSecondList = new ArrayList<ProjectLinkman>();
+                List<ProjectLinkman> partyBSecondList = new ArrayList<>();
                 int size = linkmanList.size();
-                for (int i = 0; i < size; i++) {
-                    ProjectLinkman linkman = linkmanList.get(i);
+                for (ProjectLinkman linkman : linkmanList) {
                     //甲方信息
                     if (linkman.getPartyType() == 1) {
                         partyAList.add(linkman);
@@ -167,7 +165,7 @@ public class ProjectService {
      * @return 项目信息
      */
     public Map<String, Object> queryOmsProjectDetail(Long projectID) throws Exception {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         log.info("query project detail info projectId = " + projectID);
         try {
             ProjectInfo projectInfo = queryOmsProjectInfoByID(projectID);
@@ -177,19 +175,16 @@ public class ProjectService {
             List<ProjectLinkman> linkmanList = linkmanService.queryProjectLinkmanByProjectID(projectID);
             if (!linkmanList.isEmpty()) {
                 //甲方信息
-                Map<String, List<ProjectLinkman>> partyAMap = new HashMap<String, List<ProjectLinkman>>();
-                List<ProjectLinkman> partyAList = new ArrayList<ProjectLinkman>();
+                List<ProjectLinkman> partyAList = new ArrayList<>();
                 //乙方中的设计师信息
-                List<ProjectLinkman> partyBDesignList = new ArrayList<ProjectLinkman>();
+                List<ProjectLinkman> partyBDesignList = new ArrayList<>();
                 //乙方中的工程商信息
-                List<ProjectLinkman> partyBFirstList = new ArrayList<ProjectLinkman>();
+                List<ProjectLinkman> partyBFirstList = new ArrayList<>();
                 //乙方中的工程商信息
-                List<ProjectLinkman> partyBWorkList = new ArrayList<ProjectLinkman>();
+                List<ProjectLinkman> partyBWorkList = new ArrayList<>();
                 //乙方中的分包商信息
-                List<ProjectLinkman> partyBSecondList = new ArrayList<ProjectLinkman>();
-                int size = linkmanList.size();
-                for (int i = 0; i < size; i++) {
-                    ProjectLinkman linkman = linkmanList.get(i);
+                List<ProjectLinkman> partyBSecondList = new ArrayList<>();
+                for (ProjectLinkman linkman : linkmanList) {
                     //甲方信息
                     if (linkman.getPartyType() == 1) {
                         partyAList.add(linkman);
@@ -234,25 +229,26 @@ public class ProjectService {
      * @return 项目信息
      */
     public Map<String, Object> previewUnLoginProject(Long projectID) throws Exception {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         log.info("query project detail info projectId = " + projectID);
         try {
             ProjectInfo projectInfo = queryProjectInfoByID(projectID);
+            projectInfo.setAddress(ProjectConstant.HiddenStar.TEN.toString());
             //项目信息
             map.put("project", projectInfo);
             //根据项目ID查询联系人信息
             List<ProjectLinkman> linkmanList = linkmanService.queryProjectLinkmanByProjectID(projectID);
             if (!linkmanList.isEmpty()) {
                 //甲方信息
-                List<ProjectLinkman> partyAList = new ArrayList<ProjectLinkman>();
+                List<ProjectLinkman> partyAList = new ArrayList<>();
                 //乙方中的设计师信息
-                List<ProjectLinkman> partyBDesignList = new ArrayList<ProjectLinkman>();
+                List<ProjectLinkman> partyBDesignList = new ArrayList<>();
                 //乙方中的工程商信息
-                List<ProjectLinkman> partyBFirstList = new ArrayList<ProjectLinkman>();
+                List<ProjectLinkman> partyBFirstList = new ArrayList<>();
                 //乙方中的工程商信息
-                List<ProjectLinkman> partyBWorkList = new ArrayList<ProjectLinkman>();
+                List<ProjectLinkman> partyBWorkList = new ArrayList<>();
                 //乙方中的分包商信息
-                List<ProjectLinkman> partyBSecondList = new ArrayList<ProjectLinkman>();
+                List<ProjectLinkman> partyBSecondList = new ArrayList<>();
                 for (ProjectLinkman linkman : linkmanList) {
                     //甲方信息
                     if (linkman.getPartyType() == 1) {
@@ -315,22 +311,36 @@ public class ProjectService {
         String mobile = linkman.getMobile();
         if (!StringUtils.isEmpty(mobile)) {
             sb = new StringBuilder(mobile);
-            sb.replace(sb.length() - 4, sb.length(), ProjectConstant.HiddenStar.FOUR.toString());
-            linkman.setMobile(sb.toString());
+            sb.replace(4, sb.length(), ProjectConstant.HiddenStar.FOUR.toString());
+            if(mobile.length() >= 4){
+                  linkman.setMobile(sb.toString());
+            }else{
+                 linkman.setMobile(ProjectConstant.HiddenStar.TEN.toString());
+            }
         }
         //座机
         String tel = linkman.getTelephone();
-        if (!StringUtils.isEmpty(tel) && tel.length() > 5) {
-            sb = new StringBuilder(tel);
-            sb.replace(sb.length() - 4, sb.length(), ProjectConstant.HiddenStar.FOUR.toString());
-            linkman.setTelephone(sb.toString());
+        if (!StringUtils.isEmpty(tel)) {
+            if(tel.length() >= 4) {
+                sb = new StringBuilder(tel);
+                sb.replace(4, sb.length(), ProjectConstant.HiddenStar.FOUR.toString());
+                linkman.setTelephone(sb.toString());
+            } else{
+                  linkman.setTelephone( ProjectConstant.HiddenStar.TEN.toString());
+            }
+
         }
         //传真
         String fax = linkman.getFax();
         if (!StringUtils.isEmpty(fax)) {
-            sb = new StringBuilder(fax);
-            sb.replace(sb.length() - 4, sb.length(), ProjectConstant.HiddenStar.FOUR.toString());
-            linkman.setFax(sb.toString());
+            if(fax.length() >=4 ) {
+                sb = new StringBuilder(fax);
+                sb.replace(4, sb.length(), ProjectConstant.HiddenStar.FOUR.toString());
+                linkman.setFax(sb.toString());
+            } else{
+                linkman.setFax( ProjectConstant.HiddenStar.TEN.toString());
+            }
+
         }
     }
 
@@ -558,8 +568,9 @@ public class ProjectService {
 
     /**
      * 条件 分页查询项目信息
-     * @param map       conditions
-     * @param pager     pager
+     *
+     * @param map   conditions
+     * @param pager pager
      * @return
      */
     public List<Map<String, String>> findAllProject(Map<String, Object> map, Paging<Map<String, String>> pager) {
@@ -578,6 +589,7 @@ public class ProjectService {
 
     /**
      * 项目信息记录解析组装
+     *
      * @param records
      * @return
      */
@@ -601,35 +613,35 @@ public class ProjectService {
             String areaCode = map.get("area");
             String address;
 
-            if(!StringUtils.isEmpty(provinceCode)){
+            if (!StringUtils.isEmpty(provinceCode)) {
                 Province province = dictionaryService.selectProvinceByCode(provinceCode);
                 String provinceName = StringUtils.isEmpty(province.getName()) ? "" : province.getName();
 
                 String cityName = "";
-                if(!StringUtils.isEmpty(cityCode)){
+                if (!StringUtils.isEmpty(cityCode)) {
                     City city = dictionaryService.selectCityByCode(cityCode);
                     cityName = city.getName();
                 }
-                result.put("city",cityName);
+                result.put("city", cityName);
 
                 String areaName = "";
-                if(!StringUtils.isEmpty(areaCode)){
+                if (!StringUtils.isEmpty(areaCode)) {
                     Area area = dictionaryService.selectAreaByCode(areaCode);
                     areaName = area.getName();
                 }
                 String addressO = StringUtils.isEmpty(map.get("address")) ? "" : map.get("address");
                 address = provinceName + cityName + areaName + addressO;
-                result.put("address",address);
-            }else{
-                result.put("address",map.get("address"));
+                result.put("address", address);
+            } else {
+                result.put("address", map.get("address"));
             }
 
             String category = map.get("category");
-            if(!StringUtils.isEmpty(category)){
+            if (!StringUtils.isEmpty(category)) {
                 String categoryName = constantService.selectNameByJoinCode(category, Constants.ConstantType.XMXXLB.toString());
-                result.put("categoryName",categoryName);
-            } else{
-                result.put("categoryName","");
+                result.put("categoryName", categoryName);
+            } else {
+                result.put("categoryName", "");
             }
 
             projectList.add(result);
