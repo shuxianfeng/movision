@@ -564,4 +564,15 @@ public class JobPositionService {
         }
         return map;
     }
+
+    public List<Map<String, Object>> findNewPositions(int count) {
+        List<Map<String,Object>> list;
+        try{
+               list = jobMapper.findNewPositions(count);
+        } catch (Exception e){
+                e.printStackTrace();
+                throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
+        }
+        return list;
+    }
 }

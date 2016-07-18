@@ -76,4 +76,6 @@ public interface JobMapper {
     List<Map<String,String>> queryPublishJobCity(Map<String,Object> map);
 
     Map<String,Object> findJobByJobID(@Param("jobID") String jobID);
+
+    List<Map<String,Object>> findNewPositions(@Param("count") int count);
 }

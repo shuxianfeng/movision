@@ -6,6 +6,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.expo.service.ExpoService;
+import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.project.service.ProjectService;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +43,9 @@ public class NewController {
 
     @Autowired
     private ChannelNewsService channelNewsService;
+
+    @Autowired
+    private JobPositionService jobService;
 
     @ApiOperation(value = "首页威客信息（三个列表集合）", notes = "首页威客信息（三个列表集合）", response = Response.class)
     @RequestMapping(value = "sel_three_serviceList", method = RequestMethod.GET)
@@ -133,5 +138,13 @@ public class NewController {
 
         response.setData(map);
         return response;
+    }
+
+    @ApiOperation(value = "查询最新招聘职位", notes = "查询最新招聘职位", response = Response.class)
+    @RequestMapping(value = "sel_latest_position", method = RequestMethod.GET)
+    public Response searchNewPosition() throws IOException {
+
+        List<Map<String,Object>> list = jobService.findNewPositions(6);
+        return new Response(list);
     }
 }
