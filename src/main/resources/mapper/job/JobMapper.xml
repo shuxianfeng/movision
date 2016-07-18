@@ -355,4 +355,14 @@
       j.name,j.positionType,j.welfare,j.salary,j.city
       from `t_i_job` j,t_m_member m where j.createID = m.id     and j.id = #{jobID}
   </select>
+    <select id="findNewPositions" resultType="java.util.Map">
+        select j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,j.createid,j.positionType,
+        (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
+        from t_i_job j
+        left join t_dictionary_city c on c.code = j.city
+        left join t_dictionary_constant co on co.code = j.salary
+        left join t_m_member m on m.id = j.createid
+        where co.type = 1 and j.is_deleted = 0
+        order by updateTime desc limit 0,#{count}
+    </select>
 </mapper>
