@@ -95,4 +95,7 @@
     from t_dictionary_city
     where code = #{code}
   </select>
+  <select id="findCityByCode" resultType="java.util.Map">
+    select code ,name from t_dictionary_city where code = #{cityCode}
+  </select>
 </mapper>

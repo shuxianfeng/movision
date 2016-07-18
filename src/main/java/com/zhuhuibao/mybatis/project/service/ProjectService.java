@@ -253,7 +253,6 @@ public class ProjectService {
                 List<ProjectLinkman> partyBWorkList = new ArrayList<ProjectLinkman>();
                 //乙方中的分包商信息
                 List<ProjectLinkman> partyBSecondList = new ArrayList<ProjectLinkman>();
-                int size = linkmanList.size();
                 for (ProjectLinkman linkman : linkmanList) {
                     //甲方信息
                     if (linkman.getPartyType() == 1) {
