@@ -109,8 +109,23 @@ public class DictionaryService {
         return area;
     }
 
+    @Cacheable(value = "mapAreaCode", key = "'map_'+#areaCode")
+    public Map<String,String> findAreaByCode(String areaCode) {
+        Map<String,String>  area;
+        try {
 
-    @Cacheable(value = "mapProvinceCode", key = "#provinceCode")
+            area = areaMapper.findAreaByCode(areaCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("t_dictionary_area select error : " + e.getMessage());
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
+        }
+
+        return area;
+    }
+
+
+    @Cacheable(value = "mapProvinceCode", key = "'map_'+#provinceCode")
     public Map<String,String> findProvinceByCode(String provinceCode) {
         Map<String,String> province;
         try {
