@@ -213,7 +213,9 @@ public class ResumeService {
                         }
                     }
                     postName = sb.toString();
-                    postName = postName.substring(0,postName.length() -1);
+                    if(postName.length()!=0){
+                        postName = postName.substring(0,postName.length()-1);
+                    }
                 }
                 result.put("post",postName);
                 list.add(result);
