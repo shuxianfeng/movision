@@ -81,6 +81,8 @@ public class JobPositionService {
             map.put(Constants.salary, job.getSalaryName());
             map.put(Constants.area, job.getWorkArea());
             map.put(Constants.id, job.getId());
+            map.put("companyId",job.getCreateid());
+            map.put("positionType",job.getPositionType());
             map.put(Constants.publishTime, job.getPublishTime());
             map.put(Constants.updateTime, job.getUpdateTime());
             list.add(map);

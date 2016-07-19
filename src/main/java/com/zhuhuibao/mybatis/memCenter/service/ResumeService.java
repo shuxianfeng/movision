@@ -5,13 +5,11 @@ import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.fsearch.utils.StringUtil;
+import com.zhuhuibao.mybatis.memCenter.entity.CollectRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.DownloadRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
-import com.zhuhuibao.mybatis.memCenter.mapper.DownloadRecordMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.JobRelResumeMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.ResumeLookRecordMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.*;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.apache.commons.lang3.StringUtils;
@@ -46,7 +44,10 @@ public class ResumeService {
     private ResumeLookRecordMapper resumeLookRecordMapper;
 
     @Autowired
-    private DownloadRecordMapper downloadRocordMapper;
+    private DownloadRecordMapper downloadRecordMapper;
+
+    @Autowired
+    private CollectRecordMapper collectRecordMapper;
 
     /**
      * 发布简历
@@ -258,6 +259,18 @@ public class ResumeService {
     }
 
     /**
+     * 我收藏的简历
+     */
+    public Response findAllCollectResume(Paging<Map<String, String>> pager, String id) {
+        Response response = new Response();
+        List<Map<String, String>> resumeList = resumeMapper.findAllCollectResume(pager.getRowBounds(), id);
+        pager.result(resumeList);
+        response.setCode(200);
+        response.setData(pager);
+        return response;
+    }
+
+    /**
      * 导出简历
      */
     public Map<String, String> exportResume(String id) {
@@ -425,7 +438,17 @@ public class ResumeService {
 
     public int del_downloadResume(DownloadRecord record) {
         try {
-            return downloadRocordMapper.updateByPrimaryKeySelective(record);
+            return downloadRecordMapper.updateByPrimaryKeySelective(record);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public int del_collectResume(CollectRecord record) {
+        try {
+            return collectRecordMapper.updateByPrimaryKeySelective(record);
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();

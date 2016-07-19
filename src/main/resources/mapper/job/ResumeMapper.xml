@@ -260,7 +260,8 @@
     order by t.updateTime desc
   </select>
   <select id="findAllReceiveResume" parameterType="java.lang.String" resultType="java.util.Map">
-    select re.id as recordId,re.jobID,r.id,j.name,r.realName,re.publishDate as publishTime,re.status,(DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear)  as experienceYear
+    select re.id as recordId,re.jobID,j.createID as companyId,r.id,j.name,j.positionType,
+    r.realName,re.publishDate as publishTime,re.status,(DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear)  as experienceYear
     from t_i_resume r
     left join t_i_jobRelresume re on re.resumeID = r.id
     left join t_i_job j on j.id = re.jobID
@@ -301,9 +302,21 @@
   </select>
 
   <select id="findAllDownloadResume" parameterType="java.lang.String" resultType="java.util.Map">
-    select r.id,rd.id as recordId,r.realName,r.post,(DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
+    select r.id,rd.id as recordId,r.realName,
+    (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post,
+    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
     date_format(rd.publishDate,'%Y-%m-%d') publishDate
     from t_i_resume_download_record rd
+    left join t_i_resume r on r.id = rd.resumeID
+    where rd.companyID = #{id} and rd.is_deleted = 0
+  </select>
+
+  <select id="findAllCollectResume" parameterType="java.lang.String" resultType="java.util.Map">
+    select r.id,rd.id as recordId,concat(substring(r.realName,1,1),'**') realName,
+    (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post,
+    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
+    date_format(rd.publishDate,'%Y-%m-%d') publishDate
+    from t_i_resume_collect_record rd
     left join t_i_resume r on r.id = rd.resumeID
     where rd.companyID = #{id} and rd.is_deleted = 0
   </select>

@@ -8,6 +8,7 @@ import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.memCenter.entity.CollectRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.DownloadRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
@@ -234,6 +235,40 @@ public class JobController {
             record.setId(Long.parseLong(id));
             record.setIs_deleted(1);
             resumeService.del_downloadResume(record);
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "我收藏的简历", notes = "我收藏的简历", response = Response.class)
+    @RequestMapping(value = "sel_collect_resume", method = RequestMethod.GET)
+    public Response sel_collect_resume(@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Long createid = ShiroUtil.getCreateID();
+        Response response = new Response();
+        if(createid!=null){
+            Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+            response = resumeService.findAllCollectResume(pager,createid.toString());
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "收藏的简历批量删除", notes = "收藏的简历批量删除", response = Response.class)
+    @RequestMapping(value = "del_collectResume", method = RequestMethod.POST)
+    public Response del_collectResume(@ApiParam(value = "ids,逗号隔开") @RequestParam String ids){
+        Response response = new Response();
+        String[] idList = ids.split(",");
+        for (String id : idList) {
+            CollectRecord record = new CollectRecord();
+            record.setId(Long.parseLong(id));
+            record.setIs_deleted(1);
+            resumeService.del_collectResume(record);
         }
         return response;
     }
