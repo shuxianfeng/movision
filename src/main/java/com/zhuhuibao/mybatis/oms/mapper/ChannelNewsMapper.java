@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.oms.mapper;
 
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.*;
@@ -33,4 +34,10 @@ public interface ChannelNewsMapper {
     Map<String,Object> previewNewsInfo(Map<String,Object> channelMap);
 
     List<Map<String,String>> queryHomepageTechnologyList(Map<String, Object> map);
+
+    List<Map<String,String>> findAllPassNewsByType(RowBounds rowBounds, Map<String, Object> params);
+
+    List<Map<String,String>> selectHotViews(@Param("type") String type, @Param("count") Integer count);
+
+    List<Map<String,String>> selectNewViews(@Param("type") String type, @Param("count") Integer count);
 }

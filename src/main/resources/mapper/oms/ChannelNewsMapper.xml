@@ -295,4 +295,34 @@
     and at.advArea = #{advArea}
     and at.advType = #{advType}
   </select>
+
+  <select id="findAllPassNewsByType" resultType="java.util.Map">
+    select id,title,date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,description  from t_oms_channel_news
+    <where>
+      <if test="channelid != null and channelid !='' ">
+        and channelid = #{channelid}
+      </if>
+      <if test="status != null and status !='' ">
+        and status = #{status}
+      </if>
+    </where>
+    order by createTime desc
+    <if test="count != null and count!='' ">
+     limit 0,#{count}
+    </if>
+  </select>
+  <select id="selectHotViews" resultType="java.util.Map">
+    select id,title,views from t_oms_channel_news
+    where channelid in (select id from t_oms_channel where parentId=#{type}) order by views desc
+    <if test="count != null and count!='' ">
+      limit 0,#{count}
+    </if>
+  </select>
+  <select id="selectNewViews" resultType="java.util.Map">
+    select id,title,views,createTime  from t_oms_channel_news
+    where channelid in (select id from t_oms_channel where parentId=#{type}) order by createTime desc
+    <if test="count != null and count!='' ">
+      limit 0,#{count}
+    </if>
+  </select>
 </mapper>

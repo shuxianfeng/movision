@@ -33,9 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * Created by Administrator on 2016/4/21 0021.
- */
+
 @RestController
 @RequestMapping("/rest/job/site/recruit")
 public class JobSiteController {

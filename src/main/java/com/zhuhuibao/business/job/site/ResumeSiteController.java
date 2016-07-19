@@ -39,9 +39,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.*;
 
-/**
- * Created by Administrator on 2016/4/21 0021.
- */
+
 @RestController
 @RequestMapping("/rest/job/site/resume")
 public class ResumeSiteController {
