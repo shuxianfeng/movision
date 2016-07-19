@@ -1,6 +1,6 @@
 package com.zhuhuibao.fsearch.service;
 
-import com.zhuhuibao.fsearch.pojo.ContractorSearchSpec;
+import com.zhuhuibao.fsearch.pojo.spec.ContractorSearchSpec;
 import com.zhuhuibao.fsearch.pojo.spec.SupplierSearchSpec;
 import com.zhuhuibao.fsearch.service.exception.ServiceException;
 
