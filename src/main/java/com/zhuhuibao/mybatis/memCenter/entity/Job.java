@@ -5,7 +5,7 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value="职位",description = "职位属性")
 public class Job {
-    @ApiModelProperty(value="职位ID",required = true)
+    @ApiModelProperty(value="职位ID")
     private String id;
 
     @ApiModelProperty(value="发布人ID")
