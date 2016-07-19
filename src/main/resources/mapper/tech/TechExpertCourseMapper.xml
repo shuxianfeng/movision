@@ -21,8 +21,8 @@
   </resultMap>
 
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
-    select t.id, t.proposerId,t.operateId, t.title, t.teacher, t.city, t.linkman, date_format(t.startTime,'%Y-%m-%d') startTime,
-    date_format(t.endTime,'%Y-%m-%d') endTime, t.mobile, t.status,t.notes from t_tech_expert_applyCourse t
+    select t.id, t.proposerId,t.operateId, t.title, t.teacher, t.city, t.linkman, date_format(t.startTime,'%Y-%m-%d %h:%i:%s') startTime,
+    date_format(t.endTime,'%Y-%m-%d %h:%i:%s') endTime, t.mobile, t.status,t.notes from t_tech_expert_applyCourse t
     where t.id = #{id,jdbcType=BIGINT}
   </select>
 
