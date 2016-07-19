@@ -81,7 +81,8 @@ public class JobPositionService {
             map.put(Constants.salary, job.getSalaryName());
             map.put(Constants.area, job.getWorkArea());
             map.put(Constants.id, job.getId());
-            map.put(Constants.publishTime, job.getUpdateTime().substring(0, 10));
+            map.put(Constants.publishTime, job.getPublishTime());
+            map.put(Constants.updateTime, job.getUpdateTime());
             list.add(map);
         }
         return list;
@@ -109,6 +110,25 @@ public class JobPositionService {
         for (String id : idList) {
             try {
                 jobMapper.deletePosition(id);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return response;
+    }
+
+    /**
+     * 刷新已发布的职位
+     */
+    public Response refreshPosition(String ids) {
+        Response response = new Response();
+        String[] idList = ids.split(",");
+        for (String id : idList) {
+            try {
+                Job job = new Job();
+                job.setId(id);
+                jobMapper.updatePosition(job);
             } catch (Exception e) {
                 log.error(e.getMessage());
                 e.printStackTrace();
