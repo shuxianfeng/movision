@@ -44,4 +44,7 @@ public interface ResumeMapper {
 
     //我下载的简历
     List<Map<String,String>> findAllDownloadResume(RowBounds rowBounds,@Param("id")String id);
+
+    //我收藏的简历
+    List<Map<String,String>> findAllCollectResume(RowBounds rowBounds,@Param("id")String id);
 }
