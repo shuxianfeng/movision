@@ -260,11 +260,11 @@
     order by t.updateTime desc
   </select>
   <select id="findAllReceiveResume" parameterType="java.lang.String" resultType="java.util.Map">
-    select re.id as recordId,r.id,j.name,r.realName,re.publishDate as publishTime,re.status,(DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear)  as experienceYear
+    select re.id as recordId,re.jobID,r.id,j.name,r.realName,re.publishDate as publishTime,re.status,(DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear)  as experienceYear
     from t_i_resume r
     left join t_i_jobRelresume re on re.resumeID = r.id
     left join t_i_job j on j.id = re.jobID
-    where re.jobID in (select id from t_i_job where createid=#{id}) order by re.status asc,re.publishDate desc
+    where re.jobID in (select id from t_i_job where createid=#{id}) and re.status != 3 order by re.status asc,re.publishDate desc
   </select>
   <select id="searchResumeById" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT * from t_i_resume WHERE id = #{id}
@@ -298,5 +298,13 @@
   <select id="queryJobCount" parameterType="java.lang.Long" resultType="java.util.Map">
     select count(1) count from t_i_job t where t.createID = #{createId} and t.is_deleted = 0 union all
     select count(1) count from t_i_jobRelresume j where j.jobID in (select id from t_i_job where createid=#{createId})
+  </select>
+
+  <select id="findAllDownloadResume" parameterType="java.lang.String" resultType="java.util.Map">
+    select r.id,rd.id as recordId,r.realName,r.post,(DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
+    date_format(rd.publishDate,'%Y-%m-%d') publishDate
+    from t_i_resume_download_record rd
+    left join t_i_resume r on r.id = rd.resumeID
+    where rd.companyID = #{id} and rd.is_deleted = 0
   </select>
 </mapper>

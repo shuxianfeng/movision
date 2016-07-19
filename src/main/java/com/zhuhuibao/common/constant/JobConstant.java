@@ -69,4 +69,9 @@ public interface JobConstant {
      * 简历已查看状态
      */
     String RESUME_STATUS_TWO = "2";
+
+    /**
+     * 简历删除状态
+     */
+    String RESUME_STATUS_THREE = "3";
 }

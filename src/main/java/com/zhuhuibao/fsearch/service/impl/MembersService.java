@@ -123,21 +123,18 @@ public class MembersService implements IMembersService {
 				result.put("sortorder", spec.getSortorder());
 			}
 			if (sort.equals("registerTime1")) {
-				sortField.put("field", sort);
-				sortField.put("type", "LONG");
-				sortField.put("reverse",
-						FormatUtil.parseBoolean(sortorder));
+//				sortField.put("field", sort);
+//				sortField.put("type", "LONG");
+//				sortField.put("reverse",FormatUtil.parseBoolean(sortorder));
+                sortField.put("field", "certLevel");
+                sortField.put("type", "INT");
+                sortField.put("reverse", FormatUtil.parseBoolean(sortorder));
 			}
 		}else {
 			sortField.put("field", "id");
 			sortField.put("type", "INT");
 			sortField.put("reverse",FormatUtil.parseBoolean(true));
 		}
-
-        sortField = new HashMap<>(3);
-        sortField.put("field", "certLevel");
-        sortField.put("type", "INT");
-        sortField.put("reverse", FormatUtil.parseBoolean("true"));
         sortFields.add(sortField);
 
         return sortFields;
@@ -156,7 +153,10 @@ public class MembersService implements IMembersService {
                 result.put("sortorder", spec.getSortorder());
             }
             if (sort.equals("registerTime1")) {
-                sortField.put("field", sort);
+//                sortField.put("field", sort);
+//                sortField.put("type", "LONG");
+//                sortField.put("reverse", FormatUtil.parseBoolean(sortorder));
+                sortField.put("field", "certLevel");
                 sortField.put("type", "LONG");
                 sortField.put("reverse", FormatUtil.parseBoolean(sortorder));
             }
@@ -165,12 +165,6 @@ public class MembersService implements IMembersService {
             sortField.put("type", "INT");
             sortField.put("reverse",FormatUtil.parseBoolean(true));
         }
-        sortFields.add(sortField);
-
-        sortField = new HashMap<>(3);
-        sortField.put("field", "certLevel");
-        sortField.put("type", "INT");
-        sortField.put("reverse", FormatUtil.parseBoolean("true"));
         sortFields.add(sortField);
 
         return sortFields;

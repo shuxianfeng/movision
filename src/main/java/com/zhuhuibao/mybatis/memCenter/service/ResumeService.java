@@ -5,8 +5,10 @@ import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.fsearch.utils.StringUtil;
+import com.zhuhuibao.mybatis.memCenter.entity.DownloadRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
+import com.zhuhuibao.mybatis.memCenter.mapper.DownloadRecordMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobRelResumeMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ResumeLookRecordMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
@@ -42,6 +44,9 @@ public class ResumeService {
 
     @Autowired
     private ResumeLookRecordMapper resumeLookRecordMapper;
+
+    @Autowired
+    private DownloadRecordMapper downloadRocordMapper;
 
     /**
      * 发布简历
@@ -241,6 +246,18 @@ public class ResumeService {
     }
 
     /**
+     * 我下载的简历
+     */
+    public Response findAllDownloadResume(Paging<Map<String, String>> pager, String id) {
+        Response response = new Response();
+        List<Map<String, String>> resumeList = resumeMapper.findAllDownloadResume(pager.getRowBounds(), id);
+        pager.result(resumeList);
+        response.setCode(200);
+        response.setData(pager);
+        return response;
+    }
+
+    /**
      * 导出简历
      */
     public Map<String, String> exportResume(String id) {
@@ -404,5 +421,15 @@ public class ResumeService {
             throw e;
         }
         return resultMap;
+    }
+
+    public int del_downloadResume(DownloadRecord record) {
+        try {
+            return downloadRocordMapper.updateByPrimaryKeySelective(record);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 }
