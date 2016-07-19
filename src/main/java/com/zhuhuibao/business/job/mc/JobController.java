@@ -4,11 +4,14 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.memCenter.entity.DownloadRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
+import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -19,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +40,9 @@ public class JobController {
 
     @Autowired
     private ResumeService resumeService;
+
+    @Autowired
+    JobRelResumeService jrrService;
 
     @ApiOperation(value = "获取职位类别", notes = "获取职位类别", response = Response.class)
     @RequestMapping(value = "sel_positionType", method = RequestMethod.GET)
@@ -169,4 +176,65 @@ public class JobController {
         return response;
     }
 
+    @ApiOperation(value = "简历批量设为已查看", notes = "简历批量设为已查看", response = Response.class)
+    @RequestMapping(value = "upd_jobRelresume", method = RequestMethod.POST)
+    public Response upd_jobRelresume(@ApiParam(value = "ids,逗号隔开") @RequestParam String ids){
+        Response response = new Response();
+        String[] idList = ids.split(",");
+        for (String id : idList) {
+            Map<String,Object> map = new HashMap<String,Object>();
+            map.put("id",id);
+            map.put("status", JobConstant.RESUME_STATUS_TWO);
+            jrrService.updateJobRelResume(map);
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "收到的简历批量删除", notes = "收到的简历批量删除", response = Response.class)
+    @RequestMapping(value = "del_jobRelresume", method = RequestMethod.POST)
+    public Response del_jobRelresume(@ApiParam(value = "ids,逗号隔开") @RequestParam String ids){
+        Response response = new Response();
+        String[] idList = ids.split(",");
+        for (String id : idList) {
+            Map<String,Object> map = new HashMap<String,Object>();
+            map.put("id",id);
+            map.put("status", JobConstant.RESUME_STATUS_THREE);
+            jrrService.updateJobRelResume(map);
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "我下载的简历", notes = "我下载的简历", response = Response.class)
+    @RequestMapping(value = "sel_download_resume", method = RequestMethod.GET)
+    public Response sel_download_resume(@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Long createid = ShiroUtil.getCreateID();
+        Response response = new Response();
+        if(createid!=null){
+            Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+            response = resumeService.findAllDownloadResume(pager,createid.toString());
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "下载的简历批量删除", notes = "下载的简历批量删除", response = Response.class)
+    @RequestMapping(value = "del_downloadResume", method = RequestMethod.POST)
+    public Response del_downloadResume(@ApiParam(value = "ids,逗号隔开") @RequestParam String ids){
+        Response response = new Response();
+        String[] idList = ids.split(",");
+        for (String id : idList) {
+            DownloadRecord record = new DownloadRecord();
+            record.setId(Long.parseLong(id));
+            record.setIs_deleted(1);
+            resumeService.del_downloadResume(record);
+        }
+        return response;
+    }
 }

@@ -41,4 +41,7 @@ public interface ResumeMapper {
     int isExistResume(Long createID);
 
     List<Map<String,Object>> queryJobCount(Long createId);
+
+    //我下载的简历
+    List<Map<String,String>> findAllDownloadResume(RowBounds rowBounds,@Param("id")String id);
 }
