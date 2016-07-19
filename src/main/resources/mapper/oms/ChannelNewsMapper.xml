@@ -319,7 +319,7 @@
     </if>
   </select>
   <select id="selectNewViews" resultType="java.util.Map">
-    select id,title,views,createTime  from t_oms_channel_news
+    select id,title,date_format(createTime,'%Y-%m-%d') createTime  from t_oms_channel_news
     where channelid in (select id from t_oms_channel where parentId=#{type}) order by createTime desc
     <if test="count != null and count!='' ">
       limit 0,#{count}
