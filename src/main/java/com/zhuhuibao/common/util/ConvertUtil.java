@@ -26,8 +26,12 @@ public class ConvertUtil {
     public static Map<String, Object> execute(Map<String, Object> map, String key, String clzName, String method, Object[] params) {
 
         Map<String, String> resultMap = (Map<String, String>) load(clzName, method, params);
-        String name = resultMap.get("name");
-        map.put(key + "Name", name);
+        if(resultMap!=null){
+            String name = resultMap.get("name");
+            map.put(key + "Name", name);
+        }else {
+            map.put(key + "Name", "");
+        }
         return map;
     }
 

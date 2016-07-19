@@ -4,6 +4,7 @@ package com.zhuhuibao.mybatis.constants.service;
 import com.zhuhuibao.mybatis.constants.entity.Constant;
 import com.zhuhuibao.mybatis.constants.mapper.ConstantMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.PositionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class ConstantService {
     ConstantMapper constantMapper;
     @Autowired
     JobMapper jobMapper;
+    @Autowired
+    PositionMapper positionMapper;
 
     /**
      * 根据Type Code查询
@@ -104,5 +107,18 @@ public class ConstantService {
      */
     public String selectNameByJoinCode(String codes, String type) {
         return constantMapper.selectNameByJoinCode(codes, type);
+    }
+
+
+    /**
+     * 根据id查询职位
+     * @param id
+     * @return
+     */
+    @Cacheable(value = "positionCache", key = "#id")
+    public Map<String, Object> findPositionById(String id) {
+        log.warn("select by db.....");
+        Map<String, Object> result = positionMapper.findById(id);
+        return result;
     }
 }

@@ -3,6 +3,8 @@ package com.zhuhuibao.mybatis.memCenter.service;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ConvertUtil;
+import com.zhuhuibao.fsearch.utils.StringUtil;
 import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobRelResumeMapper;
@@ -157,10 +159,66 @@ public class ResumeService {
      * @param map   查询条件
      * @return 分页结果
      */
-    public Paging<Resume> findAllResume(Paging<Resume> pager, Map<String, Object> map) {
+    public Paging<Map<String,Object>> findAllResume(Paging<Map<String,Object>> pager, Map<String, Object> map) {
+        List<Map<String,Object>> list = new ArrayList<>();
         try {
-            List<Resume> resumeList = resumeMapper.findAllResume(pager.getRowBounds(), map);
-            pager.result(resumeList);
+            List<Map<String,Object>> resumeList = resumeMapper.findAllResume(pager.getRowBounds(), map);
+            for(Map<String,Object> resume:resumeList){
+                Map<String,Object> result = new HashMap<>();
+                result.put("id",resume.get("id"));
+                result.put("createid",resume.get("createid"));
+                result.put("title",resume.get("title"));
+                result.put("realName",resume.get("realName"));
+                result.put("photo",resume.get("photo"));
+                result.put("publishTime",resume.get("publishTime"));
+                result.put("updateTime",resume.get("updateTime"));
+                result.put("experienceYear",resume.get("experienceYear"));
+                result.put("education",resume.get("education"));
+                result.put("isPublic",resume.get("isPublic"));
+                result.put("birthYear",resume.get("birthYear"));
+                result.put("workYear",resume.get("workYear"));
+                if(resume.get("jobNature")!=null){
+                    resume = ConvertUtil.execute(resume, "jobNature", "constantService", "findByTypeCode", new Object[]{"7", String.valueOf(resume.get("jobNature"))});
+                    result.put("jobNature",resume.get("jobNatureName"));
+                }else {
+                    result.put("jobNature","");
+                }
+
+                if(resume.get("hopeSalary")!=null){
+                    resume = ConvertUtil.execute(resume, "hopeSalary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(resume.get("hopeSalary"))});
+                    result.put("hopeSalary",resume.get("hopeSalaryName"));
+                }else {
+                    result.put("hopeSalary","");
+                }
+
+                if(resume.get("education")!=null){
+                    resume = ConvertUtil.execute(resume, "education", "constantService", "findByTypeCode", new Object[]{"2", String.valueOf(resume.get("education"))});
+                    result.put("name",resume.get("educationName"));
+                }else {
+                    result.put("name","");
+                }
+
+                String post = (String) resume.get("post");
+                String postName = "";
+                if(!StringUtils.isEmpty(post)){
+                    String[] posts = post.split(",");
+                    StringBuilder sb = new StringBuilder();
+                    for(String p : posts){
+                        Map<String,Object> tmp = new HashMap<>();
+                        tmp.put("post",p);
+                        tmp = ConvertUtil.execute(tmp, "post", "constantService", "findPositionById", new Object[]{String.valueOf(tmp.get("post"))});
+                        String pName = (String) tmp.get("postName");
+                        if(!"".equals(pName)){
+                            sb.append(pName).append(",");
+                        }
+                    }
+                    postName = sb.toString();
+                    postName = postName.substring(0,postName.length() -1);
+                }
+                result.put("post",postName);
+                list.add(result);
+            }
+            pager.result(list);
         } catch (Exception e) {
             log.error("find all resume error!", e);
             throw e;

@@ -213,52 +213,51 @@
     where r.id = #{id}
 
   </select>
-  <select id="findAllResume" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select tr.* from (select t.id,t.createId,t.title,concat(substring(t.realName,1,1),'**') realName,t.jobCity,dc.name hopeSalary,m.headShot as photo,dt.name,
-    date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,date_format(t.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,t.experienceYear,t.education,t.isPublic,
+  <select id="findAllResume" parameterType="java.util.Map" resultType="java.util.Map">
+    select t.id,t.createid,t.title,concat(substring(t.realName,1,1),'**') realName,
+    t.hopeSalary,m.headShot as photo,t.education,
+    date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,
+    date_format(t.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,
+    t.experienceYear,t.isPublic,t.jobNature,t.post,
     (DATE_FORMAT( current_date(),'%Y' )-birthYear) birthYear,
-    (DATE_FORMAT( current_date(),'%Y' )-workYear) workYear,
-    (select Group_concat(name) from t_dictionary_constant where find_in_set(code,t.jobNature) and type=7)AS jobNature,
-    (select Group_concat(name) from t_dictionary_position where find_in_set(id,t.post))AS post,t.post postID
+    (DATE_FORMAT( current_date(),'%Y' )-workYear) workYear
     from t_i_resume t
-    left join t_dictionary_city ct on ct.code = t.jobCity
-    left join t_dictionary_constant dc on dc.code = t.hopeSalary and dc.type = 1
-    left join t_dictionary_constant dt on dt.code = t.education and dt.type =2
     LEFT JOIN t_m_member m on t.createid = m.id
-    where m.status != #{status}
-    ) tr
     <where>
+      <if test="status != null and status != ''">
+        and m.status != #{status}
+      </if>
       <if test="title != null and title != ''">
-        and tr.post like concat('%',#{title},'%')
+        and t.post like concat('%',#{title},'%')
       </if>
       <if test="jobCity != null and jobCity != ''">
-        and tr.jobCity = #{jobCity}
+        and t.jobCity = #{jobCity}
       </if>
       <if test="expYearBefore != null and expYearBefore != '' and expYearBehind != null and expYearBehind != ''">
-        and tr.workYear &gt;= #{expYearBefore} and tr.workYear &lt;= #{expYearBehind}
+        and t.workYear &gt;= #{expYearBefore} and t.workYear &lt;= #{expYearBehind}
       </if>
       <if test="expYearBefore != null and expYearBefore != '' and expYearBehind == null and expYearBehind = ''">
-        and tr.workYear &gt;= #{expYearBefore}
+        and t.workYear &gt;= #{expYearBefore}
       </if>
       <if test="expYearBefore == null and expYearBefore = ''  and expYearBehind != null and expYearBehind != ''">
-        and tr.workYear &lt;= #{expYearBehind}
+        and t.workYear &lt;= #{expYearBehind}
       </if>
       <if test="education != null and education != ''">
-        and tr.education = #{education}
+        and t.education = #{education}
       </if>
       <if test="isPublic != null and isPublic != ''">
-        and tr.isPublic = #{isPublic}
+        and t.isPublic = #{isPublic}
       </if>
       <if test="positionList != null">
       <foreach collection="positionList" item="item" index="index" open="and (" separator="or" close=")" >
-        find_in_set(#{item},tr.postID)
+        find_in_set(#{item},t.post)
       </foreach>
       </if>
       <if test="company_id != null">
-        and tr.createId not in (select t.create_id from t_i_forbid_key_words t where t.company_id = #{company_id} and t.is_deleted = 0)
+        and t.createid not in (select t.create_id from t_i_forbid_key_words t where t.company_id = #{company_id} and t.is_deleted = 0)
       </if>
     </where>
-    order by tr.updateTime desc
+    order by t.updateTime desc
   </select>
   <select id="findAllReceiveResume" parameterType="java.lang.String" resultType="java.util.Map">
     select re.id as recordId,r.id,j.name,r.realName,re.publishDate as publishTime,re.status,(DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear)  as experienceYear
