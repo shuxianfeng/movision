@@ -220,4 +220,32 @@
       limit #{count}
     </if>
   </select>
+  <select id="findAllTenderTonedNPager" resultType="java.util.Map">
+      select t.id, t.noticeName, t.createid, date_format(t.publishDate,'%Y-%m-%d') publishDate,
+      date_format(t.updateDate,'%Y-%m-%d') updateDate, t.projectName, t.province,t.city, t.area,
+      t.type, date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate
+      from t_prj_tender_toned t
+      <where>
+          t.is_deleted=0
+          <if test="type != null and type != ''">
+              and type = #{type}
+          </if>
+          <if test="noticeName != null and noticeName != ''">
+              and noticeName like concat('%',#{noticeName},'%')
+          </if>
+          <if test="province != null and province != ''">
+              and province = #{province}
+          </if>
+          <if test="city != null and city != ''">
+              and city = #{city}
+          </if>
+          <if test="startDateA != null and startDateB != null">
+              and t.startDate &gt;= date_format(#{startDateA},'%Y-%m-%d') and t.startDate &lt;= date_format(#{startDateB},'%Y-%m-%d')
+          </if>
+          <if test="endDateA != null and endDateB != null">
+              and t.endDate &gt;= date_format(#{endDateA},'%Y-%m-%d') and t.endDate &lt;= date_format(#{endDateB},'%Y-%m-%d')
+          </if>
+      </where>
+      order by t.updateDate desc
+  </select>
 </mapper>

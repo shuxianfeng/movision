@@ -119,7 +119,7 @@ public class JobCommonController {
         return response;
     }
 
-    @ApiOperation(value = "人才网资讯详情>热门排行", notes = "人才网资讯详情>热门排行", response = Response.class)
+    @ApiOperation(value = "人才网资讯详情|列表>热门排行", notes = "人才网资讯详情|列表>热门排行", response = Response.class)
     @RequestMapping(value = "sel_hotviews", method = RequestMethod.GET)
     public Response hotViews(@ApiParam("人才网:13")@RequestParam String type,
                              @ApiParam("记录条数") @RequestParam(required = false,defaultValue = "10") String count){
@@ -128,7 +128,7 @@ public class JobCommonController {
         return new Response(list);
     }
 
-    @ApiOperation(value = "人才网资讯详情>最新排行", notes = "人才网资讯详情>最新排行", response = Response.class)
+    @ApiOperation(value = "人才网资讯列表>最新资讯", notes = "人才网资讯列表>最新排行", response = Response.class)
     @RequestMapping(value = "sel_topnews", method = RequestMethod.GET)
     public Response topNews(@ApiParam("人才网:13")@RequestParam String type,
                              @ApiParam("记录条数") @RequestParam(required = false,defaultValue = "10") String count){
@@ -136,5 +136,14 @@ public class JobCommonController {
         List<Map<String,String>>  list = newsService.selectNewViews(type,Integer.valueOf(count));
         return new Response(list);
     }
+
+
+    @ApiOperation(value = "人才网首页>最新资讯", notes = "人才网首页>最新排行", response = Response.class)
+    @RequestMapping(value = "sel_lastestnews", method = RequestMethod.GET)
+   public Response latestNews(@ApiParam(value = "记录条数" ,defaultValue = "5") String count){
+
+        Map<String,Object> map = newsService.selectLastestNews(count);
+        return new Response(map);
+   }
 
 }

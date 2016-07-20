@@ -24,4 +24,6 @@ public interface TenderTonedMapper {
     List<Map<String,String>> queryLatestTenderToned(Map<String,Object> map);
 
 	TenderToned selectByPrimaryKeyCode(Long id);
+
+    List<Map<String,Object>> findAllTenderTonedNPager(Map<String, Object> map, RowBounds rowBounds);
 }

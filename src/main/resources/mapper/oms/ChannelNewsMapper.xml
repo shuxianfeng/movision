@@ -313,14 +313,21 @@
   </select>
   <select id="selectHotViews" resultType="java.util.Map">
     select id,title,views from t_oms_channel_news
-    where channelid in (select id from t_oms_channel where parentId=#{type}) order by views desc
+    where channelid in (select id from t_oms_channel where parentId=#{type}) and status =1  order by views desc
     <if test="count != null and count!='' ">
       limit 0,#{count}
     </if>
   </select>
   <select id="selectNewViews" resultType="java.util.Map">
     select id,title,date_format(createTime,'%Y-%m-%d') createTime  from t_oms_channel_news
-    where channelid in (select id from t_oms_channel where parentId=#{type}) order by createTime desc
+    where channelid in (select id from t_oms_channel where parentId=#{type}) and status = 1 order by createTime desc
+    <if test="count != null and count!='' ">
+      limit 0,#{count}
+    </if>
+  </select>
+  <select id="selectNewsByType" resultType="java.util.Map">
+    select id,title,  date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime from  t_oms_channel_news
+    where status = 1 and channelid = #{type} order by   createTime
     <if test="count != null and count!='' ">
       limit 0,#{count}
     </if>

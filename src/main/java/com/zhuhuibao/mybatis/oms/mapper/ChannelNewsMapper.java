@@ -40,4 +40,6 @@ public interface ChannelNewsMapper {
     List<Map<String,String>> selectHotViews(@Param("type") String type, @Param("count") Integer count);
 
     List<Map<String,String>> selectNewViews(@Param("type") String type, @Param("count") Integer count);
+
+    List<Map<String,String>> selectNewsByType(@Param("type") String type, @Param("count") String count);
 }

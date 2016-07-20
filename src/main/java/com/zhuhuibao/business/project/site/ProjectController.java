@@ -128,7 +128,7 @@ public class ProjectController {
                                            @ApiParam(value="频道下子页面:index") @RequestParam String page,
                                            @ApiParam(value="广告所在区域:F1:优秀工程商") @RequestParam String advArea)  {
         Response response = new Response();
-        Map<String,Object> map = new HashMap();
+        Map<String,Object> map = new HashMap<>();
         map.put("chanType",chanType);
         map.put("page",page);
         map.put("advArea",advArea);
@@ -139,11 +139,9 @@ public class ProjectController {
 
 	@RequestMapping(value = {"queryLatestProject","site/base/sel_latestProject"}, method = RequestMethod.GET)
 	@ApiOperation(value = "查询最新项目信息或者搜索时的推荐，默认10条",notes = "查询最新项目信息，默认10条",response = Response.class)
-	public Response queryLatestProject() throws IOException {
+	public Response queryLatestProject(@ApiParam(value="查询条数") @RequestParam(required = false,defaultValue = "10") String count) throws IOException {
 		Response response = new Response();
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("count",10);
-		List<Map<String,String>> projectList = projectService.queryLatestProject(map);
+		List<Map<String,Object>> projectList = projectService.queryLatestNProject(count);
 		response.setData(projectList);
 		return response;
 	}

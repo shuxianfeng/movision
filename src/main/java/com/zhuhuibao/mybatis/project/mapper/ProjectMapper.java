@@ -30,7 +30,7 @@ public interface ProjectMapper {
 
     List<Map<String,String>> findAllPrjectPager(Map<String,Object> map,RowBounds rowBounds);
 
-    List<Map<String,String>> queryLatestProject(Map<String,Object> map);
+    List<Map<String,Object>> queryLatestProject(Map<String,Object> map);
 
     List<Map<String,String>> findAllOmsViewProject(Map<String,Object> map,RowBounds rowBounds);
 
@@ -45,4 +45,6 @@ public interface ProjectMapper {
 	Map<String, Object> getCity(Map<String, String> areaOrCityMap);
 
     List<Map<String,String>> findAllPrject(Map<String, Object> map, RowBounds rowBounds);
+
+    List<Map<String,Object>> queryLatestNProject(@Param("count") String count);
 }
