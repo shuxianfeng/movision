@@ -234,13 +234,13 @@
         and t.jobCity = #{jobCity}
       </if>
       <if test="expYearBefore != null and expYearBefore != '' and expYearBehind != null and expYearBehind != ''">
-        and t.workYear &gt;= #{expYearBefore} and t.workYear &lt;= #{expYearBehind}
+        and t.experienceYear &gt;= #{expYearBefore} and t.experienceYear &lt;= #{expYearBehind}
       </if>
       <if test="expYearBefore != null and expYearBefore != '' and expYearBehind == null and expYearBehind = ''">
-        and t.workYear &gt;= #{expYearBefore}
+        and t.experienceYear &gt;= #{expYearBefore}
       </if>
       <if test="expYearBefore == null and expYearBefore = ''  and expYearBehind != null and expYearBehind != ''">
-        and t.workYear &lt;= #{expYearBehind}
+        and t.experienceYear &lt;= #{expYearBehind}
       </if>
       <if test="education != null and education != ''">
         and t.education = #{education}
