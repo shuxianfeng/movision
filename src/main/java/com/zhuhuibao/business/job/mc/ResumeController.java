@@ -74,6 +74,11 @@ public class ResumeController {
     public Response setUpResume(@ModelAttribute Resume resume) throws IOException {
         Long createid = ShiroUtil.getCreateID();
         Response response = new Response();
+        String[] provicnes = resume.getJobProvince().split(",");
+        String[] citys = resume.getJobCity().split(",");
+        if(provicnes.length+citys.length>5){
+            throw new BusinessException(MsgCodeConstant.RESUME_JOB_COUNT_LIMIT, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.RESUME_JOB_COUNT_LIMIT)));
+        }
         if(createid!=null){
             resume.setCreateid(createid.toString());
             response = resumeService.setUpResume(resume,createid.toString());

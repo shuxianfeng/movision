@@ -277,7 +277,7 @@ public class ResumeService {
         Map<String, String> resumeMap = new HashMap<>();
         Resume resume = resumeMapper.previewResume(id);
         if (resume != null) {
-
+            resumeMap.put("realName", resume.getRealName() != null && !StringUtils.isEmpty(resume.getRealName()) ? resume.getRealName() : "");
             resumeMap.put("title", resume.getTitle() != null && !StringUtils.isEmpty(resume.getTitle()) ? resume.getTitle() : "");
             resumeMap.put("name", resume.getRealName() != null && !StringUtils.isEmpty(resume.getRealName()) ? resume.getRealName() : "");
             resumeMap.put("sex", resume.getSex() != null && !StringUtils.isEmpty(resume.getSex()) ? resume.getSex() : "");
