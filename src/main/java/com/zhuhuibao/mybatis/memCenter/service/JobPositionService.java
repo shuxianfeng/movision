@@ -81,8 +81,8 @@ public class JobPositionService {
             map.put(Constants.salary, job.getSalaryName());
             map.put(Constants.area, job.getWorkArea());
             map.put(Constants.id, job.getId());
-            map.put("companyId",job.getCreateid());
-            map.put("positionType",job.getPositionType());
+            map.put("companyId", job.getCreateid());
+            map.put("positionType", job.getPositionType());
             map.put(Constants.publishTime, job.getPublishTime());
             map.put(Constants.updateTime, job.getUpdateTime());
             list.add(map);
@@ -479,24 +479,27 @@ public class JobPositionService {
     /**
      * 相似企业
      */
-    public Response querySimilarCompany(String id, int count) {
-        Response response = new Response();
-        Member member = memberMapper.findMemById(id);
-        List<Job> companyList = jobMapper.querySimilarCompany(member.getEmployeeNumber(), Integer.parseInt(member.getEnterpriseType()), id, count);
-        List list = new ArrayList();
-        for (int i = 0; i < companyList.size(); i++) {
-            Job job = companyList.get(i);
-            Job companyInfo = new Job();
-            companyInfo = jobMapper.querySimilarCompanyInfo(job.getCreateid());
-            Map map = new HashMap();
-            map.put(Constants.id, job.getCreateid());
-            map.put(Constants.companyName, companyInfo.getEnterpriseName());
-            map.put(Constants.size, companyInfo.getSize());
-            map.put(Constants.area, companyInfo.getCity());
-            list.add(map);
+    public List<Map<String, Object>> querySimilarCompany(String id, int count) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        try {
+            Member member = memberMapper.findMemById(id);
+            List<Job> companyList = jobMapper.querySimilarCompany(member.getEmployeeNumber(), Integer.parseInt(member.getEnterpriseType()), id, count);
+
+            for (Job job : companyList) {
+                Job companyInfo = jobMapper.querySimilarCompanyInfo(job.getCreateid());
+                Map<String, Object> map = new HashMap<>();
+                map.put(Constants.id, job.getCreateid());
+                map.put(Constants.companyName, companyInfo.getEnterpriseName());
+                map.put(Constants.size, companyInfo.getSize());
+                map.put(Constants.area, companyInfo.getCity());
+                list.add(map);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询失败");
         }
-        response.setData(list);
-        return response;
+
+        return list;
     }
 
     /**
@@ -601,7 +604,7 @@ public class JobPositionService {
             list = jobMapper.findNewPositions(count);
 
             for (Map<String, Object> map : list) {
-                String createID = String.valueOf(map.get("createID")) ;
+                String createID = String.valueOf(map.get("createID"));
                 if (!StringUtils.isEmpty(createID)) {
                     Member member = memberMapper.findMemById(createID);
                     if (member != null) {
@@ -613,27 +616,27 @@ public class JobPositionService {
                 } else {
                     map.put("enterpriseName", "");
                 }
-                String salary = String.valueOf( map.get("salary"));
-                if(!StringUtils.isEmpty(salary)){
+                String salary = String.valueOf(map.get("salary"));
+                if (!StringUtils.isEmpty(salary)) {
                     map = ConvertUtil.execute(map, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(map.get("salary"))});
-                } else{
-                    map.put("salaryName","");
+                } else {
+                    map.put("salaryName", "");
                 }
                 String welfare = (String) map.get("welfare");
                 String welfarename = "";
                 genWelfaceName(map, welfare, welfarename);
 
-                String cityCode = String.valueOf( map.get("city"));
-                if(!StringUtils.isEmpty(cityCode)){
+                String cityCode = String.valueOf(map.get("city"));
+                if (!StringUtils.isEmpty(cityCode)) {
                     map = ConvertUtil.execute(map, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
                     map.put("city", map.get("cityName"));
-                }else{
+                } else {
                     String provinceCode = String.valueOf(map.get("province"));
-                    if(!StringUtils.isEmpty(provinceCode)){
+                    if (!StringUtils.isEmpty(provinceCode)) {
                         map = ConvertUtil.execute(map, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
                         map.put("city", map.get("provinceName"));
-                    }else{
-                        map.put("city","");
+                    } else {
+                        map.put("city", "");
                     }
                 }
 
