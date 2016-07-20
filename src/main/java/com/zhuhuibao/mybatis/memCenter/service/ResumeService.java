@@ -356,10 +356,22 @@ public class ResumeService {
             for (int i = 0; i < resumeList.size(); i++) {
                 Resume resume = resumeList.get(i);
                 Map map = new HashMap();
+                String area = "";
+                if(resume.getJobCity()!=null){
+                    if(resume.getJobProvince()!=null){
+                        area = resume.getJobProvince() + "," + resume.getJobCity();
+                    }else {
+                        area = resume.getJobCity();
+                    }
+                }else {
+                    if(resume.getJobProvince()!=null){
+                        area = resume.getJobProvince();
+                    }
+                }
                 map.put(Constants.id, resume.getId());
                 map.put(Constants.logo, resume.getPhoto());
                 map.put(Constants.status, resume.getStatus());
-                map.put(Constants.area, resume.getJobCity());
+                map.put(Constants.area, area);
                 map.put(Constants.name, resume.getRealName().subSequence(0, 1) + "**");
                 map.put(Constants.position, resume.getPost());
                 map.put(Constants.experienceYear, resume.getWorkYear());
@@ -369,6 +381,7 @@ public class ResumeService {
             }
         } catch (Exception e) {
             log.error("query latest resume error!");
+            e.printStackTrace();
             throw e;
         }
         return list;

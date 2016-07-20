@@ -219,8 +219,8 @@
     date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,
     date_format(t.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,
     t.experienceYear,t.isPublic,t.jobNature,t.post,
-    (DATE_FORMAT( current_date(),'%Y' )-birthYear) birthYear,
-    (DATE_FORMAT( current_date(),'%Y' )-workYear) workYear
+    (DATE_FORMAT( current_date(),'%Y' )-t.birthYear) birthYear,
+    (DATE_FORMAT( current_date(),'%Y' )-t.workYear) workYear
     from t_i_resume t
     LEFT JOIN t_m_member m on t.createid = m.id
     <where>
@@ -231,16 +231,16 @@
         and t.post like concat('%',#{title},'%')
       </if>
       <if test="jobCity != null and jobCity != ''">
-        and t.jobCity = #{jobCity}
+        and (#{jobCity} in(t.jobCity) or (select provincecode from t_dictionary_city where code = #{jobCity}) in(t.jobProvince))
       </if>
       <if test="expYearBefore != null and expYearBefore != '' and expYearBehind != null and expYearBehind != ''">
-        and t.experienceYear &gt;= #{expYearBefore} and t.experienceYear &lt;= #{expYearBehind}
+        and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore} and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &lt;= #{expYearBehind}
       </if>
       <if test="expYearBefore != null and expYearBefore != '' and expYearBehind == null and expYearBehind = ''">
-        and t.experienceYear &gt;= #{expYearBefore}
+        and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore}
       </if>
       <if test="expYearBefore == null and expYearBefore = ''  and expYearBehind != null and expYearBehind != ''">
-        and t.experienceYear &lt;= #{expYearBehind}
+        and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &lt;= #{expYearBehind}
       </if>
       <if test="education != null and education != ''">
         and t.education = #{education}
