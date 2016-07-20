@@ -58,65 +58,61 @@ public class PriceService {
 
     @Autowired
     com.zhuhuibao.common.constant.ApiConstants ApiConstants;
+
     /**
      * 询价保存
      */
     public Response saveAskPrice(AskPrice askPrice) throws Exception {
         log.debug("询价保存");
         Response result = new Response();
-        if(askPrice.getBillurl()!=null && !askPrice.getBillurl().equals("")){
+        if (askPrice.getBillurl() != null && !askPrice.getBillurl().equals("")) {
             String fileUrl = askPrice.getBillurl();
-            if(fileUtil.isExistFile(fileUrl,"doc","price")){
-                boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.XJFB.toString());
-                if(bool) {
-                    askPriceMapper.saveAskPrice(askPrice);
-                    zhbService.payForGoods(askPrice.getId(),ZhbPaymentConstant.goodsType.XJFB.toString());
-                }else{//支付失败稍后重试，联系客服
-                    throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
-                }
-                result.setCode(200);
+            if (!fileUtil.isExistFile(fileUrl, "doc", "price")) {
+                throw new  BusinessException(MsgCodeConstant.file_not_exist,"文件不存在");
             }
-            else
-            {
-                result.setCode(400);
-                result.setMessage("文件不存在");
-                result.setMsgCode(MsgCodeConstant.file_not_exist);
-            }
-        }else{
-            askPriceMapper.saveAskPrice(askPrice);
-            result.setCode(200);
         }
+        boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.XJFB.toString());
+        if (bool) {
+            askPriceMapper.saveAskPrice(askPrice);
+            zhbService.payForGoods(askPrice.getId(), ZhbPaymentConstant.goodsType.XJFB.toString());
+        } else {//支付失败稍后重试，联系客服
+            throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+        }
+//        else {
+//            askPriceMapper.saveAskPrice(askPrice);
+//            result.setCode(200);
+//        }
         return result;
     }
 
     /**
      * 根据Id具体某条询价信息
      */
-    public Response queryAskPriceByID(String id){
+    public Response queryAskPriceByID(String id) {
         log.debug("根据Id具体某条询价信息");
         Response result = new Response();
-        try{
+        try {
             AskPriceBean bean = askPriceMapper.queryAskPriceByID(id);
-            SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = sdf.parse(bean.getEndTime());
-            if(date.before(new Date())){
+            if (date.before(new Date())) {
                 bean.setStatusName("结束");
-            }else{
+            } else {
                 bean.setStatusName("报价中");
             }
 
-            if("1".equals(bean.getType())){
+            if ("1".equals(bean.getType())) {
                 bean.setTypeName("公开询价");
-            }else{
+            } else {
                 bean.setTypeName("定向询价");
             }
 
-            if("1".equals(bean.getIsTax())){
+            if ("1".equals(bean.getIsTax())) {
                 bean.setIsTaxName("含税报价");
-            }else{
+            } else {
                 bean.setIsTaxName("非含税报价");
             }
-            if(!bean.getIsShow()){
+            if (!bean.getIsShow()) {
                 bean.setCompanyName("");
                 bean.setLinkMan("");
                 bean.setTelephone("");
@@ -124,33 +120,32 @@ public class PriceService {
             }
             result.setCode(200);
             result.setData(bean);
-        }catch (Exception e){
-            log.error("queryAskPriceByID error",e.getMessage());
+        } catch (Exception e) {
+            log.error("queryAskPriceByID error", e.getMessage());
             e.printStackTrace();
         }
         return result;
     }
 
 
-
     /**
      * 获得我的联系方式（询报价者联系方式）
      */
-    public Response getLinkInfo(String id){
+    public Response getLinkInfo(String id) {
         Response result = new Response();
         Map map = new HashMap();
         Member member = memberMapper.findMemById(id);
-        if(member!=null){
-            if("2".equals(member.getIdentify())){
-                map.put(Constants.companyName,member.getPersonRealName());
-                map.put(Constants.linkMan,"");
-                map.put(Constants.telephone,member.getFixedTelephone());
-                map.put(Constants.mobile,member.getFixedMobile());
-            }else{
-                map.put(Constants.companyName,member.getEnterpriseName());
-                map.put(Constants.linkMan,member.getEnterpriseLinkman());
-                map.put(Constants.telephone,member.getFixedTelephone());
-                map.put(Constants.mobile,member.getFixedMobile());
+        if (member != null) {
+            if ("2".equals(member.getIdentify())) {
+                map.put(Constants.companyName, member.getPersonRealName());
+                map.put(Constants.linkMan, "");
+                map.put(Constants.telephone, member.getFixedTelephone());
+                map.put(Constants.mobile, member.getFixedMobile());
+            } else {
+                map.put(Constants.companyName, member.getEnterpriseName());
+                map.put(Constants.linkMan, member.getEnterpriseLinkman());
+                map.put(Constants.telephone, member.getFixedTelephone());
+                map.put(Constants.mobile, member.getFixedMobile());
             }
         }
         result.setCode(200);
@@ -162,33 +157,33 @@ public class PriceService {
     /**
      * 根据条件查询询价信息（分页）
      */
-    public List<AskPriceResultBean> findAllByPager(Paging<AskPriceResultBean> pager, AskPriceSearchBean askPriceSearch){
+    public List<AskPriceResultBean> findAllByPager(Paging<AskPriceResultBean> pager, AskPriceSearchBean askPriceSearch) {
         log.debug("查询询价信息（分页）");
         List<AskPriceResultBean> resultBeanList = askPriceMapper.findAll(askPriceSearch);
-        List<AskPriceResultBean> resultBeanList1 = askPriceMapper.findAllByPager1(pager.getRowBounds(),askPriceSearch);
+        List<AskPriceResultBean> resultBeanList1 = askPriceMapper.findAllByPager1(pager.getRowBounds(), askPriceSearch);
         List askList = new ArrayList();
-        for(int i=0;i<resultBeanList1.size();i++){
+        for (int i = 0; i < resultBeanList1.size(); i++) {
             AskPriceResultBean resultBean = resultBeanList1.get(i);
             Map askMap = new HashMap();
-            askMap.put(Constants.id,resultBean.getId());
-            askMap.put(Constants.title,resultBean.getTitle());
-            askMap.put(Constants.status,resultBean.getStatus());
-            askMap.put(Constants.type,resultBean.getType());
-            askMap.put(Constants.publishTime,resultBean.getPublishTime().substring(0,10));
-            askMap.put(Constants.area,resultBean.getArea());
+            askMap.put(Constants.id, resultBean.getId());
+            askMap.put(Constants.title, resultBean.getTitle());
+            askMap.put(Constants.status, resultBean.getStatus());
+            askMap.put(Constants.type, resultBean.getType());
+            askMap.put(Constants.publishTime, resultBean.getPublishTime().substring(0, 10));
+            askMap.put(Constants.area, resultBean.getArea());
             List offerList = new ArrayList();
-            for(int y=0;y<resultBeanList.size();y++){
+            for (int y = 0; y < resultBeanList.size(); y++) {
                 AskPriceResultBean resultBean1 = resultBeanList.get(y);
-                if(resultBean.getId().equals(resultBean1.getAskid())){
+                if (resultBean.getId().equals(resultBean1.getAskid())) {
                     Map offerMap = new HashMap();
-                    offerMap.put(Constants.id,resultBean1.getOfferid());
-                    offerMap.put(Constants.offerTime,resultBean1.getOfferTime().substring(0,19));
-                    offerMap.put(Constants.companyName,resultBean1.getCompanyName());
-                    offerMap.put(Constants.address,resultBean1.getAddress());
+                    offerMap.put(Constants.id, resultBean1.getOfferid());
+                    offerMap.put(Constants.offerTime, resultBean1.getOfferTime().substring(0, 19));
+                    offerMap.put(Constants.companyName, resultBean1.getCompanyName());
+                    offerMap.put(Constants.address, resultBean1.getAddress());
                     offerList.add(offerMap);
                 }
             }
-            askMap.put("offerList",offerList);
+            askMap.put("offerList", offerList);
             askList.add(askMap);
         }
 
@@ -198,15 +193,15 @@ public class PriceService {
     /**
      * 最新公开询价(限六条)
      */
-    public Response queryNewPriceInfo(int count, String createid){
+    public Response queryNewPriceInfo(int count, String createid) {
         Response response = new Response();
-        List<AskPrice> askPriceList = askPriceMapper.queryNewPriceInfo(count,createid);
+        List<AskPrice> askPriceList = askPriceMapper.queryNewPriceInfo(count, createid);
         List list = new ArrayList();
-        for(int i=0;i<askPriceList.size();i++){
+        for (int i = 0; i < askPriceList.size(); i++) {
             AskPrice askPrice = askPriceList.get(i);
             Map map = new HashMap();
-            map.put(Constants.id,askPrice.getId());
-            map.put(Constants.companyName,askPrice.getTitle());
+            map.put(Constants.id, askPrice.getId());
+            map.put(Constants.companyName, askPrice.getTitle());
             list.add(map);
         }
         response.setCode(200);
@@ -217,16 +212,16 @@ public class PriceService {
     /**
      * 最新公开询价(分页)
      */
-    public List<AskPrice> queryNewPriceInfoList(Paging<AskPrice> pager,AskPriceSearchBean askPriceSearch){
-        List<AskPrice> askPriceList = askPriceMapper.findAllNewPriceInfoList(pager.getRowBounds(),askPriceSearch);
+    public List<AskPrice> queryNewPriceInfoList(Paging<AskPrice> pager, AskPriceSearchBean askPriceSearch) {
+        List<AskPrice> askPriceList = askPriceMapper.findAllNewPriceInfoList(pager.getRowBounds(), askPriceSearch);
         List list = new ArrayList();
-        for(int i=0;i<askPriceList.size();i++){
+        for (int i = 0; i < askPriceList.size(); i++) {
             AskPrice askPrice = askPriceList.get(i);
             Map map = new HashMap();
-            map.put(Constants.id,askPrice.getId());
-            map.put(Constants.title,askPrice.getTitle());
-            map.put(Constants.publishTime,askPrice.getPublishTime().substring(0,10));
-            map.put(Constants.area,askPrice.getProvinceCode());
+            map.put(Constants.id, askPrice.getId());
+            map.put(Constants.title, askPrice.getTitle());
+            map.put(Constants.publishTime, askPrice.getPublishTime().substring(0, 10));
+            map.put(Constants.area, askPrice.getProvinceCode());
             list.add(map);
         }
         return list;
