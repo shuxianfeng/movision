@@ -483,12 +483,18 @@ public class JobPositionService {
         List<Map<String, Object>> list = new ArrayList<>();
         try {
             Member member = memberMapper.findMemById(id);
-            List<Job> companyList = jobMapper.querySimilarCompany(member.getEmployeeNumber(), Integer.parseInt(member.getEnterpriseType()), id, count);
+            String employeeNumber = member.getEmployeeNumber();
+            String enterpriseType = member.getEnterpriseType();
 
-            for (Job job : companyList) {
-                Job companyInfo = jobMapper.querySimilarCompanyInfo(job.getCreateid());
+            List<String> companyList = jobMapper.querySimilarCompany(
+                    member.getEmployeeNumber() == null ?"":employeeNumber,
+                   member.getEnterpriseType() == null ?0 : Integer.parseInt(enterpriseType),
+                    id, count);
+
+            for (String  createid : companyList) {
+                Job companyInfo = jobMapper.querySimilarCompanyInfo(createid);
                 Map<String, Object> map = new HashMap<>();
-                map.put(Constants.id, job.getCreateid());
+                map.put(Constants.id, createid);
                 map.put(Constants.companyName, companyInfo.getEnterpriseName());
                 map.put(Constants.size, companyInfo.getSize());
                 map.put(Constants.area, companyInfo.getCity());
