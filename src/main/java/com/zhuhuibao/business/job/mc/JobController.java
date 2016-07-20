@@ -29,11 +29,15 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Created by cxx on 2016/4/18 0018.
@@ -288,7 +292,36 @@ public class JobController {
     public void exportResume(HttpServletRequest req, HttpServletResponse response,
                              @ApiParam(value = "简历ID") @RequestParam String resumeID) throws IOException
     {
+        log.info("export resume id == "+resumeID);
+        response.setDateHeader("Expires", 0);
+        response.setHeader("Cache-Control",
+                "no-store, no-cache, must-revalidate");
+        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+        response.setContentType("application/msword");
+        try {
+            String path = req.getSession().getServletContext().getRealPath("/");
+            log.info("base path = "+path);
 
+            Map<String, String> resumeMap = resumeService.exportResume(String.valueOf(resumeID));
+            if (!resumeMap.isEmpty()) {
+                String fileName =  !StringUtils.isEmpty(resumeMap.get("realName")) ? resumeMap.get("realName")+"的简历" :"简历";
+                response.setHeader("Content-disposition", "attachment; filename=\""
+                        + URLEncoder.encode(fileName, "UTF-8") + ".doc\"");
+                HWPFDocument document = ExporDoc.replaceDoc(path + "resumeTemplate.doc", resumeMap);
+
+                ByteArrayOutputStream ostream = new ByteArrayOutputStream();
+                if (document != null) {
+                    document.write(ostream);
+                }
+
+                ServletOutputStream stream = response.getOutputStream();
+                stream.write(ostream.toByteArray());
+                stream.flush();
+                stream.close();
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     @RequestMapping(value="export_resume_batch", method = RequestMethod.GET)
@@ -296,6 +329,37 @@ public class JobController {
     public void export_resume_batch(HttpServletRequest req, HttpServletResponse response,
                              @RequestParam String ids) throws IOException
     {
-
+        response.setDateHeader("Expires", 0);
+        response.setHeader("Cache-Control",
+                "no-store, no-cache, must-revalidate");
+        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+        response.setContentType("application/octet-stream");
+        try {
+            String path = req.getSession().getServletContext().getRealPath("/");
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ZipOutputStream zipOut = new ZipOutputStream(bos);
+            log.info("base path = "+path);
+            String[] idList = ids.split(",");
+            for (String resumeID : idList) {
+                Map<String, String> resumeMap = resumeService.exportResume(String.valueOf(resumeID));
+                if (!resumeMap.isEmpty()) {
+                    String fileName =  !StringUtils.isEmpty(resumeMap.get("realName")) ? resumeMap.get("realName")+"的简历" :"简历";
+                    HWPFDocument document = ExporDoc.replaceDoc(path + "resumeTemplate.doc", resumeMap);
+                    FileOutputStream fout = new FileOutputStream(new File("temp.doc"));
+                    if (document != null) {
+                        document.write(fout);
+                    }
+                    zipOut.putNextEntry(new ZipEntry(URLEncoder.encode(fileName,"UTF-8")+".doc"));
+                }
+            }
+            response.setHeader("Content-disposition", "attachment; filename=\""
+                    + URLEncoder.encode("简历", "UTF-8") + ".zip\"");
+            ServletOutputStream stream = response.getOutputStream();
+            stream.write(bos.toByteArray());
+            stream.flush();
+            stream.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }
