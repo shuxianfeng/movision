@@ -412,4 +412,20 @@ public class Constants {
 			return this.value;
 		}
 	}
+
+
+    /**
+     * 频道类型 1:平台主站  2：工程商 ，3：商城，4：项目，5：威客，6：人才，7：会展，8：技术，9：专家
+     */
+    public enum AdvChannType{
+        IHOME("1"),CONTRACTOR ("2"),MALL("3"),PROJECT("4"),WITKEY("5"),
+        JOB("6"),EXHIBITION("7"),TECH("8"),EXPERT("9");
+        public final String  value;
+
+        AdvChannType(String value){this.value = value;}
+        @Override
+        public String toString() {
+            return this.value;
+        }
+    }
 }

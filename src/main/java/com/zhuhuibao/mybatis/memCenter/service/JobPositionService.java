@@ -8,6 +8,8 @@ import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
+import com.zhuhuibao.mybatis.advertising.service.SysAdvertisingService;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
@@ -48,6 +50,9 @@ public class JobPositionService {
 
     @Autowired
     ZhbService zhbService;
+
+    @Autowired
+    private SysAdvertisingService advService;
 
     /**
      * 发布职位
@@ -201,30 +206,47 @@ public class JobPositionService {
     /**
      * 职位类别
      */
-    public List positionType() {
+    public List<Map<String,Object>> positionType() {
         List<Position> positionList = positionMapper.findPosition(7);
         List<Position> subPositionList = positionMapper.findSubPosition();
-        List list1 = new ArrayList();
-        for (int i = 0; i < positionList.size(); i++) {
-            Position position = positionList.get(i);
-            Map map = new HashMap();
+        List<Map<String,Object>> retList = new ArrayList<>();
+        for (Position position : positionList) {
+            Map<String,Object> map = new HashMap<>();
             map.put(Constants.code, position.getId());
             map.put(Constants.name, position.getName());
-            List list = new ArrayList();
-            for (int y = 0; y < subPositionList.size(); y++) {
-                Position subPosition = subPositionList.get(y);
+
+            List<Map<String,String>> pList = new ArrayList<>();
+            List<Map<String,String>> advList = new ArrayList<>();
+
+            for (Position subPosition : subPositionList) {
                 if (position.getId().equals(subPosition.getParentId())) {
-                    Map map1 = new HashMap();
+                    Map<String,String> map1 = new HashMap<>();
                     map1.put(Constants.code, subPosition.getId());
                     map1.put(Constants.name, subPosition.getName());
                     map1.put(Constants.hot, subPosition.getHot());
-                    list.add(map1);
+                    pList.add(map1);
+                    //广告项
+//                    chanType,page,advArea
+                    String chanType = Constants.AdvChannType.JOB.toString();  //招聘频道
+                    String page = "index";//首页
+                    String advArea = "A" + position.getId();
+                    List<SysAdvertising> advertisings = advService.findListByCondition(chanType,page,advArea);
+                    for(SysAdvertising adv : advertisings){
+                        Map<String,String> tmpMap = new HashMap<>();
+                        tmpMap.put("title",adv.getTitle());
+                        tmpMap.put("imgUrl",adv.getImgUrl());
+                        tmpMap.put("linkUrl",adv.getLinkUrl());
+                        tmpMap.put("id",adv.getConnectedId());
+                        advList.add(tmpMap);
+                    }
                 }
             }
-            map.put(Constants.subPositionList, list);
-            list1.add(map);
+            map.put(Constants.subPositionList, pList);
+            map.put("advList",advList);
+
+            retList.add(map);
         }
-        return list1;
+        return retList;
     }
 
     /**

@@ -59,7 +59,8 @@ public class PaymentService {
 
     /**
      * 查看已消费的商品信息
-     * @param goodsID  商品ID
+     *
+     * @param goodsID 商品ID
      * @return
      * @throws Exception
      */
@@ -67,98 +68,101 @@ public class PaymentService {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
         Long companyId = ShiroUtil.getCompanyID();
-        Map<String,Object> dataMap = new HashMap<String,Object>();
-        if(createId != null) {
-            Map<String,Object> con = new HashMap<String,Object>();
+        Map<String, Object> dataMap = new HashMap<>();
+        if (createId != null) {
+            Map<String, Object> con = new HashMap<>();
             //商品ID
             con.put("goodsId", goodsID);
-            con.put("companyId",companyId);
-            con.put("type",type);
+            con.put("companyId", companyId);
+            con.put("type", type);
             //项目是否已经被同企业账号查看过
             int viewNumber = goodsService.checkIsViewGoods(con);
-            if(viewNumber == 0) {
-                if(CKXMXX.toString().equals(type))//查看项目信息
+            if (viewNumber == 0) {
+                if (CKXMXX.toString().equals(type))//查看项目信息
                 {
-                    Map<String,Object> map  = projectService.previewUnLoginProject(goodsID);
-                    dataMap.put("info",map);
-                }else if(CKJSCG.toString().equals(type))//查看技术成果
+                    Map<String, Object> map = projectService.previewUnLoginProject(goodsID);
+                    dataMap.put("info", map);
+                } else if (CKJSCG.toString().equals(type))//查看技术成果
                 {
-                    Map<String,Object> techCoop = techService.previewUnloginTechCoopDetail(String.valueOf(goodsID));
-                    dataMap.put("info",techCoop);
-                }else if(CKZJJSCG.toString().equals(type))//查看专家技术成果
+                    Map<String, Object> techCoop = techService.previewUnloginTechCoopDetail(String.valueOf(goodsID));
+                    dataMap.put("info", techCoop);
+                } else if (CKZJJSCG.toString().equals(type))//查看专家技术成果
                 {
-                    Map<String,String> map = expertService.queryUnloginAchievementById(String.valueOf(goodsID));
-                    dataMap.put("info",map);
-                }else if(CKZJXX.toString().equals(type))//查看专家信息
+                    Map<String, String> map = expertService.queryUnloginAchievementById(String.valueOf(goodsID));
+                    dataMap.put("info", map);
+                } else if (CKZJXX.toString().equals(type))//查看专家信息
                 {
-                    Map map = expertService.getExpertDetail(String.valueOf(goodsID),viewNumber);
-                    dataMap.put("info",map);
+                    Map map = expertService.getExpertDetail(String.valueOf(goodsID), viewNumber);
+                    dataMap.put("info", map);
                 }
                 dataMap.put("payment", ZhbPaymentConstant.PAY_ZHB_NON_PURCHASE);
                 response.setData(dataMap);
 
-            }else {
+            } else {
                 //查看下载简历
-                if(CXXZJL.toString().equals(type)) {
+                if (CXXZJL.toString().equals(type)) {
                     Resume resume2 = resume.previewResume(String.valueOf(goodsID));
-                    dataMap.put("info",resume2);
-                    Resume resumeBean=new Resume();
+                    dataMap.put("info", resume2);
+                    Resume resumeBean = new Resume();
                     resumeBean.setViews("1");
                     resumeBean.setId(String.valueOf(goodsID));
                     //更新点击率
                     resume.updateResume(resumeBean);
-                    Map<String,Object> map1 = new HashMap<String,Object>();
+                    Map<String, Object> map1 = new HashMap<>();
                     map1.put("resumeID", goodsID);
-                    map1.put("companyID",companyId);
-                    map1.put("createId",resume2.getCreateid());
+                    map1.put("companyID", companyId);
+                    map1.put("createId", resume2.getCreateid());
                     //谁查看过我的简历 同一个人可以查看相同简历多次。
                     resume.addLookRecord(map1);
-                }else if(CKXMXX.toString().equals(type))//查看项目信息
+                } else if (CKXMXX.toString().equals(type))//查看项目信息
                 {
-                    Map<String,Object> map  = projectService.queryProjectDetail(goodsID);
-                    dataMap.put("info",map);
-                }else if(CKWKRW.toString().equals(type))//查看威客任务
+                    Map<String, Object> map = projectService.queryProjectDetail(goodsID);
+                    //记录我查看的项目信息
+
+
+                    dataMap.put("info", map);
+                } else if (CKWKRW.toString().equals(type))//查看威客任务
                 {
                     Cooperation cooperation = cooperationService.queryCooperationInfoById(String.valueOf(goodsID));
-                    dataMap.put("info",cooperation);
-                    cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews())+1));
+                    dataMap.put("info", cooperation);
+                    cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews()) + 1));
                     cooperationService.updateCooperationViews(cooperation);
-                }else if(CKJSCG.toString().equals(type))//查看技术成果
+                } else if (CKJSCG.toString().equals(type))//查看技术成果
                 {
-                    Map<String,Object> techMap = new HashMap<String,Object>();
-                    techMap.put("id",goodsID);
-                    Map<String,Object> techCoop = techService.previewTechCooperationDetail(techMap);
+                    Map<String, Object> techMap = new HashMap<>();
+                    techMap.put("id", goodsID);
+                    Map<String, Object> techCoop = techService.previewTechCooperationDetail(techMap);
                     techService.updateTechCooperationViews(String.valueOf(goodsID));
-                    dataMap.put("info",techCoop);
-                }else if(CKZJJSCG.toString().equals(type))//查看专家技术成果
+                    dataMap.put("info", techCoop);
+                } else if (CKZJJSCG.toString().equals(type))//查看专家技术成果
                 {
-                    Map<String,String> map = expertService.queryAchievementById(String.valueOf(goodsID));
-                    dataMap.put("info",map);
-                }else if(CKZJXX.toString().equals(type))//查看专家信息
+                    Map<String, String> map = expertService.queryAchievementById(String.valueOf(goodsID));
+                    dataMap.put("info", map);
+                } else if (CKZJXX.toString().equals(type))//查看专家信息
                 {
-                    Map map = expertService.getExpertDetail(String.valueOf(goodsID),viewNumber);
-                    dataMap.put("info",map);
+                    Map map = expertService.getExpertDetail(String.valueOf(goodsID), viewNumber);
+                    dataMap.put("info", map);
                 }
                 dataMap.put("payment", ZhbPaymentConstant.PAY_ZHB_PURCHASE);
                 response.setData(dataMap);
             }
-        }else{
-            if(CKJSCG.toString().equals(type)){//查看技术成果
-                Map<String,Object> techCoop = techService.previewUnloginTechCoopDetail(String.valueOf(goodsID));
+        } else {
+            if (CKJSCG.toString().equals(type)) {//查看技术成果
+                Map<String, Object> techCoop = techService.previewUnloginTechCoopDetail(String.valueOf(goodsID));
                 techService.updateTechCooperationViews(String.valueOf(goodsID));
-                dataMap.put("info",techCoop);
+                dataMap.put("info", techCoop);
                 response.setData(dataMap);
-            }else if(CKZJJSCG.toString().equals(type))//查看专家技术成果
+            } else if (CKZJJSCG.toString().equals(type))//查看专家技术成果
             {
-                Map<String,String> map = expertService.queryUnloginAchievementById(String.valueOf(goodsID));
-                dataMap.put("info",map);
+                Map<String, String> map = expertService.queryUnloginAchievementById(String.valueOf(goodsID));
+                dataMap.put("info", map);
                 response.setData(dataMap);
-            }else if(CKZJXX.toString().equals(type))//查看专家信息
+            } else if (CKZJXX.toString().equals(type))//查看专家信息
             {
-                Map map = expertService.getExpertDetail(String.valueOf(goodsID),0);
-                dataMap.put("info",map);
+                Map map = expertService.getExpertDetail(String.valueOf(goodsID), 0);
+                dataMap.put("info", map);
                 response.setData(dataMap);
-            }else {
+            } else {
                 throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }

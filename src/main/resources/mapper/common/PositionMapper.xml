@@ -8,7 +8,7 @@
     <result column="hot" property="hot" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, parentId
+    id, name, parentId,hot
   </sql>
   <update id="setupHotPosition">
     update t_dictionary_position

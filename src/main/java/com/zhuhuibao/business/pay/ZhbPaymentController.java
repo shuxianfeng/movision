@@ -29,7 +29,6 @@ public class ZhbPaymentController {
     @RequestMapping(value = "sel_payment", method = RequestMethod.GET)
     public Response previewResume(@ApiParam(value = "商品ID") @RequestParam String GoodsID,
                                   @ApiParam(value = "商品类型同筑慧币") @RequestParam String type) throws Exception {
-        Response response = paymentService.viewGoodsRecord(Long.parseLong(GoodsID),type);
-        return response;
+        return paymentService.viewGoodsRecord(Long.parseLong(GoodsID),type);
     }
 }
