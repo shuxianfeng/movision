@@ -231,7 +231,7 @@
         and t.post like concat('%',#{title},'%')
       </if>
       <if test="jobCity != null and jobCity != ''">
-        and t.jobCity = #{jobCity}
+        and (#{jobCity} in(t.jobCity) or (select provincecode from t_dictionary_city where code = #{jobCity}) in(t.jobProvince))
       </if>
       <if test="expYearBefore != null and expYearBefore != '' and expYearBehind != null and expYearBehind != ''">
         and t.experienceYear &gt;= #{expYearBefore} and t.experienceYear &lt;= #{expYearBehind}
