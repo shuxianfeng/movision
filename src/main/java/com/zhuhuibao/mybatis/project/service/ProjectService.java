@@ -655,7 +655,7 @@ public class ProjectService {
     public List<Map<String, Object>> queryLatestNProject(String count) {
         List<Map<String,Object>> list ;
         try{
-            list =  projectMapper.queryLatestNProject(count);
+            list =  projectMapper.queryLatestNProject(Integer.valueOf(count));
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
