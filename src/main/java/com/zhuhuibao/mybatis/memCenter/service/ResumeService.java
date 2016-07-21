@@ -1,33 +1,30 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ConvertUtil;
+import com.zhuhuibao.fsearch.utils.StringUtil;
+import com.zhuhuibao.mybatis.memCenter.entity.CollectRecord;
+import com.zhuhuibao.mybatis.memCenter.entity.DownloadRecord;
+import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
+import com.zhuhuibao.mybatis.memCenter.entity.Resume;
+import com.zhuhuibao.mybatis.memCenter.mapper.*;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.pagination.model.Paging;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ApiConstants;
-import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.constant.ZhbPaymentConstant;
-import com.zhuhuibao.common.util.ConvertUtil;
-import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.mybatis.memCenter.entity.CollectRecord;
-import com.zhuhuibao.mybatis.memCenter.entity.DownloadRecord;
-import com.zhuhuibao.mybatis.memCenter.entity.Resume;
-import com.zhuhuibao.mybatis.memCenter.mapper.CollectRecordMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.DownloadRecordMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.ResumeLookRecordMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
-import com.zhuhuibao.mybatis.zhb.service.ZhbService;
-import com.zhuhuibao.utils.pagination.model.Paging;
+
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by cxx on 2016/4/19 0019.
@@ -42,8 +39,6 @@ public class ResumeService {
 
     @Autowired
     ApiConstants apiConstants;
-    @Autowired
-    ZhbService zhbService;
 
     @Autowired
     private ResumeLookRecordMapper resumeLookRecordMapper;
@@ -318,67 +313,6 @@ public class ResumeService {
         }
         return resumeMap;
     }
-    
-    
-	  /**
-	   * 导入简历记录，记录现在数据扣筑慧币
-	   * @param id
-	   * @return
-	 * @throws Exception 
-	 * @throws NumberFormatException 
-	   */
-    public Map<String, String> exportResumeNew(String id,String money) throws NumberFormatException, Exception {
-        Map<String, String> resumeMap = new HashMap<>();
-        Map<String, String> recordMap =null;
-        Resume resume = resumeMapper.previewResume(id);
-        Long createId = ShiroUtil.getCreateID();
-        Long companyId = ShiroUtil.getCompanyID();
-        if (resume != null) {
-        	recordMap = new HashMap<>();
-            resumeMap.put("title", resume.getTitle() != null && !StringUtils.isEmpty(resume.getTitle()) ? resume.getTitle() : "");
-            resumeMap.put("name", resume.getRealName() != null && !StringUtils.isEmpty(resume.getRealName()) ? resume.getRealName() : "");
-            resumeMap.put("sex", resume.getSex() != null && !StringUtils.isEmpty(resume.getSex()) ? resume.getSex() : "");
-            resumeMap.put("marriage", resume.getMarriage() != null && !StringUtils.isEmpty(resume.getMarriage()) ? resume.getMarriage() : "");
-            resumeMap.put("birthYear", resume.getBirthYear() != null && !StringUtils.isEmpty(resume.getBirthYear()) ? resume.getBirthYear() : "");
-            resumeMap.put("education", resume.getEducation() != null && !StringUtils.isEmpty(resume.getEducation()) ? resume.getEducation() : "");
-            resumeMap.put("liveArea", resume.getLiveArea() != null && !StringUtils.isEmpty(resume.getLiveArea()) ? resume.getLiveArea() : "");
-            resumeMap.put("workYear", resume.getWorkYear() != null && !StringUtils.isEmpty(resume.getWorkYear()) ? resume.getWorkYear() : "");
-            resumeMap.put("mobile", resume.getMobile() != null && !StringUtils.isEmpty(resume.getMobile()) ? resume.getMobile() : "");
-            resumeMap.put("email", resume.getEmail() != null && !StringUtils.isEmpty(resume.getEmail()) ? resume.getEmail() : "");
-            resumeMap.put("jobNature", resume.getJobNature() != null && !StringUtils.isEmpty(resume.getJobNature()) ? resume.getJobNature() : "");
-            resumeMap.put("post", resume.getPost() != null && !StringUtils.isEmpty(resume.getPost()) ? resume.getPost() : "");
-            resumeMap.put("jobArea", resume.getJobArea() != null &&! StringUtils.isEmpty(resume.getJobArea()) ? resume.getJobArea() : "");
-            resumeMap.put("hopeSalary", resume.getHopeSalary() != null && !StringUtils.isEmpty(resume.getHopeSalary()) ? resume.getHopeSalary() : "");
-            resumeMap.put("status", resume.getStatus() != null && !StringUtils.isEmpty(resume.getStatus()) ? resume.getStatus() : "");
-            //表格内的使用“(char)11”换行，ascii码的制表符.表格外的参数使用“\r”换行
-            if (resume.getEduExperience() != null && !StringUtils.isEmpty(resume.getEduExperience())) {
-                resumeMap.put("eduExperience", resume.getEduExperience().replaceAll("<br/>", String.valueOf((char) 11)));
-            } else {
-                resumeMap.put("eduExperience", "");
-            }
-            if (resume.getJobExperience() != null && !StringUtils.isEmpty(resume.getJobExperience())) {
-                resumeMap.put("jobExperience", resume.getJobExperience().replaceAll("<br/>", String.valueOf((char) 11)));
-            } else {
-                resumeMap.put("jobExperience", "");
-            }
-            if (resume.getProjectExperience() != null && !StringUtils.isEmpty(resume.getProjectExperience())) {
-                resumeMap.put("projectExperience", resume.getProjectExperience().replaceAll("<br/>", String.valueOf((char) 11)));
-            } else {
-                resumeMap.put("projectExperience", "");
-            }
-
-            //记录下载状态
-            recordMap.put("resumeID", id);
-            recordMap.put("companyID", companyId.toString());
-            recordMap.put("createId", createId.toString());
-            resumeMapper.insertDownRecord(recordMap);
-            //删除收藏夹子
-            resumeMapper.delCollRecord(recordMap);
-            // 扣除筑慧币
-            zhbService.payForGoods(Long.valueOf(id), ZhbPaymentConstant.goodsType.FBZW.toString());
-        }
-        return resumeMap;
-    }
 
     public String downloadBill(String id) {
         Resume resume = resumeMapper.searchResumeById(id);
@@ -534,50 +468,4 @@ public class ResumeService {
             throw e;
         }
     }
-    /**
-     * 简历预览
-     * @param id
-     * @return
-     */
-	public Resume previewResumeNew(String id) {
-		 try {
-	            return resumeMapper.previewResume(id);
-	        } catch (Exception e) {
-	            throw e;
-	        }
-	}
-    /**
-     * 简历是否收藏或下载
-     * @param con
-     * @return
-     */
-	public Map isDownOrColl(Map<String, Object> con) {
-		try {
-            return resumeMapper.isDownOrColl(con);
-        } catch (Exception e) {
-            throw e;
-        }
-	}
-	
-   /**
-    * 收藏简历
-    * @param con
- * @return 
-    */
-	public int insertCollRecord(String id) {
-	   try {
-		   
-		    Map<String, Object> resumeMap=new HashMap<String, Object>();
-		    Long createId = ShiroUtil.getCreateID();
-	        Long companyId = ShiroUtil.getCompanyID();
-	        resumeMap.put("resumeID", id);
-	        resumeMap.put("companyID", companyId.toString());
-	        resumeMap.put("createId", createId.toString());
-            return resumeMapper.insertCollRecord(resumeMap);
-            
-         } catch (Exception e) {
-            throw e;
-         }
-	}
-	 
 }

@@ -77,11 +77,11 @@ public class VipConstant {
 	public final static Map<String, String> VIP_LEVEL_NAME = new HashMap<String, String>() {
 		{
 			put(VipLevel.PERSON_FREE.toString(), "个人普通会员");
-			put(VipLevel.PERSON_GOLD.toString(), "个人黄金VIP会员");
-			put(VipLevel.PERSON_PLATINUM.toString(), "个人铂金VIP会员");
+			put(VipLevel.PERSON_GOLD.toString(), "个人黄金盟友");
+			put(VipLevel.PERSON_PLATINUM.toString(), "个人铂金盟友");
 			put(VipLevel.ENTERPRISE_FREE.toString(), "企业普通会员");
-			put(VipLevel.ENTERPRISE_GOLD.toString(), "企业黄金VIP会员");
-			put(VipLevel.ENTERPRISE_PLATINUM.toString(), "企业铂金VIP会员");
+			put(VipLevel.ENTERPRISE_GOLD.toString(), "企业黄金盟友");
+			put(VipLevel.ENTERPRISE_PLATINUM.toString(), "企业铂金盟友");
 		}
 	};
 
@@ -107,6 +107,6 @@ public class VipConstant {
 	 * 额外自定义特权-企业
 	 */
 	public final static int EXTRA_PRIVILEGE_LEVEL_ENTERPRISE = 201;
-	
+
 	public final static String[] CHARGE_VIP_LEVEL =  {"30","60","130","160"};
 }

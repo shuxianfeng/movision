@@ -8,7 +8,7 @@
     <result column="hot" property="hot" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, parentId
+    id, name, parentId,hot
   </sql>
   <update id="setupHotPosition">
     update t_dictionary_position
@@ -16,7 +16,7 @@
     where id = #{positionId}
   </update>
   <select id="findPosition" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_dictionary_position
     where parentId = 0 limit 0,#{size}

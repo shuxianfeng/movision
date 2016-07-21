@@ -1,7 +1,5 @@
-package com.zhuhuibao.business.project.site;/**
- * @author Administrator
- * @version 2016/5/16 0016
- */
+package com.zhuhuibao.business.project.site;
+
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -45,16 +43,11 @@ public class TenderTonedController {
                                            @ApiParam(value = "开工日期查询结束日期") @RequestParam(required = false) String startDateB,
                                            @ApiParam(value = "竣工日期查询开始日期") @RequestParam(required = false) String endDateA,
                                            @ApiParam(value = "竣工日期查询结束日期") @RequestParam(required = false) String endDateB,
-                                           @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-                                           @ApiParam(value="每页显示的条数") @RequestParam(required = false) String pageSize) throws Exception {
+                                           @ApiParam(value = "页码") @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                           @ApiParam(value="每页显示的条数") @RequestParam(required = false,defaultValue = "10") String pageSize) throws Exception {
         Response response = new Response();
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Map<String,Object> map = new HashMap<String,Object>();
+
+        Map<String,Object> map = new HashMap<>();
         map.put("type",type);
         if(noticeName != null && !"".equals(noticeName))
         {
@@ -66,8 +59,8 @@ public class TenderTonedController {
         map.put("startDateB",startDateB);
         map.put("endDateA",endDateA);
         map.put("endDateB",endDateB);
-        Paging<TenderToned> pager = new Paging<TenderToned>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-        List<TenderToned> ttList = ttService.findAllTenderTonedPager(map,pager);
+        Paging<Map<String,Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Map<String,Object>> ttList = ttService.findAllTenderTonedNPager(map,pager);
         pager.result(ttList);
         response.setData(pager);
         return response;
@@ -81,12 +74,12 @@ public class TenderTonedController {
         response.setData(tenderToned);
         return response;
     }
-    
+
     @RequestMapping(value = {"queryLatestTenderToned","site/base/sel_latestTenderToned"}, method = RequestMethod.GET)
     @ApiOperation(value = "最新招标或中标公告信息或搜索时的推荐，默认10条",notes = "最新招标或中标公告信息，默认10条",response = Response.class)
     public Response queryLatestTenderToned(@ApiParam(value="公告类型 1:招标公告，2：中标公告") @RequestParam() String type) throws Exception {
         Response response = new Response();
-        Map<String,Object> map = new HashMap<String,Object>();
+        Map<String,Object> map = new HashMap<>();
         map.put("type",type);
         map.put("count",10);
         List<Map<String,String>> projectList = ttService.queryLatestTenderToned(map);

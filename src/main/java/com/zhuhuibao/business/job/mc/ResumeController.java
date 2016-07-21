@@ -74,6 +74,11 @@ public class ResumeController {
     public Response setUpResume(@ModelAttribute Resume resume) throws IOException {
         Long createid = ShiroUtil.getCreateID();
         Response response = new Response();
+        String[] provicnes = resume.getJobProvince().split(",");
+        String[] citys = resume.getJobCity().split(",");
+        if(provicnes.length+citys.length>5){
+            throw new BusinessException(MsgCodeConstant.RESUME_JOB_COUNT_LIMIT, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.RESUME_JOB_COUNT_LIMIT)));
+        }
         if(createid!=null){
             resume.setCreateid(createid.toString());
             response = resumeService.setUpResume(resume,createid.toString());
@@ -201,7 +206,7 @@ public class ResumeController {
     @ApiOperation(value = "HR通知列表", notes = "HR通知列表")
     @RequestMapping(value = "sel_myResumeLookRecord", method = RequestMethod.GET)
     public Response sel_myResumeLookRecord(@RequestParam(required = false)String pageNo, @RequestParam(required = false)String pageSize)
-            {
+    {
         Response response = new Response();
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -220,7 +225,7 @@ public class ResumeController {
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-                return response;
+        return response;
     }
 
     @ApiOperation(value = "增加屏蔽企业", notes = "增加屏蔽企业")

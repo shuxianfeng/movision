@@ -213,28 +213,6 @@
     where r.id = #{id}
 
   </select>
-  
-  <select id="previewResumeNew" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select r.id,r.createid,r.title,r.realName,r.birthYear,dc.name education,r.photo,
-    case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,
-    case WHEN r.marriage =0 then '未婚' WHEN r.marriage =1 THEN '已婚' WHEN r.marriage =2 THEN '保密' END AS marriage,
-    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
-    concat(p.name,c.name,a.name)AS liveArea,concat(ci.name,ar.name)AS jobArea,co.name as hopeSalary,
-    r.jobExperience,r.projectExperience,r.eduExperience,r.attach,con.name AS status,
-    (select Group_concat(name) from t_dictionary_constant where find_in_set(code,r.jobNature) and type=7)AS jobNature,
-    (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post
-    from t_i_resume r
-    LEFT JOIN t_dictionary_province p on r.liveProvince = p.code
-    left join t_dictionary_city c on r.liveCity = c.code
-    left join t_dictionary_area a on r.liveArea = a.code
-    left join t_dictionary_city ci on r.jobCity = ci.code
-    left join t_dictionary_area ar on r.jobArea = ar.code
-    left join t_dictionary_constant co on co.code = r.hopeSalary and co.type =1
-    left join t_dictionary_constant con on con.code = r.status and con.type = 6
-    left join t_dictionary_constant dc on dc.code = r.education and dc.type = 2
-    where r.id = #{id}
-
-  </select>
   <select id="findAllResume" parameterType="java.util.Map" resultType="java.util.Map">
     select t.id,t.createid,t.title,concat(substring(t.realName,1,1),'**') realName,
     t.hopeSalary,m.headShot as photo,t.education,
@@ -271,9 +249,9 @@
         and t.isPublic = #{isPublic}
       </if>
       <if test="positionList != null">
-      <foreach collection="positionList" item="item" index="index" open="and (" separator="or" close=")" >
-        find_in_set(#{item},t.post)
-      </foreach>
+        <foreach collection="positionList" item="item" index="index" open="and (" separator="or" close=")" >
+          find_in_set(#{item},t.post)
+        </foreach>
       </if>
       <if test="company_id != null">
         and t.createid not in (select t.create_id from t_i_forbid_key_words t where t.company_id = #{company_id} and t.is_deleted = 0)
@@ -335,36 +313,6 @@
     where rd.companyID = #{id} and rd.is_deleted = 0
   </select>
 
-  
-   <select id="isDownOrColl" parameterType="java.util.Map" resultType="java.util.Map">
-   
-   select r.id ,(case when isnull(t.id) then 1 else 0 end ) isDown, 
-	(case when isnull(c.id) then 1 else 0 end) isCollect
-	 from (select id from t_i_resume  where id=#{goodsId}) r 
-	left join  t_i_resume_download_record t on r.id= t.resumeID and t.is_deleted=0
-	left join t_i_resume_collect_record c on r.id=c.resumeID and c.is_deleted=0
-	where t.companyID=#{companyId} or c.companyID=#{companyId} 
-	
-  </select>
-  
-  <insert id="insertDownRecord" parameterType="java.util.Map" > 
-    insert into t_i_resume_download_record(resumeID,companyID,createId,publishDate) 
-    select #{resumeID},#{companyID},t.createid,now() from t_i_resume t where id=#{resumeID}
-   </insert>
-  
-   
-   <update id="delCollRecord" parameterType="java.util.Map" > 
-    update t_i_resume_collect_record set is_deleted=1
-    where resumeID=#{resumeID} and companyID=#{companyID} and is_deleted=0
-   </update>
-   
-   <insert id="insertCollRecord" parameterType="java.util.Map" > 
-    insert into t_i_resume_collect_record(resumeID,companyID,createId,publishDate)      
-    select #{resumeID},#{companyID},t.createid,now() from t_i_resume t where id=#{resumeID}
-   </insert>
-   
-
-
   <select id="findAllCollectResume" parameterType="java.lang.String" resultType="java.util.Map">
     select r.id,rd.id as recordId,concat(substring(r.realName,1,1),'**') realName,
     (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post,
@@ -374,5 +322,4 @@
     left join t_i_resume r on r.id = rd.resumeID
     where rd.companyID = #{id} and rd.is_deleted = 0
   </select>
-
 </mapper>

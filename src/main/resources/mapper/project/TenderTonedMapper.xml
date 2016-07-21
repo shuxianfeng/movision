@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuhuibao.mybatis.oms.mapper.TenderTonedMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.oms.entity.TenderToned" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="noticeName" property="noticeName" jdbcType="VARCHAR" />
-    <result column="createid" property="createid" jdbcType="BIGINT" />
-    <result column="publishDate" property="publishDate" jdbcType="DATE" />
-    <result column="updateDate" property="updateDate" jdbcType="DATE" />
-    <result column="projectName" property="projectName" jdbcType="CHAR" />
-    <result column="province" property="province" jdbcType="VARCHAR" />
-    <result column="city" property="city" jdbcType="VARCHAR" />
-    <result column="area" property="area" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="INTEGER" />
-    <result column="startDate" property="startDate" jdbcType="DATE" />
-    <result column="endDate" property="endDate" jdbcType="DATE" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="is_deleted" property="is_deleted" jdbcType="TINYINT" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+    <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.oms.entity.TenderToned" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="noticeName" property="noticeName" jdbcType="VARCHAR" />
+        <result column="createid" property="createid" jdbcType="BIGINT" />
+        <result column="publishDate" property="publishDate" jdbcType="DATE" />
+        <result column="updateDate" property="updateDate" jdbcType="DATE" />
+        <result column="projectName" property="projectName" jdbcType="CHAR" />
+        <result column="province" property="province" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="startDate" property="startDate" jdbcType="DATE" />
+        <result column="endDate" property="endDate" jdbcType="DATE" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="is_deleted" property="is_deleted" jdbcType="TINYINT" />
+    </resultMap>
+    <sql id="Base_Column_List" >
     id, noticeName, createid, date_format(publishDate,'%Y-%m-%d') publishDate,
     date_format(updateDate,'%Y-%m-%d') updateDate, projectName, province, city, area,
     type, startDate, endDate, content, is_deleted
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select t.id, t.noticeName, t.createid, date_format(t.publishDate,'%Y-%m-%d') publishDate,
     date_format(t.updateDate,'%Y-%m-%d') updateDate, t.projectName, concat(pn.name,ct.name,ar.name) area,ct.name city,pn.name province,
     t.type, date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate, t.content
@@ -32,8 +32,8 @@
     left join t_dictionary_area ar on ar.code = t.area
     where t.id = #{id}
   </select>
-  
-   <select id="selectByPrimaryKeyCode" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+
+    <select id="selectByPrimaryKeyCode" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select t.id, t.noticeName, t.createid, date_format(t.publishDate,'%Y-%m-%d') publishDate,
     date_format(t.updateDate,'%Y-%m-%d') updateDate, t.projectName, t.area,t.city,
     t.province,
@@ -44,180 +44,208 @@
     left join t_dictionary_area ar on ar.code = t.area
     where t.id = #{id}
   </select>
-  
-  
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.oms.entity.TenderToned" >
-    insert into t_prj_tender_toned
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="noticeName != null" >
-        noticeName,
-      </if>
-      <if test="createid != null" >
-        createid,
-      </if>
-        publishDate,
-        updateDate,
-      <if test="projectName != null" >
-        projectName,
-      </if>
-      <if test="province != null" >
-        province,
-      </if>
-      <if test="city != null" >
-        city,
-      </if>
-      <if test="area != null" >
-        area,
-      </if>
-      <if test="type != null" >
-        type,
-      </if>
-      <if test="startDate != null" >
-        startDate,
-      </if>
-      <if test="endDate != null" >
-        endDate,
-      </if>
-      <if test="content != null" >
-        content,
-      </if>
-      <if test="is_deleted != null" >
-        is_deleted,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="noticeName != null" >
-        #{noticeName,jdbcType=VARCHAR},
-      </if>
-      <if test="createid != null" >
-        #{createid,jdbcType=BIGINT},
-      </if>
-      current_date(),
-      current_date(),
-      <if test="projectName != null" >
-        #{projectName,jdbcType=CHAR},
-      </if>
-      <if test="province != null" >
-        #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null" >
-        #{city,jdbcType=VARCHAR},
-      </if>
-      <if test="area != null" >
-        #{area,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null" >
-        #{type,jdbcType=INTEGER},
-      </if>
-      <if test="startDate != null" >
-        #{startDate,jdbcType=DATE},
-      </if>
-      <if test="endDate != null" >
-        #{endDate,jdbcType=DATE},
-      </if>
-      <if test="content != null" >
-        #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="is_deleted != null" >
-        #{is_deleted,jdbcType=TINYINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.oms.entity.TenderToned" >
-    update t_prj_tender_toned
-    <set >
-      <if test="noticeName != null" >
-        noticeName = #{noticeName,jdbcType=VARCHAR},
-      </if>
-      <if test="createid != null" >
-        createid = #{createid,jdbcType=BIGINT},
-      </if>
-      <if test="publishDate != null" >
-        publishDate = #{publishDate,jdbcType=DATE},
-      </if>
-        updateDate = current_date(),
-      <if test="projectName != null" >
-        projectName = #{projectName,jdbcType=CHAR},
-      </if>
-      <if test="province != null" >
-        province = #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null" >
-        city = #{city,jdbcType=VARCHAR},
-      </if>
-      <if test="area != null" >
-        area = #{area,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null" >
-        type = #{type,jdbcType=INTEGER},
-      </if>
-      <if test="startDate != null" >
-        startDate = #{startDate,jdbcType=DATE},
-      </if>
-      <if test="endDate != null" >
-        endDate = #{endDate,jdbcType=DATE},
-      </if>
-      <if test="content != null" >
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="is_deleted != null" >
-        is_deleted = #{is_deleted,jdbcType=TINYINT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
 
-  <select id="findAllTenderTonedPager" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.oms.entity.TenderToned">
-    select t.id, t.noticeName, t.createid, date_format(t.publishDate,'%Y-%m-%d') publishDate,
-    date_format(t.updateDate,'%Y-%m-%d') updateDate, t.projectName, concat(pn.name,ct.name,ar.name) area,ct.name city,
-    t.type, date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate, t.content
-    from t_prj_tender_toned t
-    left join t_dictionary_province pn on pn.code = t.province
-    left join t_dictionary_city ct on ct.code = t.city
-    left join t_dictionary_area ar on ar.code = t.area
-    <where>
-      t.is_deleted=0
-      <if test="type != null and type != ''">
-        and type = #{type}
-      </if>
-      <if test="noticeName != null and noticeName != ''">
-        and noticeName like concat('%',#{noticeName},'%')
-      </if>
-      <if test="province != null and province != ''">
-        and province = #{province}
-      </if>
-      <if test="city != null and city != ''">
-        and city = #{city}
-      </if>
-      <if test="startDateA != null and startDateB != null">
-        and t.startDate &gt;= date_format(#{startDateA},'%Y-%m-%d') and t.startDate &lt;= date_format(#{startDateB},'%Y-%m-%d')
-      </if>
-      <if test="endDateA != null and endDateB != null">
-        and t.endDate &gt;= date_format(#{endDateA},'%Y-%m-%d') and t.endDate &lt;= date_format(#{endDateB},'%Y-%m-%d')
-      </if>
-    </where>
-    order by t.updateDate desc
-  </select>
 
-  <select id="queryLatestTenderToned" parameterType="java.util.Map" resultType="java.util.Map">
-    select t.id,t.noticeName,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
-    date_format(t.updateDate,'%Y-%m-%d') updateDate,t.projectName, ct.name city,
-    t.type, date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate, t.content
-    from t_prj_tender_toned t
-    left join t_dictionary_city ct on ct.code = t.city
-    where t.is_deleted = 0
-      <if test="type != null">
-        and t.type = #{type}
-      </if>
-    order by t.updateDate desc
-    <if test="count !=null">
-      limit #{count}
-    </if>
-  </select>
+    <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.oms.entity.TenderToned" >
+        insert into t_prj_tender_toned
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="noticeName != null" >
+                noticeName,
+            </if>
+            <if test="createid != null" >
+                createid,
+            </if>
+            publishDate,
+            updateDate,
+            <if test="projectName != null" >
+                projectName,
+            </if>
+            <if test="province != null" >
+                province,
+            </if>
+            <if test="city != null" >
+                city,
+            </if>
+            <if test="area != null" >
+                area,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="startDate != null" >
+                startDate,
+            </if>
+            <if test="endDate != null" >
+                endDate,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="is_deleted != null" >
+                is_deleted,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="noticeName != null" >
+                #{noticeName,jdbcType=VARCHAR},
+            </if>
+            <if test="createid != null" >
+                #{createid,jdbcType=BIGINT},
+            </if>
+            current_date(),
+            current_date(),
+            <if test="projectName != null" >
+                #{projectName,jdbcType=CHAR},
+            </if>
+            <if test="province != null" >
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null" >
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null" >
+                #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="startDate != null" >
+                #{startDate,jdbcType=DATE},
+            </if>
+            <if test="endDate != null" >
+                #{endDate,jdbcType=DATE},
+            </if>
+            <if test="content != null" >
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="is_deleted != null" >
+                #{is_deleted,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.oms.entity.TenderToned" >
+        update t_prj_tender_toned
+        <set >
+            <if test="noticeName != null" >
+                noticeName = #{noticeName,jdbcType=VARCHAR},
+            </if>
+            <if test="createid != null" >
+                createid = #{createid,jdbcType=BIGINT},
+            </if>
+            <if test="publishDate != null" >
+                publishDate = #{publishDate,jdbcType=DATE},
+            </if>
+            updateDate = current_date(),
+            <if test="projectName != null" >
+                projectName = #{projectName,jdbcType=CHAR},
+            </if>
+            <if test="province != null" >
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null" >
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null" >
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="startDate != null" >
+                startDate = #{startDate,jdbcType=DATE},
+            </if>
+            <if test="endDate != null" >
+                endDate = #{endDate,jdbcType=DATE},
+            </if>
+            <if test="content != null" >
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="is_deleted != null" >
+                is_deleted = #{is_deleted,jdbcType=TINYINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findAllTenderTonedPager" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.oms.entity.TenderToned">
+        select t.id, t.noticeName, t.createid, date_format(t.publishDate,'%Y-%m-%d') publishDate,
+        date_format(t.updateDate,'%Y-%m-%d') updateDate, t.projectName, concat(pn.name,ct.name,ar.name) area,ct.name city,
+        t.type, date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate, t.content
+        from t_prj_tender_toned t
+        left join t_dictionary_province pn on pn.code = t.province
+        left join t_dictionary_city ct on ct.code = t.city
+        left join t_dictionary_area ar on ar.code = t.area
+        <where>
+            t.is_deleted=0
+            <if test="type != null and type != ''">
+                and type = #{type}
+            </if>
+            <if test="noticeName != null and noticeName != ''">
+                and noticeName like concat('%',#{noticeName},'%')
+            </if>
+            <if test="province != null and province != ''">
+                and province = #{province}
+            </if>
+            <if test="city != null and city != ''">
+                and city = #{city}
+            </if>
+            <if test="startDateA != null and startDateB != null">
+                and t.startDate &gt;= date_format(#{startDateA},'%Y-%m-%d') and t.startDate &lt;= date_format(#{startDateB},'%Y-%m-%d')
+            </if>
+            <if test="endDateA != null and endDateB != null">
+                and t.endDate &gt;= date_format(#{endDateA},'%Y-%m-%d') and t.endDate &lt;= date_format(#{endDateB},'%Y-%m-%d')
+            </if>
+        </where>
+        order by t.updateDate desc
+    </select>
+
+    <select id="queryLatestTenderToned" parameterType="java.util.Map" resultType="java.util.Map">
+        select t.id,t.noticeName,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
+        date_format(t.updateDate,'%Y-%m-%d') updateDate,t.projectName, ct.name city,
+        t.type, date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate, t.content
+        from t_prj_tender_toned t
+        left join t_dictionary_city ct on ct.code = t.city
+        where t.is_deleted = 0
+        <if test="type != null">
+            and t.type = #{type}
+        </if>
+        order by t.updateDate desc
+        <if test="count !=null">
+            limit #{count}
+        </if>
+    </select>
+    <select id="findAllTenderTonedNPager" resultType="java.util.Map">
+        select t.id, t.noticeName, t.createid, date_format(t.publishDate,'%Y-%m-%d') publishDate,
+        date_format(t.updateDate,'%Y-%m-%d') updateDate, t.projectName, t.province,t.city, t.area,
+        t.type, date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate
+        from t_prj_tender_toned t
+        <where>
+            t.is_deleted=0
+            <if test="type != null and type != ''">
+                and type = #{type}
+            </if>
+            <if test="noticeName != null and noticeName != ''">
+                and noticeName like concat('%',#{noticeName},'%')
+            </if>
+            <if test="province != null and province != ''">
+                and province = #{province}
+            </if>
+            <if test="city != null and city != ''">
+                and city = #{city}
+            </if>
+            <if test="startDateA != null and startDateB != null">
+                and t.startDate &gt;= date_format(#{startDateA},'%Y-%m-%d') and t.startDate &lt;= date_format(#{startDateB},'%Y-%m-%d')
+            </if>
+            <if test="endDateA != null and endDateB != null">
+                and t.endDate &gt;= date_format(#{endDateA},'%Y-%m-%d') and t.endDate &lt;= date_format(#{endDateB},'%Y-%m-%d')
+            </if>
+        </where>
+        order by t.updateDate desc
+    </select>
 </mapper>
