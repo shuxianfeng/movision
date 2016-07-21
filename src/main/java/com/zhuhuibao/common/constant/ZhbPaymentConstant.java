@@ -89,4 +89,9 @@ public class ZhbPaymentConstant {
      * 简历购买次数不足
      */
     public static final int RESUME_BUY_TIMES_N0 = 3;
+    
+    /**
+     * 可以购买但未下载
+     */
+    public static final int RESUME_BUY_TIMESANDBALANCE_YEAR = 4;
 }
