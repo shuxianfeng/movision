@@ -5,6 +5,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.common.entity.Suggest;
 import com.zhuhuibao.mybatis.common.service.SuggestService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -31,6 +32,10 @@ public class SuggestController {
     public Response add_suggest(@ModelAttribute Suggest suggest) throws IOException
     {
         Response response = new Response();
+        String[] imgUrls = suggest.getImgUrl().split(",");
+        if(imgUrls.length>4){
+            throw new BusinessException(MsgCodeConstant.SUGGEST_URL_COUNT_LIMIT, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.SUGGEST_URL_COUNT_LIMIT)));
+        }
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
             suggestService.addSuggest(suggest);
