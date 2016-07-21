@@ -41,7 +41,7 @@ public class CommonController {
     SysResearchService sysResearchService;
 
     @ApiOperation(value = "上传图片，返回url", notes = "上传图片，返回url", response = Response.class)
-    @RequestMapping(value = {"/rest/uploadImg","/rest/common/upload_img"}, method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/common/upload_img", method = RequestMethod.POST)
     public Response uploadImg(@RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         Response result = new Response();
 
@@ -56,6 +56,15 @@ public class CommonController {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
 
+    }
+
+    @ApiOperation(value = "上传图片，返回url(免登陆)", notes = "上传图片，返回url(免登陆)", response = Response.class)
+    @RequestMapping(value = "/rest/common/upload_img_without_login", method = RequestMethod.POST)
+    public Response upload_img_without_login(@RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
+        Response result = new Response();
+            String url = zhbOssClient.uploadObject(file,"img",null);
+            result.setData(url);
+            return result;
     }
 
     /**
