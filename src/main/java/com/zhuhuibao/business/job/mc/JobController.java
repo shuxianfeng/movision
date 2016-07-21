@@ -335,8 +335,7 @@ public class JobController {
         response.setContentType("application/octet-stream");
         try {
             String path = req.getSession().getServletContext().getRealPath("/");
-            String outFilePath = "简历.zip";
-            File zip = new File(outFilePath);
+            File zip = new File("简历.zip");
             FileOutputStream outStream = new FileOutputStream(zip);
             ZipOutputStream toClient = new ZipOutputStream(outStream);
 
@@ -423,7 +422,8 @@ public class JobController {
 
            OutputStream toClient = new BufferedOutputStream(response.getOutputStream());
            response.setContentType("application/octet-stream");
-           response.setHeader("Content-Disposition", "attachment;filename=" + file.getName());
+           response.setHeader("Content-disposition", "attachment; filename=\""
+                   + URLEncoder.encode("简历", "UTF-8") + ".zip\"");
            toClient.write(buffer);
            toClient.flush();
            toClient.close();
