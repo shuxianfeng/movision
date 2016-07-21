@@ -11,6 +11,7 @@ import com.zhuhuibao.common.pojo.OmsMemBean;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 
@@ -86,6 +87,8 @@ public class MemberOmsController {
 	public Response updateStatus(@ApiParam(value = "会员信息") @ModelAttribute(value="member")Member member)  {
 		Response result = new Response();
 		memberService.updateMemInfo(member);
+		ShiroRealm shiroRealm = new ShiroRealm();
+		shiroRealm.forceShiroToReloadUserAuthorityCache();
 		return result;
 	}
 
@@ -93,6 +96,8 @@ public class MemberOmsController {
 	@ApiOperation(value="完善资料审核",notes="完善资料审核",response = Response.class)
 	public Response updateMemData(@ApiParam(value = "会员信息") @ModelAttribute(value="member")Member member)  {
 		memberService.updateMemData(member);
+		ShiroRealm shiroRealm = new ShiroRealm();
+		shiroRealm.forceShiroToReloadUserAuthorityCache();
 		return new Response();
 	}
 
@@ -101,6 +106,8 @@ public class MemberOmsController {
 	public Response updateCertificate(@ApiParam(value = "资质信息") @ModelAttribute(value="record")CertificateRecord record)  {
 		Response result = new Response();
 		memberService.updateCertificate(record);
+		ShiroRealm shiroRealm = new ShiroRealm();
+		shiroRealm.forceShiroToReloadUserAuthorityCache();
 		return result;
 	}
 

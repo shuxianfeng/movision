@@ -157,8 +157,6 @@ public class AuthenticationController {
             throw new AuthException(MsgCodeConstant.un_login,"请登录");
         } else {
             ShiroUser principal = (ShiroUser) session.getAttribute("member");
-            ShiroRealm shiroRealm = new ShiroRealm();
-            shiroRealm.forceShiroToReloadUserAuthorityCache();
             if (null != principal) {
                 response = memberService.findMemberInfoById(principal.getId());
             }
