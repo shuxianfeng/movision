@@ -11,6 +11,7 @@ import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.security.resubmit.AvoidDuplicateSubmission;
 import com.zhuhuibao.security.resubmit.TokenHelper;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
 
 import org.apache.shiro.SecurityUtils;
@@ -156,6 +157,8 @@ public class AuthenticationController {
             throw new AuthException(MsgCodeConstant.un_login,"请登录");
         } else {
             ShiroUser principal = (ShiroUser) session.getAttribute("member");
+            ShiroRealm shiroRealm = new ShiroRealm();
+            shiroRealm.forceShiroToReloadUserAuthorityCache();
             if (null != principal) {
                 response = memberService.findMemberInfoById(principal.getId());
             }

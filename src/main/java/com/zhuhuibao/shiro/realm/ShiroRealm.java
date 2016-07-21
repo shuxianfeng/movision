@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.cache.Cache;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
@@ -32,47 +34,47 @@ public class ShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(
             PrincipalCollection principals) {
-    	ShiroUser member = (ShiroUser)principals.fromRealm(getName()).iterator().next();
-    	if(null != member){
-    		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-    		
-    		String status = String.valueOf(member.getStatus());
-    		String identity = member.getIdentify();
-    		String role = member.getRole();
-    		String isexpert = member.getIsexpert();
-    		
-    		if(StringUtils.isEmpty(status) || null==identity || null==role || null==isexpert){
-    			return null;
-    		}
-    		
-    		if(identity.equals("2")){
-               role = "100";
-        		if(isexpert.equals("1")){
-        			role =  "200";
-        		}
-    		}else{
-        		if(identity.length() > 1){
-        			String[] strs = identity.split(",");
-        			if(Arrays.asList(strs).contains("3")){
-        				identity = "3,1";
-        			}else{
-        				identity = "1";
-        			}
-        		}else if(!identity.equals("3")){
-        			identity = "1";
-        		}
-        		
-    			if(!role.equals("100")){
-    				role = "300";
-    			}
-    		}
-    		
-    		String perm = identity + ":" + role + ":" + status;
-    		info.addRole(status);
-    		info.addStringPermission(perm);
+        ShiroUser member = (ShiroUser) principals.fromRealm(getName()).iterator().next();
+        if (null != member) {
+            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
-    		return info;
-    	}
+            String status = String.valueOf(member.getStatus());
+            String identity = member.getIdentify();
+            String role = member.getRole();
+            String isexpert = member.getIsexpert();
+
+            if (StringUtils.isEmpty(status) || null == identity || null == role || null == isexpert) {
+                return null;
+            }
+
+            if (identity.equals("2")) {
+                role = "100";
+                if (isexpert.equals("1")) {
+                    role = "200";
+                }
+            } else {
+                if (identity.length() > 1) {
+                    String[] strs = identity.split(",");
+                    if (Arrays.asList(strs).contains("3")) {
+                        identity = "3,1";
+                    } else {
+                        identity = "1";
+                    }
+                } else if (!identity.equals("3")) {
+                    identity = "1";
+                }
+
+                if (!role.equals("100")) {
+                    role = "300";
+                }
+            }
+
+            String perm = identity + ":" + role + ":" + status;
+            info.addRole(status);
+            info.addStringPermission(perm);
+
+            return info;
+        }
         return null;
     }
 
@@ -85,22 +87,22 @@ public class ShiroRealm extends AuthorizingRealm {
         log.info("登录认证");
         String loginname = (String) token.getPrincipal();
         LoginMember loginMember = memberRegService.getLoginMemberByAccount(loginname);
-        if(loginMember != null){
+        if (loginMember != null) {
             if (0 == loginMember.getStatus() || 2 == loginMember.getStatus()) {
                 throw new LockedAccountException(); // 帐号不正常状态
             }
-        }  else{
+        } else {
             throw new UnknownAccountException();//  用户名不存在
         }
-        
-        ShiroUser shiroUser = new ShiroUser(loginMember.getId(), loginMember.getAccount(),loginMember.getStatus(),
-        		loginMember.getIdentify(),loginMember.getRole(),loginMember.getIsexpert(),loginMember.getCompanyId(),
-                loginMember.getRegisterTime(),loginMember.getWorkType(),loginMember.getHeadShot(),
-                loginMember.getNickname(),loginMember.getCompanyName(),loginMember.getVipLevel());
+
+        ShiroUser shiroUser = new ShiroUser(loginMember.getId(), loginMember.getAccount(), loginMember.getStatus(),
+                loginMember.getIdentify(), loginMember.getRole(), loginMember.getIsexpert(), loginMember.getCompanyId(),
+                loginMember.getRegisterTime(), loginMember.getWorkType(), loginMember.getHeadShot(),
+                loginMember.getNickname(), loginMember.getCompanyName(), loginMember.getVipLevel());
 
         // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(
-        		shiroUser, // 用户
+                shiroUser, // 用户
                 loginMember.getPassword(), // 密码
 //                ByteSource.Util.bytes("123"),
                 getName() // realm name
@@ -112,11 +114,27 @@ public class ShiroRealm extends AuthorizingRealm {
      * 更新用户授权信息缓存.
      */
     public void clearCachedAuthorizationInfo(Object principal) {
-        SimplePrincipalCollection principals = new SimplePrincipalCollection(
-                principal, getName());
+        SimplePrincipalCollection principals = new SimplePrincipalCollection(principal, getName());
         clearCachedAuthorizationInfo(principals);
     }
 
+    //登陆成功后强制加载shiro权限缓存 避免懒加载 先清除
+    public void forceShiroToReloadUserAuthorityCache() {
+        this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipal());
+        this.isPermitted(SecurityUtils.getSubject().getPrincipals(), "强制加载缓存，避免懒加载" + System.currentTimeMillis());
+    }
+
+    /**
+     * 清除所有用户授权信息缓存.
+     */
+    public void clearAllCachedAuthorizationInfo() {
+        Cache<Object, AuthorizationInfo> cache = getAuthorizationCache();
+        if (cache != null) {
+            for (Object key : cache.keys()) {
+                cache.remove(key);
+            }
+        }
+    }
 
     /**
      * 自定义Authentication对象，使得Subject除了携带用户的登录名外还可以携带更多信息.
@@ -138,8 +156,8 @@ public class ShiroRealm extends AuthorizingRealm {
 
         private int vipLevel;
 
-        public ShiroUser(Long id, String account, int status, String identify, String role,String isexpert,Long companyId,
-                        String registerTime,int workType,String headShot,String nickname,String companyName,int vipLevel ) {
+        public ShiroUser(Long id, String account, int status, String identify, String role, String isexpert, Long companyId,
+                         String registerTime, int workType, String headShot, String nickname, String companyName, int vipLevel) {
 
             this.id = id;
             this.account = account;
