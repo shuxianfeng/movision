@@ -247,7 +247,7 @@
   </select>
   <!-- 查询所属栏目列表@author:gmli@since2016.05.09 -->
   <select id="queryChannelList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
-   select t.id,t.name,t.sort,t.parentId channelid  from t_oms_channel t where (t.parentId in(1,6) or t.id in(1,6))
+   select t.id,t.name,t.sort,t.parentId channelid  from t_oms_channel t where (t.parentId in(1,6,13) or t.id in(1,6,13))
   </select>
   <update id="batchDelNews">
     update t_oms_channel_news
