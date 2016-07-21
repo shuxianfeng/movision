@@ -3,6 +3,7 @@ package com.zhuhuibao.shiro.realm;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -40,7 +41,7 @@ public class ShiroRealm extends AuthorizingRealm {
     		String role = member.getRole();
     		String isexpert = member.getIsexpert();
     		
-    		if(null==status || null==identity || null==role || null==isexpert){
+    		if(StringUtils.isEmpty(status) || null==identity || null==role || null==isexpert){
     			return null;
     		}
     		
@@ -66,9 +67,9 @@ public class ShiroRealm extends AuthorizingRealm {
     		}
     		
     		String perm = identity + ":" + role + ":" + status;
-    		info.addRole(role);
+    		info.addRole(status);
     		info.addStringPermission(perm);
-    		
+
     		return info;
     	}
         return null;
