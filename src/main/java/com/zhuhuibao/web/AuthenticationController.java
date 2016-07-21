@@ -2,7 +2,9 @@ package com.zhuhuibao.web;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MessageLogConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.AuthcMember;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
 import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
@@ -150,7 +152,8 @@ public class AuthenticationController {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (null == session) {
-            response.setMessage("you are not login!");
+            log.error("you are not login~");
+            throw new AuthException(MsgCodeConstant.un_login,"请登录");
         } else {
             ShiroUser principal = (ShiroUser) session.getAttribute("member");
             if (null != principal) {

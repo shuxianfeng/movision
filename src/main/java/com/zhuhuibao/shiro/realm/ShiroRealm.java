@@ -46,8 +46,9 @@ public class ShiroRealm extends AuthorizingRealm {
     		}
     		
     		if(identity.equals("2")){
+               role = "100";
         		if(isexpert.equals("1")){
-        			role = role + ",200";
+        			role =  "200";
         		}
     		}else{
         		if(identity.length() > 1){

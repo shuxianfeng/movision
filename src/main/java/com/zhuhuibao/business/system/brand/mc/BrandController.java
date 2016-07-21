@@ -43,7 +43,7 @@ public class BrandController {
 
     @ApiOperation(value = "更新品牌",notes = "更新品牌", response = Response.class)
     @RequestMapping(value = {"/rest/updateBrand","/rest/system/mc/brand/upd_brand"}, method = RequestMethod.POST)
-    public Response updateBrand(@ModelAttribute Brand brand, @RequestParam String type)  {
+    public Response updateBrand(@ModelAttribute Brand brand, @RequestParam(required = false) String type)  {
         Response result = new Response();
         //如果是未通过的品牌进行更新，则状态变为待审核
         if(type==null || "".equals(type)){
