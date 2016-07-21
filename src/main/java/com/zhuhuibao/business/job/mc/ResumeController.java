@@ -110,7 +110,12 @@ public class ResumeController {
     @ApiOperation(value = "更新简历", notes = "更新简历", response = Response.class)
     @RequestMapping(value = "upd_resume", method = RequestMethod.POST)
     public Response updateResume(@ModelAttribute Resume resume) throws IOException {
-        return resumeService.updateResume(resume);
+        Long createid = ShiroUtil.getCreateID();
+        if(createid!=null) {
+            return resumeService.updateResume(resume);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
     }
 
     /**
@@ -120,8 +125,13 @@ public class ResumeController {
     @RequestMapping(value = "preview_resume", method = RequestMethod.GET)
     public Response previewResume(@RequestParam String id) throws Exception {
         Response response = new Response();
-        Resume resume = resumeService.previewResume(id);
-        response.setData(resume);
+        Long createid = ShiroUtil.getCreateID();
+        if(createid!=null) {
+            Resume resume = resumeService.previewResume(id);
+            response.setData(resume);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
@@ -186,20 +196,25 @@ public class ResumeController {
     @RequestMapping(value = "download_resume", method = RequestMethod.GET)
     public void downLoadResume(HttpServletResponse response, String id) throws IOException {
         Response jsonResult = new Response();
-        try {
-            String fileurl = resumeService.downloadBill(id);
-            response.setDateHeader("Expires", 0);
-            response.setHeader("Cache-Control",
-                    "no-store, no-cache, must-revalidate");
-            response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-            response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
-            response.setContentType("application/octet-stream");
+        Long createid = ShiroUtil.getCreateID();
+        if(createid!=null){
+            try {
+                String fileurl = resumeService.downloadBill(id);
+                response.setDateHeader("Expires", 0);
+                response.setHeader("Cache-Control",
+                        "no-store, no-cache, must-revalidate");
+                response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+                response.setHeader("Content-disposition", "attachment;filename=" + fileurl);
+                response.setContentType("application/octet-stream");
 //            fileurl = ApiConstants.getUploadDoc() + Constants.upload_job_document_url + "/" + fileurl;
-            jsonResult = fileUtil.downloadObject(response, fileurl,"doc","job");
-        }
-        catch(Exception e)
-        {
-            log.error("download resume error! ",e);
+                jsonResult = fileUtil.downloadObject(response, fileurl,"doc","job");
+            }
+            catch(Exception e)
+            {
+                log.error("download resume error! ",e);
+            }
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
     }
 
