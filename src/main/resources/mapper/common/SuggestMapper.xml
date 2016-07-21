@@ -56,9 +56,7 @@
       <if test="createId != null" >
         createId,
       </if>
-      <if test="time != null" >
         time,
-      </if>
       <if test="status != null" >
         status,
       </if>
