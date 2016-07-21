@@ -142,8 +142,9 @@ public class ResumeService {
     public Response updateResume(Resume resume) {
         Response response = new Response();
 
-        int isUpdate = resumeMapper.updateResume(resume);
+       
         try {
+        	 int isUpdate = resumeMapper.updateResume(resume);
             if (isUpdate == 1) {
                 response.setCode(200);
                 response.setData(resume.getId());

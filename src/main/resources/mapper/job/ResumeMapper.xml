@@ -66,7 +66,7 @@
 
   <update id="updateResume" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
     update t_i_resume
-    <set >
+    <set>
       <if test="title != null" >
         title = #{title},
       </if>
@@ -357,7 +357,7 @@
   
   <insert id="insertDownRecord" parameterType="java.util.Map" > 
     insert into t_i_resume_download_record(resumeID,companyID,createId,publishDate) 
-    select #{resumeID},#{companyID},t.createid,now() from t_i_resume t where id=#{resumeID}
+    select #{resumeID},#{companyID},#{createId},now() from t_i_resume t where id=#{resumeID}
    </insert>
   
    
@@ -368,7 +368,7 @@
    
    <insert id="insertCollRecord" parameterType="java.util.Map" > 
     insert into t_i_resume_collect_record(resumeID,companyID,createId,publishDate)      
-    select #{resumeID},#{companyID},t.createid,now() from t_i_resume t where id=#{resumeID}
+    select #{resumeID},#{companyID},#{createId},now() from t_i_resume t where id=#{resumeID}
    </insert>
    
 
