@@ -38,6 +38,7 @@ public class SuggestController {
         }
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
+            suggest.setCreateId(createid);
             suggestService.addSuggest(suggest);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
