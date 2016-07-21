@@ -23,7 +23,7 @@
     date_format(s.time,'%Y-%m-%d') time,c.name as type
     FROM t_sys_suggest s
     LEFT JOIN t_dictionary_constant c ON s.type = c.code and c.type =24
-    where id = #{id}
+    where s.id = #{id}
   </select>
 
   <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.common.entity.Suggest" >
