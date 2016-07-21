@@ -14,6 +14,7 @@ import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,4 +166,63 @@ public class PaymentService {
 
         return response;
     }
+    /**
+     * 简历信息查看
+     * @param parseLong
+     * @param type
+     * @return
+     */
+	public Response viewResumeRecord(long goodsID, String type) {
+		   Response response = new Response();
+	        Long createId = ShiroUtil.getCreateID();
+	        Long companyId = ShiroUtil.getCompanyID();
+	        Map<String,Object> dataMap = new HashMap<String,Object>();
+	        if(createId != null) {
+	        	
+	        	Map<String,Object> con = new HashMap<String,Object>();
+	            //商品ID
+	            con.put("goodsId", goodsID);
+	            con.put("companyId",companyId);
+	            con.put("type",type);
+	            //项目是否已经被同企业账号查看过
+	            int viewNumber = goodsService.checkIsViewGoods(con);
+	            if(viewNumber == 0) {
+	            	  dataMap.put("payment", ZhbPaymentConstant.PAY_ZHB_NON_PURCHASE);
+	                  response.setData(dataMap);
+	            }else{
+	            	
+	            	    Resume resume2 = resume.previewResumeNew(String.valueOf(goodsID));
+	            	   
+	            	    Map isDownOrColl =resume.isDownOrColl(con);
+	            	    if(isDownOrColl!=null){
+	            	    	String isDown=isDownOrColl.get("isDown").toString();
+	            	    	String isCollect=isDownOrColl.get("isCollect").toString();
+	            	    	resume2.setIsDownload(isDown);
+	            	    	resume2.setIsCollect(isCollect);
+	            	    }
+	                    dataMap.put("info",resume2);
+	                    Resume resumeBean=new Resume();
+	                    resumeBean.setViews("1");
+	                    resumeBean.setId(String.valueOf(goodsID));
+	                    //更新点击率
+	                    resume.updateResume(resumeBean);
+	                    Map<String,Object> map1 = new HashMap<String,Object>();
+	                    map1.put("resumeID", goodsID);
+	                    map1.put("companyID",companyId);
+	                    map1.put("createId",resume2.getCreateid());
+	                    //谁查看过我的简历 同一个人可以查看相同简历多次。
+	                    resume.addLookRecord(map1);
+	                    
+	                    dataMap.put("payment", ZhbPaymentConstant.PAY_ZHB_PURCHASE);
+	                    response.setData(dataMap);
+	            }
+	        	
+	        }else{
+	          
+	            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+	             
+	        }
+
+	        return response;
+	}
 }

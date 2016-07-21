@@ -226,4 +226,26 @@ public class ResumeSiteController {
         return response;
     }
 
+    
+    @RequestMapping(value = "upd_coll_resume", method = RequestMethod.POST)
+    @ApiOperation(value = "收藏简历",notes = "收藏简历",response = Response.class)
+    public Response insertCollResume(@ApiParam(value = "简历id") @RequestParam String id) throws Exception {
+        
+        Response response = new Response();
+        Long memberId = ShiroUtil.getCreateID(); 
+        if(memberId!=null){
+            int result=resume.insertCollRecord(id);
+            if(result>0)
+            {
+            	response.setCode(200);
+            }else{
+            	response.setCode(400);
+            }
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+  
+        return response;
+    }
+
 }
