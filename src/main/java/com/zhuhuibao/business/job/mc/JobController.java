@@ -56,14 +56,6 @@ public class JobController {
     @Autowired
     JobRelResumeService jrrService;
 
-    @ApiOperation(value = "获取职位类别", notes = "获取职位类别", response = Response.class)
-    @RequestMapping(value = "sel_positionType", method = RequestMethod.GET)
-    public Response positionType() {
-        Response response = new Response();
-        List list = jobService.positionType();
-        response.setData(list);
-        return response;
-    }
 
     @ApiOperation(value = "发布职位", notes = "发布职位", response = Response.class)
     @RequestMapping(value = "add_position", method = RequestMethod.POST)

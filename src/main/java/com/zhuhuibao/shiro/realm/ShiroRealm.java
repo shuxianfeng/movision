@@ -121,7 +121,7 @@ public class ShiroRealm extends AuthorizingRealm {
     //登陆成功后强制加载shiro权限缓存 避免懒加载 先清除
     public void forceShiroToReloadUserAuthorityCache() {
         this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipal());
-        this.isPermitted(SecurityUtils.getSubject().getPrincipals(), "强制加载缓存，避免懒加载" + System.currentTimeMillis());
+//        this.isPermitted(SecurityUtils.getSubject().getPrincipals(), "强制加载缓存，避免懒加载" + System.currentTimeMillis());
     }
 
     /**

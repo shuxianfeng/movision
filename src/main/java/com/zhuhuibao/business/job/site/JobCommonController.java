@@ -14,7 +14,6 @@ import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
-import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
@@ -146,4 +145,12 @@ public class JobCommonController {
         return new Response(map);
     }
 
+    @ApiOperation(value = "获取职位类别", notes = "获取职位类别", response = Response.class)
+    @RequestMapping(value = "sel_positionType", method = RequestMethod.GET)
+    public Response positionType() {
+        Response response = new Response();
+        List list = job.positionType();
+        response.setData(list);
+        return response;
+    }
 }
