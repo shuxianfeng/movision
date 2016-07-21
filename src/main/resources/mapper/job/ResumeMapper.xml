@@ -76,7 +76,11 @@
       <if test="publishTime != null" >
         publishTime = #{publishTime},
       </if>
-      updateTime = now(),
+      
+      <if test="1 == 1" >
+         updateTime = now(),
+      </if>
+    
       <if test="jobNature != null" >
         jobNature = #{jobNature},
       </if>
@@ -215,8 +219,13 @@
   </select>
   
   <select id="previewResumeNew" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select r.id,r.createid,r.title,r.realName,r.birthYear,dc.name education,r.photo,
-    case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,
+    select r.id,r.createid,r.title, 
+    concat(substr(r.realName,1,1),'**') realName,r.birthYear,dc.name education, 
+    r.photo,
+    case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,
+    
+    (case when !isnull(r.mobile) then concat(substr(r.mobile,1,3),'********') else  '' end ) mobile,
+    (case when !isnull(r.email) then concat(substr(r.email,1,3),'********') else  '' end ) email,
     case WHEN r.marriage =0 then '未婚' WHEN r.marriage =1 THEN '已婚' WHEN r.marriage =2 THEN '保密' END AS marriage,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
     concat(p.name,c.name,a.name)AS liveArea,concat(ci.name,ar.name)AS jobArea,co.name as hopeSalary,
@@ -337,13 +346,12 @@
 
   
    <select id="isDownOrColl" parameterType="java.util.Map" resultType="java.util.Map">
-   
-   select r.id ,(case when isnull(t.id) then 1 else 0 end ) isDown, 
+    select r.id ,(case when isnull(t.id) then 1 else 0 end ) isDown, 
 	(case when isnull(c.id) then 1 else 0 end) isCollect
 	 from (select id from t_i_resume  where id=#{goodsId}) r 
-	left join  t_i_resume_download_record t on r.id= t.resumeID and t.is_deleted=0
-	left join t_i_resume_collect_record c on r.id=c.resumeID and c.is_deleted=0
-	where t.companyID=#{companyId} or c.companyID=#{companyId} 
+	left join  t_i_resume_download_record t on r.id= t.resumeID and t.is_deleted=0 and t.companyID=#{companyId} 
+	left join t_i_resume_collect_record c on r.id=c.resumeID and c.is_deleted=0 and c.companyID=#{companyId} 
+	where c.createId=#{createId} or t.createId=#{createId}
 	
   </select>
   
@@ -374,4 +382,44 @@
     left join t_i_resume r on r.id = rd.resumeID
     where rd.companyID = #{id} and rd.is_deleted = 0
   </select>
+  
+  <insert id="insertViewGoods" parameterType="java.util.Map" >
+    insert into t_zhb_viewGoods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="viewerId != null" >
+        viewerId,
+      </if>
+      <if test="goodsId != null" >
+        goodsId,
+      </if>
+        viewTime,
+      <if test="companyId != null" >
+        companyId,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="viewerId != null" >
+        #{viewerId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=BIGINT},
+      </if>
+        now(),
+      <if test="companyId != null" >
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
 </mapper>

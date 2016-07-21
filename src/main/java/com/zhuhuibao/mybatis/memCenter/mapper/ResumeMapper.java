@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
@@ -60,4 +61,6 @@ public interface ResumeMapper {
 	int insertCollRecord(Map<String, Object> con);
     //我收藏的简历
     List<Map<String,String>> findAllCollectResume(RowBounds rowBounds,@Param("id")String id);
+    //记录预览
+	void insertViewGoods(Map<String, String> recordMap);
 }
