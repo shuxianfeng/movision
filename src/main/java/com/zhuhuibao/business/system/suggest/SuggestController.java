@@ -36,13 +36,13 @@ public class SuggestController {
         if(imgUrls.length>4){
             throw new BusinessException(MsgCodeConstant.SUGGEST_URL_COUNT_LIMIT, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.SUGGEST_URL_COUNT_LIMIT)));
         }
-        Long createid = ShiroUtil.getCreateID();
-        if(createid!=null){
-            suggest.setCreateId(createid);
+/*        Long createid = ShiroUtil.getCreateID();
+        if(createid!=null){*/
+            //suggest.setCreateId(createid);
             suggestService.addSuggest(suggest);
-        }else {
+        /*}else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+        }*/
         return response;
     }
 }
