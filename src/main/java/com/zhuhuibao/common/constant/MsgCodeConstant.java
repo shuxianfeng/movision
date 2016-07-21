@@ -213,4 +213,9 @@ public interface MsgCodeConstant {
 	 */
 	int RESUME_JOB_COUNT_LIMIT = 10217;
 
+	/**
+	 * 意见反馈图片不得超过4个
+	 */
+	int SUGGEST_URL_COUNT_LIMIT = 10218;
+
 }
