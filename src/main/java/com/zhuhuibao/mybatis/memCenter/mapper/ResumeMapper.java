@@ -45,6 +45,7 @@ public interface ResumeMapper {
 
     //我下载的简历
     List<Map<String,String>> findAllDownloadResume(RowBounds rowBounds,@Param("id")String id);
+ 
     
     //预览简历
     Resume previewResumeNew(@Param("id")String id);
@@ -59,4 +60,8 @@ public interface ResumeMapper {
 	void delCollRecord(Map<String, String> recordMap);
     //添加收藏
 	int insertCollRecord(Map<String, Object> con);
+ 
+    //我收藏的简历
+    List<Map<String,String>> findAllCollectResume(RowBounds rowBounds,@Param("id")String id);
+ 
 }

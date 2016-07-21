@@ -19,8 +19,10 @@ import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.mybatis.memCenter.entity.CollectRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.DownloadRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
+import com.zhuhuibao.mybatis.memCenter.mapper.CollectRecordMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.DownloadRecordMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ResumeLookRecordMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
@@ -47,7 +49,10 @@ public class ResumeService {
     private ResumeLookRecordMapper resumeLookRecordMapper;
 
     @Autowired
-    private DownloadRecordMapper downloadRocordMapper;
+    private DownloadRecordMapper downloadRecordMapper;
+
+    @Autowired
+    private CollectRecordMapper collectRecordMapper;
 
     /**
      * 发布简历
@@ -259,13 +264,25 @@ public class ResumeService {
     }
 
     /**
+     * 我收藏的简历
+     */
+    public Response findAllCollectResume(Paging<Map<String, String>> pager, String id) {
+        Response response = new Response();
+        List<Map<String, String>> resumeList = resumeMapper.findAllCollectResume(pager.getRowBounds(), id);
+        pager.result(resumeList);
+        response.setCode(200);
+        response.setData(pager);
+        return response;
+    }
+
+    /**
      * 导出简历
      */
     public Map<String, String> exportResume(String id) {
         Map<String, String> resumeMap = new HashMap<>();
         Resume resume = resumeMapper.previewResume(id);
         if (resume != null) {
-
+            resumeMap.put("realName", resume.getRealName() != null && !StringUtils.isEmpty(resume.getRealName()) ? resume.getRealName() : "");
             resumeMap.put("title", resume.getTitle() != null && !StringUtils.isEmpty(resume.getTitle()) ? resume.getTitle() : "");
             resumeMap.put("name", resume.getRealName() != null && !StringUtils.isEmpty(resume.getRealName()) ? resume.getRealName() : "");
             resumeMap.put("sex", resume.getSex() != null && !StringUtils.isEmpty(resume.getSex()) ? resume.getSex() : "");
@@ -405,10 +422,22 @@ public class ResumeService {
             for (int i = 0; i < resumeList.size(); i++) {
                 Resume resume = resumeList.get(i);
                 Map map = new HashMap();
+                String area = "";
+                if(resume.getJobCity()!=null){
+                    if(resume.getJobProvince()!=null){
+                        area = resume.getJobProvince() + "," + resume.getJobCity();
+                    }else {
+                        area = resume.getJobCity();
+                    }
+                }else {
+                    if(resume.getJobProvince()!=null){
+                        area = resume.getJobProvince();
+                    }
+                }
                 map.put(Constants.id, resume.getId());
                 map.put(Constants.logo, resume.getPhoto());
                 map.put(Constants.status, resume.getStatus());
-                map.put(Constants.area, resume.getJobCity());
+                map.put(Constants.area, area);
                 map.put(Constants.name, resume.getRealName().subSequence(0, 1) + "**");
                 map.put(Constants.position, resume.getPost());
                 map.put(Constants.experienceYear, resume.getWorkYear());
@@ -418,6 +447,7 @@ public class ResumeService {
             }
         } catch (Exception e) {
             log.error("query latest resume error!");
+            e.printStackTrace();
             throw e;
         }
         return list;
@@ -487,7 +517,17 @@ public class ResumeService {
 
     public int del_downloadResume(DownloadRecord record) {
         try {
-            return downloadRocordMapper.updateByPrimaryKeySelective(record);
+            return downloadRecordMapper.updateByPrimaryKeySelective(record);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public int del_collectResume(CollectRecord record) {
+        try {
+            return collectRecordMapper.updateByPrimaryKeySelective(record);
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
