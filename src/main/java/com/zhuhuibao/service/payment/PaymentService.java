@@ -217,24 +217,23 @@ public class PaymentService {
 	    			DictionaryZhbgoods goodsConfig = zhbService.getZhbGoodsByPinyin(type);
 	    			
 	    			ZhbAccount account = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
-	    			boolean result = account.getAmount().compareTo(goodsConfig.getPrice()) > 0;
 	    			
-	    			if (privilegeNum <= 0) {
-	    				 dataMap.put("payment", ZhbPaymentConstant.RESUME_BUY_TIMES_N0);
-	    			}else if(!result){
+	    			boolean result=false;
+	    			if(account!=null)
+	    			{
+	    			   result = account.getAmount().compareTo(goodsConfig.getPrice()) > 0;
+	    			}
 	    			
-	    				dataMap.put("payment", ZhbPaymentConstant.RESUME_BALANCE_NO);
+	    			if (privilegeNum <= 0 && !result) {
+	    				  if(privilegeNum <= 0){
+	    				   dataMap.put("payment", ZhbPaymentConstant.RESUME_BUY_TIMES_N0);
+	    				  }else{
+	    					  dataMap.put("payment", ZhbPaymentConstant.RESUME_BALANCE_NO);
+	    				  } 
 	    			}else{
 	    				
 	    				Resume resume2 = resume.previewResumeNew(String.valueOf(goodsID));
-		            	   
-	            	    Map isDownOrColl =resume.isDownOrColl(con);
-	            	    if(isDownOrColl!=null){
-	            	    	String isDown=isDownOrColl.get("isDown").toString();
-	            	    	String isCollect=isDownOrColl.get("isCollect").toString();
-	            	    	resume2.setIsDownload(isDown);
-	            	    	resume2.setIsCollect(isCollect);
-	            	    }
+		            	    
 	                    dataMap.put("info",resume2);
 	                    Resume resumeBean=new Resume();
 	                    resumeBean.setViews("1");
@@ -257,7 +256,7 @@ public class PaymentService {
 	            }else{
 	            	
 	            	    Resume resume2 = resume.previewResume(String.valueOf(goodsID));
-	            	   
+	            	    con.put("createId",createId);
 	            	    Map isDownOrColl =resume.isDownOrColl(con);
 	            	    if(isDownOrColl!=null){
 	            	    	String isDown=isDownOrColl.get("isDown").toString();
@@ -278,7 +277,7 @@ public class PaymentService {
 	                    //谁查看过我的简历 同一个人可以查看相同简历多次。
 	                    resume.addLookRecord(map1);
 	                    
-	                    dataMap.put("payment", ZhbPaymentConstant.PAY_ZHB_PURCHASE);
+	                    dataMap.put("payment", ZhbPaymentConstant.RESUME_VIEW);
 	                    response.setData(dataMap);
 	            }
 	        	

@@ -17,35 +17,18 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
-import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
-import com.zhuhuibao.fsearch.utils.StringUtil;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.memCenter.entity.CollectRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.DownloadRecord;
-import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.mapper.CollectRecordMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.DownloadRecordMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ResumeLookRecordMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
+import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
-import com.zhuhuibao.mybatis.memCenter.mapper.*;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import com.zhuhuibao.common.constant.ApiConstants;
-
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by cxx on 2016/4/19 0019.
@@ -71,6 +54,10 @@ public class ResumeService {
 
     @Autowired
     private CollectRecordMapper collectRecordMapper;
+    
+    @Autowired
+    PaymentGoodsService goodsService;
+
 
     /**
      * 发布简历
@@ -154,8 +141,10 @@ public class ResumeService {
      */
     public Response updateResume(Resume resume) {
         Response response = new Response();
-        int isUpdate = resumeMapper.updateResume(resume);
+
+       
         try {
+        	 int isUpdate = resumeMapper.updateResume(resume);
             if (isUpdate == 1) {
                 response.setCode(200);
                 response.setData(resume.getId());
@@ -345,14 +334,16 @@ public class ResumeService {
 	 * @throws Exception 
 	 * @throws NumberFormatException 
 	   */
-    public Map<String, String> exportResumeNew(String id,String money) throws NumberFormatException, Exception {
+    public Map<String, String> exportResumeNew(String id) throws NumberFormatException, Exception {
         Map<String, String> resumeMap = new HashMap<>();
         Map<String, String> recordMap =null;
+        Map<String, String> viewMap =null;
         Resume resume = resumeMapper.previewResume(id);
         Long createId = ShiroUtil.getCreateID();
         Long companyId = ShiroUtil.getCompanyID();
         if (resume != null) {
         	recordMap = new HashMap<>();
+        	viewMap = new HashMap<>();
             resumeMap.put("title", resume.getTitle() != null && !StringUtils.isEmpty(resume.getTitle()) ? resume.getTitle() : "");
             resumeMap.put("name", resume.getRealName() != null && !StringUtils.isEmpty(resume.getRealName()) ? resume.getRealName() : "");
             resumeMap.put("sex", resume.getSex() != null && !StringUtils.isEmpty(resume.getSex()) ? resume.getSex() : "");
@@ -389,11 +380,33 @@ public class ResumeService {
             recordMap.put("resumeID", id);
             recordMap.put("companyID", companyId.toString());
             recordMap.put("createId", createId.toString());
+        
+            viewMap.put("viewerId", createId.toString());
+            viewMap.put("goodsId", id);
+            viewMap.put("companyId", companyId.toString());
+            viewMap.put("type", ZhbPaymentConstant.goodsType.CXXZJL.toString());
+            
             resumeMapper.insertDownRecord(recordMap);
+           
+            
             //删除收藏夹子
             resumeMapper.delCollRecord(recordMap);
-            // 扣除筑慧币
-            zhbService.payForGoods(Long.valueOf(id), ZhbPaymentConstant.goodsType.FBZW.toString());
+            
+            Map<String,Object> con = new HashMap<String,Object>();
+            //商品ID
+            con.put("goodsId", id);
+            con.put("companyId",companyId);
+            con.put("type", ZhbPaymentConstant.goodsType.CXXZJL.toString());
+         
+            //项目是否已经被同企业账号查看过
+            int viewNumber = goodsService.checkIsViewGoods(con);
+            if(viewNumber==0)
+            {
+            	 //记录下载预览
+                resumeMapper.insertViewGoods(viewMap);
+	            // 扣除筑慧币
+	            zhbService.payForGoods(Long.valueOf(id), ZhbPaymentConstant.goodsType.FBZW.toString());
+            }
         }
         return resumeMap;
     }
@@ -559,7 +572,7 @@ public class ResumeService {
      */
 	public Resume previewResumeNew(String id) {
 		 try {
-	            return resumeMapper.previewResume(id);
+	            return resumeMapper.previewResumeNew(id);
 	        } catch (Exception e) {
 	            throw e;
 	        }

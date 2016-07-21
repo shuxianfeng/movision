@@ -4,15 +4,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.Map;
+
 import com.wordnik.swagger.annotations.ApiOperation;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import com.wordnik.swagger.annotations.ApiParam;
+
 import org.apache.poi.hwpf.HWPFDocument;
+
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.service.payment.PaymentService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -73,7 +79,15 @@ public class ZhbPaymentController {
         try {
             String path = req.getSession().getServletContext().getRealPath("/");
              
-            Map<String, String> resumeMap = resume.exportResume(String.valueOf(resumeID));
+            Map<String, String> resumeMap=null;
+			try {
+				resumeMap = resume.exportResumeNew(String.valueOf(resumeID));
+			} catch (NumberFormatException e) {
+				 
+				e.printStackTrace();
+			} catch (Exception e) { 
+				e.printStackTrace();
+			}
             if (!resumeMap.isEmpty()) {
                 String fileName =  !StringUtils.isEmpty(resumeMap.get("title")) ? resumeMap.get("title") :"简历";
                 response.setHeader("Content-disposition", "attachment; filename=\""
