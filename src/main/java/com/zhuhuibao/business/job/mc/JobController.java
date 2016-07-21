@@ -328,11 +328,6 @@ public class JobController {
     public void export_resume_batch(HttpServletRequest req, HttpServletResponse response,
                                     @RequestParam String ids) throws IOException
     {
-        response.setDateHeader("Expires", 0);
-        response.setHeader("Cache-Control",
-                "no-store, no-cache, must-revalidate");
-        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-        response.setContentType("application/octet-stream");
         try {
             String path = req.getSession().getServletContext().getRealPath("/");
             File zip = new File("简历.zip");
@@ -355,9 +350,11 @@ public class JobController {
                 }
             }
 
+            //将简历文件打包到zip
             zipFile(files,toClient);
             toClient.close();
             outStream.close();
+            //下载zip包
             this.downloadZip(zip, response);
 
         }catch(IOException e){
@@ -374,7 +371,7 @@ public class JobController {
           }
     }
 
-
+    //将简历文件打包到zip
     public static void zipFile(File inputFile, ZipOutputStream outputstream)throws IOException{
           FileInputStream inStream = new FileInputStream(inputFile);
           BufferedInputStream bInStream = new BufferedInputStream(inStream);
@@ -410,7 +407,7 @@ public class JobController {
           inStream.close();
     }
 
-
+    //下载zip包
     public void downloadZip(File file,HttpServletResponse response) {
         try{
            BufferedInputStream fis = new BufferedInputStream(new FileInputStream(file.getPath()));
