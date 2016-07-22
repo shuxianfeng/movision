@@ -11,9 +11,10 @@
         <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="operatorId" jdbcType="INTEGER" property="operatorId"/>
         <result column="connectedId" jdbcType="VARCHAR" property="connectedId"/>
+        <result column="sort" jdbcType="CHAR" property="sort"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, title, advAttrId, advType, linkUrl, imgUrl, createTime, operatorId, connectedId
+    id, title, advAttrId, advType, linkUrl, imgUrl, createTime, operatorId, connectedId,sort
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -39,11 +40,11 @@
     <insert id="insert" parameterType="com.zhuhuibao.mybatis.advertising.entity.SysAdvertising">
     insert into t_sys_advertising (id, title, advAttrId, 
       advType, linkUrl, imgUrl, 
-      createTime, operatorId, connectedId
+      createTime, operatorId, connectedId,sort
       )
     values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{advAttrId,jdbcType=CHAR}, 
       #{advType,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{operatorId,jdbcType=INTEGER}, #{connectedId,jdbcType=VARCHAR}
+      #{createTime,jdbcType=TIMESTAMP}, #{operatorId,jdbcType=INTEGER}, #{connectedId,jdbcType=VARCHAR},#{sort,jdbcType=CHAR}
       )
   </insert>
     <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.advertising.entity.SysAdvertising">
@@ -76,6 +77,9 @@
             <if test="connectedId != null">
                 connectedId,
             </if>
+            <if test="sort != null">
+                sort,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -104,6 +108,9 @@
             </if>
             <if test="connectedId != null">
                 #{connectedId,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=CHAR},
             </if>
         </trim>
     </insert>
@@ -134,6 +141,9 @@
             <if test="connectedId != null">
                 connectedId = #{connectedId,jdbcType=VARCHAR},
             </if>
+            <if test="sort != null">
+                sort = #{sort,jdbcType=CHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -146,7 +156,8 @@
       imgUrl = #{imgUrl,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       operatorId = #{operatorId,jdbcType=INTEGER},
-      connectedId = #{connectedId,jdbcType=VARCHAR}
+      connectedId = #{connectedId,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 

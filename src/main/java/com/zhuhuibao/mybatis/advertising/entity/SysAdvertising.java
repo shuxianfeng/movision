@@ -21,6 +21,16 @@ public class SysAdvertising {
 
     private String connectedId;
 
+    private String sort;
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
     public Integer getId() {
         return id;
     }
