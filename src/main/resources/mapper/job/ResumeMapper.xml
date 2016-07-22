@@ -221,7 +221,7 @@
   <select id="previewResumeNew" parameterType="java.lang.String" resultMap="BaseResultMap">
     select r.id,r.createid,r.title, 
     concat(substr(r.realName,1,1),'**') realName,r.birthYear,dc.name education, 
-    r.photo,
+    null photo,
     case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,
     
     (case when !isnull(r.mobile) then concat(substr(r.mobile,1,3),'********') else  '' end ) mobile,
