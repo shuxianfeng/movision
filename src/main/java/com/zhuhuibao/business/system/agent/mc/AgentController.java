@@ -237,7 +237,7 @@ public class AgentController {
             if (!StringUtils.isEmpty(vm)) {
                 String decodeVM = new String(EncodeUtil.decodeBase64(vm));
                 result = accountService.agentRegister(decodeVM);
-                LoginMember loginMember = memberRegService.getLoginMemberByAccount(decodeVM.split(",")[1]);
+                LoginMember loginMember = memberRegService.getLoginMemberByAccount(decodeVM);
                 ShiroRealm.ShiroUser shrioUser = new ShiroRealm.ShiroUser(loginMember.getId(), loginMember.getAccount(),
                         loginMember.getStatus(), loginMember.getIdentify(),loginMember.getRole(), "0",
                         loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(),
