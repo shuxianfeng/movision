@@ -66,19 +66,72 @@ public class ResumeService {
      */
     public Response setUpResume(Resume resume) {
         Response response = new Response();
+        checkResumeParams(resume);
         int isSetUp = resumeMapper.setUpResume(resume);
         try {
             if (isSetUp == 1) {
                 response.setData(resume.getId());
             } else {
-                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"创建失败");
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "创建失败");
             }
         } catch (Exception e) {
             log.error("setUpResume error", e);
             e.printStackTrace();
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"操作失败");
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return response;
+    }
+
+    /**
+     * 创建简历字段校验
+     *
+     * @param resume
+     */
+    private void checkResumeParams(Resume resume) {
+        //简历名称
+        if (StringUtils.isEmpty(resume.getTitle())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "简历名称不能为空");
+        }
+        //姓名
+        if (StringUtils.isEmpty(resume.getRealName())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "姓名不能为空");
+        }
+        //性别
+        if (StringUtils.isEmpty(resume.getSex())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "性别不能为空");
+        }
+        //参加工作年份
+        if (StringUtils.isEmpty(resume.getWorkYear())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "参加工作年份不能为空");
+        }
+        //最高学历
+        if (StringUtils.isEmpty(resume.getEducation())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "最高学历不能为空");
+        }
+        //工作经验
+        if (StringUtils.isEmpty(resume.getExperienceYear())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "工作经验不能为空");
+        }
+        //出生年份
+        if (StringUtils.isEmpty(resume.getBirthYear())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "出生年份不能为空");
+        }
+        //婚姻状况
+        if (StringUtils.isEmpty(resume.getMarriage())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "婚姻状况不能为空");
+        }
+        //现居地
+        if (StringUtils.isEmpty(resume.getLiveProvince())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "现居地不能为空");
+        }
+        //手机
+        if (StringUtils.isEmpty(resume.getMobile())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "手机不能为空");
+        }
+        //邮箱
+        if (StringUtils.isEmpty(resume.getEmail())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "邮箱不能为空");
+        }
     }
 
     /**
@@ -123,7 +176,7 @@ public class ResumeService {
             map.put("percent", b);
             response.setData(map);
         } else {
-           throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"简历不存在");
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "简历不存在");
         }
         return response;
     }
@@ -154,6 +207,7 @@ public class ResumeService {
         } catch (Exception e) {
             log.error("updateResume error", e);
             e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return response;
     }
@@ -240,7 +294,8 @@ public class ResumeService {
             pager.result(list);
         } catch (Exception e) {
             log.error("find all resume error!", e);
-            throw e;
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return pager;
     }
@@ -432,6 +487,8 @@ public class ResumeService {
             }
         } catch (Exception e) {
             log.error("query resume by createID error!", e);
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return resume;
     }
@@ -442,13 +499,13 @@ public class ResumeService {
      * @param condition 查询条件
      * @return
      */
-    public List queryLatestResume(Map<String, Object> condition) throws Exception {
-        List list = new ArrayList();
+    public List<Map<String,Object>> queryLatestResume(Map<String, Object> condition) throws Exception {
+        List<Map<String,Object>> list = new ArrayList<>();
         try {
             List<Resume> resumeList = resumeMapper.queryLatestResume(condition);
 
             for (Resume resume : resumeList) {
-                Map map = new HashMap();
+                Map<String,Object> map = new HashMap<>();
                 String area = "";
                 if (resume.getJobCity() != null) {
                     if (resume.getJobProvince() != null) {
@@ -475,7 +532,7 @@ public class ResumeService {
         } catch (Exception e) {
             log.error("query latest resume error!");
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询失败");
         }
         return list;
     }
@@ -496,7 +553,8 @@ public class ResumeService {
             }
         } catch (Exception e) {
             log.error("judge is exist resume error !!!");
-            throw e;
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return isExist;
     }
@@ -507,7 +565,7 @@ public class ResumeService {
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
     }
 
@@ -517,7 +575,7 @@ public class ResumeService {
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
     }
 
@@ -528,7 +586,7 @@ public class ResumeService {
      * @return
      */
     public Map<String, Object> queryJobCount(Long createId) {
-        Map<String, Object> resultMap = new HashMap<String, Object>();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             List<Map<String, Object>> resultList = resumeMapper.queryJobCount(createId);
             Map<String, Object> map1 = resultList.get(0);
@@ -537,7 +595,8 @@ public class ResumeService {
             resultMap.put("resumeCount", map2.get("count"));
         } catch (Exception e) {
             log.error("find data upload download error!", e);
-            throw e;
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return resultMap;
     }

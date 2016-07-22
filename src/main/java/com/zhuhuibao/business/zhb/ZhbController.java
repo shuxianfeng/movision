@@ -169,22 +169,17 @@ public class ZhbController {
 
 	@ApiOperation(value = "筑慧币明细记录", notes = "筑慧币明细记录", response = Response.class)
 	@RequestMapping(value = "mc/record/sel_recordList", method = RequestMethod.GET)
-	public Response getRecordList(@ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-			@ApiParam(value = "每页显示的条数") @RequestParam(required = false) String pageSize,
+	public Response getRecordList(@ApiParam(value = "页码") @RequestParam(required = false,defaultValue = "1") String pageNo,
+			@ApiParam(value = "每页显示的条数") @RequestParam(required = false,defaultValue = "10") String pageSize,
 			@ApiParam(value = "数据类型，1:使用,2:获取,null:所有") @RequestParam(required = false) String recordType) throws Exception {
 		Response response = new Response();
-		if (StringUtils.isEmpty(pageNo)) {
-			pageNo = "1";
-		}
-		if (StringUtils.isEmpty(pageSize)) {
-			pageSize = "10";
-		}
+
 		Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 		List<Map<String, String>> zhbDetails = zhbService.getZhbDetails(pager, recordType);
 		pager.result(zhbDetails);
 		ZhbAccount account = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
 		
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		result.put("zhbDetails", pager);
 		result.put("account", account);
 		response.setData(result);

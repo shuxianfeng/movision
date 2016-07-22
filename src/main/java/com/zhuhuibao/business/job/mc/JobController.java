@@ -73,18 +73,14 @@ public class JobController {
 
     @ApiOperation(value = "查询公司已发布的职位", notes = "查询公司已发布的职位", response = Response.class)
     @RequestMapping(value = "sel_positionList", method = RequestMethod.GET)
-    public Response searchPositionByMemId(@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
+    public Response searchPositionByMemId(@RequestParam(required = false,defaultValue = "1") String pageNo,
+                                          @RequestParam(required = false,defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
+
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
-            Paging<Job> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-            List list = jobService.findAllPositionByMemId(pager, String.valueOf(createid));
+            Paging<Map<String,Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+            List<Map<String,Object>> list = jobService.findAllPositionByMemId(pager, String.valueOf(createid));
             pager.result(list);
             response.setData(pager);
         }else {
@@ -120,17 +116,27 @@ public class JobController {
         return jobService.updatePosition(job);
     }
 
+    /**
+     * 老接口(之后会废弃)
+     * @return
+     * @throws IOException
+     */
     @ApiOperation(value = "查询最新招聘职位", notes = "查询最新招聘职位", response = Response.class)
     @RequestMapping(value = "sel_latest_position", method = RequestMethod.GET)
     public Response searchNewPosition() throws IOException {
         return jobService.searchNewPosition(6);
     }
 
+    /**
+     * 老接口(之后会废弃)
+     * @return
+     * @throws IOException
+     */
     @ApiOperation(value = "查询推荐职位", notes = "查询推荐职位", response = Response.class)
     @RequestMapping(value = "sel_recommend_position", method = RequestMethod.GET)
     public Response searchRecommendPosition() throws IOException {
         Long createid = ShiroUtil.getCreateID();
-        Response response = new Response();
+        Response response;
         if(createid!=null){
             response = jobService.searchRecommendPosition(String.valueOf(createid), 6);
         }else {

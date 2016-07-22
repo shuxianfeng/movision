@@ -90,7 +90,12 @@
             <if test="createid != null">
                 #{createid},
             </if>
-            CURDATE(),
+             <if test="publishDate != null">
+               #{publishDate},
+            </if>
+             <if test="publishDate == null">
+               CURDATE(),
+            </if>
             CURDATE(),
             <if test="province != null">
                 #{province},

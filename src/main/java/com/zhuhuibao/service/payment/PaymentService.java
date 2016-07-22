@@ -225,15 +225,14 @@ public class PaymentService {
 	    			}
 	    			
 	    			if (privilegeNum <= 0 && !result) {
-	    				  if(privilegeNum <= 0){
-	    				   dataMap.put("payment", ZhbPaymentConstant.RESUME_BUY_TIMES_N0);
-	    				  }else{
+	    				 
 	    					  dataMap.put("payment", ZhbPaymentConstant.RESUME_BALANCE_NO);
-	    				  } 
+	    				  
 	    			}else{
 	    				
 	    				Resume resume2 = resume.previewResumeNew(String.valueOf(goodsID));
-		            	    
+	    				resume2.setIsDownload("1");
+            	    	resume2.setIsCollect("1");
 	                    dataMap.put("info",resume2);
 	                    Resume resumeBean=new Resume();
 	                    resumeBean.setViews("1");
@@ -247,7 +246,7 @@ public class PaymentService {
 	                    //谁查看过我的简历 同一个人可以查看相同简历多次。
 	                    resume.addLookRecord(map1);
 	                    
-	                    dataMap.put("payment", ZhbPaymentConstant.RESUME_BUY_TIMESANDBALANCE_YEAR);
+	                    dataMap.put("payment", ZhbPaymentConstant.RESUME_VIEW);
 	                   
 	    				
 	    			}
