@@ -457,7 +457,7 @@ public class ResumeService {
                 //记录下载预览
                 resumeMapper.insertViewGoods(viewMap);
                 // 扣除筑慧币
-                zhbService.payForGoods(Long.valueOf(id), ZhbPaymentConstant.goodsType.FBZW.toString());
+                zhbService.payForGoods(Long.valueOf(id), ZhbPaymentConstant.goodsType.CXXZJL.toString());
             }
         }
         return resumeMap;
