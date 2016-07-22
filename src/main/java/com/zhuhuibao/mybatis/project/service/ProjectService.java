@@ -662,4 +662,15 @@ public class ProjectService {
         }
         return list;
     }
+
+
+    public List<Map<String,String>> queryDescription(Map<String,Object> map){
+        try{
+            return projectMapper.queryDescription(map);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

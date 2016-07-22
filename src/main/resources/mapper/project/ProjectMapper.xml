@@ -415,4 +415,8 @@
             limit #{count}
         </if>
     </select>
+
+    <select id="queryDescription" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT t.id,t.description FROM t_prj_project t WHERE id &gt;= #{begin} and id &lt;= #{end}
+    </select>
 </mapper>
