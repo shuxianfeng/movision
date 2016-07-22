@@ -25,10 +25,10 @@
         <property name="cachingEnabled" value="true"/>
     </bean>
 
-    <!-- 用户授权信息Cache, 采用EhCache -->
+    <!-- 用户授权信息Cache, 采用EhCache
     <bean id="ehcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
         <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache.xml"/>
-    </bean>
+    </bean>  -->
 
     <!--43200000-->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
@@ -114,7 +114,9 @@
 
                 <!--orroles["100"] 企业管理员,其他不限 orroles["200"]专家身份,其他不限  orroles["300"]企业员工,其他不限  -->
                 <!--不限+不限-->
-                rest/tech/mc/data/sel_download_data = authc
+                /rest/tech/mc/data/sel_download_data = authc
+
+                /rest/system/mc/brand/sel_brand_by_scateid = anon
 
                 <!-- 具备“不限+不限+完善资料”权限的配置      -->
                 /rest/system/mc/enquiry/** = orroles["6,9,10,11"]
@@ -143,7 +145,7 @@
                 /rest/member/mc/shop/** = orperms["1:100:10,3:100:10"]
 
                 <!--具备"企业+管理员+不限"的权限配置-->
-                rest/member/mc/company/** =  orperms["1:100:1,1:100:5,1:100:6,1:100:7,1:100:9,1:100:10,1:100:11,3:100:1,3:100:5,3:100:6,3:100:7,3:100:9,3:100:10,3:100:11"]
+                /rest/member/mc/company/** =  orperms["1:100:1,1:100:5,1:100:6,1:100:7,1:100:9,1:100:10,1:100:11,3:100:1,3:100:5,3:100:6,3:100:7,3:100:9,3:100:10,3:100:11"]
 
 
                 <!-- 具备“企业+角色不限+实名认证”权限的配置  -->
