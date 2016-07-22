@@ -94,7 +94,7 @@ public class JobCommonController {
 
     @ApiOperation(value = "人才网资讯列表", notes = "人才网资讯列表", response = Response.class)
     @RequestMapping(value = "sel_newslist", method = RequestMethod.GET)
-    public Response listNews(@ApiParam("资讯类别 14:面试技巧 15:职场动态 16:行业资讯") String type,
+    public Response listNews(@ApiParam("资讯类别 14:面试技巧 15:职场动态 16:行业资讯") @RequestParam String type,
                              @ApiParam("限制条数") @RequestParam(required = false) String count,
                              @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
                              @ApiParam(value = "每页显示的条数") @RequestParam(required = false, defaultValue = "10") String pageSize) {
@@ -106,7 +106,8 @@ public class JobCommonController {
             params.put("count",Integer.valueOf(count));
         }
         List<Map<String,String>> list = newsService.findAllPassNewsByType(pager, params);
-        return new Response(list);
+        pager.result(list);
+        return new Response(pager);
     }
 
     @ApiOperation(value = "人才网资讯详情", notes = "人才网资讯详情", response = Response.class)
