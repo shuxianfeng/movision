@@ -48,13 +48,13 @@
     WHERE j.createid = #{id} and j.is_deleted = 0 and co.type = 1 order by j.updateTime desc
   </select>
     <select id="getPositionByPositionId" resultMap="BaseResultMap" parameterType="java.lang.String">
-    SELECT j.*,p.parentId FROM t_i_job j
-    LEFT JOIN t_dictionary_position p on j.positionType = p.id
-    WHERE j.id = #{id}
-  </select>
+        SELECT j.*,p.parentId FROM t_i_job j
+        LEFT JOIN t_dictionary_position p on j.positionType = p.id
+        WHERE j.id = #{id}
+    </select>
     <update id="deletePosition" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Job">
-    UPDATE t_i_job SET is_deleted = 1 WHERE id = #{id}
-  </update>
+        UPDATE t_i_job SET is_deleted = 1 WHERE id = #{id}
+    </update>
     <update id="updatePosition" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Job">
         update t_i_job
         <set>
@@ -117,25 +117,25 @@
         where id = #{id}
     </update>
     <select id="searchNewPosition" resultMap="BaseResultMap">
-    select j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,j.createid,j.positionType,
-    (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
-    from t_i_job j
-    left join t_dictionary_city c on c.code = j.city
-    left join t_dictionary_constant co on co.code = j.salary
-    left join t_m_member m on m.id = j.createid
-    where co.type = 1 and j.is_deleted = 0
-    order by updateTime desc limit 0,#{count}
-  </select>
+        select j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,j.createid,j.positionType,
+        (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
+        from t_i_job j
+        left join t_dictionary_city c on c.code = j.city
+        left join t_dictionary_constant co on co.code = j.salary
+        left join t_m_member m on m.id = j.createid
+        where co.type = 1 and j.is_deleted = 0
+        order by updateTime desc limit 0,#{count}
+    </select>
     <select id="searchRecommendPosition" resultMap="BaseResultMap">
-    select j.positionType,j.id,j.publishTime,j.updateTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,j.createid,
-    (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
-    from t_i_job j
-    left join t_dictionary_city c on c.code = j.city
-    left join t_dictionary_constant co on co.code = j.salary
-    left join t_m_member m on m.id = j.createid
-    where co.type = 1 and j.is_deleted = 0 and find_in_set(j.positionType,(select post from t_i_resume where createid= #{id} ))
-    order by updateTime desc limit 0,#{count}
-  </select>
+        select j.positionType,j.id,j.publishTime,j.updateTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,j.createid,
+        (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
+        from t_i_job j
+        left join t_dictionary_city c on c.code = j.city
+        left join t_dictionary_constant co on co.code = j.salary
+        left join t_m_member m on m.id = j.createid
+        where co.type = 1 and j.is_deleted = 0 and find_in_set(j.positionType,(select post from t_i_resume where createid= #{id} ))
+        order by updateTime desc limit 0,#{count}
+    </select>
     <select id="searchSamePosition" resultType="java.util.Map" resultMap="BaseResultMap">
         select j.positionType,j.id,j.publishTime,j.name,j.createid,c.name as city,co.name as
         salaryName,m.enterpriseName,
@@ -157,29 +157,29 @@
         order by updateTime desc limit ${count}
     </select>
     <select id="searchLatestPublishPosition" resultMap="BaseResultMap">
-    select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,j.createid,
-    (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
-    from t_i_job j
-    left join t_dictionary_city c on c.code = j.city
-    left join t_dictionary_constant co on co.code = j.salary
-    left join t_m_member m on m.id = j.createid
-    where co.type = 1
-    order by updateTime desc limit 0,5
-  </select>
+        select j.positionType,j.id,j.publishTime,j.name,c.name as city,co.name as salaryName,m.enterpriseName,j.createid,
+        (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
+        from t_i_job j
+        left join t_dictionary_city c on c.code = j.city
+        left join t_dictionary_constant co on co.code = j.salary
+        left join t_m_member m on m.id = j.createid
+        where co.type = 1
+        order by updateTime desc limit 0,5
+    </select>
     <select id="queryCompanyInfo" parameterType="java.lang.Long"
             resultType="com.zhuhuibao.mybatis.memCenter.entity.MemberDetails">
-    select t.id,t.enterpriseName,t.enterpriseLogo,t.enterpriseDesc,
-    (select group_concat(name) from t_dictionary_constant where type=5 ) as welfare,
-    concat(ifnull(pv.name,''),ifnull(ct.name,''),ifnull(ar.name,''),ifnull(t.address,'')) address,
-    ep.name enterpriseTypeName,es.name employeeNumber from t_m_member t
-    left join t_dictionary_province pv on pv.code = t.province
-    left join t_dictionary_city ct on ct.code = t.city
-    left join t_dictionary_area ar on ar.code = t.area
-    left join t_dictionary_enterpriseType ep on ep.id = t.enterpriseType
-    left join t_dictionary_employeeSize es on es.id = t.employeeNumber
-    left join t_i_job jb on jb.createid = t.id
-    where t.id =  #{id} limit 1
-  </select>
+        select t.id,t.enterpriseName,t.enterpriseLogo,t.enterpriseDesc,
+        (select group_concat(name) from t_dictionary_constant where type=5 ) as welfare,
+        concat(ifnull(pv.name,''),ifnull(ct.name,''),ifnull(ar.name,''),ifnull(t.address,'')) address,
+        ep.name enterpriseTypeName,es.name employeeNumber from t_m_member t
+        left join t_dictionary_province pv on pv.code = t.province
+        left join t_dictionary_city ct on ct.code = t.city
+        left join t_dictionary_area ar on ar.code = t.area
+        left join t_dictionary_enterpriseType ep on ep.id = t.enterpriseType
+        left join t_dictionary_employeeSize es on es.id = t.employeeNumber
+        left join t_i_job jb on jb.createid = t.id
+        where t.id =  #{id} limit 1
+    </select>
 
     <!--  <resultMap id="adList" type="java.util.LinkedHashMap">
         <result property="imgUrl" column="imgUrl" />
@@ -190,21 +190,21 @@
       </select>-->
 
     <select id="queryPositionInfoByID" parameterType="java.util.Map" resultType="java.util.Map">
-    select t.id,t.createid,date_format(t.publishTime,'%Y-%m-%d') publishTime,date_format(t.updateTime,'%Y-%m-%d') updateTime,t.name,t.positionType,ps.name positionTypeName,t.description,
-    t.department,t.superior,t.number,t.profession,mb.enterpriseName,mb.enterpriseDesc,
-    (select cs.name from t_dictionary_constant cs where cs.code = t.salary and cs.type = 1)  salaryName,
-    (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=2) as educationName,
-    (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=3) as experienceName,
-    (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=4) as ageName,
-    (select group_concat(name) from t_dictionary_constant where find_in_set(code,t.welfare) and type=5 ) as welfare,
-    concat(ct.name,(case when isnull(ar.name) then  '' else ar.name end)) workArea,count(jrr.id) isApply from t_i_job t
-    left join t_dictionary_position ps on ps.id = t.positionType
-    left join t_dictionary_city ct on ct.code = t.city
-    left join t_dictionary_area ar on ar.code = t.area
-    left join t_m_member mb on mb.id = t.createid
-    left join t_i_jobRelresume jrr on jrr.applicantId = #{createid} and jrr.jobID = #{id} and datediff(current_date(),jrr.publishDate) &lt;= 10
-    where t.id = #{id}
-  </select>
+        select t.id,t.createid,date_format(t.publishTime,'%Y-%m-%d') publishTime,date_format(t.updateTime,'%Y-%m-%d') updateTime,t.name,t.positionType,ps.name positionTypeName,t.description,
+        t.department,t.superior,t.number,t.profession,mb.enterpriseName,mb.enterpriseDesc,
+        (select cs.name from t_dictionary_constant cs where cs.code = t.salary and cs.type = 1)  salaryName,
+        (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=2) as educationName,
+        (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=3) as experienceName,
+        (select cs.name from t_dictionary_constant cs where cs.code = t.education and cs.type=4) as ageName,
+        (select group_concat(name) from t_dictionary_constant where find_in_set(code,t.welfare) and type=5 ) as welfare,
+        concat(ct.name,(case when isnull(ar.name) then  '' else ar.name end)) workArea,count(jrr.id) isApply from t_i_job t
+        left join t_dictionary_position ps on ps.id = t.positionType
+        left join t_dictionary_city ct on ct.code = t.city
+        left join t_dictionary_area ar on ar.code = t.area
+        left join t_m_member mb on mb.id = t.createid
+        left join t_i_jobRelresume jrr on jrr.applicantId = #{createid} and jrr.jobID = #{id} and datediff(current_date(),jrr.publishDate) &lt;= 10
+        where t.id = #{id}
+    </select>
 
     <select id="findAllOtherPosition" parameterType="java.util.Map" resultType="java.util.Map">
         select t.id,t.createid,t.name,t.positionType,date_format(t.publishTime,'%Y-%m-%d') publishTime,
@@ -245,15 +245,15 @@
 
     <select id="findAllMyApplyPosition" parameterType="java.lang.String"
             resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
-    select j.id,j.name, c.name as salaryName,ci.name as workArea,re.publishDate as publishTime,m.enterpriseName,
-    (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
-    from t_i_job j
-    left join t_i_jobRelresume re on re.jobID = j.id
-    left join t_dictionary_constant c on j.salary = c.code
-    LEFT JOIN t_dictionary_city ci on j.city = ci.code
-    left join t_m_member m on m.id = j.createid
-    where re.resumeID = (select id from t_i_resume where createid = #{id}) and c.type = 1
-  </select>
+        select j.id,j.name, c.name as salaryName,ci.name as workArea,re.publishDate as publishTime,m.enterpriseName,
+        (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
+        from t_i_job j
+        left join t_i_jobRelresume re on re.jobID = j.id
+        left join t_dictionary_constant c on j.salary = c.code
+        LEFT JOIN t_dictionary_city ci on j.city = ci.code
+        left join t_m_member m on m.id = j.createid
+        where re.resumeID = (select id from t_i_resume where createid = #{id}) and c.type = 1
+    </select>
     <select id="queryHotPosition" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
         select j.id,j.name,j.positionType, c.name as salaryName,ci.name as
         workArea,j.publishTime,j.updateTime,m.enterpriseName,j.createid,
@@ -277,36 +277,25 @@
         order by j.views desc limit 0,#{count}
     </select>
     <select id="queryLatestJob" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
-    select j.id,j.name,j.positionType,ci.name as city, c.name as salaryName,j.createid from t_i_job j
-    left join t_dictionary_position p on j.positionType = p.id
-    left join t_dictionary_city ci on ci.code = j.city
-    left join t_dictionary_constant c on j.salary = c.code
-    left join t_m_member mb on mb.id = j.createid
-    where p.parentId = #{id} and c.type = 1 and j.is_deleted =0 and mb.status != 2
-    order by j.updateTime desc limit 0,#{count}
-  </select>
+        select j.id,j.name,j.positionType,ci.name as city, pr.name as province,c.name as salaryName,j.createid from t_i_job j
+        left join t_dictionary_position p on j.positionType = p.id
+        left join t_dictionary_city ci on ci.code = j.city
+        left join t_dictionary_province pr on pr.code = j.province
+        left join t_dictionary_constant c on j.salary = c.code
+        left join t_m_member mb on mb.id = j.createid
+        where p.parentId = #{id} and c.type = 1 and j.is_deleted =0 and mb.status != 2
+        order by j.updateTime desc limit 0,#{count}
+    </select>
     <select id="greatCompanyPosition" resultType="com.zhuhuibao.common.pojo.ResultBean">
-    select distinct m.id as code,m.enterpriseLogo as name from t_i_job j
-    left join t_m_member m on j.createid = m.id
-    where m.isrecommend = 1
-  </select>
+        select distinct m.id as code,m.enterpriseLogo as name from t_i_job j
+        left join t_m_member m on j.createid = m.id
+        where m.isrecommend = 1
+    </select>
     <update id="updateViews" parameterType="java.lang.Long">
-    UPDATE t_i_job SET views=views+1 WHERE id = #{id}
-  </update>
-    <!--  <select id="querySimilarCompany" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
-        SELECT j.createid
-        FROM t_i_job j
-        LEFT JOIN t_m_member m on j.createid = m.id
-        WHERE FIND_IN_SET(j.positionType,(
-        SELECT GROUP_CONCAT(A.positionType) AS positionType
-        FROM
-        (
-        SELECT positionType
-        FROM t_i_job
-        WHERE createid = #{id} and is_deleted = 0
-        GROUP BY positionType)A)) and j.createid != #{id} and j.is_deleted = 0 and m.enterpriseType = #{enterpriseType} group by j.createid limit 0,#{count}
-      </select>-->
-    <select id="querySimilarCompany" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
+        UPDATE t_i_job SET views=views+1 WHERE id = #{id}
+    </update>
+
+    <select id="querySimilarCompany" resultType="java.lang.String">
       select distinct A.createid from ((SELECT j.createid FROM t_i_job j
         WHERE FIND_IN_SET(j.positionType,(
         SELECT GROUP_CONCAT(A.positionType) AS positionType

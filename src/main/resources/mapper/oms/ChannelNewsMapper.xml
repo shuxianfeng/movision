@@ -15,7 +15,7 @@
     <result column="views" property="views" jdbcType="INTEGER" />
     <result column="publisher" property="publisher" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    
+
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.oms.entity.ChannelNews" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
@@ -28,11 +28,11 @@
     content
   </sql>
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
-    select 
+    select
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from t_oms_channel_news 
+    from t_oms_channel_news
     where id = #{id,jdbcType=BIGINT}
   </select>
 
@@ -49,7 +49,7 @@
       <if test="channelid != null" >
         channelid,
       </if>
-      
+
       <if test="sort != null" >
         sort,
       </if>
@@ -146,9 +146,9 @@
 
   <select id="queryNewsByChannelInfo" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
     select
-      <include refid="Base_Column_List" />
-      ,
-      <include refid="Blob_Column_List" />
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from t_oms_channel_news
     <where>
       <if test="channelid != null">
@@ -188,7 +188,7 @@
     </where>
     order by createTime desc
   </select>
-  
+
   <select id="queryViewsByChannel" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
     select id,title,description,imgUrl,views from t_oms_channel_news
     <where>
@@ -207,31 +207,31 @@
   </select>
 
   <!-- 查询咨询列表@author:gmli@since2016.05.09 -->
- <select id="findAllContentList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
-	select a.id,a.title,
-	
-	CONCAT(b.name,'>',
-     (select w.name from t_oms_channel w where w.sort=a.sort and w.parentId=a.channelid) ) name
-	
-	,a.views,
-	(case when a.status=0 then '未审核'
-	when a.status=1 then '已审核' when
-	a.status='2' then '已拒绝' else '回收站' end )
-	statusText,a.createid, 
-	m.username  publisher,
-	date_format(a.createTime,'%Y-%m-%d %H:%i:%s') createTime
-	from
-	t_oms_channel_news a left join t_oms_channel b on a.channelid=b.id
-	left
-	join t_oms_user m on m.id=a.createid 
-	<where>
-	   a.status!=3 
-	   <if test="channelid!=11">
-	   and a.channelid!='11'
-	   </if>
-	   
+  <select id="findAllContentList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
+    select a.id,a.title,
+
+    CONCAT(b.name,'>',
+    (select w.name from t_oms_channel w where w.sort=a.sort and w.parentId=a.channelid) ) name
+
+    ,a.views,
+    (case when a.status=0 then '未审核'
+    when a.status=1 then '已审核' when
+    a.status='2' then '已拒绝' else '回收站' end )
+    statusText,a.createid,
+    m.username  publisher,
+    date_format(a.createTime,'%Y-%m-%d %H:%i:%s') createTime
+    from
+    t_oms_channel_news a left join t_oms_channel b on a.channelid=b.id
+    left
+    join t_oms_user m on m.id=a.createid
+    <where>
+      a.status!=3
+      <if test="channelid!=11">
+        and a.channelid!='11'
+      </if>
+
       <if test="title != null">
-        and a.title like CONCAT('%',#{title},'%') 
+        and a.title like CONCAT('%',#{title},'%')
       </if>
       <if test="status != null">
         and a.status = #{status}
@@ -242,23 +242,23 @@
       <if test="sort != null">
         and a.sort = #{sort}
       </if>
-    </where> 
-	order by a.createTime desc
-  </select> 
- <!-- 查询所属栏目列表@author:gmli@since2016.05.09 -->
- <select id="queryChannelList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
-   select t.id,t.name,t.sort,t.parentId channelid  from t_oms_channel t where (t.parentId in(1,6) or t.id in(1,6))
+    </where>
+    order by a.createTime desc
+  </select>
+  <!-- 查询所属栏目列表@author:gmli@since2016.05.09 -->
+  <select id="queryChannelList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
+   select t.id,t.name,t.sort,t.parentId channelid  from t_oms_channel t where (t.parentId in(1,6,13) or t.id in(1,6,13))
   </select>
   <update id="batchDelNews">
-   update t_oms_channel_news
+    update t_oms_channel_news
     <set>
       status = 3,
     </set>
     where id = #{id}
   </update>
-    <select id="findAllTechNewsList" resultType="java.util.Map" parameterType="java.util.Map" >
-      select t.id, t.title,ur.username ,date_format(t.createTime,'%Y-%m-%d %H:%i:%s') createTime,t.imgurl,t.content,t.description from t_oms_channel_news t
-      left join t_oms_user ur on ur.id = t.createid
+  <select id="findAllTechNewsList" resultType="java.util.Map" parameterType="java.util.Map" >
+    select t.id, t.title,ur.username ,date_format(t.createTime,'%Y-%m-%d %H:%i:%s') createTime,t.imgurl,t.content,t.description from t_oms_channel_news t
+    left join t_oms_user ur on ur.id = t.createid
     <where>
       <if test="channelid != null">
         and channelid = #{channelid}
@@ -294,5 +294,42 @@
     and at.page = #{page}
     and at.advArea = #{advArea}
     and at.advType = #{advType}
+  </select>
+
+  <select id="findAllPassNewsByType" resultType="java.util.Map">
+    select id,title,date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,description  from t_oms_channel_news
+    <where>
+      <if test="channelid != null and channelid !='' ">
+        and channelid = #{channelid}
+      </if>
+      <if test="status != null and status !='' ">
+        and status = #{status}
+      </if>
+    </where>
+    order by createTime desc
+    <if test="count != null and count!='' ">
+      limit 0,#{count}
+    </if>
+  </select>
+  <select id="selectHotViews" resultType="java.util.Map">
+    select id,title,views from t_oms_channel_news
+    where channelid in (select id from t_oms_channel where parentId=#{type}) and status =1  order by views desc
+    <if test="count != null and count!='' ">
+      limit 0,#{count}
+    </if>
+  </select>
+  <select id="selectNewViews" resultType="java.util.Map">
+    select id,title,date_format(createTime,'%Y-%m-%d') createTime  from t_oms_channel_news
+    where channelid in (select id from t_oms_channel where parentId=#{type}) and status = 1 order by createTime desc
+    <if test="count != null and count!='' ">
+      limit 0,#{count}
+    </if>
+  </select>
+  <select id="selectNewsByType" resultType="java.util.Map">
+    select id,title,  date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime from  t_oms_channel_news
+    where status = 1 and channelid = #{type} order by   createTime
+    <if test="count != null and count!='' ">
+      limit 0,#{count}
+    </if>
   </select>
 </mapper>

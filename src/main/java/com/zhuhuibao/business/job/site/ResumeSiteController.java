@@ -39,9 +39,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.*;
 
-/**
- * Created by Administrator on 2016/4/21 0021.
- */
+
 @RestController
 @RequestMapping("/rest/job/site/resume")
 public class ResumeSiteController {
@@ -140,10 +138,11 @@ public class ResumeSiteController {
             map.put("company_id", ShiroUtil.getCreateID());
         }
         map.put("jobCity",jobCity);
-        if(expYearBefore != null && !expYearBefore.equals("") && expYearBehind == null && expYearBehind.equals("")) {
+        /*if(expYearBefore != null && !expYearBefore.equals("") && expYearBehind == null && expYearBehind.equals("")) {
             map.put("expYearBeforeFlag", "true");
             map.put("expYearBefore", expYearBefore);
-        }
+        }*/
+        map.put("expYearBefore", expYearBefore);
         map.put("expYearBehind",expYearBehind);
         map.put("education",education);
         if(isPublic==null)
@@ -223,6 +222,28 @@ public class ResumeSiteController {
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
+        return response;
+    }
+
+    
+    @RequestMapping(value = "upd_coll_resume", method = RequestMethod.POST)
+    @ApiOperation(value = "收藏简历",notes = "收藏简历",response = Response.class)
+    public Response insertCollResume(@ApiParam(value = "简历id") @RequestParam String id) throws Exception {
+        
+        Response response = new Response();
+        Long memberId = ShiroUtil.getCreateID(); 
+        if(memberId!=null){
+            int result=resume.insertCollRecord(id);
+            if(result>0)
+            {
+            	response.setCode(200);
+            }else{
+            	response.setCode(400);
+            }
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+  
         return response;
     }
 

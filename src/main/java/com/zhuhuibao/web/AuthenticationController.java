@@ -2,13 +2,17 @@ package com.zhuhuibao.web;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MessageLogConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.AuthcMember;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
 import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
+import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.security.resubmit.AvoidDuplicateSubmission;
 import com.zhuhuibao.security.resubmit.TokenHelper;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
 
 import org.apache.shiro.SecurityUtils;
@@ -53,7 +57,7 @@ public class AuthenticationController {
         Session session = currentUser.getSession(false);
         Response response = new Response();
         response.setCode(200);
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
 
         if (null == session) {
             response.setMsgCode(0);
@@ -113,12 +117,6 @@ public class AuthenticationController {
                 authcMember.setNickname(member.getNickname());
                 authcMember.setCompanyName(member.getCompanyName());
 
-//                MemberShop shop = shopService.findByCompanyID(member.getCompanyId());
-//                if(shop != null){
-//                        authcMember.setShopId(String.valueOf(shop.getId()));
-//                }else{
-//                    authcMember.setShopId("");
-//                }
 
                 response.setMsgCode(1);
                 response.setMessage("welcome you!");
@@ -146,19 +144,20 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/rest/findMemberInfoById", method = RequestMethod.GET)
     public Response findMemberInfoById() throws IOException {
-        Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
+        Member member = null;
         if (null == session) {
-            response.setMessage("you are not login!");
+            log.error("you are not login~");
+            throw new AuthException(MsgCodeConstant.un_login,"请登录");
         } else {
             ShiroUser principal = (ShiroUser) session.getAttribute("member");
             if (null != principal) {
-                response = memberService.findMemberInfoById(principal.getId());
+                member = memberService.findMemberInfoById(principal.getId());
             }
         }
 
-        return response;
+        return new Response(member);
     }
 
 }

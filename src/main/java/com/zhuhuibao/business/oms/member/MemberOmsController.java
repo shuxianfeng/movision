@@ -11,6 +11,7 @@ import com.zhuhuibao.common.pojo.OmsMemBean;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 

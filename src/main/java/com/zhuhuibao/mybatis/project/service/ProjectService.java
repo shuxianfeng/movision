@@ -6,10 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ProjectConstant;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memCenter.entity.Area;
@@ -39,6 +38,7 @@ import com.zhuhuibao.utils.pagination.util.StringUtils;
 @Service
 @Transactional
 public class ProjectService {
+
 	private static final Logger log = LoggerFactory.getLogger(OmsMemService.class);
 	@Autowired
 	private ProjectMapper projectMapper;
@@ -463,9 +463,9 @@ public class ProjectService {
 	 *            项目信息搜素条件 count：指定项目信息条数
 	 * @return
 	 */
-	public List<Map<String, String>> queryLatestProject(Map<String, Object> map) {
+	public List<Map<String, Object>> queryLatestProject(Map<String, Object> map) {
 		log.info("query latest project info condition = " + StringUtils.mapToString(map));
-		List<Map<String, String>> projectList = null;
+		List<Map<String, Object>> projectList;
 		try {
 			projectList = projectMapper.queryLatestProject(map);
 		} catch (Exception e) {
@@ -662,6 +662,17 @@ public class ProjectService {
 			projectList.add(result);
 		}
 		return projectList;
+	}
+
+	public List<Map<String, Object>> queryLatestNProject(String count) {
+		List<Map<String, Object>> list;
+		try {
+			list = projectMapper.queryLatestNProject(Integer.valueOf(count));
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
+		}
+		return list;
 	}
 
 	private int countStr(String str1, String str2) {

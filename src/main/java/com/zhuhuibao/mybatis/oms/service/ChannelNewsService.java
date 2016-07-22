@@ -3,6 +3,7 @@ package com.zhuhuibao.mybatis.oms.service;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.mapper.ChannelNewsMapper;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -253,5 +255,58 @@ public class ChannelNewsService {
             e.printStackTrace();
             throw e;
         }
+    }
+
+    public List<Map<String, String>> findAllPassNewsByType(Paging<Map<String, String>> pager, Map<String, Object> params) {
+        List<Map<String, String>> list;
+        try {
+            list = channel.findAllPassNewsByType(pager.getRowBounds(), params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
+        }
+        return list;
+    }
+
+    public List<Map<String, String>> selectHotViews(String type, Integer count) {
+        List<Map<String, String>> list;
+        try {
+            list = channel.selectHotViews(type, count);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
+        }
+        return list;
+    }
+
+    public List<Map<String, String>> selectNewViews(String type, Integer count) {
+        List<Map<String, String>> list;
+        try {
+            list = channel.selectNewViews(type, count);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
+        }
+        return list;
+    }
+
+    public Map<String, Object> selectLastestNews(String count) {
+        Map<String, Object> map = new HashMap<>();
+        try {
+            //资讯类别 14:面试技巧 15:职场动态 16:行业资讯
+
+            List<Map<String, String>> msList = channel.selectNewsByType("14", count);
+            List<Map<String, String>> zcList = channel.selectNewsByType("15", count);
+            List<Map<String, String>> hyList = channel.selectNewsByType("16", count);
+            map.put("interviewList", msList);
+            map.put("careerList", zcList);
+            map.put("industryList", hyList);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
+        }
+        return map;
     }
 }

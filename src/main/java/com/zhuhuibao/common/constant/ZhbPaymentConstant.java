@@ -75,4 +75,23 @@ public class ZhbPaymentConstant {
      * 未支付
      */
     public static final int PAY_ZHB_NON_PURCHASE = 0;
+    
+    /**
+     * 简历预览
+     */
+    public static final int RESUME_VIEW = 1;
+    /**
+     * 购买简历余额不足
+     */
+    public static final int RESUME_BALANCE_NO = 2;
+    
+    /**
+     * 简历购买次数不足
+     */
+    public static final int RESUME_BUY_TIMES_N0 = 3;
+    
+    /**
+     * 可以购买但未下载
+     */
+    public static final int RESUME_BUY_TIMESANDBALANCE_YEAR = 4;
 }

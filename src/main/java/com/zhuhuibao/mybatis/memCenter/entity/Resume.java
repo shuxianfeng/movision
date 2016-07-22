@@ -78,6 +78,10 @@ public class Resume {
     private String download;
 
     private String views;
+    //0 已收藏  1 未收藏
+    private String isCollect;
+    //0 已下载  1 未下载
+    private String isDownload;
 
     public String getId() {
         return id;
@@ -390,4 +394,22 @@ public class Resume {
     public void setViews(String views) {
         this.views = views;
     }
+
+	public String getIsCollect() {
+		return isCollect;
+	}
+
+	public void setIsCollect(String isCollect) {
+		this.isCollect = isCollect;
+	}
+
+	public String getIsDownload() {
+		return isDownload;
+	}
+
+	public void setIsDownload(String isDownload) {
+		this.isDownload = isDownload;
+	}
+    
+    
 }

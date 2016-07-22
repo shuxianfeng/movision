@@ -33,9 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * Created by Administrator on 2016/4/21 0021.
- */
+
 @RestController
 @RequestMapping("/rest/job/site/recruit")
 public class JobSiteController {
@@ -288,8 +286,8 @@ public class JobSiteController {
     @RequestMapping(value = "sel_similar_company", method = RequestMethod.GET)
     @ApiOperation(value = "相似企业", notes = "相似企业", response = Response.class)
     public Response querySimilarCompany(@ApiParam(value = "企业ID(创建者ID)") @RequestParam String id) throws IOException {
-        Response response = job.querySimilarCompany(id, 4);
-        return response;
+        List<Map<String,Object>> list = job.querySimilarCompany(id, 4);
+        return new Response(list);
     }
 
     @RequestMapping(value = "sel_com_hot_position", method = RequestMethod.GET)

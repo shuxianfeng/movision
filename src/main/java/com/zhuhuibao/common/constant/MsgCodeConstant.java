@@ -6,16 +6,16 @@ package com.zhuhuibao.common.constant;
  *
  */
 public interface MsgCodeConstant {
-	
+
 	int response_status_200 = 200;
-	
+
 	int response_status_400 = 400;
-	
+
 	/**
 	 * 统一定义成功返回1000
 	 */
 	int mcode_common_success = 1000;
-	
+
 	/**
 	 * 通用错误
 	 */
@@ -26,57 +26,57 @@ public interface MsgCodeConstant {
 	 * 账户名已经存在
 	 */
 	int member_mcode_account_exist = 10001;
-	
+
 	/**
 	 * 手机验证码不正确
 	 */
 	int member_mcode_mobile_validate_error = 10002;
-	
+
 	/**
 	 * 邮箱验证码不正确
 	 */
 	int member_mcode_mail_validate_error = 10003;
-	
+
 	/**
 	 * 激活码已过期
 	 */
 	int member_mcode_active_code_expire = 10004;
-	
+
 	/**
 	 * 邮箱已激活请登录
 	 */
 	int member_mcode_mail_actived = 10005;
-	
+
 	/**
 	 * 邮箱已被注册
 	 */
 	int member_mcode_mail_registered = 10006;
-	
+
 	/**
 	 * 该邮箱未注册
 	 */
 	int member_mcode_mail_unregister = 10007;
-	
+
 	/**
 	 * 验证身份已过期
 	 */
 	int member_mcode_mail_validate_expire = 10008;
-	
+
 	/**
 	 * 密码找回链接已经失效
 	 */
 	int member_mcode_mail_url_invalid = 10009;
-	
+
 	/**
 	 * 用户名不存在
 	 */
 	int member_mcode_username_not_exist = 10010;
-	
+
 	/**
 	 * 帐户状态异常
 	 */
 	int member_mcode_account_status_exception = 10011;
-	
+
 	/**
 	 * 用户名或密码错误
 	 */
@@ -86,7 +86,7 @@ public interface MsgCodeConstant {
 	 * 找回密码错误
 	 */
 	int MEMBER_SEED_PWD_ERROR = 10214;
-	
+
 	/**
 	 * 短信验证码超时
 	 */
@@ -116,7 +116,7 @@ public interface MsgCodeConstant {
 	 * 筑慧币余额不足
 	 */
 	int ZHB_AUTOPAYFOR_FAILED = 10302;
-	
+
 	/**
 	 * 充值失败
 	 */
@@ -207,5 +207,15 @@ public interface MsgCodeConstant {
 	 * 简历增加屏蔽企业关键字重复
 	 */
 	int FORBID_KEYWORDS_REPEAT = 10216;
+
+	/**
+	 * 期望工作地点不得超过5个
+	 */
+	int RESUME_JOB_COUNT_LIMIT = 10217;
+
+	/**
+	 * 意见反馈图片不得超过4个
+	 */
+	int SUGGEST_URL_COUNT_LIMIT = 10218;
 
 }

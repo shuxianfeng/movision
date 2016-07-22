@@ -8,6 +8,8 @@ import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
+import com.zhuhuibao.mybatis.advertising.service.SysAdvertisingService;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
@@ -49,6 +51,9 @@ public class JobPositionService {
     @Autowired
     ZhbService zhbService;
 
+    @Autowired
+    private SysAdvertisingService advService;
+
     /**
      * 发布职位
      */
@@ -81,8 +86,8 @@ public class JobPositionService {
             map.put(Constants.salary, job.getSalaryName());
             map.put(Constants.area, job.getWorkArea());
             map.put(Constants.id, job.getId());
-            map.put("companyId",job.getCreateid());
-            map.put("positionType",job.getPositionType());
+            map.put("companyId", job.getCreateid());
+            map.put("positionType", job.getPositionType());
             map.put(Constants.publishTime, job.getPublishTime());
             map.put(Constants.updateTime, job.getUpdateTime());
             list.add(map);
@@ -201,30 +206,47 @@ public class JobPositionService {
     /**
      * 职位类别
      */
-    public List positionType() {
+    public List<Map<String,Object>> positionType() {
         List<Position> positionList = positionMapper.findPosition(7);
         List<Position> subPositionList = positionMapper.findSubPosition();
-        List list1 = new ArrayList();
-        for (int i = 0; i < positionList.size(); i++) {
-            Position position = positionList.get(i);
-            Map map = new HashMap();
+        List<Map<String,Object>> retList = new ArrayList<>();
+        for (Position position : positionList) {
+            Map<String,Object> map = new HashMap<>();
             map.put(Constants.code, position.getId());
             map.put(Constants.name, position.getName());
-            List list = new ArrayList();
-            for (int y = 0; y < subPositionList.size(); y++) {
-                Position subPosition = subPositionList.get(y);
+
+            List<Map<String,String>> pList = new ArrayList<>();
+            List<Map<String,String>> advList = new ArrayList<>();
+
+            for (Position subPosition : subPositionList) {
                 if (position.getId().equals(subPosition.getParentId())) {
-                    Map map1 = new HashMap();
+                    Map<String,String> map1 = new HashMap<>();
                     map1.put(Constants.code, subPosition.getId());
                     map1.put(Constants.name, subPosition.getName());
                     map1.put(Constants.hot, subPosition.getHot());
-                    list.add(map1);
+                    pList.add(map1);
+                    //广告项
+//                    chanType,page,advArea
+                    String chanType = Constants.AdvChannType.JOB.toString();  //招聘频道
+                    String page = "index";//首页
+                    String advArea = "A" + position.getId();
+                    List<SysAdvertising> advertisings = advService.findListByCondition(chanType,page,advArea);
+                    for(SysAdvertising adv : advertisings){
+                        Map<String,String> tmpMap = new HashMap<>();
+                        tmpMap.put("title",adv.getTitle());
+                        tmpMap.put("imgUrl",adv.getImgUrl());
+                        tmpMap.put("linkUrl",adv.getLinkUrl());
+                        tmpMap.put("id",adv.getConnectedId());
+                        advList.add(tmpMap);
+                    }
                 }
             }
-            map.put(Constants.subPositionList, list);
-            list1.add(map);
+            map.put(Constants.subPositionList, pList);
+            map.put("advList",advList);
+
+            retList.add(map);
         }
-        return list1;
+        return retList;
     }
 
     /**
@@ -425,7 +447,11 @@ public class JobPositionService {
                     map1.put(Constants.name, job.getName());
                     map1.put(Constants.createid, job.getCreateid());
                     map1.put(Constants.salary, job.getSalaryName());
-                    map1.put(Constants.area, job.getCity());
+                    if(job.getCity()!=null){
+                        map1.put(Constants.area, job.getCity());
+                    }else {
+                        map1.put(Constants.area, job.getProvince());
+                    }
                     map1.put(JobConstant.JOB_KEY_POSITIONTYPE, job.getPositionType());
                     list1.add(map1);
                 }
@@ -479,24 +505,33 @@ public class JobPositionService {
     /**
      * 相似企业
      */
-    public Response querySimilarCompany(String id, int count) {
-        Response response = new Response();
-        Member member = memberMapper.findMemById(id);
-        List<Job> companyList = jobMapper.querySimilarCompany(member.getEmployeeNumber(), Integer.parseInt(member.getEnterpriseType()), id, count);
-        List list = new ArrayList();
-        for (int i = 0; i < companyList.size(); i++) {
-            Job job = companyList.get(i);
-            Job companyInfo = new Job();
-            companyInfo = jobMapper.querySimilarCompanyInfo(job.getCreateid());
-            Map map = new HashMap();
-            map.put(Constants.id, job.getCreateid());
-            map.put(Constants.companyName, companyInfo.getEnterpriseName());
-            map.put(Constants.size, companyInfo.getSize());
-            map.put(Constants.area, companyInfo.getCity());
-            list.add(map);
+    public List<Map<String, Object>> querySimilarCompany(String id, int count) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        try {
+            Member member = memberMapper.findMemById(id);
+            String employeeNumber = member.getEmployeeNumber();
+            String enterpriseType = member.getEnterpriseType();
+
+            List<String> companyList = jobMapper.querySimilarCompany(
+                    member.getEmployeeNumber() == null ?"":employeeNumber,
+                    member.getEnterpriseType() == null ?0 : Integer.parseInt(enterpriseType),
+                    id, count);
+
+            for (String  createid : companyList) {
+                Job companyInfo = jobMapper.querySimilarCompanyInfo(createid);
+                Map<String, Object> map = new HashMap<>();
+                map.put(Constants.id, createid);
+                map.put(Constants.companyName, companyInfo.getEnterpriseName());
+                map.put(Constants.size, companyInfo.getSize());
+                map.put(Constants.area, companyInfo.getCity());
+                list.add(map);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询失败");
         }
-        response.setData(list);
-        return response;
+
+        return list;
     }
 
     /**
@@ -601,7 +636,7 @@ public class JobPositionService {
             list = jobMapper.findNewPositions(count);
 
             for (Map<String, Object> map : list) {
-                String createID = String.valueOf(map.get("createID")) ;
+                String createID = String.valueOf(map.get("createID"));
                 if (!StringUtils.isEmpty(createID)) {
                     Member member = memberMapper.findMemById(createID);
                     if (member != null) {
@@ -613,27 +648,27 @@ public class JobPositionService {
                 } else {
                     map.put("enterpriseName", "");
                 }
-                String salary = String.valueOf( map.get("salary"));
-                if(!StringUtils.isEmpty(salary)){
+                String salary = String.valueOf(map.get("salary"));
+                if (!StringUtils.isEmpty(salary)) {
                     map = ConvertUtil.execute(map, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(map.get("salary"))});
-                } else{
-                    map.put("salaryName","");
+                } else {
+                    map.put("salaryName", "");
                 }
                 String welfare = (String) map.get("welfare");
                 String welfarename = "";
                 genWelfaceName(map, welfare, welfarename);
 
-                String cityCode = String.valueOf( map.get("city"));
-                if(!StringUtils.isEmpty(cityCode)){
+                String cityCode = String.valueOf(map.get("city"));
+                if (!StringUtils.isEmpty(cityCode)) {
                     map = ConvertUtil.execute(map, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
                     map.put("city", map.get("cityName"));
-                }else{
+                } else {
                     String provinceCode = String.valueOf(map.get("province"));
-                    if(!StringUtils.isEmpty(provinceCode)){
+                    if (!StringUtils.isEmpty(provinceCode)) {
                         map = ConvertUtil.execute(map, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
                         map.put("city", map.get("provinceName"));
-                    }else{
-                        map.put("city","");
+                    } else {
+                        map.put("city", "");
                     }
                 }
 

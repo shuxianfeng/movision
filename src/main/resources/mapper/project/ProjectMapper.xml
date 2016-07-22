@@ -184,7 +184,8 @@
         t.id,t.name,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
         date_format(t.updateDate,'%Y-%m-%d') updateDate,pn.name province,ct.name city,ar.name
         area,t.address,t.category,t.price,t.startDate,t.endDate,t.description,t.record,t.is_deleted,
-        (select group_concat(name) as names from t_dictionary_constant dc where find_in_set(dc.code,t.category) and dc.type= 8) as categoryName
+        (select group_concat(name) as names from t_dictionary_constant dc where find_in_set(dc.code,t.category) and
+        dc.type= 8) as categoryName
         FROM t_prj_project t
         left join t_dictionary_province pn on pn.code = t.province
         left join t_dictionary_city ct on ct.code = t.city
@@ -322,16 +323,16 @@
         </where>
     </select>
     <select id="getAreaOrCity" parameterType="java.util.Map" resultType="java.util.Map">
-     select w.code,w.cityCode,c.provincecode from t_dictionary_area
-      w left join t_dictionary_city c on w.cityCode=c.code
-     where w.name=#{area} and c.name like CONCAT('%',#{city},'%')
-     
-  </select>
+        select w.code,w.cityCode,c.provincecode from t_dictionary_area
+        w left join t_dictionary_city c on w.cityCode=c.code
+        where w.name=#{area} and c.name like CONCAT('%',#{city},'%')
+
+    </select>
 
     <select id="getCity" parameterType="java.util.Map" resultType="java.util.Map">
-     select c.code cityCode,c.provincecode from t_dictionary_city c
-     where c.name like CONCAT('%',#{city},'%')
-  </select>
+        select c.code cityCode,c.provincecode from t_dictionary_city c
+        where c.name like CONCAT('%',#{city},'%')
+    </select>
 
     <select id="findPrjectByName" parameterType="java.util.Map" resultMap="list">
         SELECT
@@ -370,10 +371,7 @@
         order by t.updateDate desc
     </select>
     <select id="getCatagoryByValue" parameterType="java.util.Map" resultType="java.util.Map">
-        select GROUP_CONCAT(type) type from t_dictionary_type where sendname
-
-
-        in
+        select GROUP_CONCAT(type) type from t_dictionary_type where sendname in
         <foreach item="typeList" index="index" collection="list"
                  open="(" separator="," close=")">
             #{typeList}
@@ -381,11 +379,11 @@
         group by SPACE(type)
     </select>
     <select id="findAllPrject" resultType="java.util.Map">
-       SELECT
+        SELECT
         t.id ,t.name,date_format(t.publishDate,'%Y-%m-%d') publishDate,
         date_format(t.updateDate,'%Y-%m-%d') updateDate,t.address,t.province,t.city,t.area,t.category,
         t.price,date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate
-    FROM t_prj_project t
+        FROM t_prj_project t
         <where>
             t.is_deleted=0
             <if test="name != null and name != ''">
@@ -409,9 +407,15 @@
                 date_format(#{endDateB},'%Y-%m-%d')
             </if>
         </where>
-     order by t.updateDate desc
-  </select>
-  
+        order by t.updateDate desc
+    </select>
+    <select id="queryLatestNProject" resultType="java.util.Map">
+        select t.id,t.name from t_prj_project t where is_deleted=0 order by updateDate desc
+        <if test="count !=null">
+            limit #{count}
+        </if>
+    </select>
+	  
   <select id="findAllPrjectCopy"  resultType="java.util.Map">
   	SELECT  ID,NAME FROM t_prj_project_copy where createid = 1 limit 1000
   </select>
@@ -420,4 +424,5 @@
   	update t_prj_project_copy set name = #{NAME},createid = #{CREATEID} where id=#{ID}
   </update>
   
+
 </mapper>

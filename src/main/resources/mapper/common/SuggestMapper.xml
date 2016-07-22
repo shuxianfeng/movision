@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.common.mapper.SuggestMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.common.entity.Suggest" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="imgUrl" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="userName" property="userName" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="createId" property="createId" jdbcType="BIGINT" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, type, content, imgUrl, userName, telephone, email, createId, time, status
+  </sql>
+
+  <select id="querySuggestById" resultType="java.util.Map" parameterType="java.lang.String" >
+    SELECT s.id,s.title,s.userName,s.email,s.status,s.imgUrl,s.telephone,s.content,
+    date_format(s.time,'%Y-%m-%d') time,c.name as type
+    FROM t_sys_suggest s
+    LEFT JOIN t_dictionary_constant c ON s.type = c.code and c.type =24
+    where s.id = #{id}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.common.entity.Suggest" >
+    insert into t_sys_suggest
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="imgUrl != null" >
+        imgUrl,
+      </if>
+      <if test="userName != null" >
+        userName,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="createId != null" >
+        createId,
+      </if>
+        time,
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=BIGINT},
+      </if>
+        now(),
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateSuggest" parameterType="java.util.Map" >
+    update t_sys_suggest
+    <set >
+      <if test="status !=null and status !=''">
+        status = #{status},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <select id="findAllSuggest" resultType="java.util.Map" parameterType="java.util.Map" >
+    SELECT s.id,s.title,s.userName,s.email,s.status,
+    date_format(s.time,'%Y-%m-%d') time,c.name as type
+    FROM t_sys_suggest s
+    LEFT JOIN t_dictionary_constant c ON s.type = c.code and c.type =24
+    <where>
+      <if test="title !=null and title !=''">
+        and s.title LIKE concat('%',#{title},'%')
+      </if>
+      <if test="status !=null and status !=''">
+        and s.status = #{status}
+      </if>
+      <if test="type !=null and type !=''">
+        and s.type = #{type}
+      </if>
+    </where>
+    order by time desc
+  </select>
+
+</mapper>
