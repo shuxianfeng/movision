@@ -116,6 +116,7 @@
                 <!--特殊处理-->
                 /rest/tech/mc/data/sel_download_data = authc
                 /rest/system/mc/brand/sel_brand_by_scateid = anon
+                <!--前端调整为新接口之后删除以下两个配置-->
                 /rest/job/mc/recruit/sel_recommend_position = anon
                 /rest/job/mc/recruit/sel_latest_position = anon
 

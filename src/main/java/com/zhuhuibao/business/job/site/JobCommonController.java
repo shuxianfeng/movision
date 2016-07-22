@@ -139,7 +139,7 @@ public class JobCommonController {
     }
 
 
-    @ApiOperation(value = "人才网首页>最新资讯", notes = "人才网首页>最新排行", response = Response.class)
+    @ApiOperation(value = "人才网首页>最新资讯", notes = "人才网首页>最新资讯", response = Response.class)
     @RequestMapping(value = "sel_lastestnews", method = RequestMethod.GET)
     public Response latestNews(@ApiParam(value = "记录条数" ,defaultValue = "5") String count){
 
