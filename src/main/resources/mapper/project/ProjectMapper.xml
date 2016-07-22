@@ -415,4 +415,14 @@
             limit #{count}
         </if>
     </select>
+	  
+  <select id="findAllPrjectCopy"  resultType="java.util.Map">
+  	SELECT  ID,NAME FROM t_prj_project_copy where createid = 1 limit 1000
+  </select>
+  
+  <update id="updatePrjectCopy" parameterType="java.util.Map">
+  	update t_prj_project_copy set name = #{NAME},createid = #{CREATEID} where id=#{ID}
+  </update>
+  
+
 </mapper>
