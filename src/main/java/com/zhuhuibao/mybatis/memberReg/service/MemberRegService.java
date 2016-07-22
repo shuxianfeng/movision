@@ -499,8 +499,8 @@ public class MemberRegService {
 	 * @param id
 	 * @return
 	 */
-	public Member findMemberInfoById(Long id) {
-		Member member;
+	public Map<String,Object> findMemberInfoById(Long id) {
+        Map<String,Object> member;
 		try {
 			member = memberMapper.findMemberInfoById(id);
 		} catch (Exception e) {

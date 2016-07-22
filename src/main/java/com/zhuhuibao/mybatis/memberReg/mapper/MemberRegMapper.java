@@ -4,6 +4,7 @@ import com.zhuhuibao.mybatis.memberReg.entity.LoginMember;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MemberRegMapper {
 	//注册会员
@@ -29,8 +30,8 @@ public interface MemberRegMapper {
 	
 	//更新找回密码邮箱验证是否通过
 	int updateMemberValidatePass(Member member);
-	
-	Member findMemberInfoById(Long id);
+
+	Map<String,Object> findMemberInfoById(Long id);
 	
 	LoginMember getLoginMemberByAccount(Member member);
 	

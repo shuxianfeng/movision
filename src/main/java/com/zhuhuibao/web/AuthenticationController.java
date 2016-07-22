@@ -146,7 +146,7 @@ public class AuthenticationController {
     public Response findMemberInfoById() throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        Member member = null;
+        Map<String,Object> member = null;
         if (null == session) {
             log.error("you are not login~");
             throw new AuthException(MsgCodeConstant.un_login,"请登录");

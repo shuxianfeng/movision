@@ -38,7 +38,7 @@
         where email = #{email}
     </select>
 
-    <select id="findMemberInfoById" resultType="com.zhuhuibao.mybatis.memberReg.entity.Member">
+    <select id="findMemberInfoById" resultType="java.util.Map">
     select id,case when mobile != '' or mobile != null then mobile when email!= '' or email != null then email end as  account,password, 
 	date_format(registerTime,'%Y-%m-%d %H:%i:%s') registerTime, status,identify,headShot,workType
     from t_m_member
