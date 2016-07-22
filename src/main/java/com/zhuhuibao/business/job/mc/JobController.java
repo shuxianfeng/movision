@@ -73,18 +73,14 @@ public class JobController {
 
     @ApiOperation(value = "查询公司已发布的职位", notes = "查询公司已发布的职位", response = Response.class)
     @RequestMapping(value = "sel_positionList", method = RequestMethod.GET)
-    public Response searchPositionByMemId(@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
+    public Response searchPositionByMemId(@RequestParam(required = false,defaultValue = "1") String pageNo,
+                                          @RequestParam(required = false,defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
+
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
-            Paging<Job> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-            List list = jobService.findAllPositionByMemId(pager, String.valueOf(createid));
+            Paging<Map<String,Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+            List<Map<String,Object>> list = jobService.findAllPositionByMemId(pager, String.valueOf(createid));
             pager.result(list);
             response.setData(pager);
         }else {

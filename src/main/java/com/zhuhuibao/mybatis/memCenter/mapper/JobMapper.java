@@ -14,7 +14,7 @@ public interface JobMapper {
     int publishPosition(Job job);
 
     //查询公司已发布的职位
-    List<Job> findAllByPager(RowBounds rowBounds, @Param("id") String id);
+    List<Map<String,Object>> findAllByPager(RowBounds rowBounds, @Param("id") String id);
 
     //查询公司发布的某条职位的信息
     Job getPositionByPositionId(@Param("id") String id);

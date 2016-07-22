@@ -78,13 +78,22 @@ public class ResumeController {
 
             //判断用户是否存在简历
             List<String> ids = resumeService.selectIdsByCreateId(createid);
-            if (ids != null) {
+            if (ids != null && ids.size() >= 1) {
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "该用户已存在简历");
             }
+            int procount = 0,citycount = 0;
+            String jobProvinces = resume.getJobProvince();
+            if(!StringUtils.isEmpty(jobProvinces)){
+                String[] provicnes = resume.getJobProvince().split(",");
+                procount = provicnes.length;
+            }
+            String jobCities = resume.getJobCity();
+            if(!StringUtils.isEmpty(jobCities)){
+                String[] citys = resume.getJobCity().split(",");
+                citycount = citys.length;
+            }
 
-            String[] provicnes = resume.getJobProvince().split(",");
-            String[] citys = resume.getJobCity().split(",");
-            if (provicnes.length + citys.length > 5) {
+            if ((procount + citycount) > 5) {
                 throw new BusinessException(MsgCodeConstant.RESUME_JOB_COUNT_LIMIT,
                         MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.RESUME_JOB_COUNT_LIMIT)));
             }
