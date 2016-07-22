@@ -103,7 +103,6 @@
         </property>
         <property name="filterChainDefinitions">
             <value>
-
                 <!--url = orroles[status]
                 status:会员状态 0：未激活(只针对邮件)，1：注册成功，2：注销，5：完善资料待审核 6：完善资料已审核，
                                 7：资料审核已拒绝，9：实名认证待审核，10：实名认证已认证  11：实名认证已拒绝-->
@@ -113,12 +112,14 @@
                 status:6-完善资料已审核   9-实名认证待审核 10-实名认证已认证-->
 
                 <!--orroles["100"] 企业管理员,其他不限 orroles["200"]专家身份,其他不限  orroles["300"]企业员工,其他不限  -->
-                <!--不限+不限-->
+
+                <!--特殊处理-->
                 /rest/tech/mc/data/sel_download_data = authc
-
                 /rest/system/mc/brand/sel_brand_by_scateid = anon
+                /rest/job/mc/recruit/sel_recommend_position = anon
+                /rest/job/mc/recruit/sel_latest_position = anon
 
-                <!-- 具备“不限+不限+完善资料”权限的配置      -->
+                <!-- 具备“不限+不限+完善资料”权限的配置 -->
                 /rest/system/mc/enquiry/** = orroles["6,9,10,11"]
                 /rest/system/mc/product/** = orroles["6,9,10,11"]
                 /rest/system/mc/quote/** =  orroles["6,9,10,11"]
@@ -126,7 +127,7 @@
                 /rest/tech/mc/coop/cg/**  =   orroles["6,9,10,11"]
 
 
-                <!--具备“厂家+角色不限+实名认证”权限的配置     -->
+                <!--具备“厂家+角色不限+实名认证”权限的配置 -->
                 /rest/system/mc/brand/** = orperms["3:100:10,3:300:10"]
                 /rest/system/mc/agent/** = orperms["3:100:10,3:300:10"]
 

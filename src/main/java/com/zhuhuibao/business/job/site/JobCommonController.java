@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.*;
 
 
@@ -152,6 +153,26 @@ public class JobCommonController {
         Response response = new Response();
         List list = job.positionType();
         response.setData(list);
+        return response;
+    }
+
+
+    @ApiOperation(value = "查询最新招聘职位", notes = "查询最新招聘职位", response = Response.class)
+    @RequestMapping(value = "sel_latest_position", method = RequestMethod.GET)
+    public Response searchNewPosition() throws IOException {
+        return job.searchNewPosition(6);
+    }
+
+    @ApiOperation(value = "查询推荐职位", notes = "查询推荐职位", response = Response.class)
+    @RequestMapping(value = "sel_recommend_position", method = RequestMethod.GET)
+    public Response searchRecommendPosition() throws IOException {
+        Long createid = ShiroUtil.getCreateID();
+        Response response;
+        if(createid!=null){
+            response = job.searchRecommendPosition(String.valueOf(createid), 6);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 }

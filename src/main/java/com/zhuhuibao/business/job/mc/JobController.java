@@ -116,17 +116,27 @@ public class JobController {
         return jobService.updatePosition(job);
     }
 
+    /**
+     * 老接口(之后会废弃)
+     * @return
+     * @throws IOException
+     */
     @ApiOperation(value = "查询最新招聘职位", notes = "查询最新招聘职位", response = Response.class)
     @RequestMapping(value = "sel_latest_position", method = RequestMethod.GET)
     public Response searchNewPosition() throws IOException {
         return jobService.searchNewPosition(6);
     }
 
+    /**
+     * 老接口(之后会废弃)
+     * @return
+     * @throws IOException
+     */
     @ApiOperation(value = "查询推荐职位", notes = "查询推荐职位", response = Response.class)
     @RequestMapping(value = "sel_recommend_position", method = RequestMethod.GET)
     public Response searchRecommendPosition() throws IOException {
         Long createid = ShiroUtil.getCreateID();
-        Response response = new Response();
+        Response response;
         if(createid!=null){
             response = jobService.searchRecommendPosition(String.valueOf(createid), 6);
         }else {
