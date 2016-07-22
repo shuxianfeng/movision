@@ -45,4 +45,8 @@ public interface ProjectMapper {
 	Map<String, Object> getCity(Map<String, String> areaOrCityMap);
 
     List<Map<String,String>> findAllPrject(Map<String, Object> map, RowBounds rowBounds);
+    
+    List<Map<String,Object>> findAllPrjectCopy();
+    
+    int updatePrjectCopy(Map<String, Object> map);
 }
