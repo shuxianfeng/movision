@@ -83,6 +83,7 @@ public class JobPositionService {
 
             for (Map<String,Object> map : jobList) {
                 Map<String,Object> tmpMap = new HashMap<>();
+                tmpMap.put("id",map.get("id"));
                 tmpMap.put(Constants.position, map.get("name"));
                 tmpMap.put(Constants.salary, map.get("salaryName"));
                 tmpMap.put(Constants.area, map.get("workArea"));
