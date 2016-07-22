@@ -65,6 +65,13 @@ public class UploadFileController {
 	
 	private String failReason;
 	
+	private static String LEFT = "（";
+	private static String RIGHT = "）";
+
+	private static String Left = "(";
+	private static String Right = ")";
+	
+	
 	List<String> fialList=null;
 	
 	List<ProjectLinkman> partyBList= null;
@@ -207,6 +214,8 @@ public class UploadFileController {
 		if(!isEmpty(row.getCell(0))){
 			name=row.getCell(0).toString();
 			try {
+				
+				name=this.subLastParenthesis(name);
 				map.put("name", name);
 //				List<Map<String,String>> list=projectService.findPrjectByName(map);
 //				if(list!=null&&list.size()>0)
@@ -865,6 +874,59 @@ public class UploadFileController {
 	private String subStr(String str,int index)
 	{
 		return str.substring(0, index);
+	}
+	/**
+	 * 处理项目名称
+	 * @param str1
+	 * @param str2
+	 * @return
+	 */
+	private int countStr(String str1, String str2) {
+		int counter = 0;
+		if (str1.indexOf(str2) == -1) {
+			return 0;
+		}
+		while (str1.indexOf(str2) != -1) {
+			counter++;
+			str1 = str1.substring(str1.indexOf(str2) + str2.length());
+		}
+		return counter;
+	}
+	
+	/**
+	 *项目名称处理
+	 * @param targ
+	 * @return
+	 */
+	private String subLastParenthesis(String targ) {
+		targ = targ.replace(Left, LEFT);
+		targ = targ.replace(Right, RIGHT);
+		String result = "";
+		int right = targ.lastIndexOf(RIGHT);
+		int left = targ.lastIndexOf(LEFT);
+
+		int subLeftNum = left;
+		int subRightNum = right;
+		int whileCount = 0;
+		boolean isFailed = false;
+		while (subLeftNum != subRightNum) {
+
+			String subString = targ.substring(left);
+			subLeftNum = countStr(subString, LEFT);
+			subRightNum = countStr(subString, RIGHT);
+			if (subLeftNum != subRightNum) {
+				left = targ.lastIndexOf(LEFT, left - 1);
+			}
+
+			if (whileCount++ > 50) {
+				isFailed = true;
+				break;
+			}
+		}
+
+		result = isFailed ? targ : targ.substring(0, left) + targ.substring(right + 1);
+
+		return result;
 	}
  
 }
