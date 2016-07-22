@@ -720,6 +720,11 @@
     </set>
     where id = #{id}
   </update>
+  
+  <update id="updateSubMemInfo" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member">
+      update t_m_member set  status = #{status} where enterpriseEmployeeParentId = #{id}
+  </update>
+  
   <select id="queryCompanyByKeywords" resultType="java.util.Map" parameterType="java.lang.String">
     SELECT id,enterpriseName FROM t_m_member where enterpriseName like CONCAT('%',#{keywords},'%') and status !=2 and identify !=2
   </select>

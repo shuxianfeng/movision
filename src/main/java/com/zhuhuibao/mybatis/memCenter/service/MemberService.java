@@ -17,6 +17,7 @@ import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +85,7 @@ public class MemberService {
 		try{
 
 			memberMapper.updateMemInfo(member);
+			memberMapper.updateSubMemInfo(member);
 			if("7".equals(member.getStatus()) || "11".equals(member.getStatus())) {
 				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),Long.parseLong(member.getId()),member.getReason());
 			}
@@ -626,6 +628,8 @@ public class MemberService {
 			}
 
 			updateMemInfo(member);
+			//更新子账户状态
+			updateSubMemInfo(member);
 		}catch (Exception e){
 			log.error(e.getMessage());
 			e.printStackTrace();
@@ -633,6 +637,19 @@ public class MemberService {
 		}
 	}
 
+    /**
+     *  更新子账户状态
+     * @param member
+     */
+	private void updateSubMemInfo(Member member) {
+		try{
+	      memberMapper.updateSubMemInfo(member); 
+		}catch (Exception e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
 
 	public List<Map<String,String>> queryEngineerList(Map<String,Object> map){
 		try {
