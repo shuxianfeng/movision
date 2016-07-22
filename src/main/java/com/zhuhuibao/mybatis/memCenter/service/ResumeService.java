@@ -207,6 +207,7 @@ public class ResumeService {
         } catch (Exception e) {
             log.error("updateResume error", e);
             e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return response;
     }
@@ -293,7 +294,8 @@ public class ResumeService {
             pager.result(list);
         } catch (Exception e) {
             log.error("find all resume error!", e);
-            throw e;
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return pager;
     }
@@ -485,6 +487,8 @@ public class ResumeService {
             }
         } catch (Exception e) {
             log.error("query resume by createID error!", e);
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return resume;
     }
@@ -495,13 +499,13 @@ public class ResumeService {
      * @param condition 查询条件
      * @return
      */
-    public List queryLatestResume(Map<String, Object> condition) throws Exception {
-        List list = new ArrayList();
+    public List<Map<String,Object>> queryLatestResume(Map<String, Object> condition) throws Exception {
+        List<Map<String,Object>> list = new ArrayList<>();
         try {
             List<Resume> resumeList = resumeMapper.queryLatestResume(condition);
 
             for (Resume resume : resumeList) {
-                Map map = new HashMap();
+                Map<String,Object> map = new HashMap<>();
                 String area = "";
                 if (resume.getJobCity() != null) {
                     if (resume.getJobProvince() != null) {
@@ -528,7 +532,7 @@ public class ResumeService {
         } catch (Exception e) {
             log.error("query latest resume error!");
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询失败");
         }
         return list;
     }
@@ -549,7 +553,8 @@ public class ResumeService {
             }
         } catch (Exception e) {
             log.error("judge is exist resume error !!!");
-            throw e;
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return isExist;
     }
@@ -560,7 +565,7 @@ public class ResumeService {
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
     }
 
@@ -570,7 +575,7 @@ public class ResumeService {
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
     }
 
@@ -581,7 +586,7 @@ public class ResumeService {
      * @return
      */
     public Map<String, Object> queryJobCount(Long createId) {
-        Map<String, Object> resultMap = new HashMap<String, Object>();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             List<Map<String, Object>> resultList = resumeMapper.queryJobCount(createId);
             Map<String, Object> map1 = resultList.get(0);
@@ -590,7 +595,8 @@ public class ResumeService {
             resultMap.put("resumeCount", map2.get("count"));
         } catch (Exception e) {
             log.error("find data upload download error!", e);
-            throw e;
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return resultMap;
     }

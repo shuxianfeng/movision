@@ -167,9 +167,14 @@ public class ResumeSiteController {
 
     @RequestMapping(value = "sel_latest_resume", method = RequestMethod.GET)
     @ApiOperation(value = "人才网首页最新求职 默认9个",notes = "人才网首页最新求职    默认9个",response = Response.class)
-    public Response queryLatestResume() throws Exception {
-        Map<String,Object> condition = new HashMap<String,Object>();
-        condition.put("count",JobConstant.JOB_RESUME_LATEST_COUNT_NINE);
+    public Response queryLatestResume(@ApiParam("限制条数") @RequestParam(required = false) String count)
+            throws Exception {
+        Map<String,Object> condition = new HashMap<>();
+        if(StringUtils.isEmpty(count)){
+            condition.put("count",JobConstant.JOB_RESUME_LATEST_COUNT_NINE);
+        }else{
+            condition.put("count",Integer.valueOf(count));
+        }
         condition.put("public",JobConstant.JOB_RESUME_STATUS_PUBLIC);
         condition.put("status",JobConstant.JOB_MEMBER_STATUS_LOGOUT);
         Response response = new Response();

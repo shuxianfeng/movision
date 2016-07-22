@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.*;
 
 
@@ -94,7 +95,7 @@ public class JobCommonController {
 
     @ApiOperation(value = "人才网资讯列表", notes = "人才网资讯列表", response = Response.class)
     @RequestMapping(value = "sel_newslist", method = RequestMethod.GET)
-    public Response listNews(@ApiParam("资讯类别 14:面试技巧 15:职场动态 16:行业资讯") String type,
+    public Response listNews(@ApiParam("资讯类别 14:面试技巧 15:职场动态 16:行业资讯") @RequestParam String type,
                              @ApiParam("限制条数") @RequestParam(required = false) String count,
                              @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
                              @ApiParam(value = "每页显示的条数") @RequestParam(required = false, defaultValue = "10") String pageSize) {
@@ -106,7 +107,8 @@ public class JobCommonController {
             params.put("count",Integer.valueOf(count));
         }
         List<Map<String,String>> list = newsService.findAllPassNewsByType(pager, params);
-        return new Response(list);
+        pager.result(list);
+        return new Response(pager);
     }
 
     @ApiOperation(value = "人才网资讯详情", notes = "人才网资讯详情", response = Response.class)
@@ -151,6 +153,26 @@ public class JobCommonController {
         Response response = new Response();
         List list = job.positionType();
         response.setData(list);
+        return response;
+    }
+
+
+    @ApiOperation(value = "查询最新招聘职位", notes = "查询最新招聘职位", response = Response.class)
+    @RequestMapping(value = "sel_latest_position", method = RequestMethod.GET)
+    public Response searchNewPosition() throws IOException {
+        return job.searchNewPosition(6);
+    }
+
+    @ApiOperation(value = "查询推荐职位", notes = "查询推荐职位", response = Response.class)
+    @RequestMapping(value = "sel_recommend_position", method = RequestMethod.GET)
+    public Response searchRecommendPosition() throws IOException {
+        Long createid = ShiroUtil.getCreateID();
+        Response response;
+        if(createid!=null){
+            response = job.searchRecommendPosition(String.valueOf(createid), 6);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 }
