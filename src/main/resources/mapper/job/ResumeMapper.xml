@@ -49,7 +49,7 @@
     experienceYear, company, positionName, birthYear, marriage, mobile, email, liveProvince,
     liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach,isPublic
   </sql>
-  <insert id="setUpResume" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
+  <insert id="setUpResume" useGeneratedKeys="true" keyProperty="id" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
     insert into t_i_resume (id, title, createid, publishTime, updateTime, jobNature,
     post, jobProvince, jobCity, jobArea, hopeSalary, curSalary, status, realName, userName,
     sex, workYear, education, experienceYear, company, positionName, birthYear, marriage, mobile,
@@ -382,7 +382,10 @@
     left join t_i_resume r on r.id = rd.resumeID
     where rd.companyID = #{id} and rd.is_deleted = 0
   </select>
-  
+  <select id="selectIdsByCreateId" resultType="java.lang.String">
+    select id from t_i_resume where createid= #{createid}
+  </select>
+
   <insert id="insertViewGoods" parameterType="java.util.Map" >
     insert into t_zhb_viewGoods
     <trim prefix="(" suffix=")" suffixOverrides="," >

@@ -63,4 +63,6 @@ public interface ResumeMapper {
     List<Map<String,String>> findAllCollectResume(RowBounds rowBounds,@Param("id")String id);
     //记录预览
 	void insertViewGoods(Map<String, String> recordMap);
+
+    List<String> selectIdsByCreateId(@Param("createid") Long createid);
 }

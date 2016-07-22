@@ -76,21 +76,27 @@ public class JobPositionService {
     /**
      * 查询公司已发布的职位
      */
-    public List findAllPositionByMemId(Paging<Job> pager, String id) {
-        List<Job> jobList = jobMapper.findAllByPager(pager.getRowBounds(), id);
-        List list = new ArrayList();
-        for (int i = 0; i < jobList.size(); i++) {
-            Job job = jobList.get(i);
-            Map map = new HashMap();
-            map.put(Constants.position, job.getName());
-            map.put(Constants.salary, job.getSalaryName());
-            map.put(Constants.area, job.getWorkArea());
-            map.put(Constants.id, job.getId());
-            map.put("companyId", job.getCreateid());
-            map.put("positionType", job.getPositionType());
-            map.put(Constants.publishTime, job.getPublishTime());
-            map.put(Constants.updateTime, job.getUpdateTime());
-            list.add(map);
+    public List<Map<String,Object>> findAllPositionByMemId(Paging<Map<String,Object>> pager, String id) {
+        List<Map<String,Object>> list = new ArrayList<>();
+        try{
+            List<Map<String,Object>> jobList = jobMapper.findAllByPager(pager.getRowBounds(), id);
+
+            for (Map<String,Object> map : jobList) {
+                Map<String,Object> tmpMap = new HashMap<>();
+                tmpMap.put("id",map.get("id"));
+                tmpMap.put(Constants.position, map.get("name"));
+                tmpMap.put(Constants.salary, map.get("salaryName"));
+                tmpMap.put(Constants.area, map.get("workArea"));
+                tmpMap.put("companyId", map.get("createID"));
+                tmpMap.put("positionType", map.get("positionType"));
+                tmpMap.put(Constants.publishTime, map.get("publishTime"));
+                tmpMap.put(Constants.updateTime, map.get("updateTime"));
+                list.add(tmpMap);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("select error : {}" ,e.getMessage());
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询失败");
         }
         return list;
     }
