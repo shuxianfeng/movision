@@ -57,7 +57,7 @@ public class AuthenticationController {
         Session session = currentUser.getSession(false);
         Response response = new Response();
         response.setCode(200);
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
 
         if (null == session) {
             response.setMsgCode(0);
@@ -146,7 +146,7 @@ public class AuthenticationController {
     public Response findMemberInfoById() throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
-        Map<String,Object> member = null;
+        Member member = null;
         if (null == session) {
             log.error("you are not login~");
             throw new AuthException(MsgCodeConstant.un_login,"请登录");
