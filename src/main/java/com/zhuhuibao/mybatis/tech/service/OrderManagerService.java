@@ -322,20 +322,15 @@ public class OrderManagerService {
                 }
                 vipinfoMap.put("vipnames", vippNames);
                 //所购VIP年限 登陆用户
-
-                VipMemberInfo vipmember = vipInfoService.findVipMemberInfoById(memberId);
-                if (vipmember != null) {
-
-                    Date expireTime = vipmember.getExpireTime();
-                    Date activeTime = vipmember.getActiveTime();
-                    long days = DateUtils.dayDiff(activeTime,expireTime);
-                    goodsMap.put("expireTime", days);
-                    goodsMap.put("vipinfo", vipinfoMap);
-                }
-
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(orderGoods.getCreateTime());
+                cal.add(Calendar.YEAR, 1);
+                Date expireTime = cal.getTime();
+                Date activeTime = orderGoods.getCreateTime();
+                long days = DateUtils.dayDiff(activeTime,expireTime);
+                goodsMap.put("expireTime", days);
+                goodsMap.put("vipinfo", vipinfoMap);
             }
-
-
             detailMap.put("goodsInfo", goodsMap);
         } else {
             detailMap.put("goodsInfo", "");
