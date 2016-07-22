@@ -339,6 +339,7 @@ public class CompanyController {
     @RequestMapping(value = "upd_successCase", method = RequestMethod.POST)
     public Response upd_successCase(@ModelAttribute SuccessCase successCase) {
         Response result = new Response();
+        successCase.setStatus("0");
         successCaseService.updateSuccessCase(successCase);
         return result;
     }
