@@ -192,6 +192,11 @@ public class ResumeController {
     }
 
 
+    /**
+     * 老接口(之后废弃)
+     * @param ids
+     * @return
+     */
     @ApiOperation(value = "简历批量设为已查看", notes = "简历批量设为已查看", response = Response.class)
     @RequestMapping(value = "upd_jobRelresume", method = RequestMethod.POST)
     public Response upd_jobRelresume(@ApiParam(value = "ids,逗号隔开") @RequestParam String ids) {

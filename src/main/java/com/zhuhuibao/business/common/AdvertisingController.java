@@ -50,6 +50,7 @@ public class AdvertisingController {
             map.put("imgUrl",advertising.getImgUrl());
             map.put("linkUrl",advertising.getLinkUrl());
             map.put("id",advertising.getConnectedId());
+            map.put("sort",advertising.getSort());
             mapList.add(map);
         }
 

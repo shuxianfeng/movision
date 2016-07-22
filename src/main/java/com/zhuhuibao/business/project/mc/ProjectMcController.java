@@ -44,9 +44,9 @@ public class ProjectMcController {
 	@RequestMapping(value = { "sel_project_info", "base/sel_project_info" }, method = RequestMethod.GET)
 	@ApiOperation(value = "查询我查看过的项目信息", notes = "查询我查看过的项目信息", response = Response.class)
 	public Response searchProjectPage(@ApiParam(value = "项目名称") @RequestParam(required = false) String name,
-			@ApiParam(value = "城市Code") @RequestParam(required = false) String city, @ApiParam(value = "省代码") @RequestParam(required = false) String province,
-			@ApiParam(value = "项目类别") @RequestParam(required = false) String category, @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-			@ApiParam(value = "每页显示的条数") @RequestParam(required = false) String pageSize) throws Exception {
+									  @ApiParam(value = "城市Code") @RequestParam(required = false) String city, @ApiParam(value = "省代码") @RequestParam(required = false) String province,
+									  @ApiParam(value = "项目类别") @RequestParam(required = false) String category, @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
+									  @ApiParam(value = "每页显示的条数") @RequestParam(required = false) String pageSize) throws Exception {
 		// 封装查询参数
 		Long createId = ShiroUtil.getCreateID();
 		Response response = new Response();

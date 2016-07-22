@@ -90,11 +90,11 @@
             <if test="createid != null">
                 #{createid},
             </if>
-             <if test="publishDate != null">
-               #{publishDate},
+            <if test="publishDate != null">
+                #{publishDate},
             </if>
-             <if test="publishDate == null">
-               CURDATE(),
+            <if test="publishDate == null">
+                CURDATE(),
             </if>
             CURDATE(),
             <if test="province != null">
@@ -420,14 +420,16 @@
             limit #{count}
         </if>
     </select>
-	  
-  <select id="findAllPrjectCopy"  resultType="java.util.Map">
-  	SELECT  ID,NAME FROM t_prj_project_copy where createid = 1 limit 1000
-  </select>
-  
-  <update id="updatePrjectCopy" parameterType="java.util.Map">
-  	update t_prj_project_copy set name = #{NAME},createid = #{CREATEID} where id=#{ID}
-  </update>
-  
 
+    <select id="findAllPrjectCopy"  resultType="java.util.Map">
+        SELECT  ID,NAME FROM t_prj_project_copy where createid = 1 limit 1000
+    </select>
+
+    <update id="updatePrjectCopy" parameterType="java.util.Map">
+        update t_prj_project_copy set name = #{NAME},createid = #{CREATEID} where id=#{ID}
+    </update>
+
+    <select id="queryDescription" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT t.id,t.description FROM t_prj_project t WHERE id &gt;= #{begin} and id &lt;= #{end}
+    </select>
 </mapper>
