@@ -447,7 +447,11 @@ public class JobPositionService {
                     map1.put(Constants.name, job.getName());
                     map1.put(Constants.createid, job.getCreateid());
                     map1.put(Constants.salary, job.getSalaryName());
-                    map1.put(Constants.area, job.getCity());
+                    if(job.getCity()!=null){
+                        map1.put(Constants.area, job.getCity());
+                    }else {
+                        map1.put(Constants.area, job.getProvince());
+                    }
                     map1.put(JobConstant.JOB_KEY_POSITIONTYPE, job.getPositionType());
                     list1.add(map1);
                 }
