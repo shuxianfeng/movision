@@ -48,5 +48,5 @@ public interface ProjectMapper {
 
     List<Map<String,Object>> queryLatestNProject(@Param("count") Integer count);
 
-    List<Map<String,String>> queryDescription(Map<String,Object> map);
+	List<Map<String,String>> queryDescription(Map<String,Object> map);
 }

@@ -37,10 +37,10 @@
       #{experience}, #{age}, #{description}, #{welfare}, #{department}, #{superior}, #{number}, #{profession},0,#{positionType}
       )
   </insert>
-    <select id="findAllByPager" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="findAllByPager" parameterType="java.lang.String" resultType="java.util.Map">
     SELECT j.id,j.name,co.name as salaryName,concat(p.name,c.name,a.name)as workArea,
     date_format(j.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,j.positionType,j.createID,
-    date_format(j.publishTime,'%Y-%m-%d') updateTime FROM t_i_job j
+    date_format(j.publishTime,'%Y-%m-%d') publishTime FROM t_i_job j
     LEFT JOIN t_dictionary_constant co on j.salary = co.code
     LEFT JOIN t_dictionary_province p on j.province = p.code
     LEFT JOIN t_dictionary_city c on j.city = c.code

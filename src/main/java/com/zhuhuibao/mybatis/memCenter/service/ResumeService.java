@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.BusinessException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +56,7 @@ public class ResumeService {
 
     @Autowired
     private CollectRecordMapper collectRecordMapper;
-    
+
     @Autowired
     PaymentGoodsService goodsService;
 
@@ -62,22 +64,74 @@ public class ResumeService {
     /**
      * 发布简历
      */
-    public Response setUpResume(Resume resume, String id) {
+    public Response setUpResume(Resume resume) {
         Response response = new Response();
+        checkResumeParams(resume);
         int isSetUp = resumeMapper.setUpResume(resume);
         try {
             if (isSetUp == 1) {
-                Resume resume1 = resumeMapper.searchMyResume(id);
-                response.setCode(200);
-                response.setData(resume1.getId());
+                response.setData(resume.getId());
             } else {
-                response.setMessage("发布失败");
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "创建失败");
             }
         } catch (Exception e) {
             log.error("setUpResume error", e);
             e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return response;
+    }
+
+    /**
+     * 创建简历字段校验
+     *
+     * @param resume
+     */
+    private void checkResumeParams(Resume resume) {
+        //简历名称
+        if (StringUtils.isEmpty(resume.getTitle())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "简历名称不能为空");
+        }
+        //姓名
+        if (StringUtils.isEmpty(resume.getRealName())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "姓名不能为空");
+        }
+        //性别
+        if (StringUtils.isEmpty(resume.getSex())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "性别不能为空");
+        }
+        //参加工作年份
+        if (StringUtils.isEmpty(resume.getWorkYear())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "参加工作年份不能为空");
+        }
+        //最高学历
+        if (StringUtils.isEmpty(resume.getEducation())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "最高学历不能为空");
+        }
+        //工作经验
+        if (StringUtils.isEmpty(resume.getExperienceYear())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "工作经验不能为空");
+        }
+        //出生年份
+        if (StringUtils.isEmpty(resume.getBirthYear())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "出生年份不能为空");
+        }
+        //婚姻状况
+        if (StringUtils.isEmpty(resume.getMarriage())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "婚姻状况不能为空");
+        }
+        //现居地
+        if (StringUtils.isEmpty(resume.getLiveProvince())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "现居地不能为空");
+        }
+        //手机
+        if (StringUtils.isEmpty(resume.getMobile())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "手机不能为空");
+        }
+        //邮箱
+        if (StringUtils.isEmpty(resume.getEmail())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "邮箱不能为空");
+        }
     }
 
     /**
@@ -117,14 +171,12 @@ public class ResumeService {
             numberFormat.setMaximumFractionDigits(0);
             String result = numberFormat.format((float) (i + 16) / (float) 23 * 100);
             String b = result + "%";
-            Map map = new HashMap();
+            Map<String, Object> map = new HashMap<>();
             map.put("info", resume);
             map.put("percent", b);
-            response.setCode(200);
             response.setData(map);
         } else {
-            response.setCode(400);
-            response.setMessage("暂无简历");
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "简历不存在");
         }
         return response;
     }
@@ -142,9 +194,9 @@ public class ResumeService {
     public Response updateResume(Resume resume) {
         Response response = new Response();
 
-       
+
         try {
-        	 int isUpdate = resumeMapper.updateResume(resume);
+            int isUpdate = resumeMapper.updateResume(resume);
             if (isUpdate == 1) {
                 response.setCode(200);
                 response.setData(resume.getId());
@@ -155,6 +207,7 @@ public class ResumeService {
         } catch (Exception e) {
             log.error("updateResume error", e);
             e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return response;
     }
@@ -177,71 +230,72 @@ public class ResumeService {
      * @param map   查询条件
      * @return 分页结果
      */
-    public Paging<Map<String,Object>> findAllResume(Paging<Map<String,Object>> pager, Map<String, Object> map) {
-        List<Map<String,Object>> list = new ArrayList<>();
+    public Paging<Map<String, Object>> findAllResume(Paging<Map<String, Object>> pager, Map<String, Object> map) {
+        List<Map<String, Object>> list = new ArrayList<>();
         try {
-            List<Map<String,Object>> resumeList = resumeMapper.findAllResume(pager.getRowBounds(), map);
-            for(Map<String,Object> resume:resumeList){
-                Map<String,Object> result = new HashMap<>();
-                result.put("id",resume.get("id"));
-                result.put("createid",resume.get("createid"));
-                result.put("title",resume.get("title"));
-                result.put("realName",resume.get("realName"));
-                result.put("photo",resume.get("photo"));
-                result.put("publishTime",resume.get("publishTime"));
-                result.put("updateTime",resume.get("updateTime"));
-                result.put("experienceYear",resume.get("experienceYear"));
-                result.put("education",resume.get("education"));
-                result.put("isPublic",resume.get("isPublic"));
-                result.put("birthYear",resume.get("birthYear"));
-                result.put("workYear",resume.get("workYear"));
-                if(resume.get("jobNature")!=null){
+            List<Map<String, Object>> resumeList = resumeMapper.findAllResume(pager.getRowBounds(), map);
+            for (Map<String, Object> resume : resumeList) {
+                Map<String, Object> result = new HashMap<>();
+                result.put("id", resume.get("id"));
+                result.put("createid", resume.get("createid"));
+                result.put("title", resume.get("title"));
+                result.put("realName", resume.get("realName"));
+                result.put("photo", resume.get("photo"));
+                result.put("publishTime", resume.get("publishTime"));
+                result.put("updateTime", resume.get("updateTime"));
+                result.put("experienceYear", resume.get("experienceYear"));
+                result.put("education", resume.get("education"));
+                result.put("isPublic", resume.get("isPublic"));
+                result.put("birthYear", resume.get("birthYear"));
+                result.put("workYear", resume.get("workYear"));
+                if (resume.get("jobNature") != null) {
                     resume = ConvertUtil.execute(resume, "jobNature", "constantService", "findByTypeCode", new Object[]{"7", String.valueOf(resume.get("jobNature"))});
-                    result.put("jobNature",resume.get("jobNatureName"));
-                }else {
-                    result.put("jobNature","");
+                    result.put("jobNature", resume.get("jobNatureName"));
+                } else {
+                    result.put("jobNature", "");
                 }
 
-                if(resume.get("hopeSalary")!=null){
+                if (resume.get("hopeSalary") != null) {
                     resume = ConvertUtil.execute(resume, "hopeSalary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(resume.get("hopeSalary"))});
-                    result.put("hopeSalary",resume.get("hopeSalaryName"));
-                }else {
-                    result.put("hopeSalary","");
+                    result.put("hopeSalary", resume.get("hopeSalaryName"));
+                } else {
+                    result.put("hopeSalary", "");
                 }
 
-                if(resume.get("education")!=null){
+                if (resume.get("education") != null) {
                     resume = ConvertUtil.execute(resume, "education", "constantService", "findByTypeCode", new Object[]{"2", String.valueOf(resume.get("education"))});
-                    result.put("name",resume.get("educationName"));
-                }else {
-                    result.put("name","");
+                    result.put("name", resume.get("educationName"));
+                } else {
+                    result.put("name", "");
                 }
 
                 String post = (String) resume.get("post");
                 String postName = "";
-                if(!StringUtils.isEmpty(post)){
+                if (!StringUtils.isEmpty(post)) {
                     String[] posts = post.split(",");
                     StringBuilder sb = new StringBuilder();
-                    for(String p : posts){
-                        Map<String,Object> tmp = new HashMap<>();
-                        tmp.put("post",p);
+                    for (String p : posts) {
+                        Map<String, Object> tmp = new HashMap<>();
+                        tmp.put("post", p);
                         tmp = ConvertUtil.execute(tmp, "post", "constantService", "findPositionById", new Object[]{String.valueOf(tmp.get("post"))});
                         String pName = (String) tmp.get("postName");
-                        if(!"".equals(pName)){
+                        if (!"".equals(pName)) {
                             sb.append(pName).append(",");
                         }
                     }
                     postName = sb.toString();
-                    if(postName.length()!=0){
-                        postName = postName.substring(0,postName.length()-1);
+                    if (postName.length() != 0) {
+                        postName = postName.substring(0, postName.length() - 1);
                     }
                 }
-                result.put("post",postName);
+                result.put("post", postName);
                 list.add(result);
             }
             pager.result(list);
         } catch (Exception e) {
             log.error("find all resume error!", e);
-            throw e;
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return pager;
     }
@@ -265,7 +319,6 @@ public class ResumeService {
         Response response = new Response();
         List<Map<String, String>> resumeList = resumeMapper.findAllDownloadResume(pager.getRowBounds(), id);
         pager.result(resumeList);
-        response.setCode(200);
         response.setData(pager);
         return response;
     }
@@ -277,7 +330,6 @@ public class ResumeService {
         Response response = new Response();
         List<Map<String, String>> resumeList = resumeMapper.findAllCollectResume(pager.getRowBounds(), id);
         pager.result(resumeList);
-        response.setCode(200);
         response.setData(pager);
         return response;
     }
@@ -302,7 +354,7 @@ public class ResumeService {
             resumeMap.put("email", resume.getEmail() != null && !StringUtils.isEmpty(resume.getEmail()) ? resume.getEmail() : "");
             resumeMap.put("jobNature", resume.getJobNature() != null && !StringUtils.isEmpty(resume.getJobNature()) ? resume.getJobNature() : "");
             resumeMap.put("post", resume.getPost() != null && !StringUtils.isEmpty(resume.getPost()) ? resume.getPost() : "");
-            resumeMap.put("jobArea", resume.getJobArea() != null &&! StringUtils.isEmpty(resume.getJobArea()) ? resume.getJobArea() : "");
+            resumeMap.put("jobArea", resume.getJobArea() != null && !StringUtils.isEmpty(resume.getJobArea()) ? resume.getJobArea() : "");
             resumeMap.put("hopeSalary", resume.getHopeSalary() != null && !StringUtils.isEmpty(resume.getHopeSalary()) ? resume.getHopeSalary() : "");
             resumeMap.put("status", resume.getStatus() != null && !StringUtils.isEmpty(resume.getStatus()) ? resume.getStatus() : "");
             //表格内的使用“(char)11”换行，ascii码的制表符.表格外的参数使用“\r”换行
@@ -325,25 +377,26 @@ public class ResumeService {
         }
         return resumeMap;
     }
-    
-    
-	  /**
-	   * 导入简历记录，记录现在数据扣筑慧币
-	   * @param id
-	   * @return
-	 * @throws Exception 
-	 * @throws NumberFormatException 
-	   */
-    public Map<String, String> exportResumeNew(String id) throws NumberFormatException, Exception {
+
+
+    /**
+     * 导入简历记录，记录现在数据扣筑慧币
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     * @throws NumberFormatException
+     */
+    public Map<String, String> exportResumeNew(String id) throws Exception {
         Map<String, String> resumeMap = new HashMap<>();
-        Map<String, String> recordMap =null;
-        Map<String, String> viewMap =null;
+        Map<String, String> recordMap;
+        Map<String, String> viewMap;
         Resume resume = resumeMapper.previewResume(id);
         Long createId = ShiroUtil.getCreateID();
         Long companyId = ShiroUtil.getCompanyID();
         if (resume != null) {
-        	recordMap = new HashMap<>();
-        	viewMap = new HashMap<>();
+            recordMap = new HashMap<>();
+            viewMap = new HashMap<>();
             resumeMap.put("title", resume.getTitle() != null && !StringUtils.isEmpty(resume.getTitle()) ? resume.getTitle() : "");
             resumeMap.put("name", resume.getRealName() != null && !StringUtils.isEmpty(resume.getRealName()) ? resume.getRealName() : "");
             resumeMap.put("sex", resume.getSex() != null && !StringUtils.isEmpty(resume.getSex()) ? resume.getSex() : "");
@@ -356,7 +409,7 @@ public class ResumeService {
             resumeMap.put("email", resume.getEmail() != null && !StringUtils.isEmpty(resume.getEmail()) ? resume.getEmail() : "");
             resumeMap.put("jobNature", resume.getJobNature() != null && !StringUtils.isEmpty(resume.getJobNature()) ? resume.getJobNature() : "");
             resumeMap.put("post", resume.getPost() != null && !StringUtils.isEmpty(resume.getPost()) ? resume.getPost() : "");
-            resumeMap.put("jobArea", resume.getJobArea() != null &&! StringUtils.isEmpty(resume.getJobArea()) ? resume.getJobArea() : "");
+            resumeMap.put("jobArea", resume.getJobArea() != null && !StringUtils.isEmpty(resume.getJobArea()) ? resume.getJobArea() : "");
             resumeMap.put("hopeSalary", resume.getHopeSalary() != null && !StringUtils.isEmpty(resume.getHopeSalary()) ? resume.getHopeSalary() : "");
             resumeMap.put("status", resume.getStatus() != null && !StringUtils.isEmpty(resume.getStatus()) ? resume.getStatus() : "");
             //表格内的使用“(char)11”换行，ascii码的制表符.表格外的参数使用“\r”换行
@@ -380,32 +433,31 @@ public class ResumeService {
             recordMap.put("resumeID", id);
             recordMap.put("companyID", companyId.toString());
             recordMap.put("createId", createId.toString());
-        
+
             viewMap.put("viewerId", createId.toString());
             viewMap.put("goodsId", id);
             viewMap.put("companyId", companyId.toString());
             viewMap.put("type", ZhbPaymentConstant.goodsType.CXXZJL.toString());
-            
+
             resumeMapper.insertDownRecord(recordMap);
-           
-            
+
+
             //删除收藏夹子
             resumeMapper.delCollRecord(recordMap);
-            
-            Map<String,Object> con = new HashMap<String,Object>();
+
+            Map<String, Object> con = new HashMap<>();
             //商品ID
             con.put("goodsId", id);
-            con.put("companyId",companyId);
+            con.put("companyId", companyId);
             con.put("type", ZhbPaymentConstant.goodsType.CXXZJL.toString());
-         
+
             //项目是否已经被同企业账号查看过
             int viewNumber = goodsService.checkIsViewGoods(con);
-            if(viewNumber==0)
-            {
-            	 //记录下载预览
+            if (viewNumber == 0) {
+                //记录下载预览
                 resumeMapper.insertViewGoods(viewMap);
-	            // 扣除筑慧币
-	            zhbService.payForGoods(Long.valueOf(id), ZhbPaymentConstant.goodsType.FBZW.toString());
+                // 扣除筑慧币
+                zhbService.payForGoods(Long.valueOf(id), ZhbPaymentConstant.goodsType.FBZW.toString());
             }
         }
         return resumeMap;
@@ -435,6 +487,8 @@ public class ResumeService {
             }
         } catch (Exception e) {
             log.error("query resume by createID error!", e);
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return resume;
     }
@@ -445,23 +499,22 @@ public class ResumeService {
      * @param condition 查询条件
      * @return
      */
-    public List queryLatestResume(Map<String, Object> condition) throws Exception {
-        List list = new ArrayList();
+    public List<Map<String,Object>> queryLatestResume(Map<String, Object> condition) throws Exception {
+        List<Map<String,Object>> list = new ArrayList<>();
         try {
             List<Resume> resumeList = resumeMapper.queryLatestResume(condition);
 
-            for (int i = 0; i < resumeList.size(); i++) {
-                Resume resume = resumeList.get(i);
-                Map map = new HashMap();
+            for (Resume resume : resumeList) {
+                Map<String,Object> map = new HashMap<>();
                 String area = "";
-                if(resume.getJobCity()!=null){
-                    if(resume.getJobProvince()!=null){
+                if (resume.getJobCity() != null) {
+                    if (resume.getJobProvince() != null) {
                         area = resume.getJobProvince() + "," + resume.getJobCity();
-                    }else {
+                    } else {
                         area = resume.getJobCity();
                     }
-                }else {
-                    if(resume.getJobProvince()!=null){
+                } else {
+                    if (resume.getJobProvince() != null) {
                         area = resume.getJobProvince();
                     }
                 }
@@ -479,7 +532,7 @@ public class ResumeService {
         } catch (Exception e) {
             log.error("query latest resume error!");
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询失败");
         }
         return list;
     }
@@ -500,7 +553,8 @@ public class ResumeService {
             }
         } catch (Exception e) {
             log.error("judge is exist resume error !!!");
-            throw e;
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return isExist;
     }
@@ -511,7 +565,7 @@ public class ResumeService {
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
     }
 
@@ -521,7 +575,7 @@ public class ResumeService {
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
     }
 
@@ -532,7 +586,7 @@ public class ResumeService {
      * @return
      */
     public Map<String, Object> queryJobCount(Long createId) {
-        Map<String, Object> resultMap = new HashMap<String, Object>();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             List<Map<String, Object>> resultList = resumeMapper.queryJobCount(createId);
             Map<String, Object> map1 = resultList.get(0);
@@ -541,7 +595,8 @@ public class ResumeService {
             resultMap.put("resumeCount", map2.get("count"));
         } catch (Exception e) {
             log.error("find data upload download error!", e);
-            throw e;
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return resultMap;
     }
@@ -550,9 +605,9 @@ public class ResumeService {
         try {
             return downloadRecordMapper.updateByPrimaryKeySelective(record);
         } catch (Exception e) {
-            log.error(e.getMessage());
             e.printStackTrace();
-            throw e;
+            log.error("select error:{}", e.getMessage());
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
     }
 
@@ -560,55 +615,78 @@ public class ResumeService {
         try {
             return collectRecordMapper.updateByPrimaryKeySelective(record);
         } catch (Exception e) {
-            log.error(e.getMessage());
             e.printStackTrace();
-            throw e;
+            log.error("select error:{}", e.getMessage());
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
     }
+
     /**
      * 简历预览
+     *
      * @param id
      * @return
      */
-	public Resume previewResumeNew(String id) {
-		 try {
-	            return resumeMapper.previewResumeNew(id);
-	        } catch (Exception e) {
-	            throw e;
-	        }
-	}
+    public Resume previewResumeNew(String id) {
+        try {
+            return resumeMapper.previewResumeNew(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("select error:{}", e.getMessage());
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
+        }
+    }
+
     /**
      * 简历是否收藏或下载
+     *
      * @param con
      * @return
      */
-	public Map isDownOrColl(Map<String, Object> con) {
-		try {
+    public Map isDownOrColl(Map<String, Object> con) {
+        try {
             return resumeMapper.isDownOrColl(con);
         } catch (Exception e) {
-            throw e;
+            e.printStackTrace();
+            log.error("select error:{}", e.getMessage());
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
-	}
-	
-   /**
-    * 收藏简历
-    * @param con
- * @return 
-    */
-	public int insertCollRecord(String id) {
-	   try {
-		   
-		    Map<String, Object> resumeMap=new HashMap<String, Object>();
-		    Long createId = ShiroUtil.getCreateID();
-	        Long companyId = ShiroUtil.getCompanyID();
-	        resumeMap.put("resumeID", id);
-	        resumeMap.put("companyID", companyId.toString());
-	        resumeMap.put("createId", createId.toString());
+    }
+
+    /**
+     * 收藏简历
+     *
+     * @param id
+     */
+    public int insertCollRecord(String id) {
+        try {
+
+            Map<String, Object> resumeMap = new HashMap<>();
+            Long createId = ShiroUtil.getCreateID();
+            Long companyId = ShiroUtil.getCompanyID();
+            resumeMap.put("resumeID", id);
+            resumeMap.put("companyID", companyId.toString());
+            resumeMap.put("createId", createId.toString());
             return resumeMapper.insertCollRecord(resumeMap);
-            
-         } catch (Exception e) {
-            throw e;
-         }
-	}
-	 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("insert error : {}", e.getMessage());
+            throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入失败");
+        }
+    }
+
+    public List<String> selectIdsByCreateId(Long createid) {
+        List<String> ids;
+        try {
+            ids = resumeMapper.selectIdsByCreateId(createid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("select error : {}", e.getMessage());
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
+        }
+
+        return ids;
+
+    }
 }

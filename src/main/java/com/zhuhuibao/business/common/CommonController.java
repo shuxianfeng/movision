@@ -41,7 +41,7 @@ public class CommonController {
     SysResearchService sysResearchService;
 
     @ApiOperation(value = "上传图片，返回url", notes = "上传图片，返回url", response = Response.class)
-    @RequestMapping(value = "/rest/common/upload_img", method = RequestMethod.POST)
+    @RequestMapping(value = {"rest/uploadImg","/rest/common/upload_img"}, method = RequestMethod.POST)
     public Response uploadImg(@RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         Response result = new Response();
 

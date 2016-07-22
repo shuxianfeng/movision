@@ -663,14 +663,12 @@ public class ProjectService {
         return list;
     }
 
-
     public List<Map<String,String>> queryDescription(Map<String,Object> map){
         try{
             return projectMapper.queryDescription(map);
         }catch (Exception e){
-            log.error(e.getMessage());
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
         }
     }
 }
