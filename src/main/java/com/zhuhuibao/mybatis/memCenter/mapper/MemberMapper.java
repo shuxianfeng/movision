@@ -52,4 +52,6 @@ public interface MemberMapper {
     List<Map<String,String>> findMemberOms(Map<String, Object> map);
 
     List<Map<String,String>> queryEngineerList(Map<String, Object> map);
+
+	void updateSubMemInfo(Member member);
 }
