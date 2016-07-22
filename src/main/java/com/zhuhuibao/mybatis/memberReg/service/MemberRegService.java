@@ -499,16 +499,16 @@ public class MemberRegService {
 	 * @param id
 	 * @return
 	 */
-	public Response findMemberInfoById(Long id) {
-		Response response = new Response();
+	public Member findMemberInfoById(Long id) {
+		Member member;
 		try {
-			Member member = memberMapper.findMemberInfoById(id);
-			response.setData(member);
+			member = memberMapper.findMemberInfoById(id);
 		} catch (Exception e) {
 			log.error("find member info error!", e);
-			throw new BusinessException(MsgCodeConstant.mcode_common_failure, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
+			throw new BusinessException(MsgCodeConstant.mcode_common_failure,
+                    MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
 		}
-		return response;
+		return member;
 	}
 
 	/**

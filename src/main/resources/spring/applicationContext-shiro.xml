@@ -25,10 +25,10 @@
         <property name="cachingEnabled" value="true"/>
     </bean>
 
-    <!-- 用户授权信息Cache, 采用EhCache -->
+    <!-- 用户授权信息Cache, 采用EhCache
     <bean id="ehcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
         <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache.xml"/>
-    </bean>
+    </bean>  -->
 
     <!--43200000-->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
