@@ -417,7 +417,7 @@ public class MemberRegService {
 			Date currentTime = new Date();
 			Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(), "yyyy-MM-dd HH:mm:ss"), 12, 10);
 			if (currentTime.before(sendSMStime)) {
-				if (info != null && info.getCheckCode().equalsIgnoreCase(member.getMobileCheckCode())) {
+				if (info.getCheckCode().equalsIgnoreCase(member.getMobileCheckCode())) {
 					int isExist = this.isExistAccount(member);
 					if (isExist == 0) {
 						this.registerMember(member);
@@ -461,7 +461,7 @@ public class MemberRegService {
 		Response result = new Response();
 		try {
 			if (verifyCode != null && verifyCode.equalsIgnoreCase(member.getEmailCheckCode())) {
-				if (member.getEmail().indexOf("@") >= 0) {
+				if (member.getEmail().contains("@")) {
 					int isExist = this.isExistAccount(member);
 					if (isExist == 0) {
 						this.registerMember(member);

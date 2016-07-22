@@ -444,7 +444,7 @@
   </select>
   <insert id="agentRegister" keyProperty="id" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Member" useGeneratedKeys="true">
    insert into t_m_member(email,password,registerTime,status,identify) values
-    (#{email},#{password},now(),1,1)
+    (#{email},#{password},now(),1,4)
   </insert>
   <select id="findNewEngineerOrSupplier" resultMap="BaseResultMap">
     select * FROM t_m_member WHERE

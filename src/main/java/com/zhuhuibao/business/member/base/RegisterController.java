@@ -16,7 +16,9 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.memberReg.entity.LoginMember;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.sms.SDKSendSms;
 import org.apache.commons.lang3.StringUtils;
@@ -83,30 +85,6 @@ public class RegisterController {
         sess.setAttribute(MemberConstant.SESSION_TYPE_REGISTER, verifyCode);
     }
 
-    /**
-     * 生成图片码
-     * @param response
-     * @param verifyCode
-     * @param out
-     */
-    /*@ApiOperation(value="生成图片码",notes="生成图片码",response = Response.class)
-	private void genImgCode(HttpServletResponse response, String verifyCode, ServletOutputStream out) {
-		try {
-			out = response.getOutputStream();
-			int w = 100;// 定义图片的width
-			int h = 40;// 定义图片的height
-			VerifyCodeUtils.outputImage1(w, h, out, verifyCode);
-			out.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}*/
 
     /**
      * 找回密码的图形验证码
@@ -324,13 +302,21 @@ public class RegisterController {
     @RequestMapping(value = {"/rest/activateEmail", "rest/member/site/base/sel_activateEmail"}, method = RequestMethod.GET)
     public ModelAndView activateEmail(HttpServletRequest req) throws UnsupportedEncodingException {
         log.debug("email activate start.....");
-        Response response = new Response();
+        Response response;
         ModelAndView modelAndView = new ModelAndView();
         String vm = req.getParameter("vm");//获取email
-        if (vm != null & !vm.equals("")) {
+        if (!StringUtils.isEmpty(vm)) {
             String decodeVM = new String(EncodeUtil.decodeBase64(vm));
             response = rvService.processActivate(decodeVM);
             modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(response.getData()).getBytes()));
+            LoginMember loginMember = memberService.getLoginMemberByAccount(vm);
+            ShiroRealm.ShiroUser shrioUser = new ShiroRealm.ShiroUser(loginMember.getId(), loginMember.getAccount(),
+                    loginMember.getStatus(), loginMember.getIdentify(),loginMember.getRole(), "0", loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(),
+                    loginMember.getHeadShot(), loginMember.getNickname(), loginMember.getCompanyName(), loginMember.getVipLevel());
+            Subject currentUser = SecurityUtils.getSubject();
+            Session session = currentUser.getSession();
+            session.setAttribute("member", shrioUser);
+
             RedirectView rv = new RedirectView(rvService.getRedirectUrl(response, "active"));
             modelAndView.setView(rv);
         }

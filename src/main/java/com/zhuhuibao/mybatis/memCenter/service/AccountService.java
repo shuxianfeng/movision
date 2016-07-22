@@ -6,6 +6,7 @@ package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.security.EncodeUtil;
@@ -129,26 +130,24 @@ public class AccountService {
      * 代理商邮件注册
      */
     public Response agentRegister(String email){
-        Response result = new Response();
         Member member = new Member();
         String md5Pwd = new Md5Hash("123456",null,2).toString();
         member.setEmail(email);
         member.setPassword(md5Pwd);
         try{
-            Member member1 = memberMapper.findMember(member);
-            if(member1!=null){
-                result.setCode(400);
-                result.setMsgCode(MsgCodeConstant.member_mcode_mail_registered);
-                result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_registered)));
+            Member newMember = memberMapper.findMember(member);
+            if(newMember!=null){
+                throw new BusinessException(MsgCodeConstant.member_mcode_mail_registered,
+                        MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_registered)));
             }else{
                 memberMapper.agentRegister(member);
-                result.setCode(200);
             }
         }catch (Exception e){
             log.error("agentRegister error");
             e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"操作失败");
         }
-        return result;
+        return new Response();
     }
 
     /**
