@@ -346,8 +346,7 @@
 	 from (select id from t_i_resume  where id=#{goodsId}) r 
 	left join  t_i_resume_download_record t on r.id= t.resumeID and t.is_deleted=0 and t.companyID=#{companyId} 
 	left join t_i_resume_collect_record c on r.id=c.resumeID and c.is_deleted=0 and c.companyID=#{companyId} 
-	where c.createId=#{createId} or t.createId=#{createId}
-	
+ 	
   </select>
   
   <insert id="insertDownRecord" parameterType="java.util.Map" > 
