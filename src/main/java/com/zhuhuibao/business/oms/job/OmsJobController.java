@@ -4,14 +4,16 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.mybatis.memCenter.entity.Job;
+import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
+import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 /**
  * 运营系统 - 人才网
@@ -30,6 +32,8 @@ public class OmsJobController {
 
     @Autowired
     JobPositionService positionService;
+    @Autowired
+    private ResumeService resumeService;
 
     @ApiOperation(value = "设置为热门职位", notes = "设置为热门职位", response = Response.class)
     @RequestMapping(value = "upd_setup_hot", method = RequestMethod.POST)
@@ -59,5 +63,18 @@ public class OmsJobController {
 
         return new Response();
     }
+
+    @ApiOperation(value = "更新编辑已发布的职位", notes = "更新编辑已发布的职位", response = Response.class)
+    @RequestMapping(value = "upd_position", method = RequestMethod.POST)
+    public Response updatePosition(@ModelAttribute() Job job) throws IOException {
+        return positionService.updatePosition(job);
+    }
+
+    @ApiOperation(value = "更新简历", notes = "更新简历", response = Response.class)
+    @RequestMapping(value = "upd_resume", method = RequestMethod.POST)
+    public Response updateResume(@ModelAttribute Resume resume) throws IOException {
+        return resumeService.updateResume(resume);
+    }
+
 
 }
