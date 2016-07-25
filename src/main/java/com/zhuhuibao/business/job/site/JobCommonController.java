@@ -87,10 +87,8 @@ public class JobCommonController {
     @ApiOperation(value = "人员规模", notes = "人员规模", response = Response.class)
     @RequestMapping(value = "sel_employeeSizeList", method = RequestMethod.GET)
     public Response employeeSizeList() {
-        Response result = new Response();
-        List<EmployeeSize> employeeSizeList = memberService.findEmployeeSizeList();
-        result.setData(employeeSizeList);
-        return result;
+        List<EmployeeSize> list = memberService.findEmployeeSizeList();
+        return new Response(list);
     }
 
     @ApiOperation(value = "人才网资讯列表", notes = "人才网资讯列表", response = Response.class)

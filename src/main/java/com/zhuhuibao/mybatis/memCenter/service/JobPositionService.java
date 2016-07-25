@@ -76,14 +76,14 @@ public class JobPositionService {
     /**
      * 查询公司已发布的职位
      */
-    public List<Map<String,Object>> findAllPositionByMemId(Paging<Map<String,Object>> pager, String id) {
-        List<Map<String,Object>> list = new ArrayList<>();
-        try{
-            List<Map<String,Object>> jobList = jobMapper.findAllByPager(pager.getRowBounds(), id);
+    public List<Map<String, Object>> findAllPositionByMemId(Paging<Map<String, Object>> pager, String id) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        try {
+            List<Map<String, Object>> jobList = jobMapper.findAllByPager(pager.getRowBounds(), id);
 
-            for (Map<String,Object> map : jobList) {
-                Map<String,Object> tmpMap = new HashMap<>();
-                tmpMap.put("id",map.get("id"));
+            for (Map<String, Object> map : jobList) {
+                Map<String, Object> tmpMap = new HashMap<>();
+                tmpMap.put("id", map.get("id"));
                 tmpMap.put(Constants.position, map.get("name"));
                 tmpMap.put(Constants.salary, map.get("salaryName"));
                 tmpMap.put(Constants.area, map.get("workArea"));
@@ -93,10 +93,10 @@ public class JobPositionService {
                 tmpMap.put(Constants.updateTime, map.get("updateTime"));
                 list.add(tmpMap);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            log.error("select error : {}" ,e.getMessage());
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询失败");
+            log.error("select error : {}", e.getMessage());
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
         return list;
     }
@@ -212,21 +212,21 @@ public class JobPositionService {
     /**
      * 职位类别
      */
-    public List<Map<String,Object>> positionType() {
+    public List<Map<String, Object>> positionType() {
         List<Position> positionList = positionMapper.findPosition(7);
         List<Position> subPositionList = positionMapper.findSubPosition();
-        List<Map<String,Object>> retList = new ArrayList<>();
+        List<Map<String, Object>> retList = new ArrayList<>();
         for (Position position : positionList) {
-            Map<String,Object> map = new HashMap<>();
+            Map<String, Object> map = new HashMap<>();
             map.put(Constants.code, position.getId());
             map.put(Constants.name, position.getName());
 
-            List<Map<String,String>> pList = new ArrayList<>();
-            List<Map<String,String>> advList = new ArrayList<>();
+            List<Map<String, String>> pList = new ArrayList<>();
+            List<Map<String, String>> advList = new ArrayList<>();
 
             for (Position subPosition : subPositionList) {
                 if (position.getId().equals(subPosition.getParentId())) {
-                    Map<String,String> map1 = new HashMap<>();
+                    Map<String, String> map1 = new HashMap<>();
                     map1.put(Constants.code, subPosition.getId());
                     map1.put(Constants.name, subPosition.getName());
                     map1.put(Constants.hot, subPosition.getHot());
@@ -236,19 +236,19 @@ public class JobPositionService {
                     String chanType = Constants.AdvChannType.JOB.toString();  //招聘频道
                     String page = "index";//首页
                     String advArea = "A" + position.getId();
-                    List<SysAdvertising> advertisings = advService.findListByCondition(chanType,page,advArea);
-                    for(SysAdvertising adv : advertisings){
-                        Map<String,String> tmpMap = new HashMap<>();
-                        tmpMap.put("title",adv.getTitle());
-                        tmpMap.put("imgUrl",adv.getImgUrl());
-                        tmpMap.put("linkUrl",adv.getLinkUrl());
-                        tmpMap.put("id",adv.getConnectedId());
+                    List<SysAdvertising> advertisings = advService.findListByCondition(chanType, page, advArea);
+                    for (SysAdvertising adv : advertisings) {
+                        Map<String, String> tmpMap = new HashMap<>();
+                        tmpMap.put("title", adv.getTitle());
+                        tmpMap.put("imgUrl", adv.getImgUrl());
+                        tmpMap.put("linkUrl", adv.getLinkUrl());
+                        tmpMap.put("id", adv.getConnectedId());
                         advList.add(tmpMap);
                     }
                 }
             }
             map.put(Constants.subPositionList, pList);
-            map.put("advList",advList);
+            map.put("advList", advList);
 
             retList.add(map);
         }
@@ -313,23 +313,23 @@ public class JobPositionService {
 
             String workArea = "";
             String provinceName = String.valueOf(job.get("provinceName"));
-            if(!StringUtils.isEmpty(provinceName)){
+            if (!StringUtils.isEmpty(provinceName)) {
                 workArea += provinceName;
             }
             String cityName = String.valueOf(job.get("cityName"));
-            if(!StringUtils.isEmpty(cityName)) {
+            if (!StringUtils.isEmpty(cityName)) {
                 workArea += cityName;
             }
             String areaName = String.valueOf(job.get("areaName"));
-            if(!StringUtils.isEmpty(areaName)){
+            if (!StringUtils.isEmpty(areaName)) {
                 workArea += areaName;
             }
-            job.put("workArea",workArea);
+            job.put("workArea", workArea);
 
             response.setData(job);
         } catch (Exception e) {
             log.error("add offer price error!", e);
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询失败");
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
         return response;
     }
@@ -469,9 +469,9 @@ public class JobPositionService {
                     map1.put(Constants.name, job.getName());
                     map1.put(Constants.createid, job.getCreateid());
                     map1.put(Constants.salary, job.getSalaryName());
-                    if(job.getCity()!=null){
+                    if (job.getCity() != null) {
                         map1.put(Constants.area, job.getCity());
-                    }else {
+                    } else {
                         map1.put(Constants.area, job.getProvince());
                     }
                     map1.put(JobConstant.JOB_KEY_POSITIONTYPE, job.getPositionType());
@@ -535,11 +535,11 @@ public class JobPositionService {
             String enterpriseType = member.getEnterpriseType();
 
             List<String> companyList = jobMapper.querySimilarCompany(
-                    member.getEmployeeNumber() == null ?"":employeeNumber,
-                    member.getEnterpriseType() == null ?0 : Integer.parseInt(enterpriseType),
+                    member.getEmployeeNumber() == null ? "" : employeeNumber,
+                    member.getEnterpriseType() == null ? 0 : Integer.parseInt(enterpriseType),
                     id, count);
 
-            for (String  createid : companyList) {
+            for (String createid : companyList) {
                 Job companyInfo = jobMapper.querySimilarCompanyInfo(createid);
                 Map<String, Object> map = new HashMap<>();
                 map.put(Constants.id, createid);
@@ -550,7 +550,7 @@ public class JobPositionService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询失败");
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
 
         return list;
@@ -641,7 +641,15 @@ public class JobPositionService {
                 map.put("city", map.get("cityName"));
 
             } else {
-                map.put("city", "");
+                String provinceCode = (String) map.get("province");
+                if(!StringUtils.isEmpty(provinceCode)){
+                    map = ConvertUtil.execute(map, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
+                    map.put("city", map.get("provinceName"));
+
+                }else{
+                    map.put("city", "");
+                }
+
             }
 
 
