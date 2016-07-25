@@ -117,7 +117,6 @@ public class ConstantService {
     @Cacheable(value = "positionCache", key = "#id")
     public Map<String, Object> findPositionById(String id) {
         log.warn("select by db.....");
-        Map<String, Object> result = positionMapper.findById(id);
-        return result;
+        return positionMapper.findById(id);
     }
 }
