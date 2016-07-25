@@ -309,11 +309,27 @@ public class JobPositionService {
         try {
             Map<String, Object> job = jobMapper.queryPositionInfoByID(map);
             Long isApply = (Long) job.get("isApply");
-            job.put("isApply", (isApply == 0 ? false : true));
+            job.put("isApply", (isApply != 0));
+
+            String workArea = "";
+            String provinceName = String.valueOf(job.get("provinceName"));
+            if(!StringUtils.isEmpty(provinceName)){
+                workArea += provinceName;
+            }
+            String cityName = String.valueOf(job.get("cityName"));
+            if(!StringUtils.isEmpty(cityName)) {
+                workArea += cityName;
+            }
+            String areaName = String.valueOf(job.get("areaName"));
+            if(!StringUtils.isEmpty(areaName)){
+                workArea += areaName;
+            }
+            job.put("workArea",workArea);
+
             response.setData(job);
         } catch (Exception e) {
             log.error("add offer price error!", e);
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询失败");
         }
         return response;
     }
