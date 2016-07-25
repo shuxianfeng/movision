@@ -54,7 +54,7 @@ public interface JobMapper {
     List<Job> queryHotPosition(Map<String,Object> map);
 
     //最新招聘（按分类查询）
-    List<Job> queryLatestJob(@Param("id")String id,@Param("count")int count);
+    List<Map<String,Object>> queryLatestJob(@Param("id")String id,@Param("count")int count);
 
     //名企招聘
     List<ResultBean> greatCompanyPosition();
