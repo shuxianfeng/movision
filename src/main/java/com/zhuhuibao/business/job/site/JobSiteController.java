@@ -117,23 +117,12 @@ public class JobSiteController {
         return response;
     }
 
-/*    @RequestMapping(value="sel_adv_position", method = RequestMethod.GET)
-    @ApiOperation(value = "企业信息广告位",notes = "展示最新发布职位的企业信息，默认7条可配置",response = Response.class)
-    public Response queryAdvertisingPosition() throws IOException
-    {
-        log.info("query advertising postion");
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("isDelete",0);
-        map.put("count",7);
-        Response response = job.queryAdvertisingPosition(map);
-        return response;
-    }*/
 
     @RequestMapping(value = "sel_position", method = RequestMethod.GET)
     @ApiOperation(value = "职位详情页面", notes = "职位搜索查看职位详情", response = Response.class)
     public Response queryPositionInfoByID(@ApiParam(value = "招聘职位ID") @RequestParam Long id) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        Response response = new Response();
+        Map<String, Object> map = new HashMap<>();
+        Response response;
         Long createid = ShiroUtil.getCreateID();
         map.put("createid", String.valueOf(createid));
         map.put("id", id);
