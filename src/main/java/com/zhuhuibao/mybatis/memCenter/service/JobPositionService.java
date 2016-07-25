@@ -231,23 +231,26 @@ public class JobPositionService {
                     map1.put(Constants.name, subPosition.getName());
                     map1.put(Constants.hot, subPosition.getHot());
                     pList.add(map1);
-                    //广告项
-//                    chanType,page,advArea
-                    String chanType = Constants.AdvChannType.JOB.toString();  //招聘频道
-                    String page = "index";//首页
-                    String advArea = "A" + position.getId();
-                    List<SysAdvertising> advertisings = advService.findListByCondition(chanType,page,advArea);
-                    for(SysAdvertising adv : advertisings){
-                        Map<String,String> tmpMap = new HashMap<>();
-                        tmpMap.put("title",adv.getTitle());
-                        tmpMap.put("imgUrl",adv.getImgUrl());
-                        tmpMap.put("linkUrl",adv.getLinkUrl());
-                        tmpMap.put("id",adv.getConnectedId());
-                        advList.add(tmpMap);
-                    }
+
                 }
             }
+
             map.put(Constants.subPositionList, pList);
+
+            //广告项
+            String chanType = Constants.AdvChannType.JOB.toString();  //招聘频道
+            String page = "index";//首页
+            String advArea = "A" + position.getId();
+            List<SysAdvertising> advertisings = advService.findListByCondition(chanType,page,advArea);
+            for(SysAdvertising adv : advertisings){
+                Map<String,String> tmpMap = new HashMap<>();
+                tmpMap.put("title",adv.getTitle());
+                tmpMap.put("imgUrl",adv.getImgUrl());
+                tmpMap.put("linkUrl",adv.getLinkUrl());
+                tmpMap.put("id",adv.getConnectedId());
+                advList.add(tmpMap);
+            }
+
             map.put("advList",advList);
 
             retList.add(map);
