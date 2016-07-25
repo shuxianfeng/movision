@@ -247,6 +247,7 @@ public class PaymentService {
 	                    dataMap.put("info",resume2);
 	                    Resume resumeBean=new Resume();
 	                    resumeBean.setViews("1");
+	                    resumeBean.setType("1");
 	                    resumeBean.setId(String.valueOf(goodsID));
 	                    //更新点击率
 	                    resume.updateResume(resumeBean);
@@ -277,9 +278,11 @@ public class PaymentService {
 	            	    	resume2.setIsDownload("1");
 	            	    	resume2.setIsCollect("1");
 	            	    }
+	            	  
 	                    dataMap.put("info",resume2);
 	                    Resume resumeBean=new Resume();
 	                    resumeBean.setViews("1");
+	                    resumeBean.setType("1");
 	                    resumeBean.setId(String.valueOf(goodsID));
 	                    //更新点击率
 	                    resume.updateResume(resumeBean);

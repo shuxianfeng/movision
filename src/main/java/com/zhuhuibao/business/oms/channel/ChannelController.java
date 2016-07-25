@@ -85,6 +85,21 @@ public class ChannelController {
         newsService.updateViews(id);
         return response;
     }
+    
+    /**
+     * 查询栏目信息详情Oms 专用
+     *
+     * @param id       栏目信息的ID
+     * @throws JsonGenerationException
+     * @throws JsonMappingException
+     * @throws IOException
+     */
+    @RequestMapping(value = "/rest/oms/queryNewsDetailsById", method = RequestMethod.GET)
+    public Response queryDetailsById(Long id) throws IOException {
+        Response response = newsService.selectByPrimaryKey(id);
+        //newsService.updateViews(id);
+        return response;
+    }
 
     @RequestMapping(value = {"/rest/contractor/site/sel_news_by_channel","/rest/oms/queryNewsByChannelInfo"}, method = RequestMethod.GET)
     public Response queryNewsByChannelInfo(ChannelNews channelNews) throws IOException {

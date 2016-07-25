@@ -76,6 +76,8 @@ public class Resume {
     private String isPublic;
     
     private String download;
+   
+    private String type;
 
     private String views;
     //0 已收藏  1 未收藏
@@ -409,6 +411,14 @@ public class Resume {
 
 	public void setIsDownload(String isDownload) {
 		this.isDownload = isDownload;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
     
     
