@@ -475,10 +475,10 @@ public class JobPositionService {
                     }
                     job = ConvertUtil.execute(job, "city", "dictionaryService", "findCityByCode", new Object[]{job.get("city")});
                     job = ConvertUtil.execute(job, "province", "dictionaryService", "findProvinceByCode", new Object[]{job.get("province")});
-                    if(job.get("city")!=null){
-                        map1.put(Constants.area, job.get("city"));
+                    if(!"".equals(job.get("cityName"))){
+                        map1.put(Constants.area, job.get("cityName"));
                     }else {
-                        map1.put(Constants.area, job.get("province"));
+                        map1.put(Constants.area, job.get("provinceName"));
                     }
                     map1.put(JobConstant.JOB_KEY_POSITIONTYPE, job.get("positionType"));
                     list1.add(map1);
