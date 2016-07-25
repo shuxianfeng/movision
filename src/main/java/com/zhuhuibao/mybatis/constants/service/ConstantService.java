@@ -33,7 +33,7 @@ public class ConstantService {
      * @param code [1..20...]
      * @return
      */
-    @Cacheable(value = "const_type_code", key = "#code+#type")
+    @Cacheable(value = "const_type_code", key = "#type+'_'+#code")
     public Map<String, String> findByTypeCode(String type, String code) {
         log.warn("select by db.....");
         return constantMapper.selectByTypeCode(type, code);
@@ -117,7 +117,6 @@ public class ConstantService {
     @Cacheable(value = "positionCache", key = "#id")
     public Map<String, Object> findPositionById(String id) {
         log.warn("select by db.....");
-        Map<String, Object> result = positionMapper.findById(id);
-        return result;
+        return positionMapper.findById(id);
     }
 }
