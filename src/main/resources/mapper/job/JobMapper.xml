@@ -277,14 +277,12 @@
         </where>
         order by j.views desc limit 0,#{count}
     </select>
-    <select id="queryLatestJob" resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
-        select j.id,j.name,j.positionType,ci.name as city, pr.name as province,c.name as salaryName,j.createid from t_i_job j
+    <select id="queryLatestJob" resultType="java.util.Map">
+        select j.id,j.name,j.positionType,j.city, j.province,j.salary,j.createid
+        from t_i_job j
         left join t_dictionary_position p on j.positionType = p.id
-        left join t_dictionary_city ci on ci.code = j.city
-        left join t_dictionary_province pr on pr.code = j.province
-        left join t_dictionary_constant c on j.salary = c.code
         left join t_m_member mb on mb.id = j.createid
-        where p.parentId = #{id} and c.type = 1 and j.is_deleted =0 and mb.status != 2
+        where p.parentId = #{id} and j.is_deleted =0 and mb.status != 2
         order by j.updateTime desc limit 0,#{count}
     </select>
     <select id="greatCompanyPosition" resultType="com.zhuhuibao.common.pojo.ResultBean">
@@ -333,9 +331,9 @@
     where t.createid = #{enterpriseID}
   </select>
     <select id="findJobByJobID" resultType="java.util.Map">
-      select j.id,j.createID as createid,m.`enterpriseName` as companyName,
+    select j.id,j.createID as createid,m.`enterpriseName` as companyName,
      DATE_FORMAT( j.publishTime,'%Y-%m-%d') as  publishTime, DATE_FORMAT(j.updateTime,'%Y-%m-%d') as updateTime,
-      j.name,j.positionType,j.welfare,j.salary,j.city
+      j.name,j.positionType,j.welfare,j.salary,j.city,j.province
       from `t_i_job` j,t_m_member m where j.createID = m.id     and j.id = #{jobID}
   </select>
     <select id="findNewPositions" resultType="java.util.Map">

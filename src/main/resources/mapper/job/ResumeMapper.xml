@@ -304,17 +304,12 @@
   <select id="queryResumeByCreateId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     SELECT * from t_i_resume WHERE createid = #{id}
   </select>
-  <select id="queryLatestResume" parameterType="java.util.Map" resultMap="BaseResultMap">
+  <select id="queryLatestResume" parameterType="java.util.Map" resultType="java.util.Map">
     select r.id,r.realName,(DATE_FORMAT( current_timestamp(),'%Y' )-r.birthYear)as birthYear,
-    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
-    (select Group_concat(name) from t_dictionary_city where find_in_set(code,r.jobCity))AS jobCity,
-    (select Group_concat(name) from t_dictionary_province where find_in_set(code,r.jobProvince))AS jobProvince,
+    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,r.jobCity,r.jobProvince,r.post,r.hopeSalary,
     m.headShot as photo,
-    (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post,
-    CASE WHEN r.status=1 or r.status=2 or r.status=3 THEN '在职' WHEN r.status=4 THEN '离职' END AS status,
-    co.name as hopeSalary
+    CASE WHEN r.status=1 or r.status=2 or r.status=3 THEN '在职' WHEN r.status=4 THEN '离职' END AS status
     from t_i_resume r
-    left join t_dictionary_constant co on co.code = r.hopeSalary and co.type = 1
     left join t_m_member m on r.createid = m.id
     <where>
       <if test="public != null">

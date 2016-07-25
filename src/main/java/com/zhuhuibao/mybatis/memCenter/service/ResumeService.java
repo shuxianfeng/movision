@@ -502,31 +502,102 @@ public class ResumeService {
     public List<Map<String,Object>> queryLatestResume(Map<String, Object> condition) throws Exception {
         List<Map<String,Object>> list = new ArrayList<>();
         try {
-            List<Resume> resumeList = resumeMapper.queryLatestResume(condition);
+            List<Map<String,Object>> resumeList = resumeMapper.queryLatestResume(condition);
 
-            for (Resume resume : resumeList) {
+            for (Map<String,Object> resume : resumeList) {
+
                 Map<String,Object> map = new HashMap<>();
-                String area = "";
-                if (resume.getJobCity() != null) {
-                    if (resume.getJobProvince() != null) {
-                        area = resume.getJobProvince() + "," + resume.getJobCity();
-                    } else {
-                        area = resume.getJobCity();
-                    }
+
+                if (resume.get("hopeSalary") != null) {
+                    resume = ConvertUtil.execute(resume, "hopeSalary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(resume.get("hopeSalary"))});
+                    map.put(Constants.salary, resume.get("hopeSalaryName"));
                 } else {
-                    if (resume.getJobProvince() != null) {
-                        area = resume.getJobProvince();
+                    map.put(Constants.salary, "");
+                }
+
+                String post = (String) resume.get("post");
+                String postName = "";
+                if (!StringUtils.isEmpty(post)) {
+                    String[] posts = post.split(",");
+                    StringBuilder sb = new StringBuilder();
+                    for (String p : posts) {
+                        Map<String, Object> tmp = new HashMap<>();
+                        tmp.put("post", p);
+                        tmp = ConvertUtil.execute(tmp, "post", "constantService", "findPositionById", new Object[]{String.valueOf(tmp.get("post"))});
+                        String pName = (String) tmp.get("postName");
+                        if (!"".equals(pName)) {
+                            sb.append(pName).append(",");
+                        }
+                    }
+                    postName = sb.toString();
+                    if (postName.length() != 0) {
+                        postName = postName.substring(0, postName.length() - 1);
                     }
                 }
-                map.put(Constants.id, resume.getId());
-                map.put(Constants.logo, resume.getPhoto());
-                map.put(Constants.status, resume.getStatus());
+
+                String area = "";
+                String jobCity = (String) resume.get("jobCity");
+                String jobCityName = "";
+                if (!StringUtils.isEmpty(jobCity)) {
+                    String[] jobCitys = jobCity.split(",");
+                    StringBuilder sb = new StringBuilder();
+                    for (String jc : jobCitys) {
+                        Map<String, Object> tmp = new HashMap<>();
+                        tmp.put("jobCity", jc);
+                        tmp = ConvertUtil.execute(tmp, "jobCity", "dictionaryService", "findCityByCode", new Object[]{String.valueOf(tmp.get("jobCity"))});
+                        String jcName = (String) tmp.get("jobCityName");
+                        if (!"".equals(jcName)) {
+                            sb.append(jcName).append(",");
+                        }
+                    }
+                    jobCityName = sb.toString();
+                    if (jobCityName.length() != 0) {
+                        jobCityName = jobCityName.substring(0, jobCityName.length() - 1);
+                    }
+                }
+
+                String jobProvince = (String) resume.get("jobProvince");
+                String jobProvinceName = "";
+                if (!StringUtils.isEmpty(jobProvince)) {
+                    String[] jobProvinces = jobProvince.split(",");
+                    StringBuilder sb = new StringBuilder();
+                    for (String jp : jobProvinces) {
+                        Map<String, Object> tmp = new HashMap<>();
+                        tmp.put("jobProvince", jp);
+                        tmp = ConvertUtil.execute(tmp, "jobProvince", "dictionaryService", "findProvinceByCode", new Object[]{String.valueOf(tmp.get("jobProvince"))});
+                        String jpName = (String) tmp.get("jobProvinceName");
+                        if (!"".equals(jpName)) {
+                            sb.append(jpName).append(",");
+                        }
+                    }
+                    jobProvinceName = sb.toString();
+                    if (jobProvinceName.length() != 0) {
+                        jobProvinceName = jobProvinceName.substring(0, jobProvinceName.length() - 1);
+                    }
+                }
+
+                resume = ConvertUtil.execute(resume, "jobCity", "dictionaryService", "findCityByCode", new Object[]{resume.get("jobCity")});
+                resume = ConvertUtil.execute(resume, "jobProvince", "dictionaryService", "findProvinceByCode", new Object[]{resume.get("jobProvince")});
+                if (!"".equals(jobCityName)) {
+                    if (!"".equals(jobProvinceName)) {
+                        area = jobProvinceName + "," + jobCityName;
+                    } else {
+                        area = jobCityName;
+                    }
+                } else {
+                    if (!"".equals(jobProvinceName)) {
+                        area = jobProvinceName;
+                    }
+                }
+
+                map.put(Constants.id, resume.get("id"));
+                map.put(Constants.logo, resume.get("photo"));
+                map.put(Constants.status, resume.get("status"));
                 map.put(Constants.area, area);
-                map.put(Constants.name, resume.getRealName().subSequence(0, 1) + "**");
-                map.put(Constants.position, resume.getPost());
-                map.put(Constants.experienceYear, resume.getWorkYear());
-                map.put(Constants.age, resume.getBirthYear());
-                map.put(Constants.salary, resume.getHopeSalary());
+                map.put(Constants.name, resume.get("realName").toString().subSequence(0, 1) + "**");
+                map.put(Constants.position, postName);
+                map.put(Constants.experienceYear, resume.get("workYear"));
+                map.put(Constants.age, resume.get("birthYear"));
                 list.add(map);
             }
         } catch (Exception e) {

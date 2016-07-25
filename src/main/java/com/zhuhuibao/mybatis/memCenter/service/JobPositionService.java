@@ -460,21 +460,27 @@ public class JobPositionService {
                 Position position = positionList.get(a);
                 Map map = new HashMap();
                 map.put(Constants.name, position.getName());
-                List<Job> jobList = jobMapper.queryLatestJob(position.getId(), count);
+                List<Map<String,Object>> jobList = jobMapper.queryLatestJob(position.getId(), count);
                 List list1 = new ArrayList();
-                for (int i = 0; i < jobList.size(); i++) {
-                    Job job = jobList.get(i);
+                for (Map<String,Object> job:jobList) {
                     Map map1 = new HashMap();
-                    map1.put(Constants.id, job.getId());
-                    map1.put(Constants.name, job.getName());
-                    map1.put(Constants.createid, job.getCreateid());
-                    map1.put(Constants.salary, job.getSalaryName());
-                    if(job.getCity()!=null){
-                        map1.put(Constants.area, job.getCity());
-                    }else {
-                        map1.put(Constants.area, job.getProvince());
+                    map1.put(Constants.id, job.get("id"));
+                    map1.put(Constants.name, job.get("name"));
+                    map1.put(Constants.createid, job.get("createid"));
+                    if (job.get("salary") != null) {
+                        job = ConvertUtil.execute(job, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(job.get("salary"))});
+                        map1.put(Constants.salary, job.get("salaryName"));
+                    } else {
+                        map1.put(Constants.salary, "");
                     }
-                    map1.put(JobConstant.JOB_KEY_POSITIONTYPE, job.getPositionType());
+                    job = ConvertUtil.execute(job, "city", "dictionaryService", "findCityByCode", new Object[]{job.get("city")});
+                    job = ConvertUtil.execute(job, "province", "dictionaryService", "findProvinceByCode", new Object[]{job.get("province")});
+                    if(!"".equals(job.get("cityName"))){
+                        map1.put(Constants.area, job.get("cityName"));
+                    }else {
+                        map1.put(Constants.area, job.get("provinceName"));
+                    }
+                    map1.put(JobConstant.JOB_KEY_POSITIONTYPE, job.get("positionType"));
                     list1.add(map1);
                 }
                 map.put("jobList", list1);
@@ -639,9 +645,14 @@ public class JobPositionService {
             if (!StringUtils.isEmpty(cityCode)) {
                 map = ConvertUtil.execute(map, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
                 map.put("city", map.get("cityName"));
-
             } else {
-                map.put("city", "");
+                String provinceCode = (String) map.get("province");
+                if(!StringUtils.isEmpty(provinceCode)){
+                    map = ConvertUtil.execute(map, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
+                    map.put("city", map.get("provinceName"));
+                }else{
+                    map.put("city", "");
+                }
             }
 
 
