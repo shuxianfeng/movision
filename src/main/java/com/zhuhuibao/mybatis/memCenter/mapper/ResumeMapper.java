@@ -36,7 +36,7 @@ public interface ResumeMapper {
     List<Resume> queryResumeByCreateId(Long createID);
 
     //最新求职
-    List<Resume> queryLatestResume(Map<String,Object> map);
+    List<Map<String,Object>> queryLatestResume(Map<String,Object> map);
 
     //是否存在简历
     int isExistResume(Long createID);
