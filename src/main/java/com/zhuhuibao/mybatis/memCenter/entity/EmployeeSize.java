@@ -1,6 +1,8 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-public class EmployeeSize {
+import java.io.Serializable;
+
+public class EmployeeSize implements Serializable {
     private Integer id;
 
     private String name;
