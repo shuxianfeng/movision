@@ -645,9 +645,14 @@ public class JobPositionService {
             if (!StringUtils.isEmpty(cityCode)) {
                 map = ConvertUtil.execute(map, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
                 map.put("city", map.get("cityName"));
-
             } else {
-                map.put("city", "");
+                String provinceCode = (String) map.get("province");
+                if(!StringUtils.isEmpty(provinceCode)){
+                    map = ConvertUtil.execute(map, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
+                    map.put("city", map.get("provinceName"));
+                }else{
+                    map.put("city", "");
+                }
             }
 
 
