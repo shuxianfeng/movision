@@ -316,7 +316,7 @@ public class ZhbService {
 
 			DictionaryZhbgoods goodsConfig = getZhbGoodsByPinyin(goodsType);
 			ZhbAccount account = getZhbAccount(ShiroUtil.getCompanyID());
-			result = account.getAmount().compareTo(goodsConfig.getPrice()) > 0;
+			result = account.getAmount().compareTo(goodsConfig.getPrice()) >= 0;
 		} catch (Exception e) {
 		}
 		return result;

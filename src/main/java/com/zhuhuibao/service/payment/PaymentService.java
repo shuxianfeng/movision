@@ -221,7 +221,7 @@ public class PaymentService {
 	    			boolean result=false;
 	    			if(account!=null)
 	    			{
-	    			   result = account.getAmount().compareTo(goodsConfig.getPrice()) > 0;
+	    			   result = account.getAmount().compareTo(goodsConfig.getPrice()) >= 0;
 	    			}
 	    			
 	    			if (privilegeNum <= 0 && !result) {
