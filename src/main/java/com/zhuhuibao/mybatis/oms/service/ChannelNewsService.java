@@ -309,4 +309,16 @@ public class ChannelNewsService {
         }
         return map;
     }
+
+    public ChannelNews selectByID(Long id) {
+        ChannelNews news;
+        try{
+            news = channel.selectByID(id);
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error("查询{}失败","t_oms_channel_news");
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
+        }
+        return news;
+    }
 }

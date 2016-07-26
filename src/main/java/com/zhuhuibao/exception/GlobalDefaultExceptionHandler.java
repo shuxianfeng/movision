@@ -68,6 +68,7 @@ public class GlobalDefaultExceptionHandler {
                 case "BindException":
                     result.setCode(400);
                     break;
+                case "PageNotFoundException":
                 case "NoHandlerFoundException":
                 case "NoSuchRequestHandlingMethodException":
                     result.setCode(404);

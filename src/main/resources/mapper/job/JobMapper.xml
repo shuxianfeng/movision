@@ -50,7 +50,7 @@
     <select id="getPositionByPositionId" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT j.*,p.parentId FROM t_i_job j
         LEFT JOIN t_dictionary_position p on j.positionType = p.id
-        WHERE j.id = #{id}
+        WHERE j.id = #{id}   and  j.is_deleted = 0
     </select>
     <update id="deletePosition" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Job">
         UPDATE t_i_job SET is_deleted = 1 WHERE id = #{id}
@@ -204,7 +204,7 @@
         left join t_dictionary_position ps on ps.id = t.positionType
         left join t_m_member mb on mb.id = t.createid
         left join t_i_jobRelresume jrr on jrr.applicantId = #{createid} and jrr.jobID = #{id} and datediff(current_date(),jrr.publishDate) &lt;= 10
-        where t.id = #{id}
+        where t.id = #{id}   and t.is_deleted=0
     </select>
 
     <select id="findAllOtherPosition" parameterType="java.util.Map" resultType="java.util.Map">

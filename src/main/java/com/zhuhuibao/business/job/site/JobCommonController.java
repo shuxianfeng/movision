@@ -8,12 +8,14 @@ import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.memCenter.entity.EmployeeSize;
 import com.zhuhuibao.mybatis.memCenter.entity.EnterpriseType;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
+import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
@@ -27,6 +29,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.util.*;
@@ -126,9 +132,14 @@ public class JobCommonController {
     @RequestMapping(value = "sel_newsdetail", method = RequestMethod.GET)
     public Response newsDetail(@ApiParam("资讯ID") @RequestParam String id) {
 
-        Response response = newsService.selectByPrimaryKey(Long.valueOf(id));
-        newsService.updateViews(Long.valueOf(id));
-        return response;
+        ChannelNews news  = newsService.selectByID(Long.valueOf(id));
+        if(news!=null){
+            newsService.updateViews(Long.valueOf(id));
+        }else{
+           throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR,"页面不存在");
+        }
+
+        return new Response(news);
     }
 
     @ApiOperation(value = "人才网资讯详情|列表>热门排行", notes = "人才网资讯详情|列表>热门排行", response = Response.class)

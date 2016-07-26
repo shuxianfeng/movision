@@ -8,6 +8,7 @@ import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
 import com.zhuhuibao.mybatis.advertising.service.SysAdvertisingService;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
@@ -306,35 +307,41 @@ public class JobPositionService {
      * @param map 职位搜索
      * @return
      */
-    public Response queryPositionInfoByID(Map<String, Object> map) {
+    public Map<String, Object> queryPositionInfoByID(Map<String, Object> map) {
         log.info("query position info by id = " + StringUtils.mapToString(map));
-        Response response = new Response();
-        try {
-            Map<String, Object> job = jobMapper.queryPositionInfoByID(map);
-            Long isApply = (Long) job.get("isApply");
-            job.put("isApply", (isApply != 0));
+        Map<String, Object> job;
 
-            String workArea = "";
-            String provinceName = String.valueOf(job.get("provinceName"));
-            if (!StringUtils.isEmpty(provinceName)) {
-                workArea += provinceName;
-            }
-            String cityName = String.valueOf(job.get("cityName"));
-            if (!StringUtils.isEmpty(cityName)) {
-                workArea += cityName;
-            }
-            String areaName = String.valueOf(job.get("areaName"));
-            if (!StringUtils.isEmpty(areaName)) {
-                workArea += areaName;
-            }
-            job.put("workArea", workArea);
+        job = jobMapper.queryPositionInfoByID(map);
+        String id = String.valueOf(job.get("id"));
+        if (!StringUtils.isEmpty(id)) {
+            try {
+                Long isApply = (Long) job.get("isApply");
+                job.put("isApply", (isApply != 0));
 
-            response.setData(job);
-        } catch (Exception e) {
-            log.error("add offer price error!", e);
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
+                String workArea = "";
+                String provinceName = String.valueOf(job.get("provinceName"));
+                if (!StringUtils.isEmpty(provinceName)) {
+                    workArea += provinceName;
+                }
+                String cityName = String.valueOf(job.get("cityName"));
+                if (!StringUtils.isEmpty(cityName)) {
+                    workArea += cityName;
+                }
+                String areaName = String.valueOf(job.get("areaName"));
+                if (!StringUtils.isEmpty(areaName)) {
+                    workArea += areaName;
+                }
+                job.put("workArea", workArea);
+            } catch (Exception e) {
+                log.error("add offer price error!", e);
+                e.printStackTrace();
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
+            }
+        } else {
+            throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
         }
-        return response;
+
+        return job;
     }
 
     /**
@@ -637,7 +644,7 @@ public class JobPositionService {
         Map<String, Object> map;
         try {
             map = jobMapper.findJobByJobID(jobID);
-            if(map != null){
+            if (map != null) {
                 String welfarename = "";
                 String welfare = (String) map.get("welfare");
                 genWelfaceName(map, welfare, welfarename);
@@ -658,7 +665,7 @@ public class JobPositionService {
                         map.put("city", "");
                     }
                 }
-            } else{
+            } else {
                 map = new HashMap<>();
             }
 

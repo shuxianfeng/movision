@@ -323,7 +323,7 @@
   </select>
   <select id="selectNewViews" resultType="java.util.Map">
     select id,title,date_format(createTime,'%Y-%m-%d') createTime  from t_oms_channel_news
-    where channelid in (select id from t_oms_channel where parentId=#{type}) and status = 1 order by createTime desc
+    where channelid = #{type} and status = 1 order by createTime desc
     <if test="count != null and count!='' ">
       limit 0,#{count}
     </if>
@@ -335,4 +335,7 @@
       limit 0,#{count}
     </if>
   </select>
+    <select id="selectByID" resultType="com.zhuhuibao.mybatis.oms.entity.ChannelNews">
+        select * from t_oms_channel_news where id = #{id} and status != 3
+    </select>
 </mapper>
