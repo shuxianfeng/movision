@@ -340,9 +340,12 @@
   </select>
 
   <select id="findAllWitkeyTaskList" resultType="java.util.Map" >
-    select c.id,c.title,c.type,c.province,c.city,date_format(v.viewTime,'%Y-%m-%d') viewTime,v.id as recordId
+    select c.id,c.title,ct.name as type,p.name as province,ci.name as city,date_format(v.viewTime,'%Y-%m-%d') viewTime,v.id as recordId
     from t_zhb_viewGoods v
     left join t_c_cooperation c on v.goodsId = c.id
+    left join t_dictionary_province p on c.province = p.code
+    left join t_dictionary_city ci on c.city = ci.code
+    left join t_dictionary_cooperationType ct on c.type = ct.id
     where v.type = 'CKWKRW' and v.`status` = 0
     <if test="companyId != null">
       and v.companyId = #{companyId}
