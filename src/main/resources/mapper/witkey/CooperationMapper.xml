@@ -345,7 +345,7 @@
     left join t_c_cooperation c on v.goodsId = c.id
     where v.type = 'CKWKRW' and v.`status` = 0
     <if test="companyId != null">
-      and v.comapnyId = #{companyId}
+      and v.companyId = #{companyId}
     </if>
     <if test="viewerId != null">
       and v.viewerId = #{viewerId}
