@@ -65,4 +65,6 @@ public interface ResumeMapper {
 	void insertViewGoods(Map<String, String> recordMap);
 
     List<String> selectIdsByCreateId(@Param("createid") Long createid);
+    //获取简历收藏最大值
+	int getMaxCollCount(Long memberId);
 }
