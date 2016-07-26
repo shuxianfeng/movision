@@ -325,11 +325,11 @@ public class JobPositionService {
                 }
                 String cityName = String.valueOf(job.get("cityName"));
                 if (!StringUtils.isEmpty(cityName)) {
-                    workArea += cityName;
+                    workArea += " " + cityName;
                 }
                 String areaName = String.valueOf(job.get("areaName"));
                 if (!StringUtils.isEmpty(areaName)) {
-                    workArea += areaName;
+                    workArea +=  " " + areaName;
                 }
                 job.put("workArea", workArea);
             } catch (Exception e) {
