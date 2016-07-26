@@ -1,11 +1,9 @@
 package com.zhuhuibao.business.project.mc;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,9 +42,9 @@ public class ProjectMcController {
 	@RequestMapping(value = { "sel_project_info", "base/sel_project_info" }, method = RequestMethod.GET)
 	@ApiOperation(value = "查询我查看过的项目信息", notes = "查询我查看过的项目信息", response = Response.class)
 	public Response searchProjectPage(@ApiParam(value = "项目名称") @RequestParam(required = false) String name,
-									  @ApiParam(value = "城市Code") @RequestParam(required = false) String city, @ApiParam(value = "省代码") @RequestParam(required = false) String province,
-									  @ApiParam(value = "项目类别") @RequestParam(required = false) String category, @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-									  @ApiParam(value = "每页显示的条数") @RequestParam(required = false) String pageSize) throws Exception {
+			@ApiParam(value = "城市Code") @RequestParam(required = false) String city, @ApiParam(value = "省代码") @RequestParam(required = false) String province,
+			@ApiParam(value = "项目类别") @RequestParam(required = false) String category, @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
+			@ApiParam(value = "每页显示的条数") @RequestParam(required = false) String pageSize) throws Exception {
 		// 封装查询参数
 		Long createId = ShiroUtil.getCreateID();
 		Response response = new Response();
@@ -74,38 +72,6 @@ public class ProjectMcController {
 		} else {
 			throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
 		}
-		return response;
-	}
-
-	@RequestMapping(value = { "deal_project_info" }, method = RequestMethod.GET)
-	@ApiOperation(value = "查询我查看过的项目信息", notes = "查询我查看过的项目信息", response = Response.class)
-	public Response dealProjectPage() throws Exception {
-		long startTime = (new Date()).getTime();
-		Response response = new Response();
-		String curAccount = ShiroUtil.getMember().getAccount();
-
-		int total = 0;
-		int succ = 0;
-		int failed = 0;
-		if ("tongxl@zhuhui8.com".equals(curAccount)) {
-			List<Map<String, Object>> allList = projectService.findAllPrjectCopy();
-			if (CollectionUtils.isNotEmpty(allList)) {
-				total = allList.size();
-				for (Map<String, Object> m : allList) {
-					boolean result = projectService.dealProjectPage(m);
-					if (result) {
-						succ++;
-					} else {
-						failed++;
-					}
-				}
-			}
-		}
-		long endTime = (new Date()).getTime();
-		long expTime = (endTime - startTime);
-		long extTimeSec = expTime / 1000;
-		String a = "total:" + total + ",succ:" + succ + ",failed:" + failed + ",expTime:" + expTime + ",extTimeSec:" + extTimeSec;
-		response.setData(a);
 		return response;
 	}
 

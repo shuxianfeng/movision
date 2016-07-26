@@ -238,6 +238,13 @@ public class ResumeSiteController {
         Response response = new Response();
         Long memberId = ShiroUtil.getCreateID(); 
         if(memberId!=null){
+        	int collCount=resume.getMaxCollCount(memberId);
+        	if(collCount>=JobConstant.MAX_COLL_COUNT)
+        	{
+        		 response.setCode(400);
+        		 response.setMessage("您的简历收藏夹已满"+JobConstant.MAX_COLL_COUNT+"，请先清空收藏夹，然后再进行简历收藏！");
+        		 return response;
+        	}
             int result=resume.insertCollRecord(id);
             if(result>0)
             {
@@ -245,6 +252,7 @@ public class ResumeSiteController {
             }else{
             	response.setCode(400);
             }
+        	
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }

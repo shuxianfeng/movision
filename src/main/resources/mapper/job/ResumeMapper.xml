@@ -324,6 +324,11 @@
   <select id="isExistResume" parameterType="java.lang.Long" resultType="java.lang.Integer">
     select count(1) from t_i_resume t where t.createid = #{createID}
   </select>
+  
+  <select id="getMaxCollCount" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    select count(1) from t_i_resume_collect_record t where t.companyID = #{memberId} and t.is_deleted=0
+  </select>
+  
   <select id="queryJobCount" parameterType="java.lang.Long" resultType="java.util.Map">
     select count(1) count from t_i_job t where t.createID = #{createId} and t.is_deleted = 0 union all
     select count(1) count from t_i_jobRelresume j where j.jobID in (select id from t_i_job where createid=#{createId})
