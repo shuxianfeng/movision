@@ -24,7 +24,7 @@
   <select id="queryDynamicById" resultMap="BaseResultMap" parameterType="java.lang.String" >
     SELECT d.id,date_format(d.publishTime,'%Y-%m-%d') publishTime,date_format(d.updateTime,'%Y-%m-%d') updateTime,d.createId,
     d.title,d.wordkey,d.description,d.imgurl,d.views,d.status,d.content,d.createrType
-    FROM t_e_dynamic d WHERE d.id = #{id}
+    FROM t_e_dynamic d WHERE d.id = #{id} and d.is_deleted = 0
   </select>
   <select id="findDynamicListByCount" resultType="java.util.Map" >
     SELECT id,title
@@ -159,6 +159,15 @@
       </if>
       <if test="reason != null">
         reason = #{reason}
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateDynamicViews" parameterType="com.zhuhuibao.mybatis.expert.entity.Dynamic" >
+    update t_e_dynamic
+    <set >
+      <if test="views != null" >
+        views = #{views},
       </if>
     </set>
     where id = #{id}

@@ -777,4 +777,14 @@ public class ExpertService {
             throw e;
         }
     }
+
+    public int updateDynamicViews(Dynamic dynamic) {
+        try{
+            return dynamicMapper.updateDynamicViews(dynamic);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

@@ -252,7 +252,7 @@
     left join t_dictionary_constant co on co.code = c.category and co.type = 9
     left join t_dictionary_cooperationType coo on coo.id = c.type
     LEFT JOIN t_m_member m on c.createId = m.id
-    where c.id = #{id}
+    where c.id = #{id} and c.is_deleted = 0
   </select>
   <select id="queryUnloginCooperationInfo" resultType="java.util.Map" >
     select c.id,c.title,date_format(c.updateTime,'%Y-%m-%d %H:%i:%s') updateTime

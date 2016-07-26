@@ -8,6 +8,7 @@ import com.zhuhuibao.common.constant.CooperationConstants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
@@ -114,9 +115,13 @@ public class WitkeySiteController {
     public Response cooperationInfo(@RequestParam String id)  {
         Response response = new Response();
         Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
-        cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews())+1));
-        cooperationService.updateCooperationViews(cooperation);
-        response.setData(cooperation);
+        if(cooperation!=null){
+            cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews())+1));
+            cooperationService.updateCooperationViews(cooperation);
+            response.setData(cooperation);
+        }else {
+            throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR,"页面不存在");
+        }
         return response;
     }
 

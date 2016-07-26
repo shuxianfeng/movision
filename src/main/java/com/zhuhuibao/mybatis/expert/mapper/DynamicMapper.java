@@ -18,4 +18,5 @@ public interface DynamicMapper {
 
     List<Map<String,String>> findDynamicListByCount(int count);
 
+    int updateDynamicViews(Dynamic dynamic);
 }

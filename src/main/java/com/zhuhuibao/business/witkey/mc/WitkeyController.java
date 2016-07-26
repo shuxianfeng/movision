@@ -3,7 +3,9 @@ package com.zhuhuibao.business.witkey.mc;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
@@ -106,7 +108,11 @@ public class WitkeyController {
     public Response queryCooperationInfo(@RequestParam String id)  {
         Response response = new Response();
         Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
-        response.setData(cooperation);
+        if(cooperation!=null){
+            response.setData(cooperation);
+        }else {
+            throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR,"页面不存在");
+        }
         return response;
     }
 

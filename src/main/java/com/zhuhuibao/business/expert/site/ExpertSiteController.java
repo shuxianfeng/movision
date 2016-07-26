@@ -10,6 +10,7 @@ import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import com.zhuhuibao.mybatis.expert.entity.*;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
@@ -157,7 +158,13 @@ public class ExpertSiteController {
     public Response queryDynamicById(@ApiParam(value = "协会动态Id")@RequestParam String id) throws Exception {
         Response response = new Response();
         Dynamic dynamic = expertService.queryDynamicById(id);
-        response.setData(dynamic);
+        if(dynamic!=null){
+            dynamic.setViews(String.valueOf(Integer.parseInt(dynamic.getViews())+1));
+            expertService.updateDynamicViews(dynamic);
+            response.setData(dynamic);
+        }else {
+            throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR,"页面不存在");
+        }
         return response;
     }
 

@@ -8,6 +8,7 @@ import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.expert.entity.*;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
@@ -88,7 +89,12 @@ public class ExpertController {
     public Response queryAchievementById(@ApiParam(value = "技术成果ID")@RequestParam String id) throws Exception {
         Response response = new Response();
         Map<String,String> map = expertService.queryAchievementById(id);
-        response.setData(map);
+        if(map!=null){
+            response.setData(map);
+        }else {
+            throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR,"页面不存在");
+        }
+
         return response;
     }
 
@@ -158,7 +164,11 @@ public class ExpertController {
     public Response queryDynamicById(@ApiParam(value = "协会动态Id")@RequestParam String id) throws Exception {
         Response response = new Response();
         Dynamic dynamic = expertService.queryDynamicById(id);
-        response.setData(dynamic);
+        if(dynamic!=null){
+            response.setData(dynamic);
+        }else {
+            throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR,"页面不存在");
+        }
         return response;
     }
 
