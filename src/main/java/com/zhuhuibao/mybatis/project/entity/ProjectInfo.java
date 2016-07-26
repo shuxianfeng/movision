@@ -44,6 +44,12 @@ public class ProjectInfo {
 	private String endDate;
 	@ApiModelProperty(value = " 项目描述")
 	private String description;
+	@ApiModelProperty(value = " 项目概况")
+	private String basicDesc;
+	@ApiModelProperty(value = " 项目背景")
+	private String background;
+	@ApiModelProperty(value = " 备注")
+	private String remark;
 	@ApiModelProperty(value = " 跟进记录")
 	private String record;
 	@ApiModelProperty(value = " 删除标识：1删除,0:不删除")
@@ -165,14 +171,6 @@ public class ProjectInfo {
 		this.endDate = endDate;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public String getRecord() {
 		return record;
 	}
@@ -203,6 +201,38 @@ public class ProjectInfo {
 
 	public void setPartyBList(List partyBList) {
 		this.partyBList = partyBList;
+	}
+
+	public String getBasicDesc() {
+		return basicDesc;
+	}
+
+	public void setBasicDesc(String basicDesc) {
+		this.basicDesc = basicDesc;
+	}
+
+	public String getBackground() {
+		return background;
+	}
+
+	public void setBackground(String background) {
+		this.background = background;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
