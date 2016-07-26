@@ -6,7 +6,7 @@
     <properties resource="mybatis/init.properties"/>
 
     <!-- 指定数据连接驱动jar地址 -->
-    <classPathEntry location="D:/repository/mysql/mysql-connector-java/5.1.24/mysql-connector-java-5.1.24.jar"/>
+    <classPathEntry location="${classPath}"/>
 
     <!-- 一个数据库一个context -->
     <context id="infoGuardian">
@@ -33,7 +33,7 @@
 
         <!-- 生成实体类地址 -->
 
-        <javaModelGenerator targetPackage="com.zhuhuibao.mybatis.project.entity"
+        <javaModelGenerator targetPackage="com.zhuhuibao.mybatis.common.entity"
                             targetProject="${project}">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
@@ -42,29 +42,29 @@
         </javaModelGenerator>
 
         <!-- 生成mapxml文件 -->
-        <sqlMapGenerator targetPackage="mapper/project"
+        <sqlMapGenerator targetPackage="mapper/common"
                          targetProject="${resources}">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
         <!-- 生成mapxml对应client，也就是接口dao -->
-        <javaClientGenerator targetPackage="com.zhuhuibao.mybatis.project.mapper"
+        <javaClientGenerator targetPackage="com.zhuhuibao.mybatis.common.mapper"
                              targetProject="${project}" type="XMLMAPPER">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <table tableName="t_prj_project_test"
-               domainObjectName="ProjectTest"
+        <table tableName="t_sys_joinus"
+               domainObjectName="SysJoinus"
                enableCountByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false">
             <!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 enable*ByExample
                 是否生成 example类 -->
-            <property name="useActualColumnNames" value="true"/>
+            <property name="useActualColumnNames" value="false"/>
         </table>
 
 

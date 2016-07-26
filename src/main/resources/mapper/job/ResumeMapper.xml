@@ -341,7 +341,7 @@
     date_format(rd.publishDate,'%Y-%m-%d') publishDate
     from t_i_resume_download_record rd
     left join t_i_resume r on r.id = rd.resumeID
-    where rd.companyID = #{id} and rd.is_deleted = 0
+    where rd.companyID = #{id} and rd.is_deleted = 0 order by rd.publishDate desc
   </select>
 
   
@@ -379,7 +379,7 @@
     date_format(rd.publishDate,'%Y-%m-%d') publishDate
     from t_i_resume_collect_record rd
     left join t_i_resume r on r.id = rd.resumeID
-    where rd.companyID = #{id} and rd.is_deleted = 0
+    where rd.companyID = #{id} and rd.is_deleted = 0 order by rd.publishDate desc
   </select>
   <select id="selectIdsByCreateId" resultType="java.lang.String">
     select id from t_i_resume where createid= #{createid}
