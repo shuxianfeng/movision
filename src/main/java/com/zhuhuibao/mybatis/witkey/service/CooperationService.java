@@ -263,4 +263,14 @@ public class CooperationService {
 			throw e;
 		}
 	}
+
+	public int deleteWitkeyTask(String id) {
+		try {
+			return cooperationMapper.deleteWitkeyTask(id);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

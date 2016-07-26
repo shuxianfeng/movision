@@ -358,4 +358,10 @@
     </if>
     order by v.viewTime desc
   </select>
+
+  <update id="deleteWitkeyTask" parameterType="java.lang.String" >
+    update t_zhb_viewGoods
+    set status = 1
+    where id = #{id}
+  </update>
 </mapper>

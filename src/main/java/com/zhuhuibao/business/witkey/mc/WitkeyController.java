@@ -189,4 +189,15 @@ public class WitkeyController {
         }
         return response;
     }
+
+    @ApiOperation(value="批量删除我查看的威客任务",notes="批量删除我查看的威客任务",response = Response.class)
+    @RequestMapping(value = "del_witkey_task", method = RequestMethod.POST)
+    public Response del_witkey_task(@RequestParam String ids)  {
+        Response response = new Response();
+        String idlist[] = ids.split(",");
+        for(String id:idlist){
+            cooperationService.deleteWitkeyTask(id);
+        }
+        return response;
+    }
 }
