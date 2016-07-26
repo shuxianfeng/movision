@@ -1,6 +1,8 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-public class Identity {
+import java.io.Serializable;
+
+public class Identity implements Serializable{
     private Integer id;
 
     private String name;
