@@ -79,7 +79,7 @@ public class RegisterController {
     @RequestMapping(value = {"/rest/imgCode", "rest/member/site/base/sel_imgCode"}, method = RequestMethod.GET)
     public void getCode(HttpServletResponse response) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(false);
+        Session sess = currentUser.getSession(true);
         String verifyCode = VerifyCodeUtils.outputHttpVerifyImage(100, 40, response, Constants.CHECK_IMG_CODE_SIZE);
         log.debug("verifyCode == " + verifyCode);
         sess.setAttribute(MemberConstant.SESSION_TYPE_REGISTER, verifyCode);
@@ -191,7 +191,7 @@ public class RegisterController {
         Response result = new Response();
         try {
             Subject currentUser = SecurityUtils.getSubject();
-            Session sess = currentUser.getSession(false);
+            Session sess = currentUser.getSession(true);
             //校验手机验证码是否正确
             if (member.getMobileCheckCode() != null) {
                 String verifyCode = (String) sess.getAttribute("r" + member.getMobile());
