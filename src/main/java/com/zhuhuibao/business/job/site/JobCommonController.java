@@ -97,21 +97,34 @@ public class JobCommonController {
                              @ApiParam("限制条数") @RequestParam(required = false) String count,
                              @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
                              @ApiParam(value = "每页显示的条数") @RequestParam(required = false, defaultValue = "10") String pageSize) {
-        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> params = new HashMap<>();
-        params.put("channelid", type);
-        params.put("status", "1");   //已审核
-        if(!StringUtils.isEmpty(count)){
-            params.put("count",Integer.valueOf(count));
+        String sort = "0";
+        switch (type) {
+            case "14":
+                sort = "1";    //面试技巧
+                break;
+            case "15":
+                sort = "2";     //职场动态
+                break;
+            case "16":
+                sort = "3";   //行业资讯
+                break;
         }
-        List<Map<String,String>> list = newsService.findAllPassNewsByType(pager, params);
+        params.put("channelid", "13");     //人才网
+        params.put("sort",sort);
+        params.put("status", "1");   //已审核
+        if (!StringUtils.isEmpty(count)) {
+            params.put("count", Integer.valueOf(count));
+        }
+        List<Map<String, String>> list = newsService.findAllPassNewsByType(pager, params);
         pager.result(list);
         return new Response(pager);
     }
 
     @ApiOperation(value = "人才网资讯详情", notes = "人才网资讯详情", response = Response.class)
     @RequestMapping(value = "sel_newsdetail", method = RequestMethod.GET)
-    public Response newsDetail(@ApiParam("资讯ID") @RequestParam String id){
+    public Response newsDetail(@ApiParam("资讯ID") @RequestParam String id) {
 
         Response response = newsService.selectByPrimaryKey(Long.valueOf(id));
         newsService.updateViews(Long.valueOf(id));
@@ -120,28 +133,28 @@ public class JobCommonController {
 
     @ApiOperation(value = "人才网资讯详情|列表>热门排行", notes = "人才网资讯详情|列表>热门排行", response = Response.class)
     @RequestMapping(value = "sel_hotviews", method = RequestMethod.GET)
-    public Response hotViews(@ApiParam("人才网:13")@RequestParam String type,
-                             @ApiParam("记录条数") @RequestParam(required = false,defaultValue = "10") String count){
+    public Response hotViews(@ApiParam("人才网:13") @RequestParam String type,
+                             @ApiParam("记录条数") @RequestParam(required = false, defaultValue = "10") String count) {
 
-        List<Map<String,String>>  list = newsService.selectHotViews(type,Integer.valueOf(count));
+        List<Map<String, String>> list = newsService.selectHotViews(type, Integer.valueOf(count));
         return new Response(list);
     }
 
     @ApiOperation(value = "人才网资讯列表>最新资讯", notes = "人才网资讯列表>最新排行", response = Response.class)
     @RequestMapping(value = "sel_topnews", method = RequestMethod.GET)
-    public Response topNews(@ApiParam("人才网:13")@RequestParam String type,
-                            @ApiParam("记录条数") @RequestParam(required = false,defaultValue = "10") String count){
+    public Response topNews(@ApiParam("人才网:13") @RequestParam String type,
+                            @ApiParam("记录条数") @RequestParam(required = false, defaultValue = "10") String count) {
 
-        List<Map<String,String>>  list = newsService.selectNewViews(type,Integer.valueOf(count));
+        List<Map<String, String>> list = newsService.selectNewViews(type, Integer.valueOf(count));
         return new Response(list);
     }
 
 
     @ApiOperation(value = "人才网首页>最新资讯", notes = "人才网首页>最新资讯", response = Response.class)
     @RequestMapping(value = "sel_lastestnews", method = RequestMethod.GET)
-    public Response latestNews(@ApiParam(value = "记录条数" ,defaultValue = "5") String count){
+    public Response latestNews(@ApiParam(value = "记录条数", defaultValue = "5") String count) {
 
-        Map<String,Object> map = newsService.selectLastestNews(count);
+        Map<String, Object> map = newsService.selectLastestNews(count);
         return new Response(map);
     }
 
@@ -166,9 +179,9 @@ public class JobCommonController {
     public Response searchRecommendPosition() throws IOException {
         Long createid = ShiroUtil.getCreateID();
         Response response;
-        if(createid!=null){
+        if (createid != null) {
             response = job.searchRecommendPosition(String.valueOf(createid), 6);
-        }else {
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;

@@ -208,8 +208,8 @@
     </select>
 
     <select id="findAllOtherPosition" parameterType="java.util.Map" resultType="java.util.Map">
-        select t.id,t.createid,t.name,t.positionType,date_format(t.publishTime,'%Y-%m-%d %h:%i:%s') publishTime,
-        date_format(t.updateTime,'%Y-%m-%d %h:%i:%s') updateTime,mb.enterpriseName,t.salary,t.education,t.experience,t.welfare,
+        select t.id,t.createid,t.name,t.positionType,date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,
+        date_format(t.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,mb.enterpriseName,t.salary,t.education,t.experience,t.welfare,
         t.city,t.province
         from t_i_job t
         left join t_m_member mb on mb.id = t.createid

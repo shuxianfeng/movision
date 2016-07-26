@@ -302,6 +302,9 @@
       <if test="channelid != null and channelid !='' ">
         and channelid = #{channelid}
       </if>
+      <if test="sort != null and sort !='' ">
+        and sort = #{sort}
+      </if>
       <if test="status != null and status !='' ">
         and status = #{status}
       </if>
@@ -313,7 +316,7 @@
   </select>
   <select id="selectHotViews" resultType="java.util.Map">
     select id,title,views from t_oms_channel_news
-    where channelid in (select id from t_oms_channel where parentId=#{type}) and status =1  order by views desc
+    where channelid = #{type} and status =1  order by views desc
     <if test="count != null and count!='' ">
       limit 0,#{count}
     </if>

@@ -213,7 +213,7 @@ public class JobSiteController {
             map.put("publishTime", publishTime);
         }
         map.put("salary", salary);
-        Paging<Map<String,Object>> pager = new Paging<Map<String,Object>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String,Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<Map<String,Object>> jobList = job.findAllOtherPosition(pager, map);
         pager.result(jobList);
         response.setData(pager);
