@@ -372,7 +372,7 @@ public class UploadFileController {
         //项目描述
         if(!isEmpty(row.getCell(7))){
 			String description= row.getCell(7).toString(); 
-			projectInfo.setDescription(description);
+			projectInfo.setBasicDesc(description);
 		}
         
         //项目开工时间
@@ -638,7 +638,6 @@ public class UploadFileController {
 	}
 	/**
 	 * 封装乙方信息
-	 * @param row
 	 * @param rowsNum
 	 * @param ProjectInfo
 	 */
@@ -783,9 +782,7 @@ public class UploadFileController {
 	/**
 	 * 封装联系人信息
 	 * @param linkma
-	 * @param details
-	 * @param temp
-	 * @return 
+	 * @return
 	 */
 	private ProjectLinkman setLinkMan(ProjectLinkman linkma) {
 		int index;
