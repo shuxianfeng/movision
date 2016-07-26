@@ -20,7 +20,9 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class VerifyCodeUtils {
 	 //使用到Algerian字体，系统里没有的话需要安装字体，字体只显示大写，去掉了1,0,i,o几个容易混淆的字符  
@@ -101,17 +103,52 @@ public class VerifyCodeUtils {
         response.addHeader("Cache-Control", "post-check=0, pre-check=0");
         response.setHeader("Pragma", "no-cache");
         response.setContentType("image/jpeg");
-        Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(true);
-		/*// 生成随机字串
-		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
-		log.debug("verifyCode == " + verifyCode);
-		sess.setAttribute("email", verifyCode);*/
 
         ServletOutputStream out = response.getOutputStream();
         String verifyCode = generateVerifyCode(verifySize);
         outputImage1(w, h, out, verifyCode);
         return verifyCode;
+    }
+
+
+    /**
+     *
+     * @param req
+     * @param response
+     * @param imgWidth
+     * @param imgheight
+     * @param size
+     * @param key
+     */
+    public static  void getImageCode(HttpServletRequest req,
+                                    HttpServletResponse response,int imgWidth,int imgheight,int size,String key) {
+        response.setDateHeader("Expires", 0);
+        response.setHeader("Cache-Control",
+                "no-store, no-cache, must-revalidate");
+        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+        response.setHeader("Pragma", "no-cache");
+        response.setContentType("image/jpeg");
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(true);
+        // 生成随机字串
+        String verifyCode = VerifyCodeUtils.generateVerifyCode(size);
+        sess.setAttribute(key, verifyCode);
+        ServletOutputStream out = null;
+        try {
+            out = response.getOutputStream();
+            VerifyCodeUtils.outputImage1(imgWidth, imgheight, out, verifyCode);
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /** 
@@ -365,7 +402,11 @@ public class VerifyCodeUtils {
   
         }  
   
-    }  
+    }
+
+
+
+
     public static void main(String[] args) throws IOException{  
         File dir = new File("D:/zhb_project/zhuhuibao/zhb/code");  
         int w = 200, h = 80;  

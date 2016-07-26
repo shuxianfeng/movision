@@ -6,11 +6,15 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.common.entity.SysJoinus;
 import com.zhuhuibao.mybatis.common.entity.SysResearch;
+import com.zhuhuibao.mybatis.common.service.SysJoinusService;
 import com.zhuhuibao.mybatis.common.service.SysResearchService;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.oss.ZhbOssClient;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -21,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -39,6 +45,9 @@ public class CommonController {
 
     @Autowired
     SysResearchService sysResearchService;
+
+    @Autowired
+    SysJoinusService joinusService;
 
     @ApiOperation(value = "上传图片，返回url", notes = "上传图片，返回url", response = Response.class)
     @RequestMapping(value = {"rest/uploadImg","/rest/common/upload_img"}, method = RequestMethod.POST)
@@ -70,7 +79,6 @@ public class CommonController {
     /**
      *留言
      * @return
-     * @throws IOException
      */
     @ApiOperation(value="留言",notes="留言",response = Response.class)
     @RequestMapping(value = "/rest/common/add_message", method = RequestMethod.POST)
@@ -93,5 +101,31 @@ public class CommonController {
         sysResearchService.insert(sysResearch);
 
         return new Response();
+    }
+
+
+    @ApiOperation(value="加盟",notes="加盟",response = Response.class)
+    @RequestMapping(value = "/rest/common/joinus", method = RequestMethod.POST)
+    public Response joinus(@ApiParam @ModelAttribute SysJoinus joinus){
+        //校验验证码
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
+        String sessionCode = (String) sess.getAttribute("joinus");
+        String imgCode = joinus.getImgCode();
+        if(!sessionCode.equals(imgCode)){
+             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"图形验证码不正确");
+        }
+
+        joinusService.insert(joinus);
+
+        return new Response();
+    }
+
+    @ApiOperation(value="图形验证码",notes="图形验证码")
+    @RequestMapping(value = "/rest/common/imgCode", method = RequestMethod.GET)
+    public void getImageCode(HttpServletRequest req, HttpServletResponse response){
+
+        VerifyCodeUtils.getImageCode(req, response,100,40,4,"joinus");
+
     }
 }
