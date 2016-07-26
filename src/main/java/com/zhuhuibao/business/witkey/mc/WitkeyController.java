@@ -3,10 +3,15 @@ package com.zhuhuibao.business.witkey.mc;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -14,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +37,9 @@ public class WitkeyController {
 
     @Autowired
     private ConstantService constantService;
+
+    @Autowired
+    private MemberService memberService;
 
     /**
      * 合作类型(大类，子类)
@@ -135,9 +144,49 @@ public class WitkeyController {
         cooperation.setType(type);
         cooperation.setTitle(title);
         cooperation.setStatus(status);
-        List<Map<String,String>> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
-        pager.result(cooperationList);
-        response.setData(pager);
+        if(createId!=null){
+            List<Map<String,String>> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
+            pager.result(cooperationList);
+            response.setData(pager);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+
+    @ApiOperation(value="我查看的威客任务",notes="我查看的威客任务",response = Response.class)
+    @RequestMapping(value = "sel_witkey_task", method = RequestMethod.GET)
+    public Response sel_witkey_task(
+            @RequestParam(required = false) String pageNo,@RequestParam(required = false) String pageSize,
+            @ApiParam(value = "合作标题")@RequestParam(required = false) String title,
+            @ApiParam(value = "合作类型")@RequestParam(required = false) String type
+    )  {
+        Long createId = ShiroUtil.getCreateID();
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Response response = new Response();
+        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        Map<String,Object> map = new HashMap<>();
+        map.put("title",title);
+        map.put("type",type);
+        if(createId!=null){
+            Member member = memberService.findMemById(String.valueOf(createId));
+            if("100".equals(member.getWorkType())){
+                map.put("companyId",createId);
+            }else {
+                map.put("viewerId",createId);
+            }
+            List<Map<String,String>> cooperationList = cooperationService.findAllWitkeyTaskList(pager,map);
+            pager.result(cooperationList);
+            response.setData(pager);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 }

@@ -31,4 +31,6 @@ public interface CooperationMapper {
     List<Map<String,String>> queryHotCooperation(Map<String, Object> map);
 
     int queryMyWitkeyListSize(Map<String,Object> map);
+
+    List<Map<String,String>> findAllWitkeyTaskList(RowBounds rowBounds, Map<String, Object> map);
 }

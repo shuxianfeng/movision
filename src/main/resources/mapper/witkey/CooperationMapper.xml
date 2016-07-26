@@ -12,6 +12,7 @@
     <result column="type" property="type" jdbcType="VARCHAR" />
     <result column="typeName" property="typeName" jdbcType="VARCHAR" />
     <result column="category" property="category" jdbcType="VARCHAR" />
+    <result column="systemType" property="systemType" jdbcType="VARCHAR" />
     <result column="categoryName" property="categoryName" jdbcType="VARCHAR" />
     <result column="province" property="province" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
@@ -59,6 +60,9 @@
       </if>
       <if test="category != null" >
         category,
+      </if>
+      <if test="systemType != null" >
+        systemType,
       </if>
       <if test="province != null" >
         province,
@@ -121,6 +125,9 @@
       <if test="category != null" >
         #{category},
       </if>
+      <if test="systemType != null" >
+        #{systemType},
+      </if>
       <if test="province != null" >
         #{province},
       </if>
@@ -177,6 +184,9 @@
       </if>
       <if test="category != null" >
         category = #{category},
+      </if>
+      <if test="systemType != null" >
+        systemType = #{systemType},
       </if>
       <if test="province != null" >
         province = #{province},
@@ -242,7 +252,7 @@
     UPDATE t_c_cooperation SET is_deleted = 1 WHERE id = #{id}
   </update>
   <select id="queryCooperationInfoById" resultMap="BaseResultMap" >
-    select c.*, concat(p.name,ci.name)as cooperationArea,co.name as categoryName,coo.name as TypeName,coo.parentId,
+    select c.*, concat(p.name,ci.name)as cooperationArea,co.name as categoryName,con.name as systemTypeName,coo.name as TypeName,coo.parentId,
     (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName,
     CASE WHEN m.identify = 2 THEN '个人' WHEN m.identify !=2 THEN '公司' END AS memberType,m.headShot
     from t_c_cooperation c
@@ -250,6 +260,7 @@
     left join t_dictionary_city ci on ci.code = c.city
     left join t_dictionary_area a on a.code = c.area
     left join t_dictionary_constant co on co.code = c.category and co.type = 9
+    left join t_dictionary_constant con on con.code = c.systemType and con.type = 25
     left join t_dictionary_cooperationType coo on coo.id = c.type
     LEFT JOIN t_m_member m on c.createId = m.id
     where c.id = #{id}
@@ -264,7 +275,7 @@
     c.price, date_format(c.endTime,'%Y-%m-%d %H:%i:%s') endTime,
     case WHEN c.endTime &lt; now() THEN '1' WHEN c.endTime &gt; now() THEN '0' END AS timeStatus,
     c.isShow, c.companyName, c.linkMan, c.telephone, c.mobile,c.email,c.content,c.is_deleted,c.views,c.status,
-    concat(p.name,ci.name)as cooperationArea,co.name as categoryName,coo.name as typeName,coo.parentId,
+    concat(p.name,ci.name)as cooperationArea,co.name as categoryName,coo.name as typeName,con.name as systemTypeName,coo.parentId,
     (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName,
     CASE WHEN m.identify = 2 THEN '个人' WHEN m.identify !=2 THEN '公司' END AS memberType,m.headShot
     from t_c_cooperation c
@@ -272,6 +283,7 @@
     left join t_dictionary_city ci on ci.code = c.city
     left join t_dictionary_area a on a.code = c.area
     left join t_dictionary_constant co on co.code = c.category and co.type = 9
+    left join t_dictionary_constant con on con.code = c.systemType and con.type = 25
     left join t_dictionary_cooperationType coo on coo.id = c.type
     LEFT JOIN t_m_member m on c.createId = m.id
     where c.is_deleted = 0
@@ -295,6 +307,9 @@
     </if>
     <if test="category != null and category != ''">
       and c.category = #{category}
+    </if>
+    <if test="systemType != null and systemType != ''">
+      and c.systemType = #{systemType}
     </if>
     <if test="province != null and province != ''">
       and c.province = #{province}
@@ -322,5 +337,25 @@
     select count(*) FROM t_c_cooperation c
     left join t_dictionary_cooperationType ct on c.type = ct.id
     WHERE c.createId = #{createId} and c.is_deleted = 0 and ct.parentId = #{parentId}
+  </select>
+
+  <select id="findAllWitkeyTaskList" resultType="java.util.Map" >
+    select c.id,c.title,c.type,c.province,c.city,date_format(v.viewTime,'%Y-%m-%d') viewTime,v.id as recordId
+    from t_zhb_viewGoods v
+    left join t_c_cooperation c on v.goodsId = c.id
+    where v.type = 'CKWKRW' and v.`status` = 0
+    <if test="companyId != null">
+      and v.comapnyId = #{companyId}
+    </if>
+    <if test="viewerId != null">
+      and v.viewerId = #{viewerId}
+    </if>
+    <if test="type != null">
+      and c.type = #{type}
+    </if>
+    <if test="title != null">
+      and c.title like concat('%',#{title},'%')
+    </if>
+    order by v.viewTime desc
   </select>
 </mapper>

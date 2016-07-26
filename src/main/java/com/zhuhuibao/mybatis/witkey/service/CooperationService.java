@@ -253,4 +253,14 @@ public class CooperationService {
 			throw e;
 		}
 	}
+
+	public List<Map<String,String>> findAllWitkeyTaskList(Paging<Map<String, String>> pager, Map<String, Object> map) {
+		try {
+			return cooperationMapper.findAllWitkeyTaskList(pager.getRowBounds(),map);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }
