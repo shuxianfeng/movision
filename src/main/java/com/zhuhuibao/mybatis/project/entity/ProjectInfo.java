@@ -42,6 +42,8 @@ public class ProjectInfo {
 	private String startDate;
 	@ApiModelProperty(value = " 竣工日期")
 	private String endDate;
+	@ApiModelProperty(value = " 项目描述")
+	private String description;
 	@ApiModelProperty(value = " 项目概况")
 	private String basicDesc;
 	@ApiModelProperty(value = " 项目背景")
@@ -223,6 +225,14 @@ public class ProjectInfo {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override

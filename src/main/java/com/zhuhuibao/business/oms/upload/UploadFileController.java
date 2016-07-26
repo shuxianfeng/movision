@@ -372,7 +372,7 @@ public class UploadFileController {
         //项目描述
         if(!isEmpty(row.getCell(7))){
 			String description= row.getCell(7).toString(); 
-			projectInfo.setBasicDesc(description);
+			projectInfo.setDescription(description);
 		}
         
         //项目开工时间
