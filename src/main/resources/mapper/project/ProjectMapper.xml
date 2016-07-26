@@ -16,6 +16,9 @@
         <result column="startDate" property="startDate" jdbcType="DATE"/>
         <result column="endDate" property="endDate" jdbcType="DATE"/>
         <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="basicDesc" property="basicDesc" jdbcType="VARCHAR"/>
+        <result column="background" property="background" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="record" property="record" jdbcType="VARCHAR"/>
         <result column="is_deleted" property="is_deleted" jdbcType="TINYINT"/>
     </resultMap>
@@ -76,6 +79,15 @@
             <if test="description != null">
                 description,
             </if>
+            <if test="basicDesc != null">
+                basicDesc,
+            </if>
+            <if test="background != null">
+                background,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
             <if test="record != null">
                 record,
             </if>
@@ -123,6 +135,15 @@
             </if>
             <if test="description != null">
                 #{description},
+            </if>
+            <if test="basicDesc != null">
+                #{basicDesc},
+            </if>
+            <if test="background != null">
+                #{background},
+            </if>
+            <if test="remark != null">
+                #{remark},
             </if>
             <if test="record != null">
                 #{record},
@@ -173,6 +194,15 @@
             <if test="description != null">
                 description=#{description},
             </if>
+            <if test="basicDesc != null">
+                basicDesc=#{basicDesc},
+            </if>
+            <if test="background != null">
+                background=#{background},
+            </if>
+            <if test="remark != null">
+                remark=#{remark},
+            </if>
             <if test="record != null">
                 record=#{record},
             </if>
@@ -188,7 +218,7 @@
         SELECT
         t.id,t.name,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
         date_format(t.updateDate,'%Y-%m-%d') updateDate,pn.name province,ct.name city,ar.name
-        area,t.address,t.category,t.price,t.startDate,t.endDate,t.description,t.record,t.is_deleted,
+        area,t.address,t.category,t.price,t.startDate,t.endDate,t.description,t.basicDesc,t.background,t.remark,t.record,t.is_deleted,
         (select group_concat(name) as names from t_dictionary_constant dc where find_in_set(dc.code,t.category) and
         dc.type= 8) as categoryName
         FROM t_prj_project t
@@ -207,7 +237,7 @@
         SELECT
         t.id,t.name,t.createid,date_format(t.publishDate,'%Y-%m-%d') publishDate,
         date_format(t.updateDate,'%Y-%m-%d')
-        updateDate,t.province,t.city,t.area,t.address,t.category,t.price,t.startDate,t.endDate,t.description,t.record,t.is_deleted,
+        updateDate,t.province,t.city,t.area,t.address,t.category,t.price,t.startDate,t.endDate,t.description,t.basicDesc,t.background,t.remark,t.record,t.is_deleted,
         (select cs.name from t_dictionary_constant cs where cs.code = t.category and cs.type=8) as categoryName
         FROM t_prj_project t
         <where>
