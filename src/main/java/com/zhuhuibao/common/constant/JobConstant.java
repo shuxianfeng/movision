@@ -74,4 +74,8 @@ public interface JobConstant {
      * 简历删除状态
      */
     String RESUME_STATUS_THREE = "3";
+    /**
+     * 简历最大收藏值
+     */
+	int MAX_COLL_COUNT = 50;
 }

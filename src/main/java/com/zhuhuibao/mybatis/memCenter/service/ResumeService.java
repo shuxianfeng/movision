@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.BusinessException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -760,4 +761,9 @@ public class ResumeService {
         return ids;
 
     }
+    //用户收藏最大值值
+	public int getMaxCollCount(Long memberId) {
+	 
+		  return resumeMapper.getMaxCollCount(memberId);
+	}
 }
