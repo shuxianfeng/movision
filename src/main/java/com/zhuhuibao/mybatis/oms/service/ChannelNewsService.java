@@ -295,9 +295,9 @@ public class ChannelNewsService {
         try {
             //资讯类别 14:面试技巧 15:职场动态 16:行业资讯
 
-            List<Map<String, String>> msList = channel.selectNewsByType("14", count);
-            List<Map<String, String>> zcList = channel.selectNewsByType("15", count);
-            List<Map<String, String>> hyList = channel.selectNewsByType("16", count);
+            List<Map<String, String>> msList = channel.selectNewsByType("13","1", count);
+            List<Map<String, String>> zcList = channel.selectNewsByType("13", "2",count);
+            List<Map<String, String>> hyList = channel.selectNewsByType("13","3", count);
             map.put("interviewList", msList);
             map.put("careerList", zcList);
             map.put("industryList", hyList);

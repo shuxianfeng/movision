@@ -330,7 +330,7 @@
   </select>
   <select id="selectNewsByType" resultType="java.util.Map">
     select id,title,  date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime from  t_oms_channel_news
-    where status = 1 and channelid = #{type} order by   createTime  desc
+    where status = 1 and channelid = #{type} and sort = #{sort} order by   createTime  desc
     <if test="count != null and count!='' ">
       limit 0,#{count}
     </if>

@@ -186,30 +186,38 @@ public class RegisterController {
     @ApiOperation(value = "会员注册", notes = "会员注册", response = Response.class)
     @RequestMapping(value = {"/rest/register", "rest/member/site/base/add_register"}, method = RequestMethod.POST)
     public Response register(@ApiParam(value = "会员信息") @ModelAttribute Member member) throws Exception {
-        log.debug("注册  mobile==" + member.getMobile() + " email ==" + member.getEmail());
+        log.debug("注册  mobile==" + member.getMobile() + " email ==" + member.getEmail()
+                + "emailCheckCode=" + member.getEmailCheckCode() + "mobileCheckCode = " + member.getMobileCheckCode());
         Response result = new Response();
-//		try {
-        Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(false);
-        //校验手机验证码是否正确
-        if (member.getMobileCheckCode() != null) {
-            String verifyCode = (String) sess.getAttribute("r" + member.getMobile());
-            result = memberService.registerMobileMember(member, verifyCode);
+        try {
+            Subject currentUser = SecurityUtils.getSubject();
+            Session sess = currentUser.getSession(false);
+            //校验手机验证码是否正确
+            if (member.getMobileCheckCode() != null) {
+                String verifyCode = (String) sess.getAttribute("r" + member.getMobile());
+                result = memberService.registerMobileMember(member, verifyCode);
+            }
+            if (member.getEmailCheckCode() != null) {
+                String verifyCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_REGISTER);
+                result = memberService.registerMailMember(member, verifyCode);
+            }
+            //会员注册初始化特权
+            if (member.getId() != null) {
+                vipInfoService.initDefaultExtraPrivilege(member.getId(), member.getIdentify());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("操作失败:" + e.getMessage());
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "注册失败");
         }
-        if (member.getEmailCheckCode() != null) {
-            String verifyCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_REGISTER);
-            result = memberService.registerMailMember(member, verifyCode);
-        }
-        //会员注册初始化特权
-        if (member.getId() != null) {
-            vipInfoService.initDefaultExtraPrivilege(member.getId(), member.getIdentify());
-        }
+
         return result;
     }
 
     /**
      * 找回密码时填写账户名
-     *  校验账户是否存在
+     * 校验账户是否存在
+     *
      * @param member
      * @return
      * @throws IOException
@@ -275,12 +283,12 @@ public class RegisterController {
         //判断验证
 
         //判断邮件链接是否失效
-        if(member.getAccount() != null && member.getAccount().contains("@")){
+        if (member.getAccount() != null && member.getAccount().contains("@")) {
             Validateinfo info = new Validateinfo();
             info.setAccount(member.getAccount());
-            Validateinfo rinfo  = memberService.findMemberValidateInfo(info);
-            if(rinfo == null){
-                throw new BusinessException(MsgCodeConstant.member_mcode_mail_url_invalid,"该邮件链接已失效");
+            Validateinfo rinfo = memberService.findMemberValidateInfo(info);
+            if (rinfo == null) {
+                throw new BusinessException(MsgCodeConstant.member_mcode_mail_url_invalid, "该邮件链接已失效");
             }
         }
 
@@ -310,9 +318,9 @@ public class RegisterController {
             response = rvService.processActivate(decodeVM);
             modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(response.getData()).getBytes()));
             LoginMember loginMember = memberService.getLoginMemberByAccount(decodeVM.split(",")[1]);
-            if(loginMember!=null){
+            if (loginMember != null) {
                 ShiroRealm.ShiroUser shrioUser = new ShiroRealm.ShiroUser(loginMember.getId(), loginMember.getAccount(),
-                        loginMember.getStatus(), loginMember.getIdentify(),loginMember.getRole(), "0", loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(),
+                        loginMember.getStatus(), loginMember.getIdentify(), loginMember.getRole(), "0", loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(),
                         loginMember.getHeadShot(), loginMember.getNickname(), loginMember.getCompanyName(), loginMember.getVipLevel());
                 Subject currentUser = SecurityUtils.getSubject();
                 Session session = currentUser.getSession();
@@ -338,15 +346,15 @@ public class RegisterController {
         log.debug("validate mail start.....");
         ModelAndView modelAndView = new ModelAndView();
         String vm = req.getParameter("vm");//获取email
-        if (vm != null &&!StringUtils.isEmpty(vm)) {
-                Response response = rvService.processValidate(vm);
-                String[] array = (String[]) response.getData();
-                modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(array[0].getBytes()));
-                modelAndView.addObject("id", EncodeUtil.encodeBase64ToString(array[1].getBytes()));
-                RedirectView rv = new RedirectView(rvService.getRedirectUrl(response, "validate"));
-                modelAndView.setView(rv);
+        if (vm != null && !StringUtils.isEmpty(vm)) {
+            Response response = rvService.processValidate(vm);
+            String[] array = (String[]) response.getData();
+            modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(array[0].getBytes()));
+            modelAndView.addObject("id", EncodeUtil.encodeBase64ToString(array[1].getBytes()));
+            RedirectView rv = new RedirectView(rvService.getRedirectUrl(response, "validate"));
+            modelAndView.setView(rv);
         } else {
-            modelAndView.setView(new RedirectView(PropertiesUtils.getValue("host.ip")+"/404.html"));
+            modelAndView.setView(new RedirectView(PropertiesUtils.getValue("host.ip") + "/404.html"));
         }
 
         return modelAndView;
