@@ -33,6 +33,7 @@ import com.zhuhuibao.mybatis.witkey.service.CooperationService;
 import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 
 /**
@@ -198,7 +199,16 @@ public class PaymentService {
 		   Response response = new Response();
 	        Long createId = ShiroUtil.getCreateID();
 	        Long companyId = ShiroUtil.getCompanyID();
+	        ShiroRealm.ShiroUser member= ShiroUtil.getMember();
+	        int vipLevel=member.getVipLevel();
 	        Map<String,Object> dataMap = new HashMap<String,Object>();
+	        if(vipLevel==100||vipLevel==0){
+	        	 dataMap.put("payment", ZhbPaymentConstant.RESUME_BALANCE_NO);
+	        	 response.setData(dataMap);
+	        	 return response;
+	        }
+	        
+	       
 	        if(createId != null) {
 	        	
 	        	Map<String,Object> con = new HashMap<String,Object>();
@@ -274,7 +284,7 @@ public class PaymentService {
 	            	    	String isCollect=isDownOrColl.get("isCollect").toString();
 	            	    	if("1".equals(isDown)){
 	            	    		resume2.setIsDownload("2");
-		            	    	resume2.setIsCollect("1");
+		            	    	resume2.setIsCollect(isCollect);
 	            	    	}else{
 		            	    	resume2.setIsDownload(isDown);
 		            	    	resume2.setIsCollect(isCollect);
