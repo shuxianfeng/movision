@@ -345,7 +345,6 @@ public class ProjectService {
         log.info("projectId = " + projectId);
         try {
             if (!partylist.isEmpty()) {
-                int partyASize = partylist.size();
                 for (ProjectLinkman partyA : partylist) {
                     partyA.setProjectid(projectId);
                     linkmanService.addProjectLinkmanInfo(partyA);
