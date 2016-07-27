@@ -172,12 +172,36 @@ public class JobPositionService {
     /**
      * 查询最新招聘职位
      */
-    public Response searchNewPosition(int count) {
-        Response result = new Response();
-        List<Job> jobList = jobMapper.searchNewPosition(count);
-        result.setData(jobList);
-        result.setCode(200);
-        return result;
+    public List<Map<String,Object>> searchNewPosition(int count) {
+        List<Map<String,Object>> jobList;
+        try{
+            jobList = jobMapper.searchNewPosition(count);
+            for(Map<String,Object> job:jobList){
+                job = ConvertUtil.execute(job, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(job.get("salary"))});
+                job.put("salary", job.get("salaryName"));
+
+                String cityCode = (String) job.get("city");
+                if (!StringUtils.isEmpty(cityCode)) {
+                    job = ConvertUtil.execute(job, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
+                    job.put("city", job.get("cityName"));
+                } else {
+                    String provinceCode = (String) job.get("province");
+                    if (!StringUtils.isEmpty(provinceCode)) {
+                        job = ConvertUtil.execute(job, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
+                        job.put("city", job.get("provinceName"));
+                    } else {
+                        job.put("city", "");
+                    }
+                }
+            }
+
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error("search job error>>>{}",e);
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败'");
+        }
+
+        return jobList;
     }
 
     /**
@@ -494,8 +518,7 @@ public class JobPositionService {
         List list = new ArrayList();
         try {
             List<ResultBean> companyList = jobMapper.greatCompanyPosition();
-            for (int i = 0; i < companyList.size(); i++) {
-                ResultBean company = companyList.get(i);
+            for (ResultBean company : companyList) {
                 Map map = new HashMap();
                 map.put(Constants.id, company.getCode());
                 map.put(Constants.logo, company.getName());
