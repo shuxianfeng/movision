@@ -247,7 +247,7 @@
     <select id="findAllMyApplyPosition" parameterType="java.lang.String"
             resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
         select j.id,j.name, c.name as salaryName,ci.name as workArea,re.publishDate as publishTime,m.enterpriseName,
-        (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
+        (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare,j.is_deleted,
         from t_i_job j
         left join t_i_jobRelresume re on re.jobID = j.id
         left join t_dictionary_constant c on j.salary = c.code

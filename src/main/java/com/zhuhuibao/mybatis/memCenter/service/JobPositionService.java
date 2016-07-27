@@ -413,6 +413,7 @@ public class JobPositionService {
             map.put(Constants.publishTime, job.getPublishTime());
             map.put(Constants.area, job.getWorkArea());
             map.put(Constants.welfare, job.getWelfare());
+            map.put("is_deleted", job.getIs_deleted());
             list.add(map);
         }
         pager.result(list);
