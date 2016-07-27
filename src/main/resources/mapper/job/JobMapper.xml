@@ -245,8 +245,8 @@
     </select>
 
     <select id="findAllMyApplyPosition" parameterType="java.lang.String"
-            resultType="com.zhuhuibao.mybatis.memCenter.entity.Job">
-        select j.id,j.name, c.name as salaryName,
+            resultType="java.util.Map">
+        select j.id,j.createID as companyId,j.positionType,j.name, c.name as salaryName,
         CASE WHEN ci.name is null then p.name
 		WHEN ci.name is not null then ci.name end as workArea,
         re.publishDate as publishTime,m.enterpriseName,
