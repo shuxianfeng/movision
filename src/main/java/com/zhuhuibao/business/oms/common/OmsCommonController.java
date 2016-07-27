@@ -74,11 +74,13 @@ public class OmsCommonController {
     @ApiOperation(value="处理申请",notes="处理申请",response = Response.class)
     @RequestMapping(value = "upd_joinus", method = RequestMethod.POST)
     public Response update(@ApiParam ("id")@RequestParam String id,
+    		               @ApiParam ("remark")@RequestParam String remark,
                            @ApiParam ("状态 0：待处理，1：已处理")@RequestParam String status){
 
         SysJoinus joinus = new SysJoinus();
         joinus.setId(Integer.valueOf(id));
         joinus.setStatus(status);
+        joinus.setRemark(remark);
         sysJoinusService.update(joinus);
         return new Response();
     }

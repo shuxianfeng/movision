@@ -347,7 +347,7 @@
 
   
    <select id="isDownOrColl" parameterType="java.util.Map" resultType="java.util.Map">
-    select r.id ,(case when isnull(t.id) then 1 else 0 end ) isDown, 
+    select distinct r.id ,(case when isnull(t.id) then 1 else 0 end ) isDown, 
 	(case when isnull(c.id) then 1 else 0 end) isCollect
 	 from (select id from t_i_resume  where id=#{goodsId}) r 
 	left join  t_i_resume_download_record t on r.id= t.resumeID and t.is_deleted=0 and t.companyID=#{companyId} 
