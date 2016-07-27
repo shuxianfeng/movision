@@ -60,8 +60,10 @@ public class ProjectTestController {
                     }
                 }
 
-                if(old.contains("部分建材及配置")){
-                    desc = old.substring(0,old.indexOf("部分建材及配置"));
+                if(old.contains("部分建材")){
+                    desc = old.substring(0,old.indexOf("部分建材"));
+                }else if(old.contains("部分建筑材料")){
+                    desc = old.substring(0,old.indexOf("部分建筑材料"));
                 }
 
                 if(old.contains("备注：")){
