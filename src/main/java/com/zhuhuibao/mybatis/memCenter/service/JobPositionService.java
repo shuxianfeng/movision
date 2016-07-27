@@ -380,18 +380,20 @@ public class JobPositionService {
      */
     public Response myApplyPosition(Paging<Job> pager, String id) {
         Response response = new Response();
-        List<Job> jobList = jobMapper.findAllMyApplyPosition(pager.getRowBounds(), id);
+        List<Map<String,Object>> jobList = jobMapper.findAllMyApplyPosition(pager.getRowBounds(), id);
         List list = new ArrayList();
-        for (int i = 0; i < jobList.size(); i++) {
-            Job job = jobList.get(i);
+        for (Map<String,Object> result:jobList) {
             Map map = new HashMap();
-            map.put(Constants.id, job.getId());
-            map.put(Constants.name, job.getName());
-            map.put(Constants.companyName, job.getEnterpriseName());
-            map.put(Constants.salary, job.getSalaryName());
-            map.put(Constants.publishTime, job.getPublishTime());
-            map.put(Constants.area, job.getWorkArea());
-            map.put(Constants.welfare, job.getWelfare());
+            map.put(Constants.id, result.get("id"));
+            map.put(Constants.name, result.get("name"));
+            map.put(Constants.companyName, result.get("enterpriseName"));
+            map.put(Constants.salary, result.get("salaryName"));
+            map.put(Constants.publishTime, result.get("publishTime"));
+            map.put(Constants.area, result.get("workArea"));
+            map.put(Constants.welfare, result.get("welfare"));
+            map.put("is_deleted", result.get("is_deleted"));
+            map.put("companyId", result.get("companyId"));
+            map.put("positionType", result.get("positionType"));
             list.add(map);
         }
         pager.result(list);

@@ -1,5 +1,7 @@
 package com.zhuhuibao.mybatis.advertising.service;
 
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
 import com.zhuhuibao.mybatis.advertising.mapper.SysAdvertisingMapper;
 import org.slf4j.Logger;
@@ -38,7 +40,8 @@ public class SysAdvertisingService {
             list = mapper.findListByCondition(chanType,page,advArea);
         }catch (Exception  e){
             log.error("数据库操作失败:{}",e.getMessage());
-            throw e;
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
         }
 
         return list;

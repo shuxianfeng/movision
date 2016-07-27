@@ -33,46 +33,43 @@ import com.zhuhuibao.utils.pagination.util.StringUtils;
 @RequestMapping(value = "/rest/project/mc")
 @Api(value = "projectMc", description = "会员中心我查看过的项目信息")
 public class ProjectMcController {
-	@Autowired
-	ProjectService projectService;
+    @Autowired
+    ProjectService projectService;
 
-	/**
-	 * 根据条件查询项目分页信息
-	 */
-	@RequestMapping(value = { "sel_project_info", "base/sel_project_info" }, method = RequestMethod.GET)
-	@ApiOperation(value = "查询我查看过的项目信息", notes = "查询我查看过的项目信息", response = Response.class)
-	public Response searchProjectPage(@ApiParam(value = "项目名称") @RequestParam(required = false) String name,
-			@ApiParam(value = "城市Code") @RequestParam(required = false) String city, @ApiParam(value = "省代码") @RequestParam(required = false) String province,
-			@ApiParam(value = "项目类别") @RequestParam(required = false) String category, @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-			@ApiParam(value = "每页显示的条数") @RequestParam(required = false) String pageSize) throws Exception {
-		// 封装查询参数
-		Long createId = ShiroUtil.getCreateID();
-		Response response = new Response();
-		if (createId != null) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			if (name != null && !"".equals(name)) {
-				map.put("name", name.replace("_", "\\_"));
-			}
-			map.put("city", city);
-			map.put("province", province);
-			map.put("category", category);
-			map.put("viewerId", createId);
-			map.put("type", ZhbConstant.ZhbGoodsType.CKXMXX.toString());
-			if (StringUtils.isEmpty(pageNo)) {
-				pageNo = "1";
-			}
-			if (StringUtils.isEmpty(pageSize)) {
-				pageSize = "10";
-			}
-			Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-			// 调用查询接口
-			List<Map<String, String>> projectList = projectService.queryOmsViewProject(map, pager);
-			pager.result(projectList);
-			response.setData(pager);
-		} else {
-			throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-		}
-		return response;
-	}
+    /**
+     * 根据条件查询项目分页信息
+     */
+    @RequestMapping(value = {"sel_project_info", "base/sel_project_info"}, method = RequestMethod.GET)
+    @ApiOperation(value = "查询我查看过的项目信息", notes = "查询我查看过的项目信息", response = Response.class)
+    public Response searchProjectPage(@ApiParam(value = "项目名称") @RequestParam(required = false) String name,
+                                      @ApiParam(value = "城市Code") @RequestParam(required = false) String city,
+                                      @ApiParam(value = "省代码") @RequestParam(required = false) String province,
+                                      @ApiParam(value = "项目类别") @RequestParam(required = false) String category,
+                                      @ApiParam(value = "页码",defaultValue = "1") @RequestParam(required = false) String pageNo,
+                                      @ApiParam(value = "每页显示的条数",defaultValue = "10") @RequestParam(required = false) String pageSize) throws Exception {
+        // 封装查询参数
+        Long createId = ShiroUtil.getCreateID();
+        Response response = new Response();
+        if (createId != null) {
+            Map<String, Object> map = new HashMap<>();
+            if (name != null && !"".equals(name)) {
+                map.put("name", name.replace("_", "\\_"));
+            }
+            map.put("city", city);
+            map.put("province", province);
+            map.put("category", category);
+            map.put("viewerId", createId);
+            map.put("type", ZhbConstant.ZhbGoodsType.CKXMXX.toString());
+
+            Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+            // 调用查询接口
+            List<Map<String, String>> projectList = projectService.queryOmsViewProject(map, pager);
+            pager.result(projectList);
+            response.setData(pager);
+        } else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
 
 }

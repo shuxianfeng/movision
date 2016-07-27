@@ -83,8 +83,8 @@ public class Job {
     @ApiModelProperty(value="专业要求")
     private String profession;
 
-    @ApiModelProperty(value="删除标识",hidden = true)
-    private Integer is_deleted;
+    @ApiModelProperty(value="删除标识")
+    private String is_deleted;
 
     @ApiModelProperty(value="企业logo")
     private String enterpriseLogo;
@@ -233,11 +233,11 @@ public class Job {
         this.profession = profession == null ? null : profession.trim();
     }
 
-    public Integer getIs_deleted() {
+    public String getIs_deleted() {
         return is_deleted;
     }
 
-    public void setIs_deleted(Integer is_deleted) {
+    public void setIs_deleted(String is_deleted) {
         this.is_deleted = is_deleted;
     }
 

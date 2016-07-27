@@ -46,9 +46,9 @@ public interface JobMapper {
 
     List<Map<String,Object>> findAllOtherPosition(RowBounds rowBounds,Map<String,Object> map);
 
-    List<Job> findAllMyApplyPosition(RowBounds rowBounds,@Param("id") String id);
+    List<Map<String,Object>> findAllMyApplyPosition(RowBounds rowBounds,@Param("id") String id);
 
-    List<Job> findAllMyApplyPosition(@Param("id") String id);
+    List<Map<String,Object>> findAllMyApplyPosition(@Param("id") String id);
 
     //热门招聘
     List<Job> queryHotPosition(Map<String,Object> map);
