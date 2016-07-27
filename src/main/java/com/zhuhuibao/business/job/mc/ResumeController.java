@@ -183,7 +183,7 @@ public class ResumeController {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
         if (createid != null) {
-            Resume resume = resumeService.searchMyResumeAllInfo(createid.toString());
+            Map<String,Object> resume = resumeService.searchMyResumeAllInfo(createid.toString());
             response.setData(resume);
         } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

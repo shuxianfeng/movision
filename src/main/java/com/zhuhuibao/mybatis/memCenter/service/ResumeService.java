@@ -141,7 +141,7 @@ public class ResumeService {
     public Response searchMyResume(String id) {
         Response response = new Response();
         Resume resume = resumeMapper.searchMyResume(id);
-        Resume resume1 = resumeMapper.searchMyResumeAllInfo(id);
+        Resume resume1 = resumeMapper.previewResume(id);
         if (resume1 != null) {
             Integer i = 0;
             if (resume1.getJobExperience() != null && !"".equals(resume1.getJobExperience())) {
@@ -185,8 +185,78 @@ public class ResumeService {
     /**
      * 查询我创建的简历的全部信息
      */
-    public Resume searchMyResumeAllInfo(String id) {
-        return resumeMapper.searchMyResumeAllInfo(id);
+    public Map<String,Object> searchMyResumeAllInfo(String id) {
+        Map<String,Object> resume =  resumeMapper.searchMyResumeAllInfo(id);
+        String jobCity = (String) resume.get("jobCity");
+        String jobCityName = "";
+        if (!StringUtils.isEmpty(jobCity)) {
+            String[] jobCitys = jobCity.split(",");
+            StringBuilder sb = new StringBuilder();
+            for (String jc : jobCitys) {
+                Map<String, Object> tmp = new HashMap<>();
+                tmp.put("jobCity", jc);
+                tmp = ConvertUtil.execute(tmp, "jobCity", "dictionaryService", "findCityByCode", new Object[]{String.valueOf(tmp.get("jobCity"))});
+                String jcName = (String) tmp.get("jobCityName");
+                if (!"".equals(jcName)) {
+                    sb.append(jcName).append(",");
+                }
+            }
+            jobCityName = sb.toString();
+            if (jobCityName.length() != 0) {
+                jobCityName = jobCityName.substring(0, jobCityName.length() - 1);
+            }
+        }
+        resume.put("jobCityName", jobCityName);
+
+        String jobProvince = (String) resume.get("jobProvince");
+        String jobProvinceName = "";
+        if (!StringUtils.isEmpty(jobProvince)) {
+            String[] jobProvinces = jobProvince.split(",");
+            StringBuilder sb = new StringBuilder();
+            for (String jp : jobProvinces) {
+                Map<String, Object> tmp = new HashMap<>();
+                tmp.put("jobProvince", jp);
+                tmp = ConvertUtil.execute(tmp, "jobProvince", "dictionaryService", "findProvinceByCode", new Object[]{String.valueOf(tmp.get("jobProvince"))});
+                String jpName = (String) tmp.get("jobProvinceName");
+                if (!"".equals(jpName)) {
+                    sb.append(jpName).append(",");
+                }
+            }
+            jobProvinceName = sb.toString();
+            if (jobProvinceName.length() != 0) {
+                jobProvinceName = jobProvinceName.substring(0, jobProvinceName.length() - 1);
+            }
+        }
+        resume.put("jobProvinceName", jobProvinceName);
+
+        if (resume.get("hopeSalary") != null) {
+            resume = ConvertUtil.execute(resume, "hopeSalary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(resume.get("hopeSalary"))});
+            resume.put("hopeSalaryName", resume.get("hopeSalaryName"));
+        } else {
+            resume.put("hopeSalaryName", "");
+        }
+
+        String post = (String) resume.get("post");
+        String postName = "";
+        if (!StringUtils.isEmpty(post)) {
+            String[] posts = post.split(",");
+            StringBuilder sb = new StringBuilder();
+            for (String p : posts) {
+                Map<String, Object> tmp = new HashMap<>();
+                tmp.put("post", p);
+                tmp = ConvertUtil.execute(tmp, "post", "constantService", "findPositionById", new Object[]{String.valueOf(tmp.get("post"))});
+                String pName = (String) tmp.get("postName");
+                if (!"".equals(pName)) {
+                    sb.append(pName).append(",");
+                }
+            }
+            postName = sb.toString();
+            if (postName.length() != 0) {
+                postName = postName.substring(0, postName.length() - 1);
+            }
+        }
+        resume.put("postName", postName);
+        return resume;
     }
 
     /**

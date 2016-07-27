@@ -67,13 +67,13 @@
   <update id="updateResume" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
     update t_i_resume
     <set>
-      <if test="title != null" >
+      <if test="title != null and title !=''" >
         title = #{title},
       </if>
       <if test="createid != null" >
         createid = #{createid},
       </if>
-      <if test="publishTime != null" >
+      <if test="publishTime != null and publishTime !=''" >
         publishTime = #{publishTime},
       </if>
       
@@ -81,97 +81,97 @@
          updateTime = now(),
       </if>
     
-      <if test="jobNature != null" >
+      <if test="jobNature != null and jobNature !=''" >
         jobNature = #{jobNature},
       </if>
-      <if test="post != null" >
+      <if test="post != null and post !=''" >
         post = #{post},
       </if>
-      <if test="jobProvince != null" >
+      <if test="jobProvince != null and jobProvince !=''" >
         jobProvince = #{jobProvince},
       </if>
-      <if test="jobCity != null" >
+      <if test="jobCity != null and jobCity !=''" >
         jobCity = #{jobCity},
       </if>
-      <if test="jobArea != null" >
+      <if test="jobArea != null and jobArea !=''" >
         jobArea = #{jobArea},
       </if>
-      <if test="hopeSalary != null" >
+      <if test="hopeSalary != null and hopeSalary !=''" >
         hopeSalary = #{hopeSalary},
       </if>
-      <if test="curSalary != null" >
+      <if test="curSalary != null and curSalary !=''" >
         curSalary = #{curSalary},
       </if>
-      <if test="status != null" >
+      <if test="status != null and status !=''" >
         status = #{status},
       </if>
-      <if test="realName != null" >
+      <if test="realName != null and realName !=''" >
         realName = #{realName},
       </if>
-      <if test="userName != null" >
+      <if test="userName != null and userName !=''" >
         userName = #{userName},
       </if>
-      <if test="sex != null" >
+      <if test="sex != null and sex !=''" >
         sex = #{sex},
       </if>
-      <if test="workYear != null" >
+      <if test="workYear != null and workYear !=''" >
         workYear = #{workYear},
       </if>
-      <if test="education != null" >
+      <if test="education != null and education !=''" >
         education = #{education},
       </if>
-      <if test="experienceYear != null" >
+      <if test="experienceYear != null and experienceYear !=''" >
         experienceYear = #{experienceYear},
       </if>
-      <if test="company != null" >
+      <if test="company != null and company !=''" >
         company = #{company},
       </if>
-      <if test="positionName != null" >
+      <if test="positionName != null and positionName !=''" >
         positionName = #{positionName},
       </if>
-      <if test="birthYear != null" >
+      <if test="birthYear != null and birthYear !=''" >
         birthYear = #{birthYear},
       </if>
-      <if test="marriage != null" >
+      <if test="marriage != null and marriage !=''" >
         marriage = #{marriage},
       </if>
-      <if test="mobile != null" >
+      <if test="mobile != null and mobile !=''" >
         mobile = #{mobile},
       </if>
-      <if test="email != null" >
+      <if test="email != null and email !=''" >
         email = #{email},
       </if>
-      <if test="liveProvince != null" >
+      <if test="liveProvince != null and liveProvince !=''" >
         liveProvince = #{liveProvince},
       </if>
-      <if test="liveCity != null" >
+      <if test="liveCity != null and liveCity !=''" >
         liveCity = #{liveCity},
       </if>
-      <if test="liveArea != null" >
+      <if test="liveArea != null and liveArea !=''" >
         liveArea = #{liveArea},
       </if>
-      <if test="photo != null" >
+      <if test="photo != null and photo !=''" >
         photo = #{photo},
       </if>
-      <if test="jobExperience != null" >
+      <if test="jobExperience != null and jobExperience !=''" >
         jobExperience = #{jobExperience},
       </if>
-      <if test="projectExperience != null" >
+      <if test="projectExperience != null and projectExperience !=''" >
         projectExperience = #{projectExperience},
       </if>
-      <if test="eduExperience != null" >
+      <if test="eduExperience != null and eduExperience !=''" >
         eduExperience = #{eduExperience},
       </if>
-      <if test="attach != null" >
+      <if test="attach != null and attach !=''" >
         attach = #{attach},
       </if>
-      <if test="isPublic != null" >
+      <if test="isPublic != null and isPublic !=''" >
         isPublic = #{isPublic},
       </if>
-      <if test="views != null">
+      <if test="views != null and views !=''">
         views = views + 1,
       </if>
-      <if test="download != null" >
+      <if test="download != null and download !=''" >
         downloadCount = downloadCount+#{download},
       </if>
     </set>
@@ -186,7 +186,7 @@
     left join t_dictionary_area a on r.liveArea = a.code
     where r.createid = #{id}
   </select>
-  <select id="searchMyResumeAllInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="searchMyResumeAllInfo" parameterType="java.lang.String" resultType="java.util.Map">
     select r.*,(select po.id from t_dictionary_position p
     left join t_dictionary_position po on p.parentId = po.id
     where find_in_set(p.id,r.post)group by p.parentId)as parentId,
@@ -202,8 +202,9 @@
     case WHEN r.marriage =0 then '未婚' WHEN r.marriage =1 THEN '已婚' WHEN r.marriage =2 THEN '保密' END AS marriage,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
     concat(p.name,c.name,a.name)AS liveArea,
-    (select Group_concat(name) from t_dictionary_city where find_in_set(code,r.jobCity))AS jobArea,
-    co.name as hopeSalary,
+    (select Group_concat(name) from t_dictionary_city where find_in_set(code,r.jobCity))AS jobCity,
+    (select Group_concat(name) from t_dictionary_province where find_in_set(code,r.jobProvince))AS jobProvince,
+    co.name as hopeSalary,r.positionName,r.company,
     r.jobExperience,r.projectExperience,r.eduExperience,r.attach,con.name AS status,
     (select Group_concat(name) from t_dictionary_constant where find_in_set(code,r.jobNature) and type=7)AS jobNature,
     (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post

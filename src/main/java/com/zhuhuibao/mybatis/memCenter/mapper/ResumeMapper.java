@@ -17,7 +17,7 @@ public interface ResumeMapper {
     Resume searchMyResume(@Param("id") String id);
 
     //查询我创建的简历的全部信息
-    Resume searchMyResumeAllInfo(@Param("id") String id);
+    Map<String,Object> searchMyResumeAllInfo(@Param("id") String id);
 
     //更新简历,刷新简历
     int updateResume(Resume resume);
