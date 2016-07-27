@@ -241,7 +241,7 @@
         <if test="salary != null and salary != ''">
             and salary = #{salary}
         </if>
-        order by t.updateTime desc
+        order by t.updateTime desc,t.id desc
     </select>
 
     <select id="findAllMyApplyPosition" parameterType="java.lang.String"
