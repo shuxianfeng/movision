@@ -66,10 +66,8 @@ public class JobSiteController {
     @ApiOperation(value = "获取职位类别", notes = "获取职位类别", response = Response.class)
     @RequestMapping(value = "sel_positionType", method = RequestMethod.GET)
     public Response positionType() {
-        Response response = new Response();
-        List list = job.positionType();
-        response.setData(list);
-        return response;
+        List<Map<String,Object>> list = job.getPositionTypes();
+        return new Response(list);
     }
 
     @RequestMapping(value = "apply_position", method = RequestMethod.POST)

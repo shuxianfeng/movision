@@ -596,8 +596,9 @@ public class ProjectService {
 			projectList = processProjectList(records);
 
 		} catch (Exception e) {
-			log.error("search project info for pager error!");
-			throw e;
+			log.error("search project info for pager error!>>>>" + e.getMessage());
+			e.printStackTrace();
+			throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
 		}
 		return projectList;
 	}

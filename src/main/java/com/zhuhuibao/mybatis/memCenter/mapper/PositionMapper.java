@@ -14,4 +14,7 @@ public interface PositionMapper {
     Map<String,Object> findById(@Param("id") String id);
 
     int setupHotPosition(@Param("positionId") String positionId, @Param("hot") String hot);
+
+
+    List<Position> findPositionByParentId(@Param("parentId") String parentId);
 }

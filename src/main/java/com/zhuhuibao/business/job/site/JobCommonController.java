@@ -171,11 +171,9 @@ public class JobCommonController {
 
     @ApiOperation(value = "获取职位类别", notes = "获取职位类别", response = Response.class)
     @RequestMapping(value = "sel_positionType", method = RequestMethod.GET)
-    public Response positionType() {
-        Response response = new Response();
-        List list = job.positionType();
-        response.setData(list);
-        return response;
+    public Response getPositionTypes() {
+        List<Map<String, Object>> list = job.getPositionTypes();
+        return new Response(list);
     }
 
 

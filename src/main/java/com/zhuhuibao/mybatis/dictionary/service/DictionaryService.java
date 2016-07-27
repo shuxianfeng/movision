@@ -5,9 +5,11 @@ import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.dictionary.mapper.DictionaryMapper;
 import com.zhuhuibao.mybatis.memCenter.entity.Area;
 import com.zhuhuibao.mybatis.memCenter.entity.City;
+import com.zhuhuibao.mybatis.memCenter.entity.Position;
 import com.zhuhuibao.mybatis.memCenter.entity.Province;
 import com.zhuhuibao.mybatis.memCenter.mapper.AreaMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.CityMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.PositionMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ProvinceMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
+import java.util.List;
 
 /**
  * 数据字典业务处理
@@ -41,6 +44,8 @@ public class DictionaryService {
     @Autowired
     AreaMapper areaMapper;
 
+    @Autowired
+    PositionMapper positionMapper;
 
     public String findMailAddress(String memberMail) {
         String mail = "";
@@ -81,8 +86,8 @@ public class DictionaryService {
     }
 
     @Cacheable(value = "mapcityCode", key = "'map_'+#cityCode")
-    public Map<String,String> findCityByCode(String cityCode) {
-        Map<String,String>  city;
+    public Map<String, String> findCityByCode(String cityCode) {
+        Map<String, String> city;
         try {
 
             city = cityMapper.findCityByCode(cityCode);
@@ -110,8 +115,8 @@ public class DictionaryService {
     }
 
     @Cacheable(value = "mapAreaCode", key = "'map_'+#areaCode")
-    public Map<String,String> findAreaByCode(String areaCode) {
-        Map<String,String>  area;
+    public Map<String, String> findAreaByCode(String areaCode) {
+        Map<String, String> area;
         try {
 
             area = areaMapper.findAreaByCode(areaCode);
@@ -126,8 +131,8 @@ public class DictionaryService {
 
 
     @Cacheable(value = "mapProvinceCode", key = "'map_'+#provinceCode")
-    public Map<String,String> findProvinceByCode(String provinceCode) {
-        Map<String,String> province;
+    public Map<String, String> findProvinceByCode(String provinceCode) {
+        Map<String, String> province;
         try {
             province = provinceMapper.findProInfo(provinceCode);
         } catch (Exception e) {
@@ -136,6 +141,32 @@ public class DictionaryService {
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return province;
+    }
+
+    @Cacheable(value = "positionType", key = "#parentId")
+    public List<Position> findPositionByParentId(String parentId) {
+        List<Position> list;
+        try {
+            list = positionMapper.findPositionByParentId(parentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("t_dictionary_position select error : " + e.getMessage());
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
+        }
+        return list;
+    }
+
+    @Cacheable(value = "positionType", key = "'parent_' + #count")
+    public List<Position> findParentTypes(int count) {
+        List<Position> list;
+        try {
+            list = positionMapper.findPosition(count);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("t_dictionary_position select error : " + e.getMessage());
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
+        }
+        return list;
     }
 
 }

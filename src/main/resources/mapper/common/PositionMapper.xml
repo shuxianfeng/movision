@@ -30,4 +30,7 @@
   <select id="findById" resultType="java.util.Map">
     select * from t_dictionary_position where id = #{id}
   </select>
+  <select id="findPositionByParentId" resultType="com.zhuhuibao.mybatis.memCenter.entity.Position">
+      select * from  t_dictionary_position where parentId =#{parentId} order by hot desc
+  </select>
 </mapper>
