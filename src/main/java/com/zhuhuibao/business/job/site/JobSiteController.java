@@ -161,13 +161,13 @@ public class JobSiteController {
             @ApiParam(value = "企业ID") @RequestParam String enterpriseID,
             @ApiParam(value = "城市code") @RequestParam(required = false) String city,
             @ApiParam(value = "名称") @RequestParam(required = false) String name,
-            String pageNo, String pageSize) throws IOException {
+            @RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
         log.info("query position info by id");
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
         if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
+            pageSize = "5";
         }
         Paging<Map<String,Object>> pager = new Paging<Map<String,Object>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<String, Object>();
