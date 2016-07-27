@@ -202,11 +202,7 @@ public class PaymentService {
 	        ShiroRealm.ShiroUser member= ShiroUtil.getMember();
 	        int vipLevel=member.getVipLevel();
 	        Map<String,Object> dataMap = new HashMap<String,Object>();
-	        if(vipLevel==100||vipLevel==0){
-	        	 dataMap.put("payment", ZhbPaymentConstant.RESUME_BALANCE_NO);
-	        	 response.setData(dataMap);
-	        	 return response;
-	        }
+	        
 	        
 	       
 	        if(createId != null) {
@@ -234,10 +230,12 @@ public class PaymentService {
 	    			   result = account.getAmount().compareTo(goodsConfig.getPrice()) >= 0;
 	    			}
 	    			
-	    			if (privilegeNum <= 0 && !result) {
+	    			if (privilegeNum <= 0 ) {
 	    				 
 	    					  dataMap.put("payment", ZhbPaymentConstant.RESUME_BALANCE_NO);
 	    				  
+	    			}else if((!result && vipLevel!=100)|| vipLevel==100){
+	    				dataMap.put("payment", ZhbPaymentConstant.RESUME_BALANCE_NO);
 	    			}else{
 	    				
 	    				Resume resume2 = resume.previewResumeNew(String.valueOf(goodsID));
