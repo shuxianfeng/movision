@@ -4,7 +4,6 @@ import java.util.*;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
 import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
 import com.zhuhuibao.mybatis.product.entity.*;
 import org.slf4j.Logger;
@@ -17,7 +16,6 @@ import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.product.mapper.ProductMapper;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
 /**
@@ -45,17 +43,16 @@ public class ProductService {
      * @param product
      */
     public int insertProduct(ProductWithBLOBs product) {
-        log.info("insert product");
         int productId = 0;
         try {
             Map<String, Long> paramMap = paramService.insertParam(product);
             List<ParamPrice> paramPrice = product.getParamPrice();
             if (paramPrice != null && !paramPrice.isEmpty()) {
                 String productName = product.getName();
-                for (int i = 0; i < paramPrice.size(); i++) {
+                for (ParamPrice aParamPrice : paramPrice) {
                     StringBuilder ids_sb = new StringBuilder();
                     StringBuilder value_sb = new StringBuilder();
-                    ParamPrice pp = paramPrice.get(i);
+                    ParamPrice pp = aParamPrice;
                     ids_sb.append(paramMap.get(pp.getFname()));
                     if (pp.getSname() != null && pp.getSname().length() > 0 && paramMap.get(pp.getSname()) != null) {
                         ids_sb.append(",");
@@ -79,7 +76,9 @@ public class ProductService {
                 productId = productMapper.insertSelective(product);
             }
         } catch (Exception e) {
-            log.error("insert product error!", e);
+            log.error("insert product error! {}", e);
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "系统异常");
         }
         return productId;
     }
@@ -97,7 +96,6 @@ public class ProductService {
 
     public Response updateProduct(ProductWithBLOBs product) {
         Response response = new Response();
-        log.info("update product");
         try {
             if (product != null) {
                 if (product.getNumber() == null || product.getNumber().trim().equals("")) {
@@ -109,11 +107,9 @@ public class ProductService {
                 productMapper.updateByPrimaryKeySelective(product);
             }
         } catch (Exception e) {
-            log.error("update product error", e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return response;
+            log.error("select  error {}", e);
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新失败");
         }
         return response;
     }
@@ -126,30 +122,24 @@ public class ProductService {
      */
     public Response updateProductStatus(ProductWithBLOBs product) {
         Response response = new Response();
-        log.info("update product");
         try {
             productMapper.updateProductStatus(product);
         } catch (Exception e) {
-            log.error("update product error", e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return response;
+            log.error("update error {}", e);
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新失败");
         }
         return response;
     }
 
     public Response batchUnpublish(List<String> list) {
         Response response = new Response();
-        log.info("update product");
         try {
             productMapper.batchUnpublish(list);
         } catch (Exception e) {
-            log.error("update product error", e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return response;
+            log.error("update  error", e);
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新失败");
         }
         return response;
     }
@@ -162,34 +152,31 @@ public class ProductService {
      */
     public Response updateHit(Long id) {
         Response response = new Response();
-        log.info("update product");
         try {
             productMapper.updateHit(id);
         } catch (Exception e) {
-            log.error("update product error", e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return response;
+            log.error("update  error", e);
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新失败");
         }
         return response;
     }
 
     public Response selectByPrimaryKey(Long id) {
         Response response = new Response();
-        ProductWithBLOBs product = null;
+        ProductWithBLOBs product;
         try {
             product = productMapper.selectByPrimaryKey(id);
             if (product != null && product.getParamIDs() != null && product.getParamIDs().length() > 0) {
-                List<ProductParam> params = new ArrayList<ProductParam>();
+                List<ProductParam> params = new ArrayList<>();
                 String param = product.getParamIDs();
                 String paramValues = product.getParamValues();
-                Map<String, String> paramMap = null;
+                Map<String, String> paramMap;
                 if (param.indexOf(",") > 0) {
                     String[] arr_param = param.split(",");
                     String[] arr_paramValues = paramValues.split(",");
                     for (int i = 0; i < arr_param.length; i++) {
-                        paramMap = new TreeMap<String, String>();
+                        paramMap = new TreeMap<>();
                         ProductParam pp = paramService.queryParamById(Long.parseLong(arr_param[i]));
                         if (pp != null) {
                             pp.setPvalue(arr_paramValues[i]);
@@ -197,7 +184,7 @@ public class ProductService {
                         }
                     }
                 } else {
-                    paramMap = new TreeMap<String, String>();
+                    paramMap = new TreeMap<>();
                     ProductParam pp = paramService.queryParamById(Long.parseLong(param));
                     if (pp != null) {
                         paramMap.put("pvalue", paramValues);
@@ -210,11 +197,9 @@ public class ProductService {
 
             response.setData(product);
         } catch (Exception e) {
-            log.error("update product error", e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return response;
+            log.error("select error {}", e);
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return response;
     }
@@ -227,9 +212,9 @@ public class ProductService {
      * @param v skuid
      */
     private void addToImg(Map<String, List<Long>> a, String k, long v) {
-        List<Long> arr = (List<Long>) a.get(k);
+        List<Long> arr = a.get(k);
         if (arr == null) {
-            arr = new ArrayList<Long>();
+            arr = new ArrayList<>();
             arr.add(v);
             a.put(k, arr);
         } else {
@@ -271,7 +256,8 @@ public class ProductService {
             }
 
         } catch (Exception e) {
-            log.error("update product error", e);
+            log.error("update product error {}", e);
+            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
         return productMap;
@@ -338,7 +324,7 @@ public class ProductService {
      */
     private void setMemberInfo(Map<String, Object> productMap, ProductWithMember product) {
         //会员信息
-        Map<String, Object> memberMap = new TreeMap<String, Object>();
+        Map<String, Object> memberMap = new TreeMap<>();
         memberMap.put("identify", product.getIdentify());
         memberMap.put("memberName", product.getMemberName());
         memberMap.put("enterpriseLogo", product.getEnterpriseLogo());
@@ -368,11 +354,11 @@ public class ProductService {
                                 Map<String, Object> productMap, List<Product> productList) {
         //产品列表
         List<Map<String, Object>> prdList = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i < productList.size(); i++) {
-            Map<String, Object> prdInfoMap = new TreeMap<String, Object>();
-            Map<String, Object> prdMap = new TreeMap<String, Object>();
+        for (Product aProductList : productList) {
+            Map<String, Object> prdInfoMap = new TreeMap<>();
+            Map<String, Object> prdMap = new TreeMap<>();
             StringBuilder sbkey = new StringBuilder();
-            Product prd = productList.get(i);
+            Product prd = aProductList;
             prdMap.put(Constants.product_field_skuid, prd.getId());
             prdMap.put(Constants.product_field_name, prd.getName());
             prdMap.put(Constants.product_field_price, prd.getPrice());
@@ -417,7 +403,7 @@ public class ProductService {
      */
     private void setNavigation(Map<String, Object> productMap,
                                Map<String, Object> prdMap, Product prd) {
-        prdMap.put(Constants.product_field_defalut, new Boolean(true));
+        prdMap.put(Constants.product_field_defalut, true);
         Map<String, Object> navigationMap = new TreeMap<String, Object>();
         navigationMap.put(Constants.product_field_fcateid, prd.getFcateid());
         navigationMap.put(Constants.product_field_fcateName, prd.getFcateName());
@@ -474,7 +460,7 @@ public class ProductService {
                 paramMap.put(Constants.product_field_key, p.getId());
                 paramMap.put(Constants.product_field_value, p.getPname());
                 String pValue = p.getPvalue();
-                String[] arr_pValue = null;
+                String[] arr_pValue;
                 if (pValue.indexOf(",") > 0) {
                     //参数值数组
                     arr_pValue = pValue.split(",");
@@ -501,15 +487,15 @@ public class ProductService {
      * @return
      */
     private List<ProductParam> getParamsInfo(ProductWithBLOBs product) {
-        List<ProductParam> params = new ArrayList<ProductParam>();
+        List<ProductParam> params = new ArrayList<>();
         String param = product.getParamIDs();
 
         //多个参数的情况
         if (param.indexOf(",") > 0) {
             String[] arr_param = param.split(",");
-            List<Integer> paramList = new ArrayList<Integer>();
-            for (int i = 0; i < arr_param.length; i++) {
-                paramList.add(Integer.parseInt(arr_param[i]));
+            List<Integer> paramList = new ArrayList<>();
+            for (String anArr_param : arr_param) {
+                paramList.add(Integer.parseInt(anArr_param));
             }
             params = paramService.selectParamByIds(paramList);
         }//一个产品没有参数情况
@@ -528,16 +514,14 @@ public class ProductService {
      */
     public Response querySCateListByBrandId(Product product) {
         Response response = new Response();
-        List<ResultBean> scategoryList = null;
+        List<ResultBean> scategoryList;
         try {
             scategoryList = productMapper.getSCateListByBrandId(product);
             response.setData(scategoryList);
         } catch (Exception e) {
-            log.error("update product error", e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return response;
+            log.error("update product error >>>{}", e);
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新失败");
         }
         return response;
     }
@@ -550,16 +534,14 @@ public class ProductService {
      */
     public Response queryProductInfoBySCategory(Map<String, Object> product) {
         Response response = new Response();
-        List<ProductWithBLOBs> productList = null;
+        List<ProductWithBLOBs> productList;
         try {
             productList = productMapper.queryProductInfoBySCategory(product);
             response.setData(productList);
         } catch (Exception e) {
-            log.error("update product error", e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return response;
+            log.error("update product error>>> {}", e);
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新失败");
         }
         return response;
     }
@@ -575,8 +557,9 @@ public class ProductService {
         try {
             productList = productMapper.queryRecommendHotProduct(product);
         } catch (Exception e) {
-            log.error("update product error", e);
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询失败");
+            log.error("update product error >>> {}", e);
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
         return productList;
     }
@@ -609,7 +592,7 @@ public class ProductService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("查询失败:{}", e.getMessage());
+            log.error("查询失败:{}", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
         return map;
@@ -622,9 +605,9 @@ public class ProductService {
         try {
             return productMapper.findSubSystem(id);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("查询失败:{}", e);
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
     }
 
@@ -639,9 +622,9 @@ public class ProductService {
         try {
             return productMapper.queryProductTypeListByCompanyId(queryMap);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("查询失败:{}", e);
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
     }
 
@@ -649,9 +632,9 @@ public class ProductService {
         try {
             return productMapper.queryHotProductListByCompanyId(queryMap);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("查询失败:{}", e);
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
     }
 
@@ -659,9 +642,9 @@ public class ProductService {
         try {
             return productMapper.queryLatestProductListByCompanyId(queryMap);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("查询失败:{}", e);
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
     }
 
@@ -669,9 +652,9 @@ public class ProductService {
         try {
             return productMapper.findAllProductListByProductType(pager.getRowBounds(), queryMap);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("查询失败:{}", e);
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
     }
 
@@ -679,24 +662,24 @@ public class ProductService {
         try {
             return productMapper.queryHotProduct(queryMap);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("查询失败:{}", e);
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
     }
 
     /**
-     *
      * @param brandId
      * @return
      */
     public List<String> findScateIdByBrandId(String brandId) {
         List<String> list;
-        try{
+        try {
             list = productMapper.findScateByBrandId(brandId);
-        } catch (Exception e){
+        } catch (Exception e) {
+            log.error("查询失败:{}", e);
             e.printStackTrace();
-            throw new  BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
         return list;
     }
