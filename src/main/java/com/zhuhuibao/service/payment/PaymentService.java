@@ -272,12 +272,14 @@ public class PaymentService {
 	            	    if(isDownOrColl!=null){
 	            	    	String isDown=isDownOrColl.get("isDown").toString();
 	            	    	String isCollect=isDownOrColl.get("isCollect").toString();
-	            	    	resume2.setIsDownload(isDown);
-	            	    	resume2.setIsCollect(isCollect);
-	            	    }else{
-	            	    	resume2.setIsDownload("1");
-	            	    	resume2.setIsCollect("1");
-	            	    }
+	            	    	if("1".equals(isDown)){
+	            	    		resume2.setIsDownload("2");
+		            	    	resume2.setIsCollect("1");
+	            	    	}else{
+		            	    	resume2.setIsDownload(isDown);
+		            	    	resume2.setIsCollect(isCollect);
+	            	    	}
+	            	    } 
 	            	  
 	                    dataMap.put("info",resume2);
 	                    Resume resumeBean=new Resume();

@@ -52,7 +52,6 @@ public class CompanyInfoController {
     @ApiOperation(value = "商户主页相关信息", notes = "商户主页相关信息")
     @RequestMapping(value = "sel_index_companyInfo", method = RequestMethod.GET)
     public Response companyInfo(@ApiParam(value = "商户id")@RequestParam String id)  {
-        Response response = new Response();
 
         //查询公司信息
         Member member = memberService.findMemById(id);
@@ -79,15 +78,13 @@ public class CompanyInfoController {
         map.put("introduce",member.getEnterpriseDesc());
         map.put("productTypeList",productTypeList);
 
-        response.setData(map);
-        return response;
+        return new Response(map);
     }
 
     @ApiOperation(value = "热销商品", notes = "热销商品")
     @RequestMapping(value = "sel_company_hot_product", method = RequestMethod.GET)
     public Response sel_company_hot_product(@ApiParam(value = "商户id")@RequestParam String id,
                                             @ApiParam(value = "条数")@RequestParam int count)  {
-        Response response = new Response();
 
         //查询公司热销产品
         Map<String,Object> queryMap = new HashMap<>();
@@ -96,15 +93,13 @@ public class CompanyInfoController {
         queryMap.put("count",count);
         List<Map<String,String>> productList = productService.queryHotProductListByCompanyId(queryMap);
 
-        response.setData(productList);
-        return response;
+        return new Response(productList);
     }
 
     @ApiOperation(value = "最新供应商品", notes = "最新供应商品")
     @RequestMapping(value = "sel_company_latest_product", method = RequestMethod.GET)
     public Response sel_company_latest_product(@ApiParam(value = "商户id")@RequestParam String id,
                                             @ApiParam(value = "条数")@RequestParam int count)  {
-        Response response = new Response();
 
         //查询公司最新供应商品
         Map<String,Object> queryMap = new HashMap<>();
@@ -113,15 +108,13 @@ public class CompanyInfoController {
         queryMap.put("count",count);
         List<Map<String,String>> productList = productService.queryLatestProductListByCompanyId(queryMap);
 
-        response.setData(productList);
-        return response;
+        return new Response(productList);
     }
 
     @ApiOperation(value = "优秀案例", notes = "优秀案例")
     @RequestMapping(value = "sel_company_great_case", method = RequestMethod.GET)
     public Response sel_company_great_case(@ApiParam(value = "商户id")@RequestParam String id,
                                                @ApiParam(value = "条数")@RequestParam int count)  {
-        Response response = new Response();
 
         //查询公司优秀案例
         Map<String,Object> queryMap = new HashMap<>();
@@ -131,14 +124,12 @@ public class CompanyInfoController {
         queryMap.put("count",count);
         List<Map<String,String>> caseList = successCaseService.queryGreatCaseListByCompanyId(queryMap);
 
-        response.setData(caseList);
-        return response;
+        return new Response(caseList);
     }
 
     @ApiOperation(value = "公司介绍", notes = "公司介绍")
     @RequestMapping(value = "sel_company_introduce", method = RequestMethod.GET)
     public Response sel_company_introduce(@ApiParam(value = "商户id")@RequestParam String id)  {
-        Response response = new Response();
 
         //查询公司信息
         Member member = memberService.findMemById(id);
@@ -169,14 +160,12 @@ public class CompanyInfoController {
         map.put("saleRange",member.getSaleProductDesc());
         map.put("productTypeList",productTypeList);
 
-        response.setData(map);
-        return response;
+        return new Response(map);
     }
 
     @ApiOperation(value = "公司联系方式", notes = "公司联系方式")
     @RequestMapping(value = "sel_company_contact", method = RequestMethod.GET)
     public Response sel_company_contact(@ApiParam(value = "商户id")@RequestParam String id)  {
-        Response response = new Response();
 
         //查询公司信息
         Member member = memberService.findMemById(id);
@@ -193,14 +182,12 @@ public class CompanyInfoController {
         map.put("telephone",member.getEnterpriseTelephone());
         map.put("fax",member.getEnterpriseFox());
 
-        response.setData(map);
-        return response;
+        return new Response(map);
     }
 
     @ApiOperation(value = "公司荣誉资质", notes = "公司荣誉资质")
     @RequestMapping(value = "sel_company_certificate", method = RequestMethod.GET)
     public Response sel_company_certificate(@ApiParam(value = "商户id")@RequestParam String id)  {
-        Response response = new Response();
 
         CertificateRecord certificateRecord = new CertificateRecord();
         certificateRecord.setMem_id(id);
@@ -211,25 +198,16 @@ public class CompanyInfoController {
         certificateRecord.setStatus("1");
         List<CertificateRecord> certificateRecordList = memberService.certificateSearch(certificateRecord);
 
-        response.setData(certificateRecordList);
-        return response;
+        return new Response(certificateRecordList);
     }
 
     @ApiOperation(value = "公司成功案例（分页）", notes = "公司成功案例（分页）")
     @RequestMapping(value = "sel_company_success_caseList", method = RequestMethod.GET)
     public Response sel_company_success_caseList(@ApiParam(value = "商户id")@RequestParam String id,
-                                                 @RequestParam(required = false) String pageNo,
-                                                 @RequestParam(required = false) String pageSize)  {
-        Response response = new Response();
+                                                 @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                                 @RequestParam(required = false,defaultValue = "10") String pageSize)  {
 
-        //设定默认分页pageSize
-        if (com.zhuhuibao.utils.pagination.util.StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (com.zhuhuibao.utils.pagination.util.StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 
         //查询公司优秀案例
         Map<String,Object> queryMap = new HashMap<>();
@@ -238,38 +216,27 @@ public class CompanyInfoController {
         List<Map<String,String>> caseList = successCaseService.findAllSuccessCaseList(pager,queryMap);
         pager.result(caseList);
 
-        response.setData(pager);
-        return response;
+        return new Response(pager);
     }
 
     @ApiOperation(value = "成功案例详情", notes = "成功案例详情")
     @RequestMapping(value = "sel_company_success_case", method = RequestMethod.GET)
     public Response sel_company_success_case(@ApiParam(value = "案例id")@RequestParam String id)  {
-        Response response = new Response();
         SuccessCase successCase = successCaseService.querySuccessCaseById(id);
         //点击率加1
         successCase.setViews(String.valueOf(Integer.parseInt(successCase.getViews())+1));
         successCaseService.updateSuccessCase(successCase);
-        response.setData(successCase);
-        return response;
+        return new Response(successCase);
     }
 
     @ApiOperation(value = "公司产品（分页）", notes = "公司产品（分页）")
     @RequestMapping(value = "sel_company_product_list", method = RequestMethod.GET)
     public Response sel_company_product_list(@ApiParam(value = "产品类别id")@RequestParam(required = false) String fcateid,
                                              @ApiParam(value = "商户id")@RequestParam String id,
-                                             @RequestParam(required = false) String pageNo,
-                                             @RequestParam(required = false) String pageSize)  {
-        Response response = new Response();
+                                             @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                             @RequestParam(required = false,defaultValue = "10") String pageSize)  {
 
-        //设定默认分页pageSize
-        if (com.zhuhuibao.utils.pagination.util.StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (com.zhuhuibao.utils.pagination.util.StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 
         Map<String,Object> queryMap = new HashMap<>();
         queryMap.put("status", "1");
@@ -278,8 +245,7 @@ public class CompanyInfoController {
         List<Map<String,String>> productList = productService.findAllProductListByProductType(pager,queryMap);
         pager.result(productList);
 
-        response.setData(pager);
-        return response;
+        return new Response(pager);
     }
 
 
@@ -288,14 +254,12 @@ public class CompanyInfoController {
     public Response sel_great_manufacturer(@ApiParam(value="频道类型 3：商城")@RequestParam String chanType,
                                            @ApiParam(value="频道下子页面.manufacturer:厂商;channel:渠道商;agent:代理商") @RequestParam String page,
                                            @ApiParam(value="广告所在区域:F1:优秀厂商,渠道商,代理商") @RequestParam String advArea)  {
-        Response response = new Response();
-        Map<String,Object> map = new HashMap();
+        Map<String,Object> map = new HashMap<>();
         map.put("chanType",chanType);
         map.put("page",page);
         map.put("advArea",advArea);
         List<Map<String,String>> list = memberService.queryGreatCompany(map);
-        response.setData(list);
-        return response;
+        return new Response(list);
     }
 
     @ApiOperation(value = "热门产品", notes = "热门产品")
@@ -303,14 +267,12 @@ public class CompanyInfoController {
     public Response sel_hot_product(@ApiParam(value="频道类型 3：商城")@RequestParam String chanType,
                                     @ApiParam(value="频道下子页面.index:首页;manufacturer:厂商;channel:渠道商") @RequestParam String page,
                                     @ApiParam(value="广告所在区域:F2:厂商渠道商热门产品;F10:首页十楼（热门产品)") @RequestParam String advArea)  {
-        Response response = new Response();
-        Map<String,Object> map = new HashMap();
+        Map<String,Object> map = new HashMap<>();
         map.put("chanType",chanType);
         map.put("page",page);
         map.put("advArea",advArea);
         List<Map<String,String>> list = productService.queryHotProduct(map);
-        response.setData(list);
-        return response;
+        return new Response(list);
     }
 
     @ApiOperation(value = "推荐品牌", notes = "推荐品牌")
@@ -318,22 +280,18 @@ public class CompanyInfoController {
     public Response sel_recommend_brand(@ApiParam(value="频道类型 3：商城")@RequestParam String chanType,
                                     @ApiParam(value="频道下子页面.agent:代理商") @RequestParam String page,
                                     @ApiParam(value="广告所在区域:F2:推荐品牌") @RequestParam String advArea)  {
-        Response response = new Response();
-        Map<String,Object> map = new HashMap();
+        Map<String,Object> map = new HashMap<>();
         map.put("chanType",chanType);
         map.put("page",page);
         map.put("advArea",advArea);
         List<Map<String,String>> list = brandService.queryRecommendBrand(map);
-        response.setData(list);
-        return response;
+        return new Response(list);
     }
 
     @ApiOperation(value = "获取商铺banner及名称", notes = "获取商铺banner及名称")
     @RequestMapping(value = "sel_shop_banner", method = RequestMethod.GET)
     public Response sel_shop_banner(@ApiParam(value = "商户id")@RequestParam String id)  {
-        Response response = new Response();
         Map<String,String> map = memShopService.queryShopBanner(id);
-        response.setData(map);
-        return response;
+        return new Response(map);
     }
 }

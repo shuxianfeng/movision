@@ -11,6 +11,7 @@ import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
 import com.zhuhuibao.mybatis.advertising.service.SysAdvertisingService;
+import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
@@ -54,6 +55,9 @@ public class JobPositionService {
 
     @Autowired
     private SysAdvertisingService advService;
+
+    @Autowired
+    DictionaryService dictionaryService;
 
     /**
      * 发布职位
@@ -213,30 +217,29 @@ public class JobPositionService {
     /**
      * 职位类别
      */
-    public List<Map<String, Object>> positionType() {
-        List<Position> positionList = positionMapper.findPosition(7);
-        List<Position> subPositionList = positionMapper.findSubPosition();
+    public List<Map<String, Object>> getPositionTypes() {
         List<Map<String, Object>> retList = new ArrayList<>();
+
+        List<Position> positionList = dictionaryService.findParentTypes(7);
+
         for (Position position : positionList) {
             Map<String, Object> map = new HashMap<>();
             map.put(Constants.code, position.getId());
             map.put(Constants.name, position.getName());
 
-            List<Map<String, String>> pList = new ArrayList<>();
+            List<Position> subpositionList = dictionaryService.findPositionByParentId(String.valueOf(position.getId()));
+            List<Map<String, Object>> subList = new ArrayList<>();
             List<Map<String, String>> advList = new ArrayList<>();
 
-            for (Position subPosition : subPositionList) {
-                if (position.getId().equals(subPosition.getParentId())) {
-                    Map<String, String> map1 = new HashMap<>();
-                    map1.put(Constants.code, subPosition.getId());
-                    map1.put(Constants.name, subPosition.getName());
-                    map1.put(Constants.hot, subPosition.getHot());
-                    pList.add(map1);
-
-                }
+            for (Position sub : subpositionList) {
+                Map<String, Object> subMap = new HashMap<>();
+                subMap.put(Constants.code, sub.getId());
+                subMap.put(Constants.name, sub.getName());
+                subMap.put(Constants.hot, sub.getHot());
+                subList.add(subMap);
             }
 
-            map.put(Constants.subPositionList, pList);
+            map.put(Constants.subPositionList, subList);
 
             //广告项
             String chanType = Constants.AdvChannType.JOB.toString();  //招聘频道
@@ -251,7 +254,6 @@ public class JobPositionService {
                 tmpMap.put("id", adv.getConnectedId());
                 advList.add(tmpMap);
             }
-
             map.put("advList", advList);
 
             retList.add(map);
@@ -277,29 +279,6 @@ public class JobPositionService {
         return response;
     }
 
-    /**
-     * 查询招聘栏目的广告位
-     * @param map 查询条件
-     * @return
-     */
-/*    public Response queryAdvertisingPosition(Map<String,Object> map)
-    {
-        Response response = new Response();
-        try
-        {
-            List<MemberDetails> memberList = jobMapper.queryAdvertisingPosition(map);
-            response.setData(memberList);
-        }
-        catch(Exception e)
-        {
-            log.error("add offer price error!",e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
-            return response;
-        }
-        return response;
-    }*/
 
     /**
      * 查询企业发布的职位详情
@@ -329,7 +308,7 @@ public class JobPositionService {
                 }
                 String areaName = String.valueOf(job.get("areaName"));
                 if (!StringUtils.isEmpty(areaName)) {
-                    workArea +=  " " + areaName;
+                    workArea += " " + areaName;
                 }
                 job.put("workArea", workArea);
             } catch (Exception e) {
