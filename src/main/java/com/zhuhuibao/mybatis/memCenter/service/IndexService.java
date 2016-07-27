@@ -162,7 +162,7 @@ public class IndexService {
                 resultMap.put("isCreateResume",false);
             }
 
-            List<Job> list = jobMapper.findAllMyApplyPosition(id);
+            List<Map<String,Object>> list = jobMapper.findAllMyApplyPosition(id);
             resultMap.put("jobWantedCount",list.size());
             return resultMap;
         }catch (Exception e){

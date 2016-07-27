@@ -91,6 +91,11 @@ public class ZhbPaymentConstant {
     public static final int RESUME_BUY_TIMES_N0 = 3;
     
     /**
+     * 非VIP且购买次数不足
+     */
+    public static final int RESUME_VIP_BUY_TIMES_N0 = 4;
+    
+    /**
      * 可以购买但未下载
      */
     public static final int RESUME_BUY_TIMESANDBALANCE_YEAR = 4;
