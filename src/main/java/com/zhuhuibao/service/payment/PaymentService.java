@@ -267,18 +267,9 @@ public class PaymentService {
 	            }else{
 	            	
 	            	    Resume resume2 = resume.previewResume(String.valueOf(goodsID));
-	            	    con.put("createId",createId);
-	            	    Map isDownOrColl =resume.isDownOrColl(con);
-	            	    if(isDownOrColl!=null){
-	            	    	String isDown=isDownOrColl.get("isDown").toString();
-	            	    	String isCollect=isDownOrColl.get("isCollect").toString();
-	            	    	resume2.setIsDownload(isDown);
-	            	    	resume2.setIsCollect(isCollect);
-	            	    }else{
-	            	    	resume2.setIsDownload("2");
-	            	    	resume2.setIsCollect("1");
-	            	    }
-	            	  
+	            	    con.put("createId",createId); 
+            	    	resume2.setIsDownload("2");
+            	    	resume2.setIsCollect("1"); 
 	                    dataMap.put("info",resume2);
 	                    Resume resumeBean=new Resume();
 	                    resumeBean.setViews("1");
