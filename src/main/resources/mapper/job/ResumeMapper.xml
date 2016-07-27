@@ -186,7 +186,7 @@
     left join t_dictionary_area a on r.liveArea = a.code
     where r.createid = #{id}
   </select>
-  <select id="searchMyResumeAllInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="searchMyResumeAllInfo" parameterType="java.lang.String" resultType="java.util.Map">
     select r.*,(select po.id from t_dictionary_position p
     left join t_dictionary_position po on p.parentId = po.id
     where find_in_set(p.id,r.post)group by p.parentId)as parentId,
@@ -196,14 +196,15 @@
     FROM t_i_resume r
     where r.createid = #{id}
   </select>
-  <select id="previewResume" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="previewResume" parameterType="java.lang.String" resultType="BaseResultMap">
     select r.id,r.createid,r.title,r.realName,r.birthYear,dc.name education,r.photo,
     case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,
     case WHEN r.marriage =0 then '未婚' WHEN r.marriage =1 THEN '已婚' WHEN r.marriage =2 THEN '保密' END AS marriage,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
     concat(p.name,c.name,a.name)AS liveArea,
-    (select Group_concat(name) from t_dictionary_city where find_in_set(code,r.jobCity))AS jobArea,
-    co.name as hopeSalary,
+    (select Group_concat(name) from t_dictionary_city where find_in_set(code,r.jobCity))AS jobCity,
+    (select Group_concat(name) from t_dictionary_province where find_in_set(code,r.jobProvince))AS jobProvince,
+    co.name as hopeSalary,r.positionName,r.company,
     r.jobExperience,r.projectExperience,r.eduExperience,r.attach,con.name AS status,
     (select Group_concat(name) from t_dictionary_constant where find_in_set(code,r.jobNature) and type=7)AS jobNature,
     (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post
