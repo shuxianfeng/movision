@@ -5,6 +5,7 @@ import com.zhuhuibao.mybatis.advertising.mapper.SysAdvertisingMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class SysAdvertisingService {
      * @param advArea  广告所在页面区域 F1:一楼层
      * @return  List<SysAdvertising>
      */
+    @Cacheable(value = "advCache",key = "#chanType+'_'+#page+'_'+#advArea")
     public List<SysAdvertising> findListByCondition(String chanType, String page, String advArea) {
         List<SysAdvertising> list;
         try{

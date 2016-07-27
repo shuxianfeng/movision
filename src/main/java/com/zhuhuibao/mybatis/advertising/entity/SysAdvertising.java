@@ -1,8 +1,9 @@
 package com.zhuhuibao.mybatis.advertising.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class SysAdvertising {
+public class SysAdvertising implements Serializable {
     private Integer id;
 
     private String title;

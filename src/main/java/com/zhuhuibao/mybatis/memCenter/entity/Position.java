@@ -1,6 +1,8 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-public class Position {
+import java.io.Serializable;
+
+public class Position  implements Serializable{
     private String id;
 
     private String name;
