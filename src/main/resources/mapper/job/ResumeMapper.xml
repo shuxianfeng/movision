@@ -192,7 +192,8 @@
     where find_in_set(p.id,r.post)group by p.parentId)as parentId,
     (select po.name from t_dictionary_position p
     left join t_dictionary_position po on p.parentId = po.id
-    where find_in_set(p.id,r.post)group by p.parentId)as parentName
+    where find_in_set(p.id,r.post)group by p.parentId)as parentName,
+    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as jobYear
     FROM t_i_resume r
     where r.createid = #{id}
   </select>

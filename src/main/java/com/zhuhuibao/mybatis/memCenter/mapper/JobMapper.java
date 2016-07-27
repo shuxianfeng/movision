@@ -26,7 +26,7 @@ public interface JobMapper {
     int updatePosition(Job job);
 
     //查询最新招聘职位
-    List<Job> searchNewPosition(int count);
+    List<Map<String,Object>> searchNewPosition(int count);
 
     //查询推荐职位
     List<Job> searchRecommendPosition(@Param("id")String id,@Param("count")int count);

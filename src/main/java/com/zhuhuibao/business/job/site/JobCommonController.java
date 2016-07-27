@@ -11,6 +11,7 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.memCenter.entity.EmployeeSize;
 import com.zhuhuibao.mybatis.memCenter.entity.EnterpriseType;
+import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
@@ -179,8 +180,9 @@ public class JobCommonController {
 
     @ApiOperation(value = "查询最新招聘职位", notes = "查询最新招聘职位", response = Response.class)
     @RequestMapping(value = "sel_latest_position", method = RequestMethod.GET)
-    public Response searchNewPosition() throws IOException {
-        return job.searchNewPosition(6);
+    public Response searchNewPosition(){
+        List<Map<String,Object>> list = job.searchNewPosition(6);
+        return   new Response(list);
     }
 
     @ApiOperation(value = "查询推荐职位", notes = "查询推荐职位", response = Response.class)

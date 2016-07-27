@@ -123,8 +123,9 @@ public class JobController {
      */
     @ApiOperation(value = "查询最新招聘职位", notes = "查询最新招聘职位", response = Response.class)
     @RequestMapping(value = "sel_latest_position", method = RequestMethod.GET)
-    public Response searchNewPosition() throws IOException {
-        return jobService.searchNewPosition(6);
+    public Response searchNewPosition() {
+        List<Map<String,Object>> list = jobService.searchNewPosition(6);
+        return   new Response(list);
     }
 
     /**
