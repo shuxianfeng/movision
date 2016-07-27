@@ -18,4 +18,6 @@ public interface JobRelResumeMapper {
     Integer isExistApplyPosition(Map<String,Object> map);
 
     int updateJobRelResume(Map<String,Object> map);
+
+    Map<String,String> queryMyReceiveResume(Map<String, Object> queryMap);
 }

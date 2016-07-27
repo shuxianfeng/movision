@@ -110,4 +110,15 @@ public class JobRelResumeService {
             throw e;
         }
     }
+
+    public Map<String,String> queryMyReceiveResume(Map<String, Object> queryMap) {
+        try {
+            return jrrMapper.queryMyReceiveResume(queryMap);
+        }catch(Exception e)
+        {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

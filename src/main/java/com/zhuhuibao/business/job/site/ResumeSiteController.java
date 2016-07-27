@@ -8,6 +8,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
@@ -206,31 +207,38 @@ public class ResumeSiteController {
         Long memberId = ShiroUtil.getCreateID();
         Long companyId = ShiroUtil.getCompanyID();
         Response response = new Response();
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("id",recordId);
-        map.put("status",JobConstant.RESUME_STATUS_TWO);
-        jrrService.updateJobRelResume(map);
-        Resume resumeBean=new Resume();
-        resumeBean.setViews("1");
-        resumeBean.setId(id);
-        resume.updateResume(resumeBean);
-        //发布招聘职位已付过钱，查看应聘的简历，也属于付费查看过的简历,需要增加到已付费信息表。这部分信息不需要付费
-        goodsService.insertViewGoods(Long.parseLong(id), memberId,companyId,ZhbPaymentConstant.goodsType.CXXZJL.toString());
         if(memberId!=null){
-            Map<String,Object> map1 = new HashMap<String,Object>();
-            map1.put("resumeID",id);
-            map1.put("companyID",companyId);
-            Resume resume2 = resume.previewResume(id);
-            map1.put("createId",resume2.getCreateid());
-            resume.addLookRecord(map1);
-            response.setData(resume2);
+            Map<String,Object> queryMap = new HashMap<String,Object>();
+            queryMap.put("id",id);
+            queryMap.put("createid",memberId);
+            Map<String,String> result = jrrService.queryMyReceiveResume(queryMap);
+            if(result!=null){
+                Map<String,Object> map = new HashMap<String,Object>();
+                map.put("id",recordId);
+                map.put("status",JobConstant.RESUME_STATUS_TWO);
+                jrrService.updateJobRelResume(map);
+                Resume resumeBean=new Resume();
+                resumeBean.setViews("1");
+                resumeBean.setId(id);
+                resume.updateResume(resumeBean);
+                //发布招聘职位已付过钱，查看应聘的简历，也属于付费查看过的简历,需要增加到已付费信息表。这部分信息不需要付费
+                goodsService.insertViewGoods(Long.parseLong(id), memberId,companyId,ZhbPaymentConstant.goodsType.CXXZJL.toString());
+                Map<String,Object> map1 = new HashMap<String,Object>();
+                map1.put("resumeID",id);
+                map1.put("companyID",companyId);
+                Resume resume2 = resume.previewResume(id);
+                map1.put("createId",resume2.getCreateid());
+                resume.addLookRecord(map1);
+                response.setData(resume2);
+            }else {
+                throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR,"页面不存在");
+            }
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
 
-    
     @RequestMapping(value = "upd_coll_resume", method = RequestMethod.POST)
     @ApiOperation(value = "收藏简历",notes = "收藏简历",response = Response.class)
     public Response insertCollResume(@ApiParam(value = "简历id") @RequestParam String id) throws Exception {
