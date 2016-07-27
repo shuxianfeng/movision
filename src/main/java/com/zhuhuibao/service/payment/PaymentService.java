@@ -275,7 +275,7 @@ public class PaymentService {
 	            	    	resume2.setIsDownload(isDown);
 	            	    	resume2.setIsCollect(isCollect);
 	            	    }else{
-	            	    	resume2.setIsDownload("1");
+	            	    	resume2.setIsDownload("2");
 	            	    	resume2.setIsCollect("1");
 	            	    }
 	            	  
