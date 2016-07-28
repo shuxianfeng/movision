@@ -51,8 +51,8 @@ public class ExpoService {
             String id = meetingOrder.getId();
             return id;
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::publishMeetingOrder::mem_id="+ShiroUtil.getCreateID(),e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -65,8 +65,8 @@ public class ExpoService {
         try {
             meetingOrderMapper.updateMeetingOrderStatus(meetingOrder);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::updateMeetingOrderStatus",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -79,8 +79,8 @@ public class ExpoService {
         try {
             return meetingOrderMapper.queryMeetingOrderInfoById(id);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::queryMeetingOrderInfoById::id="+id,e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -92,8 +92,8 @@ public class ExpoService {
         try {
             return meetingOrderMapper.findAllMeetingOrderInfo(pager.getRowBounds(),map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::findAllMeetingOrderInfo",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -106,8 +106,8 @@ public class ExpoService {
         try {
             exhibitionMapper.publishExhibition(exhibition);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::publishExhibition::mem_id="+ShiroUtil.getCreateID(),e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -120,8 +120,8 @@ public class ExpoService {
         try {
             return exhibitionMapper.findAllExhibition(pager.getRowBounds(),map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::findAllExhibition",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -134,8 +134,8 @@ public class ExpoService {
         try {
             return exhibitionMapper.queryExhibitionInfoById(id);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::queryExhibitionInfoById::id="+id,e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -152,8 +152,8 @@ public class ExpoService {
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),Long.parseLong(exhibition.getCreateid()),exhibition.getReason());
             }
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::updateExhibitionInfoById",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -166,8 +166,8 @@ public class ExpoService {
         try {
             exhibitionMapper.updateExhibitionViews(exhibition);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::updateExhibitionViews",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -180,8 +180,8 @@ public class ExpoService {
         try {
             return exhibitionMapper.findNewExhibition(map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::findNewExhibition",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -194,8 +194,8 @@ public class ExpoService {
         try {
             return distributedOrderMapper.publishDistributedOrder(distributedOrder);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::publishDistributedOrder::mem_id="+ShiroUtil.getCreateID(),e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -208,8 +208,8 @@ public class ExpoService {
         try {
             return distributedOrderMapper.findAllDistributedOrder(pager.getRowBounds(),map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::findAllDistributedOrder",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -222,8 +222,8 @@ public class ExpoService {
         try {
             return distributedOrderMapper.queryDistributedOrderInfoById(id);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::queryDistributedOrderInfoById::id="+id,e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -236,8 +236,8 @@ public class ExpoService {
         try {
             distributedOrderMapper.updateDistributedStatus(distributedOrder);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::updateDistributedStatus",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -246,8 +246,8 @@ public class ExpoService {
         try{
             return exhibitionMapper.queryHomepageExhibitionList(map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::queryHomepageExhibitionList",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -256,8 +256,8 @@ public class ExpoService {
         try{
             return exhibitionMapper.queryMyExhibitionListSize(map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpoService::queryMyExhibitionListSize",e);
+            //e.printStackTrace();
             throw e;
         }
     }
