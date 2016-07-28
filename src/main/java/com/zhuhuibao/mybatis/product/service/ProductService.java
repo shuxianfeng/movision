@@ -251,7 +251,7 @@ public class ProductService {
                     setSingleProductInfo(productMap, product);
                 }
             } else {
-                log.error("产品不存在");
+                log.error("产品不存在,id="+id);
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "产品不存在");
             }
 

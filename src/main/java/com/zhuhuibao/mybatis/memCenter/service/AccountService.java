@@ -143,7 +143,7 @@ public class AccountService {
                 memberMapper.agentRegister(member);
             }
         }catch (Exception e){
-            log.error("agentRegister error");
+            log.error("agentRegister error >>>",e);
             e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"操作失败");
         }

@@ -17,47 +17,46 @@ import com.zhuhuibao.utils.pagination.model.Paging;
 @Transactional
 public class ComplainSuggestService {
 	private static final Logger log = LoggerFactory.getLogger(ComplainSuggestService.class);
-	
+
 	@Autowired
 	ComplainSuggestMapper suggestMapper;
-	
-	public int insert(ComplainSuggest cs)
-	{
+
+	public int insert(ComplainSuggest cs) {
 		log.info("insert complain suggest");
-		int result =0;
-		try
-		{
+		int result = 0;
+		try {
 			result = suggestMapper.insert(cs);
-		}
-		catch(Exception e)
-		{
-			log.error("insert complain suggest error!",e);
+		} catch (Exception e) {
+			log.error("insert complain suggest error!", e);
 		}
 		return result;
 	}
-    /**
-     * 查询用户建议
-     * @author gmli
-     * @param pager 分页
-     * @param map 参数
-     * @return List
-     */
-	public List<ComplainSuggest> findAllComplaintSuggest(Paging<ComplainSuggest> pager,
-			Map<String, Object> map) {
-		List<ComplainSuggest> complainSuggestList=null;
-		try {
-			complainSuggestList = suggestMapper.findAllComplaintSuggest(
-					pager.getRowBounds(), map);
-		} catch (Exception e) {
 
-			log.error(e.getMessage());
+	/**
+	 * 查询用户建议
+	 * 
+	 * @author gmli
+	 * @param pager
+	 *            分页
+	 * @param map
+	 *            参数
+	 * @return List
+	 */
+	public List<ComplainSuggest> findAllComplaintSuggest(Paging<ComplainSuggest> pager, Map<String, Object> map) {
+		List<ComplainSuggest> complainSuggestList = null;
+		try {
+			complainSuggestList = suggestMapper.findAllComplaintSuggest(pager.getRowBounds(), map);
+		} catch (Exception e) {
+			log.error("findAllComplaintSuggest error >>>", e);
 			e.printStackTrace();
 			throw e;
 		}
 		return complainSuggestList;
 	}
+
 	/**
 	 * 用户建议处理
+	 * 
 	 * @author gmli
 	 * @param complainSuggest
 	 */
@@ -65,14 +64,15 @@ public class ComplainSuggestService {
 		try {
 			suggestMapper.updateByPrimaryKeySelective(complainSuggest);
 		} catch (Exception e) {
-
-			log.error(e.getMessage());
+			log.error("updateComplainSuggest error >>>", e);
 			e.printStackTrace();
 			throw e;
 		}
 	}
+
 	/**
 	 * 用户建议详情
+	 * 
 	 * @author gmli
 	 * @param id
 	 * @return
@@ -82,8 +82,8 @@ public class ComplainSuggestService {
 		try {
 			complainSuggest = suggestMapper.selectByPrimaryKey(id);
 		} catch (Exception e) {
+			log.error("queryComplainSuggestById error,id=" + id + " >>>", e);
 
-			log.error(e.getMessage());
 			e.printStackTrace();
 			throw e;
 		}

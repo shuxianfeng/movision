@@ -16,48 +16,48 @@ import java.util.Map;
  */
 @Service
 public class SuggestService {
-    private static final Logger log = LoggerFactory.getLogger(SuggestService.class);
+	private static final Logger log = LoggerFactory.getLogger(SuggestService.class);
 
-    @Autowired
-    SuggestMapper suggestmapper;
+	@Autowired
+	SuggestMapper suggestmapper;
 
-    public int addSuggest(Suggest suggest) {
-        try{
-            return suggestmapper.insertSelective(suggest);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
-            throw e;
-        }
-    }
+	public int addSuggest(Suggest suggest) {
+		try {
+			return suggestmapper.insertSelective(suggest);
+		} catch (Exception e) {
+			log.error("addSuggest error >>>", e);
+			e.printStackTrace();
+			throw e;
+		}
+	}
 
-    public List<Map<String,String>> findAllSuggest(Paging<Map<String,String>> pager,Map<String,Object> map) {
-        try{
-            return suggestmapper.findAllSuggest(pager.getRowBounds(),map);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
-            throw e;
-        }
-    }
+	public List<Map<String, String>> findAllSuggest(Paging<Map<String, String>> pager, Map<String, Object> map) {
+		try {
+			return suggestmapper.findAllSuggest(pager.getRowBounds(), map);
+		} catch (Exception e) {
+			log.error("findAllSuggest error >>>", e);
+			e.printStackTrace();
+			throw e;
+		}
+	}
 
-    public Map<String,String> querySuggestById(String id) {
-        try{
-            return suggestmapper.querySuggestById(id);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
-            throw e;
-        }
-    }
+	public Map<String, String> querySuggestById(String id) {
+		try {
+			return suggestmapper.querySuggestById(id);
+		} catch (Exception e) {
+			log.error("findAllSuggest error,id=" + id + " >>>", e);
+			e.printStackTrace();
+			throw e;
+		}
+	}
 
-    public int updateSuggest(Map<String, Object> map) {
-        try{
-            return suggestmapper.updateSuggest(map);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
-            throw e;
-        }
-    }
+	public int updateSuggest(Map<String, Object> map) {
+		try {
+			return suggestmapper.updateSuggest(map);
+		} catch (Exception e) {
+			log.error("findAllSuggest error >>>", e);
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

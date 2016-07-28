@@ -50,6 +50,7 @@ public class ProductsController {
 		catch (Exception e) {
 			response.setMsgCode(0);
 			response.setMessage("search error!");
+			log.error("searchProducts error >>>", e);
 		}
 
 		return response;
