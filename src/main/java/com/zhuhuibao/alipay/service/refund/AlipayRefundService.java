@@ -51,8 +51,7 @@ public class AlipayRefundService {
             out.write(sHtmlText);
 
         } catch (IOException e) {
-            e.printStackTrace();
-            log.error("获取输出流异常:" + e.getMessage());
+            log.error("获取输出流异常:" ,e);
         }finally {
             if (out != null) {
                 out.flush();

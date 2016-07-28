@@ -200,7 +200,7 @@ public class AlipayService {
 
 
         } catch (Exception e) {
-            log.error("获取out对象异常" + e.getMessage());
+            log.error("获取out对象异常>>>",e);
             e.printStackTrace();
         }
         return modelAndView;
@@ -318,7 +318,7 @@ public class AlipayService {
             log.debug("anti_phishing_key=" + anti_phishing_key);
         } catch (Exception e1) {
             e1.printStackTrace();
-            log.error("获取防钓鱼时间戳异常：" + e1.getMessage());
+            log.error("获取防钓鱼时间戳异常：" + e1);
             throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "获取防钓鱼时间戳失败");
         }
 
@@ -463,8 +463,7 @@ public class AlipayService {
             resultMap.put("statusCode", String.valueOf(PayConstants.HTTP_SUCCESS_CODE));
 
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("支付宝{}回调接口业务处理异常:", e.getMessage());
+            log.error("支付宝回调接口业务处理异常:", e);
             resultMap.put("statusCode", String.valueOf(PayConstants.HTTP_SYSTEM_EXCEPTION_CODE));
         }
 
@@ -496,8 +495,7 @@ public class AlipayService {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("筑慧币充值失败:" + e.getMessage());
+            log.error("筑慧币充值失败:" ,e);
         }
     }
 
@@ -519,7 +517,7 @@ public class AlipayService {
             BeanUtils.populate(refundCallbackLog, pMap);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("支付宝回调参数map转换为bean异常" + e.getMessage());
+            log.error("支付宝回调参数map转换为bean异常>>>" ,e);
         }
 
         refundCallbackLogService.insert(refundCallbackLog);
