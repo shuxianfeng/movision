@@ -422,12 +422,12 @@ public class MemberRegService {
 					if (isExist == 0) {
 						this.registerMember(member);
 						this.deleteValidateInfo(info);
-						LoginMember loginMember = this.getLoginMemberByAccount(member.getMobile());
-                        if(loginMember != null){
-                            Subject currentUser = SecurityUtils.getSubject();
-                            UsernamePasswordToken token = new UsernamePasswordToken(loginMember.getAccount(),loginMember.getPassword(),true);
-                            currentUser.login(token);
-                        }
+//						LoginMember loginMember = this.getLoginMemberByAccount(member.getMobile());
+//                        if(loginMember != null){
+//                            Subject currentUser = SecurityUtils.getSubject();
+//                            UsernamePasswordToken token = new UsernamePasswordToken(loginMember.getAccount(),loginMember.getPassword(),true);
+//                            currentUser.login(token);
+//                        }
 
 					} else {
 						throw new BusinessException(MsgCodeConstant.member_mcode_account_exist, MsgPropertiesUtils.getValue(String

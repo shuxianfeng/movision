@@ -317,12 +317,12 @@ public class RegisterController {
             String decodeVM = new String(EncodeUtil.decodeBase64(vm));
             response = rvService.processActivate(decodeVM);
             modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(response.getData()).getBytes()));
-            LoginMember loginMember = memberService.getLoginMemberByAccount(decodeVM.split(",")[1]);
-            if (loginMember != null) {
-                Subject currentUser = SecurityUtils.getSubject();
-                UsernamePasswordToken token = new UsernamePasswordToken(loginMember.getAccount(), loginMember.getPassword(), true);
-                currentUser.login(token);
-            }
+//            LoginMember loginMember = memberService.getLoginMemberByAccount(decodeVM.split(",")[1]);
+//            if (loginMember != null) {
+//                Subject currentUser = SecurityUtils.getSubject();
+//                UsernamePasswordToken token = new UsernamePasswordToken(loginMember.getAccount(), loginMember.getPassword());
+//                currentUser.login(token);
+//            }
 
             RedirectView rv = new RedirectView(rvService.getRedirectUrl(response, "active"));
             modelAndView.setView(rv);
