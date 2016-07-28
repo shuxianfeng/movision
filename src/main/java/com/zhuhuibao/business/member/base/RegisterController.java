@@ -23,6 +23,7 @@ import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.sms.SDKSendSms;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.JsonGenerationException;
@@ -191,7 +192,7 @@ public class RegisterController {
         Response result = new Response();
         try {
             Subject currentUser = SecurityUtils.getSubject();
-            Session sess = currentUser.getSession(true);
+            Session sess = currentUser.getSession(false);
             //校验手机验证码是否正确
             if (member.getMobileCheckCode() != null) {
                 String verifyCode = (String) sess.getAttribute("r" + member.getMobile());
@@ -207,8 +208,8 @@ public class RegisterController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("操作失败:" + e.getMessage());
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "注册失败");
+            log.error("操作失败:{}" + e);
+            throw e;
         }
 
         return result;
@@ -319,12 +320,14 @@ public class RegisterController {
             modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(response.getData()).getBytes()));
             LoginMember loginMember = memberService.getLoginMemberByAccount(decodeVM.split(",")[1]);
             if (loginMember != null) {
-                ShiroRealm.ShiroUser shrioUser = new ShiroRealm.ShiroUser(loginMember.getId(), loginMember.getAccount(),
-                        loginMember.getStatus(), loginMember.getIdentify(), loginMember.getRole(), "0", loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(),
-                        loginMember.getHeadShot(), loginMember.getNickname(), loginMember.getCompanyName(), loginMember.getVipLevel());
+//                ShiroRealm.ShiroUser shrioUser = new ShiroRealm.ShiroUser(loginMember.getId(), loginMember.getAccount(),
+//                        loginMember.getStatus(), loginMember.getIdentify(), loginMember.getRole(), "0", loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(),
+//                        loginMember.getHeadShot(), loginMember.getNickname(), loginMember.getCompanyName(), loginMember.getVipLevel());
                 Subject currentUser = SecurityUtils.getSubject();
-                Session session = currentUser.getSession();
-                session.setAttribute("member", shrioUser);
+//                Session session = currentUser.getSession(true);
+//                session.setAttribute("member", shrioUser);
+                UsernamePasswordToken token = new UsernamePasswordToken(loginMember.getAccount(), loginMember.getPassword(), true);
+                currentUser.login(token);
             }
 
             RedirectView rv = new RedirectView(rvService.getRedirectUrl(response, "active"));

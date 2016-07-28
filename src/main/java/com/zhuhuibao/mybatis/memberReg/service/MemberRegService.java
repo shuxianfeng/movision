@@ -9,6 +9,7 @@ import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.utils.SendEmail;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -423,12 +424,17 @@ public class MemberRegService {
 						this.registerMember(member);
 						this.deleteValidateInfo(info);
 						LoginMember loginMember = this.getLoginMemberByAccount(member.getMobile());
-						ShiroUser shrioUser = new ShiroUser(member.getId(), member.getMobile(), member.getStatus(), member.getIdentify(),
-								loginMember.getRole(), "0", loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(),
-								loginMember.getHeadShot(), loginMember.getNickname(), loginMember.getCompanyName(), loginMember.getVipLevel());
-						Subject currentUser = SecurityUtils.getSubject();
-						Session session = currentUser.getSession();
-						session.setAttribute("member", shrioUser);
+                        if(loginMember != null){
+//                            ShiroUser shrioUser = new ShiroUser(member.getId(), member.getMobile(), member.getStatus(), member.getIdentify(),
+//                                    loginMember.getRole(), "0", loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(),
+//                                    loginMember.getHeadShot(), loginMember.getNickname(), loginMember.getCompanyName(), loginMember.getVipLevel());
+                            Subject currentUser = SecurityUtils.getSubject();
+//                            Session session = currentUser.getSession();
+//                            session.setAttribute("member", shrioUser);
+                            UsernamePasswordToken token = new UsernamePasswordToken(loginMember.getAccount(),loginMember.getPassword(),true);
+                            currentUser.login(token);
+                        }
+
 					} else {
 						throw new BusinessException(MsgCodeConstant.member_mcode_account_exist, MsgPropertiesUtils.getValue(String
 								.valueOf(MsgCodeConstant.member_mcode_account_exist)));
@@ -469,7 +475,7 @@ public class MemberRegService {
 						rvService.sendMailActivateCode(member, PropertiesUtils.getValue("host.ip"));
 						// 是否显示“立即激活按钮”
 						String mail = ds.findMailAddress(member.getEmail());
-						Map<String, String> map = new HashMap<String, String>();
+						Map<String, String> map = new HashMap<>();
 						if (mail != null && !mail.equals("")) {
 							map.put("button", "true");
 						} else {
@@ -486,7 +492,7 @@ public class MemberRegService {
 						.valueOf(MsgCodeConstant.member_mcode_mail_validate_error)));
 			}
 		} catch (Exception e) {
-			log.error("register mail error!", e);
+			log.error("register mail error!>>> {}", e);
 			throw e;
 		}
 		log.debug("email verifyCode == " + member.getEmailCheckCode());
@@ -523,7 +529,7 @@ public class MemberRegService {
 		Member member = new Member();
 		LoginMember loginMember = new LoginMember();
 		try {
-			if (memberAccount != null && memberAccount.indexOf("@") >= 0) {
+			if (memberAccount != null && memberAccount.contains("@")) {
 				member.setEmail(memberAccount);
 			} else {
 				member.setMobile(memberAccount);
@@ -536,7 +542,8 @@ public class MemberRegService {
 				loginMember.setVipLevel(VipConstant.VipLevel.ENTERPRISE_FREE.value);
 			}
 		} catch (Exception e) {
-			log.error("find login memeber by account error", e);
+			log.error("find login memeber by account error>>>{}", e);
+			throw e;
 		}
 		return loginMember;
 	}
@@ -555,7 +562,7 @@ public class MemberRegService {
 			String seekMail = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_SEEKPWD_USERNAME);
 			rvService.sendValidateMail(seekMail, PropertiesUtils.getValue("host.ip"));
 			String mail = ds.findMailAddress(member.getEmail());
-			Map<String, String> map = new HashMap<String, String>();
+			Map<String, String> map = new HashMap<>();
 			if (mail != null && !mail.equals("")) {
 				map.put("button", "true");
 			} else {
