@@ -211,7 +211,7 @@ public class AgentController {
             }
             result.setCode(200);
         } catch (Exception e) {
-            log.error("send inviteEmail error!");
+            log.error("send inviteEmail error! >>>",e);
             e.printStackTrace();
         }
         return result;
@@ -249,7 +249,7 @@ public class AgentController {
                 modelAndView.setView(rv);
             }
         } catch (Exception e) {
-            log.error("email agentRegister error!", e);
+            log.error("email agentRegister error! >>>", e);
             e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"操作失败");
         }
