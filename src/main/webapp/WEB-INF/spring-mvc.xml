@@ -145,6 +145,7 @@
 
     <mvc:interceptors>
         <!--<bean class="com.zhuhuibao.aop.TimeoutInterceptor"/>-->
+        <bean class="com.zhuhuibao.aop.InitLogonMemberInterceptor"/>
         <bean class="com.zhuhuibao.aop.UserAccessInterceptor"/>
     </mvc:interceptors>
 
