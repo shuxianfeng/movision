@@ -230,11 +230,11 @@ public class PaymentService {
 	    			   result = account.getAmount().compareTo(goodsConfig.getPrice()) >= 0;
 	    			}
 	    			
-	    			if(privilegeNum <= 0 ) {
+	    			if(privilegeNum <= 0 &&!result) {
 	    				 
 	    				dataMap.put("payment", ZhbPaymentConstant.RESUME_BUY_TIMES_N0);
 	    				  
-	    			}else if((!result && vipLevel!=100)){
+	    			}else if((!result && vipLevel!=100)&&privilegeNum <= 0){
 	    				
 	    				dataMap.put("payment", ZhbPaymentConstant.RESUME_BALANCE_NO);
 	    				

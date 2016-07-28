@@ -105,6 +105,7 @@ public class ZhbPaymentController {
 
                 Resume resumeBean=new Resume();
                 resumeBean.setDownload("1");
+                resumeBean.setType("1");
                 resumeBean.setId(String.valueOf(resumeID));
                 resume.updateResume(resumeBean);
 
