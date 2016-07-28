@@ -33,13 +33,12 @@ public class RegisterValidateService {
 	
 	/**
 	 * 发送邮件激活验证码
-	 * @param member 会员信息
 	 * @param serverIp 服务器IP
 	 */
-	public void sendMailActivateCode(Member member,String serverIp){
+	public void sendMailActivateCode(String email, String serverIp){
 
         ///邮件的内容
-        StringBuffer sb=new StringBuffer("");
+        StringBuilder sb=new StringBuilder("");
         sb.append("<div style=\"line-height:40px;height:40px\">");
         sb.append("</div>");
         sb.append("<p style=\"padding:0px\"");
@@ -47,18 +46,19 @@ public class RegisterValidateService {
         sb.append("筑慧宝账号激活：");
         sb.append("</strong>");
         sb.append("</p>");
-        sb.append("<p style=\"margin:0; padding:20px 0 12px 0; color:#555555;\">您好！您于");
-        sb.append(member.getRegisterTime());
+        sb.append("<p style=\"margin:0; padding:20px 0 12px 0; color:#555555;\">您好！您已");
         sb.append(" 注册了筑慧宝账号，请在24小时内点击以下链接，激活该账号：");
         sb.append("</p>");
         sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"");
         sb.append(serverIp);
         sb.append("/rest/activateEmail?action=activate&vm=");
-        sb.append(new String(EncodeUtil.encodeBase64(member.getId()+","+member.getEmail())));
+//        sb.append(new String(EncodeUtil.encodeBase64(member.getId()+","+member.getEmail())));
+		sb.append(new String(EncodeUtil.encodeBase64(email)));
         sb.append("\">");
         sb.append(serverIp);
         sb.append("/rest/activateEmail?action=activate&vm="); 
-        sb.append(new String(EncodeUtil.encodeBase64(member.getId()+","+member.getEmail())));
+//        sb.append(new String(EncodeUtil.encodeBase64(member.getId()+","+member.getEmail())));
+        sb.append(new String(EncodeUtil.encodeBase64(email)));
         sb.append("</a>");
         sb.append("</p>");
         sb.append("<p style=\"padding:0px;line-height:24px;font-size:12px;color:#979797;font-family:arial,sans-serif\">");
@@ -66,7 +66,7 @@ public class RegisterValidateService {
         sb.append("</p>");
         log.info("send email link == "+sb.toString());
         //发送邮件
-        SendEmail.send(member.getEmail(), sb.toString(),"筑慧宝-账号激活");
+        SendEmail.send(email, sb.toString(),"筑慧宝-账号激活");
     }
 	
 	/**

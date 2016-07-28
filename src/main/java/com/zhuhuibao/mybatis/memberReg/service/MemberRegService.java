@@ -7,7 +7,6 @@ import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.constant.VipConstant;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
-import com.zhuhuibao.utils.SendEmail;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -28,7 +27,6 @@ import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.mapper.MemberRegMapper;
 import com.zhuhuibao.mybatis.memberReg.mapper.ValidateinfoMapper;
 import com.zhuhuibao.security.EncodeUtil;
-import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
 import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.PropertiesUtils;
@@ -470,7 +468,7 @@ public class MemberRegService {
 					if (isExist == 0) {
 						this.registerMember(member);
 						// 发送激活链接给此邮件
-						rvService.sendMailActivateCode(member, PropertiesUtils.getValue("host.ip"));
+						rvService.sendMailActivateCode(member.getEmail(), PropertiesUtils.getValue("host.ip"));
 						// 是否显示“立即激活按钮”
 						String mail = ds.findMailAddress(member.getEmail());
 						Map<String, String> map = new HashMap<>();

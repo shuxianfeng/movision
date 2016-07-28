@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -318,7 +317,7 @@ public class RegisterController {
             String decodeVM = new String(EncodeUtil.decodeBase64(vm));
             response = rvService.processActivate(decodeVM);
             modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(response.getData()).getBytes()));
-            LoginMember loginMember = memberService.getLoginMemberByAccount(decodeVM.split(",")[1]);
+            LoginMember loginMember = memberService.getLoginMemberByAccount(decodeVM);
             if (loginMember != null) {
                 Subject currentUser = SecurityUtils.getSubject();
                 UsernamePasswordToken token = new UsernamePasswordToken(loginMember.getAccount(), loginMember.getPassword(), true);
@@ -405,4 +404,12 @@ public class RegisterController {
         return response;
     }
 
+
+    @ApiOperation(value = "重新发送注册邮件", notes = "重新发送注册邮件", response = Response.class)
+    @RequestMapping(value = "rest/member/site/base/resend_mail", method = RequestMethod.POST)
+    public Response resendRegisterMail(@ApiParam("邮箱")@RequestParam String email){
+        // 发送激活链接给此邮件
+        rvService.sendMailActivateCode(email,PropertiesUtils.getValue("host.ip"));
+        return new Response();
+    }
 }
