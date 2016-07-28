@@ -20,9 +20,9 @@ import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
  *
  */
 public class InitLogonMemberInterceptor extends HandlerInterceptorAdapter {
-	
+
 	@Autowired
-    private MemberRegService memberService;
+	private MemberRegService memberService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -32,14 +32,15 @@ public class InitLogonMemberInterceptor extends HandlerInterceptorAdapter {
 			ShiroRealm.ShiroUser member = (ShiroUser) session.getAttribute("member");
 			if (null != member) {
 				LoginMember loginMember = memberService.getLoginMemberByAccount(member.getAccount());
-				member.setStatus(loginMember.getStatus());
-				member.setVipLevel(loginMember.getVipLevel());
-				member.setIsexpert(loginMember.getIsexpert());
-				member.setWorkType(loginMember.getWorkType());
-				member.setIdentify(loginMember.getIdentify());
-				
-				
-				session.setAttribute("member", member);
+				if (null != loginMember) {
+					member.setStatus(loginMember.getStatus());
+					member.setVipLevel(loginMember.getVipLevel());
+					member.setIsexpert(loginMember.getIsexpert());
+					member.setWorkType(loginMember.getWorkType());
+					member.setIdentify(loginMember.getIdentify());
+
+					session.setAttribute("member", member);
+				}
 			}
 		}
 
