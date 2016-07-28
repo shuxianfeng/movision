@@ -462,4 +462,20 @@
     <select id="queryDescription" resultType="java.util.Map" parameterType="java.util.Map">
         SELECT t.id,t.description FROM t_prj_project t WHERE id &gt;= #{begin} and id &lt;= #{end}
     </select>
+
+    <update id="update" parameterType="java.util.Map">
+        update t_prj_project
+        <set>
+            <if test="basicDesc != null">
+                basicDesc=#{basicDesc},
+            </if>
+            <if test="background != null">
+                background=#{background},
+            </if>
+            <if test="remark != null">
+                remark=#{remark},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

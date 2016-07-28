@@ -756,4 +756,13 @@ public class ProjectService {
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
         }
     }
+
+    public int update(Map<String, Object> queryMap) {
+        try{
+            return projectMapper.update(queryMap);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

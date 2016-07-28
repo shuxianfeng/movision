@@ -56,4 +56,6 @@ public interface ProjectMapper {
     int updatePrjectCopy(Map<String, Object> map);
 
     List<Map<String,String>> queryDescription(Map<String,Object> map);
+
+    int update(Map<String, Object> queryMap);
 }

@@ -64,6 +64,10 @@ public class ProjectTestController {
                     desc = old.substring(0,old.indexOf("部分建材"));
                 }else if(old.contains("部分建筑材料")){
                     desc = old.substring(0,old.indexOf("部分建筑材料"));
+                }else if(old.contains("部分材料")){
+                    desc = old.substring(0,old.indexOf("部分材料"));
+                }else if(old.contains("部分配置")){
+                    desc = old.substring(0,old.indexOf("部分配置"));
                 }
 
                 if(old.contains("备注：")){
@@ -91,6 +95,30 @@ public class ProjectTestController {
                     test.setId(Integer.parseInt(result.get("id").toString()));
                     projectTestService.insert(test);
                 }
+            }
+        }else {
+            throw new AuthException(400, "你想干嘛？你木有权限哟，哈哈，妈的智障！");
+        }
+        return response;
+    }
+
+    @RequestMapping(value = "update",method = RequestMethod.POST)
+    @ApiOperation(value = "项目信息表字段填充更新",notes = "项目信息表字段填充更新",response = Response.class)
+    public Response update(@RequestParam(required = false)int begin,@RequestParam(required = false)int end) {
+        Response response = new Response();
+        Long createid = ShiroUtil.getCreateID();
+        if(createid!=null && createid == 11){
+            Map<String,Object> map = new HashMap<>();
+            map.put("begin",begin);
+            map.put("end",end);
+            List<Map<String,String>> list = projectTestService.queryAll(map);
+            for(Map result:list){
+                Map<String,Object> queryMap = new HashMap<>();
+                queryMap.put("id",result.get("id"));
+                queryMap.put("basicDesc",result.get("description"));
+                queryMap.put("background",result.get("background"));
+                queryMap.put("remark",result.get("remark"));
+                projectService.update(queryMap);
             }
         }else {
             throw new AuthException(400, "你想干嘛？你木有权限哟，哈哈，妈的智障！");
