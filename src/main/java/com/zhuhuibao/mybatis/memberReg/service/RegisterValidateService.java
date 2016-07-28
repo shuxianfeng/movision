@@ -89,7 +89,7 @@ public class RegisterValidateService {
 	        	for(Member user : memberList)
 	        	{
 	        		//同一个邮箱多次注册
-	        		if(user.getStatus() == 1 || user.getStatus() == 3 || user.getStatus()==4 || user.getStatus() == 5)
+	        		if(user.getStatus() !=0)
 	        		{
 	        			if(id == user.getId())
 	        			{

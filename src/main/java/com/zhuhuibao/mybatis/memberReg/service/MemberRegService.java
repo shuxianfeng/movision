@@ -427,8 +427,6 @@ public class MemberRegService {
                             Subject currentUser = SecurityUtils.getSubject();
                             UsernamePasswordToken token = new UsernamePasswordToken(loginMember.getAccount(),loginMember.getPassword(),true);
                             currentUser.login(token);
-                            ShiroRealm shiroRealm = new ShiroRealm();
-                            shiroRealm.forceShiroToReloadUserAuthorityCache();
                         }
 
 					} else {

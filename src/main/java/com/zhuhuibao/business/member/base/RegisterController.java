@@ -322,8 +322,6 @@ public class RegisterController {
                 Subject currentUser = SecurityUtils.getSubject();
                 UsernamePasswordToken token = new UsernamePasswordToken(loginMember.getAccount(), loginMember.getPassword(), true);
                 currentUser.login(token);
-                ShiroRealm shiroRealm = new ShiroRealm();
-                shiroRealm.forceShiroToReloadUserAuthorityCache();
             }
 
             RedirectView rv = new RedirectView(rvService.getRedirectUrl(response, "active"));
