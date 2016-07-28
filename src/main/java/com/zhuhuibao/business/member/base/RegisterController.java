@@ -320,7 +320,8 @@ public class RegisterController {
 //            LoginMember loginMember = memberService.getLoginMemberByAccount(decodeVM.split(",")[1]);
 //            if (loginMember != null) {
 //                Subject currentUser = SecurityUtils.getSubject();
-//                UsernamePasswordToken token = new UsernamePasswordToken(loginMember.getAccount(), loginMember.getPassword());
+//                UsernamePasswordToken token = new UsernamePasswordToken(loginMember.getAccount(),
+//                        loginMember.getPassword().toCharArray());
 //                currentUser.login(token);
 //            }
 

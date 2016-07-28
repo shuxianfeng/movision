@@ -425,7 +425,7 @@ public class MemberRegService {
 //						LoginMember loginMember = this.getLoginMemberByAccount(member.getMobile());
 //                        if(loginMember != null){
 //                            Subject currentUser = SecurityUtils.getSubject();
-//                            UsernamePasswordToken token = new UsernamePasswordToken(loginMember.getAccount(),loginMember.getPassword(),true);
+//                            UsernamePasswordToken token = new UsernamePasswordToken(loginMember.getAccount(),loginMember.getPassword().toCharArray(),true);
 //                            currentUser.login(token);
 //                        }
 
@@ -475,6 +475,7 @@ public class MemberRegService {
 						} else {
 							map.put("button", "false");
 						}
+                        map.put("id",String.valueOf(member.getId()));
 						result.setData(map);
 					} else {
 						throw new BusinessException(MsgCodeConstant.member_mcode_account_exist, MsgPropertiesUtils.getValue(String
