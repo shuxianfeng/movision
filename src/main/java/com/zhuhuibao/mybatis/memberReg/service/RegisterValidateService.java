@@ -25,17 +25,18 @@ import java.util.List;
  */
 @Service
 public class RegisterValidateService {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(RegisterValidateService.class);
-	
+
 	@Autowired
 	MemberRegService memberService;
-	
+
 	/**
 	 * 发送邮件激活验证码
-	 * @param serverIp 服务器IP
-	 */
-	public void sendMailActivateCode(String email, String serverIp){
+     * @param id
+     * @param serverIp 服务器IP
+     */
+	public void sendMailActivateCode(Long id, String email, String serverIp){
 
         ///邮件的内容
         StringBuilder sb=new StringBuilder("");
@@ -52,13 +53,11 @@ public class RegisterValidateService {
         sb.append("<a style=\"line-height:24px;font-size:12px;font-family:arial,sans-serif;color:#0000cc\" href=\"");
         sb.append(serverIp);
         sb.append("/rest/activateEmail?action=activate&vm=");
-//        sb.append(new String(EncodeUtil.encodeBase64(member.getId()+","+member.getEmail())));
-		sb.append(new String(EncodeUtil.encodeBase64(email)));
+        sb.append(new String(EncodeUtil.encodeBase64(id+","+email)));
         sb.append("\">");
         sb.append(serverIp);
-        sb.append("/rest/activateEmail?action=activate&vm="); 
-//        sb.append(new String(EncodeUtil.encodeBase64(member.getId()+","+member.getEmail())));
-        sb.append(new String(EncodeUtil.encodeBase64(email)));
+        sb.append("/rest/activateEmail?action=activate&vm=");
+        sb.append(new String(EncodeUtil.encodeBase64(id+","+email)));
         sb.append("</a>");
         sb.append("</p>");
         sb.append("<p style=\"padding:0px;line-height:24px;font-size:12px;color:#979797;font-family:arial,sans-serif\">");
@@ -68,7 +67,7 @@ public class RegisterValidateService {
         //发送邮件
         SendEmail.send(email, sb.toString(),"筑慧宝-账号激活");
     }
-	
+
 	/**
 	 * 邮件激活
 	 * @param decodeVM  激活信息 id code
@@ -112,28 +111,28 @@ public class RegisterValidateService {
 	        		}
 	        	}
 		       for(Member user : memberList)
-		       { 
+		       {
 		    	   if(user.getId() == id)
 		    	   {
-		    		 //验证用户激活状态  
-			           if(user.getStatus()==0) { 
+		    		 //验证用户激活状态
+			           if(user.getStatus()==0) {
 			               ///没激活
-			               Date currentTime = new Date();//获取当前时间  
+			               Date currentTime = new Date();//获取当前时间
 			               //验证链接是否过期 24小时
 			               Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(user.getRegisterTime(),"yyyy-MM-dd HH:mm:ss"),5,1);
-			               if(currentTime.before(registerDate)) {  
+			               if(currentTime.before(registerDate)) {
 		                	   user.setStatus(1);
 		                	   memberService.updateMemberStatus(user);
 		                       message = "激活成功请登录";
 		                       code = 200;
 		                       break;
-			               } else { 
+			               } else {
 			            	   //激活码已过期
 			            	   message = MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_active_code_expire));
 			            	   code = 400;
 			            	   msgCode = MsgCodeConstant.member_mcode_active_code_expire;
-			            	   
-			               }  
+
+			               }
 			           } else {
 		        		   //邮箱已激活，请登录！
 			        	   code = 400;
@@ -155,7 +154,7 @@ public class RegisterValidateService {
 	    	   code = 400;
 	    	   message = MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_unregister));
 	    	   msgCode = MsgCodeConstant.member_mcode_mail_unregister;
-		   }  
+		   }
 	        result.setCode(code);
 	        result.setMessage(message);
 	        result.setData(email);
@@ -171,9 +170,9 @@ public class RegisterValidateService {
 	        return result;
 		}
         return result;
-       
+
    }
-	
+
 	/**
 	 * 发送邮件重置密码
 	 * @param mail 邮箱地址
@@ -186,7 +185,7 @@ public class RegisterValidateService {
 		if(vInfo != null && vInfo.getId() != null && vInfo.getValid() == 0) {
 			String currentTime = DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss");
 			String url = serverIp + "/rest/validateMail?vm=" + new String(EncodeUtil.encodeBase64("validate," + mail + "," + currentTime));
-			StringBuffer sb = new StringBuffer("");
+			StringBuilder sb = new StringBuilder("");
 			sb.append("<div style=\"line-height:40px;height:40px\">");
 			sb.append("</div>");
 			sb.append("<p style=\"padding:0px\"");
@@ -222,7 +221,7 @@ public class RegisterValidateService {
 			throw new BusinessException(MsgCodeConstant.MEMBER_SEED_PWD_ERROR,"找回密码错误");
 		}
     }
-	
+
 	/**
 	 * 密码重置时验证身份
 	 * @param validateInfo 用户验证信息
@@ -278,7 +277,7 @@ public class RegisterValidateService {
 		return result;
 
    }
-		
+
 	/**
 	 * 获得跳转页面的URL
 	 * @param response
@@ -329,5 +328,5 @@ public class RegisterValidateService {
 		}
 		return redirectUrl;
 	}
-	
+
 }

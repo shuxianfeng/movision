@@ -468,7 +468,7 @@ public class MemberRegService {
 					if (isExist == 0) {
 						this.registerMember(member);
 						// 发送激活链接给此邮件
-						rvService.sendMailActivateCode(member.getEmail(), PropertiesUtils.getValue("host.ip"));
+						rvService.sendMailActivateCode(member.getId(),member.getEmail(), PropertiesUtils.getValue("host.ip"));
 						// 是否显示“立即激活按钮”
 						String mail = ds.findMailAddress(member.getEmail());
 						Map<String, String> map = new HashMap<>();
