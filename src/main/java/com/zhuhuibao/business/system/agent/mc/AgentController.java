@@ -237,14 +237,14 @@ public class AgentController {
             if (!StringUtils.isEmpty(vm)) {
                 String decodeVM = new String(EncodeUtil.decodeBase64(vm));
                 result = accountService.agentRegister(decodeVM);
-                LoginMember loginMember = memberRegService.getLoginMemberByAccount(decodeVM);
-                ShiroRealm.ShiroUser shrioUser = new ShiroRealm.ShiroUser(loginMember.getId(), loginMember.getAccount(),
-                        loginMember.getStatus(), loginMember.getIdentify(),loginMember.getRole(), "0",
-                        loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(),
-                        loginMember.getHeadShot(), loginMember.getNickname(), loginMember.getCompanyName(), loginMember.getVipLevel());
-                Subject currentUser = SecurityUtils.getSubject();
-                Session session = currentUser.getSession();
-                session.setAttribute("member", shrioUser);
+//                LoginMember loginMember = memberRegService.getLoginMemberByAccount(decodeVM);
+//                ShiroRealm.ShiroUser shrioUser = new ShiroRealm.ShiroUser(loginMember.getId(), loginMember.getAccount(),
+//                        loginMember.getStatus(), loginMember.getIdentify(),loginMember.getRole(), "0",
+//                        loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(),
+//                        loginMember.getHeadShot(), loginMember.getNickname(), loginMember.getCompanyName(), loginMember.getVipLevel());
+//                Subject currentUser = SecurityUtils.getSubject();
+//                Session session = currentUser.getSession();
+//                session.setAttribute("member", shrioUser);
                 RedirectView rv = new RedirectView(accountService.getRedirectUrl(result));
                 modelAndView.setView(rv);
             }
