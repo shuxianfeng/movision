@@ -320,14 +320,11 @@ public class RegisterController {
             modelAndView.addObject("email", EncodeUtil.encodeBase64ToString(String.valueOf(response.getData()).getBytes()));
             LoginMember loginMember = memberService.getLoginMemberByAccount(decodeVM.split(",")[1]);
             if (loginMember != null) {
-//                ShiroRealm.ShiroUser shrioUser = new ShiroRealm.ShiroUser(loginMember.getId(), loginMember.getAccount(),
-//                        loginMember.getStatus(), loginMember.getIdentify(), loginMember.getRole(), "0", loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(),
-//                        loginMember.getHeadShot(), loginMember.getNickname(), loginMember.getCompanyName(), loginMember.getVipLevel());
                 Subject currentUser = SecurityUtils.getSubject();
-//                Session session = currentUser.getSession(true);
-//                session.setAttribute("member", shrioUser);
                 UsernamePasswordToken token = new UsernamePasswordToken(loginMember.getAccount(), loginMember.getPassword(), true);
                 currentUser.login(token);
+                ShiroRealm shiroRealm = new ShiroRealm();
+                shiroRealm.forceShiroToReloadUserAuthorityCache();
             }
 
             RedirectView rv = new RedirectView(rvService.getRedirectUrl(response, "active"));

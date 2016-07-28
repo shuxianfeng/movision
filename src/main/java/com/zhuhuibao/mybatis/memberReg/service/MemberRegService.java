@@ -6,6 +6,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.constant.VipConstant;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.SendEmail;
 
 import org.apache.shiro.SecurityUtils;
@@ -102,7 +103,7 @@ public class MemberRegService {
 		log.info("findMemberByAccount accunt ==" + memberAccount);
 		Member member = new Member();
 		try {
-			if (memberAccount != null && memberAccount.indexOf("@") >= 0) {
+			if (memberAccount != null && memberAccount.contains("@")) {
 				member.setEmail(memberAccount);
 			} else {
 				member.setMobile(memberAccount);
@@ -425,14 +426,11 @@ public class MemberRegService {
 						this.deleteValidateInfo(info);
 						LoginMember loginMember = this.getLoginMemberByAccount(member.getMobile());
                         if(loginMember != null){
-//                            ShiroUser shrioUser = new ShiroUser(member.getId(), member.getMobile(), member.getStatus(), member.getIdentify(),
-//                                    loginMember.getRole(), "0", loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(),
-//                                    loginMember.getHeadShot(), loginMember.getNickname(), loginMember.getCompanyName(), loginMember.getVipLevel());
                             Subject currentUser = SecurityUtils.getSubject();
-//                            Session session = currentUser.getSession();
-//                            session.setAttribute("member", shrioUser);
                             UsernamePasswordToken token = new UsernamePasswordToken(loginMember.getAccount(),loginMember.getPassword(),true);
                             currentUser.login(token);
+                            ShiroRealm shiroRealm = new ShiroRealm();
+                            shiroRealm.forceShiroToReloadUserAuthorityCache();
                         }
 
 					} else {
@@ -493,6 +491,7 @@ public class MemberRegService {
 			}
 		} catch (Exception e) {
 			log.error("register mail error!>>> {}", e);
+            e.printStackTrace();
 			throw e;
 		}
 		log.debug("email verifyCode == " + member.getEmailCheckCode());
