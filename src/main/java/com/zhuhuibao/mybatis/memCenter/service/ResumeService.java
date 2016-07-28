@@ -141,31 +141,31 @@ public class ResumeService {
     public Response searchMyResume(String id) {
         Response response = new Response();
         Resume resume = resumeMapper.searchMyResume(id);
-        Resume resume1 = resumeMapper.previewResume(id);
+        Map<String,Object> resume1 = resumeMapper.searchMyResumeAllInfo(id);
         if (resume1 != null) {
             Integer i = 0;
-            if (resume1.getJobExperience() != null && !"".equals(resume1.getJobExperience())) {
+            if (resume1.get("jobExperience") != null && !"".equals(resume1.get("jobExperience"))) {
                 i = i + 1;
             }
-            if (resume1.getEduExperience() != null && !"".equals(resume1.getEduExperience())) {
+            if (resume1.get("eduExperience") != null && !"".equals(resume1.get("eduExperience"))) {
                 i = i + 1;
             }
-            if (resume1.getProjectExperience() != null && !"".equals(resume1.getProjectExperience())) {
+            if (resume1.get("projectExperience") != null && !"".equals(resume1.get("projectExperience"))) {
                 i = i + 1;
             }
-            if (resume1.getAttach() != null && !"".equals(resume1.getAttach())) {
+            if (resume1.get("attach") != null && !"".equals(resume1.get("attach"))) {
                 i = i + 1;
             }
-            if (resume1.getPhoto() != null && !"".equals(resume1.getPhoto())) {
+            if (resume1.get("photo") != null && !"".equals(resume1.get("photo"))) {
                 i = i + 1;
             }
             /*if(resume1.getExperienceYear()!=null && !"".equals(resume1.getExperienceYear())){
                 i=i+1;
             }*/
-            if (resume1.getCompany() != null && !"".equals(resume1.getCompany())) {
+            if (resume1.get("company") != null && !"".equals(resume1.get("company"))) {
                 i = i + 1;
             }
-            if (resume1.getPositionName() != null && !"".equals(resume1.getPositionName())) {
+            if (resume1.get("positionName") != null && !"".equals(resume1.get("positionName"))) {
                 i = i + 1;
             }
             NumberFormat numberFormat = NumberFormat.getInstance();
