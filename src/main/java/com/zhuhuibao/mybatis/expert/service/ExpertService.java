@@ -78,8 +78,8 @@ public class ExpertService {
         try{
             return achievementMapper.publishAchievement(achievement);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::publishAchievement::"+"publisher="+ShiroUtil.getCreateID(),e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -93,8 +93,8 @@ public class ExpertService {
         try{
             return achievementMapper.queryAchievementById(id);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::queryAchievementById::"+"id="+id,e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -108,8 +108,8 @@ public class ExpertService {
         try{
             return achievementMapper.queryUnLoginAchievementById(id);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::queryUnloginAchievementById::"+"id="+id,e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -121,8 +121,8 @@ public class ExpertService {
         try{
             return achievementMapper.findAllAchievementList(pager.getRowBounds(),map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::findAllAchievementList",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -134,8 +134,8 @@ public class ExpertService {
         try{
             return achievementMapper.findAllAchievementList(map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::findAchievementList",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -147,8 +147,8 @@ public class ExpertService {
         try{
             return achievementMapper.findAchievementListByCount(count);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::findAchievementListByCount"+"count="+count,e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -165,8 +165,8 @@ public class ExpertService {
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),Long.parseLong(achievement.getCreateId()),achievement.getReason());
             }
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::updateAchievement",e);
+            //e.printStackTrace();
             throw e;
         }
         return result;
@@ -181,8 +181,8 @@ public class ExpertService {
         try{
             return dynamicMapper.publishDynamic(dynamic);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::publishDynamic::"+"publisher="+ShiroUtil.getCreateID(),e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -196,8 +196,8 @@ public class ExpertService {
         try{
             return dynamicMapper.queryDynamicById(id);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::queryDynamicById::"+"id="+id,e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -214,8 +214,8 @@ public class ExpertService {
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),Long.parseLong(dynamic.getCreateId()),dynamic.getReason());
             }
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::updateDynamic",e);
+            //e.printStackTrace();
             throw e;
         }
         return result;
@@ -228,8 +228,8 @@ public class ExpertService {
         try{
             return dynamicMapper.findAllDynamicList(pager.getRowBounds(),map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::findAllDynamicList",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -241,8 +241,8 @@ public class ExpertService {
         try{
             return dynamicMapper.findDynamicListByCount(count);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::findDynamicListByCount::"+"count="+count,e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -256,8 +256,8 @@ public class ExpertService {
         try{
             return expertMapper.expertMapper(expert);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::applyExpert::"+"mem_id="+ShiroUtil.getCreateID(),e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -271,8 +271,8 @@ public class ExpertService {
         try{
             return expertMapper.queryExpertById(id);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::queryExpertById::"+"id="+id,e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -281,8 +281,8 @@ public class ExpertService {
         try{
             return expertMapper.queryExpertByCreateId(id);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::queryExpertByCreateId::"+"mem_id="+id,e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -296,8 +296,8 @@ public class ExpertService {
         try{
             return expertMapper.queryExpertByCreateid(createid);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::queryExpertByCreateid::"+"mem_id="+createid,e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -316,8 +316,8 @@ public class ExpertService {
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),Long.parseLong(expert.getCreateId()),expert.getReason());
             }
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::updateExpert",e);
+            //e.printStackTrace();
             throw e;
         }
         return result;
@@ -328,8 +328,8 @@ public class ExpertService {
         try{
             result = expertMapper.updateExpertByCreateid(expert);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::updateExpertByCreateid::createid="+ShiroUtil.getCreateID(),e);
+            //e.printStackTrace();
             throw e;
         }
         return result;
@@ -344,8 +344,8 @@ public class ExpertService {
         try{
             return expertMapper.updateExpertViews(expert);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::updateExpertViews",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -359,8 +359,8 @@ public class ExpertService {
         try{
             return expertMapper.findAllExpertList(pager.getRowBounds(),map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::findAllExpertList",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -374,8 +374,8 @@ public class ExpertService {
         try{
             return expertMapper.queryHotExpert(count);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::queryHotExpert",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -389,8 +389,8 @@ public class ExpertService {
         try{
             return expertMapper.queryLatestExpert(count);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::queryLatestExpert",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -404,8 +404,8 @@ public class ExpertService {
         try{
             return questionMapper.askExpert(question);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::askExpert::mem_id="+ShiroUtil.getCreateID(),e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -420,8 +420,8 @@ public class ExpertService {
         try{
             return questionMapper.findAllExpertQuestion(pager.getRowBounds(),map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::queryExpertQuestion::mem_id="+ShiroUtil.getCreateID(),e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -435,8 +435,8 @@ public class ExpertService {
         try{
             return answerMapper.answerQuestion(answer);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::answerQuestion::mem_id="+ShiroUtil.getCreateID(),e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -450,8 +450,8 @@ public class ExpertService {
         try{
             return questionMapper.findAllMyAnswerQuestion(pager.getRowBounds(),map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::queryMyAnswerQuestion::mem_id="+ShiroUtil.getCreateID(),e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -465,8 +465,8 @@ public class ExpertService {
         try{
             return questionMapper.findAllMyQuestion(pager.getRowBounds(),map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::queryMyQuestion::mem_id="+ShiroUtil.getCreateID(),e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -488,8 +488,8 @@ public class ExpertService {
             map.put("answerSize",answerList.size());
             return map;
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::queryMyQuestionById::mem_id="+ShiroUtil.getCreateID()+",questionId="+id,e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -503,8 +503,8 @@ public class ExpertService {
         try{
             return questionMapper.expertInteraction(count);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::expertInteraction::count="+count,e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -518,8 +518,8 @@ public class ExpertService {
         try{
             return questionMapper.updateQuestionInfo(question);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::updateQuestionInfo",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -533,8 +533,8 @@ public class ExpertService {
         try{
             return expertSupportMapper.applyExpertSupport(expertSupport);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::applyExpertSupport::mem_id="+ShiroUtil.getCreateID(),e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -548,8 +548,8 @@ public class ExpertService {
         try{
             return answerMapper.findAllExpertAnswerListOms(pager.getRowBounds());
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::findAllExpertAnswerListOms",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -563,8 +563,8 @@ public class ExpertService {
         try{
             return answerMapper.updateAnswerInfo(answer);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::updateAnswerInfo",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -578,8 +578,8 @@ public class ExpertService {
         try{
             return questionMapper.findAllQuestionListOms(pager.getRowBounds());
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::findAllQuestionListOms",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -593,8 +593,8 @@ public class ExpertService {
         try{
             return expertSupportMapper.findAllExpertSupportListOms(pager.getRowBounds(),map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::findAllExpertSupportListOms",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -608,8 +608,8 @@ public class ExpertService {
         try{
             return expertSupportMapper.updateExpertSupport(expertSupport);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::updateExpertSupport",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -623,8 +623,8 @@ public class ExpertService {
         try{
             return expertSupportMapper.queryExpertSupportInfoById(id);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::queryExpertSupportInfoById::id="+id,e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -772,8 +772,8 @@ public class ExpertService {
         try{
             return expertMapper.queryHomepageExpertList(map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::queryHomepageExpertList",e);
+            //e.printStackTrace();
             throw e;
         }
     }
@@ -782,8 +782,8 @@ public class ExpertService {
         try{
             return dynamicMapper.updateDynamicViews(dynamic);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("ExpertService::updateDynamicViews",e);
+            //e.printStackTrace();
             throw e;
         }
     }

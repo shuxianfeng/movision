@@ -75,8 +75,8 @@ public class CooperationService {
 				cooperationMapper.publishCooperation(cooperation);
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
-			e.printStackTrace();
+			log.error("CooperationService::publishCooperation::"+"publisher="+ShiroUtil.getCreateID(),e);
+			//e.printStackTrace();
 			throw e;
 		}
 	}
@@ -109,8 +109,8 @@ public class CooperationService {
 			}
 			return list1;
 		} catch (Exception e) {
-			log.error(e.getMessage());
-			e.printStackTrace();
+			log.error("CooperationService::cooperationType",e);
+			//e.printStackTrace();
 			throw e;
 		}
 	}
@@ -131,8 +131,8 @@ public class CooperationService {
 			}
 			return list;
 		} catch (Exception e) {
-			log.error(e.getMessage());
-			e.printStackTrace();
+			log.error("CooperationService::subCooperationType",e);
+			//e.printStackTrace();
 			throw e;
 		}
 	}
@@ -148,8 +148,8 @@ public class CooperationService {
 				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(cooperation.getCreateId()), cooperation.getReason());
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
-			e.printStackTrace();
+			log.error("CooperationService::updateCooperation",e);
+			//e.printStackTrace();
 			throw e;
 		}
 		return result;
@@ -162,8 +162,8 @@ public class CooperationService {
 		try {
 			return cooperationMapper.updateCooperationViews(cooperation);
 		} catch (Exception e) {
-			log.error(e.getMessage());
-			e.printStackTrace();
+			log.error("CooperationService::updateCooperationViews",e);
+			//e.printStackTrace();
 			throw e;
 		}
 	}
@@ -178,8 +178,8 @@ public class CooperationService {
 				cooperationMapper.deleteCooperation(id);
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
-			e.printStackTrace();
+			log.error("CooperationService::deleteCooperation",e);
+			//e.printStackTrace();
 			throw e;
 		}
 	}
@@ -192,8 +192,8 @@ public class CooperationService {
 			Cooperation cooperation = cooperationMapper.queryCooperationInfoById(id);
 			return cooperation;
 		} catch (Exception e) {
-			log.error(e.getMessage());
-			e.printStackTrace();
+			log.error("CooperationService::queryCooperationInfoById::"+"witkeyId="+id,e);
+			//e.printStackTrace();
 			throw e;
 		}
 	}
@@ -206,8 +206,8 @@ public class CooperationService {
 			Map<String, Object> cooperation = cooperationMapper.queryUnloginCooperationInfo(id);
 			return cooperation;
 		} catch (Exception e) {
-			log.error(e.getMessage());
-			e.printStackTrace();
+			log.error("CooperationService::queryUnloginCooperationInfo::"+"witkeyId="+id,e);
+			//e.printStackTrace();
 			throw e;
 		}
 	}
@@ -220,8 +220,8 @@ public class CooperationService {
 			List<Map<String, String>> cooperationList = cooperationMapper.findAllCooperationByPager(pager.getRowBounds(), cooperation);
 			return cooperationList;
 		} catch (Exception e) {
-			log.error(e.getMessage());
-			e.printStackTrace();
+			log.error("CooperationService::findAllCooperationByPager",e);
+			//e.printStackTrace();
 			throw e;
 		}
 	}
@@ -233,8 +233,8 @@ public class CooperationService {
 		try {
 			return cooperationMapper.queryHotCooperation(map);
 		} catch (Exception e) {
-			log.error(e.getMessage());
-			e.printStackTrace();
+			log.error("CooperationService::queryHotCooperation",e);
+			//e.printStackTrace();
 			throw e;
 		}
 	}
@@ -248,8 +248,8 @@ public class CooperationService {
 		try {
 			return cooperationMapper.queryMyWitkeyListSize(map);
 		} catch (Exception e) {
-			log.error(e.getMessage());
-			e.printStackTrace();
+			log.error("CooperationService::queryMyWitkeyListSize",e);
+			//e.printStackTrace();
 			throw e;
 		}
 	}
