@@ -41,8 +41,7 @@ public class ProjectLinkmanService {
             result = linkmanMapper.insertSelective(linkmanInfo);
 
         } catch (Exception e) {
-            log.error("add project error! {}", e);
-            e.printStackTrace();
+            log.error("add project error! >>>", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "操作失败");
 
         }
@@ -55,8 +54,7 @@ public class ProjectLinkmanService {
         try {
             linkmanList = linkmanMapper.queryProjectLinkmanByProjectID(projectID);
         } catch (Exception e) {
-            log.error("query Linkman By ProjectID error! {} ", e);
-            e.printStackTrace();
+            log.error("query Linkman By ProjectID error! >>> ", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "操作失败");
         }
         return linkmanList;
@@ -68,8 +66,7 @@ public class ProjectLinkmanService {
         try {
             result = linkmanMapper.updateByPrimaryKeySelective(linkman);
         } catch (Exception e) {
-            log.error("update Linkman info error! {}", e);
-            e.printStackTrace();
+            log.error("update Linkman info error! >>>", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "操作失败");
         }
         return result;

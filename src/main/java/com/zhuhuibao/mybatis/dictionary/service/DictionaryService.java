@@ -64,8 +64,7 @@ public class DictionaryService {
 
             province = provinceMapper.getProInfo(provinceCode);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("t_dictionary_province select error : " + e.getMessage());
+            log.error("t_dictionary_province select error >>>", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return province;
@@ -78,8 +77,7 @@ public class DictionaryService {
 
             city = cityMapper.getCityInfo(cityCode);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("t_dictionary_city select error : " + e.getMessage());
+            log.error("t_dictionary_city select error >>> ", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return city;
@@ -92,8 +90,7 @@ public class DictionaryService {
 
             city = cityMapper.findCityByCode(cityCode);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("t_dictionary_city select error : " + e.getMessage());
+            log.error("t_dictionary_city select error >>> ", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return city;
@@ -106,8 +103,7 @@ public class DictionaryService {
 
             area = areaMapper.getAreaInfo(areaCode);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("t_dictionary_area select error : " + e.getMessage());
+            log.error("t_dictionary_area select error >>> ", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
 
@@ -121,8 +117,7 @@ public class DictionaryService {
 
             area = areaMapper.findAreaByCode(areaCode);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("t_dictionary_area select error : " + e.getMessage());
+            log.error("t_dictionary_area select error >>>" ,e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
 
@@ -137,7 +132,7 @@ public class DictionaryService {
             province = provinceMapper.findProInfo(provinceCode);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("t_dictionary_province select error : " + e.getMessage());
+            log.error("t_dictionary_province select error >>>" ,e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return province;
@@ -149,8 +144,7 @@ public class DictionaryService {
         try {
             list = positionMapper.findPositionByParentId(parentId);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("t_dictionary_position select error : " + e.getMessage());
+            log.error("t_dictionary_position select error>>> ", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return list;
@@ -162,8 +156,7 @@ public class DictionaryService {
         try {
             list = positionMapper.findPosition(count);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("t_dictionary_position select error : " + e.getMessage());
+            log.error("t_dictionary_position select error >>> " ,e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return list;

@@ -14,9 +14,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *我下载的资料
- *@author pl
- *@create 2016/5/31 0031
+ * 我下载的资料
+ *
+ * @author pl
+ * @create 2016/5/31 0031
  **/
 @Service
 @Transactional
@@ -29,22 +30,21 @@ public class TechDownloadDataService {
 
     /**
      * 插入我下载的数据
-     * @param dataId 下载的技术资料ID
-     * @param  createId 下载人ID
+     *
+     * @param dataId   下载的技术资料ID
+     * @param createId 下载人ID
      * @return
      */
-    public int insertDownloadData(String dataId,Long createId)
-    {
-        log.info("insert download dataId "+dataId+" createId = "+createId);
+    public int insertDownloadData(String dataId, Long createId) {
+        log.info("insert download dataId " + dataId + " createId = " + createId);
         int result;
-        try{
+        try {
             TechDownLoadData dlData = new TechDownLoadData();
             dlData.setCreateId(createId);
             dlData.setDataId(Long.parseLong(dataId));
             result = dlMapper.insertSelective(dlData);
-        }catch(Exception e)
-        {
-            log.error("insert download data error!",e);
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
         return result;
@@ -52,18 +52,17 @@ public class TechDownloadDataService {
 
     /**
      * 我下载的资料
+     *
      * @param map 查看条件
      * @return
      */
-    public List<Map<String,Object>> findAllDownloadData(Paging<Map<String,Object>> pager,Map<String,String> map)
-    {
-        log.info("find all download data "+ StringUtils.mapToString(map));
-        List<Map<String,Object>> techList;
-        try{
-            techList = dlMapper.findAllDownloadData(pager.getRowBounds(),map);
-        }catch(Exception e)
-        {
-            log.error("find all tech cooperation for pager error!",e);
+    public List<Map<String, Object>> findAllDownloadData(Paging<Map<String, Object>> pager, Map<String, String> map) {
+        log.info("find all download data " + StringUtils.mapToString(map));
+        List<Map<String, Object>> techList;
+        try {
+            techList = dlMapper.findAllDownloadData(pager.getRowBounds(), map);
+        } catch (Exception e) {
+            log.error("查询异常>>>", e);
             throw e;
         }
         return techList;

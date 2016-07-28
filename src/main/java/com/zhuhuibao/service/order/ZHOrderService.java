@@ -28,7 +28,7 @@ import java.util.*;
 /**
  * 订单流程服务
  */
-@Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 @Service
 public class ZHOrderService {
     private final static Logger logger = LoggerFactory.getLogger(ZHOrderService.class);
@@ -83,7 +83,7 @@ public class ZHOrderService {
      * @param msgParam
      */
     public void genOrderRecord(Map<String, String> msgParam) {
-        try{
+        try {
             Order order = new Order();
             order.setOrderNo(msgParam.get("orderNo"));
             order.setBuyerId(Long.valueOf(msgParam.get("buyerId")));
@@ -100,10 +100,9 @@ public class ZHOrderService {
             order.setStatus(PayConstants.OrderStatus.WZF.toString());
 
             orderService.insert(order);
-        } catch (Exception e){
-              e.printStackTrace();
-            logger.error(e.getMessage());
-               throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,e.getMessage());
+        } catch (Exception e) {
+            logger.error("执行异常>>>", e);
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, e.getMessage());
         }
     }
 
@@ -113,7 +112,7 @@ public class ZHOrderService {
      * @param msgParam
      */
     public void genOrderGoodsRecord(Map<String, String> msgParam) {
-        try{
+        try {
             //订单商品
             OrderGoods orderGoods = new OrderGoods();
             orderGoods.setGoodsId(Long.valueOf(msgParam.get("goodsId")));
@@ -125,10 +124,9 @@ public class ZHOrderService {
             orderGoods.setCreateTime(new Date());
 
             orderGoodsService.insert(orderGoods);
-        } catch (Exception e){
-            e.printStackTrace();
-            logger.error(e.getMessage());
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,e.getMessage());
+        } catch (Exception e) {
+            logger.error("执行异常>>>", e);
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, e.getMessage());
         }
 
     }
@@ -158,22 +156,21 @@ public class ZHOrderService {
                 jsonMap.put("receiveName", msgParam.get("invoiceReceiveName"));
                 jsonMap.put("address", msgParam.get("invoiceAddress"));
                 jsonMap.put("mobile", msgParam.get("invoiceMobile"));
-                jsonMap.put("telephone", StringUtil.isNotEmpty(msgParam.get("invoiceTel"))?msgParam.get("invoiceTel"):"");
+                jsonMap.put("telephone", StringUtil.isNotEmpty(msgParam.get("invoiceTel")) ? msgParam.get("invoiceTel") : "");
                 jsonMap.put("province", msgParam.get("invoiceProvince"));
                 jsonMap.put("city", msgParam.get("invoiceCity"));
                 jsonMap.put("area", msgParam.get("invoiceArea"));
-                jsonMap.put("createId",msgParam.get("buyerId"));
-                jsonMap.put("status",OrderConstants.InvoiceIsStatus.WKP.toString());//默认未开票
+                jsonMap.put("createId", msgParam.get("buyerId"));
+                jsonMap.put("status", OrderConstants.InvoiceIsStatus.WKP.toString());//默认未开票
                 Gson gson = new Gson();
                 String jsonParam = gson.toJson(jsonMap);
 
                 invoiceService.insertInvoice(jsonParam);
             }
 
-        } catch (Exception e){
-            e.printStackTrace();
-            logger.error(e.getMessage());
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,e.getMessage());
+        } catch (Exception e) {
+            logger.error("执行异常>>>", e);
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, e.getMessage());
         }
 
     }
@@ -292,7 +289,7 @@ public class ZHOrderService {
      * @param msgParam
      */
     public void createOrderFlow(Map<String, String> msgParam) {
-        try{
+        try {
             OrderFlow orderFlow = new OrderFlow();
             orderFlow.setOrderNo(msgParam.get("orderNo"));
             orderFlow.setTradeMode(msgParam.get("tradeMode"));
@@ -300,10 +297,9 @@ public class ZHOrderService {
             orderFlow.setTradeStatus(PayConstants.OrderStatus.WZF.toString());
             orderFlow.setCreateTime(new Date());
             orderFlowService.insert(orderFlow);
-        } catch (Exception e){
-            e.printStackTrace();
-            logger.error(e.getMessage());
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,e.getMessage());
+        } catch (Exception e) {
+            logger.error("执行异常>>>", e);
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, e.getMessage());
         }
 
     }
@@ -401,7 +397,7 @@ public class ZHOrderService {
      * @throws Exception
      */
     public void processAlipayRefunc(HttpServletResponse resp, Map<String, String> msgParam,
-                                     String orderNo, Order order, OrderFlow alipayOrderFlow) throws Exception {
+                                    String orderNo, Order order, OrderFlow alipayOrderFlow) throws Exception {
         logger.debug("进入支付宝退款接口");
 
         String tradeStatus = alipayOrderFlow.getTradeStatus();
@@ -431,7 +427,7 @@ public class ZHOrderService {
             } catch (Exception e) {
                 e.printStackTrace();
                 logger.error("筑慧币退款失败");
-                throw new BusinessException(MsgCodeConstant.PAY_ERROR,"筑慧币退款失败");
+                throw new BusinessException(MsgCodeConstant.PAY_ERROR, "筑慧币退款失败");
             }
         } else {
             logger.error("非[待退款]状态,不支持退款操作");

@@ -84,8 +84,7 @@ public class CourseService {
             createOrderLock(msgParam);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, e.getMessage());
         } finally {
             if (lock != null) {

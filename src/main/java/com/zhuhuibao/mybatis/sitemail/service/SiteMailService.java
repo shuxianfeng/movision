@@ -51,41 +51,37 @@ public class SiteMailService {
 
     /**
      * 插入站内信信息
-     * @param siteMail  站内信信息
+     *
+     * @param siteMail 站内信信息
      * @return
      */
-    public Response addSiteMail(MessageText siteMail) throws Exception
-    {
+    public Response addSiteMail(MessageText siteMail) throws Exception {
         Response response = new Response();
-        try
-        {
+        try {
             msgTextMapper.insertSelective(siteMail);
             MessageLog msgLog = new MessageLog();
             msgLog.setRecID(siteMail.getRecID());
             msgLog.setMessageID(siteMail.getId());
             msgLog.setStatus(1);
             msgLogMapper.insertSelective(msgLog);
-        }
-        catch(Exception e)
-        {
-            log.error(e.getMessage());
-            throw new BusinessException(MsgCodeConstant.mcode_common_failure,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
+            throw new BusinessException(MsgCodeConstant.mcode_common_failure, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
         }
         return response;
     }
 
     /**
      * 插入拒绝理由站内信
+     *
      * @param sendId 发送者ID
-     * @param recId 接收者ID
+     * @param recId  接收者ID
      * @param reason 拒绝理由
      * @return
      */
-    public Response addRefuseReasonMail(Long sendId,Long recId,String reason)
-    {
+    public Response addRefuseReasonMail(Long sendId, Long recId, String reason) {
         Response response = new Response();
-        try
-        {
+        try {
             MessageText msgText = new MessageText();
             msgText.setType(Constants.SITE_MAIL_TYPE_THREE);
             msgText.setMessageText(reason);
@@ -93,212 +89,165 @@ public class SiteMailService {
             msgText.setSendID(sendId);
             msgText.setRecID(recId);
             this.addSiteMail(msgText);
-        }
-        catch(Exception e)
-        {
-            log.error(e.getMessage());
-            throw new BusinessException(MsgCodeConstant.mcode_common_failure,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
+            throw new BusinessException(MsgCodeConstant.mcode_common_failure, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
         }
         return response;
     }
 
-    public Integer queryUnreadMsgCount(Map<String,Object> map)
-    {
-        log.info("query unread message count receiveid = "+map.get("recID")+" type = "+map.get("type")+" status = "+map.get("status"));
+    public Integer queryUnreadMsgCount(Map<String, Object> map) {
+        log.info("query unread message count receiveid = " + map.get("recID") + " type = " + map.get("type") + " status = " + map.get("status"));
         Integer count = 0;
-        try
-        {
+        try {
             count = msgLogMapper.queryUnreadMsgCount(map);
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             throw e;
         }
         return count;
     }
 
-    public List<Map<String,String>> findAllNewsList(Paging<Map<String,String>> pager, Map<String, Object> map){
-        try{
-            return msgTextMapper.findAllNewsList(pager.getRowBounds(),map);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+    public List<Map<String, String>> findAllNewsList(Paging<Map<String, String>> pager, Map<String, Object> map) {
+        try {
+            return msgTextMapper.findAllNewsList(pager.getRowBounds(), map);
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
-    public int addNewsToLog(Map<String, Object> map){
-        try{
+    public int addNewsToLog(Map<String, Object> map) {
+        try {
             return msgLogMapper.addNewsToLog(map);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
-    public int updateNewsStatus(MessageLog messageLog){
-        try{
+    public int updateNewsStatus(MessageLog messageLog) {
+        try {
             return msgLogMapper.updateByPrimaryKeySelective(messageLog);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
-    public int updateStatus(MessageLog messageLog){
-        try{
+    public int updateStatus(MessageLog messageLog) {
+        try {
             return msgLogMapper.updateNewsStatus(messageLog);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
-    public Integer selUnreadNewsCount(Map<String,Object> map)
-    {
-        try
-        {
+    public Integer selUnreadNewsCount(Map<String, Object> map) {
+        try {
             return msgLogMapper.selUnreadNewsCount(map);
-        }catch(Exception e)
-        {
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
-    public List<Map<String,String>> findAllMySendMsgList(Paging<Map<String,String>> pager,Map<String,Object> map){
-        try
-        {
-            return messageMapper.findAllMySendMsgList(pager.getRowBounds(),map);
-        }catch(Exception e)
-        {
-            log.error(e.getMessage());
-            e.printStackTrace();
+    public List<Map<String, String>> findAllMySendMsgList(Paging<Map<String, String>> pager, Map<String, Object> map) {
+        try {
+            return messageMapper.findAllMySendMsgList(pager.getRowBounds(), map);
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
-    public List<Map<String,String>> findAllMyReceiveMsgList(Paging<Map<String,String>> pager,Map<String,Object> map){
-        try
-        {
-            return messageMapper.findAllMyReceiveMsgList(pager.getRowBounds(),map);
-        }catch(Exception e)
-        {
-            log.error(e.getMessage());
-            e.printStackTrace();
+    public List<Map<String, String>> findAllMyReceiveMsgList(Paging<Map<String, String>> pager, Map<String, Object> map) {
+        try {
+            return messageMapper.findAllMyReceiveMsgList(pager.getRowBounds(), map);
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
-    public int updateMessage(Message message){
-        try
-        {
+    public int updateMessage(Message message) {
+        try {
             return messageMapper.updateMessage(message);
-        }catch(Exception e)
-        {
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
-    public Map<String,String> queryNewsById(String id){
-        try
-        {
+    public Map<String, String> queryNewsById(String id) {
+        try {
             return msgLogMapper.queryNewsById(id);
-        }catch(Exception e)
-        {
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
-    public Map<String,String> queryMySendMsgById(String id){
-        try
-        {
+    public Map<String, String> queryMySendMsgById(String id) {
+        try {
             return messageMapper.queryMySendMsgById(id);
-        }catch(Exception e)
-        {
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
-    public Map<String,String> queryMyReceiveMsgById(String id){
-        try
-        {
+    public Map<String, String> queryMyReceiveMsgById(String id) {
+        try {
             return messageMapper.queryMyReceiveMsgById(id);
-        }catch(Exception e)
-        {
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
-    public List<Map<String,String>> findMember(Map<String, Object> map){
-        try
-        {
+    public List<Map<String, String>> findMember(Map<String, Object> map) {
+        try {
             return memberMapper.findMemberOms(map);
-        }catch(Exception e)
-        {
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
-    public Long addMsgText(MessageText messageText){
-        try
-        {
+    public Long addMsgText(MessageText messageText) {
+        try {
             msgTextMapper.insertSelective(messageText);
-            Long id = messageText.getId();
-            return id;
-        }catch(Exception e)
-        {
-            log.error(e.getMessage());
-            e.printStackTrace();
+            return messageText.getId();
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
-    public int addMsgLog(MessageLog messageLog){
-        try
-        {
+    public int addMsgLog(MessageLog messageLog) {
+        try {
             return msgLogMapper.insertSelective(messageLog);
-        }catch(Exception e)
-        {
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
-    public List<Map<String,String>> findAllNoticeList(Paging<Map<String,String>> pager){
-        try
-        {
+    public List<Map<String, String>> findAllNoticeList(Paging<Map<String, String>> pager) {
+        try {
             return noticeMapper.findAllNoticeList(pager.getRowBounds());
-        }catch(Exception e)
-        {
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
-    public Map<String,String> queryNoticeById(String id){
-        try
-        {
+    public Map<String, String> queryNoticeById(String id) {
+        try {
             return noticeMapper.queryNoticeById(id);
-        }catch(Exception e)
-        {
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
     }

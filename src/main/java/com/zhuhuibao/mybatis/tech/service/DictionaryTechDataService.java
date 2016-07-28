@@ -40,7 +40,7 @@ public class DictionaryTechDataService {
         try {
             firstCategoryList = dicTDMapper.selectFirstCategory();
         }catch(Exception e){
-            log.error("select tech data first category error!",e);
+            log.error("查询异常>>>",e);
             throw e;
         }
         return firstCategoryList;
@@ -58,7 +58,7 @@ public class DictionaryTechDataService {
         try {
             secondCategoryList = dicTDMapper.selectSecondCategoryById(firstCategoryId);
         }catch(Exception e){
-            log.error("select tech data second category error!",e);
+            log.error("查询异常>>>",e);
             throw e;
         }
         return secondCategoryList;
@@ -72,15 +72,14 @@ public class DictionaryTechDataService {
     public List<Map<String,Object>> selectCategoryInfo(int firstCategoryId)
     {
         log.info("select category info firstCategoryId = "+firstCategoryId);
-        List<Map<String,Object>> fcateList = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> fcateList = new ArrayList<>();
         try {
             List<Map<String,Object>> categoryList = dicTDMapper.selectCategoryInfo(firstCategoryId);
-            List<Map<String,Object>> scateList = null;
+            List<Map<String,Object>> scateList;
             Map<String,Object> fcateMap = null;
-            Map<String,Object> scateMap = null;
+            Map<String,Object> scateMap;
             if(!categoryList.isEmpty())
             {
-                int size = categoryList.size();
                 for (Map<String, Object> category : categoryList) {
                     Integer parentId = (Integer) category.get("parentId");
                     if (fcateMap != null && fcateMap.get("fCode") != null && fcateMap.get("fCode") == parentId) {
@@ -106,7 +105,7 @@ public class DictionaryTechDataService {
                 }
             }
         }catch(Exception e){
-            log.error("select category info error!",e);
+            log.error("查询异常>>>",e);
             throw e;
         }
         return fcateList;

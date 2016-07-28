@@ -76,8 +76,7 @@ public class ResumeService {
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "创建失败");
             }
         } catch (Exception e) {
-            log.error("setUpResume error", e);
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return response;
@@ -283,8 +282,7 @@ public class ResumeService {
                 response.setMessage("更新失败");
             }
         } catch (Exception e) {
-            log.error("updateResume error", e);
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return response;
@@ -371,8 +369,7 @@ public class ResumeService {
             }
             pager.result(list);
         } catch (Exception e) {
-            log.error("find all resume error!", e);
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return pager;
@@ -568,8 +565,7 @@ public class ResumeService {
                 resume = resumeList.get(0);
             }
         } catch (Exception e) {
-            log.error("query resume by createID error!", e);
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return resume;
@@ -683,8 +679,7 @@ public class ResumeService {
                 list.add(map);
             }
         } catch (Exception e) {
-            log.error("query latest resume error!");
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询失败");
         }
         return list;
@@ -705,8 +700,7 @@ public class ResumeService {
                 isExist = true;
             }
         } catch (Exception e) {
-            log.error("judge is exist resume error !!!");
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return isExist;
@@ -716,8 +710,7 @@ public class ResumeService {
         try {
             return resumeLookRecordMapper.addLookRecord(map);
         } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
     }
@@ -726,8 +719,7 @@ public class ResumeService {
         try {
             return resumeLookRecordMapper.findAllMyResumeLookRecord(pager.getRowBounds(), map);
         } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
     }
@@ -748,7 +740,6 @@ public class ResumeService {
             resultMap.put("resumeCount", map2.get("count"));
         } catch (Exception e) {
             log.error("find data upload download error!", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return resultMap;
@@ -758,8 +749,7 @@ public class ResumeService {
         try {
             return downloadRecordMapper.updateByPrimaryKeySelective(record);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("select error:{}", e.getMessage());
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
     }
@@ -768,8 +758,7 @@ public class ResumeService {
         try {
             return collectRecordMapper.updateByPrimaryKeySelective(record);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("select error:{}", e.getMessage());
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
     }
@@ -784,8 +773,7 @@ public class ResumeService {
         try {
             return resumeMapper.previewResumeNew(id);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("select error:{}", e.getMessage());
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
     }
@@ -800,8 +788,7 @@ public class ResumeService {
         try {
             return resumeMapper.isDownOrColl(con);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("select error:{}", e.getMessage());
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
     }
@@ -823,8 +810,7 @@ public class ResumeService {
             return resumeMapper.insertCollRecord(resumeMap);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("insert error : {}", e.getMessage());
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入失败");
         }
     }
@@ -834,8 +820,7 @@ public class ResumeService {
         try {
             ids = resumeMapper.selectIdsByCreateId(createid);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("select error : {}", e.getMessage());
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
 

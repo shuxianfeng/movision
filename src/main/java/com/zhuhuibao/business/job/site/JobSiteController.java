@@ -111,8 +111,7 @@ public class JobSiteController {
     @ApiOperation(value = "公司详情", notes = "公司详情", response = Response.class)
     public Response queryCompanyInfo(@ApiParam(value = "创建者ID(会员ID)") @RequestParam(required = true) Long id) throws Exception {
         log.info("query company info id " + id);
-        Response response = job.queryCompanyInfo(id);
-        return response;
+        return job.queryCompanyInfo(id);
     }
 
 
@@ -135,15 +134,10 @@ public class JobSiteController {
     public Response queryOtherPosition(
             @ApiParam(value = "职位ID") @RequestParam(required = true) String jobID,
             @ApiParam(value = "") @RequestParam() String createID,
-            @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-            @ApiParam(value = "每页显示的条数") @RequestParam(required = false) String pageSize) throws IOException {
+            @ApiParam(value = "页码") @RequestParam(required = false,defaultValue = "1") String pageNo,
+            @ApiParam(value = "每页显示的条数") @RequestParam(required = false,defaultValue = "10") String pageSize) throws IOException {
         log.info("query position info by id");
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
+
         Paging<Map<String,Object>> pager = new Paging<Map<String,Object>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("createID", createID);
@@ -161,16 +155,12 @@ public class JobSiteController {
             @ApiParam(value = "企业ID") @RequestParam String enterpriseID,
             @ApiParam(value = "城市code") @RequestParam(required = false) String city,
             @ApiParam(value = "名称") @RequestParam(required = false) String name,
-            @RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws IOException {
+            @RequestParam(required = false,defaultValue = "1") String pageNo,
+            @RequestParam(required = false,defaultValue = "5") String pageSize) throws IOException {
         log.info("query position info by id");
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "5";
-        }
-        Paging<Map<String,Object>> pager = new Paging<Map<String,Object>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        Map<String, Object> map = new HashMap<String, Object>();
+
+        Paging<Map<String,Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String, Object> map = new HashMap<>();
         map.put("createID", enterpriseID);
         map.put("city", city);
         map.put("name", name);
@@ -225,13 +215,12 @@ public class JobSiteController {
     public Response queryRecommendPosition(@ApiParam(value = "职位ID") @RequestParam String jobID,
                                            @ApiParam(value = "职位类别ID") @RequestParam String postID) throws IOException {
         //查询不同公司发布的相同职位
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("postID", postID);
         map.put("count", JobConstant.JOB_RECOMMEND_COUNT);
         map.put("delete", JobConstant.JOB_DELETE_ZERO);
         map.put("jobID", jobID);
-        Response response = job.searchSamePosition(map);
-        return response;
+        return job.searchSamePosition(map);
     }
 
     @RequestMapping(value = "sel_hot_position", method = RequestMethod.GET)
@@ -282,7 +271,7 @@ public class JobSiteController {
     @ApiOperation(value = "热门职位", notes = "查询名企发布的热门职位", response = Response.class)
     public Response queryEnterpriseHotPosition() throws IOException {
         Response response = new Response();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         //“1”推荐企业.
         map.put("recommend", JobConstant.JOB_RECOMMEND_TRUE);
         map.put("count", JobConstant.JOB_HOTPOSITION_COUNT_EIGHT);
@@ -297,7 +286,7 @@ public class JobSiteController {
     public Response isExistApplyPosition(@ApiParam(value = "职位ID") @RequestParam String JobID,
                                          @ApiParam(value = "简历ID") @RequestParam String resumeID) throws Exception {
         Response response = new Response();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("jobID", JobID);
         map.put("resumeID", resumeID);
         Integer count = jrrService.isExistApplyPosition(map);
@@ -309,7 +298,7 @@ public class JobSiteController {
     @ApiOperation(value = "查询某企业发布职位的城市", notes = "查询某企业发布职位的城市", response = Response.class)
     public Response queryPublishJobCity(@ApiParam(value = "企业ID(创建者ID)") @RequestParam String enterpriseID) throws Exception {
         Response response = new Response();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("enterpriseID", enterpriseID);
         List<Map<String, String>> jobList = job.queryPublishJobCity(map);
         response.setData(jobList);

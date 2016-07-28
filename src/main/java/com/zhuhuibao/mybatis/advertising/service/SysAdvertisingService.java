@@ -39,8 +39,7 @@ public class SysAdvertisingService {
         try{
             list = mapper.findListByCondition(chanType,page,advArea);
         }catch (Exception  e){
-            log.error("数据库操作失败:{}",e.getMessage());
-            e.printStackTrace();
+            log.error("数据库操作失败>>>{}",e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
         }
 

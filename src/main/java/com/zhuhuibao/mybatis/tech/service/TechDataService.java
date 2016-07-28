@@ -51,11 +51,11 @@ public class TechDataService {
      */
     public List<Map<String, String>> findAllOMSTechCooperationPager(Paging<Map<String, String>> pager, Map<String, Object> condition) {
         log.info("find all OMS tech data for pager " + StringUtils.mapToString(condition));
-        List<Map<String, String>> techList = null;
+        List<Map<String, String>> techList;
         try {
             techList = techDataMapper.findAllOMSTechDataPager(pager.getRowBounds(), condition);
         } catch (Exception e) {
-            log.error("find all OMS tech data for pager error!", e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return techList;
@@ -88,7 +88,7 @@ public class TechDataService {
                 }
             }
         } catch (Exception e) {
-            log.error("find all tech data for pager error!", e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return techList;
@@ -108,7 +108,7 @@ public class TechDataService {
             techList = techDataMapper.findAllTechDataOnlyPager(pager.getRowBounds(), condition);
 
         } catch (Exception e) {
-            log.error("find all tech data for pager error!", e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return techList;
@@ -122,11 +122,11 @@ public class TechDataService {
      */
     public List<Map<String, String>> findScategory(Map<String, Object> condition) {
         log.info("find all scategory for pager " + StringUtils.mapToString(condition));
-        List<Map<String, String>> techList = null;
+        List<Map<String, String>> techList;
         try {
             techList = techDataMapper.findScategory(condition);
         } catch (Exception e) {
-            log.error("find all scategory for pager error!", e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return techList;
@@ -144,7 +144,7 @@ public class TechDataService {
         try {
             result = techDataMapper.insertSelective(techData);
         } catch (Exception e) {
-            log.error("insert data cooperation info error!", e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return result;
@@ -162,7 +162,7 @@ public class TechDataService {
         try {
             result = techDataMapper.deleteByPrimaryKey(condition);
         } catch (Exception e) {
-            log.error("delete oms tech data error! ", e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return result;
@@ -183,7 +183,7 @@ public class TechDataService {
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), techData.getCreateid(), techData.getReason());
             }
         } catch (Exception e) {
-            log.error("update oms tech data error! ", e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return result;
@@ -201,7 +201,7 @@ public class TechDataService {
         try {
             result = techDataMapper.updateTechDataViewsOrDL(map);
         } catch (Exception e) {
-            log.error("update tech data views or download rate error! ", e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return result;
@@ -219,7 +219,7 @@ public class TechDataService {
         try {
             techData = techDataMapper.selectByPrimaryKey(id);
         } catch (Exception e) {
-            log.error("select oms tech data error! ", e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return techData;
@@ -237,7 +237,7 @@ public class TechDataService {
         try {
             techData = techDataMapper.selectMCTechDataDetail(id);
         } catch (Exception e) {
-            log.error("select mc tech data error! ", e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return techData;
@@ -258,7 +258,7 @@ public class TechDataService {
                 fileName = techData.getAttach();
             }
         } catch (Exception e) {
-            log.error("select tech data attach file name error! ", e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return fileName;
@@ -283,8 +283,7 @@ public class TechDataService {
                 }
             }
         } catch (Exception e) {
-            log.error("preview tech data detail error!", e);
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw e;
         }
         return techList;
@@ -298,11 +297,11 @@ public class TechDataService {
      */
     public List<Map<String, String>> findDataViewsOrder(Map<String, Object> map) {
         log.info("find views order " + StringUtils.mapToString(map));
-        List<Map<String, String>> dataList = null;
+        List<Map<String, String>> dataList;
         try {
             dataList = techDataMapper.findViewsOrder(map);
         } catch (Exception e) {
-            log.error("find views order error!", e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return dataList;
@@ -316,11 +315,11 @@ public class TechDataService {
      */
     public List<Map<String, String>> findDownloadOrder(Map<String, Object> map) {
         log.info("find views order " + StringUtils.mapToString(map));
-        List<Map<String, String>> dataList = null;
+        List<Map<String, String>> dataList;
         try {
             dataList = techDataMapper.findDownloadOrder(map);
         } catch (Exception e) {
-            log.error("find views order error!", e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return dataList;
@@ -339,7 +338,7 @@ public class TechDataService {
             List<Map<String, String>> dataList = techDataMapper.findIndexTechData(map);
             techMap = generateDataInfo(dataList, "sCategory");
         } catch (Exception e) {
-            log.error("find home page tech data error!", e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return techMap;
@@ -389,7 +388,7 @@ public class TechDataService {
             techMap.put("msgCount",String.valueOf(count));
 
         } catch (Exception e) {
-            log.error("find tech site info error1!", e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return techMap;
@@ -406,7 +405,7 @@ public class TechDataService {
         try {
             techMap = techDataMapper.findTechCount();
         } catch (Exception e) {
-            log.error("find tech site total error1!", e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return techMap;
@@ -427,7 +426,7 @@ public class TechDataService {
             Map<String, Object> map2 = mapList.get(1);
             resultMap.put("downloadCount", map2.get("count"));
         } catch (Exception e) {
-            log.error("find data upload download error!", e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return resultMap;

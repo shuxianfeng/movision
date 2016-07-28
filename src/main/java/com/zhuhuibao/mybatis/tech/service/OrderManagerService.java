@@ -83,7 +83,7 @@ public class OrderManagerService {
         try {
             orderList = orderMapper.findAllOmsTechOrder(pager.getRowBounds(), condition);
         } catch (Exception e) {
-            log.error("find all oms order for pager error!", e);
+            log.error("查询异常>>>",e);
             throw e;
         }
         return orderList;
@@ -102,7 +102,7 @@ public class OrderManagerService {
             List<OrderFlow> orderFlows = orderFlowService.findByOrderNo((String) condition.get("orderNo"));
             orderMap = orderMapper.selectByPrimaryKey(condition);
             if (!orderFlows.isEmpty()) {
-                Map<String, Object> paymentInfo = new HashMap<String, Object>();
+                Map<String, Object> paymentInfo = new HashMap<>();
                 for (OrderFlow flow : orderFlows) {
                     if (OrderConstants.OrderFlowTradeMode.ALIPAY.toString().equals(flow.getTradeMode())) {
                         paymentInfo.put("aliTradeMode", OrderConstants.OrderFlowTradeModeName.ALIPAY.toString());
@@ -120,7 +120,7 @@ public class OrderManagerService {
                 orderMap.put("paymentInfo", paymentInfo);
             }
         } catch (Exception e) {
-            log.error("find all oms order for pager error!", e);
+            log.error("执行异常>>>",e);
             throw e;
         }
         return orderMap;
@@ -135,14 +135,14 @@ public class OrderManagerService {
      */
     public int updateByPrimaryKeySelective(String orderNo, String status) {
         log.info("update order status = " + status + " orderNo = " + orderNo);
-        int result = 0;
+        int result;
         try {
             OrderOms record = new OrderOms();
             record.setStatus(status);
             record.setOrderNo(orderNo);
             result = orderMapper.updateByPrimaryKeySelective(record);
         } catch (Exception e) {
-            log.error("update order status error!");
+            log.error("查询异常>>>",e);
             throw e;
         }
         return result;
@@ -187,7 +187,7 @@ public class OrderManagerService {
                 ZhbAccount zhbAccount = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
                 if (zhbAccount != null && zhbAccount.getAmount() != null) {
                     deskInfoMap.put("zhbtotal", zhbAccount.getAmount());
-                    payMap = new HashMap<String, Object>();
+                    payMap = new HashMap<>();
                     BigDecimal zhbAmount = zhbAccount.getAmount();
                     //筑慧币小于支付金额
                     if (zhbAmount.compareTo(payAmount) == -1) {
@@ -199,9 +199,7 @@ public class OrderManagerService {
                     else if (zhbAmount.compareTo(payAmount) == 1 || zhbAmount.compareTo(payAmount) == 0) {
                         payMap.put("zhb", payAmount);
                     }
-                } else {
                 }
-            } else {
             }
             deskInfoMap.put("pay", payMap);
         }
@@ -247,8 +245,7 @@ public class OrderManagerService {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("查询失败");
+            log.error("查询异常>>>",e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
 

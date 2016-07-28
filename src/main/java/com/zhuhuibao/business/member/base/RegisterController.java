@@ -206,8 +206,7 @@ public class RegisterController {
                 vipInfoService.initDefaultExtraPrivilege(member.getId(), member.getIdentify());
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("操作失败:{}" + e);
+            log.error("注册操作失败>>>" , e);
             throw e;
         }
 

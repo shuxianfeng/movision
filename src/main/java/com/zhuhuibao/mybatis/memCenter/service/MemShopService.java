@@ -42,8 +42,7 @@ public class MemShopService {
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>", e);
             throw e;
         }
 
@@ -89,8 +88,7 @@ public class MemShopService {
         try {
             return mapper.findAllByCondition(pager.getRowBounds(), paramMap);
         } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -105,8 +103,7 @@ public class MemShopService {
         try {
             return mapper.selectByPrimaryKey(Integer.valueOf(shopId));
         } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -115,8 +112,7 @@ public class MemShopService {
         try {
             return mapper.queryShopBanner(id);
         } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw e;
         }
     }

@@ -27,21 +27,21 @@ public class TrainPwdTicketManage {
 
     @Autowired
     TrainPwdTicketMapper ticketMapper;
+
     /**
      * 查询培训的密码券
-     * @param pager  分页条件
+     *
+     * @param pager     分页条件
      * @param condition 查询条件
      * @return
      */
-    public List<Map<String,String>> findAllTrainPwdTicket(Paging<Map<String,String>> pager, Map<String,Object> condition)
-    {
-        log.info("find all oms order for pager "+ StringUtils.mapToString(condition));
-        List<Map<String,String>> ticketList;
-        try{
-            ticketList = ticketMapper.findAllTrainPwdTicket(pager.getRowBounds(),condition);
-        }catch(Exception e)
-        {
-            log.error("find all oms order for pager error!",e);
+    public List<Map<String, String>> findAllTrainPwdTicket(Paging<Map<String, String>> pager, Map<String, Object> condition) {
+        log.info("find all oms order for pager " + StringUtils.mapToString(condition));
+        List<Map<String, String>> ticketList;
+        try {
+            ticketList = ticketMapper.findAllTrainPwdTicket(pager.getRowBounds(), condition);
+        } catch (Exception e) {
+            log.error("查询异常>>>", e);
             throw e;
         }
         return ticketList;
@@ -49,21 +49,21 @@ public class TrainPwdTicketManage {
 
     /**
      * 更新培训的密码券状态
+     *
      * @param ticketId 密码券ID
-     * @param status 状态
+     * @param status   状态
      * @return
      */
-    public int updateTrainPwdTicketStatus(Long ticketId,String status)
-    {
-        log.info("update train pwd ticket status ticketId "+ ticketId+" status = "+status);
+    public int updateTrainPwdTicketStatus(Long ticketId, String status) {
+        log.info("update train pwd ticket status ticketId " + ticketId + " status = " + status);
         int result;
-        try{
+        try {
             TrainPwdTicket ticket = new TrainPwdTicket();
             ticket.setTicketId(ticketId);
             ticket.setStatus(Integer.parseInt(status));
             result = ticketMapper.updateByPrimaryKeySelective(ticket);
-        }catch(Exception e) {
-            log.error("update train pwd ticket status info error!",e);
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
         return result;
@@ -71,17 +71,17 @@ public class TrainPwdTicketManage {
 
     /**
      * 查看培训的密码券
+     *
      * @param ticketId 密码券ID
      * @return
      */
-    public Map<String,Object> selectTrainPwdTicket(Long ticketId)
-    {
-        log.info("select train pwd ticket info ticketId "+ ticketId);
-        Map<String,Object> ticket;
-        try{
+    public Map<String, Object> selectTrainPwdTicket(Long ticketId) {
+        log.info("select train pwd ticket info ticketId " + ticketId);
+        Map<String, Object> ticket;
+        try {
             ticket = ticketMapper.selectByPrimaryKey(ticketId);
-        }catch(Exception e) {
-            log.error("select train pwd ticket info error!",e);
+        } catch (Exception e) {
+            log.error("查询异常>>>", e);
             throw e;
         }
         return ticket;

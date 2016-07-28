@@ -66,7 +66,6 @@ public class ProjectService {
 
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return projectInfo;
@@ -86,7 +85,6 @@ public class ProjectService {
 
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
 
         }
@@ -111,7 +109,6 @@ public class ProjectService {
             genProjectLinkmanInfos(map, linkmanList);
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return map;
@@ -135,7 +132,6 @@ public class ProjectService {
             genProjectLinkmanInfos(map, linkmanList);
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return map;
@@ -249,7 +245,6 @@ public class ProjectService {
             }
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return map;
@@ -327,7 +322,6 @@ public class ProjectService {
 
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
 
         }
@@ -352,7 +346,6 @@ public class ProjectService {
             }
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
     }
@@ -385,7 +378,6 @@ public class ProjectService {
             }
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
 
         }
@@ -405,7 +397,6 @@ public class ProjectService {
             projectList = projectMapper.findAllPrjectPager(map, page.getRowBounds());
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return projectList;
@@ -424,7 +415,6 @@ public class ProjectService {
             projectList = projectMapper.queryLatestProject(map);
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return projectList;
@@ -443,7 +433,6 @@ public class ProjectService {
             projectList = projectMapper.queryHomepageLatestProject(map);
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return projectList;
@@ -462,7 +451,6 @@ public class ProjectService {
             projectList = projectMapper.findAllOmsViewProject(map, page.getRowBounds());
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return projectList;
@@ -481,7 +469,6 @@ public class ProjectService {
 
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return codeMap;
@@ -500,7 +487,6 @@ public class ProjectService {
 
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return codeMap;
@@ -513,7 +499,6 @@ public class ProjectService {
             projectList = projectMapper.findPrjectByName(map);
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return projectList;
@@ -532,7 +517,6 @@ public class ProjectService {
 
         } catch (Exception e) {
             log.error("select  error! {}", e);
-            e.printStackTrace();
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return codeMap;
@@ -553,8 +537,7 @@ public class ProjectService {
             projectList = processProjectList(records);
 
         } catch (Exception e) {
-            log.error("search project info for pager error!>>>>" + e.getMessage());
-            e.printStackTrace();
+            log.error("search project info for pager error!>>>>" ,e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return projectList;
@@ -637,7 +620,7 @@ public class ProjectService {
         try {
             return projectMapper.queryDescription(map);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("查询失败>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
     }

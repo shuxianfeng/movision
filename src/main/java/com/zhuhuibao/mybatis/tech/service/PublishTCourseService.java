@@ -38,7 +38,7 @@ public class PublishTCourseService {
      * @return
      */
     public int insertPublishCourse(TrainPublishCourse course) {
-        int result = 0;
+        int result;
         log.info("insert publish course info " + StringUtils.beanToString(course));
         try {
             //插入库存
@@ -51,7 +51,7 @@ public class PublishTCourseService {
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL,"数据插入失败");
             }
         } catch (Exception e) {
-            log.error("insert publish course info  error!", e);
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL,"数据插入失败");
         }
         return result;
@@ -69,7 +69,7 @@ public class PublishTCourseService {
         try {
             course = pCourseMapper.selectByPrimaryKey(condition);
         } catch (Exception e) {
-            log.error("select train course info error!", e);
+            log.error("查询异常>>>",e);
             throw e;
         }
         return course;
@@ -96,7 +96,7 @@ public class PublishTCourseService {
             }
             result = pCourseMapper.updateByPrimaryKeySelective(course);
         } catch (Exception e) {
-            log.error("update publish course info error!", e);
+            log.error("执行异常>>>",e);
             throw e;
         }
         return result;
@@ -118,7 +118,7 @@ public class PublishTCourseService {
             course.setStatus(Integer.valueOf(TechConstant.PublishCourseStatus.SALING.toString()));
             result = pCourseMapper.updateByPrimaryKeySelective(course);
         } catch (Exception e) {
-            log.error("update publish course info error!", e);
+            log.error("执行异常>>>",e);
             throw e;
         }
         return result;
@@ -133,11 +133,11 @@ public class PublishTCourseService {
      */
     public List<Map<String, String>> findAllTrainCoursePager(Paging<Map<String, String>> pager, Map<String, Object> condition) {
         log.info("find all OMS tech data for pager " + StringUtils.mapToString(condition));
-        List<Map<String, String>> courseList = null;
+        List<Map<String, String>> courseList;
         try {
             courseList = pCourseMapper.findAllTrainCoursePager(pager.getRowBounds(), condition);
         } catch (Exception e) {
-            log.error("find all OMS tech data for pager error!", e);
+            log.error("查询异常>>>",e);
             throw e;
         }
         return courseList;
@@ -152,11 +152,11 @@ public class PublishTCourseService {
      */
     public List<Map<String, String>> findAllPublishCoursePager(Paging<Map<String, String>> pager, Map<String, Object> condition) {
         log.info("find all publish train course for pager " + StringUtils.mapToString(condition));
-        List<Map<String, String>> courseList = null;
+        List<Map<String, String>> courseList;
         try {
             courseList = pCourseMapper.findAllPublishCoursePager(pager.getRowBounds(), condition);
         } catch (Exception e) {
-            log.error("find all publish train course for pager error!", e);
+            log.error("查询异常>>>",e);
             throw e;
         }
         return courseList;
@@ -170,11 +170,11 @@ public class PublishTCourseService {
      */
     public List<Map<String, String>> findLatestPublishCourse(Map<String, Object> condition) {
         log.info("find Latest publish train course " + StringUtils.mapToString(condition));
-        List<Map<String, String>> courseList = null;
+        List<Map<String, String>> courseList;
         try {
             courseList = pCourseMapper.findLatestPublishCourse(condition);
         } catch (Exception e) {
-            log.error("find Latest publish train course error!", e);
+            log.error("查询异常>>>",e);
             throw e;
         }
         return courseList;
@@ -191,7 +191,7 @@ public class PublishTCourseService {
         try {
             return pCourseMapper.previewTrainCourseDetail(condition);
         } catch (Exception e) {
-            log.error("find Latest publish train course error!", e);
+            log.error("查询异常>>>",e);
             throw e;
         }
     }

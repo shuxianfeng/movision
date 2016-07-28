@@ -72,8 +72,7 @@ public class JobPositionService {
                 throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -99,8 +98,7 @@ public class JobPositionService {
                 list.add(tmpMap);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("select error : {}", e.getMessage());
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
         return list;
@@ -113,8 +111,7 @@ public class JobPositionService {
         try {
             return jobMapper.getPositionByPositionId(id);
         } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -129,8 +126,8 @@ public class JobPositionService {
             try {
                 jobMapper.deletePosition(id);
             } catch (Exception e) {
-                log.error(e.getMessage());
-                e.printStackTrace();
+                log.error("执行异常>>>", e);
+                throw e;
             }
         }
         return response;
@@ -148,8 +145,8 @@ public class JobPositionService {
                 job.setId(id);
                 jobMapper.updatePosition(job);
             } catch (Exception e) {
-                log.error(e.getMessage());
-                e.printStackTrace();
+                log.error("执行异常>>>",e);
+                throw e;
             }
         }
         return response;
@@ -163,8 +160,8 @@ public class JobPositionService {
         try {
             jobMapper.updatePosition(job);
         } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
+            throw e;
         }
         return result;
     }
@@ -172,11 +169,11 @@ public class JobPositionService {
     /**
      * 查询最新招聘职位
      */
-    public List<Map<String,Object>> searchNewPosition(int count) {
-        List<Map<String,Object>> jobList;
-        try{
+    public List<Map<String, Object>> searchNewPosition(int count) {
+        List<Map<String, Object>> jobList;
+        try {
             jobList = jobMapper.searchNewPosition(count);
-            for(Map<String,Object> job:jobList){
+            for (Map<String, Object> job : jobList) {
                 job = ConvertUtil.execute(job, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(job.get("salary"))});
                 job.put("salary", job.get("salaryName"));
 
@@ -195,10 +192,9 @@ public class JobPositionService {
                 }
             }
 
-        } catch (Exception e){
-            e.printStackTrace();
-            log.error("search job error>>>{}",e);
-            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败'");
+        } catch (Exception e) {
+            log.error("查询异常>>>",e);
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败'");
         }
 
         return jobList;
@@ -231,11 +227,8 @@ public class JobPositionService {
      * 查询最新发布的职位
      */
     public Response searchLatestPublishPosition() {
-        Response result = new Response();
         List<Job> jobList = jobMapper.searchLatestPublishPosition();
-        result.setData(jobList);
-        result.setCode(200);
-        return result;
+        return new Response(jobList);
     }
 
     /**
@@ -292,15 +285,14 @@ public class JobPositionService {
      * @return
      */
     public Response queryCompanyInfo(Long id) throws Exception {
-        Response response = new Response();
+        MemberDetails member;
         try {
-            MemberDetails member = jobMapper.queryCompanyInfo(id);
-            response.setData(member);
+            member   = jobMapper.queryCompanyInfo(id);
         } catch (Exception e) {
-            log.error("add offer price error!", e);
+            log.error("查询异常>>>", e);
             throw e;
         }
-        return response;
+        return new Response(member);
     }
 
 
@@ -336,8 +328,7 @@ public class JobPositionService {
                 }
                 job.put("workArea", workArea);
             } catch (Exception e) {
-                log.error("add offer price error!", e);
-                e.printStackTrace();
+                log.error("执行异常>>>", e);
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
             }
         } else {
@@ -394,7 +385,8 @@ public class JobPositionService {
                 list.add(result);
             }
         } catch (Exception e) {
-            log.error("error!", e);
+            log.error("执行异常>>>", e);
+            throw e;
         }
         return list;
     }
@@ -404,9 +396,9 @@ public class JobPositionService {
      */
     public Response myApplyPosition(Paging<Job> pager, String id) {
         Response response = new Response();
-        List<Map<String,Object>> jobList = jobMapper.findAllMyApplyPosition(pager.getRowBounds(), id);
+        List<Map<String, Object>> jobList = jobMapper.findAllMyApplyPosition(pager.getRowBounds(), id);
         List list = new ArrayList();
-        for (Map<String,Object> result:jobList) {
+        for (Map<String, Object> result : jobList) {
             Map map = new HashMap();
             map.put(Constants.id, result.get("id"));
             map.put(Constants.name, result.get("name"));
@@ -455,7 +447,7 @@ public class JobPositionService {
             }
 
         } catch (Exception e) {
-            log.error("query hot postion error!!");
+            log.error("执行异常>>>", e);
             throw e;
         }
         return list;
@@ -471,8 +463,7 @@ public class JobPositionService {
         List list = new ArrayList();
         try {
             List<Position> positionList = positionMapper.findPosition(6);
-            for (int a = 0; a < positionList.size(); a++) {
-                Position position = positionList.get(a);
+            for (Position position : positionList) {
                 Map map = new HashMap();
                 map.put(Constants.name, position.getName());
                 List<Map<String, Object>> jobList = jobMapper.queryLatestJob(position.getId(), count);
@@ -503,7 +494,7 @@ public class JobPositionService {
             }
 
         } catch (Exception e) {
-            log.error("query latest job error", e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return list;
@@ -527,7 +518,7 @@ public class JobPositionService {
                 list.add(map);
             }
         } catch (Exception e) {
-            log.error("advertising greatest enterprise job error!", e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return list;
@@ -540,7 +531,8 @@ public class JobPositionService {
         try {
             jobMapper.updateViews(jobID);
         } catch (Exception e) {
-            log.error("update position info error!", e);
+            log.error("执行异常>>>", e);
+            throw e;
         }
     }
 
@@ -569,7 +561,7 @@ public class JobPositionService {
                 list.add(map);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
 
@@ -583,10 +575,11 @@ public class JobPositionService {
      * @return 发布职位集合
      */
     public List<Job> queryEnterpriseHotPosition(Map<String, Object> map) {
-        List<Job> jobList = new ArrayList<Job>();
+        List<Job> jobList;
         try {
             jobList = jobMapper.queryEnterpriseHotPosition(map);
         } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
         return jobList;
@@ -599,10 +592,11 @@ public class JobPositionService {
      * @return 发布职位集合
      */
     public List<Map<String, String>> queryPublishJobCity(Map<String, Object> map) throws Exception {
-        List<Map<String, String>> jobList = new ArrayList<Map<String, String>>();
+        List<Map<String, String>> jobList;
         try {
             jobList = jobMapper.queryPublishJobCity(map);
         } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
         return jobList;
@@ -625,15 +619,14 @@ public class JobPositionService {
      */
     public void updateHot(String positionId, String hot) {
 
-        int count = 0;
+        int count;
         try {
             count = positionMapper.setupHotPosition(positionId, hot);
             if (count != 1) {
                 throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新t_dictionary_position失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -675,7 +668,7 @@ public class JobPositionService {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return map;
@@ -725,7 +718,7 @@ public class JobPositionService {
 
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return list;
