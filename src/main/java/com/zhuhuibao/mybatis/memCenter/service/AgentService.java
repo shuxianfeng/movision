@@ -47,8 +47,7 @@ public class AgentService {
         try {
             return agentMapper.agentSave(agent);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -62,38 +61,34 @@ public class AgentService {
         try {
             return agentMapper.agentUpdate(agent);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
     /**
      *区域按首拼分类
-     * @param
      * @return
      */
     public List<CommonBean> searchProvinceByPinYin(){
         try {
             return provinceMapper.searchProvinceByPinYin();
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
 
     /**
      * 根据会员id查询代理商
-     * @param
+     * @param  id
      * @return
      */
     public List<AgentBean> findAgentByMemId(String id){
         try {
             return agentMapper.findAgentByMemId(id);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -128,8 +123,7 @@ public class AgentService {
             map.put("agent",map1);
             return map;
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -138,8 +132,7 @@ public class AgentService {
         try {
             return agentMapper.find(agent);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -181,8 +174,7 @@ public class AgentService {
             map.put("agent",list);
             return map;
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -191,8 +183,7 @@ public class AgentService {
         try {
             return agentMapper.getGreatAgentByScateid(id);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -201,8 +192,7 @@ public class AgentService {
         try {
             return agentMapper.getGreatAgentByBrandId(id);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -240,8 +230,7 @@ public class AgentService {
             map.put("agent",list);
             return map;
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }

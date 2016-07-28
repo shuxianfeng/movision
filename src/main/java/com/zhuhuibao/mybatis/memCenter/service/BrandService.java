@@ -41,35 +41,29 @@ public class BrandService {
     /**
      * 根据会员id，状态status(可以为空)查询品牌
      */
-    public List<Brand> searchBrandByStatus(Brand brand)
-    {
+    public List<Brand> searchBrandByStatus(Brand brand) {
         try {
             return brandMapper.searchBrandByStatus(brand);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
 
-    public List<Brand> searchBrand(Brand brand)
-    {
+    public List<Brand> searchBrand(Brand brand) {
         try {
             return brandMapper.searchBrand(brand);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
 
-    public List<Brand> searchBrandByPager(Paging<Brand> pager, Brand brand)
-    {
+    public List<Brand> searchBrandByPager(Paging<Brand> pager, Brand brand) {
         try {
-            return brandMapper.findAllByPager(pager.getRowBounds(),brand);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            return brandMapper.findAllByPager(pager.getRowBounds(), brand);
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -77,13 +71,11 @@ public class BrandService {
     /**
      * 查询拥有产品的品牌
      */
-    public List<BrandBean> searchAll()
-    {
+    public List<BrandBean> searchAll() {
         try {
             return brandMapper.searchAll();
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -91,13 +83,11 @@ public class BrandService {
     /**
      * 查询拥有产品的推荐品牌
      */
-    public List<SuggestBrand> SuggestBrand()
-    {
+    public List<SuggestBrand> SuggestBrand() {
         try {
             return brandMapper.SuggestBrand();
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -105,13 +95,11 @@ public class BrandService {
     /**
      * 查询二级系统下所有品牌,返回id,品牌logo
      */
-    public List<ResultBean> findAllBrand(Product product)
-    {
+    public List<ResultBean> findAllBrand(Product product) {
         try {
             return brandMapper.findAllBrand(product);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -119,13 +107,11 @@ public class BrandService {
     /**
      * 查询二级系统下所有品牌，返回id，name
      */
-    public List<ResultBean> findBrandByScateid(Product product)
-    {
+    public List<ResultBean> findBrandByScateid(Product product) {
         try {
             return brandMapper.findBrandByScateid(product);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -133,13 +119,11 @@ public class BrandService {
     /**
      * 查询推荐品牌
      */
-    public List<ResultBean> searchSuggestBrand()
-    {
+    public List<ResultBean> searchSuggestBrand() {
         try {
             return brandMapper.searchSuggestBrand();
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -147,13 +131,11 @@ public class BrandService {
     /**
      * 查询品牌详情
      */
-    public BrandDetailBean details(String id)
-    {
+    public BrandDetailBean details(String id) {
         try {
             return brandMapper.details(id);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -161,13 +143,11 @@ public class BrandService {
     /**
      * 新建品牌
      */
-    public int addBrand(Brand brand)
-    {
+    public int addBrand(Brand brand) {
         try {
             return brandMapper.addBrand(brand);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -175,13 +155,11 @@ public class BrandService {
     /**
      * 更新品牌
      */
-    public int updateBrand(Brand brand)
-    {
+    public int updateBrand(Brand brand) {
         try {
             return brandMapper.updateBrand(brand);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -189,13 +167,11 @@ public class BrandService {
     /**
      * 删除品牌
      */
-    public int deleteBrand(String id)
-    {
+    public int deleteBrand(String id) {
         try {
             return brandMapper.deleteBrand(id);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -203,13 +179,11 @@ public class BrandService {
     /**
      * 品牌数量
      */
-    public int searchBrandSize(Brand brand)
-    {
+    public int searchBrandSize(Brand brand) {
         try {
             return brandMapper.searchBrandSize(brand);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -217,13 +191,11 @@ public class BrandService {
     /**
      * 品牌数量
      */
-    public int findBrandSize(Brand brand)
-    {
+    public int findBrandSize(Brand brand) {
         try {
             return brandMapper.findBrandSize(brand);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -231,59 +203,55 @@ public class BrandService {
     /**
      * 查询品牌详情
      */
-    public Brand brandDetails(String id)
-    {
+    public Brand brandDetails(String id) {
         try {
             return brandMapper.brandDetails(id);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
 
     /**
      * 会员中心首页获得产品相关信息 品牌数量，在线产品数量，关联的代理商
+     *
      * @param createId
      * @return
      */
-    public Map<String,Object> queryBrandProductAgentCount(Long createId)
-    {
+    public Map<String, Object> queryBrandProductAgentCount(Long createId) {
         log.info("query brand product agent count");
-        Map<String,Object> resultMap = new HashMap<String,Object>();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
-            List<Map<String,Object>> mapList = brandMapper.queryBrandProductAgentCount(createId);
-            Map<String,Object> map1 = mapList.get(0);
-            resultMap.put("brandCount",map1.get("count"));
-            Map<String,Object> map2 = mapList.get(1);
-            resultMap.put("productCount",map2.get("count"));
-            Map<String,Object> map3 = mapList.get(2);
-            resultMap.put("agentCount",map3.get("count"));
-        }catch(Exception e)
-        {
-            log.error("query brand product agent count error!",e);
+            List<Map<String, Object>> mapList = brandMapper.queryBrandProductAgentCount(createId);
+            Map<String, Object> map1 = mapList.get(0);
+            resultMap.put("brandCount", map1.get("count"));
+            Map<String, Object> map2 = mapList.get(1);
+            resultMap.put("productCount", map2.get("count"));
+            Map<String, Object> map3 = mapList.get(2);
+            resultMap.put("agentCount", map3.get("count"));
+        } catch (Exception e) {
+            log.error("query brand product agent count error!", e);
             throw new BusinessException(MsgCodeConstant.mcode_common_failure, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
         }
         return resultMap;
     }
 
 
-    public List<Map<String,String>> queryRecommendBrand(Map<String,Object> map){
-        List<Map<String,String>>  list;
+    public List<Map<String, String>> queryRecommendBrand(Map<String, Object> map) {
+        List<Map<String, String>> list;
         try {
-            list =  brandMapper.queryRecommendBrand(map);
-            for(Map<String,String> item : list){
+            list = brandMapper.queryRecommendBrand(map);
+            for (Map<String, String> item : list) {
                 List<String> scateIds = productService.findScateIdByBrandId(item.get("id"));
-                if(scateIds.size() > 0){
+                if (scateIds.size() > 0) {
                     item.put("scateid", StringUtils.isEmpty(scateIds.get(0)) ? "" : scateIds.get(0));
-                }else{
-                    item.put("scateid","");
+                } else {
+                    item.put("scateid", "");
                 }
 
             }
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
             throw e;
         }
         return list;

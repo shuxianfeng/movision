@@ -23,6 +23,7 @@ import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import com.zhuhuibao.utils.sms.SDKSendSms;
 import com.zhuhuibao.utils.sms.SDKSendTaoBaoSMS;
 import org.apache.shiro.SecurityUtils;
@@ -72,16 +73,16 @@ public class AccountSafeController {
 
     @ApiOperation(value = "根据会员id验证会员密码是否正确", notes = "根据会员id验证会员密码是否正确", response = Response.class)
     @RequestMapping(value = "check_pwd_by_id", method = RequestMethod.POST)
-    public Response checkPwdById(@RequestParam String pwd)  {
+    public Response checkPwdById(@RequestParam String pwd) {
         Long memberId = ShiroUtil.getCreateID();
         //对比密码是否正确
         Response result = new Response();
-        if(memberId!=null){
+        if (memberId != null) {
             //前台密码解密
-            String md5Pwd = new Md5Hash(new String(EncodeUtil.decodeBase64(pwd)),null,2).toString();
+            String md5Pwd = new Md5Hash(new String(EncodeUtil.decodeBase64(pwd)), null, 2).toString();
             Member member = memberService.findMemById(String.valueOf(memberId));
             result = checkPwd(md5Pwd, member, result);
-        }else {
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
@@ -89,34 +90,35 @@ public class AccountSafeController {
 
     /**
      * //对比密码是否正确
+     *
      * @param md5Pwd
      * @param member
      * @param result
      */
     private Response checkPwd(String md5Pwd, Member member, Response result) {
-        if(member!=null){
-            if(!md5Pwd.equals(member.getPassword())){
-                throw new BusinessException(MsgCodeConstant.member_mcode_usernameorpwd_error,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_usernameorpwd_error)));
+        if (member != null) {
+            if (!md5Pwd.equals(member.getPassword())) {
+                throw new BusinessException(MsgCodeConstant.member_mcode_usernameorpwd_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_usernameorpwd_error)));
             }
-        }else{
-            throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
+        } else {
+            throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
         }
 
-        return  result;
+        return result;
     }
 
     @ApiOperation(value = "根据账号验证会员密码是否正确", notes = "根据账号验证会员密码是否正确", response = Response.class)
     @RequestMapping(value = "check_pwd_by_account", method = RequestMethod.POST)
-    public Response checkPwdByAccount(@RequestParam String account,@RequestParam String pwd)  {
+    public Response checkPwdByAccount(@RequestParam String account, @RequestParam String pwd) {
         //前台密码解密
         String password = new String(EncodeUtil.decodeBase64(pwd));
-        String md5Pwd = new Md5Hash(password,null,2).toString();
+        String md5Pwd = new Md5Hash(password, null, 2).toString();
 
         //根据账号查询会员信息
         Member member = new Member();
-        if(account.contains("@")){
+        if (account.contains("@")) {
             member.setEmail(account);
-        }else{
+        } else {
             member.setMobile(account);
         }
         Member mem = memberService.findMember(member);
@@ -129,17 +131,17 @@ public class AccountSafeController {
 
     @ApiOperation(value = "更新密码", notes = "更新密码", response = Response.class)
     @RequestMapping(value = "add_new_pwd", method = RequestMethod.POST)
-    public Response saveNewPwd(@RequestParam String newPwd)  {
+    public Response saveNewPwd(@RequestParam String newPwd) {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
-        if(memberId!=null){
-            String newPassword= new String(EncodeUtil.decodeBase64(newPwd));
-            String md5Pwd = new Md5Hash(newPassword,null,2).toString();
+        if (memberId != null) {
+            String newPassword = new String(EncodeUtil.decodeBase64(newPwd));
+            String md5Pwd = new Md5Hash(newPassword, null, 2).toString();
             Member member = new Member();
             member.setPassword(md5Pwd);
             member.setId(String.valueOf(memberId));
             memberService.updateMemInfo(member);
-        }else {
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
@@ -152,24 +154,21 @@ public class AccountSafeController {
         Member member1 = new Member();
         member1.setEmail(email);
         Member member = memberService.findMember(member1);
-        if(member!=null){
-            throw new BusinessException(MsgCodeConstant.member_mcode_mail_registered,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_registered)));
-        }else {
+        if (member != null) {
+            throw new BusinessException(MsgCodeConstant.member_mcode_mail_registered, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mail_registered)));
+        } else {
             Long id = ShiroUtil.getCreateID();
-            if(id!=null){
-                as.sendChangeEmail(email,String.valueOf(id));
+            if (id != null) {
+                as.sendChangeEmail(email, String.valueOf(id));
                 String mail = ds.findMailAddress(email);
-                Map<String,String> map = new HashMap<String,String>();
-                if(mail != null && !mail.equals(""))
-                {
+                Map<String, String> map = new HashMap<>();
+                if (mail != null && !mail.equals("")) {
                     map.put("button", "true");
-                }
-                else
-                {
+                } else {
                     map.put("button", "false");
                 }
                 result.setData(map);
-            }else {
+            } else {
                 throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         }
@@ -178,15 +177,15 @@ public class AccountSafeController {
 
     @ApiOperation(value = "更改手机号", notes = "更改手机号", response = Response.class)
     @RequestMapping(value = "upd_mobile", method = RequestMethod.POST)
-    public Response updateMobile(@RequestParam String mobile)  {
+    public Response updateMobile(@RequestParam String mobile) {
         Response result = new Response();
         Member member = new Member();
         Long memberId = ShiroUtil.getCreateID();
-        if(memberId!=null){
+        if (memberId != null) {
             member.setId(String.valueOf(memberId));
             member.setMobile(mobile);
             memberService.updateMemInfo(member);
-        }else {
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
@@ -194,38 +193,37 @@ public class AccountSafeController {
 
     @ApiOperation(value = "验证手机号是否存在", notes = "验证手机号是否存在", response = Response.class)
     @RequestMapping(value = "check_mobile_isExist", method = RequestMethod.POST)
-    public Response checkMobile(@RequestParam String mobile)  {
+    public Response checkMobile(@RequestParam String mobile) {
         Response result = new Response();
         Member member = new Member();
         member.setMobile(mobile);
         Member member1 = memberService.findMember(member);
-        if(member1!=null){
-            throw new BaseException(MsgCodeConstant.member_mcode_account_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
+        if (member1 != null) {
+            throw new BaseException(MsgCodeConstant.member_mcode_account_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
         }
         return result;
     }
 
     @ApiOperation(value = "点击邮箱链接更改邮箱", notes = "点击邮箱链接更改邮箱", response = Response.class)
     @RequestMapping(value = "upd_email", method = RequestMethod.GET)
-    public ModelAndView updateEmail(@RequestParam String time,@RequestParam String email,@RequestParam String id)  {
+    public ModelAndView updateEmail(@RequestParam String time, @RequestParam String email, @RequestParam String id) {
         ModelAndView modelAndView = new ModelAndView();
         Member member = new Member();
-        String decodeTime = new String (EncodeUtil.decodeBase64(time));
-        String decodeId = new String (EncodeUtil.decodeBase64(id));
+        String decodeTime = new String(EncodeUtil.decodeBase64(time));
+        String decodeId = new String(EncodeUtil.decodeBase64(id));
         Date currentTime = new Date();//获取当前时间
-        Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(decodeTime,"yyyy-MM-dd HH:mm:ss"),5,1);
-        String redirectUrl ="";
-        if(currentTime.before(registerDate)){
-            if(email != null & !email.equals(""))
-            {
-                String decodeVM = new String (EncodeUtil.decodeBase64(email));
+        Date registerDate = DateUtils.date2Sub(DateUtils.str2Date(decodeTime, "yyyy-MM-dd HH:mm:ss"), 5, 1);
+        String redirectUrl = "";
+        if (currentTime.before(registerDate)) {
+            if (!StringUtils.isEmpty(email)) {
+                String decodeVM = new String(EncodeUtil.decodeBase64(email));
                 member.setEmail(decodeVM);
                 member.setId(decodeId);
                 memberService.updateMemInfo(member);
-                redirectUrl = PropertiesUtils.getValue("host.ip")+"/"+ PropertiesUtils.getValue("email-active-bind.page");
+                redirectUrl = PropertiesUtils.getValue("host.ip") + "/" + PropertiesUtils.getValue("email-active-bind.page");
             }
-        }else{
-            redirectUrl = PropertiesUtils.getValue("host.ip")+"/"+ PropertiesUtils.getValue("email-active-error.page");
+        } else {
+            redirectUrl = PropertiesUtils.getValue("host.ip") + "/" + PropertiesUtils.getValue("email-active-error.page");
         }
         RedirectView rv = new RedirectView(redirectUrl);
         modelAndView.setView(rv);
@@ -236,12 +234,12 @@ public class AccountSafeController {
     @RequestMapping(value = "get_verifyCode", method = RequestMethod.GET)
     public Response getModifyBindMobileSMS(@ApiParam(value = "验证的手机号") @RequestParam String mobile,
                                            @ApiParam(value = "图形验证码") @RequestParam String imgCode) throws IOException, ApiException {
-        log.debug("获得手机验证码  mobile=="+mobile);
+        log.debug("获得手机验证码  mobile==" + mobile);
         Subject currentUser = SecurityUtils.getSubject();
         Response response = new Response();
         Session sess = currentUser.getSession(true);
         String sessionImgCode = (String) sess.getAttribute("bindingMobile");
-        if(imgCode.equalsIgnoreCase(sessionImgCode)) {
+        if (imgCode.equalsIgnoreCase(sessionImgCode)) {
             // 生成随机字串
             String verifyCode = VerifyCodeUtils.generateVerifyCode(4, VerifyCodeUtils.VERIFY_CODES_DIGIT);
             log.debug("verifyCode == " + verifyCode);
@@ -264,12 +262,12 @@ public class AccountSafeController {
         return response;
     }
 
-    @ApiOperation(value="绑定手机时图形验证码",notes="绑定手机时图形验证码",response = Response.class)
+    @ApiOperation(value = "绑定手机时图形验证码", notes = "绑定手机时图形验证码", response = Response.class)
     @RequestMapping(value = "get_img_code", method = RequestMethod.GET)
     public void getCode(HttpServletResponse response) throws IOException {
         Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(false);
-        String verifyCode = VerifyCodeUtils.outputHttpVerifyImage(100,40,response, Constants.CHECK_IMG_CODE_SIZE);
+        String verifyCode = VerifyCodeUtils.outputHttpVerifyImage(100, 40, response, Constants.CHECK_IMG_CODE_SIZE);
         sess.setAttribute("bindingMobile", verifyCode);
     }
 }

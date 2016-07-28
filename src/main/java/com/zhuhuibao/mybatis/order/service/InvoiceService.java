@@ -53,7 +53,6 @@ public class InvoiceService {
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("insert invoice error!", e);
             throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
         }
@@ -69,7 +68,6 @@ public class InvoiceService {
         try {
             invoice = invoiceMapper.selectByPrimaryKey(id);
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("query invoice error!", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询数据失败");
         }
@@ -90,7 +88,6 @@ public class InvoiceService {
                 throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新状态失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("update invoice error!", e);
             throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新状态失败");
         }
@@ -105,7 +102,6 @@ public class InvoiceService {
         try {
             invoiceRecordMapper.insertSelective(record);
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("insert invoice error!", e);
             throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新状态失败");
         }
@@ -123,7 +119,6 @@ public class InvoiceService {
             con.put("isRecentUsed", isRecentUsed);
             invoiceRecord = invoiceRecordMapper.selectByPrimaryKey(con);
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("query invoice record error!", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询状态失败");
         }
@@ -145,7 +140,6 @@ public class InvoiceService {
                 throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新状态失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("update invoice record error!", e);
             throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新状态失败");
         }
@@ -164,7 +158,6 @@ public class InvoiceService {
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "更新最近被使用失败");
             }*/
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("update invoice record error!", e);
             throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新状态失败");
         }
@@ -181,7 +174,6 @@ public class InvoiceService {
 
             invoice = invoiceMapper.findByOrderNo(orderNo);
         }catch (Exception e){
-            e.printStackTrace();
             log.error("查询 t_o_invoice 失败");
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
         }

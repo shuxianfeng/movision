@@ -143,8 +143,7 @@ public class IndexService {
 
 
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
         return resultMap;
@@ -166,8 +165,7 @@ public class IndexService {
             resultMap.put("jobWantedCount",list.size());
             return resultMap;
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -184,8 +182,7 @@ public class IndexService {
             resultMap.put("questionCount",list.size());
             return resultMap;
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -203,8 +200,7 @@ public class IndexService {
             resultMap.put("answerCount",list1.size());
             return resultMap;
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -215,8 +211,7 @@ public class IndexService {
             map.put("count",3);
             return noticeMapper.queryNoticeList(map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -228,8 +223,7 @@ public class IndexService {
             map.put("recID",id);
             return messageLogMapper.queryNewsList(map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }

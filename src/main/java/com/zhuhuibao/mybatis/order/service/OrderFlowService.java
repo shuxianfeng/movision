@@ -24,6 +24,7 @@ public class OrderFlowService {
 
     /**
      * 根据订单号查询信息
+     *
      * @param orderNo
      * @return
      */
@@ -33,8 +34,7 @@ public class OrderFlowService {
             orderFlows = mapper.findByOrderNo(orderNo);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询数据失败");
         }
         return orderFlows;
@@ -42,6 +42,7 @@ public class OrderFlowService {
 
     /**
      * 根据订单号和支付方式查询信息
+     *
      * @param orderNo
      * @param tradeMode
      * @return
@@ -52,8 +53,7 @@ public class OrderFlowService {
             orderFlow = mapper.findByOrderNoAndTradeMode(orderNo, tradeMode);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询数据失败");
         }
         return orderFlow;
@@ -73,14 +73,14 @@ public class OrderFlowService {
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "插入数据失败");
         }
     }
 
     /**
      * 更新记录
+     *
      * @param alFlow
      */
     public void update(OrderFlow alFlow) {
@@ -91,10 +91,9 @@ public class OrderFlowService {
 //                log.error("t_o_order_flow:更新数据失败");
 //                throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "更新数据失败");
 //            }
-            log.debug("t_o_order_flow 更新count>>>[{}]",count);
+            log.debug("t_o_order_flow 更新count>>>[{}]", count);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "更新数据失败");
         }
     }

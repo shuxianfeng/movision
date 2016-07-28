@@ -225,7 +225,7 @@ public class RegisterController {
     @RequestMapping(value = {"/rest/writeAccount", "rest/member/site/base/add_writeAccount"}, method = RequestMethod.POST)
     public Response writeAccount(@ApiParam(value = "会员信息") @ModelAttribute Member member) throws IOException {
         log.debug("seek pwd write account");
-        Response result = new Response();
+        Response result ;
         Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(false);
         String seekCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_SEEKPWD);

@@ -37,7 +37,7 @@ public class MembersController {
 		}
 		Response response = new Response();
 		response.setCode(200);
-		Map<String, Object> ret = null;
+		Map<String, Object> ret;
 		try{
 			ret = membersService.searchContractors(spec);
 			response.setMsgCode(1);

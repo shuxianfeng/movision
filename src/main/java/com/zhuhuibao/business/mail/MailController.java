@@ -13,7 +13,6 @@ import com.zhuhuibao.mybatis.sitemail.entity.MessageLog;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,17 +39,11 @@ public class MailController {
     @ApiOperation(value="消息列表",notes="消息列表",response = Response.class)
     @RequestMapping(value = "sel_newsList", method = RequestMethod.GET)
     public Response findAllNewsList(@ApiParam(value = "状态：1：未读，2：已读")@RequestParam(required = false)String status,
-                                    @RequestParam(required = false)String pageNo,
-                                    @RequestParam(required = false)String pageSize)  {
+                                    @RequestParam(required = false,defaultValue = "1")String pageNo,
+                                    @RequestParam(required = false,defaultValue = "10")String pageSize)  {
         Response response = new Response();
-        //设定默认分页pageSize
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<>();
         map.put("status",status);
         Long memberId = ShiroUtil.getCreateID();
@@ -86,51 +79,6 @@ public class MailController {
         }
         return response;
     }
-/*    @ApiOperation(value="查询产品跟活动未读消息条数",notes="查询产品跟活动未读消息条数",response = Response.class)
-    @RequestMapping(value = "sel_unreadNews", method = RequestMethod.GET)
-    public Response sel_unreadNews()  {
-        Response response = new Response();
-        Long memberId = ShiroUtil.getCreateID();
-        if(memberId!=null){
-            Map map = new HashMap();
-            //查询产品消息未读条数
-            Map<String, Object> map1 = new HashMap<>();
-            map1.put("type",1);
-            map1.put("recID",String.valueOf(memberId));
-            map1.put("status",MessageLogConstant.NEWS_STATUS_ONE);
-            int count1 = siteMailService.selUnreadNewsCount(map1);
-
-            //查询活动消息未读条数
-            Map<String, Object> map2 = new HashMap<>();
-            map2.put("type",2);
-            map2.put("recID",String.valueOf(memberId));
-            map2.put("status",MessageLogConstant.NEWS_STATUS_ONE);
-            int count2 = siteMailService.selUnreadNewsCount(map2);
-
-            map.put("proCount",count1);
-            map.put("actCount",count2);
-
-            response.setData(map);
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
-        return response;
-    }*/
-
-    /*@ApiOperation(value="同步消息到日志表",notes="同步消息到日志表",response = Response.class)
-    @RequestMapping(value = "add_newsToLog", method = RequestMethod.POST)
-    public Response addNewsToLog()  {
-        Response response = new Response();
-        Long memberId = ShiroUtil.getCreateID();
-        Map<String, Object> map = new HashMap<>();
-        if(memberId!=null){
-            map.put("id",String.valueOf(memberId));
-            siteMailService.addNewsToLog(map);
-        }else  {
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
-        return response;
-    }*/
 
     @ApiOperation(value="批量标记为已读",notes="批量标记为已读",response = Response.class)
     @RequestMapping(value = "upd_news", method = RequestMethod.POST)
@@ -178,17 +126,11 @@ public class MailController {
 
     @ApiOperation(value="我发送的留言列表",notes="我发送的留言列表",response = Response.class)
     @RequestMapping(value = "sel_mySendMsgList", method = RequestMethod.GET)
-    public Response sel_mySendMsgList(@RequestParam(required = false)String pageNo,
-                                  @RequestParam(required = false)String pageSize)  {
+    public Response sel_mySendMsgList(@RequestParam(required = false,defaultValue = "1")String pageNo,
+                                  @RequestParam(required = false,defaultValue = "10")String pageSize)  {
         Response response = new Response();
-        //设定默认分页pageSize
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Long memberId = ShiroUtil.getCreateID();
         Map<String, Object> map = new HashMap<>();
         if(memberId!=null){
@@ -227,17 +169,11 @@ public class MailController {
 
     @ApiOperation(value="我收到的留言列表",notes="我收到的留言列表",response = Response.class)
     @RequestMapping(value = "sel_myReceiveMsgList", method = RequestMethod.GET)
-    public Response sel_myReceiveMsgList(@RequestParam(required = false)String pageNo,
-                                  @RequestParam(required = false)String pageSize)  {
+    public Response sel_myReceiveMsgList(@RequestParam(required = false,defaultValue = "1")String pageNo,
+                                  @RequestParam(required = false,defaultValue = "10")String pageSize)  {
         Response response = new Response();
-        //设定默认分页pageSize
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Long memberId = ShiroUtil.getCreateID();
         Map<String, Object> map = new HashMap<>();
         if(memberId!=null){
@@ -276,17 +212,11 @@ public class MailController {
 
     @ApiOperation(value="公告列表",notes="公告列表",response = Response.class)
     @RequestMapping(value = "sel_noticeList", method = RequestMethod.GET)
-    public Response sel_noticeList(@RequestParam(required = false)String pageNo,
-                                   @RequestParam(required = false)String pageSize)  {
+    public Response sel_noticeList(@RequestParam(required = false,defaultValue = "1")String pageNo,
+                                   @RequestParam(required = false,defaultValue = "10")String pageSize)  {
         Response response = new Response();
-        //设定默认分页pageSize
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<Map<String,String>> list = siteMailService.findAllNoticeList(pager);
         pager.result(list);
         response.setData(pager);

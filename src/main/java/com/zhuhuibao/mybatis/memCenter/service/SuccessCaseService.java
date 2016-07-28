@@ -28,8 +28,7 @@ public class SuccessCaseService {
         try {
             return successCaseMapper.addSuccessCase(successCase);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>", e);
             throw e;
         }
     }
@@ -38,8 +37,7 @@ public class SuccessCaseService {
         try {
             return successCaseMapper.findAllSuccessCaseList(pager.getRowBounds(),map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -48,8 +46,7 @@ public class SuccessCaseService {
         try {
             return successCaseMapper.querySuccessCaseById(id);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -58,8 +55,7 @@ public class SuccessCaseService {
         try {
             return successCaseMapper.updateSuccessCase(successCase);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -68,8 +64,7 @@ public class SuccessCaseService {
         try {
             return successCaseMapper.queryGreatCaseListByCompanyId(map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -78,8 +73,7 @@ public class SuccessCaseService {
         try {
             return successCaseMapper.queryMySuccessCaseListSize(map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }

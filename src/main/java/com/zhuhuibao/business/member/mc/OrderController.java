@@ -45,21 +45,16 @@ public class OrderController {
     @RequestMapping(value = "sel_orderlist", method = RequestMethod.GET)
     @ApiOperation(value = "我的订单管理", notes = "我的订单管理", response = Response.class)
     public Response findAllTechDataPager(@ApiParam(value = "订单状态：1未支付，2：已支付，3：退款中，4，退款失败，5：已退款 , 6:已失效") @RequestParam(required = false) String status,
-                                         @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-                                         @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
+                                         @ApiParam(value = "页码") @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                         @ApiParam(value = "每页显示的数目") @RequestParam(required = false,defaultValue = "10") String pageSize) {
         Response response = new Response();
         Long buyerId = ShiroUtil.getCreateID();
         if (buyerId != null) {
-            Map<String, Object> condition = new HashMap<String, Object>();
+            Map<String, Object> condition = new HashMap<>();
             condition.put("status", status);
             condition.put("buyerId", buyerId);
-            if (StringUtils.isEmpty(pageNo)) {
-                pageNo = "1";
-            }
-            if (StringUtils.isEmpty(pageSize)) {
-                pageSize = "10";
-            }
-            Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+
+            Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
             List<Map<String, String>> orderList = orderService.findAllOmsTechOrder(pager, condition);
             pager.result(orderList);
             response.setData(pager);

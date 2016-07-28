@@ -121,8 +121,7 @@ public class PriceService {
             result.setCode(200);
             result.setData(bean);
         } catch (Exception e) {
-            log.error("queryAskPriceByID error", e.getMessage());
-            e.printStackTrace();
+            log.error("queryAskPriceByID error", e);
         }
         return result;
     }
@@ -162,8 +161,7 @@ public class PriceService {
         List<AskPriceResultBean> resultBeanList = askPriceMapper.findAll(askPriceSearch);
         List<AskPriceResultBean> resultBeanList1 = askPriceMapper.findAllByPager1(pager.getRowBounds(), askPriceSearch);
         List askList = new ArrayList();
-        for (int i = 0; i < resultBeanList1.size(); i++) {
-            AskPriceResultBean resultBean = resultBeanList1.get(i);
+        for (AskPriceResultBean resultBean : resultBeanList1) {
             Map askMap = new HashMap();
             askMap.put(Constants.id, resultBean.getId());
             askMap.put(Constants.title, resultBean.getTitle());
@@ -172,8 +170,7 @@ public class PriceService {
             askMap.put(Constants.publishTime, resultBean.getPublishTime().substring(0, 10));
             askMap.put(Constants.area, resultBean.getArea());
             List offerList = new ArrayList();
-            for (int y = 0; y < resultBeanList.size(); y++) {
-                AskPriceResultBean resultBean1 = resultBeanList.get(y);
+            for (AskPriceResultBean resultBean1 : resultBeanList) {
                 if (resultBean.getId().equals(resultBean1.getAskid())) {
                     Map offerMap = new HashMap();
                     offerMap.put(Constants.id, resultBean1.getOfferid());
@@ -197,8 +194,7 @@ public class PriceService {
         Response response = new Response();
         List<AskPrice> askPriceList = askPriceMapper.queryNewPriceInfo(count, createid);
         List list = new ArrayList();
-        for (int i = 0; i < askPriceList.size(); i++) {
-            AskPrice askPrice = askPriceList.get(i);
+        for (AskPrice askPrice : askPriceList) {
             Map map = new HashMap();
             map.put(Constants.id, askPrice.getId());
             map.put(Constants.companyName, askPrice.getTitle());
@@ -215,8 +211,7 @@ public class PriceService {
     public List<AskPrice> queryNewPriceInfoList(Paging<AskPrice> pager, AskPriceSearchBean askPriceSearch) {
         List<AskPrice> askPriceList = askPriceMapper.findAllNewPriceInfoList(pager.getRowBounds(), askPriceSearch);
         List list = new ArrayList();
-        for (int i = 0; i < askPriceList.size(); i++) {
-            AskPrice askPrice = askPriceList.get(i);
+        for (AskPrice askPrice : askPriceList) {
             Map map = new HashMap();
             map.put(Constants.id, askPrice.getId());
             map.put(Constants.title, askPrice.getTitle());

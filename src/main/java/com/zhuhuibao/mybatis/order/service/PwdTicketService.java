@@ -38,8 +38,7 @@ public class PwdTicketService {
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
         }
     }

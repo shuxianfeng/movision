@@ -30,8 +30,7 @@ public class ZhbAccountService {
         try{
             account = mapper.selectByPrimaryKey(companyId);
         }catch (Exception e){
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "查询数据失败");
         }
         return account;

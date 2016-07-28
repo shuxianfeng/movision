@@ -23,7 +23,8 @@ public class AlipayCallbackLogService {
 
     /**
      * 新增交易流水记录
-     * @param record  log
+     *
+     * @param record log
      */
     public void insert(AlipayCallbackLog record) {
         int num;
@@ -34,8 +35,7 @@ public class AlipayCallbackLogService {
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
         }
     }

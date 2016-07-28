@@ -118,15 +118,10 @@ public class StaffManageController {
 	@ApiOperation(value = "员工搜索", notes = "员工搜索", response = Response.class)
 	@RequestMapping(value = "sel_memberList", method = RequestMethod.GET)
 	public Response staffSearch(@RequestParam(required = false) String account,
-								@RequestParam(required = false) String pageNo,
-								@RequestParam(required = false) String pageSize)  {
+								@RequestParam(required = false,defaultValue = "1") String pageNo,
+								@RequestParam(required = false,defaultValue = "10") String pageSize)  {
 		Response response = new Response();
-		if (StringUtils.isEmpty(pageNo)) {
-			pageNo = "1";
-		}
-		if (StringUtils.isEmpty(pageSize)) {
-			pageSize = "10";
-		}
+
 		Map<String, Object> map = new HashMap<>();
 		if(account!=null){
 			if(account.contains("_")){
@@ -137,7 +132,7 @@ public class StaffManageController {
 		Long memberId = ShiroUtil.getCreateID();
 		if(memberId!=null){
 			map.put("enterpriseEmployeeParentId",String.valueOf(memberId));
-			Paging<Member> pager = new Paging<Member>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+			Paging<Member> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 			List list = memberService.findStaffByParentId(pager,map);
 			pager.result(list);
 			response.setData(pager);

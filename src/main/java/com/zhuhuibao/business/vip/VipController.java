@@ -97,19 +97,14 @@ public class VipController {
 	public Response omsAllvip(@ApiParam(value = "登陆账号") @RequestParam(required = false) String account,
 			@ApiParam(value = "姓名/企业名称") @RequestParam(required = false) String name,
 			@ApiParam(value = "Vip会员等级") @RequestParam(required = false) String vipLevel,
-			@ApiParam(value = "Vip会员状态") @RequestParam(required = false) String status, @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-			@ApiParam(value = "每页显示的条数") @RequestParam(required = false) String pageSize) throws Exception {
+			@ApiParam(value = "Vip会员状态") @RequestParam(required = false) String status,
+			@ApiParam(value = "页码") @RequestParam(required = false,defaultValue = "1") String pageNo,
+			@ApiParam(value = "每页显示的条数") @RequestParam(required = false,defaultValue = "10") String pageSize) throws Exception {
 		Response response = new Response();
-		if (StringUtils.isEmpty(pageNo)) {
-			pageNo = "1";
-		}
-		if (StringUtils.isEmpty(pageSize)) {
-			pageSize = "10";
-		}
 
-		List<Map<String, String>> vipList = new ArrayList<Map<String, String>>();
+		List<Map<String, String>> vipList;
 
-		Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+		Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 		vipList = vipInfoService.listAllVipInfo(account, name, vipLevel, status, pager);
 		pager.result(vipList);
 		response.setData(pager);

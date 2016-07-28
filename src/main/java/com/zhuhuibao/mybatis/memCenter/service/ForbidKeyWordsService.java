@@ -27,8 +27,7 @@ public class ForbidKeyWordsService {
         try {
             return forbidKeyWordsMapper.queryKeyWordsList(map);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -37,8 +36,7 @@ public class ForbidKeyWordsService {
         try {
             return forbidKeyWordsMapper.addForbidKeyWords(forbidKeyWords);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -47,8 +45,7 @@ public class ForbidKeyWordsService {
         try {
             return forbidKeyWordsMapper.updForbidKeyWords(forbidKeyWords);
         }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }

@@ -36,8 +36,7 @@ public class OrderSmsService {
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
         }
     }
@@ -55,8 +54,7 @@ public class OrderSmsService {
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "更新数据失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "更新数据失败");
         }
     }
@@ -72,7 +70,7 @@ public class OrderSmsService {
         try{
             smsList =   mapper.findByOrderNoAndStatusCode(orderNos,status,templateCode);
         } catch (Exception e){
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
         }
         return  smsList;

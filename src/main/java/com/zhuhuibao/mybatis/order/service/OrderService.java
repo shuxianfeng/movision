@@ -42,8 +42,7 @@ public class OrderService {
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
         }
     }
@@ -60,8 +59,7 @@ public class OrderService {
             order = mapper.selectByPrimaryKey(orderNo);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询数据失败");
         }
         return order;
@@ -84,8 +82,7 @@ public class OrderService {
             }
             log.error("update t_o_order : [count] >>>> {}",count);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "更新数据失败");
         }
         return count > 0;
@@ -135,8 +132,7 @@ public class OrderService {
         try{
             list = mapper.findHotbuyTopten(goodsType);
         } catch (Exception e){
-            e.printStackTrace();
-            log.error("查询失败");
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
         }
         return list;

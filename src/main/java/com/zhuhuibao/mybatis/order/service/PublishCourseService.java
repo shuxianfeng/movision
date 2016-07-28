@@ -26,8 +26,7 @@ public class PublishCourseService {
         try {
             course = mapper.selectByPrimaryKey(courseId);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
         }
         return course;
@@ -48,8 +47,7 @@ public class PublishCourseService {
                 throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
         }
 
@@ -70,8 +68,7 @@ public class PublishCourseService {
                 throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
         }
 
@@ -90,8 +87,7 @@ public class PublishCourseService {
                 throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "更新数据失败");
         }
     }
