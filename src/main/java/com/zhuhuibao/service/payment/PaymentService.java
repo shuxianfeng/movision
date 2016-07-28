@@ -117,7 +117,9 @@ public class PaymentService {
             } else {
                 //查看下载简历
                 if (CXXZJL.toString().equals(type)) {
-                    Resume resume2 = resume.previewResume(String.valueOf(goodsID));
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("id",String.valueOf(goodsID));
+                    Resume resume2 = resume.previewResume(map);
                     dataMap.put("info", resume2);
                     Resume resumeBean = new Resume();
                     resumeBean.setViews("1");
@@ -277,8 +279,9 @@ public class PaymentService {
 	    			 response.setData(dataMap);
                     
 	            }else{
-	            	
-	            	    Resume resume2 = resume.previewResume(String.valueOf(goodsID));
+                        Map<String,Object> map = new HashMap<>();
+                        map.put("id",String.valueOf(goodsID));
+	            	    Resume resume2 = resume.previewResume(map);
 	            	    con.put("createId",createId);
 	            	    Map isDownOrColl =resume.isDownOrColl(con);
 	            	    if(isDownOrColl!=null){
