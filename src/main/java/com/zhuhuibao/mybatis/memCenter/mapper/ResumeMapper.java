@@ -23,7 +23,7 @@ public interface ResumeMapper {
     int updateResume(Resume resume);
 
     //预览简历
-    Resume previewResume(@Param("id")String id);
+    Resume previewResume(Map<String,Object> map);
 
     List<Map<String,Object>> findAllResume(RowBounds rowBounds, Map<String,Object> map);
 

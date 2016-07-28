@@ -69,40 +69,49 @@ public class ResumeSiteController {
     public void exportResume(HttpServletRequest req, HttpServletResponse response,
                              @ApiParam(value = "简历ID") @RequestParam Long resumeID) throws IOException
     {
-        log.info("export resume id == "+resumeID);
-        response.setDateHeader("Expires", 0);
-        response.setHeader("Cache-Control",
-                "no-store, no-cache, must-revalidate");
-        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-        response.setContentType("application/msword");
-        try {
-            String path = req.getSession().getServletContext().getRealPath("/");
-            log.info("base path = "+path);
+        Long memberId = ShiroUtil.getCreateID();
+        Map<String,Object> queryMap = new HashMap<String,Object>();
+        queryMap.put("id",resumeID);
+        queryMap.put("createid",memberId);
+        Map<String,String> result = jrrService.queryMyReceiveResume(queryMap);
+        if(result!=null){
+            log.info("export resume id == "+resumeID);
+            response.setDateHeader("Expires", 0);
+            response.setHeader("Cache-Control",
+                    "no-store, no-cache, must-revalidate");
+            response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+            response.setContentType("application/msword");
+            try {
+                String path = req.getSession().getServletContext().getRealPath("/");
+                log.info("base path = "+path);
 
-            Map<String, String> resumeMap = resume.exportResume(String.valueOf(resumeID));
-            if (!resumeMap.isEmpty()) {
-                String fileName =  !StringUtils.isEmpty(resumeMap.get("title")) ? resumeMap.get("title") :"简历";
-                response.setHeader("Content-disposition", "attachment; filename=\""
-                        + URLEncoder.encode(fileName, "UTF-8") + ".doc\"");
-                HWPFDocument document = ExporDoc.replaceDoc(path + "resumeTemplate.doc", resumeMap);
-                ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-                if (document != null) {
-                    document.write(ostream);
+                Map<String, String> resumeMap = resume.exportResume(String.valueOf(resumeID));
+                if (!resumeMap.isEmpty()) {
+                    String fileName =  !StringUtils.isEmpty(resumeMap.get("title")) ? resumeMap.get("title") :"简历";
+                    response.setHeader("Content-disposition", "attachment; filename=\""
+                            + URLEncoder.encode(fileName, "UTF-8") + ".doc\"");
+                    HWPFDocument document = ExporDoc.replaceDoc(path + "resumeTemplate.doc", resumeMap);
+                    ByteArrayOutputStream ostream = new ByteArrayOutputStream();
+                    if (document != null) {
+                        document.write(ostream);
+                    }
+                    ServletOutputStream stream = response.getOutputStream();
+                    stream.write(ostream.toByteArray());
+                    stream.flush();
+                    stream.close();
+                    stream.close();
+
+                    Resume resumeBean=new Resume();
+                    resumeBean.setDownload("1");
+                    resumeBean.setId(String.valueOf(resumeID));
+                    resume.updateResume(resumeBean);
+
                 }
-                ServletOutputStream stream = response.getOutputStream();
-                stream.write(ostream.toByteArray());
-                stream.flush();
-                stream.close();
-                stream.close();
-
-                Resume resumeBean=new Resume();
-                resumeBean.setDownload("1");
-                resumeBean.setId(String.valueOf(resumeID));
-                resume.updateResume(resumeBean);
-
+            }catch(IOException e){
+                e.printStackTrace();
             }
-        }catch(IOException e){
-            e.printStackTrace();
+        }else {
+            throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR,"页面不存在");
         }
     }
 
@@ -226,7 +235,9 @@ public class ResumeSiteController {
                 Map<String,Object> map1 = new HashMap<String,Object>();
                 map1.put("resumeID",id);
                 map1.put("companyID",companyId);
-                Resume resume2 = resume.previewResume(id);
+                Map<String,Object> queryMap1 = new HashMap<>();
+                queryMap1.put("id",id);
+                Resume resume2 = resume.previewResume(queryMap1);
                 map1.put("createId",resume2.getCreateid());
                 resume.addLookRecord(map1);
                 response.setData(resume2);

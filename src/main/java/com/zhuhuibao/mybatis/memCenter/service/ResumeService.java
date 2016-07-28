@@ -293,9 +293,9 @@ public class ResumeService {
     /**
      * 预览简历
      */
-    public Resume previewResume(String id) {
+    public Resume previewResume(Map<String,Object> map) {
         try {
-            return resumeMapper.previewResume(id);
+            return resumeMapper.previewResume(map);
         } catch (Exception e) {
             throw e;
         }
@@ -417,7 +417,9 @@ public class ResumeService {
      */
     public Map<String, String> exportResume(String id) {
         Map<String, String> resumeMap = new HashMap<>();
-        Resume resume = resumeMapper.previewResume(id);
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        Resume resume = resumeMapper.previewResume(map);
         if (resume != null) {
             resumeMap.put("realName", resume.getRealName() != null && !StringUtils.isEmpty(resume.getRealName()) ? resume.getRealName() : "");
             resumeMap.put("title", resume.getTitle() != null && !StringUtils.isEmpty(resume.getTitle()) ? resume.getTitle() : "");
@@ -469,7 +471,9 @@ public class ResumeService {
         Map<String, String> resumeMap = new HashMap<>();
         Map<String, String> recordMap;
         Map<String, String> viewMap;
-        Resume resume = resumeMapper.previewResume(id);
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        Resume resume = resumeMapper.previewResume(map);
         Long createId = ShiroUtil.getCreateID();
         Long companyId = ShiroUtil.getCompanyID();
         if (resume != null) {

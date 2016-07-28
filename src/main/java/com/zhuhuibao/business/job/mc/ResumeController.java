@@ -8,6 +8,7 @@ import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.memCenter.entity.ForbidKeyWords;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
@@ -146,8 +147,16 @@ public class ResumeController {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
         if (createid != null) {
-            Resume resume = resumeService.previewResume(id);
-            response.setData(resume);
+            Map<String,Object> map = new HashMap<>();
+            map.put("id",id);
+            map.put("createid",createid);
+            Resume resume = resumeService.previewResume(map);
+            if(resume!=null){
+                response.setData(resume);
+            }else {
+                throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR,"页面不存在");
+            }
+
         } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
