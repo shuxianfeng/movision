@@ -177,6 +177,11 @@ public class PaymentService {
                 Map map = expertService.getExpertDetail(String.valueOf(goodsID), 0);
                 dataMap.put("info", map);
                 response.setData(dataMap);
+            }else if (CKWKRW.toString().equals(type))//查看威客任务
+            {
+                Map<String,String> cooperation = cooperationService.queryUnloginCooperationInfoById(String.valueOf(goodsID));
+                dataMap.put("info", cooperation);
+                response.setData(dataMap);
             } else {
                 throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
@@ -190,7 +195,6 @@ public class PaymentService {
 	
     /**
      * 简历信息查看
-     * @param parseLong
      * @param type
      * @return
      */

@@ -273,4 +273,14 @@ public class CooperationService {
 			throw e;
 		}
 	}
+
+	public Map<String,String> queryUnloginCooperationInfoById(String id) {
+		try {
+			return cooperationMapper.queryUnloginCooperationInfoById(id);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }
