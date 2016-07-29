@@ -137,6 +137,29 @@
           class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
     </bean>
 
+    <!-- 全局异常配置 start -->
+    <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.lang.Exception">/error_500</prop>
+                <prop key="java.lang.Throwable">/error_500</prop>
+            </props>
+        </property>
+        <property name="statusCodes">
+            <props>
+                <prop key="/error_500">500</prop>
+                <prop key="/error_404">404</prop>
+            </props>
+        </property>
+        <!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->
+        <property name="warnLogCategory" value="WARN"/>
+        <!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->
+        <property name="defaultErrorView" value="errors/error"/>
+        <!-- 默认HTTP状态码 -->
+        <property name="defaultStatusCode" value="500"/>
+    </bean>
+    <!-- 全局异常配置 end -->
+
     <!-- resubmit token拦截器
     <mvc:interceptors>
        <bean class="com.zhuhuibao.security.resubmit.TokenInterceptor"/>
@@ -153,14 +176,6 @@
 
     <!--AOP-->
     <aop:config proxy-target-class="true"/>
-    <!--<bean id="aspectLog" class="com.zhuhuibao.aop.AspectLog"/>-->
-    <!--<aop:config>-->
-        <!--<aop:pointcut expression="@annotation(org.springframework.web.bind.annotation.RequestMapping)"-->
-                      <!--id="logPointcut"/>-->
-        <!--<aop:aspect id="zhblog" ref="aspectLog">-->
-            <!--<aop:around method="aroundLog" pointcut-ref="logPointcut"/>-->
-        <!--</aop:aspect>-->
-    <!--</aop:config>-->
 
     <!--swagger-->
     <bean id="apiConfig" class="com.zhuhuibao.common.util.SwaggerConfig"/>
