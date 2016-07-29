@@ -141,20 +141,20 @@
     <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <property name="exceptionMappings">
             <props>
-                <prop key="java.lang.Exception">/error_500</prop>
-                <prop key="java.lang.Throwable">/error_500</prop>
+                <prop key="java.lang.Exception">/rest/exception/error_500</prop>
+                <prop key="java.lang.Throwable">/rest/exception/error_500</prop>
             </props>
         </property>
         <property name="statusCodes">
             <props>
-                <prop key="/error_500">500</prop>
-                <prop key="/error_404">404</prop>
+                <prop key="/rest/exception/error_500">500</prop>
+                <prop key="/rest/exception/error_404">404</prop>
             </props>
         </property>
         <!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->
-        <property name="warnLogCategory" value="WARN"/>
+        <property name="warnLogCategory" value="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver"/>
         <!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->
-        <property name="defaultErrorView" value="errors/error"/>
+        <property name="defaultErrorView" value="/rest/exception/error_500"/>
         <!-- 默认HTTP状态码 -->
         <property name="defaultStatusCode" value="500"/>
     </bean>
