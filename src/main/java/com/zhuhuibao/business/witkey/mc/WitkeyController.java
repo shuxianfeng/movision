@@ -114,7 +114,7 @@ public class WitkeyController {
     @RequestMapping(value = "sel_witkey", method = RequestMethod.GET)
     public Response queryCooperationInfo(@RequestParam String id)  {
         Response response = new Response();
-        Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
+        Map<String,Object> cooperation = cooperationService.queryCooperationInfoById(id);
         response.setData(cooperation);
         return response;
     }

@@ -187,9 +187,9 @@ public class CooperationService {
 	/**
 	 * 查询一条任务的信息
 	 */
-	public Cooperation queryCooperationInfoById(String id) {
+	public Map<String,Object> queryCooperationInfoById(String id) {
 		try {
-			Cooperation cooperation = cooperationMapper.queryCooperationInfoById(id);
+			Map<String,Object> cooperation = cooperationMapper.queryCooperationInfoById(id);
 			return cooperation;
 		} catch (Exception e) {
 			log.error(e.getMessage());
@@ -274,7 +274,7 @@ public class CooperationService {
 		}
 	}
 
-	public Map<String,String> queryUnloginCooperationInfoById(String id) {
+	public Map<String,Object> queryUnloginCooperationInfoById(String id) {
 		try {
 			return cooperationMapper.queryUnloginCooperationInfoById(id);
 		} catch (Exception e) {

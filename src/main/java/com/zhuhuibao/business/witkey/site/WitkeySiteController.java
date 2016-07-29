@@ -137,9 +137,11 @@ public class WitkeySiteController {
     @RequestMapping(value = "sel_witkey", method = RequestMethod.GET)
     public Response cooperationInfo(@RequestParam String id)  {
         Response response = new Response();
-        Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
-        cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews())+1));
-        cooperationService.updateCooperationViews(cooperation);
+        Map<String,Object> cooperation = cooperationService.queryCooperationInfoById(id);
+        Cooperation result = new Cooperation();
+        result.setId(cooperation.get("id").toString());
+        result.setViews(String.valueOf(Integer.parseInt(cooperation.get("views").toString())+1));
+        cooperationService.updateCooperationViews(result);
         response.setData(cooperation);
         return response;
     }

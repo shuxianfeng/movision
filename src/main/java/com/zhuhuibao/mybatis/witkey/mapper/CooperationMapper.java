@@ -20,7 +20,7 @@ public interface CooperationMapper {
     int deleteCooperation(String id);
 
     //查询一条任务的信息
-    Cooperation queryCooperationInfoById(String id);
+    Map<String,Object> queryCooperationInfoById(String id);
 
     Map<String,Object> queryUnloginCooperationInfo(String id);
 
@@ -36,5 +36,5 @@ public interface CooperationMapper {
 
     int deleteWitkeyTask(String id);
 
-    Map<String,String> queryUnloginCooperationInfoById(String id);
+    Map<String,Object> queryUnloginCooperationInfoById(String id);
 }

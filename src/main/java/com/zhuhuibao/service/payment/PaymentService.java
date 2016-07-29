@@ -111,7 +111,7 @@ public class PaymentService {
                     dataMap.put("info", map);
                 }else if (CKWKRW.toString().equals(type))//查看威客任务
                 {
-                    Map<String,String> cooperation = cooperationService.queryUnloginCooperationInfoById(String.valueOf(goodsID));
+                    Map<String,Object> cooperation = cooperationService.queryUnloginCooperationInfoById(String.valueOf(goodsID));
                     dataMap.put("info", cooperation);
                     response.setData(dataMap);
                 }
@@ -143,10 +143,12 @@ public class PaymentService {
                     dataMap.put("info", map);
                 } else if (CKWKRW.toString().equals(type))//查看威客任务
                 {
-                    Cooperation cooperation = cooperationService.queryCooperationInfoById(String.valueOf(goodsID));
+                    Map<String,Object> cooperation = cooperationService.queryCooperationInfoById(String.valueOf(goodsID));
                     dataMap.put("info", cooperation);
-                    cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews()) + 1));
-                    cooperationService.updateCooperationViews(cooperation);
+                    Cooperation result = new Cooperation();
+                    result.setId(cooperation.get("id").toString());
+                    result.setViews(String.valueOf(Integer.parseInt(cooperation.get("views").toString())+1));
+                    cooperationService.updateCooperationViews(result);
                 } else if (CKJSCG.toString().equals(type))//查看技术成果
                 {
                     Map<String, Object> techMap = new HashMap<>();
@@ -184,7 +186,7 @@ public class PaymentService {
                 response.setData(dataMap);
             }else if (CKWKRW.toString().equals(type))//查看威客任务
             {
-                Map<String,String> cooperation = cooperationService.queryUnloginCooperationInfoById(String.valueOf(goodsID));
+                Map<String,Object> cooperation = cooperationService.queryUnloginCooperationInfoById(String.valueOf(goodsID));
                 dataMap.put("info", cooperation);
                 response.setData(dataMap);
             } else {
