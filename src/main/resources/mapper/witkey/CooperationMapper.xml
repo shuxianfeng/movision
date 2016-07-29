@@ -307,10 +307,10 @@
       and c.status = 1
     </if>
     <if test="category != null and category != ''">
-      and c.category = #{category}
+      and find_in_set(#{category},c.category)
     </if>
     <if test="systemType != null and systemType != ''">
-      and c.systemType = #{systemType}
+      and find_in_set(#{systemType},c.systemType)
     </if>
     <if test="province != null and province != ''">
       and c.province = #{province}
