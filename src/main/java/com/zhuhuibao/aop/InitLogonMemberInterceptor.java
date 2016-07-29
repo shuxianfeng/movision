@@ -31,24 +31,19 @@ public class InitLogonMemberInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		try {
-			HttpSession httpSession = request.getSession(false);
-			String sessionId = null == httpSession ? "null" : httpSession.getId();
-			log.error("sessionId=" + sessionId);
-
 			Subject subject = SecurityUtils.getSubject();
 			Session session = subject.getSession(false);
 			if (null != session) {
 				ShiroRealm.ShiroUser member = (ShiroUser) session.getAttribute("member");
-				log.error(sessionId + ">>>cahe sessionId=" + session.getId());
 				if (null != member) {
-					log.error(sessionId + ">>>account=" + member.getAccount());
 					LoginMember loginMember = memberService.getLoginMemberByAccount(member.getAccount());
 					if (null != loginMember) {
-						member.setStatus(loginMember.getStatus());
-						member.setVipLevel(loginMember.getVipLevel());
-						member.setIsexpert(loginMember.getIsexpert());
-						member.setWorkType(loginMember.getWorkType());
-						member.setIdentify(loginMember.getIdentify());
+
+						member = new ShiroUser(loginMember.getId(), loginMember.getAccount(), loginMember.getStatus(),
+								loginMember.getIdentify(), loginMember.getRole(), loginMember.getIsexpert(),
+								loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(),
+								loginMember.getHeadShot(), loginMember.getNickname(), loginMember.getCompanyName(),
+								loginMember.getVipLevel());
 
 						session.setAttribute("member", member);
 					}
