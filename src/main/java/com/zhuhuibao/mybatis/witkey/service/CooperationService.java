@@ -187,9 +187,9 @@ public class CooperationService {
 	/**
 	 * 查询一条任务的信息
 	 */
-	public Cooperation queryCooperationInfoById(String id) {
+	public Map<String,Object> queryCooperationInfoById(String id) {
 		try {
-			Cooperation cooperation = cooperationMapper.queryCooperationInfoById(id);
+			Map<String,Object> cooperation = cooperationMapper.queryCooperationInfoById(id);
 			return cooperation;
 		} catch (Exception e) {
 			log.error("CooperationService::queryCooperationInfoById::"+"witkeyId="+id,e);
@@ -250,6 +250,36 @@ public class CooperationService {
 		} catch (Exception e) {
 			log.error("CooperationService::queryMyWitkeyListSize",e);
 			//e.printStackTrace();
+			throw e;
+		}
+	}
+
+	public List<Map<String,String>> findAllWitkeyTaskList(Paging<Map<String, String>> pager, Map<String, Object> map) {
+		try {
+			return cooperationMapper.findAllWitkeyTaskList(pager.getRowBounds(),map);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	public int deleteWitkeyTask(String id) {
+		try {
+			return cooperationMapper.deleteWitkeyTask(id);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	public Map<String,Object> queryUnloginCooperationInfoById(String id) {
+		try {
+			return cooperationMapper.queryUnloginCooperationInfoById(id);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			e.printStackTrace();
 			throw e;
 		}
 	}
