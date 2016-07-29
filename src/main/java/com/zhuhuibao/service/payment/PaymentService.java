@@ -109,6 +109,11 @@ public class PaymentService {
                 {
                     Map map = expertService.getExpertDetail(String.valueOf(goodsID), viewNumber);
                     dataMap.put("info", map);
+                }else if (CKWKRW.toString().equals(type))//查看威客任务
+                {
+                    Map<String,String> cooperation = cooperationService.queryUnloginCooperationInfoById(String.valueOf(goodsID));
+                    dataMap.put("info", cooperation);
+                    response.setData(dataMap);
                 }
                 dataMap.put("payment", ZhbPaymentConstant.PAY_ZHB_NON_PURCHASE);
                 response.setData(dataMap);
