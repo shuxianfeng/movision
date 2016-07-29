@@ -72,6 +72,7 @@ public class WitkeySiteController {
                 map.put("companyName",member.getEnterpriseName());
                 map.put("name",member.getEnterpriseLinkman());
             }
+            response.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
