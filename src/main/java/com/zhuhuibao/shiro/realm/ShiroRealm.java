@@ -12,6 +12,7 @@ import org.apache.shiro.cache.Cache;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,9 @@ public class ShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(
             PrincipalCollection principals) {
-        ShiroUser member = (ShiroUser) principals.fromRealm(getName()).iterator().next();
+//        ShiroUser member = (ShiroUser) principals.fromRealm(getName()).iterator().next();
+        Subject subject = SecurityUtils.getSubject();
+        ShiroUser member  = (ShiroUser) subject.getSession(false).getAttribute("member");
         if (null != member) {
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
