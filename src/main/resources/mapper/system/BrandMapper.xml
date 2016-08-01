@@ -191,10 +191,9 @@
     order by views desc limit 0,5
   </select>
   <select id="searchAll" resultMap="ResultMap1" >
-    SELECT DISTINCT b.id,b.CNName,p.scateid
-    FROM t_p_product p
-    LEFT JOIN t_p_brand b ON b.id = p.brandid
-    where b.status = 1 and p.status = 1 order by b.weight desc,b.id
+    select distinct b.id,b.CNName,bs.scateid from t_p_brand_sys bs
+    left join t_p_brand b on bs.brandid = b.id
+    where b.status = 1 order by b.weight desc,b.id
   </select>
   <select id="SuggestBrand" resultMap="ResultMap2" >
     SELECT DISTINCT b.id,b.CNName,p.scateid,b.logourl
