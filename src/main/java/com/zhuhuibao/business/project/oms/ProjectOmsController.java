@@ -54,7 +54,7 @@ public class ProjectOmsController {
      */
     @RequestMapping(value={"addProjectInfo","oms/base/add_projectInfo"}, method = RequestMethod.POST)
 	@ApiOperation(value = "运营后台添加项目信息",notes = "运营后台的新增项目",response = Response.class)
-    public Response addProjectInfo(@ApiParam(value = "项目信息+甲方乙方信息") String json) throws JsonGenerationException, JsonMappingException, IOException {
+    public Response addProjectInfo(@ApiParam(value = "项目信息+甲方乙方信息") String json) throws IOException {
 	   
 		log.info("查询工程信息：queryProjectInfo",json);
 		Response response = new Response();

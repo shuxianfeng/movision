@@ -46,7 +46,7 @@
         left join t_dictionary_area ar on ar.code = t.area
         left join t_dictionary_constant dc on dc.code = t.systemCategory and dc.type =19
         left join t_dictionary_constant dn on dn.code = t.applicationArea and dn.type =18
-        where t.id = #{id,jdbcType=BIGINT}
+        where t.id = #{id,jdbcType=BIGINT}      and t.status = 2
         <if test="type != null">
             and t.type = #{type}
         </if>
@@ -58,7 +58,7 @@
    from t_tech_cooperation t
    left join t_dictionary_constant dc on dc.code = t.systemCategory and dc.type =19
    left join t_dictionary_constant dn on dn.code = t.applicationArea and dn.type =18
-    where t.id = #{id,jdbcType=BIGINT}
+    where t.id = #{id,jdbcType=BIGINT}      and t.status = 2
   </select>
 
     <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long">

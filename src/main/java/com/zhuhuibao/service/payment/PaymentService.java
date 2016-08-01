@@ -193,7 +193,6 @@ public class PaymentService {
 	
     /**
      * 简历信息查看
-     * @param parseLong
      * @param type
      * @return
      */
@@ -203,13 +202,13 @@ public class PaymentService {
 	        Long companyId = ShiroUtil.getCompanyID();
 	        ShiroRealm.ShiroUser member= ShiroUtil.getMember();
 	        int vipLevel=member.getVipLevel();
-	        Map<String,Object> dataMap = new HashMap<String,Object>();
+	        Map<String,Object> dataMap = new HashMap<>();
 	        
 	        
 	       
 	        if(createId != null) {
 	        	
-	        	Map<String,Object> con = new HashMap<String,Object>();
+	        	Map<String,Object> con = new HashMap<>();
 	            //商品ID
 	            con.put("goodsId", goodsID);
 	            con.put("companyId",companyId);
@@ -265,7 +264,7 @@ public class PaymentService {
 	                    resumeBean.setId(String.valueOf(goodsID));
 	                    //更新点击率
 	                    resume.updateResume(resumeBean);
-	                    Map<String,Object> map1 = new HashMap<String,Object>();
+	                    Map<String,Object> map1 = new HashMap<>();
 	                    map1.put("resumeID", goodsID);
 	                    map1.put("companyID",companyId);
 	                    map1.put("createId",resume2.getCreateid());
@@ -303,7 +302,7 @@ public class PaymentService {
 	                    resumeBean.setId(String.valueOf(goodsID));
 	                    //更新点击率
 	                    resume.updateResume(resumeBean);
-	                    Map<String,Object> map1 = new HashMap<String,Object>();
+	                    Map<String,Object> map1 = new HashMap<>();
 	                    map1.put("resumeID", goodsID);
 	                    map1.put("companyID",companyId);
 	                    map1.put("createId",resume2.getCreateid());

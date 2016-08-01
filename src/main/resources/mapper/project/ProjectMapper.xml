@@ -226,6 +226,7 @@
         left join t_dictionary_city ct on ct.code = t.city
         left join t_dictionary_area ar on ar.code = t.area
         <where>
+            t.is_deleted = 0
             <if test="id != null">
                 and t.id = #{id}
             </if>
