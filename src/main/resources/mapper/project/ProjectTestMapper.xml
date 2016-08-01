@@ -57,4 +57,11 @@
       </if>
     </trim>
   </insert>
+
+  <select id="queryAll" resultType="java.util.Map" parameterType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    from t_prj_project_test
+    where id &gt;= #{begin} and id &lt;= #{end}
+  </select>
 </mapper>

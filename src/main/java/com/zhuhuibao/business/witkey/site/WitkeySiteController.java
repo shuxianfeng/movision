@@ -1,5 +1,18 @@
 package com.zhuhuibao.business.witkey.site;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
@@ -8,22 +21,13 @@ import com.zhuhuibao.common.constant.CooperationConstants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.exception.PageNotFoundException;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
-import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 威客接口
@@ -40,9 +44,6 @@ public class WitkeySiteController {
     @Autowired
     private MemberService memberService;
 
-    /**
-     * 发布任务
-     */
     @ApiOperation(value="发布任务",notes="发布任务",response = Response.class)
     @RequestMapping(value = "add_witkey", method = RequestMethod.POST)
     public Response publishCooperation(@ApiParam(value = "威客信息")  @ModelAttribute(value="cooperation") Cooperation cooperation) throws Exception {
@@ -57,6 +58,30 @@ public class WitkeySiteController {
         return response;
     }
 
+    @ApiOperation(value="获取联系方式",notes="获取联系方式",response = Response.class)
+    @RequestMapping(value = "sel_connection", method = RequestMethod.GET)
+    public Response sel_connection() throws Exception {
+        Response response = new Response();
+        Long createId = ShiroUtil.getCreateID();
+        Map map = new HashMap();
+        if(createId!=null){
+            Member member = memberService.findMemById(String.valueOf(createId));
+            map.put("telephone",member.getFixedTelephone());
+            map.put("mobile",member.getFixedMobile());
+            map.put("email",member.getEmail());
+            if("2".equals(member.getIdentify())){
+                map.put("companyName","");
+                map.put("name",member.getNickname());
+            }else {
+                map.put("companyName",member.getEnterpriseName());
+                map.put("name",member.getEnterpriseLinkman());
+            }
+            response.setData(map);
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
 
     /**
      * 查询任务列表（分页）
@@ -67,6 +92,7 @@ public class WitkeySiteController {
     (@RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize,
      @ApiParam(value = "合作类型") @RequestParam(required = false) String type,
      @ApiParam(value = "项目类别") @RequestParam(required = false) String category,
+     @ApiParam(value = "系统分类") @RequestParam(required = false) String systemType,
      @ApiParam(value = "省") @RequestParam(required = false) String province,
      @ApiParam(value = "关键字") @RequestParam(required = false) String smart,
      @ApiParam(value = "发布类型，1：接任务，2：接服务，3：资质合作") @RequestParam String parentId) {
@@ -85,6 +111,7 @@ public class WitkeySiteController {
         cooperation.setCategory(category);
         cooperation.setProvince(province);
         cooperation.setParentId(parentId);
+        cooperation.setSystemType(systemType);
         Response Response = new Response();
         List<Map<String,String>> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
         pager.result(cooperationList);
@@ -114,14 +141,12 @@ public class WitkeySiteController {
     @RequestMapping(value = "sel_witkey", method = RequestMethod.GET)
     public Response cooperationInfo(@RequestParam String id)  {
         Response response = new Response();
-        Cooperation cooperation = cooperationService.queryCooperationInfoById(id);
-        if(cooperation!=null){
-            cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews())+1));
-            cooperationService.updateCooperationViews(cooperation);
-            response.setData(cooperation);
-        }else {
-            throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR,"页面不存在");
-        }
+        Map<String,Object> cooperation = cooperationService.queryCooperationInfoById(id);
+        Cooperation result = new Cooperation();
+        result.setId(cooperation.get("id").toString());
+        result.setViews(String.valueOf(Integer.parseInt(cooperation.get("views").toString())+1));
+        cooperationService.updateCooperationViews(result);
+        response.setData(cooperation);
         return response;
     }
 

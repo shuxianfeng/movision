@@ -12,6 +12,7 @@
     <result column="type" property="type" jdbcType="VARCHAR" />
     <result column="typeName" property="typeName" jdbcType="VARCHAR" />
     <result column="category" property="category" jdbcType="VARCHAR" />
+    <result column="systemType" property="systemType" jdbcType="VARCHAR" />
     <result column="categoryName" property="categoryName" jdbcType="VARCHAR" />
     <result column="province" property="province" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
@@ -59,6 +60,9 @@
       </if>
       <if test="category != null" >
         category,
+      </if>
+      <if test="systemType != null" >
+        systemType,
       </if>
       <if test="province != null" >
         province,
@@ -121,6 +125,9 @@
       <if test="category != null" >
         #{category},
       </if>
+      <if test="systemType != null" >
+        #{systemType},
+      </if>
       <if test="province != null" >
         #{province},
       </if>
@@ -177,6 +184,9 @@
       </if>
       <if test="category != null" >
         category = #{category},
+      </if>
+      <if test="systemType != null" >
+        systemType = #{systemType},
       </if>
       <if test="province != null" >
         province = #{province},
@@ -241,15 +251,17 @@
   <update id="deleteCooperation" parameterType="com.zhuhuibao.mybatis.witkey.entity.Cooperation" >
     UPDATE t_c_cooperation SET is_deleted = 1 WHERE id = #{id}
   </update>
-  <select id="queryCooperationInfoById" resultMap="BaseResultMap" >
-    select c.*, concat(p.name,ci.name)as cooperationArea,co.name as categoryName,coo.name as TypeName,coo.parentId,
-    (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName,
-    CASE WHEN m.identify = 2 THEN '个人' WHEN m.identify !=2 THEN '公司' END AS memberType,m.headShot
+  <select id="queryCooperationInfoById" resultType="java.util.Map" >
+    select c.id, c.createId,date_format(c.updateTime,'%Y-%m-%d') updateTime, c.title,
+    c.price, date_format(c.endTime,'%Y-%m-%d') endTime,c.type, c.category, c.province, c.city, c.area,c.systemType,
+    c.isShow, c.companyName, c.linkMan, c.telephone, c.mobile,c.email,c.content,c.views,c.is_deleted,c.status,
+    concat(p.name,ci.name)as cooperationArea,
+    (SELECT group_concat(name) from t_dictionary_constant where find_in_set(code,c.category) and type = 9)as categoryName,
+    (SELECT group_concat(name) from t_dictionary_constant where find_in_set(code,c.systemType) and type = 25)as systemTypeName,
+    coo.name as typeName
     from t_c_cooperation c
     left join t_dictionary_province p on p.code = c.province
     left join t_dictionary_city ci on ci.code = c.city
-    left join t_dictionary_area a on a.code = c.area
-    left join t_dictionary_constant co on co.code = c.category and co.type = 9
     left join t_dictionary_cooperationType coo on coo.id = c.type
     LEFT JOIN t_m_member m on c.createId = m.id
     where c.id = #{id} and c.is_deleted = 0
@@ -260,18 +272,22 @@
     where c.id = #{id}
   </select>
   <select id="findAllCooperationByPager" resultType="java.util.Map" >
-    select c.id, c.createId, date_format(c.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, date_format(c.updateTime,'%Y-%m-%d %H:%i:%s') updateTime, c.title, c.type, c.category, c.province, c.city, c.area,
+    select c.id, c.createId, date_format(c.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,
+    date_format(c.updateTime,'%Y-%m-%d %H:%i:%s') updateTime, c.title, c.type, c.category, c.province, c.city, c.area,
     c.price, date_format(c.endTime,'%Y-%m-%d %H:%i:%s') endTime,
     case WHEN c.endTime &lt; now() THEN '1' WHEN c.endTime &gt; now() THEN '0' END AS timeStatus,
     c.isShow, c.companyName, c.linkMan, c.telephone, c.mobile,c.email,c.content,c.is_deleted,c.views,c.status,
-    concat(p.name,ci.name)as cooperationArea,co.name as categoryName,coo.name as typeName,coo.parentId,
+    concat(p.name,ci.name)as cooperationArea,
+    (SELECT group_concat(name) from t_dictionary_constant where find_in_set(code,c.category) and type = 9)as categoryName,
+    (SELECT group_concat(name) from t_dictionary_constant where find_in_set(code,c.systemType) and type = 25)as systemTypeName,
+    coo.name as typeName,
+    coo.parentId,
     (select name from t_dictionary_cooperationType where id = coo.parentId)as parentName,
-    CASE WHEN m.identify = 2 THEN '个人' WHEN m.identify !=2 THEN '公司' END AS memberType,m.headShot
+    CASE WHEN m.identify = 2 THEN '个人' WHEN m.identify !=2 THEN '公司' END AS memberType,
+    m.headShot
     from t_c_cooperation c
     left join t_dictionary_province p on p.code = c.province
     left join t_dictionary_city ci on ci.code = c.city
-    left join t_dictionary_area a on a.code = c.area
-    left join t_dictionary_constant co on co.code = c.category and co.type = 9
     left join t_dictionary_cooperationType coo on coo.id = c.type
     LEFT JOIN t_m_member m on c.createId = m.id
     where c.is_deleted = 0
@@ -294,7 +310,10 @@
       and c.status = 1
     </if>
     <if test="category != null and category != ''">
-      and c.category = #{category}
+      and find_in_set(#{category},c.category)
+    </if>
+    <if test="systemType != null and systemType != ''">
+      and find_in_set(#{systemType},c.systemType)
     </if>
     <if test="province != null and province != ''">
       and c.province = #{province}
@@ -322,5 +341,46 @@
     select count(*) FROM t_c_cooperation c
     left join t_dictionary_cooperationType ct on c.type = ct.id
     WHERE c.createId = #{createId} and c.is_deleted = 0 and ct.parentId = #{parentId}
+  </select>
+
+  <select id="findAllWitkeyTaskList" resultType="java.util.Map" >
+    select c.id,c.title,ct.name as type,p.name as province,ci.name as city,date_format(v.viewTime,'%Y-%m-%d') viewTime,v.id as recordId
+    from t_zhb_viewGoods v
+    left join t_c_cooperation c on v.goodsId = c.id
+    left join t_dictionary_province p on c.province = p.code
+    left join t_dictionary_city ci on c.city = ci.code
+    left join t_dictionary_cooperationType ct on c.type = ct.id
+    where v.type = 'CKWKRW' and v.`status` = 0
+    <if test="companyId != null">
+      and v.companyId = #{companyId}
+    </if>
+    <if test="viewerId != null">
+      and v.viewerId = #{viewerId}
+    </if>
+    <if test="type != null">
+      and c.type = #{type}
+    </if>
+    <if test="title != null">
+      and c.title like concat('%',#{title},'%')
+    </if>
+    order by v.viewTime desc
+  </select>
+
+  <update id="deleteWitkeyTask" parameterType="java.lang.String" >
+    update t_zhb_viewGoods
+    set status = 1
+    where id = #{id}
+  </update>
+
+  <select id="queryUnloginCooperationInfoById" parameterType="java.lang.String" resultType="java.util.Map">
+    SELECT c.id,c.createId,c.title,date_format(c.updateTime,'%Y-%m-%d') updateTime,concat(p.name,ci.name)as cooperationArea,
+    (SELECT group_concat(name) from t_dictionary_constant where find_in_set(code,c.category) and type = 9)as categoryName,
+    (SELECT group_concat(name) from t_dictionary_constant where find_in_set(code,c.systemType) and type = 25)as systemTypeName,
+    coo.name as typeName,c.price,date_format(c.endTime,'%Y-%m-%d') endTime,c.views
+    from t_c_cooperation c
+    left join t_dictionary_province p on p.code = c.province
+    left join t_dictionary_city ci on ci.code = c.city
+    left join t_dictionary_cooperationType coo on coo.id = c.type
+    where c.id = #{id}
   </select>
 </mapper>

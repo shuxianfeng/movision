@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by cxx on 2016/7/22 0022.
  */
@@ -35,6 +38,16 @@ public class ProjectTestService {
     public ProjectTest query(int id) {
         try{
             return projectTestMapper.selectByPrimaryKey(id);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public List<Map<String,String>> queryAll(Map<String, Object> map) {
+        try{
+            return projectTestMapper.queryAll(map);
         }catch (Exception e){
             log.error(e.getMessage());
             e.printStackTrace();
