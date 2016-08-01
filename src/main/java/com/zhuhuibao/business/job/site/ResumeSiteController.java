@@ -116,7 +116,7 @@ public class ResumeSiteController {
 
     @RequestMapping(value = "sel_all_resume", method = RequestMethod.GET)
     @ApiOperation(value = "人才库搜索", notes = "人才库搜索", response = Response.class)
-    public Response findAllResume(@ApiParam(value = "简历名称") @RequestParam(required = false) String title,
+    public Response findAllResume(@ApiParam(value = "关键字") @RequestParam(required = false) String title,
                                   @ApiParam(value = "期望工作城市") @RequestParam(required = false) String jobCity,
                                   @ApiParam(value = "工作年限前") @RequestParam(required = false) String expYearBefore,
                                   @ApiParam(value = "工作年限后") @RequestParam(required = false) String expYearBehind,
