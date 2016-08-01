@@ -31,11 +31,11 @@ public interface BrandMapper {
 
     Brand brandDetails(String id);
 
-    List<ResultBean> findAllBrand(Product product);
+    List<Map<String,Object>> findAllBrand(String scateid);
 
-    List<ResultBean> findBrandByScateid(Product product);
+    List<Map<String,Object>> findBrandByScateid(String scateid);
 
-    List<ResultBean> searchSuggestBrand();
+    List<Map<String,Object>> searchSuggestBrand();
 
     List<BrandBean> searchAll();
 

@@ -173,23 +173,19 @@
     </set>
     where id = #{id}
   </update>
-  <select id="findAllBrand" resultMap="ResultMap" >
-    select
-    distinct t.brandid,b.logourl,b.CNName
-    from t_p_product t
-    LEFT JOIN t_p_brand b ON t.brandid = b.id
-    WHERE t.scateid = #{scateid} and b.status = 1 and t.status = 1
+  <select id="findAllBrand" resultType="java.util.Map" >
+    select distinct b.id as code,b.logourl as name from t_p_brand_sys bs
+    left join t_p_brand b on bs.brandid = b.id
+    where bs.scateid = #{scateid} and b.status = 1
   </select>
-  <select id="findBrandByScateid" resultMap="ResultMap3" >
-    select
-    distinct t.brandid as id,b.CNName
-    from t_p_product t
-    LEFT JOIN t_p_brand b ON t.brandid = b.id
-    WHERE t.scateid = #{scateid} and b.status = 1 and t.status = 1
+  <select id="findBrandByScateid" resultType="java.util.Map" >
+    select distinct b.id as code,b.CNName as name from t_p_brand_sys bs
+    left join t_p_brand b on bs.brandid = b.id
+    where bs.scateid = #{scateid} and b.status = 1
   </select>
-  <select id="searchSuggestBrand" resultMap="ResultMap3" >
+  <select id="searchSuggestBrand" resultType="java.util.Map" >
     select
-    id,CNName,logourl
+    id as code,CNName as name,logourl as smallIcon
     from t_p_brand
     where status = 1
     order by views desc limit 0,5

@@ -126,8 +126,8 @@ public class BrandController {
 
     @ApiOperation(value = "查询二级系统下所有品牌",notes = "查询二级系统下所有品牌", response = Response.class)
     @RequestMapping(value = {"/rest/brand/findBrandByScateid","/rest/system/mc/brand/sel_brand_by_scateid"}, method = RequestMethod.GET)
-    public Response findBrandByScateid(@ModelAttribute Product product)  {
-        List<ResultBean> brandList = brandService.findBrandByScateid(product);
+    public Response findBrandByScateid(@RequestParam String scateid)  {
+        List<Map<String,Object>> brandList = brandService.findBrandByScateid(scateid);
         Response result = new Response();
         result.setData(brandList);
         return result;

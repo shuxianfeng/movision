@@ -95,9 +95,9 @@ public class BrandService {
     /**
      * 查询二级系统下所有品牌,返回id,品牌logo
      */
-    public List<ResultBean> findAllBrand(Product product) {
+    public List<Map<String,Object>> findAllBrand(String scateid) {
         try {
-            return brandMapper.findAllBrand(product);
+            return brandMapper.findAllBrand(scateid);
         } catch (Exception e) {
             log.error("执行异常>>>", e);
             throw e;
@@ -107,9 +107,9 @@ public class BrandService {
     /**
      * 查询二级系统下所有品牌，返回id，name
      */
-    public List<ResultBean> findBrandByScateid(Product product) {
+    public List<Map<String,Object>> findBrandByScateid(String scateid) {
         try {
-            return brandMapper.findBrandByScateid(product);
+            return brandMapper.findBrandByScateid(scateid);
         } catch (Exception e) {
             log.error("执行异常>>>", e);
             throw e;
@@ -119,7 +119,7 @@ public class BrandService {
     /**
      * 查询推荐品牌
      */
-    public List<ResultBean> searchSuggestBrand() {
+    public List<Map<String,Object>> searchSuggestBrand() {
         try {
             return brandMapper.searchSuggestBrand();
         } catch (Exception e) {
