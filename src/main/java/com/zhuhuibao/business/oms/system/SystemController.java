@@ -1,9 +1,12 @@
 package com.zhuhuibao.business.oms.system;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
+import com.zhuhuibao.mybatis.memCenter.entity.SysBrand;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.oms.entity.Category;
 import com.zhuhuibao.mybatis.oms.service.CategoryService;
@@ -14,12 +17,12 @@ import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -156,6 +159,26 @@ public class SystemController {
         int size = brandService.findBrandSize(brand);
         Response result = new Response();
         result.setData(size);
+        return result;
+    }
+
+    @ApiOperation(value = "更新品牌",notes = "更新品牌", response = Response.class)
+    @RequestMapping(value = {"/rest/system/oms/brand/upd_brand"}, method = RequestMethod.POST)
+    public Response updateBrand(@ModelAttribute Brand brand,@RequestParam String json)  {
+        Response result = new Response();
+        brandService.updateBrand(brand);
+
+        //删除原有的对应关系
+        brandService.deleteBrandSysByBrandID(brand.getId());
+        //插入新的对应关系
+        Gson gson=new Gson();
+        List<SysBrand> rs= new ArrayList<SysBrand>();
+        Type type = new TypeToken<ArrayList<SysBrand>>() {}.getType();
+        rs = gson.fromJson(json, type);
+        for(SysBrand sysBrand:rs){
+            sysBrand.setBrandid(String.valueOf(brand.getId()));
+            brandService.addSysBrand(sysBrand);
+        }
         return result;
     }
 }

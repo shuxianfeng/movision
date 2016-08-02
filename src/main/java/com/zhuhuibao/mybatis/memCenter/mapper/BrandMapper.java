@@ -21,8 +21,6 @@ public interface BrandMapper {
 
     List<Brand> searchBrandByStatus(Brand brand);
 
-    List<Brand> searchBrand(Brand brand);
-
     List<Brand> findAllByPager(RowBounds rowBounds,Brand brand);
 
     int searchBrandSize(Brand brand);

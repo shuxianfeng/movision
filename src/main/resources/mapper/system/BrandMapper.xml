@@ -59,17 +59,17 @@
     id, CNName, ENName, views, weight, logourl, createid, description, imgurl,
     status, owner, certificate, webSite, publishTime, checkTime, lastModifyTime
   </sql>
-  <insert id="addBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" >
-    insert into t_p_brand (id, CNName, ENName, logourl,
+  <insert id="addBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" useGeneratedKeys="true" keyProperty="id">
+    insert into t_p_brand (CNName, ENName, logourl,
     createid, description, imgurl,
     status, owner, certificate,
     webSite, publishTime)
-    values (#{id}, #{CNName}, #{ENName}, #{logourl},
+    values (#{CNName}, #{ENName}, #{logourl},
     #{createid}, #{description}, #{imgurl},
     2, #{owner}, #{certificate},
     #{webSite}, now())
   </insert>
-  <update id="updateBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" >
+  <update id="updateBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand">
     update t_p_brand
     <set >
       <if test="CNName != null" >
@@ -117,15 +117,7 @@
       and b.status = #{status}
     </if>
   </select>
-  <select id="searchBrand" resultMap="BaseResultMap" >
-    select
-    *
-    from t_p_brand b
-    where b.createid = #{createid} and b.status !=3
-    <if test="status != null" >
-      and b.status = #{status}
-    </if>
-  </select>
+
   <select id="findAllByPager" resultMap="BaseResultMap" >
     select
     b.CNName,b.owner,b.id,b.certificate,b.webSite,b.publishTime,b.logourl,b.status,m.enterpriseName
