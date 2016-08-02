@@ -1,5 +1,6 @@
 package com.zhuhuibao.business.system.brand.site;
 
+import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.pojo.*;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -149,13 +151,13 @@ public class BrandSiteController {
      * @return
      * @throws IOException
      */
+    @ApiOperation(value="查询二级系统下所有品牌",notes="查询二级系统下所有品牌",response = Response.class)
     @RequestMapping(value = {"/rest/brand/findAllBrand","/rest/system/site/brand/sel_all_brand"}, method = RequestMethod.GET)
-    public Response findAllBrand(Product product) {
-        List<ResultBean> brandList = brandService.findAllBrand(product);
+    public Response findAllBrand(@RequestParam String scateid) {
+        List<Map<String,Object>> brandList = brandService.findAllBrand(scateid);
         Response result = new Response();
         result.setCode(200);
         result.setData(brandList);
-
         return result;
     }
 
@@ -166,7 +168,7 @@ public class BrandSiteController {
      */
     @RequestMapping(value = {"/rest/searchSuggestBrand","/rest/system/site/brand/sel_suggest_brand"}, method = RequestMethod.GET)
     public Response searchSuggestBrand()  {
-        List<ResultBean> brandList = brandService.searchSuggestBrand();
+        List<Map<String,Object>> brandList = brandService.searchSuggestBrand();
         Response result = new Response();
         result.setCode(200);
         result.setData(brandList);
