@@ -143,7 +143,7 @@ public class WitkeySiteController {
     public Response cooperationInfo(@RequestParam String id)  {
         Response response = new Response();
         Map<String,Object> cooperation = cooperationService.queryCooperationInfoById(id);
-        if(!"1".equals(cooperation.get("parentId"))){
+        if(!"1".equals(cooperation.get("parentId").toString())){
             Cooperation result = new Cooperation();
             result.setId(cooperation.get("id").toString());
             result.setViews(String.valueOf(Integer.parseInt(cooperation.get("views").toString())+1));
