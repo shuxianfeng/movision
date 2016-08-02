@@ -135,19 +135,18 @@ public class CommonController {
 
     }
 
-    @RequestMapping(value = "/rest/common/sel_productFirstCategory", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/common/sel_firstCategory", method = RequestMethod.GET)
     @ApiOperation(value = "系统一级分类", notes = "系统一级分类", response = Response.class)
-    public Response getProductFirstCategory(HttpServletResponse response) throws IOException {
+    public Response getProductFirstCategory() throws IOException {
         Response jsonResult = new Response();
         List<ResultBean> systemList = categoryService.findSystemList();
         jsonResult.setData(systemList);
         return jsonResult;
     }
 
-    @RequestMapping(value = "/rest/common/sel_productSecondCategory", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/common/sel_secondCategory", method = RequestMethod.GET)
     @ApiOperation(value = "系统二级分类", notes = "系统二级分类", response = Response.class)
-    public Response getProductSecondCategory(HttpServletRequest req) throws IOException {
-        String parentId = req.getParameter("parentID");
+    public Response getProductSecondCategory(@RequestParam String parentId) throws IOException {
         Response response = new Response();
         List<ResultBean> subSystemList = categoryService.findSubSystemList(parentId);
         response.setData(subSystemList);
