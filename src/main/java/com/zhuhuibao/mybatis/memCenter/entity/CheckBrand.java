@@ -27,11 +27,11 @@ public class CheckBrand {
 
     private String website;
 
-    private Date publishtime;
+    private String publishtime;
 
-    private Date checktime;
+    private String checktime;
 
-    private Date lastmodifytime;
+    private String lastmodifytime;
 
     private String description;
 
@@ -131,27 +131,27 @@ public class CheckBrand {
         this.website = website == null ? null : website.trim();
     }
 
-    public Date getPublishtime() {
+    public String getPublishtime() {
         return publishtime;
     }
 
-    public void setPublishtime(Date publishtime) {
+    public void setPublishtime(String publishtime) {
         this.publishtime = publishtime;
     }
 
-    public Date getChecktime() {
+    public String getChecktime() {
         return checktime;
     }
 
-    public void setChecktime(Date checktime) {
+    public void setChecktime(String checktime) {
         this.checktime = checktime;
     }
 
-    public Date getLastmodifytime() {
+    public String getLastmodifytime() {
         return lastmodifytime;
     }
 
-    public void setLastmodifytime(Date lastmodifytime) {
+    public void setLastmodifytime(String lastmodifytime) {
         this.lastmodifytime = lastmodifytime;
     }
 

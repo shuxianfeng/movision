@@ -12,6 +12,7 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.entity.CheckBrand;
+import com.zhuhuibao.mybatis.memCenter.entity.CheckSysBrand;
 import com.zhuhuibao.mybatis.memCenter.entity.SysBrand;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.memCenter.service.CheckBrandService;
@@ -46,14 +47,14 @@ public class BrandController {
     public Response upload(@ModelAttribute CheckBrand brand, @RequestParam String json) {
         Response result = new Response();
         Gson gson=new Gson();
-        List<SysBrand> rs= new ArrayList<SysBrand>();
-        Type type = new TypeToken<ArrayList<SysBrand>>() {}.getType();
+        List<CheckSysBrand> rs= new ArrayList<CheckSysBrand>();
+        Type type = new TypeToken<ArrayList<CheckSysBrand>>() {}.getType();
         rs = gson.fromJson(json, type);
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
             brand.setCreateid(createid);
             int brandId = checkBrandService.addBrand(brand);
-            for(SysBrand sysBrand:rs){
+            for(CheckSysBrand sysBrand:rs){
                 sysBrand.setBrandid(String.valueOf(brandId));
                 brandService.addSysBrand(sysBrand);
             }
@@ -67,11 +68,15 @@ public class BrandController {
     @RequestMapping(value = "sel_brand", method = RequestMethod.GET)
     public Response brandDetails(@RequestParam String id) {
         Response result = new Response();
-        Brand brand = checkBrandService.queryBrandById(id);
+        Map<String,Object> map = new HashMap<>();
+        CheckBrand brand = checkBrandService.queryBrandById(id);
+        List<Map<String,Object>> sysList = brandService.queryBrandSysById(id);
+        map.put("brandInfo",brand);
+        map.put("sysList",sysList);
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
             if(String.valueOf(createid).equals(String.valueOf(brand.getCreateid()))){
-                result.setData(brand);
+                result.setData(map);
             }else {
                 throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
             }
@@ -89,7 +94,7 @@ public class BrandController {
         brand.setStatus(2);
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
-            Brand b = checkBrandService.queryBrandById(String.valueOf(brand.getId()));
+            CheckBrand b = checkBrandService.queryBrandById(String.valueOf(brand.getId()));
             if(b!=null){
                 if(String.valueOf(createid).equals(String.valueOf(b.getCreateid()))){
                     //更新品牌基本信息
@@ -98,10 +103,10 @@ public class BrandController {
                     brandService.deleteBrandSysByBrandID(brand.getId());
                     //插入新的对应关系
                     Gson gson=new Gson();
-                    List<SysBrand> rs= new ArrayList<SysBrand>();
-                    Type type = new TypeToken<ArrayList<SysBrand>>() {}.getType();
+                    List<CheckSysBrand> rs= new ArrayList<CheckSysBrand>();
+                    Type type = new TypeToken<ArrayList<CheckSysBrand>>() {}.getType();
                     rs = gson.fromJson(json, type);
-                    for(SysBrand sysBrand:rs){
+                    for(CheckSysBrand sysBrand:rs){
                         sysBrand.setBrandid(String.valueOf(brand.getId()));
                         brandService.addSysBrand(sysBrand);
                     }
@@ -123,7 +128,7 @@ public class BrandController {
         Response result = new Response();
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
-            Brand b = checkBrandService.queryBrandById(String.valueOf(id));
+            CheckBrand b = checkBrandService.queryBrandById(String.valueOf(id));
             if(b!=null){
                 if(String.valueOf(createid).equals(String.valueOf(b.getCreateid()))){
                     brandService.deleteBrand(id);
@@ -148,7 +153,7 @@ public class BrandController {
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null){
             for (String id : idList) {
-                Brand b = checkBrandService.queryBrandById(String.valueOf(id));
+                CheckBrand b = checkBrandService.queryBrandById(String.valueOf(id));
                 if(b!=null){
                     if(String.valueOf(createid).equals(String.valueOf(b.getCreateid()))){
                         brandService.deleteBrand(id);

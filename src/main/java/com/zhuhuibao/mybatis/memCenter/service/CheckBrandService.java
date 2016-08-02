@@ -3,6 +3,7 @@ package com.zhuhuibao.mybatis.memCenter.service;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.entity.CheckBrand;
 import com.zhuhuibao.mybatis.memCenter.mapper.CheckBrandMapper;
+import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,9 +61,18 @@ public class CheckBrandService {
         }
     }
 
-    public Brand queryBrandById(String id) {
+    public CheckBrand queryBrandById(String id) {
         try {
             return checkBrandMapper.queryBrandById(id);
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw e;
+        }
+    }
+
+    public List<CheckBrand> searchBrandByPager(Paging<CheckBrand> pager, Brand brand) {
+        try {
+            return checkBrandMapper.findAllByPager(pager.getRowBounds(), brand);
         } catch (Exception e) {
             log.error("执行异常>>>", e);
             throw e;

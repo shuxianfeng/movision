@@ -2,6 +2,9 @@ package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.mybatis.memCenter.entity.SysBrand;
 
+import java.util.List;
+import java.util.Map;
+
 public interface SysBrandMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -16,4 +19,6 @@ public interface SysBrandMapper {
     int updateByPrimaryKeySelective(SysBrand record);
 
     int updateByPrimaryKey(SysBrand record);
+
+    List<Map<String,Object>> queryBrandSysById(String id);
 }

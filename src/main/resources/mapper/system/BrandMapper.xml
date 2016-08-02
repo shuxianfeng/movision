@@ -59,15 +59,15 @@
     id, CNName, ENName, views, weight, logourl, createid, description, imgurl,
     status, owner, certificate, webSite, publishTime, checkTime, lastModifyTime
   </sql>
-  <insert id="addBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" useGeneratedKeys="true" keyProperty="id">
-    insert into t_p_brand (CNName, ENName, logourl,
+  <insert id="addBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand">
+    insert into t_p_brand (id,CNName, ENName, logourl,
     createid, description, imgurl,
     status, owner, certificate,
-    webSite, publishTime)
-    values (#{CNName}, #{ENName}, #{logourl},
+    webSite, publishTime,checkTime,lastModifyTime)
+    values (#{id},#{CNName}, #{ENName}, #{logourl},
     #{createid}, #{description}, #{imgurl},
-    2, #{owner}, #{certificate},
-    #{webSite}, now())
+    1, #{owner}, #{certificate},
+    #{webSite}, #{publishTime},now(),#{lastModifyTime})
   </insert>
   <update id="updateBrand" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand">
     update t_p_brand
@@ -102,7 +102,10 @@
       <if test="status != null" >
         status = #{status},
       </if>
-      lastModifyTime = now(),
+      <if test="lastModifyTime != null" >
+        lastModifyTime = #{lastModifyTime},
+      </if>
+      checkTime = now(),
     </set>
     where id = #{id}
   </update>
@@ -124,18 +127,6 @@
     from t_p_brand b
     LEFT JOIN t_m_member m on b.createid = m.id
     WHERE 1=1
-    <if test="status != null" >
-      and b.status = #{status}
-    </if>
-    <if test="CNName != null" >
-      and b.CNName like CONCAT('%',#{CNName},'%')
-    </if>
-  </select>
-  <select id="findBrandSize" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Brand" resultType="java.lang.Integer" >
-    select
-    COUNT(*)
-    from t_p_brand b
-    where 1=1
     <if test="status != null" >
       and b.status = #{status}
     </if>

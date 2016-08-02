@@ -25,8 +25,6 @@ public interface BrandMapper {
 
     int searchBrandSize(Brand brand);
 
-    int findBrandSize(Brand brand);
-
     Brand brandDetails(String id);
 
     List<Map<String,Object>> findAllBrand(String scateid);

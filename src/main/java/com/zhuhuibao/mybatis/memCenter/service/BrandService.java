@@ -6,8 +6,9 @@ import com.zhuhuibao.common.pojo.BrandDetailBean;
 import com.zhuhuibao.common.pojo.SuggestBrand;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
-import com.zhuhuibao.mybatis.memCenter.entity.SysBrand;
+import com.zhuhuibao.mybatis.memCenter.entity.CheckSysBrand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.CheckSysBrandMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.SysBrandMapper;
 import com.zhuhuibao.mybatis.product.service.ProductService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -40,6 +41,9 @@ public class BrandService {
 
     @Autowired
     SysBrandMapper sysBrandMapper;
+
+    @Autowired
+    CheckSysBrandMapper checkSysBrandMapper;
 
     /**
      * 根据会员id，状态status(可以为空)查询品牌
@@ -153,15 +157,6 @@ public class BrandService {
         }
     }
 
-    public int findBrandSize(Brand brand) {
-        try {
-            return brandMapper.findBrandSize(brand);
-        } catch (Exception e) {
-            log.error("执行异常>>>", e);
-            throw e;
-        }
-    }
-
     public Brand brandDetails(String id) {
         try {
             return brandMapper.brandDetails(id);
@@ -216,9 +211,9 @@ public class BrandService {
         return list;
     }
 
-    public int addSysBrand(SysBrand sysBrand) {
+    public int addSysBrand(CheckSysBrand sysBrand) {
         try {
-            return sysBrandMapper.insertSelective(sysBrand);
+            return checkSysBrandMapper.insertSelective(sysBrand);
         } catch (Exception e) {
             log.error("执行异常>>>", e);
             throw e;
@@ -227,7 +222,16 @@ public class BrandService {
 
     public int deleteBrandSysByBrandID(Integer id) {
         try {
-            return sysBrandMapper.deleteBrandSysByBrandID(id);
+            return checkSysBrandMapper.deleteBrandSysByBrandID(id);
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw e;
+        }
+    }
+
+    public List<Map<String,Object>> queryBrandSysById(String id) {
+        try {
+            return checkSysBrandMapper.queryBrandSysById(id);
         } catch (Exception e) {
             log.error("执行异常>>>", e);
             throw e;

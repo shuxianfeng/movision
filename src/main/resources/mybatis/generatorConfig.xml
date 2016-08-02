@@ -56,8 +56,8 @@
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <table tableName="t_p_brand_check"
-               domainObjectName="CheckBrand"
+        <table tableName="t_p_brand_sys_check"
+               domainObjectName="CheckSysBrand"
                enableCountByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"
