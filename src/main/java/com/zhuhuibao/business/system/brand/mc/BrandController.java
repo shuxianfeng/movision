@@ -13,7 +13,6 @@ import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.entity.CheckBrand;
 import com.zhuhuibao.mybatis.memCenter.entity.CheckSysBrand;
-import com.zhuhuibao.mybatis.memCenter.entity.SysBrand;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.memCenter.service.CheckBrandService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -21,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.lang.reflect.Type;
 import java.util.*;
 
@@ -40,7 +40,6 @@ public class BrandController {
 
     @Autowired
     private CheckBrandService checkBrandService;
-
 
     @ApiOperation(value = "新建品牌",notes = "新建品牌", response = Response.class)
     @RequestMapping(value = "add_brand", method = RequestMethod.POST)

@@ -4,6 +4,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
@@ -13,6 +14,7 @@ import com.zhuhuibao.mybatis.common.service.SysJoinusService;
 import com.zhuhuibao.mybatis.common.service.SysResearchService;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.mybatis.oms.service.CategoryService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.oss.ZhbOssClient;
@@ -28,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 上传
@@ -48,6 +51,9 @@ public class CommonController {
 
     @Autowired
     SysJoinusService joinusService;
+
+    @Autowired
+    CategoryService categoryService;
 
     @ApiOperation(value = "上传图片，返回url", notes = "上传图片，返回url", response = Response.class)
     @RequestMapping(value = {"rest/uploadImg","/rest/common/upload_img"}, method = RequestMethod.POST)
@@ -127,5 +133,24 @@ public class CommonController {
 
         VerifyCodeUtils.getImageCode(req, response,100,40,4,"joinus");
 
+    }
+
+    @RequestMapping(value = "/rest/common/sel_productFirstCategory", method = RequestMethod.GET)
+    @ApiOperation(value = "系统一级分类", notes = "系统一级分类", response = Response.class)
+    public Response getProductFirstCategory(HttpServletResponse response) throws IOException {
+        Response jsonResult = new Response();
+        List<ResultBean> systemList = categoryService.findSystemList();
+        jsonResult.setData(systemList);
+        return jsonResult;
+    }
+
+    @RequestMapping(value = "/rest/common/sel_productSecondCategory", method = RequestMethod.GET)
+    @ApiOperation(value = "系统二级分类", notes = "系统二级分类", response = Response.class)
+    public Response getProductSecondCategory(HttpServletRequest req) throws IOException {
+        String parentId = req.getParameter("parentID");
+        Response response = new Response();
+        List<ResultBean> subSystemList = categoryService.findSubSystemList(parentId);
+        response.setData(subSystemList);
+        return response;
     }
 }
