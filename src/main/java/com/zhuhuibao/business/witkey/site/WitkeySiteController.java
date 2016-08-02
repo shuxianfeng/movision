@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.exception.PageNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,11 +143,15 @@ public class WitkeySiteController {
     public Response cooperationInfo(@RequestParam String id)  {
         Response response = new Response();
         Map<String,Object> cooperation = cooperationService.queryCooperationInfoById(id);
-        Cooperation result = new Cooperation();
-        result.setId(cooperation.get("id").toString());
-        result.setViews(String.valueOf(Integer.parseInt(cooperation.get("views").toString())+1));
-        cooperationService.updateCooperationViews(result);
-        response.setData(cooperation);
+        if(!"1".equals(cooperation.get("parentId"))){
+            Cooperation result = new Cooperation();
+            result.setId(cooperation.get("id").toString());
+            result.setViews(String.valueOf(Integer.parseInt(cooperation.get("views").toString())+1));
+            cooperationService.updateCooperationViews(result);
+            response.setData(cooperation);
+        }else {
+            throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
+        }
         return response;
     }
 

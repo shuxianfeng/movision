@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.exception.PageNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,8 +118,18 @@ public class WitkeyController {
     @RequestMapping(value = "sel_witkey", method = RequestMethod.GET)
     public Response queryCooperationInfo(@RequestParam String id)  {
         Response response = new Response();
-        Map<String,Object> cooperation = cooperationService.queryCooperationInfoById(id);
-        response.setData(cooperation);
+		Long createid = ShiroUtil.getCreateID();
+		if(createid!=null){
+			Map<String,Object> cooperation = cooperationService.queryCooperationInfoById(id);
+			if(createid.equals(cooperation.get("createId"))){
+				response.setData(cooperation);
+			}else {
+				throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
+			}
+		}else {
+			throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
+					.valueOf(MsgCodeConstant.un_login)));
+		}
         return response;
     }
 
