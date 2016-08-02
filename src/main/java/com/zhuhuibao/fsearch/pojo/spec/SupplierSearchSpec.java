@@ -1,86 +1,99 @@
 package com.zhuhuibao.fsearch.pojo.spec;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
+@ApiModel
 public class SupplierSearchSpec {
 
-	private String province;
-	private String identify;
-	private String assetlevel;
-	private String category;
-	private String q;
-	private String sort;
-	private String sortorder;
-	private int offset;
-	private int limit;
-	
-	public String getProvince() {
-		return province;
-	}
+    @ApiModelProperty("省份编码")
+    private String province;
+    @ApiModelProperty("身份标识 3:厂商 4:代理商 5:渠道商")
+    private String identify;
+    @ApiModelProperty("资质类型名称")
+    private String assetlevel;
+    @ApiModelProperty("系统分类")
+    private String category;
+    @ApiModelProperty("关键字")
+    private String q;
+    @ApiModelProperty("排序字段")
+    private String sort;
+    @ApiModelProperty("true:降序;false:升序")
+    private String sortorder;
+    @ApiModelProperty("当前页码")
+    private int offset;
+    @ApiModelProperty("显示记录数")
+    private int limit;
 
-	public void setProvince(String province) {
-		this.province = province;
-	}
+    public String getProvince() {
+        return province;
+    }
 
-	public String getIdentify() {
-		return identify;
-	}
+    public void setProvince(String province) {
+        this.province = province;
+    }
 
-	public void setIdentify(String identify) {
-		this.identify = identify;
-	}
-	
-	public String getAssetlevel() {
-		return assetlevel;
-	}
+    public String getIdentify() {
+        return identify;
+    }
 
-	public void setAssetlevel(String assetlevel) {
-		this.assetlevel = assetlevel;
-	}
-	
-	public String getCategory() {
-		return category;
-	}
+    public void setIdentify(String identify) {
+        this.identify = identify;
+    }
 
-	public void setCategory(String category) {
-		this.category = category;
-	}
+    public String getAssetlevel() {
+        return assetlevel;
+    }
 
-	public String getQ() {
-		return q;
-	}
+    public void setAssetlevel(String assetlevel) {
+        this.assetlevel = assetlevel;
+    }
 
-	public void setQ(String q) {
-		this.q = q;
-	}
+    public String getCategory() {
+        return category;
+    }
 
-	public String getSort() {
-		return sort;
-	}
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
-	public void setSort(String sort) {
-		this.sort = sort;
-	}
-	
-	public String getSortorder() {
-		return sortorder;
-	}
+    public String getQ() {
+        return q;
+    }
 
-	public void setSortorder(String sortorder) {
-		this.sortorder = sortorder;
-	}
+    public void setQ(String q) {
+        this.q = q;
+    }
 
-	public int getOffset() {
-		return offset;
-	}
+    public String getSort() {
+        return sort;
+    }
 
-	public void setOffset(int offset) {
-		this.offset = offset;
-	}
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
 
-	public int getLimit() {
-		return limit;
-	}
+    public String getSortorder() {
+        return sortorder;
+    }
 
-	public void setLimit(int limit) {
-		this.limit = limit;
-	}
+    public void setSortorder(String sortorder) {
+        this.sortorder = sortorder;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
 }
