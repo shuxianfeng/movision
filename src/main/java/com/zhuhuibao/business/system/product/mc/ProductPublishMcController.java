@@ -178,7 +178,7 @@ public class ProductPublishMcController {
 	@RequestMapping(value = {"/rest/getBrandList", "/rest/system/mc/product/sel_brandList"}, method = RequestMethod.GET)
 	@ApiOperation(value = "查询品牌", notes = "查询品牌", response = Response.class)
 	public Response getBrandList(Brand brand) throws IOException {
-		brand.setStatus(1);
+		brand.setStatus("1");
 		List<Brand> brandList = brandMapper.searchBrandByStatus(brand);
 		Response result = new Response();
 		result.setCode(200);
