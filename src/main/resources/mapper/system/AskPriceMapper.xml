@@ -28,6 +28,7 @@
     <result column="linkMan" property="linkMan" jdbcType="VARCHAR" />
     <result column="telephone" property="telephone" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="isCan" property="isCan" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.AskPriceBean" >
     <result column="title" property="title" jdbcType="VARCHAR" />
@@ -327,13 +328,23 @@
   </select>
 
   <select id="findAllNewPriceInfoList" resultMap="BaseResultMap">
-    select p.id,p.title,p.publishTime,concat(pr.name,c.name) as provinceCode
+    select p.id,p.title,p.publishTime,concat(pr.name,c.name) as provinceCode,
+    <if test="createid != null and createid != ''">
+      CASE WHEN p.createid != 11
+      and p.id not in (select askid from t_p_offer_price where createid = 11)
+      and p.createid not in (select enterpriseEmployeeParentId from t_m_member where id = 11)
+      and p.createid not in (select id from t_m_member where enterpriseEmployeeParentId = 11) then '1'
+      else '0' end as isCan
+    </if>
+    <if test="createid == null">
+      '1' as isCan
+    </if>
     from t_p_ask_price p
     LEFT JOIN t_dictionary_province pr on pr.code = p.provinceCode
     LEFT JOIN t_dictionary_city c on c.code = p.cityCode
     left join t_m_member m on m.id = p.createid
     where p.type = 1 and date_format(now(),'%Y-%m-%d') &lt;= date_format(p.endTime,'%Y-%m-%d')
-    <if test="createid != null and createid != ''">
+<!--    <if test="createid != null and createid != ''">
       and p.id not in (select askid from t_p_offer_price where createid = #{createid})
     </if>
     <if test="createid != null and createid != ''">
@@ -347,7 +358,7 @@
     </if>
     <if test="createid != null and createid != ''">
       and (case when m.enterpriseEmployeeParentId != 0 then (m.enterpriseEmployeeParentId not in (select enterpriseEmployeeParentId from t_m_member where id = #{createid})) else '1=1' end )
-    </if>
+    </if>-->
     order BY p.publishTime desc
   </select>
 </mapper>

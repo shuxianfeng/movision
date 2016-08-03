@@ -36,4 +36,8 @@ public interface CategoryMapper {
     ResultBean querySystemByScateid(String id);
 
     List<Map<String,String>> findSubSystemByPid(String id);
+
+    List<Map<String,Object>> querySystemList();
+
+    List<Map<String,Object>> querySubSystemList(String parentId);
 }

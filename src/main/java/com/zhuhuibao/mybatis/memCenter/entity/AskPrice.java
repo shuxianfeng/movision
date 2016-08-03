@@ -79,6 +79,8 @@ public class AskPrice {
 
     @ApiModelProperty(value="电子邮箱")
     private String email;
+
+    private String isCan;
     
     public Long getId() {
         return id;
@@ -286,5 +288,13 @@ public class AskPrice {
 
     public void setProductid(String productid) {
         this.productid = productid;
+    }
+
+    public String getIsCan() {
+        return isCan;
+    }
+
+    public void setIsCan(String isCan) {
+        this.isCan = isCan;
     }
 }
