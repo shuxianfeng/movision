@@ -37,7 +37,7 @@
   </select>
     <select id="findSubSystemList" resultMap="ResultMap">
     select
-    id,name
+    id,name,parentId as sort
     from t_p_category
     where parentId = #{parentId} and is_deleted = 0
   </select>
@@ -133,4 +133,16 @@
         where parentId = #{parentId} and is_deleted = 0
   </select>
 
+    <select id="querySystemList" resultType="java.util.Map">
+        select
+        id as fcateid,name as fcateName
+        from t_p_category
+        where parentId = 0 and is_deleted = 0
+    </select>
+    <select id="querySubSystemList" resultType="java.util.Map">
+        select
+        id as scateid,name as scateName,parentId as fcateid
+        from t_p_category
+        where parentId = #{parentId} and is_deleted = 0
+    </select>
 </mapper>
