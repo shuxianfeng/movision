@@ -172,7 +172,7 @@ public class BrandController {
 
     @ApiOperation(value = "查询品牌（自己发布的品牌）",notes = "查询品牌（自己发布的品牌）", response = Response.class)
     @RequestMapping(value = "sel_my_brand", method = RequestMethod.GET)
-    public Response searchBrand(@RequestParam String status)  {
+    public Response searchBrand(@RequestParam(required = false) String status)  {
         Response result = new Response();
         Long createid = ShiroUtil.getCreateID();
         Map<String,Object> map = new HashMap<>();
