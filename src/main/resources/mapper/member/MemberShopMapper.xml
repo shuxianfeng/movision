@@ -27,7 +27,7 @@
         select
         <include refid="Base_Column_List"/>
         from t_m_shop
-        where companyId = #{companyId,jdbcType=INTEGER}
+        where companyId = #{companyId,jdbcType=INTEGER}   and status in (1,2)
     </select>
     <select id="findAllByCondition" resultType="com.zhuhuibao.mybatis.memCenter.entity.MemberShop">
         select
@@ -59,7 +59,7 @@
       )
     values (#{id,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, #{companyId,jdbcType=INTEGER}, 
       #{companyName,jdbcType=VARCHAR}, #{companyAccount,jdbcType=VARCHAR}, #{bannerUrl,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{opreatorId,jdbcType=INTEGER}, #{status,jdbcType=CHAR} , #{reason,jdbcType=VARCHAR}
+      #{updateTime,jdbcType=VARCHAR}, #{opreatorId,jdbcType=INTEGER}, #{status,jdbcType=CHAR} , #{reason,jdbcType=VARCHAR}
       )
   </insert>
     <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.MemberShop">
@@ -169,7 +169,7 @@
       companyName = #{companyName,jdbcType=VARCHAR},
       companyAccount = #{companyAccount,jdbcType=VARCHAR},
       bannerUrl = #{bannerUrl,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      updateTime = #{updateTime,jdbcType=VARCHAR},
       opreatorId = #{opreatorId,jdbcType=INTEGER},
       status = #{status,jdbcType=CHAR},
       reason = #{reason,jdbcType=VARCHAR}

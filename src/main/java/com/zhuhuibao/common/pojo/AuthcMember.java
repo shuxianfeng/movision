@@ -20,14 +20,18 @@ public class AuthcMember {
 
     private int vipLevel;
 
-    private String shopId;
+    private  int message;
 
-    public String getShopId() {
-        return shopId;
+    public boolean isexpert() {
+        return isexpert;
     }
 
-    public void setShopId(String shopId) {
-        this.shopId = shopId;
+    public int getMessage() {
+        return message;
+    }
+
+    public void setMessage(int message) {
+        this.message = message;
     }
 
     public Long getId() {

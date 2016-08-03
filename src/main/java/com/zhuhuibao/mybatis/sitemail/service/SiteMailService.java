@@ -238,7 +238,7 @@ public class SiteMailService {
         try {
             return noticeMapper.findAllNoticeList(pager.getRowBounds());
         } catch (Exception e) {
-            log.error("执行异常>>>",e);
+            log.error("查询异常>>>",e);
             throw e;
         }
     }
@@ -247,7 +247,17 @@ public class SiteMailService {
         try {
             return noticeMapper.queryNoticeById(id);
         } catch (Exception e) {
-            log.error("执行异常>>>",e);
+            log.error("查询异常>>>",e);
+            throw e;
+        }
+    }
+
+    public int selectUnreadMessageCount(Long id) {
+        int count = 0;
+        try {
+            return noticeMapper.selectUnreadMessageCount(id);
+        } catch (Exception e) {
+            log.error("查询异常>>>",e);
             throw e;
         }
     }
