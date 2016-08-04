@@ -92,6 +92,7 @@ public class UploadFileController {
 	@ApiOperation(value = "导入项目工程信息", notes = "导入项目工程信息", response = Response.class)
 	public Response uploadProject(HttpServletRequest req,@RequestParam(value = "file", required = false) MultipartFile file) {
 		Response response = new Response(); 
+		result=new HashMap<String, Object>();
 		Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null == session){
@@ -117,6 +118,7 @@ public class UploadFileController {
          Session session = currentUser.getSession(false);
 		 OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
 		 Response response = new Response();
+		 result=new HashMap<String, Object>();
 		try {
 			// 创建对Excel工作簿文件的引用
 			HSSFWorkbook workbook = new HSSFWorkbook(fileStream);
@@ -183,7 +185,7 @@ public class UploadFileController {
 				}
 				
 			 
-				result=new HashMap<String, Object>();
+				
 				result.put("sucCount", sucCount);
 				result.put("failCount", failCount);
 				result.put("msg", "本次上传:"+(rowsCount)+"条项目信息,成功:"+sucCount+"失败:"+failCount);
