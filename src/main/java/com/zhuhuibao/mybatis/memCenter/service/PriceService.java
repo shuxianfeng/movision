@@ -218,6 +218,7 @@ public class PriceService {
             map.put(Constants.publishTime, askPrice.getPublishTime().substring(0, 10));
             map.put(Constants.area, askPrice.getProvinceCode());
             map.put("isCan", askPrice.getIsCan());
+            map.put("count", askPrice.getCount());
             list.add(map);
         }
         return list;

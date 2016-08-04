@@ -29,6 +29,7 @@
     <result column="telephone" property="telephone" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="isCan" property="isCan" jdbcType="VARCHAR" />
+    <result column="count" property="count" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.AskPriceBean" >
     <result column="title" property="title" jdbcType="VARCHAR" />
@@ -329,11 +330,12 @@
 
   <select id="findAllNewPriceInfoList" resultMap="BaseResultMap">
     select p.id,p.title,p.publishTime,concat(pr.name,c.name) as provinceCode,
+    (SELECT count(*) FROM t_p_offer_price where askid = p.id) as count,
     <if test="createid != null and createid != ''">
-      CASE WHEN p.createid != 11
-      and p.id not in (select askid from t_p_offer_price where createid = 11)
-      and p.createid not in (select enterpriseEmployeeParentId from t_m_member where id = 11)
-      and p.createid not in (select id from t_m_member where enterpriseEmployeeParentId = 11) then '1'
+      CASE WHEN p.createid != #{createid}
+      and p.id not in (select askid from t_p_offer_price where createid = #{createid})
+      and p.createid not in (select enterpriseEmployeeParentId from t_m_member where id = #{createid})
+      and p.createid not in (select id from t_m_member where enterpriseEmployeeParentId = #{createid}) then '1'
       else '0' end as isCan
     </if>
     <if test="createid == null">

@@ -81,6 +81,8 @@ public class AskPrice {
     private String email;
 
     private String isCan;
+
+    private String count;
     
     public Long getId() {
         return id;
@@ -296,5 +298,13 @@ public class AskPrice {
 
     public void setIsCan(String isCan) {
         this.isCan = isCan;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
     }
 }

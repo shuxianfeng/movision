@@ -35,6 +35,8 @@ public class AskPriceSimpleBean implements Serializable{
     private String deliveryAddress;
     
     private String companyName;
+
+	private String count;
     
 	public Long getId() {
 		return id;
@@ -92,4 +94,11 @@ public class AskPriceSimpleBean implements Serializable{
 		this.companyName = companyName;
 	}
 
+	public String getCount() {
+		return count;
+	}
+
+	public void setCount(String count) {
+		this.count = count;
+	}
 }
