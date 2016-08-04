@@ -1,7 +1,5 @@
 package com.zhuhuibao.business.member.mc;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
@@ -11,6 +9,8 @@ import com.zhuhuibao.common.constant.SuccessCaseConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
+import com.zhuhuibao.mybatis.memCenter.service.MemInfoCheckService;
+import com.zhuhuibao.mybatis.memCenter.service.MemRealCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.SuccessCaseService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
@@ -22,7 +22,6 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -39,14 +38,20 @@ public class CompanyController {
     @Autowired
     SuccessCaseService successCaseService;
 
+    @Autowired
+    MemInfoCheckService memInfoCheckService;
+
+    @Autowired
+    MemRealCheckService memRealCheckService;
+
     @ApiOperation(value = "查询企业基本信息", notes = "查询企业基本信息", response = Response.class)
     @RequestMapping(value = "sel_mem_basic_info", method = RequestMethod.GET)
     public Response basicInfo() {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
-            Member member = memberService.findMemById(String.valueOf(memberId));
-            Map map = new HashMap();
+            MemInfoCheck  member = memInfoCheckService.findMemById(String.valueOf(memberId));
+            Map<String,Object> map = new HashMap<>();
             map.put("enterpriseName",member.getEnterpriseName());
             map.put("enterpriseType",member.getEnterpriseType());
             map.put("enterpriseTypeName",member.getEnterpriseTypeName());
@@ -90,35 +95,35 @@ public class CompanyController {
     @ApiOperation(value = "查询企业实名信息", notes = "查询企业实名信息", response = Response.class)
     @RequestMapping(value = "sel_mem_realName_info", method = RequestMethod.GET)
     public Response realNameInfo() {
-        Response result = new Response();
+        Map<String,String> map;
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
-            Member member = memberService.findMemById(String.valueOf(memberId));
-            Map map = new HashMap();
-            map.put("coBusLicNum",member.getCoBusLicNum());
+            MemRealCheck member = memRealCheckService.findMemById(String.valueOf(memberId));
+            map = new HashMap<>();
             map.put("companyBusinessLicenseImg",member.getCompanyBusinessLicenseImg());
-            map.put("status",member.getStatus());
+            map.put("status", String.valueOf(member.getStatus()));
             map.put("reason",member.getReason());
-            result.setData(map);
+            map.put("enterpriseName",member.getEnterpriseName());
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-        return result;
+        return new Response(map);
     }
 
     @ApiOperation(value = "企业基本资料保存", notes = "企业基本资料保存", response = Response.class)
     @RequestMapping(value = "upd_mem_basic_info", method = RequestMethod.POST)
-    public Response upd_mem_basic_info(@ModelAttribute Member member)  {
+    public Response upd_mem_basic_info(@ModelAttribute MemInfoCheck member)  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
         ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
         if(memberId!=null){
-            member.setId(String.valueOf(memberId));
+            member.setId(memberId);
             //基本资料待审核
-            if(loginMember.getStatus()==1||loginMember.getStatus()==7){
-                member.setStatus(MemberConstant.MemberStatus.WSZLDSH.toString());
+            if(loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue()
+                    ||loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()){
+                member.setStatus(MemberConstant.MemberStatus.WSZLDSH.intValue());
             }
-            memberService.updateMemInfo(member);
+            memInfoCheckService.update(member);
             Member mem = memberService.findMemById(String.valueOf(memberId));
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
@@ -136,21 +141,22 @@ public class CompanyController {
 
     @ApiOperation(value = "企业实名认证保存", notes = "企业实名认证保存", response = Response.class)
     @RequestMapping(value = "upd_mem_realName_info", method = RequestMethod.POST)
-    public Response upd_mem_realName_info(@RequestParam String coBusLicNum,
-                                          @RequestParam String companyBusinessLicenseImg)  {
+    public Response upd_mem_realName_info(@ApiParam("企业名称")@RequestParam String enterpriseName,
+                                          @ApiParam("营业执照图片URL")@RequestParam String companyBusinessLicenseImg)  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
         ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
-        Member member = new Member();
+        MemRealCheck member = new MemRealCheck();
         if(memberId!=null){
-            member.setId(String.valueOf(memberId));
+            member.setId(memberId);
             //实名认证待审核
-            if(loginMember.getStatus()==6||loginMember.getStatus()==11){
-                member.setStatus(MemberConstant.MemberStatus.SMRZDSH.toString());
+            if(loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue()
+                    ||loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()){
+                member.setStatus(MemberConstant.MemberStatus.SMRZDSH.intValue());
             }
-            member.setCoBusLicNum(coBusLicNum);
+            member.setEnterpriseName(enterpriseName);
             member.setCompanyBusinessLicenseImg(companyBusinessLicenseImg);
-            memberService.updateMemInfo(member);
+            memRealCheckService.update(member);
             Member mem = memberService.findMemById(String.valueOf(memberId));
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
@@ -235,7 +241,7 @@ public class CompanyController {
             record2.setType("2");
             List<CertificateRecord> list2 = memberService.certificateSearch(record2);
 
-            Map map = new HashMap();
+            Map<String,Object> map = new HashMap<>();
             map.put("supplier",list1);
             map.put("contractor",list2);
             result.setData(map);
@@ -309,7 +315,7 @@ public class CompanyController {
         if (com.zhuhuibao.utils.pagination.util.StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<>();
         //查询传参
         map.put("title", title);

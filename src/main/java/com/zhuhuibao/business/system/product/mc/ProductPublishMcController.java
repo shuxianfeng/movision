@@ -28,172 +28,153 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**
  * 产品控制层
- * @author penglong
  *
+ * @author penglong
  */
 @RestController
-@Api(value = "productPublishMc",description = "产品(个人中心)")
+@Api(value = "productPublishMc", description = "产品(个人中心)")
 public class ProductPublishMcController {
 
-	private static final Logger log = LoggerFactory.getLogger(ProductPublishMcController.class);
+    private static final Logger log = LoggerFactory.getLogger(ProductPublishMcController.class);
 
-	@Autowired
-	private ProductService productService;
-	@Autowired
-	private ComplainSuggestService suggestService;
-	@Autowired
-	private CategoryMapper categoryMapper;
-	@Autowired
-	private BrandMapper brandMapper;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private ComplainSuggestService suggestService;
+    @Autowired
+    private CategoryMapper categoryMapper;
+    @Autowired
+    private BrandMapper brandMapper;
 
     @Autowired
     BrandService brandService;
-	/**
-	 * 新增产品
-	 *
-	 * @throws IOException
-	 * @throws JsonMappingException
-	 * @throws JsonGenerationException
-	 */
-	@RequestMapping(value = {"/rest/addProduct", "/rest/system/mc/product/add_product"}, method = RequestMethod.POST)
-	@ApiOperation(value = "新增产品", notes = "新增产品", response = Response.class)
-	public Response addProduct(String json) throws IOException {
-		Gson gson = new Gson();
-		ProductWithBLOBs product = gson.fromJson(json, ProductWithBLOBs.class);
-		Response response = new Response();
-		productService.insertProduct(product);
-		return response;
-	}
-
-	@RequestMapping(value = {"/rest/addComplainSuggest", "/rest/system/mc/product/add_complainSuggest"}, method = RequestMethod.POST)
-	@ApiOperation(value = "找不到产品对应的类别新增投诉和建议", notes = "找不到产品对应的类别新增投诉和建议", response = Response.class)
-	public Response addComplainSuggest(ComplainSuggest suggest) throws IOException {
-		Response response = new Response();
-		suggestService.insert(suggest);
-
-		return response;
-	}
 
 
-	@RequestMapping(value = {"/rest/updateProduct", "/rest/system/mc/product/upd_product"}, method = RequestMethod.POST)
-	@ApiOperation(value = "更新产品", notes = "更新产品", response = Response.class)
-	public Response updateProduct(ProductWithBLOBs product) throws IOException {
-		Response response = new Response();
-		response = productService.updateProduct(product);
+    @RequestMapping(value = {"/rest/addProduct", "/rest/system/mc/product/add_product"}, method = RequestMethod.POST)
+    @ApiOperation(value = "新增产品", notes = "新增产品", response = Response.class)
+    public Response addProduct(String json) throws IOException {
+        Gson gson = new Gson();
+        ProductWithBLOBs product = gson.fromJson(json, ProductWithBLOBs.class);
+        Response response = new Response();
+        productService.insertProduct(product);
+        return response;
+    }
 
-		return response;
-	}
+    @RequestMapping(value = {"/rest/addComplainSuggest", "/rest/system/mc/product/add_complainSuggest"}, method = RequestMethod.POST)
+    @ApiOperation(value = "找不到产品对应的类别新增投诉和建议", notes = "找不到产品对应的类别新增投诉和建议", response = Response.class)
+    public Response addComplainSuggest(ComplainSuggest suggest) throws IOException {
+        Response response = new Response();
+        suggestService.insert(suggest);
 
-	@RequestMapping(value = {"/rest/updateProductStatus", "/rest/system/mc/product/upd_productStatus"}, method = RequestMethod.POST)
-	@ApiOperation(value = "更新产品状态", notes = "更新产品状态", response = Response.class)
-	public Response updateProductStatus(ProductWithBLOBs product) throws IOException {
-		Response response = new Response();
-		response = productService.updateProductStatus(product);
-		return response;
-	}
+        return response;
+    }
 
-	@RequestMapping(value = {"/rest/batchUnpublish", "/rest/system/mc/product/upd_batchPublish"}, method = RequestMethod.POST)
-	@ApiOperation(value = "批量更新产品状态", notes = "批量更新产品状态", response = Response.class)
-	public Response batchUnpublish(@RequestParam String[] ids) throws IOException {
-		Response response = new Response();
-		List<String> list = new ArrayList<String>();
-		Collections.addAll(list, ids);
-		response = productService.batchUnpublish(list);
 
-		return response;
-	}
+    @RequestMapping(value = {"/rest/updateProduct", "/rest/system/mc/product/upd_product"}, method = RequestMethod.POST)
+    @ApiOperation(value = "更新产品", notes = "更新产品", response = Response.class)
+    public Response updateProduct(ProductWithBLOBs product) throws IOException {
+        return  productService.updateProduct(product);
+    }
 
-	@RequestMapping(value={"/rest/queryProductById","/rest/system/mc/product/sel_productById"}, method = RequestMethod.GET)
-	@ApiOperation(value = "获得产品信息根据ID", notes = "获得产品信息根据ID", response = Response.class)
-	public Response queryProductById(Long id) throws IOException
-	{
-		Response response = new Response();
-		response = productService.selectByPrimaryKey(id);
+    @RequestMapping(value = {"/rest/updateProductStatus", "/rest/system/mc/product/upd_productStatus"}, method = RequestMethod.POST)
+    @ApiOperation(value = "更新产品状态", notes = "更新产品状态", response = Response.class)
+    public Response updateProductStatus(ProductWithBLOBs product) throws IOException {
+        return productService.updateProductStatus(product);
+    }
 
-		return response;
-	}
+    @RequestMapping(value = {"/rest/batchUnpublish", "/rest/system/mc/product/upd_batchPublish"}, method = RequestMethod.POST)
+    @ApiOperation(value = "批量更新产品状态", notes = "批量更新产品状态", response = Response.class)
+    public Response batchUnpublish(@RequestParam String[] ids) throws IOException {
+        List<String> list = new ArrayList<>();
+        Collections.addAll(list, ids);
 
-	/**
-	 * 查询产品分页
-	 *
-	 * @param product
-	 * @param pageNo
-	 * @param pageSize
-	 * @throws IOException
-	 * @throws JsonMappingException
-	 * @throws JsonGenerationException
-	 */
-	@RequestMapping(value = {"/rest/findAllProduct", "/rest/system/mc/product/sel_allProduct"}, method = RequestMethod.GET)
-	@ApiOperation(value = "我的产品", notes = "我的产品", response = Response.class)
-	public Response findAllProduct(ProductWithBLOBs product,
+        return productService.batchUnpublish(list);
+    }
+
+    @RequestMapping(value = {"/rest/queryProductById", "/rest/system/mc/product/sel_productById"}, method = RequestMethod.GET)
+    @ApiOperation(value = "获得产品信息根据ID", notes = "获得产品信息根据ID", response = Response.class)
+    public Response queryProductById(Long id) throws IOException {
+
+        return productService.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 查询产品分页
+     *
+     * @param product
+     * @param pageNo
+     * @param pageSize
+     * @throws IOException
+     */
+    @RequestMapping(value = {"/rest/findAllProduct", "/rest/system/mc/product/sel_allProduct"}, method = RequestMethod.GET)
+    @ApiOperation(value = "我的产品", notes = "我的产品", response = Response.class)
+    public Response findAllProduct(ProductWithBLOBs product,
                                    @RequestParam(defaultValue = "1") String pageNo,
                                    @RequestParam(defaultValue = "10") String pageSize) throws IOException {
-		Response response = new Response();
 
-		Paging<Product> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-		List<Product> productList = productService.findAllByPager(pager, product);
-		pager.result(productList);
-		response.setData(pager);
+        Paging<Product> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Product> productList = productService.findAllByPager(pager, product);
+        pager.result(productList);
 
-		return response;
-	}
+        return new Response(pager);
+    }
 
-	@RequestMapping(value = {"/rest/getProductFirstCategory", "/rest/system/mc/product/sel_productFirstCategory"}, method = RequestMethod.GET)
-	@ApiOperation(value = "系统一级分类", notes = "系统一级分类", response = Response.class)
-	public Response getProductFirstCategory(HttpServletResponse response) throws IOException {
-		Response jsonResult = new Response();
-		List<ResultBean> systemList = categoryMapper.findSystemList();
-		jsonResult.setData(systemList);
-		return jsonResult;
-	}
+    @RequestMapping(value = {"/rest/getProductFirstCategory", "/rest/system/mc/product/sel_productFirstCategory"}, method = RequestMethod.GET)
+    @ApiOperation(value = "系统一级分类", notes = "系统一级分类", response = Response.class)
+    public Response getProductFirstCategory() {
+        List<ResultBean> systemList = categoryMapper.findSystemList();
+        return new Response(systemList);
+    }
 
-	/**
-	 * 查询大系统下所有子系统类目
-	 *
-	 * @param req
-	 * @return
-	 * @throws IOException
-	 */
+    /**
+     * 查询大系统下所有子系统类目
+     *
+     * @param req
+     * @return
+     * @throws IOException
+     */
 
-	@RequestMapping(value = {"/rest/getProductSecondCategory", "/rest/system/mc/product/sel_productSecondCategory"}, method = RequestMethod.GET)
-	@ApiOperation(value = "系统二级分类", notes = "系统二级分类", response = Response.class)
-	public Response getProductSecondCategory(HttpServletRequest req) throws IOException {
-		String parentId = req.getParameter("parentID");
-		Response response = new Response();
-		List<ResultBean> subSystemList = categoryMapper.findSubSystemList(parentId);
-		response.setData(subSystemList);
+    @RequestMapping(value = {"/rest/getProductSecondCategory", "/rest/system/mc/product/sel_productSecondCategory"}, method = RequestMethod.GET)
+    @ApiOperation(value = "系统二级分类", notes = "系统二级分类", response = Response.class)
+    public Response getProductSecondCategory(HttpServletRequest req) throws IOException {
+        String parentId = req.getParameter("parentID");
+        Response response = new Response();
+        List<ResultBean> subSystemList = categoryMapper.findSubSystemList(parentId);
+        response.setData(subSystemList);
 
-		return response;
-	}
+        return response;
+    }
 
-	/**
-	 * 查询品牌
-	 *
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping(value = {"/rest/getBrandList", "/rest/system/mc/product/sel_brandList"}, method = RequestMethod.GET)
-	@ApiOperation(value = "查询品牌", notes = "查询品牌", response = Response.class)
-	public Response getBrandList(Brand brand) throws IOException {
-		brand.setStatus("1");    //已审核通过
-		List<Brand> brandList = brandMapper.searchBrandByStatus(brand);
-		Response result = new Response();
-		result.setCode(200);
-		result.setData(brandList);
+    /**
+     * 查询品牌
+     *
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = {"/rest/getBrandList", "/rest/system/mc/product/sel_brandList"}, method = RequestMethod.GET)
+    @ApiOperation(value = "查询品牌", notes = "查询品牌", response = Response.class)
+    public Response getBrandList(Brand brand) throws IOException {
+        brand.setStatus("1");    //已审核通过
+        List<Brand> brandList = brandMapper.searchBrandByStatus(brand);
+        Response result = new Response();
+        result.setCode(200);
+        result.setData(brandList);
 
-		return result;
-	}
+        return result;
+    }
 
     @RequestMapping(value = {"/rest/system/mc/product/sel_brand_kw"}, method = RequestMethod.GET)
     @ApiOperation(value = "查询品牌", notes = "查询品牌", response = Response.class)
-    public Response getAllPassBrand(@ApiParam("品牌中英文名称关键字")@RequestParam String keyword,
-                                    @ApiParam("显示数量(默认15)")@RequestParam(defaultValue = "15") String count){
-        log.debug(">>>>keyword keyword>>>:{} && count>>>{}",keyword,count);
-        List<Map<String,String>> list =  brandService.findByKeyword(keyword,count);
+    public Response getAllPassBrand(@ApiParam("品牌中英文名称关键字") @RequestParam String keyword,
+                                    @ApiParam("显示数量(默认10)") @RequestParam(defaultValue = "10") String count) throws UnsupportedEncodingException {
+        log.debug(">>>>keyword keyword>>>:{} && count>>>{}", keyword, count);
+        keyword = new String(keyword.getBytes("ISO-8859-1"), "UTF-8");
+        List<Map<String, String>> list = brandService.findByKeyword(keyword, count);
 
         return new Response(list);
     }

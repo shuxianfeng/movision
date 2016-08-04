@@ -119,7 +119,7 @@ public class CommonController {
         Session sess = currentUser.getSession(false);
         String sessionCode = (String) sess.getAttribute("joinus");
         String imgCode = joinus.getImgCode();
-        if(!sessionCode.equals(imgCode)){
+        if(!(sessionCode.toLowerCase()).equals((imgCode.toLowerCase()))){
              throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"图形验证码不正确");
         }
 
