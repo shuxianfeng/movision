@@ -5,6 +5,8 @@ package com.zhuhuibao.common.pojo;
  */
 public class AskPriceBean {
 
+    String createid;
+
     String title;
 
     String productName;
@@ -46,6 +48,8 @@ public class AskPriceBean {
     String areaName;
 
     Boolean isShow;
+
+    String isCan;
 
     public String getTitle() {
         return title;
@@ -213,5 +217,21 @@ public class AskPriceBean {
 
     public void setBillurl(String billurl) {
         this.billurl = billurl;
+    }
+
+    public String getIsCan() {
+        return isCan;
+    }
+
+    public void setIsCan(String isCan) {
+        this.isCan = isCan;
+    }
+
+    public String getCreateid() {
+        return createid;
+    }
+
+    public void setCreateid(String createid) {
+        this.createid = createid;
     }
 }
