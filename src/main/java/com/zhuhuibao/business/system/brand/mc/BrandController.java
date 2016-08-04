@@ -188,7 +188,7 @@ public class BrandController {
     }
 
 
-    @ApiOperation(value = "查询品牌",notes = "查询品牌", response = Response.class)
+    @ApiOperation(value = "查询品牌",notes = "查询品牌(用户自己发布审核通过的品牌)", response = Response.class)
     @RequestMapping(value = "sel_brand_by_createId", method = RequestMethod.GET)
     public Response searchBrandSelect(@ModelAttribute Brand brand)  {
         List<Brand> brandList = brandService.searchBrandByStatus(brand);

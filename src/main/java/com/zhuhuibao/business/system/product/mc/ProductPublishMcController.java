@@ -3,11 +3,13 @@ package com.zhuhuibao.business.system.product.mc;
 import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
+import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.oms.entity.ComplainSuggest;
 import com.zhuhuibao.mybatis.oms.mapper.CategoryMapper;
 import com.zhuhuibao.mybatis.oms.service.ComplainSuggestService;
@@ -48,6 +50,8 @@ public class ProductPublishMcController {
 	@Autowired
 	private BrandMapper brandMapper;
 
+    @Autowired
+    BrandService brandService;
 	/**
 	 * 新增产品
 	 *
@@ -125,14 +129,11 @@ public class ProductPublishMcController {
 	 */
 	@RequestMapping(value = {"/rest/findAllProduct", "/rest/system/mc/product/sel_allProduct"}, method = RequestMethod.GET)
 	@ApiOperation(value = "我的产品", notes = "我的产品", response = Response.class)
-	public Response findAllProduct(ProductWithBLOBs product, String pageNo, String pageSize) throws IOException {
+	public Response findAllProduct(ProductWithBLOBs product,
+                                   @RequestParam(defaultValue = "1") String pageNo,
+                                   @RequestParam(defaultValue = "10") String pageSize) throws IOException {
 		Response response = new Response();
-		if (StringUtils.isEmpty(pageNo)) {
-			pageNo = "1";
-		}
-		if (StringUtils.isEmpty(pageSize)) {
-			pageSize = "10";
-		}
+
 		Paging<Product> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 		List<Product> productList = productService.findAllByPager(pager, product);
 		pager.result(productList);
@@ -178,7 +179,7 @@ public class ProductPublishMcController {
 	@RequestMapping(value = {"/rest/getBrandList", "/rest/system/mc/product/sel_brandList"}, method = RequestMethod.GET)
 	@ApiOperation(value = "查询品牌", notes = "查询品牌", response = Response.class)
 	public Response getBrandList(Brand brand) throws IOException {
-		brand.setStatus("1");
+		brand.setStatus("1");    //已审核通过
 		List<Brand> brandList = brandMapper.searchBrandByStatus(brand);
 		Response result = new Response();
 		result.setCode(200);
@@ -186,4 +187,14 @@ public class ProductPublishMcController {
 
 		return result;
 	}
+
+    @RequestMapping(value = {"/rest/system/mc/product/sel_brand_kw"}, method = RequestMethod.GET)
+    @ApiOperation(value = "查询品牌", notes = "查询品牌", response = Response.class)
+    public Response getAllPassBrand(@ApiParam("品牌中英文名称关键字")@RequestParam String keyword,
+                                    @ApiParam("显示数量(默认15)")@RequestParam(defaultValue = "15") String count){
+        log.debug(">>>>keyword keyword>>>:{} && count>>>{}",keyword,count);
+        List<Map<String,String>> list =  brandService.findByKeyword(keyword,count);
+
+        return new Response(list);
+    }
 }

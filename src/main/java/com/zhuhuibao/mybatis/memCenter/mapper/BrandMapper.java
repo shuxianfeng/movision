@@ -2,10 +2,9 @@ package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.common.pojo.BrandBean;
 import com.zhuhuibao.common.pojo.BrandDetailBean;
-import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.pojo.SuggestBrand;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
-import com.zhuhuibao.mybatis.product.entity.Product;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -42,4 +41,6 @@ public interface BrandMapper {
     List<Map<String,Object>> queryBrandProductAgentCount(Long createId);
 
     List<Map<String,String>> queryRecommendBrand(Map<String,Object> map);
+
+    List<Map<String,String>> findByKeyword(@Param("keyword") String keyword, @Param("count") Integer count);
 }

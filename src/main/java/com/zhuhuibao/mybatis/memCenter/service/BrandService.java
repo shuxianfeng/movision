@@ -237,4 +237,21 @@ public class BrandService {
             throw e;
         }
     }
+
+    /**
+     * 根据品牌中英文名称关键字模糊查询
+     * @param keyword   品牌中英文名称关键字
+     * @param count   显示数量 default = 10
+     * @return
+     */
+    public List<Map<String, String>> findByKeyword(String keyword, String count) {
+        List<Map<String, String>> list;
+        try {
+            list =    brandMapper.findByKeyword(keyword,Integer.valueOf(count));
+        } catch (Exception e) {
+            log.error("查询异常>>>", e);
+            throw e;
+        }
+        return list;
+    }
 }
