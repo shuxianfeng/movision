@@ -623,8 +623,7 @@ public class MemberService {
                 }
 
                 updateMemInfo(mem);
-                // 更新子账户状态
-                updateSubMemInfo(mem);
+
                 //2.给用户创建商铺
                 // 查询该用户是否存在商铺
                 String companyId = mem.getId();
@@ -686,6 +685,9 @@ public class MemberService {
         MemInfoCheck infoCheck;
         try {
             infoCheck = infoCheckService.findMemById(id);
+            String enterpriseCreaterTime = infoCheck.getEnterpriseCreaterTime();
+            infoCheck.setEnterpriseCreaterTime(DateUtils.str2DateFormat(enterpriseCreaterTime,"yyyy-MM-dd"));
+
         } catch (Exception e) {
             log.error("findMeminfoCheck() 查询异常>>>", e);
             e.printStackTrace();
@@ -735,9 +737,9 @@ public class MemberService {
             if (status == MemberConstant.MemberStatus.SMRZYRZ.intValue()) {
                 Member mem = new Member();
                 BeanUtils.copyProperties(member, mem);
+                mem.setId(String.valueOf(member.getId()));
                 updateMemInfo(mem);
-                // 更新子账户状态
-                updateSubMemInfo(mem);
+
             }
 
         } catch (Exception e) {

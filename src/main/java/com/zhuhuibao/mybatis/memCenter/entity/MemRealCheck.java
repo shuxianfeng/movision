@@ -31,6 +31,7 @@ public class MemRealCheck {
 
     private String reason;
 
+
     public Long getId() {
         return id;
     }

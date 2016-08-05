@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.mybatis.memCenter.entity.MemRealCheck;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Map;
 
@@ -18,4 +19,6 @@ public interface MemRealCheckMapper {
     int updateByPrimaryKey(MemRealCheck record);
 
     Map<String,Object> findMemrealCheck(String id);
+
+    String getStatusById(@Param("id") Long id);
 }

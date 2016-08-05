@@ -253,12 +253,13 @@ public class SiteMailService {
     }
 
     public int selectUnreadMessageCount(Long id) {
-        int count = 0;
+        int count;
         try {
-            return noticeMapper.selectUnreadMessageCount(id);
+            count =  noticeMapper.selectUnreadMessageCount(id);
         } catch (Exception e) {
             log.error("查询异常>>>",e);
             throw e;
         }
+        return count;
     }
 }

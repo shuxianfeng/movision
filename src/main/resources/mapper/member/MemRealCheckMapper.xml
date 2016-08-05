@@ -47,6 +47,11 @@
         WHERE
             ic.id = rc.id AND rc.id = #{id}
     </select>
+    <select id="getStatusById" resultType="java.lang.String">
+        SELECT status
+        FROM t_m_member_real_check
+        WHERE id =#{id};
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         DELETE FROM t_m_member_real_check
         WHERE id = #{id,jdbcType=BIGINT}

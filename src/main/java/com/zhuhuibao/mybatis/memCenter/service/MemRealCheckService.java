@@ -44,4 +44,15 @@ public class MemRealCheckService {
             throw e;
         }
     }
+
+    public String getStatusById(Long id) {
+       String status;
+        try{
+            status = realCheckMapper.getStatusById(id);
+        }catch (Exception e){
+            log.error("t_m_member_real_check >>getStatusById()执行失败>>>",e);
+            throw e;
+        }
+        return status;
+    }
 }

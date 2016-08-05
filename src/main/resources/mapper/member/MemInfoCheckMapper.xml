@@ -19,7 +19,7 @@
         <result column="enterpriseLogo" property="enterpriseLogo" jdbcType="VARCHAR"/>
         <result column="headShot" property="headShot" jdbcType="VARCHAR"/>
         <result column="saleProductDesc" property="saleProductDesc" jdbcType="VARCHAR"/>
-        <result column="enterpriseCreaterTime" property="enterpriseCreaterTime" jdbcType="TIMESTAMP"/>
+        <result column="enterpriseCreaterTime" property="enterpriseCreaterTime" jdbcType="VARCHAR"/>
         <result column="registerCapital" property="registerCapital" jdbcType="VARCHAR"/>
         <result column="currency" property="currency" jdbcType="CHAR"/>
         <result column="employeeNumber" property="employeeNumber" jdbcType="VARCHAR"/>
@@ -123,7 +123,7 @@
             #{enterpriseName,jdbcType=VARCHAR}, #{workType,jdbcType=INTEGER}, #{enterpriseEmployeeParentId,jdbcType=BIGINT},
             #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR},
             #{address,jdbcType=VARCHAR}, #{enterpriseType,jdbcType=INTEGER}, #{enterpriseLogo,jdbcType=VARCHAR},
-            #{headShot,jdbcType=VARCHAR}, #{saleProductDesc,jdbcType=VARCHAR}, #{enterpriseCreaterTime,jdbcType=TIMESTAMP},
+            #{headShot,jdbcType=VARCHAR}, #{saleProductDesc,jdbcType=VARCHAR}, #{enterpriseCreaterTime,jdbcType=VARCHAR},
             #{registerCapital,jdbcType=VARCHAR}, #{currency,jdbcType=CHAR}, #{employeeNumber,jdbcType=VARCHAR},
             #{enterpriseProvince,jdbcType=VARCHAR}, #{enterpriseCity,jdbcType=VARCHAR}, #{enterpriseArea,jdbcType=VARCHAR},
             #{enterpriseAddress,jdbcType=VARCHAR}, #{enterpriseTelephone,jdbcType=VARCHAR},
@@ -304,7 +304,7 @@
                 #{saleProductDesc,jdbcType=VARCHAR},
             </if>
             <if test="enterpriseCreaterTime != null">
-                #{enterpriseCreaterTime,jdbcType=TIMESTAMP},
+                #{enterpriseCreaterTime,jdbcType=VARCHAR},
             </if>
             <if test="registerCapital != null">
                 #{registerCapital,jdbcType=VARCHAR},
@@ -420,7 +420,7 @@
                 saleProductDesc = #{saleProductDesc,jdbcType=VARCHAR},
             </if>
             <if test="enterpriseCreaterTime != null">
-                enterpriseCreaterTime = #{enterpriseCreaterTime,jdbcType=TIMESTAMP},
+                enterpriseCreaterTime = #{enterpriseCreaterTime,jdbcType=VARCHAR},
             </if>
             <if test="registerCapital != null">
                 registerCapital = #{registerCapital,jdbcType=VARCHAR},
@@ -503,7 +503,7 @@
         enterpriseLogo = #{enterpriseLogo,jdbcType=VARCHAR},
         headShot = #{headShot,jdbcType=VARCHAR},
         saleProductDesc = #{saleProductDesc,jdbcType=VARCHAR},
-        enterpriseCreaterTime = #{enterpriseCreaterTime,jdbcType=TIMESTAMP},
+        enterpriseCreaterTime = #{enterpriseCreaterTime,jdbcType=VARCHAR},
         registerCapital = #{registerCapital,jdbcType=VARCHAR},
         currency = #{currency,jdbcType=CHAR},
         employeeNumber = #{employeeNumber,jdbcType=VARCHAR},

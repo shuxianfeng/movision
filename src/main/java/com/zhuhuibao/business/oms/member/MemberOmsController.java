@@ -102,11 +102,10 @@ public class MemberOmsController {
 
     @RequestMapping(value = "upd_mem_data", method = RequestMethod.POST)
     @ApiOperation(value = "完善资料审核", notes = "完善资料审核", response = Response.class)
-    public Response updateMemData(@ApiParam(value = "会员信息") @ModelAttribute(value = "member") MemInfoCheck member) {
+    public Response updateMemData(@ApiParam(value = "会员基本资料信息") @ModelAttribute(value = "member") MemInfoCheck member) {
 
-        MemInfoCheck memInfoCheck = infoCheckService.findMemById(String.valueOf(member.getId()));
-        Integer status = memInfoCheck.getStatus();
-        if (status != MemberConstant.MemberStatus.WSZLDSH.intValue()) {
+        String status = infoCheckService.getStatusById(member.getId());
+        if (!status.equals(MemberConstant.MemberStatus.WSZLDSH.toString())) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "非待审核状态");
         }
 
@@ -117,24 +116,25 @@ public class MemberOmsController {
 
     @RequestMapping(value = "upd_memreal_data", method = RequestMethod.POST)
     @ApiOperation(value = "实名认证审核", notes = "实名认证审核", response = Response.class)
-    public Response updateMemRealData(@ApiParam("用户ID") @RequestParam String id,
-                                      @ApiParam("用户身份") @RequestParam String identify,
-                                      @ApiParam("企业名称") @RequestParam(required = false) String enterpriseName,
-                                      @ApiParam("状态") @RequestParam String status,
-                                      @ApiParam("拒绝理由") @RequestParam(required = false) String reason) {
-        MemRealCheck realCheck = realCheckService.findMemById(id);
-        if (MemberConstant.MemberStatus.SMRZYJJ.toString().equals(status)) {
+    public Response updateMemRealData(@ApiParam(value = "会员实名认证信息") @ModelAttribute MemRealCheck realCheck) {
+
+        String lastStatus = realCheckService.getStatusById(realCheck.getId());
+        if (!lastStatus.equals(MemberConstant.MemberStatus.SMRZDSH.toString())) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "非待审核状态");
+        }
+
+        Integer status = realCheck.getStatus();
+        if(status == null){
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"状态不能为空");
+        }
+        if (MemberConstant.MemberStatus.SMRZYJJ.intValue() == status) {
             //拒绝理由必填
+            String reason = realCheck.getReason();
             if (StringUtils.isEmpty(reason)) {
                 throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "请填写拒绝理由");
             } else {
                 realCheck.setReason(reason);
             }
-        }
-        realCheck.setStatus(Integer.valueOf(status));
-
-        if (!identify.equals("2")) {
-            realCheck.setEnterpriseName(enterpriseName);
         }
 
         memberService.updateMemRealData(realCheck);
@@ -161,7 +161,7 @@ public class MemberOmsController {
 
     @ApiOperation(value = "查询企业或用户详情", notes = "查询企业或用户详情", response = Response.class)
     @RequestMapping(value = "sel_memberDetail", method = RequestMethod.GET)
-    public Response sel_memberDetail(@ApiParam(value = "会员ID") @RequestParam String mem_id) {
+    public Response selMemberDetail(@ApiParam(value = "会员ID") @RequestParam String mem_id) {
         Member member = memberService.findMemById(mem_id);
         return new Response(member);
     }

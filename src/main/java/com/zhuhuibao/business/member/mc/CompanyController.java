@@ -58,9 +58,9 @@ public class CompanyController {
             map.put("enterpriseTypeName",member.getEnterpriseTypeName());
             map.put("identify",member.getIdentify());
             map.put("identifyName",member.getIdentifyName());
-            Date createrTime = member.getEnterpriseCreaterTime();
+            String createrTime = member.getEnterpriseCreaterTime();
             if(createrTime != null){
-                map.put("enterpriseCreaterTime", DateUtils.date2Str(createrTime,"yyyy-MM-dd"));
+                map.put("enterpriseCreaterTime", DateUtils.str2DateFormat(createrTime,"yyyy-MM-dd"));
             } else{
                 map.put("enterpriseCreaterTime", "");
             }

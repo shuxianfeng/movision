@@ -42,7 +42,7 @@ public class MemInfoCheck {
 
     private String saleProductDesc;
 
-    private Date enterpriseCreaterTime;
+    private String enterpriseCreaterTime;
 
     private String registerCapital;
 
@@ -296,11 +296,11 @@ public class MemInfoCheck {
         this.saleProductDesc = saleProductDesc == null ? null : saleProductDesc.trim();
     }
 
-    public Date getEnterpriseCreaterTime() {
+    public String getEnterpriseCreaterTime() {
         return enterpriseCreaterTime;
     }
 
-    public void setEnterpriseCreaterTime(Date enterpriseCreaterTime) {
+    public void setEnterpriseCreaterTime(String enterpriseCreaterTime) {
         this.enterpriseCreaterTime = enterpriseCreaterTime;
     }
 

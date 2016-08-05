@@ -607,7 +607,7 @@
         SELECT ic.id ,
         CASE WHEN ic.mobile IS NOT NULL AND ic.mobile != '' THEN ic.mobile WHEN ic.email IS NOT NULL AND ic.email != ''
         THEN ic.email END AS account ,
-        ic.updateTime AS registerTime ,
+        date_format(ic.updateTime,'%Y-%m-%d %H:%i:%s') AS registerTime ,
         CASE WHEN ic.enterpriseName IS NOT NULL AND ic.enterpriseName != '' THEN ic.enterpriseName WHEN
         rc.personRealName IS NOT NULL AND rc.personRealName != '' THEN rc.personRealName END AS memberName ,
         ic.enterpriseLinkman ,
