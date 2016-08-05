@@ -70,9 +70,9 @@ public class CheckBrandService {
         }
     }
 
-    public List<CheckBrand> searchBrandByPager(Paging<CheckBrand> pager, Brand brand) {
+    public List<CheckBrand> searchBrandByPager(Paging<CheckBrand> pager, Map<String,Object> map) {
         try {
-            return checkBrandMapper.findAllByPager(pager.getRowBounds(), brand);
+            return checkBrandMapper.findAllByPager(pager.getRowBounds(), map);
         } catch (Exception e) {
             log.error("执行异常>>>", e);
             throw e;

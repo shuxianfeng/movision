@@ -193,7 +193,7 @@
     date_format(b.lastModifyTime,'%Y-%m-%d %H:%i:%s')lastModifyTime
     from t_p_brand_check b
     where b.createid = #{createid} and b.status !=3
-    <if test="status != null" >
+    <if test="status != null and status !=''" >
       and b.status = #{status}
     </if>
   </select>

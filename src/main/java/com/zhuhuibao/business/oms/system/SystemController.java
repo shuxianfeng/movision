@@ -151,15 +151,21 @@ public class SystemController {
      * @throws IOException
      */
     @RequestMapping(value = {"/rest/searchBrandByPager","/rest/system/oms/brand/sel_all_brand"}, method = RequestMethod.GET)
-    public Response searchBrandByPager(Brand brand, String pageNo, String pageSize)  {
+    public Response searchBrandByPager(@RequestParam(required = false) String status,
+                                       @RequestParam(required = false) String CNName,
+                                       @RequestParam(required = false) String pageNo,
+                                       @RequestParam(required = false) String pageSize)  {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
+        Map<String,Object> map = new HashMap<>();
+        map.put("status",status);
+        map.put("CNName",CNName);
         Paging<CheckBrand> pager = new Paging<CheckBrand>(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-        List<CheckBrand> brandList = checkBrandService.searchBrandByPager(pager,brand);
+        List<CheckBrand> brandList = checkBrandService.searchBrandByPager(pager,map);
         pager.result(brandList);
         Response result = new Response();
         result.setData(pager);

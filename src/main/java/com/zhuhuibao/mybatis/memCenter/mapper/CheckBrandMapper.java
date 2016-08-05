@@ -19,5 +19,5 @@ public interface CheckBrandMapper {
 
     CheckBrand queryBrandById(String id);
 
-    List<CheckBrand> findAllByPager(RowBounds rowBounds, Brand brand);
+    List<CheckBrand> findAllByPager(RowBounds rowBounds, Map<String,Object> map);
 }
