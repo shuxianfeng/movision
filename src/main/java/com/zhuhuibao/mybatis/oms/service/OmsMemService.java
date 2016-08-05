@@ -35,33 +35,59 @@ public class OmsMemService {
     @Autowired
     private CertificateRecordMapper certificateRecordMapper;
 
-    public List<Map<String,Object>>  getAllMemInfo(Paging<Map<String,Object>> pager, OmsMemBean member){
-        List<Map<String,Object>> memberList = memberMapper.findAllMemberByPager(pager.getRowBounds(),member);
-        for(Map<String,Object> map : memberList){
-            if(member.getType().equals("1") || StringUtils.isEmpty(member.getType())){      //资料审核
-                map.put("status",map.get("infoStatus")) ;
-            }else if(member.getType().equals("2")){     //实名认证
-                map.put("status",map.get("realStatus")) ;
-            }
+    public Response getAllMemInfo(Paging<OmsMemBean> pager, OmsMemBean member) {
+        Response response = new Response();
+        try {
+            List<OmsMemBean> memberList = memberMapper.findAllMemberByPager(pager.getRowBounds(), member);
+            pager.result(memberList);
+            response.setCode(200);
+            response.setData(pager);
+        } catch (Exception e) {
+            log.error("getAllMemInfo()执行异常>>>", e);
+            throw e;
         }
+
+        return response;
+    }
+
+    public List<Map<String, Object>> getAllcheckMemInfo(Paging<Map<String, Object>> pager, OmsMemBean member) {
+        List<Map<String, Object>> memberList;
+        try {
+            memberList = memberMapper.findAllcheckMemberByPager(pager.getRowBounds(), member);
+            for (Map<String, Object> map : memberList) {
+                if (member.getType() == null) {
+                    map.put("status", map.get("infoStatus"));
+                } else {
+                    if (member.getType().equals("2")) {      //资料审核
+                        map.put("status", map.get("infoStatus"));
+                    } else if (member.getType().equals("1")) {     //实名认证
+                        map.put("status", map.get("realStatus"));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error("getAllcheckMemInfo()执行异常>>>", e);
+            e.printStackTrace();
+            throw e;
+        }
+
         return memberList;
     }
 
-    public Response getAllMemCertificate(Paging<OmsMemBean> pager, OmsMemBean member){
+    public Response getAllMemCertificate(Paging<OmsMemBean> pager, OmsMemBean member) {
         Response response = new Response();
-        List<OmsMemBean> memCertificateList = memberMapper.findAllMemCertificateByPager(pager.getRowBounds(),member);
+        List<OmsMemBean> memCertificateList = memberMapper.findAllMemCertificateByPager(pager.getRowBounds(), member);
         pager.result(memCertificateList);
         response.setCode(200);
         response.setData(pager);
         return response;
     }
 
-    public CertificateRecord queryCertificateById(String id)
-    {
-        try{
+    public CertificateRecord queryCertificateById(String id) {
+        try {
             return certificateRecordMapper.queryCertificateById(id);
-        }catch (Exception e){
-            log.error(e.getMessage());
+        } catch (Exception e) {
+            log.error("queryCertificateById()执行异常>>>", e);
             e.printStackTrace();
             throw e;
         }

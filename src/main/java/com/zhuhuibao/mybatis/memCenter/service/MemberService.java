@@ -616,8 +616,8 @@ public class MemberService {
                 Member mem = findMemById(String.valueOf(member.getId()));
                 String memStatus = mem.getStatus();
                 BeanUtils.copyProperties(member, mem);
-                if(memStatus.equals(MemberConstant.MemberStatus.SMRZDSH.toString())||
-                        memStatus.equals(MemberConstant.MemberStatus.SMRZYRZ.toString())||
+                if (memStatus.equals(MemberConstant.MemberStatus.SMRZDSH.toString()) ||
+                        memStatus.equals(MemberConstant.MemberStatus.SMRZYRZ.toString()) ||
                         memStatus.equals(MemberConstant.MemberStatus.SMRZYJJ.toString())) {
                     mem.setStatus(memStatus);
                 }
@@ -713,7 +713,7 @@ public class MemberService {
     }
 
     /**
-     * 实名认证审核
+     * 实名认证审核     *需要先判断是否基本资料审核已通过
      * 修改审核子表状态
      * 审核通过之后同步用户主表信息
      *
@@ -721,6 +721,12 @@ public class MemberService {
      */
     public void updateMemRealData(MemRealCheck member) {
         try {
+            //先判断基本资料是否审核通过
+            String infoStatus = infoCheckService.getStatusById(member.getId());
+            if(!infoStatus.equals(MemberConstant.MemberStatus.WSZLYSH.toString())){
+               throw new BusinessException(MsgCodeConstant.SMRZSH_ERROR,"基本资料未审核通过");
+            }
+
             Integer status = member.getStatus();
 
             realCheckService.update(member);

@@ -39,7 +39,7 @@ public interface MemberMapper {
 
     List<Member> findnewIdentifyEngineer(@Param("type") String type);
 
-    List<Map<String,Object>> findAllMemberByPager(RowBounds rowBounds,OmsMemBean member);
+    List<OmsMemBean> findAllMemberByPager(RowBounds rowBounds,OmsMemBean member);
 
     List<OmsMemBean> findAllMemCertificateByPager(RowBounds rowBounds,OmsMemBean member);
 
@@ -54,4 +54,6 @@ public interface MemberMapper {
     List<Map<String,String>> queryEngineerList(Map<String, Object> map);
 
 	void updateSubMemInfo(Member member);
+
+    List<Map<String,Object>> findAllcheckMemberByPager(RowBounds rowBounds, OmsMemBean member);
 }

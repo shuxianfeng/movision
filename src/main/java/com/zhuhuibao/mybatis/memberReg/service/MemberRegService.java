@@ -570,4 +570,15 @@ public class MemberRegService {
 		}
 		return result;
 	}
+
+	public int findCountByAccount(String account) {
+		int count = 0;
+		try{
+			    count =  memberRegMapper.findCountByAccount(account);
+		}catch (Exception e){
+			log.error("t_m_member 查询异常>>>" ,e);
+            throw e;
+		}
+		return count;
+	}
 }

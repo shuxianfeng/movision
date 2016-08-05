@@ -55,10 +55,19 @@ public class MemberOmsController {
     public Response getAllMemInfo(@ModelAttribute OmsMemBean member,
                                   @RequestParam(required = false, defaultValue = "1") String pageNo,
                                   @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Paging<OmsMemBean> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        return omsMemService.getAllMemInfo(pager, member);
+    }
+
+    @ApiOperation(value = "查询审核会员（分页）", notes = "查询审核会员（分页）", response = Response.class)
+    @RequestMapping(value = "sel_all_ckmem", method = RequestMethod.GET)
+    public Response getAllcheckMem(@ModelAttribute OmsMemBean member,
+                                   @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                   @RequestParam(required = false, defaultValue = "10") String pageSize) {
         log.debug("查询审核会员...");
 
         Paging<Map<String, Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Map<String, Object>> list = omsMemService.getAllMemInfo(pager, member);
+        List<Map<String, Object>> list = omsMemService.getAllcheckMemInfo(pager, member);
         pager.result(list);
         return new Response(pager);
     }
@@ -114,17 +123,17 @@ public class MemberOmsController {
                                       @ApiParam("状态") @RequestParam String status,
                                       @ApiParam("拒绝理由") @RequestParam(required = false) String reason) {
         MemRealCheck realCheck = realCheckService.findMemById(id);
-        if(MemberConstant.MemberStatus.SMRZYJJ.toString().equals(status)){
+        if (MemberConstant.MemberStatus.SMRZYJJ.toString().equals(status)) {
             //拒绝理由必填
-            if(StringUtils.isEmpty(reason)) {
-                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"请填写拒绝理由");
-            }else{
+            if (StringUtils.isEmpty(reason)) {
+                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "请填写拒绝理由");
+            } else {
                 realCheck.setReason(reason);
             }
         }
         realCheck.setStatus(Integer.valueOf(status));
 
-        if(!identify.equals("2")) {
+        if (!identify.equals("2")) {
             realCheck.setEnterpriseName(enterpriseName);
         }
 

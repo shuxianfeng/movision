@@ -563,7 +563,47 @@
             identify like '%6%'
         </if>
     </select>
-    <select id="findAllMemberByPager" resultType="java.util.Map" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
+
+    <select id="findAllMemberByPager" resultMap="ResultMap2" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
+        select m.id,date_format(m.registerTime,'%Y-%m-%d %H:%i:%s') registerTime,m.isrecommend,
+        CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile WHEN m.email IS NOT NULL and m.email != '' THEN m.email END AS account,
+        m.enterpriseLinkman,
+        CASE WHEN m.enterpriseName IS NOT NULL and m.enterpriseName != '' THEN m.enterpriseName
+        WHEN m.personRealName IS NOT NULL and m.personRealName != '' THEN m.personRealName END AS memberName,
+        CASE WHEN m.identify = 2 THEN '个人会员' WHEN m.identify != 2 then '企业会员' END AS memberType,
+        CASE WHEN m.workType = 100 then '管理员' when m.workType!=100 then w.name end as worktype,
+        (select group_concat(name) from t_dictionary_identity where find_in_set(id,m.identify))as identify,
+        m.status
+        from t_m_member m
+        left join t_dictionary_workType w on m.workType = w.id
+        WHERE 1=1
+        <if test="account != null and account != '' ">
+            and (m.email like CONCAT('%',#{account},'%') or m.mobile like CONCAT('%',#{account},'%'))
+        </if>
+        <if test="memberName != null and memberName != '' ">
+            and (m.enterpriseName like CONCAT('%',#{memberName},'%') or m.personRealName like CONCAT('%',#{memberName},'%'))
+        </if>
+        <if test="memberType != null and memberType == 2 ">
+            and m.identify = 2
+        </if>
+        <if test="memberType != null and memberType == 1 ">
+            and m.identify != 2
+        </if>
+        <if test="identify != null and identify != '' ">
+            and find_in_set(#{identify},m.identify)
+        </if>
+        <if test="status != null and status != '' ">
+            and m.status = #{status}
+        </if>
+        <if test="type != null and type == 1">
+            and m.status in (9,10,11)
+        </if>
+        <if test="type != null and type == 2">
+            and m.status in (5,6,7)
+        </if>
+    </select>
+
+    <select id="findAllcheckMemberByPager" resultType="java.util.Map" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
         SELECT ic.id ,
         CASE WHEN ic.mobile IS NOT NULL AND ic.mobile != '' THEN ic.mobile WHEN ic.email IS NOT NULL AND ic.email != ''
         THEN ic.email END AS account ,
