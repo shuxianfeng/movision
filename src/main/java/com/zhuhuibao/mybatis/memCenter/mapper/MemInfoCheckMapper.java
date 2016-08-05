@@ -20,4 +20,6 @@ public interface MemInfoCheckMapper {
     int updateByPrimaryKey(MemInfoCheck record);
 
     MemInfoCheck findMemById(@Param("id") String id);
+
+    String getStatusById(@Param("id") Long id);
 }

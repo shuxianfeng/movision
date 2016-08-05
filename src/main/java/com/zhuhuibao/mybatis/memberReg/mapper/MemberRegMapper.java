@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.memberReg.mapper;
 
 import com.zhuhuibao.mybatis.memberReg.entity.LoginMember;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -34,5 +35,6 @@ public interface MemberRegMapper {
 	Member findMemberInfoById(Long id);
 	
 	LoginMember getLoginMemberByAccount(Member member);
-	
+
+	int findCountByAccount(@Param("account") String account);
 }

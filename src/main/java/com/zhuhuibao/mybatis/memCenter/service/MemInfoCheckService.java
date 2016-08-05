@@ -49,4 +49,15 @@ public class MemInfoCheckService {
             throw e;
         }
     }
+
+    public String getStatusById(Long id) {
+        String status;
+        try{
+            status = memInfoCheckMapper.getStatusById(id);
+        }catch (Exception e){
+            log.error("t_m_member_info_check >>getStatusById()执行失败>>>",e);
+            throw e;
+        }
+        return status;
+    }
 }

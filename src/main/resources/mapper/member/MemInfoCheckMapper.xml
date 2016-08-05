@@ -45,16 +45,16 @@
         <result column="enterpriseDesc" property="enterpriseDesc" jdbcType="LONGVARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, mobile, email, updateTime, status, identify, enterpriseName, workType, enterpriseEmployeeParentId, 
-    province, city, area, address, enterpriseType, enterpriseLogo, headShot, saleProductDesc, 
-    enterpriseCreaterTime, registerCapital, currency, employeeNumber, enterpriseProvince, 
-    enterpriseCity, enterpriseArea, enterpriseAddress, enterpriseTelephone, enterpriseFox, 
-    enterpriseWebSite, enterpriseLinkman, enterpriseLMDep, fixedTelephone, fixedMobile, 
-    QQ, nickname, sex, personCompanyType, reason
-  </sql>
+        id, mobile, email, updateTime, status, identify, enterpriseName, workType, enterpriseEmployeeParentId,
+        province, city, area, address, enterpriseType, enterpriseLogo, headShot, saleProductDesc,
+        enterpriseCreaterTime, registerCapital, currency, employeeNumber, enterpriseProvince,
+        enterpriseCity, enterpriseArea, enterpriseAddress, enterpriseTelephone, enterpriseFox,
+        enterpriseWebSite, enterpriseLinkman, enterpriseLMDep, fixedTelephone, fixedMobile,
+        QQ, nickname, sex, personCompanyType, reason
+    </sql>
     <sql id="Blob_Column_List">
-    enterpriseDesc
-  </sql>
+        enterpriseDesc
+    </sql>
     <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
@@ -64,58 +64,75 @@
         where id = #{id,jdbcType=BIGINT}
     </select>
     <select id="findMemById" resultType="com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck">
-       select  m.*,
-        p1.name provinceName,p2.name enterpriseProvinceName,c1.name cityName,c2.name enterpriseCityName,a1.name areaName,a2.name enterpriseAreaName,
-        e.name employeeNumberName,et.name enterpriseTypeName,w.name workTypeName,
-        (select group_concat(name) from t_dictionary_identity where find_in_set(id,m.identify))as identifyName,
-        (select group_concat(name) from t_dictionary_identity WHERE find_in_set(id,m.personCompanyType))as personCompanyTypeName
-        from t_m_member_info_check m
-        LEFT JOIN t_dictionary_province p1 ON m.province = p1.code
-        LEFT JOIN t_dictionary_province p2 ON m.enterpriseProvince = p2.code
-        LEFT JOIN t_dictionary_city c1 ON m.city = c1.code
-        LEFT JOIN t_dictionary_city c2 ON m.enterpriseCity = c2.code
-        LEFT JOIN t_dictionary_area a1 ON m.area = a1.code
-        LEFT JOIN t_dictionary_area a2 on m.enterpriseArea = a2.code
-        LEFT JOIN t_dictionary_employeeSize e on m.employeeNumber = e.id
-        LEFT JOIN t_dictionary_enterpriseType et on m.enterpriseType = et.id
-        LEFT JOIN t_dictionary_workType w on m.workType = w.id
-        where m.id = #{id}
+        SELECT
+            m.*,
+            p1.name                                         provinceName,
+            p2.name                                         enterpriseProvinceName,
+            c1.name                                         cityName,
+            c2.name                                         enterpriseCityName,
+            a1.name                                         areaName,
+            a2.name                                         enterpriseAreaName,
+            e.name                                          employeeNumberName,
+            et.name                                         enterpriseTypeName,
+            w.name                                          workTypeName,
+            (SELECT group_concat(name)
+             FROM t_dictionary_identity
+             WHERE find_in_set(id, m.identify))          AS identifyName,
+            (SELECT group_concat(name)
+             FROM t_dictionary_identity
+             WHERE find_in_set(id, m.personCompanyType)) AS personCompanyTypeName
+        FROM t_m_member_info_check m
+            LEFT JOIN t_dictionary_province p1 ON m.province = p1.code
+            LEFT JOIN t_dictionary_province p2 ON m.enterpriseProvince = p2.code
+            LEFT JOIN t_dictionary_city c1 ON m.city = c1.code
+            LEFT JOIN t_dictionary_city c2 ON m.enterpriseCity = c2.code
+            LEFT JOIN t_dictionary_area a1 ON m.area = a1.code
+            LEFT JOIN t_dictionary_area a2 ON m.enterpriseArea = a2.code
+            LEFT JOIN t_dictionary_employeeSize e ON m.employeeNumber = e.id
+            LEFT JOIN t_dictionary_enterpriseType et ON m.enterpriseType = et.id
+            LEFT JOIN t_dictionary_workType w ON m.workType = w.id
+        WHERE m.id = #{id}
 
-  </select>
+    </select>
+    <select id="getStatusById" resultType="java.lang.String">
+        SELECT status
+        FROM t_m_member_info_check
+        WHERE id =#{id};
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_m_member_info_check
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+        DELETE FROM t_m_member_info_check
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
     <insert id="insert" parameterType="com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck">
-    insert into t_m_member_info_check (id, mobile, email, 
-      updateTime, status, identify, 
-      enterpriseName, workType, enterpriseEmployeeParentId, 
-      province, city, area, 
-      address, enterpriseType, enterpriseLogo, 
-      headShot, saleProductDesc, enterpriseCreaterTime, 
-      registerCapital, currency, employeeNumber, 
-      enterpriseProvince, enterpriseCity, enterpriseArea, 
-      enterpriseAddress, enterpriseTelephone, 
-      enterpriseFox, enterpriseWebSite, enterpriseLinkman, 
-      enterpriseLMDep, fixedTelephone, fixedMobile, 
-      QQ, nickname, sex, 
-      personCompanyType, reason, enterpriseDesc
-      )
-    values (#{id,jdbcType=BIGINT}, #{mobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{identify,jdbcType=VARCHAR}, 
-      #{enterpriseName,jdbcType=VARCHAR}, #{workType,jdbcType=INTEGER}, #{enterpriseEmployeeParentId,jdbcType=BIGINT}, 
-      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{enterpriseType,jdbcType=INTEGER}, #{enterpriseLogo,jdbcType=VARCHAR}, 
-      #{headShot,jdbcType=VARCHAR}, #{saleProductDesc,jdbcType=VARCHAR}, #{enterpriseCreaterTime,jdbcType=TIMESTAMP}, 
-      #{registerCapital,jdbcType=VARCHAR}, #{currency,jdbcType=CHAR}, #{employeeNumber,jdbcType=VARCHAR}, 
-      #{enterpriseProvince,jdbcType=VARCHAR}, #{enterpriseCity,jdbcType=VARCHAR}, #{enterpriseArea,jdbcType=VARCHAR}, 
-      #{enterpriseAddress,jdbcType=VARCHAR}, #{enterpriseTelephone,jdbcType=VARCHAR}, 
-      #{enterpriseFox,jdbcType=VARCHAR}, #{enterpriseWebSite,jdbcType=VARCHAR}, #{enterpriseLinkman,jdbcType=VARCHAR}, 
-      #{enterpriseLMDep,jdbcType=VARCHAR}, #{fixedTelephone,jdbcType=VARCHAR}, #{fixedMobile,jdbcType=VARCHAR}, 
-      #{QQ,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, 
-      #{personCompanyType,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{enterpriseDesc,jdbcType=LONGVARCHAR}
-      )
-  </insert>
+        INSERT INTO t_m_member_info_check (id, mobile, email,
+                                           updateTime, status, identify,
+                                           enterpriseName, workType, enterpriseEmployeeParentId,
+                                           province, city, area,
+                                           address, enterpriseType, enterpriseLogo,
+                                           headShot, saleProductDesc, enterpriseCreaterTime,
+                                           registerCapital, currency, employeeNumber,
+                                           enterpriseProvince, enterpriseCity, enterpriseArea,
+                                           enterpriseAddress, enterpriseTelephone,
+                                           enterpriseFox, enterpriseWebSite, enterpriseLinkman,
+                                           enterpriseLMDep, fixedTelephone, fixedMobile,
+                                           QQ, nickname, sex,
+                                           personCompanyType, reason, enterpriseDesc
+        )
+        VALUES (#{id,jdbcType=BIGINT}, #{mobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+            #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{identify,jdbcType=VARCHAR},
+            #{enterpriseName,jdbcType=VARCHAR}, #{workType,jdbcType=INTEGER}, #{enterpriseEmployeeParentId,jdbcType=BIGINT},
+            #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR},
+            #{address,jdbcType=VARCHAR}, #{enterpriseType,jdbcType=INTEGER}, #{enterpriseLogo,jdbcType=VARCHAR},
+            #{headShot,jdbcType=VARCHAR}, #{saleProductDesc,jdbcType=VARCHAR}, #{enterpriseCreaterTime,jdbcType=TIMESTAMP},
+            #{registerCapital,jdbcType=VARCHAR}, #{currency,jdbcType=CHAR}, #{employeeNumber,jdbcType=VARCHAR},
+            #{enterpriseProvince,jdbcType=VARCHAR}, #{enterpriseCity,jdbcType=VARCHAR}, #{enterpriseArea,jdbcType=VARCHAR},
+            #{enterpriseAddress,jdbcType=VARCHAR}, #{enterpriseTelephone,jdbcType=VARCHAR},
+            #{enterpriseFox,jdbcType=VARCHAR}, #{enterpriseWebSite,jdbcType=VARCHAR}, #{enterpriseLinkman,jdbcType=VARCHAR},
+            #{enterpriseLMDep,jdbcType=VARCHAR}, #{fixedTelephone,jdbcType=VARCHAR}, #{fixedMobile,jdbcType=VARCHAR},
+            #{QQ,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER},
+            #{personCompanyType,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{enterpriseDesc,jdbcType=LONGVARCHAR}
+        )
+    </insert>
     <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck">
         insert into t_m_member_info_check
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -469,84 +486,84 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck">
-    update t_m_member_info_check
-    set mobile = #{mobile,jdbcType=VARCHAR},
-      email = #{email,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=INTEGER},
-      identify = #{identify,jdbcType=VARCHAR},
-      enterpriseName = #{enterpriseName,jdbcType=VARCHAR},
-      workType = #{workType,jdbcType=INTEGER},
-      enterpriseEmployeeParentId = #{enterpriseEmployeeParentId,jdbcType=BIGINT},
-      province = #{province,jdbcType=VARCHAR},
-      city = #{city,jdbcType=VARCHAR},
-      area = #{area,jdbcType=VARCHAR},
-      address = #{address,jdbcType=VARCHAR},
-      enterpriseType = #{enterpriseType,jdbcType=INTEGER},
-      enterpriseLogo = #{enterpriseLogo,jdbcType=VARCHAR},
-      headShot = #{headShot,jdbcType=VARCHAR},
-      saleProductDesc = #{saleProductDesc,jdbcType=VARCHAR},
-      enterpriseCreaterTime = #{enterpriseCreaterTime,jdbcType=TIMESTAMP},
-      registerCapital = #{registerCapital,jdbcType=VARCHAR},
-      currency = #{currency,jdbcType=CHAR},
-      employeeNumber = #{employeeNumber,jdbcType=VARCHAR},
-      enterpriseProvince = #{enterpriseProvince,jdbcType=VARCHAR},
-      enterpriseCity = #{enterpriseCity,jdbcType=VARCHAR},
-      enterpriseArea = #{enterpriseArea,jdbcType=VARCHAR},
-      enterpriseAddress = #{enterpriseAddress,jdbcType=VARCHAR},
-      enterpriseTelephone = #{enterpriseTelephone,jdbcType=VARCHAR},
-      enterpriseFox = #{enterpriseFox,jdbcType=VARCHAR},
-      enterpriseWebSite = #{enterpriseWebSite,jdbcType=VARCHAR},
-      enterpriseLinkman = #{enterpriseLinkman,jdbcType=VARCHAR},
-      enterpriseLMDep = #{enterpriseLMDep,jdbcType=VARCHAR},
-      fixedTelephone = #{fixedTelephone,jdbcType=VARCHAR},
-      fixedMobile = #{fixedMobile,jdbcType=VARCHAR},
-      QQ = #{QQ,jdbcType=VARCHAR},
-      nickname = #{nickname,jdbcType=VARCHAR},
-      sex = #{sex,jdbcType=INTEGER},
-      personCompanyType = #{personCompanyType,jdbcType=VARCHAR},
-      reason = #{reason,jdbcType=VARCHAR},
-      enterpriseDesc = #{enterpriseDesc,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+        UPDATE t_m_member_info_check
+        SET mobile = #{mobile,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR},
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+        status = #{status,jdbcType=INTEGER},
+        identify = #{identify,jdbcType=VARCHAR},
+        enterpriseName = #{enterpriseName,jdbcType=VARCHAR},
+        workType = #{workType,jdbcType=INTEGER},
+        enterpriseEmployeeParentId = #{enterpriseEmployeeParentId,jdbcType=BIGINT},
+        province = #{province,jdbcType=VARCHAR},
+        city = #{city,jdbcType=VARCHAR},
+        area = #{area,jdbcType=VARCHAR},
+        address = #{address,jdbcType=VARCHAR},
+        enterpriseType = #{enterpriseType,jdbcType=INTEGER},
+        enterpriseLogo = #{enterpriseLogo,jdbcType=VARCHAR},
+        headShot = #{headShot,jdbcType=VARCHAR},
+        saleProductDesc = #{saleProductDesc,jdbcType=VARCHAR},
+        enterpriseCreaterTime = #{enterpriseCreaterTime,jdbcType=TIMESTAMP},
+        registerCapital = #{registerCapital,jdbcType=VARCHAR},
+        currency = #{currency,jdbcType=CHAR},
+        employeeNumber = #{employeeNumber,jdbcType=VARCHAR},
+        enterpriseProvince = #{enterpriseProvince,jdbcType=VARCHAR},
+        enterpriseCity = #{enterpriseCity,jdbcType=VARCHAR},
+        enterpriseArea = #{enterpriseArea,jdbcType=VARCHAR},
+        enterpriseAddress = #{enterpriseAddress,jdbcType=VARCHAR},
+        enterpriseTelephone = #{enterpriseTelephone,jdbcType=VARCHAR},
+        enterpriseFox = #{enterpriseFox,jdbcType=VARCHAR},
+        enterpriseWebSite = #{enterpriseWebSite,jdbcType=VARCHAR},
+        enterpriseLinkman = #{enterpriseLinkman,jdbcType=VARCHAR},
+        enterpriseLMDep = #{enterpriseLMDep,jdbcType=VARCHAR},
+        fixedTelephone = #{fixedTelephone,jdbcType=VARCHAR},
+        fixedMobile = #{fixedMobile,jdbcType=VARCHAR},
+        QQ = #{QQ,jdbcType=VARCHAR},
+        nickname = #{nickname,jdbcType=VARCHAR},
+        sex = #{sex,jdbcType=INTEGER},
+        personCompanyType = #{personCompanyType,jdbcType=VARCHAR},
+        reason = #{reason,jdbcType=VARCHAR},
+        enterpriseDesc = #{enterpriseDesc,jdbcType=LONGVARCHAR}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
     <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck">
-    update t_m_member_info_check
-    set mobile = #{mobile,jdbcType=VARCHAR},
-      email = #{email,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=INTEGER},
-      identify = #{identify,jdbcType=VARCHAR},
-      enterpriseName = #{enterpriseName,jdbcType=VARCHAR},
-      workType = #{workType,jdbcType=INTEGER},
-      enterpriseEmployeeParentId = #{enterpriseEmployeeParentId,jdbcType=BIGINT},
-      province = #{province,jdbcType=VARCHAR},
-      city = #{city,jdbcType=VARCHAR},
-      area = #{area,jdbcType=VARCHAR},
-      address = #{address,jdbcType=VARCHAR},
-      enterpriseType = #{enterpriseType,jdbcType=INTEGER},
-      enterpriseLogo = #{enterpriseLogo,jdbcType=VARCHAR},
-      headShot = #{headShot,jdbcType=VARCHAR},
-      saleProductDesc = #{saleProductDesc,jdbcType=VARCHAR},
-      enterpriseCreaterTime = #{enterpriseCreaterTime,jdbcType=TIMESTAMP},
-      registerCapital = #{registerCapital,jdbcType=VARCHAR},
-      currency = #{currency,jdbcType=CHAR},
-      employeeNumber = #{employeeNumber,jdbcType=VARCHAR},
-      enterpriseProvince = #{enterpriseProvince,jdbcType=VARCHAR},
-      enterpriseCity = #{enterpriseCity,jdbcType=VARCHAR},
-      enterpriseArea = #{enterpriseArea,jdbcType=VARCHAR},
-      enterpriseAddress = #{enterpriseAddress,jdbcType=VARCHAR},
-      enterpriseTelephone = #{enterpriseTelephone,jdbcType=VARCHAR},
-      enterpriseFox = #{enterpriseFox,jdbcType=VARCHAR},
-      enterpriseWebSite = #{enterpriseWebSite,jdbcType=VARCHAR},
-      enterpriseLinkman = #{enterpriseLinkman,jdbcType=VARCHAR},
-      enterpriseLMDep = #{enterpriseLMDep,jdbcType=VARCHAR},
-      fixedTelephone = #{fixedTelephone,jdbcType=VARCHAR},
-      fixedMobile = #{fixedMobile,jdbcType=VARCHAR},
-      QQ = #{QQ,jdbcType=VARCHAR},
-      nickname = #{nickname,jdbcType=VARCHAR},
-      sex = #{sex,jdbcType=INTEGER},
-      personCompanyType = #{personCompanyType,jdbcType=VARCHAR},
-      reason = #{reason,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+        UPDATE t_m_member_info_check
+        SET mobile = #{mobile,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR},
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+        status = #{status,jdbcType=INTEGER},
+        identify = #{identify,jdbcType=VARCHAR},
+        enterpriseName = #{enterpriseName,jdbcType=VARCHAR},
+        workType = #{workType,jdbcType=INTEGER},
+        enterpriseEmployeeParentId = #{enterpriseEmployeeParentId,jdbcType=BIGINT},
+        province = #{province,jdbcType=VARCHAR},
+        city = #{city,jdbcType=VARCHAR},
+        area = #{area,jdbcType=VARCHAR},
+        address = #{address,jdbcType=VARCHAR},
+        enterpriseType = #{enterpriseType,jdbcType=INTEGER},
+        enterpriseLogo = #{enterpriseLogo,jdbcType=VARCHAR},
+        headShot = #{headShot,jdbcType=VARCHAR},
+        saleProductDesc = #{saleProductDesc,jdbcType=VARCHAR},
+        enterpriseCreaterTime = #{enterpriseCreaterTime,jdbcType=TIMESTAMP},
+        registerCapital = #{registerCapital,jdbcType=VARCHAR},
+        currency = #{currency,jdbcType=CHAR},
+        employeeNumber = #{employeeNumber,jdbcType=VARCHAR},
+        enterpriseProvince = #{enterpriseProvince,jdbcType=VARCHAR},
+        enterpriseCity = #{enterpriseCity,jdbcType=VARCHAR},
+        enterpriseArea = #{enterpriseArea,jdbcType=VARCHAR},
+        enterpriseAddress = #{enterpriseAddress,jdbcType=VARCHAR},
+        enterpriseTelephone = #{enterpriseTelephone,jdbcType=VARCHAR},
+        enterpriseFox = #{enterpriseFox,jdbcType=VARCHAR},
+        enterpriseWebSite = #{enterpriseWebSite,jdbcType=VARCHAR},
+        enterpriseLinkman = #{enterpriseLinkman,jdbcType=VARCHAR},
+        enterpriseLMDep = #{enterpriseLMDep,jdbcType=VARCHAR},
+        fixedTelephone = #{fixedTelephone,jdbcType=VARCHAR},
+        fixedMobile = #{fixedMobile,jdbcType=VARCHAR},
+        QQ = #{QQ,jdbcType=VARCHAR},
+        nickname = #{nickname,jdbcType=VARCHAR},
+        sex = #{sex,jdbcType=INTEGER},
+        personCompanyType = #{personCompanyType,jdbcType=VARCHAR},
+        reason = #{reason,jdbcType=VARCHAR}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
 </mapper>
