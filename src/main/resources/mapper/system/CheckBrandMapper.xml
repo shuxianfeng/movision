@@ -63,9 +63,7 @@
       <if test="imgurl != null" >
         imgurl,
       </if>
-      <if test="status != null" >
         status,
-      </if>
       <if test="owner != null" >
         owner,
       </if>
@@ -111,9 +109,7 @@
       <if test="imgurl != null" >
         #{imgurl,jdbcType=VARCHAR},
       </if>
-      <if test="status != null" >
-        #{status,jdbcType=INTEGER},
-      </if>
+        2,
       <if test="owner != null" >
         #{owner,jdbcType=VARCHAR},
       </if>
