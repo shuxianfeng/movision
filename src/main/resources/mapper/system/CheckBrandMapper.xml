@@ -32,7 +32,7 @@
   <select id="queryBrandById" resultMap="BaseResultMap" >
     select
     *
-    from t_p_brand
+    from t_p_brand_check
     where id = #{id}
   </select>
 
