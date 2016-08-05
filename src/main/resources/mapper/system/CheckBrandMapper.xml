@@ -75,9 +75,7 @@
       <if test="website != null" >
         webSite,
       </if>
-      <if test="publishtime != null" >
         publishTime,
-      </if>
       <if test="checktime != null" >
         checkTime,
       </if>
@@ -125,9 +123,7 @@
       <if test="website != null" >
         #{website,jdbcType=VARCHAR},
       </if>
-      <if test="publishtime != null" >
-        #{publishtime,jdbcType=TIMESTAMP},
-      </if>
+        now(),
       <if test="checktime != null" >
         #{checktime,jdbcType=TIMESTAMP},
       </if>
@@ -199,7 +195,7 @@
     b.certificate,b.webSite,date_format(b.publishTime,'%Y-%m-%d %H:%i:%s')publishTime,
     date_format(b.checkTime,'%Y-%m-%d %H:%i:%s')checkTime,
     date_format(b.lastModifyTime,'%Y-%m-%d %H:%i:%s')lastModifyTime
-    from t_p_brand b
+    from t_p_brand_check b
     where b.createid = #{createid} and b.status !=3
     <if test="status != null" >
       and b.status = #{status}
@@ -209,7 +205,7 @@
   <select id="findAllByPager" resultMap="BaseResultMap" >
     select
     b.CNName,b.owner,b.id,b.certificate,b.webSite,b.publishTime,b.logourl,b.status,m.enterpriseName
-    from t_p_brand b
+    from t_p_brand_check b
     LEFT JOIN t_m_member m on b.createid = m.id
     WHERE 1=1
     <if test="status != null" >
