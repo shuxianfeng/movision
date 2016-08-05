@@ -33,7 +33,7 @@
             rc.*,
             ic.enterpriseName,
             ic.identify,
-            ic.enterpriseCreaterTime,
+            date_format(ic.enterpriseCreaterTime,'%Y-%m-%d') enterpriseCreaterTime,
             ic.registerCapital,
             ic.currency,
             ic.province,
