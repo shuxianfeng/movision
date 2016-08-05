@@ -173,7 +173,7 @@ public class ProductPublishMcController {
     public Response getAllPassBrand(@ApiParam("品牌中英文名称关键字") @RequestParam String keyword,
                                     @ApiParam("显示数量(默认10)") @RequestParam(defaultValue = "10") String count) throws UnsupportedEncodingException {
         log.debug(">>>>keyword keyword>>>:{} && count>>>{}", keyword, count);
-        keyword = new String(keyword.getBytes("ISO-8859-1"), "UTF-8");
+//        keyword = new String(keyword.getBytes("ISO-8859-1"), "UTF-8");
         List<Map<String, String>> list = brandService.findByKeyword(keyword, count);
 
         return new Response(list);
