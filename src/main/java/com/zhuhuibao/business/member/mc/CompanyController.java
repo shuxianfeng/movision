@@ -14,6 +14,7 @@ import com.zhuhuibao.mybatis.memCenter.service.MemRealCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.SuccessCaseService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.apache.shiro.SecurityUtils;
@@ -57,7 +58,12 @@ public class CompanyController {
             map.put("enterpriseTypeName",member.getEnterpriseTypeName());
             map.put("identify",member.getIdentify());
             map.put("identifyName",member.getIdentifyName());
-            map.put("enterpriseCreaterTime",member.getEnterpriseCreaterTime());
+            Date createrTime = member.getEnterpriseCreaterTime();
+            if(createrTime != null){
+                map.put("enterpriseCreaterTime", DateUtils.date2Str(createrTime,"yyyy-MM-dd"));
+            } else{
+                map.put("enterpriseCreaterTime", "");
+            }
             map.put("registerCapital",member.getRegisterCapital());
             map.put("currency",member.getCurrency());
             map.put("employeeNumber",member.getEmployeeNumber());

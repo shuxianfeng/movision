@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.pojo.ResultBean;
@@ -167,6 +168,7 @@ public class ProductPublishMcController {
 
         return result;
     }
+
 
     @RequestMapping(value = {"/rest/system/mc/product/sel_brand_kw"}, method = RequestMethod.GET)
     @ApiOperation(value = "查询品牌", notes = "查询品牌", response = Response.class)
