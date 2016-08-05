@@ -50,7 +50,7 @@ public class InitLogonMemberInterceptor extends HandlerInterceptorAdapter {
 
 						if (loginMemberInfoIsChange(member, loginInfo)) {
 							session.setAttribute("member", loginInfo);
-							clearCurrentAuthorizationInfo();
+							shiroRealm.getAuthorizationCache().remove(subject.getPrincipals());
 						}
 					}
 				}
@@ -69,14 +69,5 @@ public class InitLogonMemberInterceptor extends HandlerInterceptorAdapter {
 				|| !loginInfo.getRole().equals(member.getRole())
 				|| !loginInfo.getIsexpert().equals(member.getIsexpert());
 		return isChange;
-	}
-
-	private void clearCurrentAuthorizationInfo() {
-		Subject subject = SecurityUtils.getSubject();
-		String realmName = subject.getPrincipals().getRealmNames().iterator().next();
-		SimplePrincipalCollection principals = new SimplePrincipalCollection(subject.getPrincipal(), realmName);
-		subject.runAs(principals);
-		shiroRealm.getAuthorizationCache().remove(subject.getPrincipals());
-		subject.releaseRunAs();
 	}
 }
