@@ -49,7 +49,7 @@ public class InitLogonMemberInterceptor extends HandlerInterceptorAdapter {
 								loginMember.getCompanyName(), loginMember.getVipLevel());
 
 						if (loginMemberInfoIsChange(member, loginInfo)) {
-							session.setAttribute("member", member);
+							session.setAttribute("member", loginInfo);
 							clearCurrentAuthorizationInfo();
 						}
 					}
