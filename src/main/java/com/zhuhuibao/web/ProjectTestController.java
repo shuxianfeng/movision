@@ -7,6 +7,9 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.project.entity.ProjectTest;
 import com.zhuhuibao.mybatis.project.service.ProjectService;
 import com.zhuhuibao.mybatis.project.service.ProjectTestService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,7 +28,7 @@ import java.util.regex.Pattern;
 @RestController
 @RequestMapping("/rest/project/test")
 public class ProjectTestController {
-
+	private static final Logger log = LoggerFactory.getLogger(ProjectTestController.class);
     @Autowired
     ProjectTestService projectTestService;
 
@@ -43,58 +46,64 @@ public class ProjectTestController {
             map.put("end",end);
             List<Map<String,String>> list = projectService.queryDescription(map);
             for(Map result:list){
-                String old = result.get("description").toString();
-                String areaSize = "";
-                String desc = "";
-                String background = "";
-                String remark = "";
-                if(old.contains("建筑面积")){
-                    areaSize = old.substring(old.indexOf("建筑面积")).substring(4,20).replace(",","");
-                    Pattern p = Pattern.compile("(\\d+)");
-                    Matcher m = p.matcher(areaSize);
-                    if(m.find()){
-                        areaSize = m.group(1);
-                    }
-                    if(areaSize.contains("万")){
-                        areaSize = m.group(1)+"万";
-                    }
-                }
+                try {
+					String old = result.get("description").toString();
+					String areaSize = "";
+					String desc = "";
+					String background = "";
+					String remark = "";
+					if(old.contains("建筑面积")){
+					    areaSize = old.substring(old.indexOf("建筑面积")).substring(4,20).replace(",","");
+					    Pattern p = Pattern.compile("(\\d+)");
+					    Matcher m = p.matcher(areaSize);
+					    if(m.find()){
+					        areaSize = m.group(1);
+					    }
+					    if(areaSize.contains("万")){
+					        areaSize = m.group(1)+"万";
+					    }
+					}
 
-                if(old.contains("部分建材")){
-                    desc = old.substring(0,old.indexOf("部分建材"));
-                }else if(old.contains("部分建筑材料")){
-                    desc = old.substring(0,old.indexOf("部分建筑材料"));
-                }else if(old.contains("部分材料")){
-                    desc = old.substring(0,old.indexOf("部分材料"));
-                }else if(old.contains("部分配置")){
-                    desc = old.substring(0,old.indexOf("部分配置"));
-                }
+					if(old.contains("部分建材")){
+					    desc = old.substring(0,old.indexOf("部分建材"));
+					}else if(old.contains("部分建筑材料")){
+					    desc = old.substring(0,old.indexOf("部分建筑材料"));
+					}else if(old.contains("部分材料")){
+					    desc = old.substring(0,old.indexOf("部分材料"));
+					}else if(old.contains("部分配置")){
+					    desc = old.substring(0,old.indexOf("部分配置"));
+					}
 
-                if(old.contains("备注：")){
-                    if(old.contains("项目背景：")){
-                        if(old.indexOf("备注：")<old.lastIndexOf("项目背景：")){
-                            remark = old.substring(old.indexOf("备注："),old.lastIndexOf("项目背景：")).substring(3);
-                        }
-                    }
-                }
+					if(old.contains("备注：")){
+					    if(old.contains("项目背景：")){
+					        if(old.indexOf("备注：")<old.lastIndexOf("项目背景：")){
+					            remark = old.substring(old.indexOf("备注："),old.lastIndexOf("项目背景：")).substring(3);
+					        }
+					    }
+					}
 
-                if(old.contains("项目背景")){
-                    if(old.contains("审批手续进展情况")){
-                        if(old.indexOf("项目背景：")<old.lastIndexOf("审批手续进展情况")){
-                            background = old.substring(old.indexOf("项目背景："),old.lastIndexOf("审批手续进展情况")).substring(5);
-                        }
-                    }
-                }
-                ProjectTest projectTest = projectTestService.query(Integer.parseInt(result.get("id").toString()));
-                if(projectTest==null){
-                    ProjectTest test = new ProjectTest();
-                    test.setAreaSize(areaSize);
-                    test.setDescription(desc);
-                    test.setRemark(remark);
-                    test.setBackground(background);
-                    test.setId(Integer.parseInt(result.get("id").toString()));
-                    projectTestService.insert(test);
-                }
+					if(old.contains("项目背景")){
+					    if(old.contains("审批手续进展情况")){
+					        if(old.indexOf("项目背景：")<old.lastIndexOf("审批手续进展情况")){
+					            background = old.substring(old.indexOf("项目背景："),old.lastIndexOf("审批手续进展情况")).substring(5);
+					        }
+					    }
+					}
+					ProjectTest projectTest = projectTestService.query(Integer.parseInt(result.get("id").toString()));
+					if(projectTest==null){
+					    ProjectTest test = new ProjectTest();
+					    test.setAreaSize(areaSize);
+					    test.setDescription(desc);
+					    test.setRemark(remark);
+					    test.setBackground(background);
+					    test.setId(Integer.parseInt(result.get("id").toString()));
+					    projectTestService.insert(test);
+					}
+				} catch (Exception e) {
+					log.error("项目信息转换出错", e);
+					throw e;
+				}
+            
             }
         }else {
             throw new AuthException(400, "你想干嘛？你木有权限哟，哈哈，妈的智障！");
@@ -108,18 +117,23 @@ public class ProjectTestController {
         Response response = new Response();
         Long createid = ShiroUtil.getCreateID();
         if(createid!=null && createid == 11){
-            Map<String,Object> map = new HashMap<>();
-            map.put("begin",begin);
-            map.put("end",end);
-            List<Map<String,String>> list = projectTestService.queryAll(map);
-            for(Map result:list){
-                Map<String,Object> queryMap = new HashMap<>();
-                queryMap.put("id",result.get("id"));
-                queryMap.put("basicDesc",result.get("description"));
-                queryMap.put("background",result.get("background"));
-                queryMap.put("remark",result.get("remark"));
-                projectService.update(queryMap);
-            }
+            try {
+				Map<String,Object> map = new HashMap<>();
+				map.put("begin",begin);
+				map.put("end",end);
+				List<Map<String,String>> list = projectTestService.queryAll(map);
+				for(Map result:list){
+				    Map<String,Object> queryMap = new HashMap<>();
+				    queryMap.put("id",result.get("id"));
+				    queryMap.put("basicDesc",result.get("description"));
+				    queryMap.put("background",result.get("background"));
+				    queryMap.put("remark",result.get("remark"));
+				    projectService.update(queryMap);
+				}
+			} catch (Exception e) {
+				log.error("项目信息表字段填充更新出错", e);
+				throw e;
+			}
         }else {
             throw new AuthException(400, "你想干嘛？你木有权限哟，哈哈，妈的智障！");
         }

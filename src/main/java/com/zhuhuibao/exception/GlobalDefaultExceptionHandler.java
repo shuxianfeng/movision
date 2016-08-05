@@ -90,7 +90,7 @@ public class GlobalDefaultExceptionHandler {
                     result.setMessage("服务器繁忙");
                     break;
             }
-
+            throw ex;
         } catch (Exception e) {
             if (log.isWarnEnabled()) {
                 log.warn("Handling of [" + ex.getClass().getName() + "] resulted in Exception", e);
