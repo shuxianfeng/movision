@@ -7,6 +7,7 @@ import java.util.Map;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.aop.OmsLoginAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
@@ -100,6 +101,7 @@ public class MemberOmsController {
         return result;
     }
 
+    @OmsLoginAccess
     @RequestMapping(value = "upd_mem_data", method = RequestMethod.POST)
     @ApiOperation(value = "完善资料审核", notes = "完善资料审核", response = Response.class)
     public Response updateMemData(@ApiParam(value = "会员基本资料信息") @ModelAttribute(value = "member") MemInfoCheck member) {

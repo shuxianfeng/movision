@@ -603,7 +603,7 @@
         </if>
     </select>
 
-    <select id="findAllcheckMemberByPager" resultType="java.util.Map" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
+    <select id="findAllInfocheckMemberByPager" resultType="java.util.Map" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
         SELECT ic.id ,
         CASE WHEN ic.mobile IS NOT NULL AND ic.mobile != '' THEN ic.mobile WHEN ic.email IS NOT NULL AND ic.email != ''
         THEN ic.email END AS account ,
@@ -619,13 +619,13 @@
         FROM t_m_member_info_check ic
         LEFT JOIN t_dictionary_workType w ON ic.workType = w.id
         LEFT JOIN t_m_member_real_check rc ON ic.id = rc.id
-        <where>
+        WHERE  ic.status in (5,6,7)
             <if test="account != null and account != '' ">
                 and (ic.email like CONCAT('%',#{account},'%') or ic.mobile like CONCAT('%',#{account},'%'))
             </if>
             <if test="memberName != null and memberName != '' ">
-                and (ic.enterpriseName like CONCAT('%',#{memberName},'%') or rc.personRealName like
-                CONCAT('%',#{memberName},'%'))
+                and (ic.enterpriseName like CONCAT('%',#{memberName},'%')
+                    or rc.personRealName like CONCAT('%',#{memberName},'%'))
             </if>
             <if test="memberType != null and memberType == 2 ">
                 and ic.identify = 2
@@ -636,17 +636,49 @@
             <if test="identify != null and identify != '' ">
                 and find_in_set(#{identify},m.identify)
             </if>
-            <if test="status != null and status != '' ">
+            <if test="status != null and status != ''" >
                 and ic.status = #{status}
             </if>
-            <if test="type != null and type == 1">
-                and rc.status in (9,10,11)
-            </if>
-            <if test="type != null and type == 2">
-                and ic.status in (5,6,7)
-            </if>
-        </where>
     </select>
+
+    <select id="findAllRealcheckMemberByPager" resultType="java.util.Map" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
+        SELECT ic.id ,
+        CASE WHEN ic.mobile IS NOT NULL AND ic.mobile != '' THEN ic.mobile WHEN ic.email IS NOT NULL AND ic.email != ''
+        THEN ic.email END AS account ,
+        date_format(ic.updateTime,'%Y-%m-%d %H:%i:%s') AS registerTime ,
+        CASE WHEN ic.enterpriseName IS NOT NULL AND ic.enterpriseName != '' THEN ic.enterpriseName WHEN
+        rc.personRealName IS NOT NULL AND rc.personRealName != '' THEN rc.personRealName END AS memberName ,
+        ic.enterpriseLinkman ,
+        CASE WHEN ic.identify = 2 THEN '个人会员' WHEN ic.identify != 2 then '企业会员' END AS memberType ,
+        CASE WHEN ic.workType = 100 then '管理员' when ic.workType != 100 then w. name end as worktype ,
+        (select group_concat(name) from t_dictionary_identity where find_in_set(id , ic.identify)) as identify ,
+        ic. STATUS AS infoStatus ,
+        rc. STATUS AS realStatus
+        FROM t_m_member_info_check ic
+        LEFT JOIN t_dictionary_workType w ON ic.workType = w.id
+        LEFT JOIN t_m_member_real_check rc ON ic.id = rc.id
+       WHERE  rc.status in (9,10,11)
+            <if test="account != null and account != '' ">
+                and (ic.email like CONCAT('%',#{account},'%') or ic.mobile like CONCAT('%',#{account},'%'))
+            </if>
+            <if test="memberName != null and memberName != '' ">
+                and (ic.enterpriseName like CONCAT('%',#{memberName},'%')
+                    or rc.personRealName likeCONCAT('%',#{memberName},'%'))
+            </if>
+            <if test="memberType != null and memberType == 2 ">
+                and ic.identify = 2
+            </if>
+            <if test="memberType != null and memberType == 1 ">
+                and ic.identify != 2
+            </if>
+            <if test="identify != null and identify != '' ">
+                and find_in_set(#{identify},m.identify)
+            </if>
+            <if test="status != null and status != ''" >
+                and rc.status = #{status}
+            </if>
+    </select>
+
     <select id="findAllMemCertificateByPager" resultMap="ResultMap2"
             parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
         select r.certificate_name,r.certificate_grade,date_format(r.time,'%Y-%m-%d %H:%i:%s')

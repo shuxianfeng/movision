@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -51,20 +52,29 @@ public class OmsMemService {
     }
 
     public List<Map<String, Object>> getAllcheckMemInfo(Paging<Map<String, Object>> pager, OmsMemBean member) {
-        List<Map<String, Object>> memberList;
+        List<Map<String, Object>> memberList = new ArrayList<>();
         try {
-            memberList = memberMapper.findAllcheckMemberByPager(pager.getRowBounds(), member);
-            for (Map<String, Object> map : memberList) {
-                if (member.getType() == null) {
-                    map.put("status", map.get("infoStatus"));
-                } else {
-                    if (member.getType().equals("2")) {      //资料审核
+            String type = member.getType();
+            if(type != null){
+                if(type.equals("2")){    //实名认证
+                    memberList = memberMapper.findAllInfocheckMemberByPager(pager.getRowBounds(), member);
+                }else if (type.equals("1")){   //基本资料
+                    memberList = memberMapper.findAllRealcheckMemberByPager(pager.getRowBounds(), member);
+                }
+
+                for (Map<String, Object> map : memberList) {
+                    if (member.getType() == null) {
                         map.put("status", map.get("infoStatus"));
-                    } else if (member.getType().equals("1")) {     //实名认证
-                        map.put("status", map.get("realStatus"));
+                    } else {
+                        if (member.getType().equals("2")) {      //资料审核
+                            map.put("status", map.get("infoStatus"));
+                        } else if (member.getType().equals("1")) {     //实名认证
+                            map.put("status", map.get("realStatus"));
+                        }
                     }
                 }
             }
+
         } catch (Exception e) {
             log.error("getAllcheckMemInfo()执行异常>>>", e);
             e.printStackTrace();

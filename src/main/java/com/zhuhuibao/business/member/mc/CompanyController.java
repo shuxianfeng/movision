@@ -149,7 +149,6 @@ public class CompanyController {
     @RequestMapping(value = "upd_mem_realName_info", method = RequestMethod.POST)
     public Response upd_mem_realName_info(@ApiParam("企业名称")@RequestParam String enterpriseName,
                                           @ApiParam("营业执照图片URL")@RequestParam String companyBusinessLicenseImg)  {
-        Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
         ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
         MemRealCheck member = new MemRealCheck();
@@ -160,7 +159,12 @@ public class CompanyController {
                     ||loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()){
                 member.setStatus(MemberConstant.MemberStatus.SMRZDSH.intValue());
             }
-            member.setEnterpriseName(enterpriseName);
+            //实名认证审核通过之后 企业名称不可修改
+            String status = memRealCheckService.getStatusById(memberId);
+            if(!status.equals(MemberConstant.MemberStatus.SMRZYRZ.toString())){
+                member.setEnterpriseName(enterpriseName);
+            }
+
             member.setCompanyBusinessLicenseImg(companyBusinessLicenseImg);
             memRealCheckService.update(member);
             Member mem = memberService.findMemById(String.valueOf(memberId));
@@ -174,7 +178,7 @@ public class CompanyController {
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-        return result;
+        return new Response();
     }
 
     @ApiOperation(value = "企业资质保存", notes = "企业资质保存", response = Response.class)
