@@ -34,6 +34,8 @@ public class CheckBrand {
     private String lastmodifytime;
 
     private String description;
+    
+    private String enterpriseName;
 
     public Integer getId() {
         return id;
@@ -162,4 +164,14 @@ public class CheckBrand {
     public void setDescription(String description) {
         this.description = description == null ? null : description.trim();
     }
+
+	public String getEnterpriseName() {
+		return enterpriseName;
+	}
+
+	public void setEnterpriseName(String enterpriseName) {
+		this.enterpriseName = enterpriseName;
+	}
+    
+    
 }

@@ -17,6 +17,7 @@
     <result column="publishTime" property="publishtime" jdbcType="TIMESTAMP" />
     <result column="checkTime" property="checktime" jdbcType="TIMESTAMP" />
     <result column="lastModifyTime" property="lastmodifytime" jdbcType="TIMESTAMP" />
+    <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.memCenter.entity.CheckBrand" extends="BaseResultMap" >
     <result column="description" property="description" jdbcType="LONGVARCHAR" />
@@ -200,7 +201,7 @@
 
   <select id="findAllByPager" resultMap="BaseResultMap" >
     select
-    b.CNName,b.owner,b.id,b.certificate,b.webSite,b.publishTime,b.logourl,b.status,m.enterpriseName
+    b.CNName,b.owner,b.id,b.certificate,b.webSite,date_format(b.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,b.logourl,b.status,m.enterpriseName
     from t_p_brand_check b
     LEFT JOIN t_m_member m on b.createid = m.id
     WHERE 1=1
