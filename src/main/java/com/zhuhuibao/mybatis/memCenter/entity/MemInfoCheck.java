@@ -18,7 +18,7 @@ public class MemInfoCheck {
 
     private String enterpriseName;
 
-    private Integer workType;
+    private int workType;
     private String workTypeName;
 
     private Long enterpriseEmployeeParentId;

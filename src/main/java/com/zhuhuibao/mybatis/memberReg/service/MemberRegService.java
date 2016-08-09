@@ -99,12 +99,10 @@ public class MemberRegService {
 				//基本资料审核表+实名认证审核表插入数据
 				MemInfoCheck infoCheck = new MemInfoCheck();
 				BeanUtils.copyProperties(member,infoCheck);
-				infoCheck.setId((long) memberId);
 				infoCheckMapper.insertSelective(infoCheck);
 
 				MemRealCheck realCheck = new MemRealCheck();
 				BeanUtils.copyProperties(member,realCheck);
-				realCheck.setId((long) memberId);
 				realCheckMapper.insertSelective(realCheck);
 
 
