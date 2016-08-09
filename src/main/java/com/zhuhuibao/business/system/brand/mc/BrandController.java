@@ -99,7 +99,7 @@ public class BrandController {
                     //更新品牌基本信息
                     checkBrandService.updateBrand(brand);
                     //删除原有的对应关系
-                    brandService.deleteBrandSysByBrandID(brand.getId());
+                    checkBrandService.deleteBrandSysByBrandID(brand.getId());
                     //插入新的对应关系
                     Gson gson=new Gson();
                     List<CheckSysBrand> rs= new ArrayList<CheckSysBrand>();
