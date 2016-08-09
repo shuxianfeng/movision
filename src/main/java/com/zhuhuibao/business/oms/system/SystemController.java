@@ -204,7 +204,7 @@ public class SystemController {
             checkBrandService.addSysBrand(sysBrand);
         }
         //审核通过，将字表的数据同步到主表，包括基本信息表和品牌所属分类表
-        if("1".equals(brand.getStatus())){
+        if("1".equals(brand.getStatus().toString())){
             CheckBrand checkBrand = checkBrandService.queryBrandById(String.valueOf(brand.getId()));
             Brand newBrand = new Brand();
             newBrand.setId(checkBrand.getId());
