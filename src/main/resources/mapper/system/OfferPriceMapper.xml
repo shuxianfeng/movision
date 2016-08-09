@@ -200,7 +200,7 @@
     left join t_dictionary_province p on p.code = a.provinceCode
     left join t_dictionary_city c on c.code = a.cityCode
     left join t_dictionary_area ar on ar.code = a.areaCode
-    left join t_p_category ct on ct.id = a.fcateid
+    left join t_dictionary_constant ct on ct.code = a.fcateid and ct.type = 26
     where t.id = #{id}
   </select>
 
