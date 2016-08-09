@@ -193,7 +193,7 @@ public class SystemController {
         //审核品牌基本信息
         checkBrandService.updateBrand(brand);
         //删除原有的对应关系
-        brandService.deleteBrandSysByBrandID(brand.getId());
+        checkBrandService.deleteBrandSysByBrandID(brand.getId());
         //插入新的对应关系
         Gson gson=new Gson();
         List<CheckSysBrand> rs= new ArrayList<CheckSysBrand>();
@@ -201,10 +201,10 @@ public class SystemController {
         rs = gson.fromJson(json, type);
         for(CheckSysBrand sysBrand:rs){
             sysBrand.setBrandid(String.valueOf(brand.getId()));
-            brandService.addSysBrand(sysBrand);
+            checkBrandService.addSysBrand(sysBrand);
         }
         //审核通过，将字表的数据同步到主表，包括基本信息表和品牌所属分类表
-        if("1".equals(brand.getStatus())){
+        if("1".equals(brand.getStatus().toString())){
             CheckBrand checkBrand = checkBrandService.queryBrandById(String.valueOf(brand.getId()));
             Brand newBrand = new Brand();
             newBrand.setId(checkBrand.getId());
@@ -223,9 +223,21 @@ public class SystemController {
             //判断是否是第一次审核通过
             Brand isExist = brandService.brandDetails(String.valueOf(brand.getId()));
             if(isExist!=null){
-                brandService.addBrand(newBrand);
-            }else {
                 brandService.updateBrand(newBrand);
+            }else {
+                brandService.addBrand(newBrand);
+            }
+
+            //删除原有的对应关系
+            brandService.deleteBrandSysByBrandID(brand.getId());
+            //插入新的对应关系
+            Gson gson1=new Gson();
+            List<SysBrand> rs1= new ArrayList<SysBrand>();
+            Type type1 = new TypeToken<ArrayList<SysBrand>>() {}.getType();
+            rs1 = gson1.fromJson(json, type1);
+            for(SysBrand sysBrand:rs1){
+                sysBrand.setBrandid(String.valueOf(brand.getId()));
+                brandService.addSysBrand(sysBrand);
             }
         }
 

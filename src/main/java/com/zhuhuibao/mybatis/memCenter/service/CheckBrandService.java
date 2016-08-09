@@ -2,7 +2,9 @@ package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.entity.CheckBrand;
+import com.zhuhuibao.mybatis.memCenter.entity.CheckSysBrand;
 import com.zhuhuibao.mybatis.memCenter.mapper.CheckBrandMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.CheckSysBrandMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,9 @@ public class CheckBrandService {
 
     @Autowired
     private CheckBrandMapper checkBrandMapper;
+
+    @Autowired
+    private CheckSysBrandMapper checkSysBrandMapper;
 
     public int addBrand(CheckBrand brand) {
         try {
@@ -73,6 +78,24 @@ public class CheckBrandService {
     public List<CheckBrand> searchBrandByPager(Paging<CheckBrand> pager, Map<String,Object> map) {
         try {
             return checkBrandMapper.findAllByPager(pager.getRowBounds(), map);
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw e;
+        }
+    }
+
+    public int deleteBrandSysByBrandID(Integer id) {
+        try {
+            return checkSysBrandMapper.deleteBrandSysByBrandID(id);
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw e;
+        }
+    }
+
+    public int addSysBrand(CheckSysBrand sysBrand) {
+        try {
+            return checkSysBrandMapper.insertSelective(sysBrand);
         } catch (Exception e) {
             log.error("执行异常>>>", e);
             throw e;

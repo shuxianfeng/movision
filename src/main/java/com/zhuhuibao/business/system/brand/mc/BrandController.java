@@ -55,7 +55,7 @@ public class BrandController {
             int brandId = checkBrandService.addBrand(brand);
             for(CheckSysBrand sysBrand:rs){
                 sysBrand.setBrandid(String.valueOf(brandId));
-                brandService.addSysBrand(sysBrand);
+                checkBrandService.addSysBrand(sysBrand);
             }
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -99,7 +99,7 @@ public class BrandController {
                     //更新品牌基本信息
                     checkBrandService.updateBrand(brand);
                     //删除原有的对应关系
-                    brandService.deleteBrandSysByBrandID(brand.getId());
+                    checkBrandService.deleteBrandSysByBrandID(brand.getId());
                     //插入新的对应关系
                     Gson gson=new Gson();
                     List<CheckSysBrand> rs= new ArrayList<CheckSysBrand>();
@@ -107,7 +107,7 @@ public class BrandController {
                     rs = gson.fromJson(json, type);
                     for(CheckSysBrand sysBrand:rs){
                         sysBrand.setBrandid(String.valueOf(brand.getId()));
-                        brandService.addSysBrand(sysBrand);
+                        checkBrandService.addSysBrand(sysBrand);
                     }
                 }else {
                     throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
