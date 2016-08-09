@@ -122,17 +122,14 @@ public class MembersService implements IMembersService {
 				sortorder = spec.getSortorder();
 				result.put("sortorder", spec.getSortorder());
 			}
-			if (sort.equals("registerTime1") || sort.equals("weightLevel")) {
-//				sortField.put("field", sort);
-//				sortField.put("type", "LONG");
-//				sortField.put("reverse",FormatUtil.parseBoolean(sortorder));
+			if (sort.equals("registerTime1") || sort.equals("weightLevel")) {    //这里好奇怪对不对，想知道为什么么？你猜啊╮(╯_╰)╭
 				sortField.put("field", "weightLevel");
 				sortField.put("type", "DOUBLE");
 				sortField.put("reverse", FormatUtil.parseBoolean(sortorder));
 			}
-		}else {
-			sortField.put("field", "id");
-			sortField.put("type", "INT");
+		}else {   //猜不到吧,就是这么调皮→ →
+			sortField.put("field", "registerTime1");
+			sortField.put("type", "LONG");
 			sortField.put("reverse",FormatUtil.parseBoolean(true));
 		}
 		sortFields.add(sortField);
@@ -152,17 +149,14 @@ public class MembersService implements IMembersService {
 				sortorder = spec.getSortorder();
 				result.put("sortorder", spec.getSortorder());
 			}
-			if (sort.equals("registerTime1")) {
-//                sortField.put("field", sort);
-//                sortField.put("type", "LONG");
-//                sortField.put("reverse", FormatUtil.parseBoolean(sortorder));
+			if (sort.equals("registerTime1")) {   //这里好奇怪对不对，想知道为什么么？你猜啊╮(╯_╰)╭
 				sortField.put("field", "certLevel");
-				sortField.put("type", "LONG");
+				sortField.put("type", "DOUBLE");
 				sortField.put("reverse", FormatUtil.parseBoolean(sortorder));
 			}
-		}else {
-			sortField.put("field", "id");
-			sortField.put("type", "INT");
+		}else {   //猜不到吧,就是这么调皮→ →
+			sortField.put("field", "registerTime1");
+			sortField.put("type", "LONG");
 			sortField.put("reverse",FormatUtil.parseBoolean(true));
 		}
 		sortFields.add(sortField);

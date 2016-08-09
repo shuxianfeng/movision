@@ -200,7 +200,7 @@ public class AlipayService {
 
 
         } catch (Exception e) {
-            log.error("获取out对象异常>>>",e);
+            log.error("获取out对象异常>>>", e);
             e.printStackTrace();
         }
         return modelAndView;
@@ -294,8 +294,13 @@ public class AlipayService {
         sParaTemp.put("_input_charset", aliPayConfig.getInputCharset());//编码格式
         sParaTemp.put("payment_type", aliPayConfig.getPaymentType());   //支付类型 ，无需修改
         sParaTemp.put("service", msgParam.get("service"));              //接口名称
-        sParaTemp.put("notify_url", msgParam.get("notifyUrl"));         //服务器异步通知页面路径
-//        sParaTemp.put("return_url", msgParam.get("returnUrl"));       //页面跳转同步通知页面路径
+        String noticeTag = AlipayPropertiesLoader.getPropertyValue("alipay_back_switch");
+        if (noticeTag.equals("sync")) {
+            sParaTemp.put("return_url", msgParam.get("returnUrl"));       //页面跳转同步通知页面路径
+        } else if (noticeTag.equals("async")) {
+            sParaTemp.put("notify_url", msgParam.get("notifyUrl"));         //服务器异步通知页面路径
+        }
+
         sParaTemp.put("partner", msgParam.get("partner"));              //合作伙伴ID  == 商家支付宝账户号
         sParaTemp.put("seller_id", msgParam.get("partner"));            //partner = seller_id
 
@@ -409,55 +414,13 @@ public class AlipayService {
             //异步通知
             if (notifyType.equals(PayConstants.NotifyType.ASYNC.toString())) {
                 log.error("异步通知返回记录处理...[{}]", params.get("out_trade_no"));
-                //即时到账支付
-                if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
-                    recordPayAsyncCallbackLog(params);
-                    //2-> 判断是否存在筑慧币支付方式
-                    OrderFlow orderFlow = orderFlowService.findByOrderNoAndTradeMode(params.get("out_trade_no"),
-                            PayConstants.PayMode.ZHBPAY.toString());
-                    if (orderFlow != null) {
-                        String tradeStatus = orderFlow.getTradeStatus();
-                        if (tradeStatus.equals(PayConstants.OrderStatus.YZF.toString())) {
-                            //3-> 修改订单状态为已支付
-                            order.setStatus(PayConstants.OrderStatus.YZF.toString());
-                        }
-                    } else {
-                        //3-> 修改订单状态为已支付
-                        OrderFlow alFlow = new OrderFlow();
-                        alFlow.setOrderNo(params.get("out_trade_no"));
-                        alFlow.setTradeStatus(PayConstants.OrderStatus.YZF.toString());
-                        alFlow.setTradeTime(new Date());
-                        alFlow.setUpdateTime(new Date());
-                        orderFlowService.update(alFlow);
-                        log.error("修改t_o_order_flow status>>>");
-                        order.setStatus(PayConstants.OrderStatus.YZF.toString());
-                    }
+                callbackNotice(params, tradeType, order);
 
-                    //2. 修改订单状态
-                    boolean suc = orderService.update(order);
-                     log.error("update t_o_order status :>>>>" + suc);
-                    //购买筑慧币,VIP 需要回调
-                    if (suc) {
-                        String orderNo = params.get("out_trade_no");
-                        callbackZhbPay(orderNo);
-                    } else {
-                        throw new BusinessException(MsgCodeConstant.PAY_ERROR, "业务处理失败");
-                    }
-
-                }
-                //退款
-                if (tradeType.equals(PayConstants.TradeType.REFUND.toString())) {
-                    recordRefundAsyncCallbackLog(params);
-                    //修改订单状态为已支付
-                    order.setStatus(PayConstants.OrderStatus.YTK.toString());
-
-                    //2. 修改订单状态
-                    orderService.update(order);
-                }
             }
             //同步通知
             if (notifyType.equals(PayConstants.NotifyType.SYNC.toString())) {
-                log.info("同步通知返回记录处理...");
+                log.error("同步通知返回记录处理...[{}]", params.get("out_trade_no"));
+//                callbackNotice(params, tradeType, order);
             }
 
             resultMap.put("statusCode", String.valueOf(PayConstants.HTTP_SUCCESS_CODE));
@@ -469,6 +432,61 @@ public class AlipayService {
 
 
         return resultMap;
+    }
+
+    /**
+     * 支付回调通知
+     *
+     * @param params
+     * @param tradeType
+     * @param order
+     */
+    private void callbackNotice(Map<String, String> params, String tradeType, Order order) {
+        //即时到账支付
+        if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
+            recordPayAsyncCallbackLog(params);
+            //2-> 判断是否存在筑慧币支付方式
+            OrderFlow orderFlow = orderFlowService.findByOrderNoAndTradeMode(params.get("out_trade_no"),
+                    PayConstants.PayMode.ZHBPAY.toString());
+            if (orderFlow != null) {
+                String tradeStatus = orderFlow.getTradeStatus();
+                if (tradeStatus.equals(PayConstants.OrderStatus.YZF.toString())) {
+                    //3-> 修改订单状态为已支付
+                    order.setStatus(PayConstants.OrderStatus.YZF.toString());
+                }
+            } else {
+                //3-> 修改订单状态为已支付
+                OrderFlow alFlow = new OrderFlow();
+                alFlow.setOrderNo(params.get("out_trade_no"));
+                alFlow.setTradeStatus(PayConstants.OrderStatus.YZF.toString());
+                alFlow.setTradeTime(new Date());
+                alFlow.setUpdateTime(new Date());
+                orderFlowService.update(alFlow);
+                log.error("修改t_o_order_flow status>>>");
+                order.setStatus(PayConstants.OrderStatus.YZF.toString());
+            }
+
+            //2. 修改订单状态
+            boolean suc = orderService.update(order);
+            log.error("update t_o_order status :>>>>" + suc);
+            //购买筑慧币,VIP 需要回调
+            if (suc) {
+                String orderNo = params.get("out_trade_no");
+                callbackZhbPay(orderNo);
+            } else {
+                throw new BusinessException(MsgCodeConstant.PAY_ERROR, "业务处理失败");
+            }
+
+        }
+        //退款
+        if (tradeType.equals(PayConstants.TradeType.REFUND.toString())) {
+            recordRefundAsyncCallbackLog(params);
+            //修改订单状态为已支付
+            order.setStatus(PayConstants.OrderStatus.YTK.toString());
+
+            //2. 修改订单状态
+            orderService.update(order);
+        }
     }
 
     /**
@@ -495,7 +513,7 @@ public class AlipayService {
                 }
             }
         } catch (Exception e) {
-            log.error("筑慧币充值失败:" ,e);
+            log.error("筑慧币充值失败:", e);
         }
     }
 
@@ -517,7 +535,7 @@ public class AlipayService {
             BeanUtils.populate(refundCallbackLog, pMap);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("支付宝回调参数map转换为bean异常>>>" ,e);
+            log.error("支付宝回调参数map转换为bean异常>>>", e);
         }
 
         refundCallbackLogService.insert(refundCallbackLog);
