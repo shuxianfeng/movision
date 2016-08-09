@@ -72,7 +72,12 @@ public class CompanyInfoController {
 
         //页面展示
         Map map = new HashMap();
-        map.put("vipLevel",vip.getVipLevel());
+        if(vip!=null){
+            map.put("vipLevel",vip.getVipLevel());
+        }else {
+            map.put("vipLevel",100);
+        }
+
         map.put("logo",member.getEnterpriseLogo());
         map.put("companyName",member.getEnterpriseName());
         map.put("webSite",member.getEnterpriseWebSite());

@@ -223,9 +223,9 @@ public class SystemController {
             //判断是否是第一次审核通过
             Brand isExist = brandService.brandDetails(String.valueOf(brand.getId()));
             if(isExist!=null){
-                brandService.addBrand(newBrand);
-            }else {
                 brandService.updateBrand(newBrand);
+            }else {
+                brandService.addBrand(newBrand);
             }
         }
 
