@@ -7,6 +7,7 @@ import com.zhuhuibao.common.pojo.SuggestBrand;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.entity.CheckSysBrand;
+import com.zhuhuibao.mybatis.memCenter.entity.SysBrand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.CheckSysBrandMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.SysBrandMapper;
@@ -211,18 +212,11 @@ public class BrandService {
         return list;
     }
 
-    public int addSysBrand(CheckSysBrand sysBrand) {
-        try {
-            return checkSysBrandMapper.insertSelective(sysBrand);
-        } catch (Exception e) {
-            log.error("执行异常>>>", e);
-            throw e;
-        }
-    }
+
 
     public int deleteBrandSysByBrandID(Integer id) {
         try {
-            return checkSysBrandMapper.deleteBrandSysByBrandID(id);
+            return sysBrandMapper.deleteBrandSysByBrandID(id);
         } catch (Exception e) {
             log.error("执行异常>>>", e);
             throw e;
@@ -253,5 +247,14 @@ public class BrandService {
             throw e;
         }
         return list;
+    }
+
+    public int addSysBrand(SysBrand sysBrand) {
+        try {
+            return sysBrandMapper.insertSelective(sysBrand);
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw e;
+        }
     }
 }
