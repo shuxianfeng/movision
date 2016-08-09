@@ -19,6 +19,7 @@ public class MemInfoCheck {
     private String enterpriseName;
 
     private Integer workType;
+    private String workTypeName;
 
     private Long enterpriseEmployeeParentId;
 
@@ -83,10 +84,27 @@ public class MemInfoCheck {
     private Integer sex;
 
     private String personCompanyType;
+    private String personCompanyTypeName;
 
     private String reason;
 
     private String enterpriseDesc;
+
+    public String getWorkTypeName() {
+        return workTypeName;
+    }
+
+    public void setWorkTypeName(String workTypeName) {
+        this.workTypeName = workTypeName;
+    }
+
+    public String getPersonCompanyTypeName() {
+        return personCompanyTypeName;
+    }
+
+    public void setPersonCompanyTypeName(String personCompanyTypeName) {
+        this.personCompanyTypeName = personCompanyTypeName;
+    }
 
     public String getIdentifyName() {
         return identifyName;

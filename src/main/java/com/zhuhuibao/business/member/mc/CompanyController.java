@@ -123,6 +123,7 @@ public class CompanyController {
         Long memberId = ShiroUtil.getCreateID();
         ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
         if(memberId!=null){
+
             member.setId(memberId);
             //基本资料待审核
             if(loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue()
