@@ -7,8 +7,13 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.ResultBean;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
+import com.zhuhuibao.mybatis.memCenter.entity.CheckBrand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.oms.entity.ComplainSuggest;
@@ -17,6 +22,7 @@ import com.zhuhuibao.mybatis.oms.service.ComplainSuggestService;
 import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs;
 import com.zhuhuibao.mybatis.product.service.ProductService;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
@@ -79,7 +85,23 @@ public class ProductPublishMcController {
     @RequestMapping(value = {"/rest/updateProduct", "/rest/system/mc/product/upd_product"}, method = RequestMethod.POST)
     @ApiOperation(value = "更新产品", notes = "更新产品", response = Response.class)
     public Response updateProduct(ProductWithBLOBs product) throws IOException {
-        return  productService.updateProduct(product);
+        Response response = new Response();
+        Long createid = ShiroUtil.getCreateID();
+        if(createid!=null){
+            Product b = productService.findById(product.getId());
+            if(b!=null){
+                if(String.valueOf(createid).equals(String.valueOf(b.getCreateid()))){
+                    response = productService.updateProduct(product);
+                }else {
+                    throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
+                }
+            }else {
+                throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
+            }
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
     }
 
     @RequestMapping(value = {"/rest/updateProductStatus", "/rest/system/mc/product/upd_productStatus"}, method = RequestMethod.POST)

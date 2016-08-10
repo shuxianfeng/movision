@@ -58,5 +58,4 @@ public interface MemberMapper {
     List<Map<String,Object>> findAllInfocheckMemberByPager(RowBounds rowBounds, OmsMemBean member);
 
     List<Map<String,Object>> findAllRealcheckMemberByPager(RowBounds rowBounds, OmsMemBean member);
-
 }
