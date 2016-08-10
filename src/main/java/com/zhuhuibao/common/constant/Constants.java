@@ -25,6 +25,10 @@ public class Constants {
      * 产品状态  注销：1
      */
     public static final Integer product_status_delete = 2;
+    /**
+     * 产品状态待审核
+     */
+    public static Integer product_status_nocheck=3;
 
     /**
      * 品牌详情页面展示产品的数量 10
