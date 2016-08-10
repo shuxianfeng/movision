@@ -12,6 +12,8 @@ import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.SuccessCaseService;
 import com.zhuhuibao.mybatis.product.service.ProductService;
+import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
+import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,12 +51,18 @@ public class CompanyInfoController {
     @Autowired
     MemShopService memShopService;
 
+    @Autowired
+    VipInfoService vipInfoService;
+
     @ApiOperation(value = "商户主页相关信息", notes = "商户主页相关信息")
     @RequestMapping(value = "sel_index_companyInfo", method = RequestMethod.GET)
     public Response companyInfo(@ApiParam(value = "商户id")@RequestParam String id)  {
 
         //查询公司信息
         Member member = memberService.findMemById(id);
+
+        //查询公司vip信息
+        VipMemberInfo vip = vipInfoService.findVipMemberInfoById(Long.parseLong(id));
 
         //查询公司产品类别
         Map<String,Object> queryMap = new HashMap<>();
@@ -64,6 +72,12 @@ public class CompanyInfoController {
 
         //页面展示
         Map map = new HashMap();
+        if(vip!=null){
+            map.put("vipLevel",vip.getVipLevel());
+        }else {
+            map.put("vipLevel",100);
+        }
+
         map.put("logo",member.getEnterpriseLogo());
         map.put("companyName",member.getEnterpriseName());
         map.put("webSite",member.getEnterpriseWebSite());

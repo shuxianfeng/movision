@@ -3,6 +3,7 @@ package com.zhuhuibao.business.tech.site;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
@@ -47,6 +48,7 @@ public class TechCoopController {
     @Autowired
     PaymentService paymentService;
 
+    @LoginAccess
     @RequestMapping(value = "add_tech_cooperation", method = RequestMethod.POST)
     @ApiOperation(value = "发布技术成果", notes = "新增技术技术成果", response = Response.class)
     public Response insertTechCooperation(@ApiParam(value = "技术合作：技术成果") @ModelAttribute(value = "techCoop") TechCooperation techCoop) throws Exception {

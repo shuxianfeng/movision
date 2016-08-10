@@ -5,10 +5,13 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.business.mall.MallIndexController;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.memCenter.entity.MemShopCheck;
 import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
+import com.zhuhuibao.mybatis.memCenter.service.MemShopCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -45,11 +48,14 @@ public class OmsShopController {
     @Autowired
     MemberService memberService;
 
+    @Autowired
+    MemShopCheckService shopCheckService;
+
     @ApiOperation(value = "查询商户店铺信息", notes = "查询商户店铺信息")
     @RequestMapping(value = "sel_shop1", method = RequestMethod.GET)
     public Response searchOne(@ApiParam("商铺ID") @RequestParam String shopId) {
 
-        MemberShop shop = memShopService.findByID(shopId);
+        MemShopCheck shop = shopCheckService.findByID(shopId);
 
         if (shop == null) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "商铺不存在");
@@ -63,8 +69,8 @@ public class OmsShopController {
                                @ApiParam("企业名称") @RequestParam(required = false) String companyName,
                                @ApiParam("店铺名称") @RequestParam(required = false) String shopName,
                                @ApiParam("审核状态") @RequestParam(required = false) String status,
-                               @RequestParam(required = false,defaultValue = "1") String pageNo,
-                               @RequestParam(required = false,defaultValue = "10") String pageSize) {
+                               @RequestParam(required = false, defaultValue = "1") String pageNo,
+                               @RequestParam(required = false, defaultValue = "10") String pageSize) {
         log.debug("搜索商铺...");
 
         Map<String, String> paramMap = new HashMap<>();
@@ -81,33 +87,43 @@ public class OmsShopController {
         if (!StringUtils.isEmpty(status)) {
             paramMap.put("status", status);
         }
-        Paging<MemberShop> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<MemShopCheck> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 
-        List<MemberShop> list = memShopService.findAllByCondition(pager, paramMap);
+        List<MemShopCheck> list = shopCheckService.findAllByCondition(pager, paramMap);
         pager.result(list);
 
         return new Response(pager);
     }
 
 
-    @ApiOperation(value = "更新商户店铺状态", notes = "更新商户店铺状态")
+    @ApiOperation(value = "更新商户店铺状态(审核)", notes = "更新商户店铺状态(审核)")
     @RequestMapping(value = "upd_shop_st", method = RequestMethod.POST)
     public Response uploadStatus(@ApiParam("商铺ID") @RequestParam String shopId,
-                                 @ApiParam("状态 1：待审核 2：已审核  3：已拒绝 4：已注销") @RequestParam  String status,
-                                 @ApiParam("拒绝理由") @RequestParam(required = false)  String reason) {
-        MemberShop shop = check(shopId);
+                                 @ApiParam("状态 1：待审核 2：已审核  3：已拒绝 4：已注销") @RequestParam String status,
+                                 @ApiParam("拒绝理由") @RequestParam(required = false) String reason) {
+        MemShopCheck shopCheck = check(shopId);
 
-      
-        shop.setStatus(status);
+        shopCheck.setStatus(status);
 
-        if ("3".equals(status)) {
+        if (MemberConstant.ShopStatus.YJJ.toString().equals(status)) {
             if (StringUtils.isEmpty(reason)) {
                 throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "拒绝理由不能为空");
             }
-            shop.setReason(reason);
+            shopCheck.setReason(reason);
         }
 
-        memShopService.update(shop);
+        shopCheckService.update(shopCheck);
+
+        //同步审核通过之后的信息到主表
+        if (MemberConstant.ShopStatus.YSH.toString().equals(status)) {
+            MemberShop shop = new MemberShop();
+            shop.setId(shopCheck.getId());
+            shop.setShopName(shopCheck.getShopName());
+            shop.setBannerUrl(shopCheck.getBannerUrl());
+            shop.setUpdateTime(shopCheck.getUpdateTime());
+            shop.setOpreatorId(shopCheck.getOpreatorId());
+            memShopService.update(shop);
+        }
 
         return new Response();
     }
@@ -119,14 +135,11 @@ public class OmsShopController {
      * @param shopId
      * @return
      */
-    private MemberShop check(@ApiParam("商铺ID") @RequestParam String shopId) {
-//        Long companyID =ShiroUtil.getCompanyID();
-//        if(companyID == null){
-//            throw new BusinessException(MsgCodeConstant.un_login, "请登录");
-//        }
+    private MemShopCheck check(@ApiParam("商铺ID") @RequestParam String shopId) {
+
         //验证店铺ID是否为该用户所在企业的店铺
-        MemberShop shop = memShopService.findByID(shopId);
-                //.findByCompanyID(companyID);
+        MemShopCheck shop = shopCheckService.findByID(shopId);
+
         if (shop == null) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "用户商铺不存在");
         } else {

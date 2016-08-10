@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.MemRealCheckMapper">
+    <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.MemRealCheck">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR"/>
+        <result column="companyBusinessLicenseImg" property="companyBusinessLicenseImg" jdbcType="VARCHAR"/>
+        <result column="personRealName" property="personRealName" jdbcType="VARCHAR"/>
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="personCompanyType" property="personCompanyType" jdbcType="VARCHAR"/>
+        <result column="personIdentifyCard" property="personIdentifyCard" jdbcType="VARCHAR"/>
+        <result column="personIDFrontImgUrl" property="personIDFrontImgUrl" jdbcType="VARCHAR"/>
+        <result column="personIDBackImgUrl" property="personIDBackImgUrl" jdbcType="VARCHAR"/>
+        <result column="reason" property="reason" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, mobile, email, updateTime, status, enterpriseName, companyBusinessLicenseImg,
+        personRealName, nickname, personCompanyType, personIdentifyCard, personIDFrontImgUrl,
+        personIDBackImgUrl, reason
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from t_m_member_real_check
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="findMemrealCheck" resultType="java.util.Map">
+        SELECT
+            rc.*,
+            ic.enterpriseName,
+            ic.identify,
+            date_format(ic.enterpriseCreaterTime,'%Y-%m-%d') enterpriseCreaterTime,
+            ic.registerCapital,
+            ic.currency,
+            ic.province,
+            ic.city,
+            ic.area,
+            ic.address,
+            ic.saleProductDesc
+        FROM
+            t_m_member_real_check rc,
+            t_m_member_info_check ic
+        WHERE
+            ic.id = rc.id AND rc.id = #{id}
+    </select>
+    <select id="getStatusById" resultType="java.lang.String">
+        SELECT status
+        FROM t_m_member_real_check
+        WHERE id =#{id};
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM t_m_member_real_check
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.zhuhuibao.mybatis.memCenter.entity.MemRealCheck">
+        INSERT INTO t_m_member_real_check (id, mobile, email,
+                                           updateTime, status, enterpriseName,
+                                           companyBusinessLicenseImg, personRealName,
+                                           nickname, personCompanyType, personIdentifyCard,
+                                           personIDFrontImgUrl, personIDBackImgUrl,
+                                           reason)
+        VALUES (#{id,jdbcType=BIGINT}, #{mobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+        #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{enterpriseName,jdbcType=VARCHAR},
+        #{companyBusinessLicenseImg,jdbcType=VARCHAR}, #{personRealName,jdbcType=VARCHAR},
+        #{nickname,jdbcType=VARCHAR}, #{personCompanyType,jdbcType=VARCHAR}, #{personIdentifyCard,jdbcType=VARCHAR},
+        #{personIDFrontImgUrl,jdbcType=VARCHAR}, #{personIDBackImgUrl,jdbcType=VARCHAR},
+        #{reason,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.MemRealCheck">
+        insert into t_m_member_real_check
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="mobile != null">
+                mobile,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="updateTime != null">
+                updateTime,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="enterpriseName != null">
+                enterpriseName,
+            </if>
+            <if test="companyBusinessLicenseImg != null">
+                companyBusinessLicenseImg,
+            </if>
+            <if test="personRealName != null">
+                personRealName,
+            </if>
+            <if test="nickname != null">
+                nickname,
+            </if>
+            <if test="personCompanyType != null">
+                personCompanyType,
+            </if>
+            <if test="personIdentifyCard != null">
+                personIdentifyCard,
+            </if>
+            <if test="personIDFrontImgUrl != null">
+                personIDFrontImgUrl,
+            </if>
+            <if test="personIDBackImgUrl != null">
+                personIDBackImgUrl,
+            </if>
+            <if test="reason != null">
+                reason,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="enterpriseName != null">
+                #{enterpriseName,jdbcType=VARCHAR},
+            </if>
+            <if test="companyBusinessLicenseImg != null">
+                #{companyBusinessLicenseImg,jdbcType=VARCHAR},
+            </if>
+            <if test="personRealName != null">
+                #{personRealName,jdbcType=VARCHAR},
+            </if>
+            <if test="nickname != null">
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="personCompanyType != null">
+                #{personCompanyType,jdbcType=VARCHAR},
+            </if>
+            <if test="personIdentifyCard != null">
+                #{personIdentifyCard,jdbcType=VARCHAR},
+            </if>
+            <if test="personIDFrontImgUrl != null">
+                #{personIDFrontImgUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="personIDBackImgUrl != null">
+                #{personIDBackImgUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="reason != null">
+                #{reason,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.MemRealCheck">
+        update t_m_member_real_check
+        <set>
+            <if test="mobile != null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="enterpriseName != null">
+                enterpriseName = #{enterpriseName,jdbcType=VARCHAR},
+            </if>
+            <if test="companyBusinessLicenseImg != null">
+                companyBusinessLicenseImg = #{companyBusinessLicenseImg,jdbcType=VARCHAR},
+            </if>
+            <if test="personRealName != null">
+                personRealName = #{personRealName,jdbcType=VARCHAR},
+            </if>
+            <if test="nickname != null">
+                nickname = #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="personCompanyType != null">
+                personCompanyType = #{personCompanyType,jdbcType=VARCHAR},
+            </if>
+            <if test="personIdentifyCard != null">
+                personIdentifyCard = #{personIdentifyCard,jdbcType=VARCHAR},
+            </if>
+            <if test="personIDFrontImgUrl != null">
+                personIDFrontImgUrl = #{personIDFrontImgUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="personIDBackImgUrl != null">
+                personIDBackImgUrl = #{personIDBackImgUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="reason != null">
+                reason = #{reason,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.memCenter.entity.MemRealCheck">
+        UPDATE t_m_member_real_check
+        SET mobile = #{mobile,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR},
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+        status = #{status,jdbcType=INTEGER},
+        enterpriseName = #{enterpriseName,jdbcType=VARCHAR},
+        companyBusinessLicenseImg = #{companyBusinessLicenseImg,jdbcType=VARCHAR},
+        personRealName = #{personRealName,jdbcType=VARCHAR},
+        nickname = #{nickname,jdbcType=VARCHAR},
+        personCompanyType = #{personCompanyType,jdbcType=VARCHAR},
+        personIdentifyCard = #{personIdentifyCard,jdbcType=VARCHAR},
+        personIDFrontImgUrl = #{personIDFrontImgUrl,jdbcType=VARCHAR},
+        personIDBackImgUrl = #{personIDBackImgUrl,jdbcType=VARCHAR},
+        reason = #{reason,jdbcType=VARCHAR}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

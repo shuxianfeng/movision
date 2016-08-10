@@ -80,7 +80,7 @@ public class MapUtil {
 	 * @return
 	 */
 	public static Map convert2HashMap(Object... args) {
-		Map<Object, Object> result = new HashMap<Object, Object>();
+		Map<Object, Object> result = new HashMap<>();
 
 		int argsNum = args.length;
 		if (argsNum % 2 == 0) {

@@ -117,6 +117,8 @@ public class AuthenticationController {
                 authcMember.setNickname(member.getNickname());
                 authcMember.setCompanyName(member.getCompanyName());
 
+                int message = siteMailService.selectUnreadMessageCount(member.getId());
+                authcMember.setMessage(message);
 
                 response.setMsgCode(1);
                 response.setMessage("welcome you!");

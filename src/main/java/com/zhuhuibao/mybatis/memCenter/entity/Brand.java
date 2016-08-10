@@ -27,7 +27,7 @@ public class Brand {
 
     private String imgurl;
 
-    private Integer status;
+    private String status;
 
     private String owner;
 
@@ -121,11 +121,11 @@ public class Brand {
         this.imgurl = imgurl;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

@@ -7,6 +7,7 @@ import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.AskPriceBean;
 import com.zhuhuibao.common.pojo.AskPriceResultBean;
 import com.zhuhuibao.common.pojo.AskPriceSearchBean;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
@@ -93,6 +94,14 @@ public class PriceService {
         Response result = new Response();
         try {
             AskPriceBean bean = askPriceMapper.queryAskPriceByID(id);
+            Long mem_id = ShiroUtil.getCreateID();
+            if(mem_id!=null){
+                if(bean.getCreateid().equals(String.valueOf(mem_id))){
+                    bean.setIsCan("0");
+                }else {
+                    bean.setIsCan("1");
+                }
+            }
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = sdf.parse(bean.getEndTime());
             if (date.before(new Date())) {
@@ -217,6 +226,8 @@ public class PriceService {
             map.put(Constants.title, askPrice.getTitle());
             map.put(Constants.publishTime, askPrice.getPublishTime().substring(0, 10));
             map.put(Constants.area, askPrice.getProvinceCode());
+            map.put("isCan", askPrice.getIsCan());
+            map.put("count", askPrice.getCount());
             list.add(map);
         }
         return list;

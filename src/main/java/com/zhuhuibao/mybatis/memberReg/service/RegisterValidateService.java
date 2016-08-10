@@ -3,6 +3,10 @@ package com.zhuhuibao.mybatis.memberReg.service;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck;
+import com.zhuhuibao.mybatis.memCenter.entity.MemRealCheck;
+import com.zhuhuibao.mybatis.memCenter.mapper.MemInfoCheckMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.MemRealCheckMapper;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.security.EncodeUtil;
@@ -30,6 +34,12 @@ public class RegisterValidateService {
 
 	@Autowired
 	MemberRegService memberService;
+
+    @Autowired
+    MemInfoCheckMapper infoCheckMapper;
+
+    @Autowired
+    MemRealCheckMapper realCheckMapper;
 
 	/**
 	 * 发送邮件激活验证码
@@ -123,6 +133,17 @@ public class RegisterValidateService {
 			               if(currentTime.before(registerDate)) {
 		                	   user.setStatus(1);
 		                	   memberService.updateMemberStatus(user);
+
+                               MemInfoCheck info = new MemInfoCheck();
+                               info.setId(user.getId());
+                               info.setStatus(1);
+                               infoCheckMapper.updateByPrimaryKeySelective(info);
+
+                               MemRealCheck real = new MemRealCheck();
+                               real.setId(user.getId());
+                               real.setStatus(1);
+                               realCheckMapper.updateByPrimaryKeySelective(real);
+
 		                       message = "激活成功请登录";
 		                       code = 200;
 		                       break;

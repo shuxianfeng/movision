@@ -207,6 +207,11 @@ public class MailController {
         Response response = new Response();
         Map<String,String> map = siteMailService.queryMyReceiveMsgById(id);
         response.setData(map);
+        //标记已读
+        Message message = new Message();
+        message.setId(id);
+        message.setStatus(MessageConstant.Status.YD.toString());
+        siteMailService.updateMessage(message);
         return response;
     }
 

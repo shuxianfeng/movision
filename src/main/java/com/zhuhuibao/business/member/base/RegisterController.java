@@ -411,4 +411,13 @@ public class RegisterController {
         rvService.sendMailActivateCode(Long.valueOf(id), email,PropertiesUtils.getValue("host.ip"));
         return new Response();
     }
+
+    @ApiOperation(value = "校验是否已经注册", notes = "校验是否已经注册", response = Response.class)
+    @RequestMapping(value = "rest/ckregisterl", method = RequestMethod.POST)
+    public Response checkRegister(@ApiParam("账号")@RequestParam String account){
+
+        int count =  memberService.findCountByAccount(account);
+
+        return new Response(count > 0);
+    }
 }

@@ -73,8 +73,7 @@ public class MemShopService {
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "更新数据失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("执行异常>>>",e);
             throw e;
         }
     }

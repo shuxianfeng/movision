@@ -3,12 +3,14 @@ package com.zhuhuibao.mybatis.memCenter.service;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.BrandBean;
 import com.zhuhuibao.common.pojo.BrandDetailBean;
-import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.pojo.SuggestBrand;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
+import com.zhuhuibao.mybatis.memCenter.entity.CheckSysBrand;
+import com.zhuhuibao.mybatis.memCenter.entity.SysBrand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
-import com.zhuhuibao.mybatis.product.entity.Product;
+import com.zhuhuibao.mybatis.memCenter.mapper.CheckSysBrandMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.SysBrandMapper;
 import com.zhuhuibao.mybatis.product.service.ProductService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -38,21 +40,18 @@ public class BrandService {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    SysBrandMapper sysBrandMapper;
+
+    @Autowired
+    CheckSysBrandMapper checkSysBrandMapper;
+
     /**
      * 根据会员id，状态status(可以为空)查询品牌
      */
     public List<Brand> searchBrandByStatus(Brand brand) {
         try {
             return brandMapper.searchBrandByStatus(brand);
-        } catch (Exception e) {
-            log.error("执行异常>>>", e);
-            throw e;
-        }
-    }
-
-    public List<Brand> searchBrand(Brand brand) {
-        try {
-            return brandMapper.searchBrand(brand);
         } catch (Exception e) {
             log.error("执行异常>>>", e);
             throw e;
@@ -68,9 +67,6 @@ public class BrandService {
         }
     }
 
-    /**
-     * 查询拥有产品的品牌
-     */
     public List<BrandBean> searchAll() {
         try {
             return brandMapper.searchAll();
@@ -80,9 +76,6 @@ public class BrandService {
         }
     }
 
-    /**
-     * 查询拥有产品的推荐品牌
-     */
     public List<SuggestBrand> SuggestBrand() {
         try {
             return brandMapper.SuggestBrand();
@@ -92,9 +85,6 @@ public class BrandService {
         }
     }
 
-    /**
-     * 查询二级系统下所有品牌,返回id,品牌logo
-     */
     public List<Map<String,Object>> findAllBrand(String scateid) {
         try {
             return brandMapper.findAllBrand(scateid);
@@ -104,9 +94,6 @@ public class BrandService {
         }
     }
 
-    /**
-     * 查询二级系统下所有品牌，返回id，name
-     */
     public List<Map<String,Object>> findBrandByScateid(String scateid) {
         try {
             return brandMapper.findBrandByScateid(scateid);
@@ -116,9 +103,6 @@ public class BrandService {
         }
     }
 
-    /**
-     * 查询推荐品牌
-     */
     public List<Map<String,Object>> searchSuggestBrand() {
         try {
             return brandMapper.searchSuggestBrand();
@@ -128,9 +112,6 @@ public class BrandService {
         }
     }
 
-    /**
-     * 查询品牌详情
-     */
     public BrandDetailBean details(String id) {
         try {
             return brandMapper.details(id);
@@ -140,21 +121,16 @@ public class BrandService {
         }
     }
 
-    /**
-     * 新建品牌
-     */
     public int addBrand(Brand brand) {
         try {
-            return brandMapper.addBrand(brand);
+            brandMapper.addBrand(brand);
+            return brand.getId();
         } catch (Exception e) {
             log.error("执行异常>>>", e);
             throw e;
         }
     }
 
-    /**
-     * 更新品牌
-     */
     public int updateBrand(Brand brand) {
         try {
             return brandMapper.updateBrand(brand);
@@ -164,9 +140,6 @@ public class BrandService {
         }
     }
 
-    /**
-     * 删除品牌
-     */
     public int deleteBrand(String id) {
         try {
             return brandMapper.deleteBrand(id);
@@ -176,9 +149,6 @@ public class BrandService {
         }
     }
 
-    /**
-     * 品牌数量
-     */
     public int searchBrandSize(Brand brand) {
         try {
             return brandMapper.searchBrandSize(brand);
@@ -188,21 +158,6 @@ public class BrandService {
         }
     }
 
-    /**
-     * 品牌数量
-     */
-    public int findBrandSize(Brand brand) {
-        try {
-            return brandMapper.findBrandSize(brand);
-        } catch (Exception e) {
-            log.error("执行异常>>>", e);
-            throw e;
-        }
-    }
-
-    /**
-     * 查询品牌详情
-     */
     public Brand brandDetails(String id) {
         try {
             return brandMapper.brandDetails(id);
@@ -255,5 +210,51 @@ public class BrandService {
             throw e;
         }
         return list;
+    }
+
+
+
+    public int deleteBrandSysByBrandID(Integer id) {
+        try {
+            return sysBrandMapper.deleteBrandSysByBrandID(id);
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw e;
+        }
+    }
+
+    public List<Map<String,Object>> queryBrandSysById(String id) {
+        try {
+            return checkSysBrandMapper.queryBrandSysById(id);
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据品牌中英文名称关键字模糊查询
+     * @param keyword   品牌中英文名称关键字
+     * @param count   显示数量 default = 10
+     * @return
+     */
+    public List<Map<String, String>> findByKeyword(String keyword, String count) {
+        List<Map<String, String>> list;
+        try {
+            list =    brandMapper.findByKeyword(keyword,Integer.valueOf(count));
+        } catch (Exception e) {
+            log.error("查询异常>>>", e);
+            throw e;
+        }
+        return list;
+    }
+
+    public int addSysBrand(SysBrand sysBrand) {
+        try {
+            return sysBrandMapper.insertSelective(sysBrand);
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw e;
+        }
     }
 }
