@@ -33,9 +33,10 @@ public class MembersController {
     MembersService membersService;
 
 
-    @ApiOperation(value = "搜索工程师", notes = "搜索工程师", response = Response.class)
+    @ApiOperation(value = "搜索工程商", notes = "搜索工程商", response = Response.class)
     @RequestMapping(value = {"/rest/searchContractors", "/rest/member/site/sel_contractors"}, method = RequestMethod.GET)
     public Response searchContractors(ContractorSearchSpec spec) throws IOException {
+        log.debug("并不知道为什么,就是想写一条注释");
         if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
             spec.setLimit(12);
         }

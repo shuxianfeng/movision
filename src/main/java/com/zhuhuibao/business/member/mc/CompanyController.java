@@ -110,7 +110,7 @@ public class CompanyController {
             MemRealCheck member = memRealCheckService.findMemById(String.valueOf(memberId));
             map = new HashMap<>();
             map.put("companyBusinessLicenseImg",member.getCompanyBusinessLicenseImg());
-            map.put("status", String.valueOf(member.getStatus()));
+            map.put("status", member.getStatus());
             map.put("reason",member.getReason());
             map.put("enterpriseName",member.getEnterpriseName());
 
