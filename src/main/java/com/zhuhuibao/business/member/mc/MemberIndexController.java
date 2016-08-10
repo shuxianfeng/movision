@@ -171,9 +171,9 @@ public class MemberIndexController {
     @RequestMapping(value = "sel_zhbInfo", method = RequestMethod.GET)
     public Response sel_zhbInfo() {
         Response result = new Response();
-        Long memberId = ShiroUtil.getCreateID();
-        if(memberId!=null){
-            Map<String,Object> resultMap = indexService.getZhbInfo(memberId);
+        Long companyId = ShiroUtil.getCompanyID();
+        if(companyId!=null){
+            Map<String,Object> resultMap = indexService.getZhbInfo(companyId);
             result.setData(resultMap);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

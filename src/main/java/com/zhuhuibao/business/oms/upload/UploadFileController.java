@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -92,6 +94,7 @@ public class UploadFileController {
 	@ApiOperation(value = "导入项目工程信息", notes = "导入项目工程信息", response = Response.class)
 	public Response uploadProject(HttpServletRequest req,@RequestParam(value = "file", required = false) MultipartFile file) {
 		Response response = new Response(); 
+		result=new HashMap<String, Object>();
 		Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if(null == session){
@@ -117,6 +120,7 @@ public class UploadFileController {
          Session session = currentUser.getSession(false);
 		 OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
 		 Response response = new Response();
+		 result=new HashMap<String, Object>();
 		try {
 			// 创建对Excel工作簿文件的引用
 			HSSFWorkbook workbook = new HSSFWorkbook(fileStream);
@@ -183,7 +187,7 @@ public class UploadFileController {
 				}
 				
 			 
-				result=new HashMap<String, Object>();
+				
 				result.put("sucCount", sucCount);
 				result.put("failCount", failCount);
 				result.put("msg", "本次上传:"+(rowsCount)+"条项目信息,成功:"+sucCount+"失败:"+failCount);
@@ -372,7 +376,15 @@ public class UploadFileController {
         //项目描述
         if(!isEmpty(row.getCell(7))){
 			String description= row.getCell(7).toString(); 
+			Map<String,String> descMap=this.description(description);
+			 
 			projectInfo.setDescription(description);
+			if(descMap!=null){
+				projectInfo.setRemark(descMap.get("remark"));
+				projectInfo.setBackground(descMap.get("background"));
+				projectInfo.setBasicDesc(descMap.get("desc"));
+			}
+			
 		}
         
         //项目开工时间
@@ -927,5 +939,55 @@ public class UploadFileController {
 		return result;
 	}
  
+	
+	private Map<String,String> description(String description){
+		 Map<String,String> map=new HashMap<String,String>();
+		String old = description;
+        String areaSize = "";
+        String desc = "";
+        String background = "";
+        String remark = "";
+        if(old.contains("建筑面积")){
+            areaSize = old.substring(old.indexOf("建筑面积")).substring(4,20).replace(",","");
+            Pattern p = Pattern.compile("(\\d+)");
+            Matcher m = p.matcher(areaSize);
+            if(m.find()){
+                areaSize = m.group(1);
+            }
+            if(areaSize.contains("万")){
+                areaSize = m.group(1)+"万";
+            }
+        }
+
+        if(old.contains("部分建材")){
+            desc = old.substring(0,old.indexOf("部分建材"));
+        }else if(old.contains("部分建筑材料")){
+            desc = old.substring(0,old.indexOf("部分建筑材料"));
+        }else if(old.contains("部分材料")){
+            desc = old.substring(0,old.indexOf("部分材料"));
+        }else if(old.contains("部分配置")){
+            desc = old.substring(0,old.indexOf("部分配置"));
+        }
+
+        if(old.contains("备注：")){
+            if(old.contains("项目背景：")){
+                if(old.indexOf("备注：")<old.lastIndexOf("项目背景：")){
+                    remark = old.substring(old.indexOf("备注："),old.lastIndexOf("项目背景：")).substring(3);
+                }
+            }
+        }
+
+        if(old.contains("项目背景")){
+            if(old.contains("审批手续进展情况")){
+                if(old.indexOf("项目背景：")<old.lastIndexOf("审批手续进展情况")){
+                    background = old.substring(old.indexOf("项目背景："),old.lastIndexOf("审批手续进展情况")).substring(5);
+                }
+            }
+        }
+        map.put("desc", desc);
+        map.put("remark", remark);
+        map.put("background", background);
+        return map;
+	}
 } 
  

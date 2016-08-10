@@ -191,7 +191,7 @@ public class RegisterController {
         Response result = new Response();
         try {
             Subject currentUser = SecurityUtils.getSubject();
-            Session sess = currentUser.getSession(false);
+            Session sess = currentUser.getSession(true);
             //校验手机验证码是否正确
             if (member.getMobileCheckCode() != null) {
                 String verifyCode = (String) sess.getAttribute("r" + member.getMobile());
@@ -227,7 +227,7 @@ public class RegisterController {
         log.debug("seek pwd write account");
         Response result ;
         Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(false);
+        Session sess = currentUser.getSession(true);
         String seekCode = (String) sess.getAttribute(MemberConstant.SESSION_TYPE_SEEKPWD);
         sess.setAttribute(MemberConstant.SESSION_TYPE_SEEKPWD_USERNAME, member.getAccount());
         log.info("writeAccount seek username  === " + member.getAccount() + " session = " + sess.getAttribute(MemberConstant.SESSION_TYPE_SEEKPWD_USERNAME));
@@ -247,7 +247,7 @@ public class RegisterController {
     public Response mobileValidate(Member member) throws IOException {
         log.debug("找回密码  mobile ==" + member.getMobile());
         Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(false);
+        Session sess = currentUser.getSession(true);
         String seekMobileCode = (String) sess.getAttribute("s" + member.getMobile());
 
         return memberService.mobileValidate(member, seekMobileCode);

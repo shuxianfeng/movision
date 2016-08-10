@@ -39,7 +39,7 @@ import com.zhuhuibao.utils.pagination.util.StringUtils;
 @Transactional
 public class ProjectService {
 
-    private static final Logger log = LoggerFactory.getLogger(OmsMemService.class);
+    private static final Logger log = LoggerFactory.getLogger(ProjectService.class);
     @Autowired
     private ProjectMapper projectMapper;
 

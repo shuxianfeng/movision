@@ -3,10 +3,16 @@ package com.zhuhuibao.business.oms.witkey;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +81,21 @@ public class WitkeyOmsController {
             cooperation.setPrice(Double.parseDouble("-1"));
         }
         cooperationService.updateCooperation(cooperation);
+        return response;
+    }
+    
+    /**
+	 * 查询一条任务的信息
+	 */
+	@ApiOperation(value="查询一条任务的信息",notes="查询一条任务的信息",response = Cooperation.class)
+    @RequestMapping(value = "sel_witkey", method = RequestMethod.GET)
+    public Response queryCooperationInfo(@RequestParam String id)  {
+        Response response = new Response();
+		 
+		Map<String,Object> cooperation = cooperationService.queryCooperationInfoById(id);
+	 
+		response.setData(cooperation);
+			 
         return response;
     }
 }

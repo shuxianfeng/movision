@@ -1,6 +1,5 @@
 package com.zhuhuibao.fsearch.service.impl;
 
-
 import com.zhuhuibao.fsearch.pojo.spec.ContractorSearchSpec;
 import com.zhuhuibao.fsearch.pojo.Member;
 import com.zhuhuibao.fsearch.pojo.ProductGroup;
@@ -20,8 +19,7 @@ import java.util.Map;
 public class MembersService implements IMembersService {
 
 	@Override
-	public Map<String, Object> searchContractors(ContractorSearchSpec spec)
-			throws ServiceException {
+	public Map<String, Object> searchContractors(ContractorSearchSpec spec) throws ServiceException {
 		Map<String, Map<String, Object>> query = new HashMap<>();
 		Map<String, Object> result = new HashMap<>();
 		result.put("spec", spec);
@@ -37,12 +35,14 @@ public class MembersService implements IMembersService {
 		spec.setQ(StringUtil.emptyToNull(spec.getQ()));
 		if (spec.getQ() != null) {
 			String q = spec.getQ();
+
 			query.put("_s", CollectionUtil.arrayAsMap("type", "phrase",
 					"value", q));
 			result.put("q", q);
 		}
 
 		List<Map<String, Object>> sortFields =  genContractorSortFields(spec, result);
+
 
 		Map<?, ?> psAsMap = (Map<?, ?>) Searcher.request(
 				"search",
@@ -51,16 +51,16 @@ public class MembersService implements IMembersService {
 						"sort",JSONUtil.toJSONString(sortFields),
 						"offset",spec.getOffset(),
 						"limit", spec.getLimit()));
+
 		List<?> list = (List<?>) psAsMap.get("items");
-		Pagination<Member,ProductGroup> contractors;
+		Pagination<Member, ProductGroup> contractors;
 		contractors = assItems(psAsMap, list);
 		result.put("contractors", contractors);
 		return result;
 	}
 
 	@Override
-	public Map<String, Object> searchSuppliers(SupplierSearchSpec spec)
-			throws ServiceException {
+	public Map<String, Object> searchSuppliers(SupplierSearchSpec spec) throws ServiceException {
 		Map<String, Map<String, Object>> query = new HashMap<>();
 		Map<String, Object> result = new HashMap<>();
 		result.put("spec", spec);
@@ -89,8 +89,10 @@ public class MembersService implements IMembersService {
 		spec.setQ(StringUtil.emptyToNull(spec.getQ()));
 		if (spec.getQ() != null) {
 			String q = spec.getQ();
+
 			query.put("_s", CollectionUtil.arrayAsMap("type", "phrase",
 					"value", q));
+
 			result.put("q", q);
 		}
 
@@ -98,13 +100,14 @@ public class MembersService implements IMembersService {
 
 		Map<?, ?> psAsMap = (Map<?, ?>) Searcher.request(
 				"search",
+
 				CollectionUtil.arrayAsMap("table", "supplier",
 						"query",JSONUtil.toJSONString(query),
 						"sort",JSONUtil.toJSONString(sortFields),
 						"offset",spec.getOffset(),
 						"limit", spec.getLimit()));
 		List<?> list = (List<?>) psAsMap.get("items");
-		Pagination<Member,ProductGroup> suppliers;
+		Pagination<Member, ProductGroup> suppliers;
 		suppliers = assItems(psAsMap, list);
 
 		result.put("suppliers", suppliers);
@@ -118,10 +121,11 @@ public class MembersService implements IMembersService {
 			String sort = spec.getSort();
 			result.put("sort", spec.getSort());
 			String sortorder = "true";
-			if(StringUtil.isNotEmpty(spec.getSortorder())){
+			if (StringUtil.isNotEmpty(spec.getSortorder())) {
 				sortorder = spec.getSortorder();
 				result.put("sortorder", spec.getSortorder());
 			}
+
 			if (sort.equals("registerTime1") || sort.equals("weightLevel")) {    //这里好奇怪对不对，想知道为什么么？你猜啊╮(╯_╰)╭
 				sortField.put("field", "weightLevel");
 				sortField.put("type", "DOUBLE");
