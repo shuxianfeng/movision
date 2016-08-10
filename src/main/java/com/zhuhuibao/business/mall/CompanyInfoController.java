@@ -4,6 +4,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.fsearch.utils.StringUtil;
 import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.SuccessCase;
@@ -15,6 +16,7 @@ import com.zhuhuibao.mybatis.product.service.ProductService;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,8 +83,20 @@ public class CompanyInfoController {
         map.put("logo",member.getEnterpriseLogo());
         map.put("companyName",member.getEnterpriseName());
         map.put("webSite",member.getEnterpriseWebSite());
+        String provinceName = "";
+        if(!StringUtils.isEmpty(member.getProvinceName())){
+            provinceName = member.getProvinceName();
+        }
+        String cityName = "";
+        if(!StringUtils.isEmpty(member.getCityName())){
+            cityName = member.getCityName();
+        }
+        String areaName = "";
+        if(!StringUtils.isEmpty(member.getAreaName())){
+            areaName = member.getAreaName();
+        }
         if(member.getProvince()!=null){
-            map.put("address",member.getProvinceName()+member.getCityName()+member.getAreaName()+member.getAddress());
+            map.put("address",provinceName + cityName + areaName + member.getAddress());
         }else {
             map.put("address","");
         }
