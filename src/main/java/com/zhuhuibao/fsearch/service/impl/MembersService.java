@@ -191,6 +191,8 @@ public class MembersService implements IMembersService {
 							.get("address")));
 					member.setSaleProductDesc(FormatUtil.parseString(itemAsMap
 							.get("saleProductDesc")));
+                    member.setEnterpriseDesc(FormatUtil.parseString(itemAsMap
+                            .get("enterpriseDesc")));
 					member.setViplevel(FormatUtil.parseString(itemAsMap.get("viplevel")));
 				}
 				members.add(member);

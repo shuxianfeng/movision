@@ -91,6 +91,9 @@ public class CompanyController {
             map.put("enterpriseWebSite",member.getEnterpriseWebSite());
             map.put("status",member.getStatus());
             map.put("reason",member.getReason());
+
+            map.put("vipLevel",ShiroUtil.getVipLevel());
+
             result.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -101,7 +104,7 @@ public class CompanyController {
     @ApiOperation(value = "查询企业实名信息", notes = "查询企业实名信息", response = Response.class)
     @RequestMapping(value = "sel_mem_realName_info", method = RequestMethod.GET)
     public Response realNameInfo() {
-        Map<String,String> map;
+        Map<String,Object> map;
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
             MemRealCheck member = memRealCheckService.findMemById(String.valueOf(memberId));
@@ -110,6 +113,9 @@ public class CompanyController {
             map.put("status", String.valueOf(member.getStatus()));
             map.put("reason",member.getReason());
             map.put("enterpriseName",member.getEnterpriseName());
+
+            map.put("vipLevel",ShiroUtil.getVipLevel());
+
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }

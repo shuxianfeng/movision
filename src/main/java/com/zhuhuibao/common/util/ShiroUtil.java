@@ -91,4 +91,24 @@ public class ShiroUtil {
 		}
 		return createID;
 	}
+
+
+	public static Integer getVipLevel() {
+        Integer viplevel = null;
+		try {
+			Subject currentUser = SecurityUtils.getSubject();
+			Session session = currentUser.getSession(false);
+			if (session != null) {
+				ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
+				if (principal != null) {
+                    viplevel = principal.getVipLevel();
+				}
+			}
+		} catch (Exception e) {
+			log.error("get seesion user info error!", e);
+			throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+
+		}
+		return viplevel;
+	}
 }

@@ -67,7 +67,7 @@ public class IndividualController {
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
             MemInfoCheck  member = memInfoCheckService.findMemById(String.valueOf(memberId));
-            Map map = new HashMap();
+            Map<String,Object> map = new HashMap<>();
             map.put("nickname",member.getNickname());
             map.put("sex",member.getSex());
             map.put("personCompanyType",member.getPersonCompanyType());
@@ -87,6 +87,9 @@ public class IndividualController {
             map.put("QQ",member.getQQ());
             map.put("status",member.getStatus());
             map.put("reason",member.getReason());
+
+            map.put("vipLevel",ShiroUtil.getVipLevel());
+
             result.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -132,13 +135,16 @@ public class IndividualController {
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
             MemRealCheck member = memRealCheckService.findMemById(String.valueOf(memberId));
-            Map map = new HashMap();
+            Map<String,Object> map = new HashMap<>();
             map.put("personRealName",member.getPersonRealName());
             map.put("personIdentifyCard",member.getPersonIdentifyCard());
             map.put("personIDFrontImgUrl",member.getPersonIDFrontImgUrl());
             map.put("personIDBackImgUrl",member.getPersonIDBackImgUrl());
             map.put("status",member.getStatus());
             map.put("reason",member.getReason());
+
+            map.put("vipLevel",ShiroUtil.getVipLevel());
+
             result.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
