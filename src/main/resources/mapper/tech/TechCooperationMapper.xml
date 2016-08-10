@@ -375,4 +375,27 @@
         order by t.type,t.updateTime desc
         limit #{count}
     </select>
+
+    <select id="findAllMyLookedAchievementList" resultType="java.util.Map" >
+        select c.id,c.title,date_format(v.viewTime,'%Y-%m-%d') viewTime,
+        v.id as recordId,co.name as systemName,con.name as areaName
+        from t_zhb_viewGoods v
+        left join t_tech_cooperation c on v.goodsId = c.id
+        left join t_dictionary_constant co on c.systemCategory = co.code and co.`type` = 19
+        left join t_dictionary_constant con on c.applicationArea = con.code and con.`type` = 18
+        where v.type = 'CKJSCG' and v.`status` = 0
+        <if test="companyId != null">
+            and v.companyId = #{companyId}
+        </if>
+        <if test="viewerId != null">
+            and v.viewerId = #{viewerId}
+        </if>
+        order by v.viewTime desc
+    </select>
+
+    <update id="deleteLookedAchievement" parameterType="java.lang.String" >
+        update t_zhb_viewGoods
+        set status = 1
+        where id = #{id}
+    </update>
 </mapper>

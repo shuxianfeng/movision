@@ -282,4 +282,22 @@ public class TechCooperationService {
         }
         return coopList;
     }
+
+    public List<Map<String,String>> findAllMyLookedAchievementList(Paging<Map<String, String>> pager, Map<String, Object> map) {
+        try {
+            return techMapper.findAllMyLookedAchievementList(pager.getRowBounds(),map);
+        } catch (Exception e) {
+            log.error("TechCooperationService::findAllMyLookedAchievementList",e);
+            throw e;
+        }
+    }
+
+    public int deleteLookedAchievement(String id) {
+        try {
+            return techMapper.deleteLookedAchievement(id);
+        } catch (Exception e) {
+            log.error("TechCooperationService::deleteLookedAchievement::id=="+id,e);
+            throw e;
+        }
+    }
 }
