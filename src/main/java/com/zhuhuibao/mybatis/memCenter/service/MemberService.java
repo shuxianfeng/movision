@@ -740,6 +740,7 @@ public class MemberService {
                 Member mem = new Member();
                 BeanUtils.copyProperties(member, mem);
                 mem.setId(String.valueOf(member.getId()));
+                mem.setStatus(String.valueOf(status));
                 updateMemInfo(mem);
 
             }
