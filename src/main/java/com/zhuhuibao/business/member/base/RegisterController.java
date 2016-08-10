@@ -413,7 +413,7 @@ public class RegisterController {
     }
 
     @ApiOperation(value = "校验是否已经注册", notes = "校验是否已经注册", response = Response.class)
-    @RequestMapping(value = "rest/ckregisterl", method = RequestMethod.POST)
+    @RequestMapping(value = "rest/ckregister", method = RequestMethod.POST)
     public Response checkRegister(@ApiParam("账号")@RequestParam String account){
 
         int count =  memberService.findCountByAccount(account);
