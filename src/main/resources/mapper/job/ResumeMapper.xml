@@ -264,7 +264,7 @@
         and m.status != #{status}
       </if>
       <if test="title != null and title != ''">
-        and t.post like concat('%',#{title},'%')
+        and (select Group_concat(name) from t_dictionary_position where find_in_set(id,t.post)) like concat('%',#{title},'%')
       </if>
       <if test="jobCity != null and jobCity != ''">
         and (#{jobCity} in(t.jobCity) or (select provincecode from t_dictionary_city where code = #{jobCity}) in(t.jobProvince))

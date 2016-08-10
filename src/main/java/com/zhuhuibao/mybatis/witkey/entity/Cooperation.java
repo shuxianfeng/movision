@@ -21,6 +21,9 @@ public class Cooperation {
     @ApiModelProperty(value="合作类型")
     private String type;
 
+    @ApiModelProperty(value="系统分类")
+    private String systemType;
+
     @ApiModelProperty(value="项目类别")
     private String category;
 
@@ -334,5 +337,13 @@ public class Cooperation {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String getSystemType() {
+        return systemType;
+    }
+
+    public void setSystemType(String systemType) {
+        this.systemType = systemType;
     }
 }

@@ -110,6 +110,11 @@ public class PaymentService {
                 {
                     Map map = expertService.getExpertDetail(String.valueOf(goodsID), viewNumber);
                     dataMap.put("info", map);
+                }else if (CKWKRW.toString().equals(type))//查看威客任务
+                {
+                    Map<String,Object> cooperation = cooperationService.queryUnloginCooperationInfoById(String.valueOf(goodsID));
+                    dataMap.put("info", cooperation);
+                    response.setData(dataMap);
                 }
                 dataMap.put("payment", ZhbPaymentConstant.PAY_ZHB_NON_PURCHASE);
                 response.setData(dataMap);
@@ -141,10 +146,12 @@ public class PaymentService {
                     dataMap.put("info", map);
                 } else if (CKWKRW.toString().equals(type))//查看威客任务
                 {
-                    Cooperation cooperation = cooperationService.queryCooperationInfoById(String.valueOf(goodsID));
+                    Map<String,Object> cooperation = cooperationService.queryCooperationInfoById(String.valueOf(goodsID));
                     dataMap.put("info", cooperation);
-                    cooperation.setViews(String.valueOf(Integer.parseInt(cooperation.getViews()) + 1));
-                    cooperationService.updateCooperationViews(cooperation);
+                    Cooperation result = new Cooperation();
+                    result.setId(cooperation.get("id").toString());
+                    result.setViews(String.valueOf(Integer.parseInt(cooperation.get("views").toString())+1));
+                    cooperationService.updateCooperationViews(result);
                 } else if (CKJSCG.toString().equals(type))//查看技术成果
                 {
                     Map<String, Object> techMap = new HashMap<>();
@@ -180,6 +187,11 @@ public class PaymentService {
                 Map map = expertService.getExpertDetail(String.valueOf(goodsID), 0);
                 dataMap.put("info", map);
                 response.setData(dataMap);
+            }else if (CKWKRW.toString().equals(type))//查看威客任务
+            {
+                Map<String,Object> cooperation = cooperationService.queryUnloginCooperationInfoById(String.valueOf(goodsID));
+                dataMap.put("info", cooperation);
+                response.setData(dataMap);
             } else {
                 throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
@@ -193,7 +205,6 @@ public class PaymentService {
 	
     /**
      * 简历信息查看
-     * @param parseLong
      * @param type
      * @return
      */
@@ -203,13 +214,13 @@ public class PaymentService {
 	        Long companyId = ShiroUtil.getCompanyID();
 	        ShiroRealm.ShiroUser member= ShiroUtil.getMember();
 	        int vipLevel=member.getVipLevel();
-	        Map<String,Object> dataMap = new HashMap<String,Object>();
+	        Map<String,Object> dataMap = new HashMap<>();
 	        
 	        
 	       
 	        if(createId != null) {
 	        	
-	        	Map<String,Object> con = new HashMap<String,Object>();
+	        	Map<String,Object> con = new HashMap<>();
 	            //商品ID
 	            con.put("goodsId", goodsID);
 	            con.put("companyId",companyId);
@@ -265,7 +276,7 @@ public class PaymentService {
 	                    resumeBean.setId(String.valueOf(goodsID));
 	                    //更新点击率
 	                    resume.updateResume(resumeBean);
-	                    Map<String,Object> map1 = new HashMap<String,Object>();
+	                    Map<String,Object> map1 = new HashMap<>();
 	                    map1.put("resumeID", goodsID);
 	                    map1.put("companyID",companyId);
 	                    map1.put("createId",resume2.getCreateid());
@@ -303,7 +314,7 @@ public class PaymentService {
 	                    resumeBean.setId(String.valueOf(goodsID));
 	                    //更新点击率
 	                    resume.updateResume(resumeBean);
-	                    Map<String,Object> map1 = new HashMap<String,Object>();
+	                    Map<String,Object> map1 = new HashMap<>();
 	                    map1.put("resumeID", goodsID);
 	                    map1.put("companyID",companyId);
 	                    map1.put("createId",resume2.getCreateid());
