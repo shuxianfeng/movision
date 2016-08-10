@@ -612,7 +612,7 @@ public class MemberService {
             infoCheckService.update(member);
 
             if (status.equals(MemberConstant.MemberStatus.WSZLYSH.toString())) { // 完善审核通过
-                //1.同步主表信息       {原来状态不变}
+                //1.同步主表信息       {如果完善资料已审核,保持原来状态不变}
                 Member mem = findMemById(String.valueOf(member.getId()));
                 String memStatus = mem.getStatus();
                 BeanUtils.copyProperties(member, mem);
@@ -620,6 +620,8 @@ public class MemberService {
                         memStatus.equals(MemberConstant.MemberStatus.SMRZYRZ.toString()) ||
                         memStatus.equals(MemberConstant.MemberStatus.SMRZYJJ.toString())) {
                     mem.setStatus(memStatus);
+                }else{
+                    mem.setStatus(status);
                 }
 
                 updateMemInfo(mem);
