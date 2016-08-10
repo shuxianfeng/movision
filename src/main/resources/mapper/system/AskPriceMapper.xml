@@ -28,6 +28,8 @@
     <result column="linkMan" property="linkMan" jdbcType="VARCHAR" />
     <result column="telephone" property="telephone" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="isCan" property="isCan" jdbcType="VARCHAR" />
+    <result column="count" property="count" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.AskPriceBean" >
     <result column="title" property="title" jdbcType="VARCHAR" />
@@ -51,6 +53,7 @@
     <result column="telephone" property="telephone" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="fcateName" property="fcateName" jdbcType="VARCHAR" />
+    <result column="createid" property="createid" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, createid, title, status, type, content,billurl, publishTime, endTime, provinceCode, cityCode,
@@ -223,10 +226,10 @@
   </insert>
 
   <select id="queryAskPriceByID" resultMap="ResultMap">
-    SELECT p.title,p.productName,p.content,p.billurl,p.endTime,p.status,p.type,p.isTax,p.isShow,
+    SELECT p.title,p.productName,p.content,p.billurl,p.endTime,p.status,p.type,p.isTax,p.isShow,p.createid,
     p.description,p.companyName,p.linkMan,p.telephone,p.email,c.name as fcateName, pr.name as provinceName,ci.name as cityName,a.name as areaName
     FROM t_p_ask_price p
-    left join t_p_category c on p.fcateid = c.id
+    left join t_dictionary_constant c on p.fcateid = c.code and c.type = 26
     left join t_dictionary_province pr on pr.code = p.provinceCode
     left join t_dictionary_city ci on ci.code = p.cityCode
     left join t_dictionary_area a on a.code = p.areaCode
@@ -327,13 +330,24 @@
   </select>
 
   <select id="findAllNewPriceInfoList" resultMap="BaseResultMap">
-    select p.id,p.title,p.publishTime,concat(pr.name,c.name) as provinceCode
+    select p.id,p.title,p.publishTime,concat(pr.name,c.name) as provinceCode,
+    (SELECT count(*) FROM t_p_offer_price where askid = p.id) as count,
+    <if test="createid != null and createid != ''">
+      CASE WHEN p.createid != #{createid}
+      and p.id not in (select askid from t_p_offer_price where createid = #{createid})
+      and p.createid not in (select enterpriseEmployeeParentId from t_m_member where id = #{createid})
+      and p.createid not in (select id from t_m_member where enterpriseEmployeeParentId = #{createid}) then '1'
+      else '0' end as isCan
+    </if>
+    <if test="createid == null">
+      '1' as isCan
+    </if>
     from t_p_ask_price p
     LEFT JOIN t_dictionary_province pr on pr.code = p.provinceCode
     LEFT JOIN t_dictionary_city c on c.code = p.cityCode
     left join t_m_member m on m.id = p.createid
     where p.type = 1 and date_format(now(),'%Y-%m-%d') &lt;= date_format(p.endTime,'%Y-%m-%d')
-    <if test="createid != null and createid != ''">
+<!--    <if test="createid != null and createid != ''">
       and p.id not in (select askid from t_p_offer_price where createid = #{createid})
     </if>
     <if test="createid != null and createid != ''">
@@ -347,7 +361,7 @@
     </if>
     <if test="createid != null and createid != ''">
       and (case when m.enterpriseEmployeeParentId != 0 then (m.enterpriseEmployeeParentId not in (select enterpriseEmployeeParentId from t_m_member where id = #{createid})) else '1=1' end )
-    </if>
+    </if>-->
     order BY p.publishTime desc
   </select>
 </mapper>

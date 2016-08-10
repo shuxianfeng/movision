@@ -687,4 +687,15 @@ public class ProductService {
         }
         return list;
     }
+
+
+    public Product findById(Long id) {
+        try {
+            return productMapper.selectByPrimaryKey(id);
+        } catch (Exception e) {
+            log.error("查询失败:{}", e);
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
+        }
+    }
 }

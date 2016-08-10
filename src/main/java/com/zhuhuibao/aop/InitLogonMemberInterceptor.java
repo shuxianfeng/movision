@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,9 @@ public class InitLogonMemberInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
 	private MemberRegService memberService;
 
+	@Autowired
+	private ShiroRealm shiroRealm;
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		try {
@@ -37,14 +41,16 @@ public class InitLogonMemberInterceptor extends HandlerInterceptorAdapter {
 				if (null != member) {
 					LoginMember loginMember = memberService.getLoginMemberByAccount(member.getAccount());
 					if (null != loginMember) {
+						ShiroRealm.ShiroUser loginInfo = new ShiroUser(loginMember.getId(), loginMember.getAccount(),
+								loginMember.getStatus(), loginMember.getIdentify(), loginMember.getRole(),
+								loginMember.getIsexpert(), loginMember.getCompanyId(), loginMember.getRegisterTime(),
+								loginMember.getWorkType(), loginMember.getHeadShot(), loginMember.getNickname(),
+								loginMember.getCompanyName(), loginMember.getVipLevel());
 
-						member = new ShiroUser(loginMember.getId(), loginMember.getAccount(), loginMember.getStatus(),
-								loginMember.getIdentify(), loginMember.getRole(), loginMember.getIsexpert(),
-								loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(),
-								loginMember.getHeadShot(), loginMember.getNickname(), loginMember.getCompanyName(),
-								loginMember.getVipLevel());
-
-						session.setAttribute("member", member);
+						if (loginMemberInfoIsChange(member, loginInfo)) {
+							session.setAttribute("member", loginInfo);
+							shiroRealm.getAuthorizationCache().remove(subject.getPrincipals());
+						}
 					}
 				}
 			}
@@ -53,5 +59,14 @@ public class InitLogonMemberInterceptor extends HandlerInterceptorAdapter {
 		}
 
 		return true;
+	}
+
+	private boolean loginMemberInfoIsChange(ShiroUser member, ShiroRealm.ShiroUser loginInfo) {
+		boolean isChange = member == null || loginInfo == null || loginInfo.getWorkType() != member.getWorkType()
+				|| loginInfo.getVipLevel() != member.getVipLevel() || loginInfo.getStatus() != member.getStatus()
+				|| !loginInfo.getIdentify().equals(member.getIdentify())
+				|| !loginInfo.getRole().equals(member.getRole())
+				|| !loginInfo.getIsexpert().equals(member.getIsexpert());
+		return isChange;
 	}
 }

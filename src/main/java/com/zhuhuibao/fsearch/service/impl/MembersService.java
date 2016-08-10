@@ -35,15 +35,23 @@ public class MembersService implements IMembersService {
 		spec.setQ(StringUtil.emptyToNull(spec.getQ()));
 		if (spec.getQ() != null) {
 			String q = spec.getQ();
-			query.put("_s", CollectionUtil.arrayAsMap("type", "phrase", "value", q));
+
+			query.put("_s", CollectionUtil.arrayAsMap("type", "phrase",
+					"value", q));
 			result.put("q", q);
 		}
 
-		List<Map<String, Object>> sortFields = genContractorSortFields(spec, result);
+		List<Map<String, Object>> sortFields =  genContractorSortFields(spec, result);
 
-		Map<?, ?> psAsMap = (Map<?, ?>) Searcher.request("search", CollectionUtil.arrayAsMap("table", "contractor",
-				"query", JSONUtil.toJSONString(query), "sort", JSONUtil.toJSONString(sortFields), "offset",
-				spec.getOffset(), "limit", spec.getLimit()));
+
+		Map<?, ?> psAsMap = (Map<?, ?>) Searcher.request(
+				"search",
+				CollectionUtil.arrayAsMap("table", "contractor",
+						"query",JSONUtil.toJSONString(query),
+						"sort",JSONUtil.toJSONString(sortFields),
+						"offset",spec.getOffset(),
+						"limit", spec.getLimit()));
+
 		List<?> list = (List<?>) psAsMap.get("items");
 		Pagination<Member, ProductGroup> contractors;
 		contractors = assItems(psAsMap, list);
@@ -72,7 +80,7 @@ public class MembersService implements IMembersService {
 		String category = spec.getCategory();
 		if (StringUtil.isNotEmpty(category)) {
 			String[] categorylArr = category.split(",");
-			for (String cate : categorylArr) {
+			for(String cate : categorylArr){
 				Searcher.wrapEqualQuery(query, cate, cate);
 			}
 			result.put("category", category);
@@ -81,7 +89,10 @@ public class MembersService implements IMembersService {
 		spec.setQ(StringUtil.emptyToNull(spec.getQ()));
 		if (spec.getQ() != null) {
 			String q = spec.getQ();
-			query.put("_s", CollectionUtil.arrayAsMap("type", "phrase", "value", q));
+
+			query.put("_s", CollectionUtil.arrayAsMap("type", "phrase",
+					"value", q));
+
 			result.put("q", q);
 		}
 
@@ -89,8 +100,12 @@ public class MembersService implements IMembersService {
 
 		Map<?, ?> psAsMap = (Map<?, ?>) Searcher.request(
 				"search",
-				CollectionUtil.arrayAsMap("table", "supplier", "query", JSONUtil.toJSONString(query), "sort",
-						JSONUtil.toJSONString(sortFields), "offset", spec.getOffset(), "limit", spec.getLimit()));
+
+				CollectionUtil.arrayAsMap("table", "supplier",
+						"query",JSONUtil.toJSONString(query),
+						"sort",JSONUtil.toJSONString(sortFields),
+						"offset",spec.getOffset(),
+						"limit", spec.getLimit()));
 		List<?> list = (List<?>) psAsMap.get("items");
 		Pagination<Member, ProductGroup> suppliers;
 		suppliers = assItems(psAsMap, list);
@@ -110,25 +125,23 @@ public class MembersService implements IMembersService {
 				sortorder = spec.getSortorder();
 				result.put("sortorder", spec.getSortorder());
 			}
-			if (sort.equals("registerTime1")) {
-				// sortField.put("field", sort);
-				// sortField.put("type", "LONG");
-				// sortField.put("reverse",FormatUtil.parseBoolean(sortorder));
-				sortField.put("field", "certLevel");
-				sortField.put("type", "INT");
+
+			if (sort.equals("registerTime1") || sort.equals("weightLevel")) {    //这里好奇怪对不对，想知道为什么么？你猜啊╮(╯_╰)╭
+				sortField.put("field", "weightLevel");
+				sortField.put("type", "DOUBLE");
 				sortField.put("reverse", FormatUtil.parseBoolean(sortorder));
 			}
-		} else {
-			sortField.put("field", "id");
-			sortField.put("type", "INT");
-			sortField.put("reverse", FormatUtil.parseBoolean(true));
+		}else {   //猜不到吧,就是这么调皮→ →
+			sortField.put("field", "registerTime1");
+			sortField.put("type", "LONG");
+			sortField.put("reverse",FormatUtil.parseBoolean(true));
 		}
 		sortFields.add(sortField);
 
 		return sortFields;
 	}
 
-	private List<Map<String, Object>> genContractorSortFields(ContractorSearchSpec spec, Map<String, Object> result) {
+	private List<Map<String, Object>>  genContractorSortFields(ContractorSearchSpec spec, Map<String, Object> result) {
 		List<Map<String, Object>> sortFields = new ArrayList<>(1);
 		Map<String, Object> sortField = new HashMap<>(3);
 
@@ -136,22 +149,19 @@ public class MembersService implements IMembersService {
 			String sort = spec.getSort();
 			result.put("sort", spec.getSort());
 			String sortorder = "true";
-			if (StringUtil.isNotEmpty(spec.getSortorder())) {
+			if(StringUtil.isNotEmpty(spec.getSortorder())){
 				sortorder = spec.getSortorder();
 				result.put("sortorder", spec.getSortorder());
 			}
-			if (sort.equals("registerTime1")) {
-				// sortField.put("field", sort);
-				// sortField.put("type", "LONG");
-				// sortField.put("reverse", FormatUtil.parseBoolean(sortorder));
+			if (sort.equals("registerTime1")) {   //这里好奇怪对不对，想知道为什么么？你猜啊╮(╯_╰)╭
 				sortField.put("field", "certLevel");
-				sortField.put("type", "LONG");
+				sortField.put("type", "DOUBLE");
 				sortField.put("reverse", FormatUtil.parseBoolean(sortorder));
 			}
-		} else {
-			sortField.put("field", "id");
-			sortField.put("type", "INT");
-			sortField.put("reverse", FormatUtil.parseBoolean(true));
+		}else {   //猜不到吧,就是这么调皮→ →
+			sortField.put("field", "registerTime1");
+			sortField.put("type", "LONG");
+			sortField.put("reverse",FormatUtil.parseBoolean(true));
 		}
 		sortFields.add(sortField);
 
@@ -169,29 +179,37 @@ public class MembersService implements IMembersService {
 				Member member = new Member();
 				{
 					member.setId(FormatUtil.parseLong(itemAsMap.get("id")));
-					member.setEnterpriseName(FormatUtil.parseString(itemAsMap.get("enterpriseName")));
-					member.setAuthinfo(FormatUtil.parseString(itemAsMap.get("authinfo")));
-					member.setEnterpriseLogo(FormatUtil.parseString(itemAsMap.get("enterpriseLogo")));
-					member.setEnterpriseWebSite(FormatUtil.parseString(itemAsMap.get("enterpriseWebSite")));
-					member.setAddress(FormatUtil.parseString(itemAsMap.get("address")));
-					member.setSaleProductDesc(FormatUtil.parseString(itemAsMap.get("saleProductDesc")));
+					member.setEnterpriseName(FormatUtil.parseString(itemAsMap
+							.get("enterpriseName")));
+					member.setAuthinfo(FormatUtil.parseString(itemAsMap
+							.get("authinfo")));
+					member.setEnterpriseLogo(FormatUtil.parseString(itemAsMap
+							.get("enterpriseLogo")));
+					member.setEnterpriseWebSite(FormatUtil.parseString(itemAsMap
+							.get("enterpriseWebSite")));
+					member.setAddress(FormatUtil.parseString(itemAsMap
+							.get("address")));
+					member.setSaleProductDesc(FormatUtil.parseString(itemAsMap
+							.get("saleProductDesc")));
+                    member.setEnterpriseDesc(FormatUtil.parseString(itemAsMap
+                            .get("enterpriseDesc")));
 					member.setViplevel(FormatUtil.parseString(itemAsMap.get("viplevel")));
-					member.setEnterpriseDesc(FormatUtil.parseString(itemAsMap.get("enterpriseDesc")));
 				}
 				members.add(member);
 			}
 
-			items = new Pagination<>(members, null, FormatUtil.parseInteger(psAsMap.get("total")),
-					FormatUtil.parseInteger(psAsMap.get("offset")), FormatUtil.parseInteger(psAsMap.get("limit")));
+			items = new Pagination<>(members, null,
+					FormatUtil.parseInteger(psAsMap.get("total")),
+					FormatUtil.parseInteger(psAsMap.get("offset")),
+					FormatUtil.parseInteger(psAsMap.get("limit")));
 		}
 		return items;
 	}
 
-	private void genAssetLevelQuery(Map<String, Map<String, Object>> query, Map<String, Object> result,
-			String assetlevel) {
+	private void genAssetLevelQuery(Map<String, Map<String, Object>> query, Map<String, Object> result, String assetlevel) {
 		if (StringUtil.isNotEmpty(assetlevel)) {
 			String[] assetlevelArr = assetlevel.split(",");
-			for (String asset : assetlevelArr) {
+			for(String asset : assetlevelArr){
 				Searcher.wrapEqualQuery(query, asset, asset);
 			}
 			result.put("assetlevel", assetlevel);

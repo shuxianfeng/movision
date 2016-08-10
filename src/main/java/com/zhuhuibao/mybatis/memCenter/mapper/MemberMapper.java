@@ -54,4 +54,8 @@ public interface MemberMapper {
     List<Map<String,String>> queryEngineerList(Map<String, Object> map);
 
 	void updateSubMemInfo(Member member);
+
+    List<Map<String,Object>> findAllInfocheckMemberByPager(RowBounds rowBounds, OmsMemBean member);
+
+    List<Map<String,Object>> findAllRealcheckMemberByPager(RowBounds rowBounds, OmsMemBean member);
 }

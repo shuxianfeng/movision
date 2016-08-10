@@ -140,4 +140,7 @@
     from t_oms_notice
     WHERE id = #{id}
   </select>
+  <select id="selectUnreadMessageCount" resultType="java.lang.Integer">
+    select  count(1) from t_sys_message  where  status = 1  and ReceiveDelete = 0 and receiveid=#{id}
+  </select>
 </mapper>

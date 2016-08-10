@@ -218,4 +218,9 @@ public interface MsgCodeConstant {
 	 */
 	int SUGGEST_URL_COUNT_LIMIT = 10218;
 
+	/**
+	 * 审核实名认证需先审核基本资料
+	 */
+	int SMRZSH_ERROR = 5001;
+
 }

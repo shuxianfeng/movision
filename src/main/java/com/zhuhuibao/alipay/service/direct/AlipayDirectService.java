@@ -38,7 +38,7 @@ public class AlipayDirectService {
     /**
      * 支付宝同步通知
      */
-//    public static final String RETURN_URL =  AlipayPropertiesLoader.getPropertyValue("direct_return_url");
+    public static final String RETURN_URL =  AlipayPropertiesLoader.getPropertyValue("direct_return_url");
 
     @Autowired
     private AlipayService alipayService;
@@ -84,8 +84,12 @@ public class AlipayDirectService {
     public String alipayRequst(Map<String, String> paramMap) throws Exception {
 
         paramMap.put("service" ,SERVICE_NAME);
-//        paramMap.put("returnUrl", RETURN_URL); //同步通知
-        paramMap.put("notifyUrl", NOTIFY_URL);   //异步通知
+        String noticeTag =  AlipayPropertiesLoader.getPropertyValue("alipay_back_switch");
+        if(noticeTag.equals("sync")){
+            paramMap.put("returnUrl", RETURN_URL); //同步通知
+        }else if(noticeTag.equals("async")){
+            paramMap.put("notifyUrl", NOTIFY_URL);   //异步通知
+        }
 
         return  alipayService.alipay(paramMap, PayConstants.ALIPAY_METHOD_GET);
 

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.CheckBrandMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.CheckBrand" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="CNName" property="cnname" jdbcType="VARCHAR" />
+    <result column="ENName" property="enname" jdbcType="VARCHAR" />
+    <result column="views" property="views" jdbcType="BIGINT" />
+    <result column="weight" property="weight" jdbcType="INTEGER" />
+    <result column="logourl" property="logourl" jdbcType="VARCHAR" />
+    <result column="createid" property="createid" jdbcType="BIGINT" />
+    <result column="imgurl" property="imgurl" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="owner" property="owner" jdbcType="VARCHAR" />
+    <result column="certificate" property="certificate" jdbcType="VARCHAR" />
+    <result column="webSite" property="website" jdbcType="VARCHAR" />
+    <result column="publishTime" property="publishtime" jdbcType="TIMESTAMP" />
+    <result column="checkTime" property="checktime" jdbcType="TIMESTAMP" />
+    <result column="lastModifyTime" property="lastmodifytime" jdbcType="TIMESTAMP" />
+    <result column="enterpriseName" property="enterpriseName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.memCenter.entity.CheckBrand" extends="BaseResultMap" >
+    <result column="description" property="description" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, CNName, ENName, views, weight, logourl, createid, imgurl, status, owner, certificate, 
+    webSite, publishTime, checkTime, lastModifyTime
+  </sql>
+  <sql id="Blob_Column_List" >
+    description
+  </sql>
+
+  <select id="queryBrandById" resultMap="BaseResultMap" >
+    select
+    *
+    from t_p_brand_check
+    where id = #{id}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CheckBrand"  useGeneratedKeys="true" keyProperty="id">
+    insert into t_p_brand_check
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="cnname != null" >
+        CNName,
+      </if>
+      <if test="enname != null" >
+        ENName,
+      </if>
+      <if test="views != null" >
+        views,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="logourl != null" >
+        logourl,
+      </if>
+      <if test="createid != null" >
+        createid,
+      </if>
+      <if test="imgurl != null" >
+        imgurl,
+      </if>
+        status,
+      <if test="owner != null" >
+        owner,
+      </if>
+      <if test="certificate != null" >
+        certificate,
+      </if>
+      <if test="website != null" >
+        webSite,
+      </if>
+        publishTime,
+      <if test="checktime != null" >
+        checkTime,
+      </if>
+      <if test="lastmodifytime != null" >
+        lastModifyTime,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="cnname != null" >
+        #{cnname,jdbcType=VARCHAR},
+      </if>
+      <if test="enname != null" >
+        #{enname,jdbcType=VARCHAR},
+      </if>
+      <if test="views != null" >
+        #{views,jdbcType=BIGINT},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="logourl != null" >
+        #{logourl,jdbcType=VARCHAR},
+      </if>
+      <if test="createid != null" >
+        #{createid,jdbcType=BIGINT},
+      </if>
+      <if test="imgurl != null" >
+        #{imgurl,jdbcType=VARCHAR},
+      </if>
+        2,
+      <if test="owner != null" >
+        #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="certificate != null" >
+        #{certificate,jdbcType=VARCHAR},
+      </if>
+      <if test="website != null" >
+        #{website,jdbcType=VARCHAR},
+      </if>
+        now(),
+      <if test="checktime != null" >
+        #{checktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastmodifytime != null" >
+        #{lastmodifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.CheckBrand" >
+    update t_p_brand_check
+    <set >
+      <if test="cnname != null" >
+        CNName = #{cnname,jdbcType=VARCHAR},
+      </if>
+      <if test="enname != null" >
+        ENName = #{enname,jdbcType=VARCHAR},
+      </if>
+      <if test="views != null" >
+        views = #{views,jdbcType=BIGINT},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="logourl != null" >
+        logourl = #{logourl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl != null" >
+        imgurl = #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="owner != null" >
+        owner = #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="certificate != null" >
+        certificate = #{certificate,jdbcType=VARCHAR},
+      </if>
+      <if test="website != null" >
+        webSite = #{website,jdbcType=VARCHAR},
+      </if>
+      <if test="checktime != null" >
+        checkTime = #{checktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastmodifytime != null" >
+        lastModifyTime = now(),
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="deleteBrand">
+    update t_p_brand_check
+    <set >
+      status = 3
+    </set>
+    where id = #{id}
+  </update>
+
+  <select id="searchMyBrand" resultType="java.util.Map" parameterType="java.util.Map">
+    select
+    b.id,b.CNName,b.ENName,b.logourl,b.createid,b.description,b.imgurl,b.status,b.owner,
+    b.certificate,b.webSite,date_format(b.publishTime,'%Y-%m-%d %H:%i:%s')publishTime,
+    date_format(b.checkTime,'%Y-%m-%d %H:%i:%s')checkTime,
+    date_format(b.lastModifyTime,'%Y-%m-%d %H:%i:%s')lastModifyTime
+    from t_p_brand_check b
+    where b.createid = #{createid} and b.status !=3
+    <if test="status != null and status !=''" >
+      and b.status = #{status}
+    </if>
+  </select>
+
+  <select id="findAllByPager" resultMap="BaseResultMap" >
+    select
+    b.CNName,b.owner,b.id,b.certificate,b.webSite,date_format(b.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,b.logourl,b.status,m.enterpriseName
+    from t_p_brand_check b
+    LEFT JOIN t_m_member m on b.createid = m.id
+    WHERE 1=1
+    <if test="status != null" >
+      and b.status = #{status}
+    </if>
+    <if test="CNName != null" >
+      and b.CNName like CONCAT('%',#{CNName},'%')
+    </if>
+  </select>
+</mapper>

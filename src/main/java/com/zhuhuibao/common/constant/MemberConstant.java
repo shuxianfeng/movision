@@ -45,6 +45,9 @@ public class MemberConstant {
             return  this.value;
         }
 
+        public int intValue(){
+            return Integer.valueOf(this.value);
+        }
     }
 
     /**

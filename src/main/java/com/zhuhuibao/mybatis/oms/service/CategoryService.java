@@ -210,4 +210,24 @@ public class CategoryService {
 		result.setData(list);
 		return result;
 	}
+
+	public List<Map<String,Object>> querySystemList() {
+		try {
+			return categoryMapper.querySystemList();
+		} catch (Exception e) {
+			log.error("findSystemList error >>>", e);
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	public List<Map<String,Object>> querySubSystemList(String id) {
+		try {
+			return categoryMapper.querySubSystemList(id);
+		} catch (Exception e) {
+			log.error("findSubSystemList error,id=" + id + " >>>", e);
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

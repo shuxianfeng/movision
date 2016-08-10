@@ -6,6 +6,12 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.constant.VipConstant;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck;
+import com.zhuhuibao.mybatis.memCenter.entity.MemRealCheck;
+import com.zhuhuibao.mybatis.memCenter.mapper.MemInfoCheckMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.MemRealCheckMapper;
+import com.zhuhuibao.mybatis.memCenter.service.MemInfoCheckService;
+import com.zhuhuibao.mybatis.memCenter.service.MemRealCheckService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 
 import org.apache.shiro.SecurityUtils;
@@ -15,6 +21,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,6 +67,12 @@ public class MemberRegService {
 	@Autowired
 	private RegisterValidateService rvService;
 
+	@Autowired
+	MemInfoCheckMapper infoCheckMapper;
+
+	@Autowired
+	MemRealCheckMapper realCheckMapper;
+
 	/**
 	 * 注册用户
 	 */
@@ -83,6 +96,16 @@ public class MemberRegService {
 					member.setWorkType(MemberConstant.MEMBER_WORK_TYPE_100);
 				}
 				memberId = memberRegMapper.registerMember(member);
+				//基本资料审核表+实名认证审核表插入数据
+				MemInfoCheck infoCheck = new MemInfoCheck();
+				BeanUtils.copyProperties(member,infoCheck);
+				infoCheckMapper.insertSelective(infoCheck);
+
+				MemRealCheck realCheck = new MemRealCheck();
+				BeanUtils.copyProperties(member,realCheck);
+				realCheckMapper.insertSelective(realCheck);
+
+
 			}
 		} catch (Exception e) {
 			log.error("register member error", e);
@@ -569,5 +592,16 @@ public class MemberRegService {
 			throw new BusinessException(MsgCodeConstant.mcode_common_failure, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
 		}
 		return result;
+	}
+
+	public int findCountByAccount(String account) {
+		int count = 0;
+		try{
+			    count =  memberRegMapper.findCountByAccount(account);
+		}catch (Exception e){
+			log.error("t_m_member 查询异常>>>" ,e);
+            throw e;
+		}
+		return count;
 	}
 }

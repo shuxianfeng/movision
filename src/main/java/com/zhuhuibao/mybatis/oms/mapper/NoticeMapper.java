@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.oms.mapper;
 
 import com.zhuhuibao.mybatis.oms.entity.Notice;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -30,4 +31,6 @@ public interface NoticeMapper {
     List<Map<String,String>> findAllNoticeList(RowBounds rowBounds);
 
     Map<String,String> queryNoticeById(String id);
+
+    int selectUnreadMessageCount(@Param("id") Long id);
 }

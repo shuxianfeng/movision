@@ -2,7 +2,7 @@ package com.zhuhuibao.mybatis.memCenter.entity;
 
 import java.util.Date;
 
-public class MemberShop {
+public class MemberShop{
     private Integer id;
 
     private String shopName;
@@ -102,4 +102,5 @@ public class MemberShop {
     public void setReason(String reason) {
         this.reason = reason;
     }
+
 }

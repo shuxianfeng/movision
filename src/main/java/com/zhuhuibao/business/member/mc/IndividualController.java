@@ -7,10 +7,9 @@ import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
-import com.zhuhuibao.mybatis.memCenter.entity.Identity;
-import com.zhuhuibao.mybatis.memCenter.entity.Member;
-import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
+import com.zhuhuibao.mybatis.memCenter.entity.*;
+import com.zhuhuibao.mybatis.memCenter.service.MemInfoCheckService;
+import com.zhuhuibao.mybatis.memCenter.service.MemRealCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -34,6 +33,14 @@ public class IndividualController {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    MemInfoCheckService memInfoCheckService;
+
+    @Autowired
+    MemRealCheckService memRealCheckService;
+
+
 
     @ApiOperation(value = "工作类别", notes = "工作类别", response = Response.class)
     @RequestMapping(value = "sel_workTypeList", method = RequestMethod.GET)
@@ -59,8 +66,8 @@ public class IndividualController {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
-            Member member = memberService.findMemById(String.valueOf(memberId));
-            Map map = new HashMap();
+            MemInfoCheck  member = memInfoCheckService.findMemById(String.valueOf(memberId));
+            Map<String,Object> map = new HashMap<>();
             map.put("nickname",member.getNickname());
             map.put("sex",member.getSex());
             map.put("personCompanyType",member.getPersonCompanyType());
@@ -80,6 +87,9 @@ public class IndividualController {
             map.put("QQ",member.getQQ());
             map.put("status",member.getStatus());
             map.put("reason",member.getReason());
+
+            map.put("vipLevel",ShiroUtil.getVipLevel());
+
             result.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -90,17 +100,19 @@ public class IndividualController {
 
     @ApiOperation(value = "个人基本资料保存", notes = "个人基本资料保存", response = Response.class)
     @RequestMapping(value = "base/upd_mem_basic_info", method = RequestMethod.POST)
-    public Response upd_mem_basic_info(@ModelAttribute Member member)  {
+    public Response upd_mem_basic_info(@ModelAttribute MemInfoCheck member)  {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
         ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
         if(memberId!=null){
-            member.setId(String.valueOf(memberId));
+            member.setId(memberId);
             //基本资料待审核
-            if(loginMember.getStatus()==1||loginMember.getStatus()==7){
-                member.setStatus(MemberConstant.MemberStatus.WSZLDSH.toString());
+            //基本资料待审核
+            if(loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue()
+                    ||loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()){
+                member.setStatus(MemberConstant.MemberStatus.WSZLDSH.intValue());
             }
-            memberService.updateMemInfo(member);
+            memInfoCheckService.update(member);
             Member mem = memberService.findMemById(String.valueOf(memberId));
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
@@ -122,14 +134,17 @@ public class IndividualController {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
-            Member member = memberService.findMemById(String.valueOf(memberId));
-            Map map = new HashMap();
+            MemRealCheck member = memRealCheckService.findMemById(String.valueOf(memberId));
+            Map<String,Object> map = new HashMap<>();
             map.put("personRealName",member.getPersonRealName());
             map.put("personIdentifyCard",member.getPersonIdentifyCard());
             map.put("personIDFrontImgUrl",member.getPersonIDFrontImgUrl());
             map.put("personIDBackImgUrl",member.getPersonIDBackImgUrl());
             map.put("status",member.getStatus());
             map.put("reason",member.getReason());
+
+            map.put("vipLevel",ShiroUtil.getVipLevel());
+
             result.setData(map);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -147,18 +162,19 @@ public class IndividualController {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
         ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
-        Member member = new Member();
+        MemRealCheck member = new MemRealCheck();
         if(memberId!=null){
-            member.setId(String.valueOf(memberId));
+            member.setId(memberId);
             //实名认证待审核
-            if(loginMember.getStatus()==6||loginMember.getStatus()==11){
-                member.setStatus(MemberConstant.MemberStatus.SMRZDSH.toString());
+            if(loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue()
+                    ||loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()){
+                member.setStatus(MemberConstant.MemberStatus.SMRZDSH.intValue());
             }
             member.setPersonRealName(personRealName);
             member.setPersonIdentifyCard(personIdentifyCard);
             member.setPersonIDFrontImgUrl(personIDFrontImgUrl);
             member.setPersonIDBackImgUrl(personIDBackImgUrl);
-            memberService.updateMemInfo(member);
+            memRealCheckService.update(member);
             Member mem = memberService.findMemById(String.valueOf(memberId));
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);

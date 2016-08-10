@@ -9,8 +9,10 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.memCenter.entity.MemShopCheck;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
+import com.zhuhuibao.mybatis.memCenter.service.MemShopCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.DateUtils;
@@ -44,19 +46,26 @@ public class ShopController {
     @Autowired
     MemberService memberService;
 
+    @Autowired
+    MemShopCheckService shopCheckService;
+
 
     @ApiOperation(value = "查询商户店铺信息", notes = "查询商户店铺信息")
     @RequestMapping(value = "sel_shop", method = RequestMethod.GET)
     public Response searchOne() {
-
+        MemberShop shop;
         Long companyId = ShiroUtil.getCompanyID();
-
-        MemberShop shop =  memShopService.findByCompanyID(companyId);
-
-        if (shop == null) {
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "商铺不存在");
+        //判断审核表是否存在
+        MemShopCheck check = shopCheckService.findByCompanyID(companyId);
+        if(check == null){
+            shop =  memShopService.findByCompanyID(companyId);
+            if (shop == null) {
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "商铺不存在");
+            }
+            return new Response(shop);
+        }else{
+            return new Response(check);
         }
-        return new Response(shop);
     }
 
     @ApiOperation(value = "编辑商户店铺", notes = "编辑商户店铺")
@@ -81,7 +90,7 @@ public class ShopController {
 
         Long companyId = ShiroUtil.getCompanyID();
 
-        MemberShop memberShop = check(shopId,companyId);
+        check(shopId,companyId);
 
         Member member =  memberService.findMemById(String.valueOf(memberId));
 
@@ -89,16 +98,25 @@ public class ShopController {
         String companyName = member.getEnterpriseName() == null ? "" : member.getEnterpriseName();
 
 
-        memberShop.setOpreatorId(memberId.intValue());
-        memberShop.setCompanyId(companyId.intValue());
-        memberShop.setCompanyAccount(account);
-        memberShop.setCompanyName(companyName);
-        memberShop.setUpdateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
-        memberShop.setStatus(MemberConstant.ShopStatus.DSH.toString());
-        memberShop.setShopName(shopName);
-        memberShop.setBannerUrl(bannerUrl);
+        MemShopCheck shopCheck = shopCheckService.findByCompanyID(companyId);
+        if(shopCheck == null){
+            shopCheck = new MemShopCheck();
+            shopCheck.setOpreatorId(memberId.intValue());
+            shopCheck.setCompanyId(companyId.intValue());
+            shopCheck.setCompanyAccount(account);
+            shopCheck.setCompanyName(companyName);
+            shopCheck.setUpdateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+            shopCheck.setStatus(MemberConstant.ShopStatus.DSH.toString());
+            shopCheck.setShopName(shopName);
+            shopCheck.setBannerUrl(bannerUrl);
 
-        memShopService.update(memberShop);
+            shopCheckService.insert(shopCheck);
+        } else{
+            shopCheck.setStatus(MemberConstant.ShopStatus.DSH.toString());
+            shopCheck.setShopName(shopName);
+            shopCheck.setBannerUrl(bannerUrl);
+            shopCheckService.update(shopCheck);
+        }
 
         return new Response();
     }
@@ -106,9 +124,8 @@ public class ShopController {
     /**
      * 验证商铺是否为登陆用户所在企业商铺
      * @param shopId  商铺ID
-     * @return  memberShop
      */
-    private MemberShop check(String shopId,Long companyId) {
+    private void check(String shopId,Long companyId) {
         if(companyId==null){
             throw new AuthException(MsgCodeConstant.un_login,
                     MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
@@ -122,6 +139,5 @@ public class ShopController {
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"用户商铺不存在");
             }
         }
-        return shop;
     }
 }

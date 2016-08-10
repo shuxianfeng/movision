@@ -25,14 +25,15 @@ public class AlipayRefundService {
      */
     public static final String SERVICE_NAME = AlipayPropertiesLoader.getPropertyValue("refund_service");
 
-    public static final String NOTIFY_URL =  AlipayPropertiesLoader.getPropertyValue("refund_notify_url");
-//    public static final String RETURN_URL =  AlipayPropertiesLoader.getPropertyValue("refund_return_url");
+    public static final String NOTIFY_URL = AlipayPropertiesLoader.getPropertyValue("refund_notify_url");
+    public static final String RETURN_URL = AlipayPropertiesLoader.getPropertyValue("refund_return_url");
 
     @Autowired
     private AlipayService alipayService;
 
     /**
      * 批量退款
+     *
      * @param resp
      * @param paramMap
      */
@@ -42,7 +43,7 @@ public class AlipayRefundService {
 
         log.info("***********************进入批量退款环节********************");
 
-        String  sHtmlText = refundRequst(paramMap);
+        String sHtmlText = refundRequst(paramMap);
         log.info("支付宝退款请求页面:{}", sHtmlText);
 
         PrintWriter out = null;
@@ -51,8 +52,8 @@ public class AlipayRefundService {
             out.write(sHtmlText);
 
         } catch (IOException e) {
-            log.error("获取输出流异常:" ,e);
-        }finally {
+            log.error("获取输出流异常:", e);
+        } finally {
             if (out != null) {
                 out.flush();
                 out.close();
@@ -63,14 +64,20 @@ public class AlipayRefundService {
 
     /**
      * 调用支付宝批量退款接口
+     *
      * @param paramMap
      * @return
      */
     private String refundRequst(Map paramMap) throws Exception {
-        paramMap.put("service" ,SERVICE_NAME);
-//        paramMap.put("returnUrl", RETURN_URL); //同步通知
-        paramMap.put("notifyUrl", NOTIFY_URL);   //异步通知
+        paramMap.put("service", SERVICE_NAME);
 
-        return  alipayService.alirefund(paramMap, PayConstants.ALIPAY_METHOD_GET);
+        String noticeTag = AlipayPropertiesLoader.getPropertyValue("alipay_back_switch");
+        if (noticeTag.equals("sync")) {
+            paramMap.put("returnUrl", RETURN_URL); //同步通知
+        } else if (noticeTag.equals("async")) {
+            paramMap.put("notifyUrl", NOTIFY_URL);   //异步通知
+        }
+
+        return alipayService.alirefund(paramMap, PayConstants.ALIPAY_METHOD_GET);
     }
 }
