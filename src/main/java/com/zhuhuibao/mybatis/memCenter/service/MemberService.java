@@ -743,6 +743,12 @@ public class MemberService {
                 mem.setStatus(String.valueOf(status));
                 updateMemInfo(mem);
 
+                //同步公司名称到基本信息审核表
+                MemInfoCheck icheck = new MemInfoCheck();
+                icheck.setId(member.getId());
+                icheck.setEnterpriseName(member.getEnterpriseName());
+                infoCheckService.update(icheck);
+
             }
 
         } catch (Exception e) {
