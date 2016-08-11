@@ -419,7 +419,7 @@
             <if test="saleProductDesc != null">
                 saleProductDesc = #{saleProductDesc,jdbcType=VARCHAR},
             </if>
-            <if test="enterpriseCreaterTime != null">
+            <if test="enterpriseCreaterTime != null and enterpriseCreaterTime !='' ">
                 enterpriseCreaterTime = #{enterpriseCreaterTime,jdbcType=VARCHAR},
             </if>
             <if test="registerCapital != null">
