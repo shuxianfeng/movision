@@ -4,10 +4,13 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.pojo.AskPriceBean;
 import com.zhuhuibao.common.pojo.AskPriceResultBean;
 import com.zhuhuibao.common.pojo.AskPriceSearchBean;
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.service.PriceService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
@@ -120,9 +123,16 @@ public class PriceController {
      */
     @ApiOperation(value="查看具体某条询价信息",notes="查看具体某条询价信息",response = Response.class)
     @RequestMapping(value = {"/rest/price/queryAskPriceByID","/rest/system/mc/enquiry/sel_enquiry"}, method = RequestMethod.GET)
-    public Response queryAskPriceByID(@RequestParam String id) throws IOException {
-        Response result = priceService.queryAskPriceByID(id);
-        return result;
+    public Response queryAskPriceByID(@RequestParam String id) {
+        Response response = new Response();
+        AskPriceBean bean = priceService.queryAskPriceByID(id);
+        Long memberid = ShiroUtil.getCompanyID();
+        if(!String.valueOf(memberid).equals(bean.getCreateid()) && "结束".equals(bean.getStatusName())){
+            throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
+        }else {
+            response.setData(bean);
+        }
+        return response;
     }
 
     /**
