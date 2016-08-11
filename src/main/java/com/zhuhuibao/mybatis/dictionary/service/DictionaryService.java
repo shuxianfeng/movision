@@ -150,7 +150,7 @@ public class DictionaryService {
         return list;
     }
 
-    @Cacheable(value = "positionType", key = "'parent_' + #count")
+    @Cacheable(value = "positionType", key = "#root.targetClass + #root.methodName + #count")
     public List<Position> findParentTypes(int count) {
         List<Position> list;
         try {
