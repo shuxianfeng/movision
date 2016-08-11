@@ -204,7 +204,7 @@ public class SystemController {
             checkBrandService.addSysBrand(sysBrand);
         }
         //审核通过，将字表的数据同步到主表，包括基本信息表和品牌所属分类表
-        if("1".equals(brand.getStatus().toString())){
+        if("1".equals(brand.getStatus().toString()) || "3".equals(brand.getStatus().toString())){
             CheckBrand checkBrand = checkBrandService.queryBrandById(String.valueOf(brand.getId()));
             Brand newBrand = new Brand();
             newBrand.setId(checkBrand.getId());
@@ -219,7 +219,7 @@ public class SystemController {
             newBrand.setWebSite(checkBrand.getWebsite());
             newBrand.setPublishTime(checkBrand.getPublishtime());
             newBrand.setLastModifyTime(checkBrand.getLastmodifytime());
-            newBrand.setStatus("1");
+            newBrand.setStatus(brand.getStatus().toString());
             //判断是否是第一次审核通过
             Brand isExist = brandService.brandDetails(String.valueOf(brand.getId()));
             if(isExist!=null){
