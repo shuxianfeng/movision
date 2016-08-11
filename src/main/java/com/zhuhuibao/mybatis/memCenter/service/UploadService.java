@@ -108,7 +108,6 @@ public class UploadService {
 
         } catch (Exception e) {
             log.error("upload error!", e);
-
             result.put("status", "fail");
 
         }
@@ -191,6 +190,7 @@ public class UploadService {
             }
         } catch (Exception e) {
             log.error("upload error!", e);
+            throw e;
         }
         return url;
     }

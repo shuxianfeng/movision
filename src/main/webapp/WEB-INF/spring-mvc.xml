@@ -39,7 +39,16 @@
             </bean>
 
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-                <property name="supportedMediaTypes" value="*/*"/>
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>text/json;charset=UTF-8</value>
+                        <value>text/*;charset=UTF-8</value>
+                        <value>*/*</value>
+                    </list>
+                </property>
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
@@ -72,7 +81,16 @@
             <list>
                 <bean
                         class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-                    <property name="supportedMediaTypes" value="*/*"/>
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>application/json;charset=UTF-8</value>
+                            <value>text/html;charset=UTF-8</value>
+                            <value>text/plain;charset=UTF-8</value>
+                            <value>text/json;charset=UTF-8</value>
+                            <value>text/*;charset=UTF-8</value>
+                            <value>*/*</value>
+                        </list>
+                    </property>
                 </bean>
             </list>
         </property>
@@ -94,6 +112,7 @@
                     p:defaultContentType="text/html">
                 <property name="mediaTypes">
                     <map>
+                        <entry key="plain" value="text/plain"/>
                         <entry key="html" value="text/html"/>
                         <entry key="pdf" value="application/pdf"/>
                         <entry key="json" value="application/json"/>
@@ -148,7 +167,6 @@
         <bean class="com.zhuhuibao.aop.InitLogonMemberInterceptor"/>
         <bean class="com.zhuhuibao.aop.UserAccessInterceptor"/>
     </mvc:interceptors>
-
 
 
     <!--AOP-->
