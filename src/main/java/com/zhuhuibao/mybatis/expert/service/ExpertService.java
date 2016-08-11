@@ -787,4 +787,40 @@ public class ExpertService {
             throw e;
         }
     }
+
+    public List<Map<String,String>> findAllMyLookedAchievementList(Paging<Map<String, String>> pager, Map<String, Object> map) {
+        try {
+            return achievementMapper.findAllMyLookedAchievementList(pager.getRowBounds(),map);
+        } catch (Exception e) {
+            log.error("ExpertService::findAllMyLookedAchievementList",e);
+            throw e;
+        }
+    }
+
+    public int deleteLookedAchievement(String id) {
+        try {
+            return achievementMapper.deleteLookedAchievement(id);
+        } catch (Exception e) {
+            log.error("ExpertService::deleteLookedAchievement::id=="+id,e);
+            throw e;
+        }
+    }
+
+    public List<Map<String,String>> findAllMyLookedExpertList(Paging<Map<String, String>> pager, Map<String, Object> map) {
+        try {
+            return expertMapper.findAllMyLookedExpertList(pager.getRowBounds(),map);
+        } catch (Exception e) {
+            log.error("ExpertService::findAllMyLookedExpertList",e);
+            throw e;
+        }
+    }
+
+    public int deleteLookedExpert(String id) {
+        try {
+            return expertMapper.deleteLookedExpert(id);
+        } catch (Exception e) {
+            log.error("ExpertService::deleteLookedExpert::id=="+id,e);
+            throw e;
+        }
+    }
 }

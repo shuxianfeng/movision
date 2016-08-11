@@ -11,14 +11,11 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.expert.entity.*;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
-import com.zhuhuibao.shiro.realm.OMSRealm;
-import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +38,9 @@ public class ExpertController {
 
     @Autowired
     private ExpertService expertService;
+
+    @Autowired
+    private MemberService memberService;
 
     @ApiOperation(value = "我的技术成果(后台)", notes = "我的技术成果(后台)", response = Response.class)
     @RequestMapping(value = "ach/sel_myAchievementList", method = RequestMethod.GET)
@@ -226,7 +226,7 @@ public class ExpertController {
         return response;
     }
 
-    @ApiOperation(value = "根据id查询专家全部信息", notes = "根据id查询专家全部信息", response = Response.class)
+    @ApiOperation(value = "查询我的专家全部信息", notes = "查询我的专家全部信息", response = Response.class)
     @RequestMapping(value = "base/sel_expert", method = RequestMethod.GET)
     public Response queryExpertById()  {
         Response response = new Response();
@@ -367,6 +367,84 @@ public class ExpertController {
         //狀態設為已關閉
         question.setStatus(ExpertConstant.EXPERT_QUESTION_STATUS_FOUR);
         expertService.updateQuestionInfo(question);
+        return response;
+    }
+
+    @RequestMapping(value="sel_my_looked_achievementList", method = RequestMethod.GET)
+    @ApiOperation(value="查询我查看过的专家技术成果",notes = "查询我查看过的专家技术成果",response = Response.class)
+    public Response sel_my_looked_achievementList( @ApiParam(value = "页码") @RequestParam(required = false,defaultValue = "1") String pageNo,
+                         @ApiParam(value = "每页显示的数目") @RequestParam(required = false,defaultValue = "10") String pageSize)
+    {
+        Response response = new Response();
+        Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo),
+                Integer.valueOf(pageSize));
+        Long createId = ShiroUtil.getCreateID();
+        Map<String, Object> map = new HashMap<>();
+        if (createId != null) {
+            Member member = memberService.findMemById(String.valueOf(createId));
+            if ("100".equals(member.getWorkType())) {
+                map.put("companyId", createId);
+            } else {
+                map.put("viewerId", createId);
+            }
+            List<Map<String, String>> achievementList = expertService.findAllMyLookedAchievementList(pager, map);
+            pager.result(achievementList);
+            response.setData(pager);
+        } else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
+                    .valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @RequestMapping(value="del_batch_my_looked_achievement", method = RequestMethod.POST)
+    @ApiOperation(value="批量删除我查看过的专家技术成果",notes = "批量删除我查看过的专家技术成果",response = Response.class)
+    public Response del_batch_my_looked_achievement(@RequestParam() String ids)
+    {
+        Response response = new Response();
+        String idlist[] = ids.split(",");
+        for (String id : idlist) {
+            expertService.deleteLookedAchievement(id);
+        }
+        return response;
+    }
+
+    @RequestMapping(value="sel_my_looked_expertList", method = RequestMethod.GET)
+    @ApiOperation(value="查询我查看过的专家列表",notes = "查询我查看过的专家列表",response = Response.class)
+    public Response sel_my_looked_expertList( @ApiParam(value = "页码") @RequestParam(required = false,defaultValue = "1") String pageNo,
+                         @ApiParam(value = "每页显示的数目") @RequestParam(required = false,defaultValue = "10") String pageSize)
+    {
+        Response response = new Response();
+        Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo),
+                Integer.valueOf(pageSize));
+        Long createId = ShiroUtil.getCreateID();
+        Map<String, Object> map = new HashMap<>();
+        if (createId != null) {
+            Member member = memberService.findMemById(String.valueOf(createId));
+            if ("100".equals(member.getWorkType())) {
+                map.put("companyId", createId);
+            } else {
+                map.put("viewerId", createId);
+            }
+            List<Map<String, String>> expertList = expertService.findAllMyLookedExpertList(pager, map);
+            pager.result(expertList);
+            response.setData(pager);
+        } else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
+                    .valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @RequestMapping(value="del_batch_my_looked_expert", method = RequestMethod.POST)
+    @ApiOperation(value="批量删除我查看过的专家",notes = "批量删除我查看过的专家",response = Response.class)
+    public Response del_batch_my_looked_expert(@RequestParam() String ids)
+    {
+        Response response = new Response();
+        String idlist[] = ids.split(",");
+        for (String id : idlist) {
+            expertService.deleteLookedExpert(id);
+        }
         return response;
     }
 }
