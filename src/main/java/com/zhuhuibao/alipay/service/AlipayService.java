@@ -162,12 +162,16 @@ public class AlipayService {
     public ModelAndView syncNotify(HttpServletRequest request, String tradeType) {
 
         ModelAndView modelAndView = new ModelAndView();
-        RedirectView rv = new RedirectView(PropertiesUtils.getValue("host.ip") + "/" + PropertiesUtils.getValue("alipay_return_url"));
-        modelAndView.setView(rv);
+        String returnUrl = PropertiesUtils.getValue("host.ip") + "/" + PropertiesUtils.getValue("alipay_return_url");
+
         try {
             // 获取返回信息
             // 获取支付宝GET过来反馈信息
             Map<String, String> params = getRequestParams(request);
+
+            String orderNo = params.get("out_trade_no");
+            RedirectView rv = new RedirectView(returnUrl + orderNo);
+            modelAndView.setView(rv);
 
             // 计算得出通知验证结果
             log.info("******支付宝同步回调校验参数信息开始*******");
@@ -420,7 +424,7 @@ public class AlipayService {
             //同步通知
             if (notifyType.equals(PayConstants.NotifyType.SYNC.toString())) {
                 log.error("同步通知返回记录处理...[{}]", params.get("out_trade_no"));
-//                callbackNotice(params, tradeType, order);
+                callbackNotice(params, tradeType, order);
             }
 
             resultMap.put("statusCode", String.valueOf(PayConstants.HTTP_SUCCESS_CODE));
