@@ -54,6 +54,8 @@ public class Product implements Serializable {
 
     //产品发布者名称
     private String publisherName;
+    
+    private String reason;
 
     public Long getId() {
         return id;
@@ -230,4 +232,14 @@ public class Product implements Serializable {
     public void setPublisherName(String publisherName) {
         this.publisherName = publisherName;
     }
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+    
+    
 }

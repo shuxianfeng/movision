@@ -91,6 +91,9 @@ public class ProductPublishMcController {
             Product b = productService.findById(product.getId());
             if(b!=null){
                 if(String.valueOf(createid).equals(String.valueOf(b.getCreateid()))){
+                	
+                    product.setStatus(Constants.product_status_nocheck);
+                    
                     response = productService.updateProduct(product);
                 }else {
                     throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
