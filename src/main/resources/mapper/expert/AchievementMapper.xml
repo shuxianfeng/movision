@@ -270,9 +270,9 @@
     select c.id,c.title,date_format(v.viewTime,'%Y-%m-%d') viewTime,
     v.id as recordId,co.name as systemName,con.name as areaName
     from t_zhb_viewGoods v
-    left join t_tech_cooperation c on v.goodsId = c.id
-    left join t_dictionary_constant co on c.systemCategory = co.code and co.`type` = 19
-    left join t_dictionary_constant con on c.applicationArea = con.code and con.`type` = 18
+    left join t_e_achievement c on v.goodsId = c.id
+    left join t_dictionary_constant co on c.systemType = co.code and co.`type` = 19
+    left join t_dictionary_constant con on c.useArea = con.code and con.`type` = 18
     where v.type = 'CKZJJSCG' and v.`status` = 0
     <if test="companyId != null">
       and v.companyId = #{companyId}
