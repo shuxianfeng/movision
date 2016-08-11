@@ -86,7 +86,7 @@ public class AdService {
 			result = adMapper.addAdInfo(map);
 			//同步更新广告详情
 			String type=map.get("type").toString();
-			if(result>0&&!"1".equals(type))
+			if(result>0&&"3".equals(type))
 			{
 				adMapper.addAdDetailsInfo(map);
 			}

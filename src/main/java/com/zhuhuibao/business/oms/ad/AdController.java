@@ -97,6 +97,11 @@ public class AdController {
 	    public Response updateAdInfo(@ApiParam(value = "广告ID")@RequestParam(required = false) String id,
                 @ApiParam(value = "名称")@RequestParam(required = false)String name,
                 @ApiParam(value = "排序")@RequestParam(required = false) String sort,
+                @ApiParam(value = "频道类型")@RequestParam(required = false) String chanType,
+                @ApiParam(value = "频道名称")@RequestParam(required = false) String chanPage,
+                @ApiParam(value = "广告类别")@RequestParam(required = false) String advType,
+                @ApiParam(value = "所属上级广告")@RequestParam(required = false) String parentId,
+                @ApiParam(value = "广告位置")@RequestParam(required = false) String position,
                 @ApiParam(value = "修改类型")@RequestParam(required = false) String type) {
 	        Response result = new Response();
 	 
@@ -111,6 +116,11 @@ public class AdController {
 	 	  	        map.put("name",name);
 	 	  	        map.put("sort",sort); 
 	 	  	        map.put("type",type); 
+	 	  	        map.put("chanType",chanType); 
+	 	  	        map.put("chanPage",chanPage); 
+	 	  	        map.put("advType",advType); 
+	 	  	        map.put("parentId",parentId); 
+	 	  	        map.put("position",position); 
 	 	  	        adService.updateAdInfo(map);
 	 	  	        
 	 	        }else {
@@ -132,6 +142,11 @@ public class AdController {
 	    public Response addAdInfo(
                 @ApiParam(value = "名称")@RequestParam(required = false)String name,
                 @ApiParam(value = "排序")@RequestParam(required = false) String sort,
+                @ApiParam(value = "频道类型")@RequestParam(required = false) String chanType,
+                @ApiParam(value = "频道名称")@RequestParam(required = false) String chanPage,
+                @ApiParam(value = "广告类别")@RequestParam(required = false) String advType,
+                @ApiParam(value = "所属上级广告")@RequestParam(required = false) String parentId,
+                @ApiParam(value = "广告位置")@RequestParam(required = false) String position,
                 @ApiParam(value = "添加类型")@RequestParam(required = false) String type) {
 	        Response result = new Response();
 	 
@@ -145,6 +160,11 @@ public class AdController {
 	 	  	        map.put("name",name);
 	 	  	        map.put("sort",sort); 
 	 	  	        map.put("type",type); 
+	 	  	        map.put("chanType",chanType); 
+	 	  	        map.put("chanPage",chanPage); 
+	 	  	        map.put("advType",advType); 
+	 	  	        map.put("parentId",parentId); 
+	 	  	        map.put("position",position); 
 	 	  	       adService.addAdInfo(map);
 	 	  	        
 	 	        }else {

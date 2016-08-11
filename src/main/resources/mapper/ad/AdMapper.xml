@@ -3,7 +3,7 @@
 <mapper namespace="com.zhuhuibao.mybatis.ad.mapper.AdMapper"> 
 
    <select id="findAllAdList" parameterType="java.util.Map" resultType="java.util.Map">
-       select id,code,name,sort,parentId from t_sys_adv_constant
+       select id,code,name,sort,parentId,position from t_sys_adv_constant
        where 
        <if test="chanType==null">
           parentId=0
@@ -32,7 +32,7 @@
    </select> 
    
     <select id="findAdType" parameterType="java.util.Map" resultType="java.util.Map">
-       select id,code,name,sort,parentId from t_sys_adv_constant
+       select id,code,name,sort,parentId,position from t_sys_adv_constant
        where 
        <if test="chanType==null">
           parentId=0
@@ -81,13 +81,13 @@
      
 	   <set> 
 	     <if test="type==2">
-	        pageDesc=#{pageDesc,jdbcType=VARCHAR}
+	        pageDesc=#{name,jdbcType=VARCHAR}
 	     </if>
 	      <if test="type==3">
-	        advAreaDesc=#{advAreaDesc,jdbcType=VARCHAR}
+	        advAreaDesc=#{name,jdbcType=VARCHAR}
 	     </if>
 	      <if test="type==4">
-	        advTypeDesc=#{advTypeDesc,jdbcType=VARCHAR}
+	        advTypeDesc=#{name,jdbcType=VARCHAR}
 	     </if> 
 	   </set>
 	    where 
@@ -133,17 +133,28 @@
    </update>
    
    <insert id="addAdInfo" parameterType="java.util.Map"> 
-	insert into t_sys_adv_constant(code,name,parentId,sort)
+	insert into t_sys_adv_constant(code,name,parentId,sort,position)
 	select (max(code)+1) code,#{name,jdbcType=VARCHAR}
 	,#{parentId,jdbcType=VARCHAR},
-	#{sort,jdbcType=VARCHAR} from t_sys_adv_constant 
+	#{sort,jdbcType=VARCHAR},
+	#{position,jdbcType=VARCHAR}
+	from t_sys_adv_constant 
    </insert>
    
     <insert id="addAdDetailsInfo" parameterType="java.util.Map"> 
-	insert into t_sys_adv_constant (code,name,parentId,sort)
-	select max(code),#{name,jdbcType=VARCHAR}
-	,#{parentId,jdbcType=VARCHAR},
-	#{sort,jdbcType=VARCHAR} from t_sys_adv_constant  
+	 insert into t_sys_adv_attr (chanType,page,pageDesc,advArea,advAreaDesc,advType,advTypeDesc)
+	  select #{chanType,jdbcType=VARCHAR} chanType,
+	 (select position from t_sys_adv_constant where code=#{chanPage,jdbcType=VARCHAR}) page,
+	 (select name from t_sys_adv_constant where code=#{chanPage,jdbcType=VARCHAR}) pageDesc,
+	 
+	 (select position from t_sys_adv_constant where code=#{parentId,jdbcType=VARCHAR}) advArea,
+	 (select name from t_sys_adv_constant where code=#{parentId,jdbcType=VARCHAR}) advAreaDesc,
+	 
+	 name advTypeDesc, position advType from t_sys_adv_constant   
+	 
+	  where id= (select max(id) from t_sys_adv_constant);
+ 
+ 
    </insert>
    
 </mapper>
