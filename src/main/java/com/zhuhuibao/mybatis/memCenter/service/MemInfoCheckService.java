@@ -4,6 +4,7 @@ import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemInfoCheckMapper;
+import com.zhuhuibao.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class MemInfoCheckService {
     public void update(MemInfoCheck member) {
         try {
 
-            member.setUpdateTime(new Date());
+            member.setUpdateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
             memInfoCheckMapper.updateByPrimaryKeySelective(member);
 
         } catch (Exception e) {

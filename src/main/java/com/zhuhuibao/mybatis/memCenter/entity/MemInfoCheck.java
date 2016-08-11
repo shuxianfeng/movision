@@ -9,7 +9,7 @@ public class MemInfoCheck {
 
     private String email;
 
-    private Date updateTime;
+    private String updateTime;
 
     private Integer status;
 
@@ -202,12 +202,16 @@ public class MemInfoCheck {
         this.email = email == null ? null : email.trim();
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public void setWorkType(int workType) {
+        this.workType = workType;
     }
 
     public Integer getStatus() {
