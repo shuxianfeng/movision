@@ -169,8 +169,6 @@ public class AlipayService {
             // 获取支付宝GET过来反馈信息
             Map<String, String> params = getRequestParams(request);
 
-            System.out.println("支付宝反馈参数:" + params);
-
             String orderNo = params.get("out_trade_no");
             RedirectView rv = new RedirectView(returnUrl + orderNo);
             modelAndView.setView(rv);
@@ -562,12 +560,9 @@ public class AlipayService {
         for (String key : params.keySet()) {
             pMap.put(CommonUtils.getCamelString(key), params.get(key));
         }
-
-        System.out.printf("同步接口如表参数>>" + pMap);
-
 //        pMap.put("price", String.valueOf(new BigDecimal(pMap.get("price")).multiply(new BigDecimal(1000)).longValue()));
 //        pMap.put("totalFee", String.valueOf(new BigDecimal(pMap.get("totalFee")).multiply(new BigDecimal(1000)).longValue()));
-        log.info("需转换为bean的pMap>>{}" , pMap);
+        log.info("需转换为bean的pMap>>{}", pMap);
         try {
             BeanUtils.populate(alipayCallbackLog, pMap);
         } catch (Exception e) {
