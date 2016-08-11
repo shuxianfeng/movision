@@ -561,7 +561,7 @@ public class AlipayService {
             pMap.put(CommonUtils.getCamelString(key), params.get(key));
         }
 //        pMap.put("price", String.valueOf(new BigDecimal(pMap.get("price")).multiply(new BigDecimal(1000)).longValue()));
-//        pMap.put("totalFee", String.valueOf(new BigDecimal(pMap.get("totalFee")).multiply(new BigDecimal(1000)).longValue()));
+        pMap.put("totalFee", String.valueOf(new BigDecimal(pMap.get("totalFee")).multiply(new BigDecimal(1000)).longValue()));
         log.info("需转换为bean的pMap>>{}", pMap);
         try {
             BeanUtils.populate(alipayCallbackLog, pMap);
