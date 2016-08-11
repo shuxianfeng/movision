@@ -131,7 +131,7 @@ public class ShopController {
                     MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         //验证店铺ID是否为该用户所在企业的店铺
-        MemberShop shop =  memShopService.findByCompanyID(companyId);
+        MemShopCheck shop =  shopCheckService.findByCompanyID(companyId);
         if(shop == null){
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"用户商铺不存在");
         }else{
