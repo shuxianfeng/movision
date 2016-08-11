@@ -330,7 +330,7 @@
   </select>
 
   <select id="findAllNewPriceInfoList" resultMap="BaseResultMap">
-    select p.id,p.title,p.publishTime,concat(pr.name,c.name) as provinceCode,
+    select p.id,p.title,p.endTime,concat(pr.name,c.name) as provinceCode,
     (SELECT count(*) FROM t_p_offer_price where askid = p.id) as count,
     <if test="createid != null and createid != ''">
       CASE WHEN p.createid != #{createid}

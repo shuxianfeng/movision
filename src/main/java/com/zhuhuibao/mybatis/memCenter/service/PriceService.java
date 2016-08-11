@@ -222,7 +222,7 @@ public class PriceService {
             Map map = new HashMap();
             map.put(Constants.id, askPrice.getId());
             map.put(Constants.title, askPrice.getTitle());
-            map.put(Constants.publishTime, askPrice.getPublishTime().substring(0, 10));
+            map.put(Constants.publishTime, askPrice.getEndTime().substring(0, 10));
             map.put(Constants.area, askPrice.getProvinceCode());
             map.put("isCan", askPrice.getIsCan());
             map.put("count", askPrice.getCount());
