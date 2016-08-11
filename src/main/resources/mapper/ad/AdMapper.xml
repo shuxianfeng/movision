@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuhuibao.mybatis.ad.mapper.AdMapper"> 
+
+   <select id="findAllAdList" parameterType="java.util.Map" resultType="java.util.Map">
+       select id,code,name,sort,parentId from t_sys_adv_constant
+       where 
+       <if test="chanType==null">
+          parentId=0
+       </if>
+       
+        <if test="chanType!=null">
+          <if test="chanPage!=null">
+            <if test="advArea!=null">
+              <if test="advType!=null">
+               code = #{advType,jdbcType=VARCHAR}
+               </if>
+               <if test="advType==null">
+               parentId= #{advArea,jdbcType=VARCHAR}
+               </if>
+            </if>
+             <if test="advArea==null">
+               parentId= #{chanPage,jdbcType=VARCHAR}
+            </if>
+          </if>
+          
+           <if test="chanPage==null">
+            parentId= #{chanType,jdbcType=VARCHAR}
+          </if>
+          
+        </if>
+   </select> 
+   
+    <select id="findAdType" parameterType="java.util.Map" resultType="java.util.Map">
+       select id,code,name,sort,parentId from t_sys_adv_constant
+       where 
+       <if test="chanType==null">
+          parentId=0
+       </if>
+       
+         <if test="chanType!=null">
+          <if test="page!=null">
+            <if test="advArea!=null">
+              <if test="advType!=null">
+               parentId= #{advType,jdbcType=VARCHAR}
+               </if>
+               <if test="advType==null">
+               parentId= #{advArea,jdbcType=VARCHAR}
+               </if>
+            </if>
+             <if test="advArea==null">
+               parentId= #{page,jdbcType=VARCHAR}
+            </if>
+          </if>
+          
+           <if test="page==null">
+            parentId= #{chanType,jdbcType=VARCHAR}
+          </if>
+          
+        </if>
+        
+   </select> 
+   
+   <update id="updateAdInfo" parameterType="java.util.Map">
+   
+     update t_sys_adv_constant  
+	   <set> 
+	      <if test="sort !=null">
+	        sort=#{sort,jdbcType=VARCHAR},
+	      </if> 
+	      name=#{name,jdbcType=VARCHAR} 
+	   </set>
+	    where id=#{id,jdbcType=VARCHAR}
+     
+   </update>
+   
+    <update id="updateAdDetailsInfo" parameterType="java.util.Map">
+   
+     update t_sys_adv_attr  
+     
+     
+	   <set> 
+	     <if test="type==2">
+	        pageDesc=#{pageDesc,jdbcType=VARCHAR}
+	     </if>
+	      <if test="type==3">
+	        advAreaDesc=#{advAreaDesc,jdbcType=VARCHAR}
+	     </if>
+	      <if test="type==4">
+	        advTypeDesc=#{advTypeDesc,jdbcType=VARCHAR}
+	     </if> 
+	   </set>
+	    where 
+	    
+	     <if test="type==2">
+	        chanType=(select code from t_sys_adv_constant where id=#{id,jdbcType=VARCHAR} and name=#{pageDesc,jdbcType=VARCHAR})
+	     </if>
+	      <if test="type==3">
+	        id in (
+	        
+	           select e.id from t_sys_adv_attr e,(
+
+				select d.id,d.name,c.page,c.advAreaDesc from t_sys_adv_constant d , (
+				select a.parentId,a.name page,t.advAreaDesc from (
+				
+				select t.parentId,t.name advAreaDesc from t_sys_adv_constant t where id=#{id,jdbcType=VARCHAR} 
+				) t left join t_sys_adv_constant a on t.parentId=a.id  ) c where d.id=c.parentId
+				
+				 ) f where e.chanType=f.id and e.pageDesc=f.page and e.advAreaDesc=f.advAreaDesc
+				 
+ 
+	        )
+	     </if>
+	     
+	      <if test="type==4">
+	         id in 
+	         
+	          (select t.id from t_sys_adv_attr t ,(
+
+				select d.parentId,d.name,c.advAreaDesc,c.advTypeDesc from t_sys_adv_constant d , (
+				select a.parentId,a.name advAreaDesc,t.advTypeDesc from (
+				select t.parentId,t.name advTypeDesc from t_sys_adv_constant t where id=#{id,jdbcType=VARCHAR}  
+				) t left join t_sys_adv_constant a on t.parentId=a.id  ) c where d.id=c.parentId
+				
+				) w where t.chanType=w.parentId 
+				and t.advAreaDesc=w.advAreaDesc 
+				and t.advTypeDesc=w.advTypeDesc
+				and t.pageDesc=w.name
+			)
+	     </if> 
+	   
+     
+   </update>
+   
+   <insert id="addAdInfo" parameterType="java.util.Map"> 
+	insert into t_sys_adv_constant(code,name,parentId,sort)
+	select (max(code)+1) code,#{name,jdbcType=VARCHAR}
+	,#{parentId,jdbcType=VARCHAR},
+	#{sort,jdbcType=VARCHAR} from t_sys_adv_constant 
+   </insert>
+   
+    <insert id="addAdDetailsInfo" parameterType="java.util.Map"> 
+	insert into t_sys_adv_constant (code,name,parentId,sort)
+	select max(code),#{name,jdbcType=VARCHAR}
+	,#{parentId,jdbcType=VARCHAR},
+	#{sort,jdbcType=VARCHAR} from t_sys_adv_constant  
+   </insert>
+   
+</mapper>
