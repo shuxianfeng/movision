@@ -138,7 +138,7 @@ public class DictionaryService {
         return province;
     }
 
-//    @Cacheable(value = "positionTypeList", key = "#parentId")
+    @Cacheable(value = "positionType", key = "#root.methodName+'_'+#parentId")
     public List<Position> findPositionByParentId(String parentId) {
         List<Position> list;
         try {
