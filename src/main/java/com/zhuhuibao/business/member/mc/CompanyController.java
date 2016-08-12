@@ -50,52 +50,52 @@ public class CompanyController {
     public Response basicInfo() {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
-        if(memberId!=null){
-            MemInfoCheck  member = memInfoCheckService.findMemById(String.valueOf(memberId));
-            Map<String,Object> map = new HashMap<>();
-            map.put("enterpriseName",member.getEnterpriseName());
-            map.put("enterpriseType",member.getEnterpriseType());
-            map.put("enterpriseTypeName",member.getEnterpriseTypeName());
-            map.put("identify",member.getIdentify());
-            map.put("identifyName",member.getIdentifyName());
+        if (memberId != null) {
+            MemInfoCheck member = memInfoCheckService.findMemById(String.valueOf(memberId));
+            Map<String, Object> map = new HashMap<>();
+            map.put("enterpriseName", member.getEnterpriseName());
+            map.put("enterpriseType", member.getEnterpriseType());
+            map.put("enterpriseTypeName", member.getEnterpriseTypeName());
+            map.put("identify", member.getIdentify());
+            map.put("identifyName", member.getIdentifyName());
             String createrTime = member.getEnterpriseCreaterTime();
-            if(createrTime != null){
-                map.put("enterpriseCreaterTime", DateUtils.str2DateFormat(createrTime,"yyyy-MM-dd"));
-            } else{
+            if (createrTime != null) {
+                map.put("enterpriseCreaterTime", DateUtils.str2DateFormat(createrTime, "yyyy-MM-dd"));
+            } else {
                 map.put("enterpriseCreaterTime", "");
             }
-            map.put("registerCapital",member.getRegisterCapital());
-            map.put("currency",member.getCurrency());
-            map.put("employeeNumber",member.getEmployeeNumber());
-            map.put("employeeNumberName",member.getEmployeeNumberName());
-            map.put("province",member.getProvince());
-            map.put("provinceName",member.getProvinceName());
-            map.put("city",member.getCity());
-            map.put("cityName",member.getCityName());
-            map.put("area",member.getArea());
-            map.put("areaName",member.getAreaName());
-            map.put("address",member.getAddress());
-            map.put("enterpriseLogo",member.getEnterpriseLogo());
-            map.put("headShot",member.getHeadShot());
-            map.put("saleProductDesc",member.getSaleProductDesc());
-            map.put("enterpriseDesc",member.getEnterpriseDesc());
-            map.put("enterpriseProvince",member.getEnterpriseProvince());
-            map.put("enterpriseProvinceName",member.getEnterpriseProvinceName());
-            map.put("enterpriseCity",member.getEnterpriseCity());
-            map.put("enterpriseCityName",member.getEnterpriseCityName());
-            map.put("enterpriseArea",member.getEnterpriseArea());
-            map.put("enterpriseAreaName",member.getEnterpriseAreaName());
-            map.put("enterpriseAddress",member.getEnterpriseAddress());
-            map.put("enterpriseTelephone",member.getEnterpriseTelephone());
-            map.put("enterpriseFox",member.getEnterpriseFox());
-            map.put("enterpriseWebSite",member.getEnterpriseWebSite());
-            map.put("status",member.getStatus());
-            map.put("reason",member.getReason());
+            map.put("registerCapital", member.getRegisterCapital());
+            map.put("currency", member.getCurrency());
+            map.put("employeeNumber", member.getEmployeeNumber());
+            map.put("employeeNumberName", member.getEmployeeNumberName());
+            map.put("province", member.getProvince());
+            map.put("provinceName", member.getProvinceName());
+            map.put("city", member.getCity());
+            map.put("cityName", member.getCityName());
+            map.put("area", member.getArea());
+            map.put("areaName", member.getAreaName());
+            map.put("address", member.getAddress());
+            map.put("enterpriseLogo", member.getEnterpriseLogo());
+            map.put("headShot", member.getHeadShot());
+            map.put("saleProductDesc", member.getSaleProductDesc());
+            map.put("enterpriseDesc", member.getEnterpriseDesc());
+            map.put("enterpriseProvince", member.getEnterpriseProvince());
+            map.put("enterpriseProvinceName", member.getEnterpriseProvinceName());
+            map.put("enterpriseCity", member.getEnterpriseCity());
+            map.put("enterpriseCityName", member.getEnterpriseCityName());
+            map.put("enterpriseArea", member.getEnterpriseArea());
+            map.put("enterpriseAreaName", member.getEnterpriseAreaName());
+            map.put("enterpriseAddress", member.getEnterpriseAddress());
+            map.put("enterpriseTelephone", member.getEnterpriseTelephone());
+            map.put("enterpriseFox", member.getEnterpriseFox());
+            map.put("enterpriseWebSite", member.getEnterpriseWebSite());
+            map.put("status", member.getStatus());
+            map.put("reason", member.getReason());
 
-            map.put("vipLevel",ShiroUtil.getVipLevel());
+            map.put("vipLevel", ShiroUtil.getVipLevel());
 
             result.setData(map);
-        }else {
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
@@ -104,19 +104,19 @@ public class CompanyController {
     @ApiOperation(value = "查询企业实名信息", notes = "查询企业实名信息", response = Response.class)
     @RequestMapping(value = "sel_mem_realName_info", method = RequestMethod.GET)
     public Response realNameInfo() {
-        Map<String,Object> map;
+        Map<String, Object> map;
         Long memberId = ShiroUtil.getCreateID();
-        if(memberId!=null){
+        if (memberId != null) {
             MemRealCheck member = memRealCheckService.findMemById(String.valueOf(memberId));
             map = new HashMap<>();
-            map.put("companyBusinessLicenseImg",member.getCompanyBusinessLicenseImg());
+            map.put("companyBusinessLicenseImg", member.getCompanyBusinessLicenseImg());
             map.put("status", member.getStatus());
-            map.put("reason",member.getReason());
-            map.put("enterpriseName",member.getEnterpriseName());
+            map.put("reason", member.getReason());
+            map.put("enterpriseName", member.getEnterpriseName());
 
-            map.put("vipLevel",ShiroUtil.getVipLevel());
+            map.put("vipLevel", ShiroUtil.getVipLevel());
 
-        }else {
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return new Response(map);
@@ -124,20 +124,28 @@ public class CompanyController {
 
     @ApiOperation(value = "企业基本资料保存", notes = "企业基本资料保存", response = Response.class)
     @RequestMapping(value = "upd_mem_basic_info", method = RequestMethod.POST)
-    public Response upd_mem_basic_info(@ModelAttribute MemInfoCheck member)  {
+    public Response upd_mem_basic_info(@ModelAttribute MemInfoCheck member) {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
         ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
-        if(memberId!=null){
+        if (memberId != null) {
 
             member.setId(memberId);
             //基本资料待审核
-            if(loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue()
-                    ||loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()){
+            if (loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue()
+                    || loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()) {
                 member.setStatus(MemberConstant.MemberStatus.WSZLDSH.intValue());
             }
-            memInfoCheckService.update(member);
+
+            //实名认证审核通过之后,企业名称不可修改
             Member mem = memberService.findMemById(String.valueOf(memberId));
+            String memStatus=mem.getStatus();
+            if(memStatus.equals(MemberConstant.MemberStatus.SMRZYRZ.toString())){
+                member.setEnterpriseName(mem.getEnterpriseName());
+            }
+
+            memInfoCheckService.update(member);
+
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             if (session != null) {
@@ -146,7 +154,7 @@ public class CompanyController {
                 principal.setIdentify(loginMember.getIdentify());
                 session.setAttribute("member", principal);
             }
-        }else {
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
@@ -154,26 +162,23 @@ public class CompanyController {
 
     @ApiOperation(value = "企业实名认证保存", notes = "企业实名认证保存", response = Response.class)
     @RequestMapping(value = "upd_mem_realName_info", method = RequestMethod.POST)
-    public Response upd_mem_realName_info(@ApiParam("企业名称")@RequestParam String enterpriseName,
-                                          @ApiParam("营业执照图片URL")@RequestParam String companyBusinessLicenseImg)  {
+    public Response upd_mem_realName_info(@ApiParam("企业名称") @RequestParam String enterpriseName,
+                                          @ApiParam("营业执照图片URL") @RequestParam String companyBusinessLicenseImg) {
         Long memberId = ShiroUtil.getCreateID();
         ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
         MemRealCheck member = new MemRealCheck();
-        if(memberId!=null){
+        if (memberId != null) {
             member.setId(memberId);
             //实名认证待审核
-            if(loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue()
-                    ||loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()){
+            if (loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue()
+                    || loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()) {
                 member.setStatus(MemberConstant.MemberStatus.SMRZDSH.intValue());
             }
-            //实名认证审核通过之后 企业名称不可修改
-            String status = memRealCheckService.getStatusById(memberId);
-            if(!status.equals(MemberConstant.MemberStatus.SMRZYRZ.toString())){
-                member.setEnterpriseName(enterpriseName);
-            }
 
+            member.setEnterpriseName(enterpriseName);
             member.setCompanyBusinessLicenseImg(companyBusinessLicenseImg);
             memRealCheckService.update(member);
+
             Member mem = memberService.findMemById(String.valueOf(memberId));
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
@@ -182,7 +187,7 @@ public class CompanyController {
                 principal.setStatus(Integer.parseInt(mem.getStatus()));
                 session.setAttribute("member", principal);
             }
-        }else {
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return new Response();
@@ -190,16 +195,16 @@ public class CompanyController {
 
     @ApiOperation(value = "企业资质保存", notes = "企业资质保存", response = Response.class)
     @RequestMapping(value = "add_certificate", method = RequestMethod.POST)
-    public Response add_certificate(@ApiParam(value = "证书编号")@RequestParam String certificate_number,
-                                    @ApiParam(value = "证书id")@RequestParam String certificate_id,
-                                    @ApiParam(value = "资质名称")@RequestParam String certificate_name,
-                                    @ApiParam(value = "资质等级")@RequestParam(required = false) String certificate_grade,
-                                    @ApiParam(value = "资质证书图片url")@RequestParam String certificate_url,
-                                    @ApiParam(value = "资质类型：1：供应商资质；2：工程商资质；")@RequestParam String type)  {
+    public Response add_certificate(@ApiParam(value = "证书编号") @RequestParam String certificate_number,
+                                    @ApiParam(value = "证书id") @RequestParam String certificate_id,
+                                    @ApiParam(value = "资质名称") @RequestParam String certificate_name,
+                                    @ApiParam(value = "资质等级") @RequestParam(required = false) String certificate_grade,
+                                    @ApiParam(value = "资质证书图片url") @RequestParam String certificate_url,
+                                    @ApiParam(value = "资质类型：1：供应商资质；2：工程商资质；") @RequestParam String type) {
         Response result = new Response();
         CertificateRecord record = new CertificateRecord();
         Long memberId = ShiroUtil.getCreateID();
-        if(memberId!=null){
+        if (memberId != null) {
             record.setMem_id(String.valueOf(memberId));
             record.setType(type);
             record.setCertificate_grade(certificate_grade);
@@ -208,7 +213,7 @@ public class CompanyController {
             record.setCertificate_number(certificate_number);
             record.setCertificate_url(certificate_url);
             memberService.saveCertificate(record);
-        }else {
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
@@ -217,15 +222,15 @@ public class CompanyController {
     @ApiOperation(value = "企业资质编辑", notes = "企业资质编辑", response = Response.class)
     @RequestMapping(value = "upd_certificate", method = RequestMethod.POST)
     public Response update_certificate(@RequestParam String id,
-                                    @RequestParam String certificate_number,
-                                    @RequestParam String certificate_id,
-                                    @RequestParam String certificate_name,
-                                    @RequestParam(required = false) String certificate_grade,
-                                    @RequestParam String certificate_url)  {
+                                       @RequestParam String certificate_number,
+                                       @RequestParam String certificate_id,
+                                       @RequestParam String certificate_name,
+                                       @RequestParam(required = false) String certificate_grade,
+                                       @RequestParam String certificate_url) {
         Response result = new Response();
         CertificateRecord record = new CertificateRecord();
         Long memberId = ShiroUtil.getCreateID();
-        if(memberId!=null){
+        if (memberId != null) {
             record.setId(id);
             record.setCertificate_grade(certificate_grade);
             record.setCertificate_id(certificate_id);
@@ -234,7 +239,7 @@ public class CompanyController {
             record.setCertificate_url(certificate_url);
             record.setStatus("0");
             memberService.updateCertificate(record);
-        }else {
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
@@ -242,10 +247,10 @@ public class CompanyController {
 
     @ApiOperation(value = "企业资质查询", notes = "企业资质查询", response = Response.class)
     @RequestMapping(value = "sel_certificate", method = RequestMethod.GET)
-    public Response sel_certificate()  {
+    public Response sel_certificate() {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
-        if(memberId!=null){
+        if (memberId != null) {
             CertificateRecord record1 = new CertificateRecord();
             record1.setMem_id(String.valueOf(memberId));
             record1.setIs_deleted(0);
@@ -258,11 +263,11 @@ public class CompanyController {
             record2.setType("2");
             List<CertificateRecord> list2 = memberService.certificateSearch(record2);
 
-            Map<String,Object> map = new HashMap<>();
-            map.put("supplier",list1);
-            map.put("contractor",list2);
+            Map<String, Object> map = new HashMap<>();
+            map.put("supplier", list1);
+            map.put("contractor", list2);
             result.setData(map);
-        }else {
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
@@ -270,7 +275,7 @@ public class CompanyController {
 
     @ApiOperation(value = "资质类型", notes = "资质类型", response = Response.class)
     @RequestMapping(value = "sel_certificateList", method = RequestMethod.GET)
-    public Response certificateList(@RequestParam String type)  {
+    public Response certificateList(@RequestParam String type) {
         Response response = new Response();
         List list = memberService.findCertificateList(type);
         response.setData(list);
@@ -279,7 +284,7 @@ public class CompanyController {
 
     @ApiOperation(value = "企业性质", notes = "企业性质", response = Response.class)
     @RequestMapping(value = "sel_enterpriseTypeList", method = RequestMethod.GET)
-    public Response enterpriseTypeList()  {
+    public Response enterpriseTypeList() {
         Response result = new Response();
         List<EnterpriseType> enterpriseType = memberService.findEnterpriseTypeList();
         result.setData(enterpriseType);
@@ -288,7 +293,7 @@ public class CompanyController {
 
     @ApiOperation(value = "企业身份", notes = "企业身份", response = Response.class)
     @RequestMapping(value = "sel_identityList", method = RequestMethod.GET)
-    public Response identityList()  {
+    public Response identityList() {
         Response result = new Response();
         List<Identity> identity = memberService.findIdentityList();
         result.setData(identity);
@@ -297,7 +302,7 @@ public class CompanyController {
 
     @ApiOperation(value = "人员规模", notes = "人员规模", response = Response.class)
     @RequestMapping(value = "sel_employeeSizeList", method = RequestMethod.GET)
-    public Response employeeSizeList()  {
+    public Response employeeSizeList() {
         Response result = new Response();
         List<EmployeeSize> employeeSizeList = memberService.findEmployeeSizeList();
         result.setData(employeeSizeList);
@@ -309,10 +314,10 @@ public class CompanyController {
     public Response add_successCase(@ModelAttribute SuccessCase successCase) throws Exception {
         Response result = new Response();
         Long createid = ShiroUtil.getCreateID();
-        if(createid!=null){
+        if (createid != null) {
             successCase.setCreateid(String.valueOf(createid));
             successCaseService.addSuccessCase(successCase);
-        }else {
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
@@ -332,18 +337,18 @@ public class CompanyController {
         if (com.zhuhuibao.utils.pagination.util.StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
-        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<>();
         //查询传参
         map.put("title", title);
         map.put("status", status);
         Long createid = ShiroUtil.getCreateID();
-        if(createid!=null){
-            map.put("createid",String.valueOf(createid));
-            List<Map<String,String>> list = successCaseService.findAllSuccessCaseList(pager,map);
+        if (createid != null) {
+            map.put("createid", String.valueOf(createid));
+            List<Map<String, String>> list = successCaseService.findAllSuccessCaseList(pager, map);
             pager.result(list);
             result.setData(pager);
-        }else {
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return result;
