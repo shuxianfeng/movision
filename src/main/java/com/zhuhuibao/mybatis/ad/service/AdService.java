@@ -34,7 +34,13 @@ public class AdService {
 			Map<String, Object> map) {
 
         try{
-            return adMapper.findAllAdList(pager.getRowBounds(),map);
+        	if(map.get("type")!=null)
+        	{
+        		return adMapper.findAllAdList(pager.getRowBounds(),map);
+        	}else{
+        		return adMapper.findAllAdList(pager.getRowBounds(),map);
+        	}
+            
         }catch (Exception e){
             log.error("AdService::AdService::"+"publisher="+ShiroUtil.getCreateID(),e);
             

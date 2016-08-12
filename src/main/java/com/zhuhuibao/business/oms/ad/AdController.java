@@ -19,7 +19,6 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.mybatis.expert.entity.Achievement;
 import com.zhuhuibao.mybatis.ad.service.AdService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -47,7 +46,8 @@ public class AdController {
 	                                       @ApiParam(value = "广告位区域")@RequestParam(required = false) String advArea,
 	                                       @ApiParam(value = "广告类型")@RequestParam(required = false)String advType,
 	                                       @RequestParam(required = false)String pageNo,
-	                                       @RequestParam(required = false)String pageSize)  {
+	                                       @RequestParam(required = false)String pageSize,
+	                                       @ApiParam(value = "修改类型")@RequestParam(required = false) String type)  {
 	        Response response = new Response();
 	        //设定默认分页pageSize
 	        if (StringUtils.isEmpty(pageNo)) {
@@ -63,6 +63,7 @@ public class AdController {
 	        map.put("chanPage",chanPage);
 	        map.put("advArea",advArea);
 	        map.put("advType",advType);
+	        map.put("type",type);
 	        List<Map<String, String>> adList = adService.findAllAdList(pager,map);
 	        pager.result(adList);
 	        response.setData(pager);
