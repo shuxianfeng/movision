@@ -349,6 +349,9 @@ public class UploadFileController {
 			try {
 				if (typeList != null) {
 					projectInfo.setCategory(typeList.get("type"));
+				}else{
+					isAdd = 1;
+					failReason += "第6列,项目类别不正确,无需导入;";
 				}
 			} catch (Exception ex) {
 				isAdd = 1;
