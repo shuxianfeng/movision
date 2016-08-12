@@ -10,6 +10,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.fsearch.utils.StringUtil;
 import com.zhuhuibao.mybatis.expert.entity.*;
 import com.zhuhuibao.mybatis.expert.mapper.*;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
@@ -749,15 +750,49 @@ public class ExpertService {
                 map.put("mobile",expert.getMobile());
                 map.put("isLook",true);
             }else {
-                map.put("address","");
-                map.put("telephone","");
-                map.put("mobile","");
+
+                if(!StringUtil.isEmpty(expert.getAddress()) && expert.getAddress().length()>4){
+                    map.put("address",expert.getAddress().substring(0,4) + "******");
+                }else if(!StringUtil.isEmpty(expert.getAddress()) && expert.getAddress().length()<4){
+                    map.put("address",expert.getAddress().substring(0,2) + "********");
+                }else {
+                    map.put("address","");
+                }
+
+                if(!StringUtil.isEmpty(expert.getTelephone())){
+                    map.put("telephone",expert.getTelephone().substring(0,4)+"*******");
+                }else {
+                    map.put("telephone","");
+                }
+
+                if(!StringUtil.isEmpty(expert.getMobile())){
+                    map.put("mobile",expert.getMobile().substring(0,4)+"*******");
+                }else {
+                    map.put("mobile","");
+                }
+
                 map.put("isLook",false);
             }
         }else {
-            map.put("address","");
-            map.put("telephone","");
-            map.put("mobile","");
+            if(!StringUtil.isEmpty(expert.getAddress()) && expert.getAddress().length()>4){
+                map.put("address",expert.getAddress().substring(0,4) + "******");
+            }else if(!StringUtil.isEmpty(expert.getAddress()) && expert.getAddress().length()<4){
+                map.put("address",expert.getAddress().substring(0,2) + "********");
+            }else {
+                map.put("address","");
+            }
+
+            if(!StringUtil.isEmpty(expert.getTelephone())){
+                map.put("telephone",expert.getTelephone().substring(0,4)+"*******");
+            }else {
+                map.put("telephone","");
+            }
+
+            if(!StringUtil.isEmpty(expert.getMobile())){
+                map.put("mobile",expert.getMobile().substring(0,4)+"*******");
+            }else {
+                map.put("mobile","");
+            }
             map.put("isLook",false);
         }
 
