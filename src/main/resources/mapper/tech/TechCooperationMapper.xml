@@ -54,8 +54,22 @@
 
     <select id="previewUnloginTechCoopDetail" resultType="java.util.Map" parameterType="java.lang.Long">
    select
-   t.id, t.title, dc.name systemCategory, dn.name applicationArea,t.cooperation,t.notes
+   t.id, t.title, dc.name systemCategory, dn.name applicationArea,t.cooperation,t.notes,
+   case when t.companyName is null or t.companyName = '' THEN t.companyName when t.companyName
+     is not null and t.companyName != '' then '********'  end as companyName,
+     case when t.linkman is null or t.linkman = '' THEN t.linkman when t.linkman
+     is not null and t.linkman != '' then '********'  end as linkman,
+     case when t.telephone is null or t.telephone = '' THEN t.telephone when t.telephone
+     is not null and t.telephone != '' then '********'  end as telephone,
+     case when t.email is null or t.email = '' THEN t.email when t.email
+     is not null and t.email != '' then '********'  end as email,
+    '***' province, '***' city, '***' area,
+   case when t.address is null or t.address = '' THEN t.address when t.address
+	is not null and t.address != '' then '********'  end as address
    from t_tech_cooperation t
+   left join t_dictionary_province po on po.code = t.province
+   left join t_dictionary_city ct on ct.code = t.city
+   left join t_dictionary_area ar on ar.code = t.area
    left join t_dictionary_constant dc on dc.code = t.systemCategory and dc.type =19
    left join t_dictionary_constant dn on dn.code = t.applicationArea and dn.type =18
     where t.id = #{id,jdbcType=BIGINT}      and t.status = 2
