@@ -299,7 +299,8 @@
   </update>
     <select id="findAllTechCooperationPager" parameterType="java.util.Map" resultType="java.util.Map">
         select t.id, t.createID, t.title,dc.name systemCategory, dn.name applicationAreaName,t.applicationArea,
-        concat(po.name,'-',ct.name) provincecity,t.cooperation from t_tech_cooperation t
+        concat(po.name,'-',ct.name) provincecity,t.cooperation ,t.type,date_format(t.updateTime,'%Y-%m-%d') updateTime,t.status
+        from t_tech_cooperation t
         left join t_dictionary_province po on po.code = t.province
         left join t_dictionary_city ct on ct.code = t.city
         left join t_dictionary_area ar on ar.code = t.area
