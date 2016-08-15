@@ -2,12 +2,15 @@ package com.zhuhuibao.mybatis.expert.service;
 
 import com.google.gson.Gson;
 import com.taobao.api.ApiException;
+import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.fsearch.utils.StringUtil;
 import com.zhuhuibao.mybatis.expert.entity.*;
 import com.zhuhuibao.mybatis.expert.mapper.*;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
@@ -17,8 +20,6 @@ import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.utils.*;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.sms.SDKSendSms;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -27,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.*;
@@ -773,19 +775,63 @@ public class ExpertService {
 		map.put("achievementList", list);
 
 		Long createid = ShiroUtil.getCreateID();
-		if (createid != null && viewNumber > 0) {
-			map.put("address", expert.getAddress());
-			map.put("telephone", expert.getTelephone());
-			map.put("mobile", expert.getMobile());
-			map.put("isLook", true);
+		Long comanyId = ShiroUtil.getCompanyID();
+		if (createid != null) {
+			/*
+			 * //查询该专家是否已被查看过 Map<String,Object> con = new
+			 * HashMap<String,Object>(); con.put("goodsId",id);
+			 * con.put("companyId",comanyId); con.put("type","expert"); int
+			 * count = goodsService.checkIsViewGoods(con);
+			 */
+			if (viewNumber > 0) {
+				map.put("address", expert.getAddress());
+				map.put("telephone", expert.getTelephone());
+				map.put("mobile", expert.getMobile());
+				map.put("isLook", true);
+			} else {
+
+				if (!StringUtil.isEmpty(expert.getAddress()) && expert.getAddress().length() > 4) {
+					map.put("address", expert.getAddress().substring(0, 4) + "******");
+				} else if (!StringUtil.isEmpty(expert.getAddress()) && expert.getAddress().length() < 4) {
+					map.put("address", expert.getAddress().substring(0, 2) + "********");
+				} else {
+					map.put("address", "");
+				}
+
+				if (!StringUtil.isEmpty(expert.getTelephone())) {
+					map.put("telephone", expert.getTelephone().substring(0, 4) + "*******");
+				} else {
+					map.put("telephone", "");
+				}
+
+				if (!StringUtil.isEmpty(expert.getMobile())) {
+					map.put("mobile", expert.getMobile().substring(0, 4) + "*******");
+				} else {
+					map.put("mobile", "");
+				}
+
+				map.put("isLook", false);
+			}
 		} else {
-			map.put("address", "**********");
-			String telephone = StringUtils.trimToEmpty(expert.getTelephone());
-			telephone = telephone.length() > 4 ? telephone.substring(0, 4) + "******" : "";
-			map.put("telephone", telephone);
-			String mobile = StringUtils.trimToEmpty(expert.getMobile());
-			mobile = mobile.length() > 4 ? mobile.substring(0, 4) + "******" : "";
-			map.put("mobile", mobile);
+			if (!StringUtil.isEmpty(expert.getAddress()) && expert.getAddress().length() > 4) {
+				map.put("address", expert.getAddress().substring(0, 4) + "******");
+			} else if (!StringUtil.isEmpty(expert.getAddress()) && expert.getAddress().length() < 4) {
+				map.put("address", expert.getAddress().substring(0, 2) + "********");
+			} else {
+				map.put("address", "");
+			}
+
+			if (!StringUtil.isEmpty(expert.getTelephone())) {
+				map.put("telephone", expert.getTelephone().substring(0, 4) + "*******");
+			} else {
+				map.put("telephone", "");
+			}
+
+			if (!StringUtil.isEmpty(expert.getMobile())) {
+				map.put("mobile", expert.getMobile().substring(0, 4) + "*******");
+			} else {
+				map.put("mobile", "");
+			}
 			map.put("isLook", false);
 		}
 
@@ -811,6 +857,44 @@ public class ExpertService {
 		} catch (Exception e) {
 			log.error("ExpertService::updateDynamicViews", e);
 			// e.printStackTrace();
+			throw e;
+		}
+	}
+
+	public List<Map<String, String>> findAllMyLookedAchievementList(Paging<Map<String, String>> pager,
+			Map<String, Object> map) {
+		try {
+			return achievementMapper.findAllMyLookedAchievementList(pager.getRowBounds(), map);
+		} catch (Exception e) {
+			log.error("ExpertService::findAllMyLookedAchievementList", e);
+			throw e;
+		}
+	}
+
+	public int deleteLookedAchievement(String id) {
+		try {
+			return achievementMapper.deleteLookedAchievement(id);
+		} catch (Exception e) {
+			log.error("ExpertService::deleteLookedAchievement::id==" + id, e);
+			throw e;
+		}
+	}
+
+	public List<Map<String, String>> findAllMyLookedExpertList(Paging<Map<String, String>> pager,
+			Map<String, Object> map) {
+		try {
+			return expertMapper.findAllMyLookedExpertList(pager.getRowBounds(), map);
+		} catch (Exception e) {
+			log.error("ExpertService::findAllMyLookedExpertList", e);
+			throw e;
+		}
+	}
+
+	public int deleteLookedExpert(String id) {
+		try {
+			return expertMapper.deleteLookedExpert(id);
+		} catch (Exception e) {
+			log.error("ExpertService::deleteLookedExpert::id==" + id, e);
 			throw e;
 		}
 	}
