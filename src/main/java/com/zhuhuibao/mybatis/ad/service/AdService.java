@@ -34,11 +34,11 @@ public class AdService {
 			Map<String, Object> map) {
 
         try{
-        	if(map.get("type")!=null)
+        	if(map.get("type")==null)
         	{
         		return adMapper.findAllAdList(pager.getRowBounds(),map);
         	}else{
-        		return adMapper.findAllAdList(pager.getRowBounds(),map);
+        		return adMapper.findAllAdDetailsList(pager.getRowBounds(),map);
         	}
             
         }catch (Exception e){
@@ -69,13 +69,21 @@ public class AdService {
 	public int updateAdInfo(Map<String, Object> map) {
 		int result = 0;
 		try {
-			result = adMapper.updateAdInfo(map);
 			//同步更新广告详情
 			String type=map.get("type").toString();
-			if(result>0&&!"1".equals(type))
+			if(!"1".equals(type))
 			{
 				adMapper.updateAdDetailsInfo(map);
 			}
+			
+			if("5".equals(type)){
+				
+				adMapper.updateAdDetails(map);
+			}else{
+			
+			result = adMapper.updateAdInfo(map);
+			}
+			
 		} catch (Exception e) {
 			log.error("AdService::updateAdInfo",e);
 			throw e;
@@ -92,7 +100,7 @@ public class AdService {
 			result = adMapper.addAdInfo(map);
 			//同步更新广告详情
 			String type=map.get("type").toString();
-			if(result>0&&"3".equals(type))
+			if(result>0&&"4".equals(type))
 			{
 				adMapper.addAdDetailsInfo(map);
 			}
@@ -103,5 +111,72 @@ public class AdService {
 	  return result;
 		
 	}
+
+	public int deleteAdvDetails(String id) {
+		int result = 0;
+		try {
+			result = adMapper.deleteByPrimaryKey(id);
+			//同步更新广告详情 
+			 
+		} catch (Exception e) {
+			log.error("AdService::deleteAdvDetails",e);
+			throw e;
+		}
+	  return result;
+	}
+	
+    /**
+     * 添加广告详情
+     * @param map
+     */
+	public int addAdDetails(Map<String, Object> map) {
+		int result = 0;
+		try {
+			result=adMapper.addAdDetails(map); 
+		} catch (Exception e) {
+			log.error("AdService::addAdDetailsInfo",e);
+			throw e;
+		}
+	    return result;
+		
+	}
+    /**
+     * 修改广告详情
+     * @param map
+     * @return
+     */
+	public int updateAdDetails(Map<String, Object> map) {
+		 
+		int result = 0;
+		try {
+		 
+			 
+			result=adMapper.updateAdDetails(map);
+			 
+		} catch (Exception e) {
+			log.error("AdService::updateAdInfo",e);
+			throw e;
+		}
+	  return result;
+	}
+    /**
+     * 查询管理ID是否存在
+     * @param map
+     * @return
+     */
+	public int queryIdExits(Map<String, Object> map) {
+		 
+		int result = 0;
+		try {
+		  result=adMapper.queryIdExits(map);
+			 
+		} catch (Exception e) {
+			log.error("AdService::queryIdExits",e);
+			throw e;
+		}
+	  return result;
+	}
+
+	 
 
 }
