@@ -22,10 +22,21 @@ public interface AdMapper {
 
 	int updateAdInfo(Map<String, Object> map);
 
-	void updateAdDetailsInfo(Map<String, Object> map);
+	int updateAdDetailsInfo(Map<String, Object> map);
 
 	int addAdInfo(Map<String, Object> map);
 
 	void addAdDetailsInfo(Map<String, Object> map);
+
+	List<Map<String, String>> findAllAdDetailsList(RowBounds rowBounds,
+			Map<String, Object> map); 
+
+	int deleteByPrimaryKey(String id);
+
+	int addAdDetails(Map<String, Object> map);
+
+	int updateAdDetails(Map<String, Object> map);
+
+	int queryIdExits(Map<String, Object> map);
 
 }
