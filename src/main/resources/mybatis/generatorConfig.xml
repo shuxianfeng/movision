@@ -33,7 +33,7 @@
 
         <!-- 生成实体类地址 -->
 
-        <javaModelGenerator targetPackage="com.zhuhuibao.mybatis.memCenter.entity"
+        <javaModelGenerator targetPackage="com.zhuhuibao.mybatis.common.entity"
                             targetProject="${project}">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
@@ -42,22 +42,22 @@
         </javaModelGenerator>
 
         <!-- 生成mapxml文件 -->
-        <sqlMapGenerator targetPackage="mapper/system"
+        <sqlMapGenerator targetPackage="mapper/common"
                          targetProject="${resources}">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
         <!-- 生成mapxml对应client，也就是接口dao -->
-        <javaClientGenerator targetPackage="com.zhuhuibao.mybatis.memCenter.mapper"
+        <javaClientGenerator targetPackage="com.zhuhuibao.mybatis.common.mapper"
                              targetProject="${project}" type="XMLMAPPER">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <table tableName="t_p_brand_sys_check"
-               domainObjectName="CheckSysBrand"
+        <table tableName="t_sendMsg_mobile"
+               domainObjectName="SendMsgMobile"
                enableCountByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"
