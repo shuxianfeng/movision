@@ -6,6 +6,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
 import com.zhuhuibao.mybatis.product.entity.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,9 +106,9 @@ public class ProductService {
                 if (product.getPrice() == null || product.getPrice().trim().equals("")) {
                     product.setPrice(Constants.product_price);
                 }
-                
+
                // product.setStatus(Constants.product_status_nocheck);
-                
+
                 productMapper.updateByPrimaryKeySelective(product);
             }
         } catch (Exception e) {
@@ -698,4 +699,22 @@ public class ProductService {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
     }
+    
+	/**
+	 * 查询所有产品
+	 * @param pager
+	 * @param product
+	 * @return
+	 */
+	public List<Product> findAllProduct(Paging<Product> pager,
+			ProductWithBLOBs product) {
+		 try {
+		       log.debug("分页查询所有产品");
+	        return productMapper.findAllProduct(pager.getRowBounds(), product);
+		 } catch (Exception e) {
+	            log.error("查询失败:{}", e);
+	            e.printStackTrace();
+	            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
+	        }
+	}
 }

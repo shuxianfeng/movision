@@ -22,4 +22,8 @@ public interface AchievementMapper {
     List<Map<String,String>> findAchievementListByCount(int count);
 
     int updateAchievement(Achievement achievement);
+
+    List<Map<String,String>> findAllMyLookedAchievementList(RowBounds rowBounds, Map<String, Object> map);
+
+    int deleteLookedAchievement(String id);
 }

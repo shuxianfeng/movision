@@ -36,4 +36,8 @@ public interface TechCooperationMapper {
     List<Map<String,String>> findCoopViewsOrder(Map<String,Object> condition);
 
     List<Map<String,String>> findIndexTechCooperation(Map<String,Object> condition);
+
+    List<Map<String,String>> findAllMyLookedAchievementList(RowBounds rowBounds, Map<String, Object> map);
+
+    int deleteLookedAchievement(String id);
 }

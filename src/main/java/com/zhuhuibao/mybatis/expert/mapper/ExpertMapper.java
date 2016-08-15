@@ -28,4 +28,8 @@ public interface ExpertMapper {
     List<Expert> queryLatestExpert(int count);
 
     List<Map<String,String>> queryHomepageExpertList(Map<String, Object> map);
+
+    List<Map<String,String>> findAllMyLookedExpertList(RowBounds rowBounds, Map<String, Object> map);
+
+    int deleteLookedExpert(String id);
 }

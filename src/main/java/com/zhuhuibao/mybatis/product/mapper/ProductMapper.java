@@ -64,4 +64,6 @@ public interface ProductMapper {
     List<Map<String,String>> queryHotProduct(Map<String,Object> queryMap);
 
     List<String> findScateByBrandId(@Param("brandId") String brandId);
+
+	List<Product> findAllProduct(RowBounds rowBounds, ProductWithBLOBs product);
 }

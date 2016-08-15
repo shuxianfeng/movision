@@ -54,8 +54,22 @@
 
     <select id="previewUnloginTechCoopDetail" resultType="java.util.Map" parameterType="java.lang.Long">
    select
-   t.id, t.title, dc.name systemCategory, dn.name applicationArea,t.cooperation,t.notes
+   t.id, t.title, dc.name systemCategory, dn.name applicationArea,t.cooperation,t.notes,
+   case when t.companyName is null or t.companyName = '' THEN t.companyName when t.companyName
+     is not null and t.companyName != '' then '********'  end as companyName,
+     case when t.linkman is null or t.linkman = '' THEN t.linkman when t.linkman
+     is not null and t.linkman != '' then '********'  end as linkman,
+     case when t.telephone is null or t.telephone = '' THEN t.telephone when t.telephone
+     is not null and t.telephone != '' then '********'  end as telephone,
+     case when t.email is null or t.email = '' THEN t.email when t.email
+     is not null and t.email != '' then '********'  end as email,
+    '***' province, '***' city, '***' area,
+   case when t.address is null or t.address = '' THEN t.address when t.address
+	is not null and t.address != '' then '********'  end as address
    from t_tech_cooperation t
+   left join t_dictionary_province po on po.code = t.province
+   left join t_dictionary_city ct on ct.code = t.city
+   left join t_dictionary_area ar on ar.code = t.area
    left join t_dictionary_constant dc on dc.code = t.systemCategory and dc.type =19
    left join t_dictionary_constant dn on dn.code = t.applicationArea and dn.type =18
     where t.id = #{id,jdbcType=BIGINT}      and t.status = 2
@@ -285,7 +299,8 @@
   </update>
     <select id="findAllTechCooperationPager" parameterType="java.util.Map" resultType="java.util.Map">
         select t.id, t.createID, t.title,dc.name systemCategory, dn.name applicationAreaName,t.applicationArea,
-        concat(po.name,'-',ct.name) provincecity,t.cooperation from t_tech_cooperation t
+        concat(po.name,'-',ct.name) provincecity,t.cooperation ,t.type,date_format(t.updateTime,'%Y-%m-%d') updateTime,t.status
+        from t_tech_cooperation t
         left join t_dictionary_province po on po.code = t.province
         left join t_dictionary_city ct on ct.code = t.city
         left join t_dictionary_area ar on ar.code = t.area
@@ -375,4 +390,27 @@
         order by t.type,t.updateTime desc
         limit #{count}
     </select>
+
+    <select id="findAllMyLookedAchievementList" resultType="java.util.Map" >
+        select c.id,c.title,date_format(v.viewTime,'%Y-%m-%d') viewTime,
+        v.id as recordId,co.name as systemName,con.name as areaName
+        from t_zhb_viewGoods v
+        left join t_tech_cooperation c on v.goodsId = c.id
+        left join t_dictionary_constant co on c.systemCategory = co.code and co.`type` = 19
+        left join t_dictionary_constant con on c.applicationArea = con.code and con.`type` = 18
+        where v.type = 'CKJSCG' and v.`status` = 0
+        <if test="companyId != null">
+            and v.companyId = #{companyId}
+        </if>
+        <if test="viewerId != null">
+            and v.viewerId = #{viewerId}
+        </if>
+        order by v.viewTime desc
+    </select>
+
+    <update id="deleteLookedAchievement" parameterType="java.lang.String" >
+        update t_zhb_viewGoods
+        set status = 1
+        where id = #{id}
+    </update>
 </mapper>

@@ -46,7 +46,18 @@
     where a.id = #{id} and a.is_deleted = 0
   </select>
   <select id="queryUnLoginAchievementById" parameterType="java.lang.String" resultType="java.util.Map">
-     select a.id,a.title,a.introduce,con.name as systemName,co.name as useAreaName,a.cooperationType
+     select a.id,a.title,a.introduce,con.name as systemName,co.name as useAreaName,a.cooperationType,
+     case when a.companyName is null or a.companyName = '' THEN a.companyName when a.companyName
+     is not null and a.companyName != '' then '********'  end as companyName,
+     case when a.linkMan is null or a.linkMan = '' THEN a.linkMan when a.linkMan
+     is not null and a.linkMan != '' then '********'  end as linkMan,
+     case when a.telephone is null or a.telephone = '' THEN a.telephone when a.telephone
+     is not null and a.telephone != '' then '********'  end as telephone,
+     case when a.email is null or a.email = '' THEN a.email when a.email
+     is not null and a.email != '' then '********'  end as email,
+     '***' as provinceName,'***' as cityName,'***' as areaName,
+     case when a.address is null or a.address = '' THEN a.address when a.address
+     is not null and a.address != '' then '********'  end as address
     from t_e_achievement a
     LEFT JOIN t_dictionary_constant con on con.code = a.systemType and con.type = 19
     LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
@@ -259,4 +270,27 @@
     </set>
     where id = #{id}
   </update>
+
+  <update id="deleteLookedAchievement" parameterType="java.lang.String" >
+    update t_zhb_viewGoods
+    set status = 1
+    where id = #{id}
+  </update>
+
+  <select id="findAllMyLookedAchievementList" resultType="java.util.Map" >
+    select c.id,c.title,date_format(v.viewTime,'%Y-%m-%d') viewTime,
+    v.id as recordId,co.name as systemName,con.name as areaName
+    from t_zhb_viewGoods v
+    left join t_e_achievement c on v.goodsId = c.id
+    left join t_dictionary_constant co on c.systemType = co.code and co.`type` = 19
+    left join t_dictionary_constant con on c.useArea = con.code and con.`type` = 18
+    where v.type = 'CKZJJSCG' and v.`status` = 0
+    <if test="companyId != null">
+      and v.companyId = #{companyId}
+    </if>
+    <if test="viewerId != null">
+      and v.viewerId = #{viewerId}
+    </if>
+    order by v.viewTime desc
+  </select>
 </mapper>
