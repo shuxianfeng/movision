@@ -48,7 +48,7 @@ public class ProductService {
         try {
             Map<String, Long> paramMap = paramService.insertParam(product);
             List<ParamPrice> paramPrice = product.getParamPrice();
-            product.setStatus(Constants.product_status_nocheck);
+            //product.setStatus(Constants.product_status_nocheck);
             if (paramPrice != null && !paramPrice.isEmpty()) {
                 String productName = product.getName();
                 for (ParamPrice aParamPrice : paramPrice) {
@@ -106,8 +106,9 @@ public class ProductService {
                 if (product.getPrice() == null || product.getPrice().trim().equals("")) {
                     product.setPrice(Constants.product_price);
                 }
-                 
-                
+
+               // product.setStatus(Constants.product_status_nocheck);
+
                 productMapper.updateByPrimaryKeySelective(product);
             }
         } catch (Exception e) {

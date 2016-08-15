@@ -41,6 +41,7 @@ import java.util.Map;
 
 /**
  * 订单下单支付
+ *
  * @author jianglz
  * @since 16/6/23.
  */
@@ -78,21 +79,21 @@ public class ZhbPayController {
 
         //根据商品ID查询商品价格
         DictionaryZhbgoods zhbgoods = zhbService.getZhbGoodsById(Long.valueOf(order.getGoodsId()));
-        if(zhbgoods == null){
+        if (zhbgoods == null) {
             log.error("未找到对应商品");
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"未找到对应商品");
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "未找到对应商品");
         }
-        BigDecimal price =  zhbgoods.getPrice();
-        if(price == null){
+        BigDecimal price = zhbgoods.getPrice();
+        if (price == null) {
             log.error("价格未设置");
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"价格未设置");
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "价格未设置");
         }
         //购买VIP套餐判断  个人VIP和企业VIP只能购买对应的VIP套餐
         checkVip(order.getGoodsType(), zhbgoods.getValue());
 
 
-        paramMap.put("goodsPrice",price.toString());
-        paramMap.put("goodsName",zhbgoods.getName());
+        paramMap.put("goodsPrice", price.toString());
+        paramMap.put("goodsName", zhbgoods.getName());
 
         paramMap.put("partner", PARTNER);//partner=seller_id     商家支付宝ID  合作伙伴身份ID 签约账号
         //生成订单编号
@@ -101,34 +102,35 @@ public class ZhbPayController {
 
         //提交订单
         zhOrderService.createOrder(paramMap);
-       Response response = new Response();
+        Response response = new Response();
         response.setData(orderNo);
         return response;
     }
 
     /**
      * 判断用户是否具有改VIP套餐
+     *
      * @param goodsType
-     * @param value viplevel
+     * @param value     viplevel
      */
-    private void checkVip( String goodsType ,  String value) {
-        if(goodsType.equals(OrderConstants.GoodsType.VIP.toString())){
+    private void checkVip(String goodsType, String value) {
+        if (goodsType.equals(OrderConstants.GoodsType.VIP.toString())) {
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             ShiroRealm.ShiroUser user = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            String  identify = user.getIdentify();
-            if(identify.equals("2")){     //个人
+            String identify = user.getIdentify();
+            if (identify.equals("2")) {     //个人
                 boolean suc1 = value.equals(VipConstant.VipLevel.PERSON_GOLD.toString());
-                boolean suc2 =  value.equals(VipConstant.VipLevel.PERSON_PLATINUM.toString());
-                if(!(!suc1 || !suc2)){
-                    throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"个人用户无此VIP套餐");
+                boolean suc2 = value.equals(VipConstant.VipLevel.PERSON_PLATINUM.toString());
+                if (!(!suc1 || !suc2)) {
+                    throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "个人用户无此VIP套餐");
                 }
-            }else{  //企业
+            } else {  //企业
                 boolean suc1 = value.equals(VipConstant.VipLevel.ENTERPRISE_GOLD.toString());
-                boolean suc2 =   value.equals(VipConstant.VipLevel.ENTERPRISE_PLATINUM.toString());
+                boolean suc2 = value.equals(VipConstant.VipLevel.ENTERPRISE_PLATINUM.toString());
 
-                if(!(suc1 || suc2)){
-                    throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"企业用户无此VIP套餐");
+                if (!(suc1 || suc2)) {
+                    throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "企业用户无此VIP套餐");
                 }
 
             }
@@ -137,7 +139,7 @@ public class ZhbPayController {
 
     @ApiOperation(value = "培训课程下单", notes = "培训课程下单", response = Response.class)
     @RequestMapping(value = "do_course_order", method = RequestMethod.POST)
-    public Response createOrder(@ApiParam @ModelAttribute CourseOrderReqBean order){
+    public Response createOrder(@ApiParam @ModelAttribute CourseOrderReqBean order) {
         Gson gson = new Gson();
         String json = gson.toJson(order);
 
@@ -161,18 +163,19 @@ public class ZhbPayController {
 
     /**
      * 检查购买用户是否登录
+     *
      * @param paramMap
      */
     private void checkUserLogin(Map paramMap) {
         String buyerId = (String) paramMap.get("buyerId");
-        if(StringUtils.isEmpty(buyerId)){
+        if (StringUtils.isEmpty(buyerId)) {
             Long userId = ShiroUtil.getCreateID();
             if (userId == null) {
                 log.error("用户未登陆");
                 throw new AuthException(MsgCodeConstant.un_login,
                         MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }else{
-                paramMap.put("buyerId",String.valueOf(userId));
+            } else {
+                paramMap.put("buyerId", String.valueOf(userId));
             }
         }
     }
@@ -180,15 +183,15 @@ public class ZhbPayController {
     @ApiOperation(value = "筑慧币单独支付", notes = "筑慧币单独支付")
     @RequestMapping(value = "do_zhb_pay", method = RequestMethod.POST)
     public Response doZhbPay(@ApiParam("订单号") @RequestParam String orderNo) {
-         Response response = new Response();
+        Response response = new Response();
         try {
             int result = zhbService.payForOrder(orderNo);
-            int code = result == 1 ? 200 :400;
+            int code = result == 1 ? 200 : 400;
             response.setCode(code);
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BusinessException(MsgCodeConstant.PAY_ERROR,"支付失败");
+            throw new BusinessException(MsgCodeConstant.PAY_ERROR, "支付失败");
         }
         return response;
     }
@@ -218,15 +221,15 @@ public class ZhbPayController {
         //判断支付方式   是否使用筑慧币
         String userZHB = pay.getUserZHB();
 
-        switch(userZHB){
+        switch (userZHB) {
             case "true":
-                zhpayService.doPayMultiple(response,paramMap);
+                zhpayService.doPayMultiple(response, paramMap);
                 break;
             case "false":
-                zhpayService.doPay(response,paramMap);
+                zhpayService.doPay(response, paramMap);
                 break;
             default:
-                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"是否使用筑慧币,传参错误");
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "是否使用筑慧币,传参错误");
         }
 
     }

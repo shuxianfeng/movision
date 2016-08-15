@@ -123,8 +123,21 @@ public class ProductPublishMcController {
     @RequestMapping(value = {"/rest/queryProductById", "/rest/system/mc/product/sel_productById"}, method = RequestMethod.GET)
     @ApiOperation(value = "获得产品信息根据ID", notes = "获得产品信息根据ID", response = Response.class)
     public Response queryProductById(Long id) throws IOException {
-
-        return productService.selectByPrimaryKey(id);
+        Long createid = ShiroUtil.getCreateID();
+        if(createid!=null){
+            Product b = productService.findById(id);
+            if(b!=null){
+                if(String.valueOf(createid).equals(String.valueOf(b.getCreateid()))){
+                    return productService.selectByPrimaryKey(id);
+                }else {
+                    throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
+                }
+            }else {
+                throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
+            }
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
     }
 
     /**

@@ -104,6 +104,7 @@ public class ShopController {
         MemShopCheck shopCheck = shopCheckService.findByCompanyID(companyId);
         if(shopCheck == null){
             shopCheck = new MemShopCheck();
+            shopCheck.setId(Integer.valueOf(shopId));
             shopCheck.setOpreatorId(memberId.intValue());
             shopCheck.setCompanyId(companyId.intValue());
             shopCheck.setCompanyAccount(account);

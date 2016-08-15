@@ -89,11 +89,11 @@ public class PriceService {
     /**
      * 根据Id具体某条询价信息
      */
-    public Response queryAskPriceByID(String id) {
+    public AskPriceBean queryAskPriceByID(String id) {
         log.debug("根据Id具体某条询价信息");
-        Response result = new Response();
+        AskPriceBean bean = new AskPriceBean();
         try {
-            AskPriceBean bean = askPriceMapper.queryAskPriceByID(id);
+            bean = askPriceMapper.queryAskPriceByID(id);
             Long mem_id = ShiroUtil.getCreateID();
             if(mem_id!=null){
                 if(bean.getCreateid().equals(String.valueOf(mem_id))){
@@ -127,12 +127,10 @@ public class PriceService {
                 bean.setTelephone("");
                 bean.setEmail("");
             }
-            result.setCode(200);
-            result.setData(bean);
         } catch (Exception e) {
             log.error("queryAskPriceByID error", e);
         }
-        return result;
+        return bean;
     }
 
 
@@ -224,7 +222,7 @@ public class PriceService {
             Map map = new HashMap();
             map.put(Constants.id, askPrice.getId());
             map.put(Constants.title, askPrice.getTitle());
-            map.put(Constants.publishTime, askPrice.getPublishTime().substring(0, 10));
+            map.put(Constants.publishTime, askPrice.getEndTime().substring(0, 10));
             map.put(Constants.area, askPrice.getProvinceCode());
             map.put("isCan", askPrice.getIsCan());
             map.put("count", askPrice.getCount());

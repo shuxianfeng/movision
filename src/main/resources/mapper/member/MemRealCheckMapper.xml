@@ -31,7 +31,6 @@
     <select id="findMemrealCheck" resultType="java.util.Map">
         SELECT
             rc.*,
-            ic.enterpriseName,
             ic.identify,
             date_format(ic.enterpriseCreaterTime,'%Y-%m-%d') enterpriseCreaterTime,
             ic.registerCapital,

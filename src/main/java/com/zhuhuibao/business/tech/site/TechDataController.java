@@ -3,6 +3,8 @@ package com.zhuhuibao.business.tech.site;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.aop.LoginAccess;
+import com.zhuhuibao.aop.UserAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.common.constant.Constants;
@@ -63,15 +65,13 @@ public class TechDataController {
     @Autowired
     FileUtil fileUtil;
 
+    @LoginAccess
     @ApiOperation(value = "上传技术资料(行业解决方案，技术文档，培训资料)", notes = "上传技术资料(行业解决方案，技术文档，培训资料)", response = Response.class)
     @RequestMapping(value = "upload_tech_data", method = RequestMethod.POST)
-    public Response uploadTechData(@RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
-        Response result = new Response();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if (null != session) {
+    public Response uploadTechData(@RequestParam(value = "file", required = false) MultipartFile file) {
+        Map<String, Object> map = new HashMap<>();
+        try {
             String url = zhbOssClient.uploadObject(file, "doc", "tech");
-            Map map = new HashMap();
             map.put(Constants.name, url);
             if (url.lastIndexOf(".") != -1) {
                 map.put(TechConstant.FILE_FORMAT, url.substring(url.lastIndexOf(".")));
@@ -79,12 +79,13 @@ public class TechDataController {
                 map.put(TechConstant.FILE_FORMAT, "");
             }
             map.put(TechConstant.FILE_SIZE, file.getSize());
-            result.setData(map);
-            result.setCode(200);
-        } else {
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+
+        } catch (Exception e) {
+            log.error("上传技术资料失败>>>", e);
+            throw e;
         }
-        return result;
+
+        return new Response(map);
     }
 
     @RequestMapping(value = "add_Tech_data", method = RequestMethod.POST)
@@ -168,8 +169,8 @@ public class TechDataController {
             } else {
                 jsonResult.setCode(401);
                 jsonResult.setMsgCode(MsgCodeConstant.un_login);
-                jsonResult.setMessage( MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                return  jsonResult;
+                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+                return jsonResult;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -224,17 +225,17 @@ public class TechDataController {
     @RequestMapping(value = "list_tech_data", method = RequestMethod.GET)
     public Response listTechDataPage(@ApiParam(value = "类别ID:1:解决方案 2:技术资料 3:培训资料") @RequestParam String fcateId,
                                      @ApiParam(value = "子类别ID") @RequestParam(required = false) String scateId,
-                                     @ApiParam(value = "页码") @RequestParam(required = false,defaultValue = "1") String pageNo,
-                                     @ApiParam(value = "每页显示的数目") @RequestParam(required = false,defaultValue = "10") String pageSize) {
+                                     @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                     @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
 
-        Map<String,Object>    conditionMap = new HashMap<>();
-        conditionMap.put("fCategory",fcateId);
-        if(StringUtils.isEmpty(scateId)){
-            conditionMap.put("sCategory",scateId);
+        Map<String, Object> conditionMap = new HashMap<>();
+        conditionMap.put("fCategory", fcateId);
+        if (StringUtils.isEmpty(scateId)) {
+            conditionMap.put("sCategory", scateId);
         }
 
-        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Map<String,String>> techList = techDataService.findAllTechDataOnlyPager(pager, conditionMap);
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Map<String, String>> techList = techDataService.findAllTechDataOnlyPager(pager, conditionMap);
         pager.result(techList);
 
         return new Response(pager);

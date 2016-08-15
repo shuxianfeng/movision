@@ -162,12 +162,16 @@ public class AlipayService {
     public ModelAndView syncNotify(HttpServletRequest request, String tradeType) {
 
         ModelAndView modelAndView = new ModelAndView();
-        RedirectView rv = new RedirectView(PropertiesUtils.getValue("host.ip") + "/" + PropertiesUtils.getValue("alipay_return_url"));
-        modelAndView.setView(rv);
+        String returnUrl = PropertiesUtils.getValue("host.ip") + "/" + PropertiesUtils.getValue("alipay_return_url");
+
         try {
             // 获取返回信息
             // 获取支付宝GET过来反馈信息
             Map<String, String> params = getRequestParams(request);
+
+            String orderNo = params.get("out_trade_no");
+            RedirectView rv = new RedirectView(returnUrl + orderNo);
+            modelAndView.setView(rv);
 
             // 计算得出通知验证结果
             log.info("******支付宝同步回调校验参数信息开始*******");
@@ -221,6 +225,7 @@ public class AlipayService {
             out = response.getOutputStream();
             // 获取支付宝POST过来反馈信息
             Map<String, String> params = getRequestParams(request);
+
 
             log.info("******支付宝异步回调校验参数信息开始*******");
             boolean verify_result = AlipayNotify.verify(params);
@@ -420,7 +425,7 @@ public class AlipayService {
             //同步通知
             if (notifyType.equals(PayConstants.NotifyType.SYNC.toString())) {
                 log.error("同步通知返回记录处理...[{}]", params.get("out_trade_no"));
-//                callbackNotice(params, tradeType, order);
+                callbackNotice(params, tradeType, order);
             }
 
             resultMap.put("statusCode", String.valueOf(PayConstants.HTTP_SUCCESS_CODE));
@@ -555,9 +560,9 @@ public class AlipayService {
         for (String key : params.keySet()) {
             pMap.put(CommonUtils.getCamelString(key), params.get(key));
         }
-        pMap.put("price", String.valueOf(new BigDecimal(pMap.get("price")).multiply(new BigDecimal(1000)).longValue()));
+//        pMap.put("price", String.valueOf(new BigDecimal(pMap.get("price")).multiply(new BigDecimal(1000)).longValue()));
         pMap.put("totalFee", String.valueOf(new BigDecimal(pMap.get("totalFee")).multiply(new BigDecimal(1000)).longValue()));
-        log.info("需转换为bean的pMap=" + pMap);
+        log.info("需转换为bean的pMap>>{}", pMap);
         try {
             BeanUtils.populate(alipayCallbackLog, pMap);
         } catch (Exception e) {
