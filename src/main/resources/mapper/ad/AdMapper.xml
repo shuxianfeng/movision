@@ -31,6 +31,17 @@
         </if>
    </select> 
    
+   <select id="findAllAdDetailsList" parameterType="java.util.Map" resultType="java.util.Map">
+		select t.id,t.title,t.advAttrId,t.advType,t.linkUrl,t.imgUrl,date_format(t.createTime,'%Y-%m-%d %H:%i:%s') createTime,(select u.username from t_oms_user u where u.id= t.operatorId) operatorName,
+		t.connectedId,t.sort,date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate from t_sys_advertising  t where advAttrId in(
+		select id from t_sys_adv_attr where chanType=#{chanType,jdbcType=VARCHAR} 
+		and pageDesc=(select name from t_sys_adv_constant where code in(#{chanPage,jdbcType=VARCHAR})) 
+		and advAreaDesc=(select name from t_sys_adv_constant where code in(#{advArea,jdbcType=VARCHAR}))
+		and advTypeDesc=(select name from t_sys_adv_constant where code in(#{advType,jdbcType=VARCHAR}))  )
+   </select> 
+   
+   
+   
     <select id="findAdType" parameterType="java.util.Map" resultType="java.util.Map">
        select id,code,name,sort,parentId,position from t_sys_adv_constant
        where 
@@ -93,40 +104,17 @@
 	    where 
 	    
 	     <if test="type==2">
-	        chanType=(select code from t_sys_adv_constant where id=#{id,jdbcType=VARCHAR} and name=#{pageDesc,jdbcType=VARCHAR})
+	        chanType=(select parentId from t_sys_adv_constant where id=#{id,jdbcType=VARCHAR} ) and page=(select position from t_sys_adv_constant where id=#{id,jdbcType=VARCHAR})
 	     </if>
 	      <if test="type==3">
-	        id in (
-	        
-	           select e.id from t_sys_adv_attr e,(
-
-				select d.id,d.name,c.page,c.advAreaDesc from t_sys_adv_constant d , (
-				select a.parentId,a.name page,t.advAreaDesc from (
-				
-				select t.parentId,t.name advAreaDesc from t_sys_adv_constant t where id=#{id,jdbcType=VARCHAR} 
-				) t left join t_sys_adv_constant a on t.parentId=a.id  ) c where d.id=c.parentId
-				
-				 ) f where e.chanType=f.id and e.pageDesc=f.page and e.advAreaDesc=f.advAreaDesc
-				 
- 
-	        )
+	         chanType=#{chanType,jdbcType=VARCHAR} and pageDesc=(select name from t_sys_adv_constant where code=#{chanPage,jdbcType=VARCHAR})
 	     </if>
 	     
 	      <if test="type==4">
-	         id in 
-	         
-	          (select t.id from t_sys_adv_attr t ,(
+	      
+	         chanType=#{chanType,jdbcType=VARCHAR} and pageDesc=(select name from t_sys_adv_constant where code=#{chanPage,jdbcType=VARCHAR})
+	         and advTypeDesc=(select name from t_sys_adv_constant where id=#{id,jdbcType=VARCHAR})
 
-				select d.parentId,d.name,c.advAreaDesc,c.advTypeDesc from t_sys_adv_constant d , (
-				select a.parentId,a.name advAreaDesc,t.advTypeDesc from (
-				select t.parentId,t.name advTypeDesc from t_sys_adv_constant t where id=#{id,jdbcType=VARCHAR}  
-				) t left join t_sys_adv_constant a on t.parentId=a.id  ) c where d.id=c.parentId
-				
-				) w where t.chanType=w.parentId 
-				and t.advAreaDesc=w.advAreaDesc 
-				and t.advTypeDesc=w.advTypeDesc
-				and t.pageDesc=w.name
-			)
 	     </if> 
 	   
      
@@ -156,5 +144,50 @@
  
  
    </insert>
+   
+    <insert id="addAdDetails" parameterType="java.util.Map"> 
+	insert into t_sys_advertising
+	(title,advAttrId,advType,linkUrl,imgUrl,createTime,operatorId,connectedId,sort,startDate,endDate) 
+	select #{title,jdbcType=VARCHAR} title,id,advType,#{linkUrl,jdbcType=VARCHAR},#{imgUrl,jdbcType=VARCHAR},
+	now(),#{operatorId,jdbcType=VARCHAR},#{connectedId,jdbcType=VARCHAR},#{sort,jdbcType=VARCHAR},
+	#{startDate,jdbcType=VARCHAR},#{endDate,jdbcType=VARCHAR} 
+	from t_sys_adv_attr where chanType=#{chanType,jdbcType=VARCHAR} 
+	and pageDesc=(select name from t_sys_adv_constant where code in(#{chanPage,jdbcType=VARCHAR})) 
+	and advAreaDesc=(select name from t_sys_adv_constant where code in(#{advArea,jdbcType=VARCHAR}))
+	and advTypeDesc=(select name from t_sys_adv_constant where code in(#{advType,jdbcType=VARCHAR}))  
+   </insert>
+   
+    <update id="updateAdDetails" parameterType="java.util.Map">
+     update t_sys_advertising 
+     set title=#{title,jdbcType=VARCHAR},linkUrl=#{linkUrl,jdbcType=VARCHAR},
+     imgUrl=#{imgUrl,jdbcType=VARCHAR},operatorId=#{operatorId,jdbcType=VARCHAR},
+     connectedId=#{connectedId,jdbcType=VARCHAR},sort=#{sort,jdbcType=VARCHAR},
+     startDate=#{startDate,jdbcType=VARCHAR},endDate=#{endDate,jdbcType=VARCHAR}
+     where id= #{id,jdbcType=INTEGER}
+    </update>
+   
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+	    delete from t_sys_advertising
+	    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+   <select id="queryIdExits" parameterType="java.util.Map" resultType="java.lang.Integer">
+   <if test="method==0">
+    select count(1) from t_m_member t where t.id = #{id}
+    </if>
+    
+    <if test="method==1">
+    select count(1) from t_p_brand t where t.id = #{id}
+    </if>
+    
+    <if test="method==2">
+    select count(1) from t_p_product t where t.id = #{id}
+    </if>
+    
+    <if test="method==3">
+    select count(1) from t_i_job t where t.id = #{id}
+    </if>
+    
+  </select>
    
 </mapper>
