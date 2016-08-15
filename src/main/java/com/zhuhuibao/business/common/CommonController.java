@@ -1,5 +1,6 @@
 package com.zhuhuibao.business.common;
 
+import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
@@ -10,14 +11,17 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.common.entity.SysJoinus;
 import com.zhuhuibao.mybatis.common.entity.SysResearch;
+import com.zhuhuibao.mybatis.common.service.SendMsgMobileService;
 import com.zhuhuibao.mybatis.common.service.SysJoinusService;
 import com.zhuhuibao.mybatis.common.service.SysResearchService;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.CategoryService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.oss.ZhbOssClient;
+import com.zhuhuibao.utils.sms.SDKSendSms;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -30,8 +34,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * 上传
@@ -55,6 +61,9 @@ public class CommonController {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    SendMsgMobileService sendMsgMobileService;
 
     @ApiOperation(value = "上传图片，返回url", notes = "上传图片，返回url", response = Response.class)
     @RequestMapping(value = {"rest/uploadImg","/rest/common/upload_img"}, method = RequestMethod.POST)
@@ -152,5 +161,23 @@ public class CommonController {
         List<Map<String,Object>> subSystemList = categoryService.querySubSystemList(parentId);
         response.setData(subSystemList);
         return response;
+    }
+
+    @ApiOperation(value="人才网群发短信",notes="人才网群发短信",response = Response.class)
+    @RequestMapping(value = "/rest/common/sendMsg", method = RequestMethod.POST)
+    public Response sendMsg(){
+        List<Map<String,String>> memberInfoList = sendMsgMobileService.find();
+        for(Map<String,String> member:memberInfoList){
+            String mobile = member.get("mobile");
+            String name = member.get("name");
+
+            Map<String,String> map = new LinkedHashMap<>();
+            map.put("name",name);
+            map.put("mobile",mobile);
+            Gson gson = new Gson();
+            String json = gson.toJson(map);
+            SDKSendSms.sendSMS(mobile,json, PropertiesUtils.getValue("job_mobile_sms_template_code"));
+        }
+        return new Response();
     }
 }

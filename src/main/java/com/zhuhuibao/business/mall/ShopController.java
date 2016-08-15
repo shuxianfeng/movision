@@ -3,6 +3,7 @@ package com.zhuhuibao.business.mall;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
@@ -50,6 +51,7 @@ public class ShopController {
     MemShopCheckService shopCheckService;
 
 
+    @LoginAccess
     @ApiOperation(value = "查询商户店铺信息", notes = "查询商户店铺信息")
     @RequestMapping(value = "sel_shop", method = RequestMethod.GET)
     public Response searchOne() {
@@ -68,6 +70,7 @@ public class ShopController {
         }
     }
 
+   @LoginAccess
     @ApiOperation(value = "编辑商户店铺", notes = "编辑商户店铺")
     @RequestMapping(value = "upd_shop", method = RequestMethod.POST)
     public Response updateStop(@ApiParam("商铺ID") @RequestParam String shopId,
@@ -76,10 +79,10 @@ public class ShopController {
 
         log.debug("更新商铺...");
         Long memberId = ShiroUtil.getCreateID();
-        if(memberId==null){
-            throw new AuthException(MsgCodeConstant.un_login,
-                    MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
+//        if(memberId==null){
+//            throw new AuthException(MsgCodeConstant.un_login,
+//                    MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+//        }
 
         if(StringUtils.isEmpty(shopName)){
            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"商铺名称不能为空");

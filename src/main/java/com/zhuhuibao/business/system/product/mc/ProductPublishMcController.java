@@ -82,28 +82,26 @@ public class ProductPublishMcController {
     }
 
 
+    @LoginAccess
     @RequestMapping(value = {"/rest/updateProduct", "/rest/system/mc/product/upd_product"}, method = RequestMethod.POST)
     @ApiOperation(value = "更新产品", notes = "更新产品", response = Response.class)
     public Response updateProduct(ProductWithBLOBs product) throws IOException {
-        Response response = new Response();
+        Response response;
         Long createid = ShiroUtil.getCreateID();
-        if(createid!=null){
-            Product b = productService.findById(product.getId());
-            if(b!=null){
-                if(String.valueOf(createid).equals(String.valueOf(b.getCreateid()))){
-                	
-                    product.setStatus(Constants.product_status_nocheck);
-                    
-                    response = productService.updateProduct(product);
-                }else {
-                    throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
-                }
-            }else {
+        Product b = productService.findById(product.getId());
+        if (b != null) {
+            if (String.valueOf(createid).equals(String.valueOf(b.getCreateid()))) {
+
+                product.setStatus(Constants.product_status_nocheck);
+
+                response = productService.updateProduct(product);
+            } else {
                 throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
             }
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        } else {
+            throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
         }
+
         return response;
     }
 

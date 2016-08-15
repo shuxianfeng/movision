@@ -386,6 +386,7 @@ public class TechDataService {
             nMap.put("status", MessageLogConstant.NEWS_STATUS_ONE);
             int count = siteMailService.selUnreadNewsCount(nMap);
             techMap.put("msgCount",String.valueOf(count));
+            techMap.put("vip_level", String.valueOf(ShiroUtil.getVipLevel()));
 
         } catch (Exception e) {
             log.error("执行异常>>>", e);

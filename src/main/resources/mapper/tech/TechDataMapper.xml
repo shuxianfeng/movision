@@ -337,10 +337,10 @@
 
     <select id="findTechSiteInfo" parameterType="java.lang.Long" resultType="java.util.Map">
     select case when a.mobile != '' or a.mobile != null then a.mobile when a.email!= '' or a. email != null then a.email end as account,
-    a.status,a.headShot,vip.vip_level,
+    a.status,a.headShot,
     (select count(1) from t_tech_data t where t.status = 2 and t.createid = #{createId}) docNum,
     (select count(1) from t_tech_data t where t.status = 2) docTotal
-    from t_m_member a left join t_vip_member_info vip on vip.member_id = a.id
+    from t_m_member a
     where a.id = #{createId}
   </select>
     <select id="findTechCount" resultType="java.util.Map">
