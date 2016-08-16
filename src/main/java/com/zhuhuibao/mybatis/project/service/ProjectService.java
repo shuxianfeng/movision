@@ -268,9 +268,9 @@ public class ProjectService {
         // 手机
         String mobile = linkman.getMobile();
         if (!StringUtils.isEmpty(mobile)) {
-            sb = new StringBuilder(mobile);
-            sb.replace(4, sb.length(), ProjectConstant.HiddenStar.FOUR.toString());
             if (mobile.length() >= 4) {
+                sb = new StringBuilder(mobile);
+                sb.replace(4, sb.length(), ProjectConstant.HiddenStar.FOUR.toString());
                 linkman.setMobile(sb.toString());
             } else {
                 linkman.setMobile(ProjectConstant.HiddenStar.TEN.toString());
