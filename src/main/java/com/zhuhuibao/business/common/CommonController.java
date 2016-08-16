@@ -3,6 +3,7 @@ package com.zhuhuibao.business.common;
 import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.ResultBean;
@@ -17,6 +18,7 @@ import com.zhuhuibao.mybatis.common.service.SysResearchService;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.CategoryService;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
@@ -165,18 +167,22 @@ public class CommonController {
 
     @ApiOperation(value="人才网群发短信",notes="人才网群发短信",response = Response.class)
     @RequestMapping(value = "/rest/common/sendMsg", method = RequestMethod.POST)
+    @LoginAccess
     public Response sendMsg(){
-        List<Map<String,String>> memberInfoList = sendMsgMobileService.find();
-        for(Map<String,String> member:memberInfoList){
-            String mobile = member.get("mobile");
-            String name = member.get("name");
+        Long memberid = ShiroUtil.getCreateID();
+        if(memberid==11){
+            List<Map<String,String>> memberInfoList = sendMsgMobileService.find();
+            for(Map<String,String> member:memberInfoList){
+                String mobile = member.get("mobile");
+                String name = member.get("name");
 
-            Map<String,String> map = new LinkedHashMap<>();
-            map.put("name",name);
-            map.put("mobile",mobile);
-            Gson gson = new Gson();
-            String json = gson.toJson(map);
-            SDKSendSms.sendSMS(mobile,json, PropertiesUtils.getValue("job_mobile_sms_template_code"));
+                Map<String,String> map = new LinkedHashMap<>();
+                map.put("name",name);
+                map.put("mobile",mobile);
+                Gson gson = new Gson();
+                String json = gson.toJson(map);
+                SDKSendSms.sendSMS(mobile,json, PropertiesUtils.getValue("job_mobile_sms_template_code"));
+            }
         }
         return new Response();
     }

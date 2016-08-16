@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AskPriceMapper {
 
@@ -24,5 +25,7 @@ public interface AskPriceMapper {
     List<AskPrice> queryNewPriceInfo(@Param("count") int count,@Param("createid")String createid);
 
     List<AskPrice> findAllNewPriceInfoList(RowBounds rowBounds,AskPriceSearchBean askPriceSearch);
+
+    AskPriceBean queryAskPrice(Map<String,Object> map);
 
 }
