@@ -263,7 +263,7 @@
             <if test="address != null">
                 address = #{address,jdbcType=VARCHAR},
             </if>
-            <if test="cooperation != null">
+            <if test="cooperation != null and cooperation !='' ">
                 cooperation = #{cooperation,jdbcType=VARCHAR},
             </if>
             <if test="type != null">
