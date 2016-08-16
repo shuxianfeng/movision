@@ -93,15 +93,12 @@ public class PriceService {
         log.debug("根据Id具体某条询价信息");
         AskPriceBean bean = new AskPriceBean();
         try {
-            bean = askPriceMapper.queryAskPriceByID(id);
             Long mem_id = ShiroUtil.getCreateID();
-            if(mem_id!=null){
-                if(bean.getCreateid().equals(String.valueOf(mem_id))){
-                    bean.setIsCan("0");
-                }else {
-                    bean.setIsCan("1");
-                }
-            }
+            Map<String,Object> map = new HashMap<>();
+            map.put("id",id);
+            map.put("createid",mem_id);
+            bean = askPriceMapper.queryAskPrice(map);
+
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = sdf.parse(bean.getEndTime());
             if (date.before(new Date())) {
