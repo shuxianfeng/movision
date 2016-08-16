@@ -48,7 +48,7 @@ public class ProductService {
         try {
             Map<String, Long> paramMap = paramService.insertParam(product);
             List<ParamPrice> paramPrice = product.getParamPrice();
-            //product.setStatus(Constants.product_status_nocheck);
+            product.setStatus(Constants.product_status_nocheck);
             if (paramPrice != null && !paramPrice.isEmpty()) {
                 String productName = product.getName();
                 for (ParamPrice aParamPrice : paramPrice) {
