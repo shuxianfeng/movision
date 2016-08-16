@@ -130,6 +130,10 @@ public class TechCooperationService {
         int result;
         log.info("update oms tech cooperation " + StringUtils.beanToString(tech));
         try {
+            String cooperation = tech.getCooperation();
+            if(StringUtils.isEmpty(cooperation)){
+               tech.setCooperation("面议");
+            }
             tech.setUpdateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
             result = techMapper.updateByPrimaryKeySelective(tech);
             if ("3".equals(String.valueOf(tech.getStatus()))) {
