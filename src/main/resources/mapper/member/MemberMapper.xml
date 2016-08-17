@@ -663,7 +663,7 @@
             </if>
             <if test="memberName != null and memberName != '' ">
                 and (ic.enterpriseName like CONCAT('%',#{memberName},'%')
-                    or rc.personRealName likeCONCAT('%',#{memberName},'%'))
+                    or rc.personRealName like CONCAT('%',#{memberName},'%'))
             </if>
             <if test="memberType != null and memberType == 2 ">
                 and ic.identify = 2
