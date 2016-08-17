@@ -9,6 +9,7 @@ import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
 import com.zhuhuibao.mybatis.tech.mapper.TechCooperationMapper;
 import com.zhuhuibao.mybatis.tech.mapper.TechDataMapper;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -128,6 +130,11 @@ public class TechCooperationService {
         int result;
         log.info("update oms tech cooperation " + StringUtils.beanToString(tech));
         try {
+            String cooperation = tech.getCooperation();
+            if(StringUtils.isEmpty(cooperation)){
+               tech.setCooperation("面议");
+            }
+            tech.setUpdateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
             result = techMapper.updateByPrimaryKeySelective(tech);
             if ("3".equals(String.valueOf(tech.getStatus()))) {
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), tech.getCreateID(), tech.getReason());

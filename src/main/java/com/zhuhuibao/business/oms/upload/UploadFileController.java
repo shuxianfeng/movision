@@ -349,7 +349,7 @@ public class UploadFileController {
 			try {
 				if (typeList != null) {
 					projectInfo.setCategory(typeList.get("type"));
-				}else{
+				} else {
 					isAdd = 1;
 					failReason += "第6列,项目类别不正确,无需导入;";
 				}
@@ -728,7 +728,7 @@ public class UploadFileController {
 	}
 
 	private static Pattern numStartPattern = Pattern.compile("^(\\d+)(.*)");
-	
+
 	/**
 	 * 封装联系人信息
 	 * 
@@ -749,7 +749,7 @@ public class UploadFileController {
 				telephone = telephone.replace(temp, "").trim();
 				linkma.setTelephone(telephone);
 			}
-			
+
 			Matcher matcher = numStartPattern.matcher(linkma.getTelephone());
 			if (!matcher.matches()) {
 				linkma.setTelephone("");
@@ -872,23 +872,31 @@ public class UploadFileController {
 		int subLeftNum = left;
 		int subRightNum = right;
 		int whileCount = 0;
+		int subLeftN = 0;
 		boolean isFailed = false;
 		while (subLeftNum != subRightNum) {
-
 			String subString = targ.substring(left);
 			subLeftNum = countStr(subString, LEFT);
+			subLeftN = subLeftNum;
 			subRightNum = countStr(subString, RIGHT);
 			if (subLeftNum != subRightNum) {
 				left = targ.lastIndexOf(LEFT, left - 1);
 			}
-
 			if (whileCount++ > 50) {
 				isFailed = true;
 				break;
 			}
 		}
 
-		result = isFailed ? targ : targ.substring(0, left) + targ.substring(right + 1);
+		if (left != right && !isFailed) {
+			String subString = targ.substring(left, right + 1);
+			if (subLeftN == 1 && (subString.indexOf("独资") > 0 || subString.indexOf("合资") > 0)) {
+				String targTmp = targ.substring(0, left) + targ.substring(right + 1);
+				result = subLastParenthesis(targTmp);
+			} else {
+				result = targ.substring(0, left) + "——" + targ.substring(left + 1, right) + targ.substring(right + 1);
+			}
+		}
 
 		return result;
 	}
