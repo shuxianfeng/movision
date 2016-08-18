@@ -4,13 +4,8 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.SuccessCaseService;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +32,6 @@ public class ContractorController {
     /**
      *最新工程商(个数后台控制)
      * @return
-     * @throws IOException
      */
     @ApiOperation(value = "最新工程商",notes = "最新工程商")
     @RequestMapping(value = "sel_new_engineer", method = RequestMethod.GET)
@@ -52,7 +46,6 @@ public class ContractorController {
     /**
      *工程商简版介绍
      * @return
-     * @throws IOException
      */
     @ApiOperation(value = "工程商简版介绍", notes = "工程商简版介绍")
     @RequestMapping(value = "sel_simple_introduce", method = RequestMethod.GET)
@@ -86,8 +79,8 @@ public class ContractorController {
     /**
      *名企展示
      * @return
-     * @throws IOException
      */
+    @Deprecated
     @ApiOperation(value="优秀工程商",notes="优秀工程商",response = Response.class)
     @RequestMapping(value = {"sel_great_company"}, method = RequestMethod.GET)
     public Response greatCompany() {
@@ -100,7 +93,6 @@ public class ContractorController {
     /**
      *最新认证工程商(个数后台控制)
      * @return
-     * @throws IOException
      */
     @ApiOperation(value="最新认证工程商",notes="最新认证工程商",response = Response.class)
     @RequestMapping(value = {"sel_new_identify_engineer"}, method = RequestMethod.GET)
