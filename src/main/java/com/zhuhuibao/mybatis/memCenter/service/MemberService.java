@@ -519,6 +519,7 @@ public class MemberService {
      *
      * @return
      */
+    @Deprecated
     public List greatCompany(String type) {
         List list = new ArrayList();
         if ("2".equals(type)) {
