@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.zhuhuibao.aop.UserAccess;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +33,7 @@ import com.zhuhuibao.utils.pagination.model.Paging;
 @RestController
 @RequestMapping("/rest/zhb")
 public class ZhbController {
+	private static final Logger log = LoggerFactory.getLogger(ZhbController.class);
 
 	@Autowired
 	private ZhbService zhbService;
@@ -62,6 +65,7 @@ public class ZhbController {
 		try {
 			result = zhbService.zhbPrepaidByOrder(orderNo);
 		} catch (Exception e) {
+			log.error("执行异常>>>",e);
 		}
 		response.setData(result);
 
@@ -80,6 +84,7 @@ public class ZhbController {
 		try {
 			result = zhbService.openVipService(orderNo);
 		} catch (Exception e) {
+			log.error("执行异常>>>",e);
 		}
 		response.setData(result);
 		response.setCode(1 == result ? 200 : 400);
@@ -107,6 +112,7 @@ public class ZhbController {
 		try {
 			result = zhbService.payForOrder(orderNo);
 		} catch (Exception e) {
+			log.error("执行异常>>>",e);
 		}
 		response.setData(result);
 		response.setCode(1 == result ? 200 : 400);
@@ -124,6 +130,7 @@ public class ZhbController {
 		try {
 			result = zhbService.payForGoods(goodsId, goodsType);
 		} catch (Exception e) {
+			log.error("执行异常>>>",e);
 		}
 
 		response.setData(result);
@@ -141,6 +148,7 @@ public class ZhbController {
 		try {
 			result = zhbService.refundBySystem(orderNo);
 		} catch (Exception e) {
+			log.error("执行异常>>>",e);
 		}
 
 		response.setData(result);

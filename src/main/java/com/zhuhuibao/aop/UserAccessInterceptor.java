@@ -63,32 +63,24 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
                 if (member != null) {
                     int workType = member.getWorkType();
                     String identify = member.getIdentify();
-                    if (value.equals("ADMIN")) {
-                        log.debug("需要管理员权限操作");
-                        if (!identify.equals("2") && workType == 100) { //企业用户 && 管理员
+                    switch (value) {
+                        case "ADMIN":
+                            log.debug("需要管理员权限操作");
+                            if (!identify.equals("2") && workType == 100) { //企业用户 && 管理员
 
-                            //VIP权限判断 130 : 企业黄金VIP会员,160:    企业铂金VIP会员
-                            String viplevel = annotation.viplevel();
-                            String[] viplevels = viplevel.split(",");
-                            List<String> vipList = Arrays.asList(viplevels);
+                                return checkViplevel(annotation, member);
 
-                            int vipLevel = member.getVipLevel();
-                            if (!vipList.contains(String.valueOf(vipLevel))) {
-                                log.error("用户无权限");
-                                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "用户无权限");
                             } else {
-                                return true;
+                                log.error("需要管理员权限");
+                                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "需要管理员权限");
                             }
 
-                        } else {
-                            log.error("需要管理员权限");
-                            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "需要管理员权限");
-                        }
+                        case "ALL":   //所有用户
+                            log.debug("非管理员权限操作");
+                            return checkViplevel(annotation, member);
 
-                    } else {
-                        log.debug("非管理员权限操作");
-
-                        return true;
+                        default:
+                            return true;
                     }
                 } else {
                     log.error("请登录");
@@ -103,6 +95,38 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
         return false;
     }
 
+    /**
+     * 用户VIP等级验证
+     *
+     * @param annotation
+     * @param member
+     * @return
+     */
+    private boolean checkViplevel(UserAccess annotation, ShiroRealm.ShiroUser member) {
+        //VIP权限判断 130 : 企业黄金VIP会员,160:    企业铂金VIP会员
+        String viplevel = annotation.viplevel();
+        String[] viplevels = viplevel.split(",");
+        List<String> vipList = Arrays.asList(viplevels);
+
+        if (vipList.isEmpty()) {   //无需vip权限
+            return true;
+        } else { //需要不同的vip权限
+            int vipLevel = member.getVipLevel();
+            if (!vipList.contains(String.valueOf(vipLevel))) {
+                log.error("用户无权限");
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "用户无权限");
+            } else {
+                return true;
+            }
+        }
+
+    }
+
+    /**
+     * 运营系统用户登录验证
+     *
+     * @param omsLoginAnno
+     */
     private void checkOmsLogin(OmsLoginAccess omsLoginAnno) {
         if (omsLoginAnno != null) {
             boolean require = omsLoginAnno.required();
@@ -122,6 +146,11 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
     }
 
 
+    /**
+     * 用户登录验证
+     *
+     * @param loginAnno
+     */
     private void checkLogin(LoginAccess loginAnno) {
         if (loginAnno != null) {
             boolean require = loginAnno.required();

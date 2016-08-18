@@ -5,12 +5,14 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.aop.LoginAccess;
+import com.zhuhuibao.aop.UserAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.entity.CheckBrand;
@@ -61,7 +63,8 @@ public class ProductPublishMcController {
     @Autowired
     BrandService brandService;
 
-
+    @LoginAccess
+    @UserAccess(value = "ALL", viplevel = "30,60,130,160")
     @RequestMapping(value = {"/rest/addProduct", "/rest/system/mc/product/add_product"}, method = RequestMethod.POST)
     @ApiOperation(value = "新增产品", notes = "新增产品", response = Response.class)
     public Response addProduct(String json) throws IOException {
@@ -72,6 +75,7 @@ public class ProductPublishMcController {
         return response;
     }
 
+    @Deprecated
     @RequestMapping(value = {"/rest/addComplainSuggest", "/rest/system/mc/product/add_complainSuggest"}, method = RequestMethod.POST)
     @ApiOperation(value = "找不到产品对应的类别新增投诉和建议", notes = "找不到产品对应的类别新增投诉和建议", response = Response.class)
     public Response addComplainSuggest(ComplainSuggest suggest) throws IOException {
@@ -81,7 +85,7 @@ public class ProductPublishMcController {
         return response;
     }
 
-
+    @UserAccess(value = "ALL", viplevel = "30,60,130,160")
     @LoginAccess
     @RequestMapping(value = {"/rest/updateProduct", "/rest/system/mc/product/upd_product"}, method = RequestMethod.POST)
     @ApiOperation(value = "更新产品", notes = "更新产品", response = Response.class)
@@ -105,12 +109,16 @@ public class ProductPublishMcController {
         return response;
     }
 
+    @LoginAccess
+    @UserAccess(value = "ALL", viplevel = "30,60,130,160")
     @RequestMapping(value = {"/rest/updateProductStatus", "/rest/system/mc/product/upd_productStatus"}, method = RequestMethod.POST)
     @ApiOperation(value = "更新产品状态", notes = "更新产品状态", response = Response.class)
     public Response updateProductStatus(ProductWithBLOBs product) throws IOException {
         return productService.updateProductStatus(product);
     }
 
+    @LoginAccess
+    @UserAccess(value = "ALL", viplevel = "30,60,130,160")
     @RequestMapping(value = {"/rest/batchUnpublish", "/rest/system/mc/product/upd_batchPublish"}, method = RequestMethod.POST)
     @ApiOperation(value = "批量更新产品状态", notes = "批量更新产品状态", response = Response.class)
     public Response batchUnpublish(@RequestParam String[] ids) throws IOException {
@@ -120,45 +128,50 @@ public class ProductPublishMcController {
         return productService.batchUnpublish(list);
     }
 
+    @LoginAccess
+    @UserAccess(value = "ALL", viplevel = "30,60,130,160")
     @RequestMapping(value = {"/rest/queryProductById", "/rest/system/mc/product/sel_productById"}, method = RequestMethod.GET)
     @ApiOperation(value = "获得产品信息根据ID", notes = "获得产品信息根据ID", response = Response.class)
     public Response queryProductById(Long id) throws IOException {
         Long createid = ShiroUtil.getCreateID();
-        if(createid!=null){
-            Product b = productService.findById(id);
-            if(b!=null){
-                if(String.valueOf(createid).equals(String.valueOf(b.getCreateid()))){
-                    return productService.selectByPrimaryKey(id);
-                }else {
-                    throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
-                }
-            }else {
+        Product b = productService.findById(id);
+        if (b != null) {
+            if (String.valueOf(createid).equals(String.valueOf(b.getCreateid()))) {
+                return productService.selectByPrimaryKey(id);
+            } else {
                 throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
             }
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        } else {
+            throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
         }
+
     }
 
-    /**
-     * 查询产品分页
-     *
-     * @param product
-     * @param pageNo
-     * @param pageSize
-     * @throws IOException
-     */
+    @LoginAccess
+    @UserAccess(value = "ALL", viplevel = "30,60,130,160")
     @RequestMapping(value = {"/rest/findAllProduct", "/rest/system/mc/product/sel_allProduct"}, method = RequestMethod.GET)
     @ApiOperation(value = "我的产品", notes = "我的产品", response = Response.class)
     public Response findAllProduct(ProductWithBLOBs product,
                                    @RequestParam(defaultValue = "1") String pageNo,
                                    @RequestParam(defaultValue = "10") String pageSize) throws IOException {
 
-        Paging<Product> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Product> productList = productService.findAllByPager(pager, product);
-        pager.result(productList);
+        Long createid = ShiroUtil.getCreateID();
+        if(product.getCreateid() != null){
 
-        return new Response(pager);
+            if(!Objects.equals(createid, product.getCreateid())){
+                  throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询无权限");
+            } else{
+                Paging<Product> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+                List<Product> productList = productService.findAllByPager(pager, product);
+                pager.result(productList);
+
+                return new Response(pager);
+            }
+
+        }else{
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"参数错误");
+        }
+
     }
 
     @RequestMapping(value = {"/rest/getProductFirstCategory", "/rest/system/mc/product/sel_productFirstCategory"}, method = RequestMethod.GET)
@@ -175,7 +188,6 @@ public class ProductPublishMcController {
      * @return
      * @throws IOException
      */
-
     @RequestMapping(value = {"/rest/getProductSecondCategory", "/rest/system/mc/product/sel_productSecondCategory"}, method = RequestMethod.GET)
     @ApiOperation(value = "系统二级分类", notes = "系统二级分类", response = Response.class)
     public Response getProductSecondCategory(HttpServletRequest req) throws IOException {

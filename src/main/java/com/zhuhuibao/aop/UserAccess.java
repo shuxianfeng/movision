@@ -13,7 +13,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UserAccess {
 
+    //ADMIN: 管理员       ALL:所有用户
     String value() default "ADMIN";
 
-    String viplevel();
+    //30:个人黄金 60:个人铂金 130:企业黄金 160:企业铂金
+    String viplevel();// default "30,60,130,160";
 }

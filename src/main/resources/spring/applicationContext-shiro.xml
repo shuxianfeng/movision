@@ -133,7 +133,8 @@
 
                 <!-- 具备“不限+不限+完善资料”权限的配置 -->
                 /rest/system/mc/enquiry/** = orroles["6,9,10,11"]
-                /rest/system/mc/product/** = orroles["6,9,10,11"]
+                <!--产品管理去掉完善资料限制
+                /rest/system/mc/product/** = orroles["6,9,10,11"]  -->
                 /rest/system/mc/quote/** =  orroles["6,9,10,11"]
                 /rest/tech/mc/data/**  =   orroles["6,9,10,11"]
                 /rest/tech/mc/coop/cg/**  =   orroles["6,9,10,11"]
