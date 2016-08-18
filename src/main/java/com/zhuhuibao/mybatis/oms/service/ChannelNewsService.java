@@ -21,9 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Administrator on 2016/4/12 0012.
- */
+
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @Service
 @Transactional
@@ -46,8 +44,13 @@ public class ChannelNewsService {
         Response response = new Response();
         try {
             int result = channel.insertSelective(news);
+            if(result != 1){
+                throw new BusinessException(MsgCodeConstant.mcode_common_failure,
+                        MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
+            }
         } catch (Exception e) {
             log.error("add channel news error!", e);
+            throw e;
         }
         return response;
     }
@@ -67,9 +70,7 @@ public class ChannelNewsService {
             }
         } catch (Exception e) {
             log.error("add channel news error!", e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            throw e;
         }
         return response;
     }
@@ -86,9 +87,7 @@ public class ChannelNewsService {
             channel.updateViews(id);
         } catch (Exception e) {
             log.error("add channel news error!", e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            throw e;
         }
         return response;
     }
@@ -106,9 +105,7 @@ public class ChannelNewsService {
             response.setData(news);
         } catch (Exception e) {
             log.error("select by primary key error!", e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            throw e;
         }
         return response;
     }
@@ -143,9 +140,7 @@ public class ChannelNewsService {
             response.setData(newsList);
         } catch (Exception e) {
             log.error("select by primary key error!", e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            throw e;
         }
         return response;
     }
@@ -157,11 +152,12 @@ public class ChannelNewsService {
      * @return List<ChannelNews>
      */
     public List<ChannelNews> findAllNewsList(Paging<ChannelNews> pager, Map<String, Object> channelMap) {
-        List<ChannelNews> newsList = null;
+        List<ChannelNews> newsList;
         try {
             newsList = channel.findAllNewsList(pager.getRowBounds(), channelMap);
         } catch (Exception e) {
             log.error("find all news List pager error!", e);
+            throw e;
         }
         return newsList;
     }
@@ -173,11 +169,12 @@ public class ChannelNewsService {
      * @return List<ChannelNews>
      */
     public List<Map<String, Object>> findAllTechNewsList(Paging<Map<String, Object>> pager, Map<String, Object> channelMap) {
-        List<Map<String, Object>> newsList = null;
+        List<Map<String, Object>> newsList;
         try {
             newsList = channel.findAllTechNewsList(pager.getRowBounds(), channelMap);
         } catch (Exception e) {
             log.error("find all news List pager error!", e);
+            throw e;
         }
         return newsList;
     }
@@ -190,11 +187,12 @@ public class ChannelNewsService {
      */
     public Map<String, Object> previewNewsInfo(Map<String, Object> channelMap) {
         log.info("preview tech news info " + StringUtils.mapToString(channelMap));
-        Map<String, Object> newsList = null;
+        Map<String, Object> newsList;
         try {
             newsList = channel.previewNewsInfo(channelMap);
         } catch (Exception e) {
             log.error("preview tech news info error!", e);
+            throw e;
         }
         return newsList;
     }
@@ -211,6 +209,7 @@ public class ChannelNewsService {
             newsList = channel.findAllContentList(pager.getRowBounds(), channelMap);
         } catch (Exception e) {
             log.error("find all news List pager error!", e);
+            throw e;
         }
         return newsList;
     }
@@ -227,9 +226,7 @@ public class ChannelNewsService {
             response.setData(newsList);
         } catch (Exception e) {
             log.error("select by primary key error!", e);
-            response.setCode(MsgCodeConstant.response_status_400);
-            response.setMsgCode(MsgCodeConstant.mcode_common_failure);
-            response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
+            throw e;
         }
         return response;
     }
@@ -242,17 +239,14 @@ public class ChannelNewsService {
      */
     public int batchDelNews(String id) {
         log.debug("删除咨询信息");
-        int result = 0;
-        result = channel.batchDelNews(id);
-        return result;
+        return channel.batchDelNews(id);
     }
 
     public List<Map<String, String>> queryHomepageTechnologyList(Map<String, Object> map) {
         try {
             return channel.queryHomepageTechnologyList(map);
         } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw e;
         }
     }
@@ -262,7 +256,7 @@ public class ChannelNewsService {
         try {
             list = channel.findAllPassNewsByType(pager.getRowBounds(), params);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return list;
@@ -273,7 +267,7 @@ public class ChannelNewsService {
         try {
             list = channel.selectHotViews(type, count);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return list;
@@ -284,7 +278,7 @@ public class ChannelNewsService {
         try {
             list = channel.selectNewViews(type, count);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return list;
@@ -304,7 +298,7 @@ public class ChannelNewsService {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("执行异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return map;
@@ -315,8 +309,7 @@ public class ChannelNewsService {
         try{
             news = channel.selectByID(id);
         } catch (Exception e){
-            e.printStackTrace();
-            log.error("查询{}失败","t_oms_channel_news");
+            log.error("查询{}失败","t_oms_channel_news>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
         }
         return news;
