@@ -167,6 +167,9 @@ public class TenderTonedService {
                     tmpMap = ConvertUtil.execute(tmpMap, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
                     tmpMap.put("city",tmpMap.get("cityName"));
                     address += tmpMap.get("cityName");
+                }else{
+                    tmpMap.put("city",tmpMap.get("provinceName"));
+                    tmpMap.put("cityName",tmpMap.get("provinceName"));
                 }
                 String areaCode = String.valueOf(tmpMap.get("area"));
                 if(!StringUtils.isEmpty(areaCode)){
