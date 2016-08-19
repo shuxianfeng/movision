@@ -35,7 +35,7 @@
         select
         <include refid="Base_Column_List"/>
         from t_m_member
-        where email = #{email}
+        where email = #{email} and status !=2
     </select>
 
     <select id="findMemberInfoById" resultType="com.zhuhuibao.mybatis.memberReg.entity.Member">
@@ -111,7 +111,7 @@
     </select>
 
     <select id="findCountByAccount" resultType="java.lang.Integer">
-            SELECT COUNT(1) FROM  t_m_member WHERE mobile = #{account} or email = #{account}
+            SELECT COUNT(1) FROM  t_m_member WHERE mobile = #{account} or email = #{account} and status !=2
     </select>
 
 </mapper>
