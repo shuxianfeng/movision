@@ -158,12 +158,12 @@ public class TenderTonedService {
             for (Map<String,Object> tmpMap : ttList){
                 String address = "";
                 String provinceCode = String.valueOf(tmpMap.get("province"));
-                if(!StringUtils.isEmpty(provinceCode)){
+                if(!StringUtils.isEmpty(provinceCode.trim())){
                     tmpMap = ConvertUtil.execute(tmpMap, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
                     address += tmpMap.get("provinceName");
                 }
                 String cityCode = String.valueOf(tmpMap.get("city"));
-                if(!StringUtils.isEmpty(cityCode)){
+                if(!StringUtils.isEmpty(cityCode.trim())){
                     tmpMap = ConvertUtil.execute(tmpMap, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
                     tmpMap.put("city",tmpMap.get("cityName"));
                     address += tmpMap.get("cityName");
@@ -172,7 +172,7 @@ public class TenderTonedService {
                     tmpMap.put("cityName",tmpMap.get("provinceName"));
                 }
                 String areaCode = String.valueOf(tmpMap.get("area"));
-                if(!StringUtils.isEmpty(areaCode)){
+                if(!StringUtils.isEmpty(areaCode.trim())){
                     tmpMap = ConvertUtil.execute(tmpMap, "area", "dictionaryService", "findAreaByCode", new Object[]{areaCode});
                     address += tmpMap.get("areaName");
                 }
