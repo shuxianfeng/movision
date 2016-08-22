@@ -37,7 +37,10 @@
 		select id from t_sys_adv_attr where chanType=#{chanType,jdbcType=VARCHAR} 
 		and pageDesc=(select name from t_sys_adv_constant where code in(#{chanPage,jdbcType=VARCHAR})) 
 		and advAreaDesc=(select name from t_sys_adv_constant where code in(#{advArea,jdbcType=VARCHAR}))
-		and advTypeDesc=(select name from t_sys_adv_constant where code in(#{advType,jdbcType=VARCHAR}))  )
+		 <if test="advType!=null">
+		   and advTypeDesc=(select name from t_sys_adv_constant where code in(#{advType,jdbcType=VARCHAR})) 
+		 </if>
+		 )
    </select> 
    
    
@@ -50,21 +53,21 @@
        </if>
        
          <if test="chanType!=null">
-          <if test="page!=null">
+          <if test="chanPage!=null">
             <if test="advArea!=null">
               <if test="advType!=null">
-               parentId= #{advType,jdbcType=VARCHAR}
+               code = #{advType,jdbcType=VARCHAR}
                </if>
                <if test="advType==null">
                parentId= #{advArea,jdbcType=VARCHAR}
                </if>
             </if>
              <if test="advArea==null">
-               parentId= #{page,jdbcType=VARCHAR}
+               parentId= #{chanPage,jdbcType=VARCHAR}
             </if>
           </if>
           
-           <if test="page==null">
+           <if test="chanPage==null">
             parentId= #{chanType,jdbcType=VARCHAR}
           </if>
           
@@ -107,7 +110,9 @@
 	        chanType=(select parentId from t_sys_adv_constant where id=#{id,jdbcType=VARCHAR} ) and page=(select position from t_sys_adv_constant where id=#{id,jdbcType=VARCHAR})
 	     </if>
 	      <if test="type==3">
-	         chanType=#{chanType,jdbcType=VARCHAR} and pageDesc=(select name from t_sys_adv_constant where code=#{chanPage,jdbcType=VARCHAR})
+	         chanType=#{chanType,jdbcType=VARCHAR} 
+	         and pageDesc=(select name from t_sys_adv_constant where code=#{chanPage,jdbcType=VARCHAR})
+	         and advAreaDesc=(select name from t_sys_adv_constant where id=#{id,jdbcType=VARCHAR})
 	     </if>
 	     
 	      <if test="type==4">
@@ -138,7 +143,7 @@
 	 (select position from t_sys_adv_constant where code=#{parentId,jdbcType=VARCHAR}) advArea,
 	 (select name from t_sys_adv_constant where code=#{parentId,jdbcType=VARCHAR}) advAreaDesc,
 	 
-	 name advTypeDesc, position advType from t_sys_adv_constant   
+	  position advType,name advTypeDesc from t_sys_adv_constant   
 	 
 	  where id= (select max(id) from t_sys_adv_constant);
  
@@ -166,9 +171,9 @@
      where id= #{id,jdbcType=INTEGER}
     </update>
    
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 	    delete from t_sys_advertising
-	    where id = #{id,jdbcType=INTEGER}
+	    where id = #{id,jdbcType=VARCHAR}
   </delete>
   
    <select id="queryIdExits" parameterType="java.util.Map" resultType="java.lang.Integer">

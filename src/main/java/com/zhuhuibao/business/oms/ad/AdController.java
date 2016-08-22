@@ -74,14 +74,14 @@ public class AdController {
 	    @RequestMapping(value = "sel_adType", method = RequestMethod.GET)
 	    @ApiOperation(value = "根据类型查询", notes = "根据类型查询", response = Response.class)
 	    public Response findByType(@ApiParam(value = "广告频道类型")@RequestParam(required = false) String chanType,
-                @ApiParam(value = "平道子页面")@RequestParam(required = false)String page,
+                @ApiParam(value = "平道子页面")@RequestParam(required = false)String chanPage,
                 @ApiParam(value = "广告位区域")@RequestParam(required = false) String advArea) {
 	        Response result = new Response();
 	        try {
 	        	  Map<String,Object> map = new HashMap<>();
 	  	        //查询传参+
 	  	        map.put("chanType",chanType);
-	  	        map.put("page",page);
+	  	        map.put("chanPage",chanPage);
 	  	        map.put("advArea",advArea); 
 	  	        
 	            List<Map<String,String>> list = adService.findAdType(map);
