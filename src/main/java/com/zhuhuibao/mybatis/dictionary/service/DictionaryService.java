@@ -138,7 +138,7 @@ public class DictionaryService {
         return province;
     }
 
-    @Cacheable(value = "positionType", key = "#root.methodName+'_'+#parentId")
+    @Cacheable(value = "positionType", key = "'parent_'+#parentId")
     public List<Position> findPositionByParentId(String parentId) {
         List<Position> list;
         try {
@@ -150,7 +150,7 @@ public class DictionaryService {
         return list;
     }
 
-    @Cacheable(value = "positionType", key = "#root.targetClass + #root.methodName + #count")
+    @Cacheable(value = "positionType", key = "'count_'+#count")
     public List<Position> findParentTypes(int count) {
         List<Position> list;
         try {
