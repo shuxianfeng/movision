@@ -291,9 +291,8 @@
   </select>
 
   <select id="findAllExpoListByCompanyId" resultType="java.util.Map" parameterType="java.util.Map" >
-    select e.id,e.title,date_format(e.updateTime,'%Y-%m-%d %h:%i:%s') updateTime,c.name as city
+    select e.id,e.title,e.imgUrl,date_format(e.updateTime,'%Y-%m-%d') updateTime,e.views,e.endDate
     from t_c_exhibition e
-    left join t_dictionary_city c on e.city = c.code
     where e.createid = #{createid} and e.is_deleted = 0 and e.status = 1
     order by e.updateTime desc
   </select>
