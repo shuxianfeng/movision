@@ -26,6 +26,48 @@ public class SysJoinus {
     @ApiModelProperty("图形验证码")
     private String imgCode;
 
+    @ApiModelProperty(value = "省份名称",required = true)
+    private String province;
+    @ApiModelProperty(value = "城市名称",required = true)
+    private String city;
+    @ApiModelProperty("地区名称")
+    private String area;
+
+    @ApiModelProperty("申请时间")
+    private String applytime;
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getApplytime() {
+        return applytime;
+    }
+
+    public void setApplytime(String applytime) {
+        this.applytime = applytime;
+    }
+
     public String getImgCode() {
         return imgCode;
     }
