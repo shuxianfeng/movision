@@ -37,4 +37,6 @@ public interface CooperationMapper {
     int deleteWitkeyTask(String id);
 
     Map<String,Object> queryUnloginCooperationInfoById(String id);
+
+    List<Map<String,String>> findAllWitkeyByCompanyId(RowBounds rowBounds, Map<String, Object> map);
 }

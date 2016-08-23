@@ -283,4 +283,14 @@ public class CooperationService {
 			throw e;
 		}
 	}
+
+	public List<Map<String,String>> findAllWitkeyByCompanyId(Paging<Map<String, String>> pager, Map<String, Object> map) {
+		try {
+			return cooperationMapper.findAllWitkeyByCompanyId(pager.getRowBounds(),map);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

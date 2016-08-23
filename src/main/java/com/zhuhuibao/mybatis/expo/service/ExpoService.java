@@ -261,4 +261,14 @@ public class ExpoService {
             throw e;
         }
     }
+
+    public List<Map<String,String>> findAllExpoListByCompanyId(Paging<Map<String, String>> pager, Map<String, Object> map) {
+        try{
+            return exhibitionMapper.findAllExpoListByCompanyId(pager.getRowBounds(),map);
+        }catch (Exception e){
+            log.error("ExpoService::findAllExpoListByCompanyId",e);
+            //e.printStackTrace();
+            throw e;
+        }
+    }
 }

@@ -307,4 +307,13 @@ public class TechCooperationService {
             throw e;
         }
     }
+
+    public List<Map<String,String>> findAllTechByCompanyId(Paging<Map<String, String>> pager, Map<String, Object> map) {
+        try {
+            return techMapper.findAllTechByCompanyId(pager.getRowBounds(),map);
+        } catch (Exception e) {
+            log.error("TechCooperationService::findAllTechByCompanyId",e);
+            throw e;
+        }
+    }
 }
