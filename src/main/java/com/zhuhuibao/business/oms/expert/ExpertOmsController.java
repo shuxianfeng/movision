@@ -175,7 +175,7 @@ public class ExpertOmsController {
             pageSize = "10";
         }
         Paging<Map<String,String>> pager = new Paging<Map<String,String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Map<String,String>> questionList = expertService.findAllQuestionListOms(pager);
+        List<Map<String,String>> questionList = expertService.findAllQuestionList(pager);
         pager.result(questionList);
         response.setData(pager);
         return response;

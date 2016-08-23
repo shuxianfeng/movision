@@ -5,6 +5,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.alipay.service.direct.AlipayDirectService;
 import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
+import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.common.util.ShiroUtil;
@@ -691,10 +692,6 @@ public class ExpertSiteController {
         return response;
     }
 
-    /**
-     * 邮箱注册时的图形验证码
-     * @param response
-     */
     @ApiOperation(value="专家培训课程下单图形验证码",notes="专家培训课程下单图形验证码",response = Response.class)
     @RequestMapping(value = "train/sel_orderImgCode", method = RequestMethod.GET)
     public void getOrderImgCode(HttpServletResponse response) throws IOException {
@@ -720,6 +717,76 @@ public class ExpertSiteController {
             }
         }else {
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "查询問題列表", notes = "查询問題列表", response = Response.class)
+    @RequestMapping(value = "base/sel_questionList", method = RequestMethod.GET)
+    public Response queryExpertQuestion(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                        @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Map<String, String>> questionList = expertService.findAllQuestionList(pager);
+        pager.result(questionList);
+        response.setData(pager);
+        return response;
+    }
+
+    @ApiOperation(value = "查询問題详情", notes = "查询問題详情", response = Response.class)
+    @RequestMapping(value = "base/sel_myQuestion", method = RequestMethod.GET)
+    public Response queryMyQuestionById(@ApiParam(value = "問題id") @RequestParam String id) {
+        Response response = new Response();
+        Map map = expertService.queryMyQuestionById(id);
+        Long createid = ShiroUtil.getCreateID();
+        if(createid!=null){
+            Map<String,String> map1 = expertService.queryQuestionById(id);
+            if(createid.equals(map1.get("createid"))){
+                map.put("isCan",1);
+            }else {
+                map.put("isCan",0);
+            }
+        }else {
+            map.put("isCan",1);
+        }
+        response.setData(map);
+        return response;
+    }
+
+    @ApiOperation(value = "关闭问题", notes = "关闭问题", response = Response.class)
+    @RequestMapping(value = "base/upd_closeQuestion", method = RequestMethod.POST)
+    @LoginAccess
+    public Response closeQuestion(@ApiParam(value = "問題id") @RequestParam String id) {
+        Response response = new Response();
+        Question question = new Question();
+        Long createid = ShiroUtil.getCreateID();
+        Map<String, String> map1 = expertService.queryQuestionById(id);
+        if (createid.equals(map1.get("createid"))) {
+            question.setId(id);
+            //狀態設為已關閉
+            question.setStatus(ExpertConstant.EXPERT_QUESTION_STATUS_TWO);
+            expertService.updateQuestionInfo(question);
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "采纳答案", notes = "采纳答案", response = Response.class)
+    @RequestMapping(value = "base/upd_acceptAnswer", method = RequestMethod.POST)
+    @LoginAccess
+    public Response acceptAnswer(@ApiParam(value = "問題id") @RequestParam String questionId,
+                                 @ApiParam(value = "答案id") @RequestParam String answerId) {
+        Response response = new Response();
+        Question question = new Question();
+        Long createid = ShiroUtil.getCreateID();
+        Map<String, String> map1 = expertService.queryQuestionById(questionId);
+        if (createid.equals(map1.get("createid"))) {
+            question.setId(questionId);
+            //設置採納答案id
+            question.setAnswerId(answerId);
+            //狀態設為已關閉
+            question.setStatus(ExpertConstant.EXPERT_QUESTION_STATUS_FOUR);
+            expertService.updateQuestionInfo(question);
         }
         return response;
     }
