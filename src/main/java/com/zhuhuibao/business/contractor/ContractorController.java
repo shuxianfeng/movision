@@ -4,8 +4,12 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.mybatis.expo.service.ExpoService;
+import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.SuccessCaseService;
+import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
+import com.zhuhuibao.mybatis.witkey.service.CooperationService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +32,18 @@ public class ContractorController {
 
     @Autowired
     private SuccessCaseService successCaseService;
+
+    @Autowired
+    private ExpoService expoService;
+
+    @Autowired
+    private CooperationService cooperationService;
+
+    @Autowired
+    private TechCooperationService techCooperationService;
+
+    @Autowired
+    private JobPositionService jobPositionService;
     /**
      *最新工程商(个数后台控制)
      * @return
@@ -118,4 +134,63 @@ public class ContractorController {
         return response;
     }
 
+    @ApiOperation(value = "vip工程商信息活动",notes = "vip工程商信息活动")
+    @RequestMapping(value = "sel_contractor_activity", method = RequestMethod.GET)
+    public Response sel_contractor_activity(@ApiParam(value = "公司id")@RequestParam String id,
+                                            @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                            @RequestParam(required = false,defaultValue = "10") String pageSize)  {
+        Response response = new Response();
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String,Object> map = new HashMap<>();
+        map.put("createid",id);
+        List<Map<String,String>> resultList = expoService.findAllExpoListByCompanyId(pager,map);
+        pager.result(resultList);
+        response.setData(pager);
+        return response;
+    }
+
+    @ApiOperation(value = "vip工程商信息威客",notes = "vip工程商信息威客")
+    @RequestMapping(value = "sel_contractor_witkey", method = RequestMethod.GET)
+    public Response sel_contractor_witkey(@ApiParam(value = "公司id")@RequestParam String id,
+                                            @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                            @RequestParam(required = false,defaultValue = "10") String pageSize)  {
+        Response response = new Response();
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String,Object> map = new HashMap<>();
+        map.put("createid",id);
+        List<Map<String,String>> resultList = cooperationService.findAllWitkeyByCompanyId(pager,map);
+        pager.result(resultList);
+        response.setData(pager);
+        return response;
+    }
+
+    @ApiOperation(value = "vip工程商信息技术",notes = "vip工程商信息技术")
+    @RequestMapping(value = "sel_contractor_tech", method = RequestMethod.GET)
+    public Response sel_contractor_tech(@ApiParam(value = "公司id")@RequestParam String id,
+                                          @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                          @RequestParam(required = false,defaultValue = "10") String pageSize)  {
+        Response response = new Response();
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String,Object> map = new HashMap<>();
+        map.put("createid",id);
+        List<Map<String,String>> resultList = techCooperationService.findAllTechByCompanyId(pager,map);
+        pager.result(resultList);
+        response.setData(pager);
+        return response;
+    }
+
+    @ApiOperation(value = "vip工程商信息人才",notes = "vip工程商信息人才")
+    @RequestMapping(value = "sel_contractor_job", method = RequestMethod.GET)
+    public Response sel_contractor_job(@ApiParam(value = "公司id")@RequestParam String id,
+                                        @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                        @RequestParam(required = false,defaultValue = "10") String pageSize)  {
+        Response response = new Response();
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String,Object> map = new HashMap<>();
+        map.put("createid",id);
+        List<Map<String,String>> resultList = jobPositionService.findAllJobByCompanyId(pager,map);
+        pager.result(resultList);
+        response.setData(pager);
+        return response;
+    }
 }

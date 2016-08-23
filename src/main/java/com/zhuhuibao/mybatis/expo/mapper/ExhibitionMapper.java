@@ -23,4 +23,5 @@ public interface ExhibitionMapper {
 
     int queryMyExhibitionListSize(Map<String, Object> map);
 
+    List<Map<String,String>> findAllExpoListByCompanyId(RowBounds rowBounds, Map<String, Object> map);
 }
