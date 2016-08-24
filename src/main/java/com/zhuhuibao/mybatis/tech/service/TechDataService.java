@@ -4,6 +4,7 @@ package com.zhuhuibao.mybatis.tech.service;/**
  */
 
 import com.zhuhuibao.common.constant.MessageLogConstant;
+import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.mybatis.tech.entity.TechCategoryBean;
@@ -19,10 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 技术资料业务处理类
@@ -178,8 +176,9 @@ public class TechDataService {
         int result;
         log.info("update oms tech data " + StringUtils.beanToString(techData));
         try {
+            techData.setStatus(TechConstant.TechDataStatus.PENDINGAUDIT.intValue());
             result = techDataMapper.updateByPrimaryKeySelective(techData);
-            if ("3".equals(String.valueOf(techData.getStatus()))) {
+            if (Objects.equals(techData.getStatus(), TechConstant.TechDataStatus.REJECT.intValue())) {
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), techData.getCreateid(), techData.getReason());
             }
         } catch (Exception e) {

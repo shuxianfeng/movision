@@ -3,6 +3,7 @@ package com.zhuhuibao.business.tech.mc;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
@@ -58,30 +59,26 @@ public class TechDataMcController {
     @ApiOperation(value = "删除技术资料(行业解决方案，技术文档，培训资料)", notes = "删除技术资料(行业解决方案，技术文档，培训资料)", response = Response.class)
     public Response deleteTechData(@ApiParam(value = "技术资料ID") @RequestParam() String techDataId) {
         Response response = new Response();
-        Map<String, Object> condition = new HashMap<String, Object>();
+        Map<String, Object> condition = new HashMap<>();
         condition.put("id", techDataId);
         condition.put("status", TechConstant.TechCooperationnStatus.DELETE.toString());
         int result = techDataService.deleteTechData(condition);
         return response;
     }
 
+    @LoginAccess
     @RequestMapping(value = "sel_tech_data", method = RequestMethod.GET)
     @ApiOperation(value = "搜索技术资料", notes = "搜索技术资料", response = Response.class)
     public Response findAllTechDataPager(@ApiParam(value = "一级分类") @RequestParam(required = false) String fCategory,
                                          @ApiParam(value = "标题") @RequestParam(required = false) String title,
                                          @ApiParam(value = "状态") @RequestParam(required = false) String status,
-                                         @ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-                                         @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) {
+                                         @ApiParam(value = "页码") @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                         @ApiParam(value = "每页显示的数目") @RequestParam(required = false,defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Map<String, Object> condition = new HashMap<String, Object>();
+        Map<String, Object> condition = new HashMap<>();
         condition.put("fCategory", fCategory);
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         if (title != null && !"".equals(title)) {
             condition.put("title", title.replace("_", "\\_"));
         }
@@ -89,9 +86,7 @@ public class TechDataMcController {
 
         //登录用户
         Long createid = ShiroUtil.getCreateID();
-        if (createid == null) {
-            throw new AuthException(MsgCodeConstant.un_login, "请登录");
-        }
+
         condition.put("createid", createid);
 
         List<Map<String, String>> techList = techDataService.findAllOMSTechCooperationPager(pager, condition);

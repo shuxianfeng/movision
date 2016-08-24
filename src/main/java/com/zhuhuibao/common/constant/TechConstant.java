@@ -39,6 +39,10 @@ public class TechConstant {
         public String toString() {
             return this.value;
         }
+
+        public Integer intValue(){
+            return Integer.valueOf(this.value);
+        }
     }
 
     /**

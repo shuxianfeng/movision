@@ -11,6 +11,8 @@ import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.*;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
+import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
+import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -86,6 +88,9 @@ public class MemberService {
 
     @Autowired
     MemRealCheckService realCheckService;
+
+    @Autowired
+    VipInfoService vipInfoService;
 
     /**
      * 会员信息更新
@@ -621,7 +626,7 @@ public class MemberService {
                         memStatus.equals(MemberConstant.MemberStatus.SMRZYRZ.toString()) ||
                         memStatus.equals(MemberConstant.MemberStatus.SMRZYJJ.toString())) {
                     mem.setStatus(memStatus);
-                } else{
+                } else {
                     mem.setStatus(status);
                 }
 
@@ -669,8 +674,14 @@ public class MemberService {
     }
 
     public List<Map<String, String>> queryEngineerList(Map<String, Object> map) {
+        List<Map<String, String>> list;
         try {
-            return memberMapper.queryEngineerList(map);
+            list = memberMapper.queryEngineerList(map);
+            for (Map<String, String> item : list) {
+                VipMemberInfo vip = vipInfoService.findVipMemberInfoById(Long.valueOf(item.get("id")));
+                item.put("vipLevel", vip != null ? String.valueOf(vip.getVipLevel()) : "");
+            }
+            return list;
         } catch (Exception e) {
             log.error("queryEngineerList error >>>", e);
             e.printStackTrace();
@@ -689,7 +700,7 @@ public class MemberService {
         try {
             infoCheck = infoCheckService.findMemById(id);
             String enterpriseCreaterTime = infoCheck.getEnterpriseCreaterTime();
-            infoCheck.setEnterpriseCreaterTime(DateUtils.str2DateFormat(enterpriseCreaterTime,"yyyy-MM-dd"));
+            infoCheck.setEnterpriseCreaterTime(DateUtils.str2DateFormat(enterpriseCreaterTime, "yyyy-MM-dd"));
 
         } catch (Exception e) {
             log.error("findMeminfoCheck() 查询异常>>>", e);
@@ -728,8 +739,8 @@ public class MemberService {
         try {
             //先判断基本资料是否审核通过
             String infoStatus = infoCheckService.getStatusById(member.getId());
-            if(!infoStatus.equals(MemberConstant.MemberStatus.WSZLYSH.toString())){
-               throw new BusinessException(MsgCodeConstant.SMRZSH_ERROR,"基本资料未审核通过");
+            if (!infoStatus.equals(MemberConstant.MemberStatus.WSZLYSH.toString())) {
+                throw new BusinessException(MsgCodeConstant.SMRZSH_ERROR, "基本资料未审核通过");
             }
 
             Integer status = member.getStatus();
