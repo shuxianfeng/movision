@@ -31,10 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -322,7 +319,11 @@ public class JobController {
 
             List<File> files = new ArrayList<File>();
             String[] idList = ids.split(",");
-            for (String resumeID : idList) {
+            Set<String> set = new HashSet<>();
+            for(String id:idList){
+                set.add(id);
+            }
+            for (String resumeID : set) {
                 Map<String, String> resumeMap = resumeService.exportResume(String.valueOf(resumeID));
                 if (!resumeMap.isEmpty()) {
                     String fileName = !StringUtils.isEmpty(resumeMap.get("realName")) ? resumeMap.get("realName") + "的简历" : "简历";
