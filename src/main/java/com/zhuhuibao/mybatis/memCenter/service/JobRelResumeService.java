@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -108,6 +109,15 @@ public class JobRelResumeService {
     public Map<String, String> queryMyReceiveResume(Map<String, Object> queryMap) {
         try {
             return jrrMapper.queryMyReceiveResume(queryMap);
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw e;
+        }
+    }
+
+    public List<Map<String, String>> queryReceiveResume(Map<String, Object> queryMap) {
+        try {
+            return jrrMapper.queryReceiveResume(queryMap);
         } catch (Exception e) {
             log.error("执行异常>>>", e);
             throw e;

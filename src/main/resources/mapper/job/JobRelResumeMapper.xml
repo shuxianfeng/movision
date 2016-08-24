@@ -89,4 +89,9 @@
     select * from t_i_jobRelresume jr
     where jr.resumeID = #{id} and jr.id = #{recordId};
   </select>
+
+  <select id="queryReceiveResume" parameterType="java.util.Map" resultType="java.util.Map">
+    select * from t_i_jobRelresume jr
+    where jr.resumeID = #{id} and find_in_set(jr.id,(select group_concat(id) from t_i_job where createid = #{createid}));
+  </select>
 </mapper>

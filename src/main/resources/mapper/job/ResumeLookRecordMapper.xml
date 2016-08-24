@@ -22,5 +22,6 @@
     select r.id,date_format(r.publishDate,'%Y-%m-%d %H:%i:%s')publishDate,r.companyID,m.enterpriseName from t_i_resume_look_record r
     left join t_m_member m on r.companyID = m.id
     where r.createId = #{id}
+    order by r.publishDate desc
   </select>
 </mapper>

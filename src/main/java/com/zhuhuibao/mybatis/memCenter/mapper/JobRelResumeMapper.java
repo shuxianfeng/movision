@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.mybatis.memCenter.entity.JobRelResume;
 
+import java.util.List;
 import java.util.Map;
 
 public interface JobRelResumeMapper {
@@ -20,4 +21,6 @@ public interface JobRelResumeMapper {
     int updateJobRelResume(Map<String,Object> map);
 
     Map<String,String> queryMyReceiveResume(Map<String, Object> queryMap);
+
+    List<Map<String,String>> queryReceiveResume(Map<String, Object> queryMap);
 }

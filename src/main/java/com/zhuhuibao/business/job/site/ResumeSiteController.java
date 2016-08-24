@@ -72,8 +72,8 @@ public class ResumeSiteController {
         Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("id", resumeID);
         queryMap.put("createid", memberId);
-        Map<String, String> result = jrrService.queryMyReceiveResume(queryMap);
-        if (result != null) {
+        List<Map<String, String>> resultList = jrrService.queryReceiveResume(queryMap);
+        if (resultList.size()!=0) {
             log.info("export resume id == " + resumeID);
             response.setDateHeader("Expires", 0);
             response.setHeader("Cache-Control",
