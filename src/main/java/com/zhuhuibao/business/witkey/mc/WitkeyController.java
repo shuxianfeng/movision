@@ -96,6 +96,7 @@ public class WitkeyController {
 		if (cooperation.getPrice() == null) {
 			cooperation.setPrice(Double.parseDouble("-1"));
 		}
+		cooperation.setStatus("0");
 		cooperationService.updateCooperation(cooperation);
 		return response;
 	}
