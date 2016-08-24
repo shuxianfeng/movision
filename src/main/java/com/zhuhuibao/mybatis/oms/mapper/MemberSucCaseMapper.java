@@ -17,5 +17,7 @@ public interface MemberSucCaseMapper {
     //修改成功案例
 	void updateByPrimaryKeySelective(MemberSucCase memberSucCase);
 	//查询成功案例详情
-	MemberSucCase selectByPrimaryKey(String id); 
+	MemberSucCase selectByPrimaryKey(String id);
+	
+	List<MemberSucCase> queryMemberSucCaseList(String id); 
 }

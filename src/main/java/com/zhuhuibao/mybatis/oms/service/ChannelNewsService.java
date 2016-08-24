@@ -9,8 +9,8 @@ import com.zhuhuibao.mybatis.oms.mapper.ChannelNewsMapper;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
-
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -314,4 +314,38 @@ public class ChannelNewsService {
         }
         return news;
     }
+     /**
+      * 查询咨询列表
+      * @param pager
+      * @param map
+      * @return
+      */
+	public List<Map> findAllChanNewsList(Paging<Map> pager,
+			Map<String, Object> map) {
+		    List<Map> newsList = null;
+	        try {
+	            newsList = channel.findAllChanNewsList(pager.getRowBounds(), map);
+	        } catch (Exception e) {
+	            log.error("查询{}失败","findAllChanNewsList>>>", e);
+	            throw e;
+	        }
+	        return newsList;
+	}
+	
+    /**
+     * 查询咨询详情
+     * @param id
+     * @return
+     */
+	public List<Map> queryDetailsById(Long id) {
+		   List<Map> newsList = null;
+	        try{
+	        	newsList = channel.queryDetailsById(id);
+	        } catch (Exception e){
+	            log.error("查询{}失败","t_oms_channel_news>>>",e);
+	            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
+	        }
+	       
+		return newsList;
+	}
 }

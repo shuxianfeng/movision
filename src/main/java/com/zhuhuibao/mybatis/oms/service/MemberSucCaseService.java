@@ -84,5 +84,23 @@ public class MemberSucCaseService {
 		}
 		return memberSucCase;
 	}
+	
+	/**
+	 * 查询会员成功案例详情
+	 * @param id
+	 * @return
+	 */
+	public List<MemberSucCase> queryMemberSucCaseList(String id) {
+		List<MemberSucCase> memberSucCaseList = null;
+		try {
+			memberSucCaseList = memberSucCaseMapper.queryMemberSucCaseList(id);
+		} catch (Exception e) {
+
+			log.error("MemberSucCaseService: queryMemberSucCaseList exception ",e);
+			e.printStackTrace();
+			throw e;
+		}
+		return memberSucCaseList;
+	}
 
 }

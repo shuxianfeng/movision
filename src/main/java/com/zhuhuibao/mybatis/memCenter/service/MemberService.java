@@ -1,22 +1,10 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.constant.MemberConstant;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.ZhbPaymentConstant;
-import com.zhuhuibao.common.pojo.AccountBean;
-import com.zhuhuibao.common.pojo.ResultBean;
-import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.memCenter.entity.*;
-import com.zhuhuibao.mybatis.memCenter.mapper.*;
-import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
-import com.zhuhuibao.mybatis.zhb.service.ZhbService;
-import com.zhuhuibao.utils.DateUtils;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
-import com.zhuhuibao.utils.convert.BeanUtil;
-import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +14,50 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MemberConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
+import com.zhuhuibao.common.pojo.AccountBean;
+import com.zhuhuibao.common.pojo.ResultBean;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.memCenter.entity.Area;
+import com.zhuhuibao.mybatis.memCenter.entity.Certificate;
+import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
+import com.zhuhuibao.mybatis.memCenter.entity.City;
+import com.zhuhuibao.mybatis.memCenter.entity.EmployeeSize;
+import com.zhuhuibao.mybatis.memCenter.entity.EnterpriseType;
+import com.zhuhuibao.mybatis.memCenter.entity.Identity;
+import com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck;
+import com.zhuhuibao.mybatis.memCenter.entity.MemRealCheck;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
+import com.zhuhuibao.mybatis.memCenter.entity.Message;
+import com.zhuhuibao.mybatis.memCenter.entity.Province;
+import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
+import com.zhuhuibao.mybatis.memCenter.mapper.AreaMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.CertificateMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.CertificateRecordMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.CityMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.EmployeeSizeMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.EnterpriseTypeMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.IdentityMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.MessageMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.ProvinceMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.WorkTypeMapper;
+import com.zhuhuibao.mybatis.oms.entity.MemberSucCase;
+import com.zhuhuibao.mybatis.oms.service.MemberSucCaseService;
+import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
+import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
+import com.zhuhuibao.mybatis.vip.service.VipInfoService;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.DateUtils;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.convert.BeanUtil;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 
 /**
  * 会员中心业务处理
@@ -86,7 +116,12 @@ public class MemberService {
 
     @Autowired
     MemRealCheckService realCheckService;
-
+    
+    @Autowired
+    VipInfoService vipInfoService;
+    
+    @Autowired
+	private MemberSucCaseService memberSucCaseService;
     /**
      * 会员信息更新
      */
@@ -759,4 +794,28 @@ public class MemberService {
         }
 
     }
+    
+    /**
+     * VIP 工程商简介
+     * @param id
+     * @param string
+     * @return
+     */
+	public Map vipIntroduce(String id, String type) {
+		Long memberId=ShiroUtil.getCreateID();
+		VipMemberInfo memberInfo=vipInfoService.findVipMemberInfoById(memberId);
+		Map map=null;
+		//不是vip用户
+		if(memberInfo==null)
+		{
+			return map;
+		}else{
+		  map=this.introduce(id, type);
+		  
+		  List<MemberSucCase> sucCase=memberSucCaseService.queryMemberSucCaseList(id);
+		  map.put("sucCaseList", sucCase);
+		  
+		}
+		return map;
+	}
 }

@@ -245,6 +245,35 @@
     </where>
     order by a.createTime desc
   </select>
+  
+    <!-- 查询咨询列表@author:gmli@since2016.05.09 -->
+  <select id="findAllChanNewsList" resultType="java.util.Map" parameterType="java.util.Map" >
+    select a.id,a.title,   
+      date_format(a.createTime,'%Y-%m-%d %H:%i:%s') createTime
+      from
+     t_oms_channel_news a 
+    <where>
+      a.status!=3 
+      <if test="status != null">
+        and a.status = #{status}
+      </if>
+      <if test="channelid != null">
+        and a.channelid = #{channelid}
+      </if>
+      <if test="sort != null">
+        and a.sort = #{sort}
+      </if>
+    </where>
+    order by a.createTime desc
+  </select>
+  
+   <select id="queryDetailsById" resultType="java.util.Map" parameterType="java.lang.Long" >
+    select
+      id, title, date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,  description,content
+    from t_oms_channel_news
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
   <!-- 查询所属栏目列表@author:gmli@since2016.05.09 -->
   <select id="queryChannelList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
    select t.id,t.name,t.sort,t.parentId channelid  from t_oms_channel t where (t.parentId in(1,6,13) or t.id in(1,6,13))

@@ -27,6 +27,13 @@
     where c.id = #{id,jdbcType=VARCHAR}
   </select>
   
+  <select id="queryMemberSucCaseList" parameterType="java.lang.String" resultMap="BaseResultMap">
+   select 
+       c.id,c.createid,c.title,c.imgUrl,c.content,date_format(c.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,date_format(c.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,c.views,c.status,c.is_deleted,m.enterpriseName companyName,c.reason ,(case when isnull(m.mobile) then m.email else m.mobile end) account
+      from t_m_success_case c left join t_m_member m on c.createid=m.id
+    where c.id = #{id,jdbcType=VARCHAR}
+  </select>
+  
   <select id="findAllSucCaseList" resultMap="BaseResultMap" parameterType="java.util.Map" >
      select 
        c.id,c.createid,c.title,c.imgUrl,c.content,date_format(c.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,date_format(c.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,c.views,c.status,c.is_deleted,m.enterpriseName companyName,c.reason ,(case when isnull(m.mobile) then m.email else m.mobile end) account
