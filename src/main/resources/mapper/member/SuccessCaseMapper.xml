@@ -95,6 +95,7 @@
     <if test="createid != null" >
       and c.createid = #{createid}
     </if>
+    order by c.updateTime desc
   </select>
 
   <select id="queryGreatCaseListByCompanyId" resultType="java.util.Map" parameterType="java.util.Map" >
