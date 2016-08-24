@@ -87,6 +87,6 @@
 
   <select id="queryMyReceiveResume" parameterType="java.util.Map" resultType="java.util.Map">
     select * from t_i_jobRelresume jr
-    where jr.resumeID = #{id} and jr.jobID in (select group_concat(id) from t_i_job where createid = #{createid});
+    where jr.resumeID = #{id} and find_in_set(jr.jobID,(select group_concat(id) from t_i_job where createid = #{createid}));
   </select>
 </mapper>
