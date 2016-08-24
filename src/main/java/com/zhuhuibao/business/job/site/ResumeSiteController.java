@@ -207,7 +207,7 @@ public class ResumeSiteController {
         if (memberId != null) {
             Map<String, Object> queryMap = new HashMap<>();
             queryMap.put("id", id);
-            queryMap.put("createid", memberId);
+            queryMap.put("recordId", recordId);
             Map<String, String> result = jrrService.queryMyReceiveResume(queryMap);
             if (result != null) {
                 Map<String, Object> map = new HashMap<>();
