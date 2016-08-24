@@ -266,7 +266,7 @@ public class MemberService {
     /**
      * 人员规模
      */
-    @Cacheable(value = "common", key = "#root.targetClass + #root.methodName")
+    @Cacheable(value = "common", key = "#root.methodName")
     public List<EmployeeSize> findEmployeeSizeList() {
         try {
             return employeeSizeMapper.findEmployeeSizeList();
@@ -280,7 +280,7 @@ public class MemberService {
     /**
      * 企业性质
      */
-    @Cacheable(value = "common", key = "#root.targetClass + #root.methodName")
+    @Cacheable(value = "common", key = "#root.methodName")
     public List<EnterpriseType> findEnterpriseTypeList() {
         try {
             return enterpriseTypeMapper.findEnterpriseTypeList();
@@ -294,7 +294,7 @@ public class MemberService {
     /**
      * 企业身份
      */
-    @Cacheable(value = "common", key = "#root.targetClass + #root.methodName")
+    @Cacheable(value = "common", key = "#root.methodName")
     public List<Identity> findIdentityList() {
         try {
             return identityMapper.findIdentityList();

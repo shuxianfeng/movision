@@ -4,12 +4,14 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.common.entity.SysJoinus;
 import com.zhuhuibao.mybatis.common.mapper.SysJoinusMapper;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +32,7 @@ public class SysJoinusService {
     public void insert(SysJoinus joinus) {
         int count;
         try {
+            joinus.setApplytime(DateUtils.date2Str(new Date(),"yyyy-MM-dd"));
             count = joinusMapper.insertSelective(joinus);
             if(count != 1){
                 throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL,"插入失败");

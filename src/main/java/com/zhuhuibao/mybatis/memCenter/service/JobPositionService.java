@@ -740,4 +740,13 @@ public class JobPositionService {
         }
         map.put("welfare", welfarename);
     }
+
+    public List<Map<String,String>> findAllJobByCompanyId(Paging<Map<String, String>> pager, Map<String, Object> map) {
+        try {
+            return jobMapper.findAllJobByCompanyId(pager.getRowBounds(),map);
+        } catch (Exception e) {
+            log.error("JobPositionService::findAllJobByCompanyId",e);
+            throw e;
+        }
+    }
 }

@@ -413,4 +413,11 @@
         set status = 1
         where id = #{id}
     </update>
+
+    <select id="findAllTechByCompanyId" parameterType="java.util.Map" resultType="java.util.Map">
+        select tc.id,tc.title,date_format(tc.updateTime,'%Y-%m-%d %h:%i:%s') updateTime,tc.type
+        from t_tech_cooperation tc
+        where tc.createID = #{createid} and tc.status = 2
+        order by tc.updateTime desc
+    </select>
 </mapper>

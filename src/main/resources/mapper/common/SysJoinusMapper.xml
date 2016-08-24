@@ -9,9 +9,13 @@
         <result column="description" jdbcType="VARCHAR" property="description"/>
         <result column="status" jdbcType="CHAR" property="status"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="area" jdbcType="VARCHAR" property="area"/>
+        <result column="applytime" jdbcType="DATE" property="applytime"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, real_name, mobile, qq, description, status, remark
+    id, real_name, mobile, qq, description, status, remark, province,city,area,applytime
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -47,10 +51,11 @@
   </delete>
     <insert id="insert" parameterType="com.zhuhuibao.mybatis.common.entity.SysJoinus">
     insert into t_sys_joinus (id, real_name, mobile, 
-      qq, description, status, remark
+      qq, description, status, remark, province, city, area, applytime
       )
     values (#{id,jdbcType=INTEGER}, #{realName,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
       #{qq,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}
+      , #{province,jdbcType=VARCHAR}  , #{city,jdbcType=VARCHAR} , #{area,jdbcType=VARCHAR}  , #{applytime,jdbcType=DATE}
       )
   </insert>
     <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.common.entity.SysJoinus">
@@ -77,6 +82,18 @@
             <if test="remark != null">
                 remark,
             </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+            <if test="applytime != null">
+                applytime,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -99,6 +116,18 @@
             </if>
             <if test="remark != null">
                 #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null">
+                #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="applytime != null">
+                #{applytime,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -123,6 +152,18 @@
             <if test="remark != null">
                 remark = #{remark,jdbcType=VARCHAR},
             </if>
+            <if test="province != null">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null">
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="applytime != null">
+                applytime = #{applytime,jdbcType=DATE},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -133,7 +174,11 @@
       qq = #{qq,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},
-      remark = #{remark,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      applytime = #{applytime,jdbcType=DATE}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -78,4 +78,6 @@ public interface JobMapper {
     Map<String,Object> findJobByJobID(@Param("jobID") String jobID);
 
     List<Map<String,Object>> findNewPositions(@Param("count") int count);
+
+    List<Map<String,String>> findAllJobByCompanyId(RowBounds rowBounds, Map<String, Object> map);
 }

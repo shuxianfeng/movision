@@ -40,4 +40,6 @@ public interface TechCooperationMapper {
     List<Map<String,String>> findAllMyLookedAchievementList(RowBounds rowBounds, Map<String, Object> map);
 
     int deleteLookedAchievement(String id);
+
+    List<Map<String,String>> findAllTechByCompanyId(RowBounds rowBounds, Map<String, Object> map);
 }
