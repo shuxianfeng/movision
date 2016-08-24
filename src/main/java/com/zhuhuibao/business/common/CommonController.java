@@ -178,7 +178,7 @@ public class CommonController {
 
                 Map<String,String> map = new LinkedHashMap<>();
                 map.put("name",name);
-                map.put("mobile",mobile);
+                map.put("password","123456");
                 Gson gson = new Gson();
                 String json = gson.toJson(map);
                 SDKSendSms.sendSMS(mobile,json, PropertiesUtils.getValue("job_mobile_sms_template_code"));
