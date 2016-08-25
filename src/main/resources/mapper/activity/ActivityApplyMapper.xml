@@ -97,4 +97,11 @@
       orderNo = #{orderNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="getApplyCount" resultType="java.lang.Integer">
+    select
+    count(*)
+    from t_sys_activity_apply a
+    left join t_o_order o on a.orderNo = o.orderNo
+    where o.status = 2
+  </select>
 </mapper>

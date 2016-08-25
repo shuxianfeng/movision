@@ -111,4 +111,13 @@ public class ActivityService {
 
         return orderNo;
     }
+
+    public int getApplyCount() {
+        try{
+            return activityApplyMapper.getApplyCount();
+        }catch (Exception e){
+            log.error("ActivityService::getApplyCount" ,e);
+            throw e;
+        }
+    }
 }

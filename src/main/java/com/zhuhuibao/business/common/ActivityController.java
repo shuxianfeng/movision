@@ -160,4 +160,13 @@ public class ActivityController {
         zhpayService.doPay(response, paramMap);
 
     }
+
+    @ApiOperation(value="获取报名人数",notes="获取报名人数",response = Response.class)
+    @RequestMapping(value = "get_apply_count", method = RequestMethod.GET)
+    public Response get_apply_count()  throws IOException, ApiException {
+        Response response = new Response();
+        int count = activityService.getApplyCount();
+        response.setData(count);
+        return response;
+    }
 }
