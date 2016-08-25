@@ -11,6 +11,16 @@ public class ActivityApply {
 
     private String activityId;
 
+    private String orderNo;
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
     public String getId() {
         return id;
     }

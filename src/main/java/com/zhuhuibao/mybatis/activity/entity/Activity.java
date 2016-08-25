@@ -21,7 +21,6 @@ public class Activity {
 
     private String activityAddress;
 
-    private String returnUrl;
 
     public Long getId() {
         return id;
@@ -95,11 +94,4 @@ public class Activity {
         this.activityAddress = activityAddress == null ? null : activityAddress.trim();
     }
 
-    public String getReturnUrl() {
-        return returnUrl;
-    }
-
-    public void setReturnUrl(String returnUrl) {
-        this.returnUrl = returnUrl == null ? null : returnUrl.trim();
-    }
 }

@@ -14,4 +14,6 @@ public interface ActivityApplyMapper {
     int updateByPrimaryKeySelective(ActivityApply record);
 
     int updateByPrimaryKey(ActivityApply record);
+
+    int getApplyCount();
 }

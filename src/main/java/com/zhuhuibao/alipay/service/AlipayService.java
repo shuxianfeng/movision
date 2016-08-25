@@ -7,9 +7,11 @@ import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.alipay.util.AlipaySubmit;
 import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.activity.service.ActivityService;
 import com.zhuhuibao.mybatis.order.entity.*;
 import com.zhuhuibao.mybatis.order.service.*;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.utils.CommonUtils;
 import com.zhuhuibao.utils.IdGenerator;
 import com.zhuhuibao.utils.JsonUtils;
@@ -68,6 +70,8 @@ public class AlipayService {
     @Autowired
     ZhbService zhbService;
 
+    @Autowired
+    ActivityService activityService;
 
     /**
      * 支付宝退款请求
@@ -169,8 +173,29 @@ public class AlipayService {
             Map<String, String> params = getRequestParams(request);
 
             String orderNo = params.get("out_trade_no");
-            RedirectView rv = new RedirectView(returnUrl + orderNo);
-            modelAndView.setView(rv);
+
+            String comJson = params.get("extra_common_param");
+            if(!StringUtils.isEmpty(comJson)){
+               Map<String,String> map =  JsonUtils.getMapFromJsonString(comJson);
+                String type = map.get("type");
+                String url = map.get("url");
+                RedirectView rv = new RedirectView(PropertiesUtils.getValue("host.ip") + "/"+url);
+                if(type.equals(OrderConstants.GoodsType.ACTIVITY_APPLY.toString())){
+                    //查询活动报名信息
+                    Map<String,String> attrs= activityService.findByOrderNo(orderNo);
+                    String name = attrs.get("name");
+                    String mobile = attrs.get("mobile");
+                    Map<String,String> pars = new HashMap<>();
+                    pars.put("name", EncodeUtil.encodeBase64ToString(name.getBytes()));
+                    pars.put("mobile", EncodeUtil.encodeBase64ToString(mobile.getBytes()));
+                    rv.setAttributesMap(pars);
+                }
+                modelAndView.setView(rv);
+
+            }else{
+                RedirectView rv = new RedirectView(returnUrl + orderNo);
+                modelAndView.setView(rv);
+            }
 
             // 计算得出通知验证结果
             log.info("******支付宝同步回调校验参数信息开始*******");
@@ -316,6 +341,12 @@ public class AlipayService {
 //        sParaTemp.put("price", msgParam.get("goodsPrice"));               //商品单价
 //        sParaTemp.put("quantity", msgParam.get("number"));                //购买数量
         sParaTemp.put("exter_invoke_ip", msgParam.get("exterInvokeIp")); //客户端IP
+
+        //公用回传参数 extra_common_param
+         String extra =msgParam.get("extra_common_param");
+        if(!StringUtils.isEmpty(extra)){
+            sParaTemp.put("extra_common_param",extra);
+        }
 
         // 防钓鱼时间戳
         String anti_phishing_key = "";

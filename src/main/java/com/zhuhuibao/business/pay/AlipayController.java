@@ -26,6 +26,7 @@ public class AlipayController {
     @Autowired
     AlipayService alipayService;
 
+
     /**
      * 即时到账接口
      * <p/>
@@ -36,6 +37,7 @@ public class AlipayController {
     @RequestMapping(value = "callback/direct_return", method = RequestMethod.GET)
     public ModelAndView alipaySynchPay(HttpServletRequest request) {
         log.debug("*****支付宝同步[即时到账]跳转*****开始");
+        //默认回调页面
         String returnUrl = AlipayPropertiesLoader.getPropertyValue("alipay_return_url");
         return alipayService.syncNotify(request, PayConstants.TradeType.PAY.toString(),returnUrl);
     }

@@ -7,6 +7,8 @@ import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.fsearch.utils.StringUtil;
+import com.zhuhuibao.mybatis.activity.entity.Activity;
+import com.zhuhuibao.mybatis.activity.service.ActivityService;
 import com.zhuhuibao.mybatis.order.entity.*;
 import com.zhuhuibao.mybatis.order.service.*;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
@@ -60,6 +62,31 @@ public class ZHOrderService {
     @Autowired
     ZhbService zhbService;
 
+    @Autowired
+    ActivityService activityService;
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void createActivityOrder(Map<String, String> msgParam) {
+
+        msgParam.put("goodsType", OrderConstants.GoodsType.ACTIVITY_APPLY.toString());
+        msgParam.put("number","1");
+        //查询活动信息
+        String goodsId = msgParam.get("goodsId");
+        Activity activity =  activityService.findByActivityId(goodsId);
+        if(activity != null){
+            msgParam.put("goodsName",activity.getActivityName());
+            msgParam.put("goodsPrice",activity.getApplyFee());
+        }else{
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"活动不存在");
+        }
+        //记录订单表
+        genOrderRecord(msgParam);
+        //记录订单商品表
+        genOrderGoodsRecord(msgParam);
+
+    }
+
+
     /**
      * 生成订单
      * (事务管理)
@@ -86,7 +113,11 @@ public class ZHOrderService {
         try {
             Order order = new Order();
             order.setOrderNo(msgParam.get("orderNo"));
-            order.setBuyerId(Long.valueOf(msgParam.get("buyerId")));
+            String buyerId = msgParam.get("buyerId");
+            if(!StringUtils.isEmpty(buyerId)){
+                order.setBuyerId(Long.valueOf(buyerId));
+            }
+
             order.setSellerId(msgParam.get("partner"));
             order.setDealTime(new Date());
             String payPrice = msgParam.get("goodsPrice");
