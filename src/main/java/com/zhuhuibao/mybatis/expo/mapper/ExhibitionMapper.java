@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.expo.mapper;
 
 import com.zhuhuibao.mybatis.expo.entity.Exhibition;
+
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -22,5 +23,7 @@ public interface ExhibitionMapper {
     List<Map<String,String>> queryHomepageExhibitionList(Map<String, Object> map);
 
     int queryMyExhibitionListSize(Map<String, Object> map);
+
+	List<Map<String,String>> findAllActivityList(RowBounds rowBounds, Map<String, Object> map);
 
 }
