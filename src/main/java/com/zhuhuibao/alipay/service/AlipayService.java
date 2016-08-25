@@ -177,14 +177,6 @@ public class AlipayService {
             String url = params.get("extra_common_param");
             if (!StringUtils.isEmpty(url)) {
                 RedirectView rv = new RedirectView(url);
-                //查询活动报名信息
-                Map<String, String> attrs = activityService.findByOrderNo(orderNo);
-                String name = attrs.get("name");
-                String mobile = attrs.get("mobile");
-                Map<String, String> pars = new HashMap<>();
-                pars.put("name", EncodeUtil.encodeBase64ToString(name.getBytes()));
-                pars.put("mobile", EncodeUtil.encodeBase64ToString(mobile.getBytes()));
-                rv.setAttributesMap(pars);
                 modelAndView.setView(rv);
 
             } else {
