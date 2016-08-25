@@ -289,4 +289,29 @@
     select count(*) FROM t_c_exhibition
     where createid = #{createId} and type = #{type}
   </select>
+  
+   <select id="findAllActivityList" resultType="java.util.Map" parameterType="java.util.Map" >
+    select a.apply_name,a.apply_mobile,
+    date_format(a.apply_time,'%Y-%m-%d %H:%i:%s') apply_time,a.apply_fee,a.activity_name,(case when isnull(c.status) then 1 else c.status end ) status
+	   from (
+	     select a.apply_name,a.apply_mobile,a.apply_time,b.apply_fee,b.activity_name,a.orderNo from t_sys_activity_apply a,t_sys_activity b
+	
+	      where a.activity_id=b.id  ) 
+	    a left join  t_o_order c on (c.orderNo=a.orderNo or a.orderNo =null) 
+    
+    where c.goodsType=5 
+    
+     <if test="activityName != null">
+        and a.activity_name like CONCAT('%',#{activityName},'%') 
+      </if>
+      
+      <if test="mobile != null">
+        and a.apply_mobile like CONCAT('%',#{mobile},'%') 
+      </if>
+      
+      <if test="status != null">
+        and c.status = #{status}
+      </if>
+      order by a.apply_time desc
+   </select>
 </mapper>

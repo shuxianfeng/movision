@@ -11,6 +11,7 @@ import com.zhuhuibao.mybatis.expo.mapper.MeetingOrderMapper;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.utils.pagination.model.Paging;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -261,4 +262,19 @@ public class ExpoService {
             throw e;
         }
     }
+    
+    /**
+     * 查询活动名称
+     * @param pager
+     * @param map
+     * @return
+     */
+	public List findAllActivityList(Paging pager, Map<String, Object> map) {
+		  try {
+	            return exhibitionMapper.findAllActivityList(pager.getRowBounds(),map);
+	        }catch (Exception e){
+	            log.error("ExpoService::findAllActivityList",e); 
+	            throw e;
+	        }
+	}
 }

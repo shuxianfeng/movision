@@ -268,4 +268,35 @@ public class ExpoOmsController {
         }
         return response;
     }
+    
+    /**
+     * 活动报名查询
+     */
+    @ApiOperation(value="一站式会展定制列表",notes="一站式会展定制列表",response = Response.class)
+    @RequestMapping(value = "sel_activityList", method = RequestMethod.GET)
+    public Response findAllActivityList(
+            @ApiParam(value = "活动名称")@RequestParam(required = false) String activityName,
+            @ApiParam(value = "报名手机号")@RequestParam(required = false)String mobile,
+            @ApiParam(value = "支付状态")@RequestParam(required = false)String status, 
+            @RequestParam(required = false)String pageNo,@RequestParam(required = false)String pageSize)  {
+        Response Response = new Response();
+        //设定默认分页pageSize
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String,Object> map = new HashMap<>();
+        //查询传参
+        map.put("activityName",activityName);
+        map.put("mobile",mobile); 
+        map.put("status",status);
+        //查询
+        List activityList = exhibitionService.findAllActivityList(pager,map);
+        pager.result(activityList);
+        Response.setData(pager);
+        return Response;
+    }
 }
