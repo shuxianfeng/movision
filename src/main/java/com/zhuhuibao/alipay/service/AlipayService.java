@@ -163,7 +163,7 @@ public class AlipayService {
      * @param tradeType 交易流水类型
      * @return mv
      */
-    public ModelAndView syncNotify(HttpServletRequest request, String tradeType,String returnUrl) {
+    public ModelAndView syncNotify(HttpServletRequest request, String tradeType, String returnUrl) {
 
         ModelAndView modelAndView = new ModelAndView();
 
@@ -174,25 +174,20 @@ public class AlipayService {
 
             String orderNo = params.get("out_trade_no");
 
-            String comJson = params.get("extra_common_param");
-            if(!StringUtils.isEmpty(comJson)){
-               Map<String,String> map =  JsonUtils.getMapFromJsonString(comJson);
-                String type = map.get("type");
-                String url = map.get("url");
-                RedirectView rv = new RedirectView(PropertiesUtils.getValue("host.ip") + "/"+url);
-                if(type.equals(OrderConstants.GoodsType.ACTIVITY_APPLY.toString())){
-                    //查询活动报名信息
-                    Map<String,String> attrs= activityService.findByOrderNo(orderNo);
-                    String name = attrs.get("name");
-                    String mobile = attrs.get("mobile");
-                    Map<String,String> pars = new HashMap<>();
-                    pars.put("name", EncodeUtil.encodeBase64ToString(name.getBytes()));
-                    pars.put("mobile", EncodeUtil.encodeBase64ToString(mobile.getBytes()));
-                    rv.setAttributesMap(pars);
-                }
+            String url = params.get("extra_common_param");
+            if (!StringUtils.isEmpty(url)) {
+                RedirectView rv = new RedirectView(url);
+                //查询活动报名信息
+                Map<String, String> attrs = activityService.findByOrderNo(orderNo);
+                String name = attrs.get("name");
+                String mobile = attrs.get("mobile");
+                Map<String, String> pars = new HashMap<>();
+                pars.put("name", EncodeUtil.encodeBase64ToString(name.getBytes()));
+                pars.put("mobile", EncodeUtil.encodeBase64ToString(mobile.getBytes()));
+                rv.setAttributesMap(pars);
                 modelAndView.setView(rv);
 
-            }else{
+            } else {
                 RedirectView rv = new RedirectView(returnUrl + orderNo);
                 modelAndView.setView(rv);
             }
@@ -343,9 +338,9 @@ public class AlipayService {
         sParaTemp.put("exter_invoke_ip", msgParam.get("exterInvokeIp")); //客户端IP
 
         //公用回传参数 extra_common_param
-         String extra =msgParam.get("extra_common_param");
-        if(!StringUtils.isEmpty(extra)){
-            sParaTemp.put("extra_common_param",extra);
+        String extra = msgParam.get("extra_common_param");
+        if (!StringUtils.isEmpty(extra)) {
+            sParaTemp.put("extra_common_param", extra);
         }
 
         // 防钓鱼时间戳

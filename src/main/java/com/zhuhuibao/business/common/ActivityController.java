@@ -160,10 +160,7 @@ public class ActivityController {
         paramMap.put("alipay_goods_type", PayConstants.GoodsType.XNL.toString());//商品类型  0 , 1
         paramMap.put("partner", PARTNER);//partner=seller_id     商家支付宝ID  合作伙伴身份ID 签约账号
         //公用回传参数
-        Map<String,String> commsMap = new HashMap<>();
-        commsMap.put("type", OrderConstants.GoodsType.ACTIVITY_APPLY.toString());
-        commsMap.put("url",returnUrl);
-        paramMap.put("extra_common_param",JsonUtils.getJsonStringFromMap(commsMap));
+        paramMap.put("extra_common_param",returnUrl);
         log.debug("调用立即支付接口......");
 
         zhpayService.doPay(response, paramMap);
