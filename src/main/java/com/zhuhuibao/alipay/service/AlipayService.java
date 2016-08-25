@@ -153,16 +153,15 @@ public class AlipayService {
     }
 
     /**
-     * 支付宝同步通知 {不使用}
+     * 支付宝同步通知
      *
      * @param request   request
      * @param tradeType 交易流水类型
      * @return mv
      */
-    public ModelAndView syncNotify(HttpServletRequest request, String tradeType) {
+    public ModelAndView syncNotify(HttpServletRequest request, String tradeType,String returnUrl) {
 
         ModelAndView modelAndView = new ModelAndView();
-        String returnUrl = PropertiesUtils.getValue("host.ip") + "/" + PropertiesUtils.getValue("alipay_return_url");
 
         try {
             // 获取返回信息

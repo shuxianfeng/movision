@@ -1,7 +1,9 @@
 package com.zhuhuibao.business.pay;
 
 import com.zhuhuibao.alipay.service.AlipayService;
+import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.common.constant.PayConstants;
+import com.zhuhuibao.utils.PropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +36,14 @@ public class AlipayController {
     @RequestMapping(value = "callback/direct_return", method = RequestMethod.GET)
     public ModelAndView alipaySynchPay(HttpServletRequest request) {
         log.debug("*****支付宝同步[即时到账]跳转*****开始");
-
-        return alipayService.syncNotify(request, PayConstants.TradeType.PAY.toString());
+        String returnUrl = AlipayPropertiesLoader.getPropertyValue("alipay_return_url");
+        return alipayService.syncNotify(request, PayConstants.TradeType.PAY.toString(),returnUrl);
     }
 
+
+
     /**
-     * 即时到账接口
+     * 即时到账接口  [批量退款]
      * <p/>
      * 支付宝同步跳转 {return_url}      GET
      *
@@ -48,8 +52,8 @@ public class AlipayController {
     @RequestMapping(value = "callback/refund_return", method = RequestMethod.GET)
     public ModelAndView alipaySynchRefund(HttpServletRequest request) {
         log.debug("*****支付宝同步[批量退款]跳转*****开始");
-
-        return alipayService.syncNotify(request, PayConstants.TradeType.REFUND.toString());
+        String returnUrl = AlipayPropertiesLoader.getPropertyValue("alirefund_return_url");
+        return alipayService.syncNotify(request, PayConstants.TradeType.REFUND.toString(),returnUrl);
     }
 
     /**
@@ -68,7 +72,7 @@ public class AlipayController {
     }
 
     /**
-     * 即时到账接口   退款
+     * 即时到账接口   [批量退款]
      * <p/>
      * 支付宝异步跳转 {notify_url}      POST
      *
