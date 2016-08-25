@@ -11,7 +11,7 @@
         <result column="co_ organized" property="coOrganized" jdbcType="VARCHAR"/>
         <result column="apply_fee" property="applyFee" jdbcType="VARCHAR"/>
         <result column="activity_address" property="activityAddress" jdbcType="VARCHAR"/>
-        <result column="apply_num" property="applyNum" jdbcType="INT"/>
+        <result column="apply_num" property="applyNum" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, activity_name, activity_starttime, activity_endtime, apply_endtime, organized, 
@@ -43,7 +43,7 @@
     values (#{id,jdbcType=BIGINT}, #{activityName,jdbcType=VARCHAR}, #{activityStarttime,jdbcType=TIMESTAMP}, 
       #{activityEndtime,jdbcType=TIMESTAMP}, #{applyEndtime,jdbcType=TIMESTAMP}, #{organized,jdbcType=VARCHAR}, 
       #{coOrganized,jdbcType=VARCHAR}, #{applyFee,jdbcType=VARCHAR}, #{activityAddress,jdbcType=VARCHAR},
-      #{apply_num,jdbcType=INT})
+      #{apply_num,jdbcType=INTEGER})
   </insert>
     <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.activity.entity.Activity">
         insert into t_sys_activity
@@ -108,7 +108,7 @@
                 #{activityAddress,jdbcType=VARCHAR},
             </if>
             <if test="applyNum != null">
-                #{apply_num,jdbcType=INT},
+                #{apply_num,jdbcType=INTEGER},
             </if>
 
         </trim>
@@ -141,7 +141,7 @@
                 activity_address = #{activityAddress,jdbcType=VARCHAR},
             </if>
             <if test="applyNum != null">
-                apply_num = #{activityAddress,jdbcType=INT},
+                apply_num = #{activityAddress,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
@@ -156,7 +156,7 @@
       "co_ organized" = #{coOrganized,jdbcType=VARCHAR},
       apply_fee = #{applyFee,jdbcType=VARCHAR},
       activity_address = #{activityAddress,jdbcType=VARCHAR} ,
-      apply_num = #{applyNum,jdbcType=INT}
+      apply_num = #{applyNum,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
     <update id="updateApplyNum">
