@@ -114,6 +114,8 @@ public class ActivityService {
         msgParam.put("orderNo",orderNo);
         msgParam.put("goodsId",activityApply.getActivityId());
         msgParam.put("partner",PARTNER);
+        msgParam.put("goodsType", OrderConstants.GoodsType.ACTIVITY_APPLY.toString());
+        msgParam.put("number","1");
 
         try{
             //报名人数校验

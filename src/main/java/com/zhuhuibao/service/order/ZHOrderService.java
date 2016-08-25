@@ -68,8 +68,6 @@ public class ZHOrderService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void createActivityOrder(Map<String, String> msgParam) {
 
-        msgParam.put("goodsType", OrderConstants.GoodsType.ACTIVITY_APPLY.toString());
-        msgParam.put("number","1");
         //查询活动信息
         String goodsId = msgParam.get("goodsId");
         Activity activity =  activityService.findByActivityId(goodsId);
