@@ -11,10 +11,11 @@
         <result column="co_ organized" property="coOrganized" jdbcType="VARCHAR"/>
         <result column="apply_fee" property="applyFee" jdbcType="VARCHAR"/>
         <result column="activity_address" property="activityAddress" jdbcType="VARCHAR"/>
+        <result column="apply_num" property="applyNum" jdbcType="INT"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, activity_name, activity_starttime, activity_endtime, apply_endtime, organized, 
-    "co_ organized", apply_fee, activity_address
+    "co_ organized", apply_fee, activity_address,apply_num
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -38,10 +39,11 @@
     <insert id="insert" parameterType="com.zhuhuibao.mybatis.activity.entity.Activity">
     insert into t_sys_activity (id, activity_name, activity_starttime, 
       activity_endtime, apply_endtime, organized, 
-      "co_ organized", apply_fee, activity_address)
+      "co_ organized", apply_fee, activity_address,apply_num)
     values (#{id,jdbcType=BIGINT}, #{activityName,jdbcType=VARCHAR}, #{activityStarttime,jdbcType=TIMESTAMP}, 
       #{activityEndtime,jdbcType=TIMESTAMP}, #{applyEndtime,jdbcType=TIMESTAMP}, #{organized,jdbcType=VARCHAR}, 
-      #{coOrganized,jdbcType=VARCHAR}, #{applyFee,jdbcType=VARCHAR}, #{activityAddress,jdbcType=VARCHAR})
+      #{coOrganized,jdbcType=VARCHAR}, #{applyFee,jdbcType=VARCHAR}, #{activityAddress,jdbcType=VARCHAR},
+      #{apply_num,jdbcType=INT})
   </insert>
     <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.activity.entity.Activity">
         insert into t_sys_activity
@@ -73,7 +75,9 @@
             <if test="activityAddress != null">
                 activity_address,
             </if>
-
+            <if test="applyNum != null">
+                apply_num,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -102,6 +106,9 @@
             </if>
             <if test="activityAddress != null">
                 #{activityAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="applyNum != null">
+                #{apply_num,jdbcType=INT},
             </if>
 
         </trim>
@@ -133,7 +140,9 @@
             <if test="activityAddress != null">
                 activity_address = #{activityAddress,jdbcType=VARCHAR},
             </if>
-
+            <if test="applyNum != null">
+                apply_num = #{activityAddress,jdbcType=INT},
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -146,7 +155,8 @@
       organized = #{organized,jdbcType=VARCHAR},
       "co_ organized" = #{coOrganized,jdbcType=VARCHAR},
       apply_fee = #{applyFee,jdbcType=VARCHAR},
-      activity_address = #{activityAddress,jdbcType=VARCHAR}
+      activity_address = #{activityAddress,jdbcType=VARCHAR} ,
+      apply_num = #{applyNum,jdbcType=INT}
     where id = #{id,jdbcType=BIGINT}
   </update>
     <update id="updateApplyNum">
