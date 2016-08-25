@@ -21,6 +21,15 @@ public class Activity {
 
     private String activityAddress;
 
+    private int applyNum;
+
+    public int getApplyNum() {
+        return applyNum;
+    }
+
+    public void setApplyNum(int applyNum) {
+        this.applyNum = applyNum;
+    }
 
     public Long getId() {
         return id;

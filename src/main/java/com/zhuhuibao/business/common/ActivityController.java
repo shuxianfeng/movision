@@ -16,6 +16,8 @@ import com.zhuhuibao.mybatis.activity.entity.ActivityApply;
 import com.zhuhuibao.mybatis.activity.service.ActivityService;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
+import com.zhuhuibao.mybatis.order.entity.Order;
+import com.zhuhuibao.mybatis.order.service.OrderService;
 import com.zhuhuibao.service.order.ZHOrderService;
 import com.zhuhuibao.service.zhpay.ZhpayService;
 import com.zhuhuibao.utils.*;
@@ -56,6 +58,9 @@ public class ActivityController {
 
     @Autowired
     ZhpayService zhpayService;
+
+    @Autowired
+    OrderService orderService;
 
 
 
@@ -139,6 +144,12 @@ public class ActivityController {
                       @ApiParam("订单号") @RequestParam String orderNo,
                       @ApiParam("支付方式 1:支付宝") @RequestParam  String tradeMode,
                       @ApiParam("回调页面") @RequestParam String returnUrl) throws Exception {
+
+        //先判断该订单是否已经过期关闭
+        Order order = orderService.findByOrderNo(orderNo);
+        if(order !=null && order.getStatus().equals(PayConstants.OrderStatus.CLOSED.toString())){
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"抱歉，您的报名费支付时间已过期，请重新报名!");
+        }
 
         Map paramMap = new HashMap();
         paramMap.put("orderNo",orderNo);

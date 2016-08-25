@@ -149,4 +149,9 @@
       activity_address = #{activityAddress,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+    <update id="updateApplyNum">
+       update t_sys_activity
+       set apply_num = apply_num -  #{number,jdbcType=INTEGER}
+       where id = #{id}
+    </update>
 </mapper>

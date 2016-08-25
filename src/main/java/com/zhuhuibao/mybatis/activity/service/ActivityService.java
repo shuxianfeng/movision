@@ -2,14 +2,17 @@ package com.zhuhuibao.mybatis.activity.service;
 
 import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.activity.entity.Activity;
 import com.zhuhuibao.mybatis.activity.entity.ActivityApply;
 import com.zhuhuibao.mybatis.activity.mapper.ActivityApplyMapper;
 import com.zhuhuibao.mybatis.activity.mapper.ActivityMapper;
+import com.zhuhuibao.mybatis.order.entity.PublishCourse;
 import com.zhuhuibao.service.order.ZHOrderService;
 import com.zhuhuibao.utils.IdGenerator;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.zookeeper.DistributedLock;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -35,6 +38,8 @@ public class ActivityService {
     private static final Logger log = LoggerFactory.getLogger(ActivityService.class);
 
     private static final String PARTNER = AlipayPropertiesLoader.getPropertyValue("partner");
+
+    public static final String LOCK_NAME = "alipay_activity";
 
     @Autowired
     private ActivityApplyMapper activityApplyMapper;
@@ -82,8 +87,28 @@ public class ActivityService {
      * @param mobileCode
      * @return
      */
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public String applyActivity(ActivityApply activityApply, String mobileCode){
+
+        DistributedLock lock = null;
+        try {
+            lock = new DistributedLock(LOCK_NAME);
+            lock.lock();
+
+            return doApply(activityApply, mobileCode);
+
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, e.getMessage());
+        } finally {
+            if (lock != null) {
+                lock.unlock();
+            }
+        }
+
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    private String doApply(ActivityApply activityApply, String mobileCode) {
         String orderNo =  IdGenerator.createOrderNo();
         Map<String,String> msgParam = new HashMap<>();
         msgParam.put("orderNo",orderNo);
@@ -91,6 +116,9 @@ public class ActivityService {
         msgParam.put("partner",PARTNER);
 
         try{
+            //报名人数校验
+            checkApplyNum(msgParam);
+
             Subject currentUser = SecurityUtils.getSubject();
             Session sess = currentUser.getSession(true);
             String sessMobileCode = (String) sess.getAttribute("activity"+activityApply.getApplyMobile());
@@ -104,12 +132,39 @@ public class ActivityService {
             }
 
             zhOrderService.createActivityOrder(msgParam);
+            //更新报名人数
+            updateApplyNum(msgParam);
         }catch (Exception e){
             log.error("报名活动异常>>>" ,e);
             throw e;
         }
 
         return orderNo;
+    }
+
+    private void checkApplyNum(Map<String, String> msgParam) {
+        if (msgParam.get("goodsType").equals(OrderConstants.GoodsType.ACTIVITY_APPLY.toString())) {
+            int number = Integer.valueOf(msgParam.get("number"));
+            Long id = Long.valueOf(msgParam.get("goodsId"));
+            Activity activity = activityMapper.selectByPrimaryKey(id);
+
+            int applyNum = activity.getApplyNum();
+
+            if (number > applyNum) {
+                log.error("报名名额已满");
+                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "报名名额已满");
+            }
+        }
+    }
+
+    private void updateApplyNum(Map<String, String> params) {
+        try{
+            Long activityid = Long.valueOf(params.get("goodsId"));
+            int number = Integer.valueOf(params.get("number"));
+            activityMapper.updateApplyNum(activityid, number);
+        }catch (Exception e){
+            log.error("更新异常>>>",e);
+        }
     }
 
     public int getApplyCount() {
