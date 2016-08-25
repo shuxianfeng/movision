@@ -2,7 +2,6 @@ package com.zhuhuibao.business.common;
 
 import com.google.gson.Gson;
 import com.taobao.api.ApiException;
-import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
@@ -18,7 +17,6 @@ import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.mybatis.order.entity.Order;
 import com.zhuhuibao.mybatis.order.service.OrderService;
-import com.zhuhuibao.service.order.ZHOrderService;
 import com.zhuhuibao.service.zhpay.ZhpayService;
 import com.zhuhuibao.utils.*;
 import com.zhuhuibao.utils.sms.SDKSendSms;
