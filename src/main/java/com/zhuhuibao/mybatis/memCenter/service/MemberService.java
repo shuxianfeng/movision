@@ -540,6 +540,7 @@ public class MemberService {
             map.put(Constants.webSite, member.getEnterpriseWebSite());
             map.put(Constants.telephone, member.getEnterpriseTelephone());
             map.put(Constants.fax, member.getEnterpriseFox());
+            map.put(Constants.vipLevel, member.getVipLevel());
             map.put(Constants.certificateRecord, certificateRecordList);
             return map;
         } catch (Exception e) {
@@ -802,7 +803,7 @@ public class MemberService {
      * @return
      */
 	public Map vipIntroduce(String id, String type) {
-		Long memberId=ShiroUtil.getCreateID();
+	    Long memberId=ShiroUtil.getCreateID();
 		VipMemberInfo memberInfo=vipInfoService.findVipMemberInfoById(memberId);
 		Map map=null;
 		//不是vip用户
@@ -811,6 +812,7 @@ public class MemberService {
 			return map;
 		}else{
 		  map=this.introduce(id, type);
+		  
 		  
 		  List<MemberSucCase> sucCase=memberSucCaseService.queryMemberSucCaseList(id);
 		  map.put("sucCaseList", sucCase);

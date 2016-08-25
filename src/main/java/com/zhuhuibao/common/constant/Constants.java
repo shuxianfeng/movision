@@ -29,6 +29,11 @@ public class Constants {
      * 产品状态待审核
      */
     public static Integer product_status_nocheck=3;
+    /**
+     *vip等级
+     *
+     */
+	public static String vipLevel="vipLevel";
 
     /**
      * 品牌详情页面展示产品的数量 10
