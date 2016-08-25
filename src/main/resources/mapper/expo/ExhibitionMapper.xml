@@ -312,5 +312,6 @@
       <if test="status != null">
         and c.status = #{status}
       </if>
+      order by a.apply_time desc
    </select>
 </mapper>
