@@ -295,10 +295,10 @@ public class ZhpayService {
 //        if (StringUtils.isEmpty(goodsPrice)) {
 //            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "商品单价不能为空");
 //        }
-        String buyersid = String.valueOf(msgParam.get("buyerId"));//创建订单的会员ID
-        if (StringUtils.isEmpty(buyersid)) {
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "创建订单会员ID不能为空");
-        }
+//        String buyersid = String.valueOf(msgParam.get("buyerId"));//创建订单的会员ID
+//        if (StringUtils.isEmpty(buyersid)) {
+//            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "创建订单会员ID不能为空");
+//        }
         String number = msgParam.get("number");//订单商品数量
         if (StringUtils.isEmpty(number)) {
             throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "订单商品数量不能为空");

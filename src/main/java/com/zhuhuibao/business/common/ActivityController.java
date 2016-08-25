@@ -2,21 +2,23 @@ package com.zhuhuibao.business.common;
 
 import com.google.gson.Gson;
 import com.taobao.api.ApiException;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.OrderConstants;
+import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.activity.entity.ActivityApply;
 import com.zhuhuibao.mybatis.activity.service.ActivityService;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
-import com.zhuhuibao.utils.DateUtils;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
-import com.zhuhuibao.utils.PropertiesUtils;
-import com.zhuhuibao.utils.VerifyCodeUtils;
+import com.zhuhuibao.service.order.ZHOrderService;
+import com.zhuhuibao.service.zhpay.ZhpayService;
+import com.zhuhuibao.utils.*;
 import com.zhuhuibao.utils.sms.SDKSendSms;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -27,9 +29,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -42,11 +46,18 @@ import java.util.Map;
 public class ActivityController {
     private static final Logger log = LoggerFactory.getLogger(ActivityController.class);
 
+    private static final String PARTNER = AlipayPropertiesLoader.getPropertyValue("partner");
+
     @Autowired
     ActivityService activityService;
 
     @Autowired
     MemberRegService memberRegService;
+
+    @Autowired
+    ZhpayService zhpayService;
+
+
 
     @ApiOperation(value="图形验证码",notes="图形验证码")
     @RequestMapping(value = "get_imgCode", method = RequestMethod.GET)
@@ -86,7 +97,6 @@ public class ActivityController {
     @RequestMapping(value = "get_mobileCode", method = RequestMethod.GET)
     public Response get_mobileCode(@ApiParam(value = "手机号码") @RequestParam String mobile,
                                    @ApiParam(value ="图形验证码") @RequestParam String imgCode)  throws IOException, ApiException {
-        Response response = new Response();
         Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(true);
         String sessImgCode = (String) sess.getAttribute("activity");
@@ -108,27 +118,46 @@ public class ActivityController {
             info.setAccount(mobile);
             memberRegService.inserValidateInfo(info);
             sess.setAttribute("activity"+mobile, verifyCode);
-            response.setData(verifyCode);
         }else{
             throw new BusinessException(MsgCodeConstant.validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
         }
-        return response;
+        return new Response();
     }
 
     @ApiOperation(value="提交报名",notes="提交报名",response = Response.class)
     @RequestMapping(value = "add_activity_apply", method = RequestMethod.POST)
     public Response add_activity_apply(@ModelAttribute ActivityApply activityApply,@RequestParam String mobileCode)  throws IOException, ApiException {
-        Response response = new Response();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(true);
-        String sessMobileCode = (String) sess.getAttribute("activity"+activityApply.getApplyMobile());
-        if(mobileCode.equals(sessMobileCode)){
-            activityApply.setActivityId("1");
-            activityService.addActivity(activityApply);
-        }else{
-            throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error,
-                    MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
-        }
-        return response;
+        activityApply.setActivityId("1");
+        String orderNo = activityService.applyActivity(activityApply,mobileCode);
+        return new Response(orderNo);
+    }
+
+
+    @ApiOperation(value = "立即支付", notes = "立即支付")
+    @RequestMapping(value = "do_pay", method = RequestMethod.POST)
+    public void doPay(HttpServletRequest request, HttpServletResponse response,
+                      @ApiParam("订单号") @RequestParam String orderNo,
+                      @ApiParam("支付方式 1:支付宝") @RequestParam  String tradeMode,
+                      @ApiParam("回调页面") @RequestParam String returnUrl) throws Exception {
+
+        Map paramMap = new HashMap();
+        paramMap.put("orderNo",orderNo);
+        paramMap.put("tradeMode",tradeMode);
+
+        log.info("活动报名,请求参数:{}", paramMap);
+
+        //特定参数
+        paramMap.put("exterInvokeIp", ValidateUtils.getIpAddr(request));//客户端IP地址
+        paramMap.put("alipay_goods_type", PayConstants.GoodsType.XNL.toString());//商品类型  0 , 1
+        paramMap.put("partner", PARTNER);//partner=seller_id     商家支付宝ID  合作伙伴身份ID 签约账号
+        //公用回传参数
+        Map<String,String> commsMap = new HashMap<>();
+        commsMap.put("type", OrderConstants.GoodsType.ACTIVITY_APPLY.toString());
+        commsMap.put("url",returnUrl);
+        paramMap.put("extra_common_param",JsonUtils.getJsonStringFromMap(commsMap));
+        log.debug("调用立即支付接口......");
+
+        zhpayService.doPay(response, paramMap);
+
     }
 }

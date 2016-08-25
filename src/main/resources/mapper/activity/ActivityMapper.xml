@@ -1,143 +1,143 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.activity.mapper.ActivityMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.activity.entity.Activity" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="activity_name" property="activityName" jdbcType="VARCHAR" />
-    <result column="activity_starttime" property="activityStarttime" jdbcType="TIMESTAMP" />
-    <result column="activity_endtime" property="activityEndtime" jdbcType="TIMESTAMP" />
-    <result column="apply_endtime" property="applyEndtime" jdbcType="TIMESTAMP" />
-    <result column="organized" property="organized" jdbcType="VARCHAR" />
-    <result column="co_ organized" property="coOrganized" jdbcType="VARCHAR" />
-    <result column="apply_fee" property="applyFee" jdbcType="VARCHAR" />
-    <result column="activity_address" property="activityAddress" jdbcType="VARCHAR" />
-    <result column="return_url" property="returnUrl" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.zhuhuibao.mybatis.activity.mapper.ActivityMapper">
+    <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.activity.entity.Activity">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="activity_name" property="activityName" jdbcType="VARCHAR"/>
+        <result column="activity_starttime" property="activityStarttime" jdbcType="TIMESTAMP"/>
+        <result column="activity_endtime" property="activityEndtime" jdbcType="TIMESTAMP"/>
+        <result column="apply_endtime" property="applyEndtime" jdbcType="TIMESTAMP"/>
+        <result column="organized" property="organized" jdbcType="VARCHAR"/>
+        <result column="co_ organized" property="coOrganized" jdbcType="VARCHAR"/>
+        <result column="apply_fee" property="applyFee" jdbcType="VARCHAR"/>
+        <result column="activity_address" property="activityAddress" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, activity_name, activity_starttime, activity_endtime, apply_endtime, organized, 
-    "co_ organized", apply_fee, activity_address, return_url
+    "co_ organized", apply_fee, activity_address
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_sys_activity
-    where id = #{id,jdbcType=BIGINT}
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from t_sys_activity
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="findByOrderNo" resultType="java.util.Map">
+
+    SELECT
+        p.apply_name as name ,
+        p.apply_mobile   as mobile
+    FROM
+        t_sys_activity_apply p
+    WHERE p.orderNo = #{orderNo}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_sys_activity
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.zhuhuibao.mybatis.activity.entity.Activity" >
+    <insert id="insert" parameterType="com.zhuhuibao.mybatis.activity.entity.Activity">
     insert into t_sys_activity (id, activity_name, activity_starttime, 
       activity_endtime, apply_endtime, organized, 
-      "co_ organized", apply_fee, activity_address, 
-      return_url)
+      "co_ organized", apply_fee, activity_address)
     values (#{id,jdbcType=BIGINT}, #{activityName,jdbcType=VARCHAR}, #{activityStarttime,jdbcType=TIMESTAMP}, 
       #{activityEndtime,jdbcType=TIMESTAMP}, #{applyEndtime,jdbcType=TIMESTAMP}, #{organized,jdbcType=VARCHAR}, 
-      #{coOrganized,jdbcType=VARCHAR}, #{applyFee,jdbcType=VARCHAR}, #{activityAddress,jdbcType=VARCHAR}, 
-      #{returnUrl,jdbcType=VARCHAR})
+      #{coOrganized,jdbcType=VARCHAR}, #{applyFee,jdbcType=VARCHAR}, #{activityAddress,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.activity.entity.Activity" >
-    insert into t_sys_activity
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="activityName != null" >
-        activity_name,
-      </if>
-      <if test="activityStarttime != null" >
-        activity_starttime,
-      </if>
-      <if test="activityEndtime != null" >
-        activity_endtime,
-      </if>
-      <if test="applyEndtime != null" >
-        apply_endtime,
-      </if>
-      <if test="organized != null" >
-        organized,
-      </if>
-      <if test="coOrganized != null" >
-        "co_ organized",
-      </if>
-      <if test="applyFee != null" >
-        apply_fee,
-      </if>
-      <if test="activityAddress != null" >
-        activity_address,
-      </if>
-      <if test="returnUrl != null" >
-        return_url,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="activityName != null" >
-        #{activityName,jdbcType=VARCHAR},
-      </if>
-      <if test="activityStarttime != null" >
-        #{activityStarttime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="activityEndtime != null" >
-        #{activityEndtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="applyEndtime != null" >
-        #{applyEndtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="organized != null" >
-        #{organized,jdbcType=VARCHAR},
-      </if>
-      <if test="coOrganized != null" >
-        #{coOrganized,jdbcType=VARCHAR},
-      </if>
-      <if test="applyFee != null" >
-        #{applyFee,jdbcType=VARCHAR},
-      </if>
-      <if test="activityAddress != null" >
-        #{activityAddress,jdbcType=VARCHAR},
-      </if>
-      <if test="returnUrl != null" >
-        #{returnUrl,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.activity.entity.Activity" >
-    update t_sys_activity
-    <set >
-      <if test="activityName != null" >
-        activity_name = #{activityName,jdbcType=VARCHAR},
-      </if>
-      <if test="activityStarttime != null" >
-        activity_starttime = #{activityStarttime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="activityEndtime != null" >
-        activity_endtime = #{activityEndtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="applyEndtime != null" >
-        apply_endtime = #{applyEndtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="organized != null" >
-        organized = #{organized,jdbcType=VARCHAR},
-      </if>
-      <if test="coOrganized != null" >
-        "co_ organized" = #{coOrganized,jdbcType=VARCHAR},
-      </if>
-      <if test="applyFee != null" >
-        apply_fee = #{applyFee,jdbcType=VARCHAR},
-      </if>
-      <if test="activityAddress != null" >
-        activity_address = #{activityAddress,jdbcType=VARCHAR},
-      </if>
-      <if test="returnUrl != null" >
-        return_url = #{returnUrl,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.activity.entity.Activity" >
+    <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.activity.entity.Activity">
+        insert into t_sys_activity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="activityName != null">
+                activity_name,
+            </if>
+            <if test="activityStarttime != null">
+                activity_starttime,
+            </if>
+            <if test="activityEndtime != null">
+                activity_endtime,
+            </if>
+            <if test="applyEndtime != null">
+                apply_endtime,
+            </if>
+            <if test="organized != null">
+                organized,
+            </if>
+            <if test="coOrganized != null">
+                "co_ organized",
+            </if>
+            <if test="applyFee != null">
+                apply_fee,
+            </if>
+            <if test="activityAddress != null">
+                activity_address,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="activityName != null">
+                #{activityName,jdbcType=VARCHAR},
+            </if>
+            <if test="activityStarttime != null">
+                #{activityStarttime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activityEndtime != null">
+                #{activityEndtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="applyEndtime != null">
+                #{applyEndtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="organized != null">
+                #{organized,jdbcType=VARCHAR},
+            </if>
+            <if test="coOrganized != null">
+                #{coOrganized,jdbcType=VARCHAR},
+            </if>
+            <if test="applyFee != null">
+                #{applyFee,jdbcType=VARCHAR},
+            </if>
+            <if test="activityAddress != null">
+                #{activityAddress,jdbcType=VARCHAR},
+            </if>
+
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.activity.entity.Activity">
+        update t_sys_activity
+        <set>
+            <if test="activityName != null">
+                activity_name = #{activityName,jdbcType=VARCHAR},
+            </if>
+            <if test="activityStarttime != null">
+                activity_starttime = #{activityStarttime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activityEndtime != null">
+                activity_endtime = #{activityEndtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="applyEndtime != null">
+                apply_endtime = #{applyEndtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="organized != null">
+                organized = #{organized,jdbcType=VARCHAR},
+            </if>
+            <if test="coOrganized != null">
+                "co_ organized" = #{coOrganized,jdbcType=VARCHAR},
+            </if>
+            <if test="applyFee != null">
+                apply_fee = #{applyFee,jdbcType=VARCHAR},
+            </if>
+            <if test="activityAddress != null">
+                activity_address = #{activityAddress,jdbcType=VARCHAR},
+            </if>
+
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.activity.entity.Activity">
     update t_sys_activity
     set activity_name = #{activityName,jdbcType=VARCHAR},
       activity_starttime = #{activityStarttime,jdbcType=TIMESTAMP},
@@ -146,8 +146,7 @@
       organized = #{organized,jdbcType=VARCHAR},
       "co_ organized" = #{coOrganized,jdbcType=VARCHAR},
       apply_fee = #{applyFee,jdbcType=VARCHAR},
-      activity_address = #{activityAddress,jdbcType=VARCHAR},
-      return_url = #{returnUrl,jdbcType=VARCHAR}
+      activity_address = #{activityAddress,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -7,9 +7,10 @@
     <result column="apply_mobile" property="applyMobile" jdbcType="VARCHAR" />
     <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
     <result column="activity_id" property="activityId" jdbcType="BIGINT" />
+    <result column="orderNo" property="orderNo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, apply_name, apply_mobile, apply_time, activity_id
+    id, apply_name, apply_mobile, apply_time, activity_id ,orderNo
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -23,9 +24,9 @@
   </delete>
   <insert id="insert" parameterType="com.zhuhuibao.mybatis.activity.entity.ActivityApply" >
     insert into t_sys_activity_apply (id, apply_name, apply_mobile, 
-      apply_time, activity_id)
+      apply_time, activity_id,orderNo)
     values (#{id,jdbcType=INTEGER}, #{applyName,jdbcType=VARCHAR}, #{applyMobile,jdbcType=VARCHAR}, 
-      #{applyTime,jdbcType=TIMESTAMP}, #{activityId,jdbcType=BIGINT})
+      #{applyTime,jdbcType=TIMESTAMP}, #{activityId,jdbcType=BIGINT},#{orderNo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.activity.entity.ActivityApply" >
     insert into t_sys_activity_apply
@@ -43,6 +44,9 @@
       <if test="activityId != null" >
         activity_id,
       </if>
+      <if test="orderNo != null" >
+        orderNo,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -57,6 +61,9 @@
         now(),
       <if test="activityId != null" >
         #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -75,6 +82,9 @@
       <if test="activityId != null" >
         activity_id = #{activityId,jdbcType=BIGINT},
       </if>
+      <if test="orderNo != null" >
+        orderNo = #{orderNo,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -83,7 +93,8 @@
     set apply_name = #{applyName,jdbcType=VARCHAR},
       apply_mobile = #{applyMobile,jdbcType=VARCHAR},
       apply_time = #{applyTime,jdbcType=TIMESTAMP},
-      activity_id = #{activityId,jdbcType=BIGINT}
+      activity_id = #{activityId,jdbcType=BIGINT} ,
+      orderNo = #{orderNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
