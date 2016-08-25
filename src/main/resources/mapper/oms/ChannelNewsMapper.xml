@@ -249,7 +249,9 @@
     <!-- 查询咨询列表@author:gmli@since2016.05.09 -->
   <select id="findAllChanNewsList" resultType="java.util.Map" parameterType="java.util.Map" >
     select a.id,a.title,   
-      date_format(a.createTime,'%Y-%m-%d %H:%i:%s') createTime
+      date_format(a.createTime,'%Y-%m-%d %H:%i:%s') createTime,
+      a.imgurl,
+      a.description
       from
      t_oms_channel_news a 
     <where>
@@ -264,12 +266,21 @@
         and a.sort = #{sort}
       </if>
     </where>
-    order by a.createTime desc
+     <if test="isHot == true">
+         order by a.views desc
+      </if>
+      
+      <if test="isHot != true">
+         order by a.createTime desc
+      </if>
+    
+    
   </select>
   
    <select id="queryDetailsById" resultType="java.util.Map" parameterType="java.lang.Long" >
     select
       id, title, date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,  description,content
+      ,attachName,attachUrl
     from t_oms_channel_news
     where id = #{id,jdbcType=BIGINT}
   </select>

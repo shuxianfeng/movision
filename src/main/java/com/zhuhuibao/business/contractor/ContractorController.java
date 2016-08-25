@@ -174,6 +174,7 @@ public class ContractorController {
     @RequestMapping(value = "sel_channel_news", method = RequestMethod.GET)
     public Response queryChannelNewsList(
     		@ApiParam(value = "类型：1 行业资讯，2 人物专访 3：行业风云人物 4：工程商风采 5：工程资料")@RequestParam String type,
+    		@ApiParam(value = "是否是热门资料")@RequestParam(required = false,defaultValue = "false") boolean isHot,
             @RequestParam(required = false,defaultValue = "1") String pageNo,
             @RequestParam(required = false,defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
@@ -189,6 +190,7 @@ public class ContractorController {
         map.put("channelid", "1");
         map.put("sort", type);
         map.put("status", "1");
+        map.put("isHot", isHot);
         List<Map> channelList = newsService.findAllChanNewsList(pager, map);
         pager.result(channelList);
         response.setData(pager);

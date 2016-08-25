@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -20,12 +21,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
+import com.zhuhuibao.utils.oss.ZhbOssClient;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 
@@ -38,6 +44,9 @@ public class ChannelController {
 
     @Autowired
     ChannelNewsService newsService;
+    
+    @Autowired
+    ZhbOssClient zhbOssClient;
 
     @RequestMapping(value = "/rest/oms/addChannelNews", method = RequestMethod.POST)
     public Response addChannelNews(@ModelAttribute ChannelNews channelNews) throws IOException {
@@ -256,5 +265,27 @@ public class ChannelController {
         }
 
         return result;
+    }
+    
+    @ApiOperation(value = "上传工程资料", notes = "上传工程资料", response = Response.class)
+    @RequestMapping(value = "/rest/oms/upload_project_data", method = RequestMethod.POST) 
+    public Response uploadTechData(@RequestParam(value = "file", required = false) MultipartFile file) {
+        Map<String, Object> map = new HashMap<>();
+        try {
+            String url = zhbOssClient.uploadObject(file, "doc", "tech");
+            map.put(Constants.name, url);
+            if (url.lastIndexOf(".") != -1) {
+                map.put(TechConstant.FILE_FORMAT, url.substring(url.lastIndexOf(".")));
+            } else {
+                map.put(TechConstant.FILE_FORMAT, "");
+            }
+            map.put(TechConstant.FILE_SIZE, file.getSize());
+
+        } catch (Exception e) {
+            log.error("上传工程资料资料失败>>>", e);
+            throw e;
+        }
+
+        return new Response(map);
     }
 }

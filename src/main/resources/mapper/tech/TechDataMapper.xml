@@ -236,6 +236,7 @@
         <if test="type != null">
             and t.type = #{type}
         </if>
+        order by t.updateTime desc
     </select>
 
     <select id="findAllTechDataPager" parameterType="java.util.Map"
