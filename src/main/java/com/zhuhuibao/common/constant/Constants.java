@@ -398,6 +398,14 @@ public class Constants {
      * 站内信类型：3
      */
     public static final Integer SITE_MAIL_TYPE_THREE = 3;
+    /**
+     * 附件名称
+     */
+	public static final String attachName = "attachName";
+	/**
+     * 附件Url
+     */
+	public static final String attachUrl = "attachUrl";
 
     /**
      * 1：薪资，2：学历，3：工作经验，4：年龄，5：福利待遇，6：工作状态，7：工作性质，
