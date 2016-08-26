@@ -11,6 +11,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.activity.entity.Activity;
 import com.zhuhuibao.mybatis.activity.entity.ActivityApply;
 import com.zhuhuibao.mybatis.activity.service.ActivityService;
 import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
@@ -130,6 +131,14 @@ public class ActivityController {
     @ApiOperation(value="提交报名",notes="提交报名",response = Response.class)
     @RequestMapping(value = "add_activity_apply", method = RequestMethod.POST)
     public Response add_activity_apply(@ModelAttribute ActivityApply activityApply,@RequestParam String mobileCode)  throws IOException, ApiException {
+        //判断是否超过报名时间
+        Activity activity = activityService.findByActivityId("1");
+        Date applyEndtime = activity.getApplyEndtime();
+        Date now = new Date();
+        if(now.getTime() > applyEndtime.getTime()){
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"该活动报名已截止");
+        }
+
         activityApply.setActivityId("1");
         String orderNo = activityService.applyActivity(activityApply,mobileCode);
         return new Response(orderNo);
