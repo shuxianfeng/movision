@@ -531,7 +531,7 @@ public class MemberService {
             map.put(Constants.enterpriseTypeName, enterpriseTypeName);
             map.put(Constants.area, address);
             map.put(Constants.enterpriseCreaterTime, createTime);
-            map.put(Constants.registerCapital, member.getRegisterCapital());
+            map.put(Constants.registerCapital, "2".equals(member.getCurrency())?member.getRegisterCapital()+"万美元":member.getRegisterCapital()+"万人民币");
             map.put(Constants.employeeNumber, employeeSizeName);
             map.put(Constants.identifyName, identifyName);
             map.put(Constants.enterpriseDesc, member.getEnterpriseDesc());
@@ -803,21 +803,13 @@ public class MemberService {
      * @return
      */
 	public Map vipIntroduce(String id, String type) {
-	    Long memberId=ShiroUtil.getCreateID();
-		VipMemberInfo memberInfo=vipInfoService.findVipMemberInfoById(memberId);
-		Map map=null;
-		//不是vip用户
-		if(memberInfo==null)
-		{
-			return map;
-		}else{
-		  map=this.introduce(id, type);
+	     
+		Map map= this.introduce(id, type);
 		  
-		  
-		  List<MemberSucCase> sucCase=memberSucCaseService.queryMemberSucCaseList(id);
-		  map.put("sucCaseList", sucCase);
-		  
-		}
+	  
+	    List<MemberSucCase> sucCase=memberSucCaseService.queryMemberSucCaseList(id);
+	    map.put("sucCaseList", sucCase);
+	  
 		return map;
 	}
 }

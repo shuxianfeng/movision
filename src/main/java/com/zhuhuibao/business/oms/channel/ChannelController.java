@@ -272,8 +272,9 @@ public class ChannelController {
     public Response uploadTechData(@RequestParam(value = "file", required = false) MultipartFile file) {
         Map<String, Object> map = new HashMap<>();
         try {
-            String url = zhbOssClient.uploadObject(file, "doc", "tech");
-            map.put(Constants.name, url);
+          String url = zhbOssClient.uploadObject(file, "doc", "tech");
+            map.put(Constants.attachUrl, url);
+            map.put(Constants.attachName, file.getOriginalFilename());
             if (url.lastIndexOf(".") != -1) {
                 map.put(TechConstant.FILE_FORMAT, url.substring(url.lastIndexOf(".")));
             } else {
