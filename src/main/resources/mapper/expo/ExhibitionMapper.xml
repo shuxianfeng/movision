@@ -283,6 +283,7 @@
     and at.page = #{page}
     and at.advArea = #{advArea}
     and at.advType = #{advType}
+    order by a.sort   asc
   </select>
 
   <select id="queryMyExhibitionListSize" resultType="java.lang.Integer" parameterType="java.util.Map" >
