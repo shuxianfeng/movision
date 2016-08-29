@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 
 import org.apache.shiro.SecurityUtils;
@@ -26,11 +28,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.oss.ZhbOssClient;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -272,7 +277,7 @@ public class ChannelController {
     public Response uploadTechData(@RequestParam(value = "file", required = false) MultipartFile file) {
         Map<String, Object> map = new HashMap<>();
         try {
-          String url = zhbOssClient.uploadObject(file, "doc", "tech");
+          String url = zhbOssClient.uploadObject(file, "doc", "project/data");
             map.put(Constants.attachUrl, url);
             map.put(Constants.attachName, file.getOriginalFilename());
             if (url.lastIndexOf(".") != -1) {
@@ -289,4 +294,6 @@ public class ChannelController {
 
         return new Response(map);
     }
+    
+    
 }

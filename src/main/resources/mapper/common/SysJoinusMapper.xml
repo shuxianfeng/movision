@@ -43,6 +43,10 @@
             <if test="status != null">
                 status = #{status}
             </if>
+            
+             <if test="city != null">
+                city = #{city}
+            </if>
         </where>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

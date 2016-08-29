@@ -348,4 +348,17 @@ public class ChannelNewsService {
 	       
 		return newsList;
 	}
+    /**
+     * 查询附件名称
+     * @param id
+     * @return
+     */
+	public String queryattachName(String id) {
+	  try {
+            return channel.queryattachName(id);
+        } catch (Exception e) {
+            log.error("ChannelNewsService.queryattachName：执行异常>>>",e);
+            throw e;
+        }
+	}
 }
