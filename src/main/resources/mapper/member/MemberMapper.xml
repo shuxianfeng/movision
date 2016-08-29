@@ -881,6 +881,7 @@
         WHERE at.chanType = #{chanType}
               AND at.page = #{page}
               AND at.advArea = #{advArea}
+        order by ad.sort   asc
     </select>
 
     <select id="queryGreatCompany" resultType="java.util.Map" parameterType="java.util.Map">
@@ -896,6 +897,7 @@
         WHERE at.chanType = #{chanType}
               AND at.page = #{page}
               AND at.advArea = #{advArea}
+        order by ad.sort   asc
     </select>
 
     <select id="findMemberOms" resultType="java.util.Map" parameterType="java.util.Map">
@@ -936,5 +938,6 @@
         WHERE at.chanType = #{chanType}
               AND at.page = #{page}
               AND at.advArea = #{advArea}
+        order by ad.sort   asc
     </select>
 </mapper>

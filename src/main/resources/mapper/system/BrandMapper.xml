@@ -245,6 +245,7 @@
         WHERE at.chanType = #{chanType}
               AND at.page = #{page}
               AND at.advArea = #{advArea}
+        order by ad.sort   asc
     </select>
 
     <select id="findByKeyword" resultType="java.util.Map">
