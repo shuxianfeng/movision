@@ -296,10 +296,9 @@ public class ContractorController {
     public Response downloadBill(HttpServletResponse response,
                                  @ApiParam(value = "工程资料ID") @RequestParam String id) throws Exception {
         Response jsonResult = new Response();
-        log.debug("download tech data");
+        log.debug("download project data");
         try {
-            Long createId = ShiroUtil.getCreateID();
-            if (createId != null) {
+           
                 String attachName = newsService.queryattachName(id);
                 response.setDateHeader("Expires", 0);
                 response.setHeader("Cache-Control",
@@ -309,16 +308,10 @@ public class ContractorController {
                 response.setContentType("application/octet-stream");
 //                attachName = ApiConstants.getUploadDoc() + TechConstant.UPLOAD_TECH_DOC_URL + "/" + attachName;
                 jsonResult = fileUtil.downloadObject(response, attachName, "doc", "project/data");
-               
-            } else {
-                jsonResult.setCode(401);
-                jsonResult.setMsgCode(MsgCodeConstant.un_login);
-                jsonResult.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-                return jsonResult;
-            }
+          
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("download tech data error! ", e);
+            log.error("download project data error! ", e);
         }
         return jsonResult;
     }
