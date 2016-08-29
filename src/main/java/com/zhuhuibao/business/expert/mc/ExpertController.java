@@ -110,6 +110,7 @@ public class ExpertController {
     @RequestMapping(value = "ach/upd_achievement", method = RequestMethod.POST)
     public Response updateAchievement(@ModelAttribute Achievement achievement) {
         Response response = new Response();
+        achievement.setStatus("0");
         expertService.updateAchievement(achievement);
         return response;
     }
