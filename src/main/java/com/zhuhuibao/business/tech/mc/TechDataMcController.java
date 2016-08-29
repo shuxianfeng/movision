@@ -54,7 +54,7 @@ public class TechDataMcController {
         return response;
     }
 
-    @RequestMapping(value = "del_tech_data", method = RequestMethod.GET)
+    @RequestMapping(value = "del_tech_data", method = RequestMethod.POST)
     @ApiOperation(value = "删除技术资料(行业解决方案，技术文档，培训资料)", notes = "删除技术资料(行业解决方案，技术文档，培训资料)", response = Response.class)
     public Response deleteTechData(@ApiParam(value = "技术资料ID") @RequestParam() String techDataId) {
         Response response = new Response();
