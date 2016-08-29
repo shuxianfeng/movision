@@ -12,6 +12,7 @@ import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -260,11 +262,19 @@ public class ContractorController {
     @RequestMapping(value = "sel_contractor_job", method = RequestMethod.GET)
     public Response sel_contractor_job(@ApiParam(value = "公司id")@RequestParam String id,
                                         @RequestParam(required = false,defaultValue = "1") String pageNo,
-                                        @RequestParam(required = false,defaultValue = "10") String pageSize)  {
+                                        @RequestParam(required = false,defaultValue = "10") String pageSize,
+                                       @RequestParam(required = false)String days,
+                                       @RequestParam(required = false)String salary)  {
         Response response = new Response();
         Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String,Object> map = new HashMap<>();
         map.put("createid",id);
+        if (days != null && !"".equals(days)) {
+            Date date = DateUtils.date2Sub(new Date(), 5, -Integer.parseInt(days));
+            String publishTime = DateUtils.date2Str(date, "yyyy-MM-dd");
+            map.put("publishTime", publishTime);
+        }
+        map.put("salary",salary);
         List<Map<String,String>> resultList = jobPositionService.findAllJobByCompanyId(pager,map);
         pager.result(resultList);
         response.setData(pager);

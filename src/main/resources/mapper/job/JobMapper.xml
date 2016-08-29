@@ -354,6 +354,12 @@
         left join t_dictionary_city ct on j.city = ct.code
         left join t_dictionary_province p on j.province = p.code
         where j.createID = #{createid} and j.is_deleted = 0
+        <if test="publishTime != null and publishTime != ''">
+            and date_format(#{publishTime},'%Y-%m-%d') &lt;= date_format(j.updateTime,'%Y-%m-%d')
+        </if>
+        <if test="salary != null and salary != ''">
+            and j.salary = #{salary}
+        </if>
         order by j.updateTime desc
     </select>
 </mapper>
