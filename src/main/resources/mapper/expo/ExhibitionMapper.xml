@@ -283,6 +283,7 @@
     and at.page = #{page}
     and at.advArea = #{advArea}
     and at.advType = #{advType}
+    order by a.sort   asc
   </select>
 
   <select id="queryMyExhibitionListSize" resultType="java.lang.Integer" parameterType="java.util.Map" >
@@ -291,7 +292,7 @@
   </select>
 
   <select id="findAllExpoListByCompanyId" resultType="java.util.Map" parameterType="java.util.Map" >
-    select e.id,e.title,e.imgUrl,date_format(e.updateTime,'%Y-%m-%d') updateTime,e.views,e.endDate
+    select e.id,e.title,e.imgUrl,date_format(e.updateTime,'%Y-%m-%d') updateTime,e.views,e.endDate,e.startDate
     from t_c_exhibition e
     where e.createid = #{createid} and e.is_deleted = 0 and e.status = 1
     order by e.updateTime desc

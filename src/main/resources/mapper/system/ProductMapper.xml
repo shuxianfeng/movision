@@ -432,6 +432,7 @@
     where at.chanType = #{chanType}
     and at.page = #{page}
     and at.advArea = #{advArea}
+    order by ad.sort   asc
   </select>
   <select id="findScateByBrandId" resultType="java.lang.String">
       select DISTINCT scateid from t_p_product  p where brandid = #{brandId}

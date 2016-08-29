@@ -329,6 +329,7 @@
     and at.page = #{page}
     and at.advArea = #{advArea}
     and at.advType = #{advType}
+    order by a.sort asc
   </select>
 
   <update id="deleteLookedExpert" parameterType="java.lang.String" >

@@ -30,7 +30,7 @@
         where a.chanType = #{chanType}
         and a.page = #{page}
         and a.advArea = #{advArea}
-        ) order by sort asc
+        ) order by adv.sort asc
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
