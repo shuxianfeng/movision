@@ -37,6 +37,10 @@ public class ChannelNews implements Serializable{
     private String name;
 
     private String reason;
+    
+    private String attachName;
+    
+    private String attachUrl;
 
     public Long getId() {
         return id;
@@ -165,4 +169,22 @@ public class ChannelNews implements Serializable{
     public void setReason(String reason) {
         this.reason = reason;
     }
+
+	public String getAttachName() {
+		return attachName;
+	}
+
+	public void setAttachName(String attachName) {
+		this.attachName = attachName;
+	}
+
+	public String getAttachUrl() {
+		return attachUrl;
+	}
+
+	public void setAttachUrl(String attachUrl) {
+		this.attachUrl = attachUrl;
+	}
+    
+    
 }

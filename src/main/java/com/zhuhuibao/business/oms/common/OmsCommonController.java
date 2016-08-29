@@ -39,6 +39,7 @@ public class OmsCommonController {
                                    @RequestParam(required = false)String realName,
                                    @RequestParam(required = false)String mobile,
                                    @RequestParam(required = false)String status,
+                                   @RequestParam(required = false)String city,
                                    @RequestParam(required = false,defaultValue = "1")String pageNo,
                                    @RequestParam(required = false,defaultValue = "10")String pageSize)  {
         log.debug("find all joinus pager....");
@@ -55,6 +56,10 @@ public class OmsCommonController {
         }
         if(!StringUtils.isEmpty(status)){
             map.put("status",status);
+        }
+        
+        if(!StringUtils.isEmpty(city)){
+            map.put("city",city);
         }
         List<SysJoinus> joinusList = sysJoinusService.findAllJoinusPager(pager,map);
         pager.result(joinusList);

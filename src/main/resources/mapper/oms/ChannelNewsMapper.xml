@@ -68,6 +68,12 @@
       <if test="content != null" >
         content,
       </if>
+      <if test="attachName != null" >
+        attachName,
+      </if>
+      <if test="attachUrl != null" >
+        attachUrl,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="title != null" >
@@ -97,6 +103,12 @@
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
+      </if>
+       <if test="attachName != null" >
+        #{attachName,jdbcType=VARCHAR},
+      </if>
+       <if test="attachUrl != null" >
+        #{attachUrl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -251,7 +263,9 @@
     select a.id,a.title,   
       date_format(a.createTime,'%Y-%m-%d %H:%i:%s') createTime,
       a.imgurl,
-      a.description
+      a.description,
+      a.attachUrl,
+      a.attachName
       from
      t_oms_channel_news a 
     <where>
@@ -379,4 +393,9 @@
     <select id="selectByID" resultType="com.zhuhuibao.mybatis.oms.entity.ChannelNews">
         select * from t_oms_channel_news where id = #{id} and status != 3
     </select>
+    
+    <select id="queryattachName" resultType="java.lang.String" parameterType="java.lang.String" >
+        select attachUrl from t_oms_channel_news where id = #{id} 
+    </select>
+    
 </mapper>
