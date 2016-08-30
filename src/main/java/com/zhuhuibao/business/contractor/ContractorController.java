@@ -4,6 +4,8 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.expo.service.ExpoService;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
@@ -13,6 +15,8 @@ import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
 import com.zhuhuibao.utils.DateUtils;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 
@@ -28,6 +32,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 @RestController
@@ -55,6 +61,9 @@ public class ContractorController {
 
     @Autowired
     private JobPositionService jobPositionService;
+    
+    @Autowired
+    FileUtil fileUtil;
 
     /**
      *最新工程商(个数后台控制)
@@ -279,5 +288,31 @@ public class ContractorController {
         pager.result(resultList);
         response.setData(pager);
         return response;
+    }
+    
+  //vip减 项目条数减
+    @ApiOperation(value = "下载工程资料", notes = "下载工程资料资料", response = Response.class)
+    @RequestMapping(value = "downLoadProjectData ", method = RequestMethod.GET)
+    public Response downloadBill(HttpServletResponse response,
+                                 @ApiParam(value = "工程资料ID") @RequestParam String id) throws Exception {
+        Response jsonResult = new Response();
+        log.debug("download project data");
+        try {
+           
+                String attachName = newsService.queryattachName(id);
+                response.setDateHeader("Expires", 0);
+                response.setHeader("Cache-Control",
+                        "no-store, no-cache, must-revalidate");
+                response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+                response.setHeader("Content-disposition", "attachment;filename=" + attachName);
+                response.setContentType("application/octet-stream");
+//                attachName = ApiConstants.getUploadDoc() + TechConstant.UPLOAD_TECH_DOC_URL + "/" + attachName;
+                jsonResult = fileUtil.downloadObject(response, attachName, "doc", "project/data");
+          
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("download project data error! ", e);
+        }
+        return jsonResult;
     }
 }
