@@ -194,5 +194,29 @@
     </if>
     
   </select>
+  
+  <select id="findAllConnectedInfo" parameterType="java.util.Map" resultType="java.util.Map">
+   <if test="method==0">
+    select (case when isnull(t.enterpriseName) then t.personRealName else t.enterpriseName end) name,t.id 
+    from t_m_member t where (t.enterpriseName like CONCAT('%',#{name},'%')) or (t.personRealName like CONCAT('%',#{name},'%')) 
+    </if>
+    
+    <if test="method==1">
+    select  (case when isnull(t.CNName) then t.ENName else t.CNName end) name,t.id from t_p_brand t
+     where (t.CNName like CONCAT('%',#{name},'%'))  
+    </if>
+    
+    <if test="method==2">
+    select t.name,t.id  from t_p_product t
+     where t.name like CONCAT('%',#{name},'%')
+    </if>
+    
+    <if test="method==3">
+    select t.name,t.id from t_i_job t where 
+    t.name like CONCAT('%',#{name},'%')
+    </if>
+    
+  </select>
+  
    
 </mapper>

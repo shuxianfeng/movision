@@ -39,4 +39,6 @@ public interface AdMapper {
 
 	int queryIdExits(Map<String, Object> map);
 
+	List<Map<String, String>> findAllConnectedInfo(RowBounds rowBounds, Map<String, Object> map);
+
 }

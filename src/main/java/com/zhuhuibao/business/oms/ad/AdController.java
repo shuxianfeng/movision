@@ -290,4 +290,31 @@ public class AdController {
 	        }
 
 	    }
+	    
+	    @ApiOperation(value="查询广告管理信息",notes="查询广告管理信息",response = Response.class)
+	    @RequestMapping(value = "sel_connectedInfo", method = RequestMethod.GET)
+	    public Response queryConnectedInfo(@ApiParam(value = "广告名称")@RequestParam(required = false) String name,
+	    								   @ApiParam(value = "查询类型")@RequestParam(required = false) String method,
+	                                       @RequestParam(required = false)String pageNo,
+	                                       @RequestParam(required = false)String pageSize,
+	                                       @ApiParam(value = "修改类型")@RequestParam(required = false) String type)  {
+	        Response response = new Response();
+	        //设定默认分页pageSize
+	        if (StringUtils.isEmpty(pageNo)) {
+	            pageNo = "1";
+	        }
+	        if (StringUtils.isEmpty(pageSize)) {
+	            pageSize = "5";
+	        }
+	        Paging pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+	        Map<String,Object> map = new HashMap<>();
+	        //查询传参+
+	        map.put("name",name);
+	        map.put("method",method);
+	        
+	        List<Map<String, String>> adList = adService.findAllConnectedInfo(pager,map);
+	        pager.result(adList);
+	        response.setData(pager);
+	        return response;
+	    }
 }
