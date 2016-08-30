@@ -748,7 +748,7 @@ public class ExpertSiteController {
                 map.put("isCan",0);
             }
         }else {
-            map.put("isCan",1);
+            map.put("isCan",0);
         }
         response.setData(map);
         return response;
