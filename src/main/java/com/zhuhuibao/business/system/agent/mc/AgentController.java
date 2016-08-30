@@ -2,6 +2,7 @@ package com.zhuhuibao.business.system.agent.mc;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.*;
@@ -191,15 +192,13 @@ public class AgentController {
         return result;
     }
 
+    @LoginAccess
     @ApiOperation(value = "邀请代理商入驻", notes = "邀请代理商入驻", response = Response.class)
     @RequestMapping(value = {"/rest/agent/inviteAgent", "/rest/system/mc/agent/invite_agent"}, method = RequestMethod.POST)
     public Response inviteAgent(@RequestParam String email) {
         Response result = new Response();
 
         Long createId = ShiroUtil.getCreateID();
-        if (createId == null) {
-            throw new AuthException(MsgCodeConstant.un_login, "请登录");
-        }
 
         Member member = memberService.findMemById(String.valueOf(createId));
         Member member1 = new Member();
@@ -237,14 +236,6 @@ public class AgentController {
             if (!StringUtils.isEmpty(vm)) {
                 String decodeVM = new String(EncodeUtil.decodeBase64(vm));
                 result = accountService.agentRegister(decodeVM);
-//                LoginMember loginMember = memberRegService.getLoginMemberByAccount(decodeVM);
-//                ShiroRealm.ShiroUser shrioUser = new ShiroRealm.ShiroUser(loginMember.getId(), loginMember.getAccount(),
-//                        loginMember.getStatus(), loginMember.getIdentify(),loginMember.getRole(), "0",
-//                        loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(),
-//                        loginMember.getHeadShot(), loginMember.getNickname(), loginMember.getCompanyName(), loginMember.getVipLevel());
-//                Subject currentUser = SecurityUtils.getSubject();
-//                Session session = currentUser.getSession();
-//                session.setAttribute("member", shrioUser);
                 RedirectView rv = new RedirectView(accountService.getRedirectUrl(result));
                 modelAndView.setView(rv);
             }
