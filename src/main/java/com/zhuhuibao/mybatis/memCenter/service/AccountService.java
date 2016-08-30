@@ -187,7 +187,7 @@ public class AccountService {
         } catch (Exception e) {
             log.error("agentRegister error >>>", e);
             e.printStackTrace();
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
+            throw e;
         }
         return new Response();
     }

@@ -22,6 +22,7 @@ import com.zhuhuibao.mybatis.oms.service.CategoryService;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -64,7 +65,6 @@ public class AgentController {
 
     @Autowired
     MemberRegService memberRegService;
-
 
 
     @ApiOperation(value = "根据品牌查询它所属的大系统，子系统",
@@ -213,7 +213,7 @@ public class AgentController {
             }
             result.setCode(200);
         } catch (Exception e) {
-            log.error("send inviteEmail error! >>>",e);
+            log.error("send inviteEmail error! >>>", e);
             e.printStackTrace();
         }
         return result;
@@ -244,8 +244,18 @@ public class AgentController {
             }
         } catch (Exception e) {
             log.error("email agentRegister error! >>>", e);
-            e.printStackTrace();
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"操作失败");
+            if (e instanceof BusinessException) {
+                Integer msgid = ((BusinessException) e).getMsgid();
+                if (msgid == MsgCodeConstant.member_mcode_mail_registered) {
+                    String rurl = PropertiesUtils.getValue("host.ip") + "/" + PropertiesUtils.getValue("active.mail.replay.page");
+                    RedirectView rv = new RedirectView(rurl);
+                    modelAndView.setView(rv);
+                    return modelAndView;
+                }
+            } else {
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
+            }
+
         }
 
         return modelAndView;
