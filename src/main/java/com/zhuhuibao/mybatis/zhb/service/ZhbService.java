@@ -100,7 +100,7 @@ public class ZhbService {
 			// && ShiroUtil.getCompanyID().compareTo(ShiroUtil.getCreateID()) ==
 			// 0 &&
 			if (null != order && null != orderGoods && "4".equals(order.getGoodsType()) && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
-				DictionaryZhbgoods goods = getZhbGoodsById(orderGoods.getGoodsId());
+				DictionaryZhbgoods goods = getZhbGoodsById(String.valueOf(orderGoods.getGoodsId()));
 				BigDecimal amount = new BigDecimal(goods.getValue());
 
 				// 订单中amount大于0
@@ -175,7 +175,7 @@ public class ZhbService {
 			// 操作人为管理员
 			// 不存在该订单号对应的筑慧币流水记录 && isAdminLogin()
 			if (null != order && null != orderGoods && isRightOrder(order, "3") && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
-				DictionaryZhbgoods vipgoods = getZhbGoodsById(orderGoods.getGoodsId());
+				DictionaryZhbgoods vipgoods = getZhbGoodsById(String.valueOf(orderGoods.getGoodsId()));
 				int buyVipLevel = Integer.parseInt(vipgoods.getValue());
 				BigDecimal amount = new BigDecimal(VipConstant.VIP_LEVEL_ZHB.get(String.valueOf(buyVipLevel)));
 
@@ -429,9 +429,9 @@ public class ZhbService {
 	 * @return
 	 */
 	@Cacheable(value = "zhbGoodsConfigCache", key = "#id")
-	public DictionaryZhbgoods getZhbGoodsById(Long id) {
+	public DictionaryZhbgoods getZhbGoodsById(String id) {
 
-		return zhbMapper.selectZhbGoodsById(id);
+		return zhbMapper.selectZhbGoodsById(Long.valueOf(id));
 	}
 
 	/**

@@ -78,7 +78,7 @@ public class ZhbPayController {
         checkUserLogin(paramMap);
 
         //根据商品ID查询商品价格
-        DictionaryZhbgoods zhbgoods = zhbService.getZhbGoodsById(Long.valueOf(order.getGoodsId()));
+        DictionaryZhbgoods zhbgoods = zhbService.getZhbGoodsById(order.getGoodsId());
         if (zhbgoods == null) {
             log.error("未找到对应商品");
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "未找到对应商品");
