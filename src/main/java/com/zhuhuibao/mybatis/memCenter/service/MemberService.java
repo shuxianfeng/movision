@@ -770,4 +770,18 @@ public class MemberService {
         }
 
     }
+    /**
+     * 新建员工
+     */
+    public int omsAddMember(Member member) throws Exception {
+        int result = 0;
+        try { 
+              result = memberMapper.addMember(member); 
+        } catch (Exception e) {
+            log.error("omsAddMember error >>>", e);
+            e.printStackTrace();
+            throw e;
+        }
+        return result;
+    }
 }

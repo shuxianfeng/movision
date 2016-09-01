@@ -323,7 +323,7 @@
                 #{password},
             </if>
             <if test="registerTime != null">
-                #{registerTime},
+                now(),
             </if>
             <if test="status != null">
                 #{status},
