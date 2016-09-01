@@ -58,7 +58,7 @@
   </select>
 
   <select id="expertInteraction" resultType="java.util.Map" >
-    select q.content as question,a.content as answer,date_format(a.publishTime,'%Y-%m-%d') publishTime,e.photoUrl,e.name
+    select q.content as question,a.content as answer,date_format(a.publishTime,'%Y-%m-%d') publishTime,e.photoUrl,e.name,q.id
     from t_e_question q
     left join t_e_answer a on q.id = a.questionId
     left join t_e_expert e on e.createid = a.createid
