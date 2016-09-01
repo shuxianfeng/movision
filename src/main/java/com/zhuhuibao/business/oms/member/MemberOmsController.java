@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,10 +34,13 @@ import com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck;
 import com.zhuhuibao.mybatis.memCenter.entity.MemRealCheck;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
+import com.zhuhuibao.mybatis.memCenter.mapper.MemInfoCheckMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.MemRealCheckMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemInfoCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemRealCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
+import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -64,6 +68,15 @@ public class MemberOmsController {
 
     @Autowired
     MemRealCheckService realCheckService;
+    
+    @Autowired
+	MemInfoCheckMapper infoCheckMapper;
+
+	@Autowired
+	MemRealCheckMapper realCheckMapper;
+	
+	@Autowired
+    VipInfoService vipInfoService; 
 
     @ApiOperation(value = "查询会员（分页）", notes = "查询会员（分页）", response = Response.class)
     @RequestMapping(value = "sel_allMember", method = RequestMethod.GET)
@@ -263,6 +276,11 @@ public class MemberOmsController {
    			}else{
    				member.setMobile(account); 
    			}
+   			if("1".equals(identify)){
+   				member.setWorkType("100");
+   			}else{
+   				member.setWorkType("217");
+   			}
    			member.setIdentify(identify);;
    			 
 
@@ -276,6 +294,23 @@ public class MemberOmsController {
    				member.setRegisterTime("");
    				member.setStatus("1");
    				memberService.omsAddMember(member);
+   			   //基本资料审核表+实名认证审核表插入数据
+				MemInfoCheck infoCheck = new MemInfoCheck();
+				
+				BeanUtils.copyProperties(member,infoCheck);
+				infoCheck.setStatus(1);
+				infoCheckMapper.insertSelective(infoCheck);
+
+				MemRealCheck realCheck = new MemRealCheck();
+				
+				BeanUtils.copyProperties(member,realCheck);
+				realCheck.setStatus(1);
+				realCheckMapper.insertSelective(realCheck);
+				member = memberService.findMember(member);
+				 //会员注册初始化特权
+	            if (member.getId() != null) {
+	                vipInfoService.initDefaultExtraPrivilege(Long.valueOf(member.getId()), member.getIdentify());
+	            }
    			}else{
    				throw new BusinessException(MsgCodeConstant.member_mcode_account_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
    			}
