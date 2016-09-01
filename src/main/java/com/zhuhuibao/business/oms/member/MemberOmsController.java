@@ -4,6 +4,16 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.crypto.hash.Md5Hash;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -12,20 +22,24 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.OmsMemBean;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.memCenter.entity.*;
+import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
+import com.zhuhuibao.mybatis.memCenter.entity.EmployeeSize;
+import com.zhuhuibao.mybatis.memCenter.entity.EnterpriseType;
+import com.zhuhuibao.mybatis.memCenter.entity.Identity;
+import com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck;
+import com.zhuhuibao.mybatis.memCenter.entity.MemRealCheck;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
 import com.zhuhuibao.mybatis.memCenter.service.MemInfoCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemRealCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
-
-import org.apache.shiro.crypto.hash.Md5Hash;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * 会员管理
@@ -236,4 +250,38 @@ public class MemberOmsController {
 
         return result;
     }
+    @ApiOperation(value = "新建员工", notes = "新建员工", response = Response.class)
+   	@RequestMapping(value = "add_member", method = RequestMethod.POST)
+   	public Response addMember(@RequestParam String account,@RequestParam String identify) throws Exception {
+   		Response result = new Response();
+
+   		Long memberId = ShiroUtil.getOmsCreateID();
+   		if(memberId !=null){
+   			Member member = new Member();
+   			if(account.contains("@")){
+   				member.setEmail(account); 
+   			}else{
+   				member.setMobile(account); 
+   			}
+   			member.setIdentify(identify);;
+   			 
+
+   			String md5Pwd = new Md5Hash("123456",null,2).toString();
+   			member.setPassword(md5Pwd);
+
+   			//member.setEnterpriseEmployeeParentId(String.valueOf(memberId));
+   			//先判断账号是否已经存在
+   			Member mem = memberService.findMember(member);
+   			if(mem==null){
+   				member.setRegisterTime("");
+   				member.setStatus("1");
+   				memberService.omsAddMember(member);
+   			}else{
+   				throw new BusinessException(MsgCodeConstant.member_mcode_account_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
+   			}
+   		}else {
+   			throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+   		}
+   		return result;
+   	}
 }
