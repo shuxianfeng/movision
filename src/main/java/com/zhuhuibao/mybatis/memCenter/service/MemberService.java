@@ -531,7 +531,14 @@ public class MemberService {
             map.put(Constants.enterpriseTypeName, enterpriseTypeName);
             map.put(Constants.area, address);
             map.put(Constants.enterpriseCreaterTime, createTime);
-            map.put(Constants.registerCapital, "2".equals(member.getCurrency())?member.getRegisterCapital()+"万美元":member.getRegisterCapital()+"万人民币");
+            if("2".equals(member.getCurrency())&&!"".equals(member.getRegisterCapital()))
+            {
+            map.put(Constants.registerCapital, member.getRegisterCapital()+"万美元");
+            }else if("1".equals(member.getCurrency())&&!"".equals(member.getRegisterCapital())){
+            	map.put(Constants.registerCapital,member.getRegisterCapital()+"万人民币");
+            }else{
+            	map.put(Constants.registerCapital,"");
+            }
             map.put(Constants.employeeNumber, employeeSizeName);
             map.put(Constants.identifyName, identifyName);
             map.put(Constants.enterpriseDesc, member.getEnterpriseDesc());
