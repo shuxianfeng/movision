@@ -32,4 +32,6 @@ public interface ExpertMapper {
     List<Map<String,String>> findAllMyLookedExpertList(RowBounds rowBounds, Map<String, Object> map);
 
     int deleteLookedExpert(String id);
+
+    List<Map<String,Object>> findAllExpert(RowBounds rowBounds, Map<String, Object> map);
 }

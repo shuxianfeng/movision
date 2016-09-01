@@ -909,4 +909,13 @@ public class ExpertService {
 			throw e;
 		}
 	}
+
+	public List<Map<String, Object>> findAllExpert(Paging<Map<String, Object>> pager, Map<String, Object> map) {
+		try {
+			return expertMapper.findAllExpert(pager.getRowBounds(),map);
+		} catch (Exception e) {
+			log.error("ExpertService::findAllExpert::map==" + map, e);
+			throw e;
+		}
+	}
 }
