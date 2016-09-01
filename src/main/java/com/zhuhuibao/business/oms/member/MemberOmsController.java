@@ -12,12 +12,15 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.OmsMemBean;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemInfoCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemRealCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 
@@ -231,4 +234,39 @@ public class MemberOmsController {
 
         return result;
     }
+    
+    @ApiOperation(value = "新建员工", notes = "新建员工", response = Response.class)
+	@RequestMapping(value = "add_member", method = RequestMethod.POST)
+	public Response addMember(@RequestParam String account,@RequestParam String identify) throws Exception {
+		Response result = new Response();
+
+		Long memberId = ShiroUtil.getOmsCreateID();
+		if(memberId !=null){
+			Member member = new Member();
+			if(account.contains("@")){
+				member.setEmail(account); 
+			}else{
+				member.setMobile(account); 
+			}
+			member.setIdentify(identify);;
+			 
+
+			String md5Pwd = new Md5Hash("123456",null,2).toString();
+			member.setPassword(md5Pwd);
+
+			//member.setEnterpriseEmployeeParentId(String.valueOf(memberId));
+			//先判断账号是否已经存在
+			Member mem = memberService.findMember(member);
+			if(mem==null){
+				member.setRegisterTime("");
+				member.setStatus("1");
+				memberService.omsAddMember(member);
+			}else{
+				throw new BusinessException(MsgCodeConstant.member_mcode_account_exist,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
+			}
+		}else {
+			throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+		}
+		return result;
+	}
 }
