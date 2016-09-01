@@ -30,12 +30,13 @@
         <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache.xml"/>
     </bean>  -->
 
-    <!--43200000-->
+    <!--43200000 | 21600000-->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-        <property name="globalSessionTimeout" value="43200000"/>
+        <property name="globalSessionTimeout" value="21600000"/>
         <property name="deleteInvalidSessions" value="true"/>
         <property name="sessionValidationSchedulerEnabled" value="true"/>
         <property name="sessionDAO" ref="redisSessionDAO"/>
+        <property name="cacheManager" ref="cacheManager"/>
     </bean>
 
     <!-- shiro redisManager -->
@@ -54,6 +55,10 @@
     <bean id="cacheManager" class="org.crazycake.shiro.RedisCacheManager">
         <property name="redisManager" ref="redisManager"/>
     </bean>
+
+    <!--<bean id="cacheManager" class="com.zhuhuibao.shiro.cache.SpringCacheManagerWrapper">-->
+        <!--<property name="cacheManager" ref="redisCacheManager"/>-->
+    <!--</bean>-->
 
     <!-- 安全管理器 配置权限管理器 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
