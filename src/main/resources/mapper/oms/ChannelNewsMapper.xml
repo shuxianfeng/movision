@@ -146,7 +146,14 @@
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
       <if test="reason != null">
-        reason = #{reason}
+        reason = #{reason},
+      </if>
+      
+      <if test="attachName != null" >
+        attachName= #{attachName,jdbcType=VARCHAR},
+      </if>
+      <if test="attachUrl != null" >
+        attachUrl= #{attachUrl,jdbcType=VARCHAR}
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
