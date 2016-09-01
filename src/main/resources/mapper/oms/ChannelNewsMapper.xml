@@ -22,7 +22,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, title, date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime, status, createid, channelid, sort, wordkey, description,
-    imgurl, views
+    imgurl, views,attachName,attachUrl
   </sql>
   <sql id="Blob_Column_List" >
     content
