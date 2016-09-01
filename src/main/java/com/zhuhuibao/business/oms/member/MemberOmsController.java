@@ -41,6 +41,7 @@ import com.zhuhuibao.mybatis.memCenter.service.MemRealCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.service.OmsMemService;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -295,18 +296,25 @@ public class MemberOmsController {
    				member.setStatus("1");
    				memberService.omsAddMember(member);
    			   //基本资料审核表+实名认证审核表插入数据
+   				member = memberService.findMember(member);
+   				
 				MemInfoCheck infoCheck = new MemInfoCheck();
 				
 				BeanUtils.copyProperties(member,infoCheck);
 				infoCheck.setStatus(1);
+				infoCheck.setId(Long.valueOf(member.getId()));
+				infoCheck.setUpdateTime(member.getRegisterTime());
+				infoCheck.setWorkType(Integer.valueOf(member.getWorkType())); 
 				infoCheckMapper.insertSelective(infoCheck);
 
 				MemRealCheck realCheck = new MemRealCheck();
 				
 				BeanUtils.copyProperties(member,realCheck);
 				realCheck.setStatus(1);
+				realCheck.setId(Long.valueOf(member.getId()));
+				realCheck.setUpdateTime(DateUtils.date2Sub(DateUtils.str2Date(member.getRegisterTime(), "yyyy-MM-dd HH:mm:ss"), 12, 10));
 				realCheckMapper.insertSelective(realCheck);
-				member = memberService.findMember(member);
+				
 				 //会员注册初始化特权
 	            if (member.getId() != null) {
 	                vipInfoService.initDefaultExtraPrivilege(Long.valueOf(member.getId()), member.getIdentify());
