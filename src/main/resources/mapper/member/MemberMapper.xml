@@ -641,6 +641,7 @@
             <if test="status != null and status != ''" >
                 and ic.status = #{status}
             </if>
+        order by ic.updateTime desc
     </select>
 
     <select id="findAllRealcheckMemberByPager" resultType="java.util.Map" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
@@ -679,6 +680,7 @@
             <if test="status != null and status != ''" >
                 and rc.status = #{status}
             </if>
+        order by rc.updateTime desc
     </select>
 
     <select id="findAllMemCertificateByPager" resultMap="ResultMap2"

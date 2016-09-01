@@ -56,9 +56,9 @@ public class OmsMemService {
         try {
             String type = member.getType();
             if(type != null){
-                if(type.equals("2")){    //实名认证
+                if(type.equals("2")){    //基本资料
                     memberList = memberMapper.findAllInfocheckMemberByPager(pager.getRowBounds(), member);
-                }else if (type.equals("1")){   //基本资料
+                }else if (type.equals("1")){   //实名认证
                     memberList = memberMapper.findAllRealcheckMemberByPager(pager.getRowBounds(), member);
                 }
 
