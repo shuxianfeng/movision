@@ -30,9 +30,9 @@
         <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache.xml"/>
     </bean>  -->
 
-    <!--43200000 | 21600000 | 600000-->
+    <!--(12h)43200000 | (6h)21600000 | *(3h)10800000* | (10m)600000-->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-        <property name="globalSessionTimeout" value="600000"/>
+        <property name="globalSessionTimeout" value="10800000"/>
         <property name="deleteInvalidSessions" value="true"/>
         <property name="sessionValidationSchedulerEnabled" value="true"/>
         <property name="sessionDAO" ref="redisSessionDAO"/>
