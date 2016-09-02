@@ -197,7 +197,7 @@
     FROM t_i_resume r
     where r.createid = #{id}
   </select>
-  <select id="previewResume" parameterType="java.util.Map" resultType="java.util.Map">
+  <select id="previewResume" parameterType="java.util.Map" resultMap="BaseResultMap">
     select r.id,r.createid,r.title,r.realName,r.birthYear,dc.name education,r.photo,
     case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,
     case WHEN r.marriage =0 then '未婚' WHEN r.marriage =1 THEN '已婚' WHEN r.marriage =2 THEN '保密' END AS marriage,
