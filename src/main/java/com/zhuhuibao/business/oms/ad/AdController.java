@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -22,6 +26,7 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.ad.service.AdService;
 import com.zhuhuibao.mybatis.expo.entity.Exhibition;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.oss.ZhbOssClient;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 
@@ -39,6 +44,9 @@ public class AdController {
 
 	    @Autowired
 	    private AdService adService;
+	    
+	    @Autowired
+	    ZhbOssClient zhbOssClient;
 
 	    @ApiOperation(value="广告(运营分页)",notes="广告列表(运营分页)",response = Response.class)
 	    @RequestMapping(value = "sel_adList", method = RequestMethod.GET)
@@ -262,6 +270,51 @@ public class AdController {
 	        	response.setMessage("关联ID不存在");
 	        }
 	       
+	        return response;
+	    }
+	    
+	    @ApiOperation(value = "上传图片，返回url", notes = "上传图片，返回url", response = Response.class)
+	    @RequestMapping(value = "uploadAdvImg", method = RequestMethod.POST)
+	    public Response uploadImg(@RequestParam(value = "file", required = false) MultipartFile file,@ApiParam(value = "文件路径")@RequestParam(required = false) String path) throws Exception {
+	        Response result = new Response();
+
+	        Subject currentUser = SecurityUtils.getSubject();
+	        Session session = currentUser.getSession(false);
+	        if (session != null) {
+	            String url = zhbOssClient.uploadObject(file,"img","adv/"+path);
+	            result.setData(url);
+	            return result;
+	        }else {
+	            log.error("上传图片失败");
+	            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+	        }
+
+	    }
+	    
+	    @ApiOperation(value="查询广告管理信息",notes="查询广告管理信息",response = Response.class)
+	    @RequestMapping(value = "sel_connectedInfo", method = RequestMethod.GET)
+	    public Response queryConnectedInfo(@ApiParam(value = "广告名称")@RequestParam(required = false) String name,
+	    								   @ApiParam(value = "查询类型")@RequestParam(required = false) String method,
+	                                       @RequestParam(required = false)String pageNo,
+	                                       @RequestParam(required = false)String pageSize,
+	                                       @ApiParam(value = "修改类型")@RequestParam(required = false) String type)  {
+	        Response response = new Response();
+	        //设定默认分页pageSize
+	        if (StringUtils.isEmpty(pageNo)) {
+	            pageNo = "1";
+	        }
+	        if (StringUtils.isEmpty(pageSize)) {
+	            pageSize = "5";
+	        }
+	        Paging pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+	        Map<String,Object> map = new HashMap<>();
+	        //查询传参+
+	        map.put("name",name);
+	        map.put("method",method);
+	        
+	        List<Map<String, String>> adList = adService.findAllConnectedInfo(pager,map);
+	        pager.result(adList);
+	        response.setData(pager);
 	        return response;
 	    }
 }

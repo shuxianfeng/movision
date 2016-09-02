@@ -264,6 +264,7 @@ public class MemberOmsController {
 
         return result;
     }
+    
     @ApiOperation(value = "新建员工", notes = "新建员工", response = Response.class)
    	@RequestMapping(value = "add_member", method = RequestMethod.POST)
    	public Response addMember(@RequestParam String account,@RequestParam String identify) throws Exception {

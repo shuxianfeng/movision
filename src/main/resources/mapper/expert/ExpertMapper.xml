@@ -1,327 +1,327 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.expert.mapper.ExpertMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.expert.entity.Expert" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="createId" property="createId" jdbcType="VARCHAR" />
-    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
-    <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="company" property="company" jdbcType="VARCHAR" />
-    <result column="position" property="position" jdbcType="VARCHAR" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="expertType" property="expertType" jdbcType="VARCHAR" />
-    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
-    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
-    <result column="province" property="province" jdbcType="VARCHAR" />
-    <result column="city" property="city" jdbcType="VARCHAR" />
-    <result column="area" property="area" jdbcType="VARCHAR" />
-    <result column="address" property="address" jdbcType="VARCHAR" />
-    <result column="photoUrl" property="photoUrl" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="is_deleted" property="is_deleted" jdbcType="VARCHAR" />
-    <result column="views" property="views" jdbcType="VARCHAR" />
-    <result column="introduce" property="introduce" jdbcType="VARCHAR" />
-    <result column="provinceName" property="provinceName" jdbcType="VARCHAR" />
-    <result column="cityName" property="cityName" jdbcType="VARCHAR" />
-    <result column="areaName" property="areaName" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.zhuhuibao.mybatis.expert.mapper.ExpertMapper">
+    <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.expert.entity.Expert">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="createId" property="createId" jdbcType="VARCHAR"/>
+        <result column="publishTime" property="publishTime" jdbcType="VARCHAR"/>
+        <result column="updateTime" property="updateTime" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="company" property="company" jdbcType="VARCHAR"/>
+        <result column="position" property="position" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="expertType" property="expertType" jdbcType="VARCHAR"/>
+        <result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="area" property="area" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="photoUrl" property="photoUrl" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="is_deleted" jdbcType="VARCHAR"/>
+        <result column="views" property="views" jdbcType="VARCHAR"/>
+        <result column="introduce" property="introduce" jdbcType="VARCHAR"/>
+        <result column="provinceName" property="provinceName" jdbcType="VARCHAR"/>
+        <result column="cityName" property="cityName" jdbcType="VARCHAR"/>
+        <result column="areaName" property="areaName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, createId, publishTime, updateTime, name, company, position, title,expertType, telephone, mobile, province, city, area, address, photoUrl,
     status, is_deleted, views,introduce
   </sql>
-  <select id="queryExpertById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    <select id="queryExpertById" resultMap="BaseResultMap" parameterType="java.lang.String">
     SELECT e.*,p.name as provinceName,c.name as cityName,ar.name as areaName FROM t_e_expert e
     LEFT JOIN t_dictionary_province p on e.province = p.code
     LEFT JOIN t_dictionary_city c on e.city = c.code
     LEFT JOIN t_dictionary_area ar on e.area = ar.code
     WHERE e.id = #{id}
   </select>
-  <select id="queryExpertByCreateId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    <select id="queryExpertByCreateId" resultMap="BaseResultMap" parameterType="java.lang.String">
     SELECT e.*,p.name as provinceName,c.name as cityName,ar.name as areaName FROM t_e_expert e
     LEFT JOIN t_dictionary_province p on e.province = p.code
     LEFT JOIN t_dictionary_city c on e.city = c.code
     LEFT JOIN t_dictionary_area ar on e.area = ar.code
     WHERE e.createId = #{id}
   </select>
-  <select id="queryExpertByCreateid" resultMap="BaseResultMap" >
+    <select id="queryExpertByCreateid" resultMap="BaseResultMap">
     SELECT * FROM t_e_expert WHERE createid = #{createid} and is_deleted = 0 and status = 1
   </select>
-  <select id="queryHotExpert" resultMap="BaseResultMap" >
+    <select id="queryHotExpert" resultMap="BaseResultMap">
     SELECT * FROM t_e_expert WHERE is_deleted = 0 and status = 1 ORDER by views desc limit 0,#{count}
   </select>
-  <select id="queryLatestExpert" resultMap="BaseResultMap" >
+    <select id="queryLatestExpert" resultMap="BaseResultMap">
     SELECT * FROM t_e_expert WHERE is_deleted = 0 and status = 1 ORDER by updateTime desc limit 0,#{count}
   </select>
-  <select id="findAllExpertList" resultMap="BaseResultMap">
-    SELECT e.*,p.name as provinceName,c.name as cityName,ar.name as areaName FROM t_e_expert e
-    LEFT JOIN t_dictionary_province p on e.province = p.code
-    LEFT JOIN t_dictionary_city c on e.city = c.code
-    LEFT JOIN t_dictionary_area ar on e.area = ar.code
-    WHERE e.is_deleted = 0
-    <if test="province != null and province !=''">
-      and e.province = #{province}
-    </if>
-    <if test="expertType != null and expertType !=''">
-      and e.expertType = #{expertType}
-    </if>
-    <if test="status != null and status !=''">
-      and e.status = #{status}
-    </if>
-    <if test="name != null and name !=''">
-      and e.name like CONCAT('%',#{name},'%')
-    </if>
-    <if test="type != null and type !=''">
-      and e.status = 1
-    </if>
-    order by e.updateTime desc
-  </select>
-  <insert id="expertMapper" parameterType="com.zhuhuibao.mybatis.expert.entity.Expert" >
-    insert into t_e_expert
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="createId != null" >
-        createId,
-      </if>
-        publishTime,
-        updateTime,
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="company != null" >
-        company,
-      </if>
-      <if test="position != null" >
-        position,
-      </if>
-      <if test="title != null" >
-        title,
-      </if>
-      <if test="expertType != null" >
-        expertType,
-      </if>
-      <if test="telephone != null" >
-        telephone,
-      </if>
-      <if test="mobile != null" >
-        mobile,
-      </if>
-      <if test="province != null" >
-        province,
-      </if>
-      <if test="city != null" >
-        city,
-      </if>
-      <if test="area != null" >
-        area,
-      </if>
-      <if test="address != null" >
-        address,
-      </if>
-      <if test="photoUrl != null" >
-        photoUrl,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="is_deleted != null" >
-        is_deleted,
-      </if>
-      <if test="views != null" >
-        views,
-      </if>
-      <if test="introduce != null" >
-        introduce,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id},
-      </if>
-      <if test="createId != null" >
-        #{createId},
-      </if>
-        now(),
-        now(),
-      <if test="name != null" >
-        #{name},
-      </if>
-      <if test="company != null" >
-        #{company},
-      </if>
-      <if test="position != null" >
-        #{position},
-      </if>
-      <if test="title != null" >
-        #{title},
-      </if>
-      <if test="expertType != null" >
-        #{expertType},
-      </if>
-      <if test="telephone != null" >
-        #{telephone},
-      </if>
-      <if test="mobile != null" >
-        #{mobile},
-      </if>
-      <if test="province != null" >
-        #{province},
-      </if>
-      <if test="city != null" >
-        #{city},
-      </if>
-      <if test="area != null" >
-        #{area},
-      </if>
-      <if test="address != null" >
-        #{address},
-      </if>
-      <if test="photoUrl != null" >
-        #{photoUrl},
-      </if>
-      <if test="status != null" >
-        #{status},
-      </if>
-      <if test="is_deleted != null" >
-        #{is_deleted},
-      </if>
-      <if test="views != null" >
-        #{views},
-      </if>
-      <if test="introduce != null" >
-        #{introduce},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateExpert" parameterType="com.zhuhuibao.mybatis.expert.entity.Expert" >
-    update t_e_expert
-    <set >
-        updateTime = now(),
-      <if test="name != null" >
-        name = #{name},
-      </if>
-      <if test="company != null" >
-        company = #{company},
-      </if>
-      <if test="position != null" >
-        position = #{position},
-      </if>
-      <if test="title != null" >
-        title = #{title},
-      </if>
-      <if test="expertType != null" >
-        expertType = #{expertType},
-      </if>
-      <if test="telephone != null" >
-        telephone = #{telephone},
-      </if>
-      <if test="mobile != null" >
-        mobile = #{mobile},
-      </if>
-      <if test="province != null" >
-        province = #{province},
-      </if>
-      <if test="city != null" >
-        city = #{city},
-      </if>
-      <if test="area != null" >
-        area = #{area},
-      </if>
-      <if test="address != null" >
-        address = #{address},
-      </if>
-      <if test="photoUrl != null" >
-        photoUrl = #{photoUrl},
-      </if>
-      <if test="status != null" >
-        status = #{status},
-      </if>
-      <if test="is_deleted != null" >
-        is_deleted = #{is_deleted},
-      </if>
-      <if test="views != null" >
-        views = #{views},
-      </if>
-      <if test="introduce != null" >
-        introduce = #{introduce},
-      </if>
-      <if test="reason != null">
-        reason = #{reason}
-      </if>
-    </set>
-    where id = #{id}
-  </update>
-  <update id="updateExpertByCreateid" parameterType="com.zhuhuibao.mybatis.expert.entity.Expert" >
-    update t_e_expert
-    <set >
-      updateTime = now(),
-      <if test="name != null" >
-        name = #{name},
-      </if>
-      <if test="company != null" >
-        company = #{company},
-      </if>
-      <if test="position != null" >
-        position = #{position},
-      </if>
-      <if test="title != null" >
-        title = #{title},
-      </if>
-      <if test="expertType != null" >
-        expertType = #{expertType},
-      </if>
-      <if test="telephone != null" >
-        telephone = #{telephone},
-      </if>
-      <if test="mobile != null" >
-        mobile = #{mobile},
-      </if>
-      <if test="province != null" >
-        province = #{province},
-      </if>
-      <if test="city != null" >
-        city = #{city},
-      </if>
-      <if test="area != null" >
-        area = #{area},
-      </if>
-      <if test="address != null" >
-        address = #{address},
-      </if>
-      <if test="photoUrl != null" >
-        photoUrl = #{photoUrl},
-      </if>
-      <if test="status != null" >
-        status = #{status},
-      </if>
-      <if test="is_deleted != null" >
-        is_deleted = #{is_deleted},
-      </if>
-      <if test="views != null" >
-        views = #{views},
-      </if>
-      <if test="introduce != null" >
-        introduce = #{introduce},
-      </if>
-      <if test="reason != null">
-        reason = #{reason}
-      </if>
-    </set>
-    where createId = #{createId}
-  </update>
-  <update id="updateExpertViews" parameterType="com.zhuhuibao.mybatis.expert.entity.Expert" >
-    update t_e_expert
-    <set >
-      <if test="views != null" >
-        views = #{views},
-      </if>
-    </set>
-    where id = #{id}
-  </update>
+    <select id="findAllExpertList" resultMap="BaseResultMap">
+        SELECT e.*,p.name as provinceName,c.name as cityName,ar.name as areaName FROM t_e_expert e
+        LEFT JOIN t_dictionary_province p on e.province = p.code
+        LEFT JOIN t_dictionary_city c on e.city = c.code
+        LEFT JOIN t_dictionary_area ar on e.area = ar.code
+        WHERE e.is_deleted = 0
+        <if test="province != null and province !=''">
+            and e.province = #{province}
+        </if>
+        <if test="expertType != null and expertType !=''">
+            and e.expertType = #{expertType}
+        </if>
+        <if test="status != null and status !=''">
+            and e.status = #{status}
+        </if>
+        <if test="name != null and name !=''">
+            and e.name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="type != null and type !=''">
+            and e.status = 1
+        </if>
+        order by e.updateTime desc
+    </select>
+    <insert id="expertMapper" parameterType="com.zhuhuibao.mybatis.expert.entity.Expert">
+        insert into t_e_expert
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createId != null">
+                createId,
+            </if>
+            publishTime,
+            updateTime,
+            <if test="name != null">
+                name,
+            </if>
+            <if test="company != null">
+                company,
+            </if>
+            <if test="position != null">
+                position,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="expertType != null">
+                expertType,
+            </if>
+            <if test="telephone != null">
+                telephone,
+            </if>
+            <if test="mobile != null">
+                mobile,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="photoUrl != null">
+                photoUrl,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="is_deleted != null">
+                is_deleted,
+            </if>
+            <if test="views != null">
+                views,
+            </if>
+            <if test="introduce != null">
+                introduce,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="createId != null">
+                #{createId},
+            </if>
+            now(),
+            now(),
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="company != null">
+                #{company},
+            </if>
+            <if test="position != null">
+                #{position},
+            </if>
+            <if test="title != null">
+                #{title},
+            </if>
+            <if test="expertType != null">
+                #{expertType},
+            </if>
+            <if test="telephone != null">
+                #{telephone},
+            </if>
+            <if test="mobile != null">
+                #{mobile},
+            </if>
+            <if test="province != null">
+                #{province},
+            </if>
+            <if test="city != null">
+                #{city},
+            </if>
+            <if test="area != null">
+                #{area},
+            </if>
+            <if test="address != null">
+                #{address},
+            </if>
+            <if test="photoUrl != null">
+                #{photoUrl},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="is_deleted != null">
+                #{is_deleted},
+            </if>
+            <if test="views != null">
+                #{views},
+            </if>
+            <if test="introduce != null">
+                #{introduce},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateExpert" parameterType="com.zhuhuibao.mybatis.expert.entity.Expert">
+        update t_e_expert
+        <set>
+            updateTime = now(),
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="company != null">
+                company = #{company},
+            </if>
+            <if test="position != null">
+                position = #{position},
+            </if>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="expertType != null">
+                expertType = #{expertType},
+            </if>
+            <if test="telephone != null">
+                telephone = #{telephone},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile},
+            </if>
+            <if test="province != null">
+                province = #{province},
+            </if>
+            <if test="city != null">
+                city = #{city},
+            </if>
+            <if test="area != null">
+                area = #{area},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="photoUrl != null">
+                photoUrl = #{photoUrl},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="is_deleted != null">
+                is_deleted = #{is_deleted},
+            </if>
+            <if test="views != null">
+                views = #{views},
+            </if>
+            <if test="introduce != null">
+                introduce = #{introduce},
+            </if>
+            <if test="reason != null">
+                reason = #{reason}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <update id="updateExpertByCreateid" parameterType="com.zhuhuibao.mybatis.expert.entity.Expert">
+        update t_e_expert
+        <set>
+            updateTime = now(),
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="company != null">
+                company = #{company},
+            </if>
+            <if test="position != null">
+                position = #{position},
+            </if>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="expertType != null">
+                expertType = #{expertType},
+            </if>
+            <if test="telephone != null">
+                telephone = #{telephone},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile},
+            </if>
+            <if test="province != null">
+                province = #{province},
+            </if>
+            <if test="city != null">
+                city = #{city},
+            </if>
+            <if test="area != null">
+                area = #{area},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="photoUrl != null">
+                photoUrl = #{photoUrl},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="is_deleted != null">
+                is_deleted = #{is_deleted},
+            </if>
+            <if test="views != null">
+                views = #{views},
+            </if>
+            <if test="introduce != null">
+                introduce = #{introduce},
+            </if>
+            <if test="reason != null">
+                reason = #{reason}
+            </if>
+        </set>
+        where createId = #{createId}
+    </update>
+    <update id="updateExpertViews" parameterType="com.zhuhuibao.mybatis.expert.entity.Expert">
+        update t_e_expert
+        <set>
+            <if test="views != null">
+                views = #{views},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 
-  <select id="queryHomepageExpertList" resultType="java.util.Map" >
+    <select id="queryHomepageExpertList" resultType="java.util.Map">
     select a.connectedId as id,a.imgUrl,a.title
     from t_sys_advertising a
     left join t_sys_adv_attr at on at.id = a.advAttrId
@@ -329,28 +329,63 @@
     and at.page = #{page}
     and at.advArea = #{advArea}
     and at.advType = #{advType}
+    order by a.sort asc
   </select>
 
-  <update id="deleteLookedExpert" parameterType="java.lang.String" >
+    <update id="deleteLookedExpert" parameterType="java.lang.String">
     update t_zhb_viewGoods
     set status = 1
     where id = #{id}
   </update>
 
-  <select id="findAllMyLookedExpertList" resultType="java.util.Map" >
-    select e.id,e.name,e.company,e.position,
-    case when e.expertType = '1' then '协会专家'
-    when e.expertType = '2' then '行业专家' end as expertType,
-    date_format(v.viewTime,'%Y-%m-%d') viewTime,v.id as recordId
-    from t_zhb_viewGoods v
-    left join t_e_expert e on v.goodsId = e.id
-    where v.type = 'CKZJXX' and v.`status` = 0
-    <if test="companyId != null">
-      and v.companyId = #{companyId}
-    </if>
-    <if test="viewerId != null">
-      and v.viewerId = #{viewerId}
-    </if>
-    order by v.viewTime desc
-  </select>
+    <select id="findAllMyLookedExpertList" resultType="java.util.Map">
+        select e.id,e.name,e.company,e.position,
+        case when e.expertType = '1' then '协会专家'
+        when e.expertType = '2' then '行业专家' end as expertType,
+        date_format(v.viewTime,'%Y-%m-%d') viewTime,v.id as recordId
+        from t_zhb_viewGoods v
+        left join t_e_expert e on v.goodsId = e.id
+        where v.type = 'CKZJXX' and v.`status` = 0
+        <if test="companyId != null">
+            and v.companyId = #{companyId}
+        </if>
+        <if test="viewerId != null">
+            and v.viewerId = #{viewerId}
+        </if>
+        order by v.viewTime desc
+    </select>
+    <select id="findAllExpert" resultType="java.util.Map">
+        SELECT
+        e.createid ,
+        e.id ,
+        e. NAME ,
+        e.company ,
+        e.position ,
+        e.photoUrl AS photo ,
+        e.views AS hot ,
+        e.introduce ,
+        e.province ,
+        e.city ,
+        e.area
+        FROM
+        t_e_expert e
+        WHERE
+        e.is_deleted = 0
+        <if test="province != null and province !=''">
+            and e.province = #{province}
+        </if>
+        <if test="expertType != null and expertType !=''">
+            and e.expertType = #{expertType}
+        </if>
+        <if test="status != null and status !=''">
+            and e.status = #{status}
+        </if>
+        <if test="name != null and name !=''">
+            and e.name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="type != null and type !=''">
+            and e.status = 1
+        </if>
+        order by e.updateTime desc
+    </select>
 </mapper>

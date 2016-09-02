@@ -37,7 +37,7 @@
 
     <select id="selectVipMemberInfoById" parameterType="java.lang.Long" resultMap="VipMemberInfoResultMap">
   	SELECT 
-	  id,member_id,vip_level,active_time,expire_time,add_time,update_time 
+	  id,member_id,vip_level vipLevel,active_time,expire_time,add_time,update_time 
 	FROM
 	  t_vip_member_info
 	WHERE member_id = #{memberId,jdbcType=BIGINT} 

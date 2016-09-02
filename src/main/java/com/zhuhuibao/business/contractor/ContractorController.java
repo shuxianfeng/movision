@@ -4,17 +4,36 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.mybatis.expo.service.ExpoService;
+import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.memCenter.service.SuccessCaseService;
+import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
+import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
+import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
+import com.zhuhuibao.mybatis.witkey.service.CooperationService;
+import com.zhuhuibao.utils.DateUtils;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 @RestController
@@ -28,6 +47,24 @@ public class ContractorController {
 
     @Autowired
     private SuccessCaseService successCaseService;
+    
+    @Autowired
+    ChannelNewsService newsService;
+    @Autowired
+    private ExpoService expoService;
+
+    @Autowired
+    private CooperationService cooperationService;
+
+    @Autowired
+    private TechCooperationService techCooperationService;
+
+    @Autowired
+    private JobPositionService jobPositionService;
+    
+    @Autowired
+    FileUtil fileUtil;
+
     /**
      *最新工程商(个数后台控制)
      * @return
@@ -55,6 +92,23 @@ public class ContractorController {
         return response;
     }
 
+    /**
+     *工程商简版介绍
+     * @return
+     */
+    @ApiOperation(value = "Vip工程商简版介绍", notes = "Vip工程商简版介绍")
+    @RequestMapping(value = "sel_vip_simple_introduce", method = RequestMethod.GET)
+    public Response vipIntroduce(@ApiParam("id") @RequestParam String id) {
+        Response response = new Response();
+        Map map = memberService.vipIntroduce(id,"2"); //资质类型：1：供应商资质；2：工程商资质；3：个人资质
+        if(map==null){
+        	response.setCode(400);
+        	response.setMessage("非vip用户不能查询vip工程商信息");
+        }else{
+        	response.setData(map);
+        }
+        return response;
+    }
     @ApiOperation(value = "公司成功案例（分页）", notes = "公司成功案例（分页）")
     @RequestMapping(value = "sel_company_success_caseList", method = RequestMethod.GET)
     public Response sel_company_success_caseList(@ApiParam(value = "公司id")@RequestParam String id,
@@ -117,5 +171,148 @@ public class ContractorController {
         response.setData(companyList);
         return response;
     }
+    /**
+     * 查询资讯内容列表
+     *
+     * @param channelNews
+     * @param pageNo
+     * @param pageSize
+     * @throws JsonGenerationException
+     * @throws JsonMappingException
+     * @throws IOException
+     */
+    @ApiOperation(value = "查询行业咨询", notes = "查询行业咨询")
+    @RequestMapping(value = "sel_channel_news", method = RequestMethod.GET)
+    public Response queryChannelNewsList(
+    		@ApiParam(value = "类型：1 行业资讯，2 人物专访 3：行业风云人物 4：工程商风采 5：工程资料")@RequestParam String type,
+    		@ApiParam(value = "是否是热门资料")@RequestParam(required = false,defaultValue = "false") boolean isHot,
+            @RequestParam(required = false,defaultValue = "1") String pageNo,
+            @RequestParam(required = false,defaultValue = "10") String pageSize) throws IOException {
+        Response response = new Response();
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Map> pager = new Paging<Map>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String, Object> map = new HashMap<String, Object>();
+        
+        map.put("channelid", "1");
+        map.put("sort", type);
+        map.put("status", "1");
+        map.put("isHot", isHot);
+        List<Map> channelList = newsService.findAllChanNewsList(pager, map);
+        pager.result(channelList);
+        response.setData(pager);
+        return response;
+    }
+    
+    /**
+     * 
+     * @param id 栏目信息的ID
+     * @throws IOException
+     */ 
+    @ApiOperation(value = "查询行业咨询详情", notes = "查询行业咨询详情")
+    @RequestMapping(value = "sel_news_details", method = RequestMethod.GET)
+    public Response queryDetailsById(@ApiParam(value="咨询id")@RequestParam Long id) throws IOException {
+    	Response response = new Response(); 
+    	List<Map> chanMap= newsService.queryDetailsById(id);
+        response.setData(chanMap);
+        return response;
+    }
+    
+    @ApiOperation(value = "vip工程商信息活动",notes = "vip工程商信息活动")
+    @RequestMapping(value = "sel_contractor_activity", method = RequestMethod.GET)
+    public Response sel_contractor_activity(@ApiParam(value = "公司id")@RequestParam String id,
+                                            @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                            @RequestParam(required = false,defaultValue = "10") String pageSize)  {
+        Response response = new Response();
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String,Object> map = new HashMap<>();
+        map.put("createid",id);
+        List<Map<String,String>> resultList = expoService.findAllExpoListByCompanyId(pager,map);
+        pager.result(resultList);
+        response.setData(pager);
+        return response;
+    }
 
+    @ApiOperation(value = "vip工程商信息威客",notes = "vip工程商信息威客")
+    @RequestMapping(value = "sel_contractor_witkey", method = RequestMethod.GET)
+    public Response sel_contractor_witkey(@ApiParam(value = "公司id")@RequestParam String id,
+                                            @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                            @RequestParam(required = false,defaultValue = "10") String pageSize)  {
+        Response response = new Response();
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String,Object> map = new HashMap<>();
+        map.put("createid",id);
+        List<Map<String,String>> resultList = cooperationService.findAllWitkeyByCompanyId(pager,map);
+        pager.result(resultList);
+        response.setData(pager);
+        return response;
+    }
+
+    @ApiOperation(value = "vip工程商信息技术",notes = "vip工程商信息技术")
+    @RequestMapping(value = "sel_contractor_tech", method = RequestMethod.GET)
+    public Response sel_contractor_tech(@ApiParam(value = "公司id")@RequestParam String id,
+                                          @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                          @RequestParam(required = false,defaultValue = "10") String pageSize)  {
+        Response response = new Response();
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String,Object> map = new HashMap<>();
+        map.put("createid",id);
+        List<Map<String,String>> resultList = techCooperationService.findAllTechByCompanyId(pager,map);
+        pager.result(resultList);
+        response.setData(pager);
+        return response;
+    }
+
+    @ApiOperation(value = "vip工程商信息人才",notes = "vip工程商信息人才")
+    @RequestMapping(value = "sel_contractor_job", method = RequestMethod.GET)
+    public Response sel_contractor_job(@ApiParam(value = "公司id")@RequestParam String id,
+                                        @RequestParam(required = false,defaultValue = "1") String pageNo,
+                                        @RequestParam(required = false,defaultValue = "10") String pageSize,
+                                       @RequestParam(required = false)String days,
+                                       @RequestParam(required = false)String salary)  {
+        Response response = new Response();
+        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String,Object> map = new HashMap<>();
+        map.put("createid",id);
+        if (days != null && !"".equals(days)) {
+            Date date = DateUtils.date2Sub(new Date(), 5, -Integer.parseInt(days));
+            String publishTime = DateUtils.date2Str(date, "yyyy-MM-dd");
+            map.put("publishTime", publishTime);
+        }
+        map.put("salary",salary);
+        List<Map<String,String>> resultList = jobPositionService.findAllJobByCompanyId(pager,map);
+        pager.result(resultList);
+        response.setData(pager);
+        return response;
+    }
+    
+  //vip减 项目条数减
+    @ApiOperation(value = "下载工程资料", notes = "下载工程资料资料", response = Response.class)
+    @RequestMapping(value = "downLoadProjectData ", method = RequestMethod.GET)
+    public Response downloadBill(HttpServletResponse response,
+                                 @ApiParam(value = "工程资料ID") @RequestParam String id) throws Exception {
+        Response jsonResult = new Response();
+        log.debug("download project data");
+        try {
+           
+                String attachName = newsService.queryattachName(id);
+                response.setDateHeader("Expires", 0);
+                response.setHeader("Cache-Control",
+                        "no-store, no-cache, must-revalidate");
+                response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+                response.setHeader("Content-disposition", "attachment;filename=" + attachName);
+                response.setContentType("application/octet-stream");
+//                attachName = ApiConstants.getUploadDoc() + TechConstant.UPLOAD_TECH_DOC_URL + "/" + attachName;
+                jsonResult = fileUtil.downloadObject(response, attachName, "doc", "project/data");
+          
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("download project data error! ", e);
+        }
+        return jsonResult;
+    }
 }

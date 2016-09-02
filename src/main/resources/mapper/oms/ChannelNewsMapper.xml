@@ -22,7 +22,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, title, date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime, status, createid, channelid, sort, wordkey, description,
-    imgurl, views
+    imgurl, views,attachName,attachUrl
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -68,6 +68,12 @@
       <if test="content != null" >
         content,
       </if>
+      <if test="attachName != null" >
+        attachName,
+      </if>
+      <if test="attachUrl != null" >
+        attachUrl,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="title != null" >
@@ -97,6 +103,12 @@
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
+      </if>
+       <if test="attachName != null" >
+        #{attachName,jdbcType=VARCHAR},
+      </if>
+       <if test="attachUrl != null" >
+        #{attachUrl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -134,7 +146,14 @@
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
       <if test="reason != null">
-        reason = #{reason}
+        reason = #{reason},
+      </if>
+      
+      <if test="attachName != null" >
+        attachName= #{attachName,jdbcType=VARCHAR},
+      </if>
+      <if test="attachUrl != null" >
+        attachUrl= #{attachUrl,jdbcType=VARCHAR}
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -245,6 +264,48 @@
     </where>
     order by a.createTime desc
   </select>
+  
+    <!-- 查询咨询列表@author:gmli@since2016.05.09 -->
+  <select id="findAllChanNewsList" resultType="java.util.Map" parameterType="java.util.Map" >
+    select a.id,a.title,   
+      date_format(a.createTime,'%Y-%m-%d %H:%i:%s') createTime,
+      a.imgurl,
+      a.description,
+      a.attachUrl,
+      a.attachName
+      from
+     t_oms_channel_news a 
+    <where>
+      a.status!=3 
+      <if test="status != null">
+        and a.status = #{status}
+      </if>
+      <if test="channelid != null">
+        and a.channelid = #{channelid}
+      </if>
+      <if test="sort != null">
+        and a.sort = #{sort}
+      </if>
+    </where>
+     <if test="isHot == true">
+         order by a.views desc
+      </if>
+      
+      <if test="isHot != true">
+         order by a.createTime desc
+      </if>
+    
+    
+  </select>
+  
+   <select id="queryDetailsById" resultType="java.util.Map" parameterType="java.lang.Long" >
+    select
+      id, title, date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,  description,content
+      ,attachName,attachUrl
+    from t_oms_channel_news
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
   <!-- 查询所属栏目列表@author:gmli@since2016.05.09 -->
   <select id="queryChannelList" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
    select t.id,t.name,t.sort,t.parentId channelid  from t_oms_channel t where (t.parentId in(1,6,13) or t.id in(1,6,13))
@@ -294,6 +355,7 @@
     and at.page = #{page}
     and at.advArea = #{advArea}
     and at.advType = #{advType}
+    order by a.sort   asc
   </select>
 
   <select id="findAllPassNewsByType" resultType="java.util.Map">
@@ -338,4 +400,9 @@
     <select id="selectByID" resultType="com.zhuhuibao.mybatis.oms.entity.ChannelNews">
         select * from t_oms_channel_news where id = #{id} and status != 3
     </select>
+    
+    <select id="queryattachName" resultType="java.lang.String" parameterType="java.lang.String" >
+        select attachUrl from t_oms_channel_news where id = #{id} 
+    </select>
+    
 </mapper>

@@ -513,6 +513,17 @@ public class ExpertService {
 		}
 	}
 
+	public Map queryQuestionById(String id) {
+		try {
+			// 查詢問題信息和提問者的信息
+			return questionMapper.queryMyQuestionById(id);
+		} catch (Exception e) {
+			log.error("ExpertService::queryQuestionById::questionId=" + id, e);
+			// e.printStackTrace();
+			throw e;
+		}
+	}
+
 	/**
 	 * 專家互動(前台)
 	 * 
@@ -599,9 +610,9 @@ public class ExpertService {
 	 * @param pager
 	 * @return
 	 */
-	public List<Map<String, String>> findAllQuestionListOms(Paging<Map<String, String>> pager) {
+	public List<Map<String, String>> findAllQuestionList(Paging<Map<String, String>> pager) {
 		try {
-			return questionMapper.findAllQuestionListOms(pager.getRowBounds());
+			return questionMapper.findAllQuestionList(pager.getRowBounds());
 		} catch (Exception e) {
 			log.error("ExpertService::findAllQuestionListOms", e);
 			// e.printStackTrace();
@@ -895,6 +906,15 @@ public class ExpertService {
 			return expertMapper.deleteLookedExpert(id);
 		} catch (Exception e) {
 			log.error("ExpertService::deleteLookedExpert::id==" + id, e);
+			throw e;
+		}
+	}
+
+	public List<Map<String, Object>> findAllExpert(Paging<Map<String, Object>> pager, Map<String, Object> map) {
+		try {
+			return expertMapper.findAllExpert(pager.getRowBounds(),map);
+		} catch (Exception e) {
+			log.error("ExpertService::findAllExpert::map==" + map, e);
 			throw e;
 		}
 	}

@@ -26,4 +26,5 @@ public interface ExhibitionMapper {
 
 	List<Map<String,String>> findAllActivityList(RowBounds rowBounds, Map<String, Object> map);
 
+    List<Map<String,String>> findAllExpoListByCompanyId(RowBounds rowBounds, Map<String, Object> map);
 }

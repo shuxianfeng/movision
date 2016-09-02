@@ -51,6 +51,8 @@ public class AskPriceBean {
 
     String isCan;
 
+    String period;
+
     public String getTitle() {
         return title;
     }
@@ -233,5 +235,13 @@ public class AskPriceBean {
 
     public void setCreateid(String createid) {
         this.createid = createid;
+    }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
     }
 }

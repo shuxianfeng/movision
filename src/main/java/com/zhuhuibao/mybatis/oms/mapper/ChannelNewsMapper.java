@@ -44,4 +44,10 @@ public interface ChannelNewsMapper {
     List<Map<String,String>> selectNewsByType(@Param("type") String type, @Param("sort") String sort, @Param("count") String count);
 
     ChannelNews selectByID(@Param("id") Long id);
+
+	List<Map> findAllChanNewsList(RowBounds rowBounds,Map<String, Object> map);
+
+	List<Map> queryDetailsById(Long id);
+
+	String queryattachName(String id);
 }

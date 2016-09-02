@@ -176,6 +176,20 @@ public class AdService {
 		}
 	  return result;
 	}
+    /**
+     * 查询广告管理信息
+     */
+	public List<Map<String, String>> findAllConnectedInfo(Paging pager,
+			Map<String, Object> map) { 
+		List<Map<String, String>> result = null;
+		try {
+		  result=adMapper.findAllConnectedInfo(pager.getRowBounds(),map); 
+		} catch (Exception e) {
+			log.error("AdService::findAllConnectedInfo",e);
+			throw e;
+		}
+	  return result;
+	}
 
 	 
 

@@ -24,7 +24,7 @@ public interface QuestionMapper {
 
     List<Map<String,String>> findAllMyQuestion(Map<String, Object> map);
 
-    List<Map<String,String>> findAllQuestionListOms(RowBounds rowBounds);
+    List<Map<String,String>> findAllQuestionList(RowBounds rowBounds);
 
     List<Map<String,String>> expertInteraction(int count);
 

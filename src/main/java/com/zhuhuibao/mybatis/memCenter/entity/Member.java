@@ -163,6 +163,9 @@ public class Member implements Serializable{
     private String account;
 
     private String isrecommend;
+    
+    @ApiModelProperty(value="vip 等级")
+    private String vipLevel;
 
     public String getId() {
         return id;
@@ -635,4 +638,13 @@ public class Member implements Serializable{
     public void setPersonCompanyTypeName(String personCompanyTypeName) {
         this.personCompanyTypeName = personCompanyTypeName;
     }
+
+	public String getVipLevel() {
+		return vipLevel;
+	}
+
+	public void setVipLevel(String vipLevel) {
+		this.vipLevel = vipLevel;
+	}
+
 }

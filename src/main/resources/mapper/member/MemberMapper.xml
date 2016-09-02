@@ -161,7 +161,8 @@
              WHERE find_in_set(id, m.identify))          AS  identifyName,
             (SELECT group_concat(name)
              FROM t_dictionary_identity
-             WHERE find_in_set(id, m.personCompanyType)) AS  personCompanyTypeName
+             WHERE find_in_set(id, m.personCompanyType)) AS  personCompanyTypeName,
+             v.vip_level vipLevel
         FROM t_m_member m
             LEFT JOIN t_dictionary_province p1 ON m.province = p1.code
             LEFT JOIN t_dictionary_province p2 ON m.enterpriseProvince = p2.code
@@ -172,6 +173,7 @@
             LEFT JOIN t_dictionary_employeeSize e ON m.employeeNumber = e.id
             LEFT JOIN t_dictionary_enterpriseType et ON m.enterpriseType = et.id
             LEFT JOIN t_dictionary_workType w ON m.workType = w.id
+            LEFT JOIN t_vip_member_info v ON v.member_id = m.id
         WHERE m.id = #{id}
     </select>
 
@@ -639,6 +641,7 @@
             <if test="status != null and status != ''" >
                 and ic.status = #{status}
             </if>
+        order by ic.updateTime desc
     </select>
 
     <select id="findAllRealcheckMemberByPager" resultType="java.util.Map" parameterType="com.zhuhuibao.common.pojo.OmsMemBean">
@@ -677,6 +680,7 @@
             <if test="status != null and status != ''" >
                 and rc.status = #{status}
             </if>
+        order by rc.updateTime desc
     </select>
 
     <select id="findAllMemCertificateByPager" resultMap="ResultMap2"
@@ -879,6 +883,7 @@
         WHERE at.chanType = #{chanType}
               AND at.page = #{page}
               AND at.advArea = #{advArea}
+        order by ad.sort   asc
     </select>
 
     <select id="queryGreatCompany" resultType="java.util.Map" parameterType="java.util.Map">
@@ -894,6 +899,7 @@
         WHERE at.chanType = #{chanType}
               AND at.page = #{page}
               AND at.advArea = #{advArea}
+        order by ad.sort   asc
     </select>
 
     <select id="findMemberOms" resultType="java.util.Map" parameterType="java.util.Map">
@@ -925,12 +931,15 @@
             m.enterpriseName    AS companyName,
             m.enterpriseWebSite AS webSite,
             m.saleProductDesc,
-            m.address
+            m.address,
+            v.vip_level
         FROM t_sys_advertising ad
             LEFT JOIN t_sys_adv_attr at ON at.id = ad.advAttrId
             LEFT JOIN t_m_member m ON m.id = ad.connectedId
+            left join t_vip_member_info v on v.member_id=ad.connectedId
         WHERE at.chanType = #{chanType}
               AND at.page = #{page}
               AND at.advArea = #{advArea}
+        order by ad.sort   asc
     </select>
 </mapper>

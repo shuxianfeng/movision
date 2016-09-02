@@ -343,4 +343,23 @@
         where is_deleted = 0
         order by updateTime desc limit 0,#{count}
     </select>
+
+    <select id="findAllJobByCompanyId" resultType="java.util.Map" parameterType="java.util.Map">
+        select j.id,j.name,c.name as salary,DATE_FORMAT(j.updateTime,'%Y-%m-%d') as updateTime,j.createid,j.positionType,
+        (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare,
+        case WHEN ct.name is null or ct.name ='' then p.name
+        when ct.name is not null and ct.name != '' then ct.name end as city
+        from t_i_job j
+        left JOIN t_dictionary_constant c on j.salary = c.code and c.type = 1
+        left join t_dictionary_city ct on j.city = ct.code
+        left join t_dictionary_province p on j.province = p.code
+        where j.createID = #{createid} and j.is_deleted = 0
+        <if test="publishTime != null and publishTime != ''">
+            and date_format(#{publishTime},'%Y-%m-%d') &lt;= date_format(j.updateTime,'%Y-%m-%d')
+        </if>
+        <if test="salary != null and salary != ''">
+            and j.salary = #{salary}
+        </if>
+        order by j.updateTime desc
+    </select>
 </mapper>

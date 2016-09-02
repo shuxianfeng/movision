@@ -19,6 +19,11 @@ import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.convert.BeanUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +33,50 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MemberConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
+import com.zhuhuibao.common.pojo.AccountBean;
+import com.zhuhuibao.common.pojo.ResultBean;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.memCenter.entity.Area;
+import com.zhuhuibao.mybatis.memCenter.entity.Certificate;
+import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
+import com.zhuhuibao.mybatis.memCenter.entity.City;
+import com.zhuhuibao.mybatis.memCenter.entity.EmployeeSize;
+import com.zhuhuibao.mybatis.memCenter.entity.EnterpriseType;
+import com.zhuhuibao.mybatis.memCenter.entity.Identity;
+import com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck;
+import com.zhuhuibao.mybatis.memCenter.entity.MemRealCheck;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
+import com.zhuhuibao.mybatis.memCenter.entity.Message;
+import com.zhuhuibao.mybatis.memCenter.entity.Province;
+import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
+import com.zhuhuibao.mybatis.memCenter.mapper.AreaMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.CertificateMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.CertificateRecordMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.CityMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.EmployeeSizeMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.EnterpriseTypeMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.IdentityMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.MessageMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.ProvinceMapper;
+import com.zhuhuibao.mybatis.memCenter.mapper.WorkTypeMapper;
+import com.zhuhuibao.mybatis.oms.entity.MemberSucCase;
+import com.zhuhuibao.mybatis.oms.service.MemberSucCaseService;
+import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
+import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
+import com.zhuhuibao.mybatis.vip.service.VipInfoService;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.DateUtils;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.convert.BeanUtil;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 
 /**
  * 会员中心业务处理
@@ -88,10 +135,12 @@ public class MemberService {
 
     @Autowired
     MemRealCheckService realCheckService;
-
+    
     @Autowired
     VipInfoService vipInfoService;
-
+    
+    @Autowired
+	private MemberSucCaseService memberSucCaseService;
     /**
      * 会员信息更新
      */
@@ -236,7 +285,7 @@ public class MemberService {
     /**
      * 人员规模
      */
-    @Cacheable(value = "common", key = "#root.targetClass + #root.methodName")
+    @Cacheable(value = "common", key = "#root.methodName")
     public List<EmployeeSize> findEmployeeSizeList() {
         try {
             return employeeSizeMapper.findEmployeeSizeList();
@@ -250,7 +299,7 @@ public class MemberService {
     /**
      * 企业性质
      */
-    @Cacheable(value = "common", key = "#root.targetClass + #root.methodName")
+    @Cacheable(value = "common", key = "#root.methodName")
     public List<EnterpriseType> findEnterpriseTypeList() {
         try {
             return enterpriseTypeMapper.findEnterpriseTypeList();
@@ -264,7 +313,7 @@ public class MemberService {
     /**
      * 企业身份
      */
-    @Cacheable(value = "common", key = "#root.targetClass + #root.methodName")
+    @Cacheable(value = "common", key = "#root.methodName")
     public List<Identity> findIdentityList() {
         try {
             return identityMapper.findIdentityList();
@@ -501,7 +550,14 @@ public class MemberService {
             map.put(Constants.enterpriseTypeName, enterpriseTypeName);
             map.put(Constants.area, address);
             map.put(Constants.enterpriseCreaterTime, createTime);
-            map.put(Constants.registerCapital, member.getRegisterCapital());
+            if("2".equals(member.getCurrency())&&!"".equals(member.getRegisterCapital()))
+            {
+            map.put(Constants.registerCapital, member.getRegisterCapital()+"万美元");
+            }else if("1".equals(member.getCurrency())&&!"".equals(member.getRegisterCapital())){
+            	map.put(Constants.registerCapital,member.getRegisterCapital()+"万人民币");
+            }else{
+            	map.put(Constants.registerCapital,"");
+            }
             map.put(Constants.employeeNumber, employeeSizeName);
             map.put(Constants.identifyName, identifyName);
             map.put(Constants.enterpriseDesc, member.getEnterpriseDesc());
@@ -510,6 +566,7 @@ public class MemberService {
             map.put(Constants.webSite, member.getEnterpriseWebSite());
             map.put(Constants.telephone, member.getEnterpriseTelephone());
             map.put(Constants.fax, member.getEnterpriseFox());
+            map.put(Constants.vipLevel, member.getVipLevel());
             map.put(Constants.certificateRecord, certificateRecordList);
             return map;
         } catch (Exception e) {
@@ -770,7 +827,22 @@ public class MemberService {
         }
 
     }
+
     /**
+     * VIP 工程商简介
+     * @param id
+     * @param string
+     * @return
+     */
+	public Map vipIntroduce(String id, String type) {
+		Map map= this.introduce(id, type);
+	    List<MemberSucCase> sucCase=memberSucCaseService.queryMemberSucCaseList(id);
+	    map.put("sucCaseList", sucCase);
+	  
+		return map;
+	}
+	
+	/**
      * 新建员工
      */
     public int omsAddMember(Member member) throws Exception {

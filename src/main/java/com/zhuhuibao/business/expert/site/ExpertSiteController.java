@@ -5,8 +5,10 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.alipay.service.direct.AlipayDirectService;
 import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
+import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.*;
+import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
@@ -331,37 +333,40 @@ public class ExpertSiteController {
     @RequestMapping(value = "base/sel_expertList", method = RequestMethod.GET)
     public Response expertList(@ApiParam(value = "省")@RequestParam(required = false) String province,
                                @ApiParam(value = "专家类型")@RequestParam(required = false) String expertType,
-                               @RequestParam(required = false)String pageNo,
-                               @RequestParam(required = false)String pageSize)  {
+                               @RequestParam(required = false,defaultValue = "1")String pageNo,
+                               @RequestParam(required = false,defaultValue = "10")String pageSize)  {
         Response response = new Response();
-        //设定默认分页pageSize
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Expert> pager = new Paging<Expert>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+
+        Paging<Map<String,Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String,Object> map = new HashMap<>();
         //查询传参
         map.put("province",province);
         map.put("expertType",expertType);
         map.put("type",ExpertConstant.EXPERT_TYPE_ONE);
-        List<Expert> expertList = expertService.findAllExpertList(pager,map);
-        List list = new ArrayList();
-        for (Expert expert : expertList) {
-            Map expertMap = new HashMap();
-            expertMap.put("createid", expert.getCreateId());
-            expertMap.put("id", expert.getId());
-            expertMap.put("name", expert.getName());
-            expertMap.put("company", expert.getCompany());
-            expertMap.put("position", expert.getPosition());
-            expertMap.put("photo", expert.getPhotoUrl());
-            expertMap.put("hot", expert.getViews());
-            expertMap.put("introduce", expert.getIntroduce());
-            list.add(expertMap);
+        List<Map<String,Object>> expertList = expertService.findAllExpert(pager,map);
+        for (Map<String,Object> expert : expertList) {
+            String provinceCode = String.valueOf(expert.get("province"));
+            if(!StringUtils.isEmpty(provinceCode)){
+                ConvertUtil.execute(expert, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
+            }else{
+                expert.put("provinceName","");
+            }
+            String cityCode =  String.valueOf(expert.get("city"));
+            if(!StringUtils.isEmpty(cityCode)){
+                ConvertUtil.execute(expert, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
+            }else{
+                expert.put("cityName","");
+            }
+            String areaCode =  String.valueOf(expert.get("area"));
+            if(!StringUtils.isEmpty(areaCode)){
+                ConvertUtil.execute(expert, "area", "dictionaryService", "findAreaByCode", new Object[]{areaCode});
+            }else{
+                expert.put("areaName","");
+            }
+
+
         }
-        pager.result(list);
+        pager.result(expertList);
         response.setData(pager);
         return response;
     }
@@ -691,10 +696,6 @@ public class ExpertSiteController {
         return response;
     }
 
-    /**
-     * 邮箱注册时的图形验证码
-     * @param response
-     */
     @ApiOperation(value="专家培训课程下单图形验证码",notes="专家培训课程下单图形验证码",response = Response.class)
     @RequestMapping(value = "train/sel_orderImgCode", method = RequestMethod.GET)
     public void getOrderImgCode(HttpServletResponse response) throws IOException {
@@ -720,6 +721,76 @@ public class ExpertSiteController {
             }
         }else {
             throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "查询問題列表", notes = "查询問題列表", response = Response.class)
+    @RequestMapping(value = "base/sel_questionList", method = RequestMethod.GET)
+    public Response queryExpertQuestion(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                        @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Map<String, String>> questionList = expertService.findAllQuestionList(pager);
+        pager.result(questionList);
+        response.setData(pager);
+        return response;
+    }
+
+    @ApiOperation(value = "查询問題详情", notes = "查询問題详情", response = Response.class)
+    @RequestMapping(value = "base/sel_myQuestion", method = RequestMethod.GET)
+    public Response queryMyQuestionById(@ApiParam(value = "問題id") @RequestParam String id) {
+        Response response = new Response();
+        Map map = expertService.queryMyQuestionById(id);
+        Long createid = ShiroUtil.getCreateID();
+        if(createid!=null){
+            Map<String,String> map1 = expertService.queryQuestionById(id);
+            if(createid.equals(map1.get("createid"))){
+                map.put("isCan",1);
+            }else {
+                map.put("isCan",0);
+            }
+        }else {
+            map.put("isCan",0);
+        }
+        response.setData(map);
+        return response;
+    }
+
+    @ApiOperation(value = "关闭问题", notes = "关闭问题", response = Response.class)
+    @RequestMapping(value = "base/upd_closeQuestion", method = RequestMethod.POST)
+    @LoginAccess
+    public Response closeQuestion(@ApiParam(value = "問題id") @RequestParam String id) {
+        Response response = new Response();
+        Question question = new Question();
+        Long createid = ShiroUtil.getCreateID();
+        Map<String, String> map1 = expertService.queryQuestionById(id);
+        if (createid.equals(map1.get("createid"))) {
+            question.setId(id);
+            //狀態設為已關閉
+            question.setStatus(ExpertConstant.EXPERT_QUESTION_STATUS_TWO);
+            expertService.updateQuestionInfo(question);
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "采纳答案", notes = "采纳答案", response = Response.class)
+    @RequestMapping(value = "base/upd_acceptAnswer", method = RequestMethod.POST)
+    @LoginAccess
+    public Response acceptAnswer(@ApiParam(value = "問題id") @RequestParam String questionId,
+                                 @ApiParam(value = "答案id") @RequestParam String answerId) {
+        Response response = new Response();
+        Question question = new Question();
+        Long createid = ShiroUtil.getCreateID();
+        Map<String, String> map1 = expertService.queryQuestionById(questionId);
+        if (createid.equals(map1.get("createid"))) {
+            question.setId(questionId);
+            //設置採納答案id
+            question.setAnswerId(answerId);
+            //狀態設為已關閉
+            question.setStatus(ExpertConstant.EXPERT_QUESTION_STATUS_FOUR);
+            expertService.updateQuestionInfo(question);
         }
         return response;
     }
