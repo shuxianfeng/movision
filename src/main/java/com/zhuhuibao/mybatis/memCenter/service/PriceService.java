@@ -134,26 +134,21 @@ public class PriceService {
     /**
      * 获得我的联系方式（询报价者联系方式）
      */
-    public Response getLinkInfo(String id) {
-        Response result = new Response();
-        Map map = new HashMap();
+    public Map<String,String> getLinkInfo(String id) {
+        Map<String,String> map = new HashMap<>();
         Member member = memberMapper.findMemById(id);
         if (member != null) {
-            if ("2".equals(member.getIdentify())) {
-                map.put(Constants.companyName, member.getPersonRealName());
-                map.put(Constants.linkMan, "");
-                map.put(Constants.telephone, member.getFixedTelephone());
-                map.put(Constants.mobile, member.getFixedMobile());
+            map.put(Constants.companyName, member.getEnterpriseName());
+            map.put(Constants.telephone, member.getFixedTelephone());
+            map.put(Constants.mobile, member.getFixedMobile());
+            map.put("email",member.getEmail());
+            if ("2".equals(member.getIdentify())) { //个人用户
+                map.put(Constants.linkMan, member.getPersonRealName());
             } else {
-                map.put(Constants.companyName, member.getEnterpriseName());
                 map.put(Constants.linkMan, member.getEnterpriseLinkman());
-                map.put(Constants.telephone, member.getFixedTelephone());
-                map.put(Constants.mobile, member.getFixedMobile());
             }
         }
-        result.setCode(200);
-        result.setData(map);
-        return result;
+        return map;
     }
 
 

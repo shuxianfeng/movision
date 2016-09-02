@@ -217,8 +217,7 @@ public class CooperationService {
 	 */
 	public List<Map<String, String>> findAllCooperationByPager(Paging<Map<String, String>> pager, Cooperation cooperation) {
 		try {
-			List<Map<String, String>> cooperationList = cooperationMapper.findAllCooperationByPager(pager.getRowBounds(), cooperation);
-			return cooperationList;
+			return cooperationMapper.findAllCooperationByPager(pager.getRowBounds(), cooperation);
 		} catch (Exception e) {
 			log.error("CooperationService::findAllCooperationByPager",e);
 			//e.printStackTrace();
