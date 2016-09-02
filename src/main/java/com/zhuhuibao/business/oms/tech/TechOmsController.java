@@ -196,7 +196,7 @@ public class TechOmsController {
     @ApiOperation(value = "修改技术资料(行业解决方案，技术文档，培训资料)", notes = "修改技术资料(行业解决方案，技术文档，培训资料)", response = Response.class)
     public Response updateTechData(@ApiParam(value = "技术合作：技术成果，技术需求") @ModelAttribute(value = "techData") TechData techData) {
         Response response = new Response();
-        techDataService.updateTechData(techData);
+        techDataService.updateOmsTechData(techData);
         return response;
     }
 

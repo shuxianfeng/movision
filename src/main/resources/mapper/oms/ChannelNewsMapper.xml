@@ -272,7 +272,8 @@
       a.imgurl,
       a.description,
       a.attachUrl,
-      a.attachName
+      a.attachName,
+      a.views
       from
      t_oms_channel_news a 
     <where>

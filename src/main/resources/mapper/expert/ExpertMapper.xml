@@ -358,7 +358,7 @@
         SELECT
         e.createid ,
         e.id ,
-        e. NAME ,
+        e.name ,
         e.company ,
         e.position ,
         e.photoUrl AS photo ,

@@ -187,6 +187,27 @@ public class TechDataService {
         }
         return result;
     }
+    
+    /**
+     * 更新技术资料
+     *
+     * @param techData
+     * @return
+     */
+    public int updateOmsTechData(TechData techData) {
+        int result;
+        log.info("update oms tech data " + StringUtils.beanToString(techData));
+        try { 
+            result = techDataMapper.updateByPrimaryKeySelective(techData);
+            if (Objects.equals(techData.getStatus(), TechConstant.TechDataStatus.REJECT.intValue())) {
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), techData.getCreateid(), techData.getReason());
+            }
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw e;
+        }
+        return result;
+    }
 
     /**
      * 更新点击率或者下载率
