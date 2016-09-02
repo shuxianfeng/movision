@@ -8,8 +8,6 @@ import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.G;
 import com.zhuhuibao.utils.L;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Searcher {
@@ -26,13 +24,13 @@ public class Searcher {
 
     private static String makeSign(Map<?, ?> kv, String secret) {
         Set<?> keySet = kv.keySet();
-        List<String> keys = new ArrayList<String>(keySet.size());
+        List<String> keys = new ArrayList<>(keySet.size());
         for (Object key : keySet) {
             keys.add(key.toString());
         }
         Collections.sort(keys);
 
-        String encodeString = null;
+        String encodeString;
         {
             StringBuilder buf = new StringBuilder();
             for (String key : keys) {
@@ -67,7 +65,7 @@ public class Searcher {
             throw new UnknownServiceException(e);
         }
         if (L.isInfoEnabled()) {
-            L.info("SEARCH params: " + params + ", result: "
+            L.error("SEARCH params: " + params + ", result: "
                     + client.getResponseBody());
         }
         Map<String, Object> map = JSONUtil.parseAsMap(client.getResponseBody());
