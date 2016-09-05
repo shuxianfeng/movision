@@ -42,7 +42,7 @@
     LEFT JOIN t_dictionary_province p on e.province = p.code
     LEFT JOIN t_dictionary_city c on e.city = c.code
     LEFT JOIN t_dictionary_area ar on e.area = ar.code
-    WHERE e.createId = #{id}
+    WHERE e.createId = #{id}    and e.status=1
   </select>
     <select id="queryExpertByCreateid" resultMap="BaseResultMap">
     SELECT * FROM t_e_expert WHERE createid = #{createid} and is_deleted = 0 and status = 1

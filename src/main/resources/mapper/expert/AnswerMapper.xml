@@ -24,7 +24,7 @@
     select q.content as question,date_format(a.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,a.content as answer,e.name,a.id as answerId,a.status
     from t_e_answer a
     left join t_e_question q on a.questionId = q.id
-    left join t_e_expert e on e.createId = a.createid
+    left join t_e_expert e on e.createId = a.createid    and e.status=1
     order by a.publishTime desc
   </select>
   <insert id="answerQuestion" parameterType="com.zhuhuibao.mybatis.expert.entity.Answer" >
