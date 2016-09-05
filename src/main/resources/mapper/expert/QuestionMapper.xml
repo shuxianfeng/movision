@@ -37,7 +37,7 @@
     from t_e_answer a
     left join t_e_question q on a.questionId = q.id
     LEFT JOIN t_m_member m on m.id = q.createid
-    LEFT JOIN t_e_expert e on e.createid = a.createid
+    LEFT JOIN t_e_expert e on e.createid = a.createid  and e.status=1
     where a.createid = #{id} order by a.publishTime desc
   </select>
 

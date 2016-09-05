@@ -17,7 +17,7 @@
     a.id,a.content,date_format(a.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,e.photoUrl,
     e.name as memberName
     from t_e_answer a
-    LEFT JOIN t_e_expert e on e.createid = a.createid
+    LEFT JOIN t_e_expert e on e.createid = a.createid  and e.`status`=1
     where a.questionId = #{id} and a.status = 0
   </select>
   <select id="findAllExpertAnswerListOms" resultType="java.util.Map" >
