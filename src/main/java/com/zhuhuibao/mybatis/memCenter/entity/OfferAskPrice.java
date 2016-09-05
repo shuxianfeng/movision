@@ -39,6 +39,8 @@ public class OfferAskPrice extends OfferPrice {
 
 	private String askBillUrl;
 
+	private String period;
+
 	public String getTitle() {
 		return title;
 	}
@@ -157,5 +159,13 @@ public class OfferAskPrice extends OfferPrice {
 
 	public void setAskBillUrl(String askBillUrl) {
 		this.askBillUrl = askBillUrl;
+	}
+
+	public String getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(String period) {
+		this.period = period;
 	}
 }

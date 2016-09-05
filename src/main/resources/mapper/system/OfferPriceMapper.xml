@@ -192,7 +192,7 @@
   <select id="queryOfferPriceInfoByID" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.memCenter.entity.OfferAskPrice">
   	select t.id, t.askid, t.createid,t.content,t.billurl,if(t.isShow,t.companyName,'') companyName,
     if(t.isShow,t.linkMan,'') linkMan,if(t.isShow,t.telephone,'') telephone,if(t.isShow,t.email,'') email,
-    t.isShow,a.title,if(a.type=1,'公开询价','定向询价') typeName,date_format(a.endTime,"%Y-%m-%d") endTime,
+    t.isShow,a.title,if(a.type=1,'公开询价','定向询价') typeName,date_format(a.endTime,"%Y-%m-%d") endTime,a.period,
     if(a.isTax=1,'含税报价','不含税报价') taxName,concat(p.name,c.name,ar.name) address,ct.name categoryName,if(a.isShow=1,a.companyName,'') askCompanyName,
     if(a.isShow=1,a.linkMan,'') askLinkMan,a.isShow askisShow,if(a.isShow=1,a.telephone,'') askTelephone,
     if(a.isShow=1,a.email,'') askEmail,a.description description,a.productName,a.content askContent,a.billurl askBillUrl
