@@ -25,6 +25,7 @@
     from t_e_answer a
     left join t_e_question q on a.questionId = q.id
     left join t_e_expert e on e.createId = a.createid
+    order by a.publishTime desc
   </select>
   <insert id="answerQuestion" parameterType="com.zhuhuibao.mybatis.expert.entity.Answer" >
     insert into t_e_answer
