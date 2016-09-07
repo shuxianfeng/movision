@@ -99,7 +99,7 @@
   </select>
 
   <select id="queryGreatCaseListByCompanyId" resultType="java.util.Map" parameterType="java.util.Map" >
-    select c.id,c.imgUrl
+    select c.id,c.imgUrl,c.title,c.content,date_format(c.publishTime,'%Y-%m-%d') as publishTime
     from t_m_success_case c
     where c.is_deleted = #{is_deleted} and c.status = #{status} and c.createid = #{createid}
     order by c.updateTime desc

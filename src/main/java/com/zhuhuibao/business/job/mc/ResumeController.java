@@ -3,6 +3,7 @@ package com.zhuhuibao.business.job.mc;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.common.util.ShiroUtil;
@@ -18,6 +19,7 @@ import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.oss.ZhbOssClient;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -66,6 +69,31 @@ public class ResumeController {
 
     @Autowired
     MemberService memberService;
+    
+    
+   /* @LoginAccess
+    @ApiOperation(value = "上传附件(简历编辑页面)", notes = "上传附件(简历编辑页面)", response = Response.class)
+    @RequestMapping(value = "upload_resume_attach", method = RequestMethod.POST)
+    public Response uploadResumeAttach(@RequestParam(value = "file", required = false) MultipartFile file) {
+        Map<String, Object> map = new HashMap<>();
+        try {
+            String url = zhbOssClient.uploadObject(file, "doc", "resume");
+            map.put(Constants.name, url);
+            if (url.lastIndexOf(".") != -1) {
+                map.put(ResumeConstants.FILE_FORMAT, url.substring(url.lastIndexOf(".")));
+            } else {
+                map.put(ResumeConstants.FILE_FORMAT, "");
+            }
+            map.put(ResumeConstants.FILE_SIZE, file.getSize());
+
+        } catch (Exception e) {
+            log.error("上传附件失败>>>", e);
+            throw e;
+        }
+
+        return new Response(map);
+    }*/
+    
 
     /**
      * 发布简历
@@ -82,6 +110,8 @@ public class ResumeController {
             if (ids != null && ids.size() >= 1) {
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "该用户已存在简历");
             }
+            
+            //期望工作地点不得超过5个
             int procount = 0,citycount = 0;
             String jobProvinces = resume.getJobProvince();
             if(!StringUtils.isEmpty(jobProvinces)){
@@ -93,7 +123,6 @@ public class ResumeController {
                 String[] citys = resume.getJobCity().split(",");
                 citycount = citys.length;
             }
-
             if ((procount + citycount) > 5) {
                 throw new BusinessException(MsgCodeConstant.RESUME_JOB_COUNT_LIMIT,
                         MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.RESUME_JOB_COUNT_LIMIT)));
@@ -166,6 +195,7 @@ public class ResumeController {
     /**
      * 上传简历附件
      */
+    @LoginAccess
     @ApiOperation(value = "上传简历附件", notes = "上传简历附件", response = Response.class)
     @RequestMapping(value = "upload_resume", method = RequestMethod.POST)
     public Response uploadResume(@RequestParam(value = "file", required = false) MultipartFile file) throws IOException {

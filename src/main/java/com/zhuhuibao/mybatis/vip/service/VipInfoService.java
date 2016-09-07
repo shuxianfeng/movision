@@ -1,29 +1,43 @@
 package com.zhuhuibao.mybatis.vip.service;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.VipConstant;
 import com.zhuhuibao.common.constant.VipConstant.VipLevel;
 import com.zhuhuibao.common.constant.VipConstant.VipPrivilegeType;
+import com.zhuhuibao.common.constant.ZhbConstant;
+import com.zhuhuibao.common.constant.ZhbConstant.ZhbAccountStatus;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege;
 import com.zhuhuibao.mybatis.vip.entity.VipPrivilege;
+import com.zhuhuibao.mybatis.vip.entity.VipRecord;
 import com.zhuhuibao.mybatis.vip.mapper.VipInfoMapper;
+import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
+import com.zhuhuibao.mybatis.zhb.mapper.ZhbMapper;
 import com.zhuhuibao.utils.MapUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
@@ -36,10 +50,189 @@ import com.zhuhuibao.utils.pagination.model.Paging;
 @Service
 @Transactional
 public class VipInfoService {
-
+	private Logger log = LoggerFactory.getLogger(VipInfoService.class);
 	@Autowired
 	private VipInfoMapper vipInfoMapper;
+	@Autowired
+	private ZhbMapper zhbMapper;
+	@Autowired
+	private MemberService memberSV;
+	
+	/**
+	 * 开通尊贵会员
+	 * @param contract_id
+	 * @param member_account
+	 * @param vip_level
+	 * @param active_time
+	 * @param validity
+	 * @return
+	 * @throws Exception
+	 */
+	public int addVipService(String contract_id, String member_account, int vip_level, 
+			String active_time, int validity) throws Exception{
+		int result = 0;
+		try{
+			//校验该合同是否已经存在
+			if(isNotExistsVipRecord(contract_id)){
+				//VIP级别对应赠送筑慧币数量
+				BigDecimal amount = new BigDecimal(VipConstant.VIP_LEVEL_ZHB.get(String.valueOf(vip_level)));
+				//获取memberID
+				Member member = new Member();
+				if (member_account.contains("@")) {
+		            member.setEmail(member_account);
+		        } else {
+		            member.setMobile(member_account);
+		        }
+				Member mem = memberSV.findMember(member);
+				String member_id_Str = mem.getId();
+				if(StringUtils.isEmpty(member_id_Str)){
+					throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist, "该盟友账号不存在");
+				}
+				Long member_id = Long.valueOf(mem.getId());
+				//获取管理员账号
+				Long createid = ShiroUtil.getOmsCreateID();
+				if(createid == null) {
+					throw new BusinessException(MsgCodeConstant.member_mcode_account_status_exception, "获取当前登录管理员失败");
+				}
+				// 订单中amount大于0
+				// 筑慧币充值
+				if (amount.compareTo(BigDecimal.ZERO) > 0 ) {
+					// 进行筑慧币充值
+					int prepaidResult = execPay(contract_id, member_id, createid, amount,vip_level, active_time, validity);
+					if (0 == prepaidResult) {
+						throw new BusinessException(MsgCodeConstant.ZHB_AUTOPAYFOR_FAILED, "充值失败");
+					}
+				}
+				// VIP升级
+				VipMemberInfo vipMemberInfo = findVipMemberInfoById(member_id);
+				if (null == vipMemberInfo) {
+					insertVipMemberInfo(member_id, vip_level, 1);
+					
+				} else if (vipMemberInfo.getVipLevel() <= vip_level) {
+					Calendar cal = Calendar.getInstance();
+					//若原本是收费会员，则需要在原过期时间上增加1年
+					if (ArrayUtils.contains(VipConstant.CHARGE_VIP_LEVEL, String.valueOf(vipMemberInfo.getVipLevel()))) {
+						cal.setTime(vipMemberInfo.getExpireTime());
+					}
+					cal.add(Calendar.YEAR, 1);
+					cal.set(Calendar.HOUR_OF_DAY, 0);
+					cal.set(Calendar.MINUTE, 0);
+					cal.set(Calendar.SECOND, 0);
+					cal.add(Calendar.DATE, 1);
+					vipMemberInfo.setExpireTime(cal.getTime());
+					vipMemberInfo.setVipLevel(vip_level);
+					updateVipMemberInfo(vipMemberInfo);
+				}
+			}else{
+				throw new BusinessException(MsgCodeConstant.EXIST_CONTRACTNO_WARN, "该合同编号已经操作过");
+			}
+				
+		}catch(Exception e){
+			log.error("ZhbService::addVipService::contract_id=" + contract_id + ",member_account=" + member_account + ",vip_level="
+					+vip_level+",active_time="+active_time+",validity="+validity, e);
+			throw e;
+		}
+		
+		return result;
+	}
+	
+	private int execPay(String contractId, Long buyerId, Long operaterId, BigDecimal amount,int vipLevel,
+			 String activeTime, int validity) throws Exception {
+		int result = 0;
+		ZhbAccount zhbAccount = zhbMapper.selectZhbAccount(buyerId);
+		if (null != zhbAccount && !ZhbConstant.ZhbAccountStatus.ACTIVE.toString().equals(zhbAccount.getStatus())) {
+			return result;
+		}
+		// 增加vip操作记录
+		insertVipRecord(contractId,buyerId, operaterId, amount,vipLevel, activeTime, validity);
 
+		// 增加充值金额
+		if (null != zhbAccount) {
+			// 将充值金额更新到账户
+			zhbAccount.setAmount(zhbAccount.getAmount().add(amount));
+			result = zhbMapper.updateZhbAccountEmoney(zhbAccount);
+
+			if (1 != result) {
+				throw new BusinessException(MsgCodeConstant.ZHB_PERPAID_FAILED, "充值失败");
+			}
+		} else {
+			// 初次充值账户为空，将充值金额添加到账户
+			insertZhbAccount(buyerId, amount);
+			result = 1;
+		}
+
+		return result >= 1 ? 1 : 0;
+	}
+	/**
+	 * 
+	 * @param contractId
+	 * @param buyerId
+	 * @param operaterId
+	 * @param amount
+	 * @param activeTime
+	 * @param validity
+	 * @throws ParseException
+	 */
+	private void insertVipRecord(String contractId, Long buyerId, Long operaterId, BigDecimal amount, 
+			int vipLevel, String activeTime, int validity) throws ParseException {
+		VipRecord vipRecord = new VipRecord();
+		vipRecord.setContractNo(contractId);
+		vipRecord.setBuyerId(buyerId);
+		vipRecord.setOperaterId(operaterId);
+		vipRecord.setAmount(amount);
+		vipRecord.setStatus("1");
+		vipRecord.setVipLevel(vipLevel);
+		//activeDate
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date activeDate=sdf.parse(activeTime);
+		//expireDate
+		Calendar   calendar   =   new   GregorianCalendar(); 
+	    calendar.setTime(activeDate); 
+	    calendar.add(calendar.YEAR, validity);//把日期往后增加一年.整数往后推,负数往前移动 
+	    Date expireDate=calendar.getTime(); 
+		
+		vipRecord.setActiveTime(activeDate);
+		vipRecord.setExpireTime(expireDate);
+		
+		Calendar cal = Calendar.getInstance();
+		vipRecord.setAddTime(cal.getTime());
+		vipRecord.setUpdateTime(cal.getTime());
+		
+		vipInfoMapper.insertVipRecord(vipRecord);
+	}
+	
+	/**
+	 * 添加筑慧币账号
+	 * 
+	 * @param memberId
+	 * @param amount
+	 */
+	private void insertZhbAccount(Long memberId, BigDecimal amount) {
+		ZhbAccount zhbAccount = new ZhbAccount();
+		zhbAccount.setMemberId(memberId);
+		zhbAccount.setStatus(ZhbAccountStatus.ACTIVE.toString());
+		zhbAccount.setAmount(amount);
+		Calendar cal = Calendar.getInstance();
+		zhbAccount.setAddTime(cal.getTime());
+		zhbAccount.setUpdateTime(cal.getTime());
+
+		zhbMapper.insertZhbAccount(zhbAccount);
+	}
+	
+	private boolean isNotExistsVipRecord(String contractNo) {
+		return null == getVipRecordByContractNo(contractNo);
+	}
+	
+	private VipRecord getVipRecordByContractNo(String contractNo) {
+
+		if (StringUtils.isNotBlank(contractNo) && !"0".equals(contractNo)) {
+			return vipInfoMapper.selectVipRecordByContractNo(contractNo);
+		}
+
+		return null;
+	}
+
+	
 	/**
 	 * 根据ID获取会员VIP信息
 	 * 

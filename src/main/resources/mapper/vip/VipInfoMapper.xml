@@ -212,5 +212,37 @@
     <select id="findVipInfoByID" resultType="java.util.Map">
        select * from t_vip_privilege v where v.vip_level = (select value from t_dictionary_zhbgoods  where id = #{goodsId})
     </select>
-
+    
+    <select id="selectVipRecordByContractNo" resultType="com.zhuhuibao.mybatis.vip.entity.VipRecord">
+    	select * from t_vip_member_record where contract_id = #{contractNo}	
+    </select>
+	
+	<insert id="insertVipRecord" parameterType="com.zhuhuibao.mybatis.vip.entity.VipRecord">
+	INSERT INTO t_vip_member_record
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+		  contract_id,
+		  buyer_id,
+		  operater_id,
+		  amount,
+		  status,
+		  vip_level,
+		  active_time,
+		  expire_time,
+		  add_time,
+		  update_time,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+		  #{contractNo,jdbcType=VARCHAR},
+		  #{buyerId,jdbcType=BIGINT},
+		  #{operaterId,jdbcType=BIGINT},
+		  #{amount,jdbcType=DECIMAL},
+		  #{status,jdbcType=VARCHAR},
+		  #{vipLevel,jdbcType=INTEGER},
+		  #{activeTime,jdbcType=TIMESTAMP},
+		  #{expireTime,jdbcType=TIMESTAMP},
+		  now(),
+		  now(),
+ 	</trim>
+	</insert>
+	
 </mapper>

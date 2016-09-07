@@ -60,7 +60,7 @@
     #{hopeSalary}, #{curSalary},#{status}, #{realName}, #{userName},#{sex}, #{workYear}, #{education},
     #{experienceYear}, #{company}, #{positionName}, #{birthYear}, #{marriage}, #{mobile},
     #{email}, #{liveProvince}, #{liveCity}, #{liveArea}, #{photo}, #{jobExperience},
-    #{projectExperience}, #{eduExperience}, #{isPublic},1
+    #{projectExperience}, #{eduExperience}, #{attach},1
     )
   </insert>
 
@@ -162,9 +162,16 @@
       <if test="eduExperience != null and eduExperience !=''" >
         eduExperience = #{eduExperience},
       </if>
-      <if test="attach != null and attach !=''" >
+      
+      
+      
+      	<if test="attach != null and attach !=''" >
         attach = #{attach},
-      </if>
+        </if>
+        <if test="attach == null or attach == ''">
+		attach = "",
+		</if>    
+		  
       <if test="isPublic != null and isPublic !=''" >
         isPublic = #{isPublic},
       </if>

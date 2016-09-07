@@ -87,8 +87,8 @@ public class ResumeService {
      *
      * @param resume
      */
-    private void checkResumeParams(Resume resume) {
         //简历名称
+    private void checkResumeParams(Resume resume) {
         if (StringUtils.isEmpty(resume.getTitle())) {
             throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "简历名称不能为空");
         }

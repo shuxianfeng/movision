@@ -81,9 +81,10 @@ public class MapUtil {
 	 */
 	public static Map convert2HashMap(Object... args) {
 		Map<Object, Object> result = new HashMap<>();
-
+		
 		int argsNum = args.length;
 		if (argsNum % 2 == 0) {
+			//key的数量
 			int count = argsNum / 2;
 			int idx = 0;
 			while (count > 0) {
