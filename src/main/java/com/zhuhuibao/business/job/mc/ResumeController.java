@@ -70,31 +70,6 @@ public class ResumeController {
     @Autowired
     MemberService memberService;
     
-    
-   /* @LoginAccess
-    @ApiOperation(value = "上传附件(简历编辑页面)", notes = "上传附件(简历编辑页面)", response = Response.class)
-    @RequestMapping(value = "upload_resume_attach", method = RequestMethod.POST)
-    public Response uploadResumeAttach(@RequestParam(value = "file", required = false) MultipartFile file) {
-        Map<String, Object> map = new HashMap<>();
-        try {
-            String url = zhbOssClient.uploadObject(file, "doc", "resume");
-            map.put(Constants.name, url);
-            if (url.lastIndexOf(".") != -1) {
-                map.put(ResumeConstants.FILE_FORMAT, url.substring(url.lastIndexOf(".")));
-            } else {
-                map.put(ResumeConstants.FILE_FORMAT, "");
-            }
-            map.put(ResumeConstants.FILE_SIZE, file.getSize());
-
-        } catch (Exception e) {
-            log.error("上传附件失败>>>", e);
-            throw e;
-        }
-
-        return new Response(map);
-    }*/
-    
-
     /**
      * 发布简历
      */
