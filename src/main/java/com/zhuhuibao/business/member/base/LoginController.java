@@ -78,7 +78,8 @@ public class LoginController {
             response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_usernameorpwd_error)));
             response.setMsgCode(MsgCodeConstant.member_mcode_usernameorpwd_error);
         }
-
+        //更新登陆时间
+        memberService.updateLoginTime(member.getAccount());
         if (currentUser.isAuthenticated()) {
             Session session = currentUser.getSession();
             session.setAttribute("member", currentUser.getPrincipal());

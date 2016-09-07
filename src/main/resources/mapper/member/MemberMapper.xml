@@ -575,7 +575,7 @@
         CASE WHEN m.identify = 2 THEN '个人会员' WHEN m.identify != 2 then '企业会员' END AS memberType,
         CASE WHEN m.workType = 100 then '管理员' when m.workType!=100 then w.name end as worktype,
         (select group_concat(name) from t_dictionary_identity where find_in_set(id,m.identify))as identify,
-        m.status
+        m.status,date_format(m.loginTime,'%Y-%m-%d %H:%i:%s') loginTime
         from t_m_member m
         left join t_dictionary_workType w on m.workType = w.id
         WHERE 1=1

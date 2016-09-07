@@ -19,12 +19,31 @@
   </select>
   <!-- @author:gmli@since 2016.6.14 查询平台待处理的数据 -->
    <select id="findAllPlatformWaitStat" resultType="java.util.Map" parameterType="java.util.Map" >
-      select (select count(1) from t_c_exhibition w where w.status=0) exCount,
-		(select count(1) from t_certificate_record  w where w.status=0) crCount,
-		(select count(1) from t_e_expertSupport  w where w.status=0)  esCount,
-		(select count(1) from t_p_brand  w where w.status=2) pbCount,
-		(select count(1) from t_sys_complain_suggest  w where w.status=1) csCount,
-		(select count(1) from t_oms_channel_news  w where w.status=0) cnCount
+      select ( select count(1) FROM t_m_member_info_check ic where  ic.status =5) dataCheckCount, 
+			( select count(1) FROM    t_m_member_info_check ic
+		        LEFT JOIN t_dictionary_workType w ON ic.workType = w.id
+		        LEFT JOIN t_m_member_real_check rc ON ic.id = rc.id
+		       WHERE  rc.status =9
+		     ) realCount,
+		   (select count(1) from t_certificate_record w where w.status=0) certificateCount,
+		   (select count(1) from t_m_success_case w where w.status=0) successCaseCount,
+		   (select count(1) from t_p_brand_check w where w.status=2) pbCount,
+		   (select count(1) from t_p_product w where w.status=3) productCount,
+		   (select count(1) from t_m_shop_check w where w.status=1) shopCount,
+		   (select count(1) from t_oms_channel_news  w where w.status=0 and w.channelid !=11) newsCount,
+		   (select count(1) from t_sys_suggest  w where w.status=0) suggestCount,
+		   (select count(1) from t_c_cooperation  w where w.status=0) cooperationCount,
+		   (select count(1) from t_e_expert w where w.status=0) expertCount, 
+		   (select count(1) from t_tech_cooperation w where w.status=0 and w.type=1) techSucCount, 
+		   (select count(1) from t_e_dynamic w where w.status=0 ) dynamicCount,
+		   (select count(1) from t_e_expertSupport w where w.status=0)  expertSupportCount,
+		   (select count(1) from t_p_group_publishCourse w where w.status=3)  publishCourseCount,
+		   (select count(1) from t_tech_data w where w.status=1)  techDataCount,
+		   (select count(1) from t_tech_cooperation  w where w.status=0) techcooperationCount, 
+		   (select count(1) from t_oms_channel_news  w where w.status=0 and w.channelid=11 ) broadCastCount,
+		   (select count(1) from t_tech_expert_applyCourse  w where w.status=3)  expertApplyCourseCount,
+		   (select count(1) from t_c_exhibition  w where w.status=0)  exhibitionCourseCount,
+		   (select count(1) from t_c_distributedOrder  w where w.status=0) distributedOrderCount
 		 from dual
   </select>
   

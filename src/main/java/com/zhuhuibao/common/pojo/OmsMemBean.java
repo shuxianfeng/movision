@@ -38,6 +38,8 @@ public class OmsMemBean {
     private String certificate_number;
     
     private String time;
+    
+    private String loginTime;
 
     public String getId() {
         return id;
@@ -173,6 +175,14 @@ public class OmsMemBean {
 
 	public void setTime(String time) {
 		this.time = time;
+	}
+
+	public String getLoginTime() {
+		return loginTime;
+	}
+
+	public void setLoginTime(String loginTime) {
+		this.loginTime = loginTime;
 	}
     
     

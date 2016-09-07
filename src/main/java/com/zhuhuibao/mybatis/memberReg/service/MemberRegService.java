@@ -604,4 +604,19 @@ public class MemberRegService {
 		}
 		return count;
 	}
+    /**
+     * 更新邓丽时间
+     * @param account
+     * @return
+     */
+	public int updateLoginTime(String account) {
+		int result = 0;
+		try {
+			result = memberRegMapper.updateLoginTime(account);
+		} catch (Exception e) {
+			log.error("update updateLoginTime status", e);
+		}
+		return result;
+		
+	}
 }

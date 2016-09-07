@@ -54,6 +54,15 @@
         </set>
         where email = #{email}
     </update>
+    
+    
+    <update id="updateLoginTime" parameterType="java.lang.String">
+        update t_m_member set loginTime=now()
+       
+        where mobile =#{account} or mobile=#{account}
+    </update>
+    
+    
 
     <update id="updateMemberStatus" parameterType="com.zhuhuibao.mybatis.memberReg.entity.Member">
         update t_m_member

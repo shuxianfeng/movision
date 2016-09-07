@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.memberReg.mapper;
 
 import com.zhuhuibao.mybatis.memberReg.entity.LoginMember;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
+
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -37,4 +38,6 @@ public interface MemberRegMapper {
 	LoginMember getLoginMemberByAccount(Member member);
 
 	int findCountByAccount(@Param("account") String account);
+    //更新登陆时间
+	int updateLoginTime(String account);
 }
