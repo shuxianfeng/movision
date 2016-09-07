@@ -66,6 +66,7 @@ public class VipController {
 			result = vipInfoService.addVipService(contractNo, member_account, vip_level, active_time, validity);
 		} catch (Exception e) {
 			log.error("执行异常>>>",e);
+			response.setMessage(e.getMessage());
 		}
 		response.setData(result);
 		response.setCode(1 == result ? 200 : 400);

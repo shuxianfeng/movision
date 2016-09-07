@@ -84,6 +84,9 @@ public class VipInfoService {
 		            member.setMobile(member_account);
 		        }
 				Member mem = memberSV.findMember(member);
+				if(mem == null){
+					throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist, "该盟友账号不存在");
+				}
 				String member_id_Str = mem.getId();
 				if(StringUtils.isEmpty(member_id_Str)){
 					throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist, "该盟友账号不存在");
@@ -106,7 +109,7 @@ public class VipInfoService {
 				// VIP升级
 				VipMemberInfo vipMemberInfo = findVipMemberInfoById(member_id);
 				if (null == vipMemberInfo) {
-					insertVipMemberInfo(member_id, vip_level, 1);
+					result = insertVipMemberInfo(member_id, vip_level, 1);
 					
 				} else if (vipMemberInfo.getVipLevel() <= vip_level) {
 					Calendar cal = Calendar.getInstance();
@@ -121,7 +124,7 @@ public class VipInfoService {
 					cal.add(Calendar.DATE, 1);
 					vipMemberInfo.setExpireTime(cal.getTime());
 					vipMemberInfo.setVipLevel(vip_level);
-					updateVipMemberInfo(vipMemberInfo);
+					result = updateVipMemberInfo(vipMemberInfo);
 				}
 			}else{
 				throw new BusinessException(MsgCodeConstant.EXIST_CONTRACTNO_WARN, "该合同编号已经操作过");
@@ -403,7 +406,7 @@ public class VipInfoService {
 	 * @param activeYears
 	 *            生效年份
 	 */
-	public VipMemberInfo insertVipMemberInfo(Long memberId, int vipLevel, int activeYears) {
+	public int insertVipMemberInfo(Long memberId, int vipLevel, int activeYears) {
 		VipMemberInfo vipMemberInfo = new VipMemberInfo();
 		vipMemberInfo.setMemberId(memberId);
 		vipMemberInfo.setVipLevel(vipLevel);
@@ -417,9 +420,12 @@ public class VipInfoService {
 		cal.add(Calendar.YEAR, activeYears);
 		cal.add(Calendar.DATE, 1);
 		vipMemberInfo.setExpireTime(cal.getTime());
-		vipInfoMapper.insertVipMemberInfo(vipMemberInfo);
-
-		return vipMemberInfo;
+		try{
+			vipInfoMapper.insertVipMemberInfo(vipMemberInfo);
+		}catch(Exception e){
+			return 0;
+		}
+		return 1;
 	}
 
 	/**
@@ -427,8 +433,8 @@ public class VipInfoService {
 	 * 
 	 * @param vipMemberInfo
 	 */
-	public void updateVipMemberInfo(VipMemberInfo vipMemberInfo) {
-		vipInfoMapper.updateVipMemberInfo(vipMemberInfo);
+	public int updateVipMemberInfo(VipMemberInfo vipMemberInfo) {
+		return vipInfoMapper.updateVipMemberInfo(vipMemberInfo);
 	}
 
 	/**
