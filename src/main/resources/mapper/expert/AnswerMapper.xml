@@ -17,14 +17,14 @@
     a.id,a.content,date_format(a.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,e.photoUrl,
     e.name as memberName
     from t_e_answer a
-    LEFT JOIN t_e_expert e on e.createid = a.createid
+    LEFT JOIN t_e_expert e on e.createid = a.createid  and e.`status`=1
     where a.questionId = #{id} and a.status = 0
   </select>
   <select id="findAllExpertAnswerListOms" resultType="java.util.Map" >
     select q.content as question,date_format(a.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,a.content as answer,e.name,a.id as answerId,a.status
     from t_e_answer a
     left join t_e_question q on a.questionId = q.id
-    left join t_e_expert e on e.createId = a.createid
+    left join t_e_expert e on e.createId = a.createid    and e.status=1
     order by a.publishTime desc
   </select>
   <insert id="answerQuestion" parameterType="com.zhuhuibao.mybatis.expert.entity.Answer" >
