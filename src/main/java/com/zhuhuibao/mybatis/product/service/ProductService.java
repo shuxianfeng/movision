@@ -673,23 +673,6 @@ public class ProductService {
         }
     }
 
-    /**
-     * @param brandId
-     * @return
-     */
-    public List<String> findScateIdByBrandId(String brandId) {
-        List<String> list;
-        try {
-            list = productMapper.findScateByBrandId(brandId);
-        } catch (Exception e) {
-            log.error("查询失败:{}", e);
-            e.printStackTrace();
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
-        }
-        return list;
-    }
-
-
     public Product findById(Long id) {
         try {
             return productMapper.selectByPrimaryKey(id);

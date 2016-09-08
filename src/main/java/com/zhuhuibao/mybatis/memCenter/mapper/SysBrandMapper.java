@@ -21,4 +21,6 @@ public interface SysBrandMapper {
     int updateByPrimaryKey(SysBrand record);
 
     List<Map<String,Object>> queryBrandSysById(String id);
+    
+    List<String> queryScateByBrandId(Integer brandid);
 }
