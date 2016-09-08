@@ -9,6 +9,7 @@ import org.apache.ibatis.session.RowBounds;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege;
 import com.zhuhuibao.mybatis.vip.entity.VipPrivilege;
+import com.zhuhuibao.mybatis.vip.entity.VipRecord;
 
 /**
  * 
@@ -88,4 +89,16 @@ public interface VipInfoMapper {
 	List<Map<String, String>> findAllVipInfoList(RowBounds rowBounds, Map<String, String> param);
 
 	List<Map<String,String>> findVipInfoByID(@Param("goodsId") Long goodsId);
+	
+	/**
+	 * 根据合同号获取vip流水记录
+	 * @param contractNo
+	 * @return
+	 */
+	VipRecord selectVipRecordByContractNo(String contractNo);
+	/**
+	 * 添加vip流水
+	 * @param vipRecord
+	 */
+	void insertVipRecord(VipRecord vipRecord);
 }

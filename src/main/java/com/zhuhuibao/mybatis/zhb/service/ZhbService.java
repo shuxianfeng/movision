@@ -156,7 +156,7 @@ public class ZhbService {
 	private boolean isAdminLogin() {
 		return ShiroUtil.getCompanyID().compareTo(ShiroUtil.getCreateID()) == 0;
 	}
-
+	
 	/**
 	 * 购买VIP服务
 	 * 
@@ -171,8 +171,8 @@ public class ZhbService {
 			// 订单和订单物品不为空
 			// 订单类型为3：VIP套餐
 			// 订单状态为已支付
-			// 订单购买人为当前操作账号的管理员账号
-			// 操作人为管理员
+			// 订单购买人为当前操作账号的管理员账号 （）
+			// 操作人为管理员 (*)
 			// 不存在该订单号对应的筑慧币流水记录 && isAdminLogin()
 			if (null != order && null != orderGoods && isRightOrder(order, "3") && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
 				DictionaryZhbgoods vipgoods = getZhbGoodsById(String.valueOf(orderGoods.getGoodsId()));
@@ -181,7 +181,7 @@ public class ZhbService {
 
 				// 订单中amount大于0
 				// 筑慧币充值
-				if (amount.compareTo(BigDecimal.ZERO) > 0 && isNotExistsZhbRecord(orderNo, ZhbRecordType.PREPAID)) {
+				if (amount.compareTo(BigDecimal.ZERO) > 0 ) {
 					// 进行筑慧币充值
 					int prepaidResult = execPrepaid(order.getOrderNo(), order.getBuyerId(), order.getBuyerId(), amount, vipgoods.getPinyin(), vipgoods.getId());
 					if (0 == prepaidResult) {
@@ -216,7 +216,10 @@ public class ZhbService {
 
 		return result;
 	}
-
+	
+	
+	
+	
 	/**
 	 * 查询筑慧币余额
 	 * 

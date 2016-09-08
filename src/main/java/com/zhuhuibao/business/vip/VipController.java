@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,9 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.business.zhb.ZhbController;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.VipConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.mybatis.vip.entity.VipPrivilege;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
@@ -34,12 +38,41 @@ import com.zhuhuibao.utils.pagination.model.Paging;
 @RestController
 @RequestMapping("/rest/vip")
 public class VipController {
-
+	
+	private static final Logger log = LoggerFactory.getLogger(VipController.class);
+	
 	@Autowired
 	private ZhbService zhbService;
 
 	@Autowired
 	private VipInfoService vipInfoService;
+	
+	
+	
+	@ApiOperation(value = "添加尊贵盟友", notes = "添加尊贵盟友 ", response = Response.class)
+	@RequestMapping(value = "mc/add_vip", method = RequestMethod.POST)
+	public Response addVipService(
+			@ApiParam(value = "合同编号") @RequestParam(required = true) String contractNo,
+			@ApiParam(value = "尊贵盟友账号") @RequestParam(required = true) String member_account,
+			@ApiParam(value = "套餐类型") @RequestParam(required = true) int vip_level,
+			@ApiParam(value = "生效时间") @RequestParam(required = true) String active_time,
+			@ApiParam(value = "套餐有效期") @RequestParam(required = true) int validity
+			)
+			throws Exception {
+		Response response = new Response();
+		// 开通VIP服务
+		int result = 0;
+		try {
+			result = vipInfoService.addVipService(contractNo, member_account, vip_level, active_time, validity);
+		} catch (Exception e) {
+			log.error("执行异常>>>",e);
+			response.setMessage(e.getMessage());
+		}
+		response.setData(result);
+		response.setCode(1 == result ? 200 : 400);
+
+		return response;
+	}
 
 	@ApiOperation(value = "VIP介绍页面", notes = "VIP介绍页面", response = Response.class)
 	@RequestMapping(value = "site/sel_vippack", method = RequestMethod.GET)

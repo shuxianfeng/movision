@@ -222,5 +222,9 @@ public interface MsgCodeConstant {
 	 * 审核实名认证需先审核基本资料
 	 */
 	int SMRZSH_ERROR = 5001;
-
+	
+	/**
+	 * 该合同编号已存在
+	 */
+	int EXIST_CONTRACTNO_WARN = 12345;
 }
