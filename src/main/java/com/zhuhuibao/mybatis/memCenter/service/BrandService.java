@@ -263,7 +263,8 @@ public class BrandService {
 	public List<String> findScateIdByBrandId(String brandId) {
 		List<String> list = new ArrayList<String>();
 		try {
-			if (org.apache.commons.lang.StringUtils.isNumeric(brandId)) {
+			if (org.apache.commons.lang.StringUtils.isNotBlank(brandId)
+					&& org.apache.commons.lang.StringUtils.isNumeric(brandId)) {
 				list = sysBrandMapper.queryScateByBrandId(Integer.parseInt(brandId));
 			}
 		} catch (Exception e) {
