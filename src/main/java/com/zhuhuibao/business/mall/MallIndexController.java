@@ -53,6 +53,9 @@ public class MallIndexController {
 
     @Autowired
     ProductService productService;
+    
+    @Autowired
+    BrandService brandService;
 
     @ApiOperation(value = "首页广告区域信息展示", notes = "首页广告区域信息展示")
     @RequestMapping(value = "indexfloor", method = RequestMethod.GET)
@@ -110,7 +113,7 @@ public class MallIndexController {
                     brandMap.put("title", advertising.getTitle());
                     brandMap.put("id", advertising.getConnectedId());
                     //根据品牌查询子系统ID    scateid
-                    List<String> scateIds = productService.findScateIdByBrandId(advertising.getConnectedId());
+                    List<String> scateIds = brandService.findScateIdByBrandId(advertising.getConnectedId());
                     if(scateIds.size() > 0){
                         brandMap.put("scateid", StringUtils.isEmpty(scateIds.get(0)) ? "" : scateIds.get(0));
                     }else{
@@ -168,7 +171,7 @@ public class MallIndexController {
                     brandMap.put("title", advertising.getTitle());
                     brandMap.put("id", advertising.getConnectedId());
                     //根据品牌查询子系统ID    scateid
-                    List<String> scateIds = productService.findScateIdByBrandId(advertising.getConnectedId());
+                    List<String> scateIds = brandService.findScateIdByBrandId(advertising.getConnectedId());
                     if(scateIds.size() > 0){
                         brandMap.put("scateid", StringUtils.isEmpty(scateIds.get(0)) ? "" : scateIds.get(0));
                     }else{

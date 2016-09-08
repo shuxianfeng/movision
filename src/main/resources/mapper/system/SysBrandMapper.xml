@@ -91,4 +91,8 @@
     left join t_p_category c on bs.scateid = c.id
     where bs.brandid = #{id}
   </select>
+  
+  <select id="queryScateByBrandId" resultType="java.lang.String" parameterType="java.lang.Integer">
+  	SELECT scateid FROM t_p_brand_sys  WHERE brandid = #{brandid,jdbcType=BIGINT}
+  </select>
 </mapper>
