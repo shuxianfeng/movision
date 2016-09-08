@@ -234,4 +234,10 @@ public interface MsgCodeConstant {
 	 * 日期转换异常
 	 */
 	int DATE_CONVERT_WARN = 3100; 
+	
+	/**
+	 * 不支持会员降级处理
+	 */
+	int DEGRADE_VIP_WARN = 3200;
+	
 }

@@ -131,34 +131,55 @@ public class VipInfoService {
 		if (null == vipMemberInfo) {
 			//新增一个会员信息
 			result = insertVipMemberInfo(member_id, vip_level, 1, active_time);
-			insertVipRecord(contract_id, member_id, createid, amount, vip_level, active_time, validity);
+			
+			Calendar cal = convertTime(active_time);
+			
+			insertVipRecord(contract_id, member_id, createid, amount, vip_level, active_time, validity, null, cal.getTime());
 			
 		} else if (vipMemberInfo.getVipLevel() <= vip_level) {
 			/**
 			 * 处理失效时间
+			 * 激活时间就是老的激活时间
 			 */
 			Calendar cal = Calendar.getInstance();
-			//若原本是收费会员，则需要在原过期时间上增加1年
-			//若原本不是收费会员，则截止日期变为明年的今天
+			//默认有效时间是老会员套餐的有效时间
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date oldActiveDateStr = vipMemberInfo.getActiveTime();
+			String oldActiveTime = sdf.format(oldActiveDateStr);	//老会员套餐的激活时间
+			
 			if (ArrayUtils.contains(VipConstant.CHARGE_VIP_LEVEL, String.valueOf(vipMemberInfo.getVipLevel()))) {
-				cal.setTime(vipMemberInfo.getExpireTime());
+				//若原本是收费会员，则需要在原过期时间上增加1年
+				//若原本不是收费会员，则截止日期变为明年的今天
+				//{"30","60","130","160"}
+				Date oldExpireTime = vipMemberInfo.getExpireTime();
+				cal.setTime(oldExpireTime);
 			}
 			cal.add(Calendar.YEAR, 1);
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.SECOND, 0);
 			cal.add(Calendar.DATE, 1);
+			
 			vipMemberInfo.setExpireTime(cal.getTime());
 			//处理会员等级
 			vipMemberInfo.setVipLevel(vip_level);
 			
 			result = updateVipMemberInfo(vipMemberInfo);
 			//增加vip操作记录
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			insertVipRecord(contract_id, member_id, createid, amount, vip_level, sdf.format(vipMemberInfo.getExpireTime()), validity);
+			insertVipRecord(contract_id, member_id, createid, amount, vip_level, null, validity, oldActiveTime, cal.getTime());
 			
-		} 
+		} else{
+			result = 0;
+			throw new BusinessException(MsgCodeConstant.DEGRADE_VIP_WARN, "暂不支持会员降级处理");
+		}
 		return result;
+	}
+	private Calendar convertTime(String active_time) throws ParseException {
+		Calendar cal = new GregorianCalendar();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		cal.setTime(sdf.parse(active_time));
+		cal.add(Calendar.YEAR, 1);
+		return cal;
 	}
 	
 	private Long getMemberId(String member_account) {
@@ -187,7 +208,7 @@ public class VipInfoService {
 	 * @throws ParseException
 	 */
 	private void insertVipRecord(String contractId, Long buyerId, Long operaterId, BigDecimal amount, 
-			int vipLevel, String activeTime, int validity) throws ParseException {
+			int vipLevel, String activeTime, int validity, String oldActiveTime, Date expireTime) throws ParseException {
 		VipRecord vipRecord = new VipRecord();
 		vipRecord.setContractNo(contractId);
 		vipRecord.setBuyerId(buyerId);
@@ -195,17 +216,12 @@ public class VipInfoService {
 		vipRecord.setAmount(amount);
 		vipRecord.setStatus("1");
 		vipRecord.setVipLevel(vipLevel);
-		//activeDate
+		
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date activeDate=sdf.parse(activeTime);
-		//expireDate
-		Calendar   calendar   =   new   GregorianCalendar(); 
-	    calendar.setTime(activeDate); 
-	    calendar.add(calendar.YEAR, validity);//把日期往后增加一年.整数往后推,负数往前移动 
-	    Date expireDate=calendar.getTime(); 
+		Date activeDate = null == oldActiveTime ? sdf.parse(activeTime) : sdf.parse(oldActiveTime);
 		
 		vipRecord.setActiveTime(activeDate);
-		vipRecord.setExpireTime(expireDate);
+		vipRecord.setExpireTime(expireTime);
 		
 		Calendar cal = Calendar.getInstance();
 		vipRecord.setAddTime(cal.getTime());
@@ -417,7 +433,6 @@ public class VipInfoService {
 	 *            生效年份
 	 * @throws ParseException 
 	 */
-	@SuppressWarnings("deprecation")
 	public int insertVipMemberInfo(Long memberId, int vipLevel, int activeYears, String activeTime) {
 		VipMemberInfo vipMemberInfo = new VipMemberInfo();
 		vipMemberInfo.setMemberId(memberId);
@@ -428,23 +443,29 @@ public class VipInfoService {
 		if(null == activeTime || StringUtils.isEmpty(activeTime)){
 			//前台没有传生效时间的情况，使用当前时间
 			vipMemberInfo.setActiveTime(cal.getTime());
+			//处理失效时间
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.add(Calendar.YEAR, activeYears);
+			cal.add(Calendar.DATE, 1);
+			vipMemberInfo.setExpireTime(cal.getTime());
 		}else{
 			//前台传生效时间
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			try {
-				vipMemberInfo.setActiveTime(sdf.parse(activeTime));
+				Date activeDate = sdf.parse(activeTime);
+				vipMemberInfo.setActiveTime(activeDate);
+				
+				cal.setTime(activeDate); 
+				cal.add(Calendar.YEAR, 1);
+				vipMemberInfo.setExpireTime(cal.getTime());
 			} catch (ParseException e) {
 				throw new BusinessException(MsgCodeConstant.DATE_CONVERT_WARN, "日期转换格式异常");
 			}
 			
 		}
-		//处理失效时间
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.add(Calendar.YEAR, activeYears);
-		cal.add(Calendar.DATE, 1);
-		vipMemberInfo.setExpireTime(cal.getTime());
+		
 		try{
 			vipInfoMapper.insertVipMemberInfo(vipMemberInfo);
 		}catch(Exception e){
