@@ -15,6 +15,7 @@ import com.zhuhuibao.mybatis.product.service.ProductService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -197,7 +198,7 @@ public class BrandService {
         try {
             list = brandMapper.queryRecommendBrand(map);
             for (Map<String, String> item : list) {
-                List<String> scateIds = productService.findScateIdByBrandId(item.get("id"));
+                List<String> scateIds = findScateIdByBrandId(item.get("id"));
                 if (scateIds.size() > 0) {
                     item.put("scateid", StringUtils.isEmpty(scateIds.get(0)) ? "" : scateIds.get(0));
                 } else {
@@ -256,5 +257,18 @@ public class BrandService {
             log.error("执行异常>>>", e);
             throw e;
         }
+    }
+    
+    
+    public List<String> findScateIdByBrandId(String brandId) {
+        List<String> list;
+        try {
+            list = sysBrandMapper.queryScateByBrandId(Integer.parseInt(brandId));
+        } catch (Exception e) {
+            log.error("查询失败:{}", e);
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
+        }
+        return list;
     }
 }
