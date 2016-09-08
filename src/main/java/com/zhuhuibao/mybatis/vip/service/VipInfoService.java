@@ -27,6 +27,7 @@ import com.zhuhuibao.common.constant.VipConstant.VipLevel;
 import com.zhuhuibao.common.constant.VipConstant.VipPrivilegeType;
 import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.common.constant.ZhbConstant.ZhbAccountStatus;
+import com.zhuhuibao.common.constant.ZhbConstant.ZhbRecordType;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
@@ -37,6 +38,7 @@ import com.zhuhuibao.mybatis.vip.entity.VipPrivilege;
 import com.zhuhuibao.mybatis.vip.entity.VipRecord;
 import com.zhuhuibao.mybatis.vip.mapper.VipInfoMapper;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
+import com.zhuhuibao.mybatis.zhb.entity.ZhbRecord;
 import com.zhuhuibao.mybatis.zhb.mapper.ZhbMapper;
 import com.zhuhuibao.utils.MapUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -110,6 +112,7 @@ public class VipInfoService {
 				VipMemberInfo vipMemberInfo = findVipMemberInfoById(member_id);
 				if (null == vipMemberInfo) {
 					result = insertVipMemberInfo(member_id, vip_level, 1);
+					insertVipRecord(contract_id, member_id, createid, amount, vip_level, active_time, validity);
 					
 				} else if (vipMemberInfo.getVipLevel() <= vip_level) {
 					Calendar cal = Calendar.getInstance();
@@ -124,6 +127,7 @@ public class VipInfoService {
 					cal.add(Calendar.DATE, 1);
 					vipMemberInfo.setExpireTime(cal.getTime());
 					vipMemberInfo.setVipLevel(vip_level);
+					insertVipRecord(contract_id, member_id, createid, amount, vip_level, active_time, validity);
 					result = updateVipMemberInfo(vipMemberInfo);
 				}
 			}else{
@@ -146,9 +150,8 @@ public class VipInfoService {
 		if (null != zhbAccount && !ZhbConstant.ZhbAccountStatus.ACTIVE.toString().equals(zhbAccount.getStatus())) {
 			return result;
 		}
-		// 增加vip操作记录
-		insertVipRecord(contractId,buyerId, operaterId, amount,vipLevel, activeTime, validity);
-
+		// 增加ZHB流水记录
+		insertZhbRecord(buyerId, operaterId, amount, ZhbRecordType.PREPAID.toString());
 		// 增加充值金额
 		if (null != zhbAccount) {
 			// 将充值金额更新到账户
@@ -165,6 +168,18 @@ public class VipInfoService {
 		}
 
 		return result >= 1 ? 1 : 0;
+	}
+	
+	private void insertZhbRecord(Long buyerId, Long operaterId, BigDecimal amount, String type) {
+		ZhbRecord zhbRecord = new ZhbRecord();
+		zhbRecord.setOrderNo("0");	//表示未走订单流程
+		zhbRecord.setBuyerId(buyerId);
+		zhbRecord.setOperaterId(operaterId);
+		zhbRecord.setAmount(amount);
+		zhbRecord.setStatus("1");	//支付成功
+		zhbRecord.setType(type);	//充值
+
+		zhbMapper.insertZhbRecord(zhbRecord);
 	}
 	/**
 	 * 
