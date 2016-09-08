@@ -552,9 +552,9 @@ public class MemberService {
             map.put(Constants.enterpriseCreaterTime, createTime);
             if("2".equals(member.getCurrency())&&!"".equals(member.getRegisterCapital()))
             {
-            map.put(Constants.registerCapital, member.getRegisterCapital()+"万美元");
+            map.put(Constants.registerCapital, member.getRegisterCapital()==null?"":member.getRegisterCapital()+"万美元");
             }else if("1".equals(member.getCurrency())&&!"".equals(member.getRegisterCapital())){
-            	map.put(Constants.registerCapital,member.getRegisterCapital()+"万人民币");
+            	map.put(Constants.registerCapital,member.getRegisterCapital()==null?"":member.getRegisterCapital()+"万人民币");
             }else{
             	map.put(Constants.registerCapital,"");
             }
