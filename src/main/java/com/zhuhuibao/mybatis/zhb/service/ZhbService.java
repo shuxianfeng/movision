@@ -191,7 +191,7 @@ public class ZhbService {
 				// VIP升级
 				VipMemberInfo vipMemberInfo = vipInfoService.findVipMemberInfoById(order.getBuyerId());
 				if (null == vipMemberInfo) {
-					vipInfoService.insertVipMemberInfo(order.getBuyerId(), buyVipLevel, 1);
+					vipInfoService.insertVipMemberInfo(order.getBuyerId(), buyVipLevel, 1, null);
 				} else if (vipMemberInfo.getVipLevel() <= buyVipLevel) {
 					Calendar cal = Calendar.getInstance();
 					//若原本是收费会员，则需要在原过期时间上增加1年

@@ -224,8 +224,14 @@ public interface MsgCodeConstant {
 	int SMRZSH_ERROR = 5001;
 	
 	/**
-	 * 数据存在警告 3000~3999
+	 * 数据存在警告 3000~3099
 	 * 该合同编号已存在
 	 */
 	int EXIST_CONTRACTNO_WARN = 3000;
+	
+	/**
+	 * 时间异常 3100~3199
+	 * 日期转换异常
+	 */
+	int DATE_CONVERT_WARN = 3100; 
 }
