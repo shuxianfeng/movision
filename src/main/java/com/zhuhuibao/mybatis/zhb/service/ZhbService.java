@@ -496,7 +496,7 @@ public class ZhbService {
 	 * @param goodsId
 	 * @param goodsType
 	 */
-	private void insertZhbRecord(String orderNo, Long buyerId, Long operaterId, BigDecimal amount, String type, Long goodsId, String goodsType) {
+	public void insertZhbRecord(String orderNo, Long buyerId, Long operaterId, BigDecimal amount, String type, Long goodsId, String goodsType) {
 		ZhbRecord zhbRecord = new ZhbRecord();
 		zhbRecord.setOrderNo(orderNo);
 		zhbRecord.setBuyerId(buyerId);
@@ -522,7 +522,7 @@ public class ZhbService {
 	 * @return
 	 * @throws Exception
 	 */
-	private int execPrepaid(String orderNo, Long buyerId, Long operaterId, BigDecimal amount, String goodsType, Long goodsId) throws Exception {
+	public int execPrepaid(String orderNo, Long buyerId, Long operaterId, BigDecimal amount, String goodsType, Long goodsId) throws Exception {
 		int result = 0;
 		ZhbAccount zhbAccount = zhbMapper.selectZhbAccount(buyerId);
 		if (null != zhbAccount && !ZhbConstant.ZhbAccountStatus.ACTIVE.toString().equals(zhbAccount.getStatus())) {

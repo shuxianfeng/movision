@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.business.zhb.ZhbController;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.VipConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.mybatis.vip.entity.VipPrivilege;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
@@ -50,7 +47,7 @@ public class VipController {
 	
 	
 	@ApiOperation(value = "添加尊贵盟友", notes = "添加尊贵盟友 ", response = Response.class)
-	@RequestMapping(value = "mc/add_vip", method = RequestMethod.POST)
+	@RequestMapping(value = "oms/add_vip", method = RequestMethod.POST)
 	public Response addVipService(
 			@ApiParam(value = "合同编号") @RequestParam(required = true) String contractNo,
 			@ApiParam(value = "尊贵盟友账号") @RequestParam(required = true) String member_account,

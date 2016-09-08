@@ -40,6 +40,7 @@ import com.zhuhuibao.mybatis.vip.mapper.VipInfoMapper;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbRecord;
 import com.zhuhuibao.mybatis.zhb.mapper.ZhbMapper;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.MapUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
@@ -59,6 +60,8 @@ public class VipInfoService {
 	private ZhbMapper zhbMapper;
 	@Autowired
 	private MemberService memberSV;
+	@Autowired
+	private ZhbService zhbSV;
 	
 	/**
 	 * 开通尊贵会员
@@ -79,57 +82,23 @@ public class VipInfoService {
 				//VIP级别对应赠送筑慧币数量
 				BigDecimal amount = new BigDecimal(VipConstant.VIP_LEVEL_ZHB.get(String.valueOf(vip_level)));
 				//获取memberID
-				Member member = new Member();
-				if (member_account.contains("@")) {
-		            member.setEmail(member_account);
-		        } else {
-		            member.setMobile(member_account);
-		        }
-				Member mem = memberSV.findMember(member);
-				if(mem == null){
-					throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist, "该盟友账号不存在");
-				}
-				String member_id_Str = mem.getId();
-				if(StringUtils.isEmpty(member_id_Str)){
-					throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist, "该盟友账号不存在");
-				}
-				Long member_id = Long.valueOf(mem.getId());
+				Long member_id = getMemberId(member_account);
 				//获取管理员账号
 				Long createid = ShiroUtil.getOmsCreateID();
 				if(createid == null) {
 					throw new BusinessException(MsgCodeConstant.member_mcode_account_status_exception, "获取当前登录管理员失败");
 				}
-				// 订单中amount大于0
-				// 筑慧币充值
+				// 筑慧币充值条件: 订单中amount大于0
 				if (amount.compareTo(BigDecimal.ZERO) > 0 ) {
 					// 进行筑慧币充值
-					int prepaidResult = execPay(contract_id, member_id, createid, amount,vip_level, active_time, validity);
+					int prepaidResult = zhbSV.execPrepaid("0", member_id, createid, amount, null, null);
 					if (0 == prepaidResult) {
 						throw new BusinessException(MsgCodeConstant.ZHB_AUTOPAYFOR_FAILED, "充值失败");
 					}
 				}
 				// VIP升级
-				VipMemberInfo vipMemberInfo = findVipMemberInfoById(member_id);
-				if (null == vipMemberInfo) {
-					result = insertVipMemberInfo(member_id, vip_level, 1);
-					insertVipRecord(contract_id, member_id, createid, amount, vip_level, active_time, validity);
-					
-				} else if (vipMemberInfo.getVipLevel() <= vip_level) {
-					Calendar cal = Calendar.getInstance();
-					//若原本是收费会员，则需要在原过期时间上增加1年
-					if (ArrayUtils.contains(VipConstant.CHARGE_VIP_LEVEL, String.valueOf(vipMemberInfo.getVipLevel()))) {
-						cal.setTime(vipMemberInfo.getExpireTime());
-					}
-					cal.add(Calendar.YEAR, 1);
-					cal.set(Calendar.HOUR_OF_DAY, 0);
-					cal.set(Calendar.MINUTE, 0);
-					cal.set(Calendar.SECOND, 0);
-					cal.add(Calendar.DATE, 1);
-					vipMemberInfo.setExpireTime(cal.getTime());
-					vipMemberInfo.setVipLevel(vip_level);
-					insertVipRecord(contract_id, member_id, createid, amount, vip_level, active_time, validity);
-					result = updateVipMemberInfo(vipMemberInfo);
-				}
+				result = addVipRecord(contract_id, vip_level, active_time,
+						validity, result, amount, member_id, createid);
 			}else{
 				throw new BusinessException(MsgCodeConstant.EXIST_CONTRACTNO_WARN, "该合同编号已经操作过");
 			}
@@ -142,47 +111,64 @@ public class VipInfoService {
 		
 		return result;
 	}
-	
-	private int execPay(String contractId, Long buyerId, Long operaterId, BigDecimal amount,int vipLevel,
-			 String activeTime, int validity) throws Exception {
-		int result = 0;
-		ZhbAccount zhbAccount = zhbMapper.selectZhbAccount(buyerId);
-		if (null != zhbAccount && !ZhbConstant.ZhbAccountStatus.ACTIVE.toString().equals(zhbAccount.getStatus())) {
-			return result;
-		}
-		// 增加ZHB流水记录
-		insertZhbRecord(buyerId, operaterId, amount, ZhbRecordType.PREPAID.toString());
-		// 增加充值金额
-		if (null != zhbAccount) {
-			// 将充值金额更新到账户
-			zhbAccount.setAmount(zhbAccount.getAmount().add(amount));
-			result = zhbMapper.updateZhbAccountEmoney(zhbAccount);
-
-			if (1 != result) {
-				throw new BusinessException(MsgCodeConstant.ZHB_PERPAID_FAILED, "充值失败");
-			}
-		} else {
-			// 初次充值账户为空，将充值金额添加到账户
-			insertZhbAccount(buyerId, amount);
-			result = 1;
-		}
-
-		return result >= 1 ? 1 : 0;
-	}
-	
-	private void insertZhbRecord(Long buyerId, Long operaterId, BigDecimal amount, String type) {
-		ZhbRecord zhbRecord = new ZhbRecord();
-		zhbRecord.setOrderNo("0");	//表示未走订单流程
-		zhbRecord.setBuyerId(buyerId);
-		zhbRecord.setOperaterId(operaterId);
-		zhbRecord.setAmount(amount);
-		zhbRecord.setStatus("1");	//支付成功
-		zhbRecord.setType(type);	//充值
-
-		zhbMapper.insertZhbRecord(zhbRecord);
-	}
 	/**
-	 * 
+	 * VIP升级
+	 * @param contract_id
+	 * @param vip_level
+	 * @param active_time
+	 * @param validity
+	 * @param result
+	 * @param amount
+	 * @param member_id
+	 * @param createid
+	 * @return
+	 * @throws ParseException
+	 */
+	private int addVipRecord(String contract_id, int vip_level,
+			String active_time, int validity, int result, BigDecimal amount,
+			Long member_id, Long createid) throws ParseException {
+		VipMemberInfo vipMemberInfo = findVipMemberInfoById(member_id);
+		if (null == vipMemberInfo) {
+			result = insertVipMemberInfo(member_id, vip_level, 1);
+			insertVipRecord(contract_id, member_id, createid, amount, vip_level, active_time, validity);
+			
+		} else if (vipMemberInfo.getVipLevel() <= vip_level) {
+			Calendar cal = Calendar.getInstance();
+			//若原本是收费会员，则需要在原过期时间上增加1年
+			if (ArrayUtils.contains(VipConstant.CHARGE_VIP_LEVEL, String.valueOf(vipMemberInfo.getVipLevel()))) {
+				cal.setTime(vipMemberInfo.getExpireTime());
+			}
+			cal.add(Calendar.YEAR, 1);
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.add(Calendar.DATE, 1);
+			vipMemberInfo.setExpireTime(cal.getTime());
+			vipMemberInfo.setVipLevel(vip_level);
+			
+			insertVipRecord(contract_id, member_id, createid, amount, vip_level, active_time, validity);
+			result = updateVipMemberInfo(vipMemberInfo);
+		}
+		return result;
+	}
+	
+	private Long getMemberId(String member_account) {
+		Member member = new Member();
+		if (member_account.contains("@")) {
+		    member.setEmail(member_account);
+		} else {
+		    member.setMobile(member_account);
+		}
+		Member mem = memberSV.findMember(member);
+		if(mem == null || StringUtils.isEmpty(mem.getId()) ){
+			throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist, "该盟友账号不存在");
+		}
+		Long member_id = Long.valueOf(mem.getId());
+		return member_id;
+	}
+	
+	/**
+	 * 添加一条vip操作记录
 	 * @param contractId
 	 * @param buyerId
 	 * @param operaterId
