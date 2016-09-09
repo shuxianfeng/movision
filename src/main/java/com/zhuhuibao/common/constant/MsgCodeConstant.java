@@ -248,5 +248,10 @@ public interface MsgCodeConstant {
 	 */
 	int DEGRADE_VIP_WARN = 3200;
 	
+	/**
+	 * 添加会员信息异常
+	 */
+	int ADD_VIP_ERROR = 3300;
+	
 	
 }
