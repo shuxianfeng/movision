@@ -266,8 +266,8 @@ public class VipInfoService {
 	 * @return
 	 */
 	@Cacheable(value = "vipPrivilegeCache", key = "#vipLevel")
-	public List<VipPrivilege> listVipPrivilegeByLevel(int vipLevel) {
-		return vipInfoMapper.selectVipPrivilegeListByLevel(vipLevel);
+	public List<VipPrivilege> listVipPrivilegeByLevel(String vipLevel) {
+		return vipInfoMapper.selectVipPrivilegeListByLevel(Integer.valueOf(vipLevel));
 	}
 
 	/**
@@ -276,7 +276,7 @@ public class VipInfoService {
 	 * @param vipLevel
 	 * @return
 	 */
-	public Map<String, VipPrivilege> findVipPrivilegeMap(int vipLevel) {
+	public Map<String, VipPrivilege> findVipPrivilegeMap(String vipLevel) {
 		Map<String, VipPrivilege> privilegeMap = new HashMap<String, VipPrivilege>();
 		List<VipPrivilege> list = listVipPrivilegeByLevel(vipLevel);
 		if (CollectionUtils.isNotEmpty(list)) {
@@ -397,7 +397,7 @@ public class VipInfoService {
 
 		List<VipMemberPrivilege> memberPrivilegeList = vipInfoMapper.selectVipMemberPrivilegeList(memberId);
 		if (CollectionUtils.isEmpty(memberPrivilegeList)) {
-			insertExtraPrivilege(memberId, defaultPrivilegeLevel);
+			insertExtraPrivilege(memberId, String.valueOf(defaultPrivilegeLevel));
 		}
 	}
 
@@ -476,7 +476,7 @@ public class VipInfoService {
 	 * @param memberId
 	 * @param vipLevel
 	 */
-	private void insertExtraPrivilege(Long memberId, int vipLevel) {
+	private void insertExtraPrivilege(Long memberId, String vipLevel) {
 		List<VipPrivilege> privilegeList = listVipPrivilegeByLevel(vipLevel);
 		if (CollectionUtils.isNotEmpty(privilegeList)) {
 			for (VipPrivilege p : privilegeList) {
