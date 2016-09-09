@@ -194,7 +194,7 @@
         WHERE o1.buyerId = o.buyerId
         AND o1.dealTime > o.dealTime)
         <if test="account != null">
-            AND (m.mobile = #{account,jdbcType=VARCHAR} OR m.email = #{account,jdbcType=VARCHAR})
+            AND (m.mobile like CONCAT('%',#{account},'%') OR m.email like CONCAT('%',#{account},'%'))
         </if>
         <if test="name != null">
             AND m.enterpriseName = #{name,jdbcType=VARCHAR}
