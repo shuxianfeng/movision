@@ -25,9 +25,6 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.VipConstant;
 import com.zhuhuibao.common.constant.VipConstant.VipLevel;
 import com.zhuhuibao.common.constant.VipConstant.VipPrivilegeType;
-import com.zhuhuibao.common.constant.ZhbConstant;
-import com.zhuhuibao.common.constant.ZhbConstant.ZhbAccountStatus;
-import com.zhuhuibao.common.constant.ZhbConstant.ZhbRecordType;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
@@ -37,8 +34,6 @@ import com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege;
 import com.zhuhuibao.mybatis.vip.entity.VipPrivilege;
 import com.zhuhuibao.mybatis.vip.entity.VipRecord;
 import com.zhuhuibao.mybatis.vip.mapper.VipInfoMapper;
-import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
-import com.zhuhuibao.mybatis.zhb.entity.ZhbRecord;
 import com.zhuhuibao.mybatis.zhb.mapper.ZhbMapper;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.MapUtil;
@@ -203,8 +198,11 @@ public class VipInfoService {
 	 * @param buyerId
 	 * @param operaterId
 	 * @param amount
+	 * @param vipLevel
 	 * @param activeTime
 	 * @param validity
+	 * @param oldActiveTime
+	 * @param expireTime
 	 * @throws ParseException
 	 */
 	private void insertVipRecord(String contractId, Long buyerId, Long operaterId, BigDecimal amount, 
@@ -228,24 +226,6 @@ public class VipInfoService {
 		vipRecord.setUpdateTime(cal.getTime());
 		
 		vipInfoMapper.insertVipRecord(vipRecord);
-	}
-	
-	/**
-	 * 添加筑慧币账号
-	 * 
-	 * @param memberId
-	 * @param amount
-	 */
-	private void insertZhbAccount(Long memberId, BigDecimal amount) {
-		ZhbAccount zhbAccount = new ZhbAccount();
-		zhbAccount.setMemberId(memberId);
-		zhbAccount.setStatus(ZhbAccountStatus.ACTIVE.toString());
-		zhbAccount.setAmount(amount);
-		Calendar cal = Calendar.getInstance();
-		zhbAccount.setAddTime(cal.getTime());
-		zhbAccount.setUpdateTime(cal.getTime());
-
-		zhbMapper.insertZhbAccount(zhbAccount);
 	}
 	
 	private boolean isNotExistsVipRecord(String contractNo) {
