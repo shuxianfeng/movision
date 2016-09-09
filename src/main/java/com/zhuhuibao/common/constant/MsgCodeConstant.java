@@ -232,6 +232,10 @@ public interface MsgCodeConstant {
 	 * 不存在该商品信息
 	 */
 	int NOT_EXIST_GOODS_ERROR = 3001;
+	/**
+	 * 不存在该会员信息
+	 */
+	int NOT_EXIST_VIP = 3002;
 	
 	/**
 	 * 时间异常 3100~3199
