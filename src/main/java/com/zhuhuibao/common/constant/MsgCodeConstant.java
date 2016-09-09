@@ -228,6 +228,10 @@ public interface MsgCodeConstant {
 	 * 该合同编号已存在
 	 */
 	int EXIST_CONTRACTNO_WARN = 3000;
+	/**
+	 * 不存在该商品信息
+	 */
+	int NOT_EXIST_GOODS_ERROR = 3001;
 	
 	/**
 	 * 时间异常 3100~3199
@@ -239,5 +243,6 @@ public interface MsgCodeConstant {
 	 * 不支持会员降级处理
 	 */
 	int DEGRADE_VIP_WARN = 3200;
+	
 	
 }

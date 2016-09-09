@@ -70,7 +70,25 @@ public class VipConstant {
 			return String.valueOf(value);
 		}
 	}
+	
+	/**
+	 * VIP级别对应的t_dictionary_zhbgoods中的ID
+	 */
+	public final static Map<String, Integer> VIP_LEVEL_GOODSID = new HashMap<String, Integer>(){
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -6418172837829944696L;
 
+		{
+			put(VipLevel.PERSON_GOLD.toString(), 15);
+			put(VipLevel.PERSON_PLATINUM.toString(), 16);
+			put(VipLevel.ENTERPRISE_GOLD.toString(), 17);
+			put(VipLevel.ENTERPRISE_PLATINUM.toString(), 18);
+		}
+	};
+	
+	
 	/**
 	 * VIP级别对应的名称
 	 */

@@ -34,6 +34,7 @@ import com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege;
 import com.zhuhuibao.mybatis.vip.entity.VipPrivilege;
 import com.zhuhuibao.mybatis.vip.entity.VipRecord;
 import com.zhuhuibao.mybatis.vip.mapper.VipInfoMapper;
+import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
 import com.zhuhuibao.mybatis.zhb.mapper.ZhbMapper;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.MapUtil;
@@ -74,6 +75,12 @@ public class VipInfoService {
 		try{
 			//校验该合同是否已经存在
 			if(isNotExistsVipRecord(contract_id)){
+				//VIP级别对应的商品ID
+				int goodsId = VipConstant.VIP_LEVEL_GOODSID.get(String.valueOf(vip_level));
+				DictionaryZhbgoods zhbGoods = zhbSV.getZhbGoodsById(String.valueOf(goodsId));
+				if(null == zhbGoods){
+					throw new BusinessException(MsgCodeConstant.NOT_EXIST_GOODS_ERROR, "不存在该商品信息");
+				}
 				//VIP级别对应赠送筑慧币数量
 				BigDecimal amount = new BigDecimal(VipConstant.VIP_LEVEL_ZHB.get(String.valueOf(vip_level)));
 				//获取memberID
@@ -86,7 +93,7 @@ public class VipInfoService {
 				// 筑慧币充值条件: 订单中amount大于0
 				if (amount.compareTo(BigDecimal.ZERO) > 0 ) {
 					// 进行筑慧币充值
-					int prepaidResult = zhbSV.execPrepaid("0", member_id, createid, amount, null, null);
+					int prepaidResult = zhbSV.execPrepaid("0", member_id, createid, amount, zhbGoods.getPinyin(), zhbGoods.getId());
 					if (0 == prepaidResult) {
 						throw new BusinessException(MsgCodeConstant.ZHB_AUTOPAYFOR_FAILED, "充值失败");
 					}
