@@ -70,11 +70,34 @@ public class VipConstant {
 			return String.valueOf(value);
 		}
 	}
+	
+	/**
+	 * VIP级别对应的t_dictionary_zhbgoods中的ID
+	 */
+	public final static Map<String, Integer> VIP_LEVEL_GOODSID = new HashMap<String, Integer>(){
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -6418172837829944696L;
 
+		{
+			put(VipLevel.PERSON_GOLD.toString(), 15);
+			put(VipLevel.PERSON_PLATINUM.toString(), 16);
+			put(VipLevel.ENTERPRISE_GOLD.toString(), 17);
+			put(VipLevel.ENTERPRISE_PLATINUM.toString(), 18);
+		}
+	};
+	
+	
 	/**
 	 * VIP级别对应的名称
 	 */
 	public final static Map<String, String> VIP_LEVEL_NAME = new HashMap<String, String>() {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -6418172837829944696L;
+
 		{
 			put(VipLevel.PERSON_FREE.toString(), "个人普通会员");
 			put(VipLevel.PERSON_GOLD.toString(), "个人黄金盟友");
@@ -89,6 +112,10 @@ public class VipConstant {
 	 * VIP级别对应赠送筑慧币数量
 	 */
 	public final static Map<String, Long> VIP_LEVEL_ZHB = new HashMap<String, Long>() {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 7063341595544422247L;
 		{
 			put(VipLevel.PERSON_FREE.toString(), 0L);
 			put(VipLevel.PERSON_GOLD.toString(), 350L);

@@ -25,9 +25,6 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.VipConstant;
 import com.zhuhuibao.common.constant.VipConstant.VipLevel;
 import com.zhuhuibao.common.constant.VipConstant.VipPrivilegeType;
-import com.zhuhuibao.common.constant.ZhbConstant;
-import com.zhuhuibao.common.constant.ZhbConstant.ZhbAccountStatus;
-import com.zhuhuibao.common.constant.ZhbConstant.ZhbRecordType;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
@@ -37,8 +34,7 @@ import com.zhuhuibao.mybatis.vip.entity.VipMemberPrivilege;
 import com.zhuhuibao.mybatis.vip.entity.VipPrivilege;
 import com.zhuhuibao.mybatis.vip.entity.VipRecord;
 import com.zhuhuibao.mybatis.vip.mapper.VipInfoMapper;
-import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
-import com.zhuhuibao.mybatis.zhb.entity.ZhbRecord;
+import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
 import com.zhuhuibao.mybatis.zhb.mapper.ZhbMapper;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.MapUtil;
@@ -79,6 +75,12 @@ public class VipInfoService {
 		try{
 			//校验该合同是否已经存在
 			if(isNotExistsVipRecord(contract_id)){
+				//VIP级别对应的商品ID
+				int goodsId = VipConstant.VIP_LEVEL_GOODSID.get(String.valueOf(vip_level));
+				DictionaryZhbgoods zhbGoods = zhbSV.getZhbGoodsById(String.valueOf(goodsId));
+				if(null == zhbGoods){
+					throw new BusinessException(MsgCodeConstant.NOT_EXIST_GOODS_ERROR, "不存在该商品信息");
+				}
 				//VIP级别对应赠送筑慧币数量
 				BigDecimal amount = new BigDecimal(VipConstant.VIP_LEVEL_ZHB.get(String.valueOf(vip_level)));
 				//获取memberID
@@ -91,7 +93,7 @@ public class VipInfoService {
 				// 筑慧币充值条件: 订单中amount大于0
 				if (amount.compareTo(BigDecimal.ZERO) > 0 ) {
 					// 进行筑慧币充值
-					int prepaidResult = zhbSV.execPrepaid("0", member_id, createid, amount, null, null);
+					int prepaidResult = zhbSV.execPrepaid("0", member_id, createid, amount, zhbGoods.getPinyin(), zhbGoods.getId());
 					if (0 == prepaidResult) {
 						throw new BusinessException(MsgCodeConstant.ZHB_AUTOPAYFOR_FAILED, "充值失败");
 					}
@@ -127,59 +129,61 @@ public class VipInfoService {
 	private int addVipRecord(String contract_id, int vip_level,
 			String active_time, int validity, int result, BigDecimal amount,
 			Long member_id, Long createid) throws ParseException {
+		
 		VipMemberInfo vipMemberInfo = findVipMemberInfoById(member_id);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		if (null == vipMemberInfo) {
-			//新增一个会员信息
+			//添加会员操作记录
+			Calendar cal = new GregorianCalendar();
+			cal.setTime(sdf.parse(active_time));
+			delayOneYear(validity, cal);
+			Date expireDate = cal.getTime();
+			insertVipRecord(contract_id, member_id, createid, amount, vip_level, active_time, validity, expireDate);
+			//添加新会员信息
 			result = insertVipMemberInfo(member_id, vip_level, 1, active_time);
-			
-			Calendar cal = convertTime(active_time);
-			
-			insertVipRecord(contract_id, member_id, createid, amount, vip_level, active_time, validity, null, cal.getTime());
 			
 		} else if (vipMemberInfo.getVipLevel() <= vip_level) {
 			/**
-			 * 处理失效时间
-			 * 激活时间就是老的激活时间
+			 * 判断该用户是否是收费会员
+			 * 若原本不是收费会员，即免费会员——》黄金会员
+			 * 	1.生效时间：填的日期；
+			 * 	2.过期时间：填的日期+1年；
+			 * 若原本是收费会员，即黄金会员——》铂金会员
+			 * 	1.生效时间：当天；
+			 * 	2.过期时间：原来的失效日期+1年；
 			 */
 			Calendar cal = Calendar.getInstance();
-			//默认有效时间是老会员套餐的有效时间
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Date oldActiveDateStr = vipMemberInfo.getActiveTime();
-			String oldActiveTime = sdf.format(oldActiveDateStr);	//老会员套餐的激活时间
+			Date active_date = sdf.parse(active_time);
+			cal.setTime(active_date);
 			
+			/*若原本是收费会员，即黄金会员——》铂金会员*/
 			if (ArrayUtils.contains(VipConstant.CHARGE_VIP_LEVEL, String.valueOf(vipMemberInfo.getVipLevel()))) {
-				//若原本是收费会员，则需要在原过期时间上增加1年
-				//若原本不是收费会员，则截止日期变为明年的今天
-				//{"30","60","130","160"}
+				//原来是收费会员的情况： {"30","60","130","160"}
+				//过期时间：原来的失效日期+1年；
 				Date oldExpireTime = vipMemberInfo.getExpireTime();
 				cal.setTime(oldExpireTime);
+				//生效时间：当天；
+				Calendar cal2 = Calendar.getInstance();
+				active_date = cal2.getTime();
+				active_time = sdf.format(active_date);
 			}
-			cal.add(Calendar.YEAR, 1);
-			cal.set(Calendar.HOUR_OF_DAY, 0);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.add(Calendar.DATE, 1);
+			//计算过期时间：+1年；
+			delayOneYear(validity, cal);
 			
+			vipMemberInfo.setActiveTime(active_date);
 			vipMemberInfo.setExpireTime(cal.getTime());
-			//处理会员等级
 			vipMemberInfo.setVipLevel(vip_level);
 			
-			result = updateVipMemberInfo(vipMemberInfo);
 			//增加vip操作记录
-			insertVipRecord(contract_id, member_id, createid, amount, vip_level, null, validity, oldActiveTime, cal.getTime());
+			insertVipRecord(contract_id, member_id, createid, amount, vip_level, active_time, validity, cal.getTime());
+			//更新会员信息
+			result = updateVipMemberInfo(vipMemberInfo);
 			
 		} else{
 			result = 0;
 			throw new BusinessException(MsgCodeConstant.DEGRADE_VIP_WARN, "暂不支持会员降级处理");
 		}
 		return result;
-	}
-	private Calendar convertTime(String active_time) throws ParseException {
-		Calendar cal = new GregorianCalendar();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		cal.setTime(sdf.parse(active_time));
-		cal.add(Calendar.YEAR, 1);
-		return cal;
 	}
 	
 	private Long getMemberId(String member_account) {
@@ -203,12 +207,15 @@ public class VipInfoService {
 	 * @param buyerId
 	 * @param operaterId
 	 * @param amount
+	 * @param vipLevel
 	 * @param activeTime
 	 * @param validity
+	 * @param oldActiveTime
+	 * @param expireTime
 	 * @throws ParseException
 	 */
 	private void insertVipRecord(String contractId, Long buyerId, Long operaterId, BigDecimal amount, 
-			int vipLevel, String activeTime, int validity, String oldActiveTime, Date expireTime) throws ParseException {
+			int vipLevel, String activeTime, int validity, Date expireTime) throws ParseException {
 		VipRecord vipRecord = new VipRecord();
 		vipRecord.setContractNo(contractId);
 		vipRecord.setBuyerId(buyerId);
@@ -218,7 +225,7 @@ public class VipInfoService {
 		vipRecord.setVipLevel(vipLevel);
 		
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date activeDate = null == oldActiveTime ? sdf.parse(activeTime) : sdf.parse(oldActiveTime);
+		Date activeDate = sdf.parse(activeTime);
 		
 		vipRecord.setActiveTime(activeDate);
 		vipRecord.setExpireTime(expireTime);
@@ -228,24 +235,6 @@ public class VipInfoService {
 		vipRecord.setUpdateTime(cal.getTime());
 		
 		vipInfoMapper.insertVipRecord(vipRecord);
-	}
-	
-	/**
-	 * 添加筑慧币账号
-	 * 
-	 * @param memberId
-	 * @param amount
-	 */
-	private void insertZhbAccount(Long memberId, BigDecimal amount) {
-		ZhbAccount zhbAccount = new ZhbAccount();
-		zhbAccount.setMemberId(memberId);
-		zhbAccount.setStatus(ZhbAccountStatus.ACTIVE.toString());
-		zhbAccount.setAmount(amount);
-		Calendar cal = Calendar.getInstance();
-		zhbAccount.setAddTime(cal.getTime());
-		zhbAccount.setUpdateTime(cal.getTime());
-
-		zhbMapper.insertZhbAccount(zhbAccount);
 	}
 	
 	private boolean isNotExistsVipRecord(String contractNo) {
@@ -279,8 +268,8 @@ public class VipInfoService {
 	 * @return
 	 */
 	@Cacheable(value = "vipPrivilegeCache", key = "#vipLevel")
-	public List<VipPrivilege> listVipPrivilegeByLevel(int vipLevel) {
-		return vipInfoMapper.selectVipPrivilegeListByLevel(vipLevel);
+	public List<VipPrivilege> listVipPrivilegeByLevel(String vipLevel) {
+		return vipInfoMapper.selectVipPrivilegeListByLevel(Integer.valueOf(vipLevel));
 	}
 
 	/**
@@ -289,7 +278,7 @@ public class VipInfoService {
 	 * @param vipLevel
 	 * @return
 	 */
-	public Map<String, VipPrivilege> findVipPrivilegeMap(int vipLevel) {
+	public Map<String, VipPrivilege> findVipPrivilegeMap(String vipLevel) {
 		Map<String, VipPrivilege> privilegeMap = new HashMap<String, VipPrivilege>();
 		List<VipPrivilege> list = listVipPrivilegeByLevel(vipLevel);
 		if (CollectionUtils.isNotEmpty(list)) {
@@ -410,7 +399,7 @@ public class VipInfoService {
 
 		List<VipMemberPrivilege> memberPrivilegeList = vipInfoMapper.selectVipMemberPrivilegeList(memberId);
 		if (CollectionUtils.isEmpty(memberPrivilegeList)) {
-			insertExtraPrivilege(memberId, defaultPrivilegeLevel);
+			insertExtraPrivilege(memberId, String.valueOf(defaultPrivilegeLevel));
 		}
 	}
 
@@ -443,12 +432,7 @@ public class VipInfoService {
 		if(null == activeTime || StringUtils.isEmpty(activeTime)){
 			//前台没有传生效时间的情况，使用当前时间
 			vipMemberInfo.setActiveTime(cal.getTime());
-			//处理失效时间
-			cal.set(Calendar.HOUR_OF_DAY, 0);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.add(Calendar.YEAR, activeYears);
-			cal.add(Calendar.DATE, 1);
+			delayOneYear(activeYears, cal);
 			vipMemberInfo.setExpireTime(cal.getTime());
 		}else{
 			//前台传生效时间
@@ -456,22 +440,33 @@ public class VipInfoService {
 			try {
 				Date activeDate = sdf.parse(activeTime);
 				vipMemberInfo.setActiveTime(activeDate);
-				
-				cal.setTime(activeDate); 
-				cal.add(Calendar.YEAR, 1);
+				cal.setTime(activeDate);
+				delayOneYear(activeYears, cal);
 				vipMemberInfo.setExpireTime(cal.getTime());
 			} catch (ParseException e) {
 				throw new BusinessException(MsgCodeConstant.DATE_CONVERT_WARN, "日期转换格式异常");
 			}
-			
 		}
 		
 		try{
 			vipInfoMapper.insertVipMemberInfo(vipMemberInfo);
 		}catch(Exception e){
 			return 0;
+//			throw new BusinessException(MsgCodeConstant.ADD_VIP_ERROR, "添加会员信息异常");
 		}
 		return 1;
+	}
+	/**
+	 * 延迟一年处理
+	 * @param activeYears	年数
+	 * @param cal	日历对象
+	 */
+	private void delayOneYear(int activeYears, Calendar cal) {
+		cal.add(Calendar.YEAR, activeYears);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.add(Calendar.DATE, 1);
 	}
 
 	/**
@@ -489,7 +484,7 @@ public class VipInfoService {
 	 * @param memberId
 	 * @param vipLevel
 	 */
-	private void insertExtraPrivilege(Long memberId, int vipLevel) {
+	private void insertExtraPrivilege(Long memberId, String vipLevel) {
 		List<VipPrivilege> privilegeList = listVipPrivilegeByLevel(vipLevel);
 		if (CollectionUtils.isNotEmpty(privilegeList)) {
 			for (VipPrivilege p : privilegeList) {

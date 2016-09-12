@@ -153,9 +153,9 @@ public class ZhbService {
 	 * 
 	 * @return
 	 */
-	private boolean isAdminLogin() {
+	/*private boolean isAdminLogin() {
 		return ShiroUtil.getCompanyID().compareTo(ShiroUtil.getCreateID()) == 0;
-	}
+	}*/
 	
 	/**
 	 * 购买VIP服务

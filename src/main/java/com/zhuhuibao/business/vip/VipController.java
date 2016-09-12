@@ -111,8 +111,9 @@ public class VipController {
 	public Response myvip() throws Exception {
 		Response response = new Response();
 		Map<String, Object> result = new HashMap<String, Object>();
-		VipMemberInfo vipMemberInfo = vipInfoService.findVipMemberInfoById(ShiroUtil.getMember().getCompanyId());
-		List<VipPrivilege> privilegeList = vipInfoService.listVipPrivilegeByLevel(vipMemberInfo.getVipLevel());
+		Long curLogId = ShiroUtil.getCreateID();
+		VipMemberInfo vipMemberInfo = vipInfoService.findVipMemberInfoById(curLogId);
+		List<VipPrivilege> privilegeList = vipInfoService.listVipPrivilegeByLevel(String.valueOf(vipMemberInfo.getVipLevel()));
 		String vipName = VipConstant.VIP_LEVEL_NAME.get(String.valueOf(vipMemberInfo.getVipLevel()));
 		result.put("vipMemberInfo", vipMemberInfo);
 		result.put("vipName", vipName);
