@@ -572,7 +572,7 @@
         m.enterpriseLinkman,
         CASE WHEN m.enterpriseName IS NOT NULL and m.enterpriseName != '' THEN m.enterpriseName
         WHEN m.personRealName IS NOT NULL and m.personRealName != '' THEN m.personRealName END AS memberName,
-        CASE WHEN m.identify = 2 THEN '个人会员' WHEN m.identify != 2 then '企业会员' END AS memberType,
+        CASE WHEN m.identify = 2 THEN '个人盟友' WHEN m.identify != 2 then '企业盟友' END AS memberType,
         CASE WHEN m.workType = 100 then '管理员' when m.workType!=100 then w.name end as worktype,
         (select group_concat(name) from t_dictionary_identity where find_in_set(id,m.identify))as identify,
         m.status,date_format(m.loginTime,'%Y-%m-%d %H:%i:%s') loginTime
@@ -613,7 +613,7 @@
         CASE WHEN ic.enterpriseName IS NOT NULL AND ic.enterpriseName != '' THEN ic.enterpriseName WHEN
         rc.personRealName IS NOT NULL AND rc.personRealName != '' THEN rc.personRealName END AS memberName ,
         ic.enterpriseLinkman ,
-        CASE WHEN ic.identify = 2 THEN '个人会员' WHEN ic.identify != 2 then '企业会员' END AS memberType ,
+        CASE WHEN ic.identify = 2 THEN '个人盟友' WHEN ic.identify != 2 then '企业盟友' END AS memberType ,
         CASE WHEN ic.workType = 100 then '管理员' when ic.workType != 100 then w. name end as worktype ,
         (select group_concat(name) from t_dictionary_identity where find_in_set(id , ic.identify)) as identify ,
         ic. STATUS AS infoStatus ,
@@ -652,7 +652,7 @@
         CASE WHEN ic.enterpriseName IS NOT NULL AND ic.enterpriseName != '' THEN ic.enterpriseName WHEN
         rc.personRealName IS NOT NULL AND rc.personRealName != '' THEN rc.personRealName END AS memberName ,
         ic.enterpriseLinkman ,
-        CASE WHEN ic.identify = 2 THEN '个人会员' WHEN ic.identify != 2 then '企业会员' END AS memberType ,
+        CASE WHEN ic.identify = 2 THEN '个人盟友' WHEN ic.identify != 2 then '企业盟友' END AS memberType ,
         CASE WHEN ic.workType = 100 then '管理员' when ic.workType != 100 then w. name end as worktype ,
         (select group_concat(name) from t_dictionary_identity where find_in_set(id , ic.identify)) as identify ,
         ic. STATUS AS infoStatus ,
@@ -689,7 +689,7 @@
         time,r.status,r.id,r.certificate_url,r.certificate_number,
         CASE WHEN m.enterpriseName IS NOT NULL and m.enterpriseName != '' THEN m.enterpriseName
         WHEN m.personRealName IS NOT NULL and m.personRealName != '' THEN m.personRealName END AS memberName,
-        CASE WHEN m.identify = 2 THEN '个人会员' WHEN m.identify != 2 then '企业会员' END AS memberType,
+        CASE WHEN m.identify = 2 THEN '个人盟友' WHEN m.identify != 2 then '企业盟友' END AS memberType,
         CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile WHEN m.email IS NOT NULL and m.email != '' THEN
         m.email END AS account
         from t_certificate_record r
