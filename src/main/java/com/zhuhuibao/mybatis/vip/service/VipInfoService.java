@@ -61,6 +61,8 @@ public class VipInfoService {
 	
 	/**
 	 * 开通尊贵会员
+	 * 如果个人升级VIP，则只允许升级个人黄金、个人铂金
+	 * 如果企业升级VIP，则只允许升级企业黄金、企业铂金
 	 * @param contract_id
 	 * @param member_account
 	 * @param vip_level
@@ -84,7 +86,7 @@ public class VipInfoService {
 				//VIP级别对应赠送筑慧币数量
 				BigDecimal amount = new BigDecimal(VipConstant.VIP_LEVEL_ZHB.get(String.valueOf(vip_level)));
 				//获取memberID
-				Long member_id = getMemberId(member_account);
+				Long member_id = getMemberId(member_account, vip_level);
 				//获取管理员账号
 				Long createid = ShiroUtil.getOmsCreateID();
 				if(createid == null) {
@@ -186,7 +188,7 @@ public class VipInfoService {
 		return result;
 	}
 	
-	private Long getMemberId(String member_account) {
+	private Long getMemberId(String member_account, int vip_level) {
 		Member member = new Member();
 		if (member_account.contains("@")) {
 		    member.setEmail(member_account);
@@ -196,6 +198,18 @@ public class VipInfoService {
 		Member mem = memberSV.findMember(member);
 		if(mem == null || StringUtils.isEmpty(mem.getId()) ){
 			throw new BusinessException(MsgCodeConstant.member_mcode_username_not_exist, "该盟友账号不存在");
+		}
+		String identify = mem.getIdentify();
+		String vipLevel = String.valueOf(vip_level);
+		//个人身份升级会员限制
+		if(VipConstant.PERSON.equals(identify) 
+				&& !ArrayUtils.contains(VipConstant.PERSON_VIP_LEVEL, vipLevel)){
+			throw new BusinessException(MsgCodeConstant.PERSON_ACCOUNT_CAN_NOT_UPGRADE_ENTERPRISE_VIP, "个人账号不能升级为企业盟友");
+		}
+		//企业身份升级会员限制
+		if(VipConstant.ENTERPRISE.equals(identify) 
+				&& !ArrayUtils.contains(VipConstant.ENTERPRISE_VIP_LEVEL, vipLevel)){
+			throw new BusinessException(MsgCodeConstant.ENTERPRISE_ACCOUNT_CAN_NOT_UPGRADE_PERSON_VIP, "企业账号不能升级为个人盟友");
 		}
 		Long member_id = Long.valueOf(mem.getId());
 		return member_id;
