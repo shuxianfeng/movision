@@ -160,7 +160,8 @@
     </update>
 
     <select id="findAllVipInfoList" resultType="java.util.Map" parameterType="java.util.Map">
-        SELECT
+        
+       SELECT
         o.buyerId AS id,
         date_format(o.dealTime,'%Y-%m-%d %H:%i:%s') AS buyTime,
         CASE
@@ -171,14 +172,22 @@
         AND m.email != ''
         THEN m.email
         END AS account,
-        m.enterpriseName AS NAME,
+        m.enterpriseName AS NAME, 
         g.goodsId,
-        g.goodsName AS vipLevel,
-        1 AS activeTime,
+        (case when !isnull(g.goodsName) then g.goodsName when 
+		  v.vip_level='130'  then '企业黄金盟友'  when v.vip_level='160' then '企业铂金盟友' when v.vip_level='30' 
+		  then '个人黄金盟友' when v.vip_level='60' then '个人铂金盟友' when v.vip_level='100' then '企业普通盟友' when v.vip_level='0' then '个人普通盟友' end) AS vipLevel,
+         date_format(v.expire_time,'%Y-%m-%d') AS activeTime,
         o.payAmount price,
         v.vip_level
         FROM
-        t_o_order o
+        (
+             select buyerId,orderNo, goodsType,dealTime,payAmount, expire_time from (
+				select buyerId,orderNo, goodsType,dealTime,payAmount,'' expire_time from t_o_order where status=2
+		        union all  
+		       select buyer_id buyerId,'' orderNo,3 goodsType,active_time dealTime,amount payAmount ,max(expire_time) expire_time
+               from t_vip_member_record t  group by buyer_id) b  group by buyerId 
+		  ) o 
         LEFT JOIN t_m_member m
         ON o.buyerId = m.id
         LEFT JOIN t_o_order_goods g
@@ -193,21 +202,27 @@
         t_o_order o1
         WHERE o1.buyerId = o.buyerId
         AND o1.dealTime > o.dealTime)
+        
         <if test="account != null">
             AND (m.mobile like CONCAT('%',#{account},'%') OR m.email like CONCAT('%',#{account},'%'))
         </if>
         <if test="name != null">
-            AND m.enterpriseName = #{name,jdbcType=VARCHAR}
+            AND m.enterpriseName like CONCAT('%',#{name},'%')
         </if>
         <if test="vipLevel != null">
-            AND g.goodsId = #{vipLevel,jdbcType=BIGINT}
+        
+            AND v.vip_level = #{vipLevel,jdbcType=BIGINT}
+            
         </if>
         <if test="status == 1">
             AND (v.vip_level IN (30,60,130,160))
+            
+            
         </if>
         <if test="status == 0">
             AND (v.vip_level IN (0,100))
         </if>
+       
     </select>
     <select id="findVipInfoByID" resultType="java.util.Map">
        select * from t_vip_privilege v where v.vip_level = (select value from t_dictionary_zhbgoods  where id = #{goodsId})

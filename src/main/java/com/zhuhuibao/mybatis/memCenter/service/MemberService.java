@@ -149,6 +149,7 @@ public class MemberService {
 
             memberMapper.updateMemInfo(member);
             memberMapper.updateSubMemInfo(member);
+            //资料审核已拒绝 or 实名认证已拒绝
             if ("7".equals(member.getStatus()) || "11".equals(member.getStatus())) {
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(member.getId()),
                         member.getReason());

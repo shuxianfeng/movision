@@ -184,7 +184,7 @@
 	WHERE pinyin = #{pinyin,jdbcType=VARCHAR}
  </select>
  
- <select id="selectZhbGoodsById" parameterType="java.lang.Long" resultMap="ZhbGoodsMap">
+ <select id="selectZhbGoodsById" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods">
  	SELECT 
 	  id,name,pinyin,type,value,price,add_time
 	FROM

@@ -109,7 +109,7 @@ public class StaffManageController {
 		for (String id : idList) {
 			Member member = new Member();
 			member.setId(id);
-			member.setStatus("2");
+			member.setStatus("2");	//注销
 			memberService.updateMemInfo(member);
 		}
 		return result;

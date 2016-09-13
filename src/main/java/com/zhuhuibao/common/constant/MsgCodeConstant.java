@@ -252,6 +252,14 @@ public interface MsgCodeConstant {
 	 * 添加会员信息异常
 	 */
 	int ADD_VIP_ERROR = 3300;
+	/**
+	 * 个人账号不能升级为企业盟友
+	 */
+	int PERSON_ACCOUNT_CAN_NOT_UPGRADE_ENTERPRISE_VIP = 3301;
+	/**
+	 * 企业账号不能升级为个人盟友
+	 */
+	int ENTERPRISE_ACCOUNT_CAN_NOT_UPGRADE_PERSON_VIP = 3302;
 	
 	
 }

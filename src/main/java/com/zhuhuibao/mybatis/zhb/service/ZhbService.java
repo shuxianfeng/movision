@@ -431,7 +431,7 @@ public class ZhbService {
 	 * @param id
 	 * @return
 	 */
-	@Cacheable(value = "zhbGoodsConfigCache", key = "#id")
+//	@Cacheable(value = "zhbGoodsConfigCache", key = "#id")
 	public DictionaryZhbgoods getZhbGoodsById(String id) {
 
 		return zhbMapper.selectZhbGoodsById(Long.valueOf(id));

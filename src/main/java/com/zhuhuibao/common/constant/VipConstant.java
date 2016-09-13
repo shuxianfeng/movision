@@ -136,4 +136,18 @@ public class VipConstant {
 	public final static int EXTRA_PRIVILEGE_LEVEL_ENTERPRISE = 201;
 
 	public final static String[] CHARGE_VIP_LEVEL =  {"30","60","130","160"};
+	/**
+	 * 个人黄金+个人铂金
+	 */
+	public final static String[] PERSON_VIP_LEVEL = {"30","60"};
+	/**
+	 * 企业黄金+企业铂金
+	 */
+	public final static String[] ENTERPRISE_VIP_LEVEL = {"130","160"};
+	
+	
+	public final static String PERSON = "2";
+	public final static String ENTERPRISE = "1";
+	
+	
 }
