@@ -183,7 +183,7 @@
         FROM
         (
              select buyerId,orderNo, goodsType,dealTime,payAmount, expire_time from (
-				select buyerId,orderNo, goodsType,dealTime,payAmount,'' expire_time from t_o_order 
+				select buyerId,orderNo, goodsType,dealTime,payAmount,'' expire_time from t_o_order where status=2
 		        union all  
 		       select buyer_id buyerId,'' orderNo,3 goodsType,active_time dealTime,amount payAmount ,max(expire_time) expire_time
                from t_vip_member_record t  group by buyer_id) b  group by buyerId 
