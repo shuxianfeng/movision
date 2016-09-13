@@ -160,7 +160,8 @@
     </update>
 
     <select id="findAllVipInfoList" resultType="java.util.Map" parameterType="java.util.Map">
-        SELECT
+        
+       SELECT
         o.buyerId AS id,
         date_format(o.dealTime,'%Y-%m-%d %H:%i:%s') AS buyTime,
         CASE
@@ -171,28 +172,36 @@
         AND m.email != ''
         THEN m.email
         END AS account,
-        m.enterpriseName AS NAME,
+        m.enterpriseName AS NAME, 
         g.goodsId,
-         (case when !isnull(g.goodsName) then g.goodsName when 
+        (case when !isnull(g.goodsName) then g.goodsName when 
 		  v.vip_level='130'  then '企业黄金盟友'  when v.vip_level='160' then '企业铂金盟友' when v.vip_level='30' 
-		  then '个人黄金盟友' when v.vip_level='60' then '个人铂金' end) AS vipLevel,
+		  then '个人黄金盟友' when v.vip_level='60' then '个人铂金盟友' when v.vip_level='100' then '企业普通盟友' when v.vip_level='0' then '个人普通盟友' end) AS vipLevel,
          date_format(v.expire_time,'%Y-%m-%d') AS activeTime,
         o.payAmount price,
         v.vip_level
-        
         FROM
-        
-        t_vip_member_info v
-        
-        LEFT JOIN
-        t_o_order o
-        ON o.buyerId = v.member_id
+        (
+             select buyerId,orderNo, goodsType,dealTime,payAmount, expire_time from (
+				select buyerId,orderNo, goodsType,dealTime,payAmount,'' expire_time from t_o_order 
+		        union all  
+		       select buyer_id buyerId,'' orderNo,3 goodsType,active_time dealTime,amount payAmount ,max(expire_time) expire_time
+               from t_vip_member_record t  group by buyer_id) b  group by buyerId 
+		  ) o 
         LEFT JOIN t_m_member m
-         ON v.member_id = m.id
+        ON o.buyerId = m.id
         LEFT JOIN t_o_order_goods g
-        ON o.orderNo = g.orderNo  
-        WHERE (o.goodsType = '3' or isnull(o.goodsType))   and v.expire_time>=now()
-       
+        ON o.orderNo = g.orderNo
+        LEFT JOIN t_vip_member_info v
+        ON o.buyerId = v.member_id
+        WHERE o.goodsType = '3'
+        AND NOT EXISTS
+        (SELECT
+        1
+        FROM
+        t_o_order o1
+        WHERE o1.buyerId = o.buyerId
+        AND o1.dealTime > o.dealTime)
         
         <if test="account != null">
             AND (m.mobile like CONCAT('%',#{account},'%') OR m.email like CONCAT('%',#{account},'%'))

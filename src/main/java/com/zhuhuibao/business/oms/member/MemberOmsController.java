@@ -328,4 +328,18 @@ public class MemberOmsController {
    		}
    		return result;
    	}
+    
+    @ApiOperation(value = "删除员工", notes = "删除员工", response = Response.class)
+	@RequestMapping(value = "del_member", method = RequestMethod.POST)
+	public Response deleteMember(@ApiParam(value = "员工ids,逗号隔开") @RequestParam String ids)  {
+		String[] idList = ids.split(",");
+		Response result = new Response();
+		for (String id : idList) {
+			Member member = new Member();
+			member.setId(id);
+			member.setStatus("2");	//注销
+			memberService.updateMemInfo(member);
+		}
+		return result;
+	}
 }
