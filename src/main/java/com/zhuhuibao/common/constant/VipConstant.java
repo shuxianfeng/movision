@@ -146,8 +146,8 @@ public class VipConstant {
 	public final static String[] ENTERPRISE_VIP_LEVEL = {"130","160"};
 	
 	
-	public final static String PERSON = "1";
-	public final static String ENTERPRISE = "2";
+	public final static String PERSON = "2";
+	public final static String ENTERPRISE = "1";
 	
 	
 }
