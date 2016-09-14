@@ -37,16 +37,18 @@ public class InitLogonMemberInterceptor extends HandlerInterceptorAdapter {
 			Subject subject = SecurityUtils.getSubject();
 			Session session = subject.getSession(false);
 			if (null != session) {
+				//获取当前会话登录人
 				ShiroRealm.ShiroUser member = (ShiroUser) session.getAttribute("member");
 				if (null != member) {
 					LoginMember loginMember = memberService.getLoginMemberByAccount(member.getAccount());
 					if (null != loginMember) {
+						//初始化登录信息
 						ShiroRealm.ShiroUser loginInfo = new ShiroUser(loginMember.getId(), loginMember.getAccount(),
 								loginMember.getStatus(), loginMember.getIdentify(), loginMember.getRole(),
 								loginMember.getIsexpert(), loginMember.getCompanyId(), loginMember.getRegisterTime(),
 								loginMember.getWorkType(), loginMember.getHeadShot(), loginMember.getNickname(),
 								loginMember.getCompanyName(), loginMember.getVipLevel());
-
+						
 						if (loginMemberInfoIsChange(member, loginInfo)) {
 							session.setAttribute("member", loginInfo);
 							shiroRealm.getAuthorizationCache().remove(subject.getPrincipals());
@@ -60,7 +62,12 @@ public class InitLogonMemberInterceptor extends HandlerInterceptorAdapter {
 
 		return true;
 	}
-
+	/**
+	 * 判断登录信息是否改变
+	 * @param member
+	 * @param loginInfo
+	 * @return
+	 */
 	private boolean loginMemberInfoIsChange(ShiroUser member, ShiroRealm.ShiroUser loginInfo) {
 		boolean isChange = member == null || loginInfo == null || loginInfo.getWorkType() != member.getWorkType()
 				|| loginInfo.getVipLevel() != member.getVipLevel() || loginInfo.getStatus() != member.getStatus()

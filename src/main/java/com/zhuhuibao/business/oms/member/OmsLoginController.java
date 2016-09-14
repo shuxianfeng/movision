@@ -95,8 +95,9 @@ public class OmsLoginController {
 			record.setCurLoginIp(curLoginIp);
 			ShiroOmsUser user=(ShiroOmsUser)currentUser.getPrincipal();
 			 record.setId(user.getId());
+			 //更新oms用户信息
 			 this.userService.updateRecordByPrimaryKey(record);
-			
+			//session中存入当前用户信息
 			session.setAttribute("oms", currentUser.getPrincipal());
             System.out.println("oms 用户[" + username + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
         }else{

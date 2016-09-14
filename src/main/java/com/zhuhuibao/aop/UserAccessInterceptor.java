@@ -96,7 +96,7 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
     }
 
     /**
-     * 用户VIP等级验证
+     * 验证用户的VIP等级
      *  30:个人黄金 60:个人铂金 130:企业黄金 160:企业铂金
      * @param annotation
      * @param member

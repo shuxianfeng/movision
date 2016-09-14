@@ -211,6 +211,7 @@ public class MemberService {
 
     /**
      * 根据会员账号查询会员
+     * 激活并且非注销的状态
      */
     public Member findMember(Member member) {
         try {

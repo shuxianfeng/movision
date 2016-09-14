@@ -21,6 +21,9 @@ public class TimeoutInterceptor extends HandlerInterceptorAdapter {
         Session session = subject.getSession(false);
         ShiroRealm.ShiroUser member;
         if (session != null) {
+        	System.err.println("session开始时间》》》"+session.getStartTimestamp());
+            System.out.println("session结束时间》》》"+session.getLastAccessTime());
+            System.out.println("session超时时间》》》"+session.getTimeout());
             member = (ShiroRealm.ShiroUser) session.getAttribute("member");
             if (member == null) {
                 if (request.getHeader("x-requested-with") != null
