@@ -120,7 +120,7 @@
     </select>
 
     <select id="findCountByAccount" resultType="java.lang.Integer">
-            SELECT COUNT(1) FROM  t_m_member WHERE mobile = #{account} or email = #{account} and status !=2
+            SELECT COUNT(1) FROM  t_m_member WHERE (mobile = #{account} or email = #{account}) and status !=2
     </select>
 
 </mapper>
