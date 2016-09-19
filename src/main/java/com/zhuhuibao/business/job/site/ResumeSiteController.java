@@ -148,7 +148,7 @@ public class ResumeSiteController {
         map.put("expYearBehind", expYearBehind);
         map.put("education", education);
         if (isPublic == null) {
-            map.put("isPublic", "1");
+            map.put("isPublic", "1");	//默认公开
         } else {
             if (!"2".equals(isPublic)) {
                 map.put("isPublic", isPublic);
