@@ -229,16 +229,7 @@ public class MemberService {
     public List findCertificateList(String type) {
         try {
             List<Certificate> certificate = certificateMapper.findCertificateList(type);
-            List list = new ArrayList();
-            for (Certificate certificate1 : certificate) {
-                String[] stringArr = certificate1.getDegree().split(",");
-                Map<String, Object> map = new HashMap<>();
-                map.put("id", certificate1.getId());
-                map.put("name", certificate1.getName());
-                map.put("degree", stringArr);
-                list.add(map);
-            }
-            return list;
+            return certificate;
         } catch (Exception e) {
             log.error("findCertificateList error,type=" + type + " >>>", e);
             e.printStackTrace();

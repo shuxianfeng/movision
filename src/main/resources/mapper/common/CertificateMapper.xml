@@ -6,9 +6,12 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="VARCHAR" />
     <result column="degree" property="degree" jdbcType="VARCHAR" />
+    <result column="searchFlag" property="searchFlag" jdbcType="INTEGER" />
+    <result column="weight" property="weight" jdbcType="INTEGER" />
+    <result column="category" property="category" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name,type,degree
+    id, name,type,degree,searchFlag,weight,category
   </sql>
   <select id="findCertificateList" resultMap="BaseResultMap">
     select
