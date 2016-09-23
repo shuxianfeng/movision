@@ -82,7 +82,7 @@ public class MallIndexController {
         } else {
             throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "传值不正确");
         }
-
+        
         List<SysAdvertising> advertisings = advService.findListByCondition("3", "index", advArea);
         for (SysAdvertising advertising : advertisings) {
             Map<String, String> comMap = new HashMap<>();
@@ -94,7 +94,7 @@ public class MallIndexController {
                     comMap.put("imgUrl", advertising.getImgUrl());
                     comMap.put("linkUrl", advertising.getLinkUrl());
                     comMap.put("title", advertising.getTitle());
-                    String id = advertising.getConnectedId();  //公司ID
+                    String id = advertising.getConnectedId();  //关联ID(关联用户的ID,关联产品的产品ID,关联品牌的品牌ID)
 
                     comMap.put("comId", id);
                     Member member = memberService.findMemById(id);

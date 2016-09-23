@@ -188,6 +188,7 @@ public class BrandSiteController {
         Map map3 = new HashMap();
         //品牌详情
         BrandDetailBean brand = brandService.details(id);
+        //计算点击量
         Brand brand1 = brandService.brandDetails(id);
         if(brand1.getViews()==null){
             brand1.setViews(1);
@@ -195,6 +196,7 @@ public class BrandSiteController {
             brand1.setViews(brand1.getViews()+1);
         }
         brandService.updateBrand(brand1);
+        //品牌描述
         map2.put("company",brand.getCompany());
         map2.put("webSite",brand.getWebSite());
         map2.put("phone",brand.getPhone());
@@ -202,18 +204,21 @@ public class BrandSiteController {
         map2.put("introduce",brand.getBrandDesc());
         map2.put("imgUrl",brand.getImgUrl());
         map2.put("logo",brand.getLogo());
-
+        
         ResultBean  result = categoryService.querySystem(scateid);
+        //导航信息
         map3.put("brandid",id);
         map3.put("brandName",brand.getCnName());
         map2.put("brandName",brand.getCnName());
         map3.put("scateid",scateid);
         map3.put("scateName",result.getName());
+        
         ResultBean  result1 = categoryService.querySystem(result.getSmallIcon());
+        
         map3.put("fcateid",result1.getCode());
         map3.put("fcateName",result1.getName());
-        map1.put("brandDesc",map2);
-        map1.put("navigation",map3);
+        map1.put("brandDesc",map2);	
+        map1.put("navigation",map3);	
         Response response = new Response();
         response.setCode(200);
         response.setData(map1);

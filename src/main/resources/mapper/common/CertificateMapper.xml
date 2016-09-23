@@ -15,5 +15,6 @@
     <include refid="Base_Column_List" />
     from t_dictionary_certificate
     where type = #{type}
+    AND searchFlag = '1' ORDER BY category,weight
   </select>
 </mapper>
