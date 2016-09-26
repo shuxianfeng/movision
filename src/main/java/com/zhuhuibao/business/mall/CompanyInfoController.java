@@ -205,7 +205,7 @@ public class CompanyInfoController {
 		map.put("webSite", member.getEnterpriseWebSite());
 		if (member.getProvince() != null) {
 			map.put("address",
-					member.getProvinceName() + member.getCityName() + member.getAreaName() + member.getAddress());
+					StringUtils.trimToEmpty(member.getProvinceName()) + StringUtils.trimToEmpty(member.getCityName()) + StringUtils.trimToEmpty(member.getAreaName()) + member.getAddress());
 		} else {
 			map.put("address", "");
 		}
