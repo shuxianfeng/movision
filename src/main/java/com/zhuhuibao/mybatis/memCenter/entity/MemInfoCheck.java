@@ -11,17 +11,17 @@ public class MemInfoCheck {
 
     private String updateTime;
 
-    private Integer status;
+    private String status;
 
     private String identify;
     private String identifyName;
 
     private String enterpriseName;
 
-    private int workType;
+    private String workType;
     private String workTypeName;
 
-    private Long enterpriseEmployeeParentId;
+    private String enterpriseEmployeeParentId;
 
     private String province;
     private String provinceName;
@@ -34,7 +34,7 @@ public class MemInfoCheck {
 
     private String address;
 
-    private Integer enterpriseType;
+    private String enterpriseType;
     private String enterpriseTypeName;
 
     private String enterpriseLogo;
@@ -81,7 +81,7 @@ public class MemInfoCheck {
 
     private String nickname;
 
-    private Integer sex;
+    private String sex;
 
     private String personCompanyType;
     private String personCompanyTypeName;
@@ -210,15 +210,12 @@ public class MemInfoCheck {
         this.updateTime = updateTime;
     }
 
-    public void setWorkType(int workType) {
-        this.workType = workType;
-    }
-
-    public Integer getStatus() {
+    
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -238,19 +235,19 @@ public class MemInfoCheck {
         this.enterpriseName = enterpriseName == null ? null : enterpriseName.trim();
     }
 
-    public Integer getWorkType() {
+    public String getWorkType() {
         return workType;
     }
 
-    public void setWorkType(Integer workType) {
+    public void setWorkType(String workType) {
         this.workType = workType;
     }
 
-    public Long getEnterpriseEmployeeParentId() {
+    public String getEnterpriseEmployeeParentId() {
         return enterpriseEmployeeParentId;
     }
 
-    public void setEnterpriseEmployeeParentId(Long enterpriseEmployeeParentId) {
+    public void setEnterpriseEmployeeParentId(String enterpriseEmployeeParentId) {
         this.enterpriseEmployeeParentId = enterpriseEmployeeParentId;
     }
 
@@ -286,11 +283,11 @@ public class MemInfoCheck {
         this.address = address == null ? null : address.trim();
     }
 
-    public Integer getEnterpriseType() {
+    public String getEnterpriseType() {
         return enterpriseType;
     }
 
-    public void setEnterpriseType(Integer enterpriseType) {
+    public void setEnterpriseType(String enterpriseType) {
         this.enterpriseType = enterpriseType;
     }
 
@@ -454,11 +451,11 @@ public class MemInfoCheck {
         this.nickname = nickname == null ? null : nickname.trim();
     }
 
-    public Integer getSex() {
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(Integer sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
