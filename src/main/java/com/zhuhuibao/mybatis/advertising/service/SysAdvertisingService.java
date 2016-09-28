@@ -32,8 +32,9 @@ public class SysAdvertisingService {
      * @param page     频道子页面 index:首页
      * @param advArea  广告所在页面区域 F1:一楼层
      * @return  List<SysAdvertising>
+     * 
+     * @Cacheable(value = "advCache",key = "#chanType+'_'+#page+'_'+#advArea") 暂时取消广告缓存（目前是永久缓存，导致新发布的广告一直无法生效）
      */
-    @Cacheable(value = "advCache",key = "#chanType+'_'+#page+'_'+#advArea")
     public List<SysAdvertising> findListByCondition(String chanType, String page, String advArea) {
         List<SysAdvertising> list;
         try{
