@@ -197,7 +197,10 @@ public class ProjectController {
                             	comMap.put("vipLevel", "");
                             }
                         }else{
-                        	throw new BusinessException(MsgCodeConstant.NOT_EXIST_MEMBERID, "广告中不存在关联ID");
+//                        	throw new BusinessException(MsgCodeConstant.NOT_EXIST_MEMBERID, "广告中不存在关联ID");
+                        	comMap.put("comId", "");
+                        	comMap.put("comName", "");
+                        	comMap.put("vipLevel", "");
                         }
                         
                         comList.add(comMap);
