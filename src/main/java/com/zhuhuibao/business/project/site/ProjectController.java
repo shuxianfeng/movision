@@ -21,6 +21,8 @@ import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.project.service.ProjectService;
+import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
+import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -59,6 +61,9 @@ public class ProjectController {
 
     @Autowired
     BrandService brandService;
+    
+    @Autowired
+    VipInfoService vipInfoSV;
     /**
      * 根据条件查询项目分页信息
      *
@@ -183,7 +188,15 @@ public class ProjectController {
                         } else {
                             comMap.put("comName", "");
                         }
-
+                        
+                        VipMemberInfo vipinfo = vipInfoSV.findVipMemberInfoById(Long.valueOf(id));
+                        if(null != vipinfo){
+                        	int vipLevel = vipinfo.getVipLevel();
+                        	comMap.put("vipLevel", String.valueOf(vipLevel));
+                        }else{
+                        	comMap.put("vipLevel", "");
+                        }
+                        
                         comList.add(comMap);
                         break;
                     case "brand":
