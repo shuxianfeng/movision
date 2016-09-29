@@ -134,7 +134,7 @@ public class CompanyController {
             //基本资料待审核
             if (loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue()
                     || loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()) {
-                member.setStatus(MemberConstant.MemberStatus.WSZLDSH.intValue());
+                member.setStatus(MemberConstant.MemberStatus.WSZLDSH.toString());
             }
 
             //实名认证审核通过之后,企业名称不可修改

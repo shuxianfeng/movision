@@ -97,9 +97,9 @@
     GROUP BY brand,account
   </select>
   <select id="getAgentByBrandid" resultMap="ResultMap1">
-    select distinct a.agentid,m.enterpriseName,a.proviceid from t_p_brand_agent a
-    left join t_m_member m on a.agentid = m.id
-    where a.brandid = #{id} and a.status = 0
+    select distinct a.agentid,m.enterpriseName,a.proviceid from t_p_brand_agent a ,t_m_member m 
+    where a.agentid = m.id
+    and a.brandid = #{id} and a.status = 0
   </select>
   <select id="updateAgentById" resultMap="ResultMap">
     select a.brandid as brand,b.CNName as brandName,a.proviceid as province,m.id,m.enterpriseName as company,
@@ -140,8 +140,8 @@
     where find_in_set(#{id},a.scateid) limit 0,6
   </select>
   <select id="getGreatAgentByBrandId" resultMap="ResultMap3">
-    select distinct m.id as code,m.enterpriseName as name,m.enterpriseLogo as smallIcon from t_p_brand_agent a
-    left join t_m_member m on a.agentid = m.id
-    where a.brandid = #{id}
+    select distinct m.id as code,m.enterpriseName as name,m.enterpriseLogo as smallIcon from t_p_brand_agent a ,t_m_member m
+    where a.agentid = m.id
+    and a.brandid = #{id}
   </select>
 </mapper>

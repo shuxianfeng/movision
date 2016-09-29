@@ -72,7 +72,7 @@
   <select id="findAllDownloadData" resultType="java.util.Map" parameterType="java.util.Map">
     select td.title,tc.name,date_format(t.dowloadTime,'%Y-%m-%d') dowloadTime,
     tc.code, td.type, td.id,
-    case when ur.mobile != '' or ur.mobile != null then ur.mobile when ur.email!= '' or ur.email != null then ur.email end as  username
+    CONCAT(LEFT(CASE WHEN ur.mobile != '' OR ur.mobile != NULL THEN ur.mobile WHEN ur.email!= '' OR ur.email != NULL THEN ur.email END, 3),"******") AS  username
     from t_tech_downloadReldata t
     left join t_tech_data td on td.id = t.dataId
     left join t_dictionary_techDataCategory tc on tc.code = td.fCategory

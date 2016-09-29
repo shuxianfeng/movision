@@ -136,7 +136,7 @@ public class RegisterValidateService {
 
                                MemInfoCheck info = new MemInfoCheck();
                                info.setId(user.getId());
-                               info.setStatus(1);
+                               info.setStatus("1");
                                infoCheckMapper.updateByPrimaryKeySelective(info);
 
                                MemRealCheck real = new MemRealCheck();
