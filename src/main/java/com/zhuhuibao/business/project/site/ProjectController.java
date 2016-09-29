@@ -1,6 +1,7 @@
 package com.zhuhuibao.business.project.site;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,13 +10,21 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.fsearch.pojo.spec.ProjectSearchSpec;
 import com.zhuhuibao.fsearch.service.impl.ProjectFSService;
+import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
+import com.zhuhuibao.mybatis.advertising.service.SysAdvertisingService;
+import com.zhuhuibao.mybatis.category.service.CategoryService;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.project.service.ProjectService;
 import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
@@ -41,7 +50,15 @@ public class ProjectController {
 
     @Autowired
     ProjectFSService projectfsService;
+    
+    @Autowired
+    private CategoryService categoryService;
+    
+    @Autowired
+    private SysAdvertisingService advService;
 
+    @Autowired
+    BrandService brandService;
     /**
      * 根据条件查询项目分页信息
      *
@@ -117,14 +134,92 @@ public class ProjectController {
     public Response sel_great_manufacturer(@ApiParam(value = "频道类型 4：项目") @RequestParam String chanType,
                                            @ApiParam(value = "频道下子页面:index") @RequestParam String page,
                                            @ApiParam(value = "广告所在区域:F1:优秀工程商") @RequestParam String advArea) {
-        Response response = new Response();
+        /*Response response = new Response();
         Map<String, Object> map = new HashMap<>();
         map.put("chanType", chanType);
         map.put("page", page);
         map.put("advArea", advArea);
         List<Map<String, String>> list = memberService.queryGreatCompany(map);
         response.setData(list);
-        return response;
+        return response;*/
+        
+    	Map<String, Object> result = new HashMap<>();
+
+        List<Map<String, String>> comList = new ArrayList<>();
+        List<Map<String, String>> brandList = new ArrayList<>();
+        List<Map<String, String>> otherList = new ArrayList<>();
+        
+        //校验advArea
+        if (!advArea.contains("F") || advArea.length() < 2) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "传值不正确");
+        }
+        String pid = advArea.substring(1, advArea.length());
+        if (!StringUtils.isEmpty(pid)) {
+            List<Map<String, String>> scategory = categoryService.findSubSystemByPid(pid);
+            result.put("scategory", scategory);
+        } else {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "传值不正确");
+        }
+        
+        List<SysAdvertising> advertisings = advService.findListByCondition(chanType, page, advArea);
+        if(null != advertisings && advertisings.size() > 0){
+        	for (SysAdvertising advertising : advertisings) {
+                Map<String, String> comMap = new HashMap<>();
+                Map<String, String> brandMap = new HashMap<>();
+                Map<String, String> otherMap = new HashMap<>();
+
+                switch (advertising.getAdvType()) {
+                    case "company":
+                        comMap.put("imgUrl", advertising.getImgUrl());
+                        comMap.put("linkUrl", advertising.getLinkUrl());
+                        comMap.put("title", advertising.getTitle());
+                        String id = advertising.getConnectedId();  //关联ID(关联用户的ID,关联产品的产品ID,关联品牌的品牌ID)
+
+                        comMap.put("comId", id);
+                        Member member = memberService.findMemById(id);
+                        if (member != null) {
+                            String comName = member.getEnterpriseName();
+                            comMap.put("comName", comName == null ? "" : comName);
+                        } else {
+                            comMap.put("comName", "");
+                        }
+
+                        comList.add(comMap);
+                        break;
+                    case "brand":
+                        brandMap.put("imgUrl", advertising.getImgUrl());
+                        brandMap.put("linkUrl", advertising.getLinkUrl());
+                        brandMap.put("title", advertising.getTitle());
+                        brandMap.put("id", advertising.getConnectedId());
+                        //根据品牌查询子系统ID    scateid
+                        List<String> scateIds = brandService.findScateIdByBrandId(advertising.getConnectedId());
+                        if(scateIds.size() > 0){
+                            brandMap.put("scateid", StringUtils.isEmpty(scateIds.get(0)) ? "" : scateIds.get(0));
+                        }else{
+                            brandMap.put("scateid","");
+                        }
+
+                        brandList.add(brandMap);
+                        break;
+                    case "other":
+                        otherMap.put("imgUrl", advertising.getImgUrl());
+                        otherMap.put("linkUrl", advertising.getLinkUrl());
+                        otherMap.put("title", advertising.getTitle());
+                        otherMap.put("id", advertising.getConnectedId());
+                        otherList.add(otherMap);
+                        break;
+                }
+            }
+        }else{
+        	throw new BusinessException(MsgCodeConstant.NOT_EXIST_ADV, "暂未设置广告信息");
+        }
+
+        result.put("company", comList);
+        result.put("brand", brandList);
+        result.put("other", otherList);
+
+        return new Response(result);
+        
     }
 
     @RequestMapping(value = {"queryLatestProject", "site/base/sel_latestProject"}, method = RequestMethod.GET)

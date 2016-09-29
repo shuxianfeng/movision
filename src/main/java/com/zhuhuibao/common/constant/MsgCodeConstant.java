@@ -238,6 +238,11 @@ public interface MsgCodeConstant {
 	int NOT_EXIST_VIP = 3002;
 	
 	/**
+	 * 不存在此处广告
+	 */
+	int NOT_EXIST_ADV = 3003;
+	
+	/**
 	 * 时间异常 3100~3199
 	 * 日期转换异常
 	 */
