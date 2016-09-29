@@ -179,22 +179,25 @@ public class ProjectController {
                         comMap.put("linkUrl", advertising.getLinkUrl());
                         comMap.put("title", advertising.getTitle());
                         String id = advertising.getConnectedId();  //关联ID(关联用户的ID,关联产品的产品ID,关联品牌的品牌ID)
-
-                        comMap.put("comId", id);
-                        Member member = memberService.findMemById(id);
-                        if (member != null) {
-                            String comName = member.getEnterpriseName();
-                            comMap.put("comName", comName == null ? "" : comName);
-                        } else {
-                            comMap.put("comName", "");
-                        }
-                        
-                        VipMemberInfo vipinfo = vipInfoSV.findVipMemberInfoById(Long.valueOf(id));
-                        if(null != vipinfo){
-                        	int vipLevel = vipinfo.getVipLevel();
-                        	comMap.put("vipLevel", String.valueOf(vipLevel));
+                        if(org.apache.commons.lang3.StringUtils.isNotEmpty(id)){
+                        	comMap.put("comId", id);
+                            Member member = memberService.findMemById(id);
+                            if (member != null) {
+                                String comName = member.getEnterpriseName();
+                                comMap.put("comName", comName == null ? "" : comName);
+                            } else {
+                                comMap.put("comName", "");
+                            }
+                            
+                            VipMemberInfo vipinfo = vipInfoSV.findVipMemberInfoById(Long.valueOf(id));
+                            if(null != vipinfo){
+                            	int vipLevel = vipinfo.getVipLevel();
+                            	comMap.put("vipLevel", String.valueOf(vipLevel));
+                            }else{
+                            	comMap.put("vipLevel", "");
+                            }
                         }else{
-                        	comMap.put("vipLevel", "");
+                        	throw new BusinessException(MsgCodeConstant.NOT_EXIST_MEMBERID, "广告中不存在关联ID");
                         }
                         
                         comList.add(comMap);

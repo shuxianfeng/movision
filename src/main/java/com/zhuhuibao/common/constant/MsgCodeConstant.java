@@ -243,6 +243,11 @@ public interface MsgCodeConstant {
 	int NOT_EXIST_ADV = 3003;
 	
 	/**
+	 * 不存在关联ID，即会员ID
+	 */
+	int NOT_EXIST_MEMBERID = 3004;
+	
+	/**
 	 * 时间异常 3100~3199
 	 * 日期转换异常
 	 */
