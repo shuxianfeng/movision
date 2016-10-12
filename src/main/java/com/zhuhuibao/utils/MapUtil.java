@@ -3,6 +3,8 @@ package com.zhuhuibao.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.message.BasicNameValuePair;
+
 /**
  * @author jianglz
  * @since 15/12/12.
@@ -98,4 +100,18 @@ public class MapUtil {
 		}
 		return result;
 	}
+	
+	public static Map<Object, Object> convertStringMapToObjectMap (Map<String, String> map){
+		Map<Object, Object> result = new HashMap<Object, Object>();
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			String value = entry.getValue();
+			 if (value != null) {
+				 result.put(entry.getKey(), value);
+             }else{
+            	 result.put(entry.getKey(), null);
+             }
+		}
+		return result;
+	}
+	
 }
