@@ -52,26 +52,28 @@
           parentId=0
        </if>
        
-         <if test="chanType!=null">
-          <if test="chanPage!=null">
-            <if test="advArea!=null">
-              <if test="advType!=null">
-               code = #{advType,jdbcType=VARCHAR}
-               </if>
-               <if test="advType==null">
-               parentId= #{advArea,jdbcType=VARCHAR}
-               </if>
-            </if>
-             <if test="advArea==null">
-               parentId= #{chanPage,jdbcType=VARCHAR}
-            </if>
-          </if>
-          
-           <if test="chanPage==null">
-            parentId= #{chanType,jdbcType=VARCHAR}
-          </if>
-          
-        </if>
+       <if test="chanType!=null">
+       
+	        <if test="chanPage!=null">
+		          <if test="advArea!=null">
+		          
+			             <if test="advType!=null">
+			             code = #{advType,jdbcType=VARCHAR}
+			             </if>
+			             <if test="advType==null">
+			             parentId= #{advArea,jdbcType=VARCHAR}
+			             </if>
+		          </if>
+		           <if test="advArea==null">
+		             parentId= #{chanPage,jdbcType=VARCHAR}
+		          </if>
+	        </if>
+	        
+	        <if test="chanPage==null">
+	          parentId= #{chanType,jdbcType=VARCHAR}
+	        </if>
+        
+      </if>
         
    </select> 
    

@@ -18,14 +18,14 @@ public class LocalTest extends BaseSpringContext {
 
     @Autowired
     FileUtil fileUtil;
-
-    @Test
+    
     public void test(){
         boolean bool = FileUtil.isAllowed("/Users/jianglz/Downloads/aaa.ppt", "doc");
                 //fileUtil.isExistFile("11466507049775.txt","doc","job");
         System.out.println(bool);
     }
-
+    
+    @Test	
     public void testContants() {
         CloseableHttpClient httpclient = HttpClients.custom()
                 .build();
@@ -49,7 +49,6 @@ public class LocalTest extends BaseSpringContext {
 
     }
 
-    @Test
     public void testQuery() {
         Map<String, String> params = new HashMap<String, String>();
         params.put("_input_charset", "utf-8");

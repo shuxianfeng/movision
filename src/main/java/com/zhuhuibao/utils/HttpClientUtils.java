@@ -254,7 +254,9 @@ public class HttpClientUtils {
             if (pairs != null && pairs.size() > 0) {
                 httpPost.setEntity(new UrlEncodedFormEntity(pairs, charset));
             }
+            //执行httpClient请求
             CloseableHttpResponse response = httpClient.execute(httpPost);
+            //解析返回结果response
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode != 200) {
                 httpPost.abort();
