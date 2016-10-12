@@ -62,9 +62,6 @@ public class ZhbService {
 	private WorkTypeMapper workTypeMapper;
 
 	@Autowired
-	private MemberService memberService;
-
-	@Autowired
 	private OrderService orderService;
 
 	@Autowired
