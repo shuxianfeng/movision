@@ -39,8 +39,8 @@ public class AdvertisingService {
      *            广告所属的该页面的区域
      * @return
      */
-    public List<SysAdvertising> queryAdvertisting(String chanType, String page, String advArea) {
-        return advService.findListByCondition(chanType, page, advArea);
+    public List<SysAdvertising> queryAdveristing(String chanType, String page, String advArea) {
+            return advService.findListByCondition(chanType, page, advArea);
     }
 
 }

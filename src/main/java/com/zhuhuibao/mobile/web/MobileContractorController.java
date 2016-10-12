@@ -63,13 +63,13 @@ public class MobileContractorController {
     public Response index() {
         Response response = new Response();
         // banner位广告图片 todo chanType 待定 广告位置
-        List<SysAdvertising> bannerAdvList = advertisingService.queryAdvertisting(AdvertisingConstant.AdvertisingChanType.mobile.value, mAdvArea, "M_Engineering_banner");
+        List<SysAdvertising> bannerAdvList = advertisingService.queryAdveristing(AdvertisingConstant.AdvertisingChanType.mobile.value, mAdvArea, "M_Engineering_banner");
         // 加入我们广告图片
-        List<SysAdvertising> joinUsAdvList = advertisingService.queryAdvertisting(AdvertisingConstant.AdvertisingChanType.mobile.value, mAdvArea, "M_Engineering_joinus");
+        List<SysAdvertising> joinUsAdvList = advertisingService.queryAdveristing(AdvertisingConstant.AdvertisingChanType.mobile.value, mAdvArea, "M_Engineering_joinus");
         // 名企展示广告图片
-        List<SysAdvertising> greatCompanyAdvList = advertisingService.queryAdvertisting(AdvertisingConstant.AdvertisingChanType.mobile.value, mAdvArea, "M_Engineering_Enterprisedisplay");
+        List<SysAdvertising> greatCompanyAdvList = advertisingService.queryAdveristing(AdvertisingConstant.AdvertisingChanType.mobile.value, mAdvArea, "M_Engineering_Enterprisedisplay");
         // 风云人物展示广告图片
-        List<SysAdvertising> greatPersonAdvList = advertisingService.queryAdvertisting(AdvertisingConstant.AdvertisingChanType.mobile.value, mAdvArea, "M_Engineering_Influentialman");
+        List<SysAdvertising> greatPersonAdvList = advertisingService.queryAdveristing(AdvertisingConstant.AdvertisingChanType.mobile.value, mAdvArea, "M_Engineering_Influentialman");
 
         Map<String, List> advList = new HashMap<>();
         advList.put("banner", bannerAdvList);
