@@ -52,15 +52,20 @@ public class XmlUtil {
 		
 	
 		/**
-		    * 解析xml,返回第一级元素键值对。如果第一级元素有子节点，则此节点的值是子节点的xml数据。
+		    * JDOM解析xml,返回第一级元素键值对。如果第一级元素有子节点，则此节点的值是子节点的xml数据。
 		    * @param strxml
 		    * @return
 		    * @throws JDOMException
 		    * @throws IOException
 		    */
 	   public static Map doXMLParse(String strxml) throws JDOMException, IOException {
-	      strxml = strxml.replaceFirst("encoding=\".*\"", "encoding=\"UTF-8\"");
-
+		  System.out.println("替换encoding=\".*\"前");
+		  if(strxml.contains("encoding=\".*\"")){
+			  System.out.println("含有encoding");
+			  strxml = strxml.replaceFirst("encoding=\".*\"", "encoding=\"UTF-8\"");
+		  }
+	      System.out.println("替换encoding=\".*\"后");
+	      
 	      if(null == strxml || "".equals(strxml)) {
 	         return null;
 	      }
@@ -69,7 +74,7 @@ public class XmlUtil {
 
 	      InputStream in = new ByteArrayInputStream(strxml.getBytes("UTF-8"));
 	      SAXBuilder builder = new SAXBuilder();
-	      Document doc = builder.build(in);
+	      Document doc = builder.build(in);		//出错
 	      Element root = doc.getRootElement();
 	      List list = root.getChildren();
 	      Iterator it = list.iterator();
