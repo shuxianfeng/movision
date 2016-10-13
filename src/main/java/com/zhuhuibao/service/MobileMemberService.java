@@ -6,8 +6,10 @@ import java.util.Map;
 import com.zhuhuibao.fsearch.pojo.spec.ContractorSearchSpec;
 import com.zhuhuibao.fsearch.service.exception.ServiceException;
 import com.zhuhuibao.fsearch.service.impl.MembersService;
+import com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
+import com.zhuhuibao.mybatis.memCenter.service.MemInfoCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -37,6 +39,9 @@ public class MobileMemberService {
     @Autowired
     private MembersService membersService;
 
+    @Autowired
+    private MemInfoCheckService memInfoCheckService;
+
     /**
      * 获取名企列表
      *
@@ -58,7 +63,8 @@ public class MobileMemberService {
     /**
      * 搜索工程商
      *
-     * @param spec  查询条件
+     * @param spec
+     *            查询条件
      * @return map
      * @throws ServiceException
      */
@@ -67,5 +73,20 @@ public class MobileMemberService {
             spec.setLimit(12);
         }
         return membersService.searchContractors(spec);
+    }
+
+    /**
+     * 查询memberChk信息
+     * 
+     * @param id
+     * @return
+     */
+    public MemInfoCheck getMemInfoCheckById(Long id) {
+        try {
+            return memInfoCheckService.findMemById(String.valueOf(id));
+        } catch (Exception e) {
+            log.error("执行异常>>", e);
+            throw e;
+        }
     }
 }

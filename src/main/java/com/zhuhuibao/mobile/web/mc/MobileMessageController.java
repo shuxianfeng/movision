@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.zhuhuibao.common.constant.MessageConstant;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
+import com.zhuhuibao.service.MobileMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +35,7 @@ public class MobileMessageController {
 
     @Autowired
     private MobileMessageService messageService;
+
 
     @ApiOperation(value = "获取系统消息列表", notes = "获取系统消息列表", response = Response.class)
     @RequestMapping(value = "/sel_sysmsg_list", method = RequestMethod.GET)

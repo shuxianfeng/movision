@@ -3,6 +3,7 @@ package com.zhuhuibao.shiro.realm;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -303,6 +304,14 @@ public class ShiroRealm extends AuthorizingRealm {
             return false;
         }
 
+        /**
+         * 是否为企业账号
+         *
+         * @return
+         */
+        public boolean isEnterprise() {
+            return !MemberConstant.MemberIdentify.GR.toString().equals(getIdentify());
+        }
     }
 
 }
