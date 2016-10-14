@@ -28,7 +28,7 @@ public class AlipayController {
 
 
     /**
-     * 即时到账接口
+     * 支付宝同步[即时到账]
      * <p/>
      * 支付宝同步跳转 {return_url}      GET
      *
@@ -45,7 +45,7 @@ public class AlipayController {
 
 
     /**
-     * 即时到账接口  [批量退款]
+     * 支付宝同步[批量退款]
      * <p/>
      * 支付宝同步跳转 {return_url}      GET
      *
@@ -74,7 +74,7 @@ public class AlipayController {
     }
 
     /**
-     * 即时到账接口   [批量退款]
+     * 批量退款
      * <p/>
      * 支付宝异步跳转 {notify_url}      POST
      *

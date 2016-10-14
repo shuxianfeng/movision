@@ -16,7 +16,26 @@ import com.zhuhuibao.utils.SignUtil;
 import com.zhuhuibao.utils.XmlUtil;
 
 public class WXpayTest extends BaseSpringContext{
+	
 	@Test	
+	public void getOpenId(){
+		
+		String code = "";
+		String url = "https://api.weixin.qq.com/sns/oauth2/access_token";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("appid", WePayConstant.APPID);
+		map.put("secret", "d7bf995f8b4271893fb92a29d4cf43f7");
+		map.put("code", code);
+		map.put("grant_type", "authorization_code");
+		
+		Map<String, String> resultMap = HttpClientUtils.doGet(url, map, "UTF-8");
+		
+		System.out.println("resultMap>>>"+resultMap);
+		
+	}
+	
+	
+	
 	public void unifiedorder(){
 		String nonce_str = SignUtil.generateString(32);
 		SortedMap<String, String> signParams = new TreeMap<String, String>();
