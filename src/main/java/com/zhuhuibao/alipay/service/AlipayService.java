@@ -173,7 +173,7 @@ public class AlipayService {
             Map<String, String> params = getRequestParams(request);
 
             String orderNo = params.get("out_trade_no");
-
+            //？
             String url = params.get("extra_common_param");
             if (!StringUtils.isEmpty(url)) {
                 RedirectView rv = new RedirectView(url);
@@ -193,8 +193,10 @@ public class AlipayService {
 
                 if (params.get("trade_status").equals("TRADE_FINISHED")
                         || params.get("trade_status").equals("TRADE_SUCCESS")) {
+                	//返回成功时业务逻辑处理
                     Map<String, String> resultMap = tradeSuccessDeal(params,
                             PayConstants.NotifyType.SYNC.toString(), tradeType);
+                    
                     log.info("***同步回调：支付平台回调发起发支付方结果：" + resultMap);
                     if (resultMap != null
                             && String.valueOf(PayConstants.HTTP_SUCCESS_CODE)
@@ -503,7 +505,7 @@ public class AlipayService {
         //退款
         if (tradeType.equals(PayConstants.TradeType.REFUND.toString())) {
             recordRefundAsyncCallbackLog(params);
-            //修改订单状态为已支付
+            //修改订单状态为已退款
             order.setStatus(PayConstants.OrderStatus.YTK.toString());
 
             //2. 修改订单状态

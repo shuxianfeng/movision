@@ -1,9 +1,8 @@
-package com.zhuhuibao.business.pay;
+package com.zhuhuibao.mobile.web;
 
 import com.zhuhuibao.alipay.service.AlipayService;
 import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
 import com.zhuhuibao.common.constant.PayConstants;
-import com.zhuhuibao.utils.PropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * 手机端
  * 支付宝支付  {回调接口} callback
  */
 @RestController
-@RequestMapping("/rest/alipay")
-public class AlipayController {
-    private static final Logger log = LoggerFactory.getLogger(AlipayController.class);
+@RequestMapping("/rest/m/alipay")
+public class MobileAlipayController {
+    private static final Logger log = LoggerFactory.getLogger(MobileAlipayController.class);
 
     @Autowired
     AlipayService alipayService;
@@ -36,6 +36,7 @@ public class AlipayController {
      */
     @RequestMapping(value = "callback/direct_return", method = RequestMethod.GET)
     public ModelAndView alipaySynchPay(HttpServletRequest request) {
+    	
         log.debug("*****支付宝同步[即时到账]跳转*****开始");
         //默认回调页面
         String returnUrl = AlipayPropertiesLoader.getPropertyValue("alipay_return_url");
@@ -53,6 +54,7 @@ public class AlipayController {
      */
     @RequestMapping(value = "callback/refund_return", method = RequestMethod.GET)
     public ModelAndView alipaySynchRefund(HttpServletRequest request) {
+    	
         log.debug("*****支付宝同步[批量退款]跳转*****开始");
         String returnUrl = AlipayPropertiesLoader.getPropertyValue("alirefund_return_url");
         return alipayService.syncNotify(request, PayConstants.TradeType.REFUND.toString(),returnUrl);
@@ -68,6 +70,7 @@ public class AlipayController {
      */
     @RequestMapping(value = "callback/direct_notify", method = RequestMethod.POST)
     public void alipayAsynPay(HttpServletRequest request, HttpServletResponse response) {
+    	
         log.debug("*******支付宝[即时到账]异步跳转******开始");
 
         alipayService.asyncNotify(request, response, PayConstants.TradeType.PAY.toString());
@@ -83,6 +86,7 @@ public class AlipayController {
      */
     @RequestMapping(value = "callback/refund_notify", method = RequestMethod.POST)
     public void alipayAsynRefund(HttpServletRequest request, HttpServletResponse response) {
+    	
         log.debug("*******支付宝[批量退款]异步跳转******开始");
 
         alipayService.asyncNotify(request, response, PayConstants.TradeType.REFUND.toString());
