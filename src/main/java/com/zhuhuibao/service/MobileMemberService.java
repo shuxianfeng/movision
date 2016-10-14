@@ -47,8 +47,8 @@ public class MobileMemberService {
      *
      * @return list
      */
-    public List<Member> getGreatCompany(Paging<Member> pager) throws Exception {
-        return memberMapper.findGreatCompanyByPager(pager.getRowBounds());
+    public List<Member> getGreatCompany(Paging<Member> pager,String identify) throws Exception {
+        return memberMapper.findGreatCompanyByPager(pager.getRowBounds(),identify);
     }
 
     /**

@@ -33,8 +33,8 @@ import com.zhuhuibao.utils.pagination.model.Paging;
  * @date 2016年10月12日
  */
 @RestController
-@RequestMapping("/rest/m/contractor/sit/")
-@Api(value = "Contractor", description = "触屏端工程商频道")
+@RequestMapping("/rest/m/contractor/site/")
+@Api(value = "MobileContractor", description = "触屏端工程商频道")
 public class MobileContractorController {
 
     private static final Logger log = LoggerFactory.getLogger(MobileContractorController.class);
@@ -51,7 +51,7 @@ public class MobileContractorController {
     /**
      * 触屏端工程商广告图片位置
      */
-    private final String mAdvArea = "M_Engineering";
+    private final String mContractorArea = "M_Contractor";
 
     /**
      * 触屏端工程商首页
@@ -63,13 +63,13 @@ public class MobileContractorController {
     public Response index() {
         Response response = new Response();
         // banner位广告图片 todo chanType 待定 广告位置
-        List<SysAdvertising> bannerAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mAdvArea, "M_Engineering_banner");
+        List<SysAdvertising> bannerAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mContractorArea, "M_Contractor_Banner");
         // 加入我们广告图片
-        List<SysAdvertising> joinUsAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mAdvArea, "M_Engineering_joinus");
+        List<SysAdvertising> joinUsAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mContractorArea, "M_Contractor_Join_Us");
         // 名企展示广告图片
-        List<SysAdvertising> greatCompanyAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mAdvArea, "M_Engineering_Enterprisedisplay");
+        List<SysAdvertising> greatCompanyAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mContractorArea, "M_Contractor_Enterprise_Display");
         // 风云人物展示广告图片
-        List<SysAdvertising> greatPersonAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mAdvArea, "M_Engineering_Influentialman");
+        List<SysAdvertising> greatPersonAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mContractorArea, "M_Contractor_Influential_Man");
 
         Map<String, List> advList = new HashMap<>();
         advList.put("banner", bannerAdvList);
@@ -81,7 +81,7 @@ public class MobileContractorController {
     }
 
     /**
-     * 触屏端工程商-名企展示更多页面
+     * 触屏端-名企（厂商，代理商，渠道商)展示更多页面
      * 
      * @param pageNo
      *            页码
@@ -89,14 +89,14 @@ public class MobileContractorController {
      *            每页显示条数
      * @return response 响应
      */
-    @ApiOperation(value = "触屏端工程商-名企展示更多", notes = "触屏端工程商-名企展示更多")
+    @ApiOperation(value = "触屏端-名企(厂商，代理商，渠道商)展示更多页面", notes = "触屏端-名企(厂商，代理商，渠道商)展示更多页面")
     @RequestMapping(value = "sel_great_company_list", method = RequestMethod.GET)
     public Response sel_great_company_list(@ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo,
             @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
         Paging<Member> pager = new Paging<>(pageNo, pageSize);
         try {
-            response.setData(memberService.getGreatCompany(pager));
+            response.setData(memberService.getGreatCompany(pager,"6"));
         } catch (Exception e) {
             log.error("sel_great_company_list error! ", e);
             e.printStackTrace();
@@ -105,13 +105,13 @@ public class MobileContractorController {
     }
 
     /**
-     * 触屏端工程商-名企信息详情
+     * 触屏端-名企(厂商，代理商，渠道商)信息详情
      * 
      * @param id
      *            工程商id
      * @return response 响应
      */
-    @ApiOperation(value = "触屏端工程商-名企信息详情", notes = "触屏端工程商-名企信息详情")
+    @ApiOperation(value = "触屏端-名企(厂商，代理商，渠道商)信息详情", notes = "触屏端-名企(厂商，代理商，渠道商)信息详情")
     @RequestMapping(value = "sel_great_company_info", method = RequestMethod.GET)
     public Response sel_great_company_info(@ApiParam(value = "名企主键id") @RequestParam(required = true) String id) {
         Response response = new Response();

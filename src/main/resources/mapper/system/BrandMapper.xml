@@ -260,4 +260,25 @@
                                  OR ENName LIKE CONCAT('%', #{keyword},'%')
               ) LIMIT #{count}
     </select>
+
+    <!-- 根据一级分类获取品牌信息 -->
+    <select id="selHotBrandListByType" resultMap="ResultMap2" parameterType="java.util.Map">
+        SELECT DISTINCT
+        b.id,
+        b.CNName,
+        p.scateid,
+        b.logourl
+        FROM t_p_product p
+        LEFT JOIN t_p_brand b ON b.id = p.brandid
+        WHERE b.status = 1 AND p.status = 1  and p.scateid IN
+        (select
+            id
+            from t_p_category
+            where parentId = #{parentId} and is_deleted = 0
+        <if test="subTypeId != null">
+            id = #{subTypeId}
+        </if>
+        )
+        ORDER BY b.views DESC
+    </select>
 </mapper>
