@@ -1,12 +1,9 @@
 package com.zhuhuibao.mobile.web;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs;
-import com.zhuhuibao.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +17,11 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
-import com.zhuhuibao.fsearch.pojo.spec.ContractorSearchSpec;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
-import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.service.AdvertisingService;
+import com.zhuhuibao.service.AskPriceService;
+import com.zhuhuibao.service.MobileBrandService;
+import com.zhuhuibao.service.MobileProductService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
 /**
@@ -49,15 +48,6 @@ public class MobileSupplierController {
 
     @Autowired
     private MobileProductService mobileProductService;
-
-    @Autowired
-    private MobileAgentService mobileAgentService;
-
-    @Autowired
-    private MobileMemberService memberService;
-
-    @Autowired
-    private MobileChannelNewsService channelNewsService;
 
     /**
      * 触屏端供应链广告图片位置
@@ -161,6 +151,5 @@ public class MobileSupplierController {
         }
         return response;
     }
-
 
 }
