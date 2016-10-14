@@ -943,10 +943,10 @@
         order by ad.sort   asc
     </select>
 
-    <select id="findGreatCompanyByPager" resultMap="BaseResultMap">
+    <select id="findGreatCompanyByPager" resultMap="BaseResultMap" parameterType="java.lang.String">
         select * FROM t_m_member WHERE
         status = 5 and
-            identify like '%6%'
+            identify like CONCAT('%',#{identify},'%')
         order by registerTime desc
     </select>
 </mapper>

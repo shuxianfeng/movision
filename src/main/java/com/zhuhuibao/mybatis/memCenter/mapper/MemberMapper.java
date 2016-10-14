@@ -101,5 +101,5 @@ public interface MemberMapper {
      * @param rowBounds 分页信息
      * @return
      */
-    List<Member> findGreatCompanyByPager(RowBounds rowBounds);
+    List<Member> findGreatCompanyByPager(RowBounds rowBounds,String identify);
 }

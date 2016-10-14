@@ -66,4 +66,6 @@ public interface ProductMapper {
     //List<String> findScateByBrandId(@Param("brandId") String brandId);
 
 	List<Product> findAllProduct(RowBounds rowBounds, ProductWithBLOBs product);
+
+    List<ProductWithBLOBs> queryProductInfoBySCategoryPages(RowBounds rowBounds,Map<String,Object> map);
 }
