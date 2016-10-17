@@ -21,7 +21,7 @@ import java.util.Map;
  */
 @RestController("cashier")
 @RequestMapping(value = "/rest/m/order/site")
-@Api(value = "OrderController", description = "下单流程")
+@Api(value = "MobileOrderController", description = "下单流程")
 public class MobileOrderController {
 
     @Autowired

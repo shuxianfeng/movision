@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/rest/m/pay/site")
-@Api(value = "zhbOrderPAY", description = "订单下单支付")
+@Api(value = "MobileZhbOrderPAY", description = "订单下单支付")
 public class MobileZhbPayController {
 
     @Autowired
