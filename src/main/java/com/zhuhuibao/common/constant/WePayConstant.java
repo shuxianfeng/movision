@@ -1,5 +1,12 @@
 package com.zhuhuibao.common.constant;
 
+/**
+ * 微信支付单元测试使用
+ * 
+ * @author zhuangyuhao
+ * @time   2016年10月17日 上午11:47:35
+ *
+ */
 public class WePayConstant {
 
 	public static final String SIGN_KEY = "d7bf995f8b4271893fb92a29d4cf43e8"; 
