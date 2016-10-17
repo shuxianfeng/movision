@@ -7,6 +7,7 @@ import java.util.Map;
 import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.fsearch.pojo.spec.ContractorSearchSpec;
+import com.zhuhuibao.fsearch.pojo.spec.SupplierSearchSpec;
 import com.zhuhuibao.fsearch.service.exception.ServiceException;
 import com.zhuhuibao.fsearch.service.impl.MembersService;
 import com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck;
@@ -51,8 +52,10 @@ public class MobileMemberService {
      *
      * @return list
      */
-    public List<Member> getGreatCompany(Paging<Member> pager, String identify) throws Exception {
-        return memberMapper.findGreatCompanyByPager(pager.getRowBounds(), identify);
+    public Paging<Member> getGreatCompany(Paging<Member> pager, String identify) throws Exception {
+        List<Member> members = memberMapper.findGreatCompanyByPager(pager.getRowBounds(), identify);
+        pager.result(members);
+        return pager;
     }
 
     /**
@@ -95,7 +98,7 @@ public class MobileMemberService {
     }
 
     /**
-     * 更新会员审核信息
+     * <<<<<<< HEAD 更新会员审核信息
      * 
      * @param memInfoCheck
      */
@@ -119,7 +122,22 @@ public class MobileMemberService {
      * @param crmPassword
      */
     public void updateMemberPwd(String oldPassword, String newPassword, String crmPassword) {
-        Map<String,String> map  = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
 
+    }
+
+    /**
+     * 搜索供应商
+     *
+     * @param spec
+     *            查询条件
+     * @return map
+     * @throws ServiceException
+     */
+    public Map<String, Object> searchSuppliers(SupplierSearchSpec spec) throws ServiceException {
+        if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
+            spec.setLimit(12);
+        }
+        return membersService.searchSuppliers(spec);
     }
 }

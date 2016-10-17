@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.common.pojo.AskPriceResultBean;
+import com.zhuhuibao.common.pojo.AskPriceSearchBean;
+import com.zhuhuibao.fsearch.pojo.spec.SupplierSearchSpec;
+import com.zhuhuibao.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +22,6 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
-import com.zhuhuibao.service.AdvertisingService;
-import com.zhuhuibao.service.AskPriceService;
-import com.zhuhuibao.service.MobileBrandService;
-import com.zhuhuibao.service.MobileProductService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
 /**
@@ -48,6 +48,9 @@ public class MobileSupplierController {
 
     @Autowired
     private MobileProductService mobileProductService;
+
+    @Autowired
+    private MobileMemberService memberService;
 
     /**
      * 触屏端供应链广告图片位置
@@ -152,4 +155,64 @@ public class MobileSupplierController {
         return response;
     }
 
+    /**
+     * 触屏端搜索供应商信息
+     *
+     * @param spec
+     *            查询条件
+     * @return
+     */
+    @ApiOperation(value = "触屏端搜索供应商", notes = "触屏端搜索供应商", response = Response.class)
+    @RequestMapping(value = { "sel_supplier_list" }, method = RequestMethod.GET)
+    public Response sel_supplier_list(SupplierSearchSpec spec) {
+        Response response = new Response();
+        try {
+            response.setData(memberService.searchSuppliers(spec));
+        } catch (Exception e) {
+            response.setMsgCode(0);
+            response.setMessage("sel_supplier_list  error!" + e);
+        }
+        return response;
+    }
+
+    /**
+     * 触屏端--询价馆
+     * 
+     * @param askPriceSearch
+     *            查询条件
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "触屏端--询价馆", notes = "触屏端--询价馆", response = Response.class)
+    @RequestMapping(value = { "sel_enquiry_list" }, method = RequestMethod.GET)
+    public Response sel_enquiry_list(AskPriceSearchBean askPriceSearch, @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<AskPriceResultBean> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        try {
+            response.setData(askPriceService.selEnquiryList(askPriceSearch, pager));
+        } catch (Exception e) {
+            response.setMessage("sel_enquiry_list  error!" + e);
+        }
+        return response;
+    }
+
+    /**
+     * 触屏端--查看具体询价详情
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "触屏端--查看具体询价详情", notes = "触屏端--查看具体询价详情", response = Response.class)
+    @RequestMapping(value = { "sel_enquiry_info" }, method = RequestMethod.GET)
+    public Response sel_enquiry_info(@ApiParam(value = "询价主键id")@RequestParam(required = false) String id) {
+        Response response = new Response();
+        try {
+            response.setData(askPriceService.queryAskPriceByID(id));
+        } catch (Exception e) {
+            response.setMessage("sel_enquiry_info  error!" + e);
+        }
+        return response;
+    }
 }
