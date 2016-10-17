@@ -1,4 +1,4 @@
-package com.zhuhuibao.mobile.web;
+package com.zhuhuibao.mobile.web.pay;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;

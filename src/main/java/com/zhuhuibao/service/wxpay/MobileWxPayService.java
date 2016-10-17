@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mangofactory.swagger.models.Collections;
 import com.zhuhuibao.common.constant.WePayConstant;
-import com.zhuhuibao.mobile.web.MobileAlipayController;
+import com.zhuhuibao.mobile.web.pay.MobileAlipayController;
 import com.zhuhuibao.utils.HttpClientUtils;
 import com.zhuhuibao.utils.SignUtil;
 import com.zhuhuibao.utils.XmlUtil;
