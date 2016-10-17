@@ -98,7 +98,7 @@ public class MobileMemberService {
     }
 
     /**
-     * <<<<<<< HEAD 更新会员审核信息
+     * 更新会员审核信息
      * 
      * @param memInfoCheck
      */
