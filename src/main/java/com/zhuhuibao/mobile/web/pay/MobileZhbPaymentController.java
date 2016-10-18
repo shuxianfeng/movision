@@ -1,4 +1,4 @@
-package com.zhuhuibao.mobile.web;
+package com.zhuhuibao.mobile.web.pay;
 
 import java.io.IOException;
 
@@ -30,7 +30,7 @@ import com.wordnik.swagger.annotations.Api;
  */
 @RestController
 @RequestMapping(value ="/rest/m/zhbpayment/site/base")
-@Api(value="ZhbPayment", description="筑慧币付款")
+@Api(value="MobileZhbPayment", description="筑慧币付款")
 public class MobileZhbPaymentController {
     @Autowired
     PaymentService paymentService;

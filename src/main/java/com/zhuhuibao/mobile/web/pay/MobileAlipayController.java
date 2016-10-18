@@ -1,4 +1,4 @@
-package com.zhuhuibao.mobile.web;
+package com.zhuhuibao.mobile.web.pay;
 
 import com.zhuhuibao.alipay.service.AlipayService;
 import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
