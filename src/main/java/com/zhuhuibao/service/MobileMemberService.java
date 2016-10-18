@@ -15,8 +15,11 @@ import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemInfoCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,15 +118,58 @@ public class MobileMemberService {
     }
 
     /**
-     * 密码修改
+     * 密码修改（参数全通过base64编码）
      * 
      * @param oldPassword
      * @param newPassword
-     * @param crmPassword
+     * @param confirmPassword
+     * @return 错误提示消息（为空则表示修改成功）
      */
-    public void updateMemberPwd(String oldPassword, String newPassword, String crmPassword) {
-        Map<String, String> map = new HashMap<>();
+    public String updateMemberPwd(String oldPassword, String newPassword, String confirmPassword) {
+        String errorMsg = "";
+        if (isRightPassword(oldPassword)) {
+            if ((StringUtils.trimToEmpty(newPassword)).equals(confirmPassword)) {
+                String newPwd = new String(EncodeUtil.decodeBase64(newPassword));
+                String md5Pwd = new Md5Hash(newPwd, null, 2).toString();
+                Member member = new Member();
+                member.setPassword(md5Pwd);
+                member.setId(String.valueOf(ShiroUtil.getCreateID()));
+                oldMemberService.updateMemInfo(member);
 
+            } else {
+                errorMsg = "两次输入的密码不一致";
+            }
+        } else {
+            errorMsg = "密码输入错";
+        }
+
+        return errorMsg;
+    }
+
+    /**
+     * 判断密码是当前登录者密码
+     * 
+     * @param password
+     * @return
+     */
+    private boolean isRightPassword(String password) {
+        Member member = oldMemberService.findMemById(String.valueOf(ShiroUtil.getCreateID()));
+        String md5Pwd = new Md5Hash(new String(EncodeUtil.decodeBase64(password)), null, 2).toString();
+
+        return null != member && StringUtils.isNotBlank(member.getPassword()) ? member.getPassword().equals(md5Pwd) : false;
+    }
+
+    /**
+     * 修改手机号码
+     * 
+     * @param mobile
+     * @param verifyCode
+     * @return 错误提示消息（为空则表示修改成功）
+     */
+    public String updateMemberMobile(String mobile, String verifyCode) {
+        String errorMsg = "";
+
+        return errorMsg;
     }
 
     /**
