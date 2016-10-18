@@ -327,7 +327,7 @@
                 and fCategory = #{fCategory}
             </if>
             <if test="count != null">
-                and #{count} >= (select count(*) from t_tech_data t2 where t.sCategory = t2.sCategory and t.id > t2.id)
+                and #{count} >= (select count(*) from t_tech_data t2 where t.sCategory = t2.sCategory and t2.id > t.id)
             </if>
             <if test="status != null">
                 and status = #{status}
