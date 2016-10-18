@@ -1,23 +1,18 @@
 package com.zhuhuibao.alipay.service;
 
-import com.google.common.collect.Maps;
-import com.zhuhuibao.alipay.config.AliPayConfig;
-import com.zhuhuibao.alipay.util.AlipayNotify;
-import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
-import com.zhuhuibao.alipay.util.AlipaySubmit;
-import com.zhuhuibao.common.constant.*;
-import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.activity.service.ActivityService;
-import com.zhuhuibao.mybatis.order.entity.*;
-import com.zhuhuibao.mybatis.order.service.*;
-import com.zhuhuibao.mybatis.zhb.service.ZhbService;
-import com.zhuhuibao.security.EncodeUtil;
-import com.zhuhuibao.utils.CommonUtils;
-import com.zhuhuibao.utils.IdGenerator;
-import com.zhuhuibao.utils.JsonUtils;
-import com.zhuhuibao.utils.PropertiesUtils;
-import com.zhuhuibao.utils.convert.DateConvert;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.slf4j.Logger;
@@ -26,19 +21,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.google.common.collect.Maps;
+import com.zhuhuibao.alipay.config.AliPayConfig;
+import com.zhuhuibao.alipay.util.AlipayNotify;
+import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
+import com.zhuhuibao.alipay.util.AlipaySubmit;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.OrderConstants;
+import com.zhuhuibao.common.constant.PayConstants;
+import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.activity.service.ActivityService;
+import com.zhuhuibao.mybatis.order.entity.AlipayCallbackLog;
+import com.zhuhuibao.mybatis.order.entity.AlipayRefundCallbackLog;
+import com.zhuhuibao.mybatis.order.entity.Order;
+import com.zhuhuibao.mybatis.order.entity.OrderFlow;
+import com.zhuhuibao.mybatis.order.entity.Refund;
+import com.zhuhuibao.mybatis.order.service.AlipayCallbackLogService;
+import com.zhuhuibao.mybatis.order.service.AlipayRefundCallbackLogService;
+import com.zhuhuibao.mybatis.order.service.OrderFlowService;
+import com.zhuhuibao.mybatis.order.service.OrderService;
+import com.zhuhuibao.mybatis.order.service.RefundService;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.CommonUtils;
+import com.zhuhuibao.utils.IdGenerator;
+import com.zhuhuibao.utils.convert.DateConvert;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 
 /**
  * 支付宝服务入口
@@ -197,7 +207,7 @@ public class AlipayService {
                     Map<String, String> resultMap = tradeSuccessDeal(params,
                             PayConstants.NotifyType.SYNC.toString(), tradeType);
                     
-                    log.info("***同步回调：支付平台回调发起发支付方结果：" + resultMap);
+                    log.info("***同步回调：支付平台回调发起方支付方结果：" + resultMap);
                     if (resultMap != null
                             && String.valueOf(PayConstants.HTTP_SUCCESS_CODE)
                             .equals(resultMap.get("statusCode"))) {
@@ -271,7 +281,7 @@ public class AlipayService {
                     //业务逻辑处理
                     Map<String, String> resultMap =
                             tradeSuccessDeal(params, PayConstants.NotifyType.ASYNC.toString(), tradeType);
-                    log.info("***异步回调：支付平台回调发起发支付方结果：" + resultMap);
+                    log.info("***异步回调：支付平台回调发起方支付方结果：" + resultMap);
                     if (resultMap != null
                             && String.valueOf(PayConstants.HTTP_SUCCESS_CODE).equals(resultMap.get("statusCode"))) {
                         if ("SUCCESS".equals(resultMap.get("result"))) {
@@ -350,7 +360,6 @@ public class AlipayService {
             log.error("获取防钓鱼时间戳异常：" + e1);
             throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "获取防钓鱼时间戳失败");
         }
-
 
         log.info("Alipay 支付请求参数:{}", sParaTemp.toString());
         return AlipaySubmit.buildRequest(sParaTemp, method, "确认");

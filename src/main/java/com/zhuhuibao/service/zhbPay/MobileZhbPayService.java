@@ -1,5 +1,6 @@
-package com.zhuhuibao.service;
+package com.zhuhuibao.service.zhbPay;
 
+import java.awt.Checkbox;
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -39,6 +40,12 @@ import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ValidateUtils;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 
+/**
+ * ZHB支付服务
+ * @author zhuangyuhao
+ * @time   2016年10月17日 下午7:27:42
+ *
+ */
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 @Service
 public class MobileZhbPayService {
@@ -108,26 +115,31 @@ public class MobileZhbPayService {
      * @param value     viplevel
      */
     private void checkVip(String goodsType, String value) {
+    	
         if (goodsType.equals(OrderConstants.GoodsType.VIP.toString())) {
+        	
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             ShiroRealm.ShiroUser user = (ShiroRealm.ShiroUser) session.getAttribute("member");
             String identify = user.getIdentify();
+            
             if (identify.equals("2")) {     //个人
                 boolean suc1 = value.equals(VipConstant.VipLevel.PERSON_GOLD.toString());
                 boolean suc2 = value.equals(VipConstant.VipLevel.PERSON_PLATINUM.toString());
-                if (!(!suc1 || !suc2)) {
+                //如果suc1不是真，并且suc2不是真，则抛异常
+//                if (!(!suc1 || !suc2)) {
+                if(!suc1 && !suc2){	//!false && !false
                     throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "个人用户无此VIP套餐");
                 }
             } else {  //企业
                 boolean suc1 = value.equals(VipConstant.VipLevel.ENTERPRISE_GOLD.toString());
                 boolean suc2 = value.equals(VipConstant.VipLevel.ENTERPRISE_PLATINUM.toString());
 
-                if (!(suc1 || suc2)) {
+                if(!suc1 && !suc2){
                     throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "企业用户无此VIP套餐");
                 }
-
             }
+            
         }
     }
 	
