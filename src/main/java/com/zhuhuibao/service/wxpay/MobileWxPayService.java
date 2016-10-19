@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.collect.Maps;
+import com.google.gson.Gson;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
@@ -382,12 +383,21 @@ public class MobileWxPayService {
 		 * https://api.weixin.qq.com/sns/oauth2/access_token?
 		 * 	appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
 		 */
-		Map<String, String> resultMap = HttpClientUtils.doGet(GET_OPENID_URL,
+		Map<String, String> queryOpenidResult = HttpClientUtils.doGet(GET_OPENID_URL,
 				map, "UTF-8");
 		log.info("【调openid的接口】，结束");
-		log.info("【调openid的接口】,返回值="+resultMap);
-		if (null != resultMap && null != resultMap.get("openid")) {
-			openid = (String) resultMap.get("openid");
+		log.info("【调openid的接口】,返回值="+queryOpenidResult);
+		/**
+		 * {result={"access_token":"JPNXAj_cpfu6QXzC5w5KdIMuEGlq3fiKCh2LlU4gCJq-yoU8AAXdE9FL9sjqDa-T5yvmCpvx-d0XpNSTJdpqaxijOFeLBeC2QL3m7ml3I8M",
+		 * "expires_in":7200,"refresh_token":"aoXKwIJ-zGCGffNWB8dPqjXOK1Pm2E57ZHQe8gbdWaYEWnlX84oCngejTUK-4Nu5dA4C4xmyXkFh-uo9jnHpITItZw8asP-cASM77gmf0dI",
+		 * "openid":"o3eXzv14h_YilIZB3JDomt0Zutao","scope":"snsapi_userinfo"}, status=200}
+		 */
+		if (null != queryOpenidResult && null != queryOpenidResult.get("result")) {
+			String result =  queryOpenidResult.get("result");
+			Gson gson = new Gson();
+	        Map resultMap = gson.fromJson(result, Map.class);
+	        openid =  (String)resultMap.get("openid");
+	        log.info("【调openid的接口】，openid="+openid);
 		}
 
 		return openid;

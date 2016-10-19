@@ -214,9 +214,9 @@ public class HttpClientUtils {
             rspMap.put("result", "HTTP GET ERROR! " + e.getMessage());
             return rspMap;
         }
-
     }
 
+    
     /**
      * HTTP Post 获取内容
      *
