@@ -1,6 +1,9 @@
 package com.zhuhuibao.service.wxpay;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
@@ -8,24 +11,51 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.jdom.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mangofactory.swagger.models.Collections;
-import com.zhuhuibao.common.constant.WePayConstant;
-import com.zhuhuibao.mobile.web.pay.MobileAlipayController;
+import com.google.common.collect.Maps;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.OrderConstants;
+import com.zhuhuibao.common.constant.PayConstants;
+import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.order.entity.AlipayCallbackLog;
+import com.zhuhuibao.mybatis.order.entity.AlipayRefundCallbackLog;
+import com.zhuhuibao.mybatis.order.entity.Order;
+import com.zhuhuibao.mybatis.order.entity.OrderFlow;
+import com.zhuhuibao.mybatis.order.service.OrderFlowService;
+import com.zhuhuibao.mybatis.order.service.OrderService;
+import com.zhuhuibao.mybatis.wxpayLog.entity.WxPayNotifyLog;
+import com.zhuhuibao.mybatis.wxpayLog.mapper.WxPayNotifyLogMapper;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.CommonUtils;
 import com.zhuhuibao.utils.HttpClientUtils;
 import com.zhuhuibao.utils.SignUtil;
 import com.zhuhuibao.utils.XmlUtil;
+import com.zhuhuibao.utils.convert.DateConvert;
 import com.zhuhuibao.utils.wxpay.WxpayPropertiesLoader;
 
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 @Service
 public class MobileWxPayService {
+	@Autowired
+    ZhbService zhbService;
+	
+	@Autowired
+	private WxPayNotifyLogMapper wxPayNotifyLogMapper;
+	
+	@Autowired
+    private OrderService orderService;
+	
+	@Autowired
+    private OrderFlowService orderFlowService;
 	
 	private static final Logger log = LoggerFactory.getLogger(MobileWxPayService.class);
 	
@@ -42,6 +72,174 @@ public class MobileWxPayService {
 	private static final String WX_DO_ORDER_URL = WxpayPropertiesLoader.getPropertyValue("wx_do_order_url");
 			
 	private static final String MD5 = "MD5";
+	
+	
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public Map<String, String> tradeSuccessDeal(Map<String, String> params, String notifyType, String tradeType) throws ParseException {
+        log.info("支付返回成功,业务逻辑处理...");
+        Map<String, String> resultMap = new HashMap<>();
+
+        try {
+
+            //1-> 记录支付宝回调信息 交易流水信息
+            //订单
+            Order order = new Order();
+            order.setOrderNo(params.get("out_trade_no"));
+            order.setUpdateTime(new Date());
+            //异步通知
+            if (notifyType.equals(PayConstants.NotifyType.ASYNC.toString())) {
+                log.error("异步通知返回记录处理...[{}]", params.get("out_trade_no"));
+                callbackNotice(params, tradeType, order);
+
+            }
+            //同步通知
+            if (notifyType.equals(PayConstants.NotifyType.SYNC.toString())) {
+                log.error("同步通知返回记录处理...[{}]", params.get("out_trade_no"));
+                callbackNotice(params, tradeType, order);
+            }
+
+            resultMap.put("statusCode", String.valueOf(PayConstants.HTTP_SUCCESS_CODE));
+
+        } catch (Exception e) {
+            log.error("微信回调接口业务处理异常:", e);
+            resultMap.put("statusCode", String.valueOf(PayConstants.HTTP_SYSTEM_EXCEPTION_CODE));
+        }
+
+
+        return resultMap;
+    }
+	
+	private void callbackNotice(Map<String, String> params, String tradeType, Order order) {
+        //即时到账支付
+        if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
+        	//记录 微信支付结果通用通知 返回记录
+            recordPayAsyncCallbackLog(params);
+            //2-> 判断是否存在筑慧币支付方式
+            OrderFlow orderFlow = orderFlowService.findByOrderNoAndTradeMode(params.get("out_trade_no"),
+                    PayConstants.PayMode.ZHBPAY.toString());
+            if (orderFlow != null) {
+                String tradeStatus = orderFlow.getTradeStatus();
+                if (tradeStatus.equals(PayConstants.OrderStatus.YZF.toString())) {
+                    //3-> 修改订单状态为已支付
+                    order.setStatus(PayConstants.OrderStatus.YZF.toString());
+                }
+            } else {
+                //3-> 修改订单状态为已支付
+                OrderFlow alFlow = new OrderFlow();
+                alFlow.setOrderNo(params.get("out_trade_no"));
+                alFlow.setTradeStatus(PayConstants.OrderStatus.YZF.toString());
+                alFlow.setTradeTime(new Date());
+                alFlow.setUpdateTime(new Date());
+                orderFlowService.update(alFlow);
+                log.error("修改t_o_order_flow status>>>");
+                order.setStatus(PayConstants.OrderStatus.YZF.toString());
+            }
+
+            //2. 修改订单状态
+            boolean suc = orderService.update(order);
+            log.error("update t_o_order status :>>>>" + suc);
+            //购买筑慧币,VIP 需要回调
+            if (suc) {
+                String orderNo = params.get("out_trade_no");
+                callbackZhbPay(orderNo);
+            } else {
+                throw new BusinessException(MsgCodeConstant.PAY_ERROR, "业务处理失败");
+            }
+
+        }
+        //退款 TODO
+        /*if (tradeType.equals(PayConstants.TradeType.REFUND.toString())) {
+            recordRefundAsyncCallbackLog(params);
+            //修改订单状态为已退款
+            order.setStatus(PayConstants.OrderStatus.YTK.toString());
+
+            //2. 修改订单状态
+            orderService.update(order);
+        }*/
+    }
+	
+	/**
+     * 记录 支付宝即时到账退款接口 异步通知返回记录
+     *
+     * @param params
+     */
+    /*public void recordRefundAsyncCallbackLog(Map<String, String> params) {
+        log.info("支付宝即时到账退款接口,异步通知返回记录 入表操作...");
+        AlipayRefundCallbackLog refundCallbackLog = new AlipayRefundCallbackLog();
+        ConvertUtils.register(new DateConvert(), Date.class);
+        Map<String, String> pMap = Maps.newHashMap();
+        for (String key : params.keySet()) {
+            pMap.put(CommonUtils.getCamelString(key), params.get(key));
+        }
+        log.info("需转换为bean的pMap=" + pMap);
+        try {
+            BeanUtils.populate(refundCallbackLog, pMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("支付宝回调参数map转换为bean异常>>>", e);
+        }
+
+        refundCallbackLogService.insert(refundCallbackLog);
+
+    }*/
+	
+	private void callbackZhbPay(String orderNo) {
+        try {
+
+            Order endOrder = orderService.findByOrderNo(orderNo);
+            if (endOrder != null) {
+                if (endOrder.getGoodsType().equals(OrderConstants.GoodsType.ZHB.toString())) {
+
+                    int result = zhbService.zhbPrepaidByOrder(orderNo);
+                    if (result == 0) {
+                        throw new BusinessException(MsgCodeConstant.PAY_ERROR, "筑慧币充值失败");
+                    }
+                } else if (endOrder.getGoodsType().equals(OrderConstants.GoodsType.VIP.toString())) {
+                    int result = zhbService.openVipService(orderNo);
+                    if (result == 0) {
+                        throw new BusinessException(MsgCodeConstant.PAY_ERROR, "VIP购买失败失败");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error("筑慧币充值失败:", e);
+        }
+    }
+	
+	public void recordPayAsyncCallbackLog(Map<String, String> params) {
+        log.info("微信支付结果通知 , 入表操作... ");
+        WxPayNotifyLog wxpayNotifyLog = new WxPayNotifyLog();
+        
+        ConvertUtils.register(new DateConvert(), Date.class);
+        Map<String, String> pMap = Maps.newHashMap();
+        for (String key : params.keySet()) {
+            pMap.put(CommonUtils.getCamelString(key), params.get(key));
+        }
+//        pMap.put("price", String.valueOf(new BigDecimal(pMap.get("price")).multiply(new BigDecimal(1000)).longValue()));
+        pMap.put("totalFee", String.valueOf(new BigDecimal(pMap.get("totalFee")).multiply(new BigDecimal(1000)).longValue()));
+        log.info("需转换为bean的pMap>>{}", pMap);
+        try {
+            BeanUtils.populate(wxpayNotifyLog, pMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("微信支付结果通知参数map转换为bean异常" + e.getMessage());
+        }
+        wxPayLoginsert(wxpayNotifyLog);
+    }
+	
+	public void wxPayLoginsert(WxPayNotifyLog record) {
+        int num;
+        try {
+            num = wxPayNotifyLogMapper.insertSelective(record);
+            if (num != 1) {
+                log.error("t_o_wxpay_log:插入数据失败");
+                throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
+            }
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "插入数据失败");
+        }
+    }
 	
 	/**
 	 * 获取微信支付中统一下单接口的传参——openID
