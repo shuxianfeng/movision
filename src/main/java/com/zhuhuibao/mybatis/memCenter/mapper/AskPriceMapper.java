@@ -16,16 +16,24 @@ public interface AskPriceMapper {
 
     AskPriceBean queryAskPriceByID(String id);
 
+    /**
+     * 根据ID获取当前登录者的询价信息
+     * 
+     * @param map
+     * @return
+     */
+    AskPriceBean queryAskPriceByAskidMemId(Map<String, Object> map);
+
     List<AskPriceResultBean> findAll(AskPriceSearchBean askPriceSearch);
 
     List<AskPriceResultBean> findAllByPager1(RowBounds rowBounds, AskPriceSearchBean askPriceSearch);
 
     List<AskPrice> find();
 
-    List<AskPrice> queryNewPriceInfo(@Param("count") int count,@Param("createid")String createid);
+    List<AskPrice> queryNewPriceInfo(@Param("count") int count, @Param("createid") String createid);
 
-    List<AskPrice> findAllNewPriceInfoList(RowBounds rowBounds,AskPriceSearchBean askPriceSearch);
+    List<AskPrice> findAllNewPriceInfoList(RowBounds rowBounds, AskPriceSearchBean askPriceSearch);
 
-    AskPriceBean queryAskPrice(Map<String,Object> map);
+    AskPriceBean queryAskPrice(Map<String, Object> map);
 
 }
