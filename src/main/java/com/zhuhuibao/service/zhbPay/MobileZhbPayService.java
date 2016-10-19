@@ -78,7 +78,7 @@ public class MobileZhbPayService {
         log.info("筑慧币下单页面,请求参数:{}", json);
         @SuppressWarnings("unchecked")
 		Map<String, String> paramMap = gson.fromJson(json, Map.class);
-
+        //检查购买用户是否登录
         checkUserLogin(paramMap);
         //根据商品ID查询商品价格
         DictionaryZhbgoods zhbgoods = zhbService.getZhbGoodsById(order.getGoodsId());
@@ -94,7 +94,6 @@ public class MobileZhbPayService {
         //购买VIP套餐判断  个人VIP和企业VIP只能购买对应的VIP套餐
         checkVip(order.getGoodsType(), zhbgoods.getValue());
 
-
         paramMap.put("goodsPrice", price.toString());
         paramMap.put("goodsName", zhbgoods.getName());
 
@@ -102,7 +101,7 @@ public class MobileZhbPayService {
         //生成订单编号
         String orderNo = IdGenerator.createOrderNo();
         paramMap.put("orderNo", orderNo);
-        //提交订单
+        //生成订单 (事务管理)
         zhOrderService.createOrder(paramMap);
         
         return orderNo;

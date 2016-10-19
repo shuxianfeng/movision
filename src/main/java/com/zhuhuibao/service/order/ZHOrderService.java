@@ -171,6 +171,7 @@ public class ZHOrderService {
 
             //交易发票信息
             if ("true".equals(msgParam.get("needInvoice"))) {
+            	//校验发票信息参数
                 checkInvoiceParams(msgParam);
                 //录入发票信息
                 logger.debug("录入发票信息~");
