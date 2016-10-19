@@ -79,6 +79,9 @@ public class MobileWxPayService {
 
 	private static final String WX_DO_ORDER_URL = WxpayPropertiesLoader
 			.getPropertyValue("wx_do_order_url");
+	
+	private static final String WEI_XIN_NOTIFY_URL = WxpayPropertiesLoader
+			.getPropertyValue("wei_xin_notify_url");
 
 	private static final String MD5 = "MD5";
 	
@@ -101,6 +104,7 @@ public class MobileWxPayService {
 		ModelAndView modelAndView = new ModelAndView();
 
 		Map requestParams = request.getParameterMap();
+		log.info("处理微信支付完成的通知回调,requestParams="+requestParams);
 		
 		if (null == requestParams) {
 			throw new BusinessException(
@@ -123,7 +127,9 @@ public class MobileWxPayService {
 					"微信支付结果通用通知接口参数为空");
 		}
 		
+		log.info("处理微信支付完成的通知回调，requestMap="+requestMap);
 //		String orderno = (String)requestParams.get("out_trade_no");
+		log.info("加锁");
 		DistributedLock lock = null;
         try {
             lock = new DistributedLock(LOCK_NAME);
@@ -137,6 +143,7 @@ public class MobileWxPayService {
         } finally {
             if (lock != null) {
                 lock.unlock();
+                log.info("解锁");
             }
         }
         
@@ -150,10 +157,12 @@ public class MobileWxPayService {
 		if ("SUCCESS".equals(return_code)) {
 
 			// 返回成功时业务逻辑处理
+			log.info("微信支付回调成功业务处理，开始");
 			Map<String, String> resultMap = tradeSuccessDeal(
 					requestMap, PayConstants.NotifyType.SYNC.toString(),
 					tradeType);
-
+			log.info("微信支付回调成功业务处理，结束");
+			
 			log.info("***同步回调：支付平台回调发起方支付方结果：" + resultMap);
 			if (resultMap != null
 					&& String.valueOf(PayConstants.HTTP_SUCCESS_CODE).equals(
@@ -220,12 +229,14 @@ public class MobileWxPayService {
 					params.get("out_trade_no"),
 					PayConstants.PayMode.ZHBPAY.toString());
 			if (orderFlow != null) {
+				log.info("存在筑慧币支付方式");
 				String tradeStatus = orderFlow.getTradeStatus();
 				if (tradeStatus.equals(PayConstants.OrderStatus.YZF.toString())) {
 					// 3-> 修改订单状态为已支付
 					order.setStatus(PayConstants.OrderStatus.YZF.toString());
 				}
 			} else {
+				log.info("不存在筑慧币支付方式");
 				// 3-> 修改订单状态为已支付
 				OrderFlow alFlow = new OrderFlow();
 				alFlow.setOrderNo(params.get("out_trade_no"));
@@ -331,6 +342,7 @@ public class MobileWxPayService {
 			log.error("微信支付结果通知参数map转换为bean异常" + e.getMessage());
 		}
 		wxPayLoginsert(wxpayNotifyLog);
+		log.info("微信支付结果通知 , 入表操作——成功！");
 	}
 
 	public void wxPayLoginsert(WxPayNotifyLog record) {
@@ -362,10 +374,14 @@ public class MobileWxPayService {
 		map.put("secret", SECRET);
 		map.put("code", code);
 		map.put("grant_type", AUTHORIZATION_CODE);
-
+		log.info("【调openid的接口】的参数："+map);
+		
 		String openid = "";
+		log.info("【调openid的接口】，开始");
 		Map<String, String> resultMap = HttpClientUtils.doGet(GET_OPENID_URL,
 				map, "UTF-8");
+		log.info("【调openid的接口】，结束");
+		log.info("【调openid的接口】,返回值="+resultMap);
 		if (null != resultMap && null != resultMap.get("openid")) {
 			openid = (String) resultMap.get("openid");
 		}
@@ -379,17 +395,16 @@ public class MobileWxPayService {
 	 * @param openid
 	 * @param orderid
 	 * @param request
-	 * @param wei_xin_notify_url
 	 * @return
 	 */
 	public Map<String, String> handleOrder(String openid, String orderid,
-			HttpServletRequest request, String wei_xin_notify_url) {
+			HttpServletRequest request) {
 		// 生成随机数
 		String nonce_str = SignUtil.generateString(32);
 		log.info("【调微信统一下单接口】生成的【随机数】，【nonce_str】=" + nonce_str);
 		SortedMap<String, String> signParams = new TreeMap<String, String>();
 		// 准备统一下单接口传参
-		prepareParameters(openid, orderid, request, wei_xin_notify_url,
+		prepareParameters(openid, orderid, request, WEI_XIN_NOTIFY_URL,
 				nonce_str, signParams);
 		// 生成签名
 		String sign = SignUtil.createSign("UTF-8", signParams);
@@ -409,11 +424,10 @@ public class MobileWxPayService {
 		// 准备前端调用getBrandWCPayRequest接口所需的参数
 		SortedMap<String, String> jsAPIsignParam = prepareJSAPIParams(
 				nonce_str, doOrderResultMap);
-		Map resultMap = new HashMap<>();
-		resultMap.put("doOrderResultMap", doOrderResultMap);
-		resultMap.put("jsAPIsignParam", jsAPIsignParam);
-		log.info("最终返回给前端的结果集：【resultMap】=" + resultMap);
-		return resultMap;
+//		resultMap.put("doOrderResultMap", doOrderResultMap);
+//		resultMap.put("jsAPIsignParam", jsAPIsignParam);
+		log.info("最终返回给前端的结果集：【jsAPIsignParam】=" + jsAPIsignParam);
+		return jsAPIsignParam;
 	}
 
 	/**

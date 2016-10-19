@@ -48,8 +48,7 @@ public class MobileWexinPayController {
 	MobileWxPayService mobileWxPaySV;
 	
 	@ApiOperation(value = "获取调用微信统一下单接口的APPID", notes = "获取调用微信统一下单接口的APPID", response = Response.class)
-    @RequestMapping(value = "getAppId", method = RequestMethod.POST)
-	@LoginAccess
+    @RequestMapping(value = "getAppId", method = RequestMethod.GET)
 	public Response getAppId(){
 		
 		String appid = WxpayPropertiesLoader.getPropertyValue("app_id");
@@ -64,13 +63,11 @@ public class MobileWexinPayController {
 	public Response getWxPayJSAPIParams(
 			@ApiParam(value = "请求code") @RequestParam(required = true) String code,
 			@ApiParam(value = "订单编号") @RequestParam(required = true) String orderid,
-			@ApiParam(value = "http请求对象") @RequestParam(required = true) HttpServletRequest request,
-			@ApiParam(value = "wei_xin_notify_url") @RequestParam(required = true) String wei_xin_notify_url
-
+			HttpServletRequest request
 			){
 		
 		String openid = mobileWxPaySV.getOpenId(code);
-		Map result = mobileWxPaySV.handleOrder(openid, orderid, request, wei_xin_notify_url);
+		Map result = mobileWxPaySV.handleOrder(openid, orderid, request);
 		Response response = new Response();
         response.setData(result);
         return response;
