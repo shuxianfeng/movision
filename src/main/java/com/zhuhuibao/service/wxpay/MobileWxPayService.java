@@ -420,11 +420,10 @@ public class MobileWxPayService {
 		// 准备前端调用getBrandWCPayRequest接口所需的参数
 		SortedMap<String, String> jsAPIsignParam = prepareJSAPIParams(
 				nonce_str, doOrderResultMap);
-		Map resultMap = new HashMap<>();
-		resultMap.put("doOrderResultMap", doOrderResultMap);
-		resultMap.put("jsAPIsignParam", jsAPIsignParam);
-		log.info("最终返回给前端的结果集：【resultMap】=" + resultMap);
-		return resultMap;
+//		resultMap.put("doOrderResultMap", doOrderResultMap);
+//		resultMap.put("jsAPIsignParam", jsAPIsignParam);
+		log.info("最终返回给前端的结果集：【jsAPIsignParam】=" + jsAPIsignParam);
+		return jsAPIsignParam;
 	}
 
 	/**
