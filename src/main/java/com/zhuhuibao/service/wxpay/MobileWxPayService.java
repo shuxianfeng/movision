@@ -378,6 +378,10 @@ public class MobileWxPayService {
 		
 		String openid = "";
 		log.info("【调openid的接口】，开始");
+		/**
+		 * https://api.weixin.qq.com/sns/oauth2/access_token?
+		 * 	appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
+		 */
 		Map<String, String> resultMap = HttpClientUtils.doGet(GET_OPENID_URL,
 				map, "UTF-8");
 		log.info("【调openid的接口】，结束");
