@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.zhuhuibao.common.pojo.AskPriceBean;
+import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
+import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
+import com.zhuhuibao.mybatis.memCenter.entity.OfferPrice;
 import com.zhuhuibao.mybatis.memCenter.service.OfferPriceService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -59,14 +62,46 @@ public class MobileEnquiryService {
     }
 
     /**
+     * 查询收到的询价单
+     * 
+     * @param pager
+     * @param price
+     * @return
+     */
+    public List<AskPriceSimpleBean> getReceivedEnquiryList(Paging<AskPriceSimpleBean> pager, AskPrice price) {
+
+        return offerPriceService.findAllAskingPriceInfo(pager, price);
+    }
+
+    /**
      * 根据askID、memberID查询询价信息
      * 
      * @param askId
      * @param memberId
      * @return
      */
-    public AskPriceBean getAskPriceById(Long askId, Long memberId) {
-        return priceService.findAskPriceById(askId, memberId);
+    public AskPriceBean getAskPriceByAskidMemId(Long askId, Long memberId) {
+        return priceService.findAskPriceByAskidMemId(askId, memberId);
+    }
+
+    /**
+     * 根据ID查询询价信息
+     * 
+     * @param askId
+     * @return
+     */
+    public AskPriceBean getAskPriceById(Long askId) {
+        return priceService.findAskPriceById(askId);
+    }
+
+    /**
+     * 根据ID查询报价信息
+     * 
+     * @param offerId
+     * @return
+     */
+    public OfferPrice getOfferPriceById(Long offerId) {
+        return offerPriceService.getOfferPriceByID(offerId);
     }
 
     /**

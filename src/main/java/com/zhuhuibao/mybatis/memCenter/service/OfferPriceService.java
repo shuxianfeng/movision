@@ -209,6 +209,23 @@ public class OfferPriceService {
     }
 
     /**
+     * 根据ID查询报价详情
+     * 
+     * @param id
+     * @return
+     */
+    public OfferPrice getOfferPriceByID(Long id) {
+
+        try {
+            return priceMapper.selectByPrimaryKey(id);
+        } catch (Exception e) {
+            log.error("getOfferPriceByID error,id=" + id, e);
+            throw e;
+        }
+
+    }
+
+    /**
      * 会员中心首页询报价相关信息
      *
      * @param createId
