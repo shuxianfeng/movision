@@ -67,7 +67,7 @@ public class MobileEnquiryController {
 
     @ApiOperation(value = "查看询价详情", notes = "查看询价详情", response = Response.class)
     @RequestMapping(value = { "/mc/sel_enquiry_detail" }, method = RequestMethod.GET)
-    public Response selEnquiryDetail(@ApiParam(value = "报价ID") @RequestParam Long askId) throws IOException {
+    public Response selEnquiryDetail(@ApiParam(value = "询价ID") @RequestParam Long askId) throws IOException {
         Response response = new Response();
         AskPriceBean askPrice = mobileEnquiryService.getAskPriceById(askId);
         response.setData(askPrice);
@@ -93,6 +93,16 @@ public class MobileEnquiryController {
         return response;
     }
 
+    @ApiOperation(value = "发出的报价信息（分页）", notes = "发出的报价信息（分页）", response = Response.class)
+    @RequestMapping(value = { "/mc/sel_sent_offer_list" }, method = RequestMethod.GET)
+    public Response selSentOfferList(@ApiParam(value = "标题") @RequestParam(required = false) String title, @ApiParam(value = "开始时间") @RequestParam(required = false) String startDate,
+            @ApiParam(value = "结束时间") @RequestParam(required = false) String endDate, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @ApiParam(value = "每页显示的条数") @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
+        Paging<AskPriceSimpleBean> offerPager = mobileEnquiryService.getSentOfferList(ShiroUtil.getCreateID(), title, startDate, endDate, pageNo, pageSize);
+
+        return new Response(offerPager);
+    }
+
     @ApiOperation(value = "查看报价详情", notes = "查看报价详情", response = Response.class)
     @RequestMapping(value = { "/mc/sel_offer_detail" }, method = RequestMethod.GET)
     public Response selOfferDetail(@ApiParam(value = "报价ID") @RequestParam Long offerId) throws IOException {
@@ -101,7 +111,7 @@ public class MobileEnquiryController {
 
         OfferPrice offerPrice = mobileEnquiryService.getOfferPriceById(offerId);
         if (null != offerPrice && null != ShiroUtil.getCreateID()) {
-            AskPriceBean askPrice = mobileEnquiryService.getAskPriceByAskidMemId(offerPrice.getAskid(), ShiroUtil.getCreateID());
+            AskPriceBean askPrice = mobileEnquiryService.getAskPriceById(offerPrice.getAskid());
             resultMap.put("offerPrice", offerPrice);
             resultMap.put("askPrice", askPrice);
         }
