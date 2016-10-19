@@ -523,6 +523,17 @@ public class MobileWxPayService {
 	private void prepareParameters(String openid, String orderid,
 			HttpServletRequest request, String wei_xin_notify_url,
 			String nonce_str, SortedMap<String, String> signParams) {
+		
+		Order order = orderService.findByOrderNo(orderid);
+		if(null == order){
+			throw new BusinessException(MsgCodeConstant.NOT_EXIST_ORDER, "不存在该订单");
+		}
+		if(null == order.getPayAmount()){
+			throw new BusinessException(MsgCodeConstant.NOT_EXIST_ORDER_PAYAMOUNT, "不存在该订单的【实付金额】字段");
+		}
+		BigDecimal payAmount = order.getPayAmount();
+	    String total_fee = String.valueOf(payAmount.multiply(new BigDecimal(100)).longValue());  
+		
 		signParams.put("appid", APPID); // 公众账号ID
 		signParams.put("mch_id", MCH_ID); // 商户号
 		signParams.put("device_info", "WEB"); // 设备号,PC网页或公众号内支付请传"WEB"
@@ -532,7 +543,7 @@ public class MobileWxPayService {
 		// signParams.put("attach", ""); //附加数据
 		signParams.put("out_trade_no", orderid); // 商户订单号
 		signParams.put("fee_type", "CNY"); // 货币类型
-		signParams.put("total_fee", "888"); // 总金额
+		signParams.put("total_fee", total_fee); // 总金额(单位：分)
 		signParams.put("spbill_create_ip", request.getRemoteAddr()); // 终端IP
 		// signParams.put("time_start", "");
 		// signParams.put("time_expire", "");

@@ -276,4 +276,14 @@ public interface MsgCodeConstant {
 	 */
 	int NOTIFY_PARAMS_EMPTY_ERROR = 8001;
 	
+	/**
+	 * 不存在该订单
+	 */
+	int NOT_EXIST_ORDER = 3005;
+	
+	/**
+	 * 不存在该订单的【实付金额】字段
+	 */
+	int NOT_EXIST_ORDER_PAYAMOUNT = 3006;
+	
 }
