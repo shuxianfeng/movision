@@ -45,6 +45,19 @@
 	  left join t_m_member mm on t.createid = mm.id
     where t.id = #{id,jdbcType=BIGINT}
   </select>
+
+  <select id="selectByIdMemberId" parameterType="java.util.Map" resultMap="ResultMapWithBLOBs">
+    select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified,
+    price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,c.name fcateName ,c1.name scateName,
+    b.CNName,b.ENName,if(mm.identify = 2,mm.personRealName,mm.enterpriseName) publisherName,t.reason
+    from t_p_product t left join t_p_category c on t.fcateid = c.id
+    left join t_p_category c1 on t.scateid = c1.id
+    left join t_p_brand b on t.brandid = b.id
+    left join t_m_member mm on t.createid = mm.id
+    where t.id = #{id,jdbcType=BIGINT}
+    AND t.createid = #{memberId,jdbcType=BIGINT}
+  </select>
+
   <select id="selectProductMemberByid" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.product.entity.ProductWithMember">
     select n.id,n.name,n.createid,n.fcateid,n.scateid,n.brandid,n.status,n.publishTime,n.lastmodified,n.price,n.unit,n.repository,n.number,
     n.hit,n.imgUrl,n.paramIDs,n.paramValues,n.detailDesc,n.paras,n.service,n.fcateName,n.scateName,n.CNName,n.ENName,n.identify,n.memberName,n.enterpriseLogo,n.enterpriseWebSite,
@@ -257,7 +270,7 @@
   </update>
   
   <update id="updateProductStatus" parameterType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
-    update t_p_product set status = #{status},lastmodified = now() where id = #{id}
+    update t_p_product set status = #{status},lastmodified = now() where id = #{id} AND createid = #{createid}
   </update>
   
   <select id="findAllByPager" parameterType="com.zhuhuibao.mybatis.product.entity.Product" resultType="com.zhuhuibao.mybatis.product.entity.Product">

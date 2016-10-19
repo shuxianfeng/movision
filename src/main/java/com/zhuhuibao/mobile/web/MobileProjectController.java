@@ -30,30 +30,13 @@ import java.util.Map;
  * @date 2016/10/17 0017.
  */
 @RestController
-@RequestMapping("/rest/m/project")
+@RequestMapping("/rest/m/project/site")
 public class MobileProjectController {
 
     @Autowired
     private MobileProjectService mobileProjectService;
 
-    @RequestMapping(value = { "/mc/sel_my_project_list" }, method = RequestMethod.GET)
-    @ApiOperation(value = "查询我查看过的项目信息", notes = "查询我查看过的项目信息", response = Response.class)
-    public Response selMyProjectList(@ApiParam(value = "项目名称") @RequestParam(required = false) String name, @ApiParam(value = "城市Code") @RequestParam(required = false) String city,
-            @ApiParam(value = "省代码") @RequestParam(required = false) String province, @ApiParam(value = "项目类别") @RequestParam(required = false) String category,
-            @ApiParam(value = "页码", defaultValue = "1") @RequestParam(required = false) String pageNo,
-            @ApiParam(value = "每页显示的条数", defaultValue = "10") @RequestParam(required = false) String pageSize) throws Exception {
 
-        // 封装查询参数
-        Long createId = ShiroUtil.getCreateID();
-        Response response = new Response();
-        if (createId != null) {
-            Paging<Map<String, String>> projectPager = mobileProjectService.getMyProjectList(createId, name, city, province, category, pageNo, pageSize);
-            response.setData(projectPager);
-        } else {
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
-        return response;
-    }
 
     /**
      * 前台项目信息列表页
@@ -64,7 +47,7 @@ public class MobileProjectController {
      * @throws JsonMappingException
      * @throws IOException
      */
-    @RequestMapping(value = { "/site/sel_project_list" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/sel_project_list" }, method = RequestMethod.GET)
     @ApiOperation(value = "根据条件查询项目分页信息", notes = "根据条件查询分页", response = Response.class)
     public Response selProjectList(@ApiParam(value = "项目名称") @RequestParam(required = false) String name, @ApiParam(value = "城市Code") @RequestParam(required = false) String city,
             @ApiParam(value = "省代码") @RequestParam(required = false) String province, @ApiParam(value = "项目类别") @RequestParam(required = false) String category,

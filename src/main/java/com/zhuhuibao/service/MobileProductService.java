@@ -3,11 +3,14 @@ package com.zhuhuibao.service;
 import java.util.*;
 
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.mybatis.product.entity.ProductParam;
 import com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs;
 import com.zhuhuibao.mybatis.product.mapper.ProductMapper;
 import com.zhuhuibao.mybatis.product.service.ProductParamService;
 import com.zhuhuibao.mybatis.product.service.ProductService;
+import com.zhuhuibao.utils.MapUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,5 +134,60 @@ public class MobileProductService {
      */
     public Map<String, Object> queryPrdDescParam(Long id) {
         return productService.queryPrdDescParamService(id);
+    }
+
+    /**
+     * 根据条件查询产品信息
+     * 
+     * @param memberId
+     * @param fcateid
+     * @param scateid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    public Paging<Product> getProductList(Long memberId, Integer fcateid, Integer scateid, Integer status, String pageNo, String pageSize) {
+        Paging<Product> productPaging = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+
+        ProductWithBLOBs product = new ProductWithBLOBs();
+        product.setCreateid(memberId);
+        product.setScateid(scateid);
+        product.setFcateid(fcateid);
+        product.setStatus(status);
+        List<Product> productList = productService.findAllByPager(productPaging, product);
+        productPaging.result(productList);
+
+        return productPaging;
+    }
+
+    /**
+     * 根据ID更新产品状态
+     * 
+     * @param memberId
+     * @param productId
+     * @param status
+     */
+    public void updateProductStatus(Long memberId, Long productId, Integer status) {
+        ProductWithBLOBs product = new ProductWithBLOBs();
+
+        product.setCreateid(memberId);
+        product.setId(productId);
+        product.setStatus(status);
+
+        productMapper.updateProductStatus(product);
+    }
+
+    /**
+     * 查询登录会员的产品详情
+     * 
+     * @param productId
+     * @return
+     */
+    public ProductWithBLOBs getMemberProductById(Long productId, Long memberId) {
+        Map<String, Object> param = MapUtil.convert2HashMap("id", productId, "memberId", memberId);
+        ProductWithBLOBs product = productMapper.selectByIdMemberId(param);
+        productService.deailProductParam(product);
+
+        return product;
     }
 }

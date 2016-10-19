@@ -163,15 +163,26 @@ public class PriceService {
     }
 
     /**
-     * 根据询价信息
+     * 查询询价信息
      * 
      * @param askId
      * @return
      */
-    public AskPriceBean findAskPriceById(Long askId, Long memberId) {
+    public AskPriceBean findAskPriceByAskidMemId(Long askId, Long memberId) {
         Map<String, Object> map = MapUtil.convert2HashMap("askId", askId, "memberId", memberId);
 
         return askPriceMapper.queryAskPriceByAskidMemId(map);
+    }
+
+    /**
+     * 根据ID查询询价信息
+     * 
+     * @param askId
+     * @return
+     */
+    public AskPriceBean findAskPriceById(Long askId) {
+
+        return askPriceMapper.queryAskPriceByID(String.valueOf(askId));
     }
 
     /**
