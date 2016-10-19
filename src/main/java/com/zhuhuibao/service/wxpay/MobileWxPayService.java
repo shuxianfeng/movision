@@ -374,10 +374,14 @@ public class MobileWxPayService {
 		map.put("secret", SECRET);
 		map.put("code", code);
 		map.put("grant_type", AUTHORIZATION_CODE);
-
+		log.info("【调openid的接口】的参数："+map);
+		
 		String openid = "";
+		log.info("【调openid的接口】，开始");
 		Map<String, String> resultMap = HttpClientUtils.doGet(GET_OPENID_URL,
 				map, "UTF-8");
+		log.info("【调openid的接口】，结束");
+		log.info("【调openid的接口】,返回值="+resultMap);
 		if (null != resultMap && null != resultMap.get("openid")) {
 			openid = (String) resultMap.get("openid");
 		}
