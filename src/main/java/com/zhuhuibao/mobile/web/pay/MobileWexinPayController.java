@@ -63,8 +63,7 @@ public class MobileWexinPayController {
 	public Response getWxPayJSAPIParams(
 			@ApiParam(value = "请求code") @RequestParam(required = true) String code,
 			@ApiParam(value = "订单编号") @RequestParam(required = true) String orderid,
-			@ApiParam(value = "http请求对象") @RequestParam(required = true) HttpServletRequest request
-
+			HttpServletRequest request
 			){
 		
 		String openid = mobileWxPaySV.getOpenId(code);
