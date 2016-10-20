@@ -64,4 +64,18 @@ public class MobileNewsController {
         return response;
     }
 
+
+    /**
+     * 触屏端资讯-详情页面
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/sel_news_info", method = RequestMethod.GET)
+    @ApiOperation(value = "触屏端资讯-详情页面", notes = "触屏端资讯-详情页面", response = Response.class)
+    public Response sel_news(@ApiParam(value = "资讯主键id") @RequestParam(required = false) int id) {
+        Response response = new Response();
+        response.setData(newsService.sel_news(id));
+        return response;
+    }
 }
