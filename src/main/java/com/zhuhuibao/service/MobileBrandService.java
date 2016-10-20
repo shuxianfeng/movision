@@ -7,7 +7,10 @@ import java.util.Map;
 
 import com.zhuhuibao.common.pojo.*;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
+import com.zhuhuibao.mybatis.memCenter.entity.CheckBrand;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
+import com.zhuhuibao.mybatis.memCenter.service.CheckBrandService;
+import com.zhuhuibao.utils.MapUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,9 @@ public class MobileBrandService {
 
     @Autowired
     private BrandService brandService;
+
+    @Autowired
+    private CheckBrandService checkBrandService;
 
     /**
      * 查询对应类别品牌
@@ -91,21 +97,22 @@ public class MobileBrandService {
         return list;
     }
 
-
     /**
      * 品牌详情页
      *
-     * @param id      品牌主键id
-     * @param scateId 品牌所属类别id
+     * @param id
+     *            品牌主键id
+     * @param scateId
+     *            品牌所属类别id
      * @return
      */
     public Map selBrandInfo(String id, String scateId) {
         Map map1 = new HashMap();
         Map map2 = new HashMap();
         Map map3 = new HashMap();
-        //品牌详情
+        // 品牌详情
         BrandDetailBean brand = brandService.details(id);
-        //计算点击量
+        // 计算点击量
         Brand brand1 = brandService.brandDetails(id);
         if (brand1.getViews() == null) {
             brand1.setViews(1);
@@ -113,7 +120,7 @@ public class MobileBrandService {
             brand1.setViews(brand1.getViews() + 1);
         }
         brandService.updateBrand(brand1);
-        //品牌描述
+        // 品牌描述
         map2.put("company", brand.getCompany());
         map2.put("webSite", brand.getWebSite());
         map2.put("phone", brand.getPhone());
@@ -123,7 +130,7 @@ public class MobileBrandService {
         map2.put("logo", brand.getLogo());
 
         ResultBean result = categoryService.querySystem(scateId);
-        //导航信息
+        // 导航信息
         map3.put("brandid", id);
         map3.put("brandName", brand.getCnName());
         map2.put("brandName", brand.getCnName());
@@ -137,5 +144,39 @@ public class MobileBrandService {
         map1.put("brandDesc", map2);
         map1.put("navigation", map3);
         return map1;
+    }
+
+    /**
+     * 查询我的品牌(审核信息）列表
+     * 
+     * @param memberId
+     * @param status
+     * @param publishTimeOrder
+     * @return
+     */
+    public List<Map<String, Object>> getMyBrandChkList(Long memberId, String status, String publishTimeOrder) {
+        Map<String, Object> params = MapUtil.convert2HashMap("createid", memberId, "status", status, "publishTimeOrder", publishTimeOrder);
+
+        return checkBrandService.searchMyBrand(params);
+    }
+
+    /**
+     * 根据ID查询品牌（审核信息）详情
+     * 
+     * @param brandId
+     * @return
+     */
+    public CheckBrand getBrandChkById(String brandId) {
+        return checkBrandService.queryBrandById(brandId);
+    }
+
+    /**
+     * 根据ID查询品牌分类信息
+     * 
+     * @param brandId
+     * @return
+     */
+    public List<Map<String, Object>> getBrandSysChkById(String brandId) {
+        return brandService.queryBrandSysById(brandId);
     }
 }

@@ -49,7 +49,7 @@ public class MobileExhibitionMcController {
 
     @ApiOperation(value = "我的活动", notes = "我的活动", response = Response.class)
     @RequestMapping(value = "sel_my_exhibition_detail", method = RequestMethod.GET)
-    public Response selMyExhibitionList(@ApiParam(value = "标题") @RequestParam String exhibitionId) {
+    public Response selMyExhibitionList(@ApiParam(value = "信息ID") @RequestParam String exhibitionId) {
         Exhibition exhibition = mobileExhibitionService.getExhibitionById(exhibitionId);
 
         return new Response(exhibition);

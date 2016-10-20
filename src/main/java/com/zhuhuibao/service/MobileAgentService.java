@@ -1,7 +1,11 @@
 package com.zhuhuibao.service;
 
+import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.common.pojo.AgentBean;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,9 @@ public class MobileAgentService {
     @Autowired
     private AgentService agentService;
 
+    @Autowired
+    private AccountService accountService;
+
     /**
      * 根据产品id获取代理商信息
      * 
@@ -34,6 +41,21 @@ public class MobileAgentService {
      */
     public Map getAgentByProId(String id) {
         return agentService.getAgentByProId(id);
+    }
+
+    /**
+     * 根据会员id查询代理商
+     * 
+     * @param memberId
+     * @return
+     */
+    public List<AgentBean> getMyAgentListByMemId(Long memberId) {
+        try {
+            return agentService.findAgentByMemId(String.valueOf(memberId));
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw e;
+        }
     }
 
 }
