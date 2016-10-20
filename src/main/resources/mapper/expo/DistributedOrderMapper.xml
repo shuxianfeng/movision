@@ -63,6 +63,12 @@
       <if test="type != null" >
         type,
       </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -87,6 +93,12 @@
       </if>
       <if test="type != null" >
         #{type},
+      </if>
+      <if test="companyName != null" >
+        #{companyName},
+      </if>
+      <if test="source != null" >
+        #{source},
       </if>
     </trim>
   </insert>
