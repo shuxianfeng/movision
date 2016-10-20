@@ -331,4 +331,43 @@
             #{item}
         </foreach>
     </update>
+
+
+    <!-- 触屏端所有资讯列表-->
+    <select id="selAllMobileNews" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        id,
+        title,views,source,photo,
+        date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
+        FROM t_n_news
+        where status = 1
+        order by publish_time desc
+    </select>
+
+    <!-- 触屏端热点资讯列表-->
+    <select id="selHotMobileNews" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        id,
+        title,views,source,photo,
+        date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
+        FROM t_n_news
+         where status = 1
+        order by views, publish_time desc
+    </select>
+
+    <!-- 触屏端分类资讯列表-->
+    <select id="selMobileNewsByType" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        id,
+        title,views,source,photo,
+        date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
+        FROM t_n_news
+        <if test="subType != null and subType != '' and type ==1">
+            and sub_type = #{subType,jdbcType=INTEGER}
+        </if>
+        <if test="type != null and type != '' ">
+            and type = #{type,jdbcType=INTEGER}
+        </if>
+        order by views, publish_time desc
+    </select>
 </mapper>

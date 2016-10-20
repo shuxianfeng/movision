@@ -30,7 +30,7 @@ public interface NewsMapper {
 
     /**
      * OMS分页获取资讯分页信息
-     * 
+     *
      * @param queryMap
      * @param rowBounds
      * @return
@@ -39,8 +39,31 @@ public interface NewsMapper {
 
     /**
      * 批量发布资讯信息
-     * 
+     *
      * @param ids
      */
     void batchPubNews(List<Integer> ids);
+
+    /**
+     * 触屏端所有资讯列表
+     *
+     * @param rowBounds
+     */
+    List<NewsForm>  selAllMobileNews(RowBounds rowBounds);
+
+    /**
+     * 触屏端按热点排序资讯列表
+     *
+     * @param rowBounds
+     */
+    List<NewsForm>  selHotMobileNews(RowBounds rowBounds);
+
+    /**
+     * 触屏端按分类查询对应资讯列表信息
+     *
+     * @param type
+     * @param subtype
+     * @param rowBounds
+     */
+    List<NewsForm>  selMobileNewsByType(String type, String subtype, RowBounds rowBounds);
 }
