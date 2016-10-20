@@ -271,5 +271,19 @@ public interface MsgCodeConstant {
 	 */
 	int ENTERPRISE_ACCOUNT_CAN_NOT_UPGRADE_PERSON_VIP = 3302;
 	
+	/**
+	 * 微信支付结果通用通知接口参数错误
+	 */
+	int NOTIFY_PARAMS_EMPTY_ERROR = 8001;
+	
+	/**
+	 * 不存在该订单
+	 */
+	int NOT_EXIST_ORDER = 3005;
+	
+	/**
+	 * 不存在该订单的【实付金额】字段
+	 */
+	int NOT_EXIST_ORDER_PAYAMOUNT = 3006;
 	
 }

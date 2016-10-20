@@ -1,5 +1,6 @@
-package com.zhuhuibao.service;
+package com.zhuhuibao.service.zhbPay;
 
+import java.awt.Checkbox;
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -39,6 +40,12 @@ import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.ValidateUtils;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 
+/**
+ * ZHB支付服务
+ * @author zhuangyuhao
+ * @time   2016年10月17日 下午7:27:42
+ *
+ */
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 @Service
 public class MobileZhbPayService {
@@ -71,7 +78,7 @@ public class MobileZhbPayService {
         log.info("筑慧币下单页面,请求参数:{}", json);
         @SuppressWarnings("unchecked")
 		Map<String, String> paramMap = gson.fromJson(json, Map.class);
-
+        //检查购买用户是否登录
         checkUserLogin(paramMap);
         //根据商品ID查询商品价格
         DictionaryZhbgoods zhbgoods = zhbService.getZhbGoodsById(order.getGoodsId());
@@ -87,7 +94,6 @@ public class MobileZhbPayService {
         //购买VIP套餐判断  个人VIP和企业VIP只能购买对应的VIP套餐
         checkVip(order.getGoodsType(), zhbgoods.getValue());
 
-
         paramMap.put("goodsPrice", price.toString());
         paramMap.put("goodsName", zhbgoods.getName());
 
@@ -95,7 +101,7 @@ public class MobileZhbPayService {
         //生成订单编号
         String orderNo = IdGenerator.createOrderNo();
         paramMap.put("orderNo", orderNo);
-        //提交订单
+        //生成订单 (事务管理)
         zhOrderService.createOrder(paramMap);
         
         return orderNo;
@@ -108,26 +114,31 @@ public class MobileZhbPayService {
      * @param value     viplevel
      */
     private void checkVip(String goodsType, String value) {
+    	
         if (goodsType.equals(OrderConstants.GoodsType.VIP.toString())) {
+        	
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             ShiroRealm.ShiroUser user = (ShiroRealm.ShiroUser) session.getAttribute("member");
             String identify = user.getIdentify();
+            
             if (identify.equals("2")) {     //个人
                 boolean suc1 = value.equals(VipConstant.VipLevel.PERSON_GOLD.toString());
                 boolean suc2 = value.equals(VipConstant.VipLevel.PERSON_PLATINUM.toString());
-                if (!(!suc1 || !suc2)) {
+                //如果suc1不是真，并且suc2不是真，则抛异常
+//                if (!(!suc1 || !suc2)) {
+                if(!suc1 && !suc2){	//!false && !false
                     throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "个人用户无此VIP套餐");
                 }
             } else {  //企业
                 boolean suc1 = value.equals(VipConstant.VipLevel.ENTERPRISE_GOLD.toString());
                 boolean suc2 = value.equals(VipConstant.VipLevel.ENTERPRISE_PLATINUM.toString());
 
-                if (!(suc1 || suc2)) {
+                if(!suc1 && !suc2){
                     throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "企业用户无此VIP套餐");
                 }
-
             }
+            
         }
     }
 	

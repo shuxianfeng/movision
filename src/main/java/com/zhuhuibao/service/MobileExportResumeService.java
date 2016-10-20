@@ -20,6 +20,12 @@ import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.utils.file.ExporDoc;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 
+/**
+ * 导出简历
+ * @author zhuangyuhao
+ * @time   2016年10月17日 下午7:27:18
+ *
+ */
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 @Service
 public class MobileExportResumeService {

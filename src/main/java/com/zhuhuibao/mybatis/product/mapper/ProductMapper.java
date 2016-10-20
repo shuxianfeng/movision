@@ -21,6 +21,8 @@ public interface ProductMapper {
 
     ProductWithBLOBs selectByPrimaryKey(Long id);
 
+    ProductWithBLOBs selectByIdMemberId(Map<String,Object> param);
+
     ProductWithMember selectProductMemberByid(Long id);
 
     int updateByPrimaryKeySelective(ProductWithBLOBs record);

@@ -4,36 +4,36 @@ public class Constants {
     /**
      * 短信验证时间 10分钟
      */
-    public static final	String sms_time = "10";
+    public static final String sms_time = "10";
 
     /**
-     * 图片存放路径  upload/img/
+     * 图片存放路径 upload/img/
      */
     public static final String upload_img_prifix = "upload/img/";
 
     /**
-     * 产品状态  上架：0
+     * 产品状态 上架：0
      */
     public static final Integer product_status_uppublish = 0;
 
     /**
-     * 产品状态  上架：1
+     * 产品状态 上架：1
      */
     public static final Integer product_status_publish = 1;
 
     /**
-     * 产品状态  注销：1
+     * 产品状态 注销：1
      */
     public static final Integer product_status_delete = 2;
     /**
      * 产品状态待审核
      */
-    public static Integer product_status_nocheck=3;
+    public static Integer product_status_nocheck = 3;
     /**
-     *vip等级
+     * vip等级
      *
      */
-	public static String vipLevel="vipLevel";
+    public static String vipLevel = "vipLevel";
 
     /**
      * 品牌详情页面展示产品的数量 10
@@ -189,7 +189,7 @@ public class Constants {
      */
     public static final String product_price = "-1";
 
-    /******************price****************/
+    /****************** price ****************/
 
     /**
      * id
@@ -230,15 +230,15 @@ public class Constants {
     public static final String mobile = "mobile";
 
     /**
-     * 上传询，报价单的路径  /price
+     * 上传询，报价单的路径 /price
      */
     public static final String upload_price_document_url = "/price";
     /**
-     * 上传简历附件的路径  /job
+     * 上传简历附件的路径 /job
      */
     public static final String upload_job_document_url = "/job";
 
-    /******************end****************/
+    /****************** end ****************/
     /**
      * 公司性质
      */
@@ -308,11 +308,11 @@ public class Constants {
      */
     public static final String offerTime = "offerTime";
     /**
-     *职位名称
+     * 职位名称
      */
     public static final String position = "position";
     /**
-     *月薪
+     * 月薪
      */
     public static final String salary = "salary";
 
@@ -330,9 +330,9 @@ public class Constants {
 
     public static final String age = "age";
 
-    public static final String size= "size";
+    public static final String size = "size";
 
-    public static final String createid= "createid";
+    public static final String createid = "createid";
 
     /**
      * 站内信状态 1
@@ -349,12 +349,11 @@ public class Constants {
      */
     public static final Integer MAILSITE_STATUS_DELETE = 3;
 
-
     /**
      * 删除标识 0：不删除，1：删除
      */
     public enum DeleteMark {
-        NODELETE ("0"),DELETE("1");
+        NODELETE("0"), DELETE("1");
         public final String value;
 
         DeleteMark(String value) {
@@ -371,7 +370,7 @@ public class Constants {
      * 状态标识 0：未审核，1：已审核，2：已拒绝
      */
     public enum StatusMark {
-        WSH ("0"),YSH("1"),YJJ ("2");
+        WSH("0"), YSH("1"), YJJ("2");
         public final String value;
 
         StatusMark(String value) {
@@ -401,11 +400,11 @@ public class Constants {
     /**
      * 附件名称
      */
-	public static final String attachName = "attachName";
-	/**
+    public static final String attachName = "attachName";
+    /**
      * 附件Url
      */
-	public static final String attachUrl = "attachUrl";
+    public static final String attachUrl = "attachUrl";
 
     /**
      * 1：薪资，2：学历，3：工作经验，4：年龄，5：福利待遇，6：工作状态，7：工作性质，
@@ -414,10 +413,8 @@ public class Constants {
      * 18：技术成果应用领域，19：技术成果系统分类，20：专家类型，21：筑慧活动子栏目，22：会展定制类型
      */
     public enum ConstantType {
-        XZ ("1"),XL("2"),GZJY ("3"),NL("4"),FLDY("5"),GZZT("6"),GZXZ("7"),
-        XMXXLB("8"),WKXMLB("9"),YFLX("10"),SC("11"),HYLX("12"),
-        CGYQ("13"),CDBJ("14"),YCLX("15"),YCBZDW("16"),HZSSLM("17"),
-        JSCGYYLY("18"),JSCGXTFL("19"),ZJLX("20"),ZHHDZLM("21"),HZDZLX("22");
+        XZ("1"), XL("2"), GZJY("3"), NL("4"), FLDY("5"), GZZT("6"), GZXZ("7"), XMXXLB("8"), WKXMLB("9"), YFLX("10"), SC("11"), HYLX("12"), CGYQ("13"), CDBJ("14"), YCLX("15"), YCBZDW("16"), HZSSLM(
+                "17"), JSCGYYLY("18"), JSCGXTFL("19"), ZJLX("20"), ZHHDZLM("21"), HZDZLX("22");
         public final String value;
 
         ConstantType(String value) {
@@ -430,19 +427,25 @@ public class Constants {
         }
     }
 
-
     /**
-     * 频道类型 1:平台主站  2：工程商 ，3：商城，4：项目，5：威客，6：人才，7：会展，8：技术，9：专家
+     * 频道类型 1:平台主站 2：工程商 ，3：商城，4：项目，5：威客，6：人才，7：会展，8：技术，9：专家
      */
-    public enum AdvChannType{
-        IHOME("1"),CONTRACTOR ("2"),MALL("3"),PROJECT("4"),WITKEY("5"),
-        JOB("6"),EXHIBITION("7"),TECH("8"),EXPERT("9");
-        public final String  value;
+    public enum AdvChannType {
+        IHOME("1"), CONTRACTOR("2"), MALL("3"), PROJECT("4"), WITKEY("5"), JOB("6"), EXHIBITION("7"), TECH("8"), EXPERT("9");
+        public final String value;
 
-        AdvChannType(String value){this.value = value;}
+        AdvChannType(String value) {
+            this.value = value;
+        }
+
         @Override
         public String toString() {
             return this.value;
         }
     }
+
+    /**
+     * 排序关键字
+     */
+    public static String[] ORDER_TYPE_KEYWORD = new String[] { "ASC", "DESC" };
 }
