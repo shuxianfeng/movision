@@ -2,8 +2,6 @@ package com.zhuhuibao.mobile.web.mc;
 
 import java.io.IOException;
 
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.exception.PageNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +19,8 @@ import com.zhuhuibao.service.MobileProductService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
 /**
+ * 产品controller
+ * 
  * @author tongxinglong
  * @date 2016/10/19 0019.
  */

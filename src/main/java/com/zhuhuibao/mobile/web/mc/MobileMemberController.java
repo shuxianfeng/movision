@@ -20,6 +20,8 @@ import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.service.MobileMemberService;
 
 /**
+ * 会员信息Controller
+ * 
  * @author tongxinglong
  * @date 2016/10/12 0012.
  */
@@ -70,6 +72,7 @@ public class MobileMemberController {
 
         return response;
     }
+
     @ApiOperation(value = "手机号码修改验证", notes = "手机号码修改", response = Response.class)
     @RequestMapping(value = "/sel_chk_old_mobile", method = RequestMethod.POST)
     public Response chkOldMobile(@ApiParam(value = "验证码") @RequestParam String verifyCode) throws Exception {
