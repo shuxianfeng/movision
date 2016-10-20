@@ -48,7 +48,7 @@ public class AdvertisingConstant {
         /**
          * 移动端
          */
-        mobile("10");
+        mobile("181");
         public final String value;
 
         AdvertisingChanType(String value) {
