@@ -1,11 +1,13 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.entity.CheckBrand;
 import com.zhuhuibao.mybatis.memCenter.entity.CheckSysBrand;
 import com.zhuhuibao.mybatis.memCenter.mapper.CheckBrandMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.CheckSysBrandMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +59,13 @@ public class CheckBrandService {
         }
     }
 
-    public List<Map<String,Object>> searchMyBrand(Map<String,Object> map) {
+    public List<Map<String, Object>> searchMyBrand(Map<String, Object> map) {
         try {
+            String publishTimeOrder = (String.valueOf(map.get("publishTimeOrder"))).toUpperCase();
+            if (!ArrayUtils.contains(Constants.ORDER_TYPE_KEYWORD, publishTimeOrder)) {
+                map.put("publishTimeOrder", "");
+            }
+
             return checkBrandMapper.searchMyBrand(map);
         } catch (Exception e) {
             log.error("执行异常>>>", e);
@@ -75,7 +82,7 @@ public class CheckBrandService {
         }
     }
 
-    public List<CheckBrand> searchBrandByPager(Paging<CheckBrand> pager, Map<String,Object> map) {
+    public List<CheckBrand> searchBrandByPager(Paging<CheckBrand> pager, Map<String, Object> map) {
         try {
             return checkBrandMapper.findAllByPager(pager.getRowBounds(), map);
         } catch (Exception e) {
