@@ -555,15 +555,4 @@ public class MobileWxPayService {
 		// signParams.put("limit_pay", ""); //指定支付方式
 		signParams.put("openid", openid); // trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识
 	}
-
-	/**
-	 * 获取微信等支付的APPID
-	 * 
-	 * @param token
-	 * @return
-	 */
-	public String getAppID(String token) {
-
-		return null;
-	}
 }
