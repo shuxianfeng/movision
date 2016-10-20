@@ -11,6 +11,10 @@
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, createid, publishTime, updateTime, updateManId, linkName, mobile, status, type
@@ -69,6 +73,12 @@
       <if test="source != null" >
         source,
       </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -99,6 +109,12 @@
       </if>
       <if test="source != null" >
         #{source},
+      </if>
+      <if test="email != null" >
+        #{email},
+      </if>
+      <if test="remark != null" >
+        #{remark},
       </if>
     </trim>
   </insert>

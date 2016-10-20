@@ -3,7 +3,6 @@ package com.zhuhuibao.mobile.web;
 import java.util.List;
 import java.util.Map;
 
-import com.zhuhuibao.mybatis.expo.entity.Exhibition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.mybatis.expo.entity.Exhibition;
 import com.zhuhuibao.service.MobileExhibitionService;
 import com.zhuhuibao.utils.MapUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -39,6 +39,8 @@ public class MobileExhibitionController {
         Map<String, Object> paramMap = MapUtil.convert2HashMap("subType", subType, "type", type, "province", province, "city", city, "type1", 1);
 
         List<Map<String, String>> exhibitionList = mobileExhibitionService.getExhibitionList(pager, paramMap);
+
+        // TODO 广告
 
         return new Response(exhibitionList);
     }

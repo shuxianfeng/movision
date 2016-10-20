@@ -13,20 +13,40 @@ public class DistributedOrder {
 
     private String updateManId;
 
-    @ApiModelProperty(value="联系人名称")
+    @ApiModelProperty(value = "联系人名称")
     private String linkName;
 
-    @ApiModelProperty(value="手机")
+    @ApiModelProperty(value = "手机")
     private String mobile;
 
     private String status;
 
-    @ApiModelProperty(value="定制类型：1：活动策划；2：展前服务；3：展期服务；4：展后服务")
+    @ApiModelProperty(value = "定制类型：1：活动策划；2：展前服务；3：展期服务；4：展后服务")
     private String type;
 
     private String companyName;
 
     private String source;
+
+    private String email;
+
+    private String remark;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public String getCompanyName() {
         return companyName;
