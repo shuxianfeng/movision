@@ -3,6 +3,8 @@ package com.zhuhuibao.service;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.mybatis.oms.entity.TenderToned;
+import com.zhuhuibao.mybatis.oms.service.TenderTonedService;
 import com.zhuhuibao.service.payment.PaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,9 @@ public class MobileProjectService {
 
     @Autowired
     private PaymentService paymentService;
+
+    @Autowired
+    private TenderTonedService tenderTonedService;
 
     /**
      * 根据会员ID及其他条件查询项目信息
@@ -97,5 +102,33 @@ public class MobileProjectService {
      */
     public Map<String, Object> getProjectDetail(Long projectId) throws Exception {
         return paymentService.getChargeGoodsRecord(projectId, ZhbConstant.ZhbGoodsType.CKXMXX.toString());
+    }
+
+    /**
+     * 查询招中标信息列表
+     * 
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<Map<String, Object>> getTenderList(Map<String, Object> map, Paging<Map<String, Object>> pager) {
+
+        return tenderTonedService.findAllTenderTonedNPager(map, pager);
+    }
+
+    /**
+     * 查询招中标信息详情
+     * 
+     * @param tenderId
+     * @return
+     * @throws Exception
+     */
+    public TenderToned getTenderDetail(Long tenderId) throws Exception {
+        try {
+            return tenderTonedService.queryTenderToneByID(tenderId);
+        } catch (Exception e) {
+            log.error("getTenderDetail>>>tenderId=" + tenderId, e);
+            throw e;
+        }
     }
 }

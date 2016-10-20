@@ -8,11 +8,13 @@ import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.expo.entity.Exhibition;
+import com.zhuhuibao.mybatis.oms.entity.TenderToned;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.MobileProjectService;
+import com.zhuhuibao.utils.MapUtil;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.codehaus.jackson.JsonGenerationException;
@@ -62,13 +64,14 @@ public class MobileProjectController {
             @ApiParam(value = "竣工日期查询开始日期") @RequestParam(required = false) String endDateA, @ApiParam(value = "竣工日期查询结束日期") @RequestParam(required = false) String endDateB,
             @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
             @ApiParam(value = "每页显示的条数") @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
+        Map<String, Object> result = new HashMap<>();
+
         // 查询项目信息
         Paging<Map<String, String>> projectPager = mobileProjectService.getProjectListByConditions(name, city, province, category, startDateA, startDateB, endDateA, endDateB, pageNo, pageSize);
 
         // TODO
         // 封装广告数据
 
-        Map<String, Object> result = new HashMap<>();
         result.put("projectPager", projectPager);
 
         return new Response(result);
@@ -100,6 +103,34 @@ public class MobileProjectController {
         resultMap.putAll(projectDetail);
 
         return new Response(resultMap);
+    }
+
+    @RequestMapping(value = { "/sel_tender_list" }, method = RequestMethod.GET)
+    @ApiOperation(value = "查询招中标分页展示", notes = "根据条件查询招中标", response = Response.class)
+    public Response selTenderList(@ApiParam(value = "招中标公告名称") @RequestParam(required = false) String noticeName, @ApiParam(value = "省代码") @RequestParam(required = false) String province,
+            @ApiParam(value = "市代码") @RequestParam(required = false) String city, @ApiParam(value = "招中标类型：1招标，2中标") @RequestParam(required = false) String type,
+            @ApiParam(value = "开工日期查询开始日期") @RequestParam(required = false) String startDateA, @ApiParam(value = "开工日期查询结束日期") @RequestParam(required = false) String startDateB,
+            @ApiParam(value = "竣工日期查询开始日期") @RequestParam(required = false) String endDateA, @ApiParam(value = "竣工日期查询结束日期") @RequestParam(required = false) String endDateB,
+            @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @ApiParam(value = "每页显示的条数") @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
+
+        Map<String, Object> paramMap = MapUtil.convert2HashMap("type", type, "province", province, "city", city, "startDateA", startDateA, "startDateB", startDateB, "endDateA", endDateA, "endDateB",
+                endDateB);
+        if (noticeName != null && !"".equals(noticeName)) {
+            paramMap.put("noticeName", noticeName.replace("_", "\\_"));
+        }
+        Paging<Map<String, Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+
+        List<Map<String, Object>> tenderList = mobileProjectService.getTenderList(paramMap, pager);
+
+        return new Response(tenderList);
+    }
+
+    @RequestMapping(value = { "/sel_tender_detail" }, method = RequestMethod.GET)
+    @ApiOperation(value = "频道预览招中标信息", notes = "频道预览招中标信息", response = Response.class)
+    public Response selTenderDetail(@ApiParam(value = "招中标信息ID") @RequestParam Long tenderID) throws Exception {
+        TenderToned tenderToned = mobileProjectService.getTenderDetail(tenderID);
+        return new Response(tenderToned);
     }
 
 }
