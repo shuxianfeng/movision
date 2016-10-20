@@ -7,6 +7,11 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.expo.entity.Exhibition;
+import com.zhuhuibao.mybatis.vip.service.VipInfoService;
+import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
+import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.MobileProjectService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -35,8 +40,10 @@ public class MobileProjectController {
 
     @Autowired
     private MobileProjectService mobileProjectService;
-
-
+    @Autowired
+    private ZhbService zhbService;
+    @Autowired
+    private VipInfoService vipInfoService;
 
     /**
      * 前台项目信息列表页
@@ -67,7 +74,32 @@ public class MobileProjectController {
         return new Response(result);
     }
 
+    @ApiOperation(value = "项目信息详情", notes = "项目信息详情", response = Response.class)
+    @RequestMapping(value = "/sel_project_detail", method = RequestMethod.GET)
+    public Response selProjectDetail(@ApiParam(value = "项目信息ID") @RequestParam Long projectId) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
 
+        // 判断是否登录
+        if (null != ShiroUtil.getCreateID()) {
+            // 剩余特权数量
+            long privilegeNum = vipInfoService.getExtraPrivilegeNum(ShiroUtil.getCompanyID(), ZhbConstant.ZhbGoodsType.CKXMXX.toString());
+            resultMap.put("privilegeNum", String.valueOf(privilegeNum));
+            // 筑慧币余额
+            ZhbAccount account = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
+            resultMap.put("zhbAmount", null != account ? account.getAmount().toString() : "0");
+        } else {
+            resultMap.put("privilegeNum", "0");
+            resultMap.put("zhbAmount", "0");
+        }
+        // 筑慧币单价
+        DictionaryZhbgoods goodsConfig = zhbService.getZhbGoodsByPinyin(ZhbConstant.ZhbGoodsType.CKXMXX.toString());
+        resultMap.put("zhbPrice", null != goodsConfig ? String.valueOf(goodsConfig.getPriceDoubleValue()) : "999");
 
+        // 获取项目信息详情
+        Map<String, Object> projectDetail = mobileProjectService.getProjectDetail(projectId);
+        resultMap.putAll(projectDetail);
+
+        return new Response(resultMap);
+    }
 
 }

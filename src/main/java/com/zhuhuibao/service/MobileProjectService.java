@@ -3,6 +3,7 @@ package com.zhuhuibao.service;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.service.payment.PaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class MobileProjectService {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private PaymentService paymentService;
 
     /**
      * 根据会员ID及其他条件查询项目信息
@@ -84,4 +88,14 @@ public class MobileProjectService {
         return pager;
     }
 
+    /**
+     * 查看项目信息，根据当前会员是否购买返回加密或非加密信息
+     * 
+     * @param projectId
+     * @return
+     * @throws Exception
+     */
+    public Map<String, Object> getProjectDetail(Long projectId) throws Exception {
+        return paymentService.getChargeGoodsRecord(projectId, ZhbConstant.ZhbGoodsType.CKXMXX.toString());
+    }
 }

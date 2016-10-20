@@ -29,9 +29,6 @@ public class MobileAgentService {
     @Autowired
     private AgentService agentService;
 
-    @Autowired
-    private AccountService accountService;
-
     /**
      * 根据产品id获取代理商信息
      * 
