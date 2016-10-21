@@ -200,6 +200,9 @@ public class MobileSupplierController {
         try {
             response.setData(enquiryService.selEnquiryList(askPriceSearch, pager));
         } catch (Exception e) {
+            String a = null != askPriceSearch ? askPriceSearch.getTitle() : null;
+            log.error("sel_enquiry_list  error! " + a, e);
+            response.setCode(400);
             response.setMessage("sel_enquiry_list  error!" + e);
         }
         return response;
