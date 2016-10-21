@@ -52,6 +52,9 @@ public class MobileSupplierController {
     @Autowired
     private MobileMemberService memberService;
 
+    @Autowired
+    private MobileCategoryService categoryService;
+
     /**
      * 触屏端供应链广告图片位置
      */
@@ -210,6 +213,24 @@ public class MobileSupplierController {
         Response response = new Response();
         try {
             response.setData(askPriceService.queryAskPriceByID(id));
+        } catch (Exception e) {
+            response.setMessage("sel_enquiry_info  error!" + e);
+        }
+        return response;
+    }
+
+
+    /**
+     * 触屏端--系统分类
+     *
+     * @return
+     */
+    @ApiOperation(value = "触屏端--系统分类", notes = "触屏端--系统分类", response = Response.class)
+    @RequestMapping(value = { "sel_category" }, method = RequestMethod.GET)
+    public Response sel_category() {
+        Response response = new Response();
+        try {
+            response.setData(categoryService.selCategory());
         } catch (Exception e) {
             response.setMessage("sel_enquiry_info  error!" + e);
         }
