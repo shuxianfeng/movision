@@ -36,7 +36,7 @@ public class MobileProductMcController {
     @ApiOperation(value = "我的产品", notes = "我的产品", response = Response.class)
     public Response selProductList(@ApiParam(value = "一级分类") @RequestParam(required = false) Integer fcateid, @ApiParam(value = "二级分类") @RequestParam(required = false) Integer scateid,
             @ApiParam(value = "状态") @RequestParam(required = false) Integer status, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
-            @ApiParam(value = "每页显示的条数", defaultValue = "10") @RequestParam(required = false) String pageSize) throws IOException {
+            @ApiParam(value = "每页显示的条数") @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
 
         Paging<Product> productPaging = mobileProductService.getProductList(ShiroUtil.getCreateID(), fcateid, scateid, status, pageNo, pageSize);
         return new Response(productPaging);
