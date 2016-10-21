@@ -95,7 +95,7 @@ public class MobileSupplierController {
      *
      * @return response 响应
      */
-    @ApiOperation(value = "触屏端供应链-对应类别品牌展示列表页面", notes = "触屏端供应链-对应类别品牌展示列表页面")
+    @ApiOperation(value = "触屏端供应链-所有品牌列表展示页", notes = "触屏端供应链-所有品牌列表展示页")
     @RequestMapping(value = "sel_hot_brand_list", method = RequestMethod.GET)
     public Response sel_hot_brand_list() {
         Response response = new Response();
@@ -119,7 +119,7 @@ public class MobileSupplierController {
      */
     @ApiOperation(value = "触屏端供应链-对应类别品牌展示列表页面", notes = "触屏端供应链-对应类别品牌展示列表页面")
     @RequestMapping(value = "sel_hot_brand_list_by_type", method = RequestMethod.GET)
-    public Response sel_hot_brand_list_by_type(@ApiParam(value = "一级分类id") @RequestParam(required = true) String parentId, @ApiParam(value = "一级分类id") @RequestParam(required = true) String subTypeId,
+    public Response sel_hot_brand_list_by_type(@ApiParam(value = "一级分类id") @RequestParam(required = true) String parentId, @ApiParam(value = "一级分类id") @RequestParam(required = false) String subTypeId,
             @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo, @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
         Paging<Map> pager = new Paging<>(pageNo, pageSize);

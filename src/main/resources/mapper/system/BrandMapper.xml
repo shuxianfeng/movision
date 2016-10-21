@@ -270,13 +270,13 @@
         b.logourl
         FROM t_p_product p
         LEFT JOIN t_p_brand b ON b.id = p.brandid
-        WHERE b.status = 1 AND p.status = 1  and p.scateid IN
+        WHERE b.status = 1 AND p.status = 1 and p.scateid IN
         (select
-            id
-            from t_p_category
-            where parentId = #{parentId} and is_deleted = 0
-        <if test="subTypeId != null">
-            id = #{subTypeId}
+        id
+        from t_p_category
+        where parentId = #{parentId} and is_deleted = 0
+        <if test="subTypeId != null and subTypeId != ''">
+            and id = #{subTypeId}
         </if>
         )
         ORDER BY b.views DESC
