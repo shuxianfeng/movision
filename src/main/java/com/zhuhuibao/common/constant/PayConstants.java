@@ -8,10 +8,10 @@ package com.zhuhuibao.common.constant;
 public class PayConstants {
 
     /**
-     * 支付方式  1支付宝，2筑慧币支付
+     * 支付方式  1支付宝，2筑慧币支付, 3微信
      */
     public enum PayMode {
-        ALIPAY("1"), ZHBPAY("2");
+        ALIPAY("1"), ZHBPAY("2"), WXPAY("3");
         public final String value;
 
         PayMode(String value) {

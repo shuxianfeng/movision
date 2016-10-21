@@ -87,10 +87,15 @@ public class MobileWxPayService {
 	private static final String MD5 = "MD5";
 	
 	public static final String LOCK_NAME = "wxpay_notify_orderno";
+	
+	public static final String SUCCESS = "SUCCESS";
+	
+	public static final String FAIL = "FAIL";
 
 	/**
 	 * 处理微信支付完成的通知回调
-	 * TODO 业务锁控制并发
+	 * 
+	 * 业务锁控制并发：在对业务数据进行状态检查和处理之前，要采用数据锁进行并发控制，以避免函数重入造成的数据混乱
 	 * @param request
 	 * @return
 	 * @throws ParseException
@@ -121,6 +126,7 @@ public class MobileWxPayService {
 		}
 
 		Map requestMap = new HashMap<>();
+		//通知参数 
 		requestMap = XmlUtil.doXMLParse(String.valueOf(returnObj));
 		if (null == requestMap) {
 			throw new BusinessException(
@@ -151,47 +157,78 @@ public class MobileWxPayService {
 		return modelAndView;
 	}
 
+	/**
+	 * 微信支付处理：判断返回值+返回成功时的业务处理
+	 * 
+	 * TODO  签名验证
+	 * 商户系统对于支付结果通知的内容一定要做签名验证，防止数据泄漏导致出现“假通知”，造成资金损失
+	 * @param tradeType
+	 * @param modelAndView
+	 * @param requestParams	通知参数 
+	 * @param requestMap	通知参数 
+	 * @throws ParseException
+	 */
 	private void payHandler(String tradeType, ModelAndView modelAndView,
 			Map requestParams, Map requestMap) throws ParseException {
+		//获取返回状态码【通信标识】
 		String return_code = (String) requestParams.get("return_code");
-
-		if ("SUCCESS".equals(return_code)) {
+		//获取业务结果【交易标识】，判断交易是否成功
+		String result_code = (String) requestParams.get("result_code");
+		
+		//TODO 签名校验
+		
+		
+		/**
+		 * 【通信标识】和【交易标识】都成功才说明返回成功
+		 */
+		if (SUCCESS.equals(return_code) && SUCCESS.equals(result_code)) {
 
 			// 返回成功时业务逻辑处理
 			log.info("微信支付回调成功业务处理，开始");
+			
+			//TODO 逻辑有问题，待改
 			Map<String, String> resultMap = tradeSuccessDeal(
 					requestMap, PayConstants.NotifyType.SYNC.toString(),
-					tradeType);
+					tradeType);	//这里用的是同步通知
+			
+			
 			log.info("微信支付回调成功业务处理，结束");
 			
 			log.info("***同步回调：支付平台回调发起方支付方结果：" + resultMap);
 			if (resultMap != null
 					&& String.valueOf(PayConstants.HTTP_SUCCESS_CODE).equals(
 							resultMap.get("statusCode"))) {
-
-				if ("SUCCESS".equals(resultMap.get("result"))) {
-
-					modelAndView.addObject("return_code", "SUCCESS");
-					modelAndView.addObject("return_msg", "支付成功");
-				}
-
+				
+				modelAndView.addObject("return_code", SUCCESS);
+				modelAndView.addObject("return_msg", "支付成功");
+			}else{
+				modelAndView.addObject("return_code", FAIL);
+				modelAndView.addObject("return_msg", "支付失败");
 			}
 		} else {
-			modelAndView.addObject("return_code", "FAIL");
+			modelAndView.addObject("return_code", FAIL);
 			modelAndView.addObject("return_msg", "支付失败");
 		}
 	}
 
+	/**
+	 * 微信支付返回成功,业务逻辑处理
+	 * @param params	
+	 * @param notifyType
+	 * @param tradeType
+	 * @return
+	 * @throws ParseException
+	 */
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public Map<String, String> tradeSuccessDeal(Map<String, String> params,
 			String notifyType, String tradeType) throws ParseException {
+		
 		log.info("支付返回成功,业务逻辑处理...");
 		Map<String, String> resultMap = new HashMap<>();
 
 		try {
-
 			// 1-> 记录微信支付通知信息 交易流水信息
-			// 订单
+			// 订单：此处是生成一个订单 
 			Order order = new Order();
 			order.setOrderNo(params.get("out_trade_no"));
 			order.setUpdateTime(new Date());
@@ -218,17 +255,28 @@ public class MobileWxPayService {
 
 		return resultMap;
 	}
-
+	
+	/**
+	 * 微信支付回调通知业务处理
+	 * @param params
+	 * @param tradeType	交易类型，1：支付，2：退款
+	 * 				目前只有支付
+	 * @param order	
+	 */
 	private void callbackNotice(Map<String, String> params, String tradeType,
 			Order order) {
 		// 即时到账支付
 		if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
+			
 			// 记录 微信支付结果通用通知 返回记录
 			recordPayAsyncCallbackLog(params);
-			// 2-> 判断是否存在筑慧币支付方式
+			
+			// 2-> 判断是否存在筑慧币支付方式——微信支付
+			//TODO 为什么 ？？
 			OrderFlow orderFlow = orderFlowService.findByOrderNoAndTradeMode(
 					params.get("out_trade_no"),
-					PayConstants.PayMode.ZHBPAY.toString());
+					PayConstants.PayMode.WXPAY.toString());
+			
 			if (orderFlow != null) {
 				log.info("存在筑慧币支付方式");
 				String tradeStatus = orderFlow.getTradeStatus();
@@ -241,9 +289,9 @@ public class MobileWxPayService {
 				// 3-> 修改订单状态为已支付
 				OrderFlow alFlow = new OrderFlow();
 				alFlow.setOrderNo(params.get("out_trade_no"));
-				alFlow.setTradeStatus(PayConstants.OrderStatus.YZF.toString());
-				alFlow.setTradeTime(new Date());
-				alFlow.setUpdateTime(new Date());
+				alFlow.setTradeStatus(PayConstants.OrderStatus.YZF.toString());	//交易状态
+				alFlow.setTradeTime(new Date());	//支付时间
+				alFlow.setUpdateTime(new Date());	//交易更新时间
 				orderFlowService.update(alFlow);
 				log.error("修改t_o_order_flow status>>>");
 				order.setStatus(PayConstants.OrderStatus.YZF.toString());
@@ -319,6 +367,10 @@ public class MobileWxPayService {
 		}
 	}
 
+	/**
+	 * 微信支付结果通知 , 入表 t_o_wxpay_log 操作
+	 * @param params
+	 */
 	public void recordPayAsyncCallbackLog(Map<String, String> params) {
 		log.info("微信支付结果通知 , 入表操作... ");
 		WxPayNotifyLog wxpayNotifyLog = new WxPayNotifyLog();

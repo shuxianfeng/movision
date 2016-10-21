@@ -211,6 +211,7 @@ public class AlipayService {
                     if (resultMap != null
                             && String.valueOf(PayConstants.HTTP_SUCCESS_CODE)
                             .equals(resultMap.get("statusCode"))) {
+                    	
                         if ("SUCCESS".equals(resultMap.get("result"))) {
                             modelAndView.addObject("result", "success");
                             modelAndView.addObject("msg", "支付成功");
