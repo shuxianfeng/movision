@@ -448,4 +448,12 @@ public class Constants {
      * 排序关键字
      */
     public static String[] ORDER_TYPE_KEYWORD = new String[] { "ASC", "DESC" };
+
+    /**
+     * 信息数据来源
+     */
+    public enum DataSource {
+        MOBILE, PC
+    }
+
 }

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.mybatis.expo.entity.DistributedOrder;
 import com.zhuhuibao.mybatis.expo.entity.Exhibition;
 import com.zhuhuibao.mybatis.expo.mapper.ExhibitionMapper;
 import org.apache.commons.lang.ArrayUtils;
@@ -68,4 +70,46 @@ public class MobileExhibitionService {
         return expoService.queryExhibitionInfoById(exhibitionId);
     }
 
+    /**
+     * 更新会展点击率
+     * 
+     * @param exhibition
+     */
+    public void updateExhibitionViews(Exhibition exhibition) {
+        try {
+            expoService.updateExhibitionViews(exhibition);
+        } catch (Exception e) {
+            log.error("updateExhibitionViews", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 会展信息列表
+     *
+     * @param pager,map
+     */
+    public List<Map<String, String>> getExhibitionList(Paging<Map<String, String>> pager, Map<String, Object> map) {
+        try {
+            return exhibitionMapper.findAllExhibition(pager.getRowBounds(), map);
+        } catch (Exception e) {
+            log.error("getExhibitionList", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 发布分布式会展定制
+     *
+     * @param distributedOrder
+     */
+    public int addDistributedOrder(DistributedOrder distributedOrder) {
+        try {
+            return expoService.publishDistributedOrder(distributedOrder);
+        } catch (Exception e) {
+            log.error("addDistributedOrder", e);
+            // e.printStackTrace();
+            throw e;
+        }
+    }
 }

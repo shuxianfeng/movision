@@ -252,6 +252,9 @@
     <if test="province != null and province != ''">
       and e.province = #{province}
     </if>
+    <if test="city != null and city != ''">
+      and e.city = #{city}
+    </if>
     <if test="type1 != null and type1 != ''">
       and e.status = 1
     </if>
