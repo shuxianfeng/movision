@@ -103,10 +103,10 @@ public class OfferPriceService {
         if (null != price) {
             String publishTimeOrder = StringUtils.trimToEmpty(price.getPublishTimeOrder());
             String endTimeOrder = StringUtils.trimToEmpty(price.getEndTimeOrder());
-            if (!ArrayUtils.contains(Constants.ORDER_TYPE_KEYWORD, publishTimeOrder)) {
+            if (!ArrayUtils.contains(Constants.ORDER_TYPE_KEYWORD, publishTimeOrder.toUpperCase())) {
                 price.setPublishTimeOrder(null);
             }
-            if (!ArrayUtils.contains(Constants.ORDER_TYPE_KEYWORD, endTimeOrder)) {
+            if (!ArrayUtils.contains(Constants.ORDER_TYPE_KEYWORD, endTimeOrder.toUpperCase())) {
                 price.setEndTimeOrder(null);
             }
 
