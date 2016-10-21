@@ -4,10 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.zhuhuibao.common.pojo.AskPriceResultBean;
-import com.zhuhuibao.common.pojo.AskPriceSearchBean;
-import com.zhuhuibao.fsearch.pojo.spec.SupplierSearchSpec;
-import com.zhuhuibao.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +17,11 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
+import com.zhuhuibao.common.pojo.AskPriceResultBean;
+import com.zhuhuibao.common.pojo.AskPriceSearchBean;
+import com.zhuhuibao.fsearch.pojo.spec.SupplierSearchSpec;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
+import com.zhuhuibao.service.*;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
 /**
@@ -38,10 +38,10 @@ public class MobileSupplierController {
     private static final Logger log = LoggerFactory.getLogger(MobileSupplierController.class);
 
     @Autowired
-    private AdvertisingService advertisingService;
+    private MobileSysAdvertisingService advertisingService;
 
     @Autowired
-    private AskPriceService askPriceService;
+    private MobileEnquiryService enquiryService;
 
     @Autowired
     private MobileBrandService mobileBrandService;
@@ -54,6 +54,9 @@ public class MobileSupplierController {
 
     @Autowired
     private MobileCategoryService categoryService;
+
+    @Autowired
+    private MobileSuccessCaseService successCaseService;
 
     /**
      * 触屏端供应链广告图片位置
@@ -76,7 +79,7 @@ public class MobileSupplierController {
         // 热门厂商广告图片
         List<SysAdvertising> hotSupplierList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mSupplierArea, "M_Supplier_Hot_Supplier");
         // 取最新6条公开询价数据
-        List askPriceList = askPriceService.queryNewestAskPrice(6, createId);
+        List askPriceList = enquiryService.queryNewestAskPrice(6, createId);
         Map<String, List> dataList = new HashMap<>();
         dataList.put("banner", bannerAdvList);
         dataList.put("hotBrand", hotBrandList);
@@ -194,7 +197,7 @@ public class MobileSupplierController {
         Response response = new Response();
         Paging<AskPriceResultBean> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         try {
-            response.setData(askPriceService.selEnquiryList(askPriceSearch, pager));
+            response.setData(enquiryService.selEnquiryList(askPriceSearch, pager));
         } catch (Exception e) {
             response.setMessage("sel_enquiry_list  error!" + e);
         }
@@ -209,16 +212,15 @@ public class MobileSupplierController {
      */
     @ApiOperation(value = "触屏端--查看具体询价详情", notes = "触屏端--查看具体询价详情", response = Response.class)
     @RequestMapping(value = { "sel_enquiry_info" }, method = RequestMethod.GET)
-    public Response sel_enquiry_info(@ApiParam(value = "询价主键id")@RequestParam(required = false) String id) {
+    public Response sel_enquiry_info(@ApiParam(value = "询价主键id") @RequestParam(required = false) String id) {
         Response response = new Response();
         try {
-            response.setData(askPriceService.queryAskPriceByID(id));
+            response.setData(enquiryService.queryAskPriceByID(id));
         } catch (Exception e) {
             response.setMessage("sel_enquiry_info  error!" + e);
         }
         return response;
     }
-
 
     /**
      * 触屏端--系统分类
@@ -234,6 +236,26 @@ public class MobileSupplierController {
         } catch (Exception e) {
             response.setMessage("sel_enquiry_info  error!" + e);
         }
+        return response;
+    }
+
+    /**
+     * 供应商成功案例
+     * 
+     * @param id
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "公司成功案例（分页）", notes = "公司成功案例（分页）")
+    @RequestMapping(value = "sel_company_success_caseList", method = RequestMethod.GET)
+    public Response sel_company_success_caseList(@ApiParam(value = "公司id") @RequestParam String id, @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Map<String, String>> caseList = successCaseService.findAllSuccessCaseList(pager, id);
+        pager.result(caseList);
+        response.setData(pager);
         return response;
     }
 }

@@ -48,7 +48,8 @@ public class MobileProductService {
     /**
      * 根据品牌id查询该品牌下共有多少产品分类
      *
-     * @param brandId 品牌id
+     * @param brandId
+     *            品牌id
      * @return
      */
     public List findSubSystemByBrand(String brandId) {
@@ -58,8 +59,10 @@ public class MobileProductService {
     /**
      * 根据品牌id和分类获取下面的所有的产品
      *
-     * @param brandId 品牌id
-     * @param scateId 二级系统分类id
+     * @param brandId
+     *            品牌id
+     * @param scateId
+     *            二级系统分类id
      * @return
      */
     public List<ProductWithBLOBs> findProductByBrandAndSubSystem(String brandId, String scateId) {
@@ -76,8 +79,10 @@ public class MobileProductService {
     /**
      * 根据品牌id和分类获取下面的所有的产品分页信息
      *
-     * @param brandId 品牌id
-     * @param scateId 二级系统分类id
+     * @param brandId
+     *            品牌id
+     * @param scateId
+     *            二级系统分类id
      * @return
      */
     public List<ProductWithBLOBs> findProductByBrandAndSubSystemPages(String brandId, String scateId, Paging<Map> pager) {
@@ -92,7 +97,8 @@ public class MobileProductService {
     /**
      * 获取产品详情信息
      *
-     * @param id 产品主键id
+     * @param id
+     *            产品主键id
      * @return
      */
     public ProductWithBLOBs queryProductById(Long id) {
@@ -128,7 +134,8 @@ public class MobileProductService {
     /**
      * 查询产品参数
      *
-     * @param id 产品主键id
+     * @param id
+     *            产品主键id
      * @return
      */
     public Map<String, Object> queryPrdDescParam(Long id) {
@@ -205,18 +212,19 @@ public class MobileProductService {
     }
 
     /**
-     * 获取供应商下面的所有产品信息
+     * 根据产品名称获取供应商下面的所有产品信息
      *
      * @param fcateid
      * @param id
      * @param pager
      * @return
      */
-    public List<Map<String, String>> findAllProductListByProductType(String fcateid, String id, Paging<Map<String, String>> pager) {
+    public List<Map<String, String>> findCompanyProductListByName(String fcateid, String id, String name, Paging<Map<String, String>> pager) {
         Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("status", "1");
         queryMap.put("createid", id);
         queryMap.put("fcateid", fcateid);
-        return productService.findAllProductListByProductType(pager, queryMap);
+        queryMap.put("name", name);
+        return productMapper.findCompanyProductListByName(pager.getRowBounds(), queryMap);
     }
 }

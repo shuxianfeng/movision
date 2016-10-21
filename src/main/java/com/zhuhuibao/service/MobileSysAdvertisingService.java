@@ -1,10 +1,7 @@
 package com.zhuhuibao.service;
 
 import java.util.List;
-import java.util.Map;
 
-import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
-import com.zhuhuibao.mybatis.advertising.service.SysAdvertisingService;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
+import com.zhuhuibao.mybatis.advertising.service.SysAdvertisingService;
 
 /**
  * 广告相关接口实现类
@@ -22,9 +20,9 @@ import com.zhuhuibao.mybatis.memCenter.service.MemberService;
  */
 @Service
 @Transactional
-public class AdvertisingService {
+public class MobileSysAdvertisingService {
 
-    private static final Logger log = LoggerFactory.getLogger(AdvertisingService.class);
+    private static final Logger log = LoggerFactory.getLogger(MobileSysAdvertisingService.class);
 
     @Autowired
     private SysAdvertisingService advService;
@@ -46,7 +44,7 @@ public class AdvertisingService {
 
     /**
      * 查询广告信息
-     * 
+     *
      * @param position
      *            数组值依次是 chanType，page，advArea
      * @return
@@ -55,7 +53,7 @@ public class AdvertisingService {
         if (ArrayUtils.isNotEmpty(position) && position.length == 3) {
             return advService.findListByCondition(position[0], position[1], position[2]);
         }
-
         return null;
     }
+
 }

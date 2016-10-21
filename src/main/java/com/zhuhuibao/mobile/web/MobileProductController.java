@@ -111,8 +111,8 @@ public class MobileProductController {
     }
 
     /**
-     * 检索供应商下面的商品
-     * 
+     * 检索根据产品名称供应商下面的商品 (产品名称如果为空则检索所有的商品信息)
+     *
      * @param fcateid
      *            产品类别id
      * @param id
@@ -123,12 +123,13 @@ public class MobileProductController {
      *            页数
      * @return
      */
-    @ApiOperation(value = "检索供应商下面的商品", notes = "检索供应商下面的商品）")
-    @RequestMapping(value = "sel_company_product_list", method = RequestMethod.GET)
-    public Response sel_company_product_list(@ApiParam(value = "产品类别id") @RequestParam(required = false) String fcateid, @ApiParam(value = "商户id") @RequestParam String id,
-            @RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) {
+    @ApiOperation(value = "检索根据产品名称供应商下面的商品", notes = "检索根据产品名称供应商下面的商品）")
+    @RequestMapping(value = "sel_company_product_list_by_name", method = RequestMethod.GET)
+    public Response sel_company_product_list_by_name(@ApiParam(value = "产品类别id") @RequestParam(required = false) String fcateid, @ApiParam(value = "商户id") @RequestParam String id,
+            @ApiParam(value = "产品名称") @RequestParam(required = false) String name, @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Map<String, String>> productList = mobileProductService.findAllProductListByProductType(fcateid, id, pager);
+        List<Map<String, String>> productList = mobileProductService.findCompanyProductListByName(fcateid, id, name, pager);
         pager.result(productList);
 
         return new Response(pager);

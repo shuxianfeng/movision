@@ -13,7 +13,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
-import com.zhuhuibao.service.AdvertisingService;
+import com.zhuhuibao.service.MobileSysAdvertisingService;
 
 /**
  * 移动端首页
@@ -24,7 +24,7 @@ import com.zhuhuibao.service.AdvertisingService;
 @RequestMapping("/rest/m/index")
 public class IndexController {
     @Autowired
-    private AdvertisingService advertisingService;
+    private MobileSysAdvertisingService advertisingService;
 
     @ApiOperation(value = "触屏端首页", notes = "触屏端工程商首页")
     @RequestMapping(value = "/site", method = RequestMethod.GET)

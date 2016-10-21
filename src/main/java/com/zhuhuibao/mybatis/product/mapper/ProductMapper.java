@@ -70,4 +70,6 @@ public interface ProductMapper {
 	List<Product> findAllProduct(RowBounds rowBounds, ProductWithBLOBs product);
 
     List<ProductWithBLOBs> queryProductInfoBySCategoryPages(RowBounds rowBounds,Map<String,Object> map);
+
+    List<Map<String,String>> findCompanyProductListByName(RowBounds rowBounds,Map<String,Object> queryMap);
 }
