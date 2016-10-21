@@ -1,41 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhuhuibao.mybatis.product.mapper.ProductMapper">
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.product.entity.Product">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="createid" jdbcType="BIGINT" property="createid" />
-    <result column="fcateid" jdbcType="INTEGER" property="fcateid" />
-    <result column="scateid" jdbcType="INTEGER" property="scateid" />
-    <result column="brandid" jdbcType="INTEGER" property="brandid" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="publishTime" jdbcType="TIMESTAMP" property="publishTime" />
-    <result column="lastmodified" jdbcType="TIMESTAMP" property="lastmodified" />
-    <result column="price" jdbcType="DOUBLE" property="price" />
-    <result column="unit" jdbcType="VARCHAR" property="unit" />
-    <result column="repository" jdbcType="DOUBLE" property="repository" />
-    <result column="number" jdbcType="DOUBLE" property="number" />
-    <result column="hit" jdbcType="INTEGER" property="hit" />
-    <result column="imgUrl" jdbcType="VARCHAR" property="imgUrl" />
-    <result column="paramIDs" jdbcType="VARCHAR" property="paramIDs" />
-    <result column="paramValues" jdbcType="VARCHAR" property="paramValues" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
-    <result column="detailDesc" jdbcType="LONGVARCHAR" property="detailDesc" />
-    <result column="paras" jdbcType="LONGVARCHAR" property="paras" />
-    <result column="service" jdbcType="LONGVARCHAR" property="service" />
-  </resultMap>
-  <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.ResultBean" >
-    <result column="id" property="code" jdbcType="VARCHAR" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-  </resultMap>
-  <resultMap id="ProductMap" type="com.zhuhuibao.mybatis.product.entity.ProductMap" >
-    <result column="id" property="id" jdbcType="INTEGER" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-     <result column="imgUrl" property="imgUrl" jdbcType="VARCHAR" />
-     <result column="price" property="price" jdbcType="DOUBLE" />
-  </resultMap>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.product.entity.Product">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="createid" jdbcType="BIGINT" property="createid"/>
+        <result column="fcateid" jdbcType="INTEGER" property="fcateid"/>
+        <result column="scateid" jdbcType="INTEGER" property="scateid"/>
+        <result column="brandid" jdbcType="INTEGER" property="brandid"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="publishTime" jdbcType="TIMESTAMP" property="publishTime"/>
+        <result column="lastmodified" jdbcType="TIMESTAMP" property="lastmodified"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+        <result column="unit" jdbcType="VARCHAR" property="unit"/>
+        <result column="repository" jdbcType="DOUBLE" property="repository"/>
+        <result column="number" jdbcType="DOUBLE" property="number"/>
+        <result column="hit" jdbcType="INTEGER" property="hit"/>
+        <result column="imgUrl" jdbcType="VARCHAR" property="imgUrl"/>
+        <result column="paramIDs" jdbcType="VARCHAR" property="paramIDs"/>
+        <result column="paramValues" jdbcType="VARCHAR" property="paramValues"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+               type="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
+        <result column="detailDesc" jdbcType="LONGVARCHAR" property="detailDesc"/>
+        <result column="paras" jdbcType="LONGVARCHAR" property="paras"/>
+        <result column="service" jdbcType="LONGVARCHAR" property="service"/>
+    </resultMap>
+    <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.ResultBean">
+        <result column="id" property="code" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="ProductMap" type="com.zhuhuibao.mybatis.product.entity.ProductMap">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="imgUrl" property="imgUrl" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DOUBLE"/>
+    </resultMap>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
 	  price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,c.name fcateName ,c1.name scateName,
 	  b.CNName,b.ENName,if(mm.identify = 2,mm.personRealName,mm.enterpriseName) publisherName,t.reason
@@ -46,7 +47,7 @@
     where t.id = #{id,jdbcType=BIGINT}
   </select>
 
-  <select id="selectByIdMemberId" parameterType="java.util.Map" resultMap="ResultMapWithBLOBs">
+    <select id="selectByIdMemberId" parameterType="java.util.Map" resultMap="ResultMapWithBLOBs">
     select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified,
     price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,c.name fcateName ,c1.name scateName,
     b.CNName,b.ENName,if(mm.identify = 2,mm.personRealName,mm.enterpriseName) publisherName,t.reason
@@ -58,7 +59,8 @@
     AND t.createid = #{memberId,jdbcType=BIGINT}
   </select>
 
-  <select id="selectProductMemberByid" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.product.entity.ProductWithMember">
+    <select id="selectProductMemberByid" parameterType="java.lang.Long"
+            resultType="com.zhuhuibao.mybatis.product.entity.ProductWithMember">
     select n.id,n.name,n.createid,n.fcateid,n.scateid,n.brandid,n.status,n.publishTime,n.lastmodified,n.price,n.unit,n.repository,n.number,
     n.hit,n.imgUrl,n.paramIDs,n.paramValues,n.detailDesc,n.paras,n.service,n.fcateName,n.scateName,n.CNName,n.ENName,n.identify,n.memberName,n.enterpriseLogo,n.enterpriseWebSite,
     concat(p.name,c.name,ar.name,n.address) address,n.memberId from (select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified,
@@ -71,11 +73,11 @@
     where t.id = #{id,jdbcType=BIGINT}) n left join t_dictionary_province p on n.province = p.code
     left join t_dictionary_city c on n.city = c.code left join t_dictionary_area ar on ar.code = n.area
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_p_product
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
+    <insert id="insert" parameterType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
     insert into t_p_product (name, createid, 
       fcateid, scateid, brandid, 
       status, publishTime, lastmodified, 
@@ -91,215 +93,219 @@
       #{paramIDs,jdbcType=VARCHAR}, #{paramValues,jdbcType=VARCHAR}, #{detailDesc,jdbcType=LONGVARCHAR}, 
       #{paras,jdbcType=LONGVARCHAR}, #{service,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
-    insert into t_p_product
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="name != null">
-        name,
-      </if>
-      <if test="createid != null">
-        createid,
-      </if>
-      <if test="fcateid != null">
-        fcateid,
-      </if>
-      <if test="scateid != null">
-        scateid,
-      </if>
-      <if test="brandid != null">
-        brandid,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-        publishTime,
-        lastmodified,
-      <if test="price != null and price != ''">
-        price,
-      </if>
-      <if test="unit != null and unit != ''">
-        unit,
-      </if>
-      <if test="repository != null">
-        repository,
-      </if>
-      <if test="number != null and number != ''">
-        number,
-      </if>
-      <if test="hit != null">
-        hit,
-      </if>
-      <if test="imgUrl != null">
-        imgUrl,
-      </if>
-      <if test="paramIDs != null">
-        paramIDs,
-      </if>
-      <if test="paramValues != null">
-        paramValues,
-      </if>
-      <if test="detailDesc != null">
-        detailDesc,
-      </if>
-      <if test="paras != null">
-        paras,
-      </if>
-      <if test="service != null">
-        service,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="createid != null">
-        #{createid,jdbcType=BIGINT},
-      </if>
-      <if test="fcateid != null">
-        #{fcateid,jdbcType=INTEGER},
-      </if>
-      <if test="scateid != null">
-        #{scateid,jdbcType=INTEGER},
-      </if>
-      <if test="brandid != null">
-        #{brandid,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
-      now(),
-      now(),
-       <if test="price != null and price != ''">
-        #{price,jdbcType=DOUBLE},
-      </if>
-      <if test="unit != null and unit != ''">
-        #{unit,jdbcType=VARCHAR},
-      </if>
-      <if test="repository != null">
-        #{repository,jdbcType=DOUBLE},
-      </if>
-      <if test="number != null and number != ''">
-        #{number,jdbcType=DOUBLE},
-      </if>
-      <if test="hit != null">
-        #{hit,jdbcType=INTEGER},
-      </if>
-      <if test="imgUrl != null">
-        #{imgUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="paramIDs != null">
-        #{paramIDs,jdbcType=VARCHAR},
-      </if>
-      <if test="paramValues != null">
-        #{paramValues,jdbcType=VARCHAR},
-      </if>
-      <if test="detailDesc != null">
-        #{detailDesc,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="paras != null">
-        #{paras,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="service != null">
-        #{service,jdbcType=LONGVARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
-    update t_p_product
-    <set>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="createid != null">
-        createid = #{createid,jdbcType=BIGINT},
-      </if>
-      <if test="fcateid != null">
-        fcateid = #{fcateid,jdbcType=INTEGER},
-      </if>
-      <if test="scateid != null">
-        scateid = #{scateid,jdbcType=INTEGER},
-      </if>
-      <if test="brandid != null">
-        brandid = #{brandid,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="publishTime != null">
-        publishTime = #{publishTime,jdbcType=TIMESTAMP},
-      </if>
-        lastmodified = now(),
-      <if test="price != null">
-        price = #{price,jdbcType=DOUBLE},
-      </if>
-      <if test="unit != null">
-        unit = #{unit,jdbcType=VARCHAR},
-      </if>
-      <if test="repository != null">
-        repository = #{repository,jdbcType=DOUBLE},
-      </if>
-      <if test="number != null and number != ''">
-        number = #{number,jdbcType=DOUBLE},
-      </if>
-      <if test="hit != null">
-        hit = #{hit,jdbcType=INTEGER},
-      </if>
-      <if test="imgUrl != null">
-        imgUrl = #{imgUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="paramIDs != null">
-        paramIDs = #{paramIDs,jdbcType=VARCHAR},
-      </if>
-      <if test="paramValues != null">
-        paramValues = #{paramValues,jdbcType=VARCHAR},
-      </if>
-      <if test="detailDesc != null">
-        detailDesc = #{detailDesc,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="paras != null">
-        paras = #{paras,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="service != null">
-        service = #{service,jdbcType=LONGVARCHAR},
-      </if>
-       <if test="reason != null">
-        reason = #{reason,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  
-  <update id="updateProductStatus" parameterType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
+    <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
+        insert into t_p_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="createid != null">
+                createid,
+            </if>
+            <if test="fcateid != null">
+                fcateid,
+            </if>
+            <if test="scateid != null">
+                scateid,
+            </if>
+            <if test="brandid != null">
+                brandid,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            publishTime,
+            lastmodified,
+            <if test="price != null and price != ''">
+                price,
+            </if>
+            <if test="unit != null and unit != ''">
+                unit,
+            </if>
+            <if test="repository != null">
+                repository,
+            </if>
+            <if test="number != null and number != ''">
+                number,
+            </if>
+            <if test="hit != null">
+                hit,
+            </if>
+            <if test="imgUrl != null">
+                imgUrl,
+            </if>
+            <if test="paramIDs != null">
+                paramIDs,
+            </if>
+            <if test="paramValues != null">
+                paramValues,
+            </if>
+            <if test="detailDesc != null">
+                detailDesc,
+            </if>
+            <if test="paras != null">
+                paras,
+            </if>
+            <if test="service != null">
+                service,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="createid != null">
+                #{createid,jdbcType=BIGINT},
+            </if>
+            <if test="fcateid != null">
+                #{fcateid,jdbcType=INTEGER},
+            </if>
+            <if test="scateid != null">
+                #{scateid,jdbcType=INTEGER},
+            </if>
+            <if test="brandid != null">
+                #{brandid,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            now(),
+            now(),
+            <if test="price != null and price != ''">
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="unit != null and unit != ''">
+                #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="repository != null">
+                #{repository,jdbcType=DOUBLE},
+            </if>
+            <if test="number != null and number != ''">
+                #{number,jdbcType=DOUBLE},
+            </if>
+            <if test="hit != null">
+                #{hit,jdbcType=INTEGER},
+            </if>
+            <if test="imgUrl != null">
+                #{imgUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="paramIDs != null">
+                #{paramIDs,jdbcType=VARCHAR},
+            </if>
+            <if test="paramValues != null">
+                #{paramValues,jdbcType=VARCHAR},
+            </if>
+            <if test="detailDesc != null">
+                #{detailDesc,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="paras != null">
+                #{paras,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="service != null">
+                #{service,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
+        update t_p_product
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="createid != null">
+                createid = #{createid,jdbcType=BIGINT},
+            </if>
+            <if test="fcateid != null">
+                fcateid = #{fcateid,jdbcType=INTEGER},
+            </if>
+            <if test="scateid != null">
+                scateid = #{scateid,jdbcType=INTEGER},
+            </if>
+            <if test="brandid != null">
+                brandid = #{brandid,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="publishTime != null">
+                publishTime = #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            lastmodified = now(),
+            <if test="price != null">
+                price = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="unit != null">
+                unit = #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="repository != null">
+                repository = #{repository,jdbcType=DOUBLE},
+            </if>
+            <if test="number != null and number != ''">
+                number = #{number,jdbcType=DOUBLE},
+            </if>
+            <if test="hit != null">
+                hit = #{hit,jdbcType=INTEGER},
+            </if>
+            <if test="imgUrl != null">
+                imgUrl = #{imgUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="paramIDs != null">
+                paramIDs = #{paramIDs,jdbcType=VARCHAR},
+            </if>
+            <if test="paramValues != null">
+                paramValues = #{paramValues,jdbcType=VARCHAR},
+            </if>
+            <if test="detailDesc != null">
+                detailDesc = #{detailDesc,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="paras != null">
+                paras = #{paras,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="service != null">
+                service = #{service,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="reason != null">
+                reason = #{reason,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateProductStatus" parameterType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
     update t_p_product set status = #{status},lastmodified = now() where id = #{id} AND createid = #{createid}
   </update>
-  
-  <select id="findAllByPager" parameterType="com.zhuhuibao.mybatis.product.entity.Product" resultType="com.zhuhuibao.mybatis.product.entity.Product">
-      select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
-	  price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,c.name fcateName ,c1.name scateName,
-	  b.CNName,b.ENName,if(mm.identify = 2,mm.personRealName,mm.enterpriseName) publisherName
-      from t_p_product t left join t_p_category c on t.fcateid = c.id
-	  left join t_p_category c1 on t.scateid = c1.id 
-	  left join t_p_brand b on t.brandid = b.id
-      left join t_m_member mm on t.createid = mm.id
-      where t.status != 2 
-      <if test="fcateid != null">
-        and t.fcateid = #{fcateid,jdbcType=INTEGER}
-      </if>
-      <if test="scateid != null">
-        and t.scateid = #{scateid,jdbcType=INTEGER}
-      </if>
-      <if test="status != null">
-        and t.status = #{status,jdbcType=INTEGER}
-      </if>
-       <if test="createid != null">
-        and t.createid = #{createid,jdbcType=BIGINT}
-      </if>
-      <if test="name != null">
-        and t.name = #{name,jdbcType=VARCHAR}
-      </if>
-      order by publishTime desc
-  </select>
-   <select id="queryProductByParamIDs" parameterType="java.lang.String" resultType="com.zhuhuibao.mybatis.product.entity.Product">
+
+    <select id="findAllByPager" parameterType="com.zhuhuibao.mybatis.product.entity.Product"
+            resultType="com.zhuhuibao.mybatis.product.entity.Product">
+        select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d
+        %H:%i:%s') publishTime, t.lastmodified,
+        price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras,
+        t.service,c.name fcateName ,c1.name scateName,
+        b.CNName,b.ENName,if(mm.identify = 2,mm.personRealName,mm.enterpriseName) publisherName
+        from t_p_product t left join t_p_category c on t.fcateid = c.id
+        left join t_p_category c1 on t.scateid = c1.id
+        left join t_p_brand b on t.brandid = b.id
+        left join t_m_member mm on t.createid = mm.id
+        where t.status != 2
+        <if test="fcateid != null">
+            and t.fcateid = #{fcateid,jdbcType=INTEGER}
+        </if>
+        <if test="scateid != null">
+            and t.scateid = #{scateid,jdbcType=INTEGER}
+        </if>
+        <if test="status != null">
+            and t.status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="createid != null">
+            and t.createid = #{createid,jdbcType=BIGINT}
+        </if>
+        <if test="name != null">
+            and t.name = #{name,jdbcType=VARCHAR}
+        </if>
+        order by publishTime desc
+    </select>
+    <select id="queryProductByParamIDs" parameterType="java.lang.String"
+            resultType="com.zhuhuibao.mybatis.product.entity.Product">
       select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
 	  price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,c.name fcateName ,c1.name scateName,
 	  b.CNName,b.ENName  
@@ -308,100 +314,105 @@
 	  left join t_p_brand b on t.brandid = b.id
       where t.status = 1 and t.paramIDs = #{paramIDs}
   </select>
-  
-  <select id="getSCateListByBrandId" parameterType="com.zhuhuibao.mybatis.product.entity.Product" resultMap="ResultMap">
-    select distinct(c.id),c.name from t_p_product t left join t_p_category c on t.scateid = c.id 
-    <where>
-    	<if test="fcateid != null">
-        and t.fcateid = #{fcateid,jdbcType=INTEGER}
-      </if>
-      <if test="brandid != null">
-        and t.brandid = #{brandid,jdbcType=INTEGER}
-      </if>
-    </where>
-  </select>
-  
-  <select id="queryProductInfoBySCategory" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
-      select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
-	   price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service from t_p_product t 
-      <where>
-	      <if test="scateid != null">
-	        and t.scateid = #{scateid,jdbcType=INTEGER}
-	      </if>
-	      <if test="status != null">
-	        and t.status = #{status,jdbcType=INTEGER}
-	      </if>
-	       <if test="brandid != null">
-	        and t.brandid = #{brandid,jdbcType=BIGINT}
-	      </if>
-      </where>
-      <if test="order != null"> 
-          order by #{order} desc
-      </if>
-      limit 0,#{count}
-  </select>
-  
+
+    <select id="getSCateListByBrandId" parameterType="com.zhuhuibao.mybatis.product.entity.Product"
+            resultMap="ResultMap">
+        select distinct(c.id),c.name from t_p_product t left join t_p_category c on t.scateid = c.id
+        <where>
+            <if test="fcateid != null">
+                and t.fcateid = #{fcateid,jdbcType=INTEGER}
+            </if>
+            <if test="brandid != null">
+                and t.brandid = #{brandid,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryProductInfoBySCategory" parameterType="java.util.Map"
+            resultType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
+        select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d
+        %H:%i:%s') publishTime, t.lastmodified,
+        price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras,
+        t.service from t_p_product t
+        <where>
+            <if test="scateid != null">
+                and t.scateid = #{scateid,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and t.status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="brandid != null">
+                and t.brandid = #{brandid,jdbcType=BIGINT}
+            </if>
+        </where>
+        <if test="order != null">
+            order by #{order} desc
+        </if>
+        limit 0,#{count}
+    </select>
+
     <select id="queryRecommendHotProduct" parameterType="java.util.Map" resultMap="ProductMap">
-      select t.id, t.name,t.price,
-      case when (locate(';',imgUrl) > 0) then substring(imgUrl,1,locate(';',imgUrl)-1) when locate(';',imgUrl) = 0 then imgUrl end as imgUrl
-      from t_p_product t 
-      <where>
-	      <if test="scateid != null">
-	        and t.scateid = #{scateid,jdbcType=INTEGER}
-	      </if>
-	      <if test="status != null">
-	        and t.status = #{status,jdbcType=INTEGER}
-	      </if>
-	       <if test="brandid != null">
-	        and t.brandid = #{brandid,jdbcType=BIGINT}
-	      </if>
-      </where>
-      <if test="order != null"> 
-          order by ${order} desc
-      </if>
-      limit 0,#{count}
-  </select>
-  
-  <select id="findSecondCategoryBrand" resultType="com.zhuhuibao.mybatis.oms.entity.CategoryAssemble">
+        select t.id, t.name,t.price,
+        case when (locate(';',imgUrl) > 0) then substring(imgUrl,1,locate(';',imgUrl)-1) when locate(';',imgUrl) = 0
+        then imgUrl end as imgUrl
+        from t_p_product t
+        <where>
+            <if test="scateid != null">
+                and t.scateid = #{scateid,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and t.status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="brandid != null">
+                and t.brandid = #{brandid,jdbcType=BIGINT}
+            </if>
+        </where>
+        <if test="order != null">
+            order by ${order} desc
+        </if>
+        limit 0,#{count}
+    </select>
+
+    <select id="findSecondCategoryBrand" resultType="com.zhuhuibao.mybatis.oms.entity.CategoryAssemble">
   	SELECT distinct(B.id) brandid,B.CNName,B.ENName,P.fcateid,P.scateid FROM  t_p_product P  LEFT JOIN t_p_brand  B ON P.brandid=B.ID
   </select>
-  <select id="findCategoryAssemble" resultType="com.zhuhuibao.mybatis.oms.entity.CategoryAssemble">
+    <select id="findCategoryAssemble" resultType="com.zhuhuibao.mybatis.oms.entity.CategoryAssemble">
 	  SELECT P.ID fcateid,T.ID scateid,P.NAME fname,P.smallIcon,T.NAME sname FROM 
 	(SELECT T.id,T.NAME,T.smallIcon FROM t_p_category T WHERE T.parentId=0 ) P LEFT JOIN t_p_category T ON P.ID=T.parentId 
   </select>
-  <update id="updateHit" parameterType="java.lang.Long">
+    <update id="updateHit" parameterType="java.lang.Long">
   	update t_p_product set hit = hit+1 where id = #{id}
   </update>
-  <update id="batchUnpublish" parameterType="java.util.List">
-  	update t_p_product set status = 0 where id in
-  	<foreach collection="list" item="item" index="index" open="(" separator="," close=")" >  
-        #{item}  
-    </foreach> 
-  </update>
-   <select id="queryPrdDescParamService" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    <update id="batchUnpublish" parameterType="java.util.List">
+        update t_p_product set status = 0 where id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+    <select id="queryPrdDescParamService" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select t.id,t.detailDesc,t.paras,t.service from t_p_product t
     where t.id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="findSubSystem" resultType="com.zhuhuibao.common.pojo.ResultBean">
+    <select id="findSubSystem" resultType="com.zhuhuibao.common.pojo.ResultBean">
     SELECT distinct c.id as code,c.name as name
     FROM  t_p_product p
     LEFT JOIN t_p_category c ON p.scateid = c.id
     where p.brandid = #{id} and p.status = 1
   </select>
-  <select id="findProductBySystemId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+    <select id="findProductBySystemId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
     select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
 	  price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service
     FROM  t_p_product t
     where (t.fcateid = #{id} or t.scateid = #{id}) and t.status != 2
   </select>
 
-  <select id="queryProductTypeListByCompanyId" resultType="java.util.Map" parameterType="java.util.Map">
+    <select id="queryProductTypeListByCompanyId" resultType="java.util.Map" parameterType="java.util.Map">
     select distinct p.fcateid,c.name from t_p_product p
     left join t_p_category c on p.fcateid = c.id
     where p.createid = #{createid} and p.status = #{status} order by p.fcateid
   </select>
 
-  <select id="queryHotProductListByCompanyId" resultType="java.util.Map" parameterType="java.util.Map">
+    <select id="queryHotProductListByCompanyId" resultType="java.util.Map" parameterType="java.util.Map">
     select id,name,price,
     case when (locate(';',imgUrl) > 0) then substring(imgUrl,1,locate(';',imgUrl)-1) when locate(';',imgUrl) = 0 then imgUrl end as imgUrl
     from t_p_product
@@ -410,7 +421,7 @@
     limit 0,#{count}
   </select>
 
-  <select id="queryLatestProductListByCompanyId" resultType="java.util.Map" parameterType="java.util.Map">
+    <select id="queryLatestProductListByCompanyId" resultType="java.util.Map" parameterType="java.util.Map">
     select id,name,price,
     case when (locate(';',imgUrl) > 0) then substring(imgUrl,1,locate(';',imgUrl)-1) when locate(';',imgUrl) = 0 then imgUrl end as imgUrl
     from t_p_product
@@ -419,25 +430,26 @@
     limit 0,#{count}
   </select>
 
-  <select id="findAllProductListByProductType" resultType="java.util.Map" parameterType="java.util.Map">
-    select id,name,price,fcateid,
-    case when (locate(';',imgUrl) > 0) then substring(imgUrl,1,locate(';',imgUrl)-1) when locate(';',imgUrl) = 0 then imgUrl end as imgUrl
-    from t_p_product
-    <where>
-      <if test="fcateid != null and fcateid !=''">
-        and fcateid = #{fcateid}
-      </if>
-      <if test="createid != null">
-        and createid = #{createid}
-      </if>
-      <if test="status != null">
-        and status = #{status}
-      </if>
-    </where>
-    order by lastmodified desc
-  </select>
+    <select id="findAllProductListByProductType" resultType="java.util.Map" parameterType="java.util.Map">
+        select id,name,price,fcateid,
+        case when (locate(';',imgUrl) > 0) then substring(imgUrl,1,locate(';',imgUrl)-1) when locate(';',imgUrl) = 0
+        then imgUrl end as imgUrl
+        from t_p_product
+        <where>
+            <if test="fcateid != null and fcateid !=''">
+                and fcateid = #{fcateid}
+            </if>
+            <if test="createid != null">
+                and createid = #{createid}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+        order by lastmodified desc
+    </select>
 
-  <select id="queryHotProduct" resultType="java.util.Map" parameterType="java.util.Map">
+    <select id="queryHotProduct" resultType="java.util.Map" parameterType="java.util.Map">
     SELECT ad.connectedId as id,ad.imgUrl as productLogo,p.name,p.price
     FROM t_sys_advertising ad
     LEFT JOIN t_sys_adv_attr at on at.id = ad.advAttrId
@@ -447,53 +459,83 @@
     and at.advArea = #{advArea}
     order by ad.sort   asc
   </select>
-  
-  
-  
-  <select id="findAllProduct" parameterType="com.zhuhuibao.mybatis.product.entity.Product" resultType="com.zhuhuibao.mybatis.product.entity.Product">
-      select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified, 
-	  price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service,c.name fcateName ,c1.name scateName,
-	  b.CNName,b.ENName,if(mm.identify = 2,mm.personRealName,mm.enterpriseName) publisherName
-      from t_p_product t left join t_p_category c on t.fcateid = c.id
-	  left join t_p_category c1 on t.scateid = c1.id 
-	  left join t_p_brand b on t.brandid = b.id
-      left join t_m_member mm on t.createid = mm.id
-      where t.status != 2 
-      <if test="fcateid != null">
-        and t.fcateid = #{fcateid,jdbcType=INTEGER}
-      </if>
-      <if test="scateid != null">
-        and t.scateid = #{scateid,jdbcType=INTEGER}
-      </if>
-      <if test="status != null">
-        and t.status = #{status,jdbcType=INTEGER}
-      </if>
-       <if test="createid != null">
-        and t.createid = #{createid,jdbcType=BIGINT}
-      </if>
-      <if test="name != null">
-        and t.name = #{name,jdbcType=VARCHAR}
-      </if>
-      order by publishTime desc
-  </select>
 
-  <!-- 根据品牌和二级分类分页获取对应产品信息-->
-  <select id="queryProductInfoBySCategoryPages" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
-    select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime, t.lastmodified,
-    price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras, t.service from t_p_product t
-    <where>
-      <if test="scateid != null">
-        and t.scateid = #{scateid,jdbcType=INTEGER}
-      </if>
-      <if test="status != null">
-        and t.status = #{status,jdbcType=INTEGER}
-      </if>
-      <if test="brandid != null">
-        and t.brandid = #{brandid,jdbcType=BIGINT}
-      </if>
-    </where>
-    <if test="order != null">
-      order by #{order} desc
-    </if>
-  </select>
+
+    <select id="findAllProduct" parameterType="com.zhuhuibao.mybatis.product.entity.Product"
+            resultType="com.zhuhuibao.mybatis.product.entity.Product">
+        select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d
+        %H:%i:%s') publishTime, t.lastmodified,
+        price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras,
+        t.service,c.name fcateName ,c1.name scateName,
+        b.CNName,b.ENName,if(mm.identify = 2,mm.personRealName,mm.enterpriseName) publisherName
+        from t_p_product t left join t_p_category c on t.fcateid = c.id
+        left join t_p_category c1 on t.scateid = c1.id
+        left join t_p_brand b on t.brandid = b.id
+        left join t_m_member mm on t.createid = mm.id
+        where t.status != 2
+        <if test="fcateid != null">
+            and t.fcateid = #{fcateid,jdbcType=INTEGER}
+        </if>
+        <if test="scateid != null">
+            and t.scateid = #{scateid,jdbcType=INTEGER}
+        </if>
+        <if test="status != null">
+            and t.status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="createid != null">
+            and t.createid = #{createid,jdbcType=BIGINT}
+        </if>
+        <if test="name != null">
+            and t.name = #{name,jdbcType=VARCHAR}
+        </if>
+        order by publishTime desc
+    </select>
+
+    <!-- 根据品牌和二级分类分页获取对应产品信息-->
+    <select id="queryProductInfoBySCategoryPages" parameterType="java.util.Map"
+            resultType="com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs">
+        select t.id, t.name, t.createid, t.fcateid, t.scateid, t.brandid, t.status, date_format(t.publishTime,'%Y-%m-%d
+        %H:%i:%s') publishTime, t.lastmodified,
+        price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras,
+        t.service from t_p_product t
+        <where>
+            <if test="scateid != null">
+                and t.scateid = #{scateid,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and t.status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="brandid != null">
+                and t.brandid = #{brandid,jdbcType=BIGINT}
+            </if>
+        </where>
+        <if test="order != null">
+            order by #{order} desc
+        </if>
+    </select>
+
+
+    <!--  根据供应商和产品名称模糊查询产品信息-->
+    <select id="findCompanyProductListByName" resultType="java.util.Map" parameterType="java.util.Map">
+        select id,name,price,fcateid,
+        case when (locate(';',imgUrl) > 0) then substring(imgUrl,1,locate(';',imgUrl)-1) when locate(';',imgUrl) = 0
+        then imgUrl end as imgUrl
+        from t_p_product
+        <where>
+            <if test="fcateid != null and fcateid !=''">
+                and fcateid = #{fcateid}
+            </if>
+            <if test="createid != null">
+                and createid = #{createid}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="name != null">
+                and name like CONCAT('%',#{name},'%')
+            </if>
+
+        </where>
+        order by lastmodified desc
+    </select>
 </mapper>

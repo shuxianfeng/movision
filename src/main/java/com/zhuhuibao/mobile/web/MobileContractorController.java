@@ -21,9 +21,9 @@ import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.fsearch.pojo.spec.ContractorSearchSpec;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
-import com.zhuhuibao.service.AdvertisingService;
 import com.zhuhuibao.service.MobileChannelNewsService;
 import com.zhuhuibao.service.MobileMemberService;
+import com.zhuhuibao.service.MobileSysAdvertisingService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
 /**
@@ -40,7 +40,7 @@ public class MobileContractorController {
     private static final Logger log = LoggerFactory.getLogger(MobileContractorController.class);
 
     @Autowired
-    private AdvertisingService advertisingService;
+    private MobileSysAdvertisingService advertisingService;
 
     @Autowired
     private MobileMemberService memberService;
@@ -96,7 +96,7 @@ public class MobileContractorController {
         Response response = new Response();
         Paging<Member> pager = new Paging<>(pageNo, pageSize);
         try {
-            response.setData(memberService.getGreatCompany(pager,"6"));
+            response.setData(memberService.getGreatCompany(pager, "6"));
         } catch (Exception e) {
             log.error("sel_great_company_list error! ", e);
             e.printStackTrace();
