@@ -177,8 +177,17 @@
     <if test="createid != null and createid != ''">
         and (case when mm.enterpriseEmployeeParentId != 0 then (mm.enterpriseEmployeeParentId not in (select mc.enterpriseEmployeeParentId from t_m_member mc where id = #{createid})) else '1=1' end )
     </if>
-
-    order by dateTime desc
+    <choose>
+      <when test="publishTimeOrder != null and publishTimeOrder != ''">
+        ORDER BY publishTime ${publishTimeOrder},dateTime desc
+      </when>
+      <when test="endTimeOrder != null and endTimeOrder != ''">
+        ORDER BY endTime ${endTimeOrder},dateTime desc
+      </when>
+      <otherwise>
+        order by dateTime desc
+      </otherwise>
+    </choose>
   </select>
   <select id="findAllOfferedPriceInfo" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean">
   	 select t.id,t.offerTime dateTime,concat(p.name,c.name) deliveryAddress,if(t.type = 1,'公开询价','定向询价') typeName,t.title,t.createid 

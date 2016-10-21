@@ -20,6 +20,8 @@ import com.zhuhuibao.utils.MapUtil;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,6 +161,13 @@ public class PriceService {
      */
     public List<AskPriceResultBean> findAllEnquiryList(Paging<AskPriceResultBean> pager, AskPriceSearchBean askPriceSearch) {
 
+        if (null != askPriceSearch) {
+            String publishTimeOrder = StringUtils.trimToEmpty(askPriceSearch.getPublishTimeOrder());
+            if (!ArrayUtils.contains(Constants.ORDER_TYPE_KEYWORD, publishTimeOrder.toUpperCase())) {
+                askPriceSearch.setPublishTimeOrder(null);
+            }
+
+        }
         return askPriceMapper.findAllByPager1(pager.getRowBounds(), askPriceSearch);
     }
 
@@ -191,7 +200,7 @@ public class PriceService {
     public List<AskPriceResultBean> findAllByPager(Paging<AskPriceResultBean> pager, AskPriceSearchBean askPriceSearch) {
         log.debug("查询询价信息（分页）");
         List<AskPriceResultBean> resultBeanList = askPriceMapper.findAll(askPriceSearch);
-        List<AskPriceResultBean> resultBeanList1 = askPriceMapper.findAllByPager1(pager.getRowBounds(), askPriceSearch);
+        List<AskPriceResultBean> resultBeanList1 = findAllEnquiryList(pager, askPriceSearch);
         List askList = new ArrayList();
         for (AskPriceResultBean resultBean : resultBeanList1) {
             Map askMap = new HashMap();

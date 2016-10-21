@@ -261,6 +261,11 @@
     <if test="type2 != null and type2 != ''">
       and e.type in (1,2,3)
     </if>
+    <if test="publishTimeA != null and publishTimeB != null">
+      AND e.publishTime &gt;=date_format(#{publishTimeA},'%Y-%m-%d')
+      AND e.publishTime &lt;=date_format(#{publishTimeB},'%Y-%m-%d')
+    </if>
+      
     order by e.updateTime desc
   </select>
 
@@ -283,15 +288,17 @@
     <if test="status != null and status != ''">
       and e.status = #{status}
     </if>
-    <if test="viewsOrder != null and viewsOrder != ''">
-      ORDER by e.views ${viewsOrder},e.updateTime desc
-    </if>
-    <if test="publishTimeOrder != null and publishTimeOrder != ''">
-      ORDER by e.publishTime ${publishTimeOrder},e.updateTime desc
-    </if>
-    <if test="(viewsOrder == null or viewsOrder == '') and (publishTimeOrder == null or publishTimeOrder == '')">
-      order by e.updateTime desc
-    </if>
+    <choose>
+      <when test="viewsOrder != null and viewsOrder != ''">
+        ORDER by e.views ${viewsOrder},e.updateTime desc
+      </when>
+      <when test="publishTimeOrder != null and publishTimeOrder != ''">
+        ORDER by e.publishTime ${publishTimeOrder},e.updateTime desc
+      </when>
+      <otherwise>
+        order by e.updateTime desc
+      </otherwise>
+    </choose>
   </select>
 
 

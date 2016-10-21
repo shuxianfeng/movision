@@ -177,27 +177,26 @@ public class MobileEnquiryService {
     /**
      * 根据条件分页查询询价信息
      *
-     * @param askPriceSearch
-     *            查询条件
+     * @param fcateid
+     *            系统分类
      * @param pager
      *            分页对象
      * @return
      */
-    public Paging<AskPriceResultBean> selEnquiryList(AskPriceSearchBean askPriceSearch, Paging<AskPriceResultBean> pager) {
-        if (askPriceSearch.getTitle() != null) {
-            if (askPriceSearch.getTitle().contains("_")) {
-                askPriceSearch.setTitle(askPriceSearch.getTitle().replace("_", "\\_"));
-            }
+    public Paging<AskPriceResultBean> selEnquiryList(String fcateid, Paging<AskPriceResultBean> pager) {
+        List askList = new ArrayList();
+        List<AskPriceResultBean> resultBeanList1 = askPriceMapper.findAllPriceInfo(pager.getRowBounds(), fcateid);
+        for (AskPriceResultBean resultBean : resultBeanList1) {
+            Map askMap = new HashMap();
+            askMap.put(Constants.id, resultBean.getId());
+            askMap.put(Constants.title, resultBean.getTitle());
+            askMap.put(Constants.status, resultBean.getStatus());
+            askMap.put(Constants.type, resultBean.getType());
+            askMap.put(Constants.publishTime, resultBean.getPublishTime().substring(0, 10));
+            askMap.put(Constants.area, resultBean.getArea());
+            askList.add(askMap);
         }
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-        if (null != principal) {
-            askPriceSearch.setCreateid(principal.getId().toString());
-        }
-        askPriceSearch.setEndTime(askPriceSearch.getEndTime() + " 23:59:59");
-        List<AskPriceResultBean> askPriceList = priceService.findAllByPager(pager, askPriceSearch);
-        pager.result(askPriceList);
+        pager.result(askList);
         return pager;
     }
 

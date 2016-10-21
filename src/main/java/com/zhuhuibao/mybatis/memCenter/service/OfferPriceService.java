@@ -7,6 +7,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.AskPriceBean;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.constants.entity.Constant;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferAskPrice;
@@ -17,6 +18,8 @@ import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +100,18 @@ public class OfferPriceService {
      * @return product 报价信息
      */
     public List<AskPriceSimpleBean> findAllAskingPriceInfo(Paging<AskPriceSimpleBean> pager, AskPrice price) {
-        log.debug("分页询价需求");
+        if (null != price) {
+            String publishTimeOrder = StringUtils.trimToEmpty(price.getPublishTimeOrder());
+            String endTimeOrder = StringUtils.trimToEmpty(price.getEndTimeOrder());
+            if (!ArrayUtils.contains(Constants.ORDER_TYPE_KEYWORD, publishTimeOrder.toUpperCase())) {
+                price.setPublishTimeOrder(null);
+            }
+            if (!ArrayUtils.contains(Constants.ORDER_TYPE_KEYWORD, endTimeOrder.toUpperCase())) {
+                price.setEndTimeOrder(null);
+            }
+
+        }
+
         return priceMapper.findAllAskingPriceInfo(pager.getRowBounds(), price);
     }
 
