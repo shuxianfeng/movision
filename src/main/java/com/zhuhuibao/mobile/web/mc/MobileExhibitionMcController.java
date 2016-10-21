@@ -36,7 +36,7 @@ public class MobileExhibitionMcController {
     @RequestMapping(value = "sel_my_exhibition_list", method = RequestMethod.GET)
     public Response selMyExhibitionList(@ApiParam(value = "标题") @RequestParam(required = false) String title, @ApiParam(value = "审核状态") @RequestParam(required = false) String status,
             @ApiParam(value = "点击率排序，值为asc/desc") @RequestParam String viewsOrder, @ApiParam(value = "发布时间排序，值为asc/desc") @RequestParam String publishTimeOrder,
-            @RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) {
+            @RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Map<String, Object> map = MapUtil.convert2HashMap("memberId", ShiroUtil.getCreateID(), "title", title, "status", status, "viewsOrder", viewsOrder, "publishTimeOrder", publishTimeOrder);
         Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 
