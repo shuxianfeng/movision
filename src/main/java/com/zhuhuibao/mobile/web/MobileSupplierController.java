@@ -7,10 +7,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -185,20 +182,20 @@ public class MobileSupplierController {
     /**
      * 触屏端--询价馆
      * 
-     * @param askPriceSearch
-     *            查询条件
+     * @param fcateid
+     *            系统分类
      * @param pageNo
      * @param pageSize
      * @return
      */
     @ApiOperation(value = "触屏端--询价馆", notes = "触屏端--询价馆", response = Response.class)
     @RequestMapping(value = { "sel_enquiry_list" }, method = RequestMethod.GET)
-    public Response sel_enquiry_list(AskPriceSearchBean askPriceSearch, @RequestParam(required = false, defaultValue = "1") String pageNo,
+    public Response sel_enquiry_list(@ApiParam(value = "系统分类") @RequestParam(required = false) String fcateid, @RequestParam(required = false, defaultValue = "1") String pageNo,
             @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<AskPriceResultBean> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         try {
-            response.setData(enquiryService.selEnquiryList(askPriceSearch, pager));
+            response.setData(enquiryService.selEnquiryList(fcateid, pager));
         } catch (Exception e) {
             log.error("sel_enquiry_list  error! ", e);
             response.setCode(400);
