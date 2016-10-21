@@ -276,7 +276,7 @@
             from t_p_category
             where parentId = #{parentId} and is_deleted = 0
         <if test="subTypeId != null">
-            id = #{subTypeId}
+            and id = #{subTypeId}
         </if>
         )
         ORDER BY b.views DESC
