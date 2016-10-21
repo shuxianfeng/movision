@@ -2,7 +2,9 @@ package com.zhuhuibao.service;
 
 import java.util.*;
 
+import com.zhuhuibao.mybatis.memCenter.entity.SuccessCase;
 import com.zhuhuibao.mybatis.memCenter.mapper.SuccessCaseMapper;
+import com.zhuhuibao.mybatis.memCenter.service.SuccessCaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +33,12 @@ public class MobileSuccessCaseService {
     @Autowired
     private SuccessCaseMapper successCaseMapper;
 
+    @Autowired
+    private SuccessCaseService successCaseService;
+
     /**
      * 检索供应商对应的成功案例
-     * 
+     *
      * @param pager
      * @param id
      * @return
@@ -50,4 +55,17 @@ public class MobileSuccessCaseService {
         }
     }
 
+    /**
+     * 成功案例详情
+     *
+     * @param id
+     * @return
+     */
+    public SuccessCase querySuccessCaseById(String id) {
+        SuccessCase sc = successCaseService.querySuccessCaseById(id);
+        // 点击率加1
+        sc.setViews(String.valueOf(Integer.parseInt(sc.getViews()) + 1));
+        successCaseService.updateSuccessCase(sc);
+        return sc;
+    }
 }

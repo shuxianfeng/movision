@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.mybatis.memCenter.entity.SuccessCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -248,7 +249,7 @@ public class MobileSupplierController {
      * @return
      */
     @ApiOperation(value = "公司成功案例（分页）", notes = "公司成功案例（分页）")
-    @RequestMapping(value = "sel_company_success_caseList", method = RequestMethod.GET)
+    @RequestMapping(value = "sel_company_success_case_list", method = RequestMethod.GET)
     public Response sel_company_success_caseList(@ApiParam(value = "公司id") @RequestParam String id, @RequestParam(required = false, defaultValue = "1") String pageNo,
             @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
@@ -257,5 +258,18 @@ public class MobileSupplierController {
         pager.result(caseList);
         response.setData(pager);
         return response;
+    }
+
+    /**
+     * 成功案例详情
+     * 
+     * @param id
+     *            案例id
+     * @return
+     */
+    @ApiOperation(value = "成功案例详情", notes = "成功案例详情")
+    @RequestMapping(value = "sel_company_success_case", method = RequestMethod.GET)
+    public Response sel_company_success_case(@ApiParam(value = "案例id") @RequestParam String id) {
+        return new Response(successCaseService.querySuccessCaseById(id));
     }
 }
