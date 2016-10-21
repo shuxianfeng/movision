@@ -59,11 +59,6 @@ public class MobileSupplierController {
     private MobileSuccessCaseService successCaseService;
 
     /**
-     * 触屏端供应链广告图片位置
-     */
-    private final String mSupplierArea = "M_Supplier";
-
-    /**
      * 触屏端供应链首页
      * 
      * @return response 响应
@@ -73,17 +68,23 @@ public class MobileSupplierController {
     public Response index(@ApiParam(value = "当前登陆人id") @RequestParam(required = false) String createId) {
         Response response = new Response();
         // banner位广告图片
-        List<SysAdvertising> bannerAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mSupplierArea, "M_Supplier_Banner");
+        List<SysAdvertising> bannerAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Supplychain_Banner.value);
         // 热门品牌广告图片
-        List<SysAdvertising> hotBrandList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mSupplierArea, "M_Supplier_Hot_Brand");
+        List<SysAdvertising> hotBrandList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Supplychain_Hotbrand.value);
         // 热门厂商广告图片
-        List<SysAdvertising> hotSupplierList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mSupplierArea, "M_Supplier_Hot_Supplier");
+        List<SysAdvertising> manufaList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Supplychain_Manufa.value);
+        // 热门代理商广告图片
+        List<SysAdvertising> agentfaList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Supplychain_Agent.value);
+        // 热门渠道商广告图片
+        List<SysAdvertising> canalsfaList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Supplychain_Canals.value);
         // 取最新6条公开询价数据
         List askPriceList = enquiryService.queryNewestAskPrice(6, createId);
         Map<String, List> dataList = new HashMap<>();
         dataList.put("banner", bannerAdvList);
         dataList.put("hotBrand", hotBrandList);
-        dataList.put("hotSupplier", hotSupplierList);
+        dataList.put("manufaList", manufaList);
+        dataList.put("agentfaList", agentfaList);
+        dataList.put("canalsfaList", canalsfaList);
         dataList.put("askPriceList", askPriceList);
         response.setData(dataList);
         return response;

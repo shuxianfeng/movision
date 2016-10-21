@@ -28,21 +28,6 @@ public class MobileSysAdvertisingService {
     private SysAdvertisingService advService;
 
     /**
-     * 查询广告图片信息
-     * 
-     * @param chanType
-     *            频道类型
-     * @param page
-     *            频道子页面
-     * @param advArea
-     *            广告所属的该页面的区域
-     * @return
-     */
-    public List<SysAdvertising> queryAdvertising(String chanType, String page, String advArea) {
-        return advService.findListByCondition(chanType, page, advArea);
-    }
-
-    /**
      * 查询广告信息
      *
      * @param position

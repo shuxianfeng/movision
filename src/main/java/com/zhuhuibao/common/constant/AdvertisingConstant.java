@@ -33,7 +33,54 @@ public class AdvertisingConstant {
         /**
          * 移动端活动家首页banner
          */
-        M_Activity_Banner(new String[] { "181", "M_Activity", "M_Activity_Banner" });
+        M_Activity_Banner(new String[] { "181", "M_Activity", "M_Activity_Banner" }),
+
+        /**
+         * 移动端工程商首页banner
+         */
+        M_Contractor_Banner(new String[] { "191", "M_Contractor", "M_Contractor_Banner" }),
+
+        /**
+         * 移动端工程商首页banner
+         */
+        M_Contractor_Join_Us(new String[] { "191", "M_Contractor", "M_Contractor_Join_Us" }),
+
+        /**
+         * 移动端工程商首页名企展示
+         */
+        M_Contractor_Enterprise_Display(new String[] { "191", "M_Contractor", "M_Contractor_Enterprise_Display" }),
+
+        /**
+         * 移动端工程商首页风云人物
+         */
+        M_Contractor_Influential_Man(new String[] { "191", "M_Contractor", "M_Contractor_Influential_Man" }),
+
+        /**
+         * 移动端供应链首页banner
+         */
+        M_Supplychain_Banner(new String[] { "192", "M_Supplychain", "M_Supplychain_Banner" }),
+
+        /**
+         * 移动端供应链首页热门品牌
+         */
+        M_Supplychain_Hotbrand(new String[] { "192", "M_Supplychain", "M_Supplychain_Hotbrand" }),
+
+        /**
+         * 移动端供应链首页热门厂商
+         */
+        M_Supplychain_Manufa(new String[] { "192", "M_Supplychain", "M_Supplychain_Manufa" }),
+
+        /**
+         * 移动端供应链首页热门代理商
+         */
+        M_Supplychain_Agent(new String[] { "192", "M_Supplychain", "M_Supplychain_Agent" }),
+
+        /**
+         * 移动端供应链首页渠道商
+         */
+        M_Supplychain_Canals(new String[] { "192", "M_Supplychain", "M_Supplychain_Canals" }),
+
+        ;
 
         /**
          * chanType,page,advArea

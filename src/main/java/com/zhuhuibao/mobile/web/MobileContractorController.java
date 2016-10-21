@@ -49,11 +49,6 @@ public class MobileContractorController {
     private MobileChannelNewsService channelNewsService;
 
     /**
-     * 触屏端工程商广告图片位置
-     */
-    private final String mContractorArea = "M_Contractor";
-
-    /**
      * 触屏端工程商首页
      * 
      * @return response 响应
@@ -62,14 +57,13 @@ public class MobileContractorController {
     @RequestMapping(value = "index", method = RequestMethod.GET)
     public Response index() {
         Response response = new Response();
-        // banner位广告图片 todo chanType 待定 广告位置
-        List<SysAdvertising> bannerAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mContractorArea, "M_Contractor_Banner");
+        List<SysAdvertising> bannerAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Contractor_Banner.value);
         // 加入我们广告图片
-        List<SysAdvertising> joinUsAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mContractorArea, "M_Contractor_Join_Us");
+        List<SysAdvertising> joinUsAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Contractor_Join_Us.value);
         // 名企展示广告图片
-        List<SysAdvertising> greatCompanyAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mContractorArea, "M_Contractor_Enterprise_Display");
+        List<SysAdvertising> greatCompanyAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Contractor_Enterprise_Display.value);
         // 风云人物展示广告图片
-        List<SysAdvertising> greatPersonAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingChanType.mobile.value, mContractorArea, "M_Contractor_Influential_Man");
+        List<SysAdvertising> greatPersonAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Contractor_Influential_Man.value);
 
         Map<String, List> advList = new HashMap<>();
         advList.put("banner", bannerAdvList);
