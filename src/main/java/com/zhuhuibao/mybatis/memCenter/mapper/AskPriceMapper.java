@@ -36,4 +36,6 @@ public interface AskPriceMapper {
 
     AskPriceBean queryAskPrice(Map<String, Object> map);
 
+    List<AskPriceResultBean> findAllPriceInfo(RowBounds rowBounds, String fcateid);
+
 }
