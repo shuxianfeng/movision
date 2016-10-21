@@ -3,16 +3,19 @@ package com.zhuhuibao.mobile.web;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
 import com.zhuhuibao.mybatis.expo.entity.Exhibition;
 import com.zhuhuibao.mybatis.oms.entity.TenderToned;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.service.AdvertisingService;
 import com.zhuhuibao.service.MobileProjectService;
 import com.zhuhuibao.utils.MapUtil;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -46,6 +49,8 @@ public class MobileProjectController {
     private ZhbService zhbService;
     @Autowired
     private VipInfoService vipInfoService;
+    @Autowired
+    private AdvertisingService advertisingService;
 
     /**
      * 前台项目信息列表页
@@ -68,12 +73,11 @@ public class MobileProjectController {
 
         // 查询项目信息
         Paging<Map<String, String>> projectPager = mobileProjectService.getProjectListByConditions(name, city, province, category, startDateA, startDateB, endDateA, endDateB, pageNo, pageSize);
-
-        // TODO
-        // 封装广告数据
+        // banner
+        List<SysAdvertising> banner = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Project_Banner.value);
 
         result.put("projectPager", projectPager);
-
+        result.put("banner", banner);
         return new Response(result);
     }
 
@@ -120,10 +124,13 @@ public class MobileProjectController {
             paramMap.put("noticeName", noticeName.replace("_", "\\_"));
         }
         Paging<Map<String, Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-
+        // 招中标数据
         List<Map<String, Object>> tenderList = mobileProjectService.getTenderList(paramMap, pager);
 
-        return new Response(tenderList);
+        // banner
+        List<SysAdvertising> banner = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Project_Banner.value);
+
+        return new Response(MapUtil.convert2HashMap("tenderList", tenderList, "banner", banner));
     }
 
     @RequestMapping(value = { "/sel_tender_detail" }, method = RequestMethod.GET)
