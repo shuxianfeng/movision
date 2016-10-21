@@ -320,6 +320,9 @@
     <if test="startTime == null and endTime != null">
       and p.publishTime &lt;= #{endTime}
     </if>
+    <if test="publishTimeOrder != null and publishTimeOrder != ''">
+      ORDER BY p.publishTime ${publishTimeOrder}
+    </if>
   </select>
   <select id="queryNewPriceInfo" resultMap="BaseResultMap">
     select t.id,t.title from t_p_ask_price t

@@ -60,8 +60,8 @@ public class MobileEnquiryMcController {
         Response response = new Response();
         Paging<AskPriceSimpleBean> pager = new Paging<AskPriceSimpleBean>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<AskPriceSimpleBean> enquiryList = mobileEnquiryService.getReceivedEnquiryList(pager, price);
-
-        response.setData(enquiryList);
+        pager.result(enquiryList);
+        response.setData(pager);
         return response;
     }
 
