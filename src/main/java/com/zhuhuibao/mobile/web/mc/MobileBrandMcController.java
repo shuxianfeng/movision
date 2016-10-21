@@ -35,7 +35,8 @@ public class MobileBrandMcController {
 
     @ApiOperation(value = "我的品牌列表", notes = "我的品牌列表", response = Response.class)
     @RequestMapping(value = "/sel_my_brand_list", method = RequestMethod.GET)
-    public Response selMyBrandList(@ApiParam(value = "审核状态") @RequestParam(required = false) String status, @ApiParam(value = "发布时间排序，值为asc/desc") @RequestParam String publishTimeOrder) {
+    public Response selMyBrandList(@ApiParam(value = "审核状态") @RequestParam(required = false) String status,
+            @ApiParam(value = "发布时间排序，值为asc/desc") @RequestParam(required = false) String publishTimeOrder) {
         Response result = new Response();
         Long memberId = ShiroUtil.getCreateID();
         if (memberId != null) {

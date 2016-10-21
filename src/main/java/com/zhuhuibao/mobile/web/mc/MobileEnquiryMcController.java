@@ -1,4 +1,4 @@
-package com.zhuhuibao.mobile.web;
+package com.zhuhuibao.mobile.web.mc;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -31,8 +31,8 @@ import com.zhuhuibao.utils.pagination.model.Paging;
  * @date 2016/10/18 0018.
  */
 @RestController
-@RequestMapping("/rest/m/enquiry/")
-public class MobileEnquiryController {
+@RequestMapping("/rest/m/enquiry/mc/")
+public class MobileEnquiryMcController {
 
     @Autowired
     private MobileEnquiryService mobileEnquiryService;
@@ -41,7 +41,7 @@ public class MobileEnquiryController {
      * 根据条件查询发出的询价信息（分页）
      */
     @ApiOperation(value = "根据条件查询发出的询价信息（分页）", notes = "根据条件查询发出的询价信息（分页）", response = Response.class)
-    @RequestMapping(value = { "/mc/sel_sent_enquiry_list" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/sel_sent_enquiry_list" }, method = RequestMethod.GET)
     public Response selSentEnquiryList(AskPriceSearchBean askPriceSearch, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
             @ApiParam(value = "每页显示的条数") @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
@@ -54,7 +54,7 @@ public class MobileEnquiryController {
     }
 
     @ApiOperation(value = "询价需求：我收到的询价需求", notes = "询价需求：我收到的询价需求", response = Response.class)
-    @RequestMapping(value = { "/mc/sel_received_enquiry_list" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/sel_received_enquiry_list" }, method = RequestMethod.GET)
     public Response selReceivedEnquiryList(AskPrice price, @RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize)
             throws IOException {
         Response response = new Response();
@@ -66,7 +66,7 @@ public class MobileEnquiryController {
     }
 
     @ApiOperation(value = "查看询价详情", notes = "查看询价详情", response = Response.class)
-    @RequestMapping(value = { "/mc/sel_enquiry_detail" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/sel_enquiry_detail" }, method = RequestMethod.GET)
     public Response selEnquiryDetail(@ApiParam(value = "询价ID") @RequestParam Long askId) throws IOException {
         Response response = new Response();
         AskPriceBean askPrice = mobileEnquiryService.getAskPriceById(askId);
@@ -75,7 +75,7 @@ public class MobileEnquiryController {
     }
 
     @ApiOperation(value = "根据条件查询收到的报价信息（分页）", notes = "根据条件查询收到的报价信息（分页）", response = Response.class)
-    @RequestMapping(value = { "/mc/sel_received_offer_list" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/sel_received_offer_list" }, method = RequestMethod.GET)
     public Response selReceivedOfferList(@ApiParam(value = "询价ID") @RequestParam Long askId, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
             @ApiParam(value = "每页显示的条数") @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
@@ -94,7 +94,7 @@ public class MobileEnquiryController {
     }
 
     @ApiOperation(value = "发出的报价信息（分页）", notes = "发出的报价信息（分页）", response = Response.class)
-    @RequestMapping(value = { "/mc/sel_sent_offer_list" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/sel_sent_offer_list" }, method = RequestMethod.GET)
     public Response selSentOfferList(@ApiParam(value = "标题") @RequestParam(required = false) String title, @ApiParam(value = "开始时间") @RequestParam(required = false) String startDate,
             @ApiParam(value = "结束时间") @RequestParam(required = false) String endDate, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
             @ApiParam(value = "每页显示的条数") @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
@@ -104,7 +104,7 @@ public class MobileEnquiryController {
     }
 
     @ApiOperation(value = "查看报价详情", notes = "查看报价详情", response = Response.class)
-    @RequestMapping(value = { "/mc/sel_offer_detail" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/sel_offer_detail" }, method = RequestMethod.GET)
     public Response selOfferDetail(@ApiParam(value = "报价ID") @RequestParam Long offerId) throws IOException {
         Response response = new Response();
         Map<String, Object> resultMap = new HashMap<>();

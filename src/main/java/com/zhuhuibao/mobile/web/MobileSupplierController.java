@@ -197,6 +197,8 @@ public class MobileSupplierController {
         try {
             response.setData(enquiryService.selEnquiryList(fcateid, pager));
         } catch (Exception e) {
+            log.error("sel_enquiry_list  error! ", e);
+            response.setCode(400);
             response.setMessage("sel_enquiry_list  error!" + e);
         }
         return response;
