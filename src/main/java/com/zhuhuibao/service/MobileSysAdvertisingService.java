@@ -2,6 +2,7 @@ package com.zhuhuibao.service;
 
 import java.util.List;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,20 @@ public class MobileSysAdvertisingService {
      */
     public List<SysAdvertising> queryAdvertising(String chanType, String page, String advArea) {
         return advService.findListByCondition(chanType, page, advArea);
+    }
+
+    /**
+     * 查询广告信息
+     *
+     * @param position
+     *            数组值依次是 chanType，page，advArea
+     * @return
+     */
+    public List<SysAdvertising> queryAdvertising(String[] position) {
+        if (ArrayUtils.isNotEmpty(position) && position.length == 3) {
+            return advService.findListByCondition(position[0], position[1], position[2]);
+        }
+        return null;
     }
 
 }

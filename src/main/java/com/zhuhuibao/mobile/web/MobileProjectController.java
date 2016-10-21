@@ -1,25 +1,10 @@
 package com.zhuhuibao.mobile.web;
 
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.AdvertisingConstant;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.ZhbConstant;
-import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
-import com.zhuhuibao.mybatis.expo.entity.Exhibition;
-import com.zhuhuibao.mybatis.oms.entity.TenderToned;
-import com.zhuhuibao.mybatis.vip.service.VipInfoService;
-import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
-import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
-import com.zhuhuibao.mybatis.zhb.service.ZhbService;
-import com.zhuhuibao.service.AdvertisingService;
-import com.zhuhuibao.service.MobileProjectService;
-import com.zhuhuibao.utils.MapUtil;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
-import com.zhuhuibao.utils.pagination.model.Paging;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +13,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.AdvertisingConstant;
+import com.zhuhuibao.common.constant.ZhbConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
+import com.zhuhuibao.mybatis.oms.entity.TenderToned;
+import com.zhuhuibao.mybatis.vip.service.VipInfoService;
+import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
+import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.service.MobileProjectService;
+import com.zhuhuibao.service.MobileSysAdvertisingService;
+import com.zhuhuibao.utils.MapUtil;
+import com.zhuhuibao.utils.pagination.model.Paging;
 
 /**
  * 项目信息controller
@@ -50,7 +47,7 @@ public class MobileProjectController {
     @Autowired
     private VipInfoService vipInfoService;
     @Autowired
-    private AdvertisingService advertisingService;
+    private MobileSysAdvertisingService advertisingService;
 
     /**
      * 前台项目信息列表页

@@ -3,9 +3,6 @@ package com.zhuhuibao.mobile.web;
 import java.util.List;
 import java.util.Map;
 
-import com.zhuhuibao.common.constant.AdvertisingConstant;
-import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
-import com.zhuhuibao.service.AdvertisingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,8 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.AdvertisingConstant;
+import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
 import com.zhuhuibao.mybatis.expo.entity.Exhibition;
 import com.zhuhuibao.service.MobileExhibitionService;
+import com.zhuhuibao.service.MobileSysAdvertisingService;
 import com.zhuhuibao.utils.MapUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
@@ -32,7 +32,7 @@ public class MobileExhibitionController {
     @Autowired
     private MobileExhibitionService mobileExhibitionService;
     @Autowired
-    private AdvertisingService advertisingService;
+    private MobileSysAdvertisingService advertisingService;
 
     @ApiOperation(value = "会展信息列表", notes = "会展信息列表", response = Response.class)
     @RequestMapping(value = "sel_list", method = RequestMethod.GET)
