@@ -192,7 +192,9 @@ public class MobileEnquiryService {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-        askPriceSearch.setCreateid(principal.getId().toString());
+        if (null != principal) {
+            askPriceSearch.setCreateid(principal.getId().toString());
+        }
         askPriceSearch.setEndTime(askPriceSearch.getEndTime() + " 23:59:59");
         List<AskPriceResultBean> askPriceList = priceService.findAllByPager(pager, askPriceSearch);
         pager.result(askPriceList);
