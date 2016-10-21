@@ -8,6 +8,48 @@ package com.zhuhuibao.common.constant;
  */
 public class AdvertisingConstant {
 
+    public enum AdvertisingPosition {
+
+        /**
+         * 手机版首页banner
+         */
+        M_Homepage_Banner(new String[] { "181", "M_Homepage", "M_Homepage_Banner" }),
+        /**
+         * 移动端首页筑慧头条
+         */
+        M_Homepage_Headline(new String[] { "181", "M_Homepage", "M_Homepage_Headline" }),
+        /**
+         * 移动端首页频道推广
+         */
+        M_Homepage_Marketing(new String[] { "181", "M_Homepage", "M_Homepage_Marketing" }),
+        /**
+         * 移动端首页盟友邀请
+         */
+        M_Homepage_Invitation(new String[] { "181", "M_Homepage", "M_Homepage_Invitation" }),
+        /**
+         * 移动端项目信息首页banner
+         */
+        M_Project_Banner(new String[] { "181", "M_Project", "M_Project_Banner" }),
+        /**
+         * 移动端活动家首页banner
+         */
+        M_Activity_Banner(new String[] { "181", "M_Activity", "M_Activity_Banner" });
+
+        /**
+         * chanType,page,advArea
+         */
+        public final String[] value;
+
+        AdvertisingPosition(String[] value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
+    }
+
     public enum AdvertisingChanType {
         /**
          * 平台主站

@@ -3,6 +3,9 @@ package com.zhuhuibao.mobile.web;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.common.constant.AdvertisingConstant;
+import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
+import com.zhuhuibao.service.AdvertisingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +31,8 @@ public class MobileExhibitionController {
 
     @Autowired
     private MobileExhibitionService mobileExhibitionService;
+    @Autowired
+    private AdvertisingService advertisingService;
 
     @ApiOperation(value = "会展信息列表", notes = "会展信息列表", response = Response.class)
     @RequestMapping(value = "sel_list", method = RequestMethod.GET)
@@ -38,11 +43,13 @@ public class MobileExhibitionController {
         Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> paramMap = MapUtil.convert2HashMap("subType", subType, "type", type, "province", province, "city", city, "type1", 1);
 
+        // 会展信息
         List<Map<String, String>> exhibitionList = mobileExhibitionService.getExhibitionList(pager, paramMap);
 
-        // TODO 广告
+        // banner
+        List<SysAdvertising> banner = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Activity_Banner.value);
 
-        return new Response(exhibitionList);
+        return new Response(MapUtil.convert2HashMap("exhibitionList", exhibitionList, "banner", banner));
     }
 
     @ApiOperation(value = "会展详情查看", notes = "会展详情查看", response = Response.class)

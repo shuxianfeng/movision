@@ -153,7 +153,7 @@ public class AuthcMember {
      * 
      * @return
      */
-    public boolean isEnterprise() {
+    public boolean getIsEnterprise() {
         return !MemberConstant.MemberIdentify.GR.toString().equals(getIdentify());
     }
 
