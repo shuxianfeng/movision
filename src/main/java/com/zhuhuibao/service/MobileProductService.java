@@ -4,6 +4,9 @@ import java.util.*;
 
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.fsearch.pojo.spec.ProductSearchSpec;
+import com.zhuhuibao.fsearch.service.exception.ServiceException;
+import com.zhuhuibao.fsearch.service.impl.ProductsService;
 import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.mybatis.product.entity.ProductParam;
 import com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs;
@@ -34,6 +37,9 @@ public class MobileProductService {
     private ProductService productService;
 
     @Autowired
+    private ProductsService productsService;
+
+    @Autowired
     private ProductMapper productMapper;
 
     @Autowired
@@ -41,9 +47,8 @@ public class MobileProductService {
 
     /**
      * 根据品牌id查询该品牌下共有多少产品分类
-     * 
-     * @param brandId
-     *            品牌id
+     *
+     * @param brandId 品牌id
      * @return
      */
     public List findSubSystemByBrand(String brandId) {
@@ -52,11 +57,9 @@ public class MobileProductService {
 
     /**
      * 根据品牌id和分类获取下面的所有的产品
-     * 
-     * @param brandId
-     *            品牌id
-     * @param scateId
-     *            二级系统分类id
+     *
+     * @param brandId 品牌id
+     * @param scateId 二级系统分类id
      * @return
      */
     public List<ProductWithBLOBs> findProductByBrandAndSubSystem(String brandId, String scateId) {
@@ -73,10 +76,8 @@ public class MobileProductService {
     /**
      * 根据品牌id和分类获取下面的所有的产品分页信息
      *
-     * @param brandId
-     *            品牌id
-     * @param scateId
-     *            二级系统分类id
+     * @param brandId 品牌id
+     * @param scateId 二级系统分类id
      * @return
      */
     public List<ProductWithBLOBs> findProductByBrandAndSubSystemPages(String brandId, String scateId, Paging<Map> pager) {
@@ -90,9 +91,8 @@ public class MobileProductService {
 
     /**
      * 获取产品详情信息
-     * 
-     * @param id
-     *            产品主键id
+     *
+     * @param id 产品主键id
      * @return
      */
     public ProductWithBLOBs queryProductById(Long id) {
@@ -127,9 +127,8 @@ public class MobileProductService {
 
     /**
      * 查询产品参数
-     * 
-     * @param id
-     *            产品主键id
+     *
+     * @param id 产品主键id
      * @return
      */
     public Map<String, Object> queryPrdDescParam(Long id) {
@@ -138,7 +137,7 @@ public class MobileProductService {
 
     /**
      * 根据条件查询产品信息
-     * 
+     *
      * @param memberId
      * @param fcateid
      * @param scateid
@@ -162,7 +161,7 @@ public class MobileProductService {
 
     /**
      * 根据ID更新产品状态
-     * 
+     *
      * @param memberId
      * @param productId
      * @param status
@@ -179,7 +178,7 @@ public class MobileProductService {
 
     /**
      * 查询登录会员的产品详情
-     * 
+     *
      * @param productId
      * @return
      */
@@ -189,5 +188,35 @@ public class MobileProductService {
         productService.deailProductParam(product);
 
         return product;
+    }
+
+    /**
+     * 检索产品信息
+     *
+     * @param spec
+     * @return
+     */
+    public Map<String, Object> selProductList(ProductSearchSpec spec) throws ServiceException {
+        if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
+            spec.setLimit(12);
+        }
+        return productsService.search(spec);
+
+    }
+
+    /**
+     * 获取供应商下面的所有产品信息
+     *
+     * @param fcateid
+     * @param id
+     * @param pager
+     * @return
+     */
+    public List<Map<String, String>> findAllProductListByProductType(String fcateid, String id, Paging<Map<String, String>> pager) {
+        Map<String, Object> queryMap = new HashMap<>();
+        queryMap.put("status", "1");
+        queryMap.put("createid", id);
+        queryMap.put("fcateid", fcateid);
+        return productService.findAllProductListByProductType(pager, queryMap);
     }
 }

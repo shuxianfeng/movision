@@ -1,6 +1,7 @@
 package com.zhuhuibao.mobile.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -15,6 +16,8 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.fsearch.pojo.spec.ProductSearchSpec;
+import com.zhuhuibao.fsearch.service.exception.ServiceException;
 import com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs;
 import com.zhuhuibao.service.MobileAgentService;
 import com.zhuhuibao.service.MobileProductService;
@@ -28,7 +31,7 @@ import com.zhuhuibao.utils.pagination.model.Paging;
  */
 @RestController
 @RequestMapping("/rest/m/product/site/")
-@Api(value = "product", description = "产品")
+@Api(value = "mobileProduct", description = "产品")
 public class MobileProductController {
 
     private static final Logger log = LoggerFactory.getLogger(MobileProductController.class);
@@ -85,5 +88,49 @@ public class MobileProductController {
         modelMap.put("agentMap", agentMap);
         response.setData(modelMap);
         return response;
+    }
+
+    /**
+     * 触屏端供应链-检索产品
+     *
+     * @param spec
+     *            检索条件
+     * @return
+     */
+    @ApiOperation(value = "触屏端供应链-搜索产品", notes = "触屏端供应链-品牌下更多产品")
+    @RequestMapping(value = "sel_product_list", method = RequestMethod.GET)
+    public Response sel_product_list(ProductSearchSpec spec) {
+        Response response = new Response();
+        try {
+            response.setData(mobileProductService.selProductList(spec));
+        } catch (ServiceException e) {
+            response.setCode(500);
+            response.setMessage("sel_product_list  error!" + e);
+        }
+        return response;
+    }
+
+    /**
+     * 检索供应商下面的商品
+     * 
+     * @param fcateid
+     *            产品类别id
+     * @param id
+     *            商户id
+     * @param pageNo
+     *            页码
+     * @param pageSize
+     *            页数
+     * @return
+     */
+    @ApiOperation(value = "检索供应商下面的商品", notes = "检索供应商下面的商品）")
+    @RequestMapping(value = "sel_company_product_list", method = RequestMethod.GET)
+    public Response sel_company_product_list(@ApiParam(value = "产品类别id") @RequestParam(required = false) String fcateid, @ApiParam(value = "商户id") @RequestParam String id,
+            @RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Map<String, String>> productList = mobileProductService.findAllProductListByProductType(fcateid, id, pager);
+        pager.result(productList);
+
+        return new Response(pager);
     }
 }
