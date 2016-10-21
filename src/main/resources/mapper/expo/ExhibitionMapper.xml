@@ -261,6 +261,11 @@
     <if test="type2 != null and type2 != ''">
       and e.type in (1,2,3)
     </if>
+    <if test="publishTimeA != null and publishTimeB != null">
+      AND e.publishTime &gt;=date_format(#{publishTimeA},'%Y-%m-%d')
+      AND e.publishTime &lt;=date_format(#{publishTimeB},'%Y-%m-%d')
+    </if>
+      
     order by e.updateTime desc
   </select>
 

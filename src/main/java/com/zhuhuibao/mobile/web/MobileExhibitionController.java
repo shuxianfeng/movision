@@ -38,10 +38,12 @@ public class MobileExhibitionController {
     @RequestMapping(value = "sel_list", method = RequestMethod.GET)
     public Response selList(@ApiParam(value = "所属栏目:1:筑慧活动;2:行业会议;3:厂商活动") @RequestParam(required = false) String type,
             @ApiParam(value = "筑慧活动子栏目:1:技术研讨会;2:产品发布会;3:行业峰会;4:市场活动会") @RequestParam(required = false) String subType, @ApiParam(value = "省") @RequestParam(required = false) String province,
-            @ApiParam(value = "市") @RequestParam(required = false) String city, @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @ApiParam(value = "市") @RequestParam(required = false) String city, @ApiParam(value = "发布时间查询的开始时间") @RequestParam(required = false) String publishTimeA,
+            @ApiParam(value = "发布时间查询的结束时间") @RequestParam(required = false) String publishTimeB, @RequestParam(required = false, defaultValue = "1") String pageNo,
             @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        Map<String, Object> paramMap = MapUtil.convert2HashMap("subType", subType, "type", type, "province", province, "city", city, "type1", 1);
+        Map<String, Object> paramMap = MapUtil.convert2HashMap("subType", subType, "type", type, "province", province, "city", city, "publishTimeA", publishTimeA, "publishTimeB", publishTimeB,
+                "type1", 1);
 
         // 会展信息
         List<Map<String, String>> exhibitionList = mobileExhibitionService.getExhibitionList(pager, paramMap);
