@@ -45,11 +45,11 @@ public class MobileExhibitionController {
 
         // 会展信息
         List<Map<String, String>> exhibitionList = mobileExhibitionService.getExhibitionList(pager, paramMap);
-
+        pager.result(exhibitionList);
         // banner
         List<SysAdvertising> banner = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Activity_Banner.value);
 
-        return new Response(MapUtil.convert2HashMap("exhibitionList", exhibitionList, "banner", banner));
+        return new Response(MapUtil.convert2HashMap("exhibitionList", pager, "banner", banner));
     }
 
     @ApiOperation(value = "会展详情查看", notes = "会展详情查看", response = Response.class)
