@@ -3,7 +3,9 @@ package com.zhuhuibao.service;
 import java.util.*;
 
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.fsearch.pojo.spec.ProductSearchSpec;
 import com.zhuhuibao.fsearch.service.exception.ServiceException;
 import com.zhuhuibao.fsearch.service.impl.ProductsService;
@@ -226,5 +228,18 @@ public class MobileProductService {
         queryMap.put("fcateid", fcateid);
         queryMap.put("name", name);
         return productMapper.findCompanyProductListByName(pager.getRowBounds(), queryMap);
+    }
+
+    /**
+     * 查询公司发布的商品信息
+     * 
+     * @param createid
+     * @return
+     */
+    public List<Map<String, String>> queryProductTypeListByCompanyId(String createid) {
+        Map<String, Object> queryMap = new HashMap<>();
+        queryMap.put("status", Constants.product_status_publish);
+        queryMap.put("createid", createid);
+        return productMapper.queryProductTypeListByCompanyId(queryMap);
     }
 }
