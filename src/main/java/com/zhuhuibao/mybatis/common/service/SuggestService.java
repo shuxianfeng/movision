@@ -1,8 +1,10 @@
 package com.zhuhuibao.mybatis.common.service;
 
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.common.entity.Suggest;
 import com.zhuhuibao.mybatis.common.mapper.SuggestMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,48 +18,56 @@ import java.util.Map;
  */
 @Service
 public class SuggestService {
-	private static final Logger log = LoggerFactory.getLogger(SuggestService.class);
+    private static final Logger log = LoggerFactory.getLogger(SuggestService.class);
 
-	@Autowired
-	SuggestMapper suggestmapper;
+    @Autowired
+    SuggestMapper suggestmapper;
 
-	public int addSuggest(Suggest suggest) {
-		try {
-			return suggestmapper.insertSelective(suggest);
-		} catch (Exception e) {
-			log.error("addSuggest error >>>", e);
-			e.printStackTrace();
-			throw e;
-		}
-	}
+    public int addSuggest(Suggest suggest) {
+        try {
+            if (null != ShiroUtil.getCreateID()) {
+                suggest.setCreateId(ShiroUtil.getCreateID());
+            }
+            if (StringUtils.isBlank(suggest.getUserName())) {
+                String userName = null != ShiroUtil.getCreateID() ? ShiroUtil.getMember().getCompanyName() : "匿名";
+                suggest.setUserName(userName);
+            }
 
-	public List<Map<String, String>> findAllSuggest(Paging<Map<String, String>> pager, Map<String, Object> map) {
-		try {
-			return suggestmapper.findAllSuggest(pager.getRowBounds(), map);
-		} catch (Exception e) {
-			log.error("findAllSuggest error >>>", e);
-			e.printStackTrace();
-			throw e;
-		}
-	}
+            return suggestmapper.insertSelective(suggest);
+        } catch (Exception e) {
+            log.error("addSuggest error >>>", e);
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
-	public Map<String, String> querySuggestById(String id) {
-		try {
-			return suggestmapper.querySuggestById(id);
-		} catch (Exception e) {
-			log.error("findAllSuggest error,id=" + id + " >>>", e);
-			e.printStackTrace();
-			throw e;
-		}
-	}
+    public List<Map<String, String>> findAllSuggest(Paging<Map<String, String>> pager, Map<String, Object> map) {
+        try {
+            return suggestmapper.findAllSuggest(pager.getRowBounds(), map);
+        } catch (Exception e) {
+            log.error("findAllSuggest error >>>", e);
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
-	public int updateSuggest(Map<String, Object> map) {
-		try {
-			return suggestmapper.updateSuggest(map);
-		} catch (Exception e) {
-			log.error("findAllSuggest error >>>", e);
-			e.printStackTrace();
-			throw e;
-		}
-	}
+    public Map<String, String> querySuggestById(String id) {
+        try {
+            return suggestmapper.querySuggestById(id);
+        } catch (Exception e) {
+            log.error("findAllSuggest error,id=" + id + " >>>", e);
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public int updateSuggest(Map<String, Object> map) {
+        try {
+            return suggestmapper.updateSuggest(map);
+        } catch (Exception e) {
+            log.error("findAllSuggest error >>>", e);
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

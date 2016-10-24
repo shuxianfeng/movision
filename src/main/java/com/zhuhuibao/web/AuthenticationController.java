@@ -4,12 +4,15 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MessageLogConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.AuthcMember;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
 import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
 import com.zhuhuibao.mybatis.memberReg.entity.Member;
 import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
+import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.security.resubmit.AvoidDuplicateSubmission;
 import com.zhuhuibao.security.resubmit.TokenHelper;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
@@ -29,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +54,9 @@ public class AuthenticationController {
 
     @Autowired
     MemShopService shopService;
+
+    @Autowired
+    private ZhbService zhbService;
 
     @RequestMapping(value = "/rest/web/authc", method = RequestMethod.GET)
     public Response isLogin() throws IOException {
@@ -119,7 +126,9 @@ public class AuthenticationController {
 
                 int message = siteMailService.selectUnreadMessageCount(member.getId());
                 authcMember.setMessage(message);
-
+                ZhbAccount zhbAccount = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
+                BigDecimal zhbAmount = null != zhbAccount ? zhbAccount.getAmount() : new BigDecimal(0);
+                authcMember.setZhbAmount(zhbAmount);
                 response.setMsgCode(1);
                 response.setMessage("welcome you!");
                 map.put("authorized", true);
@@ -128,14 +137,13 @@ public class AuthenticationController {
             }
         }
 
-    response.setData(map);
-    log.debug("caijl:/rest/web/authc is called,msgcode=["+response.getMsgCode()+"],Message=["+response.getMessage()+"].");
-    return response;
+        response.setData(map);
+        log.debug("caijl:/rest/web/authc is called,msgcode=[" + response.getMsgCode() + "],Message=[" + response.getMessage() + "].");
+        return response;
 
-}
+    }
 
-
-//    @AvoidDuplicateSubmission(saveToken = true)
+    // @AvoidDuplicateSubmission(saveToken = true)
     @RequestMapping(value = "/rest/getToken", method = RequestMethod.GET)
     public Response getToken(HttpServletRequest req, HttpServletResponse rsp) {
         Response result = new Response();
@@ -151,7 +159,7 @@ public class AuthenticationController {
         Member member = null;
         if (null == session) {
             log.error("you are not login~");
-            throw new AuthException(MsgCodeConstant.un_login,"请登录");
+            throw new AuthException(MsgCodeConstant.un_login, "请登录");
         } else {
             ShiroUser principal = (ShiroUser) session.getAttribute("member");
             if (null != principal) {

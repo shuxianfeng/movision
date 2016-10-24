@@ -3,6 +3,8 @@ package com.zhuhuibao.common.pojo;
 import com.zhuhuibao.common.constant.MemberConstant;
 import org.apache.commons.lang.StringUtils;
 
+import java.math.BigDecimal;
+
 public class AuthcMember {
     private Long id;
     private String account;
@@ -23,6 +25,16 @@ public class AuthcMember {
     private int vipLevel;
 
     private int message;
+
+    private BigDecimal zhbAmount;
+
+    public BigDecimal getZhbAmount() {
+        return zhbAmount;
+    }
+
+    public void setZhbAmount(BigDecimal zhbAmount) {
+        this.zhbAmount = zhbAmount;
+    }
 
     public boolean isexpert() {
         return isexpert;
