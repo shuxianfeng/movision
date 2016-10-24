@@ -1,9 +1,7 @@
 package com.zhuhuibao.mobile.web;
 
 import java.util.List;
-import java.util.Map;
 
-import com.zhuhuibao.mybatis.news.form.NewsForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,8 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.mybatis.news.entity.News;
+import com.zhuhuibao.mybatis.news.form.NewsForm;
 import com.zhuhuibao.service.NewsService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
@@ -75,7 +75,12 @@ public class MobileNewsController {
     @ApiOperation(value = "触屏端资讯-详情页面", notes = "触屏端资讯-详情页面", response = Response.class)
     public Response sel_news(@ApiParam(value = "资讯主键id") @RequestParam(required = false) int id) {
         Response response = new Response();
-        response.setData(newsService.sel_news(id));
+        NewsForm form = newsService.sel_news(id);
+        response.setData(form);
+        // view + 1
+        News news = form.getNews();
+        news.setViews(news.getViews() + 1);
+        newsService.upd_news(news);
         return response;
     }
 }

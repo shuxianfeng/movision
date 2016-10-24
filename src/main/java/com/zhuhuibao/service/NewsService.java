@@ -99,7 +99,7 @@ public class NewsService {
     }
 
     /**
-     * 更新资讯信息
+     * oms后台更新资讯信息
      *
      * @param news
      *            资讯
@@ -256,4 +256,16 @@ public class NewsService {
             return newsMapper.selMobileNewsByType(queryMap, pager.getRowBounds());
         }
     }
+
+    /**
+     * 更新资讯信息(不包括推荐位置)
+     *
+     * @param news
+     *            资讯
+     * @return
+     */
+    public void upd_news(News news) {
+        newsMapper.updateByPrimaryKeySelective(news);
+    }
+
 }
