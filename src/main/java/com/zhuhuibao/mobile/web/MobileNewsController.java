@@ -60,10 +60,10 @@ public class MobileNewsController {
         Response response = new Response();
         Paging<NewsForm> pager = new Paging<>(pageNo, pageSize);
         List<NewsForm> forms = newsService.mobile_sel_news_list(queryType, type, subtype, pager);
-        response.setData(forms);
+        pager.result(forms);
+        response.setData(pager);
         return response;
     }
-
 
     /**
      * 触屏端资讯-详情页面
