@@ -18,201 +18,188 @@ import java.util.Map;
 @Service
 public class MembersService implements IMembersService {
 
-	@Override
-	public Map<String, Object> searchContractors(ContractorSearchSpec spec) throws ServiceException {
-		Map<String, Map<String, Object>> query = new HashMap<>();
-		Map<String, Object> result = new HashMap<>();
-		result.put("spec", spec);
+    @Override
+    public Map<String, Object> searchContractors(ContractorSearchSpec spec) throws ServiceException {
+        Map<String, Map<String, Object>> query = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
+        result.put("spec", spec);
 
-		String province = spec.getProvince();
-		if (StringUtil.isNotEmpty(province)) {
-			Searcher.wrapEqualQuery(query, "province", province);
-			result.put("province", province);
+        String province = spec.getProvince();
+        if (StringUtil.isNotEmpty(province)) {
+            Searcher.wrapEqualQuery(query, "province", province);
+            result.put("province", province);
+        }
+        String city = spec.getCity();
+        if (StringUtil.isNotEmpty(city)) {
+            Searcher.wrapEqualQuery(query, "city", city);
+            result.put("city", city);
+        }
+        String assetlevel = spec.getAssetlevel();
+        genAssetLevelQuery(query, result, assetlevel);
+
+        spec.setQ(StringUtil.emptyToNull(spec.getQ()));
+        if (spec.getQ() != null) {
+            String q = spec.getQ();
+
+            query.put("_s", CollectionUtil.arrayAsMap("type", "phrase", "value", q));
+            result.put("q", q);
+        }
+
+        List<Map<String, Object>> sortFields = genContractorSortFields(spec, result);
+
+        Map<?, ?> psAsMap = (Map<?, ?>) Searcher.request("search", CollectionUtil.arrayAsMap("table", "contractor", "query", JSONUtil.toJSONString(query), "sort", JSONUtil.toJSONString(sortFields),
+                "offset", spec.getOffset(), "limit", spec.getLimit()));
+
+        List<?> list = (List<?>) psAsMap.get("items");
+        Pagination<Member, ProductGroup> contractors;
+        contractors = assItems(psAsMap, list);
+        result.put("contractors", contractors);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> searchSuppliers(SupplierSearchSpec spec) throws ServiceException {
+        Map<String, Map<String, Object>> query = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
+        result.put("spec", spec);
+
+        String province = spec.getProvince();
+        if (StringUtil.isNotEmpty(province)) {
+            Searcher.wrapEqualQuery(query, "province", province);
+            result.put("province", province);
+        }
+		String city = spec.getCity();
+		if (StringUtil.isNotEmpty(city)) {
+			Searcher.wrapEqualQuery(query, "city", city);
+			result.put("city", city);
 		}
-		String assetlevel = spec.getAssetlevel();
-		genAssetLevelQuery(query, result, assetlevel);
+        String identify = spec.getIdentify();
+        if (StringUtil.isNotEmpty(identify)) {
+            Searcher.wrapEqualQuery(query, identify, identify);
+            result.put("identify", identify);
+        }
+        String assetlevel = spec.getAssetlevel();
+        genAssetLevelQuery(query, result, assetlevel);
+        String category = spec.getCategory();
+        if (StringUtil.isNotEmpty(category)) {
+            String[] categorylArr = category.split(",");
+            for (String cate : categorylArr) {
+                Searcher.wrapEqualQuery(query, cate, cate);
+            }
+            result.put("category", category);
+        }
 
-		spec.setQ(StringUtil.emptyToNull(spec.getQ()));
-		if (spec.getQ() != null) {
-			String q = spec.getQ();
+        spec.setQ(StringUtil.emptyToNull(spec.getQ()));
+        if (spec.getQ() != null) {
+            String q = spec.getQ();
 
-			query.put("_s", CollectionUtil.arrayAsMap("type", "phrase",
-					"value", q));
-			result.put("q", q);
-		}
+            query.put("_s", CollectionUtil.arrayAsMap("type", "phrase", "value", q));
 
-		List<Map<String, Object>> sortFields =  genContractorSortFields(spec, result);
+            result.put("q", q);
+        }
 
+        List<Map<String, Object>> sortFields = genSupplierSortFileds(spec, result);
 
-		Map<?, ?> psAsMap = (Map<?, ?>) Searcher.request(
-				"search",
-				CollectionUtil.arrayAsMap("table", "contractor",
-						"query",JSONUtil.toJSONString(query),
-						"sort",JSONUtil.toJSONString(sortFields),
-						"offset",spec.getOffset(),
-						"limit", spec.getLimit()));
+        Map<?, ?> psAsMap = (Map<?, ?>) Searcher.request("search",
 
-		List<?> list = (List<?>) psAsMap.get("items");
-		Pagination<Member, ProductGroup> contractors;
-		contractors = assItems(psAsMap, list);
-		result.put("contractors", contractors);
-		return result;
-	}
+                CollectionUtil.arrayAsMap("table", "supplier", "query", JSONUtil.toJSONString(query), "sort", JSONUtil.toJSONString(sortFields), "offset", spec.getOffset(), "limit", spec.getLimit()));
+        List<?> list = (List<?>) psAsMap.get("items");
+        Pagination<Member, ProductGroup> suppliers;
+        suppliers = assItems(psAsMap, list);
 
-	@Override
-	public Map<String, Object> searchSuppliers(SupplierSearchSpec spec) throws ServiceException {
-		Map<String, Map<String, Object>> query = new HashMap<>();
-		Map<String, Object> result = new HashMap<>();
-		result.put("spec", spec);
+        result.put("suppliers", suppliers);
+        return result;
+    }
 
-		String province = spec.getProvince();
-		if (StringUtil.isNotEmpty(province)) {
-			Searcher.wrapEqualQuery(query, "province", province);
-			result.put("province", province);
-		}
-		String identify = spec.getIdentify();
-		if (StringUtil.isNotEmpty(identify)) {
-			Searcher.wrapEqualQuery(query, identify, identify);
-			result.put("identify", identify);
-		}
-		String assetlevel = spec.getAssetlevel();
-		genAssetLevelQuery(query, result, assetlevel);
-		String category = spec.getCategory();
-		if (StringUtil.isNotEmpty(category)) {
-			String[] categorylArr = category.split(",");
-			for(String cate : categorylArr){
-				Searcher.wrapEqualQuery(query, cate, cate);
-			}
-			result.put("category", category);
-		}
+    private List<Map<String, Object>> genSupplierSortFileds(SupplierSearchSpec spec, Map<String, Object> result) {
+        List<Map<String, Object>> sortFields = new ArrayList<>(1);
+        Map<String, Object> sortField = new HashMap<>(3);
+        if (StringUtil.isNotEmpty(spec.getSort())) {
+            String sort = spec.getSort();
+            result.put("sort", spec.getSort());
+            String sortorder = "true";
+            if (StringUtil.isNotEmpty(spec.getSortorder())) {
+                sortorder = spec.getSortorder();
+                result.put("sortorder", spec.getSortorder());
+            }
 
-		spec.setQ(StringUtil.emptyToNull(spec.getQ()));
-		if (spec.getQ() != null) {
-			String q = spec.getQ();
+            if (sort.equals("registerTime1") || sort.equals("weightLevel")) { // 这里好奇怪对不对，想知道为什么么？你猜啊╮(╯_╰)╭
+                sortField.put("field", "weightLevel");
+                sortField.put("type", "DOUBLE");
+                sortField.put("reverse", FormatUtil.parseBoolean(sortorder));
+            }
+        } else { // 猜不到吧,就是这么调皮→ →
+            sortField.put("field", "registerTime1");
+            sortField.put("type", "LONG");
+            sortField.put("reverse", FormatUtil.parseBoolean(true));
+        }
+        sortFields.add(sortField);
 
-			query.put("_s", CollectionUtil.arrayAsMap("type", "phrase",
-					"value", q));
+        return sortFields;
+    }
 
-			result.put("q", q);
-		}
+    private List<Map<String, Object>> genContractorSortFields(ContractorSearchSpec spec, Map<String, Object> result) {
+        List<Map<String, Object>> sortFields = new ArrayList<>(1);
+        Map<String, Object> sortField = new HashMap<>(3);
 
-		List<Map<String, Object>> sortFields = genSupplierSortFileds(spec, result);
+        if (StringUtil.isNotEmpty(spec.getSort())) {
+            String sort = spec.getSort();
+            result.put("sort", spec.getSort());
+            String sortorder = "true";
+            if (StringUtil.isNotEmpty(spec.getSortorder())) {
+                sortorder = spec.getSortorder();
+                result.put("sortorder", spec.getSortorder());
+            }
+            if (sort.equals("registerTime1")) { // 这里好奇怪对不对，想知道为什么么？你猜啊╮(╯_╰)╭
+                sortField.put("field", "certLevel");
+                sortField.put("type", "DOUBLE");
+                sortField.put("reverse", FormatUtil.parseBoolean(sortorder));
+            }
+        } else { // 猜不到吧,就是这么调皮→ →
+            sortField.put("field", "registerTime1");
+            sortField.put("type", "LONG");
+            sortField.put("reverse", FormatUtil.parseBoolean(true));
+        }
+        sortFields.add(sortField);
 
-		Map<?, ?> psAsMap = (Map<?, ?>) Searcher.request(
-				"search",
+        return sortFields;
+    }
 
-				CollectionUtil.arrayAsMap("table", "supplier",
-						"query",JSONUtil.toJSONString(query),
-						"sort",JSONUtil.toJSONString(sortFields),
-						"offset",spec.getOffset(),
-						"limit", spec.getLimit()));
-		List<?> list = (List<?>) psAsMap.get("items");
-		Pagination<Member, ProductGroup> suppliers;
-		suppliers = assItems(psAsMap, list);
+    private Pagination<Member, ProductGroup> assItems(Map<?, ?> psAsMap, List<?> list) {
+        Pagination<Member, ProductGroup> items;
+        if (list.isEmpty()) {
+            items = Pagination.getEmptyInstance();
+        } else {
+            List<Member> members = new ArrayList<>(list.size());
+            for (Object item : list) {
+                Map<?, ?> itemAsMap = (Map<?, ?>) item;
+                Member member = new Member();
+                {
+                    member.setId(FormatUtil.parseLong(itemAsMap.get("id")));
+                    member.setEnterpriseName(FormatUtil.parseString(itemAsMap.get("enterpriseName")));
+                    member.setAuthinfo(FormatUtil.parseString(itemAsMap.get("authinfo")));
+                    member.setEnterpriseLogo(FormatUtil.parseString(itemAsMap.get("enterpriseLogo")));
+                    member.setEnterpriseWebSite(FormatUtil.parseString(itemAsMap.get("enterpriseWebSite")));
+                    member.setAddress(FormatUtil.parseString(itemAsMap.get("address")));
+                    member.setSaleProductDesc(FormatUtil.parseString(itemAsMap.get("saleProductDesc")));
+                    member.setEnterpriseDesc(FormatUtil.parseString(itemAsMap.get("enterpriseDesc")));
+                    member.setViplevel(FormatUtil.parseString(itemAsMap.get("viplevel")));
+                }
+                members.add(member);
+            }
 
-		result.put("suppliers", suppliers);
-		return result;
-	}
+            items = new Pagination<>(members, null, FormatUtil.parseInteger(psAsMap.get("total")), FormatUtil.parseInteger(psAsMap.get("offset")), FormatUtil.parseInteger(psAsMap.get("limit")));
+        }
+        return items;
+    }
 
-	private List<Map<String, Object>> genSupplierSortFileds(SupplierSearchSpec spec, Map<String, Object> result) {
-		List<Map<String, Object>> sortFields = new ArrayList<>(1);
-		Map<String, Object> sortField = new HashMap<>(3);
-		if (StringUtil.isNotEmpty(spec.getSort())) {
-			String sort = spec.getSort();
-			result.put("sort", spec.getSort());
-			String sortorder = "true";
-			if (StringUtil.isNotEmpty(spec.getSortorder())) {
-				sortorder = spec.getSortorder();
-				result.put("sortorder", spec.getSortorder());
-			}
-
-			if (sort.equals("registerTime1") || sort.equals("weightLevel")) {    //这里好奇怪对不对，想知道为什么么？你猜啊╮(╯_╰)╭
-				sortField.put("field", "weightLevel");
-				sortField.put("type", "DOUBLE");
-				sortField.put("reverse", FormatUtil.parseBoolean(sortorder));
-			}
-		}else {   //猜不到吧,就是这么调皮→ →
-			sortField.put("field", "registerTime1");
-			sortField.put("type", "LONG");
-			sortField.put("reverse",FormatUtil.parseBoolean(true));
-		}
-		sortFields.add(sortField);
-
-		return sortFields;
-	}
-
-	private List<Map<String, Object>>  genContractorSortFields(ContractorSearchSpec spec, Map<String, Object> result) {
-		List<Map<String, Object>> sortFields = new ArrayList<>(1);
-		Map<String, Object> sortField = new HashMap<>(3);
-
-		if (StringUtil.isNotEmpty(spec.getSort())) {
-			String sort = spec.getSort();
-			result.put("sort", spec.getSort());
-			String sortorder = "true";
-			if(StringUtil.isNotEmpty(spec.getSortorder())){
-				sortorder = spec.getSortorder();
-				result.put("sortorder", spec.getSortorder());
-			}
-			if (sort.equals("registerTime1")) {   //这里好奇怪对不对，想知道为什么么？你猜啊╮(╯_╰)╭
-				sortField.put("field", "certLevel");
-				sortField.put("type", "DOUBLE");
-				sortField.put("reverse", FormatUtil.parseBoolean(sortorder));
-			}
-		}else {   //猜不到吧,就是这么调皮→ →
-			sortField.put("field", "registerTime1");
-			sortField.put("type", "LONG");
-			sortField.put("reverse",FormatUtil.parseBoolean(true));
-		}
-		sortFields.add(sortField);
-
-		return sortFields;
-	}
-
-	private Pagination<Member, ProductGroup> assItems(Map<?, ?> psAsMap, List<?> list) {
-		Pagination<Member, ProductGroup> items;
-		if (list.isEmpty()) {
-			items = Pagination.getEmptyInstance();
-		} else {
-			List<Member> members = new ArrayList<>(list.size());
-			for (Object item : list) {
-				Map<?, ?> itemAsMap = (Map<?, ?>) item;
-				Member member = new Member();
-				{
-					member.setId(FormatUtil.parseLong(itemAsMap.get("id")));
-					member.setEnterpriseName(FormatUtil.parseString(itemAsMap
-							.get("enterpriseName")));
-					member.setAuthinfo(FormatUtil.parseString(itemAsMap
-							.get("authinfo")));
-					member.setEnterpriseLogo(FormatUtil.parseString(itemAsMap
-							.get("enterpriseLogo")));
-					member.setEnterpriseWebSite(FormatUtil.parseString(itemAsMap
-							.get("enterpriseWebSite")));
-					member.setAddress(FormatUtil.parseString(itemAsMap
-							.get("address")));
-					member.setSaleProductDesc(FormatUtil.parseString(itemAsMap
-							.get("saleProductDesc")));
-                    member.setEnterpriseDesc(FormatUtil.parseString(itemAsMap
-                            .get("enterpriseDesc")));
-					member.setViplevel(FormatUtil.parseString(itemAsMap.get("viplevel")));
-				}
-				members.add(member);
-			}
-
-			items = new Pagination<>(members, null,
-					FormatUtil.parseInteger(psAsMap.get("total")),
-					FormatUtil.parseInteger(psAsMap.get("offset")),
-					FormatUtil.parseInteger(psAsMap.get("limit")));
-		}
-		return items;
-	}
-
-	private void genAssetLevelQuery(Map<String, Map<String, Object>> query, Map<String, Object> result, String assetlevel) {
-		if (StringUtil.isNotEmpty(assetlevel)) {
-			String[] assetlevelArr = assetlevel.split(",");
-			for(String asset : assetlevelArr){
-				Searcher.wrapEqualQuery(query, asset, asset);
-			}
-			result.put("assetlevel", assetlevel);
-		}
-	}
+    private void genAssetLevelQuery(Map<String, Map<String, Object>> query, Map<String, Object> result, String assetlevel) {
+        if (StringUtil.isNotEmpty(assetlevel)) {
+            String[] assetlevelArr = assetlevel.split(",");
+            for (String asset : assetlevelArr) {
+                Searcher.wrapEqualQuery(query, asset, asset);
+            }
+            result.put("assetlevel", assetlevel);
+        }
+    }
 }
