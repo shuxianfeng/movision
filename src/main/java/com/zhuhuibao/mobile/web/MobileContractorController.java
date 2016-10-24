@@ -198,6 +198,7 @@ public class MobileContractorController {
             response.setData(memberService.searchContractors(spec));
         } catch (Exception e) {
             response.setMsgCode(0);
+            log.error("sel_contractor_list error! ", e);
             response.setMessage("sel_contractor_list  error!" + e);
         }
         return response;

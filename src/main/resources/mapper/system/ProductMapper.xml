@@ -499,7 +499,10 @@
         price, t.unit, t.repository, t.number, t.hit, t.imgUrl, t.paramIDs,t.paramValues,t.detailDesc, t.paras,
         t.service from t_p_product t
         <where>
-            <if test="scateid != null">
+            <if test="fcateid != null and fcateid != ''">
+                and t.fcateid = #{fcateid,jdbcType=INTEGER}
+            </if>
+            <if test="scateid != null and scateid != ''">
                 and t.scateid = #{scateid,jdbcType=INTEGER}
             </if>
             <if test="status != null">

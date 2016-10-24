@@ -87,9 +87,10 @@ public class MobileProductService {
      *            二级系统分类id
      * @return
      */
-    public List<ProductWithBLOBs> findProductByBrandAndSubSystemPages(String brandId, String scateId, Paging<Map> pager) {
+    public List<ProductWithBLOBs> findProductByBrandAndSubSystemPages(String brandId,String fcateid, String scateId, Paging<Map> pager) {
         Map<String, Object> productMap = new HashMap<>();
         productMap.put("scateid", scateId);
+        productMap.put("fcateid", fcateid);
         productMap.put("brandid", brandId);
         productMap.put("status", Constants.product_status_publish);
         productMap.put("order", "publishTime");

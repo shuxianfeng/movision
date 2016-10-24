@@ -57,11 +57,12 @@ public class MobileProductController {
      */
     @ApiOperation(value = "触屏端供应链-品牌下更多产品", notes = "触屏端供应链-品牌下更多产品")
     @RequestMapping(value = "sel_hot_brand_product_list", method = RequestMethod.GET)
-    public Response sel_hot_brand_product_list(@ApiParam(value = "品牌主键id") @RequestParam(required = true) String id, @ApiParam(value = "品牌所属类别id") @RequestParam(required = true) String scateId,
-            @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo, @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
+    public Response sel_hot_brand_product_list(@ApiParam(value = "品牌主键id") @RequestParam(required = true) String id, @ApiParam(value = "品牌所属一级类别id") @RequestParam(required = true) String fcateid,
+            @ApiParam(value = "品牌所属二级类别id") @RequestParam(required = true) String scateId, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo,
+            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
         Paging<Map> pager = new Paging<>(pageNo, pageSize);
-        response.setData(mobileProductService.findProductByBrandAndSubSystemPages(id, scateId, pager));
+        response.setData(mobileProductService.findProductByBrandAndSubSystemPages(id,fcateid, scateId, pager));
         return response;
     }
 
