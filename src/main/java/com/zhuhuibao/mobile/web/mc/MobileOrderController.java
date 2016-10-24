@@ -3,10 +3,9 @@ package com.zhuhuibao.mobile.web.mc;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -27,6 +26,12 @@ import com.zhuhuibao.utils.pagination.model.Paging;
 @RestController
 @RequestMapping("/rest/m/order/mc")
 public class MobileOrderController {
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        // 字符串自动trim，且空字符串转为null
+        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    }
 
     @Autowired
     private MobileOrderService mobileOrderService;
