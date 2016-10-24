@@ -4,11 +4,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.zhuhuibao.mybatis.memCenter.entity.SuccessCase;
+import com.zhuhuibao.aop.LoginAccess;
+import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
+import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -16,9 +25,10 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.common.pojo.AskPriceResultBean;
-import com.zhuhuibao.common.pojo.AskPriceSearchBean;
 import com.zhuhuibao.fsearch.pojo.spec.SupplierSearchSpec;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.service.*;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
@@ -55,6 +65,9 @@ public class MobileSupplierController {
 
     @Autowired
     private MobileSuccessCaseService successCaseService;
+
+    @Autowired
+    private MobileVipInfoService vipInfoService;
 
     /**
      * 触屏端供应链首页
@@ -174,6 +187,7 @@ public class MobileSupplierController {
         try {
             response.setData(memberService.searchSuppliers(spec));
         } catch (Exception e) {
+            log.error("sel_supplier_list  error! ", e);
             response.setMsgCode(0);
             response.setMessage("sel_supplier_list  error!" + e);
         }
@@ -218,6 +232,7 @@ public class MobileSupplierController {
         try {
             response.setData(enquiryService.queryAskPriceByID(id));
         } catch (Exception e) {
+            log.error("sel_enquiry_info  error! ", e);
             response.setMessage("sel_enquiry_info  error!" + e);
         }
         return response;
@@ -235,7 +250,8 @@ public class MobileSupplierController {
         try {
             response.setData(categoryService.selCategory());
         } catch (Exception e) {
-            response.setMessage("sel_enquiry_info  error!" + e);
+            log.error("sel_category  error! ", e);
+            response.setMessage("sel_category  error!" + e);
         }
         return response;
     }
@@ -271,5 +287,76 @@ public class MobileSupplierController {
     @RequestMapping(value = "sel_company_success_case", method = RequestMethod.GET)
     public Response sel_company_success_case(@ApiParam(value = "案例id") @RequestParam String id) {
         return new Response(successCaseService.querySuccessCaseById(id));
+    }
+
+    /**
+     * 供应商详情页面
+     *
+     * @param id
+     *            供应商id
+     * @return
+     */
+    @ApiOperation(value = "供应商详情页面", notes = "供应商详情页面")
+    @RequestMapping(value = "sel_supplier_details", method = RequestMethod.GET)
+    public Response sel_supplier_details(@ApiParam(value = "供应商id") @RequestParam String id) {
+        // 查询公司信息
+        Member member = memberService.findMemById(id);
+
+        // 查询公司vip信息
+        VipMemberInfo vip = vipInfoService.findVipMemberInfoById(Long.parseLong(id));
+
+        // 查询公司产品类别
+        List<Map<String, String>> productTypeList = mobileProductService.queryProductTypeListByCompanyId(id);
+
+        // 页面展示
+        Map map = new HashMap();
+        if (vip != null) {
+            map.put("vipLevel", vip.getVipLevel());
+        } else {
+            map.put("vipLevel", 100);
+        }
+
+        map.put("logo", member.getEnterpriseLogo());
+        map.put("companyName", member.getEnterpriseName());
+        map.put("webSite", member.getEnterpriseWebSite());
+        String provinceName = "";
+        if (!StringUtils.isEmpty(member.getProvinceName())) {
+            provinceName = member.getProvinceName();
+        }
+        String cityName = "";
+        if (!StringUtils.isEmpty(member.getCityName())) {
+            cityName = member.getCityName();
+        }
+        String areaName = "";
+        if (!StringUtils.isEmpty(member.getAreaName())) {
+            areaName = member.getAreaName();
+        }
+        if (member.getProvince() != null) {
+            map.put("address", provinceName + cityName + areaName + member.getAddress());
+        } else {
+            map.put("address", "");
+        }
+        map.put("telephone", member.getEnterpriseTelephone());
+        map.put("fax", member.getEnterpriseFox());
+        map.put("introduce", member.getEnterpriseDesc());
+        map.put("productTypeList", productTypeList);
+        return new Response(map);
+    }
+
+    /**
+     * 询价保存
+     */
+    @LoginAccess
+    @ApiOperation(value = "询价保存", notes = "询价保存", response = Response.class)
+    @RequestMapping(value = { "add_enquiry" }, method = RequestMethod.POST)
+    public Response add_enquiry(@ApiParam(value = "询价信息") @RequestParam AskPrice askPrice) throws Exception {
+        Response response = new Response();
+        try {
+            enquiryService.addEnquiry(askPrice);
+        } catch (Exception e) {
+            log.error("add_enquiry  error! ", e);
+            response.setMessage("add_enquiry  error!" + e);
+        }
+        return response;
     }
 }

@@ -7,10 +7,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -33,6 +32,12 @@ import com.zhuhuibao.utils.pagination.model.Paging;
 @RequestMapping("/rest/m/product/site/")
 @Api(value = "mobileProduct", description = "产品")
 public class MobileProductController {
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        // 字符串自动trim，且空字符串转为null
+        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    }
 
     private static final Logger log = LoggerFactory.getLogger(MobileProductController.class);
 
@@ -57,11 +62,12 @@ public class MobileProductController {
      */
     @ApiOperation(value = "触屏端供应链-品牌下更多产品", notes = "触屏端供应链-品牌下更多产品")
     @RequestMapping(value = "sel_hot_brand_product_list", method = RequestMethod.GET)
-    public Response sel_hot_brand_product_list(@ApiParam(value = "品牌主键id") @RequestParam(required = true) String id, @ApiParam(value = "品牌所属类别id") @RequestParam(required = true) String scateId,
-            @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo, @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
+    public Response sel_hot_brand_product_list(@ApiParam(value = "品牌主键id") @RequestParam(required = true) String id, @ApiParam(value = "品牌所属一级类别id") @RequestParam(required = true) String fcateid,
+            @ApiParam(value = "品牌所属二级类别id") @RequestParam(required = true) String scateId, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo,
+            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
         Paging<Map> pager = new Paging<>(pageNo, pageSize);
-        response.setData(mobileProductService.findProductByBrandAndSubSystemPages(id, scateId, pager));
+        response.setData(mobileProductService.findProductByBrandAndSubSystemPages(id, fcateid, scateId, pager));
         return response;
     }
 

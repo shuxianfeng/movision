@@ -9,6 +9,7 @@ import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.common.entity.Suggest;
 import com.zhuhuibao.mybatis.common.service.SuggestService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,22 +28,24 @@ public class SuggestController {
     @Autowired
     private SuggestService suggestService;
 
-    @RequestMapping(value="add_suggest", method = RequestMethod.POST)
-    @ApiOperation(value = "提交意见反馈",notes = "提交意见反馈",response = Response.class)
-    public Response add_suggest(@ModelAttribute Suggest suggest) throws IOException
-    {
+    @RequestMapping(value = "add_suggest", method = RequestMethod.POST)
+    @ApiOperation(value = "提交意见反馈", notes = "提交意见反馈", response = Response.class)
+    public Response add_suggest(@ModelAttribute Suggest suggest) throws IOException {
         Response response = new Response();
-        String[] imgUrls = suggest.getImgUrl().split(",");
-        if(imgUrls.length>4){
+        if (StringUtils.isNotBlank(suggest.getImgUrl()) && (suggest.getImgUrl().split(",")).length > 4) {
             throw new BusinessException(MsgCodeConstant.SUGGEST_URL_COUNT_LIMIT, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.SUGGEST_URL_COUNT_LIMIT)));
         }
-/*        Long createid = ShiroUtil.getCreateID();
-        if(createid!=null){*/
-            //suggest.setCreateId(createid);
-            suggestService.addSuggest(suggest);
-        /*}else {
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }*/
+
+        /*
+         * Long createid = ShiroUtil.getCreateID(); if(createid!=null){
+         */
+        // suggest.setCreateId(createid);
+        suggestService.addSuggest(suggest);
+        /*
+         * }else { throw new AuthException(MsgCodeConstant.un_login,
+         * MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login))
+         * ); }
+         */
         return response;
     }
 }

@@ -186,4 +186,11 @@ public class MobileMemberService {
         }
         return membersService.searchSuppliers(spec);
     }
+
+    /**
+     * 根据会员ID查询会员信息
+     */
+    public Member findMemById(String id) {
+        return memberMapper.findMemById(id);
+    }
 }

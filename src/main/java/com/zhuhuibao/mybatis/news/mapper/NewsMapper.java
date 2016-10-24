@@ -49,21 +49,20 @@ public interface NewsMapper {
      *
      * @param rowBounds
      */
-    List<NewsForm>  selAllMobileNews(RowBounds rowBounds);
+    List<NewsForm> selAllMobileNews(RowBounds rowBounds);
 
     /**
      * 触屏端按热点排序资讯列表
      *
      * @param rowBounds
      */
-    List<NewsForm>  selHotMobileNews(RowBounds rowBounds);
+    List<NewsForm> selHotMobileNews(RowBounds rowBounds);
 
     /**
      * 触屏端按分类查询对应资讯列表信息
      *
-     * @param type
-     * @param subtype
+     * @param queryMap
      * @param rowBounds
      */
-    List<NewsForm>  selMobileNewsByType(String type, String subtype, RowBounds rowBounds);
+    List<NewsForm> selMobileNewsByType(Map queryMap, RowBounds rowBounds);
 }

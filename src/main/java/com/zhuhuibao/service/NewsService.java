@@ -36,10 +36,14 @@ public class NewsService {
     /**
      * OMS根据条件分页查询系统资讯信息
      *
-     * @param title  标题
-     * @param type   分类
-     * @param status 状态
-     * @param pager  分页信息
+     * @param title
+     *            标题
+     * @param type
+     *            分类
+     * @param status
+     *            状态
+     * @param pager
+     *            分页信息
      * @return
      */
     public List<NewsForm> sel_news_list(String title, String type, String status, Paging<NewsForm> pager) {
@@ -69,7 +73,8 @@ public class NewsService {
     /**
      * 增加一条资讯信息
      *
-     * @param news 资讯
+     * @param news
+     *            资讯
      * @return
      */
     public void add_news(News news, String recPlace) {
@@ -85,7 +90,8 @@ public class NewsService {
     /**
      * 删除资讯信息
      *
-     * @param id 主键id
+     * @param id
+     *            主键id
      * @return
      */
     public boolean del_news(int id) {
@@ -93,9 +99,10 @@ public class NewsService {
     }
 
     /**
-     * 更新资讯信息
+     * oms后台更新资讯信息
      *
-     * @param news 资讯
+     * @param news
+     *            资讯
      * @return
      */
     public void update_news(News news, String recPlace) {
@@ -120,7 +127,8 @@ public class NewsService {
     /**
      * 查询资讯信息
      *
-     * @param id 主键id
+     * @param id
+     *            主键id
      * @return
      */
     public NewsForm sel_news(int id) {
@@ -137,7 +145,8 @@ public class NewsService {
     /**
      * 批量删除资讯信息
      *
-     * @param ids 批量惭怍的资讯id 两个id之间用","隔开
+     * @param ids
+     *            批量惭怍的资讯id 两个id之间用","隔开
      * @return
      */
     public boolean batch_del_news(String ids) {
@@ -160,7 +169,8 @@ public class NewsService {
     /**
      * 批量发布资讯信息
      *
-     * @param ids 批量惭怍的资讯id 两个id之间用","隔开
+     * @param ids
+     *            批量惭怍的资讯id 两个id之间用","隔开
      * @return
      */
     public void batch_pub_news(String ids) {
@@ -173,7 +183,6 @@ public class NewsService {
             newsMapper.batchPubNews(pIds);
         }
     }
-
 
     /**
      * 批量修改资讯信息的属性
@@ -220,15 +229,18 @@ public class NewsService {
         }
     }
 
-
     /**
      * 触屏端列表展示页面
      *
-     * @param queryType 列表类型:1 全部，2 热点，3 分类
-     * @param type      一级分类:1 行业资讯,2 专题,3 筑慧访谈,4 曝光台,5 工程商新闻,6 深度观察,7 活动
-     * @param subtype   行业资讯下面的二级分类:1 网络及硬件,2 安全防范,3 楼宇自动化,4 数据中心,5 智能家居,6 影音视频,7
-     *                  应用系统,8 智能照明,9 行业软件
-     * @param pager     分页对象
+     * @param queryType
+     *            列表类型:1 全部，2 热点，3 分类
+     * @param type
+     *            一级分类:1 行业资讯,2 专题,3 筑慧访谈,4 曝光台,5 工程商新闻,6 深度观察,7 活动
+     * @param subtype
+     *            行业资讯下面的二级分类:1 网络及硬件,2 安全防范,3 楼宇自动化,4 数据中心,5 智能家居,6 影音视频,7
+     *            应用系统,8 智能照明,9 行业软件
+     * @param pager
+     *            分页对象
      * @return
      */
     public List<NewsForm> mobile_sel_news_list(String queryType, String type, String subtype, Paging<NewsForm> pager) {
@@ -238,7 +250,22 @@ public class NewsService {
         } else if (queryType.equals("2")) {
             return newsMapper.selHotMobileNews(pager.getRowBounds());
         } else {
-            return newsMapper.selMobileNewsByType(type, subtype, pager.getRowBounds());
+            Map queryMap = new HashMap();
+            queryMap.put("type", type);
+            queryMap.put("subtype", subtype);
+            return newsMapper.selMobileNewsByType(queryMap, pager.getRowBounds());
         }
     }
+
+    /**
+     * 更新资讯信息(不包括推荐位置)
+     *
+     * @param news
+     *            资讯
+     * @return
+     */
+    public void upd_news(News news) {
+        newsMapper.updateByPrimaryKeySelective(news);
+    }
+
 }
