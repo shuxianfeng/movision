@@ -13,22 +13,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.AskPriceBean;
 import com.zhuhuibao.common.pojo.AskPriceResultBean;
 import com.zhuhuibao.common.pojo.AskPriceSearchBean;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferPrice;
 import com.zhuhuibao.mybatis.memCenter.mapper.AskPriceMapper;
 import com.zhuhuibao.mybatis.memCenter.service.OfferPriceService;
 import com.zhuhuibao.mybatis.memCenter.service.PriceService;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MapUtil;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
 /**
  * 询报价service
- * 
+ *
  * @author tongxinglong
  * @date 2016/10/18 0018.
  */
@@ -45,9 +51,15 @@ public class MobileEnquiryService {
     @Autowired
     private AskPriceMapper askPriceMapper;
 
+    @Autowired
+    private ZhbService zhbService;
+
+    @Autowired
+    private FileUtil fileUtil;
+
     /**
      * 查询询价列表
-     * 
+     *
      * @param askPriceSearch
      * @param pageNo
      * @param pageSize
@@ -71,7 +83,7 @@ public class MobileEnquiryService {
 
     /**
      * 查询收到的询价单
-     * 
+     *
      * @param pager
      * @param price
      * @return
@@ -83,7 +95,7 @@ public class MobileEnquiryService {
 
     /**
      * 根据askID、memberID查询询价信息
-     * 
+     *
      * @param askId
      * @param memberId
      * @return
@@ -94,7 +106,7 @@ public class MobileEnquiryService {
 
     /**
      * 根据ID查询询价信息
-     * 
+     *
      * @param askId
      * @return
      */
@@ -104,7 +116,7 @@ public class MobileEnquiryService {
 
     /**
      * 根据ID查询报价信息
-     * 
+     *
      * @param offerId
      * @return
      */
@@ -114,7 +126,7 @@ public class MobileEnquiryService {
 
     /**
      * 根据询价ID查询报价信息
-     * 
+     *
      * @param askId
      * @param pageNo
      * @param pageSize
@@ -131,7 +143,7 @@ public class MobileEnquiryService {
 
     /**
      * 查询发送的报价信息
-     * 
+     *
      * @param memberId
      * @param title
      * @param startDate
@@ -155,10 +167,8 @@ public class MobileEnquiryService {
     /**
      * 查询最新公开询价
      *
-     * @param count
-     *            查询条数
-     * @param createId
-     *            询价提出的创建者id
+     * @param count    查询条数
+     * @param createId 询价提出的创建者id
      * @return
      */
     public List queryNewestAskPrice(int count, String createId) {
@@ -177,10 +187,8 @@ public class MobileEnquiryService {
     /**
      * 根据条件分页查询询价信息
      *
-     * @param fcateid
-     *            系统分类
-     * @param pager
-     *            分页对象
+     * @param fcateid 系统分类
+     * @param pager   分页对象
      * @return
      */
     public Paging<AskPriceResultBean> selEnquiryList(String fcateid, Paging<AskPriceResultBean> pager) {
@@ -208,5 +216,32 @@ public class MobileEnquiryService {
      */
     public AskPriceBean queryAskPriceByID(String id) {
         return priceService.queryAskPriceByID(id);
+    }
+
+
+    /**
+     * 保存询价信息
+     *
+     * @param askPrice
+     */
+    public void addEnquiry(AskPrice askPrice) throws Exception {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        askPrice.setEndTime(askPrice.getEndTime() + " 23:59:59");
+        ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
+        askPrice.setCreateid(principal.getId().toString());
+        if (askPrice.getBillurl() != null && !askPrice.getBillurl().equals("")) {
+            String fileUrl = askPrice.getBillurl();
+            if (!fileUtil.isExistFile(fileUrl, "doc", "price")) {
+                throw new BusinessException(MsgCodeConstant.file_not_exist, "文件不存在");
+            }
+        }
+        boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.XJFB.toString());
+        if (bool) {
+            askPriceMapper.saveAskPrice(askPrice);
+            zhbService.payForGoods(askPrice.getId(), ZhbPaymentConstant.goodsType.XJFB.toString());
+        } else {// 支付失败稍后重试，联系客服
+            throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+        }
     }
 }

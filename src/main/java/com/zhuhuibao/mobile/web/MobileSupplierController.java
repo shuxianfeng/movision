@@ -4,7 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.aop.LoginAccess;
+import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
+import com.zhuhuibao.shiro.realm.ShiroRealm;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,6 +187,7 @@ public class MobileSupplierController {
         try {
             response.setData(memberService.searchSuppliers(spec));
         } catch (Exception e) {
+            log.error("sel_supplier_list  error! ", e);
             response.setMsgCode(0);
             response.setMessage("sel_supplier_list  error!" + e);
         }
@@ -225,6 +232,7 @@ public class MobileSupplierController {
         try {
             response.setData(enquiryService.queryAskPriceByID(id));
         } catch (Exception e) {
+            log.error("sel_enquiry_info  error! ", e);
             response.setMessage("sel_enquiry_info  error!" + e);
         }
         return response;
@@ -242,7 +250,8 @@ public class MobileSupplierController {
         try {
             response.setData(categoryService.selCategory());
         } catch (Exception e) {
-            response.setMessage("sel_enquiry_info  error!" + e);
+            log.error("sel_category  error! ", e);
+            response.setMessage("sel_category  error!" + e);
         }
         return response;
     }
@@ -332,5 +341,22 @@ public class MobileSupplierController {
         map.put("introduce", member.getEnterpriseDesc());
         map.put("productTypeList", productTypeList);
         return new Response(map);
+    }
+
+    /**
+     * 询价保存
+     */
+    @LoginAccess
+    @ApiOperation(value = "询价保存", notes = "询价保存", response = Response.class)
+    @RequestMapping(value = { "add_enquiry" }, method = RequestMethod.POST)
+    public Response add_enquiry(@ApiParam(value = "询价信息") @RequestParam AskPrice askPrice) throws Exception {
+        Response response = new Response();
+        try {
+            enquiryService.addEnquiry(askPrice);
+        } catch (Exception e) {
+            log.error("add_enquiry  error! ", e);
+            response.setMessage("add_enquiry  error!" + e);
+        }
+        return response;
     }
 }
