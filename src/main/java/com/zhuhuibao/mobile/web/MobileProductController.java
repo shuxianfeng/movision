@@ -7,10 +7,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -33,6 +32,12 @@ import com.zhuhuibao.utils.pagination.model.Paging;
 @RequestMapping("/rest/m/product/site/")
 @Api(value = "mobileProduct", description = "产品")
 public class MobileProductController {
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        // 字符串自动trim，且空字符串转为null
+        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    }
 
     private static final Logger log = LoggerFactory.getLogger(MobileProductController.class);
 
@@ -62,7 +67,7 @@ public class MobileProductController {
             @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
         Paging<Map> pager = new Paging<>(pageNo, pageSize);
-        response.setData(mobileProductService.findProductByBrandAndSubSystemPages(id,fcateid, scateId, pager));
+        response.setData(mobileProductService.findProductByBrandAndSubSystemPages(id, fcateid, scateId, pager));
         return response;
     }
 
