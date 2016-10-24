@@ -49,6 +49,12 @@ import com.zhuhuibao.zookeeper.DistributedLock;
 @Service
 public class MobileWxPayService {
 	@Autowired
+	OrderFlowService orderFlowSV;
+	
+	@Autowired
+	OrderService orderSV;
+	
+	@Autowired
 	ZhbService zhbService;
 
 	@Autowired
@@ -135,7 +141,6 @@ public class MobileWxPayService {
 		}
 		
 		log.info("处理微信支付完成的通知回调，requestMap="+requestMap);
-//		String orderno = (String)requestParams.get("out_trade_no");
 		log.info("加锁");
 		DistributedLock lock = null;
         try {
@@ -169,46 +174,123 @@ public class MobileWxPayService {
 	 * @throws ParseException
 	 */
 	private void payHandler(String tradeType, ModelAndView modelAndView,
-			Map requestParams, Map requestMap) throws ParseException {
+			Map requestParams, Map<String,String> requestMap) throws ParseException {
 		//获取返回状态码【通信标识】
 		String return_code = (String) requestParams.get("return_code");
 		//获取业务结果【交易标识】，判断交易是否成功
 		String result_code = (String) requestParams.get("result_code");
 		
-		//TODO 签名校验
-		
-		
 		/**
 		 * 【通信标识】和【交易标识】都成功才说明返回成功
 		 */
 		if (SUCCESS.equals(return_code) && SUCCESS.equals(result_code)) {
-
-			// 返回成功时业务逻辑处理
-			log.info("微信支付回调成功业务处理，开始");
-			
-			//TODO 逻辑有问题，待改
-			Map<String, String> resultMap = tradeSuccessDeal(
-					requestMap, PayConstants.NotifyType.SYNC.toString(),
-					tradeType);	//这里用的是同步通知
-			
-			
-			log.info("微信支付回调成功业务处理，结束");
-			
-			log.info("***同步回调：支付平台回调发起方支付方结果：" + resultMap);
-			if (resultMap != null
-					&& String.valueOf(PayConstants.HTTP_SUCCESS_CODE).equals(
-							resultMap.get("statusCode"))) {
-				
-				modelAndView.addObject("return_code", SUCCESS);
-				modelAndView.addObject("return_msg", "支付成功");
-			}else{
-				modelAndView.addObject("return_code", FAIL);
-				modelAndView.addObject("return_msg", "支付失败");
+			//先进行签名校验
+			if(signValidating(requestMap)){
+				//再进行业务处理
+				wxpayNofifySuccessHandle(tradeType, modelAndView, requestMap);
 			}
+			
 		} else {
 			modelAndView.addObject("return_code", FAIL);
 			modelAndView.addObject("return_msg", "支付失败");
 		}
+	}
+	
+	/**
+	 * 微信回调通知业务处理
+	 * @param tradeType
+	 * @param modelAndView
+	 * @param requestMap
+	 */
+	private void wxpayNofifySuccessHandle(String tradeType,
+			ModelAndView modelAndView, Map<String, String> requestMap) {
+		// 返回成功时业务逻辑处理
+		boolean isOrderUpdate = false;
+		String orderno = (String) requestMap.get("out_trade_no");
+		Order order =  orderSV.findByOrderNo(orderno);
+		//支付的业务处理
+		if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
+			log.info("微信支付交易的处理，开始。。。");
+			//记录微信回调的请求数据
+		    recordPayAsyncCallbackLog(requestMap);
+			//查询是否存在微信支付的该订单
+			OrderFlow orderFlow = orderFlowService.findByOrderNoAndTradeMode((String)requestMap.get("out_trade_no"),
+		            PayConstants.PayMode.WXPAY.toString());
+			if(null != order){
+				/**
+				 * 订单存在，先判断是否存在该订单的流水：
+				 * 若流水存在，则修改流水的状态=已支付
+				 * 若流失不存在，则新增已支付的流水
+				 */
+				if (orderFlow != null) {
+		            //订单流水不为空，修改流水的状态为已支付
+					if(!orderFlow.getTradeStatus().equals(PayConstants.OrderStatus.YZF.toString())){
+						orderFlow.setTradeStatus(PayConstants.OrderStatus.YZF.toString());
+						orderFlowSV.update(orderFlow);	
+						log.info("【修改】t_o_order_flow中一条微信支付流水记录，status=已支付");
+					}
+		        } else {
+		        	//生成一条订单流水，状态为已支付
+					addOrderFlowForWxPaySuccess(requestMap);
+					log.error("【新增】t_o_order_flow中一条微信支付流水记录, status=已支付");
+		        }
+				//修改订单状态为已支付
+				if(!order.getStatus().equals(PayConstants.OrderStatus.YZF.toString())){
+					order.setStatus(PayConstants.OrderStatus.YZF.toString());
+					order.setUpdateTime(new Date());
+					isOrderUpdate =  orderSV.update(order);
+					log.error("【修改】t_o_orde中的订单状态为已支付！");
+				}
+			}else{
+				/**
+				 * 若不存在微信支付的该订单 TODO
+				 * 则抛出异常
+				 */
+				throw new BusinessException(MsgCodeConstant.NOT_EXIST_ORDER_FOR_WXPAY, "微信支付回调接口调用时，微信端的请求参数中不存在该订单");
+				/*Order new_order = new Order();
+				new_order.setStatus(PayConstants.OrderStatus.YZF.toString());
+				new_order.setOrderNo(orderno);*/
+			}
+			log.info("微信支付交易的处理，结束。");
+		}
+		if (isOrderUpdate) {
+			modelAndView.addObject("return_code", SUCCESS);
+			modelAndView.addObject("return_msg", "支付成功");
+		}else{
+			modelAndView.addObject("return_code", FAIL);
+			modelAndView.addObject("return_msg", "支付失败");
+		}
+	}
+
+	private boolean signValidating(Map<String, String> requestMap) {
+		boolean isSignValidationAccess = false;
+		SortedMap<String, String> signParams = new TreeMap<String, String>();
+		for (Map.Entry<String, String> entry : requestMap.entrySet()) {
+			signParams.put(entry.getKey(), entry.getValue());
+		}
+		String sign = SignUtil.createSign("UTF-8", signParams);
+		if(sign.equals(requestMap.get("sign"))){
+			isSignValidationAccess = true;
+		}
+		return isSignValidationAccess;
+	}
+
+	private boolean updateOrderStatusSuccess(Map requestMap) {
+		String orderno = (String) requestMap.get("out_trade_no");
+		Order order =  orderSV.findByOrderNo(orderno);
+		order.setUpdateTime(new Date());
+		order.setStatus(PayConstants.OrderStatus.YZF.toString());
+		return orderSV.update(order);
+		
+	}
+
+	private void addOrderFlowForWxPaySuccess(Map requestMap) {
+		OrderFlow wepayFlow = new OrderFlow();
+		wepayFlow.setOrderNo((String)requestMap.get("out_trade_no"));
+		wepayFlow.setTradeStatus(PayConstants.OrderStatus.YZF.toString());
+		wepayFlow.setTradeTime(new Date());
+		wepayFlow.setUpdateTime(new Date());
+		orderFlowService.update(wepayFlow);
 	}
 
 	/**
@@ -243,7 +325,7 @@ public class MobileWxPayService {
 				log.error("同步通知返回记录处理...[{}]", params.get("out_trade_no"));
 				callbackNotice(params, tradeType, order);
 			}
-
+			
 			resultMap.put("statusCode",
 					String.valueOf(PayConstants.HTTP_SUCCESS_CODE));
 
@@ -310,13 +392,6 @@ public class MobileWxPayService {
 
 		}
 		// 退款 TODO 暂时手机端不支持
-		/*
-		 * if (tradeType.equals(PayConstants.TradeType.REFUND.toString())) {
-		 * recordRefundAsyncCallbackLog(params); //修改订单状态为已退款
-		 * order.setStatus(PayConstants.OrderStatus.YTK.toString());
-		 * 
-		 * //2. 修改订单状态 orderService.update(order); }
-		 */
 	}
 
 	/**
@@ -489,9 +564,7 @@ public class MobileWxPayService {
 		log.info("调用微信统一下单接口的【xml形式的返回值】,doOrderResultMap =" + doOrderResultMap);
 		// 准备前端调用getBrandWCPayRequest接口所需的参数
 		SortedMap<String, String> jsAPIsignParam = prepareJSAPIParams(
-				nonce_str, doOrderResultMap);
-//		resultMap.put("doOrderResultMap", doOrderResultMap);
-//		resultMap.put("jsAPIsignParam", jsAPIsignParam);
+				nonce_str, doOrderResultMap, orderid);
 		log.info("最终返回给前端的结果集：【jsAPIsignParam】=" + jsAPIsignParam);
 		return jsAPIsignParam;
 	}
@@ -504,7 +577,7 @@ public class MobileWxPayService {
 	 * @return
 	 */
 	private SortedMap<String, String> prepareJSAPIParams(String nonce_str,
-			Map<String, String> doOrderResultMap) {
+			Map<String, String> doOrderResultMap, String orderid) {
 		/**
 		 * 解析结果:返回正确信息
 		 * {result=<xml><return_code><![CDATA[SUCCESS]]></return_code>
@@ -529,37 +602,149 @@ public class MobileWxPayService {
 				String return_code = (String) map.get("return_code"); // 返回状态码
 				String result_code = (String) map.get("result_code"); // 业务结果
 				String prepay_id = null;
-
-				if (return_code.equals("SUCCESS")
-						&& result_code.equals("SUCCESS")) {
-					prepay_id = (String) map.get("prepay_id");// 获取到prepay_id
-					log.info("成功获取到prepay_id=" + prepay_id);
+				String signAgain = null;
+				if(return_code.equals("SUCCESS")){
+					
+					if(result_code.equals("SUCCESS")){
+						// 获取到prepay_id
+						prepay_id = (String) map.get("prepay_id");
+						log.info("成功获取到prepay_id=" + prepay_id);
+						
+						Order order = orderService.findByOrderNo(orderid);
+						BigDecimal tradeFee = new BigDecimal(0);
+						if(null != order){
+							tradeFee = order.getAmount();
+						}
+						//流水入库
+						OrderFlow orderFlow = new OrderFlow();
+						orderFlow.setOrderNo(orderid);
+						orderFlow.setPrepareId(prepay_id);
+						orderFlow.setTradeMode(PayConstants.PayMode.WXPAY.toString());
+						orderFlow.setTradeFee(tradeFee);
+						orderFlow.setTradeStatus(PayConstants.OrderStatus.WZF.toString());
+						orderFlow.setCreateTime(new Date());
+						
+						//第二次生成签名（该签名需要返回给前端）
+						signAgain = genSignAgain(nonce_str, jsAPIsignParam,
+								prepay_id);
+						orderFlow.setSign(signAgain);
+						
+						orderFlowService.insert(orderFlow);
+						
+					}else{
+						//返回失败的处理：直接抛出errorcode和errormsg给前台
+						exceptionHandle(map);
+					}
 				}
-
-				long currentTimeMillis = System.currentTimeMillis();// 生成时间戳
-				long second = currentTimeMillis / 1000L; // （转换成秒）
-				String seconds = String.valueOf(second).substring(0, 10); // （截取前10位）
-
-				jsAPIsignParam.put("appId", APPID);// app_id
-				jsAPIsignParam.put("package", "prepay_id=" + prepay_id);// 默认sign=WXPay
-				jsAPIsignParam.put("nonceStr", nonce_str);// 自定义不重复的长度不长于32位
-				jsAPIsignParam.put("timeStamp", seconds);// 北京时间时间戳
-				jsAPIsignParam.put("signType", MD5);
-
-				String signAgain = SignUtil.createSign("UTF-8", jsAPIsignParam);// 再次生成签名
-				log.info("第二次生产签名：【jsAPIsignParam】=" + jsAPIsignParam);
-
 				jsAPIsignParam.put("paySign", signAgain);
-
+				log.info("第二次生产签名：【jsAPIsignParam】=" + jsAPIsignParam);
+				
 			} catch (JDOMException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		return jsAPIsignParam;
+	}
+
+	private String returnSuccessHandle(String orderid, Map map) {
+		String prepay_id;
+		prepay_id = (String) map.get("prepay_id");// 获取到prepay_id
+		log.info("成功获取到prepay_id=" + prepay_id);
+		
+		Order order = orderService.findByOrderNo(orderid);
+		BigDecimal tradeFee = new BigDecimal(0);
+		if(null != order){
+			tradeFee = order.getAmount();
+		}
+		//流水入库
+		addOrderFlow(orderid, prepay_id, tradeFee);
+		return prepay_id;
+	}
+
+	private String genSignAgain(String nonce_str,
+			SortedMap<String, String> jsAPIsignParam, String prepay_id) {
+		long currentTimeMillis = System.currentTimeMillis();// 生成时间戳
+		long second = currentTimeMillis / 1000L; // （转换成秒）
+		String seconds = String.valueOf(second).substring(0, 10); // （截取前10位）
+		//准备签名参数
+		jsAPIsignParam.put("appId", APPID);// app_id
+		jsAPIsignParam.put("package", "prepay_id=" + prepay_id);// 默认sign=WXPay
+		jsAPIsignParam.put("nonceStr", nonce_str);// 自定义不重复的长度不长于32位
+		jsAPIsignParam.put("timeStamp", seconds);// 北京时间时间戳
+		jsAPIsignParam.put("signType", MD5);
+		// 再次生成签名
+		String signAgain = SignUtil.createSign("UTF-8", jsAPIsignParam);
+		return signAgain;
+	}
+
+
+	private void addOrderFlow(String orderid, String prepay_id,
+			BigDecimal tradeFee) {
+		OrderFlow orderFlow = new OrderFlow();
+		orderFlow.setOrderNo(orderid);
+		orderFlow.setPrepareId(prepay_id);
+		orderFlow.setTradeMode(PayConstants.PayMode.WXPAY.toString());
+		orderFlow.setTradeFee(tradeFee);
+		orderFlow.setTradeStatus(PayConstants.OrderStatus.WZF.toString());
+		orderFlow.setCreateTime(new Date());
+		orderFlowService.insert(orderFlow);
+	}
+
+	private void exceptionHandle(Map map) {
+		//异常处理
+		String err_code = (String) map.get("err_code");
+		String err_code_des = (String) map.get("err_code_des");
+		int exception_error_code = 0;
+		switch(err_code){
+			case "NOAUTH":
+				exception_error_code = MsgCodeConstant.WXPAY_ERROR_CODE.NOAUTH.getCode();
+				break;
+			case "NOTENOUGH":
+				exception_error_code = MsgCodeConstant.WXPAY_ERROR_CODE.NOTENOUGH.getCode();
+				break;
+			case "ORDERPAID":
+				exception_error_code = MsgCodeConstant.WXPAY_ERROR_CODE.ORDERPAID.getCode();
+				break;
+			case "ORDERCLOSED":
+				exception_error_code = MsgCodeConstant.WXPAY_ERROR_CODE.ORDERCLOSED.getCode();
+				break;
+			case "SYSTEMERROR":
+				exception_error_code = MsgCodeConstant.WXPAY_ERROR_CODE.SYSTEMERROR.getCode();
+				break;
+			case "APPID_NOT_EXIST":
+				exception_error_code = MsgCodeConstant.WXPAY_ERROR_CODE.APPID_NOT_EXIST.getCode();
+				break;
+			case "MCHID_NOT_EXIST":
+				exception_error_code = MsgCodeConstant.WXPAY_ERROR_CODE.MCHID_NOT_EXIST.getCode();
+				break;
+			case "APPID_MCHID_NOT_MATCH":
+				exception_error_code = MsgCodeConstant.WXPAY_ERROR_CODE.APPID_MCHID_NOT_MATCH.getCode();
+				break;
+			case "LACK_PARAMS":
+				exception_error_code = MsgCodeConstant.WXPAY_ERROR_CODE.LACK_PARAMS.getCode();
+				break;
+			case "OUT_TRADE_NO_USED":
+				exception_error_code = MsgCodeConstant.WXPAY_ERROR_CODE.OUT_TRADE_NO_USED.getCode();
+				break;
+			case "SIGNERROR":
+				exception_error_code = MsgCodeConstant.WXPAY_ERROR_CODE.SIGNERROR.getCode();
+				break;
+			case "XML_FORMAT_ERROR":
+				exception_error_code = MsgCodeConstant.WXPAY_ERROR_CODE.XML_FORMAT_ERROR.getCode();
+				break;
+			case "REQUIRE_POST_METHOD":
+				exception_error_code = MsgCodeConstant.WXPAY_ERROR_CODE.REQUIRE_POST_METHOD.getCode();
+				break;
+			case "POST_DATA_EMPTY":
+				exception_error_code = MsgCodeConstant.WXPAY_ERROR_CODE.POST_DATA_EMPTY.getCode();
+				break;
+			case "NOT_UTF8":
+				exception_error_code = MsgCodeConstant.WXPAY_ERROR_CODE.NOT_UTF8.getCode();
+				break;
+		}
+		throw new BusinessException(exception_error_code, err_code_des);
 	}
 
 	/**

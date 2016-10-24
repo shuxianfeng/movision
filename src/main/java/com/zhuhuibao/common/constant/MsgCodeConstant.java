@@ -277,6 +277,48 @@ public interface MsgCodeConstant {
 	int NOTIFY_PARAMS_EMPTY_ERROR = 8001;
 	
 	/**
+	 * 统一下单接口错误码
+	 */
+	public enum WXPAY_ERROR_CODE {
+		
+		NOAUTH(8002), 
+		NOTENOUGH(8003),
+		ORDERPAID(8004),
+		ORDERCLOSED(8005), 
+		SYSTEMERROR(8006), 
+		APPID_NOT_EXIST(8007), 
+		MCHID_NOT_EXIST(8008),
+		APPID_MCHID_NOT_MATCH(8009),
+		LACK_PARAMS(8010),
+		OUT_TRADE_NO_USED(8011),
+		SIGNERROR(8012),
+		XML_FORMAT_ERROR(8013),
+		REQUIRE_POST_METHOD(8014),
+		POST_DATA_EMPTY(8015),
+		NOT_UTF8(8016);
+		
+        public final int code;
+
+        WXPAY_ERROR_CODE(Integer code) {
+            this.code = code;
+        }
+
+        public Integer getCode(){
+        	return this.code;
+        }
+        
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+	
+	/**
+	 * 微信支付回调接口调用时，微信端的请求参数中不存在该订单
+	 */
+	int NOT_EXIST_ORDER_FOR_WXPAY = 8017;
+	
+	/**
 	 * 不存在该订单
 	 */
 	int NOT_EXIST_ORDER = 3005;

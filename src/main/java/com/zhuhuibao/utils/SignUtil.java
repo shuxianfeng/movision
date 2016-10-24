@@ -33,6 +33,12 @@ public class SignUtil {
         return sb.toString();  
     }  
     
+    /**
+     * 生成签名方法
+     * @param characterEncoding
+     * @param parameters
+     * @return
+     */
     public static String createSign(String characterEncoding, SortedMap<String,String> parameters){
         StringBuffer sb = new StringBuffer();
         Set es = parameters.entrySet();

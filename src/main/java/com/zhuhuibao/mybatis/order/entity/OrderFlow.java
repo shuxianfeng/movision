@@ -17,8 +17,29 @@ public class OrderFlow {
     private Date tradeTime;
 
     private Date updateTime;
+    
+    private String prepareId;
+    
+    private String sign;
+    
 
-    public String getOrderNo() {
+	public String getSign() {
+		return sign;
+	}
+
+	public void setSign(String sign) {
+		this.sign = sign;
+	}
+
+	public String getPrepareId() {
+		return prepareId;
+	}
+
+	public void setPrepareId(String prepareId) {
+		this.prepareId = prepareId;
+	}
+
+	public String getOrderNo() {
         return orderNo;
     }
 

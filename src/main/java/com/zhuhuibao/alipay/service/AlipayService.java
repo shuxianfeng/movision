@@ -483,8 +483,8 @@ public class AlipayService {
             OrderFlow orderFlow = orderFlowService.findByOrderNoAndTradeMode(params.get("out_trade_no"),
                     PayConstants.PayMode.ZHBPAY.toString());
             if (orderFlow != null) {
-                String tradeStatus = orderFlow.getTradeStatus();
-                if (tradeStatus.equals(PayConstants.OrderStatus.YZF.toString())) {
+            	
+                if (orderFlow.getTradeStatus().equals(PayConstants.OrderStatus.YZF.toString())) {
                     //3-> 修改订单状态为已支付
                     order.setStatus(PayConstants.OrderStatus.YZF.toString());
                 }

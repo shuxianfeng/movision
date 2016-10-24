@@ -9,17 +9,19 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="tradeTime" property="tradeTime" jdbcType="TIMESTAMP" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="prepareId" property="prepareId" jdbcType="VARCHAR" />
+    <result column="sign" property="sign" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    orderNo, tradeMode, tradeFee, tradeStatus, createTime, tradeTime, updateTime
+    orderNo, tradeMode, tradeFee, tradeStatus, createTime, tradeTime, updateTime, prepareId, sign
   </sql>
   <insert id="insert" parameterType="com.zhuhuibao.mybatis.order.entity.OrderFlow" >
     insert into t_o_order_flow (orderNo, tradeMode, tradeFee, 
       tradeStatus, createTime, tradeTime, 
-      updateTime)
+      updateTime, prepareId, sign)
     values (#{orderNo,jdbcType=VARCHAR}, #{tradeMode,jdbcType=CHAR}, #{tradeFee,jdbcType=DECIMAL}, 
       #{tradeStatus,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{tradeTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{updateTime,jdbcType=TIMESTAMP}, #{prepareId,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.order.entity.OrderFlow" >
     insert into t_o_order_flow
@@ -45,6 +47,12 @@
       <if test="updateTime != null" >
         updateTime,
       </if>
+      <if test="prepareid != null" >
+        prepareId,
+      </if>
+      <if test="sign != null" >
+        sign,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderNo != null" >
@@ -68,6 +76,12 @@
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="prepareid != null" >
+        #{prepareId,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null" >
+        #{sign,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="update">
@@ -90,6 +104,12 @@
       </if>
       <if test="updateTime != null" >
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="prepareId != null" >
+        prepareId = #{prepareId,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null" >
+        sign = #{sign,jdbcType=VARCHAR},
       </if>
     </set>
     where orderNo = #{orderNo,jdbcType=VARCHAR}
