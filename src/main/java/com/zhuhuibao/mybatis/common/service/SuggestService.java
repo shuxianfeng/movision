@@ -25,9 +25,9 @@ public class SuggestService {
 
     public int addSuggest(Suggest suggest) {
         try {
-            if (null != ShiroUtil.getCreateID()) {
-                suggest.setCreateId(ShiroUtil.getCreateID());
-            }
+            Long createId = null != ShiroUtil.getCreateID() ? ShiroUtil.getCreateID() : 0L;
+            suggest.setCreateId(createId);
+
             if (StringUtils.isBlank(suggest.getUserName())) {
                 String userName = null != ShiroUtil.getCreateID() ? ShiroUtil.getMember().getCompanyName() : "匿名";
                 suggest.setUserName(userName);
