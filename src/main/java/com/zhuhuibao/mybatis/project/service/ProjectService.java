@@ -572,7 +572,7 @@ public class ProjectService {
             if (!StringUtils.isEmpty(provinceCode)) {
                 Province province = dictionaryService.selectProvinceByCode(provinceCode);
                 String provinceName = StringUtils.isEmpty(province.getName()) ? "" : province.getName();
-
+                result.put("provinceName",provinceName);
                 String cityName = "";
                 if (!StringUtils.isEmpty(cityCode)) {
                     City city = dictionaryService.selectCityByCode(cityCode);
