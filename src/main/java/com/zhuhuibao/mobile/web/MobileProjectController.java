@@ -123,11 +123,11 @@ public class MobileProjectController {
         Paging<Map<String, Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         // 招中标数据
         List<Map<String, Object>> tenderList = mobileProjectService.getTenderList(paramMap, pager);
-
+        pager.result(tenderList);
         // banner
         List<SysAdvertising> banner = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Project_Banner.value);
 
-        return new Response(MapUtil.convert2HashMap("tenderList", tenderList, "banner", banner));
+        return new Response(MapUtil.convert2HashMap("tenderList", pager, "banner", banner));
     }
 
     @RequestMapping(value = { "/sel_tender_detail" }, method = RequestMethod.GET)

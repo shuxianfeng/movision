@@ -25,6 +25,35 @@ public class PayConstants {
     }
 
     /**
+     * 
+     * 微信查订单接口的交易状态
+     * @author zhuangyuhao
+     * @time   2016年10月25日 下午4:58:15
+     *
+     */
+    public enum WX_TradeStatus{
+    	
+    	SUCCESS("支付成功"),
+    	REFUND("转入退款"),
+    	NOTPAY("未支付"),
+    	CLOSED("已关闭"),
+    	REVOKED("已撤销（刷卡支付）"),
+    	USERPAYING("用户支付中"),
+    	PAYERROR("支付失败(其他原因，如银行返回失败)");
+    	
+    	public final String value;
+    	
+    	WX_TradeStatus(String value){
+    		this.value = value;
+    	}
+    	
+    	@Override
+        public String toString() {
+            return this.value;
+        }
+    }
+    
+    /**
      * 订单状态 1未支付，2：已支付，3：支付失败 ，4：待退款，5：退款中，6：退款失败，7：已退款 ，8:已关闭
      */
     public enum OrderStatus {
