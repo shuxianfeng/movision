@@ -29,11 +29,11 @@ public class AdvertisingConstant {
         /**
          * 移动端项目信息首页banner
          */
-        M_Project_Banner(new String[] { "181", "M_Project", "M_Project_Banner" }),
+        M_Project_Banner(new String[] { "193", "M_Project", "M_Project_Banner" }),
         /**
          * 移动端活动家首页banner
          */
-        M_Activity_Banner(new String[] { "181", "M_Activity", "M_Activity_Banner" }),
+        M_Activity_Banner(new String[] { "236", "M_Activity", "M_Activity_Banner" }),
 
         /**
          * 移动端工程商首页banner
