@@ -353,6 +353,7 @@ public class MobileWxPayService {
 			 * 则抛出异常
 			 * 应该调退款请求
 			 */
+			log.info("【不存在该订单】");
 			throw new BusinessException(MsgCodeConstant.NOT_EXIST_ORDER_FOR_WXPAY, "微信支付回调接口调用时，微信端的请求参数中不存在该订单");
 		}
 		
@@ -373,6 +374,7 @@ public class MobileWxPayService {
 			}
 		}else{
 			isOrderUpdateFlag = true;
+			log.info("【该订单已经处理过了】");
 		}
 		return isOrderUpdateFlag;
 	}
