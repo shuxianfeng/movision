@@ -97,6 +97,10 @@ public class MobileWxPayService {
 	public static final String SUCCESS = "SUCCESS";
 	
 	public static final String FAIL = "FAIL";
+	
+	public static final String WEB = "WEB";
+	
+	public static final String CNY = "CNY";
 
 	/**
 	 * 处理微信支付完成的通知回调
@@ -579,9 +583,11 @@ public class MobileWxPayService {
 	 * @param orderid
 	 * @param request
 	 * @return
+	 * @throws IOException 
+	 * @throws JDOMException 
 	 */
 	public Map<String, String> handleOrder(String openid, String orderid,
-			HttpServletRequest request) {
+			HttpServletRequest request) throws JDOMException, IOException {
 		// 生成随机数
 		String nonce_str = SignUtil.generateString(32);
 		log.info("【调微信统一下单接口】生成的【随机数】，【nonce_str】=" + nonce_str);
@@ -616,11 +622,13 @@ public class MobileWxPayService {
 	 * 准备前端调用getBrandWCPayRequest接口所需的参数
 	 * 
 	 * @param nonce_str
-	 * @param doOrderResultMap
+	 * @param doOrderResultMap 
 	 * @return
+	 * @throws IOException 
+	 * @throws JDOMException 
 	 */
 	private SortedMap<String, String> prepareJSAPIParams(String nonce_str,
-			Map<String, String> doOrderResultMap, String orderid) {
+			Map<String, String> doOrderResultMap, String orderid) throws JDOMException, IOException {
 		/**
 		 * 解析结果:返回正确信息
 		 * {result=<xml><return_code><![CDATA[SUCCESS]]></return_code>
@@ -637,58 +645,66 @@ public class MobileWxPayService {
 		Object resultObj = doOrderResultMap.get("result");
 		SortedMap<String, String> jsAPIsignParam = new TreeMap<String, String>();
 		if (null != resultObj) {
-			String resultStr = String.valueOf(resultObj);
-			Map map;
-			try {
-				map = XmlUtil.doXMLParse(resultStr);
-				log.info("调用微信统一下单接口的【map形式的返回值】，map=" + map);
-				String return_code = (String) map.get("return_code"); // 返回状态码
-				String result_code = (String) map.get("result_code"); // 业务结果
-				String prepay_id = null;
-				String signAgain = null;
-				if(return_code.equals("SUCCESS")){
-					
-					if(result_code.equals("SUCCESS")){
-						// 获取到prepay_id
-						prepay_id = (String) map.get("prepay_id");
-						log.info("成功获取到prepay_id=" + prepay_id);
-						
-						Order order = orderService.findByOrderNo(orderid);
-						BigDecimal tradeFee = new BigDecimal(0);
-						if(null != order){
-							tradeFee = order.getAmount();
-						}
-						//流水入库
-						OrderFlow orderFlow = new OrderFlow();
-						orderFlow.setOrderNo(orderid);
-						orderFlow.setPrepareId(prepay_id);
-						orderFlow.setTradeMode(PayConstants.PayMode.WXPAY.toString());
-						orderFlow.setTradeFee(tradeFee);
-						orderFlow.setTradeStatus(PayConstants.OrderStatus.WZF.toString());
-						orderFlow.setCreateTime(new Date());
-						
-						//第二次生成签名（该签名需要返回给前端）
-						signAgain = genSignAgain(nonce_str, jsAPIsignParam,
-								prepay_id);
-						orderFlow.setSign(signAgain);
-						
-						orderFlowService.insert(orderFlow);
-						
-					}else{
-						//返回失败的处理：直接抛出errorcode和errormsg给前台
-						exceptionHandle(map);
-					}
-				}
-				jsAPIsignParam.put("paySign", signAgain);
-				log.info("第二次生产签名：【jsAPIsignParam】=" + jsAPIsignParam);
+			
+			Map map = XmlUtil.doXMLParse(String.valueOf(resultObj));
+			log.info("调用微信统一下单接口的【map形式的返回值】，map=" + map);
+			String return_code = (String) map.get("return_code"); // 返回状态码
+			String result_code = (String) map.get("result_code"); // 业务结果
+			String signAgain = null;
+			if(return_code.equals("SUCCESS")){
 				
-			} catch (JDOMException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+				if(result_code.equals("SUCCESS")){
+					//返回成功的处理
+					signAgain = returnSuccessStep(nonce_str, orderid,
+							jsAPIsignParam, map);
+				}else{
+					//返回失败的处理：直接抛出errorcode和errormsg给前台
+					exceptionHandle(map);
+				}
 			}
+			jsAPIsignParam.put("paySign", signAgain);
+			log.info("第二次生产签名：【jsAPIsignParam】=" + jsAPIsignParam);
 		}
 		return jsAPIsignParam;
+	}
+
+	private String returnSuccessStep(String nonce_str, String orderid,
+			SortedMap<String, String> jsAPIsignParam, Map map) {
+		String prepay_id;
+		String signAgain;
+		// 获取到prepay_id
+		prepay_id = (String) map.get("prepay_id");
+		log.info("成功获取到prepay_id=" + prepay_id);
+		
+		Order order = orderService.findByOrderNo(orderid);
+		
+		OrderFlow orderFlow = prepareOrderFlowParams(orderid,
+				prepay_id, order);
+		
+		//第二次生成签名（该签名需要返回给前端）
+		signAgain = genSignAgain(nonce_str, jsAPIsignParam,
+				prepay_id);
+		orderFlow.setSign(signAgain);
+		
+		orderFlowService.insert(orderFlow);
+		return signAgain;
+	}
+
+	private OrderFlow prepareOrderFlowParams(String orderid, String prepay_id,
+			Order order) {
+		BigDecimal tradeFee = new BigDecimal(0);
+		if(null != order){
+			tradeFee = order.getAmount();
+		}
+		//流水入库
+		OrderFlow orderFlow = new OrderFlow();
+		orderFlow.setOrderNo(orderid);
+		orderFlow.setPrepareId(prepay_id);
+		orderFlow.setTradeMode(PayConstants.PayMode.WXPAY.toString());
+		orderFlow.setTradeFee(tradeFee);
+		orderFlow.setTradeStatus(PayConstants.OrderStatus.WZF.toString());
+		orderFlow.setCreateTime(new Date());
+		return orderFlow;
 	}
 
 	
@@ -789,13 +805,13 @@ public class MobileWxPayService {
 		
 		signParams.put("appid", APPID); // 公众账号ID
 		signParams.put("mch_id", MCH_ID); // 商户号
-		signParams.put("device_info", "WEB"); // 设备号,PC网页或公众号内支付请传"WEB"
+		signParams.put("device_info", WEB); // 设备号,PC网页或公众号内支付请传"WEB"
 		signParams.put("nonce_str", nonce_str); // 随机数算法
 		signParams.put("body", "JSAPI支付测试"); // 商品描述
 		// signParams.put("detail", ""); //商品详情
 		// signParams.put("attach", ""); //附加数据
 		signParams.put("out_trade_no", orderid); // 商户订单号
-		signParams.put("fee_type", "CNY"); // 货币类型
+		signParams.put("fee_type", CNY); // 货币类型
 		signParams.put("total_fee", total_fee); // 总金额(单位：分)
 		signParams.put("spbill_create_ip", request.getRemoteAddr()); // 终端IP
 		// signParams.put("time_start", "");
