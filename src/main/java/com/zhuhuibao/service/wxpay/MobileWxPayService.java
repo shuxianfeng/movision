@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jdom.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +29,6 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.order.entity.AlipayCallbackLog;
-import com.zhuhuibao.mybatis.order.entity.AlipayRefundCallbackLog;
 import com.zhuhuibao.mybatis.order.entity.Order;
 import com.zhuhuibao.mybatis.order.entity.OrderFlow;
 import com.zhuhuibao.mybatis.order.service.OrderFlowService;
@@ -89,18 +88,130 @@ public class MobileWxPayService {
 	
 	private static final String WEI_XIN_NOTIFY_URL = WxpayPropertiesLoader
 			.getPropertyValue("wei_xin_notify_url");
+	
+	private static final String WEI_XIN_QUERY_ORDER_URL = 
+			WxpayPropertiesLoader.getPropertyValue("WxpayPropertiesLoader");
 
 	private static final String MD5 = "MD5";
 	
 	public static final String LOCK_NAME = "wxpay_notify_orderno";
 	
 	public static final String SUCCESS = "SUCCESS";
-	
 	public static final String FAIL = "FAIL";
 	
 	public static final String WEB = "WEB";
-	
 	public static final String CNY = "CNY";
+	
+	
+	/**
+	 * 查询微信支付订单
+	 * @param orderid
+	 * @return
+	 * @throws JDOMException
+	 * @throws IOException
+	 */
+	public Map getWxpayResult(String orderid) throws JDOMException, IOException{
+		
+		SortedMap<String, String> signParams = genSignParams(orderid);
+		
+		Map orderMap = HttpClientUtils.doPostForXml(
+				WEI_XIN_QUERY_ORDER_URL, signParams, "UTF-8");
+		
+		Map map = queryOrderResult(orderMap.get("result"));
+		
+		return map;
+	}
+
+	/**
+	 * 生成微信queryOrder请求参数
+	 * @param orderid
+	 * @return
+	 */
+	private SortedMap<String, String> genSignParams(String orderid) {
+		SortedMap<String, String> signParams = new TreeMap<String, String>();
+		String nonce_str = SignUtil.generateString(32);
+		signParams.put("appid", APPID);
+		signParams.put("mch_id", MCH_ID);
+		
+		OrderFlow oflow = orderFlowService.findByOrderNoAndTradeMode(orderid, PayConstants.PayMode.WXPAY.toString());
+		if(null == oflow){
+			throw new BusinessException(MsgCodeConstant.NOT_EXIST_ORDER, "不存在该订单");
+		}
+		if(StringUtils.isEmpty(oflow.getTransaction_id())){
+			signParams.put("out_trade_no", orderid);
+		}else{
+			signParams.put("transaction_id ", oflow.getTransaction_id());
+		}
+		signParams.put("nonce_str", nonce_str);
+		
+		String sign = SignUtil.createSign("UTF-8", signParams);
+		
+		signParams.put("sign", sign);
+		return signParams;
+	}
+
+	/**
+	 * 查询订单的结果处理
+	 * @param resultObj
+	 * @return
+	 * @throws JDOMException
+	 * @throws IOException
+	 */
+	private Map queryOrderResult(Object resultObj) throws JDOMException,
+			IOException {
+		Map map = new HashMap<>();
+		if (null != resultObj) {
+			
+			map = XmlUtil.doXMLParse(String.valueOf(resultObj));
+			String return_code = (String) map.get("return_code"); // 返回状态码
+			String result_code = (String) map.get("result_code"); // 业务结果
+			if(return_code.equals("SUCCESS")){
+				
+				if(result_code.equals("SUCCESS")){
+					//返回成功的处理
+					/*String trade_state = (String)map.get("trade_state");	//交易状态 
+					if(trade_state.equals(PayConstants.WX_TradeStatus.SUCCESS.toString())){
+						
+					}else if(){
+						
+					}else if(){
+						
+					}else if(){
+						
+					}*/
+					
+				}else{
+					handlerException(map);
+				}
+			}else{
+				//map中包含return_code和return_msg
+//				return map;
+			}
+		}
+		return map;
+	}
+
+
+
+	
+	/**
+	 * 处理异常
+	 * 系统异常如何处理 TODO
+	 * @param map
+	 */
+	private void handlerException(Map map) {
+		//返回失败的处理：直接抛出errorcode和errormsg给前台
+		String err_code = (String) map.get("err_code");
+		if(err_code.equals("ORDERNOTEXIST")){
+			throw new BusinessException(MsgCodeConstant.WXPAY_QUERY_ORDER_ERROR.ORDERNOTEXIST.getCode(), "此交易订单号不存在");
+		}
+		if(err_code.equals("SYSTEMERROR")){
+			throw new BusinessException(MsgCodeConstant.WXPAY_QUERY_ORDER_ERROR.SYSTEMERROR.getCode(), "系统错误");
+		}
+	}
+	
+	
+	
 
 	/**
 	 * 处理微信支付完成的通知回调
@@ -113,7 +224,7 @@ public class MobileWxPayService {
 	 * @throws IOException
 	 */
 	public ModelAndView handleWxPayNotify(HttpServletRequest request) throws ParseException, JDOMException, IOException {
-		
+		log.info("【微信支付回调，开始】");
 		// 交易类型
 		String tradeType = PayConstants.TradeType.PAY.toString();
 		ModelAndView modelAndView = new ModelAndView();
@@ -140,7 +251,7 @@ public class MobileWxPayService {
                 log.info("解锁");
             }
         }
-        
+        log.info("【微信支付回调,结束】");
 		return modelAndView;
 	}
 
@@ -242,6 +353,7 @@ public class MobileWxPayService {
 			 * 则抛出异常
 			 * 应该调退款请求
 			 */
+			log.info("【不存在该订单】");
 			throw new BusinessException(MsgCodeConstant.NOT_EXIST_ORDER_FOR_WXPAY, "微信支付回调接口调用时，微信端的请求参数中不存在该订单");
 		}
 		
@@ -262,6 +374,7 @@ public class MobileWxPayService {
 			}
 		}else{
 			isOrderUpdateFlag = true;
+			log.info("【该订单已经处理过了】");
 		}
 		return isOrderUpdateFlag;
 	}

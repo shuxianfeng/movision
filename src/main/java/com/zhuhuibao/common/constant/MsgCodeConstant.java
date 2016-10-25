@@ -314,6 +314,33 @@ public interface MsgCodeConstant {
     }
 	
 	/**
+	 * 微信查询订单接口错误码
+	 * @author zhuangyuhao
+	 * @time   2016年10月25日 下午4:47:29
+	 *
+	 */
+	public enum WXPAY_QUERY_ORDER_ERROR {
+		ORDERNOTEXIST(8018),
+		SYSTEMERROR(8019);
+		
+		public final int code;
+
+		WXPAY_QUERY_ORDER_ERROR(Integer code) {
+            this.code = code;
+        }
+
+        public Integer getCode(){
+        	return this.code;
+        }
+        
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+	}
+	
+	
+	/**
 	 * 微信支付回调接口调用时，微信端的请求参数中不存在该订单
 	 */
 	int NOT_EXIST_ORDER_FOR_WXPAY = 8017;

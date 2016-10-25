@@ -1,16 +1,11 @@
 package com.zhuhuibao.mobile.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.zhuhuibao.aop.LoginAccess;
-import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
-import com.zhuhuibao.shiro.realm.ShiroRealm;
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.common.pojo.AskPriceResultBean;
 import com.zhuhuibao.fsearch.pojo.spec.SupplierSearchSpec;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
+import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
+import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.service.*;
@@ -71,7 +69,7 @@ public class MobileSupplierController {
 
     /**
      * 触屏端供应链首页
-     * 
+     *
      * @return response 响应
      */
     @ApiOperation(value = "触屏端供应链首页", notes = "触屏端供应链首页")
@@ -110,19 +108,41 @@ public class MobileSupplierController {
     @ApiOperation(value = "触屏端供应链-所有品牌列表展示页", notes = "触屏端供应链-所有品牌列表展示页")
     @RequestMapping(value = "sel_hot_brand_list", method = RequestMethod.GET)
     public Response sel_hot_brand_list() {
-        Response response = new Response();
-        try {
-            response.setData(mobileBrandService.selHotBrandList());
-        } catch (Exception e) {
-            log.error("sel_hot_brand_list error! ", e);
-            e.printStackTrace();
-        }
-        return response;
+        // 网络及硬件广告位
+        List<SysAdvertising> f1AdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Brands_Hardware.value);
+        // 安全防范
+        List<SysAdvertising> f2AdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Brands_Safety.value);
+
+        List<SysAdvertising> f3AdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Brands_Bas.value);
+
+        List<SysAdvertising> f4AdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Brands_Data_Center.value);
+
+        List<SysAdvertising> f5AdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Brands_Smart_Home.value);
+
+        List<SysAdvertising> f6AdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Brands_Video.value);
+
+        List<SysAdvertising> f7AdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Brands_App_Sys.value);
+
+        List<SysAdvertising> f8AdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Brands_Lighting.value);
+
+        List<SysAdvertising> f9AdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Brands_Software.value);
+
+        Map<String, List> dataList = new HashMap<>();
+        dataList.put("f1", getAdvList(f1AdvList.subList(0, 4)));
+        dataList.put("f2", getAdvList(f2AdvList.subList(0, 4)));
+        dataList.put("f3", getAdvList(f3AdvList.subList(0, 4)));
+        dataList.put("f4", getAdvList(f4AdvList.subList(0, 4)));
+        dataList.put("f5", getAdvList(f5AdvList.subList(0, 4)));
+        dataList.put("f6", getAdvList(f6AdvList.subList(0, 4)));
+        dataList.put("f7", getAdvList(f7AdvList.subList(0, 4)));
+        dataList.put("f8", getAdvList(f8AdvList.subList(0, 4)));
+        dataList.put("f9", getAdvList(f9AdvList.subList(0, 4)));
+        return new Response(dataList);
     }
 
     /**
      * 触屏端供应链-对应类别品牌展示列表页面
-     * 
+     *
      * @param pageNo
      *            页码
      * @param pageSize
@@ -146,7 +166,7 @@ public class MobileSupplierController {
 
     /**
      * 触屏端供应链-品牌信息详情页面
-     * 
+     *
      * @param id
      *            品牌id
      * @return response 响应
@@ -197,7 +217,7 @@ public class MobileSupplierController {
 
     /**
      * 触屏端--询价馆
-     * 
+     *
      * @param fcateid
      *            系统分类
      * @param pageNo
@@ -259,7 +279,7 @@ public class MobileSupplierController {
 
     /**
      * 供应商成功案例
-     * 
+     *
      * @param id
      * @param pageNo
      * @param pageSize
@@ -279,7 +299,7 @@ public class MobileSupplierController {
 
     /**
      * 成功案例详情
-     * 
+     *
      * @param id
      *            案例id
      * @return
@@ -341,6 +361,17 @@ public class MobileSupplierController {
         map.put("fax", member.getEnterpriseFox());
         map.put("introduce", member.getEnterpriseDesc());
         map.put("productTypeList", productTypeList);
+
+        // 成功案例
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(1), Integer.valueOf(4));
+        List<Map<String, String>> caseList = successCaseService.findAllSuccessCaseList(pager, id);
+        map.put("caseList", caseList);
+
+        // 荣誉资质
+        List<CertificateRecord> certificateRecordList = memberService.certificateSearch(id);
+        map.put("certificateRecordList", certificateRecordList);
+
+        // todo 缺少banner图
         return new Response(map);
     }
 
@@ -359,5 +390,30 @@ public class MobileSupplierController {
             response.setMessage("add_enquiry  error!" + e);
         }
         return response;
+    }
+
+    /**
+     * 封装品牌馆首页返回数据
+     *
+     * @param advertisings
+     * @return
+     */
+    private List<Map<String, String>> getAdvList(List<SysAdvertising> advertisings) {
+        List<Map<String, String>> mapList = new ArrayList<>();
+        for (SysAdvertising advertising : advertisings) {
+            Map<String, String> brandMap = new HashMap<>();
+            List<String> scateIds = mobileBrandService.findScateIdByBrandId(advertising.getConnectedId());
+            if (scateIds.size() > 0) {
+                brandMap.put("scateid", com.zhuhuibao.utils.pagination.util.StringUtils.isEmpty(scateIds.get(0)) ? "" : scateIds.get(0));
+            } else {
+                brandMap.put("scateid", "");
+            }
+            brandMap.put("imgUrl", advertising.getImgUrl());
+            brandMap.put("linkUrl", advertising.getLinkUrl());
+            brandMap.put("title", advertising.getTitle());
+            brandMap.put("id", advertising.getConnectedId());
+            mapList.add(brandMap);
+        }
+        return mapList;
     }
 }

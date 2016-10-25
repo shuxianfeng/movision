@@ -74,5 +74,19 @@ public class MobileWexinPayController {
 
         return mobileWxPaySV.handleWxPayNotify(request);
     }
+    
+    @ApiOperation(value = "调用微信查询订单接口,获取JSAPI参数", notes = "调用微信查询订单接口,获取JSAPI参数", response = Response.class)
+    @RequestMapping(value = "wxOrderQuery", method = RequestMethod.POST)
+    @LoginAccess
+    public Response wxOrderQuery(
+    		@ApiParam(value = "订单编号") @RequestParam(required = true) String orderid,
+            HttpServletRequest request) throws JDOMException, IOException {
+
+    	Map result = mobileWxPaySV.getWxpayResult(orderid);
+        Response response = new Response();
+        response.setData(result);
+        return response;
+    } 
+    
 
 }

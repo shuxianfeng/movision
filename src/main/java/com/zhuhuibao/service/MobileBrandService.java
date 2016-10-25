@@ -179,4 +179,14 @@ public class MobileBrandService {
     public List<Map<String, Object>> getBrandSysChkById(String brandId) {
         return brandService.queryBrandSysById(brandId);
     }
+
+    /**
+     * 根据品牌id获取品牌所属2级分类信息
+     * 
+     * @param brandId
+     * @return
+     */
+    public List<String> findScateIdByBrandId(String brandId) {
+        return brandService.findScateIdByBrandId(brandId);
+    }
 }
