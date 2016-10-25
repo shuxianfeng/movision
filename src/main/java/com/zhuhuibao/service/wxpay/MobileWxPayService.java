@@ -112,33 +112,11 @@ public class MobileWxPayService {
 		
 		// 交易类型
 		String tradeType = PayConstants.TradeType.PAY.toString();
-
 		ModelAndView modelAndView = new ModelAndView();
-
-		Map requestParams = request.getParameterMap();
-		log.info("处理微信支付完成的通知回调,requestParams="+requestParams);
 		
-		if (null == requestParams) {
-			throw new BusinessException(
-					MsgCodeConstant.NOTIFY_PARAMS_EMPTY_ERROR,
-					"微信支付结果通用通知接口参数为空");
-		}
-
-		Object returnObj = requestParams.get("return");
-		if (null == returnObj) {
-			throw new BusinessException(
-					MsgCodeConstant.NOTIFY_PARAMS_EMPTY_ERROR,
-					"微信支付结果通用通知接口参数为空");
-		}
-
-		Map requestMap = new HashMap<>();
-		//通知参数 
-		requestMap = XmlUtil.doXMLParse(String.valueOf(returnObj));
-		if (null == requestMap) {
-			throw new BusinessException(
-					MsgCodeConstant.NOTIFY_PARAMS_EMPTY_ERROR,
-					"微信支付结果通用通知接口参数为空");
-		}
+		Map requestParams = getRequestParams(request);
+		Object returnObj = getReturnObj(requestParams);
+		Map requestMap = getRequestMap(returnObj);
 		
 		log.info("处理微信支付完成的通知回调，requestMap="+requestMap);
 		log.info("加锁");
@@ -162,6 +140,41 @@ public class MobileWxPayService {
 		return modelAndView;
 	}
 
+	private Map getRequestMap(Object returnObj) throws JDOMException,
+			IOException {
+		Map requestMap = new HashMap<>();
+		//通知参数 
+		requestMap = XmlUtil.doXMLParse(String.valueOf(returnObj));
+		if (null == requestMap) {
+			throw new BusinessException(
+					MsgCodeConstant.NOTIFY_PARAMS_EMPTY_ERROR,
+					"微信支付结果通用通知接口参数为空");
+		}
+		return requestMap;
+	}
+
+	private Object getReturnObj(Map requestParams) {
+		Object returnObj = requestParams.get("return");
+		if (null == returnObj) {
+			throw new BusinessException(
+					MsgCodeConstant.NOTIFY_PARAMS_EMPTY_ERROR,
+					"微信支付结果通用通知接口参数为空");
+		}
+		return returnObj;
+	}
+
+	private Map getRequestParams(HttpServletRequest request) {
+		Map requestParams = request.getParameterMap();
+		log.info("处理微信支付完成的通知回调,requestParams="+requestParams);
+		
+		if (null == requestParams) {
+			throw new BusinessException(
+					MsgCodeConstant.NOTIFY_PARAMS_EMPTY_ERROR,
+					"微信支付结果通用通知接口参数为空");
+		}
+		return requestParams;
+	}
+
 	/**
 	 * 微信支付处理：判断返回值+返回成功时的业务处理
 	 * 
@@ -174,7 +187,7 @@ public class MobileWxPayService {
 	 * @throws ParseException
 	 */
 	private void payHandler(String tradeType, ModelAndView modelAndView,
-			Map requestParams, Map<String,String> requestMap) throws ParseException {
+			Map requestParams, Map<String,String> requestMap) {
 		//获取返回状态码【通信标识】
 		String return_code = (String) requestParams.get("return_code");
 		//获取业务结果【交易标识】，判断交易是否成功
@@ -186,10 +199,17 @@ public class MobileWxPayService {
 		if (SUCCESS.equals(return_code) && SUCCESS.equals(result_code)) {
 			//先进行签名校验
 			if(signValidating(requestMap)){
-				//再进行业务处理
-				wxpayNofifySuccessHandle(tradeType, modelAndView, requestMap);
+				//再进行业务处理,判断是否更新了order的状态
+				boolean isOrderUpdate = wxpayNofifySuccessHandle(tradeType, modelAndView, requestMap);
+				
+				if (isOrderUpdate) {
+					modelAndView.addObject("return_code", SUCCESS);
+					modelAndView.addObject("return_msg", "支付成功");
+				}else{
+					modelAndView.addObject("return_code", FAIL);
+					modelAndView.addObject("return_msg", "支付失败");
+				}
 			}
-			
 		} else {
 			modelAndView.addObject("return_code", FAIL);
 			modelAndView.addObject("return_msg", "支付失败");
@@ -202,86 +222,97 @@ public class MobileWxPayService {
 	 * @param modelAndView
 	 * @param requestMap
 	 */
-	private void wxpayNofifySuccessHandle(String tradeType,
+	private boolean wxpayNofifySuccessHandle(String tradeType,
 			ModelAndView modelAndView, Map<String, String> requestMap) {
 		// 返回成功时业务逻辑处理
-		boolean isOrderUpdate = false;
+		boolean isOrderUpdateFlag = false;
 		String orderno = (String) requestMap.get("out_trade_no");
 		Order order =  orderSV.findByOrderNo(orderno);
-		//支付的业务处理
-		if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
-			log.info("微信支付交易的处理，开始。。。");
-			//记录微信回调的请求数据
-		    recordPayAsyncCallbackLog(requestMap);
-			//查询是否存在微信支付的该订单
-			OrderFlow orderFlow = orderFlowService.findByOrderNoAndTradeMode((String)requestMap.get("out_trade_no"),
-		            PayConstants.PayMode.WXPAY.toString());
-			if(null != order){
-				/**
-				 * 订单存在，先判断是否存在该订单的流水：
-				 * 若流水存在，则修改流水的状态=已支付
-				 * 若流失不存在，则新增已支付的流水
-				 */
-				if (orderFlow != null) {
-		            //订单流水不为空，修改流水的状态为已支付
-					if(!orderFlow.getTradeStatus().equals(PayConstants.OrderStatus.YZF.toString())){
-						orderFlow.setTradeStatus(PayConstants.OrderStatus.YZF.toString());
-						orderFlowSV.update(orderFlow);	
-						log.info("【修改】t_o_order_flow中一条微信支付流水记录，status=已支付");
-					}
-		        } else {
-		        	//生成一条订单流水，状态为已支付
-					addOrderFlowForWxPaySuccess(requestMap);
-					log.error("【新增】t_o_order_flow中一条微信支付流水记录, status=已支付");
-		        }
-				//修改订单状态为已支付
-				if(!order.getStatus().equals(PayConstants.OrderStatus.YZF.toString())){
-					order.setStatus(PayConstants.OrderStatus.YZF.toString());
-					order.setUpdateTime(new Date());
-					isOrderUpdate =  orderSV.update(order);
-					log.error("【修改】t_o_orde中的订单状态为已支付！");
-				}
-			}else{
-				/**
-				 * 若不存在微信支付的该订单 TODO
-				 * 则抛出异常
-				 */
-				throw new BusinessException(MsgCodeConstant.NOT_EXIST_ORDER_FOR_WXPAY, "微信支付回调接口调用时，微信端的请求参数中不存在该订单");
-				/*Order new_order = new Order();
-				new_order.setStatus(PayConstants.OrderStatus.YZF.toString());
-				new_order.setOrderNo(orderno);*/
-			}
-			log.info("微信支付交易的处理，结束。");
+		
+		if(null == order){
+			/**
+			 * 若不存在微信支付的该订单 TODO
+			 * 则抛出异常
+			 * 应该调退款请求
+			 */
+			throw new BusinessException(MsgCodeConstant.NOT_EXIST_ORDER_FOR_WXPAY, "微信支付回调接口调用时，微信端的请求参数中不存在该订单");
 		}
-		if (isOrderUpdate) {
-			modelAndView.addObject("return_code", SUCCESS);
-			modelAndView.addObject("return_msg", "支付成功");
-		}else{
-			modelAndView.addObject("return_code", FAIL);
-			modelAndView.addObject("return_msg", "支付失败");
+		
+		if(!order.getStatus().equals(PayConstants.OrderStatus.YZF.toString())){
+			if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
+				log.info("微信支付交易的处理，开始。。。");
+				
+				OrderFlow orderFlow = orderFlowService.findByOrderNoAndTradeMode((String)requestMap.get("out_trade_no"),
+			            PayConstants.PayMode.WXPAY.toString());
+				
+				handleOrderFlow(requestMap, orderFlow);
+				
+			    recordPayAsyncCallbackLog(requestMap);
+				
+			    isOrderUpdateFlag = updateOrder(order);
+				
+				log.info("微信支付交易的处理，结束。");
+			}
+		}
+		return isOrderUpdateFlag;
+	}
+
+	/**
+	 * 修改订单状态为已支付
+	 * @param order
+	 * @return
+	 */
+	private boolean updateOrder(Order order) {
+		boolean isOrderUpdateFlag;
+		order.setStatus(PayConstants.OrderStatus.YZF.toString());
+		order.setUpdateTime(new Date());
+		isOrderUpdateFlag =  orderSV.update(order);
+		log.error("【修改】t_o_orde中的订单状态为已支付！");
+		return isOrderUpdateFlag;
+	}
+
+	/**
+	 * 订单存在，先判断是否存在该订单的流水：
+	 * 若流水存在，则修改流水的状态=已支付 
+	 * 若流失不存在，则新增已支付的流水 
+	 * @param requestMap
+	 * @param orderFlow
+	 */
+	private void handleOrderFlow(Map<String, String> requestMap,
+			OrderFlow orderFlow) {
+		
+		if (orderFlow != null) {
+		    //订单流水不为空，修改流水的状态为已支付
+			if(!orderFlow.getTradeStatus().equals(PayConstants.OrderStatus.YZF.toString())){
+				orderFlow.setTradeStatus(PayConstants.OrderStatus.YZF.toString());
+				orderFlowSV.update(orderFlow);	
+				log.info("【修改】t_o_order_flow中一条微信支付流水记录，status=已支付");
+			}
+		} else {
+			//生成一条订单流水，状态为已支付
+			addOrderFlowForWxPaySuccess(requestMap);
+			log.error("【新增】t_o_order_flow中一条微信支付流水记录, status=已支付");
 		}
 	}
 
+	/**
+	 * 微信支付完回调接口的签名校验
+	 * @param requestMap
+	 * @return
+	 */
 	private boolean signValidating(Map<String, String> requestMap) {
-		boolean isSignValidationAccess = false;
+		boolean isSignValidationFlag = false;
 		SortedMap<String, String> signParams = new TreeMap<String, String>();
 		for (Map.Entry<String, String> entry : requestMap.entrySet()) {
-			signParams.put(entry.getKey(), entry.getValue());
+			if(!"sign".equals(entry.getKey())){
+				signParams.put(entry.getKey(), entry.getValue());
+			}
 		}
 		String sign = SignUtil.createSign("UTF-8", signParams);
 		if(sign.equals(requestMap.get("sign"))){
-			isSignValidationAccess = true;
+			isSignValidationFlag = true;
 		}
-		return isSignValidationAccess;
-	}
-
-	private boolean updateOrderStatusSuccess(Map requestMap) {
-		String orderno = (String) requestMap.get("out_trade_no");
-		Order order =  orderSV.findByOrderNo(orderno);
-		order.setUpdateTime(new Date());
-		order.setStatus(PayConstants.OrderStatus.YZF.toString());
-		return orderSV.update(order);
-		
+		return isSignValidationFlag;
 	}
 
 	private void addOrderFlowForWxPaySuccess(Map requestMap) {
@@ -492,33 +523,37 @@ public class MobileWxPayService {
 	/**
 	 * 获取微信支付中统一下单接口的传参——openID
 	 * 
+	 * GET_OPENID_URL=https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
 	 * @param code
 	 * @return
 	 */
 	public String getOpenId(String code) {
 
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("appid", APPID);
-		map.put("secret", SECRET);
-		map.put("code", code);
-		map.put("grant_type", AUTHORIZATION_CODE);
-		log.info("【调openid的接口】的参数："+map);
+		
+		prepareMapParams(code, map);
 		
 		String openid = "";
 		log.info("【调openid的接口】，开始");
-		/**
-		 * https://api.weixin.qq.com/sns/oauth2/access_token?
-		 * 	appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
-		 */
 		Map<String, String> queryOpenidResult = HttpClientUtils.doGet(GET_OPENID_URL,
 				map, "UTF-8");
 		log.info("【调openid的接口】，结束");
 		log.info("【调openid的接口】,返回值="+queryOpenidResult);
-		/**
-		 * {result={"access_token":"JPNXAj_cpfu6QXzC5w5KdIMuEGlq3fiKCh2LlU4gCJq-yoU8AAXdE9FL9sjqDa-T5yvmCpvx-d0XpNSTJdpqaxijOFeLBeC2QL3m7ml3I8M",
-		 * "expires_in":7200,"refresh_token":"aoXKwIJ-zGCGffNWB8dPqjXOK1Pm2E57ZHQe8gbdWaYEWnlX84oCngejTUK-4Nu5dA4C4xmyXkFh-uo9jnHpITItZw8asP-cASM77gmf0dI",
-		 * "openid":"o3eXzv14h_YilIZB3JDomt0Zutao","scope":"snsapi_userinfo"}, status=200}
-		 */
+		
+		return parseOpenid(openid, queryOpenidResult);
+	}
+
+	/**
+	 * 解析返回值获取openid
+	 * @param openid
+	 * @param queryOpenidResult = {result={"access_token":"JPNXAj_cpfu6QXzC5w5KdIMuEGlq3fiKCh2LlU4gCJq-yoU8AAXdE9FL9sjqDa-T5yvmCpvx-d0XpNSTJdpqaxijOFeLBeC2QL3m7ml3I8M",
+		 "expires_in":7200,"refresh_token":"aoXKwIJ-zGCGffNWB8dPqjXOK1Pm2E57ZHQe8gbdWaYEWnlX84oCngejTUK-4Nu5dA4C4xmyXkFh-uo9jnHpITItZw8asP-cASM77gmf0dI",
+		 "openid":"o3eXzv14h_YilIZB3JDomt0Zutao","scope":"snsapi_userinfo"}, status=200}
+	 * @return
+	 */
+	private String parseOpenid(String openid,
+			Map<String, String> queryOpenidResult) {
+		
 		if (null != queryOpenidResult && null != queryOpenidResult.get("result")) {
 			String result =  queryOpenidResult.get("result");
 			Gson gson = new Gson();
@@ -526,8 +561,15 @@ public class MobileWxPayService {
 	        openid =  (String)resultMap.get("openid");
 	        log.info("【调openid的接口】，openid="+openid);
 		}
-
 		return openid;
+	}
+
+	private void prepareMapParams(String code, Map<String, String> map) {
+		map.put("appid", APPID);
+		map.put("secret", SECRET);
+		map.put("code", code);
+		map.put("grant_type", AUTHORIZATION_CODE);
+		log.info("【调openid的接口】的参数："+map);
 	}
 
 	/**
@@ -543,11 +585,12 @@ public class MobileWxPayService {
 		// 生成随机数
 		String nonce_str = SignUtil.generateString(32);
 		log.info("【调微信统一下单接口】生成的【随机数】，【nonce_str】=" + nonce_str);
+		
 		SortedMap<String, String> signParams = new TreeMap<String, String>();
-		// 准备统一下单接口传参
+		
 		prepareParameters(openid, orderid, request, WEI_XIN_NOTIFY_URL,
 				nonce_str, signParams);
-		// 生成签名
+		
 		String sign = SignUtil.createSign("UTF-8", signParams);
 		signParams.put("sign", sign);
 		log.info("【调用微信统一下单接口】的签名——【sign】=" + sign);
@@ -555,7 +598,6 @@ public class MobileWxPayService {
 		signParams.remove("key");// 调用统一下单无需key（商户应用密钥）
 		log.info("【调用微信统一下单接口】的传参——【signParams】=" + signParams);
 
-		// 向微信接口端发起请求
 		log.info("调用微信统一下单接口:【开始】");
 		Map<String, String> doOrderResultMap = HttpClientUtils.doPostForXml(
 				WX_DO_ORDER_URL, signParams, "UTF-8");
@@ -566,6 +608,7 @@ public class MobileWxPayService {
 		SortedMap<String, String> jsAPIsignParam = prepareJSAPIParams(
 				nonce_str, doOrderResultMap, orderid);
 		log.info("最终返回给前端的结果集：【jsAPIsignParam】=" + jsAPIsignParam);
+		
 		return jsAPIsignParam;
 	}
 
@@ -648,21 +691,7 @@ public class MobileWxPayService {
 		return jsAPIsignParam;
 	}
 
-	private String returnSuccessHandle(String orderid, Map map) {
-		String prepay_id;
-		prepay_id = (String) map.get("prepay_id");// 获取到prepay_id
-		log.info("成功获取到prepay_id=" + prepay_id);
-		
-		Order order = orderService.findByOrderNo(orderid);
-		BigDecimal tradeFee = new BigDecimal(0);
-		if(null != order){
-			tradeFee = order.getAmount();
-		}
-		//流水入库
-		addOrderFlow(orderid, prepay_id, tradeFee);
-		return prepay_id;
-	}
-
+	
 	private String genSignAgain(String nonce_str,
 			SortedMap<String, String> jsAPIsignParam, String prepay_id) {
 		long currentTimeMillis = System.currentTimeMillis();// 生成时间戳
@@ -677,19 +706,6 @@ public class MobileWxPayService {
 		// 再次生成签名
 		String signAgain = SignUtil.createSign("UTF-8", jsAPIsignParam);
 		return signAgain;
-	}
-
-
-	private void addOrderFlow(String orderid, String prepay_id,
-			BigDecimal tradeFee) {
-		OrderFlow orderFlow = new OrderFlow();
-		orderFlow.setOrderNo(orderid);
-		orderFlow.setPrepareId(prepay_id);
-		orderFlow.setTradeMode(PayConstants.PayMode.WXPAY.toString());
-		orderFlow.setTradeFee(tradeFee);
-		orderFlow.setTradeStatus(PayConstants.OrderStatus.WZF.toString());
-		orderFlow.setCreateTime(new Date());
-		orderFlowService.insert(orderFlow);
 	}
 
 	private void exceptionHandle(Map map) {
