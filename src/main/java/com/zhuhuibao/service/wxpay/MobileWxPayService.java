@@ -182,7 +182,6 @@ public class MobileWxPayService {
 	/**
 	 * 微信支付处理：判断返回值+返回成功时的业务处理
 	 * 
-	 * TODO  签名验证
 	 * 商户系统对于支付结果通知的内容一定要做签名验证，防止数据泄漏导致出现“假通知”，造成资金损失
 	 * @param tradeType
 	 * @param modelAndView
@@ -261,6 +260,8 @@ public class MobileWxPayService {
 				
 				log.info("微信支付交易的处理，结束。");
 			}
+		}else{
+			isOrderUpdateFlag = true;
 		}
 		return isOrderUpdateFlag;
 	}
