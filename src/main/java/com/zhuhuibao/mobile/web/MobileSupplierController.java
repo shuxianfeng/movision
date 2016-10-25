@@ -196,31 +196,6 @@ public class MobileSupplierController {
     }
 
     /**
-     * 触屏端--更多询价
-     *
-     * @param createId
-     *            系统分类
-     * @param pageNo
-     * @param pageSize
-     * @return
-     */
-    @ApiOperation(value = "触屏端--更多询价", notes = "触屏端--更多询价", response = Response.class)
-    @RequestMapping(value = { "sel_newest_enquiry" }, method = RequestMethod.GET)
-    public Response sel_newest_enquiry(@ApiParam(value = "当前登陆人id") @RequestParam(required = false) String createId, @RequestParam(required = false, defaultValue = "1") String pageNo,
-            @RequestParam(required = false, defaultValue = "10") String pageSize) {
-        Response response = new Response();
-        Paging<AskPrice> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        try {
-            response.setData(enquiryService.queryNewestAskPrice(createId, pager));
-        } catch (Exception e) {
-            log.error("sel_newest_enquiry  error! ", e);
-            response.setCode(400);
-            response.setMessage("sel_newest_enquiry  error!" + e);
-        }
-        return response;
-    }
-
-    /**
      * 触屏端--询价馆
      * 
      * @param fcateid
