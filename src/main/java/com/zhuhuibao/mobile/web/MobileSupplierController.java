@@ -89,7 +89,8 @@ public class MobileSupplierController {
         // 热门渠道商广告图片
         List<SysAdvertising> canalsfaList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Supplychain_Canals.value);
         // 取最新6条公开询价数据
-        List askPriceList = enquiryService.queryNewestAskPrice(createId);
+        Paging<AskPrice> pager = new Paging<>(Integer.valueOf(1), Integer.valueOf(6));
+        List askPriceList = enquiryService.queryNewestAskPrice(createId, pager);
         Map<String, List> dataList = new HashMap<>();
         dataList.put("banner", bannerAdvList);
         dataList.put("hotBrand", hotBrandList);

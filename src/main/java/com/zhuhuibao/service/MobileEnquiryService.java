@@ -171,8 +171,7 @@ public class MobileEnquiryService {
      *            询价提出的创建者id
      * @return
      */
-    public List queryNewestAskPrice(String createId) {
-        Paging<AskPrice> pager = new Paging<>(Integer.valueOf(1), Integer.valueOf(6));
+    public List queryNewestAskPrice(String createId, Paging<AskPrice> pager) {
         AskPriceSearchBean askPriceSearch = new AskPriceSearchBean();
         if (null != createId && !createId.equals("")) {
             askPriceSearch.setCreateid(createId);
