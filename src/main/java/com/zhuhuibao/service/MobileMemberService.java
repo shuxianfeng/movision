@@ -10,6 +10,7 @@ import com.zhuhuibao.fsearch.pojo.spec.ContractorSearchSpec;
 import com.zhuhuibao.fsearch.pojo.spec.SupplierSearchSpec;
 import com.zhuhuibao.fsearch.service.exception.ServiceException;
 import com.zhuhuibao.fsearch.service.impl.MembersService;
+import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
@@ -73,8 +74,7 @@ public class MobileMemberService {
     /**
      * 搜索工程商
      *
-     * @param spec
-     *            查询条件
+     * @param spec 查询条件
      * @return map
      * @throws ServiceException
      */
@@ -87,7 +87,7 @@ public class MobileMemberService {
 
     /**
      * 查询memberChk信息
-     * 
+     *
      * @param id
      * @return
      */
@@ -102,7 +102,7 @@ public class MobileMemberService {
 
     /**
      * 更新会员审核信息
-     * 
+     *
      * @param memInfoCheck
      */
     public void updateMemberInfoCheck(MemInfoCheck memInfoCheck) {
@@ -119,7 +119,7 @@ public class MobileMemberService {
 
     /**
      * 密码修改（参数全通过base64编码）
-     * 
+     *
      * @param oldPassword
      * @param newPassword
      * @param confirmPassword
@@ -148,7 +148,7 @@ public class MobileMemberService {
 
     /**
      * 判断密码是当前登录者密码
-     * 
+     *
      * @param password
      * @return
      */
@@ -161,7 +161,7 @@ public class MobileMemberService {
 
     /**
      * 修改手机号码
-     * 
+     *
      * @param mobile
      * @param verifyCode
      * @return 错误提示消息（为空则表示修改成功）
@@ -175,8 +175,7 @@ public class MobileMemberService {
     /**
      * 搜索供应商
      *
-     * @param spec
-     *            查询条件
+     * @param spec 查询条件
      * @return map
      * @throws ServiceException
      */
@@ -192,5 +191,22 @@ public class MobileMemberService {
      */
     public Member findMemById(String id) {
         return memberMapper.findMemById(id);
+    }
+
+    /**
+     * 获取企业荣誉资质信息
+     *
+     * @param id
+     * @return
+     */
+    public List<CertificateRecord> certificateSearch(String id) {
+        CertificateRecord certificateRecord = new CertificateRecord();
+        certificateRecord.setMem_id(id);
+        // 供应商资质
+        certificateRecord.setType("1");
+        certificateRecord.setIs_deleted(0);
+        // 审核通过
+        certificateRecord.setStatus("1");
+        return oldMemberService.certificateSearch(certificateRecord);
     }
 }
