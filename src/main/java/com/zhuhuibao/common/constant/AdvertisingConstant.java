@@ -80,7 +80,50 @@ public class AdvertisingConstant {
          */
         M_Supplychain_Canals(new String[] { "192", "M_Supplychain", "M_Supplychain_Canals" }),
 
-        ;
+        /**
+         * 移动端供应链品牌馆-网络及硬件品牌
+         */
+        M_Brands_Hardware(new String[] { "192", "M_Brands", "M_Brands_Hardware" }),
+
+        /**
+         * 移动端供应链品牌馆-安全防范品牌
+         */
+        M_Brands_Safety(new String[] { "192", "M_Brands", "M_Brands_Safety" }),
+
+        /**
+         * 移动端供应链品牌馆-楼宇自动化品牌
+         */
+        M_Brands_Bas(new String[] { "192", "M_Brands", "M_Brands_Bas" }),
+
+        /**
+         * 移动端供应链品牌馆-数据中心品牌
+         */
+        M_Brands_Data_Center(new String[] { "192", "M_Brands", "M_Brands_Data_Center" }),
+
+        /**
+         * 移动端供应链品牌馆-智能家居品牌
+         */
+        M_Brands_Smart_Home(new String[] { "192", "M_Brands", "M_Brands_Smart_Home" }),
+
+        /**
+         * 移动端供应链品牌馆-影音视频品牌
+         */
+        M_Brands_Video(new String[] { "192", "M_Brands", "M_Brands_Video" }),
+
+        /**
+         * 移动端供应链品牌馆-应用系统品牌
+         */
+        M_Brands_App_Sys(new String[] { "192", "M_Brands", "M_Brands_App_Sys" }),
+
+        /**
+         * 移动端供应链品牌馆-智能照明品牌
+         */
+        M_Brands_Lighting(new String[] { "192", "M_Brands", "M_Brands_Lighting" }),
+
+        /**
+         * 移动端供应链品牌馆-行业软件品牌
+         */
+        M_Brands_Software(new String[] { "192", "M_Brands", "M_Brands_Software" }),;
 
         /**
          * chanType,page,advArea
