@@ -89,7 +89,8 @@ public class MobileSupplierController {
         // 热门渠道商广告图片
         List<SysAdvertising> canalsfaList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Supplychain_Canals.value);
         // 取最新6条公开询价数据
-        List askPriceList = enquiryService.queryNewestAskPrice(createId);
+        Paging<AskPrice> pager = new Paging<>(Integer.valueOf(1), Integer.valueOf(6));
+        List askPriceList = enquiryService.queryNewestAskPrice(createId, pager);
         Map<String, List> dataList = new HashMap<>();
         dataList.put("banner", bannerAdvList);
         dataList.put("hotBrand", hotBrandList);
@@ -190,6 +191,31 @@ public class MobileSupplierController {
             log.error("sel_supplier_list  error! ", e);
             response.setMsgCode(0);
             response.setMessage("sel_supplier_list  error!" + e);
+        }
+        return response;
+    }
+
+    /**
+     * 触屏端--更多询价
+     *
+     * @param createId
+     *            系统分类
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "触屏端--更多询价", notes = "触屏端--更多询价", response = Response.class)
+    @RequestMapping(value = { "sel_newest_enquiry" }, method = RequestMethod.GET)
+    public Response sel_newest_enquiry(@ApiParam(value = "当前登陆人id") @RequestParam(required = false) String createId, @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<AskPrice> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        try {
+            response.setData(enquiryService.queryNewestAskPrice(createId, pager));
+        } catch (Exception e) {
+            log.error("sel_newest_enquiry  error! ", e);
+            response.setCode(400);
+            response.setMessage("sel_newest_enquiry  error!" + e);
         }
         return response;
     }
