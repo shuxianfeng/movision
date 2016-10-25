@@ -167,18 +167,26 @@ public class MobileEnquiryService {
     /**
      * 查询最新公开询价
      *
-     * @param count    查询条数
-     * @param createId 询价提出的创建者id
+     * @param createId
+     *            询价提出的创建者id
      * @return
      */
-    public List queryNewestAskPrice(int count, String createId) {
-        List<AskPrice> askPriceList = askPriceMapper.queryNewPriceInfo(count, createId);
+    public List queryNewestAskPrice(String createId, Paging<AskPrice> pager) {
+        AskPriceSearchBean askPriceSearch = new AskPriceSearchBean();
+        if (null != createId && !createId.equals("")) {
+            askPriceSearch.setCreateid(createId);
+        }
+        List<AskPrice> askPriceList = askPriceMapper.findAllNewPriceInfoList(pager.getRowBounds(), askPriceSearch);
         List list = new ArrayList();
         Map map;
         for (AskPrice askPrice : askPriceList) {
             map = new HashMap();
             map.put(Constants.id, askPrice.getId());
-            map.put(Constants.companyName, askPrice.getTitle());
+            map.put(Constants.title, askPrice.getTitle());
+            map.put(Constants.publishTime, askPrice.getEndTime().substring(0, 10));
+            map.put(Constants.area, askPrice.getProvinceCode());
+            map.put("isCan", askPrice.getIsCan());
+            map.put("count", askPrice.getCount());
             list.add(map);
         }
         return list;
@@ -187,8 +195,10 @@ public class MobileEnquiryService {
     /**
      * 根据条件分页查询询价信息
      *
-     * @param fcateid 系统分类
-     * @param pager   分页对象
+     * @param fcateid
+     *            系统分类
+     * @param pager
+     *            分页对象
      * @return
      */
     public Paging<AskPriceResultBean> selEnquiryList(String fcateid, Paging<AskPriceResultBean> pager) {
@@ -217,7 +227,6 @@ public class MobileEnquiryService {
     public AskPriceBean queryAskPriceByID(String id) {
         return priceService.queryAskPriceByID(id);
     }
-
 
     /**
      * 保存询价信息

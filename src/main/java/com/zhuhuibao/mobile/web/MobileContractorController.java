@@ -85,12 +85,12 @@ public class MobileContractorController {
      */
     @ApiOperation(value = "触屏端-名企(厂商，代理商，渠道商)展示更多页面", notes = "触屏端-名企(厂商，代理商，渠道商)展示更多页面")
     @RequestMapping(value = "sel_great_company_list", method = RequestMethod.GET)
-    public Response sel_great_company_list(@ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo,
-            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
+    public Response sel_great_company_list(@ApiParam(value = "类别") @RequestParam(required = true) String identify,
+            @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo, @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
         Paging<Member> pager = new Paging<>(pageNo, pageSize);
         try {
-            response.setData(memberService.getGreatCompany(pager, "6"));
+            response.setData(memberService.getGreatCompany(pager, identify));
         } catch (Exception e) {
             log.error("sel_great_company_list error! ", e);
             e.printStackTrace();
