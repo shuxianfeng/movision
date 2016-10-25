@@ -35,6 +35,7 @@
         <result column="CNName" property="brandCNName" jdbcType="VARCHAR"/>
         <result column="logoUrl" property="logoUrl" jdbcType="VARCHAR"/>
         <result column="scateid" property="scateid" jdbcType="VARCHAR"/>
+        <result column="enterpriseName" property="company" jdbcType="VARCHAR"/>
     </resultMap>
     <resultMap id="ResultMap3" type="com.zhuhuibao.common.pojo.ResultBean">
         <result column="id" property="code" jdbcType="VARCHAR"/>
@@ -267,9 +268,11 @@
         b.id,
         b.CNName,
         p.scateid,
-        b.logourl
+        b.logourl,
+        m.enterpriseName as enterpriseName
         FROM t_p_product p
         LEFT JOIN t_p_brand b ON b.id = p.brandid
+        LEFT JOIN t_m_member m ON b.createid = m.id
         WHERE b.status = 1 AND p.status = 1 and p.scateid IN
         (select
         id
