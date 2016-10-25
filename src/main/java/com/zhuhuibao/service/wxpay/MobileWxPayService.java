@@ -224,7 +224,7 @@ public class MobileWxPayService {
 	 * @throws IOException
 	 */
 	public ModelAndView handleWxPayNotify(HttpServletRequest request) throws ParseException, JDOMException, IOException {
-		
+		log.info("【微信支付回调，开始】");
 		// 交易类型
 		String tradeType = PayConstants.TradeType.PAY.toString();
 		ModelAndView modelAndView = new ModelAndView();
@@ -251,7 +251,7 @@ public class MobileWxPayService {
                 log.info("解锁");
             }
         }
-        
+        log.info("【微信支付回调,结束】");
 		return modelAndView;
 	}
 
