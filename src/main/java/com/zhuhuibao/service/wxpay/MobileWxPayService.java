@@ -203,20 +203,24 @@ public class MobileWxPayService {
 		if (SUCCESS.equals(return_code) && SUCCESS.equals(result_code)) {
 			//先进行签名校验
 			if(signValidating(requestMap)){
-				//再进行业务处理,判断是否更新了order的状态
+				//签名校验成功，再进行业务处理,判断是否更新了order的状态
 				boolean isOrderUpdate = wxpayNofifySuccessHandle(tradeType, modelAndView, requestMap);
 				
 				if (isOrderUpdate) {
 					modelAndView.addObject("return_code", SUCCESS);
-					modelAndView.addObject("return_msg", "支付成功");
+					modelAndView.addObject("return_msg", "OK");
 				}else{
 					modelAndView.addObject("return_code", FAIL);
 					modelAndView.addObject("return_msg", "支付失败");
 				}
+			}else{
+				//签名校验失败
+				modelAndView.addObject("return_code", FAIL);
+				modelAndView.addObject("return_msg", "签名失败");
 			}
 		} else {
 			modelAndView.addObject("return_code", FAIL);
-			modelAndView.addObject("return_msg", "支付失败");
+			modelAndView.addObject("return_msg", "参数格式校验错误");
 		}
 	}
 	

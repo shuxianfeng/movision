@@ -42,8 +42,6 @@ import com.zhuhuibao.utils.wxpay.WxpayPropertiesLoader;
 @RequestMapping("/rest/m/wxpay")
 public class MobileWexinPayController {
 
-    private static final Logger log = LoggerFactory.getLogger(MobileAlipayController.class);
-
     @Autowired
     MobileWxPayService mobileWxPaySV;
 
