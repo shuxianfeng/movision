@@ -182,7 +182,6 @@ public class MobileWxPayService {
 	/**
 	 * 微信支付处理：判断返回值+返回成功时的业务处理
 	 * 
-	 * TODO  签名验证
 	 * 商户系统对于支付结果通知的内容一定要做签名验证，防止数据泄漏导致出现“假通知”，造成资金损失
 	 * @param tradeType
 	 * @param modelAndView
@@ -203,20 +202,24 @@ public class MobileWxPayService {
 		if (SUCCESS.equals(return_code) && SUCCESS.equals(result_code)) {
 			//先进行签名校验
 			if(signValidating(requestMap)){
-				//再进行业务处理,判断是否更新了order的状态
+				//签名校验成功，再进行业务处理,判断是否更新了order的状态
 				boolean isOrderUpdate = wxpayNofifySuccessHandle(tradeType, modelAndView, requestMap);
 				
 				if (isOrderUpdate) {
 					modelAndView.addObject("return_code", SUCCESS);
-					modelAndView.addObject("return_msg", "支付成功");
+					modelAndView.addObject("return_msg", "OK");
 				}else{
 					modelAndView.addObject("return_code", FAIL);
 					modelAndView.addObject("return_msg", "支付失败");
 				}
+			}else{
+				//签名校验失败
+				modelAndView.addObject("return_code", FAIL);
+				modelAndView.addObject("return_msg", "签名失败");
 			}
 		} else {
 			modelAndView.addObject("return_code", FAIL);
-			modelAndView.addObject("return_msg", "支付失败");
+			modelAndView.addObject("return_msg", "参数格式校验错误");
 		}
 	}
 	
@@ -257,6 +260,8 @@ public class MobileWxPayService {
 				
 				log.info("微信支付交易的处理，结束。");
 			}
+		}else{
+			isOrderUpdateFlag = true;
 		}
 		return isOrderUpdateFlag;
 	}
