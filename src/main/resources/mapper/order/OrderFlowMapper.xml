@@ -11,17 +11,19 @@
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="prepareId" property="prepareId" jdbcType="VARCHAR" />
     <result column="sign" property="sign" jdbcType="VARCHAR" />
+    <result column="transaction_id" property="transaction_id" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    orderNo, tradeMode, tradeFee, tradeStatus, createTime, tradeTime, updateTime, prepareId, sign
+    orderNo, tradeMode, tradeFee, tradeStatus, createTime, tradeTime, updateTime, prepareId, sign, transaction_id
   </sql>
   <insert id="insert" parameterType="com.zhuhuibao.mybatis.order.entity.OrderFlow" >
     insert into t_o_order_flow (orderNo, tradeMode, tradeFee, 
       tradeStatus, createTime, tradeTime, 
-      updateTime, prepareId, sign)
+      updateTime, prepareId, sign, transaction_id)
     values (#{orderNo,jdbcType=VARCHAR}, #{tradeMode,jdbcType=CHAR}, #{tradeFee,jdbcType=DECIMAL}, 
       #{tradeStatus,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{tradeTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{prepareId,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR})
+      #{updateTime,jdbcType=TIMESTAMP}, #{prepareId,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}),
+      #{transaction_id,jdbcType=VARCHAR}),
   </insert>
   <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.order.entity.OrderFlow" >
     insert into t_o_order_flow
@@ -53,6 +55,9 @@
       <if test="sign != null" >
         sign,
       </if>
+      <if test="transaction_id != null" >
+        transaction_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderNo != null" >
@@ -82,6 +87,9 @@
       <if test="sign != null" >
         #{sign,jdbcType=VARCHAR},
       </if>
+      <if test="transaction_id != null" >
+        #{transaction_id,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="update">
@@ -110,6 +118,9 @@
       </if>
       <if test="sign != null" >
         sign = #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="transaction_id != null" >
+        transaction_id = #{transaction_id,jdbcType=VARCHAR},
       </if>
     </set>
     where orderNo = #{orderNo,jdbcType=VARCHAR}
