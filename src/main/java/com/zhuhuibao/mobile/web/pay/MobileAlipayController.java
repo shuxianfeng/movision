@@ -26,7 +26,6 @@ public class MobileAlipayController {
     @Autowired
     AlipayService alipayService;
 
-
     /**
      * 支付宝同步[即时到账]
      * <p/>

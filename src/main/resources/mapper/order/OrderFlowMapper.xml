@@ -49,7 +49,7 @@
       <if test="updateTime != null" >
         updateTime,
       </if>
-      <if test="prepareid != null" >
+      <if test="prepareId != null" >
         prepareId,
       </if>
       <if test="sign != null" >
@@ -81,7 +81,7 @@
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="prepareid != null" >
+      <if test="prepareId != null" >
         #{prepareId,jdbcType=VARCHAR},
       </if>
       <if test="sign != null" >
