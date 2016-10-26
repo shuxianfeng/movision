@@ -333,7 +333,7 @@
         date_format(t.updateDate,'%Y-%m-%d') updateDate,concat(pn.name,ct.name,ar.name,ifnull(t.address,'')) address,
         t.price,date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate,
         (select group_concat(name) from t_dictionary_constant where find_in_set(code,t.category) and type=8) as
-        categoryName
+        categoryName,pn.name provinceName,ct.name cityName
         FROM t_zhb_viewGoods vp
         left join t_prj_project t on t.id = vp.goodsId
         left join t_dictionary_province pn on pn.code = t.province
