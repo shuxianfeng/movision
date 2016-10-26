@@ -1,7 +1,5 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-import java.util.Date;
-
 public class MemShopCheck {
     private Integer id;
 
@@ -22,6 +20,8 @@ public class MemShopCheck {
     private String status;
 
     private String reason;
+
+    private String mobileBannerUrl;
 
     public Integer getId() {
         return id;
@@ -101,5 +101,13 @@ public class MemShopCheck {
 
     public void setReason(String reason) {
         this.reason = reason == null ? null : reason.trim();
+    }
+
+    public String getMobileBannerUrl() {
+        return mobileBannerUrl;
+    }
+
+    public void setMobileBannerUrl(String mobileBannerUrl) {
+        this.mobileBannerUrl = mobileBannerUrl;
     }
 }

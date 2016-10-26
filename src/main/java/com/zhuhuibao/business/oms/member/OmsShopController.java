@@ -41,7 +41,6 @@ import java.util.List;
 public class OmsShopController {
     private static final Logger log = LoggerFactory.getLogger(MallIndexController.class);
 
-
     @Autowired
     MemShopService memShopService;
 
@@ -65,12 +64,9 @@ public class OmsShopController {
 
     @ApiOperation(value = "搜索商户店铺", notes = "搜索商户店铺")
     @RequestMapping(value = "sel_shop", method = RequestMethod.GET)
-    public Response searchShop(@ApiParam("会员账号") @RequestParam(required = false) String account,
-                               @ApiParam("企业名称") @RequestParam(required = false) String companyName,
-                               @ApiParam("店铺名称") @RequestParam(required = false) String shopName,
-                               @ApiParam("审核状态") @RequestParam(required = false) String status,
-                               @RequestParam(required = false, defaultValue = "1") String pageNo,
-                               @RequestParam(required = false, defaultValue = "10") String pageSize) {
+    public Response searchShop(@ApiParam("会员账号") @RequestParam(required = false) String account, @ApiParam("企业名称") @RequestParam(required = false) String companyName,
+            @ApiParam("店铺名称") @RequestParam(required = false) String shopName, @ApiParam("审核状态") @RequestParam(required = false) String status,
+            @RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) {
         log.debug("搜索商铺...");
 
         Map<String, String> paramMap = new HashMap<>();
@@ -95,12 +91,10 @@ public class OmsShopController {
         return new Response(pager);
     }
 
-
     @ApiOperation(value = "更新商户店铺状态(审核)", notes = "更新商户店铺状态(审核)")
     @RequestMapping(value = "upd_shop_st", method = RequestMethod.POST)
-    public Response uploadStatus(@ApiParam("商铺ID") @RequestParam String shopId,
-                                 @ApiParam("状态 1：待审核 2：已审核  3：已拒绝 4：已注销") @RequestParam String status,
-                                 @ApiParam("拒绝理由") @RequestParam(required = false) String reason) {
+    public Response uploadStatus(@ApiParam("商铺ID") @RequestParam String shopId, @ApiParam("状态 1：待审核 2：已审核  3：已拒绝 4：已注销") @RequestParam String status,
+            @ApiParam("拒绝理由") @RequestParam(required = false) String reason) {
         MemShopCheck shopCheck = check(shopId);
 
         shopCheck.setStatus(status);
@@ -114,7 +108,7 @@ public class OmsShopController {
 
         shopCheckService.update(shopCheck);
 
-        //同步审核通过之后的信息到主表
+        // 同步审核通过之后的信息到主表
         if (MemberConstant.ShopStatus.YSH.toString().equals(status)) {
             MemberShop shop = new MemberShop();
             shop.setId(shopCheck.getId());
@@ -122,12 +116,12 @@ public class OmsShopController {
             shop.setBannerUrl(shopCheck.getBannerUrl());
             shop.setUpdateTime(shopCheck.getUpdateTime());
             shop.setOpreatorId(shopCheck.getOpreatorId());
+            shop.setMobileBannerUrl(shopCheck.getMobileBannerUrl());
             memShopService.update(shop);
         }
 
         return new Response();
     }
-
 
     /**
      * 验证商铺是否为登陆用户所在企业商铺
@@ -137,7 +131,7 @@ public class OmsShopController {
      */
     private MemShopCheck check(@ApiParam("商铺ID") @RequestParam String shopId) {
 
-        //验证店铺ID是否为该用户所在企业的店铺
+        // 验证店铺ID是否为该用户所在企业的店铺
         MemShopCheck shop = shopCheckService.findByID(shopId);
 
         if (shop == null) {
