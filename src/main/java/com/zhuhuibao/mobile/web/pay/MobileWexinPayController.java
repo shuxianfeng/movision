@@ -42,6 +42,9 @@ import com.zhuhuibao.utils.wxpay.WxpayPropertiesLoader;
 @RequestMapping("/rest/m/wxpay")
 public class MobileWexinPayController {
 
+	private static final Logger log = LoggerFactory
+			.getLogger(MobileWexinPayController.class);
+	
     @Autowired
     MobileWxPayService mobileWxPaySV;
 
@@ -69,9 +72,8 @@ public class MobileWexinPayController {
     }
 
     @RequestMapping(value = "getWxPayNotify", method = RequestMethod.POST)
-    @LoginAccess
     public ModelAndView getWxPayNotify(HttpServletRequest request) throws JDOMException, IOException, ParseException {
-
+    	log.info("-----------------------【进入微信支付回调接口】---------------------------");
         return mobileWxPaySV.handleWxPayNotify(request);
     }
     
