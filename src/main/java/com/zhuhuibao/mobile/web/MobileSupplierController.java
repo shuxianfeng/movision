@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.common.constant.Constants;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -326,8 +327,12 @@ public class MobileSupplierController {
         // 查询公司vip信息
         VipMemberInfo vip = vipInfoService.findVipMemberInfoById(Long.parseLong(id));
 
-        // 查询公司产品类别
-        List<Map<String, String>> productTypeList = mobileProductService.queryProductTypeListByCompanyId(id);
+        // 查询公司热销产品
+        Map<String, Object> queryMap = new HashMap<>();
+        queryMap.put("status", Constants.product_status_publish);
+        queryMap.put("createid", id);
+        queryMap.put("count", 4);
+        List<Map<String, String>> productList = mobileProductService.queryHotProductListByCompanyId(queryMap);
 
         // 页面展示
         Map map = new HashMap();
@@ -360,7 +365,7 @@ public class MobileSupplierController {
         map.put("telephone", member.getEnterpriseTelephone());
         map.put("fax", member.getEnterpriseFox());
         map.put("introduce", member.getEnterpriseDesc());
-        map.put("productTypeList", productTypeList);
+        map.put("productList", productList);
 
         // 成功案例
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(1), Integer.valueOf(4));

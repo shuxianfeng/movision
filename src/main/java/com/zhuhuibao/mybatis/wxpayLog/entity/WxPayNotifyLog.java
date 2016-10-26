@@ -53,7 +53,7 @@ public class WxPayNotifyLog {
 
     private String attach;
 
-    private Date timeEnd;
+    private String timeEnd;
 
     public String getTransactionId() {
         return transactionId;
@@ -255,11 +255,11 @@ public class WxPayNotifyLog {
         this.attach = attach == null ? null : attach.trim();
     }
 
-    public Date getTimeEnd() {
+    public String getTimeEnd() {
         return timeEnd;
     }
 
-    public void setTimeEnd(Date timeEnd) {
+    public void setTimeEnd(String timeEnd) {
         this.timeEnd = timeEnd;
     }
 }

@@ -56,7 +56,7 @@ public class NewsService {
             queryMap.put("type", null);
         }
         queryMap.put("status", status);
-        List<NewsForm> list = newsMapper.selNewsPager(queryMap, pager.getRowBounds());
+        List<NewsForm> list = newsMapper.findAllNewsPager(queryMap, pager.getRowBounds());
         List<NewsForm> fixList = new ArrayList<>();
         for (NewsForm newsForm : list) {
             List<NewsRecommendPlace> places = placeMapper.getPlaceByNewsId(newsForm.getNews().getId());
@@ -246,14 +246,14 @@ public class NewsService {
     public List<NewsForm> mobile_sel_news_list(String queryType, String type, String subtype, Paging<NewsForm> pager) {
         // 查询全部类型对应列表页面
         if (queryType.equals("1")) {
-            return newsMapper.selAllMobileNews(pager.getRowBounds());
+            return newsMapper.findAllMobileNews(pager.getRowBounds());
         } else if (queryType.equals("2")) {
-            return newsMapper.selHotMobileNews(pager.getRowBounds());
+            return newsMapper.findAllHotMobileNews(pager.getRowBounds());
         } else {
             Map queryMap = new HashMap();
             queryMap.put("type", type);
             queryMap.put("subtype", subtype);
-            return newsMapper.selMobileNewsByType(queryMap, pager.getRowBounds());
+            return newsMapper.findAllMobileNewsByType(queryMap, pager.getRowBounds());
         }
     }
 

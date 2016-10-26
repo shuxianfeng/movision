@@ -50,8 +50,7 @@ public class MobileProductService {
     /**
      * 根据品牌id查询该品牌下共有多少产品分类
      *
-     * @param brandId
-     *            品牌id
+     * @param brandId 品牌id
      * @return
      */
     public List findSubSystemByBrand(String brandId) {
@@ -61,10 +60,8 @@ public class MobileProductService {
     /**
      * 根据品牌id和分类获取下面的所有的产品
      *
-     * @param brandId
-     *            品牌id
-     * @param scateId
-     *            二级系统分类id
+     * @param brandId 品牌id
+     * @param scateId 二级系统分类id
      * @return
      */
     public List<ProductWithBLOBs> findProductByBrandAndSubSystem(String brandId, String scateId) {
@@ -81,13 +78,11 @@ public class MobileProductService {
     /**
      * 根据品牌id和分类获取下面的所有的产品分页信息
      *
-     * @param brandId
-     *            品牌id
-     * @param scateId
-     *            二级系统分类id
+     * @param brandId 品牌id
+     * @param scateId 二级系统分类id
      * @return
      */
-    public List<ProductWithBLOBs> findProductByBrandAndSubSystemPages(String brandId,String fcateid, String scateId, Paging<Map> pager) {
+    public List<ProductWithBLOBs> findProductByBrandAndSubSystemPages(String brandId, String fcateid, String scateId, Paging<Map> pager) {
         Map<String, Object> productMap = new HashMap<>();
         productMap.put("scateid", scateId);
         productMap.put("fcateid", fcateid);
@@ -100,8 +95,7 @@ public class MobileProductService {
     /**
      * 获取产品详情信息
      *
-     * @param id
-     *            产品主键id
+     * @param id 产品主键id
      * @return
      */
     public ProductWithBLOBs queryProductById(Long id) {
@@ -137,8 +131,7 @@ public class MobileProductService {
     /**
      * 查询产品参数
      *
-     * @param id
-     *            产品主键id
+     * @param id 产品主键id
      * @return
      */
     public Map<String, Object> queryPrdDescParam(Long id) {
@@ -233,7 +226,7 @@ public class MobileProductService {
 
     /**
      * 查询公司发布的商品信息
-     * 
+     *
      * @param createid
      * @return
      */
@@ -242,5 +235,15 @@ public class MobileProductService {
         queryMap.put("status", Constants.product_status_publish);
         queryMap.put("createid", createid);
         return productMapper.queryProductTypeListByCompanyId(queryMap);
+    }
+
+    /**
+     * 查询供应商热销产品
+     *
+     * @param queryMap
+     * @return
+     */
+    public List<Map<String, String>> queryHotProductListByCompanyId(Map<String, Object> queryMap) {
+        return productService.queryHotProductListByCompanyId(queryMap);
     }
 }
