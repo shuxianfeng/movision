@@ -68,6 +68,9 @@ public class MobileSupplierController {
     @Autowired
     private MobileVipInfoService vipInfoService;
 
+    @Autowired
+    private MobileAgentService agentService;
+
     /**
      * 触屏端供应链首页
      *
@@ -183,10 +186,12 @@ public class MobileSupplierController {
             List productList = mobileProductService.findProductByBrandAndSubSystem(id, scateId);
             // 该品牌下产品类别信息
             List typeList = mobileProductService.findSubSystemByBrand(id);
+            Map agentMap = agentService.getAgentByBrandid(id);
             Map modelMap = new HashMap();
             modelMap.put("brandInfo", brandInfo);
             modelMap.put("typeList", typeList);
             modelMap.put("productList", productList);
+            modelMap.put("agentMap", agentMap);
             response.setData(modelMap);
         } catch (Exception e) {
             log.error("sel_brand_info error! ", e);
