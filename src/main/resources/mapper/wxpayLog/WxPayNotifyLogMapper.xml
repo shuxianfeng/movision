@@ -27,7 +27,7 @@
     <result column="coupon_fee_$n" property="couponFeeN" jdbcType="INTEGER" />
     <result column="out_trade_no" property="outTradeNo" jdbcType="VARCHAR" />
     <result column="attach" property="attach" jdbcType="VARCHAR" />
-    <result column="time_end" property="timeEnd" jdbcType="TIMESTAMP" />
+    <result column="time_end" property="timeEnd" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     transaction_id, appid, mch_id, device_info, nonce_str, sign, result_code, err_code, 
@@ -63,7 +63,7 @@
       #{feeType,jdbcType=VARCHAR}, #{cashFee,jdbcType=BIGINT}, #{cashFeeType,jdbcType=VARCHAR}, 
       #{couponFee,jdbcType=INTEGER}, #{couponCount,jdbcType=INTEGER}, #{couponTypeN,jdbcType=VARCHAR}, 
       #{couponIdN,jdbcType=VARCHAR}, #{couponFeeN,jdbcType=INTEGER}, #{outTradeNo,jdbcType=VARCHAR}, 
-      #{attach,jdbcType=VARCHAR}, #{timeEnd,jdbcType=TIMESTAMP})
+      #{attach,jdbcType=VARCHAR}, #{timeEnd,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.wxpayLog.entity.WxPayNotifyLog" >
     insert into t_o_wxpay_log
@@ -224,7 +224,7 @@
         #{attach,jdbcType=VARCHAR},
       </if>
       <if test="timeEnd != null" >
-        #{timeEnd,jdbcType=TIMESTAMP},
+        #{timeEnd,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -304,7 +304,7 @@
         attach = #{attach,jdbcType=VARCHAR},
       </if>
       <if test="timeEnd != null" >
-        time_end = #{timeEnd,jdbcType=TIMESTAMP},
+        time_end = #{timeEnd,jdbcType=VARCHAR},
       </if>
     </set>
     where transaction_id = #{transactionId,jdbcType=VARCHAR}
@@ -335,7 +335,7 @@
       coupon_fee_$n = #{couponFeeN,jdbcType=INTEGER},
       out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
       attach = #{attach,jdbcType=VARCHAR},
-      time_end = #{timeEnd,jdbcType=TIMESTAMP}
+      time_end = #{timeEnd,jdbcType=VARCHAR}
     where transaction_id = #{transactionId,jdbcType=VARCHAR}
   </update>
 </mapper>
