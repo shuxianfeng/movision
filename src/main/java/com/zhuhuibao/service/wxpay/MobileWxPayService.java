@@ -1,5 +1,6 @@
 package com.zhuhuibao.service.wxpay;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -137,10 +138,13 @@ public class MobileWxPayService {
 		if(null == oflow){
 			throw new BusinessException(MsgCodeConstant.NOT_EXIST_ORDER, "不存在该订单");
 		}
+		log.info("【transaction_id】="+oflow.getTransaction_id());
 		if(StringUtils.isEmpty(oflow.getTransaction_id())){
 			signParams.put("out_trade_no", orderid);
+			log.info("入库的是商户订单id，transaction_id="+orderid);
 		}else{
 			signParams.put("transaction_id ", oflow.getTransaction_id());
+			log.info("入库的是微信订单id，transaction_id="+oflow.getTransaction_id());
 		}
 		signParams.put("nonce_str", nonce_str);
 		
@@ -224,9 +228,9 @@ public class MobileWxPayService {
 		String tradeType = PayConstants.TradeType.PAY.toString();
 		ModelAndView modelAndView = new ModelAndView();
 		
-		Map requestParams = getRequestParams(request);
-		Object returnObj = getReturnObj(requestParams);
-		Map requestMap = getRequestMap(returnObj);
+		Map requestMap = getRequestParams(request);
+//		Object returnObj = getReturnObj(requestParams);
+//		Map requestMap = getRequestMap(returnObj);
 		
 		log.info("处理微信支付完成的通知回调，requestMap="+requestMap);
 		log.info("加锁");
@@ -235,7 +239,7 @@ public class MobileWxPayService {
             lock = new DistributedLock(LOCK_NAME);
             lock.lock();
             //支付业务处理
-            payHandler(tradeType, modelAndView, requestParams, requestMap);
+            payHandler(tradeType, modelAndView, requestMap);
             
         } catch (Exception e) {
             log.error("执行异常>>>", e);
@@ -287,12 +291,29 @@ public class MobileWxPayService {
 
 	/**
 	 * 获取微信支付结果通用通知接口参数
+	 * 用BufferedReader解析请求，获取map形式的xml
 	 * @param request
 	 * @return
+	 * @throws JDOMException 
 	 */
-	private Map getRequestParams(HttpServletRequest request) {
-		Map requestParams = request.getParameterMap();
-		log.info("处理微信支付完成的通知回调,requestParams="+requestParams);
+	private Map getRequestParams(HttpServletRequest request) throws JDOMException {
+		Map requestParams = new HashMap<>() ;
+		try {
+			BufferedReader br = request.getReader();
+			StringBuilder sb = new StringBuilder();
+			char[] buff = new char[10240];
+			int len;
+			while ((len = br.read(buff, 0, buff.length)) > 0) {
+				sb.append(buff, 0, len);
+			}
+			String xmlStr = sb.toString();
+			log.info("【请求的xmlStr】="+xmlStr);
+			requestParams = XmlUtil.doXMLParse(xmlStr);
+			log.info("处理微信支付完成的通知回调,requestParams="+requestParams);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		if (null == requestParams) {
 			throw new BusinessException(
@@ -313,11 +334,11 @@ public class MobileWxPayService {
 	 * @throws ParseException
 	 */
 	private void payHandler(String tradeType, ModelAndView modelAndView,
-			Map requestParams, Map<String,String> requestMap) {
+			Map<String,String> requestMap) {
 		//获取返回状态码【通信标识】
-		String return_code = (String) requestParams.get("return_code");
+		String return_code = (String) requestMap.get("return_code");
 		//获取业务结果【交易标识】，判断交易是否成功
-		String result_code = (String) requestParams.get("result_code");
+		String result_code = (String) requestMap.get("result_code");
 		
 		/**
 		 * 【通信标识】和【交易标识】都成功才说明返回成功
@@ -364,8 +385,8 @@ public class MobileWxPayService {
 		if(null == order){
 			/**
 			 * 若不存在微信支付的该订单 
-			 * 则抛出异常
-			 * 后期应该调退款请求
+			 * 则抛出异常 
+			 * 后期应该调退款请求 
 			 */
 			log.info("【不存在该订单】");
 			throw new BusinessException(MsgCodeConstant.NOT_EXIST_ORDER_FOR_WXPAY, "微信支付回调接口调用时，微信端的请求参数中不存在该订单");
@@ -480,9 +501,6 @@ public class MobileWxPayService {
 		for (String key : params.keySet()) {
 			pMap.put(CommonUtils.getCamelString(key), params.get(key));
 		}
-		// pMap.put("price", String.valueOf(new
-		// BigDecimal(pMap.get("price")).multiply(new
-		// BigDecimal(1000)).longValue()));
 		pMap.put(
 				"totalFee",
 				String.valueOf(new BigDecimal(pMap.get("totalFee")).multiply(
