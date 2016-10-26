@@ -212,6 +212,7 @@ public class MobileEnquiryService {
             askMap.put(Constants.type, resultBean.getType());
             askMap.put(Constants.publishTime, resultBean.getPublishTime().substring(0, 10));
             askMap.put(Constants.area, resultBean.getArea());
+            askMap.put(Constants.size, resultBean.getSize());
             askList.add(askMap);
         }
         pager.result(askList);
