@@ -303,7 +303,7 @@ public class MobileWxPayService {
 			StringBuilder sb = new StringBuilder();
 			char[] buff = new char[10240];
 			int len;
-			while ((len = br.read(buff, 0, buff.length)) > 0) {
+			while ((len = br.read(buff, 0, buff.length)) > -1) {
 				sb.append(buff, 0, len);
 			}
 			String xmlStr = sb.toString();
