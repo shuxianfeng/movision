@@ -35,7 +35,7 @@ public interface NewsMapper {
      * @param rowBounds
      * @return
      */
-    List<NewsForm> selNewsPager(Map queryMap, RowBounds rowBounds);
+    List<NewsForm> findAllNewsPager(Map queryMap, RowBounds rowBounds);
 
     /**
      * 批量发布资讯信息
@@ -49,14 +49,14 @@ public interface NewsMapper {
      *
      * @param rowBounds
      */
-    List<NewsForm> selAllMobileNews(RowBounds rowBounds);
+    List<NewsForm> findAllMobileNews(RowBounds rowBounds);
 
     /**
      * 触屏端按热点排序资讯列表
      *
      * @param rowBounds
      */
-    List<NewsForm> selHotMobileNews(RowBounds rowBounds);
+    List<NewsForm> findAllHotMobileNews(RowBounds rowBounds);
 
     /**
      * 触屏端按分类查询对应资讯列表信息
@@ -64,5 +64,5 @@ public interface NewsMapper {
      * @param queryMap
      * @param rowBounds
      */
-    List<NewsForm> selMobileNewsByType(Map queryMap, RowBounds rowBounds);
+    List<NewsForm> findAllMobileNewsByType(Map queryMap, RowBounds rowBounds);
 }

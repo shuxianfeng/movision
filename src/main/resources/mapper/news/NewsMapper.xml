@@ -289,7 +289,7 @@
   </update>
 
     <!-- 运营平台根据条件查询资讯分页信息-->
-    <select id="selNewsPager" resultMap="BaseResultMap" parameterType="java.util.Map">
+    <select id="findAllNewsPager" resultMap="BaseResultMap" parameterType="java.util.Map">
         select
         id,
         title,views,publisher_id,status,
@@ -334,7 +334,7 @@
 
 
     <!-- 触屏端所有资讯列表-->
-    <select id="selAllMobileNews" resultMap="BaseResultMap" parameterType="java.util.Map">
+    <select id="findAllMobileNews" resultMap="BaseResultMap" parameterType="java.util.Map">
         select
         id,
         title,views,source,photo,
@@ -345,7 +345,7 @@
     </select>
 
     <!-- 触屏端热点资讯列表-->
-    <select id="selHotMobileNews" resultMap="BaseResultMap" parameterType="java.util.Map">
+    <select id="findAllHotMobileNews" resultMap="BaseResultMap" parameterType="java.util.Map">
         select
         id,
         title,views,source,photo,
@@ -356,7 +356,7 @@
     </select>
 
     <!-- 触屏端分类资讯列表-->
-    <select id="selMobileNewsByType" resultMap="BaseResultMap" parameterType="java.util.Map">
+    <select id="findAllMobileNewsByType" resultMap="BaseResultMap" parameterType="java.util.Map">
         select
         id,
         title,views,source,photo,
