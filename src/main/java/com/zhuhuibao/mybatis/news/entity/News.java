@@ -1,16 +1,16 @@
 package com.zhuhuibao.mybatis.news.entity;
 
-import com.wordnik.swagger.annotations.ApiParam;
-
 import java.util.Date;
+
+import com.wordnik.swagger.annotations.ApiParam;
 
 public class News {
     private Long id;
 
-    @ApiParam(value = "资讯一级分类")
+    @ApiParam(value = "资讯一级分类", required = true)
     private Integer type;
 
-    @ApiParam(value = "资讯二级分类")
+    @ApiParam(value = "资讯二级分类", required = true)
     private Integer subType;
 
     @ApiParam(value = "缩略图")
