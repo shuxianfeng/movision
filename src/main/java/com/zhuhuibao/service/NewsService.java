@@ -81,16 +81,12 @@ public class NewsService {
      */
     public void add_news(News news, String recPlace) {
         completeInsertBaseInfo(news);
-        int id = newsMapper.insertSelective(news);
+        newsMapper.insertSelective(news);
 
         NewsRecommendPlace place = new NewsRecommendPlace();
         place.setUpdateTime(new Date());
         place.setAddTime(new Date());
-        if (null != news.getId()) {
-            place.setNewsId(news.getId());
-        } else {
-            place.setNewsId(10L);
-        }
+        place.setNewsId(news.getId());
 
         place.setRecommendPlace(recPlace);
         placeMapper.insertSelective(place);
