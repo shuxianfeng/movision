@@ -382,6 +382,7 @@ public class MobileSupplierController {
         map.put("certificateRecordList", certificateRecordList);
 
         // todo 缺少banner图
+        map.put("banner","//image.zhuhui8.com/upload/L0JGGSbh1477558457557.jpg;//image.zhuhui8.com/upload/L0JGGSbh1477558457557.jpg;//image.zhuhui8.com/upload/L0JGGSbh1477558457557.jpg");
         return new Response(map);
     }
 
