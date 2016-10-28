@@ -33,9 +33,11 @@ public class ZhbOssClient {
      * @param file       multipartfile
      * @param type     img | doc
      * @param chann  频道类型  project | job | ....
+     * 
      * @return     url | filename
      */
     public String uploadObject(MultipartFile file, String type, String chann) {
+    	
         String uploadMode = PropertiesUtils.getValue("upload.mode");
 
         //判断是否为允许的上传文件后缀
