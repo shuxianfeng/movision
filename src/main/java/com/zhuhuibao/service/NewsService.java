@@ -2,8 +2,6 @@ package com.zhuhuibao.service;
 
 import java.util.*;
 
-import com.zhuhuibao.fsearch.utils.StringUtil;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +15,7 @@ import com.zhuhuibao.mybatis.news.form.NewsForm;
 import com.zhuhuibao.mybatis.news.mapper.NewsMapper;
 import com.zhuhuibao.mybatis.news.mapper.NewsRecommendPlaceMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 
 /**
  * 资讯相关接口实现类
@@ -301,6 +300,32 @@ public class NewsService {
      */
     public void updNews(News news) {
         newsMapper.updateByPrimaryKeySelective(news);
+    }
+
+    /**
+     * 精彩推荐的资讯列表
+     * 
+     * @return
+     */
+    public List<NewsForm> getRecommendNews(String keywords, Integer id) {
+        List<NewsForm> recommends = new ArrayList<>();
+        String[] keyWordArr = keywords.split(",");
+        Map queryMap = new HashMap();
+        queryMap.put("id", id);
+        if (keyWordArr.length > 0) {
+            for (String keyWord : keyWordArr) {
+                if (recommends.size() >= 5) {
+                    break;
+                }
+                queryMap.put("keyWord", keyWord);
+                recommends.addAll(newsMapper.selectRecommendNews(queryMap));
+            }
+        }
+        if (recommends.size() == 0) {
+            Paging<NewsForm> pager = new Paging<>(1, 5);
+            recommends = this.mobileSelNewsList("2", "1", "1", pager);
+        }
+        return recommends;
     }
 
 }

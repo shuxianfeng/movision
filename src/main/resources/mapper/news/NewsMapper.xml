@@ -371,4 +371,22 @@
         </if>
         order by views desc, publish_time desc
     </select>
+
+    <!-- 精彩推荐列表-->
+    <select id="selectRecommendNews" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        id,
+        title,views,source,photo,
+        date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
+        FROM t_n_news
+        where 1=1
+        <if test="keyWord != null and keyWord != ''">
+            and  keywords like CONCAT('%',#{keyWord},'%')
+        </if>
+        <if test="id != null and id != '' ">
+            and id != #{id,jdbcType=INTEGER}
+        </if>
+        order by publish_time desc
+        limit 0,5
+    </select>
 </mapper>

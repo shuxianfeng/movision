@@ -1,6 +1,8 @@
 package com.zhuhuibao.mobile.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,11 +78,15 @@ public class MobileNewsController {
     public Response sel_news(@ApiParam(value = "资讯主键id") @RequestParam(required = false) int id) {
         Response response = new Response();
         NewsForm form = newsService.selNews(id);
-        response.setData(form);
         // view + 1
         News news = form.getNews();
         news.setViews(news.getViews() + 1);
         newsService.updNews(news);
+        List<NewsForm> recommendNews = newsService.getRecommendNews(form.getNews().getKeywords(), id);
+        Map result = new HashMap();
+        result.put("news", form);
+        result.put("recommendNews", recommendNews);
+        response.setData(result);
         return response;
     }
 }

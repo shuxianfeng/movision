@@ -65,4 +65,12 @@ public interface NewsMapper {
      * @param rowBounds
      */
     List<NewsForm> findAllMobileNewsByType(Map queryMap, RowBounds rowBounds);
+
+    /**
+     * 根据关键字获取相似资讯信息
+     *
+     * @param queryMap
+     * @return
+     */
+    List<NewsForm> selectRecommendNews(Map queryMap);
 }
