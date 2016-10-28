@@ -76,7 +76,9 @@ public class ShopController {
     public Response updateStop(@ApiParam("商铺ID") @RequestParam String shopId,
                                @ApiParam("商铺名称") @RequestParam String shopName,
                             @ApiParam("banner图片URL") @RequestParam String bannerUrl,
-                               @ApiParam("触屏端banner图片URL") @RequestParam String mobileBannerUrl){
+                               @ApiParam("触屏端banner图片URL") @RequestParam String mobileBannerUrlF,
+                               @ApiParam("触屏端banner图片URL") @RequestParam String mobileBannerUrlS,
+                               @ApiParam("触屏端banner图片URL") @RequestParam String mobileBannerUrlT){
 
         log.debug("更新商铺...");
         Long memberId = ShiroUtil.getCreateID();
@@ -114,13 +116,17 @@ public class ShopController {
             shopCheck.setStatus(MemberConstant.ShopStatus.DSH.toString());
             shopCheck.setShopName(shopName);
             shopCheck.setBannerUrl(bannerUrl);
-            shopCheck.setMobileBannerUrl(mobileBannerUrl);
+            shopCheck.setMobileBannerUrlT(mobileBannerUrlT);
+            shopCheck.setMobileBannerUrlS(mobileBannerUrlS);
+            shopCheck.setMobileBannerUrlF(mobileBannerUrlF);
             shopCheckService.insert(shopCheck);
         } else{
             shopCheck.setStatus(MemberConstant.ShopStatus.DSH.toString());
             shopCheck.setShopName(shopName);
             shopCheck.setBannerUrl(bannerUrl);
-            shopCheck.setMobileBannerUrl(mobileBannerUrl);
+            shopCheck.setMobileBannerUrlT(mobileBannerUrlT);
+            shopCheck.setMobileBannerUrlS(mobileBannerUrlS);
+            shopCheck.setMobileBannerUrlF(mobileBannerUrlF);
             shopCheckService.update(shopCheck);
         }
 

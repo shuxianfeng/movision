@@ -21,7 +21,11 @@ public class MemberShop {
 
     private String reason;
 
-    private String mobileBannerUrl;
+    private String mobileBannerUrlF;
+
+    private String mobileBannerUrlS;
+
+    private String mobileBannerUrlT;
 
     public Integer getId() {
         return id;
@@ -103,11 +107,27 @@ public class MemberShop {
         this.reason = reason;
     }
 
-    public String getMobileBannerUrl() {
-        return mobileBannerUrl;
+    public String getMobileBannerUrlF() {
+        return mobileBannerUrlF;
     }
 
-    public void setMobileBannerUrl(String mobileBannerUrl) {
-        this.mobileBannerUrl = mobileBannerUrl;
+    public void setMobileBannerUrlF(String mobileBannerUrlF) {
+        this.mobileBannerUrlF = mobileBannerUrlF;
+    }
+
+    public String getMobileBannerUrlS() {
+        return mobileBannerUrlS;
+    }
+
+    public void setMobileBannerUrlS(String mobileBannerUrlS) {
+        this.mobileBannerUrlS = mobileBannerUrlS;
+    }
+
+    public String getMobileBannerUrlT() {
+        return mobileBannerUrlT;
+    }
+
+    public void setMobileBannerUrlT(String mobileBannerUrlT) {
+        this.mobileBannerUrlT = mobileBannerUrlT;
     }
 }

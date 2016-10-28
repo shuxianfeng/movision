@@ -116,7 +116,9 @@ public class OmsShopController {
             shop.setBannerUrl(shopCheck.getBannerUrl());
             shop.setUpdateTime(shopCheck.getUpdateTime());
             shop.setOpreatorId(shopCheck.getOpreatorId());
-            shop.setMobileBannerUrl(shopCheck.getMobileBannerUrl());
+            shop.setMobileBannerUrlF(shopCheck.getMobileBannerUrlF());
+            shop.setMobileBannerUrlS(shopCheck.getMobileBannerUrlS());
+            shop.setMobileBannerUrlT(shopCheck.getMobileBannerUrlT());
             memShopService.update(shop);
         }
 
