@@ -48,7 +48,7 @@ public class NewsService {
      *            分页信息
      * @return
      */
-    public List<NewsForm> sel_news_list(String title, String type, String status, Paging<NewsForm> pager) {
+    public List<NewsForm> selNewsList(String title, String type, String status, Paging<NewsForm> pager) {
         Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("title", title);
         queryMap.put("type", type);
@@ -79,7 +79,7 @@ public class NewsService {
      *            资讯
      * @return
      */
-    public void add_news(News news, String recPlace) {
+    public void addNews(News news, String recPlace) {
         completeInsertBaseInfo(news);
         newsMapper.insertSelective(news);
 
@@ -105,6 +105,9 @@ public class NewsService {
         Date curDate = new Date();
         news.setAddTime(curDate);
         news.setUpdateTime(curDate);
+        if (null == news.getViews()) {
+            news.setViews(0l);
+        }
         news.setPublisherId(ShiroUtil.getOmsCreateID());
         if (null == news.getPublishTime()) {
             news.setPublishTime(curDate);
@@ -118,7 +121,7 @@ public class NewsService {
      *            主键id
      * @return
      */
-    public boolean del_news(int id) {
+    public boolean delNews(int id) {
         return newsMapper.deleteByPrimaryKey(Long.valueOf(id)) > 0;
     }
 
@@ -129,7 +132,7 @@ public class NewsService {
      *            资讯
      * @return
      */
-    public void update_news(News news, String recPlace) {
+    public void updateNews(News news, String recPlace) {
         newsMapper.updateByPrimaryKeySelective(news);
         List<NewsRecommendPlace> places = placeMapper.getPlaceByNewsId(news.getId());
         for (NewsRecommendPlace place : places) {
@@ -155,7 +158,7 @@ public class NewsService {
      *            主键id
      * @return
      */
-    public NewsForm sel_news(int id) {
+    public NewsForm selNews(int id) {
         NewsForm form = newsMapper.selectByPrimaryKey(Long.valueOf(id));
         List<NewsRecommendPlace> places = placeMapper.getPlaceByNewsId(form.getNews().getId());
         String recPlace = "";
@@ -173,11 +176,11 @@ public class NewsService {
      *            批量惭怍的资讯id 两个id之间用","隔开
      * @return
      */
-    public boolean batch_del_news(String ids) {
+    public boolean batchDelNews(String ids) {
         String[] delIds = ids.split(",");
         if (delIds.length > 0) {
             for (String id : delIds) {
-                if (this.del_news(Integer.valueOf(id))) {
+                if (this.delNews(Integer.valueOf(id))) {
                     List<NewsRecommendPlace> places = placeMapper.getPlaceByNewsId(Long.valueOf(id));
                     for (NewsRecommendPlace rec : places) {
                         placeMapper.deleteByPrimaryKey(rec.getId());
@@ -197,7 +200,7 @@ public class NewsService {
      *            批量惭怍的资讯id 两个id之间用","隔开
      * @return
      */
-    public void batch_pub_news(String ids) {
+    public void batchPubNews(String ids) {
         String[] pubIds = ids.split(",");
         List<Integer> pIds = new ArrayList<>();
         for (String id : pubIds) {
@@ -215,7 +218,7 @@ public class NewsService {
      * @param recPlace
      * @param type
      */
-    public void batch_modifty_rec_place(String ids, String recPlace, int type) {
+    public void batchModiftyRecPlace(String ids, String recPlace, int type) {
         String[] newsIds = ids.split(",");
         String[] recPlaceArr = recPlace.split(",");
         for (String id : newsIds) {
@@ -267,7 +270,7 @@ public class NewsService {
      *            分页对象
      * @return
      */
-    public List<NewsForm> mobile_sel_news_list(String queryType, String type, String subtype, Paging<NewsForm> pager) {
+    public List<NewsForm> mobileSelNewsList(String queryType, String type, String subtype, Paging<NewsForm> pager) {
         // 查询全部类型对应列表页面
         if (queryType.equals("1")) {
             return newsMapper.findAllMobileNews(pager.getRowBounds());
@@ -288,7 +291,7 @@ public class NewsService {
      *            资讯
      * @return
      */
-    public void upd_news(News news) {
+    public void updNews(News news) {
         newsMapper.updateByPrimaryKeySelective(news);
     }
 

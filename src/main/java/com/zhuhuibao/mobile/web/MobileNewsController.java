@@ -59,7 +59,7 @@ public class MobileNewsController {
             @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo, @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
         Paging<NewsForm> pager = new Paging<>(pageNo, pageSize);
-        List<NewsForm> forms = newsService.mobile_sel_news_list(queryType, type, subtype, pager);
+        List<NewsForm> forms = newsService.mobileSelNewsList(queryType, type, subtype, pager);
         pager.result(forms);
         response.setData(pager);
         return response;
@@ -75,12 +75,12 @@ public class MobileNewsController {
     @ApiOperation(value = "触屏端资讯-详情页面", notes = "触屏端资讯-详情页面", response = Response.class)
     public Response sel_news(@ApiParam(value = "资讯主键id") @RequestParam(required = false) int id) {
         Response response = new Response();
-        NewsForm form = newsService.sel_news(id);
+        NewsForm form = newsService.selNews(id);
         response.setData(form);
         // view + 1
         News news = form.getNews();
         news.setViews(news.getViews() + 1);
-        newsService.upd_news(news);
+        newsService.updNews(news);
         return response;
     }
 }
