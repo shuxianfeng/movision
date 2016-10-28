@@ -50,5 +50,5 @@ public interface BrandMapper {
      * @param map
      * @return
      */
-    List<SuggestBrand> selHotBrandListByType(RowBounds rowBounds,Map<String, Object> map);
+    List<SuggestBrand> findAllHotBrandListByType(RowBounds rowBounds,Map<String, Object> map);
 }

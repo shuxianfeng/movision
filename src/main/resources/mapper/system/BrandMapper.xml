@@ -263,7 +263,7 @@
     </select>
 
     <!-- 根据一级分类获取品牌信息 -->
-    <select id="selHotBrandListByType" resultMap="ResultMap2" parameterType="java.util.Map">
+    <select id="findAllHotBrandListByType" resultMap="ResultMap2" parameterType="java.util.Map">
         SELECT DISTINCT
         b.id,
         b.CNName,

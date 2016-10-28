@@ -54,7 +54,7 @@ public class MobileBrandService {
         Map queryMap = new HashMap();
         queryMap.put("parentId", parentId);
         queryMap.put("subTypeId", subTypeId);
-        return brandMapper.selHotBrandListByType(pager.getRowBounds(), queryMap);
+        return brandMapper.findAllHotBrandListByType(pager.getRowBounds(), queryMap);
     }
 
     /**
