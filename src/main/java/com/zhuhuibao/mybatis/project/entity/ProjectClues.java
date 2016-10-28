@@ -2,6 +2,13 @@ package com.zhuhuibao.mybatis.project.entity;
 
 import java.util.Date;
 
+/**
+ * 项目线索信息
+ *
+ * @author changxinwei
+ * @since  2016/10/27
+ *
+ */
 public class ProjectClues {
     private Integer id;
 
