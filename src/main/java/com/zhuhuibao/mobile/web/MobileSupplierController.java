@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +71,9 @@ public class MobileSupplierController {
 
     @Autowired
     private MobileAgentService agentService;
+
+    @Autowired
+    private MobileMemberShopService shopService;
 
     /**
      * 触屏端供应链首页
@@ -155,8 +159,9 @@ public class MobileSupplierController {
      */
     @ApiOperation(value = "触屏端供应链-对应类别品牌展示列表页面", notes = "触屏端供应链-对应类别品牌展示列表页面")
     @RequestMapping(value = "sel_hot_brand_list_by_type", method = RequestMethod.GET)
-    public Response sel_hot_brand_list_by_type(@ApiParam(value = "一级分类id") @RequestParam(required = false) String parentId, @ApiParam(value = "一级分类id") @RequestParam(required = false) String subTypeId,
-            @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo, @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
+    public Response sel_hot_brand_list_by_type(@ApiParam(value = "一级分类id") @RequestParam(required = false) String parentId,
+            @ApiParam(value = "一级分类id") @RequestParam(required = false) String subTypeId, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo,
+            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
         Paging<Map> pager = new Paging<>(pageNo, pageSize);
         try {
@@ -380,9 +385,13 @@ public class MobileSupplierController {
         // 荣誉资质
         List<CertificateRecord> certificateRecordList = memberService.certificateSearch(id);
         map.put("certificateRecordList", certificateRecordList);
-
-        // todo 缺少banner图
-        map.put("banner","//image.zhuhui8.com/upload/L0JGGSbh1477558457557.jpg;//image.zhuhui8.com/upload/L0JGGSbh1477558457557.jpg;//image.zhuhui8.com/upload/L0JGGSbh1477558457557.jpg");
+        // banner图
+        MemberShop shop = shopService.getMemberShop(Long.valueOf(id));
+        List<String> bannerList = new ArrayList<>();
+        bannerList.add(shop.getMobileBannerUrlF());
+        bannerList.add(shop.getMobileBannerUrlS());
+        bannerList.add(shop.getMobileBannerUrlT());
+        map.put("banner", bannerList);
         return new Response(map);
     }
 
