@@ -2,6 +2,7 @@ package com.zhuhuibao.service;
 
 import java.util.*;
 
+import com.thoughtworks.xstream.mapper.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -321,7 +322,7 @@ public class NewsService {
         }
         if (recommends.size() == 0) {
             Paging<NewsForm> pager = new Paging<>(1, 5);
-            recommends = this.mobileSelNewsList("2", "1", "1", pager);
+            recommends = this.mobileSelNewsList("2", null, null, pager);
         }
         return recommends;
     }
