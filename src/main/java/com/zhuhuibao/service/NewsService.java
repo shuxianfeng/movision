@@ -218,7 +218,7 @@ public class NewsService {
      * @param recPlace
      * @param type
      */
-    public void batchModiftyRecPlace(String ids, String recPlace, int type) {
+    public void batchModifyRecPlace(String ids, String recPlace, int type) {
         String[] newsIds = ids.split(",");
         String[] recPlaceArr = recPlace.split(",");
         for (String id : newsIds) {

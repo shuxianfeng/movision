@@ -103,9 +103,9 @@ public class NewsController {
 
     @RequestMapping(value = "/batch_update_rec_place", method = RequestMethod.POST)
     @ApiOperation(value = "批量修改资讯信息推荐位置", notes = "批量修改资讯信息", response = Response.class)
-    public Response batch_modifty_rec_place(@ApiParam(value = "要发布的资讯id字符串") @RequestParam(required = false) String ids,
+    public Response batch_modify_rec_place(@ApiParam(value = "要发布的资讯id字符串") @RequestParam(required = false) String ids,
             @ApiParam(value = "要增加(减少)属性字符串") @RequestParam(required = false) String recPlace, @ApiParam(value = "增加(减少)") @RequestParam(required = false) int type) {
-        newsService.batchModiftyRecPlace(ids, recPlace, type);
+        newsService.batchModifyRecPlace(ids, recPlace, type);
         return new Response();
     }
 
