@@ -47,6 +47,9 @@ public class UploadService {
         Map<String, String> result = new HashMap<>();
 
         try {
+        	/**
+        	 * saveDirectory = /home/app/upload/$chan/img
+        	 */
             String saveDirectory;
             int maxPostSize;
             String imgDomain = PropertiesUtils.getValue("img.domain");
@@ -59,6 +62,9 @@ public class UploadService {
                     if (chann != null) {
                         saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/img";
                         maxPostSize = apiConstants.getUploadPicMaxPostSize();
+                        /**
+                         * 其中data = //image.zhuhui8.com/upload/$chan/img/$filename
+                         */
                         data = "//"+imgDomain + "/upload/" + chann + "/img/" + fileName;
                     } else {
                         saveDirectory = apiConstants.getUploadDir();
@@ -100,6 +106,7 @@ public class UploadService {
 
 
             File upfile = new File(saveDirectory + "/" + fileName);
+            //使用transferTo（dest）方法将上传文件写到服务器上指定的文件
             file.transferTo(upfile);
 
 
