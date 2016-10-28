@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +20,14 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.pojo.AskPriceResultBean;
 import com.zhuhuibao.fsearch.pojo.spec.SupplierSearchSpec;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.service.*;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -115,7 +115,7 @@ public class MobileSupplierController {
      */
     @ApiOperation(value = "触屏端供应链-所有品牌列表展示页", notes = "触屏端供应链-所有品牌列表展示页")
     @RequestMapping(value = "sel_hot_brand_list", method = RequestMethod.GET)
-    public Response sel_hot_brand_list() {
+    public Response selHotBrandList() {
         // 网络及硬件广告位
         List<SysAdvertising> f1AdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Brands_Hardware.value);
         // 安全防范
@@ -159,9 +159,8 @@ public class MobileSupplierController {
      */
     @ApiOperation(value = "触屏端供应链-对应类别品牌展示列表页面", notes = "触屏端供应链-对应类别品牌展示列表页面")
     @RequestMapping(value = "sel_hot_brand_list_by_type", method = RequestMethod.GET)
-    public Response sel_hot_brand_list_by_type(@ApiParam(value = "一级分类id") @RequestParam(required = false) String parentId,
-            @ApiParam(value = "一级分类id") @RequestParam(required = false) String subTypeId, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo,
-            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
+    public Response selHotBrandListByType(@ApiParam(value = "一级分类id") @RequestParam(required = false) String parentId, @ApiParam(value = "一级分类id") @RequestParam(required = false) String subTypeId,
+            @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo, @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
         Paging<Map> pager = new Paging<>(pageNo, pageSize);
         try {
@@ -182,7 +181,7 @@ public class MobileSupplierController {
      */
     @ApiOperation(value = "触屏端供应链-品牌信息详情页面", notes = "触屏端供应链-品牌信息详情页面")
     @RequestMapping(value = "sel_hot_brand_info", method = RequestMethod.GET)
-    public Response sel_brand_info(@ApiParam(value = "品牌主键id") @RequestParam(required = true) String id, @ApiParam(value = "品牌所属类别id") @RequestParam(required = true) String scateId) {
+    public Response selBrandInfo(@ApiParam(value = "品牌主键id") @RequestParam(required = true) String id, @ApiParam(value = "品牌所属类别id") @RequestParam(required = true) String scateId) {
         Response response = new Response();
         try {
             // 品牌信息
@@ -214,7 +213,7 @@ public class MobileSupplierController {
      */
     @ApiOperation(value = "触屏端搜索供应商", notes = "触屏端搜索供应商", response = Response.class)
     @RequestMapping(value = { "sel_supplier_list" }, method = RequestMethod.GET)
-    public Response sel_supplier_list(SupplierSearchSpec spec) {
+    public Response selSupplierList(SupplierSearchSpec spec) {
         Response response = new Response();
         try {
             response.setData(memberService.searchSuppliers(spec));
@@ -237,7 +236,7 @@ public class MobileSupplierController {
      */
     @ApiOperation(value = "触屏端--询价馆", notes = "触屏端--询价馆", response = Response.class)
     @RequestMapping(value = { "sel_enquiry_list" }, method = RequestMethod.GET)
-    public Response sel_enquiry_list(@ApiParam(value = "系统分类") @RequestParam(required = false) String fcateid, @RequestParam(required = false, defaultValue = "1") String pageNo,
+    public Response selEnquiryList(@ApiParam(value = "系统分类") @RequestParam(required = false) String fcateid, @RequestParam(required = false, defaultValue = "1") String pageNo,
             @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<AskPriceResultBean> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
@@ -259,7 +258,7 @@ public class MobileSupplierController {
      */
     @ApiOperation(value = "触屏端--查看具体询价详情", notes = "触屏端--查看具体询价详情", response = Response.class)
     @RequestMapping(value = { "sel_enquiry_info" }, method = RequestMethod.GET)
-    public Response sel_enquiry_info(@ApiParam(value = "询价主键id") @RequestParam(required = false) String id) {
+    public Response selEnquiryInfo(@ApiParam(value = "询价主键id") @RequestParam(required = false) String id) {
         Response response = new Response();
         try {
             response.setData(enquiryService.queryAskPriceByID(id));
@@ -277,7 +276,7 @@ public class MobileSupplierController {
      */
     @ApiOperation(value = "触屏端--系统分类", notes = "触屏端--系统分类", response = Response.class)
     @RequestMapping(value = { "sel_category" }, method = RequestMethod.GET)
-    public Response sel_category() {
+    public Response selCategory() {
         Response response = new Response();
         try {
             response.setData(categoryService.selCategory());
@@ -298,7 +297,7 @@ public class MobileSupplierController {
      */
     @ApiOperation(value = "公司成功案例（分页）", notes = "公司成功案例（分页）")
     @RequestMapping(value = "sel_company_success_case_list", method = RequestMethod.GET)
-    public Response sel_company_success_caseList(@ApiParam(value = "公司id") @RequestParam String id, @RequestParam(required = false, defaultValue = "1") String pageNo,
+    public Response selCompanySuccessCaseList(@ApiParam(value = "公司id") @RequestParam String id, @RequestParam(required = false, defaultValue = "1") String pageNo,
             @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
@@ -317,7 +316,7 @@ public class MobileSupplierController {
      */
     @ApiOperation(value = "成功案例详情", notes = "成功案例详情")
     @RequestMapping(value = "sel_company_success_case", method = RequestMethod.GET)
-    public Response sel_company_success_case(@ApiParam(value = "案例id") @RequestParam String id) {
+    public Response selCompanySuccessCase(@ApiParam(value = "案例id") @RequestParam String id) {
         return new Response(successCaseService.querySuccessCaseById(id));
     }
 
@@ -330,7 +329,7 @@ public class MobileSupplierController {
      */
     @ApiOperation(value = "供应商详情页面", notes = "供应商详情页面")
     @RequestMapping(value = "sel_supplier_details", method = RequestMethod.GET)
-    public Response sel_supplier_details(@ApiParam(value = "供应商id") @RequestParam String id) {
+    public Response selSupplierDetails(@ApiParam(value = "供应商id") @RequestParam String id) {
         // 查询公司信息
         Member member = memberService.findMemById(id);
 
@@ -401,7 +400,7 @@ public class MobileSupplierController {
     @LoginAccess
     @ApiOperation(value = "询价保存", notes = "询价保存", response = Response.class)
     @RequestMapping(value = { "add_enquiry" }, method = RequestMethod.POST)
-    public Response add_enquiry(@ApiParam(value = "询价信息") @RequestParam AskPrice askPrice) throws Exception {
+    public Response addEnquiry(@ApiParam(value = "询价信息") @RequestParam AskPrice askPrice) throws Exception {
         Response response = new Response();
         try {
             enquiryService.addEnquiry(askPrice);

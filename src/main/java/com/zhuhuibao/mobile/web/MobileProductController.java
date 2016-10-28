@@ -67,7 +67,7 @@ public class MobileProductController {
      */
     @ApiOperation(value = "触屏端供应链-品牌下更多产品", notes = "触屏端供应链-品牌下更多产品")
     @RequestMapping(value = "sel_hot_brand_product_list", method = RequestMethod.GET)
-    public Response sel_hot_brand_product_list(@ApiParam(value = "品牌主键id") @RequestParam(required = true) String id, @ApiParam(value = "品牌所属一级类别id") @RequestParam(required = true) String fcateid,
+    public Response selHotBrandProductList(@ApiParam(value = "品牌主键id") @RequestParam(required = true) String id, @ApiParam(value = "品牌所属一级类别id") @RequestParam(required = true) String fcateid,
             @ApiParam(value = "品牌所属二级类别id") @RequestParam(required = true) String scateId, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo,
             @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
@@ -85,7 +85,7 @@ public class MobileProductController {
      */
     @ApiOperation(value = "触屏端-产品详情页面", notes = "触屏端-产品详情页面")
     @RequestMapping(value = "sel_product_info", method = RequestMethod.GET)
-    public Response sel_product_info(@ApiParam(value = "商品主键id") @RequestParam(required = false) Long id) {
+    public Response selProductInfo(@ApiParam(value = "商品主键id") @RequestParam(required = false) Long id) {
         Response response = new Response();
         Map modelMap = new HashMap();
         // 产品基本信息
@@ -115,7 +115,7 @@ public class MobileProductController {
      */
     @ApiOperation(value = "触屏端供应链-搜索产品", notes = "触屏端供应链-品牌下更多产品")
     @RequestMapping(value = "sel_product_list", method = RequestMethod.GET)
-    public Response sel_product_list(ProductSearchSpec spec) {
+    public Response selProductList(ProductSearchSpec spec) {
         Response response = new Response();
         try {
             response.setData(mobileProductService.selProductList(spec));
@@ -141,7 +141,7 @@ public class MobileProductController {
      */
     @ApiOperation(value = "检索根据产品名称供应商下面的商品", notes = "检索根据产品名称供应商下面的商品）")
     @RequestMapping(value = "sel_company_product_list_by_name", method = RequestMethod.GET)
-    public Response sel_company_product_list_by_name(@ApiParam(value = "产品类别id") @RequestParam(required = false) String fcateid, @ApiParam(value = "商户id") @RequestParam String id,
+    public Response selCompanyProductListByName(@ApiParam(value = "产品类别id") @RequestParam(required = false) String fcateid, @ApiParam(value = "商户id") @RequestParam String id,
             @ApiParam(value = "产品名称") @RequestParam(required = false) String name, @RequestParam(required = false, defaultValue = "1") String pageNo,
             @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));

@@ -85,7 +85,7 @@ public class MobileContractorController {
      */
     @ApiOperation(value = "触屏端-名企(厂商，代理商，渠道商)展示更多页面", notes = "触屏端-名企(厂商，代理商，渠道商)展示更多页面")
     @RequestMapping(value = "sel_great_company_list", method = RequestMethod.GET)
-    public Response sel_great_company_list(@ApiParam(value = "类别") @RequestParam(required = true) String identify,
+    public Response selGreatCompanyList(@ApiParam(value = "类别") @RequestParam(required = true) String identify,
             @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo, @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
         Paging<Member> pager = new Paging<>(pageNo, pageSize);
@@ -107,7 +107,7 @@ public class MobileContractorController {
      */
     @ApiOperation(value = "触屏端-名企(厂商，代理商，渠道商)信息详情", notes = "触屏端-名企(厂商，代理商，渠道商)信息详情")
     @RequestMapping(value = "sel_great_company_info", method = RequestMethod.GET)
-    public Response sel_great_company_info(@ApiParam(value = "名企主键id") @RequestParam(required = true) String id) {
+    public Response selGreatCompanyInfo(@ApiParam(value = "名企主键id") @RequestParam(required = true) String id) {
         Response response = new Response();
         try {
             response.setData(memberService.getGreatCompanyInfo(id));
@@ -133,7 +133,7 @@ public class MobileContractorController {
      */
     @ApiOperation(value = "触屏端工程商-风云人物展示更多", notes = "触屏端工程商-风云人物展示更多")
     @RequestMapping(value = "sel_great_person_list", method = RequestMethod.GET)
-    public Response sel_great_person_list(@ApiParam(value = "类型：1 行业资讯，2 人物专访 3：行业风云人物 4：工程商风采 5：工程资料") @RequestParam String type,
+    public Response selGreatPersonList(@ApiParam(value = "类型：1 行业资讯，2 人物专访 3：行业风云人物 4：工程商风采 5：工程资料") @RequestParam String type,
             @ApiParam(value = "是否是热门资料") @RequestParam(required = false, defaultValue = "false") boolean isHot, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo,
             @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
@@ -159,7 +159,7 @@ public class MobileContractorController {
      */
     @ApiOperation(value = "触屏端工程商-搜索风云人物", notes = "触屏端工程商-搜索风云人物")
     @RequestMapping(value = "sel_great_person_list_by_title", method = RequestMethod.GET)
-    public Response sel_great_person_list_by_title(@ApiParam(value = "信息标题") @RequestParam(required = false) String title,
+    public Response selGreatPersonListByTitle(@ApiParam(value = "信息标题") @RequestParam(required = false) String title,
             @ApiParam(value = "类型：1 行业资讯，2 人物专访 3：行业风云人物 4：工程商风采 5：工程资料") @RequestParam String type, @ApiParam(value = "是否是热门资料") @RequestParam(required = false, defaultValue = "false") boolean isHot,
             @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo, @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
@@ -176,7 +176,7 @@ public class MobileContractorController {
      */
     @ApiOperation(value = "触屏端工程商-风云人物详情", notes = "触屏端工程商-风云人物详情")
     @RequestMapping(value = "sel_great_person_info", method = RequestMethod.GET)
-    public Response sel_great_person_info(@ApiParam(value = "咨询id") @RequestParam Long id) {
+    public Response selGreatPersonInfo(@ApiParam(value = "咨询id") @RequestParam Long id) {
         Response response = new Response();
         response.setData(channelNewsService.queryDetailsById(id));
         return response;
@@ -192,7 +192,7 @@ public class MobileContractorController {
      */
     @ApiOperation(value = "触屏端搜索工程商", notes = "触屏端搜索工程商", response = Response.class)
     @RequestMapping(value = { "sel_contractor_list" }, method = RequestMethod.GET)
-    public Response sel_contractor_list(ContractorSearchSpec spec) {
+    public Response selContractorList(ContractorSearchSpec spec) {
         Response response = new Response();
         try {
             response.setData(memberService.searchContractors(spec));
