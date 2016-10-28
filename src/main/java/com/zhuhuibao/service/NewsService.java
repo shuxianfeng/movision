@@ -82,12 +82,10 @@ public class NewsService {
     public void addNews(News news, String recPlace) {
         completeInsertBaseInfo(news);
         newsMapper.insertSelective(news);
-
         NewsRecommendPlace place = new NewsRecommendPlace();
         place.setUpdateTime(new Date());
         place.setAddTime(new Date());
         place.setNewsId(news.getId());
-
         place.setRecommendPlace(recPlace);
         placeMapper.insertSelective(place);
     }
@@ -99,9 +97,6 @@ public class NewsService {
      */
     private void completeInsertBaseInfo(News news) {
         news.setStatus(0);
-        if (null == news.getViews()) {
-            news.setViews(0L);
-        }
         Date curDate = new Date();
         news.setAddTime(curDate);
         news.setUpdateTime(curDate);
@@ -138,6 +133,9 @@ public class NewsService {
     public void updateNews(News news, String recPlace) {
         if (StringUtils.isEmpty(news.getSource())) {
             news.setSource("筑慧资讯");
+        }
+        if (null == news.getPublishTime()) {
+            news.setPublishTime(new Date());
         }
         news.setUpdateTime(new Date());
         newsMapper.updateByPrimaryKeySelective(news);
