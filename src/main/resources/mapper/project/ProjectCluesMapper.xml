@@ -1,31 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.project.mapper.ProjectCluesMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.project.entity.ProjectClues" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="prj_name" property="prjName" jdbcType="VARCHAR" />
-    <result column="prj_contents" property="prjContents" jdbcType="VARCHAR" />
-    <result column="contact" property="contact" jdbcType="VARCHAR" />
-    <result column="mark" property="mark" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="operate_id" property="operateId" jdbcType="INTEGER" />
-    <result column="add_time" property="addTime" jdbcType="DATE" />
-    <result column="update_time" property="updateTime" jdbcType="DATE" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.zhuhuibao.mybatis.project.mapper.ProjectCluesMapper">
+    <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.project.entity.ProjectClues">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="prj_name" property="prjName" jdbcType="VARCHAR"/>
+        <result column="prj_contents" property="prjContents" jdbcType="VARCHAR"/>
+        <result column="contact" property="contact" jdbcType="VARCHAR"/>
+        <result column="mark" property="mark" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="operate_id" property="operateId" jdbcType="INTEGER"/>
+        <result column="add_time" property="addTime" jdbcType="DATE"/>
+        <result column="update_time" property="updateTime" jdbcType="DATE"/>
+    </resultMap>
+
+    <resultMap id="FormResultMap" type="com.zhuhuibao.mybatis.project.form.ProjectCluesForm">
+        <id column="id" property="projectClues.id" jdbcType="INTEGER"/>
+        <result column="prj_name" property="projectClues.prjName" jdbcType="VARCHAR"/>
+        <result column="prj_contents" property="projectClues.prjContents" jdbcType="VARCHAR"/>
+        <result column="contact" property="projectClues.contact" jdbcType="VARCHAR"/>
+        <result column="mark" property="projectClues.mark" jdbcType="VARCHAR"/>
+        <result column="status" property="projectClues.status" jdbcType="INTEGER"/>
+        <result column="operate_id" property="projectClues.operateId" jdbcType="INTEGER"/>
+        <result column="add_time" property="projectClues.addTime" jdbcType="DATE"/>
+        <result column="update_time" property="projectClues.updateTime" jdbcType="DATE"/>
+        <result column="status_text" property="statusText" jdbcType="VARCHAR"/>
+        <result column="add_time_str" property="addTimeStr" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, prj_name, prj_contents, contact, mark, status, operate_id, add_time, update_time
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_prj_project_clues
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <select id="selectByPrimaryKey" resultMap="FormResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>,
+        (case when status=0 then '未处理'
+        when status=1 then '已处理' end ) as status_text
+        from t_prj_project_clues
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_prj_project_clues
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zhuhuibao.mybatis.project.entity.ProjectClues" >
+    <insert id="insert" parameterType="com.zhuhuibao.mybatis.project.entity.ProjectClues">
     insert into t_prj_project_clues (id, prj_name, prj_contents, 
       contact, mark, status, 
       operate_id, add_time, update_time
@@ -35,98 +51,98 @@
       #{operateId,jdbcType=INTEGER}, #{addTime,jdbcType=DATE}, #{updateTime,jdbcType=DATE}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.project.entity.ProjectClues" >
-    insert into t_prj_project_clues
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="prjName != null" >
-        prj_name,
-      </if>
-      <if test="prjContents != null" >
-        prj_contents,
-      </if>
-      <if test="contact != null" >
-        contact,
-      </if>
-      <if test="mark != null" >
-        mark,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="operateId != null" >
-        operate_id,
-      </if>
-      <if test="addTime != null" >
-        add_time,
-      </if>
-      <if test="updateTime != null" >
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="prjName != null" >
-        #{prjName,jdbcType=VARCHAR},
-      </if>
-      <if test="prjContents != null" >
-        #{prjContents,jdbcType=VARCHAR},
-      </if>
-      <if test="contact != null" >
-        #{contact,jdbcType=VARCHAR},
-      </if>
-      <if test="mark != null" >
-        #{mark,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="operateId != null" >
-        #{operateId,jdbcType=INTEGER},
-      </if>
-      <if test="addTime != null" >
-        #{addTime,jdbcType=DATE},
-      </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=DATE},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.project.entity.ProjectClues" >
-    update t_prj_project_clues
-    <set >
-      <if test="prjName != null" >
-        prj_name = #{prjName,jdbcType=VARCHAR},
-      </if>
-      <if test="prjContents != null" >
-        prj_contents = #{prjContents,jdbcType=VARCHAR},
-      </if>
-      <if test="contact != null" >
-        contact = #{contact,jdbcType=VARCHAR},
-      </if>
-      <if test="mark != null" >
-        mark = #{mark,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="operateId != null" >
-        operate_id = #{operateId,jdbcType=INTEGER},
-      </if>
-      <if test="addTime != null" >
-        add_time = #{addTime,jdbcType=DATE},
-      </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=DATE},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.project.entity.ProjectClues" >
+    <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.project.entity.ProjectClues">
+        insert into t_prj_project_clues
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="prjName != null">
+                prj_name,
+            </if>
+            <if test="prjContents != null">
+                prj_contents,
+            </if>
+            <if test="contact != null">
+                contact,
+            </if>
+            <if test="mark != null">
+                mark,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="operateId != null">
+                operate_id,
+            </if>
+            <if test="addTime != null">
+                add_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="prjName != null">
+                #{prjName,jdbcType=VARCHAR},
+            </if>
+            <if test="prjContents != null">
+                #{prjContents,jdbcType=VARCHAR},
+            </if>
+            <if test="contact != null">
+                #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="mark != null">
+                #{mark,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="operateId != null">
+                #{operateId,jdbcType=INTEGER},
+            </if>
+            <if test="addTime != null">
+                #{addTime,jdbcType=DATE},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=DATE},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.project.entity.ProjectClues">
+        update t_prj_project_clues
+        <set>
+            <if test="prjName != null">
+                prj_name = #{prjName,jdbcType=VARCHAR},
+            </if>
+            <if test="prjContents != null">
+                prj_contents = #{prjContents,jdbcType=VARCHAR},
+            </if>
+            <if test="contact != null">
+                contact = #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="mark != null">
+                mark = #{mark,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="operateId != null">
+                operate_id = #{operateId,jdbcType=INTEGER},
+            </if>
+            <if test="addTime != null">
+                add_time = #{addTime,jdbcType=DATE},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=DATE},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.project.entity.ProjectClues">
     update t_prj_project_clues
     set prj_name = #{prjName,jdbcType=VARCHAR},
       prj_contents = #{prjContents,jdbcType=VARCHAR},
@@ -138,4 +154,29 @@
       update_time = #{updateTime,jdbcType=DATE}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <!-- 项目线索信息列表-->
+    <select id="findAllProjectClues" resultMap="FormResultMap" parameterType="java.util.Map">
+        select
+        id,
+        prj_name,prj_contents,contact,status,
+        date_format(add_time,'%Y-%m-%d %H:%i:%s') as add_time_str
+        FROM t_prj_project_clues
+        where 1=1
+        <if test="status != null and status != ''">
+            and status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="addTimeStart != null and addTimeStart != ''">
+            <![CDATA[
+	    	and add_time >= #{addTimeStart}
+	    	]]>
+        </if>
+        <if test="addTimeEnd != null and addTimeEnd != ''">
+            <![CDATA[
+	    	and add_time <= #{addTimeEnd}
+	    	]]>
+        </if>
+        order by status asc, add_time desc
+    </select>
+
 </mapper>
