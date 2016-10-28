@@ -9,6 +9,11 @@ import java.util.TimeZone;
 
 public class DateUtils {
 
+    /**
+     * 详细时间格式
+     */
+    public static final SimpleDateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     public static String date2Str(Date target, String pattern) {
         if (null == target) {
             return "";
@@ -51,8 +56,7 @@ public class DateUtils {
         }
     }
 
-
-    public static String str2DateFormat(String src,String pattern) {
+    public static String str2DateFormat(String src, String pattern) {
         if (src == null || "".equals(src)) {
             return "";
         }
@@ -96,7 +100,7 @@ public class DateUtils {
 
     public static String dateToString(Date date, String resolution) {
         int formatLen;
-        switch (resolution){
+        switch (resolution) {
             case "YEAR":
                 formatLen = 4;
                 break;
@@ -126,23 +130,22 @@ public class DateUtils {
         return format.format(date);
     }
 
-
     public static void main(String[] args) throws ParseException {
-//        Date date = DateUtils.date2Sub(DateUtils.str2Date("2016-03-02 20:16:21", "yyyy-MM-dd HH:mm:ss"), 12, 10);
-//        System.out.println(date);
-//        Date date1 = new Date();
-//        System.out.println(date1);
-//        System.out.println(date1.before(date));
-//        String start = "2016-06-20 16:42:41";
-//        String end = "2017-06-21 00:00:00";
-//        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-//        Date startTime = sf.parse(start);
-//        Date endTime = sf.parse(end);
-//        long days = dayDiff(startTime, endTime);
-//        System.out.println(days);
-        String s = DateUtils.str2DateFormat("1468466182000","yyyy-MM-dd");
+        // Date date = DateUtils.date2Sub(DateUtils.str2Date("2016-03-02
+        // 20:16:21", "yyyy-MM-dd HH:mm:ss"), 12, 10);
+        // System.out.println(date);
+        // Date date1 = new Date();
+        // System.out.println(date1);
+        // System.out.println(date1.before(date));
+        // String start = "2016-06-20 16:42:41";
+        // String end = "2017-06-21 00:00:00";
+        // SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        // Date startTime = sf.parse(start);
+        // Date endTime = sf.parse(end);
+        // long days = dayDiff(startTime, endTime);
+        // System.out.println(days);
+        String s = DateUtils.str2DateFormat("1468466182000", "yyyy-MM-dd");
         System.out.println(s);
     }
-
 
 }

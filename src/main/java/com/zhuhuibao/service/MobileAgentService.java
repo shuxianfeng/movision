@@ -31,9 +31,8 @@ public class MobileAgentService {
 
     /**
      * 根据产品id获取代理商信息
-     * 
-     * @param id
-     *            产品id
+     *
+     * @param id 产品id
      * @return
      */
     public Map getAgentByProId(String id) {
@@ -42,7 +41,7 @@ public class MobileAgentService {
 
     /**
      * 根据会员id查询代理商
-     * 
+     *
      * @param memberId
      * @return
      */
@@ -55,4 +54,13 @@ public class MobileAgentService {
         }
     }
 
+    /**
+     * 根据品牌id获取代理商信息
+     *
+     * @param id
+     * @return
+     */
+    public Map getAgentByBrandid(String id) {
+        return agentService.getAgentByProId(id);
+    }
 }

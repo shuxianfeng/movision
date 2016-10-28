@@ -1,5 +1,8 @@
 package com.zhuhuibao.business.news;
 
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
 import java.util.*;
 
 import com.zhuhuibao.common.util.ShiroUtil;
@@ -7,10 +10,10 @@ import com.zhuhuibao.mybatis.news.form.NewsForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -31,6 +34,10 @@ import com.zhuhuibao.utils.pagination.model.Paging;
 @RequestMapping("/rest/news/oms/")
 @Api(value = "news", description = "资讯")
 public class NewsController {
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(DateUtils.DEFAULT_DATE_FORMAT, true));
+    }
 
     private static final Logger log = LoggerFactory.getLogger(NewsController.class);
 
@@ -57,15 +64,10 @@ public class NewsController {
 
     @RequestMapping(value = "/add_news", method = RequestMethod.POST)
     @ApiOperation(value = "添加资讯信息", notes = "添加资讯信息", response = Response.class)
-    public Response add_news(@ApiParam(value = "资讯一级分类") @RequestParam String type, @ApiParam(value = "资讯二级分类") @RequestParam(required = false) String subType,
-            @ApiParam(value = "缩略图") @RequestParam(required = false) String photo, @ApiParam(value = "资讯标题") @RequestParam(required = false) String title,
-            @ApiParam(value = "简短标题") @RequestParam(required = false) String shortTitle, @ApiParam(value = "跳转路径") @RequestParam(required = false) String jumpUrl,
-            @ApiParam(value = "来源") @RequestParam(required = false) String source, @ApiParam(value = "关键字") @RequestParam(required = false) String keywords,
-            @ApiParam(value = "文章描述：导读") @RequestParam(required = false) String introduction, @ApiParam(value = "热度/点击率") @RequestParam(required = false) long views,
-            @ApiParam(value = "发布时间") @RequestParam(required = false) String publishTime, @ApiParam(value = "附件名称") @RequestParam(required = false) String attachName,
-            @ApiParam(value = "附件路径") @RequestParam(required = false) String attachUrl, @ApiParam(value = "资讯内容") @RequestParam String content,
-            @ApiParam(value = "状态") @RequestParam(required = false) int status, @ApiParam(value = "推荐显示位置") @RequestParam(required = false) String recPlace) {
-        News news = getNews(type, subType, photo, title, shortTitle, jumpUrl, source, keywords, introduction, views, publishTime, attachName, attachUrl, content, status);
+    public Response add_news(@ModelAttribute News news, @ApiParam(value = "推荐显示位置") @RequestParam(required = false) String recPlace) {
+        // News news = getNews(type, subType, photo, title, shortTitle, jumpUrl,
+        // source, keywords, introduction, views, publishTime, attachName,
+        // attachUrl, content, status);
         newsService.add_news(news, recPlace);
         return new Response();
     }

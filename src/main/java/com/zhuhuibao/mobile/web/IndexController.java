@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.mybatis.news.form.NewsForm;
+import com.zhuhuibao.service.NewsService;
+import com.zhuhuibao.utils.pagination.model.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +29,9 @@ public class IndexController {
     @Autowired
     private MobileSysAdvertisingService advertisingService;
 
+    @Autowired
+    private NewsService newsService;
+
     @ApiOperation(value = "触屏端首页", notes = "触屏端工程商首页")
     @RequestMapping(value = "/site", method = RequestMethod.GET)
     public Response index() {
@@ -37,12 +43,16 @@ public class IndexController {
         List<SysAdvertising> marketing = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Homepage_Marketing.value);
         // 盟友邀请
         List<SysAdvertising> invitation = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Homepage_Invitation.value);
+        // 资讯
+        Paging<NewsForm> newsPager = new Paging<>(1, 3);
+        List<NewsForm> newsList = newsService.mobile_sel_news_list("1", null, null, newsPager);
 
         Map<String, List> advMap = new HashMap<>();
         advMap.put("banner", banner);
         advMap.put("headline", headline);
         advMap.put("marketing", marketing);
         advMap.put("invitation", invitation);
+        advMap.put("newsList", newsList);
         return new Response(advMap);
     }
 }

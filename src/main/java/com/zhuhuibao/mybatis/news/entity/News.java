@@ -2,43 +2,60 @@ package com.zhuhuibao.mybatis.news.entity;
 
 import java.util.Date;
 
+import com.wordnik.swagger.annotations.ApiParam;
+
 public class News {
     private Long id;
 
+    @ApiParam(value = "资讯一级分类", required = true)
     private Integer type;
 
+    @ApiParam(value = "资讯二级分类", required = true)
     private Integer subType;
 
+    @ApiParam(value = "缩略图")
     private String photo;
 
+    @ApiParam(value = "资讯标题")
     private String title;
 
+    @ApiParam(value = "简短标题")
     private String shortTitle;
 
+    @ApiParam(value = "跳转路径")
     private String jumpUrl;
 
+    @ApiParam(value = "来源")
     private String source;
 
+    @ApiParam(value = "关键字")
     private String keywords;
 
+    @ApiParam(value = "文章描述：导读")
     private String introduction;
 
+    @ApiParam(value = "热度/点击率")
     private Long views;
 
+    @ApiParam(value = "发布时间")
     private Date publishTime;
 
     private Long publisherId;
 
+    @ApiParam(value = "状态")
     private Integer status;
 
+    @ApiParam(value = "附件名称")
     private String attachName;
 
+    @ApiParam(value = "附件路径")
     private String attachUrl;
 
     private Date addTime;
 
     private Date updateTime;
 
+    @ApiParam(value = "资讯内容")
     private String content;
 
     public Long getId() {

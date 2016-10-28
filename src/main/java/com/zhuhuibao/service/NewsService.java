@@ -2,6 +2,8 @@ package com.zhuhuibao.service;
 
 import java.util.*;
 
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,13 +80,35 @@ public class NewsService {
      * @return
      */
     public void add_news(News news, String recPlace) {
+        completeInsertBaseInfo(news);
         newsMapper.insertSelective(news);
+
         NewsRecommendPlace place = new NewsRecommendPlace();
         place.setUpdateTime(new Date());
         place.setAddTime(new Date());
         place.setNewsId(news.getId());
+
         place.setRecommendPlace(recPlace);
         placeMapper.insertSelective(place);
+    }
+
+    /**
+     * 完善资讯添加前的基础信息
+     * 
+     * @param news
+     */
+    private void completeInsertBaseInfo(News news) {
+        news.setStatus(0);
+        if (null == news.getViews()) {
+            news.setViews(0L);
+        }
+        Date curDate = new Date();
+        news.setAddTime(curDate);
+        news.setUpdateTime(curDate);
+        news.setPublisherId(ShiroUtil.getOmsCreateID());
+        if (null == news.getPublishTime()) {
+            news.setPublishTime(curDate);
+        }
     }
 
     /**
