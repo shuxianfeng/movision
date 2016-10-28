@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.zhuhuibao.fsearch.pojo.spec.ProductSearchSpec;
 import com.zhuhuibao.fsearch.service.exception.ServiceException;
 import com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs;
 import com.zhuhuibao.service.MobileAgentService;
+import com.zhuhuibao.service.MobileMemberService;
 import com.zhuhuibao.service.MobileProductService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
@@ -46,6 +48,9 @@ public class MobileProductController {
 
     @Autowired
     private MobileAgentService mobileAgentService;
+
+    @Autowired
+    private MobileMemberService mobileMemberService;
 
     /**
      * 触屏端供应链-品牌下更多产品
@@ -89,9 +94,14 @@ public class MobileProductController {
         Map prdDescParam = mobileProductService.queryPrdDescParam(id);
         // 产品代理商
         Map agentMap = mobileAgentService.getAgentByProId(String.valueOf(id));
+
+        Member member = mobileMemberService.findMemById(String.valueOf(product.getCreateid()));
+
         modelMap.put("productInfo", product);
         modelMap.put("prdDescParam", prdDescParam);
         modelMap.put("agentMap", agentMap);
+        modelMap.put("member", member);
+
         response.setData(modelMap);
         return response;
     }

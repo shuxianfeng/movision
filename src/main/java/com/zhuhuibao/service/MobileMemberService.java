@@ -74,7 +74,8 @@ public class MobileMemberService {
     /**
      * 搜索工程商
      *
-     * @param spec 查询条件
+     * @param spec
+     *            查询条件
      * @return map
      * @throws ServiceException
      */
@@ -175,7 +176,8 @@ public class MobileMemberService {
     /**
      * 搜索供应商
      *
-     * @param spec 查询条件
+     * @param spec
+     *            查询条件
      * @return map
      * @throws ServiceException
      */
@@ -209,4 +211,5 @@ public class MobileMemberService {
         certificateRecord.setStatus("1");
         return oldMemberService.certificateSearch(certificateRecord);
     }
+
 }

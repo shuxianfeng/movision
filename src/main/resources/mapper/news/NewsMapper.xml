@@ -63,7 +63,7 @@
       #{attachUrl,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
       #{content,jdbcType=LONGVARCHAR})
   </insert>
-    <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.news.entity.News">
+    <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.news.entity.News" useGeneratedKeys="true" keyProperty="id">
         insert into t_n_news
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
