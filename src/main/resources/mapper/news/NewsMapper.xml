@@ -369,6 +369,6 @@
         <if test="type != null and type != '' ">
             and type = #{type,jdbcType=INTEGER}
         </if>
-        order by views, publish_time desc
+        order by views desc, publish_time desc
     </select>
 </mapper>

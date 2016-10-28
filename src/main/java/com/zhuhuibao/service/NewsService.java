@@ -2,6 +2,8 @@ package com.zhuhuibao.service;
 
 import java.util.*;
 
+import com.zhuhuibao.fsearch.utils.StringUtil;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,6 +113,9 @@ public class NewsService {
         if (null == news.getPublishTime()) {
             news.setPublishTime(curDate);
         }
+        if (StringUtils.isEmpty(news.getSource())) {
+            news.setSource("筑慧资讯");
+        }
     }
 
     /**
@@ -132,6 +137,10 @@ public class NewsService {
      * @return
      */
     public void updateNews(News news, String recPlace) {
+        if (StringUtils.isEmpty(news.getSource())) {
+            news.setSource("筑慧资讯");
+        }
+        news.setUpdateTime(new Date());
         newsMapper.updateByPrimaryKeySelective(news);
         List<NewsRecommendPlace> places = placeMapper.getPlaceByNewsId(news.getId());
         for (NewsRecommendPlace place : places) {
