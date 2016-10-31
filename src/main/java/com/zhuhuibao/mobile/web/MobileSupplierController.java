@@ -116,6 +116,8 @@ public class MobileSupplierController {
     @ApiOperation(value = "触屏端供应链-所有品牌列表展示页", notes = "触屏端供应链-所有品牌列表展示页")
     @RequestMapping(value = "sel_hot_brand_list", method = RequestMethod.GET)
     public Response selHotBrandList() {
+        List<SysAdvertising> bannerAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Brands_Banner.value);
+
         // 网络及硬件广告位
         List<SysAdvertising> f1AdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Brands_Hardware.value);
         // 安全防范
@@ -136,6 +138,7 @@ public class MobileSupplierController {
         List<SysAdvertising> f9AdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Brands_Software.value);
 
         Map<String, List> dataList = new HashMap<>();
+        dataList.put("banner", bannerAdvList);
         dataList.put("f1", getAdvList(f1AdvList.subList(0, 4)));
         dataList.put("f2", getAdvList(f2AdvList.subList(0, 4)));
         dataList.put("f3", getAdvList(f3AdvList.subList(0, 4)));
