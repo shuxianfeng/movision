@@ -5,13 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.memCenter.entity.Message;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -85,8 +87,8 @@ public class MobileContractorController {
      */
     @ApiOperation(value = "触屏端-名企(厂商，代理商，渠道商)展示更多页面", notes = "触屏端-名企(厂商，代理商，渠道商)展示更多页面")
     @RequestMapping(value = "sel_great_company_list", method = RequestMethod.GET)
-    public Response selGreatCompanyList(@ApiParam(value = "类别") @RequestParam(required = true) String identify,
-            @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo, @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
+    public Response selGreatCompanyList(@ApiParam(value = "类别") @RequestParam(required = true) String identify, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo,
+            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
         Paging<Member> pager = new Paging<>(pageNo, pageSize);
         try {
@@ -201,6 +203,21 @@ public class MobileContractorController {
             log.error("sel_contractor_list error! ", e);
             response.setMessage("sel_contractor_list  error!" + e);
         }
+        return response;
+    }
+
+    /**
+     * 触屏端留言
+     * 
+     * @return
+     */
+    @ApiOperation(value = "触屏端留言", notes = "触屏端留言", response = Response.class)
+    @RequestMapping(value = "/add_message", method = RequestMethod.POST)
+    public Response message(@ModelAttribute Message message) {
+        Response response = new Response();
+        Long createId = ShiroUtil.getCreateID() == null ? 0l : ShiroUtil.getCreateID();
+        message.setCreateid(String.valueOf(createId));
+        memberService.saveMessage(message);
         return response;
     }
 }

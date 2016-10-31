@@ -13,6 +13,7 @@ import com.zhuhuibao.fsearch.service.impl.MembersService;
 import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemInfoCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
@@ -210,6 +211,16 @@ public class MobileMemberService {
         // 审核通过
         certificateRecord.setStatus("1");
         return oldMemberService.certificateSearch(certificateRecord);
+    }
+
+    /**
+     * 留言
+     * 
+     * @param message
+     * @return
+     */
+    public void saveMessage(Message message) {
+        oldMemberService.saveMessage(message);
     }
 
 }
