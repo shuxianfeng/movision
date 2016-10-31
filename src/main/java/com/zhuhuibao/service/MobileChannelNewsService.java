@@ -1,9 +1,5 @@
 package com.zhuhuibao.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.zhuhuibao.mybatis.oms.mapper.ChannelNewsMapper;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -13,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
-import com.zhuhuibao.mybatis.advertising.service.SysAdvertisingService;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 频道新闻相关接口实现类
@@ -32,14 +29,17 @@ public class MobileChannelNewsService {
     private ChannelNewsService channelNewsService;
 
     @Autowired
-    private ChannelNewsMapper  newsMapper;
+    private ChannelNewsMapper newsMapper;
 
     /**
      * 查询当前频道下面的新闻信息
      *
-     * @param pager 分页信息
-     * @param isHot 是否热门
-     * @param type  新闻类型
+     * @param pager
+     *            分页信息
+     * @param isHot
+     *            是否热门
+     * @param type
+     *            新闻类型
      * @return List<Map>
      */
     public List<Map> findAllChanNewsList(Paging<Map> pager, boolean isHot, String type) {
@@ -54,20 +54,26 @@ public class MobileChannelNewsService {
     /**
      * 查询当前新闻信息具体内容
      *
-     * @param id 新闻信息id
+     * @param id
+     *            新闻信息id
      * @return List<Map>
      */
     public List<Map> queryDetailsById(Long id) {
+        channelNewsService.updateViews(id);
         return channelNewsService.queryDetailsById(id);
     }
 
     /**
      * 根据信息标题查询当前频道下面的新闻信息
      *
-     * @param pager 分页信息
-     * @param isHot 是否热门
-     * @param type  新闻类型
-     * @param title 新闻标题
+     * @param pager
+     *            分页信息
+     * @param isHot
+     *            是否热门
+     * @param type
+     *            新闻类型
+     * @param title
+     *            新闻标题
      * @return
      */
     public List<Map> findChanNewsListByTitle(Paging<Map> pager, boolean isHot, String type, String title) {
@@ -76,7 +82,7 @@ public class MobileChannelNewsService {
         map.put("sort", type);
         map.put("status", "1");
         map.put("isHot", isHot);
-        map.put("title",title);
+        map.put("title", title);
         return newsMapper.findChanNewsListByTitle(pager.getRowBounds(), map);
     }
 }
