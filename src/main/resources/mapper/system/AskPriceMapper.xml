@@ -417,6 +417,7 @@
     <if test="_parameter != null and _parameter != ''">
       and p.fcateid = #{fcateid}
     </if>
+    and p.type=1
     order BY p.publishTime desc
   </select>
 </mapper>

@@ -1,19 +1,5 @@
 package com.zhuhuibao.mobile.web;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -31,6 +17,16 @@ import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.service.*;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 供应商相关业务控制层
@@ -216,7 +212,7 @@ public class MobileSupplierController {
      */
     @ApiOperation(value = "触屏端搜索供应商", notes = "触屏端搜索供应商", response = Response.class)
     @RequestMapping(value = { "sel_supplier_list" }, method = RequestMethod.GET)
-    public Response selSupplierList(SupplierSearchSpec spec) {
+    public Response selSupplierList(@ModelAttribute SupplierSearchSpec spec) {
         Response response = new Response();
         try {
             response.setData(memberService.searchSuppliers(spec));
