@@ -204,6 +204,26 @@ public class MobileSupplierController {
     }
 
     /**
+     * 触屏端供应链-获取该品牌下所有的二级分类id
+     *
+     * @param id
+     *            品牌id
+     * @return response 响应
+     */
+    @ApiOperation(value = "触屏端供应链-获取该品牌下所有的二级分类id", notes = "触屏端供应链-获取该品牌下所有的二级分类id")
+    @RequestMapping(value = "sel_brand_scateId", method = RequestMethod.GET)
+    public Response selBrandScateId(@ApiParam(value = "品牌主键id") @RequestParam(required = true) String id) {
+        Response response = new Response();
+        try {
+            response.setData(mobileBrandService.findScateIdByBrandId(id));
+        } catch (Exception e) {
+            log.error("sel_brand_scateId error! ", e);
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    /**
      * 触屏端搜索供应商信息
      *
      * @param spec
