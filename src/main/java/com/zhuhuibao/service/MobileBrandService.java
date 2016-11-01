@@ -1,25 +1,27 @@
 package com.zhuhuibao.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.zhuhuibao.common.pojo.*;
+import com.zhuhuibao.common.pojo.BrandBean;
+import com.zhuhuibao.common.pojo.BrandDetailBean;
+import com.zhuhuibao.common.pojo.ResultBean;
+import com.zhuhuibao.common.pojo.SysBean;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.entity.CheckBrand;
+import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.memCenter.service.CheckBrandService;
+import com.zhuhuibao.mybatis.oms.service.CategoryService;
 import com.zhuhuibao.utils.MapUtil;
+import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
-import com.zhuhuibao.mybatis.oms.service.CategoryService;
-import com.zhuhuibao.utils.pagination.model.Paging;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 品牌管理相关接口实现类
@@ -138,9 +140,13 @@ public class MobileBrandService {
         map3.put("scateName", result.getName());
 
         ResultBean result1 = categoryService.querySystem(result.getSmallIcon());
-
-        map3.put("fcateid", result1.getCode());
-        map3.put("fcateName", result1.getName());
+        if (null != result) {
+            map3.put("fcateid", result1.getCode());
+            map3.put("fcateName", result1.getName());
+        } else {
+            map3.put("fcateid", "");
+            map3.put("fcateName", "");
+        }
         map1.put("brandDesc", map2);
         map1.put("navigation", map3);
         return map1;
