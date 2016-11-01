@@ -81,6 +81,11 @@ public class AdvertisingConstant {
         M_Supplychain_Canals(new String[] { "192", "M_Supplychain", "M_Supplychain_Canals" }),
 
         /**
+         * 移动端供应链品牌馆-首页banner
+         */
+        M_Brands_Banner(new String[] { "192", "M_Brands", "M_Brands_Banner" }),
+
+        /**
          * 移动端供应链品牌馆-网络及硬件品牌
          */
         M_Brands_Hardware(new String[] { "192", "M_Brands", "M_Brands_Hardware" }),
