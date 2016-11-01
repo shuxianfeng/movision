@@ -352,7 +352,7 @@
         date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
         FROM t_n_news
          where status = 1
-        order by views, publish_time desc
+        order by views desc
     </select>
 
     <!-- 触屏端分类资讯列表-->
@@ -369,7 +369,7 @@
         <if test="type != null and type != '' ">
             and type = #{type,jdbcType=INTEGER}
         </if>
-        order by views desc, publish_time desc
+        order by publish_time desc
     </select>
 
     <!-- 精彩推荐列表-->
