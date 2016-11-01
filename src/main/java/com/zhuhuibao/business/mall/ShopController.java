@@ -31,6 +31,7 @@ import java.util.Date;
 
 /**
  * 商户店铺 - 会员中心
+ * 
  * @author jianglz
  * @since 16/6/22.
  */
@@ -39,7 +40,6 @@ import java.util.Date;
 @Api(value = "Mall-Shop", description = "筑慧商城会员中心商户店铺")
 public class ShopController {
     private static final Logger log = LoggerFactory.getLogger(MallIndexController.class);
-
 
     @Autowired
     MemShopService memShopService;
@@ -50,69 +50,63 @@ public class ShopController {
     @Autowired
     MemShopCheckService shopCheckService;
 
-
     @LoginAccess
     @ApiOperation(value = "查询商户店铺信息", notes = "查询商户店铺信息")
     @RequestMapping(value = "sel_shop", method = RequestMethod.GET)
     public Response searchOne() {
         MemberShop shop;
         Long companyId = ShiroUtil.getCompanyID();
-        //判断审核表是否存在
+        // 判断审核表是否存在
         MemShopCheck check = shopCheckService.findByCompanyID(companyId);
-        if(check == null){
-            shop =  memShopService.findByCompanyID(companyId);
+        if (check == null) {
+            shop = memShopService.findByCompanyID(companyId);
             if (shop == null) {
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "商铺不存在");
             }
             return new Response(shop);
-        }else{
+        } else {
             return new Response(check);
         }
     }
 
-   @LoginAccess
+    @LoginAccess
     @ApiOperation(value = "编辑商户店铺", notes = "编辑商户店铺")
     @RequestMapping(value = "upd_shop", method = RequestMethod.POST)
-    public Response updateStop(@ApiParam("商铺ID") @RequestParam String shopId,
-                               @ApiParam("商铺名称") @RequestParam String shopName,
-                            @ApiParam("banner图片URL") @RequestParam String bannerUrl,
-                               @ApiParam("触屏端banner图片URL") @RequestParam String mobileBannerUrlF,
-                               @ApiParam("触屏端banner图片URL") @RequestParam String mobileBannerUrlS,
-                               @ApiParam("触屏端banner图片URL") @RequestParam String mobileBannerUrlT){
+    public Response updateStop(@ApiParam("商铺ID") @RequestParam String shopId, @ApiParam("商铺名称") @RequestParam String shopName, @ApiParam("banner图片URL") @RequestParam String bannerUrl,
+            @ApiParam("触屏端banner图片URL") @RequestParam String mobileBannerUrlF, @ApiParam("触屏端banner图片URL") @RequestParam String mobileBannerUrlS,
+            @ApiParam("触屏端banner图片URL") @RequestParam String mobileBannerUrlT) {
 
         log.debug("更新商铺...");
         Long memberId = ShiroUtil.getCreateID();
-//        if(memberId==null){
-//            throw new AuthException(MsgCodeConstant.un_login,
-//                    MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-//        }
+        // if(memberId==null){
+        // throw new AuthException(MsgCodeConstant.un_login,
+        // MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        // }
 
-        if(StringUtils.isEmpty(shopName)){
-           throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"商铺名称不能为空");
+        if (StringUtils.isEmpty(shopName)) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "商铺名称不能为空");
         }
-        if(StringUtils.isEmpty(bannerUrl)){
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"商铺banner图不能为空");
+        if (StringUtils.isEmpty(bannerUrl) || StringUtils.isEmpty(mobileBannerUrlF) || StringUtils.isEmpty(mobileBannerUrlS) || StringUtils.isEmpty(mobileBannerUrlT)) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "商铺banner图不能为空");
         }
-
         Long companyId = ShiroUtil.getCompanyID();
 
-        check(shopId,companyId);
+        check(shopId, companyId);
 
-        Member member =  memberService.findMemById(String.valueOf(memberId));
+        Member member = memberService.findMemById(String.valueOf(memberId));
 
         String account = member.getMobile() == null ? member.getEmail() : member.getMobile();
         String companyName = member.getEnterpriseName() == null ? "" : member.getEnterpriseName();
 
-
         MemShopCheck shopCheck = shopCheckService.findByCompanyID(companyId);
-        if(shopCheck == null){
+        if (shopCheck == null) {
             shopCheck = new MemShopCheck();
             shopCheck.setId(Integer.valueOf(shopId));
             shopCheck.setOpreatorId(memberId.intValue());
             shopCheck.setCompanyId(companyId.intValue());
             shopCheck.setCompanyAccount(account);
             shopCheck.setCompanyName(companyName);
-            shopCheck.setUpdateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+            shopCheck.setUpdateTime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
             shopCheck.setStatus(MemberConstant.ShopStatus.DSH.toString());
             shopCheck.setShopName(shopName);
             shopCheck.setBannerUrl(bannerUrl);
@@ -120,7 +114,7 @@ public class ShopController {
             shopCheck.setMobileBannerUrlS(mobileBannerUrlS);
             shopCheck.setMobileBannerUrlF(mobileBannerUrlF);
             shopCheckService.insert(shopCheck);
-        } else{
+        } else {
             shopCheck.setStatus(MemberConstant.ShopStatus.DSH.toString());
             shopCheck.setShopName(shopName);
             shopCheck.setBannerUrl(bannerUrl);
@@ -135,20 +129,21 @@ public class ShopController {
 
     /**
      * 验证商铺是否为登陆用户所在企业商铺
-     * @param shopId  商铺ID
+     * 
+     * @param shopId
+     *            商铺ID
      */
-    private void check(String shopId,Long companyId) {
-        if(companyId==null){
-            throw new AuthException(MsgCodeConstant.un_login,
-                    MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+    private void check(String shopId, Long companyId) {
+        if (companyId == null) {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-        //验证店铺ID是否为该用户所在企业的店铺
-        MemberShop shop =  memShopService.findByCompanyID(companyId);
-        if(shop == null){
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"用户商铺不存在");
-        }else{
-            if(!String.valueOf(shop.getId()).equals(shopId)){
-                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"用户商铺不存在");
+        // 验证店铺ID是否为该用户所在企业的店铺
+        MemberShop shop = memShopService.findByCompanyID(companyId);
+        if (shop == null) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "用户商铺不存在");
+        } else {
+            if (!String.valueOf(shop.getId()).equals(shopId)) {
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "用户商铺不存在");
             }
         }
     }
