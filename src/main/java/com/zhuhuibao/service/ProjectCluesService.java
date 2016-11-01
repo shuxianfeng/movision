@@ -74,6 +74,7 @@ public class ProjectCluesService {
     public void addProjectClues(ProjectClues projectClues) {
         projectClues.setAddTime(new Date());
         projectClues.setUpdateTime(new Date());
+        projectClues.setStatus(0);
         cluesMapper.insertSelective(projectClues);
     }
 
