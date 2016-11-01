@@ -1,32 +1,28 @@
 package com.zhuhuibao.mobile.web;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.mybatis.memCenter.entity.Message;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.fsearch.pojo.spec.ContractorSearchSpec;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.service.MobileChannelNewsService;
 import com.zhuhuibao.service.MobileMemberService;
 import com.zhuhuibao.service.MobileSysAdvertisingService;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 工程商相关业务控制层
@@ -217,6 +213,21 @@ public class MobileContractorController {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID() == null ? 0l : ShiroUtil.getCreateID();
         message.setCreateid(String.valueOf(createId));
+        String title = "";
+        if (ShiroUtil.getCreateID() == null) {
+            title = "来自匿名用户的留言";
+        } else {
+            if (null != ShiroUtil.getMember().getNickname()) {
+                title = "来自" + ShiroUtil.getMember().getNickname() + "的留言";
+            } else {
+                if (null != ShiroUtil.getMember().getCompanyName()) {
+                    title = "来自" + ShiroUtil.getMember().getCompanyName() + "的留言";
+                } else {
+                    title = "来自匿名用户的留言";
+                }
+            }
+        }
+        message.setTitle(title);
         memberService.saveMessage(message);
         return response;
     }
