@@ -138,7 +138,7 @@ public class MobileBrandService {
         map2.put("brandName", brand.getCnName());
         map3.put("scateid", scateId);
         map3.put("scateName", result.getName());
-
+        // 暂时没明白这边代码的意思
         ResultBean result1 = categoryService.querySystem(result.getSmallIcon());
         if (null != result) {
             map3.put("fcateid", result1.getCode());
