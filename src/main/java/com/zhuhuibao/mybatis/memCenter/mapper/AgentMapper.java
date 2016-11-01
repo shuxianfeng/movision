@@ -16,7 +16,7 @@ public interface AgentMapper {
 
     List<ResultBean> getAgentByBrandid(String id);
 
-    AgentBean updateAgentById(String id);
+    AgentBean selectAgentById(String id);
 
     Agent find(Agent agent);
 

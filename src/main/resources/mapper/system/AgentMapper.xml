@@ -101,7 +101,7 @@
     where a.agentid = m.id
     and a.brandid = #{id} and a.status = 0
   </select>
-  <select id="updateAgentById" resultMap="ResultMap">
+  <select id="selectAgentById" resultMap="ResultMap">
     select a.brandid as brand,b.CNName as brandName,a.proviceid as province,m.id,m.enterpriseName as company,
     CASE WHEN m.mobile IS NOT NULL and m.mobile != '' THEN m.mobile WHEN m.email IS NOT NULL and m.email !='' THEN m.email END AS account,
     a.scateid as agentRange

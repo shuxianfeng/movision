@@ -36,7 +36,7 @@ public class MobileAgentService {
      * @return
      */
     public Map getAgentByProId(String id) {
-        return agentService.getAgentByProId(id);
+        return agentService.getAgentById(id);
     }
 
     /**
