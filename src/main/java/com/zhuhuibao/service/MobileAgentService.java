@@ -1,18 +1,15 @@
 package com.zhuhuibao.service;
 
-import java.util.List;
-import java.util.Map;
-
 import com.zhuhuibao.common.pojo.AgentBean;
-import com.zhuhuibao.mybatis.memCenter.entity.Member;
-import com.zhuhuibao.mybatis.memCenter.service.AccountService;
+import com.zhuhuibao.mybatis.memCenter.service.AgentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zhuhuibao.mybatis.memCenter.service.AgentService;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 代理商业务处理相关接口实现类
@@ -36,7 +33,7 @@ public class MobileAgentService {
      * @return
      */
     public Map getAgentByProId(String id) {
-        return agentService.getAgentById(id);
+        return agentService.getAgentByProId(id);
     }
 
     /**
