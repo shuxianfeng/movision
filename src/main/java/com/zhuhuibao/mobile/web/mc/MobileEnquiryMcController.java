@@ -8,10 +8,7 @@ import java.util.Map;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -42,7 +39,7 @@ public class MobileEnquiryMcController {
      */
     @ApiOperation(value = "根据条件查询发出的询价信息（分页）", notes = "根据条件查询发出的询价信息（分页）", response = Response.class)
     @RequestMapping(value = { "/sel_sent_enquiry_list" }, method = RequestMethod.GET)
-    public Response selSentEnquiryList(AskPriceSearchBean askPriceSearch, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
+    public Response selSentEnquiryList(@ModelAttribute AskPriceSearchBean askPriceSearch, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
             @ApiParam(value = "每页显示的条数") @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
         askPriceSearch.setCreateid(String.valueOf(ShiroUtil.getCreateID()));
@@ -55,8 +52,8 @@ public class MobileEnquiryMcController {
 
     @ApiOperation(value = "询价需求：我收到的询价需求", notes = "询价需求：我收到的询价需求", response = Response.class)
     @RequestMapping(value = { "/sel_received_enquiry_list" }, method = RequestMethod.GET)
-    public Response selReceivedEnquiryList(AskPrice price, @RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize)
-            throws IOException {
+    public Response selReceivedEnquiryList(@ModelAttribute AskPrice price, @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
         Paging<AskPriceSimpleBean> pager = new Paging<AskPriceSimpleBean>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<AskPriceSimpleBean> enquiryList = mobileEnquiryService.getReceivedEnquiryList(pager, price);

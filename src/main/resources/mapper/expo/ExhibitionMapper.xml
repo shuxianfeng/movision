@@ -261,11 +261,11 @@
     <if test="type2 != null and type2 != ''">
       and e.type in (1,2,3)
     </if>
-    <if test="publishTimeA != null">
-      AND e.publishTime &gt;=date_format(#{publishTimeA},'%Y-%m-%d')
+    <if test="startDateA != null">
+      AND e.startDate &gt;=date_format(#{startDateA},'%Y-%m-%d')
     </if>
-    <if test="publishTimeB != null">
-      AND e.publishTime &lt;=date_format(#{publishTimeB},'%Y-%m-%d')
+    <if test="startDateB != null">
+      AND e.startDate &lt;=date_format(#{startDateB},'%Y-%m-%d')
     </if>
       
     order by e.updateTime desc
