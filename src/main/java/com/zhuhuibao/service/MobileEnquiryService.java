@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.common.util.ShiroUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -89,7 +90,7 @@ public class MobileEnquiryService {
      * @return
      */
     public List<AskPriceSimpleBean> getReceivedEnquiryList(Paging<AskPriceSimpleBean> pager, AskPrice price) {
-
+        price.setCreateid(String.valueOf(ShiroUtil.getCreateID()));
         return offerPriceService.findAllAskingPriceInfo(pager, price);
     }
 
