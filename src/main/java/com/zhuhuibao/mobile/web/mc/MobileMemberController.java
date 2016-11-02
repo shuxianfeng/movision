@@ -48,6 +48,7 @@ public class MobileMemberController {
         ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
         if (null != loginMember) {
             // 更新memberChk信息
+            memberChk.setId(loginMember.getId());
             memberService.updateMemberInfoCheck(memberChk);
 
             // 更新session中数据状态
