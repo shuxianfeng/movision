@@ -1,14 +1,5 @@
 package com.zhuhuibao.service;
 
-import java.util.*;
-
-import com.thoughtworks.xstream.mapper.Mapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.news.entity.News;
 import com.zhuhuibao.mybatis.news.entity.NewsRecommendPlace;
@@ -17,6 +8,13 @@ import com.zhuhuibao.mybatis.news.mapper.NewsMapper;
 import com.zhuhuibao.mybatis.news.mapper.NewsRecommendPlaceMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 /**
  * 资讯相关接口实现类
@@ -65,7 +63,9 @@ public class NewsService {
             List<NewsRecommendPlace> places = placeMapper.getPlaceByNewsId(newsForm.getNews().getId());
             String recPlace = "";
             for (NewsRecommendPlace place : places) {
-                recPlace.concat(place.getRecommendPlace());
+                if (null != place.getRecommendPlace()) {
+                    recPlace.concat(place.getRecommendPlace());
+                }
             }
             newsForm.setRecPlace(recPlace);
             fixList.add(newsForm);
