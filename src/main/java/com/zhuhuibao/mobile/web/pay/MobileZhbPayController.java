@@ -55,6 +55,9 @@ public class MobileZhbPayController {
     @RequestMapping(value = "do_zhb_order", method = RequestMethod.POST)
     public Response doZHBOrder(@ApiParam @ModelAttribute ZHBOrderReqBean order) {
     	
+    	order.setInvoiceProvince("999");
+    	order.setInvoiceCity("999");
+    	order.setInvoiceArea("999");
     	//执行下单业务处理，并且返回生成的订单号
     	String orderNo = mobileZhbPaySV.doZHBOrder(order);
     	

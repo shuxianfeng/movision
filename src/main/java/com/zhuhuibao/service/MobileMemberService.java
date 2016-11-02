@@ -1,11 +1,27 @@
 package com.zhuhuibao.service;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.google.gson.Gson;
+import com.taobao.api.internal.util.json.BufferErrorListener;
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MemberConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.BaseException;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.fsearch.pojo.spec.ContractorSearchSpec;
 import com.zhuhuibao.fsearch.pojo.spec.SupplierSearchSpec;
 import com.zhuhuibao.fsearch.service.exception.ServiceException;
@@ -17,11 +33,23 @@ import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemInfoCheckService;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.mybatis.memberReg.entity.Validateinfo;
+import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
 import com.zhuhuibao.security.EncodeUtil;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.DateUtils;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.PropertiesUtils;
+import com.zhuhuibao.utils.ValidateUtils;
+import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.sms.SDKSendSms;
+
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +80,242 @@ public class MobileMemberService {
     @Autowired
     private MemInfoCheckService memInfoCheckService;
 
+    @Autowired
+    private MemberRegService memberRegService;
+    
+    /**
+     * 绑定手机号
+     * @param mobile
+     * @param code
+     */
+    public Response bindMobile(String mobile, String code){
+    	Response result = new Response();
+    	
+    	Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(true);
+        String sessionCode = (String) sess.getAttribute("mobile_verifycode_"+mobile);
+        
+        Member member = new Member();
+    	Long memberId = ShiroUtil.getCreateID();
+    	
+    	validationParams(mobile, code, memberId);
+    	
+        Validateinfo info = getValidationInfo(mobile, code);
+		Date currentTime = new Date();	//当前时间
+		//短信验证码有效期十分钟
+		Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(), "yyyy-MM-dd HH:mm:ss"), 12, 10);
+		
+		if (currentTime.before(sendSMStime)) {
+			if(sessionCode.equals(code)){
+                member.setId(String.valueOf(memberId));
+                member.setMobile(mobile);
+                oldMemberService.updateMemInfo(member);
+	        }else{
+	        	//手机验证码不正确
+	        	smsException(mobile, result);
+	        }
+		}else{
+			//验证码超时
+			smsTimeOutException(result, info);
+		}
+        return result;
+    }
+    
+    /**
+     * 验证码超时
+     * @param result
+     * @param info
+     */
+	private void smsTimeOutException(Response result, Validateinfo info) {
+		memberRegService.deleteValidateInfo(info);
+		result.setCode(400);
+		result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_sms_timeout)));
+		result.setMsgCode(MsgCodeConstant.member_mcode_sms_timeout);
+	}
+	/**
+	 * 验证码不正确
+	 * @param mobile
+	 * @param result
+	 */
+	private void smsException(String mobile, Response result) {
+		result.setCode(400);
+		result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
+		result.setData(mobile);
+		result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
+	}
+
+    /**
+     * 参数校验
+     * @param mobile
+     * @param code
+     * @param memberId
+     */
+	private void validationParams(String mobile, String code, Long memberId) {
+		if(null == memberId){
+    		//抛出未登陆异常
+    		throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+    	}
+    	if(StringUtils.isEmpty(mobile)){
+    		throw new BusinessException(MsgCodeConstant.MOBILE_IS_EMPTY, "手机号是空");
+    	}
+    	if(StringUtils.isEmpty(code)){
+    		throw new BusinessException(MsgCodeConstant.SMS_VERIFY_CODE_IS_EMPTY, "手机短信验证码是空");
+    	}
+	}
+
+
+	private Validateinfo getValidationInfo(String mobile, String code) {
+		Validateinfo info = new Validateinfo();
+		info.setAccount(mobile);
+		info.setValid(0);
+		info.setCheckCode(code);
+		info = memberRegService.findMemberValidateInfo(info);
+		return info;
+	}
+    
+	/**
+	 * 获取手机短信验证码
+	 * @return
+	 */
+	public void getSMSVerifyCode(){
+		Long memberid = ShiroUtil.getCreateID();
+		Member member = oldMemberService.findMemById(String.valueOf(memberid));
+		String mobile = member.getMobile();
+		
+		sendMobileVerifyCode(mobile);
+		
+	}
+	
+	
+ 
+    /**
+     * 生成手机验证码并发送
+     * @param mobile
+     */
+    public void sendMobileVerifyCode(String mobile){
+    	
+    	Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(true);
+    	
+    	// 生成随机字串
+        String verifyCode = VerifyCodeUtils.generateVerifyCode(4, VerifyCodeUtils.VERIFY_CODES_DIGIT);
+        log.debug("verifyCode == " + verifyCode);
+        //发送验证码到手机
+        String json = convertVerifyMap2Json(verifyCode);
+        SDKSendSms.sendSMS(mobile, json, PropertiesUtils.getValue("modify_mobile_sms_template_code"));
+        addValidationInfo(mobile, verifyCode);
+        //把生成的手机验证码缓存到session
+        sess.setAttribute("mobile_verifycode_" + mobile, verifyCode);
+    }
+
+    /**
+     * 把验证码的map转换成json格式
+     * @param verifyCode
+     * @return
+     */
+	private String convertVerifyMap2Json(String verifyCode) {
+		Map<String, String> map = new LinkedHashMap<>();
+        map.put("code", verifyCode);
+        map.put("time", Constants.sms_time);
+        Gson gson = new Gson();
+        String json = gson.toJson(map);
+		return json;
+	}
+
+
+    /**
+     * 增加一条验证信息
+     * @param mobile
+     * @param verifyCode
+     */
+	private void addValidationInfo(String mobile, String verifyCode) {
+		Validateinfo info = new Validateinfo();
+        info.setCreateTime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        info.setCheckCode(verifyCode);
+        info.setAccount(mobile);
+        memberRegService.inserValidateInfo(info);
+	}
+    
+    
+    
+    /**
+     * 校验验证码
+     * @param imgCode
+     * @return
+     */
+    public boolean verifyImgCode(String imgCode){
+    	boolean flag = true;
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
+        String sessionCode = (String) sess.getAttribute("first_bind_mobile_imgVerifyCode");
+        
+        if(!(sessionCode.toLowerCase()).equals((imgCode.toLowerCase()))){
+        	flag = false;
+//             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"图形验证码不正确");
+        }
+    	return flag;
+    }
+    
+    
+    /**
+	 * 生成图片验证码
+	 * @param req
+	 * @param response
+	 * @param imgWidth  图片的宽度
+	 * @param imgheight 图片的高度
+	 * @param verifySize 验证码的长度
+	 * @param key session存储的关键字
+	 */
+	public void getImageVerifyCode(HttpServletRequest req,
+			HttpServletResponse response,int imgWidth,int imgheight,int verifySize,String key) {
+		log.debug("获取验证码，开始");
+		response.setDateHeader("Expires", 0);
+		response.setHeader("Cache-Control",
+				"no-store, no-cache, must-revalidate");
+		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		response.setHeader("Pragma", "no-cache");
+		response.setContentType("image/jpeg");
+		HttpSession sess = req.getSession(true);
+		// 生成随机字串
+		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
+		log.debug("verifyCode == " + verifyCode);
+		sess.setAttribute(key, verifyCode);
+		ServletOutputStream out = null;
+		try {
+			out = response.getOutputStream();
+			//输出指定验证码图片流 
+			VerifyCodeUtils.outputImage1(imgWidth, imgheight, out, verifyCode);
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		log.debug("获取验证码，结束");
+	}
+    
+    /**
+     * 校验手机号码
+     * @param mobile
+     * @return
+     */
+    public boolean validateMobile(String mobile){
+    	if(!ValidateUtils.isMobile(mobile)){
+    		throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, "手机验证码不正确");
+    	}
+    	Member member = new Member();
+        member.setMobile(mobile);
+        Member member1 = oldMemberService.findMember(member);
+        if (member1 != null) {
+            throw new BusinessException(MsgCodeConstant.member_mcode_account_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
+        }
+        return true;
+    }
+    
     /**
      * 获取名企列表
      *

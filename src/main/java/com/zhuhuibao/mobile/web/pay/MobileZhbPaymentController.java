@@ -40,7 +40,7 @@ public class MobileZhbPaymentController {
     
     @ApiOperation(value = "商品是否已经购买", notes = "商品是否已经购买", response = Response.class)
     @RequestMapping(value = "sel_payment", method = RequestMethod.GET)
-    public Response previewResume(@ApiParam(value = "商品ID") @RequestParam String GoodsID,
+    public Response viewGoodsPayInfo(@ApiParam(value = "商品ID") @RequestParam String GoodsID,
                                   @ApiParam(value = "商品类型同筑慧币") @RequestParam String type) throws Exception {
     	
         return paymentService.viewGoodsRecord(Long.parseLong(GoodsID),type);

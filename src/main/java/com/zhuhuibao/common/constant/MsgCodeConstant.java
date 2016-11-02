@@ -355,4 +355,14 @@ public interface MsgCodeConstant {
 	 */
 	int NOT_EXIST_ORDER_PAYAMOUNT = 3006;
 	
+	/**
+	 * 手机号是空
+	 */
+	int MOBILE_IS_EMPTY = 3007;
+	
+	/**
+	 * 手机短信验证码是空
+	 */
+	int SMS_VERIFY_CODE_IS_EMPTY = 3008;
+	
 }
