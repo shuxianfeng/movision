@@ -575,7 +575,7 @@ public class MobileMemberService {
                 errorMsg = "两次输入的密码不一致";
             }
         } else {
-            errorMsg = "密码输入错";
+            errorMsg = "原密码输入错";
         }
 
         return errorMsg;
