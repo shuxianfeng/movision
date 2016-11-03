@@ -187,6 +187,8 @@ public class MobileEnquiryService {
             map.put(Constants.area, askPrice.getProvinceCode());
             map.put("isCan", askPrice.getIsCan());
             map.put("count", askPrice.getCount());
+            map.put("province", askPrice.getCityCode());
+            map.put("city", askPrice.getAreaCode());
             list.add(map);
         }
         return list;

@@ -347,8 +347,8 @@
   </select>
 
   <select id="findAllNewPriceInfoList" resultMap="BaseResultMap">
-    select p.id,p.title,p.endTime,concat(pr.name,c.name) as provinceCode,
-    (SELECT count(*) FROM t_p_offer_price where askid = p.id) as count,
+    select p.id,p.title,p.endTime,concat(pr.name,c.name) as provinceCode,pr.name as cityCode,c.name as areaCode
+    (SELECT count(*) FROM t_p_offer_price where askid = p.id) as count
     <if test="createid != null and createid != ''">
       CASE WHEN p.createid != #{createid}
       and p.id not in (select askid from t_p_offer_price where createid = #{createid})
@@ -379,7 +379,7 @@
     <if test="createid != null and createid != ''">
       and (case when m.enterpriseEmployeeParentId != 0 then (m.enterpriseEmployeeParentId not in (select enterpriseEmployeeParentId from t_m_member where id = #{createid})) else '1=1' end )
     </if>-->
-    order BY p.publishTime desc
+    order BY p.endTime desc
   </select>
 
   <select id="queryAskPrice" resultMap="ResultMap">
