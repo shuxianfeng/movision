@@ -3,6 +3,7 @@ package com.zhuhuibao.common.util;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -117,13 +118,16 @@ public class ShiroUtil {
      * @param status
      * @param identify
      */
-    public static void updateShiroUser(String status, String identify) {
+    public static void updateShiroUser(String status, String identify, String headShot) {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (session != null) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
             principal.setStatus(Integer.parseInt(status));
             principal.setIdentify(identify);
+            if (StringUtils.isNotBlank(headShot)) {
+                principal.setHeadShot(headShot);
+            }
             session.setAttribute("member", principal);
         }
     }
