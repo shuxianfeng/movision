@@ -10,6 +10,7 @@ import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.*;
+import com.zhuhuibao.mybatis.product.service.ProductService;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
@@ -141,6 +142,9 @@ public class MemberService {
 
     @Autowired
     private MemberSucCaseService memberSucCaseService;
+
+    @Autowired
+    private ProductService productService;
 
     /**
      * 会员信息更新
@@ -556,6 +560,12 @@ public class MemberService {
             map.put(Constants.vipLevel, member.getVipLevel());
             map.put("headShot", member.getHeadShot());
             map.put(Constants.certificateRecord, certificateRecordList);
+            // 查询公司产品类别
+            Map<String, Object> queryMap = new HashMap<>();
+            queryMap.put("status", Constants.product_status_publish);
+            queryMap.put("createid", id);
+            List<Map<String, String>> productTypeList = productService.queryProductTypeListByCompanyId(queryMap);
+            map.put("productTypeList", productTypeList);
             return map;
         } catch (Exception e) {
             log.error("introduce error,id=" + id + ",type=" + type + ">>>", e);
