@@ -365,4 +365,9 @@ public interface MsgCodeConstant {
 	 */
 	int SMS_VERIFY_CODE_IS_EMPTY = 3008;
 	
+	/**
+	 * 手机格式不正确
+	 */
+	int MOBILE_PATTERN_ERROR = 3009;
+	
 }

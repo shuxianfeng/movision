@@ -7,12 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.exception.BaseException;
 import com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck;
-import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
@@ -84,26 +81,21 @@ public class MobileMemberController {
         return response;
     }
 
-    @ApiOperation(value = "根据手机号获取图形验证码", notes = "根据手机号获取图形验证码", response = Response.class)
-    @RequestMapping(value = "/genImgVerifyCodeByMobile", method = RequestMethod.GET)
-    public void genImgVerifyCodeByMobile(@ApiParam(value = "手机号") @RequestParam String mobile,
-    		HttpServletRequest req, HttpServletResponse response) throws Exception {
+    @ApiOperation(value = "校验手机号", notes = "校验手机号", response = Response.class)
+    @RequestMapping(value = "/verifyMobile", method = RequestMethod.POST)
+    public Response verifyMobile(@ApiParam(value = "手机号") @RequestParam String mobile) throws Exception {
     	
-        if(memberService.validateMobile(mobile)){
-        	//生成图形验证码
-        	memberService.getImageVerifyCode(req, response,100,40,4,"first_bind_mobile_imgVerifyCode");
-        }
+        return memberService.validateMobile(mobile);
     }
     
     @ApiOperation(value = "根据图形验证码发送手机验证码", notes = "根据图形验证码发送手机验证码", response = Response.class)
     @RequestMapping(value = "/sendMobileVerifyCodeByImgCode", method = RequestMethod.GET)
     public Response sendMobileVerifyCodeByImgCode(
     		@ApiParam(value = "图形验证码") @RequestParam String imgVerifyCode,
-    		@ApiParam(value = "验证的手机号") @RequestParam String mobile,
-    		HttpServletRequest req, HttpServletResponse response) throws Exception {
+    		@ApiParam(value = "验证的手机号") @RequestParam String mobile) throws Exception {
     	
     	Response res = new Response();
-        if(memberService.verifyImgCode(imgVerifyCode)){
+        if(memberService.verifyImgCode(imgVerifyCode)){	//校验图形验证码
         	//发送手机验证码
         	memberService.sendMobileVerifyCode(mobile);
         }else{
@@ -113,13 +105,11 @@ public class MobileMemberController {
         return res;
     }
     
-    @ApiOperation(value = "绑定手机时图形验证码", notes = "绑定手机时图形验证码", response = Response.class)
-    @RequestMapping(value = "get_img_code", method = RequestMethod.GET)
+    @ApiOperation(value = "生成绑定手机时图形验证码", notes = "生成绑定手机时图形验证码", response = Response.class)
+    @RequestMapping(value = "/get_img_code", method = RequestMethod.GET)
     public void getCode(HttpServletResponse response) throws IOException {
-        Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(false);
-        String verifyCode = VerifyCodeUtils.outputHttpVerifyImage(100, 40, response, Constants.CHECK_IMG_CODE_SIZE);
-        sess.setAttribute("first_bind_mobile_imgVerifyCode", verifyCode);
+    	
+    	memberService.getImgCode(response);
     }
     
     @ApiOperation(value = "绑定手机", notes = "绑定手机", response = Response.class)
@@ -138,27 +128,11 @@ public class MobileMemberController {
         memberService.getSMSVerifyCode();
     }
     
-    
-    
-    @ApiOperation(value = "手机号码修改验证", notes = "手机号码修改", response = Response.class)
+    @ApiOperation(value = "校验旧手机的短信验证码", notes = "校验旧手机的短信验证码", response = Response.class)
     @RequestMapping(value = "/sel_chk_old_mobile", method = RequestMethod.POST)
-    public Response chkOldMobile(@ApiParam(value = "验证码") @RequestParam String verifyCode) throws Exception {
-        Response response = new Response();
+    public Response chkOldMobile(@ApiParam(value = "验证码") @RequestParam String code) throws Exception {
         // 验证 验证码是否正确
-
-        // 修改手机号码
-
-        return response;
+        return memberService.chkOldMobile(code);
     }
 
-    @ApiOperation(value = "手机号码修改", notes = "手机号码修改", response = Response.class)
-    @RequestMapping(value = "/upd_mobile", method = RequestMethod.POST)
-    public Response updMobile(@ApiParam(value = "手机号") @RequestParam String mobile, @ApiParam(value = "验证码") @RequestParam String verifyCode) throws Exception {
-        Response response = new Response();
-        // 验证 验证码是否正确
-
-        // 修改手机号码
-
-        return response;
-    }
 }

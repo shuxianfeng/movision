@@ -84,16 +84,74 @@ public class MobileMemberService {
     private MemberRegService memberRegService;
     
     /**
-     * 绑定手机号
-     * @param mobile
+     * 生成图片验证码
+     * @param response
+     * @throws IOException
+     */
+    public void getImgCode(HttpServletResponse response) throws IOException{
+    	Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(false);
+        String verifyCode = VerifyCodeUtils.outputHttpVerifyImage(100, 40, response, Constants.CHECK_IMG_CODE_SIZE);
+        sess.setAttribute("first_bind_mobile_imgVerifyCode", verifyCode);
+    }
+    
+    
+    /**
+     * 校验旧手机号的短信验证码
      * @param code
+     * @return
+     */
+    public Response chkOldMobile(String code){
+    	Response result = new Response();
+        
+        Member member = new Member();
+    	Long memberId = ShiroUtil.getCreateID();
+    	String mobile = member.getMobile();
+    	
+    	String sessionCode = getSessionCode(mobile);
+    	
+    	validationParams(mobile, code, memberId);
+    	
+        Validateinfo info = getValidationInfo(mobile, code);
+		Date currentTime = new Date();	//当前时间
+		//短信验证码有效期十分钟
+		Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(), "yyyy-MM-dd HH:mm:ss"), 12, 10);
+		
+		if (currentTime.before(sendSMStime)) {
+			if(sessionCode.equals(code)){
+                //前端：进入到绑定新的手机号页面。
+	        }else{
+	        	//手机验证码不正确
+	        	smsException(mobile, result);
+	        }
+		}else{
+			//验证码超时
+			smsTimeOutException(result, info);
+		}
+        return result;
+    }
+
+    /**
+     * 获取session中的短信验证码
+     * @param mobile
+     * @return
+     */
+	private String getSessionCode(String mobile) {
+		Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(true);
+        String sessionCode = (String) sess.getAttribute("mobile_verifycode_"+mobile);
+		return sessionCode;
+	}
+    
+    /**
+     * 绑定手机号
+     * @param mobile	
+     * @param code	短信验证码
      */
     public Response bindMobile(String mobile, String code){
     	Response result = new Response();
     	
-    	Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(true);
-        String sessionCode = (String) sess.getAttribute("mobile_verifycode_"+mobile);
+    	String sessionCode = getSessionCode(mobile);
         
         Member member = new Member();
     	Long memberId = ShiroUtil.getCreateID();
@@ -107,9 +165,8 @@ public class MobileMemberService {
 		
 		if (currentTime.before(sendSMStime)) {
 			if(sessionCode.equals(code)){
-                member.setId(String.valueOf(memberId));
-                member.setMobile(mobile);
-                oldMemberService.updateMemInfo(member);
+				
+                updateMemberMobile(mobile, member, memberId);
 	        }else{
 	        	//手机验证码不正确
 	        	smsException(mobile, result);
@@ -120,6 +177,17 @@ public class MobileMemberService {
 		}
         return result;
     }
+    /**
+     * 修改会员信息中的手机号
+     * @param mobile
+     * @param member
+     * @param memberId
+     */
+	private void updateMemberMobile(String mobile, Member member, Long memberId) {
+		member.setId(String.valueOf(memberId));
+		member.setMobile(mobile);
+		oldMemberService.updateMemInfo(member);
+	}
     
     /**
      * 验证码超时
@@ -163,12 +231,17 @@ public class MobileMemberService {
     	}
 	}
 
-
+	/**
+	 * 获取手机验证信息
+	 * @param mobile
+	 * @param code
+	 * @return
+	 */
 	private Validateinfo getValidationInfo(String mobile, String code) {
 		Validateinfo info = new Validateinfo();
-		info.setAccount(mobile);
-		info.setValid(0);
-		info.setCheckCode(code);
+		info.setAccount(mobile);	//会员账号
+		info.setValid(0);	//有效
+		info.setCheckCode(code);	//验证码
 		info = memberRegService.findMemberValidateInfo(info);
 		return info;
 	}
@@ -236,22 +309,19 @@ public class MobileMemberService {
         memberRegService.inserValidateInfo(info);
 	}
     
-    
-    
     /**
-     * 校验验证码
+     * 校验图形验证码
      * @param imgCode
      * @return
      */
     public boolean verifyImgCode(String imgCode){
     	boolean flag = true;
         Subject currentUser = SecurityUtils.getSubject();
-        Session sess = currentUser.getSession(false);
+        Session sess = currentUser.getSession(true);
         String sessionCode = (String) sess.getAttribute("first_bind_mobile_imgVerifyCode");
         
         if(!(sessionCode.toLowerCase()).equals((imgCode.toLowerCase()))){
         	flag = false;
-//             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"图形验证码不正确");
         }
     	return flag;
     }
@@ -303,18 +373,43 @@ public class MobileMemberService {
      * @param mobile
      * @return
      */
-    public boolean validateMobile(String mobile){
+    public Response validateMobile(String mobile){
+    	Response result = new Response();
+    	
     	if(!ValidateUtils.isMobile(mobile)){
-    		throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, "手机验证码不正确");
+    		mobilePatternException(mobile, result);
     	}
+    	//判断拥有该手机号的会员是否存在
     	Member member = new Member();
         member.setMobile(mobile);
         Member member1 = oldMemberService.findMember(member);
         if (member1 != null) {
-            throw new BusinessException(MsgCodeConstant.member_mcode_account_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
+        	accountWithMobileExistException(mobile, result);
         }
-        return true;
+        return result;
     }
+    /**
+     * 您的输入的手机号已与其他账号绑定
+     * @param mobile
+     * @param result
+     */
+	private void accountWithMobileExistException(String mobile, Response result) {
+		result.setCode(400);
+		result.setMessage("您的输入的手机号已与其他账号绑定");
+		result.setData(mobile);
+		result.setMsgCode(MsgCodeConstant.member_mcode_account_exist);
+	}
+    /**
+     * 手机格式异常
+     * @param mobile
+     * @param result
+     */
+	private void mobilePatternException(String mobile, Response result) {
+		result.setCode(400);
+		result.setMessage("手机格式不正确");
+		result.setData(mobile);
+		result.setMsgCode(MsgCodeConstant.MOBILE_PATTERN_ERROR);
+	}
     
     /**
      * 获取名企列表
