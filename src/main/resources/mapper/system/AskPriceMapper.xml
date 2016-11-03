@@ -408,6 +408,8 @@
     CASE WHEN p.endTime &gt; now() then '询价中' WHEN p.endTime &lt; now() then '结束' END AS status,
     CASE WHEN p.`type`=1 THEN '公开询价' WHEN p.`type`=2 THEN '定向询价' END AS type,
     p.publishTime,concat(pr.name,ci.name,a.name)as area,
+    pr.name as province,
+    ci.name as city,
     (select count(*)from t_p_offer_price where askid = p.id)as size
     from t_p_ask_price p
     left join t_dictionary_province pr on pr.code = p.provinceCode
