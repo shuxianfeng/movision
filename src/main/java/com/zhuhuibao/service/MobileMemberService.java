@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
+import com.taobao.api.domain.BizResult;
 import com.taobao.api.internal.util.json.BufferErrorListener;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
@@ -68,6 +69,8 @@ public class MobileMemberService {
 
     private static final Logger log = LoggerFactory.getLogger(MobileMemberService.class);
 
+    public static final String SUCCESS = "SUCCESS";
+    
     @Autowired
     private MemberMapper memberMapper;
 
@@ -82,6 +85,7 @@ public class MobileMemberService {
 
     @Autowired
     private MemberRegService memberRegService;
+    
     
     /**
      * 生成图片验证码
@@ -104,9 +108,8 @@ public class MobileMemberService {
     public Response chkOldMobile(String code){
     	Response result = new Response();
         
-        Member member = new Member();
     	Long memberId = ShiroUtil.getCreateID();
-    	String mobile = member.getMobile();
+    	String mobile = getMobileByMemberId(memberId);
     	
     	String sessionCode = getSessionCode(mobile);
     	
@@ -120,6 +123,7 @@ public class MobileMemberService {
 		if (currentTime.before(sendSMStime)) {
 			if(sessionCode.equals(code)){
                 //前端：进入到绑定新的手机号页面。
+				result.setData(genSuccessReturnMap(SUCCESS, "校验手机短信验证码成功！"));
 	        }else{
 	        	//手机验证码不正确
 	        	smsException(mobile, result);
@@ -130,6 +134,20 @@ public class MobileMemberService {
 		}
         return result;
     }
+
+    /**
+     * 通过会员id获取会员绑定的手机号
+     * @param memberId
+     * @return
+     */
+	private String getMobileByMemberId(Long memberId) {
+    	Member member = oldMemberService.findMemById(String.valueOf(memberId));
+    	if(null == member){
+    		throw new BusinessException(MsgCodeConstant.NOT_EXIST_MEMBER, "不存在该会员信息");
+    	}
+    	String mobile = member.getMobile();
+		return mobile;
+	}
 
     /**
      * 获取session中的短信验证码
@@ -167,6 +185,7 @@ public class MobileMemberService {
 			if(sessionCode.equals(code)){
 				
                 updateMemberMobile(mobile, member, memberId);
+                result.setData(genSuccessReturnMap(SUCCESS, "绑定手机号成功！"));
 	        }else{
 	        	//手机验证码不正确
 	        	smsException(mobile, result);
@@ -250,12 +269,13 @@ public class MobileMemberService {
 	 * 获取手机短信验证码
 	 * @return
 	 */
-	public void getSMSVerifyCode(){
+	public Response getSMSVerifyCode(){
 		Long memberid = ShiroUtil.getCreateID();
 		Member member = oldMemberService.findMemById(String.valueOf(memberid));
 		String mobile = member.getMobile();
 		
-		sendMobileVerifyCode(mobile);
+		Response res = sendMobileVerifyCode(mobile);
+		return res;
 		
 	}
 	
@@ -265,7 +285,7 @@ public class MobileMemberService {
      * 生成手机验证码并发送
      * @param mobile
      */
-    public void sendMobileVerifyCode(String mobile){
+    public Response sendMobileVerifyCode(String mobile){
     	
     	Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(true);
@@ -279,6 +299,10 @@ public class MobileMemberService {
         addValidationInfo(mobile, verifyCode);
         //把生成的手机验证码缓存到session
         sess.setAttribute("mobile_verifycode_" + mobile, verifyCode);
+        
+        Response result = new Response();
+        result.setData(genSuccessReturnMap(SUCCESS, "手机短信验证码发送成功！"));
+        return result;
     }
 
     /**
@@ -378,6 +402,7 @@ public class MobileMemberService {
     	
     	if(!ValidateUtils.isMobile(mobile)){
     		mobilePatternException(mobile, result);
+    		return result;
     	}
     	//判断拥有该手机号的会员是否存在
     	Member member = new Member();
@@ -385,9 +410,57 @@ public class MobileMemberService {
         Member member1 = oldMemberService.findMember(member);
         if (member1 != null) {
         	accountWithMobileExistException(mobile, result);
+        	return result;
         }
+        
+        result.setData(genSuccessReturnMap(SUCCESS, "手机号校验成功！"));
         return result;
     }
+    
+    /**
+     * 根据新手机号获取图形验证码
+     * @param response
+     * @param mobile
+     * @return
+     * @throws IOException
+     */
+    public Response genImgCodeByNewMobile(HttpServletResponse response ,String mobile) throws IOException{
+    	Response result = new Response();
+    	
+    	if(!ValidateUtils.isMobile(mobile)){
+    		mobilePatternException(mobile, result);
+    		return result;
+    	}
+    	//判断拥有该手机号的会员是否存在
+    	Member member = new Member();
+        member.setMobile(mobile);
+        Member member1 = oldMemberService.findMember(member);
+        if (member1 != null) {
+        	accountWithMobileExistException(mobile, result);
+        	return result;
+        }
+        
+        getImgCode(response);
+        result.setData(genSuccessReturnMap(SUCCESS, "手机号校验成功，并且图片验证码生成成功"));
+        
+        return result;
+    	
+    	
+    }
+    
+
+    /**
+     * 生成成功返回结果的map
+     * @param status
+     * @param msg
+     * @return
+     */
+	private Map genSuccessReturnMap(String status, String msg) {
+		Map map = new HashMap<>();
+        map.put("STATUS", status);
+        map.put("MSG", msg);
+		return map;
+	}
     /**
      * 您的输入的手机号已与其他账号绑定
      * @param mobile
@@ -409,6 +482,7 @@ public class MobileMemberService {
 		result.setMessage("手机格式不正确");
 		result.setData(mobile);
 		result.setMsgCode(MsgCodeConstant.MOBILE_PATTERN_ERROR);
+		
 	}
     
     /**
