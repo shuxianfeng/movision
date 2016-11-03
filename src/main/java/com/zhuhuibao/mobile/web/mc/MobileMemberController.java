@@ -55,11 +55,10 @@ public class MobileMemberController {
         ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
         if (null != loginMember) {
             // 更新memberChk信息
-            memberChk.setId(loginMember.getId());
             memberService.updateMemberInfoCheck(memberChk);
 
             // 更新session中数据状态
-            ShiroUtil.updateShiroUser(memberChk.getStatus(), memberChk.getIdentify());
+            ShiroUtil.updateShiroUser(memberChk.getStatus(),memberChk.getIdentify(),memberChk.getHeadShot());
         } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }

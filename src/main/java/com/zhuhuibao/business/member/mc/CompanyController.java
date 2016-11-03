@@ -26,8 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 /**
- * 企业资料维护
- * Created by cxx on 2016/6/17 0017.
+ * 企业资料维护 Created by cxx on 2016/6/17 0017.
  */
 @RestController
 @RequestMapping("/rest/member/mc/company")
@@ -131,29 +130,20 @@ public class CompanyController {
         if (memberId != null) {
 
             member.setId(memberId);
-            //基本资料待审核
-            if (loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue()
-                    || loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()) {
+            // 基本资料待审核
+            if (loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue() || loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()) {
                 member.setStatus(MemberConstant.MemberStatus.WSZLDSH.toString());
             }
 
-            //实名认证审核通过之后,企业名称不可修改
+            // 实名认证审核通过之后,企业名称不可修改
             Member mem = memberService.findMemById(String.valueOf(memberId));
-            String memStatus=mem.getStatus();
-            if(memStatus.equals(MemberConstant.MemberStatus.SMRZYRZ.toString())){
+            String memStatus = mem.getStatus();
+            if (memStatus.equals(MemberConstant.MemberStatus.SMRZYRZ.toString())) {
                 member.setEnterpriseName(mem.getEnterpriseName());
             }
 
             memInfoCheckService.update(member);
-
-            Subject currentUser = SecurityUtils.getSubject();
-            Session session = currentUser.getSession(false);
-            if (session != null) {
-                ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-                principal.setStatus(Integer.parseInt(mem.getStatus()));
-                principal.setIdentify(loginMember.getIdentify());
-                session.setAttribute("member", principal);
-            }
+            ShiroUtil.updateShiroUser(mem.getStatus(), mem.getIdentify(), mem.getHeadShot());
         } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
@@ -162,16 +152,14 @@ public class CompanyController {
 
     @ApiOperation(value = "企业实名认证保存", notes = "企业实名认证保存", response = Response.class)
     @RequestMapping(value = "upd_mem_realName_info", method = RequestMethod.POST)
-    public Response upd_mem_realName_info(@ApiParam("企业名称") @RequestParam String enterpriseName,
-                                          @ApiParam("营业执照图片URL") @RequestParam String companyBusinessLicenseImg) {
+    public Response upd_mem_realName_info(@ApiParam("企业名称") @RequestParam String enterpriseName, @ApiParam("营业执照图片URL") @RequestParam String companyBusinessLicenseImg) {
         Long memberId = ShiroUtil.getCreateID();
         ShiroRealm.ShiroUser loginMember = ShiroUtil.getMember();
         MemRealCheck member = new MemRealCheck();
         if (memberId != null) {
             member.setId(memberId);
-            //实名认证待审核
-            if (loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue()
-                    || loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()) {
+            // 实名认证待审核
+            if (loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue() || loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()) {
                 member.setStatus(MemberConstant.MemberStatus.SMRZDSH.intValue());
             }
 
@@ -195,12 +183,9 @@ public class CompanyController {
 
     @ApiOperation(value = "企业资质保存", notes = "企业资质保存", response = Response.class)
     @RequestMapping(value = "add_certificate", method = RequestMethod.POST)
-    public Response add_certificate(@ApiParam(value = "证书编号") @RequestParam String certificate_number,
-                                    @ApiParam(value = "证书id") @RequestParam String certificate_id,
-                                    @ApiParam(value = "资质名称") @RequestParam String certificate_name,
-                                    @ApiParam(value = "资质等级") @RequestParam(required = false) String certificate_grade,
-                                    @ApiParam(value = "资质证书图片url") @RequestParam String certificate_url,
-                                    @ApiParam(value = "资质类型：1：供应商资质；2：工程商资质；") @RequestParam String type) {
+    public Response add_certificate(@ApiParam(value = "证书编号") @RequestParam String certificate_number, @ApiParam(value = "证书id") @RequestParam String certificate_id,
+            @ApiParam(value = "资质名称") @RequestParam String certificate_name, @ApiParam(value = "资质等级") @RequestParam(required = false) String certificate_grade,
+            @ApiParam(value = "资质证书图片url") @RequestParam String certificate_url, @ApiParam(value = "资质类型：1：供应商资质；2：工程商资质；") @RequestParam String type) {
         Response result = new Response();
         CertificateRecord record = new CertificateRecord();
         Long memberId = ShiroUtil.getCreateID();
@@ -221,12 +206,8 @@ public class CompanyController {
 
     @ApiOperation(value = "企业资质编辑", notes = "企业资质编辑", response = Response.class)
     @RequestMapping(value = "upd_certificate", method = RequestMethod.POST)
-    public Response update_certificate(@RequestParam String id,
-                                       @RequestParam String certificate_number,
-                                       @RequestParam String certificate_id,
-                                       @RequestParam String certificate_name,
-                                       @RequestParam(required = false) String certificate_grade,
-                                       @RequestParam String certificate_url) {
+    public Response update_certificate(@RequestParam String id, @RequestParam String certificate_number, @RequestParam String certificate_id, @RequestParam String certificate_name,
+            @RequestParam(required = false) String certificate_grade, @RequestParam String certificate_url) {
         Response result = new Response();
         CertificateRecord record = new CertificateRecord();
         Long memberId = ShiroUtil.getCreateID();
@@ -325,12 +306,10 @@ public class CompanyController {
 
     @ApiOperation(value = "我（企业）发布的成功案例", notes = "我（企业）发布的成功案例", response = Response.class)
     @RequestMapping(value = "sel_successCaseList", method = RequestMethod.GET)
-    public Response sel_successCaseList(@ApiParam(value = "标题") @RequestParam(required = false) String title,
-                                        @ApiParam(value = "状态") @RequestParam(required = false) String status,
-                                        @RequestParam(required = false) String pageNo,
-                                        @RequestParam(required = false) String pageSize) throws Exception {
+    public Response sel_successCaseList(@ApiParam(value = "标题") @RequestParam(required = false) String title, @ApiParam(value = "状态") @RequestParam(required = false) String status,
+            @RequestParam(required = false) String pageNo, @RequestParam(required = false) String pageSize) throws Exception {
         Response result = new Response();
-        //设定默认分页pageSize
+        // 设定默认分页pageSize
         if (com.zhuhuibao.utils.pagination.util.StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -339,7 +318,7 @@ public class CompanyController {
         }
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<>();
-        //查询传参
+        // 查询传参
         map.put("title", title);
         map.put("status", status);
         Long createid = ShiroUtil.getCreateID();
