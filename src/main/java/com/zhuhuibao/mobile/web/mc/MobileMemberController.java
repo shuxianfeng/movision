@@ -97,7 +97,7 @@ public class MobileMemberController {
     	Response res = new Response();
         if(memberService.verifyImgCode(imgVerifyCode)){	//校验图形验证码
         	//发送手机验证码
-        	memberService.sendMobileVerifyCode(mobile);
+        	res = memberService.sendMobileVerifyCode(mobile);
         }else{
         	res.setCode(400);
         	res.setMessage("验证码输入错误！");
@@ -123,9 +123,9 @@ public class MobileMemberController {
     
     @ApiOperation(value = "获取手机验证码", notes = "获取手机验证码", response = Response.class)
     @RequestMapping(value = "/getSMSVerifyCode", method = RequestMethod.GET)
-    public void getSMSVerifyCode() throws Exception {
+    public Response getSMSVerifyCode() throws Exception {
     	
-        memberService.getSMSVerifyCode();
+        return memberService.getSMSVerifyCode();
     }
     
     @ApiOperation(value = "校验旧手机的短信验证码", notes = "校验旧手机的短信验证码", response = Response.class)
@@ -135,4 +135,13 @@ public class MobileMemberController {
         return memberService.chkOldMobile(code);
     }
 
+    @ApiOperation(value = "根据新手机号获取图形验证码", notes = "根据新手机号获取图形验证码", response = Response.class)
+    @RequestMapping(value = "/gen_ImgCode_By_new_mobile", method = RequestMethod.GET)
+    public Response genImgCodeByNewMobile(
+    		HttpServletResponse response,
+    		@ApiParam(value = "新手机号") @RequestParam String mobile) throws Exception {
+    	
+        return memberService.genImgCodeByNewMobile(response, mobile);
+    }
+    
 }

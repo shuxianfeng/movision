@@ -233,7 +233,7 @@ public interface MsgCodeConstant {
 	 */
 	int NOT_EXIST_GOODS_ERROR = 3001;
 	/**
-	 * 不存在该会员信息
+	 * 不存在VIP信息
 	 */
 	int NOT_EXIST_VIP = 3002;
 	
@@ -369,5 +369,10 @@ public interface MsgCodeConstant {
 	 * 手机格式不正确
 	 */
 	int MOBILE_PATTERN_ERROR = 3009;
+	
+	/**
+	 * 不存在该会员信息
+	 */
+	int NOT_EXIST_MEMBER = 3010;
 	
 }
