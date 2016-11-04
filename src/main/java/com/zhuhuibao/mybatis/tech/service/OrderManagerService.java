@@ -13,7 +13,6 @@ import com.zhuhuibao.mybatis.order.entity.*;
 import com.zhuhuibao.mybatis.order.service.*;
 import com.zhuhuibao.mybatis.tech.entity.OrderOms;
 import com.zhuhuibao.mybatis.tech.mapper.OrderManagerMapper;
-import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
@@ -83,14 +82,14 @@ public class OrderManagerService {
         try {
             orderList = orderMapper.findAllOmsTechOrder(pager.getRowBounds(), condition);
         } catch (Exception e) {
-            log.error("查询异常>>>",e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return orderList;
     }
 
     /**
-     * 查询已发布的课程      (废弃)
+     * 查询已发布的课程 (废弃)
      *
      * @param condition
      * @return
@@ -120,7 +119,7 @@ public class OrderManagerService {
                 orderMap.put("paymentInfo", paymentInfo);
             }
         } catch (Exception e) {
-            log.error("执行异常>>>",e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return orderMap;
@@ -142,22 +141,23 @@ public class OrderManagerService {
             record.setOrderNo(orderNo);
             result = orderMapper.updateByPrimaryKeySelective(record);
         } catch (Exception e) {
-            log.error("查询异常>>>",e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return result;
     }
 
     /**
-     * 查询收银台初始信息  1:培训课程购买使用筑慧币消费的情况.  0:VIP充值，筑慧币购买不使用筑慧币的情况
+     * 查询收银台初始信息 1:培训课程购买使用筑慧币消费的情况. 0:VIP充值，筑慧币购买不使用筑慧币的情况
      *
-     * @param orderNo 订单编号
+     * @param orderNo
+     *            订单编号
      * @return
      */
     public Map<String, Object> selectCashierDeskInfo(String orderNo) {
         log.info("select casher desk init info orderNo = " + orderNo);
         Map<String, Object> deskInfoMap = orderMapper.selectCashierDeskInfo(orderNo);
-        //1:使用筑慧币消费的情况.  0:VIP充值，筑慧币购买不使用筑慧币的情况
+        // 1:使用筑慧币消费的情况. 0:VIP充值，筑慧币购买不使用筑慧币的情况
         if (!deskInfoMap.isEmpty()) {
             String duration = OrderConstants.CASHIER_PAYMENT_DURATION_24;
             if (OrderConstants.GoodsType.VIP.toString().equals(deskInfoMap.get("goodsType")) || OrderConstants.GoodsType.ZHB.toString().equals(deskInfoMap.get("goodsType"))) {
@@ -180,7 +180,7 @@ public class OrderManagerService {
      */
     public Map<String, Object> useZhbByCashierDesk(Map<String, Object> deskInfoMap, int isUseZhb) {
         if (!deskInfoMap.isEmpty()) {
-            //实付金额
+            // 实付金额
             BigDecimal payAmount = (BigDecimal) deskInfoMap.get("payAmount");
             Map<String, Object> payMap = null;
             if (isUseZhb == 1) {
@@ -189,13 +189,13 @@ public class OrderManagerService {
                     deskInfoMap.put("zhbtotal", zhbAccount.getAmount());
                     payMap = new HashMap<>();
                     BigDecimal zhbAmount = zhbAccount.getAmount();
-                    //筑慧币小于支付金额
+                    // 筑慧币小于支付金额
                     if (zhbAmount.compareTo(payAmount) == -1) {
                         payMap.put("zhb", zhbAmount);
                         BigDecimal alipay = payAmount.subtract(zhbAmount);
                         payMap.put("pay", alipay);
                     }
-                    //1:筑慧币大于支付金额,0:筑慧币等于支付金额
+                    // 1:筑慧币大于支付金额,0:筑慧币等于支付金额
                     else if (zhbAmount.compareTo(payAmount) == 1 || zhbAmount.compareTo(payAmount) == 0) {
                         payMap.put("zhb", payAmount);
                     }
@@ -217,7 +217,7 @@ public class OrderManagerService {
         Map<String, Object> detailMap = new HashMap<>();
 
         try {
-            //订单信息
+            // 订单信息
             Order order = orderMapper.findByOrderNo(orderNo);
             if (order == null || (order.getBuyerId().compareTo(ShiroUtil.getCompanyID()) != 0 && order.getBuyerId().compareTo(ShiroUtil.getCreateID()) != 0)) {
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "订单不存在");
@@ -228,24 +228,23 @@ public class OrderManagerService {
             SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date dtime = order.getDealTime();
             baseInfoMap.put("dealTime", sf.format(dtime));
-            baseInfoMap.put("goodsType",order.getGoodsType());
+            baseInfoMap.put("goodsType", order.getGoodsType());
 
             detailMap.put("baseInfo", baseInfoMap);
 
-            //订单商品信息
+            // 订单商品信息
             genOrderGoodsInfo(orderNo, order.getGoodsType(), memberId, detailMap);
 
-            //订单付款信息
+            // 订单付款信息
             genOrderPayInfo(orderNo, detailMap);
-            //发票信息
+            // 发票信息
             genInvoiceInfo(orderNo, detailMap);
 
-            //培训课程 && 已支付订单  查询培训凭证
+            // 培训课程 && 已支付订单 查询培训凭证
             genPwdticketInfo(orderNo, detailMap, order);
 
-
         } catch (Exception e) {
-            log.error("查询异常>>>",e);
+            log.error("查询异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
 
@@ -260,8 +259,7 @@ public class OrderManagerService {
      * @param order
      */
     private void genPwdticketInfo(String orderNo, Map<String, Object> detailMap, Order order) {
-        if (order.getGoodsType().equals(OrderConstants.GoodsType.JSPX.toString()) ||
-                order.getGoodsType().equals(OrderConstants.GoodsType.ZJPX.toString())) {
+        if (order.getGoodsType().equals(OrderConstants.GoodsType.JSPX.toString()) || order.getGoodsType().equals(OrderConstants.GoodsType.ZJPX.toString())) {
             if (order.getStatus().equals(PayConstants.OrderStatus.YZF.toString())) {
                 List<PwdTicket> pwdticks = pwdTicketService.findByOrderNo(orderNo);
                 Map<String, Object> pwdtickMap = new HashMap<>();
@@ -291,9 +289,8 @@ public class OrderManagerService {
             goodsMap.put("goodsName", orderGoods.getGoodsName());
             goodsMap.put("goodsPrice", orderGoods.getGoodsPrice().toString());
             goodsMap.put("number", orderGoods.getNumber());
-            //课程详细信息
-            if (goodsType.equals(OrderConstants.GoodsType.JSPX.toString()) ||
-                    goodsType.equals(OrderConstants.GoodsType.ZJPX.toString())) {
+            // 课程详细信息
+            if (goodsType.equals(OrderConstants.GoodsType.JSPX.toString()) || goodsType.equals(OrderConstants.GoodsType.ZJPX.toString())) {
 
                 PublishCourse course = publishCourseService.getCourseById(orderGoods.getGoodsId());
                 Map<String, Object> courseMap = new HashMap<>();
@@ -305,12 +302,12 @@ public class OrderManagerService {
                 courseMap.put("price", course.getPrice().toString());
                 courseMap.put("minBuyNumber", course.getMinBuyNumber());
                 courseMap.put("imgUrl", course.getImgUrl());
-                courseMap.put("courseStatus",course.getStatus());
+                courseMap.put("courseStatus", course.getStatus());
 
                 goodsMap.put("courseDetailInfo", courseMap);
             } else if (goodsType.equals(OrderConstants.GoodsType.VIP.toString())) {
-                //订单类型是VIP goodsType = 3
-                //查询所购买的VIP特权内容
+                // 订单类型是VIP goodsType = 3
+                // 查询所购买的VIP特权内容
                 Map<String, Object> vipinfoMap = new HashMap<>();
                 List<Map<String, String>> viprecords = vipInfoService.findVipInfoByID(orderGoods.getGoodsId());
                 List<String> vippNames = new ArrayList<>();
@@ -318,13 +315,13 @@ public class OrderManagerService {
                     vippNames.add(record.get("name"));
                 }
                 vipinfoMap.put("vipnames", vippNames);
-                //所购VIP年限 登陆用户
+                // 所购VIP年限 登陆用户
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(orderGoods.getCreateTime());
                 cal.add(Calendar.YEAR, 1);
                 Date expireTime = cal.getTime();
                 Date activeTime = orderGoods.getCreateTime();
-                long days = DateUtils.dayDiff(activeTime,expireTime);
+                long days = DateUtils.dayDiff(activeTime, expireTime);
                 goodsMap.put("expireTime", days);
                 goodsMap.put("vipinfo", vipinfoMap);
             }
@@ -350,9 +347,9 @@ public class OrderManagerService {
                 payinfoMap.put("tradeStatus", flow.getTradeStatus());
                 payinfoMap.put("tradeFee", flow.getTradeFee().toString());
                 SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                if(flow.getTradeTime() != null){
+                if (flow.getTradeTime() != null) {
                     payinfoMap.put("tradeTime", sf.format(flow.getTradeTime()));
-                }else{
+                } else {
                     payinfoMap.put("tradeTime", "");
                 }
 
@@ -400,26 +397,17 @@ public class OrderManagerService {
      * @return
      */
     private String genAddress(String provinceCode, String cityCode, String areaCode, String oaddress) {
-        String address = null;
-        if (!StringUtils.isEmpty(provinceCode)) {
-            Province province = dictionaryService.selectProvinceByCode(provinceCode);
-            String provinceName = StringUtils.isEmpty(province.getName()) ? "" : province.getName();
+        Province province = dictionaryService.selectProvinceByCode(provinceCode);
+        String provinceName = null == province || StringUtils.isEmpty(province.getName()) ? "" : province.getName();
 
-            String cityName = "";
-            if (!StringUtils.isEmpty(cityCode)) {
-                City city = dictionaryService.selectCityByCode(cityCode);
-                cityName = city.getName();
-            }
+        City city = dictionaryService.selectCityByCode(cityCode);
+        String cityName = null == city || StringUtils.isBlank(city.getName()) ? "" : city.getName();
 
-            String areaName = "";
-            if (!StringUtils.isEmpty(areaCode)) {
-                Area area = dictionaryService.selectAreaByCode(areaCode);
-                areaName = area.getName();
-            }
-            String addressO = StringUtils.isEmpty(oaddress) ? "" : oaddress;
-            address = provinceName + cityName + areaName + addressO;
+        Area area = dictionaryService.selectAreaByCode(areaCode);
+        String areaName = null == area || org.apache.commons.lang.StringUtils.isBlank(area.getName()) ? "" : area.getName();
 
-        }
+        String address = provinceName + cityName + areaName + org.apache.commons.lang.StringUtils.trimToEmpty(oaddress);
+
         return address;
     }
 }
