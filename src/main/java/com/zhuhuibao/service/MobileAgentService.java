@@ -58,6 +58,6 @@ public class MobileAgentService {
      * @return
      */
     public Map getAgentByBrandid(String id) {
-        return agentService.getAgentByProId(id);
+        return agentService.getAgentByBrandid(id);
     }
 }

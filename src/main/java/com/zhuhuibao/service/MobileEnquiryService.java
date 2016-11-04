@@ -1,24 +1,12 @@
 package com.zhuhuibao.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.zhuhuibao.common.util.ShiroUtil;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.AskPriceBean;
 import com.zhuhuibao.common.pojo.AskPriceResultBean;
 import com.zhuhuibao.common.pojo.AskPriceSearchBean;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
@@ -32,6 +20,17 @@ import com.zhuhuibao.utils.MapUtil;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 询报价service
@@ -188,6 +187,8 @@ public class MobileEnquiryService {
             map.put(Constants.area, askPrice.getProvinceCode());
             map.put("isCan", askPrice.getIsCan());
             map.put("count", askPrice.getCount());
+            map.put("province", askPrice.getCityCode());
+            map.put("city", askPrice.getAreaCode());
             list.add(map);
         }
         return list;
@@ -214,6 +215,8 @@ public class MobileEnquiryService {
             askMap.put(Constants.publishTime, resultBean.getPublishTime().substring(0, 10));
             askMap.put(Constants.area, resultBean.getArea());
             askMap.put(Constants.size, resultBean.getSize());
+            askMap.put("province", resultBean.getProvince());
+            askMap.put("city", resultBean.getCity());
             askList.add(askMap);
         }
         pager.result(askList);

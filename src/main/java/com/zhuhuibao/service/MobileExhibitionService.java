@@ -43,7 +43,7 @@ public class MobileExhibitionService {
      */
     public List<Map<String, String>> getMyExhibitionList(Paging<Map<String, String>> pager, Map<String, Object> map) {
         try {
-            String viewsOrder = (String.valueOf(map.get("publishTimeOrder"))).toUpperCase();
+            String viewsOrder = (String.valueOf(map.get("viewsOrder"))).toUpperCase();
             String publishTimeOrder = (String.valueOf(map.get("publishTimeOrder"))).toUpperCase();
             // 此处必须判断viewsOrder和publishTimeOrder是否在标准参数中，以防止SQL注入
             if (!ArrayUtils.contains(Constants.ORDER_TYPE_KEYWORD, viewsOrder)) {
