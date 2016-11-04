@@ -15,8 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 手机端
- * 支付宝支付  {回调接口} callback
+ * 手机端 支付宝支付 {回调接口} callback
  */
 @RestController
 @RequestMapping("/rest/m/alipay")
@@ -29,63 +28,63 @@ public class MobileAlipayController {
     /**
      * 支付宝同步[即时到账]
      * <p/>
-     * 支付宝同步跳转 {return_url}      GET
+     * 支付宝同步跳转 {return_url} GET
      *
-     * @param request http 请求
+     * @param request
+     *            http 请求
      */
     @RequestMapping(value = "callback/direct_return", method = RequestMethod.GET)
     public ModelAndView alipaySynchPay(HttpServletRequest request) {
-    	
-        log.debug("*****支付宝同步[即时到账]跳转*****开始");
-        //默认回调页面
-        String returnUrl = AlipayPropertiesLoader.getPropertyValue("alipay_return_url");
-        return alipayService.syncNotify(request, PayConstants.TradeType.PAY.toString(),returnUrl);
+        log.debug("*****H5支付宝同步[即时到账]跳转*****开始");
+        String returnUrl = AlipayPropertiesLoader.getPropertyValue("h5_alipay_return_url");
+        return alipayService.syncNotify(request, PayConstants.TradeType.PAY.toString(), returnUrl);
     }
-
-
 
     /**
      * 支付宝同步[批量退款]
      * <p/>
-     * 支付宝同步跳转 {return_url}      GET
+     * 支付宝同步跳转 {return_url} GET
      *
-     * @param request http 请求
+     * @param request
+     *            http 请求
      */
     @RequestMapping(value = "callback/refund_return", method = RequestMethod.GET)
     public ModelAndView alipaySynchRefund(HttpServletRequest request) {
-    	
-        log.debug("*****支付宝同步[批量退款]跳转*****开始");
+
+        log.debug("*****H5支付宝同步[批量退款]跳转*****开始");
         String returnUrl = AlipayPropertiesLoader.getPropertyValue("alirefund_return_url");
-        return alipayService.syncNotify(request, PayConstants.TradeType.REFUND.toString(),returnUrl);
+        return alipayService.syncNotify(request, PayConstants.TradeType.REFUND.toString(), returnUrl);
     }
 
     /**
      * 即时到账接口
      * <p/>
-     * 支付宝异步跳转 {notify_url}      POST
+     * 支付宝异步跳转 {notify_url} POST
      *
-     * @param request  http 请求
-     * @param response http
+     * @param request
+     *            http 请求
+     * @param response
+     *            http
      */
     @RequestMapping(value = "callback/direct_notify", method = RequestMethod.POST)
     public void alipayAsynPay(HttpServletRequest request, HttpServletResponse response) {
-    	
         log.debug("*******支付宝[即时到账]异步跳转******开始");
-
         alipayService.asyncNotify(request, response, PayConstants.TradeType.PAY.toString());
     }
 
     /**
      * 批量退款
      * <p/>
-     * 支付宝异步跳转 {notify_url}      POST
+     * 支付宝异步跳转 {notify_url} POST
      *
-     * @param request  http 请求
-     * @param response http
+     * @param request
+     *            http 请求
+     * @param response
+     *            http
      */
     @RequestMapping(value = "callback/refund_notify", method = RequestMethod.POST)
     public void alipayAsynRefund(HttpServletRequest request, HttpServletResponse response) {
-    	
+
         log.debug("*******支付宝[批量退款]异步跳转******开始");
 
         alipayService.asyncNotify(request, response, PayConstants.TradeType.REFUND.toString());

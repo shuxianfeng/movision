@@ -267,7 +267,6 @@
         SELECT DISTINCT
         b.id,
         b.CNName,
-        p.scateid,
         b.logourl,
         m.enterpriseName as enterpriseName
         FROM t_p_product p

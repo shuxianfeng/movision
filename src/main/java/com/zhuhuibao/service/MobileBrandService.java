@@ -1,9 +1,6 @@
 package com.zhuhuibao.service;
 
-import com.zhuhuibao.common.pojo.BrandBean;
-import com.zhuhuibao.common.pojo.BrandDetailBean;
-import com.zhuhuibao.common.pojo.ResultBean;
-import com.zhuhuibao.common.pojo.SysBean;
+import com.zhuhuibao.common.pojo.*;
 import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.entity.CheckBrand;
 import com.zhuhuibao.mybatis.memCenter.mapper.BrandMapper;
@@ -56,7 +53,13 @@ public class MobileBrandService {
         Map queryMap = new HashMap();
         queryMap.put("parentId", parentId);
         queryMap.put("subTypeId", subTypeId);
-        return brandMapper.findAllHotBrandListByType(pager.getRowBounds(), queryMap);
+        List<SuggestBrand> list = brandMapper.findAllHotBrandListByType(pager.getRowBounds(), queryMap);
+        if (null == subTypeId || (null != subTypeId & subTypeId.equals(""))) {
+            for (SuggestBrand suggestBrand : list) {
+                suggestBrand.setScateid(this.findScateIdByBrandId(suggestBrand.getId()).get(0));
+            }
+        }
+        return list;
     }
 
     /**
