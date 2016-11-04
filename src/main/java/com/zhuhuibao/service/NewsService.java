@@ -285,7 +285,7 @@ public class NewsService {
         } else {
             Map queryMap = new HashMap();
             queryMap.put("type", type);
-            queryMap.put("subtype", subtype);
+            queryMap.put("subType", subtype);
             return newsMapper.findAllMobileNewsByType(queryMap, pager.getRowBounds());
         }
     }
