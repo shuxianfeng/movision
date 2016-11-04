@@ -12,16 +12,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.google.gson.Gson;
-import com.taobao.api.domain.BizResult;
-import com.taobao.api.internal.util.json.BufferErrorListener;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.exception.BaseException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.fsearch.pojo.spec.ContractorSearchSpec;
 import com.zhuhuibao.fsearch.pojo.spec.SupplierSearchSpec;
@@ -45,17 +53,6 @@ import com.zhuhuibao.utils.ValidateUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.sms.SDKSendSms;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.crypto.hash.Md5Hash;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 会员中心业务处理实现类
@@ -88,6 +85,27 @@ public class MobileMemberService {
     
     
     /**
+     * 获取当前用户绑定的手机号
+     * @return
+     */
+    public Response getCurUserMobile(){
+    	Response res = new Response();
+    	Long memberId = ShiroUtil.getCreateID();
+    	String mobile = getMobileByMemberId(memberId);
+    	Map map = new HashMap<>();
+    	if(org.apache.commons.lang3.StringUtils.isEmpty(mobile)){
+    		map.put("IS_EXIST_MOBILE", "NO");
+        	map.put("MOBILE", "");
+    	}else{
+    		map.put("IS_EXIST_MOBILE", "YES");
+    		String encode_mobile = mobile.substring(0,3) + "******" + mobile.substring(9, mobile.length());
+        	map.put("MOBILE", encode_mobile);
+    	}
+    	res.setData(map);
+    	return res;
+    }
+    
+    /**
      * 生成图片验证码
      * @param response
      * @throws IOException
@@ -116,6 +134,11 @@ public class MobileMemberService {
     	validationParams(mobile, code, memberId);
     	
         Validateinfo info = getValidationInfo(mobile, code);
+        if(null == info){
+        	//手机验证码不正确
+        	smsException(mobile, code, result);
+        	return result;
+		}
 		Date currentTime = new Date();	//当前时间
 		//短信验证码有效期十分钟
 		Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(), "yyyy-MM-dd HH:mm:ss"), 12, 10);
@@ -126,7 +149,7 @@ public class MobileMemberService {
 				result.setData(genSuccessReturnMap(SUCCESS, "校验手机短信验证码成功！"));
 	        }else{
 	        	//手机验证码不正确
-	        	smsException(mobile, result);
+	        	smsException(mobile, code, result);
 	        }
 		}else{
 			//验证码超时
@@ -169,7 +192,9 @@ public class MobileMemberService {
     public Response bindMobile(String mobile, String code){
     	Response result = new Response();
     	
-    	String sessionCode = getSessionCode(mobile);
+    	Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(true);
+        String sessionCode = (String) sess.getAttribute("mobile_verifycode_"+mobile);
         
         Member member = new Member();
     	Long memberId = ShiroUtil.getCreateID();
@@ -177,6 +202,11 @@ public class MobileMemberService {
     	validationParams(mobile, code, memberId);
     	
         Validateinfo info = getValidationInfo(mobile, code);
+        if(null == info){
+        	//手机验证码不正确
+        	smsException(mobile, code, result);
+        	return result;
+		}
 		Date currentTime = new Date();	//当前时间
 		//短信验证码有效期十分钟
 		Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(), "yyyy-MM-dd HH:mm:ss"), 12, 10);
@@ -185,10 +215,12 @@ public class MobileMemberService {
 			if(sessionCode.equals(code)){
 				
                 updateMemberMobile(mobile, member, memberId);
+//                ShiroUser m = (ShiroUser) sess.getAttribute("member");
+//                m.setAccount(account);
                 result.setData(genSuccessReturnMap(SUCCESS, "绑定手机号成功！"));
 	        }else{
 	        	//手机验证码不正确
-	        	smsException(mobile, result);
+	        	smsException(mobile, mobile, result);
 	        }
 		}else{
 			//验证码超时
@@ -224,10 +256,14 @@ public class MobileMemberService {
 	 * @param mobile
 	 * @param result
 	 */
-	private void smsException(String mobile, Response result) {
+	private void smsException(String mobile, String code, Response result) {
 		result.setCode(400);
 		result.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
-		result.setData(mobile);
+		Map m = new HashMap<>();
+		m.put("MOBILE", mobile);
+		m.put("SMS_CODE", code);
+		
+		result.setData(m);
 		result.setMsgCode(MsgCodeConstant.member_mcode_mobile_validate_error);
 	}
 
@@ -262,6 +298,7 @@ public class MobileMemberService {
 		info.setValid(0);	//有效
 		info.setCheckCode(code);	//验证码
 		info = memberRegService.findMemberValidateInfo(info);
+		
 		return info;
 	}
     

@@ -143,4 +143,11 @@ public class MobileMemberController {
         return memberService.genImgCodeByNewMobile(response, mobile);
     }
     
+    @ApiOperation(value = "获取当前用户的手机号", notes = "获取当前用户的手机号", response = Response.class)
+    @RequestMapping(value = "/getCurUserMobile", method = RequestMethod.GET)
+    public Response getCurUserMobile() throws Exception {
+    	
+        return memberService.getCurUserMobile();
+    } 
+    
 }
