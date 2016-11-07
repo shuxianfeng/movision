@@ -302,7 +302,7 @@
    <select id="queryDetailsById" resultType="java.util.Map" parameterType="java.lang.Long" >
     select
       id, title, date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,  description,content, imgurl,views
-      ,attachName,attachUrl
+      ,attachName,attachUrl,wordkey
     from t_oms_channel_news
     where id = #{id,jdbcType=BIGINT}
   </select>
