@@ -170,7 +170,7 @@ public class AccountService {
                 MemInfoCheck infoCheck = new MemInfoCheck();
                 BeanUtils.copyProperties(member,infoCheck);
                 infoCheck.setId(Long.valueOf(member.getId()));
-                infoCheck.setStatus(MemberConstant.MemberStatus.ZCCG.toString());
+                infoCheck.setStatus(MemberConstant.MemberStatus.ZCCG.intValue());
                 infoCheckMapper.insertSelective(infoCheck);
 
                 MemRealCheck realCheck = new MemRealCheck();

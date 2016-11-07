@@ -11,7 +11,7 @@ public class MemRealCheck {
 
     private Date updateTime;
 
-    private Integer status;
+    private int status;
 
     private String enterpriseName;
 
@@ -64,11 +64,11 @@ public class MemRealCheck {
         this.updateTime = updateTime;
     }
 
-    public Integer getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

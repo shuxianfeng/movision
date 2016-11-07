@@ -118,12 +118,12 @@ public class ShiroUtil {
      * @param status
      * @param identify
      */
-    public static void updateShiroUser(String status, String identify, String headShot) {
+    public static void updateShiroUser(int status, String identify, String headShot) {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (session != null) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            principal.setStatus(Integer.parseInt(status));
+            principal.setStatus(status);
             principal.setIdentify(identify);
             if (StringUtils.isNotBlank(headShot)) {
                 principal.setHeadShot(headShot);

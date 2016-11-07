@@ -583,7 +583,7 @@ public class MobileMemberService {
         memInfoCheck.setId(loginMember.getId());
         // 设置修改后的数据状态
         if (loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue() || loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()) {
-            memInfoCheck.setStatus(MemberConstant.MemberStatus.WSZLDSH.toString());
+            memInfoCheck.setStatus(MemberConstant.MemberStatus.WSZLDSH.intValue());
         }
 
         memInfoCheckService.update(memInfoCheck);

@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.memberReg.service;
 
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MemberConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck;
@@ -136,7 +137,7 @@ public class RegisterValidateService {
 
                                MemInfoCheck info = new MemInfoCheck();
                                info.setId(user.getId());
-                               info.setStatus("1");
+                               info.setStatus(MemberConstant.MemberStatus.ZCCG.intValue());
                                infoCheckMapper.updateByPrimaryKeySelective(info);
 
                                MemRealCheck real = new MemRealCheck();

@@ -132,7 +132,7 @@ public class CompanyController {
             member.setId(memberId);
             // 基本资料待审核
             if (loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue() || loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()) {
-                member.setStatus(MemberConstant.MemberStatus.WSZLDSH.toString());
+                member.setStatus(MemberConstant.MemberStatus.WSZLDSH.intValue());
             }
 
             // 实名认证审核通过之后,企业名称不可修改
@@ -143,7 +143,7 @@ public class CompanyController {
             }
 
             memInfoCheckService.update(member);
-            ShiroUtil.updateShiroUser(mem.getStatus(), mem.getIdentify(), mem.getHeadShot());
+            ShiroUtil.updateShiroUser(Integer.parseInt(mem.getStatus()), mem.getIdentify(), mem.getHeadShot());
         } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
