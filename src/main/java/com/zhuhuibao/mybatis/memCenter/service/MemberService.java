@@ -559,6 +559,7 @@ public class MemberService {
             map.put(Constants.fax, member.getEnterpriseFox());
             map.put(Constants.vipLevel, member.getVipLevel());
             map.put("headShot", member.getHeadShot());
+            map.put("enterpriseLogo", member.getEnterpriseLogo());
             map.put(Constants.certificateRecord, certificateRecordList);
             // 查询公司产品类别
             Map<String, Object> queryMap = new HashMap<>();
@@ -826,7 +827,7 @@ public class MemberService {
      * VIP 工程商简介
      * 
      * @param id
-     * @param string
+     * @param type
      * @return
      */
     public Map vipIntroduce(String id, String type) {
