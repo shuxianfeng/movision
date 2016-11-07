@@ -406,9 +406,11 @@ public class MobileSupplierController {
         // banner图
         MemberShop shop = shopService.getMemberShop(Long.valueOf(id));
         List<String> bannerList = new ArrayList<>();
-        bannerList.add(shop.getMobileBannerUrlF());
-        bannerList.add(shop.getMobileBannerUrlS());
-        bannerList.add(shop.getMobileBannerUrlT());
+        if (null != shop) {
+            bannerList.add(shop.getMobileBannerUrlF());
+            bannerList.add(shop.getMobileBannerUrlS());
+            bannerList.add(shop.getMobileBannerUrlT());
+        }
         map.put("banner", bannerList);
         return new Response(map);
     }
