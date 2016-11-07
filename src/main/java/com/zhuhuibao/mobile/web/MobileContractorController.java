@@ -14,6 +14,7 @@ import com.zhuhuibao.service.MobileChannelNewsService;
 import com.zhuhuibao.service.MobileMemberService;
 import com.zhuhuibao.service.MobileSysAdvertisingService;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -217,10 +218,10 @@ public class MobileContractorController {
         if (ShiroUtil.getCreateID() == null) {
             title = "来自匿名用户的留言";
         } else {
-            if (null != ShiroUtil.getMember().getNickname()) {
+            if (StringUtils.isNotBlank(ShiroUtil.getMember().getNickname())) {
                 title = "来自" + ShiroUtil.getMember().getNickname() + "的留言";
             } else {
-                if (null != ShiroUtil.getMember().getCompanyName()) {
+                if (StringUtils.isNotBlank(ShiroUtil.getMember().getCompanyName())) {
                     title = "来自" + ShiroUtil.getMember().getCompanyName() + "的留言";
                 } else {
                     title = "来自匿名用户的留言";
