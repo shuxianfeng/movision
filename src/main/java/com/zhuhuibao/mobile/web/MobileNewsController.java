@@ -57,7 +57,7 @@ public class MobileNewsController {
     @RequestMapping(value = "sel_news_list", method = RequestMethod.GET)
     public Response selNewsList(@ApiParam(value = "列表类型:1 全部，2 热点，3 分类") @RequestParam(required = true) String queryType,
             @ApiParam(value = "一级分类:1 行业资讯,2 专题,3 筑慧访谈,4 曝光台,5 工程商新闻,6 深度观察,7 活动") @RequestParam(required = true) String type,
-            @ApiParam(value = "二级分类:1 网络及硬件,2 安全防范,3 楼宇自动化,4 数据中心,5 智能家居,6 影音视频,7 应用系统,8 智能照明,9 行业软件") @RequestParam(required = true) String subtype,
+            @ApiParam(value = "二级分类:1 网络及硬件,2 安全防范,3 楼宇自动化,4 数据中心,5 智能家居,6 影音视频,7 应用系统,8 智能照明,9 行业软件") @RequestParam(required = false) String subtype,
             @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo, @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
         Paging<NewsForm> pager = new Paging<>(pageNo, pageSize);
