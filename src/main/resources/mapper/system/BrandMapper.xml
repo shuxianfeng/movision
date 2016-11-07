@@ -269,10 +269,10 @@
         b.CNName,
         b.logourl,
         m.enterpriseName as enterpriseName
-        FROM t_p_product p
-        LEFT JOIN t_p_brand b ON b.id = p.brandid
+        FROM t_p_brand_sys bs
+        LEFT JOIN t_p_brand b ON bs.brandid = b.id
         LEFT JOIN t_m_member m ON b.createid = m.id
-        WHERE b.status = 1 AND p.status = 1 and p.scateid IN
+        WHERE b.status = 1 AND b.status = 1 and bs.scateid IN
         (select
         id
         from t_p_category
@@ -283,6 +283,7 @@
         <if test="subTypeId != null and subTypeId != ''">
             and id = #{subTypeId}
         </if>
+
         )
         ORDER BY b.views DESC
     </select>
