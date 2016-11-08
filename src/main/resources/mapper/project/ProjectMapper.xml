@@ -438,13 +438,17 @@
             <if test="city != null and city != ''">
                 and t.city = #{city}
             </if>
-            <if test="startDateA != null and startDateB != null">
-                and t.startDate &gt;= date_format(#{startDateA},'%Y-%m-%d') and t.startDate &lt;=
-                date_format(#{startDateB},'%Y-%m-%d')
+            <if test="startDateA != null">
+                and t.startDate &gt;= date_format(#{startDateA},'%Y-%m-%d')
             </if>
-            <if test="endDateA != null and endDateB != null">
-                and t.endDate &gt;= date_format(#{endDateA},'%Y-%m-%d') and t.endDate &lt;=
-                date_format(#{endDateB},'%Y-%m-%d')
+            <if test="startDateB != null">
+                and t.startDate &lt;= date_format(#{startDateB},'%Y-%m-%d')
+            </if>
+            <if test="endDateA != null">
+                and t.endDate &gt;= date_format(#{endDateA},'%Y-%m-%d')
+            </if>
+            <if test="endDateB != null">
+                and t.endDate &lt;= date_format(#{endDateB},'%Y-%m-%d')
             </if>
         </where>
         order by t.updateDate desc
