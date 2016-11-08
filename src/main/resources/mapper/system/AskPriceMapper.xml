@@ -404,7 +404,7 @@
   </select>
 
   <select id="findAllPriceInfo"  resultType="com.zhuhuibao.common.pojo.AskPriceResultBean">
-    select p.id,p.title,
+    select p.id,p.title,p.endTime,
     CASE WHEN p.endTime &gt; now() then '询价中' WHEN p.endTime &lt; now() then '结束' END AS status,
     CASE WHEN p.`type`=1 THEN '公开询价' WHEN p.`type`=2 THEN '定向询价' END AS type,
     p.publishTime,concat(pr.name,ci.name,a.name)as area,

@@ -16,6 +16,7 @@ import com.zhuhuibao.mybatis.memCenter.service.OfferPriceService;
 import com.zhuhuibao.mybatis.memCenter.service.PriceService;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MapUtil;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.file.FileUtil;
@@ -217,6 +218,7 @@ public class MobileEnquiryService {
             askMap.put(Constants.size, resultBean.getSize());
             askMap.put("province", resultBean.getProvince());
             askMap.put("city", resultBean.getCity());
+            askMap.put("endTime", DateUtils.date2Str(resultBean.getEndTime()));
             askList.add(askMap);
         }
         pager.result(askList);

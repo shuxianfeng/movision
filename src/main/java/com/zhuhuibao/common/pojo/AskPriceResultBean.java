@@ -1,5 +1,7 @@
 package com.zhuhuibao.common.pojo;
 
+import java.util.Date;
+
 /**
  * Created by cxx on 2016/3/31 0031.
  */
@@ -32,6 +34,16 @@ public class AskPriceResultBean {
     private String province;
 
     private String city;
+
+    private Date endTime;
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
 
     public String getId() {
         return id;
