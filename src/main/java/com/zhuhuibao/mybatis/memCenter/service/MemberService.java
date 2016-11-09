@@ -809,7 +809,8 @@ public class MemberService {
 
                 // 同步信息到基本信息审核表
                 MemInfoCheck memCheck = new MemInfoCheck();
-                BeanUtils.copyProperties(member, memCheck);
+                memCheck.setId(member.getId());
+                memCheck.setEnterpriseName(member.getEnterpriseName());
                 infoCheckService.update(memCheck);
 
             }
