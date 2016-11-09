@@ -11,7 +11,7 @@ public class MemInfoCheck {
 
     private String updateTime;
 
-    private int status;
+    private Integer status;
 
     private String identify;
     private String identifyName;
@@ -210,12 +210,11 @@ public class MemInfoCheck {
         this.updateTime = updateTime;
     }
 
-    
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
