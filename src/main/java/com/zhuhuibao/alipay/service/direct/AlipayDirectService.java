@@ -109,8 +109,8 @@ public class AlipayDirectService {
      * @throws AlipayApiException
      */
     public void h5Pay(HttpServletResponse httpResponse, OrderFlow orderFlow, Map<String, String> msgParam) throws ServletException, IOException, AlipayApiException {
-        AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", AlipayPropertiesLoader.getPropertyValue("app_id"),
-                AlipayPropertiesLoader.getPropertyValue("private_key"), "json", aliPayConfig.getInputCharset(), AlipayPropertiesLoader.getPropertyValue("alipay_public_key"));
+        AlipayClient alipayClient = new DefaultAlipayClient(AlipayPropertiesLoader.getPropertyValue("h5_alipay_gateway"), AlipayPropertiesLoader.getPropertyValue("app_id"),
+                AlipayPropertiesLoader.getPropertyValue("h5_alipay_private_key"), "json", aliPayConfig.getInputCharset(), AlipayPropertiesLoader.getPropertyValue("h5_alipay_public_key"));
         AlipayTradeWapPayRequest alipayRequest = new AlipayTradeWapPayRequest();// 创建API对应的request
         alipayRequest.setReturnUrl(AlipayPropertiesLoader.getPropertyValue("h5_direct_return_url"));
         alipayRequest.setNotifyUrl(AlipayPropertiesLoader.getPropertyValue("h5_direct_notify_url"));// 在公共参数中设置回跳和通知地址

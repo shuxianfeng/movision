@@ -367,7 +367,7 @@
         date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
         FROM t_n_news
         where 1=1 AND status = 1
-        <if test="subType != null and subType != '' and type =1">
+        <if test="subType != null and subType != '' and type ==1">
             and sub_type = #{subType,jdbcType=INTEGER}
         </if>
         <if test="type != null and type != '' ">
