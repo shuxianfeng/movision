@@ -307,7 +307,11 @@ public class NewsService {
      * @return
      */
     public List<NewsForm> getRecommendNews(String keywords, Integer id) {
+
         List<NewsForm> recommends = new ArrayList<>();
+        if (null == keywords) {
+            return recommends;
+        }
         String[] keyWordArr = keywords.split(",");
         Map queryMap = new HashMap();
         queryMap.put("id", id);
