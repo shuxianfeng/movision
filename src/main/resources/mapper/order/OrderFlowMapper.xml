@@ -143,6 +143,6 @@
     DISTINCT(orderNo),tradeMode,tradeFee
     from t_o_order_flow
     where orderNo = #{orderNo}
-    and tradeStatus = 1  order by  createTime desc;
+    and tradeStatus = 1  GROUP BY tradeMode order by  createTime desc ;
   </select>
 </mapper>

@@ -47,8 +47,8 @@ public class OrderFlowService {
      * @param orderNo
      * @return
      */
-    public OrderFlow findUniqueOrderFlow(String orderNo) {
-        OrderFlow orderFlows;
+    public List<OrderFlow> findUniqueOrderFlow(String orderNo) {
+        List<OrderFlow> orderFlows;
         try {
             orderFlows = mapper.findUniqueOrderFlow(orderNo);
         } catch (Exception e) {
