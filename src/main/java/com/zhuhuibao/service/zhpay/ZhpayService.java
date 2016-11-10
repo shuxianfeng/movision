@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -128,31 +129,34 @@ public class ZhpayService {
         checkParams(msgParam);
 
         // 根据t_o_order_flow表进行支付
-        OrderFlow orderFlows = orderFlowService.findUniqueOrderFlow(msgParam.get("orderNo"));
+        List<OrderFlow> orderFlows = orderFlowService.findByOrderNo(msgParam.get("orderNo"));
 
-        if (null != orderFlows) {
-            if (PayConstants.PayMode.ALIPAY.toString().equals(orderFlows.getTradeMode())) { // 支付宝支付
-                // 支付宝支付参数准备
-                msgParam.put("goodsPrice", orderFlows.getTradeFee().toString());
-                preAliPayParams(msgParam);
-                // pc--调用支付宝支付
-                if (null == msgParam.get("payType") || (null != msgParam.get("payType") && msgParam.get("payType").equals(""))
-                        || (null != msgParam.get("payType") && msgParam.get("payType").equals("pc"))) {
-                    alipayDirectService.doPay(resp, msgParam);
+        if (orderFlows.size() > 0) {
+            for (OrderFlow flow : orderFlows) {
+                if (PayConstants.PayMode.ALIPAY.toString().equals(flow.getTradeMode())) { // 支付宝支付
+                    // 支付宝支付参数准备
+                    msgParam.put("goodsPrice", flow.getTradeFee().toString());
+                    preAliPayParams(msgParam);
+                    // pc--调用支付宝支付
+                    if (null == msgParam.get("payType") || (null != msgParam.get("payType") && msgParam.get("payType").equals(""))
+                            || (null != msgParam.get("payType") && msgParam.get("payType").equals("pc"))) {
+                        alipayDirectService.doPay(resp, msgParam);
+                    } else {
+                        // 触屏--调用支付宝支付
+                        alipayDirectService.h5Pay(resp, flow, msgParam);
+                    }
+
+                } else if (PayConstants.PayMode.ZHBPAY.toString().equals(flow.getTradeMode())) {// 筑慧币支付
+                    // 参数准备 校验
+                    preZhPayParams(msgParam);
+                    // 调用筑慧币支付平台
+                    String orderNo = flow.getOrderNo();
+                    zhbService.payForOrder(orderNo);
                 } else {
-                    // 触屏--调用支付宝支付
-                    alipayDirectService.h5Pay(resp, orderFlows, msgParam);
+                    log.error("不支持的支付方式");
+                    throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "不支持的支付方式");
                 }
 
-            } else if (PayConstants.PayMode.ZHBPAY.toString().equals(orderFlows.getTradeMode())) {// 筑慧币支付
-                // 参数准备 校验
-                preZhPayParams(msgParam);
-                // 调用筑慧币支付平台
-                String orderNo = orderFlows.getOrderNo();
-                zhbService.payForOrder(orderNo);
-            } else {
-                log.error("不支持的支付方式");
-                throw new BusinessException(MsgCodeConstant.ALIPAY_PARAM_ERROR, "不支持的支付方式");
             }
 
         } else {
