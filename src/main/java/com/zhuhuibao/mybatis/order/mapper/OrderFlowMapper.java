@@ -14,5 +14,7 @@ public interface OrderFlowMapper {
 
     List<OrderFlow> findByOrderNo(@Param("orderNo") String orderNo);
 
+    OrderFlow findUniqueOrderFlow(@Param("orderNo") String orderNo);
+
     int update(OrderFlow alFlow);
 }

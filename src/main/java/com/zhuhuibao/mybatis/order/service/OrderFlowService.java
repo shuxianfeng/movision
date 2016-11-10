@@ -40,6 +40,24 @@ public class OrderFlowService {
         return orderFlows;
     }
 
+
+    /**
+     * 根据订单号查询信息
+     *
+     * @param orderNo
+     * @return
+     */
+    public OrderFlow findUniqueOrderFlow(String orderNo) {
+        OrderFlow orderFlows;
+        try {
+            orderFlows = mapper.findUniqueOrderFlow(orderNo);
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询数据失败");
+        }
+        return orderFlows;
+    }
+
     /**
      * 根据订单号和支付方式查询信息
      *
