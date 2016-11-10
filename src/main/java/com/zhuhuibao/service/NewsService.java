@@ -310,6 +310,8 @@ public class NewsService {
 
         List<NewsForm> recommends = new ArrayList<>();
         if (null == keywords) {
+            Paging<NewsForm> pager = new Paging<>(1, 5);
+            recommends = this.mobileSelNewsList("2", null, null, pager);
             return recommends;
         }
         String[] keyWordArr = keywords.split(",");
