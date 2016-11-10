@@ -255,7 +255,13 @@ public class AlipayService {
                         // BigDecimal(params.get("price"));
                         // BigDecimal totalFee = price.multiply(new
                         // BigDecimal(params.get("quantity")));
-                        BigDecimal totalFee = new BigDecimal(params.get("total_fee"));
+                        BigDecimal totalFee = new BigDecimal(0);
+                        if (null == params.get("total_fee")) {
+                            totalFee = new BigDecimal("total_amount");
+                        } else {
+                            totalFee = new BigDecimal("total_fee");
+                        }
+
                         if (!String.valueOf(order.getPayAmount()).equals(totalFee.toString())) {
                             log.error("支付宝返回交易金额[{}] 与 订单支付金额[{}] 不符合", totalFee.toString(), order.getPayAmount());
                             out.println("fail");
