@@ -98,6 +98,7 @@
         and o.orderNo = #{orderNo}
       </if>
     </where>
+    ORDER BY o.dealTime DESC
   </select>
   <select id="selectCashierDeskInfo" parameterType="java.lang.String" resultType="java.util.Map">
     select t.orderNo,t.payAmount,gd.goodsName,t.goodsType from t_o_order t
