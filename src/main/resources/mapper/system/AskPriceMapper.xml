@@ -299,10 +299,10 @@
     left join t_dictionary_city ci on ci.code = p.cityCode
     left join t_dictionary_area a on a.code = p.areaCode
     where createid = #{createid}
-    <if test="title != null">
+    <if test="title != null and title != ''">
       and p.title like CONCAT('%',#{title},'%')
     </if>
-    <if test="type != null">
+    <if test="type != null and type != ''">
       and p.type = #{type}
     </if>
     <if test="status != null and status == 1">
