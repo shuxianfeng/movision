@@ -99,7 +99,7 @@
     <select id="getLoginMemberByAccount" parameterType="memberReg"
             resultType="com.zhuhuibao.mybatis.memberReg.entity.LoginMember">
         SELECT a.id,CASE WHEN chk.mobile != '' OR chk.mobile != NULL THEN chk.mobile WHEN chk.email!= '' OR chk.email != NULL THEN chk.email END AS account,
-        a.password,chk.status,chk.identify,chk.workType role,IF(b.status=1,'1','0') isexpert,
+        a.password,a.status,chk.identify,chk.workType role,IF(b.status=1,'1','0') isexpert,
         CASE WHEN chk.workType = 100 AND chk.identify !=2 THEN chk.id
         WHEN chk.workType !=100 AND chk.identify !=2 THEN chk.enterpriseEmployeeParentId
         WHEN chk.identify = 2 THEN a.id
