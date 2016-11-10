@@ -114,7 +114,9 @@ public class AlipayDirectService {
         AlipayTradeWapPayRequest alipayRequest = new AlipayTradeWapPayRequest();// 创建API对应的request
         alipayRequest.setReturnUrl(AlipayPropertiesLoader.getPropertyValue("h5_direct_return_url"));
         alipayRequest.setNotifyUrl(AlipayPropertiesLoader.getPropertyValue("h5_direct_notify_url"));// 在公共参数中设置回跳和通知地址
-        alipayRequest.setBizContent("{"+"\"out_trade_no\":"+orderFlow.getOrderNo()+","+""+"\"total_amount\":"+orderFlow.getTradeFee()+","+"\"subject\":"+msgParam.get("goodsName")+","+"\"seller_id\":,"+AlipayPropertiesLoader.getPropertyValue("seller_id")+"\"product_code\":"+orderFlow.getOrderNo()+"}");// 填充业务参数
+        alipayRequest.setBizContent(
+                "{" + "    \"out_trade_no\":\"" + orderFlow.getOrderNo() + "\"," + "    \"total_amount\":" + orderFlow.getTradeFee() + "," + "    \"subject\":\"" + msgParam.get("goodsName") + "\","
+                        + "    \"seller_id\":\"" + AlipayPropertiesLoader.getPropertyValue("seller_id") + "\"," + "    \"product_code\":\"" + orderFlow.getOrderNo() + "\"" + "  }");// 填充业务参数
         String form = alipayClient.pageExecute(alipayRequest).getBody(); // 调用SDK生成表单
         httpResponse.setContentType("text/html;charset=" + aliPayConfig.getInputCharset());
         httpResponse.getWriter().write(form);// 直接将完整的表单html输出到页面
