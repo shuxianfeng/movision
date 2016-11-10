@@ -179,6 +179,9 @@ public class NewsService {
         List<NewsRecommendPlace> places = placeMapper.getPlaceByNewsId(form.getNews().getId());
         String recPlace = "";
         for (NewsRecommendPlace place : places) {
+            if (null == place.getRecommendPlace()) {
+                continue;
+            }
             recPlace = recPlace.concat(place.getRecommendPlace());
         }
         form.setRecPlace(recPlace);
