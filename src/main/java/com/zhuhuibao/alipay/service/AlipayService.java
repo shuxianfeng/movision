@@ -1,18 +1,22 @@
 package com.zhuhuibao.alipay.service;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.google.common.collect.Maps;
+import com.zhuhuibao.alipay.config.AliPayConfig;
+import com.zhuhuibao.alipay.util.AlipayNotify;
+import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
+import com.zhuhuibao.alipay.util.AlipaySubmit;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.OrderConstants;
+import com.zhuhuibao.common.constant.PayConstants;
+import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.activity.service.ActivityService;
+import com.zhuhuibao.mybatis.order.entity.*;
+import com.zhuhuibao.mybatis.order.service.*;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.CommonUtils;
+import com.zhuhuibao.utils.IdGenerator;
+import com.zhuhuibao.utils.convert.DateConvert;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.slf4j.Logger;
@@ -24,31 +28,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.google.common.collect.Maps;
-import com.zhuhuibao.alipay.config.AliPayConfig;
-import com.zhuhuibao.alipay.util.AlipayNotify;
-import com.zhuhuibao.alipay.util.AlipayPropertiesLoader;
-import com.zhuhuibao.alipay.util.AlipaySubmit;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.OrderConstants;
-import com.zhuhuibao.common.constant.PayConstants;
-import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.activity.service.ActivityService;
-import com.zhuhuibao.mybatis.order.entity.AlipayCallbackLog;
-import com.zhuhuibao.mybatis.order.entity.AlipayRefundCallbackLog;
-import com.zhuhuibao.mybatis.order.entity.Order;
-import com.zhuhuibao.mybatis.order.entity.OrderFlow;
-import com.zhuhuibao.mybatis.order.entity.Refund;
-import com.zhuhuibao.mybatis.order.service.AlipayCallbackLogService;
-import com.zhuhuibao.mybatis.order.service.AlipayRefundCallbackLogService;
-import com.zhuhuibao.mybatis.order.service.OrderFlowService;
-import com.zhuhuibao.mybatis.order.service.OrderService;
-import com.zhuhuibao.mybatis.order.service.RefundService;
-import com.zhuhuibao.mybatis.zhb.service.ZhbService;
-import com.zhuhuibao.utils.CommonUtils;
-import com.zhuhuibao.utils.IdGenerator;
-import com.zhuhuibao.utils.convert.DateConvert;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 支付宝服务入口
@@ -171,9 +161,10 @@ public class AlipayService {
      *
      * @param request   request
      * @param tradeType 交易流水类型
+     * @param type      pc:pc端支付回调 ；h5:移动端支付回调
      * @return mv
      */
-    public ModelAndView syncNotify(HttpServletRequest request, String tradeType, String returnUrl) {
+    public ModelAndView syncNotify(HttpServletRequest request, String tradeType, String returnUrl, String type) {
 
         ModelAndView modelAndView = new ModelAndView();
 
@@ -194,38 +185,17 @@ public class AlipayService {
                 modelAndView.setView(rv);
             }
 
+            boolean verify_result = false;
             // 计算得出通知验证结果
             log.info("******支付宝同步回调校验参数信息开始*******");
-            boolean verify_result = AlipayNotify.verify(params);
+            if (type.equals("h5")) {
+                verify_result = AlipayNotify.h5verify(params);
+            } else {
+                verify_result = AlipayNotify.verify(params);
+            }
             log.info("******支付宝同步回调校验参数信息结果=" + verify_result);
 
-            if (verify_result) { //验证成功
-
-                if (params.get("trade_status").equals("TRADE_FINISHED")
-                        || params.get("trade_status").equals("TRADE_SUCCESS")) {
-                	//返回成功时业务逻辑处理
-                    Map<String, String> resultMap = tradeSuccessDeal(params,
-                            PayConstants.NotifyType.SYNC.toString(), tradeType);
-                    
-                    log.info("***同步回调：支付平台回调发起方支付方结果：" + resultMap);
-                    if (resultMap != null
-                            && String.valueOf(PayConstants.HTTP_SUCCESS_CODE)
-                            .equals(resultMap.get("statusCode"))) {
-                    	
-                        if ("SUCCESS".equals(resultMap.get("result"))) {
-                            modelAndView.addObject("result", "success");
-                            modelAndView.addObject("msg", "支付成功");
-                        }
-                    }
-                } else {
-                    modelAndView.addObject("result", "fail");
-                    modelAndView.addObject("msg", "支付成功");
-                }
-            } else { //验证失败
-                modelAndView.addObject("result", "fail");
-                modelAndView.addObject("msg", "验证失败");
-            }
-
+            doCallBackBusiness(tradeType, modelAndView, params, verify_result);
 
         } catch (Exception e) {
             log.error("获取out对象异常>>>", e);
@@ -241,9 +211,10 @@ public class AlipayService {
      * @param request   request
      * @param response  response
      * @param tradeType 交易流水类型 1:支付 2:退款
+     * @param type      pc:pc端支付回调 ；h5:移动端支付回调
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void asyncNotify(HttpServletRequest request, HttpServletResponse response, String tradeType) {
+    public void asyncNotify(HttpServletRequest request, HttpServletResponse response, String tradeType, String type) {
         ServletOutputStream out = null;
         try {
             out = response.getOutputStream();
@@ -252,7 +223,13 @@ public class AlipayService {
 
 
             log.info("******支付宝异步回调校验参数信息开始*******");
-            boolean verify_result = AlipayNotify.verify(params);
+            boolean verify_result = false;
+            // 计算得出通知验证结果
+            if (type.equals("h5")) {
+                verify_result = AlipayNotify.h5verify(params);
+            } else {
+                verify_result = AlipayNotify.verify(params);
+            }
             log.info("******支付宝异步回调校验参数信息结果=" + verify_result);
 
             if (verify_result) {// 验证成功
@@ -483,7 +460,7 @@ public class AlipayService {
             OrderFlow orderFlow = orderFlowService.findByOrderNoAndTradeMode(params.get("out_trade_no"),
                     PayConstants.PayMode.ZHBPAY.toString());
             if (orderFlow != null) {
-            	
+
                 if (orderFlow.getTradeStatus().equals(PayConstants.OrderStatus.YZF.toString())) {
                     //3-> 修改订单状态为已支付
                     order.setStatus(PayConstants.OrderStatus.YZF.toString());
@@ -599,6 +576,44 @@ public class AlipayService {
             log.error("支付宝回调参数map转换为bean异常" + e.getMessage());
         }
         alipayCallbackLogService.insert(alipayCallbackLog);
+    }
+
+
+    /**
+     * 验签成功异步回调处理
+     *
+     * @param tradeType
+     * @param modelAndView
+     * @param params
+     * @param verify_result
+     * @throws ParseException
+     */
+    private void doCallBackBusiness(String tradeType, ModelAndView modelAndView, Map<String, String> params, boolean verify_result) throws ParseException {
+        if (verify_result) { //验证成功
+            if (params.get("trade_status").equals("TRADE_FINISHED")
+                    || params.get("trade_status").equals("TRADE_SUCCESS")) {
+                //返回成功时业务逻辑处理
+                Map<String, String> resultMap = tradeSuccessDeal(params,
+                        PayConstants.NotifyType.SYNC.toString(), tradeType);
+
+                log.info("***同步回调：支付平台回调发起方支付方结果：" + resultMap);
+                if (resultMap != null
+                        && String.valueOf(PayConstants.HTTP_SUCCESS_CODE)
+                        .equals(resultMap.get("statusCode"))) {
+
+                    if ("SUCCESS".equals(resultMap.get("result"))) {
+                        modelAndView.addObject("result", "success");
+                        modelAndView.addObject("msg", "支付成功");
+                    }
+                }
+            } else {
+                modelAndView.addObject("result", "fail");
+                modelAndView.addObject("msg", "支付成功");
+            }
+        } else { //验证失败
+            modelAndView.addObject("result", "fail");
+            modelAndView.addObject("msg", "验证失败");
+        }
     }
 }
 
