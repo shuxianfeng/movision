@@ -98,9 +98,9 @@ public class AgentService {
      * @param   id
      * @return
      */
-    public Map updateAgentById(String id){
+    public Map getAgentById(String id){
         try{
-            AgentBean agent = agentMapper.updateAgentById(id);
+            AgentBean agent = agentMapper.selectAgentById(id);
             Map map = new HashMap();
             Map map1 = new HashMap();
             map1.put("id",agent.getId());

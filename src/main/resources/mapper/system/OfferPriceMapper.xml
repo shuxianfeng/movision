@@ -14,12 +14,29 @@
     <result column="telephone" property="telephone" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
   </resultMap>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, askid, createid,content,billurl,if(isShow=1,companyName,'') companyName, if(isShow=1,linkMan,'') linkMan,
     if(isShow=1,telephone,'') telephone, if(isShow=1,email,'') email,isShow
     from t_p_offer_price
     where id = #{id,jdbcType=BIGINT}
   </select>
+
+  <select id="findAllOfferPriceByAskId" resultType="java.util.Map" parameterType="java.lang.Long">
+    SELECT
+      t.id,t.askid, t.createid ,t.offerTime,t.content,t.billurl,t.isShow,t.companyName,t.linkMan,t.telephone,t.email,
+      CONCAT(pp.name, ct.name) address
+    FROM
+      t_p_offer_price t
+      LEFT JOIN t_m_member m
+        ON m.id = t.createid
+      LEFT JOIN t_dictionary_province pp
+        ON pp.code = m.province
+      LEFT JOIN t_dictionary_city ct
+        ON ct.code = m.city
+    WHERE askid = #{askId,jdbcType=BIGINT}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from t_p_offer_price
     where id = #{id,jdbcType=BIGINT}
@@ -160,8 +177,17 @@
     <if test="createid != null and createid != ''">
         and (case when mm.enterpriseEmployeeParentId != 0 then (mm.enterpriseEmployeeParentId not in (select mc.enterpriseEmployeeParentId from t_m_member mc where id = #{createid})) else '1=1' end )
     </if>
-
-    order by dateTime desc
+    <choose>
+      <when test="publishTimeOrder != null and publishTimeOrder != ''">
+        ORDER BY publishTime ${publishTimeOrder},dateTime desc
+      </when>
+      <when test="endTimeOrder != null and endTimeOrder != ''">
+        ORDER BY endTime ${endTimeOrder},dateTime desc
+      </when>
+      <otherwise>
+        order by dateTime desc
+      </otherwise>
+    </choose>
   </select>
   <select id="findAllOfferedPriceInfo" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean">
   	 select t.id,t.offerTime dateTime,concat(p.name,c.name) deliveryAddress,if(t.type = 1,'公开询价','定向询价') typeName,t.title,t.createid 

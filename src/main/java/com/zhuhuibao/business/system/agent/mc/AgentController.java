@@ -266,7 +266,7 @@ public class AgentController {
     @RequestMapping(value = {"/rest/agent/updateAgentById", "/rest/system/mc/agent/sel_agent_by_id"}, method = RequestMethod.GET)
     public Response updateAgentById(@RequestParam String id) {
         Response response = new Response();
-        Map map = agentService.updateAgentById(id);
+        Map map = agentService.getAgentById(id);
         response.setData(map);
         return response;
     }

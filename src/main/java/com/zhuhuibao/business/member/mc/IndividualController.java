@@ -110,7 +110,7 @@ public class IndividualController {
             //基本资料待审核
             if(loginMember.getStatus() != MemberConstant.MemberStatus.WJH.intValue()
                     ||loginMember.getStatus() != MemberConstant.MemberStatus.ZX.intValue()){
-                member.setStatus(MemberConstant.MemberStatus.WSZLDSH.toString());
+                member.setStatus(MemberConstant.MemberStatus.WSZLDSH.intValue());
             }
             memInfoCheckService.update(member);
             Member mem = memberService.findMemById(String.valueOf(memberId));

@@ -17,6 +17,9 @@ public class PayReqBean {
     @ApiModelProperty(value="是否使用筑慧币 true|false",required = true)
     private String userZHB;
 
+    @ApiModelProperty(value="支付类型 pc:电脑端|h5：触屏端",required = false)
+    private String payType;
+
     public String getOrderNo() {
         return orderNo;
     }
@@ -39,5 +42,13 @@ public class PayReqBean {
 
     public void setUserZHB(String userZHB) {
         this.userZHB = userZHB;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 }

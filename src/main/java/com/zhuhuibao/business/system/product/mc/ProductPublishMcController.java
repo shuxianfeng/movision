@@ -65,7 +65,7 @@ public class ProductPublishMcController {
 
     @LoginAccess
     @UserAccess(value = "ALL", viplevel = "30,60,130,160")
-    @RequestMapping(value = {"/rest/addProduct", "/rest/system/mc/product/add_product"}, method = RequestMethod.POST)
+    @RequestMapping(value = { "/rest/addProduct", "/rest/system/mc/product/add_product" }, method = RequestMethod.POST)
     @ApiOperation(value = "新增产品", notes = "新增产品", response = Response.class)
     public Response addProduct(String json) throws IOException {
         Gson gson = new Gson();
@@ -76,7 +76,7 @@ public class ProductPublishMcController {
     }
 
     @Deprecated
-    @RequestMapping(value = {"/rest/addComplainSuggest", "/rest/system/mc/product/add_complainSuggest"}, method = RequestMethod.POST)
+    @RequestMapping(value = { "/rest/addComplainSuggest", "/rest/system/mc/product/add_complainSuggest" }, method = RequestMethod.POST)
     @ApiOperation(value = "找不到产品对应的类别新增投诉和建议", notes = "找不到产品对应的类别新增投诉和建议", response = Response.class)
     public Response addComplainSuggest(ComplainSuggest suggest) throws IOException {
         Response response = new Response();
@@ -87,7 +87,7 @@ public class ProductPublishMcController {
 
     @UserAccess(value = "ALL", viplevel = "30,60,130,160")
     @LoginAccess
-    @RequestMapping(value = {"/rest/updateProduct", "/rest/system/mc/product/upd_product"}, method = RequestMethod.POST)
+    @RequestMapping(value = { "/rest/updateProduct", "/rest/system/mc/product/upd_product" }, method = RequestMethod.POST)
     @ApiOperation(value = "更新产品", notes = "更新产品", response = Response.class)
     public Response updateProduct(ProductWithBLOBs product) throws IOException {
         Response response;
@@ -111,15 +111,16 @@ public class ProductPublishMcController {
 
     @LoginAccess
     @UserAccess(value = "ALL", viplevel = "30,60,130,160")
-    @RequestMapping(value = {"/rest/updateProductStatus", "/rest/system/mc/product/upd_productStatus"}, method = RequestMethod.POST)
+    @RequestMapping(value = { "/rest/updateProductStatus", "/rest/system/mc/product/upd_productStatus" }, method = RequestMethod.POST)
     @ApiOperation(value = "更新产品状态", notes = "更新产品状态", response = Response.class)
     public Response updateProductStatus(ProductWithBLOBs product) throws IOException {
+
         return productService.updateProductStatus(product);
     }
 
     @LoginAccess
     @UserAccess(value = "ALL", viplevel = "30,60,130,160")
-    @RequestMapping(value = {"/rest/batchUnpublish", "/rest/system/mc/product/upd_batchPublish"}, method = RequestMethod.POST)
+    @RequestMapping(value = { "/rest/batchUnpublish", "/rest/system/mc/product/upd_batchPublish" }, method = RequestMethod.POST)
     @ApiOperation(value = "批量更新产品状态", notes = "批量更新产品状态", response = Response.class)
     public Response batchUnpublish(@RequestParam String[] ids) throws IOException {
         List<String> list = new ArrayList<>();
@@ -130,7 +131,7 @@ public class ProductPublishMcController {
 
     @LoginAccess
     @UserAccess(value = "ALL", viplevel = "30,60,130,160")
-    @RequestMapping(value = {"/rest/queryProductById", "/rest/system/mc/product/sel_productById"}, method = RequestMethod.GET)
+    @RequestMapping(value = { "/rest/queryProductById", "/rest/system/mc/product/sel_productById" }, method = RequestMethod.GET)
     @ApiOperation(value = "获得产品信息根据ID", notes = "获得产品信息根据ID", response = Response.class)
     public Response queryProductById(Long id) throws IOException {
         Long createid = ShiroUtil.getCreateID();
@@ -149,18 +150,16 @@ public class ProductPublishMcController {
 
     @LoginAccess
     @UserAccess(value = "ALL", viplevel = "30,60,130,160")
-    @RequestMapping(value = {"/rest/findAllProduct", "/rest/system/mc/product/sel_allProduct"}, method = RequestMethod.GET)
+    @RequestMapping(value = { "/rest/findAllProduct", "/rest/system/mc/product/sel_allProduct" }, method = RequestMethod.GET)
     @ApiOperation(value = "我的产品", notes = "我的产品", response = Response.class)
-    public Response findAllProduct(ProductWithBLOBs product,
-                                   @RequestParam(defaultValue = "1") String pageNo,
-                                   @RequestParam(defaultValue = "10") String pageSize) throws IOException {
+    public Response findAllProduct(ProductWithBLOBs product, @RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "10") String pageSize) throws IOException {
 
         Long createid = ShiroUtil.getCreateID();
-        if(product.getCreateid() != null){
+        if (product.getCreateid() != null) {
 
-            if(!Objects.equals(createid, product.getCreateid())){
-                  throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询无权限");
-            } else{
+            if (!Objects.equals(createid, product.getCreateid())) {
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询无权限");
+            } else {
                 Paging<Product> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
                 List<Product> productList = productService.findAllByPager(pager, product);
                 pager.result(productList);
@@ -168,13 +167,13 @@ public class ProductPublishMcController {
                 return new Response(pager);
             }
 
-        }else{
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,"参数错误");
+        } else {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "参数错误");
         }
 
     }
 
-    @RequestMapping(value = {"/rest/getProductFirstCategory", "/rest/system/mc/product/sel_productFirstCategory"}, method = RequestMethod.GET)
+    @RequestMapping(value = { "/rest/getProductFirstCategory", "/rest/system/mc/product/sel_productFirstCategory" }, method = RequestMethod.GET)
     @ApiOperation(value = "系统一级分类", notes = "系统一级分类", response = Response.class)
     public Response getProductFirstCategory() {
         List<ResultBean> systemList = categoryMapper.findSystemList();
@@ -188,7 +187,7 @@ public class ProductPublishMcController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = {"/rest/getProductSecondCategory", "/rest/system/mc/product/sel_productSecondCategory"}, method = RequestMethod.GET)
+    @RequestMapping(value = { "/rest/getProductSecondCategory", "/rest/system/mc/product/sel_productSecondCategory" }, method = RequestMethod.GET)
     @ApiOperation(value = "系统二级分类", notes = "系统二级分类", response = Response.class)
     public Response getProductSecondCategory(HttpServletRequest req) throws IOException {
         String parentId = req.getParameter("parentID");
@@ -205,10 +204,10 @@ public class ProductPublishMcController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = {"/rest/getBrandList", "/rest/system/mc/product/sel_brandList"}, method = RequestMethod.GET)
+    @RequestMapping(value = { "/rest/getBrandList", "/rest/system/mc/product/sel_brandList" }, method = RequestMethod.GET)
     @ApiOperation(value = "查询品牌", notes = "查询品牌", response = Response.class)
     public Response getBrandList(Brand brand) throws IOException {
-        brand.setStatus("1");    //已审核通过
+        brand.setStatus("1"); // 已审核通过
         List<Brand> brandList = brandMapper.searchBrandByStatus(brand);
         Response result = new Response();
         result.setCode(200);
@@ -217,13 +216,11 @@ public class ProductPublishMcController {
         return result;
     }
 
-
-    @RequestMapping(value = {"/rest/system/mc/product/sel_brand_kw"}, method = RequestMethod.GET)
+    @RequestMapping(value = { "/rest/system/mc/product/sel_brand_kw" }, method = RequestMethod.GET)
     @ApiOperation(value = "查询品牌", notes = "查询品牌", response = Response.class)
-    public Response getAllPassBrand(@ApiParam("品牌中英文名称关键字") @RequestParam String keyword,
-                                    @ApiParam("显示数量(默认10)") @RequestParam(defaultValue = "10") String count) throws UnsupportedEncodingException {
+    public Response getAllPassBrand(@ApiParam("品牌中英文名称关键字") @RequestParam String keyword, @ApiParam("显示数量(默认10)") @RequestParam(defaultValue = "10") String count) throws UnsupportedEncodingException {
         log.debug(">>>>keyword keyword>>>:{} && count>>>{}", keyword, count);
-//        keyword = new String(keyword.getBytes("ISO-8859-1"), "UTF-8");
+        // keyword = new String(keyword.getBytes("ISO-8859-1"), "UTF-8");
         List<Map<String, String>> list = brandService.findByKeyword(keyword, count);
 
         return new Response(list);

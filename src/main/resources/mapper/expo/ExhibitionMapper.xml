@@ -252,14 +252,58 @@
     <if test="province != null and province != ''">
       and e.province = #{province}
     </if>
+    <if test="city != null and city != ''">
+      and e.city = #{city}
+    </if>
     <if test="type1 != null and type1 != ''">
       and e.status = 1
     </if>
     <if test="type2 != null and type2 != ''">
       and e.type in (1,2,3)
     </if>
+    <if test="startDateA != null">
+      AND e.startDate &gt;=date_format(#{startDateA},'%Y-%m-%d')
+    </if>
+    <if test="startDateB != null">
+      AND e.startDate &lt;=date_format(#{startDateB},'%Y-%m-%d')
+    </if>
+      
     order by e.updateTime desc
   </select>
+
+  <select id="findAllMyExhibition" resultType="java.util.Map" parameterType="java.util.Map" >
+    select e.id,e.createid,e.title,c.name as type,e.subType,e.views,date_format(e.updateTime,'%Y-%m-%d') updateTime,
+    e.status,date_format(e.publishTime,'%Y-%m-%d') publishTime,e.startDate,e.endDate,e.imgUrl,e.address,e.introduce,e.company,
+    case when e.createrType = 1 then (select u.username from t_oms_user u where u.id = e.createid)
+    when e.createrType = 2 then (select m.enterpriseName from t_m_member m where m.id = e.createid) end as createName,
+    ci.name as cityName,p.name as provinceName,a.name as areaName
+    from t_c_exhibition e
+    left join t_dictionary_constant c on e.`type` = c.code and c.`type` = 17
+    left join t_dictionary_city ci on ci.code = e.city
+    left join t_dictionary_province p on p.code = e.province
+    left join t_dictionary_area a on a.code = e.area
+    where e.is_deleted = 0
+    and e.createid = #{memberId}
+    <if test="title != null and title != ''">
+      and e.title like CONCAT('%',#{title},'%')
+    </if>
+    <if test="status != null and status != ''">
+      and e.status = #{status}
+    </if>
+    <choose>
+      <when test="viewsOrder != null and viewsOrder != ''">
+        ORDER by e.views ${viewsOrder},e.updateTime desc
+      </when>
+      <when test="publishTimeOrder != null and publishTimeOrder != ''">
+        ORDER by e.publishTime ${publishTimeOrder},e.updateTime desc
+      </when>
+      <otherwise>
+        order by e.updateTime desc
+      </otherwise>
+    </choose>
+  </select>
+
+
   <select id="findNewExhibition" resultType="java.util.Map" parameterType="java.util.Map" >
     select e.id,e.createid,e.title,c.name as type,e.views,date_format(e.updateTime,'%Y-%m-%d') updateTime,
     e.status,date_format(e.publishTime,'%Y-%m-%d') publishTime,e.startDate,e.endDate,e.imgUrl,e.address,e.introduce,

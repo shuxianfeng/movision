@@ -8,6 +8,8 @@ public class SupplierSearchSpec {
 
     @ApiModelProperty("省份编码")
     private String province;
+    @ApiModelProperty("城市编码")
+    private String city;
     @ApiModelProperty("身份标识 3:厂商 4:代理商 5:渠道商")
     private String identify;
     @ApiModelProperty("资质类型名称")
@@ -31,6 +33,14 @@ public class SupplierSearchSpec {
 
     public void setProvince(String province) {
         this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getIdentify() {

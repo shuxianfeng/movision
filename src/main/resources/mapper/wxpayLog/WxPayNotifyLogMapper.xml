@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.wxpayLog.mapper.WxPayNotifyLogMapper" >
+  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.wxpayLog.entity.WxPayNotifyLog" >
+    <id column="transaction_id" property="transactionId" jdbcType="VARCHAR" />
+    <result column="appid" property="appid" jdbcType="VARCHAR" />
+    <result column="mch_id" property="mchId" jdbcType="VARCHAR" />
+    <result column="device_info" property="deviceInfo" jdbcType="VARCHAR" />
+    <result column="nonce_str" property="nonceStr" jdbcType="VARCHAR" />
+    <result column="sign" property="sign" jdbcType="VARCHAR" />
+    <result column="result_code" property="resultCode" jdbcType="VARCHAR" />
+    <result column="err_code" property="errCode" jdbcType="VARCHAR" />
+    <result column="err_code_des" property="errCodeDes" jdbcType="VARCHAR" />
+    <result column="openid" property="openid" jdbcType="VARCHAR" />
+    <result column="is_subscribe" property="isSubscribe" jdbcType="VARCHAR" />
+    <result column="trade_type" property="tradeType" jdbcType="VARCHAR" />
+    <result column="bank_type" property="bankType" jdbcType="VARCHAR" />
+    <result column="total_fee" property="totalFee" jdbcType="BIGINT" />
+    <result column="settlement_total_fee" property="settlementTotalFee" jdbcType="BIGINT" />
+    <result column="fee_type" property="feeType" jdbcType="VARCHAR" />
+    <result column="cash_fee" property="cashFee" jdbcType="BIGINT" />
+    <result column="cash_fee_type" property="cashFeeType" jdbcType="VARCHAR" />
+    <result column="coupon_fee" property="couponFee" jdbcType="INTEGER" />
+    <result column="coupon_count" property="couponCount" jdbcType="INTEGER" />
+    <result column="coupon_type_$n" property="couponTypeN" jdbcType="VARCHAR" />
+    <result column="coupon_id_$n" property="couponIdN" jdbcType="VARCHAR" />
+    <result column="coupon_fee_$n" property="couponFeeN" jdbcType="INTEGER" />
+    <result column="out_trade_no" property="outTradeNo" jdbcType="VARCHAR" />
+    <result column="attach" property="attach" jdbcType="VARCHAR" />
+    <result column="time_end" property="timeEnd" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    transaction_id, appid, mch_id, device_info, nonce_str, sign, result_code, err_code, 
+    err_code_des, openid, is_subscribe, trade_type, bank_type, total_fee, settlement_total_fee, 
+    fee_type, cash_fee, cash_fee_type, coupon_fee, coupon_count, coupon_type_$n, coupon_id_$n, 
+    coupon_fee_$n, out_trade_no, attach, time_end
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_o_wxpay_log
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_o_wxpay_log
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.zhuhuibao.mybatis.wxpayLog.entity.WxPayNotifyLog" >
+    insert into t_o_wxpay_log (transaction_id, appid, mch_id, 
+      device_info, nonce_str, sign, 
+      result_code, err_code, err_code_des, 
+      openid, is_subscribe, trade_type, 
+      bank_type, total_fee, settlement_total_fee, 
+      fee_type, cash_fee, cash_fee_type, 
+      coupon_fee, coupon_count, coupon_type_$n, 
+      coupon_id_$n, coupon_fee_$n, out_trade_no, 
+      attach, time_end)
+    values (#{transactionId,jdbcType=VARCHAR}, #{appid,jdbcType=VARCHAR}, #{mchId,jdbcType=VARCHAR}, 
+      #{deviceInfo,jdbcType=VARCHAR}, #{nonceStr,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, 
+      #{resultCode,jdbcType=VARCHAR}, #{errCode,jdbcType=VARCHAR}, #{errCodeDes,jdbcType=VARCHAR}, 
+      #{openid,jdbcType=VARCHAR}, #{isSubscribe,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR}, 
+      #{bankType,jdbcType=VARCHAR}, #{totalFee,jdbcType=BIGINT}, #{settlementTotalFee,jdbcType=BIGINT}, 
+      #{feeType,jdbcType=VARCHAR}, #{cashFee,jdbcType=BIGINT}, #{cashFeeType,jdbcType=VARCHAR}, 
+      #{couponFee,jdbcType=INTEGER}, #{couponCount,jdbcType=INTEGER}, #{couponTypeN,jdbcType=VARCHAR}, 
+      #{couponIdN,jdbcType=VARCHAR}, #{couponFeeN,jdbcType=INTEGER}, #{outTradeNo,jdbcType=VARCHAR}, 
+      #{attach,jdbcType=VARCHAR}, #{timeEnd,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.wxpayLog.entity.WxPayNotifyLog" >
+    insert into t_o_wxpay_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="transactionId != null" >
+        transaction_id,
+      </if>
+      <if test="appid != null" >
+        appid,
+      </if>
+      <if test="mchId != null" >
+        mch_id,
+      </if>
+      <if test="deviceInfo != null" >
+        device_info,
+      </if>
+      <if test="nonceStr != null" >
+        nonce_str,
+      </if>
+      <if test="sign != null" >
+        sign,
+      </if>
+      <if test="resultCode != null" >
+        result_code,
+      </if>
+      <if test="errCode != null" >
+        err_code,
+      </if>
+      <if test="errCodeDes != null" >
+        err_code_des,
+      </if>
+      <if test="openid != null" >
+        openid,
+      </if>
+      <if test="isSubscribe != null" >
+        is_subscribe,
+      </if>
+      <if test="tradeType != null" >
+        trade_type,
+      </if>
+      <if test="bankType != null" >
+        bank_type,
+      </if>
+      <if test="totalFee != null" >
+        total_fee,
+      </if>
+      <if test="settlementTotalFee != null" >
+        settlement_total_fee,
+      </if>
+      <if test="feeType != null" >
+        fee_type,
+      </if>
+      <if test="cashFee != null" >
+        cash_fee,
+      </if>
+      <if test="cashFeeType != null" >
+        cash_fee_type,
+      </if>
+      <if test="couponFee != null" >
+        coupon_fee,
+      </if>
+      <if test="couponCount != null" >
+        coupon_count,
+      </if>
+      <if test="couponTypeN != null" >
+        coupon_type_$n,
+      </if>
+      <if test="couponIdN != null" >
+        coupon_id_$n,
+      </if>
+      <if test="couponFeeN != null" >
+        coupon_fee_$n,
+      </if>
+      <if test="outTradeNo != null" >
+        out_trade_no,
+      </if>
+      <if test="attach != null" >
+        attach,
+      </if>
+      <if test="timeEnd != null" >
+        time_end,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="transactionId != null" >
+        #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="appid != null" >
+        #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="mchId != null" >
+        #{mchId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceInfo != null" >
+        #{deviceInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="nonceStr != null" >
+        #{nonceStr,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null" >
+        #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="resultCode != null" >
+        #{resultCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errCode != null" >
+        #{errCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errCodeDes != null" >
+        #{errCodeDes,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null" >
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="isSubscribe != null" >
+        #{isSubscribe,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeType != null" >
+        #{tradeType,jdbcType=VARCHAR},
+      </if>
+      <if test="bankType != null" >
+        #{bankType,jdbcType=VARCHAR},
+      </if>
+      <if test="totalFee != null" >
+        #{totalFee,jdbcType=BIGINT},
+      </if>
+      <if test="settlementTotalFee != null" >
+        #{settlementTotalFee,jdbcType=BIGINT},
+      </if>
+      <if test="feeType != null" >
+        #{feeType,jdbcType=VARCHAR},
+      </if>
+      <if test="cashFee != null" >
+        #{cashFee,jdbcType=BIGINT},
+      </if>
+      <if test="cashFeeType != null" >
+        #{cashFeeType,jdbcType=VARCHAR},
+      </if>
+      <if test="couponFee != null" >
+        #{couponFee,jdbcType=INTEGER},
+      </if>
+      <if test="couponCount != null" >
+        #{couponCount,jdbcType=INTEGER},
+      </if>
+      <if test="couponTypeN != null" >
+        #{couponTypeN,jdbcType=VARCHAR},
+      </if>
+      <if test="couponIdN != null" >
+        #{couponIdN,jdbcType=VARCHAR},
+      </if>
+      <if test="couponFeeN != null" >
+        #{couponFeeN,jdbcType=INTEGER},
+      </if>
+      <if test="outTradeNo != null" >
+        #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="attach != null" >
+        #{attach,jdbcType=VARCHAR},
+      </if>
+      <if test="timeEnd != null" >
+        #{timeEnd,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.wxpayLog.entity.WxPayNotifyLog" >
+    update t_o_wxpay_log
+    <set >
+      <if test="appid != null" >
+        appid = #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="mchId != null" >
+        mch_id = #{mchId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceInfo != null" >
+        device_info = #{deviceInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="nonceStr != null" >
+        nonce_str = #{nonceStr,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null" >
+        sign = #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="resultCode != null" >
+        result_code = #{resultCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errCode != null" >
+        err_code = #{errCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errCodeDes != null" >
+        err_code_des = #{errCodeDes,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null" >
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="isSubscribe != null" >
+        is_subscribe = #{isSubscribe,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeType != null" >
+        trade_type = #{tradeType,jdbcType=VARCHAR},
+      </if>
+      <if test="bankType != null" >
+        bank_type = #{bankType,jdbcType=VARCHAR},
+      </if>
+      <if test="totalFee != null" >
+        total_fee = #{totalFee,jdbcType=BIGINT},
+      </if>
+      <if test="settlementTotalFee != null" >
+        settlement_total_fee = #{settlementTotalFee,jdbcType=BIGINT},
+      </if>
+      <if test="feeType != null" >
+        fee_type = #{feeType,jdbcType=VARCHAR},
+      </if>
+      <if test="cashFee != null" >
+        cash_fee = #{cashFee,jdbcType=BIGINT},
+      </if>
+      <if test="cashFeeType != null" >
+        cash_fee_type = #{cashFeeType,jdbcType=VARCHAR},
+      </if>
+      <if test="couponFee != null" >
+        coupon_fee = #{couponFee,jdbcType=INTEGER},
+      </if>
+      <if test="couponCount != null" >
+        coupon_count = #{couponCount,jdbcType=INTEGER},
+      </if>
+      <if test="couponTypeN != null" >
+        coupon_type_$n = #{couponTypeN,jdbcType=VARCHAR},
+      </if>
+      <if test="couponIdN != null" >
+        coupon_id_$n = #{couponIdN,jdbcType=VARCHAR},
+      </if>
+      <if test="couponFeeN != null" >
+        coupon_fee_$n = #{couponFeeN,jdbcType=INTEGER},
+      </if>
+      <if test="outTradeNo != null" >
+        out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="attach != null" >
+        attach = #{attach,jdbcType=VARCHAR},
+      </if>
+      <if test="timeEnd != null" >
+        time_end = #{timeEnd,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.wxpayLog.entity.WxPayNotifyLog" >
+    update t_o_wxpay_log
+    set appid = #{appid,jdbcType=VARCHAR},
+      mch_id = #{mchId,jdbcType=VARCHAR},
+      device_info = #{deviceInfo,jdbcType=VARCHAR},
+      nonce_str = #{nonceStr,jdbcType=VARCHAR},
+      sign = #{sign,jdbcType=VARCHAR},
+      result_code = #{resultCode,jdbcType=VARCHAR},
+      err_code = #{errCode,jdbcType=VARCHAR},
+      err_code_des = #{errCodeDes,jdbcType=VARCHAR},
+      openid = #{openid,jdbcType=VARCHAR},
+      is_subscribe = #{isSubscribe,jdbcType=VARCHAR},
+      trade_type = #{tradeType,jdbcType=VARCHAR},
+      bank_type = #{bankType,jdbcType=VARCHAR},
+      total_fee = #{totalFee,jdbcType=BIGINT},
+      settlement_total_fee = #{settlementTotalFee,jdbcType=BIGINT},
+      fee_type = #{feeType,jdbcType=VARCHAR},
+      cash_fee = #{cashFee,jdbcType=BIGINT},
+      cash_fee_type = #{cashFeeType,jdbcType=VARCHAR},
+      coupon_fee = #{couponFee,jdbcType=INTEGER},
+      coupon_count = #{couponCount,jdbcType=INTEGER},
+      coupon_type_$n = #{couponTypeN,jdbcType=VARCHAR},
+      coupon_id_$n = #{couponIdN,jdbcType=VARCHAR},
+      coupon_fee_$n = #{couponFeeN,jdbcType=INTEGER},
+      out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
+      attach = #{attach,jdbcType=VARCHAR},
+      time_end = #{timeEnd,jdbcType=VARCHAR}
+    where transaction_id = #{transactionId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -10,6 +10,7 @@ import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.*;
+import com.zhuhuibao.mybatis.product.service.ProductService;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.mybatis.vip.service.VipInfoService;
@@ -135,12 +136,16 @@ public class MemberService {
 
     @Autowired
     MemRealCheckService realCheckService;
-    
+
     @Autowired
     VipInfoService vipInfoService;
-    
+
     @Autowired
-	private MemberSucCaseService memberSucCaseService;
+    private MemberSucCaseService memberSucCaseService;
+
+    @Autowired
+    private ProductService productService;
+
     /**
      * 会员信息更新
      */
@@ -149,10 +154,9 @@ public class MemberService {
 
             memberMapper.updateMemInfo(member);
             memberMapper.updateSubMemInfo(member);
-            //资料审核已拒绝 or 实名认证已拒绝
+            // 资料审核已拒绝 or 实名认证已拒绝
             if ("7".equals(member.getStatus()) || "11".equals(member.getStatus())) {
-                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(member.getId()),
-                        member.getReason());
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(member.getId()), member.getReason());
             }
         } catch (Exception e) {
             log.error("updateMemInfo error >>>", e);
@@ -185,8 +189,7 @@ public class MemberService {
                 result = memberMapper.addMember(member);
                 zhbService.payForGoods(Long.parseLong(member.getId()), ZhbPaymentConstant.goodsType.YGZH.toString());
             } else {// 支付失败稍后重试，联系客服
-                throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String
-                        .valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+                throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
             }
         } catch (Exception e) {
             log.error("addMember error >>>", e);
@@ -210,8 +213,7 @@ public class MemberService {
     }
 
     /**
-     * 根据会员账号查询会员
-     * 激活并且非注销的状态
+     * 根据会员账号查询会员 (激活并且非注销的状态)
      */
     public Member findMember(Member member) {
         try {
@@ -363,8 +365,7 @@ public class MemberService {
         try {
             certificateRecordMapper.updateCertificate(record);
             if ("2".equals(record.getStatus())) {
-                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(record.getMem_id()),
-                        record.getReason());
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(record.getMem_id()), record.getReason());
             }
         } catch (Exception e) {
             log.error("updateCertificate error >>>", e);
@@ -511,8 +512,7 @@ public class MemberService {
                 areaName = area.getName();
             }
             if (!StringUtils.isEmpty(member.getEmployeeNumber())) {
-                EmployeeSize employeeSize = employeeSizeMapper.selectByPrimaryKey(Integer.parseInt(member
-                        .getEmployeeNumber()));
+                EmployeeSize employeeSize = employeeSizeMapper.selectByPrimaryKey(Integer.parseInt(member.getEmployeeNumber()));
                 if (employeeSize == null) {
                     employeeSizeName = member.getEmployeeNumber();
                 } else {
@@ -532,8 +532,7 @@ public class MemberService {
             certificateRecord.setType(type);
             certificateRecord.setIs_deleted(0);
             certificateRecord.setStatus("1");
-            List<CertificateRecord> certificateRecordList = certificateRecordMapper
-                    .certificateSearch(certificateRecord);
+            List<CertificateRecord> certificateRecordList = certificateRecordMapper.certificateSearch(certificateRecord);
             Map map = new HashMap();
             String createTime = "";
             if (!StringUtils.isEmpty(member.getEnterpriseCreaterTime())) {
@@ -543,13 +542,12 @@ public class MemberService {
             map.put(Constants.enterpriseTypeName, enterpriseTypeName);
             map.put(Constants.area, address);
             map.put(Constants.enterpriseCreaterTime, createTime);
-            if("2".equals(member.getCurrency())&&!"".equals(member.getRegisterCapital()))
-            {
-            map.put(Constants.registerCapital, member.getRegisterCapital()==null?"":member.getRegisterCapital()+"万美元");
-            }else if("1".equals(member.getCurrency())&&!"".equals(member.getRegisterCapital())){
-            	map.put(Constants.registerCapital,member.getRegisterCapital()==null?"":member.getRegisterCapital()+"万人民币");
-            }else{
-            	map.put(Constants.registerCapital,"");
+            if ("2".equals(member.getCurrency()) && !"".equals(member.getRegisterCapital())) {
+                map.put(Constants.registerCapital, member.getRegisterCapital() == null ? "" : member.getRegisterCapital() + "万美元");
+            } else if ("1".equals(member.getCurrency()) && !"".equals(member.getRegisterCapital())) {
+                map.put(Constants.registerCapital, member.getRegisterCapital() == null ? "" : member.getRegisterCapital() + "万人民币");
+            } else {
+                map.put(Constants.registerCapital, "");
             }
             map.put(Constants.employeeNumber, employeeSizeName);
             map.put(Constants.identifyName, identifyName);
@@ -560,7 +558,15 @@ public class MemberService {
             map.put(Constants.telephone, member.getEnterpriseTelephone());
             map.put(Constants.fax, member.getEnterpriseFox());
             map.put(Constants.vipLevel, member.getVipLevel());
+            map.put("headShot", member.getHeadShot());
+            map.put("enterpriseLogo", member.getEnterpriseLogo());
             map.put(Constants.certificateRecord, certificateRecordList);
+            // 查询公司产品类别
+            Map<String, Object> queryMap = new HashMap<>();
+            queryMap.put("status", Constants.product_status_publish);
+            queryMap.put("createid", id);
+            List<Map<String, String>> productTypeList = productService.queryProductTypeListByCompanyId(queryMap);
+            map.put("productTypeList", productTypeList);
             return map;
         } catch (Exception e) {
             log.error("introduce error,id=" + id + ",type=" + type + ">>>", e);
@@ -654,9 +660,7 @@ public class MemberService {
     }
 
     /**
-     * 完善资料审核
-     * 修改审核子表状态
-     * 审核通过之后同步用户主表信息
+     * 完善资料审核 修改审核子表状态 审核通过之后同步用户主表信息
      *
      * @param member
      */
@@ -664,17 +668,16 @@ public class MemberService {
         try {
             String status = String.valueOf(member.getStatus());
 
-            //更新审核子表信息
+            // 更新审核子表信息
             infoCheckService.update(member);
 
             if (status.equals(MemberConstant.MemberStatus.WSZLYSH.toString())) { // 完善审核通过
-                //1.同步主表信息       {如果完善资料已审核,保持原来状态不变}
+                // 1.同步主表信息 {如果完善资料已审核,保持原来状态不变}
                 Member mem = findMemById(String.valueOf(member.getId()));
                 String memStatus = mem.getStatus();
                 BeanUtils.copyProperties(member, mem);
-                if (memStatus.equals(MemberConstant.MemberStatus.SMRZDSH.toString()) ||
-                        memStatus.equals(MemberConstant.MemberStatus.SMRZYRZ.toString()) ||
-                        memStatus.equals(MemberConstant.MemberStatus.SMRZYJJ.toString())) {
+                if (memStatus.equals(MemberConstant.MemberStatus.SMRZDSH.toString()) || memStatus.equals(MemberConstant.MemberStatus.SMRZYRZ.toString())
+                        || memStatus.equals(MemberConstant.MemberStatus.SMRZYJJ.toString())) {
                     mem.setStatus(memStatus);
                 } else {
                     mem.setStatus(status);
@@ -682,7 +685,7 @@ public class MemberService {
 
                 updateMemInfo(mem);
 
-                //2.给用户创建商铺
+                // 2.给用户创建商铺
                 // 查询该用户是否存在商铺
                 String companyId = mem.getId();
                 MemberShop shop = shopService.findByCompanyID(Long.valueOf(companyId));
@@ -700,7 +703,6 @@ public class MemberService {
                     shopService.update(shop);
                 }
             }
-
 
         } catch (Exception e) {
             log.error("updateMemData error >>>", e);
@@ -742,7 +744,8 @@ public class MemberService {
     /**
      * 基本资料审核详情
      *
-     * @param id 会员ID
+     * @param id
+     *            会员ID
      * @return
      */
     public Map<String, Object> findMeminfoCheck(String id) {
@@ -763,7 +766,8 @@ public class MemberService {
     /**
      * 实名认证审核详情
      *
-     * @param id 会员ID
+     * @param id
+     *            会员ID
      * @return
      */
     public Map<String, Object> findMemrealCheck(String id) {
@@ -779,15 +783,13 @@ public class MemberService {
     }
 
     /**
-     * 实名认证审核     *需要先判断是否基本资料审核已通过
-     * 修改审核子表状态
-     * 审核通过之后同步用户主表信息
+     * 实名认证审核 *需要先判断是否基本资料审核已通过 修改审核子表状态 审核通过之后同步用户主表信息
      *
      * @param member
      */
     public void updateMemRealData(MemRealCheck member) {
         try {
-            //先判断基本资料是否审核通过
+            // 先判断基本资料是否审核通过
             String infoStatus = infoCheckService.getStatusById(member.getId());
             if (!infoStatus.equals(MemberConstant.MemberStatus.WSZLYSH.toString())) {
                 throw new BusinessException(MsgCodeConstant.SMRZSH_ERROR, "基本资料未审核通过");
@@ -797,7 +799,7 @@ public class MemberService {
 
             realCheckService.update(member);
 
-            //审核通过 同步信息到主表
+            // 审核通过 同步信息到主表
             if (status == MemberConstant.MemberStatus.SMRZYRZ.intValue()) {
                 Member mem = new Member();
                 BeanUtils.copyProperties(member, mem);
@@ -805,11 +807,11 @@ public class MemberService {
                 mem.setStatus(String.valueOf(status));
                 updateMemInfo(mem);
 
-                //同步公司名称到基本信息审核表
-                MemInfoCheck icheck = new MemInfoCheck();
-                icheck.setId(member.getId());
-                icheck.setEnterpriseName(member.getEnterpriseName());
-                infoCheckService.update(icheck);
+                // 同步信息到基本信息审核表
+                MemInfoCheck memCheck = new MemInfoCheck();
+                memCheck.setId(member.getId());
+                memCheck.setEnterpriseName(member.getEnterpriseName());
+                infoCheckService.update(memCheck);
 
             }
 
@@ -823,25 +825,26 @@ public class MemberService {
 
     /**
      * VIP 工程商简介
+     * 
      * @param id
-     * @param string
+     * @param type
      * @return
      */
-	public Map vipIntroduce(String id, String type) {
-		Map map= this.introduce(id, type);
-	    List<MemberSucCase> sucCase=memberSucCaseService.queryMemberSucCaseList(id);
-	    map.put("sucCaseList", sucCase);
-	  
-		return map;
-	}
-	
-	/**
+    public Map vipIntroduce(String id, String type) {
+        Map map = this.introduce(id, type);
+        List<MemberSucCase> sucCase = memberSucCaseService.queryMemberSucCaseList(id);
+        map.put("sucCaseList", sucCase);
+
+        return map;
+    }
+
+    /**
      * 新建员工
      */
     public int omsAddMember(Member member) throws Exception {
         int result = 0;
-        try { 
-              result = memberMapper.addMember(member); 
+        try {
+            result = memberMapper.addMember(member);
         } catch (Exception e) {
             log.error("omsAddMember error >>>", e);
             e.printStackTrace();

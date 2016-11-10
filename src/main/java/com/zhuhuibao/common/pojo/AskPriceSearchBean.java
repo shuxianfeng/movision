@@ -16,6 +16,16 @@ public class AskPriceSearchBean {
 
     private String endTime;
 
+    private String publishTimeOrder;
+
+    public String getPublishTimeOrder() {
+        return publishTimeOrder;
+    }
+
+    public void setPublishTimeOrder(String publishTimeOrder) {
+        this.publishTimeOrder = publishTimeOrder;
+    }
+
     public String getTitle() {
         return title;
     }

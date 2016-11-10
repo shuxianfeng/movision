@@ -1,5 +1,7 @@
 package com.zhuhuibao.common.pojo;
 
+import java.util.Date;
+
 /**
  * Created by cxx on 2016/3/31 0031.
  */
@@ -28,6 +30,20 @@ public class AskPriceResultBean {
     private String companyName;
 
     private String address;
+
+    private String province;
+
+    private String city;
+
+    private Date endTime;
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
 
     public String getId() {
         return id;
@@ -123,5 +139,21 @@ public class AskPriceResultBean {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

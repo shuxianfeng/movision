@@ -50,4 +50,6 @@ public interface ChannelNewsMapper {
 	List<Map> queryDetailsById(Long id);
 
 	String queryattachName(String id);
+
+    List<Map> findChanNewsListByTitle(RowBounds rowBounds,Map<String, Object> map);
 }

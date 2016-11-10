@@ -12,10 +12,13 @@
         <result column="opreatorId" property="opreatorId" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="CHAR"/>
         <result column="reason" property="reason" jdbcType="VARCHAR"/>
+        <result column="mobile_banner_url_f" jdbcType="VARCHAR" property="mobileBannerUrlF" />
+        <result column="mobile_banner_url_s" jdbcType="VARCHAR" property="mobileBannerUrlS" />
+        <result column="mobile_banner_url_t" jdbcType="VARCHAR" property="mobileBannerUrlT" />
     </resultMap>
     <sql id="Base_Column_List">
     id, shopName, companyId, companyName, companyAccount, bannerUrl, date_format(updateTime,'%Y-%m-%d %H:%i:%s') updateTime, opreatorId, 
-    status,reason
+    status,reason,mobile_banner_url_f,mobile_banner_url_s,mobile_banner_url_t
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -55,11 +58,12 @@
     <insert id="insert" parameterType="com.zhuhuibao.mybatis.memCenter.entity.MemberShop">
     insert into t_m_shop (id, shopName, companyId, 
       companyName, companyAccount, bannerUrl, 
-      updateTime, opreatorId, status,reason
+      updateTime, opreatorId, status,reason,mobile_banner_url_f,mobile_banner_url_s,mobile_banner_url_t
       )
     values (#{id,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, #{companyId,jdbcType=INTEGER}, 
       #{companyName,jdbcType=VARCHAR}, #{companyAccount,jdbcType=VARCHAR}, #{bannerUrl,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=VARCHAR}, #{opreatorId,jdbcType=INTEGER}, #{status,jdbcType=CHAR} , #{reason,jdbcType=VARCHAR}
+      #{updateTime,jdbcType=VARCHAR}, #{opreatorId,jdbcType=INTEGER}, #{status,jdbcType=CHAR} , #{reason,jdbcType=VARCHAR}, #{mobileBannerUrlF,jdbcType=VARCHAR}
+      , #{mobileBannerUrlS,jdbcType=VARCHAR}, #{mobileBannerUrlT,jdbcType=VARCHAR}
       )
   </insert>
     <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.memCenter.entity.MemberShop">
@@ -95,6 +99,15 @@
             <if test="reason != null">
                 reason,
             </if>
+            <if test="mobileBannerUrlF != null">
+                mobile_banner_url_f,
+           </if>
+            <if test="mobileBannerUrlS != null">
+                mobile_banner_url_s,
+            </if>
+            <if test="mobileBannerUrlT != null">
+                mobile_banner_url_t,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -126,6 +139,15 @@
             </if>
             <if test="reason != null">
                 #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="mobileBannerUrlF != null">
+                #{mobileBannerUrlF,jdbcType=VARCHAR},
+            </if>
+            <if test="mobileBannerUrlS != null">
+                #{mobileBannerUrlS,jdbcType=VARCHAR},
+            </if>
+            <if test="mobileBannerUrlT != null">
+                #{mobileBannerUrlT,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -159,6 +181,15 @@
             <if test="reason != null">
                 reason = #{reason,jdbcType=CHAR},
             </if>
+            <if test="mobileBannerUrlF != null">
+                mobile_banner_url_f = #{mobileBannerUrlF,jdbcType=VARCHAR},
+            </if>
+            <if test="mobileBannerUrlS != null">
+                mobile_banner_url_s = #{mobileBannerUrlS,jdbcType=VARCHAR},
+            </if>
+            <if test="mobileBannerUrlT != null">
+                mobile_banner_url_t = #{mobileBannerUrlT,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -172,7 +203,10 @@
       updateTime = #{updateTime,jdbcType=VARCHAR},
       opreatorId = #{opreatorId,jdbcType=INTEGER},
       status = #{status,jdbcType=CHAR},
-      reason = #{reason,jdbcType=VARCHAR}
+      reason = #{reason,jdbcType=VARCHAR},
+       mobile_banner_url_f = #{mobileBannerUrlF,jdbcType=VARCHAR},
+       mobile_banner_url_s = #{mobileBannerUrlS,jdbcType=VARCHAR},
+        mobile_banner_url_t = #{mobileBannerUrlT,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 

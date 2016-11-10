@@ -2,20 +2,20 @@ package com.zhuhuibao.mybatis.product.service;
 
 import java.util.*;
 
-import com.zhuhuibao.common.Response;
-import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
-import com.zhuhuibao.mybatis.product.entity.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.ResultBean;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
+import com.zhuhuibao.mybatis.product.entity.*;
 import com.zhuhuibao.mybatis.product.mapper.ProductMapper;
 import com.zhuhuibao.utils.pagination.model.Paging;
 
@@ -44,7 +44,7 @@ public class ProductService {
      * @param product
      */
     public int insertProduct(ProductWithBLOBs product) {
-        int productId = 0; 
+        int productId = 0;
         try {
             Map<String, Long> paramMap = paramService.insertParam(product);
             List<ParamPrice> paramPrice = product.getParamPrice();
@@ -71,7 +71,7 @@ public class ProductService {
                     product.setPrice(pp.getPrice());
                     product.setRepository(pp.getRepository());
                     product.setImgUrl(pp.getImgUrl());
-                    //用上传的参数图片
+                    // 用上传的参数图片
                     productId = productMapper.insertSelective(product);
                 }
             } else {
@@ -88,7 +88,8 @@ public class ProductService {
     /**
      * 分页查询所有用户
      *
-     * @param pager 分页属性
+     * @param pager
+     *            分页属性
      * @return user
      */
     public List<Product> findAllByPager(Paging<Product> pager, Product product) {
@@ -107,7 +108,7 @@ public class ProductService {
                     product.setPrice(Constants.product_price);
                 }
 
-               // product.setStatus(Constants.product_status_nocheck);
+                // product.setStatus(Constants.product_status_nocheck);
 
                 productMapper.updateByPrimaryKeySelective(product);
             }
@@ -128,6 +129,7 @@ public class ProductService {
     public Response updateProductStatus(ProductWithBLOBs product) {
         Response response = new Response();
         try {
+            product.setCreateid(ShiroUtil.getCreateID());
             productMapper.updateProductStatus(product);
         } catch (Exception e) {
             log.error("update error {}", e);
@@ -172,34 +174,7 @@ public class ProductService {
         ProductWithBLOBs product;
         try {
             product = productMapper.selectByPrimaryKey(id);
-            if (product != null && product.getParamIDs() != null && product.getParamIDs().length() > 0) {
-                List<ProductParam> params = new ArrayList<>();
-                String param = product.getParamIDs();
-                String paramValues = product.getParamValues();
-                Map<String, String> paramMap;
-                if (param.indexOf(",") > 0) {
-                    String[] arr_param = param.split(",");
-                    String[] arr_paramValues = paramValues.split(",");
-                    for (int i = 0; i < arr_param.length; i++) {
-                        paramMap = new TreeMap<>();
-                        ProductParam pp = paramService.queryParamById(Long.parseLong(arr_param[i]));
-                        if (pp != null) {
-                            pp.setPvalue(arr_paramValues[i]);
-                            params.add(pp);
-                        }
-                    }
-                } else {
-                    paramMap = new TreeMap<>();
-                    ProductParam pp = paramService.queryParamById(Long.parseLong(param));
-                    if (pp != null) {
-                        paramMap.put("pvalue", paramValues);
-                        pp.setPvalue(paramValues);
-                        params.add(pp);
-                    }
-                }
-                product.setParams(params);
-            }
-
+            deailProductParam(product);
             response.setData(product);
         } catch (Exception e) {
             log.error("select error {}", e);
@@ -210,11 +185,49 @@ public class ProductService {
     }
 
     /**
+     * 处理产品参数字段
+     * 
+     * @param product
+     */
+    public void deailProductParam(ProductWithBLOBs product) {
+        if (product != null && product.getParamIDs() != null && product.getParamIDs().length() > 0) {
+            List<ProductParam> params = new ArrayList<>();
+            String param = product.getParamIDs();
+            String paramValues = product.getParamValues();
+            Map<String, String> paramMap;
+            if (param.indexOf(",") > 0) {
+                String[] arr_param = param.split(",");
+                String[] arr_paramValues = paramValues.split(",");
+                for (int i = 0; i < arr_param.length; i++) {
+                    paramMap = new TreeMap<>();
+                    ProductParam pp = paramService.queryParamById(Long.parseLong(arr_param[i]));
+                    if (pp != null) {
+                        pp.setPvalue(arr_paramValues[i]);
+                        params.add(pp);
+                    }
+                }
+            } else {
+                paramMap = new TreeMap<>();
+                ProductParam pp = paramService.queryParamById(Long.parseLong(param));
+                if (pp != null) {
+                    paramMap.put("pvalue", paramValues);
+                    pp.setPvalue(paramValues);
+                    params.add(pp);
+                }
+            }
+            product.setParams(params);
+        }
+    }
+
+    /**
      * 加入对象到集合列表中
      *
-     * @param a 集合对象
-     * @param k 图片路径
-     * @param v skuid
+     * @param a
+     *            集合对象
+     * @param k
+     *            图片路径
+     * @param v
+     *            skuid
      */
     private void addToImg(Map<String, List<Long>> a, String k, long v) {
         List<Long> arr = a.get(k);
@@ -235,14 +248,14 @@ public class ProductService {
      * @return
      */
     public Map<String, Object> queryProductInfoById(Long id) {
-        //保存参数值信息
+        // 保存参数值信息
         Map<String, Object> paramValuesMap = new TreeMap<>();
         Map<String, Object> productMap = new TreeMap<>();
         ProductWithMember product;
         try {
             product = productMapper.selectProductMemberByid(id);
             if (product != null) {
-                //组成参数列表
+                // 组成参数列表
                 if (product.getParamIDs() != null && product.getParamIDs().length() > 0) {
                     setMemberInfo(productMap, product);
                     setProductParamInfo(paramValuesMap, productMap, product);
@@ -256,7 +269,7 @@ public class ProductService {
                     setSingleProductInfo(productMap, product);
                 }
             } else {
-                log.error("产品不存在,id="+id);
+                log.error("产品不存在,id=" + id);
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "产品不存在");
             }
 
@@ -274,9 +287,8 @@ public class ProductService {
      * @param productMap
      * @param product
      */
-    private void setSingleProductInfo(Map<String, Object> productMap,
-                                      ProductWithMember product) {
-        //面包屑
+    private void setSingleProductInfo(Map<String, Object> productMap, ProductWithMember product) {
+        // 面包屑
         Map<String, Object> navigationMap = new TreeMap<String, Object>();
         navigationMap.put(Constants.product_field_fcateid, product.getFcateid());
         navigationMap.put(Constants.product_field_fcateName, product.getFcateName());
@@ -287,13 +299,12 @@ public class ProductService {
         productMap.put(Constants.product_field_navigation, navigationMap);
         setMemberInfo(productMap, product);
 
-
-        //图片
+        // 图片
         List<Map<String, Object>> imgList = new ArrayList<Map<String, Object>>();
         Map<String, List<Long>> imgsMap = new HashMap<String, List<Long>>();
         for (String s : product.getImgUrl().split(";")) {
             addToImg(imgsMap, s, product.getId());
-            //a.put(s, p);
+            // a.put(s, p);
         }
         if (!imgsMap.isEmpty()) {
             for (Map.Entry<String, List<Long>> entry : imgsMap.entrySet()) {
@@ -328,7 +339,7 @@ public class ProductService {
      * @param product
      */
     private void setMemberInfo(Map<String, Object> productMap, ProductWithMember product) {
-        //会员信息
+        // 会员信息
         Map<String, Object> memberMap = new TreeMap<>();
         memberMap.put("identify", product.getIdentify());
         memberMap.put("memberName", product.getMemberName());
@@ -336,13 +347,13 @@ public class ProductService {
         memberMap.put("enterpriseWebSite", product.getEnterpriseWebSite());
         memberMap.put("address", product.getAddress());
         memberMap.put("shopID", product.getMemberId());
-        //查询企业商铺
-        /* MemberShop shop =  memShopService.findByCompanyID(Long.valueOf(product.getMemberId()));
-        if(shop != null){
-            memberMap.put("shopID",shop.getId());
-        } else{
-            memberMap.put("shopID","");
-        }*/
+        // 查询企业商铺
+        /*
+         * MemberShop shop =
+         * memShopService.findByCompanyID(Long.valueOf(product.getMemberId()));
+         * if(shop != null){ memberMap.put("shopID",shop.getId()); } else{
+         * memberMap.put("shopID",""); }
+         */
 
         productMap.put("member", memberMap);
     }
@@ -355,9 +366,8 @@ public class ProductService {
      * @param productMap
      * @param productList
      */
-    private void setProductList(Long id, Map<String, Object> paramValuesMap,
-                                Map<String, Object> productMap, List<Product> productList) {
-        //产品列表
+    private void setProductList(Long id, Map<String, Object> paramValuesMap, Map<String, Object> productMap, List<Product> productList) {
+        // 产品列表
         List<Map<String, Object>> prdList = new ArrayList<Map<String, Object>>();
         for (Product aProductList : productList) {
             Map<String, Object> prdInfoMap = new TreeMap<>();
@@ -406,8 +416,7 @@ public class ProductService {
      * @param prdMap
      * @param prd
      */
-    private void setNavigation(Map<String, Object> productMap,
-                               Map<String, Object> prdMap, Product prd) {
+    private void setNavigation(Map<String, Object> productMap, Map<String, Object> prdMap, Product prd) {
         prdMap.put(Constants.product_field_defalut, true);
         Map<String, Object> navigationMap = new TreeMap<String, Object>();
         navigationMap.put(Constants.product_field_fcateid, prd.getFcateid());
@@ -425,14 +434,13 @@ public class ProductService {
      * @param productMap
      * @param productList
      */
-    private void setProductImgs(Map<String, Object> productMap,
-                                List<Product> productList) {
+    private void setProductImgs(Map<String, Object> productMap, List<Product> productList) {
         Map<String, List<Long>> a = new HashMap<String, List<Long>>();
         for (Product p : productList) {
 
             for (String s : p.getImgUrl().split(";")) {
                 addToImg(a, s, p.getId());
-                //a.put(s, p);
+                // a.put(s, p);
             }
         }
         List<Map<String, Object>> imgList = new ArrayList<Map<String, Object>>();
@@ -454,8 +462,7 @@ public class ProductService {
      * @param productMap
      * @param product
      */
-    private void setProductParamInfo(Map<String, Object> paramValuesMap,
-                                     Map<String, Object> productMap, ProductWithBLOBs product) {
+    private void setProductParamInfo(Map<String, Object> paramValuesMap, Map<String, Object> productMap, ProductWithBLOBs product) {
         List<ProductParam> params = getParamsInfo(product);
         List<Map<String, Object>> paramList = new ArrayList<Map<String, Object>>();
         if (!params.isEmpty()) {
@@ -467,7 +474,7 @@ public class ProductService {
                 String pValue = p.getPvalue();
                 String[] arr_pValue;
                 if (pValue.indexOf(",") > 0) {
-                    //参数值数组
+                    // 参数值数组
                     arr_pValue = pValue.split(",");
                     for (int i = 0; i < arr_pValue.length; i++) {
                         paramValueMap.put(arr_pValue[i], String.valueOf(i));
@@ -495,7 +502,7 @@ public class ProductService {
         List<ProductParam> params = new ArrayList<>();
         String param = product.getParamIDs();
 
-        //多个参数的情况
+        // 多个参数的情况
         if (param.indexOf(",") > 0) {
             String[] arr_param = param.split(",");
             List<Integer> paramList = new ArrayList<>();
@@ -503,7 +510,7 @@ public class ProductService {
                 paramList.add(Integer.parseInt(anArr_param));
             }
             params = paramService.selectParamByIds(paramList);
-        }//一个产品没有参数情况
+        } // 一个产品没有参数情况
         else {
             ProductParam pp = paramService.queryParamById(Long.parseLong(param));
             params.add(pp);
@@ -569,7 +576,6 @@ public class ProductService {
         return productList;
     }
 
-
     /**
      * 产品详情页面预览产品参数
      *
@@ -616,12 +622,10 @@ public class ProductService {
         }
     }
 
-
     public List<Product> findProductBySystemId(String id) {
         return productMapper.findProductBySystemId(id);
 
     }
-
 
     public List<Map<String, String>> queryProductTypeListByCompanyId(Map<String, Object> queryMap) {
         try {
@@ -682,22 +686,22 @@ public class ProductService {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
     }
-    
-	/**
-	 * 查询所有产品
-	 * @param pager
-	 * @param product
-	 * @return
-	 */
-	public List<Product> findAllProduct(Paging<Product> pager,
-			ProductWithBLOBs product) {
-		 try {
-		       log.debug("分页查询所有产品");
-	        return productMapper.findAllProduct(pager.getRowBounds(), product);
-		 } catch (Exception e) {
-	            log.error("查询失败:{}", e);
-	            e.printStackTrace();
-	            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
-	        }
-	}
+
+    /**
+     * 查询所有产品
+     * 
+     * @param pager
+     * @param product
+     * @return
+     */
+    public List<Product> findAllProduct(Paging<Product> pager, ProductWithBLOBs product) {
+        try {
+            log.debug("分页查询所有产品");
+            return productMapper.findAllProduct(pager.getRowBounds(), product);
+        } catch (Exception e) {
+            log.error("查询失败:{}", e);
+            e.printStackTrace();
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
+        }
+    }
 }

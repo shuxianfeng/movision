@@ -12,6 +12,8 @@ public class SuggestBrand {
 
     private String scateid;
 
+    private String company;
+
     public String getId() {
         return id;
     }
@@ -42,5 +44,13 @@ public class SuggestBrand {
 
     public void setLogoUrl(String logoUrl) {
         this.logoUrl = logoUrl;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 }

@@ -21,6 +21,8 @@ public interface ProductMapper {
 
     ProductWithBLOBs selectByPrimaryKey(Long id);
 
+    ProductWithBLOBs selectByIdMemberId(Map<String,Object> param);
+
     ProductWithMember selectProductMemberByid(Long id);
 
     int updateByPrimaryKeySelective(ProductWithBLOBs record);
@@ -66,4 +68,8 @@ public interface ProductMapper {
     //List<String> findScateByBrandId(@Param("brandId") String brandId);
 
 	List<Product> findAllProduct(RowBounds rowBounds, ProductWithBLOBs product);
+
+    List<ProductWithBLOBs> queryProductInfoBySCategoryPages(RowBounds rowBounds,Map<String,Object> map);
+
+    List<Map<String,String>> findCompanyProductListByName(RowBounds rowBounds,Map<String,Object> queryMap);
 }

@@ -266,7 +266,7 @@
         SELECT
         t.id ,t.name,date_format(t.publishDate,'%Y-%m-%d') publishDate,
         date_format(t.updateDate,'%Y-%m-%d') updateDate,concat(pn.name,ct.name,ar.name,case when ISNULL(t.address) then
-        '' else t.address end) address,ct.name city,
+        '' else t.address end) address,pn.name provinceName,ct.name city,
         t.price,date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate,
         (select group_concat(name) from t_dictionary_constant where find_in_set(code,t.category) and type=8) as
         categoryName
@@ -288,13 +288,17 @@
             <if test="city != null and city != ''">
                 and t.city = #{city}
             </if>
-            <if test="startDateA != null and startDateB != null">
-                and t.startDate &gt;= date_format(#{startDateA},'%Y-%m-%d') and t.startDate &lt;=
-                date_format(#{startDateB},'%Y-%m-%d')
+            <if test="startDateA != null">
+                and t.startDate &gt;= date_format(#{startDateA},'%Y-%m-%d')
             </if>
-            <if test="endDateA != null and endDateB != null">
-                and t.endDate &gt;= date_format(#{endDateA},'%Y-%m-%d') and t.endDate &lt;=
-                date_format(#{endDateB},'%Y-%m-%d')
+            <if test="startDateB != null">
+                and t.startDate &lt;= date_format(#{startDateB},'%Y-%m-%d')
+            </if>
+            <if test="endDateA != null">
+                and t.endDate &gt;= date_format(#{endDateA},'%Y-%m-%d')
+            </if>
+            <if test="endDateB != null">
+                and t.endDate &lt;= date_format(#{endDateB},'%Y-%m-%d')
             </if>
         </where>
         order by t.updateDate desc
@@ -333,7 +337,7 @@
         date_format(t.updateDate,'%Y-%m-%d') updateDate,concat(pn.name,ct.name,ar.name,ifnull(t.address,'')) address,
         t.price,date_format(t.startDate,'%Y-%m-%d') startDate,date_format(t.endDate,'%Y-%m-%d') endDate,
         (select group_concat(name) from t_dictionary_constant where find_in_set(code,t.category) and type=8) as
-        categoryName
+        categoryName,pn.name provinceName,ct.name cityName
         FROM t_zhb_viewGoods vp
         left join t_prj_project t on t.id = vp.goodsId
         left join t_dictionary_province pn on pn.code = t.province
@@ -434,13 +438,17 @@
             <if test="city != null and city != ''">
                 and t.city = #{city}
             </if>
-            <if test="startDateA != null and startDateB != null">
-                and t.startDate &gt;= date_format(#{startDateA},'%Y-%m-%d') and t.startDate &lt;=
-                date_format(#{startDateB},'%Y-%m-%d')
+            <if test="startDateA != null">
+                and t.startDate &gt;= date_format(#{startDateA},'%Y-%m-%d')
             </if>
-            <if test="endDateA != null and endDateB != null">
-                and t.endDate &gt;= date_format(#{endDateA},'%Y-%m-%d') and t.endDate &lt;=
-                date_format(#{endDateB},'%Y-%m-%d')
+            <if test="startDateB != null">
+                and t.startDate &lt;= date_format(#{startDateB},'%Y-%m-%d')
+            </if>
+            <if test="endDateA != null">
+                and t.endDate &gt;= date_format(#{endDateA},'%Y-%m-%d')
+            </if>
+            <if test="endDateB != null">
+                and t.endDate &lt;= date_format(#{endDateB},'%Y-%m-%d')
             </if>
         </where>
         order by t.updateDate desc

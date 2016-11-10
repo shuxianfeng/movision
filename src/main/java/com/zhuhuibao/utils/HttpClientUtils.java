@@ -2,6 +2,7 @@ package com.zhuhuibao.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.zhuhuibao.alipay.util.PayVerify;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -12,6 +13,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 
 public class HttpClientUtils {
 
@@ -182,6 +185,7 @@ public class HttpClientUtils {
                 url += "?" + EntityUtils.toString(new UrlEncodedFormEntity(pairs, charset));
             }
             HttpGet httpGet = new HttpGet(url);
+            logger.info("【GET请求的URL】="+url);
             CloseableHttpResponse response = httpClient.execute(httpGet);
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode != 200) {
@@ -210,9 +214,9 @@ public class HttpClientUtils {
             rspMap.put("result", "HTTP GET ERROR! " + e.getMessage());
             return rspMap;
         }
-
     }
 
+    
     /**
      * HTTP Post 获取内容
      *
@@ -284,5 +288,125 @@ public class HttpClientUtils {
             return rspMap;
         }
     }
+    
+    /**
+     * 
+     * @param url
+     * @param params
+     * @param charset
+     * @return
+     */
+    public static Map<String, String> doPostForXml(String url, SortedMap<String, String> params, String charset) {
+        if (StringUtils.isBlank(url)) {
+            logger.error("请求地址为空！");
+            return null;
+        }
+        Map<String, String> rspMap = new HashMap<String, String>();
+        CloseableHttpClient httpClient;
+        try {
+            RequestConfig config = RequestConfig
+                    .custom()
+                    .setConnectTimeout(60000)
+                    .setSocketTimeout(15000)
+                    .build();
 
+            httpClient = HttpClientBuilder
+                    .create()
+                    .setDefaultRequestConfig(config)
+                    .build();
+            //实例化httpPost
+            HttpPost httpPost = new HttpPost(url);
+            //处理传参的格式，现在以XML形式传输
+    		String requestXml = XmlUtil.getRequestXml(params);//生成Xml格式的字符串
+    		System.out.println("xmlStr>>>"+requestXml);
+    		//请求实体
+            HttpEntity requestEntity = new StringEntity(requestXml, charset);  
+            httpPost.setEntity(requestEntity);  
+            
+            //执行
+            CloseableHttpResponse response = httpClient.execute(httpPost);
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode != 200) {
+                httpPost.abort();
+                rspMap.put("status", String.valueOf(statusCode));
+                rspMap.put("result", "HTTP POST ERROR! ");
+                return rspMap;
+//                throw new RuntimeException("HttpClient,error status code :" + statusCode);
+            }
+            HttpEntity entity = response.getEntity();
+            String result = null;
+            if (entity != null) {
+                result = EntityUtils.toString(entity, "utf-8");
+            }
+            EntityUtils.consume(entity);
+            response.close();
+
+            rspMap.put("status", String.valueOf(statusCode));
+            rspMap.put("result", result);
+
+            return rspMap;
+        } catch (Exception e) {
+            logger.error("HTTP POST 请求异常：" + e);
+            rspMap.put("status", String.valueOf(500));
+            rspMap.put("result", "HTTP POST ERROR! " + e.getMessage());
+            return rspMap;
+        }
+    }
+    
+    /**
+     * 发送https请求
+     * @param requestUrl 请求地址
+     * @param requestMethod 请求方式（GET、POST）
+     * @param outputStr 提交的数据
+     * @return 返回微信服务器响应的信息
+     */
+    /*public static String httpsRequest(String requestUrl, String requestMethod, String outputStr) {
+        try {
+            // 创建SSLContext对象，并使用我们指定的信任管理器初始化
+            MyX509TrustManager[] tm = { new MyX509TrustManager() };
+            SSLContext sslContext = SSLContext.getInstance("SSL", "SunJSSE");
+            sslContext.init(null, tm, new java.security.SecureRandom());
+            // 从上述SSLContext对象中得到SSLSocketFactory对象
+            SSLSocketFactory ssf = sslContext.getSocketFactory();
+            URL url = new URL(requestUrl);
+            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+            conn.setSSLSocketFactory(ssf);
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setUseCaches(false);
+            // 设置请求方式（GET/POST）
+            conn.setRequestMethod(requestMethod);
+            conn.setRequestProperty("content-type", "application/x-www-form-urlencoded");
+            // 当outputStr不为null时向输出流写数据
+            if (null != outputStr) {
+                OutputStream outputStream = conn.getOutputStream();
+                // 注意编码格式
+                outputStream.write(outputStr.getBytes("UTF-8"));
+                outputStream.close();
+            }
+            // 从输入流读取返回内容
+            InputStream inputStream = conn.getInputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "utf-8");
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String str = null;
+            StringBuffer buffer = new StringBuffer();
+            while ((str = bufferedReader.readLine()) != null) {
+                buffer.append(str);
+            }
+            // 释放资源
+            bufferedReader.close();
+            inputStreamReader.close();
+            inputStream.close();
+            inputStream = null;
+            conn.disconnect();
+            return buffer.toString();
+        } catch (ConnectException ce) {
+            log.error("连接超时：{}", ce);
+        } catch (Exception e) {
+            log.error("https请求异常：{}", e);
+        }
+        return null;
+    }
+    */
+    
 }

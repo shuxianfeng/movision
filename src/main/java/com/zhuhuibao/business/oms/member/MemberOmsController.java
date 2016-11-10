@@ -302,7 +302,7 @@ public class MemberOmsController {
 				MemInfoCheck infoCheck = new MemInfoCheck();
 				
 				BeanUtils.copyProperties(member,infoCheck);
-				infoCheck.setStatus("1");
+				infoCheck.setStatus(MemberConstant.MemberStatus.ZCCG.intValue());
 				infoCheck.setId(Long.valueOf(member.getId()));
 				infoCheck.setUpdateTime(member.getRegisterTime());
 				infoCheck.setWorkType(member.getWorkType()); 
