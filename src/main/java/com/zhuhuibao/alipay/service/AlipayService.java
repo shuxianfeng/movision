@@ -257,9 +257,9 @@ public class AlipayService {
                         // BigDecimal(params.get("quantity")));
                         BigDecimal totalFee = new BigDecimal(0);
                         if (null == params.get("total_fee")) {
-                            totalFee = new BigDecimal("total_amount");
+                            totalFee = new BigDecimal(params.get("total_amount"));
                         } else {
-                            totalFee = new BigDecimal("total_fee");
+                            totalFee = new BigDecimal(params.get("total_fee"));
                         }
 
                         if (!String.valueOf(order.getPayAmount()).equals(totalFee.toString())) {
