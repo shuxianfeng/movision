@@ -129,7 +129,7 @@ public class ZhpayService {
         checkParams(msgParam);
 
         // 根据t_o_order_flow表进行支付
-        List<OrderFlow> orderFlows = orderFlowService.findByOrderNo(msgParam.get("orderNo"));
+        List<OrderFlow> orderFlows = orderFlowService.findUniqueOrderFlow(msgParam.get("orderNo"));
 
         if (orderFlows.size() > 0) {
             for (OrderFlow flow : orderFlows) {
