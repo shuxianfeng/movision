@@ -152,7 +152,7 @@ public class AlipayNotify {
         //获取待签名字符串
         String preSignStr = AlipayCore.createLinkString(sParaNew);
         //获得签名验证结果
-        boolean isSign = AlipaySignature.rsaCheckContent(preSignStr, sign, AlipayPropertiesLoader.getPropertyValue("h5_alipay_public_key"),
+        boolean isSign = AlipaySignature.rsaCheckContent(preSignStr, sign, AlipayPropertiesLoader.getPropertyValue("h5_alipay_zfb_public_key"),
                 AlipayPropertiesLoader.getPropertyValue("input_charset"));
         log.debug("responseTxt=" + responseTxt + "\n isSign=" + isSign + "\n 返回回来的参数：" + AlipayCore.createLinkString(params) +"\n preSignStr：" + preSignStr);
         return isSign && responseTxt.equals("true");
