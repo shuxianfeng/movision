@@ -79,13 +79,15 @@ public class SiteMailService {
      * @param reason 拒绝理由
      * @return
      */
-    public Response addRefuseReasonMail(Long sendId, Long recId, String reason) {
+    public Response addRefuseReasonMail(Long sendId, Long recId, String reason, String source, String title) {
         Response response = new Response();
         try {
             MessageText msgText = new MessageText();
-            msgText.setType(Constants.SITE_MAIL_TYPE_THREE);
+            msgText.setType(Constants.SITE_MAIL_TYPE_THREE);	//站内信类型：3
             msgText.setMessageText(reason);
-            msgText.setTitle(reason);
+            //审核对象
+            msgText.setSource(source);
+            msgText.setTitle(title);
             msgText.setSendID(sendId);
             msgText.setRecID(recId);
             this.addSiteMail(msgText);

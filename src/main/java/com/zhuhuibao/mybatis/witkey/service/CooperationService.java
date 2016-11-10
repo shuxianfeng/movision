@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.witkey.service;
 
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.CooperationConstants;
+import com.zhuhuibao.common.constant.MessageTextConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
@@ -145,7 +146,10 @@ public class CooperationService {
 		try {
 			result = cooperationMapper.updateCooperation(cooperation);
 			if ("2".equals(cooperation.getStatus())) {
-				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(cooperation.getCreateId()), cooperation.getReason());
+				
+				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),
+						Long.parseLong(cooperation.getCreateId()), cooperation.getReason(),
+						MessageTextConstant.WITKEY, cooperation.getTitle());
 			}
 		} catch (Exception e) {
 			log.error("CooperationService::updateCooperation",e);

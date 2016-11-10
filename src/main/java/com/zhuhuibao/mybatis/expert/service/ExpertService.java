@@ -6,6 +6,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.ExpertConstant;
+import com.zhuhuibao.common.constant.MessageTextConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
@@ -20,6 +21,7 @@ import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.utils.*;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.sms.SDKSendSms;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -164,7 +166,8 @@ public class ExpertService {
 			result = achievementMapper.updateAchievement(achievement);
 			if ("2".equals(achievement.getStatus())) {
 				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),
-						Long.parseLong(achievement.getCreateId()), achievement.getReason());
+						Long.parseLong(achievement.getCreateId()), achievement.getReason(),
+						MessageTextConstant.ACHIEVEMENT,  achievement.getTitle());
 			}
 		} catch (Exception e) {
 			log.error("ExpertService::updateAchievement", e);
@@ -214,8 +217,10 @@ public class ExpertService {
 		try {
 			result = dynamicMapper.updateDynamic(dynamic);
 			if ("2".equals(dynamic.getStatus())) {
-				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(dynamic.getCreateId()),
-						dynamic.getReason());
+				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), 
+						Long.parseLong(dynamic.getCreateId()),
+						dynamic.getReason(),
+						MessageTextConstant.DYNAMIC, dynamic.getTitle());
 			}
 		} catch (Exception e) {
 			log.error("ExpertService::updateDynamic", e);
@@ -320,8 +325,10 @@ public class ExpertService {
 		try {
 			result = expertMapper.updateExpert(expert);
 			if ("2".equals(String.valueOf(expert.getStatus()))) {
-				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(expert.getCreateId()),
-						expert.getReason());
+				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), 
+						Long.parseLong(expert.getCreateId()),
+						expert.getReason(), 
+						MessageTextConstant.EXPERT, expert.getName());
 			}
 		} catch (Exception e) {
 			log.error("ExpertService::updateExpert", e);

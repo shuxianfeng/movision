@@ -22,8 +22,19 @@ public class MessageText implements Serializable{
     private Date sendTime;
 
     private Long typeID;
+    
+    private String source;
+    
 
-    public Long getId() {
+    public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public Long getId() {
         return id;
     }
 

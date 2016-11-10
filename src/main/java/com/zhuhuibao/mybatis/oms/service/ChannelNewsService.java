@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.oms.service;
 
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MessageTextConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
@@ -66,7 +67,9 @@ public class ChannelNewsService {
         try {
             channel.updateByPrimaryKeySelective(channelNews);
             if ("2".equals(String.valueOf(channelNews.getStatus()))) {
-                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), channelNews.getCreateid(), channelNews.getReason());
+            	
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), channelNews.getCreateid(), 
+                		channelNews.getReason(), MessageTextConstant.CHANNELNEWS, channelNews.getTitle());
             }
         } catch (Exception e) {
             log.error("add channel news error!", e);

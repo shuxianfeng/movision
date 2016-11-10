@@ -4,6 +4,7 @@ package com.zhuhuibao.mybatis.tech.service;/**
  */
 
 import com.zhuhuibao.common.constant.MessageLogConstant;
+import com.zhuhuibao.common.constant.MessageTextConstant;
 import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
@@ -13,6 +14,7 @@ import com.zhuhuibao.mybatis.tech.mapper.TechDataMapper;
 import com.zhuhuibao.utils.CommonUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -179,7 +181,9 @@ public class TechDataService {
             techData.setStatus(TechConstant.TechDataStatus.PENDINGAUDIT.intValue());
             result = techDataMapper.updateByPrimaryKeySelective(techData);
             if (Objects.equals(techData.getStatus(), TechConstant.TechDataStatus.REJECT.intValue())) {
-                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), techData.getCreateid(), techData.getReason());
+            	
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), techData.getCreateid(),
+                		techData.getReason(), MessageTextConstant.JSZL, techData.getTitle());
             }
         } catch (Exception e) {
             log.error("执行异常>>>", e);
@@ -200,7 +204,9 @@ public class TechDataService {
         try { 
             result = techDataMapper.updateByPrimaryKeySelective(techData);
             if (Objects.equals(techData.getStatus(), TechConstant.TechDataStatus.REJECT.intValue())) {
-                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), techData.getCreateid(), techData.getReason());
+            	
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), techData.getCreateid(), 
+                		techData.getReason(), MessageTextConstant.JSZL, techData.getTitle());
             }
         } catch (Exception e) {
             log.error("执行异常>>>", e);

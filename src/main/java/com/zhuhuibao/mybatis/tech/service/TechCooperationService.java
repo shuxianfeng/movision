@@ -1,5 +1,6 @@
 package com.zhuhuibao.mybatis.tech.service;
 
+import com.zhuhuibao.common.constant.MessageTextConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
@@ -13,6 +14,7 @@ import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,7 +139,10 @@ public class TechCooperationService {
             tech.setUpdateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
             result = techMapper.updateByPrimaryKeySelective(tech);
             if ("3".equals(String.valueOf(tech.getStatus()))) {
-                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), tech.getCreateID(), tech.getReason());
+            	
+            	String source = tech.getType() == 1 ? MessageTextConstant.ACHIEVEMENT : MessageTextConstant.JSXQ;
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), tech.getCreateID(),
+                		tech.getReason(), source, tech.getTitle());
             }
         } catch (Exception e) {
             log.error("执行异常>>>",e);

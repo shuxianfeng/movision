@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.expo.service;
 
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MessageTextConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.expo.entity.DistributedOrder;
 import com.zhuhuibao.mybatis.expo.entity.Exhibition;
@@ -150,7 +151,9 @@ public class ExpoService {
             exhibitionMapper.updateExhibitionInfoById(exhibition);
             if("2".equals(exhibition.getStatus()))
             {
-                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),Long.parseLong(exhibition.getCreateid()),exhibition.getReason());
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),
+                		Long.parseLong(exhibition.getCreateid()),exhibition.getReason(),
+                		MessageTextConstant.EXHIBITION, exhibition.getTitle());
             }
         }catch (Exception e){
             log.error("ExpoService::updateExhibitionInfoById",e);

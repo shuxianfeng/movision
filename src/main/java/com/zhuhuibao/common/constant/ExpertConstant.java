@@ -54,6 +54,11 @@ public interface ExpertConstant {
     String EXPERT_USEAREA_TYPE = "18";
 
     /**
+     * 问题未关闭
+     */
+    String QUESTION_NOT_CLOSE = "1";
+    
+    /**
      * 专家频道问题状态标识 3：已屏蔽
      */
     String EXPERT_QUESTION_STATUS_THREE = "3";
