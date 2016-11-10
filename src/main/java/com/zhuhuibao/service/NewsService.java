@@ -83,12 +83,9 @@ public class NewsService {
     public void addNews(News news, String recPlace) {
         completeInsertBaseInfo(news);
         newsMapper.insertSelective(news);
-        NewsRecommendPlace place = new NewsRecommendPlace();
-        place.setUpdateTime(new Date());
-        place.setAddTime(new Date());
-        place.setNewsId(news.getId());
-        place.setRecommendPlace(recPlace);
-        placeMapper.insertSelective(place);
+        if (!StringUtils.isEmpty(recPlace)) {
+            insertNewsRec(news, recPlace);
+        }
     }
 
     /**
@@ -144,17 +141,30 @@ public class NewsService {
         for (NewsRecommendPlace place : places) {
             placeMapper.deleteByPrimaryKey(place.getId());
         }
-        String[] split = recPlace.split(",");
-        if (split.length > 0) {
-            for (String place : split) {
-                NewsRecommendPlace recommendPlace = new NewsRecommendPlace();
-                recommendPlace.setUpdateTime(new Date());
-                recommendPlace.setAddTime(new Date());
-                recommendPlace.setNewsId(news.getId());
-                recommendPlace.setRecommendPlace(place);
-                placeMapper.insertSelective(recommendPlace);
+        if (!StringUtils.isEmpty(recPlace)) {
+            String[] split = recPlace.split(",");
+            if (split.length > 0) {
+                for (String place : split) {
+                    insertNewsRec(news, place);
+                }
             }
         }
+
+    }
+
+    /**
+     * 插入资讯推荐位置信息
+     * 
+     * @param news
+     * @param place
+     */
+    private void insertNewsRec(News news, String place) {
+        NewsRecommendPlace recommendPlace = new NewsRecommendPlace();
+        recommendPlace.setUpdateTime(new Date());
+        recommendPlace.setAddTime(new Date());
+        recommendPlace.setNewsId(news.getId());
+        recommendPlace.setRecommendPlace(place);
+        placeMapper.insertSelective(recommendPlace);
     }
 
     /**
