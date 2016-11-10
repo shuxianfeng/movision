@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * 把yyyy-MM-dd HH:mm:ss形式的日期字符串转换成Date类型
  * @author jianglz
  * @since 16/5/27.
  */

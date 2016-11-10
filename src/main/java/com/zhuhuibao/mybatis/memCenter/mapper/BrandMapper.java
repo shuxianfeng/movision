@@ -20,17 +20,17 @@ public interface BrandMapper {
 
     List<Brand> searchBrandByStatus(Brand brand);
 
-    List<Brand> findAllByPager(RowBounds rowBounds,Brand brand);
+    List<Brand> findAllByPager(RowBounds rowBounds, Brand brand);
 
     int searchBrandSize(Brand brand);
 
     Brand brandDetails(String id);
 
-    List<Map<String,Object>> findAllBrand(String scateid);
+    List<Map<String, Object>> findAllBrand(String scateid);
 
-    List<Map<String,Object>> findBrandByScateid(String scateid);
+    List<Map<String, Object>> findBrandByScateid(String scateid);
 
-    List<Map<String,Object>> searchSuggestBrand();
+    List<Map<String, Object>> searchSuggestBrand();
 
     List<BrandBean> searchAll();
 
@@ -38,9 +38,17 @@ public interface BrandMapper {
 
     BrandDetailBean details(String id);
 
-    List<Map<String,Object>> queryBrandProductAgentCount(Long createId);
+    List<Map<String, Object>> queryBrandProductAgentCount(Long createId);
 
-    List<Map<String,String>> queryRecommendBrand(Map<String,Object> map);
+    List<Map<String, String>> queryRecommendBrand(Map<String, Object> map);
 
-    List<Map<String,String>> findByKeyword(@Param("keyword") String keyword, @Param("count") Integer count);
+    List<Map<String, String>> findByKeyword(@Param("keyword") String keyword, @Param("count") Integer count);
+
+    /**
+     * 根据一级分类分页获取品牌信息
+     * 
+     * @param map
+     * @return
+     */
+    List<SuggestBrand> findAllHotBrandListByType(RowBounds rowBounds,Map<String, Object> map);
 }

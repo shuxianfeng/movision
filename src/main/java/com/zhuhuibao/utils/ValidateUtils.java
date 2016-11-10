@@ -1,10 +1,33 @@
 package com.zhuhuibao.utils;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 校验工具类
+ * @author zhuangyuhao
+ * @time   2016年11月2日 上午10:12:25
+ *
+ */
 public class ValidateUtils {
-
+	
+	/**
+	 * 校验手机
+	 * @param str
+	 * @return
+	 */
+	public static boolean isMobile(String str) {   
+        Pattern p = null;  
+        Matcher m = null;  
+        boolean b = false;   
+        p = Pattern.compile("^[1][3,4,5,7,8][0-9]{9}$"); // 验证手机号  
+        m = p.matcher(str);  
+        b = m.matches();   
+        return b;  
+    }  
+	
     /**
      * 校验金额
      *

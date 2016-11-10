@@ -8,6 +8,8 @@ public class ContractorSearchSpec {
 
     @ApiModelProperty("省份编码")
     private String province;
+    @ApiModelProperty("城市编码")
+    private String city;
     @ApiModelProperty("资质名称")
     private String assetlevel;
     @ApiModelProperty("关键字")
@@ -27,6 +29,14 @@ public class ContractorSearchSpec {
 
     public void setProvince(String province) {
         this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getAssetlevel() {

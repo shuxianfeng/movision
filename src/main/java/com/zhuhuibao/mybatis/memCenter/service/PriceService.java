@@ -16,9 +16,12 @@ import com.zhuhuibao.mybatis.memCenter.mapper.AskPriceMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.ProvinceMapper;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.MapUtil;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * 询报价业务处理
- * Created by cxx on 2016/3/29 0029.
+ * 询报价业务处理 Created by cxx on 2016/3/29 0029.
  */
 @Service
 @Transactional
@@ -69,20 +71,20 @@ public class PriceService {
         if (askPrice.getBillurl() != null && !askPrice.getBillurl().equals("")) {
             String fileUrl = askPrice.getBillurl();
             if (!fileUtil.isExistFile(fileUrl, "doc", "price")) {
-                throw new  BusinessException(MsgCodeConstant.file_not_exist,"文件不存在");
+                throw new BusinessException(MsgCodeConstant.file_not_exist, "文件不存在");
             }
         }
         boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.XJFB.toString());
         if (bool) {
             askPriceMapper.saveAskPrice(askPrice);
             zhbService.payForGoods(askPrice.getId(), ZhbPaymentConstant.goodsType.XJFB.toString());
-        } else {//支付失败稍后重试，联系客服
+        } else {// 支付失败稍后重试，联系客服
             throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
         }
-//        else {
-//            askPriceMapper.saveAskPrice(askPrice);
-//            result.setCode(200);
-//        }
+        // else {
+        // askPriceMapper.saveAskPrice(askPrice);
+        // result.setCode(200);
+        // }
         return result;
     }
 
@@ -94,9 +96,9 @@ public class PriceService {
         AskPriceBean bean = new AskPriceBean();
         try {
             Long mem_id = ShiroUtil.getCreateID();
-            Map<String,Object> map = new HashMap<>();
-            map.put("id",id);
-            map.put("createid",mem_id);
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", id);
+            map.put("createid", mem_id);
             bean = askPriceMapper.queryAskPrice(map);
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -130,19 +132,18 @@ public class PriceService {
         return bean;
     }
 
-
     /**
      * 获得我的联系方式（询报价者联系方式）
      */
-    public Map<String,String> getLinkInfo(String id) {
-        Map<String,String> map = new HashMap<>();
+    public Map<String, String> getLinkInfo(String id) {
+        Map<String, String> map = new HashMap<>();
         Member member = memberMapper.findMemById(id);
         if (member != null) {
             map.put(Constants.companyName, member.getEnterpriseName());
             map.put(Constants.telephone, member.getFixedTelephone());
             map.put(Constants.mobile, member.getFixedMobile());
-            map.put("email",member.getEmail());
-            if ("2".equals(member.getIdentify())) { //个人用户
+            map.put("email", member.getEmail());
+            if ("2".equals(member.getIdentify())) { // 个人用户
                 map.put(Constants.linkMan, member.getPersonRealName());
             } else {
                 map.put(Constants.linkMan, member.getEnterpriseLinkman());
@@ -151,6 +152,47 @@ public class PriceService {
         return map;
     }
 
+    /**
+     * 查询询价信息
+     * 
+     * @param pager
+     * @param askPriceSearch
+     * @return
+     */
+    public List<AskPriceResultBean> findAllEnquiryList(Paging<AskPriceResultBean> pager, AskPriceSearchBean askPriceSearch) {
+
+        if (null != askPriceSearch) {
+            String publishTimeOrder = StringUtils.trimToEmpty(askPriceSearch.getPublishTimeOrder());
+            if (!ArrayUtils.contains(Constants.ORDER_TYPE_KEYWORD, publishTimeOrder.toUpperCase())) {
+                askPriceSearch.setPublishTimeOrder(null);
+            }
+
+        }
+        return askPriceMapper.findAllByPager1(pager.getRowBounds(), askPriceSearch);
+    }
+
+    /**
+     * 查询询价信息
+     * 
+     * @param askId
+     * @return
+     */
+    public AskPriceBean findAskPriceByAskidMemId(Long askId, Long memberId) {
+        Map<String, Object> map = MapUtil.convert2HashMap("askId", askId, "memberId", memberId);
+
+        return askPriceMapper.queryAskPriceByAskidMemId(map);
+    }
+
+    /**
+     * 根据ID查询询价信息
+     * 
+     * @param askId
+     * @return
+     */
+    public AskPriceBean findAskPriceById(Long askId) {
+
+        return askPriceMapper.queryAskPriceByID(String.valueOf(askId));
+    }
 
     /**
      * 根据条件查询询价信息（分页）
@@ -158,7 +200,7 @@ public class PriceService {
     public List<AskPriceResultBean> findAllByPager(Paging<AskPriceResultBean> pager, AskPriceSearchBean askPriceSearch) {
         log.debug("查询询价信息（分页）");
         List<AskPriceResultBean> resultBeanList = askPriceMapper.findAll(askPriceSearch);
-        List<AskPriceResultBean> resultBeanList1 = askPriceMapper.findAllByPager1(pager.getRowBounds(), askPriceSearch);
+        List<AskPriceResultBean> resultBeanList1 = findAllEnquiryList(pager, askPriceSearch);
         List askList = new ArrayList();
         for (AskPriceResultBean resultBean : resultBeanList1) {
             Map askMap = new HashMap();

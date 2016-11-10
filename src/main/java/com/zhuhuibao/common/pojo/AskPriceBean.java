@@ -1,5 +1,7 @@
 package com.zhuhuibao.common.pojo;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Created by cxx on 2016/3/31 0031.
  */
@@ -110,6 +112,14 @@ public class AskPriceBean {
     }
 
     public String getTypeName() {
+        if (StringUtils.isBlank(typeName) && StringUtils.isNotBlank(type)) {
+            if ("1".equals(type)) {
+                typeName = "公开询价";
+            } else if ("2".equals(type)) {
+                typeName = "定向询价";
+            }
+        }
+
         return typeName;
     }
 
@@ -126,6 +136,11 @@ public class AskPriceBean {
     }
 
     public String getIsTaxName() {
+
+        if (StringUtils.isBlank(isTaxName)) {
+            isTaxName = "1".equals(getIsTax()) ? "含税报价" : "非含税报价";
+        }
+
         return isTaxName;
     }
 
@@ -244,4 +259,9 @@ public class AskPriceBean {
     public void setPeriod(String period) {
         this.period = period;
     }
+
+    public String getAddress() {
+        return getProvinceName() + getCityName() + getAreaName();
+    }
+
 }

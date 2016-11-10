@@ -1,5 +1,10 @@
 package com.zhuhuibao.common.pojo;
 
+import com.zhuhuibao.common.constant.MemberConstant;
+import org.apache.commons.lang.StringUtils;
+
+import java.math.BigDecimal;
+
 public class AuthcMember {
     private Long id;
     private String account;
@@ -15,12 +20,21 @@ public class AuthcMember {
     private String nickname;
     private String companyName;
 
-
     private int msgCount;
 
     private int vipLevel;
 
-    private  int message;
+    private int message;
+
+    private BigDecimal zhbAmount;
+
+    public BigDecimal getZhbAmount() {
+        return zhbAmount;
+    }
+
+    public void setZhbAmount(BigDecimal zhbAmount) {
+        this.zhbAmount = zhbAmount;
+    }
 
     public boolean isexpert() {
         return isexpert;
@@ -145,4 +159,17 @@ public class AuthcMember {
     public void setMsgCount(int msgCount) {
         this.msgCount = msgCount;
     }
+
+    /**
+     * 是否为企业账号
+     * 
+     * @return
+     */
+    public boolean getIsEnterprise() {
+        return !MemberConstant.MemberIdentify.GR.toString().equals(getIdentify());
+    }
+
+    public String getMobile() {
+        return StringUtils.contains(getAccount(), "@") ? "" : getAccount();
+    };
 }

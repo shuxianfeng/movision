@@ -301,8 +301,8 @@
   
    <select id="queryDetailsById" resultType="java.util.Map" parameterType="java.lang.Long" >
     select
-      id, title, date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,  description,content
-      ,attachName,attachUrl
+      id, title, date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,  description,content, imgurl,views
+      ,attachName,attachUrl,wordkey
     from t_oms_channel_news
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -405,5 +405,40 @@
     <select id="queryattachName" resultType="java.lang.String" parameterType="java.lang.String" >
         select attachUrl from t_oms_channel_news where id = #{id} 
     </select>
-    
+
+
+  <!-- 根据标题模糊查询咨询列表 -->
+  <select id="findChanNewsListByTitle" resultType="java.util.Map" parameterType="java.util.Map" >
+    select a.id,a.title,
+    date_format(a.createTime,'%Y-%m-%d %H:%i:%s') createTime,
+    a.imgurl,
+    a.description,
+    a.attachUrl,
+    a.attachName,
+    a.views
+    from
+    t_oms_channel_news a
+    <where>
+      a.status!=3
+      <if test="status != null">
+        and a.status = #{status}
+      </if>
+      <if test="channelid != null">
+        and a.channelid = #{channelid}
+      </if>
+      <if test="sort != null">
+        and a.sort = #{sort}
+      </if>
+      <if test="title != null">
+        and a.title like CONCAT('%',#{title},'%')
+      </if>
+    </where>
+    <if test="isHot == true">
+      order by a.views desc
+    </if>
+
+    <if test="isHot != true">
+      order by a.createTime desc
+    </if>
+  </select>
 </mapper>

@@ -1,8 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
-import java.util.Date;
-
-public class MemberShop{
+public class MemberShop {
     private Integer id;
 
     private String shopName;
@@ -22,6 +20,12 @@ public class MemberShop{
     private String status;
 
     private String reason;
+
+    private String mobileBannerUrlF;
+
+    private String mobileBannerUrlS;
+
+    private String mobileBannerUrlT;
 
     public Integer getId() {
         return id;
@@ -103,4 +107,27 @@ public class MemberShop{
         this.reason = reason;
     }
 
+    public String getMobileBannerUrlF() {
+        return mobileBannerUrlF;
+    }
+
+    public void setMobileBannerUrlF(String mobileBannerUrlF) {
+        this.mobileBannerUrlF = mobileBannerUrlF;
+    }
+
+    public String getMobileBannerUrlS() {
+        return mobileBannerUrlS;
+    }
+
+    public void setMobileBannerUrlS(String mobileBannerUrlS) {
+        this.mobileBannerUrlS = mobileBannerUrlS;
+    }
+
+    public String getMobileBannerUrlT() {
+        return mobileBannerUrlT;
+    }
+
+    public void setMobileBannerUrlT(String mobileBannerUrlT) {
+        this.mobileBannerUrlT = mobileBannerUrlT;
+    }
 }

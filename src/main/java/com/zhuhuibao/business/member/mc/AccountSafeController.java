@@ -259,6 +259,11 @@ public class AccountSafeController {
             memberRegService.inserValidateInfo(info);
             sess.setAttribute("s" + mobile, verifyCode);
         }
+        else {
+            response.setCode(400);
+            response.setMessage("验证码输入错误！");
+        }
+
         return response;
     }
 

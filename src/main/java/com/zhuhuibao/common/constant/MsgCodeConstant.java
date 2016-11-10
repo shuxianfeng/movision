@@ -233,7 +233,7 @@ public interface MsgCodeConstant {
 	 */
 	int NOT_EXIST_GOODS_ERROR = 3001;
 	/**
-	 * 不存在该会员信息
+	 * 不存在VIP信息
 	 */
 	int NOT_EXIST_VIP = 3002;
 	
@@ -271,5 +271,108 @@ public interface MsgCodeConstant {
 	 */
 	int ENTERPRISE_ACCOUNT_CAN_NOT_UPGRADE_PERSON_VIP = 3302;
 	
+	/**
+	 * 微信支付结果通用通知接口参数错误
+	 */
+	int NOTIFY_PARAMS_EMPTY_ERROR = 8001;
+	
+	/**
+	 * 统一下单接口错误码
+	 */
+	public enum WXPAY_ERROR_CODE {
+		
+		NOAUTH(8002), 
+		NOTENOUGH(8003),
+		ORDERPAID(8004),
+		ORDERCLOSED(8005), 
+		SYSTEMERROR(8006), 
+		APPID_NOT_EXIST(8007), 
+		MCHID_NOT_EXIST(8008),
+		APPID_MCHID_NOT_MATCH(8009),
+		LACK_PARAMS(8010),
+		OUT_TRADE_NO_USED(8011),
+		SIGNERROR(8012),
+		XML_FORMAT_ERROR(8013),
+		REQUIRE_POST_METHOD(8014),
+		POST_DATA_EMPTY(8015),
+		NOT_UTF8(8016);
+		
+        public final int code;
+
+        WXPAY_ERROR_CODE(Integer code) {
+            this.code = code;
+        }
+
+        public Integer getCode(){
+        	return this.code;
+        }
+        
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+	
+	/**
+	 * 微信查询订单接口错误码
+	 * @author zhuangyuhao
+	 * @time   2016年10月25日 下午4:47:29
+	 *
+	 */
+	public enum WXPAY_QUERY_ORDER_ERROR {
+		ORDERNOTEXIST(8018),
+		SYSTEMERROR(8019);
+		
+		public final int code;
+
+		WXPAY_QUERY_ORDER_ERROR(Integer code) {
+            this.code = code;
+        }
+
+        public Integer getCode(){
+        	return this.code;
+        }
+        
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+	}
+	
+	
+	/**
+	 * 微信支付回调接口调用时，微信端的请求参数中不存在该订单
+	 */
+	int NOT_EXIST_ORDER_FOR_WXPAY = 8017;
+	
+	/**
+	 * 不存在该订单
+	 */
+	int NOT_EXIST_ORDER = 3005;
+	
+	/**
+	 * 不存在该订单的【实付金额】字段
+	 */
+	int NOT_EXIST_ORDER_PAYAMOUNT = 3006;
+	
+	/**
+	 * 手机号是空
+	 */
+	int MOBILE_IS_EMPTY = 3007;
+	
+	/**
+	 * 手机短信验证码是空
+	 */
+	int SMS_VERIFY_CODE_IS_EMPTY = 3008;
+	
+	/**
+	 * 手机格式不正确
+	 */
+	int MOBILE_PATTERN_ERROR = 3009;
+	
+	/**
+	 * 不存在该会员信息
+	 */
+	int NOT_EXIST_MEMBER = 3010;
 	
 }

@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuhuibao.mybatis.news.mapper.NewsMapper">
+    <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.news.form.NewsForm">
+        <id column="id" property="news.id" jdbcType="BIGINT"/>
+        <result column="type" property="news.type" jdbcType="INTEGER"/>
+        <result column="sub_type" property="news.subType" jdbcType="INTEGER"/>
+        <result column="photo" property="news.photo" jdbcType="VARCHAR"/>
+        <result column="title" property="news.title" jdbcType="VARCHAR"/>
+        <result column="short_title" property="news.shortTitle" jdbcType="VARCHAR"/>
+        <result column="jump_url" property="news.jumpUrl" jdbcType="VARCHAR"/>
+        <result column="source" property="news.source" jdbcType="VARCHAR"/>
+        <result column="keywords" property="news.keywords" jdbcType="VARCHAR"/>
+        <result column="introduction" property="news.introduction" jdbcType="VARCHAR"/>
+        <result column="views" property="news.views" jdbcType="BIGINT"/>
+        <result column="publish_time" property="news.publishTime" jdbcType="TIMESTAMP"/>
+        <result column="publisher_id" property="news.publisherId" jdbcType="BIGINT"/>
+        <result column="status" property="news.status" jdbcType="INTEGER"/>
+        <result column="attach_name" property="news.attachName" jdbcType="VARCHAR"/>
+        <result column="attach_url" property="news.attachUrl" jdbcType="VARCHAR"/>
+        <result column="add_time" property="news.addTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="news.updateTime" jdbcType="TIMESTAMP"/>
+        <!-- 状态 -->
+        <result column="status_text" property="statusText" jdbcType="VARCHAR"/>
+        <result column="show_type_name" property="showTypeName" jdbcType="VARCHAR"/>
+        <result column="type_name" property="typeName" jdbcType="VARCHAR"/>
+        <result column="sub_type_name" property="subTypeName" jdbcType="VARCHAR"/>
+        <result column="publish_time_str" property="publishTimeStr" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.news.form.NewsForm" extends="BaseResultMap">
+        <result column="content" property="news.content" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, type, sub_type, photo, title, short_title, jump_url, source, keywords, introduction,
+    views, publish_time, publisher_id, status, attach_name, attach_url, add_time, update_time,content
+  </sql>
+    <sql id="Blob_Column_List">
+    content
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>, date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
+        from t_n_news
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_n_news
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.zhuhuibao.mybatis.news.entity.News">
+    insert into t_n_news (id, type, sub_type, 
+      photo, title, short_title, 
+      jump_url, source, keywords, 
+      introduction, views, publish_time,
+      publisher_id, status, attach_name,
+      attach_url, add_time, update_time,
+      content)
+    values (#{id,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, #{subType,jdbcType=INTEGER}, 
+      #{photo,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{shortTitle,jdbcType=VARCHAR}, 
+      #{jumpUrl,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, #{keywords,jdbcType=VARCHAR}, 
+      #{introduction,jdbcType=VARCHAR}, #{views,jdbcType=BIGINT}, #{publishTime,jdbcType=TIMESTAMP},
+      #{publisherId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{attachName,jdbcType=VARCHAR},
+      #{attachUrl,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.news.entity.News" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_n_news
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="subType != null">
+                sub_type,
+            </if>
+            <if test="photo != null">
+                photo,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="shortTitle != null">
+                short_title,
+            </if>
+            <if test="jumpUrl != null">
+                jump_url,
+            </if>
+            <if test="source != null">
+                source,
+            </if>
+            <if test="keywords != null">
+                keywords,
+            </if>
+            <if test="introduction != null">
+                introduction,
+            </if>
+            <if test="views != null">
+                views,
+            </if>
+            <if test="publishTime != null">
+                publish_time,
+            </if>
+            <if test="publisherId != null">
+                publisher_id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="attachName != null">
+                attach_name,
+            </if>
+            <if test="attachUrl != null">
+                attach_url,
+            </if>
+            <if test="addTime != null">
+                add_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="subType != null">
+                #{subType,jdbcType=INTEGER},
+            </if>
+            <if test="photo != null">
+                #{photo,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="shortTitle != null">
+                #{shortTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="jumpUrl != null">
+                #{jumpUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="source != null">
+                #{source,jdbcType=VARCHAR},
+            </if>
+            <if test="keywords != null">
+                #{keywords,jdbcType=VARCHAR},
+            </if>
+            <if test="introduction != null">
+                #{introduction,jdbcType=VARCHAR},
+            </if>
+            <if test="views != null">
+                #{views,jdbcType=BIGINT},
+            </if>
+            <if test="publishTime != null">
+                #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="publisherId != null">
+                #{publisherId,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="attachName != null">
+                #{attachName,jdbcType=VARCHAR},
+            </if>
+            <if test="attachUrl != null">
+                #{attachUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="addTime != null">
+                #{addTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.news.entity.News">
+        update t_n_news
+        <set>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="subType != null">
+                sub_type = #{subType,jdbcType=INTEGER},
+            </if>
+            <if test="photo != null">
+                photo = #{photo,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="shortTitle != null">
+                short_title = #{shortTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="jumpUrl != null">
+                jump_url = #{jumpUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="source != null">
+                source = #{source,jdbcType=VARCHAR},
+            </if>
+            <if test="keywords != null">
+                keywords = #{keywords,jdbcType=VARCHAR},
+            </if>
+            <if test="introduction != null">
+                introduction = #{introduction,jdbcType=VARCHAR},
+            </if>
+            <if test="views != null">
+                views = #{views,jdbcType=BIGINT},
+            </if>
+            <if test="publishTime != null">
+                publish_time = #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="publisherId != null">
+                publisher_id = #{publisherId,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="attachName != null">
+                attach_name = #{attachName,jdbcType=VARCHAR},
+            </if>
+            <if test="attachUrl != null">
+                attach_url = #{attachUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="addTime != null">
+                add_time = #{addTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zhuhuibao.mybatis.news.entity.News">
+    update t_n_news
+    set type = #{type,jdbcType=INTEGER},
+      sub_type = #{subType,jdbcType=INTEGER},
+      photo = #{photo,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      short_title = #{shortTitle,jdbcType=VARCHAR},
+      jump_url = #{jumpUrl,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      keywords = #{keywords,jdbcType=VARCHAR},
+      introduction = #{introduction,jdbcType=VARCHAR},
+      views = #{views,jdbcType=BIGINT},
+      publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      publisher_id = #{publisherId,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      attach_name = #{attachName,jdbcType=VARCHAR},
+      attach_url = #{attachUrl,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.zhuhuibao.mybatis.news.entity.News">
+    update t_n_news
+    set type = #{type,jdbcType=INTEGER},
+      sub_type = #{subType,jdbcType=INTEGER},
+      photo = #{photo,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      short_title = #{shortTitle,jdbcType=VARCHAR},
+      jump_url = #{jumpUrl,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      keywords = #{keywords,jdbcType=VARCHAR},
+      introduction = #{introduction,jdbcType=VARCHAR},
+      views = #{views,jdbcType=BIGINT},
+      publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      publisher_id = #{publisherId,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      attach_name = #{attachName,jdbcType=VARCHAR},
+      attach_url = #{attachUrl,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+    <!-- 运营平台根据条件查询资讯分页信息-->
+    <select id="findAllNewsPager" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        id,
+        title,views,publisher_id,status,
+        (case when status=0 then '未发布'
+        when status=1 then '已发布' end ) as status_text,
+        (case when type=2 then '专题'
+        when type=3 then '筑慧访谈' when type=4 then '曝光台'when type=5 then '工程商新闻'when type=6 then '深度观察'when type=7 then
+        '活动' when type=1 and sub_type = 1 then '行业资讯--网络及硬件'when type=1 and sub_type = 2 then '行业资讯--安全防范'when type=1
+        and sub_type = 3 then '行业资讯--楼宇自动化'when type=1 and sub_type = 4 then '行业资讯--数据中心'when type=1 and sub_type = 5
+        then '行业资讯--智能家居'when type=1 and sub_type = 6 then '行业资讯--影音视频'when type=1 and sub_type = 7 then
+        '行业资讯--应用系统'when type=1 and sub_type = 8 then '行业资讯--智能照明'when type=1 and sub_type = 9 then '行业资讯--行业软件' end) as
+        show_type_name,
+        date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
+        FROM t_n_news WHERE
+        1=1
+        <if test="title != null and title != '' ">
+            and title like CONCAT('%',#{title},'%')
+        </if>
+        <if test="subType != null and subType != '' ">
+            and sub_type = #{subType,jdbcType=INTEGER}
+        </if>
+        <if test="type != null and type != '' ">
+            and type = #{type,jdbcType=INTEGER}
+        </if>
+        <if test="status != null and status != '' ">
+            and status = #{status,jdbcType=INTEGER}
+        </if>
+        order by add_time desc
+    </select>
+
+    <!-- 批量发布资讯-->
+    <update id="batchPubNews" parameterType="java.util.ArrayList">
+        update t_n_news
+        set
+        status = 1,
+        update_time = now()
+        where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+
+    <!-- 触屏端所有资讯列表-->
+    <select id="findAllMobileNews" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        id,
+        title,views,source,photo,
+        date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
+        FROM t_n_news
+        where status = 1
+        order by publish_time desc
+    </select>
+
+    <!-- 触屏端热点资讯列表-->
+    <select id="findAllHotMobileNews" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        id,
+        title,views,source,photo,
+        date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
+        FROM t_n_news
+         where status = 1
+         <![CDATA[
+          and DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(publish_time)
+        ]]>
+        order by views desc
+    </select>
+
+    <!-- 触屏端分类资讯列表-->
+    <select id="findAllMobileNewsByType" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        id,
+        title,views,source,photo,
+        date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
+        FROM t_n_news
+        where 1=1 AND status = 1
+        <if test="subType != null and subType != '' and type ==1">
+            and sub_type = #{subType,jdbcType=INTEGER}
+        </if>
+        <if test="type != null and type != '' ">
+            and type = #{type,jdbcType=INTEGER}
+        </if>
+        order by publish_time desc
+    </select>
+
+    <!-- 精彩推荐列表-->
+    <select id="selectRecommendNews" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        id,
+        title,views,source,photo,
+        date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
+        FROM t_n_news
+        where 1=1 AND status = 1
+        <if test="keyWord != null and keyWord != ''">
+            and keywords like CONCAT('%',#{keyWord},'%')
+        </if>
+        <if test="id != null and id != '' ">
+            and id != #{id,jdbcType=INTEGER}
+        </if>
+        order by publish_time desc
+        limit 0,5
+    </select>
+</mapper>

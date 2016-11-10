@@ -463,6 +463,11 @@
             <version>1.1.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>alipay-mobile</groupId>
+            <artifactId>alipay-mobile</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
     <build>
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
@@ -574,7 +579,7 @@
         <repository>
             <id>releases</id>
             <name>releases</name>
-            <url>http://139.196.189.100:8081/nexus/content/repositories/releases</url>
+            <url>http://139.196.189.100:8081/nexus/content/groups/public</url>
         </repository>
     </repositories>
 

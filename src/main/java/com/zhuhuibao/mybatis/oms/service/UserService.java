@@ -24,54 +24,45 @@ public class UserService {
     @Autowired
     UserMapper userMapper;
 
-    public User selectUserByAccount(String userName)
-    {
+    public User selectUserByAccount(String userName) {
         User account = new User();
-        try
-        {
+        try {
             account = userMapper.selectUserByAccount(userName);
-        }
-        catch(Exception e)
-        {
-            log.error("query user by account error!",e);
+        } catch (Exception e) {
+            log.error("query user by account error!", e);
         }
         return account;
     }
 
-    public Response selectByPrimaryKey(Integer id)
-    {
+    public Response selectByPrimaryKey(Integer id) {
         Response response = new Response();
-        try
-        {
+        try {
             User account = userMapper.selectByPrimaryKey(id);
             response.setData(account);
-        }
-        catch(Exception e)
-        {
-            log.error("query user by account error!",e);
+        } catch (Exception e) {
+            log.error("query user by account error!", e);
             response.setCode(MsgCodeConstant.response_status_400);
             response.setMsgCode(MsgCodeConstant.mcode_common_failure);
             response.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
         }
         return response;
     }
+
     /**
      * 更新用户信息
+     * 
      * @param record
      */
-    public void updateRecordByPrimaryKey(User record)
-    {
-        
-        try
-        {
-             userMapper.updateRecordByPrimaryKey(record);
-            
+    public void updateRecordByPrimaryKey(User record) {
+        try {
+            userMapper.updateRecordByPrimaryKey(record);
+
+        } catch (Exception e) {
+            log.error("query user by account error!", e);
         }
-        catch(Exception e)
-        {
-            log.error("query user by account error!",e);
-             
-        }
-        
+    }
+
+    public User selectById(Integer id) {
+        return userMapper.selectByPrimaryKey(id);
     }
 }

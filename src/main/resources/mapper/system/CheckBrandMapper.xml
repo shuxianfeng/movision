@@ -197,6 +197,9 @@
     <if test="status != null and status !=''" >
       and b.status = #{status}
     </if>
+    <if test="publishTimeOrder != null and publishTimeOrder!= ''">
+      ORDER BY publishTime ${publishTimeOrder}
+    </if>
   </select>
 
   <select id="findAllByPager" resultMap="BaseResultMap" >

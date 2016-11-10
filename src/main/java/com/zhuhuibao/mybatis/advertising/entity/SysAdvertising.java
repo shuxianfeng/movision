@@ -8,6 +8,8 @@ public class SysAdvertising implements Serializable {
 
     private String title;
 
+    private String shortTitle;
+
     private String advAttrId;
 
     private String advType;
@@ -46,6 +48,14 @@ public class SysAdvertising implements Serializable {
 
     public void setTitle(String title) {
         this.title = title == null ? null : title.trim();
+    }
+
+    public String getShortTitle() {
+        return shortTitle;
+    }
+
+    public void setShortTitle(String shortTitle) {
+        this.shortTitle = shortTitle;
     }
 
     public String getAdvAttrId() {

@@ -62,9 +62,6 @@ public class ZhbService {
 	private WorkTypeMapper workTypeMapper;
 
 	@Autowired
-	private MemberService memberService;
-
-	@Autowired
 	private OrderService orderService;
 
 	@Autowired
@@ -262,11 +259,16 @@ public class ZhbService {
 			// 支付金额大于0，且小于或等于订单金额
 			// 不存在该订单号对应的筑慧币流水记录
 			// 筑慧币账户余额足够支付
-			if (null != order && null != orderFlow && isRightOrder(order, order.getGoodsType(), OrderStatus.WZF.value)
-					&& isRightAmount(orderFlow.getTradeFee(), order.getPayAmount(), account) && isNotExistsZhbRecord(orderNo, ZhbRecordType.PAYFOR)) {
-
+			if (null != order 
+					&& null != orderFlow 
+					&& isRightOrder(order, order.getGoodsType(), OrderStatus.WZF.value)
+					&& isRightAmount(orderFlow.getTradeFee(), order.getPayAmount(), account) 
+					&& isNotExistsZhbRecord(orderNo, ZhbRecordType.PAYFOR)) {
+				//添加筑慧币流水记录
 				insertZhbRecord(orderNo, order.getBuyerId(), ShiroUtil.getCreateID(), orderFlow.getTradeFee(), ZhbRecordType.PAYFOR.toString(), null, "");
+				
 				account.setAmount(account.getAmount().subtract(orderFlow.getTradeFee()));
+				//根据memberId修改筑慧币账号金额
 				int updateNum = zhbMapper.updateZhbAccountEmoney(account);
 				if (1 != updateNum) {
 					throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, "支付失败");

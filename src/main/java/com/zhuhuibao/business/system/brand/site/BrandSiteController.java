@@ -7,7 +7,6 @@ import com.zhuhuibao.mybatis.memCenter.entity.Brand;
 import com.zhuhuibao.mybatis.memCenter.service.BrandService;
 import com.zhuhuibao.mybatis.oms.entity.Category;
 import com.zhuhuibao.mybatis.oms.service.CategoryService;
-import com.zhuhuibao.mybatis.product.entity.Product;
 import com.zhuhuibao.mybatis.product.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 品牌业务管理
- * Created by cxx on 2016/3/16 0016.
+ * 品牌业务管理 Created by cxx on 2016/3/16 0016.
  */
 @RestController
 public class BrandSiteController {
@@ -42,11 +40,12 @@ public class BrandSiteController {
 
     /**
      * 查询大系统，子系统，品牌（首页）
+     * 
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = {"/rest/category/all","/rest/system/site/category/sel_all_category"}, method = RequestMethod.GET)
-    public Response findAll()  {
+    @RequestMapping(value = { "/rest/category/all", "/rest/system/site/category/sel_all_category" }, method = RequestMethod.GET)
+    public Response findAll() {
         Response result = new Response();
         List<ResultBean> sysList = categoryService.findSystemList();
         List<SysBean> allList = categoryService.searchAll();
@@ -90,11 +89,12 @@ public class BrandSiteController {
 
     /**
      * 查询二级系统下推荐品牌
+     * 
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = {"/rest/brand/findSuggestBrand","/rest/system/site/brand/sel_suggest_brand_by_subCategory"}, method = RequestMethod.GET)
-    public Response findSuggestBrand(String id)  {
+    @RequestMapping(value = { "/rest/brand/findSuggestBrand", "/rest/system/site/brand/sel_suggest_brand_by_subCategory" }, method = RequestMethod.GET)
+    public Response findSuggestBrand(String id) {
         Response result = new Response();
         List<ResultBean> SubSystemList = categoryService.findSubSystemListLimit(id);
         List<SuggestBrand> brandList = brandService.SuggestBrand();
@@ -125,20 +125,22 @@ public class BrandSiteController {
 
         return result;
     }
+
     /**
      * 查询大系统下的子系统
+     * 
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = {"/rest/category/findSubSystem","/rest/system/site/category/sel_sub_category"}, method = RequestMethod.GET)
-    public Response findSubSystem(String id)  {
+    @RequestMapping(value = { "/rest/category/findSubSystem", "/rest/system/site/category/sel_sub_category" }, method = RequestMethod.GET)
+    public Response findSubSystem(String id) {
         List<ResultBean> subSystemList = categoryService.findSubSystemList(id);
         Map map = new HashMap();
         Category category = categoryService.findSystem(id);
-        map.put("id",id);
-        map.put("name",category.getName());
-        map.put("url",category.getBigIcon());
-        map.put("subSystemList",subSystemList);
+        map.put("id", id);
+        map.put("name", category.getName());
+        map.put("url", category.getBigIcon());
+        map.put("subSystemList", subSystemList);
         Response result = new Response();
         result.setCode(200);
         result.setData(map);
@@ -148,13 +150,14 @@ public class BrandSiteController {
 
     /**
      * 查询二级系统下所有品牌
+     * 
      * @return
      * @throws IOException
      */
-    @ApiOperation(value="查询二级系统下所有品牌",notes="查询二级系统下所有品牌",response = Response.class)
-    @RequestMapping(value = {"/rest/brand/findAllBrand","/rest/system/site/brand/sel_all_brand"}, method = RequestMethod.GET)
+    @ApiOperation(value = "查询二级系统下所有品牌", notes = "查询二级系统下所有品牌", response = Response.class)
+    @RequestMapping(value = { "/rest/brand/findAllBrand", "/rest/system/site/brand/sel_all_brand" }, method = RequestMethod.GET)
     public Response findAllBrand(@RequestParam String scateid) {
-        List<Map<String,Object>> brandList = brandService.findAllBrand(scateid);
+        List<Map<String, Object>> brandList = brandService.findAllBrand(scateid);
         Response result = new Response();
         result.setCode(200);
         result.setData(brandList);
@@ -163,12 +166,13 @@ public class BrandSiteController {
 
     /**
      * 查询推荐品牌
+     * 
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = {"/rest/searchSuggestBrand","/rest/system/site/brand/sel_suggest_brand"}, method = RequestMethod.GET)
-    public Response searchSuggestBrand()  {
-        List<Map<String,Object>> brandList = brandService.searchSuggestBrand();
+    @RequestMapping(value = { "/rest/searchSuggestBrand", "/rest/system/site/brand/sel_suggest_brand" }, method = RequestMethod.GET)
+    public Response searchSuggestBrand() {
+        List<Map<String, Object>> brandList = brandService.searchSuggestBrand();
         Response result = new Response();
         result.setCode(200);
         result.setData(brandList);
@@ -178,47 +182,48 @@ public class BrandSiteController {
 
     /**
      * 查询品牌详情
+     * 
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = {"/rest/brand/details","/rest/system/site/brand/sel_brand"}, method = RequestMethod.GET)
-    public Response details(String id, String scateid)  {
+    @RequestMapping(value = { "/rest/brand/details", "/rest/system/site/brand/sel_brand" }, method = RequestMethod.GET)
+    public Response details(String id, String scateid) {
         Map map1 = new HashMap();
         Map map2 = new HashMap();
         Map map3 = new HashMap();
-        //品牌详情
+        // 品牌详情
         BrandDetailBean brand = brandService.details(id);
-        //计算点击量
+        // 计算点击量
         Brand brand1 = brandService.brandDetails(id);
-        if(brand1.getViews()==null){
+        if (brand1.getViews() == null) {
             brand1.setViews(1);
-        }else{
-            brand1.setViews(brand1.getViews()+1);
+        } else {
+            brand1.setViews(brand1.getViews() + 1);
         }
         brandService.updateBrand(brand1);
-        //品牌描述
-        map2.put("company",brand.getCompany());
-        map2.put("webSite",brand.getWebSite());
-        map2.put("phone",brand.getPhone());
-        map2.put("address",brand.getAddress());
-        map2.put("introduce",brand.getBrandDesc());
-        map2.put("imgUrl",brand.getImgUrl());
-        map2.put("logo",brand.getLogo());
-        
-        ResultBean  result = categoryService.querySystem(scateid);
-        //导航信息
-        map3.put("brandid",id);
-        map3.put("brandName",brand.getCnName());
-        map2.put("brandName",brand.getCnName());
-        map3.put("scateid",scateid);
-        map3.put("scateName",result.getName());
-        
-        ResultBean  result1 = categoryService.querySystem(result.getSmallIcon());
-        
-        map3.put("fcateid",result1.getCode());
-        map3.put("fcateName",result1.getName());
-        map1.put("brandDesc",map2);	
-        map1.put("navigation",map3);	
+        // 品牌描述
+        map2.put("company", brand.getCompany());
+        map2.put("webSite", brand.getWebSite());
+        map2.put("phone", brand.getPhone());
+        map2.put("address", brand.getAddress());
+        map2.put("introduce", brand.getBrandDesc());
+        map2.put("imgUrl", brand.getImgUrl());
+        map2.put("logo", brand.getLogo());
+
+        ResultBean result = categoryService.querySystem(scateid);
+        // 导航信息
+        map3.put("brandid", id);
+        map3.put("brandName", brand.getCnName());
+        map2.put("brandName", brand.getCnName());
+        map3.put("scateid", scateid);
+        map3.put("scateName", result.getName());
+
+        ResultBean result1 = categoryService.querySystem(result.getSmallIcon());
+
+        map3.put("fcateid", result1.getCode());
+        map3.put("fcateName", result1.getName());
+        map1.put("brandDesc", map2);
+        map1.put("navigation", map3);
         Response response = new Response();
         response.setCode(200);
         response.setData(map1);
@@ -228,12 +233,13 @@ public class BrandSiteController {
 
     /**
      * 品牌对应的子系统
+     * 
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = {"/rest/brand/findSubSystemByBrand","/rest/system/site/category/sel_category_by_brand"}, method = RequestMethod.GET)
-    public Response findSubSystemByBrand(String id)  {
-        //品牌对应的子系统
+    @RequestMapping(value = { "/rest/brand/findSubSystemByBrand", "/rest/system/site/category/sel_category_by_brand" }, method = RequestMethod.GET)
+    public Response findSubSystemByBrand(String id) {
+        // 品牌对应的子系统
         List<ResultBean> list = productService.findSubSystem(id);
         Response result = new Response();
         result.setData(list);

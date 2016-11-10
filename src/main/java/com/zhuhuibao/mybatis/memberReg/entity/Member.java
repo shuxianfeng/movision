@@ -63,7 +63,7 @@ public class Member implements Serializable{
 	/**
 	 * 会员状态 0：未激活，1：注册成功，2：认证成功，3：vip会员
 	 */
-	private int status;
+	private Integer status;
 	
 	/**
 	 * 会员身份 1：企业，2：个人
@@ -133,11 +133,11 @@ public class Member implements Serializable{
 		this.registerTime = registerTime;
 	}
 
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 

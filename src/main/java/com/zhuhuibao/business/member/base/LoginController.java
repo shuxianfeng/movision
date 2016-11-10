@@ -55,7 +55,7 @@ public class LoginController {
 
         Subject currentUser = SecurityUtils.getSubject();
         try {
-
+        	//记住当前用户
             String rememberMe = req.getParameter("rememberMe");
             if (rememberMe != null && rememberMe.equals("1")) {
                 token.setRememberMe(true);
