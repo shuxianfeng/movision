@@ -588,7 +588,14 @@ public class AlipayService {
         // pMap.put("price", String.valueOf(new
         // BigDecimal(pMap.get("price")).multiply(new
         // BigDecimal(1000)).longValue()));
-        pMap.put("totalFee", String.valueOf(new BigDecimal(pMap.get("totalFee")).multiply(new BigDecimal(1000)).longValue()));
+
+        BigDecimal totalFee = new BigDecimal(0);
+        if (null == params.get("total_fee")) {
+            totalFee = new BigDecimal(params.get("total_amount"));
+        } else {
+            totalFee = new BigDecimal(params.get("total_fee"));
+        }
+        pMap.put("totalFee", String.valueOf(totalFee.multiply(new BigDecimal(1000)).longValue()));
         log.info("需转换为bean的pMap>>{}", pMap);
         try {
             BeanUtils.populate(alipayCallbackLog, pMap);
