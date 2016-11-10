@@ -420,6 +420,6 @@
       and p.fcateid = #{fcateid}
     </if>
     and p.type=1
-    order BY p.publishTime desc
+    order BY p.endTime desc
   </select>
 </mapper>

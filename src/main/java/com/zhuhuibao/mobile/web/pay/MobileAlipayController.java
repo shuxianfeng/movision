@@ -37,7 +37,7 @@ public class MobileAlipayController {
     public ModelAndView alipaySynchPay(HttpServletRequest request) {
         log.debug("*****H5支付宝同步[即时到账]跳转*****开始");
         String returnUrl = AlipayPropertiesLoader.getPropertyValue("h5_alipay_return_url");
-        return alipayService.syncNotify(request, PayConstants.TradeType.PAY.toString(), returnUrl);
+        return alipayService.syncNotify(request, PayConstants.TradeType.PAY.toString(), returnUrl, "h5");
     }
 
     /**
@@ -53,7 +53,7 @@ public class MobileAlipayController {
 
         log.debug("*****H5支付宝同步[批量退款]跳转*****开始");
         String returnUrl = AlipayPropertiesLoader.getPropertyValue("alirefund_return_url");
-        return alipayService.syncNotify(request, PayConstants.TradeType.REFUND.toString(), returnUrl);
+        return alipayService.syncNotify(request, PayConstants.TradeType.REFUND.toString(), returnUrl, "h5");
     }
 
     /**
@@ -69,7 +69,7 @@ public class MobileAlipayController {
     @RequestMapping(value = "callback/direct_notify", method = RequestMethod.POST)
     public void alipayAsynPay(HttpServletRequest request, HttpServletResponse response) {
         log.debug("*******支付宝[即时到账]异步跳转******开始");
-        alipayService.asyncNotify(request, response, PayConstants.TradeType.PAY.toString());
+        alipayService.asyncNotify(request, response, PayConstants.TradeType.PAY.toString(), "h5");
     }
 
     /**
@@ -87,7 +87,7 @@ public class MobileAlipayController {
 
         log.debug("*******支付宝[批量退款]异步跳转******开始");
 
-        alipayService.asyncNotify(request, response, PayConstants.TradeType.REFUND.toString());
+        alipayService.asyncNotify(request, response, PayConstants.TradeType.REFUND.toString(), "h5");
     }
 
 }
