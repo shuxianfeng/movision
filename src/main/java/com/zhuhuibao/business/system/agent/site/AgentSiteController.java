@@ -70,7 +70,7 @@ public class AgentSiteController {
      * @return
      * @throws IOException
      */
-   /* @RequestMapping(value = {"/rest/agent/getGreatAgentByBrandId","/rest/system/site/agent/sel_great_agent_by_brandId"}, method = RequestMethod.GET)
+  /*  @RequestMapping(value = {"/rest/agent/getGreatAgentByBrandId","/rest/system/site/agent/sel_great_agent_by_brandId"}, method = RequestMethod.GET)
     public Response getGreatAgentByBrandId(String id)  {
         Response response = new Response();
         List<ResultBean> resultBeen =  agentService.getGreatAgentByBrandId(id);
@@ -80,6 +80,7 @@ public class AgentSiteController {
 
     /**
      * 根据品牌id查询代理商跟厂商（区域分组）
+     *
      * @return
      * @throws IOException
      */
@@ -95,16 +96,17 @@ public class AgentSiteController {
     /***
      * 根据品牌Id查询VIP代理商
      *
-     * @author  changxinwei
-     * @time     2016/11/10
-     *
-     * @return  VIP代理商
+     * @return VIP代理商
      * @throws IOException
+     * @author changxinwei
+     * @time 2016/11/10
      */
-    @RequestMapping(value={"/rest/agent/getGreatAgentByBrandId","/rest/system/site/agent/sel_great_agent_by_brandId"}, method = RequestMethod.GET)
-    public Response getGreatAgentVIPByBrandId(String id){
+
+    @ApiOperation(value = "尊贵盟友的本品牌代理商", notes = "尊贵盟友的本品牌代理商", response = Response.class)
+    @RequestMapping(value = {"/rest/agent/getGreatAgentByBrandId", "/rest/system/site/agent/sel_great_agent_by_brandId"}, method = RequestMethod.GET)
+    public Response getGreatAgentVIPByBrandId(@ApiParam(value = "品牌的Id") @RequestParam(required = true) String id) {
         Response response = new Response();
-        List<ResultBean> resultBeen =  agentService.getGreatAgentVIPByBrandId(id);
+        List<ResultBean> resultBeen = agentService.getGreatAgentVIPByBrandId(id);
         response.setData(resultBeen);
         return response;
     }
