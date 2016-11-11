@@ -252,15 +252,13 @@ public class MobileWxPayService {
                 log.info("解锁");
             }
         }*/
-		BusinessLockUtil lock = null;
 		MutexElement mutex = new MutexElement();
         try{
-        	lock = new BusinessLockUtil();
         	mutex.setBusinessNo((String)requestMap.get("out_trade_no"));
         	mutex.setBusinessDesc((String)requestMap.get("transaction_id"));
         	mutex.setTime(1800);
         	mutex.setType("微信支付回调通知");
-        	boolean result = lock.lock(mutex,  0);  
+        	boolean result = BusinessLockUtil.lock(mutex,  0);  
             //加锁成功  
             if (result) {  
             	//支付业务处理
@@ -270,11 +268,9 @@ public class MobileWxPayService {
         	log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, e.getMessage());
         } finally {
-        	if (lock != null) {
-        		//解锁  
-                lock.unlock(mutex); 
-                log.info("解锁");
-            }
+    		//解锁  
+    		BusinessLockUtil.unlock(mutex); 
+            log.info("解锁");
         }
         log.info("【微信支付回调,结束】");
 		return modelAndView;

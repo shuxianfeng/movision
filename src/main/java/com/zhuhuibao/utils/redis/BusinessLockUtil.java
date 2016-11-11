@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.zhuhuibao.service.wxpay.MobileWxPayService;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
@@ -35,7 +34,7 @@ public class BusinessLockUtil {
      * @return true：锁定成功，false：锁定失败 
      *      long) 
      */  
-    public boolean lock(MutexElement mutex, int timeout) {  
+    public static boolean lock(MutexElement mutex, int timeout) {  
   
         // 输入参数校验  
         if (mutex == null || mutex.getType() == null  
@@ -48,7 +47,7 @@ public class BusinessLockUtil {
         String value = mutex.getBusinessDesc();  
   
         try {  
-              
+            //获取jedis实例 
             jedis = RedisUtil.getJedis();  
             long nano = System.nanoTime();  
             do {  
@@ -101,7 +100,7 @@ public class BusinessLockUtil {
      * @param mutex 
      *            互斥对象 
      */  
-    public void unlock(MutexElement mutex) {  
+    public static void unlock(MutexElement mutex) {  
   
         // 输入参数校验  
         if (mutex == null || mutex.getType() == null  
