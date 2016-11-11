@@ -10,12 +10,10 @@ import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.pojo.AskPriceResultBean;
 import com.zhuhuibao.fsearch.pojo.spec.SupplierSearchSpec;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
-import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
-import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
-import com.zhuhuibao.mybatis.memCenter.entity.Member;
-import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
+import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
 import com.zhuhuibao.service.*;
+import com.zhuhuibao.utils.MapUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -336,7 +334,10 @@ public class MobileSupplierController {
     @ApiOperation(value = "成功案例详情", notes = "成功案例详情")
     @RequestMapping(value = "sel_company_success_case", method = RequestMethod.GET)
     public Response selCompanySuccessCase(@ApiParam(value = "案例id") @RequestParam String id) {
-        return new Response(successCaseService.querySuccessCaseById(id));
+        SuccessCase successCase = successCaseService.querySuccessCaseById(id);
+        Member member = memberService.findMemById(successCase.getCreateid());
+        Map<String, Object> result = MapUtil.convert2HashMap("successCase", successCase, "member", member);
+        return new Response(result);
     }
 
     /**
