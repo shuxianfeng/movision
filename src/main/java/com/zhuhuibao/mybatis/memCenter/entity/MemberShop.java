@@ -1,5 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
+import java.util.List;
+
 public class MemberShop {
     private Integer id;
 
@@ -26,6 +28,8 @@ public class MemberShop {
     private String mobileBannerUrlS;
 
     private String mobileBannerUrlT;
+
+    private List<String> bannerList;
 
     public Integer getId() {
         return id;
@@ -129,5 +133,13 @@ public class MemberShop {
 
     public void setMobileBannerUrlT(String mobileBannerUrlT) {
         this.mobileBannerUrlT = mobileBannerUrlT;
+    }
+
+    public List<String> getBannerList() {
+        return bannerList;
+    }
+
+    public void setBannerList(List<String> bannerList) {
+        this.bannerList = bannerList;
     }
 }
