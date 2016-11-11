@@ -48,7 +48,7 @@ public class DistributedLock implements Lock, Watcher {
         // 创建一个与服务器的连接
         try {
         	//调用exist之前需要先判断链接是否成功，否则会报错：KeeperErrorCode = ConnectionLoss for /locks
-        	CountDownLatch connectedLatch = new CountDownLatch(1); 
+        	/*CountDownLatch connectedLatch = new CountDownLatch(1); 
             Watcher watcher = new ConnectedWatcher(connectedLatch); 
             zk = new ZooKeeper(PropertiesUtils.getValue("zookeeper_hosts"),
                     Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")), 
@@ -62,6 +62,15 @@ public class DistributedLock implements Lock, Watcher {
                     // 创建根节点
                     zk.create(root, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
                 }
+            }*/
+            
+            zk = new ZooKeeper(PropertiesUtils.getValue("zookeeper_hosts"),
+                    Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")), 
+                    this);
+            Stat stat = zk.exists(root, false);
+            if (stat == null) {
+                // 创建根节点
+                zk.create(root, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
             }
             
         } catch (IOException | InterruptedException | KeeperException e) {
