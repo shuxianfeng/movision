@@ -252,7 +252,10 @@ public class MobileWxPayService {
                 log.info("解锁");
             }
         }*/
-		MutexElement mutex = new MutexElement();
+		
+		payHandler(tradeType, modelAndView, requestMap);
+		
+		/*MutexElement mutex = new MutexElement();
         try{
         	mutex.setBusinessNo((String)requestMap.get("out_trade_no"));
         	mutex.setBusinessDesc((String)requestMap.get("transaction_id"));
@@ -271,7 +274,7 @@ public class MobileWxPayService {
     		//解锁  
     		BusinessLockUtil.unlock(mutex); 
             log.info("解锁");
-        }
+        }*/
         log.info("【微信支付回调,结束】");
 		return modelAndView;
 	}
