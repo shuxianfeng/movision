@@ -144,12 +144,11 @@
       <if test="attach != null" >
         attach,
       </if>
+      createTime, 
       <if test="timeEnd != null" >
         time_end,
       </if>
-      <if test="createTime != null" >
-        createTime,
-      </if>
+      
       
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -228,10 +227,11 @@
       <if test="attach != null" >
         #{attach,jdbcType=VARCHAR},
       </if>
+      now(),
       <if test="timeEnd != null" >
         #{timeEnd,jdbcType=VARCHAR},
       </if>
-      now()
+      
       
     </trim>
   </insert>
