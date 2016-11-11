@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
+import com.zhuhuibao.alipay.service.AlipayService;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
@@ -50,6 +51,9 @@ import com.zhuhuibao.zookeeper.DistributedLock;
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 @Service
 public class MobileWxPayService {
+	@Autowired
+	AlipayService alipaySV;
+	
 	@Autowired
 	OrderFlowService orderFlowSV;
 	
@@ -252,6 +256,9 @@ public class MobileWxPayService {
                 log.info("解锁");
             }
         }*/
+		
+//		payHandler(tradeType, modelAndView, requestMap);
+		
 		MutexElement mutex = new MutexElement();
         try{
         	mutex.setBusinessNo((String)requestMap.get("out_trade_no"));
@@ -272,6 +279,8 @@ public class MobileWxPayService {
     		BusinessLockUtil.unlock(mutex); 
             log.info("解锁");
         }
+        
+        
         log.info("【微信支付回调,结束】");
 		return modelAndView;
 	}
@@ -427,6 +436,14 @@ public class MobileWxPayService {
 				
 			    isOrderUpdateFlag = updateOrder(order);
 				
+			    // 购买筑慧币,VIP 的业务处理
+	            if (isOrderUpdateFlag) {
+	                String orderNo = requestMap.get("out_trade_no");
+	                alipaySV.callbackZhbPay(orderNo);
+	            } else {
+	                throw new BusinessException(MsgCodeConstant.PAY_ERROR, "购买筑慧币或VIP业务处理失败");
+	            }
+			    
 				log.info("微信支付交易的处理，结束。");
 			}
 		}else{
