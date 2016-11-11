@@ -38,19 +38,6 @@ public class DistributedLock implements Lock, Watcher {
     private CountDownLatch latch;//计数器
     private List<Exception> exception = new ArrayList<>();
 
-    static private DistributedLock static_;  
-
-    static public DistributedLock Instance(){  
-        if(static_ == null){  
-            static_ = new DistributedLock();  
-        }  
-        return static_;  
-    }  
-    
-    private DistributedLock(){  
-        
-    } 
-    
     /**
      * 创建分布式锁,使用前请确认config配置的zookeeper服务可用
      *
@@ -200,7 +187,7 @@ public class DistributedLock implements Lock, Watcher {
     }
 
 
-    private boolean waitForLock(String lower, long waitTime) throws InterruptedException, KeeperException {
+	private boolean waitForLock(String lower, long waitTime) throws InterruptedException, KeeperException {
         Stat stat = zk.exists(root + "/" + lower, true);
         //判断比自己小一个数的节点是否存在,如果不存在则无需等待锁,同时注册监听
         if (stat != null) {
