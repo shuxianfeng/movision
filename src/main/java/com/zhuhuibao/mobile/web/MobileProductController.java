@@ -1,12 +1,19 @@
 package com.zhuhuibao.mobile.web;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.fsearch.pojo.spec.ProductSearchSpec;
+import com.zhuhuibao.fsearch.service.exception.ServiceException;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs;
+import com.zhuhuibao.service.MobileAgentService;
 import com.zhuhuibao.service.MobileBrandService;
+import com.zhuhuibao.service.MobileMemberService;
+import com.zhuhuibao.service.MobileProductService;
 import com.zhuhuibao.utils.MapUtil;
+import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +21,9 @@ import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.Response;
-import com.zhuhuibao.fsearch.pojo.spec.ProductSearchSpec;
-import com.zhuhuibao.fsearch.service.exception.ServiceException;
-import com.zhuhuibao.mybatis.product.entity.ProductWithBLOBs;
-import com.zhuhuibao.service.MobileAgentService;
-import com.zhuhuibao.service.MobileMemberService;
-import com.zhuhuibao.service.MobileProductService;
-import com.zhuhuibao.utils.pagination.model.Paging;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 产品相关业务控制层
@@ -75,8 +74,8 @@ public class MobileProductController {
      */
     @ApiOperation(value = "触屏端供应链-品牌下更多产品", notes = "触屏端供应链-品牌下更多产品")
     @RequestMapping(value = "sel_hot_brand_product_list", method = RequestMethod.GET)
-    public Response selHotBrandProductList(@ApiParam(value = "品牌主键id") @RequestParam(required = true) String id, @ApiParam(value = "品牌所属一级类别id") @RequestParam(required = true) String fcateid,
-            @ApiParam(value = "品牌所属二级类别id") @RequestParam(required = true) String scateId, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo,
+    public Response selHotBrandProductList(@ApiParam(value = "品牌主键id") @RequestParam(required = true) String id, @ApiParam(value = "品牌所属一级类别id") @RequestParam(required = false) String fcateid,
+            @ApiParam(value = "品牌所属二级类别id") @RequestParam(required = false) String scateId, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") int pageNo,
             @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
         Paging<Map> pager = new Paging<>(pageNo, pageSize);
