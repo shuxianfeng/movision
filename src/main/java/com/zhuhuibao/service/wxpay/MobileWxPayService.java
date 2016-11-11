@@ -240,7 +240,11 @@ public class MobileWxPayService {
 		
 		log.info("处理微信支付完成的通知回调，requestMap="+requestMap);
 		log.info("加锁");
-		DistributedLock lock = null;
+		
+		/**
+		 * ZooKeeper 分布式锁处理
+		 */
+		/*DistributedLock lock = null;
         try {
             lock = new DistributedLock(LOCK_NAME);
             lock.lock();
@@ -255,10 +259,13 @@ public class MobileWxPayService {
                 lock.unlock();
                 log.info("解锁");
             }
-        }
+        }*/
 		
-//		payHandler(tradeType, modelAndView, requestMap);
+		payHandler(tradeType, modelAndView, requestMap);
 		
+		/**
+		 * Jedis setnx 并发数据处理
+		 */
 		/*MutexElement mutex = new MutexElement();
         try{
         	mutex.setBusinessNo((String)requestMap.get("out_trade_no"));
@@ -364,6 +371,7 @@ public class MobileWxPayService {
 	 * @param requestMap	通知参数 
 	 * @throws ParseException
 	 */
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	private void payHandler(String tradeType, ModelAndView modelAndView,
 			Map<String,String> requestMap) {
 		//获取返回状态码【通信标识】
