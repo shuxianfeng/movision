@@ -38,7 +38,19 @@ public class DistributedLock implements Lock, Watcher {
     private CountDownLatch latch;//计数器
     private List<Exception> exception = new ArrayList<>();
 
+    static private DistributedLock static_;  
 
+    static public DistributedLock Instance(){  
+        if(static_ == null){  
+            static_ = new DistributedLock();  
+        }  
+        return static_;  
+    }  
+    
+    private DistributedLock(){  
+        
+    } 
+    
     /**
      * 创建分布式锁,使用前请确认config配置的zookeeper服务可用
      *
@@ -52,14 +64,19 @@ public class DistributedLock implements Lock, Watcher {
         	CountDownLatch connectedLatch = new CountDownLatch(1); 
             Watcher watcher = new ConnectedWatcher(connectedLatch); 
             zk = new ZooKeeper(PropertiesUtils.getValue("zookeeper_hosts"),
-                    Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")), watcher);
+                    Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")), 
+                    watcher);
             waitUntilConnected(zk, connectedLatch); 
             
-            Stat stat = zk.exists(root, false);
-            if (stat == null) {
-                // 创建根节点
-                zk.create(root, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+            //若连接上，则进行下面的exists和create操作
+            if(States.CONNECTED == zk.getState()){
+            	Stat stat = zk.exists(root, false);
+                if (stat == null) {
+                    // 创建根节点
+                    zk.create(root, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+                }
             }
+            
         } catch (IOException | InterruptedException | KeeperException e) {
             exception.add(e);
         }
@@ -74,6 +91,7 @@ public class DistributedLock implements Lock, Watcher {
         if (States.CONNECTING == zooKeeper.getState()) {  
             try {  
                 connectedLatch.await();  
+                
             } catch (InterruptedException e) {  
                 throw new IllegalStateException(e);  
             }  
