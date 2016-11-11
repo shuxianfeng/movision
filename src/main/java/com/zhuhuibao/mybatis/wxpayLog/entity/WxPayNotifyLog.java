@@ -54,8 +54,20 @@ public class WxPayNotifyLog {
     private String attach;
 
     private String timeEnd;
+    
+    private Date createTime;
+    
+    
 
-    public String getTransactionId() {
+    public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getTransactionId() {
         return transactionId;
     }
 

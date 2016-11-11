@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
@@ -17,6 +19,10 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 public class BusinessLockUtil {
 	
 	private static final Logger log = LoggerFactory.getLogger(BusinessLockUtil.class);
+	
+	@Autowired
+	static
+	RedisUtil redisUtil;
 	
     /** 
      * 锁定某个业务对象 
@@ -45,7 +51,7 @@ public class BusinessLockUtil {
   
         try {  
             //获取jedis实例 
-            jedis = RedisUtil.getJedis();  
+            jedis = redisUtil.getJedis();  
             long nano = System.nanoTime();  
             do {  
                 log.debug("try lock key: " + key);  
@@ -110,7 +116,7 @@ public class BusinessLockUtil {
         String key = mutex.getType() + mutex.getBusinessNo();  
           
         try {  
-            jedis = RedisUtil.getJedis();  
+            jedis = redisUtil.getJedis();  
               
             jedis.del(key);  
             log.debug("release lock, key :" + key);  

@@ -28,12 +28,13 @@
     <result column="out_trade_no" property="outTradeNo" jdbcType="VARCHAR" />
     <result column="attach" property="attach" jdbcType="VARCHAR" />
     <result column="time_end" property="timeEnd" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     transaction_id, appid, mch_id, device_info, nonce_str, sign, result_code, err_code, 
     err_code_des, openid, is_subscribe, trade_type, bank_type, total_fee, settlement_total_fee, 
     fee_type, cash_fee, cash_fee_type, coupon_fee, coupon_count, coupon_type_$n, coupon_id_$n, 
-    coupon_fee_$n, out_trade_no, attach, time_end
+    coupon_fee_$n, out_trade_no, attach, time_end, createTime
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -54,7 +55,7 @@
       fee_type, cash_fee, cash_fee_type, 
       coupon_fee, coupon_count, coupon_type_$n, 
       coupon_id_$n, coupon_fee_$n, out_trade_no, 
-      attach, time_end)
+      attach, time_end, createTime)
     values (#{transactionId,jdbcType=VARCHAR}, #{appid,jdbcType=VARCHAR}, #{mchId,jdbcType=VARCHAR}, 
       #{deviceInfo,jdbcType=VARCHAR}, #{nonceStr,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, 
       #{resultCode,jdbcType=VARCHAR}, #{errCode,jdbcType=VARCHAR}, #{errCodeDes,jdbcType=VARCHAR}, 
@@ -63,7 +64,7 @@
       #{feeType,jdbcType=VARCHAR}, #{cashFee,jdbcType=BIGINT}, #{cashFeeType,jdbcType=VARCHAR}, 
       #{couponFee,jdbcType=INTEGER}, #{couponCount,jdbcType=INTEGER}, #{couponTypeN,jdbcType=VARCHAR}, 
       #{couponIdN,jdbcType=VARCHAR}, #{couponFeeN,jdbcType=INTEGER}, #{outTradeNo,jdbcType=VARCHAR}, 
-      #{attach,jdbcType=VARCHAR}, #{timeEnd,jdbcType=VARCHAR})
+      #{attach,jdbcType=VARCHAR}, #{timeEnd,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.wxpayLog.entity.WxPayNotifyLog" >
     insert into t_o_wxpay_log
@@ -146,6 +147,10 @@
       <if test="timeEnd != null" >
         time_end,
       </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="transactionId != null" >
@@ -226,6 +231,8 @@
       <if test="timeEnd != null" >
         #{timeEnd,jdbcType=VARCHAR},
       </if>
+      now()
+      
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.wxpayLog.entity.WxPayNotifyLog" >
@@ -306,6 +313,9 @@
       <if test="timeEnd != null" >
         time_end = #{timeEnd,jdbcType=VARCHAR},
       </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where transaction_id = #{transactionId,jdbcType=VARCHAR}
   </update>
@@ -335,7 +345,8 @@
       coupon_fee_$n = #{couponFeeN,jdbcType=INTEGER},
       out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
       attach = #{attach,jdbcType=VARCHAR},
-      time_end = #{timeEnd,jdbcType=VARCHAR}
+      time_end = #{timeEnd,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP}
     where transaction_id = #{transactionId,jdbcType=VARCHAR}
   </update>
 </mapper>

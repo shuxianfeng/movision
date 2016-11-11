@@ -524,7 +524,7 @@ public class AlipayService {
      *
      * @param orderNo
      */
-    private void callbackZhbPay(String orderNo) {
+    public void callbackZhbPay(String orderNo) {
         try {
 
             Order endOrder = orderService.findByOrderNo(orderNo);
