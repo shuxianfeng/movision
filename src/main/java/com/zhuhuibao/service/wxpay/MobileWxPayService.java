@@ -28,12 +28,13 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.zhuhuibao.alipay.service.AlipayService;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.Order;
 import com.zhuhuibao.mybatis.order.entity.OrderFlow;
+import com.zhuhuibao.mybatis.order.entity.OrderGoods;
 import com.zhuhuibao.mybatis.order.service.OrderFlowService;
+import com.zhuhuibao.mybatis.order.service.OrderGoodsService;
 import com.zhuhuibao.mybatis.order.service.OrderService;
 import com.zhuhuibao.mybatis.wxpayLog.entity.WxPayNotifyLog;
 import com.zhuhuibao.mybatis.wxpayLog.mapper.WxPayNotifyLogMapper;
@@ -43,10 +44,7 @@ import com.zhuhuibao.utils.HttpClientUtils;
 import com.zhuhuibao.utils.SignUtil;
 import com.zhuhuibao.utils.XmlUtil;
 import com.zhuhuibao.utils.convert.DateConvert;
-import com.zhuhuibao.utils.redis.BusinessLockUtil;
-import com.zhuhuibao.utils.redis.MutexElement;
 import com.zhuhuibao.utils.wxpay.WxpayPropertiesLoader;
-import com.zhuhuibao.zookeeper.DistributedLock;
 
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 @Service
@@ -71,6 +69,9 @@ public class MobileWxPayService {
 
 	@Autowired
 	private OrderFlowService orderFlowService;
+	
+	@Autowired
+	OrderGoodsService orderGoodSV;
 
 	private static final Logger log = LoggerFactory
 			.getLogger(MobileWxPayService.class);
@@ -899,11 +900,20 @@ public class MobileWxPayService {
 		BigDecimal payAmount = order.getPayAmount();
 	    String total_fee = String.valueOf(payAmount.multiply(new BigDecimal(100)).longValue());  
 		
+	    OrderGoods orderGoods = orderGoodSV.findByOrderNo(orderid);
+	    String goodsName = "";
+	    if(null != orderGoods){
+	    	goodsName = orderGoods.getGoodsName();
+	    }else{
+	    	throw new BusinessException(MsgCodeConstant.NOT_EXIST_ORDER_GOODS, "该订单不存在购买的商品");
+	    }
+	    
+	    
 		signParams.put("appid", APPID); // 公众账号ID
 		signParams.put("mch_id", MCH_ID); // 商户号
 		signParams.put("device_info", WEB); // 设备号,PC网页或公众号内支付请传"WEB"
 		signParams.put("nonce_str", nonce_str); // 随机数算法
-		signParams.put("body", "JSAPI支付测试"); // 商品描述
+		signParams.put("body", goodsName); // 商品描述
 		// signParams.put("detail", ""); //商品详情
 		// signParams.put("attach", ""); //附加数据
 		signParams.put("out_trade_no", orderid); // 商户订单号

@@ -375,4 +375,9 @@ public interface MsgCodeConstant {
 	 */
 	int NOT_EXIST_MEMBER = 3010;
 	
+	/**
+	 * 该订单不存在购买的商品
+	 */
+	int NOT_EXIST_ORDER_GOODS = 3011;
+	
 }
