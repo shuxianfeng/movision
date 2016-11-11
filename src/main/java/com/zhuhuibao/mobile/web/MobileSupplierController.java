@@ -320,7 +320,11 @@ public class MobileSupplierController {
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<Map<String, String>> caseList = successCaseService.findAllSuccessCaseList(pager, id);
         pager.result(caseList);
-        response.setData(pager);
+
+        Member member = memberService.findMemById(id);
+        Map<String, Object> result = MapUtil.convert2HashMap("caseList", pager, "member", member);
+
+        response.setData(result);
         return response;
     }
 

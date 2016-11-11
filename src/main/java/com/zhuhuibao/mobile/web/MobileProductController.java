@@ -57,6 +57,9 @@ public class MobileProductController {
     @Autowired
     private MobileBrandService mobileBrandService;
 
+    @Autowired
+    private MobileMemberService memberService;
+
     /**
      * 触屏端供应链-品牌下更多产品
      *
@@ -155,7 +158,9 @@ public class MobileProductController {
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<Map<String, String>> productList = mobileProductService.findCompanyProductListByName(fcateid, id, name, pager);
         pager.result(productList);
+        Member member = memberService.findMemById(id);
+        Map<String, Object> result = MapUtil.convert2HashMap("productList", pager, "member", member);
 
-        return new Response(pager);
+        return new Response(result);
     }
 }
