@@ -443,6 +443,7 @@ public class MobileWxPayService {
 		    //订单流水不为空，修改流水的状态为已支付
 			if(!orderFlow.getTradeStatus().equals(PayConstants.OrderStatus.YZF.toString())){
 				orderFlow.setTradeStatus(PayConstants.OrderStatus.YZF.toString());
+				orderFlow.setTransaction_id(requestMap.get("transaction_id"));
 				orderFlowSV.update(orderFlow);	
 				log.info("【修改】t_o_order_flow中一条微信支付流水记录，status=已支付");
 			}
@@ -481,6 +482,7 @@ public class MobileWxPayService {
 	private void addOrderFlowForWxPaySuccess(Map requestMap) {
 		OrderFlow wepayFlow = new OrderFlow();
 		wepayFlow.setOrderNo((String)requestMap.get("out_trade_no"));
+		wepayFlow.setTransaction_id((String)requestMap.get("transaction_id"));
 		wepayFlow.setTradeStatus(PayConstants.OrderStatus.YZF.toString());
 		wepayFlow.setTradeTime(new Date());
 		wepayFlow.setUpdateTime(new Date());
