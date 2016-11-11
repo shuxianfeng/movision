@@ -70,13 +70,13 @@ public class AgentSiteController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = {"/rest/agent/getGreatAgentByBrandId","/rest/system/site/agent/sel_great_agent_by_brandId"}, method = RequestMethod.GET)
+   /* @RequestMapping(value = {"/rest/agent/getGreatAgentByBrandId","/rest/system/site/agent/sel_great_agent_by_brandId"}, method = RequestMethod.GET)
     public Response getGreatAgentByBrandId(String id)  {
         Response response = new Response();
         List<ResultBean> resultBeen =  agentService.getGreatAgentByBrandId(id);
         response.setData(resultBeen);
         return response;
-    }
+    }*/
 
     /**
      * 根据品牌id查询代理商跟厂商（区域分组）
@@ -89,6 +89,23 @@ public class AgentSiteController {
         Response response = new Response();
         Map map = agentService.getAgentByBrandid(id);
         response.setData(map);
+        return response;
+    }
+
+    /***
+     * 根据品牌Id查询VIP代理商
+     *
+     * @author  changxinwei
+     * @time     2016/11/10
+     *
+     * @return  VIP代理商
+     * @throws IOException
+     */
+    @RequestMapping(value={"/rest/agent/getGreatAgentByBrandId","/rest/system/site/agent/sel_great_agent_by_brandId"}, method = RequestMethod.GET)
+    public Response getGreatAgentVIPByBrandId(String id){
+        Response response = new Response();
+        List<ResultBean> resultBeen =  agentService.getGreatAgentVIPByBrandId(id);
+        response.setData(resultBeen);
         return response;
     }
 }
