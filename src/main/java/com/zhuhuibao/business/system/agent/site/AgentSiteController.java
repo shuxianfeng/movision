@@ -93,7 +93,7 @@ public class AgentSiteController {
      * @time 2016/11/10
      */
 
-    @ApiOperation(value = "尊贵盟友的本品牌代理商", notes = "尊贵盟友的本品牌代理商", response = Response.class)
+    @ApiOperation(value = "尊贵盟友的本品牌VIP代理商", notes = "尊贵盟友的本品牌VIP代理商", response = Response.class)
     @RequestMapping(value = {"/rest/agent/getGreatAgentByBrandId", "/rest/system/site/agent/sel_great_agent_by_brandId"}, method = RequestMethod.GET)
     public Response getGreatAgentVIPByBrandId(@ApiParam(value = "品牌的Id") @RequestParam(required = true) String id) {
         Response response = new Response();
