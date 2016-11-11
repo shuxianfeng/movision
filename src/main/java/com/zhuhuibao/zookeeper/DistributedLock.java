@@ -2,7 +2,10 @@ package com.zhuhuibao.zookeeper;
 
 import com.zhuhuibao.exception.LockException;
 import com.zhuhuibao.utils.PropertiesUtils;
+
 import org.apache.zookeeper.*;
+import org.apache.zookeeper.Watcher.Event.KeeperState;
+import org.apache.zookeeper.ZooKeeper.States;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +38,6 @@ public class DistributedLock implements Lock, Watcher {
     private CountDownLatch latch;//计数器
     private List<Exception> exception = new ArrayList<>();
 
-
     /**
      * 创建分布式锁,使用前请确认config配置的zookeeper服务可用
      *
@@ -45,18 +47,65 @@ public class DistributedLock implements Lock, Watcher {
         this.lockName = lockName;
         // 创建一个与服务器的连接
         try {
+        	//调用exist之前需要先判断链接是否成功，否则会报错：KeeperErrorCode = ConnectionLoss for /locks
+        	CountDownLatch connectedLatch = new CountDownLatch(1); 
+            Watcher watcher = new ConnectedWatcher(connectedLatch); 
             zk = new ZooKeeper(PropertiesUtils.getValue("zookeeper_hosts"),
-                    Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")), this);
-            Stat stat = zk.exists(root, false);
-            if (stat == null) {
-                // 创建根节点
-                zk.create(root, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+                    Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")), 
+                    watcher);
+            waitUntilConnected(zk, connectedLatch); 
+            
+            //若连接上，则进行下面的exists和create操作
+            if(States.CONNECTED == zk.getState()){
+            	Stat stat = zk.exists(root, false);
+                if (stat == null) {
+                    // 创建根节点
+                    zk.create(root, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+                }
             }
+            
         } catch (IOException | InterruptedException | KeeperException e) {
             exception.add(e);
         }
     }
 
+    /**
+     * 等待直到连接上
+     * @param zooKeeper
+     * @param connectedLatch
+     */
+    public static void waitUntilConnected(ZooKeeper zooKeeper, CountDownLatch connectedLatch) {  
+        if (States.CONNECTING == zooKeeper.getState()) {  
+            try {  
+                connectedLatch.await();  
+                
+            } catch (InterruptedException e) {  
+                throw new IllegalStateException(e);  
+            }  
+        }  
+    }  
+    
+    /**
+     * 连接监控
+     * @author zhuangyuhao
+     * @time   2016年11月11日 上午10:35:09
+     *
+     */
+    static class ConnectedWatcher implements Watcher {  
+    	   
+        private CountDownLatch connectedLatch;  
+   
+        ConnectedWatcher(CountDownLatch connectedLatch) {  
+            this.connectedLatch = connectedLatch;  
+        }  
+   
+        @Override  
+        public void process(WatchedEvent event) {  
+           if (event.getState() == KeeperState.SyncConnected) {  
+               connectedLatch.countDown();  
+           }  
+        }  
+    }  
 
     public void lock() {
 
@@ -138,7 +187,7 @@ public class DistributedLock implements Lock, Watcher {
     }
 
 
-    private boolean waitForLock(String lower, long waitTime) throws InterruptedException, KeeperException {
+	private boolean waitForLock(String lower, long waitTime) throws InterruptedException, KeeperException {
         Stat stat = zk.exists(root + "/" + lower, true);
         //判断比自己小一个数的节点是否存在,如果不存在则无需等待锁,同时注册监听
         if (stat != null) {
