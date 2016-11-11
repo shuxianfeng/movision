@@ -48,6 +48,10 @@ public class MutexElement {
 		this.time = time;
 	}
 
+	public MutexElement(){
+		
+	}
+	
 	public MutexElement(String type, String businessNo, String businessDesc,
 			int time) {
 		super();

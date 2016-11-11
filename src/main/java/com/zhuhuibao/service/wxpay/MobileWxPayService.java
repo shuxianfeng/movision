@@ -42,6 +42,8 @@ import com.zhuhuibao.utils.HttpClientUtils;
 import com.zhuhuibao.utils.SignUtil;
 import com.zhuhuibao.utils.XmlUtil;
 import com.zhuhuibao.utils.convert.DateConvert;
+import com.zhuhuibao.utils.redis.BusinessLockUtil;
+import com.zhuhuibao.utils.redis.MutexElement;
 import com.zhuhuibao.utils.wxpay.WxpayPropertiesLoader;
 import com.zhuhuibao.zookeeper.DistributedLock;
 
@@ -234,7 +236,7 @@ public class MobileWxPayService {
 		
 		log.info("处理微信支付完成的通知回调，requestMap="+requestMap);
 		log.info("加锁");
-		DistributedLock lock = null;
+		/*DistributedLock lock = null;
         try {
             lock = new DistributedLock(LOCK_NAME);
             lock.lock();
@@ -247,6 +249,30 @@ public class MobileWxPayService {
         } finally {
             if (lock != null) {
                 lock.unlock();
+                log.info("解锁");
+            }
+        }*/
+		BusinessLockUtil lock = null;
+		MutexElement mutex = new MutexElement();
+        try{
+        	lock = new BusinessLockUtil();
+        	mutex.setBusinessNo((String)requestMap.get("out_trade_no"));
+        	mutex.setBusinessDesc((String)requestMap.get("transaction_id"));
+        	mutex.setTime(1800);
+        	mutex.setType("微信支付回调通知");
+        	boolean result = lock.lock(mutex,  0);  
+            //加锁成功  
+            if (result) {  
+            	//支付业务处理
+                payHandler(tradeType, modelAndView, requestMap);
+            }  
+        } catch(Exception e){
+        	log.error("执行异常>>>", e);
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, e.getMessage());
+        } finally {
+        	if (lock != null) {
+        		//解锁  
+                lock.unlock(mutex); 
                 log.info("解锁");
             }
         }
