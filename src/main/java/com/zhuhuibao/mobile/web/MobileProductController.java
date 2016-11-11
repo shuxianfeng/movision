@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.service.MobileBrandService;
+import com.zhuhuibao.utils.MapUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +54,9 @@ public class MobileProductController {
     @Autowired
     private MobileMemberService mobileMemberService;
 
+    @Autowired
+    private MobileBrandService mobileBrandService;
+
     /**
      * 触屏端供应链-品牌下更多产品
      *
@@ -72,7 +77,10 @@ public class MobileProductController {
             @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Response response = new Response();
         Paging<Map> pager = new Paging<>(pageNo, pageSize);
-        response.setData(mobileProductService.findProductByBrandAndSubSystemPages(id, fcateid, scateId, pager));
+        List<ProductWithBLOBs> productList = mobileProductService.findProductByBrandAndSubSystemPages(id, fcateid, scateId, pager);
+        Map brandInfo = mobileBrandService.selBrandInfo(id, scateId);
+        Map<String, Object> result = MapUtil.convert2HashMap("productList", productList, "brandInfo", brandInfo);
+        response.setData(result);
         return response;
     }
 
