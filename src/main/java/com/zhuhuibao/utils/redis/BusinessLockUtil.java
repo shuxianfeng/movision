@@ -3,7 +3,6 @@ package com.zhuhuibao.utils.redis;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 import redis.clients.jedis.Jedis;
@@ -19,8 +18,6 @@ public class BusinessLockUtil {
 	
 	private static final Logger log = LoggerFactory.getLogger(BusinessLockUtil.class);
 	
-	@Autowired
-	RedisUtil client;
     /** 
      * 锁定某个业务对象 
      * timeout = 0 时，非阻塞调用，如果对象已锁定立刻返回失败 
@@ -132,18 +129,18 @@ public class BusinessLockUtil {
     
     public static void main(String[] args) {
     	
-    	BusinessLockUtil lock = new BusinessLockUtil();
     	int time = 10;
     	MutexElement mutex = new MutexElement("wxpay_notify",  
                 "1", "微信支付通知",time);  
     	
-        boolean result = lock.lock(mutex,  0);  
+        boolean result = lock(mutex,  0);  
         //加锁成功  
         if (result) {  
         	//TODO 业务处理
+        	System.out.println(1);
         }  
         //解锁  
-        lock.unlock(mutex);  
+        unlock(mutex);  
 	}
     
 }
