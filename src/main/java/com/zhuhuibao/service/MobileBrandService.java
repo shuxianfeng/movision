@@ -58,6 +58,10 @@ public class MobileBrandService {
             for (SuggestBrand suggestBrand : list) {
                 suggestBrand.setScateid(this.findScateIdByBrandId(suggestBrand.getId()).get(0));
             }
+        } else {
+            for (SuggestBrand suggestBrand : list) {
+                suggestBrand.setScateid(subTypeId);
+            }
         }
         return list;
     }
