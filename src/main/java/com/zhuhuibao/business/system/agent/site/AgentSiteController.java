@@ -56,18 +56,7 @@ public class AgentSiteController {
         return response;
     }
 
-    /**
-     * 根据品牌id查优秀代理商
-     * @return
-     * @throws IOException
-     */
-  /*  @RequestMapping(value = {"/rest/agent/getGreatAgentByBrandId","/rest/system/site/agent/sel_great_agent_by_brandId"}, method = RequestMethod.GET)
-    public Response getGreatAgentByBrandId(String id)  {
-        Response response = new Response();
-        List<ResultBean> resultBeen =  agentService.getGreatAgentByBrandId(id);
-        response.setData(resultBeen);
-        return response;
-    }*/
+
 
     /**
      * 根据品牌id查询代理商跟厂商（区域分组）

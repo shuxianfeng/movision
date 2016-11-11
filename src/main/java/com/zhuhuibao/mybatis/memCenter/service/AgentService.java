@@ -188,14 +188,6 @@ public class AgentService {
         }
     }
 
-  /*  public List<ResultBean> getGreatAgentByBrandId(String id){
-        try {
-            return agentMapper.getGreatAgentByBrandId(id);
-        }catch (Exception e){
-            log.error("执行异常>>>",e);
-            throw e;
-        }
-    }*/
 
     /**
      * 根据品牌id查询代理商跟厂商（区域分组）

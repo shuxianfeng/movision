@@ -151,7 +151,8 @@
     select m.id as code,m.enterpriseName as name,m.enterpriseLogo as smallIcon
       from t_p_brand_agent a ,t_m_member m,t_vip_member_info i
       where a.agentid = m.id
-      and (i.vip_level=130 or i.vip_level=160)
+      and i.vip_level in (130,160)
+      and m.id=i.member_id
       and a.brandid = #{id}
   </select>
 </mapper>

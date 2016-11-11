@@ -28,7 +28,5 @@ public interface AgentMapper {
 
     List<ResultBean> getGreatAgentByScateid(String id);
 
-    //List<ResultBean> getGreatAgentByBrandId(String id);
-
     List<ResultBean> getGreatAgentVIPByBrandId(String id);
 }
