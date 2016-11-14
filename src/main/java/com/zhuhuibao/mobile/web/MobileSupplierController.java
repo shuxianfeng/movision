@@ -410,13 +410,7 @@ public class MobileSupplierController {
         map.put("certificateRecordList", certificateRecordList);
         // banner图
         MemberShop shop = shopService.getMemberShop(Long.valueOf(id));
-        List<String> bannerList = new ArrayList<>();
-        if (null != shop) {
-            bannerList.add(shop.getMobileBannerUrlF());
-            bannerList.add(shop.getMobileBannerUrlS());
-            bannerList.add(shop.getMobileBannerUrlT());
-        }
-        map.put("banner", bannerList);
+        map.put("banner", shop.getBannerList());
         return new Response(map);
     }
 

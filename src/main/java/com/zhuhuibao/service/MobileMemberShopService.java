@@ -1,5 +1,6 @@
 package com.zhuhuibao.service;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
 import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 店铺相关接口实现类
@@ -31,7 +35,22 @@ public class MobileMemberShopService {
      * @return
      */
     public MemberShop getMemberShop(Long companyId) {
-        return memShopService.findByCompanyID(companyId);
+        MemberShop memberShop = memShopService.findByCompanyID(companyId);
+        List<String> bannerList = new ArrayList<>();
+        if (null != memberShop) {
+            if (StringUtils.isNotBlank(memberShop.getMobileBannerUrlF())) {
+                bannerList.add(memberShop.getMobileBannerUrlF());
+            }
+            if (StringUtils.isNotBlank(memberShop.getMobileBannerUrlS())) {
+                bannerList.add(memberShop.getMobileBannerUrlS());
+            }
+            if (StringUtils.isNotBlank(memberShop.getMobileBannerUrlT())) {
+                bannerList.add(memberShop.getMobileBannerUrlT());
+            }
+        }
+        memberShop.setBannerList(bannerList);
+
+        return memberShop;
     }
 
 }
