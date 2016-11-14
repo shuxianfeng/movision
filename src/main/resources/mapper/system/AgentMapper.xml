@@ -139,20 +139,12 @@
     left join t_m_member m on a.agentid = m.id
     where find_in_set(#{id},a.scateid) limit 0,6
   </select>
-<!--    <select id="getGreatAgentByBrandId" resultMap="ResultMap3">
-    select distinct m.id as code,m.enterpriseName as name,m.enterpriseLogo as smallIcon
-    from t_p_brand_agent a ,t_m_member m
-    where a.agentid = m.id
-    and a.brandid = #{id}
-  </select>-->
-
-
     <select id="getGreatAgentVIPByBrandId" resultMap="ResultMap3">
     select m.id as code,m.enterpriseName as name,m.enterpriseLogo as smallIcon
       from t_p_brand_agent a ,t_m_member m,t_vip_member_info i
       where a.agentid = m.id
-      and i.vip_level in (130,160)
       and m.id=i.member_id
+      and i.vip_level in (130,160)
       and a.brandid = #{id}
   </select>
 </mapper>
