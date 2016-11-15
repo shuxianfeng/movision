@@ -16,6 +16,7 @@ import com.zhuhuibao.mybatis.sitemail.mapper.MessageLogMapper;
 import com.zhuhuibao.mybatis.sitemail.mapper.MessageTextMapper;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +110,7 @@ public class SiteMailService {
         return count;
     }
 
-    public List<Map<String, String>> findAllNewsList(Paging<Map<String, String>> pager, Map<String, Object> map) {
+    public List<Map<String, Object>> findAllNewsList(Paging<Map<String, Object>> pager, Map<String, Object> map) {
         try {
             return msgTextMapper.findAllNewsList(pager.getRowBounds(), map);
         } catch (Exception e) {
@@ -181,7 +182,7 @@ public class SiteMailService {
         }
     }
 
-    public Map<String, String> queryNewsById(String id) {
+    public Map<String, Object> queryNewsById(String id) {
         try {
             return msgLogMapper.queryNewsById(id);
         } catch (Exception e) {

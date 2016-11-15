@@ -26,7 +26,7 @@ public interface MessageLogMapper {
 
     Integer selUnreadNewsCount(Map<String,Object> map);
 
-    Map<String,String> queryNewsById(String id);
+    Map<String,Object> queryNewsById(String id);
 
     List<Map<String,String>> queryNewsList(Map<String,Object> map);
 }

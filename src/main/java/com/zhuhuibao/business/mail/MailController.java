@@ -13,6 +13,8 @@ import com.zhuhuibao.mybatis.sitemail.entity.MessageLog;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -43,14 +46,19 @@ public class MailController {
                                     @RequestParam(required = false,defaultValue = "10")String pageSize)  {
         Response response = new Response();
 
-        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String,Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<>();
         map.put("status",status);
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
             map.put("recID",String.valueOf(memberId));
             siteMailService.addNewsToLog(map);
-            List<Map<String,String>> list = siteMailService.findAllNewsList(pager,map);
+            List<Map<String, Object>> list = siteMailService.findAllNewsList(pager, map);
+            if(CollectionUtils.isNotEmpty(list)){
+            	for (Map<String, Object> m : list) {
+					genDisplayTitle4AuditRefuse(m);
+				}
+            }
             pager.result(list);
             response.setData(pager);
         }else {
@@ -59,6 +67,23 @@ public class MailController {
         return response;
     }
 
+    /**
+     * 对于审核拒绝的消息，进行标题处理
+     * @param m
+     */
+	private void genDisplayTitle4AuditRefuse(Map<String, Object> m) {
+		Integer type = (Integer)m.get("type");
+		if(type == 3){
+			//当消息类型是拒绝消息时，这么处理 显示title
+			String title = (String)m.get("title");
+			String source = (String)m.get("source");
+			String shdx = "【" +source+ ":"+ title+ "】";	//【资质审核：aaa审核】
+			String display_title = "您提交的" + shdx + "未通过审核";
+			m.put("title", display_title);	//显示标题
+			m.put("shdx", shdx);	//审核对象
+		}
+	}
+
     @ApiOperation(value="查看消息详情",notes="查看消息详情",response = Response.class)
     @RequestMapping(value = "sel_news", method = RequestMethod.GET)
     public Response sel_news(@RequestParam String id)  {
@@ -66,19 +91,31 @@ public class MailController {
         Long memberId = ShiroUtil.getCreateID();
         if(memberId!=null){
             //将这条消息设为已读
-            MessageLog messageLog = new MessageLog();
-            messageLog.setRecID(memberId);
-            messageLog.setMessageID(Long.parseLong(id));
-            messageLog.setStatus(MessageLogConstant.NEWS_STATUS_TWO);
-            siteMailService.updateStatus(messageLog);
+            setNewIsRead(id, memberId);
 
-            Map<String,String> map = siteMailService.queryNewsById(id);
-            response.setData(map);
+            Map<String,Object> m = siteMailService.queryNewsById(id);
+            
+            genDisplayTitle4AuditRefuse(m);
+            
+            response.setData(m);
         }else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
+
+    /**
+     * 将这条消息设为已读
+     * @param id
+     * @param memberId
+     */
+	private void setNewIsRead(String id, Long memberId) {
+		MessageLog messageLog = new MessageLog();
+		messageLog.setRecID(memberId);
+		messageLog.setMessageID(Long.parseLong(id));
+		messageLog.setStatus(MessageLogConstant.NEWS_STATUS_TWO);
+		siteMailService.updateStatus(messageLog);
+	}
 
     @ApiOperation(value="批量标记为已读",notes="批量标记为已读",response = Response.class)
     @RequestMapping(value = "upd_news", method = RequestMethod.POST)
