@@ -142,7 +142,7 @@ public class TechCooperationService {
             	
             	String source = tech.getType() == 1 ? MessageTextConstant.ACHIEVEMENT : MessageTextConstant.JSXQ;
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), tech.getCreateID(),
-                		tech.getReason(), source, tech.getTitle());
+                		tech.getReason(), source, tech.getTitle(), String.valueOf(tech.getId()));
             }
         } catch (Exception e) {
             log.error("执行异常>>>",e);

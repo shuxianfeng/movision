@@ -153,7 +153,7 @@ public class ExpoService {
             {
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),
                 		Long.parseLong(exhibition.getCreateid()),exhibition.getReason(),
-                		MessageTextConstant.EXHIBITION, exhibition.getTitle());
+                		MessageTextConstant.EXHIBITION, exhibition.getTitle(), exhibition.getId());
             }
         }catch (Exception e){
             log.error("ExpoService::updateExhibitionInfoById",e);

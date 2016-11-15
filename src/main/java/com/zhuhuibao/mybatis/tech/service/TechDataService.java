@@ -183,7 +183,8 @@ public class TechDataService {
             if (Objects.equals(techData.getStatus(), TechConstant.TechDataStatus.REJECT.intValue())) {
             	
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), techData.getCreateid(),
-                		techData.getReason(), MessageTextConstant.JSZL, techData.getTitle());
+                		techData.getReason(), MessageTextConstant.JSZL, techData.getTitle(),
+                		String.valueOf(techData.getId()));
             }
         } catch (Exception e) {
             log.error("执行异常>>>", e);
@@ -206,7 +207,8 @@ public class TechDataService {
             if (Objects.equals(techData.getStatus(), TechConstant.TechDataStatus.REJECT.intValue())) {
             	
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), techData.getCreateid(), 
-                		techData.getReason(), MessageTextConstant.JSZL, techData.getTitle());
+                		techData.getReason(), MessageTextConstant.JSZL, techData.getTitle(),
+                		String.valueOf(techData.getId()));
             }
         } catch (Exception e) {
             log.error("执行异常>>>", e);

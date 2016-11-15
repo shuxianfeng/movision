@@ -1,18 +1,8 @@
 package com.zhuhuibao.business.mail;
 
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.MessageConstant;
-import com.zhuhuibao.common.constant.MessageLogConstant;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.mybatis.memCenter.entity.Message;
-import com.zhuhuibao.mybatis.sitemail.entity.MessageLog;
-import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
-import com.zhuhuibao.utils.pagination.model.Paging;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -23,10 +13,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MemberConstant;
+import com.zhuhuibao.common.constant.MessageConstant;
+import com.zhuhuibao.common.constant.MessageLogConstant;
+import com.zhuhuibao.common.constant.MessageTextConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
+import com.zhuhuibao.mybatis.memCenter.entity.Message;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.mybatis.sitemail.entity.MessageLog;
+import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.pagination.model.Paging;
 
 /**
  * Created by cxx on 2016/6/12 0012.
@@ -38,6 +41,9 @@ public class MailController {
 
     @Autowired
     SiteMailService siteMailService;
+    
+    @Autowired
+    private MemberService memberService;
 
     @ApiOperation(value="消息列表",notes="消息列表",response = Response.class)
     @RequestMapping(value = "sel_newsList", method = RequestMethod.GET)
@@ -81,6 +87,17 @@ public class MailController {
 			String display_title = "您提交的" + shdx + "未通过审核";
 			m.put("title", display_title);	//显示标题
 			m.put("shdx", shdx);	//审核对象
+			
+			String sid = (String)m.get("sid");
+			if(source.equals(MessageTextConstant.ZLSH) || source.equals(MessageTextConstant.SMRZ)
+					|| source.equals(MessageTextConstant.CERTIFICATERECORD)){
+				//区分身份是个人还是企业
+				Member mem = memberService.findMemById(sid);
+				String identify = mem.getIdentify();
+				boolean isPerson = identify.equals(MemberConstant.IDENTIFY_PERSON) ? true : false;
+				m.put("isPerson", isPerson);
+			}
+			
 		}
 	}
 

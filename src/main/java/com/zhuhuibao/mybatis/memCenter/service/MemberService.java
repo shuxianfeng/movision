@@ -154,11 +154,11 @@ public class MemberService {
             //资料审核已拒绝 or 实名认证已拒绝
             if ("7".equals(member.getStatus()) ) {
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(member.getId()),
-                        member.getReason(), MessageTextConstant.ZLSH, member.getAccount());
+                        member.getReason(), MessageTextConstant.ZLSH, member.getAccount(), member.getId());
             }
             if ("11".equals(member.getStatus())) {
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(member.getId()),
-                        member.getReason(), MessageTextConstant.SMRZ, member.getAccount());
+                        member.getReason(), MessageTextConstant.SMRZ, member.getAccount(), member.getId());
             }
             
         } catch (Exception e) {
@@ -371,7 +371,8 @@ public class MemberService {
             certificateRecordMapper.updateCertificate(record);
             if ("2".equals(record.getStatus())) {
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(record.getMem_id()),
-                        record.getReason(), MessageTextConstant.CERTIFICATERECORD, record.getCertificate_name());
+                        record.getReason(), MessageTextConstant.CERTIFICATERECORD, 
+                        record.getCertificate_name(), record.getId());
             }
         } catch (Exception e) {
             log.error("updateCertificate error >>>", e);

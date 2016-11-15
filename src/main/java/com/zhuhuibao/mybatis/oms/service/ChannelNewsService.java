@@ -69,7 +69,8 @@ public class ChannelNewsService {
             if ("2".equals(String.valueOf(channelNews.getStatus()))) {
             	
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), channelNews.getCreateid(), 
-                		channelNews.getReason(), MessageTextConstant.CHANNELNEWS, channelNews.getTitle());
+                		channelNews.getReason(), MessageTextConstant.CHANNELNEWS, channelNews.getTitle(),
+                		String.valueOf(channelNews.getId()));
             }
         } catch (Exception e) {
             log.error("add channel news error!", e);

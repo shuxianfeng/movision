@@ -167,11 +167,10 @@ public class ExpertService {
 			if ("2".equals(achievement.getStatus())) {
 				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),
 						Long.parseLong(achievement.getCreateId()), achievement.getReason(),
-						MessageTextConstant.ACHIEVEMENT,  achievement.getTitle());
+						MessageTextConstant.ACHIEVEMENT,  achievement.getTitle(), achievement.getId());
 			}
 		} catch (Exception e) {
 			log.error("ExpertService::updateAchievement", e);
-			// e.printStackTrace();
 			throw e;
 		}
 		return result;
@@ -220,7 +219,7 @@ public class ExpertService {
 				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), 
 						Long.parseLong(dynamic.getCreateId()),
 						dynamic.getReason(),
-						MessageTextConstant.DYNAMIC, dynamic.getTitle());
+						MessageTextConstant.DYNAMIC, dynamic.getTitle(), dynamic.getId());
 			}
 		} catch (Exception e) {
 			log.error("ExpertService::updateDynamic", e);
@@ -328,7 +327,7 @@ public class ExpertService {
 				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), 
 						Long.parseLong(expert.getCreateId()),
 						expert.getReason(), 
-						MessageTextConstant.EXPERT, expert.getName());
+						MessageTextConstant.EXPERT, expert.getName(), expert.getId());
 			}
 		} catch (Exception e) {
 			log.error("ExpertService::updateExpert", e);

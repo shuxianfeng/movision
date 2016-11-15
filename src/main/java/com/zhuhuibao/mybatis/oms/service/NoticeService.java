@@ -46,7 +46,8 @@ public class NoticeService {
 			if("3".equals(notice.getStatus()))
 			{
 				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),notice.getCreateId(),
-						notice.getReason(), MessageTextConstant.NOTICE, notice.getTitle());
+						notice.getReason(), MessageTextConstant.NOTICE, notice.getTitle(), 
+						String.valueOf(notice.getId()));
 			}
 		} catch (Exception e) {
 

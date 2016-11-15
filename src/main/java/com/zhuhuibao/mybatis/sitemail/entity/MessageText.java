@@ -25,8 +25,20 @@ public class MessageText implements Serializable{
     
     private String source;
     
+    private String sid;
+    
+    
+    
 
-    public String getSource() {
+    public String getSid() {
+		return sid;
+	}
+
+	public void setSid(String sid) {
+		this.sid = sid;
+	}
+
+	public String getSource() {
 		return source;
 	}
 

@@ -156,7 +156,7 @@ public class CooperationService {
 				
 				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),
 						Long.parseLong(cooperation.getCreateId()), cooperation.getReason(),
-						MessageTextConstant.WITKEY, cooperation.getTitle());
+						MessageTextConstant.WITKEY, cooperation.getTitle(), cooperation.getId());
 			}
 		} catch (Exception e) {
 			log.error("CooperationService::updateCooperation",e);

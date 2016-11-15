@@ -80,7 +80,7 @@ public class SiteMailService {
      * @param reason 拒绝理由
      * @return
      */
-    public Response addRefuseReasonMail(Long sendId, Long recId, String reason, String source, String title) {
+    public Response addRefuseReasonMail(Long sendId, Long recId, String reason, String source, String title, String sid) {
         Response response = new Response();
         try {
             MessageText msgText = new MessageText();
@@ -88,6 +88,9 @@ public class SiteMailService {
             msgText.setMessageText(reason);
             //审核对象
             msgText.setSource(source);
+            //来源ID
+            msgText.setSid(sid);
+            
             msgText.setTitle(title);
             msgText.setSendID(sendId);
             msgText.setRecID(recId);

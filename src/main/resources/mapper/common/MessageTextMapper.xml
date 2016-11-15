@@ -10,9 +10,10 @@
     <result column="sendTime" property="sendTime" jdbcType="TIMESTAMP" />
     <result column="typeID" property="typeID" jdbcType="BIGINT" />
     <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="sid" property="sid" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, sendID, messageText, type, sendTime, typeID,title, source
+    id, sendID, messageText, type, sendTime, typeID,title, source, sid
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -26,11 +27,11 @@
   </delete>
   <insert id="insert" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageText" >
     insert into t_sys_messageText (id, sendID, title,messageText,
-      type, sendTime, typeID, source
+      type, sendTime, typeID, source, sid
       )
     values (#{id,jdbcType=BIGINT}, #{sendID,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{messageText,jdbcType=VARCHAR},
       #{type,jdbcType=INTEGER}, #{sendTime,jdbcType=TIMESTAMP}, #{typeID,jdbcType=BIGINT},
-      #{source,jdbcType=VARCHAR}
+      #{source,jdbcType=VARCHAR}, #{sid,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.sitemail.entity.MessageText" useGeneratedKeys="true" keyProperty="id">
@@ -55,7 +56,9 @@
       <if test="source != null" >
         source,
       </if>
-      
+      <if test="sid != null" >
+        sid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="sendID != null" >
@@ -76,6 +79,9 @@
       </if>
       <if test="source != null" >
         #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="sid != null" >
+        #{sid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -103,6 +109,9 @@
       <if test="source != null" >
         title = #{source,jdbcType=VARCHAR},
       </if>
+      <if test="sid != null" >
+        title = #{sid,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -114,12 +123,13 @@
       type = #{type,jdbcType=INTEGER},
       sendTime = #{sendTime,jdbcType=TIMESTAMP},
       typeID = #{typeID,jdbcType=BIGINT},
-      source = #{source,jdbcType=VARCHAR}
+      source = #{source,jdbcType=VARCHAR},
+      sid = #{sid,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="findAllNewsList" resultType="java.util.Map" parameterType="java.util.Map">
     select mt.id,ml.id as recordId,mt.title,mt.`type`,date_format(mt.sendTime,'%Y-%m-%d %H:%i:%s') sendTime,
-    ml.`status`, mt.source,
+    ml.`status`, mt.source, mt.sid,
     case when mt.type = 1 then '产品消息' when mt.type = 2 then '活动消息' WHEN mt.type = 3 THEN '拒绝理由'end as typeName
     from t_sys_messageLog ml
     left join t_sys_messageText mt on mt.id = ml.messageID
