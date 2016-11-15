@@ -803,7 +803,7 @@ public class ExpertSiteController {
     }
     
     @ApiOperation(value = "查询专家是否能回答该问题", notes = "查询专家是否能回答该问题", response = Response.class)
-    @RequestMapping(value = "base/query_exp_can_or_not_answer", method = RequestMethod.POST)
+    @RequestMapping(value = "base/query_exp_can_or_not_answer", method = RequestMethod.GET)
     @LoginAccess
     public Response queryExpPrivilege(@ApiParam(value = "问题id") @RequestParam String questionId) {
     	

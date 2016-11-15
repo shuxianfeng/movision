@@ -106,8 +106,8 @@ public class ExpertNewService {
 	 */
 	public Map genResultMap(String status, String msg){
 		Map map = new HashMap<>();
-		map.put("STATUS", status);
-		map.put("MSG", msg);
+		map.put("status", status);
+		map.put("msg", msg);
 		return map;
 	}
 	
