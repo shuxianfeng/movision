@@ -10,7 +10,7 @@ public interface AnswerMapper {
 
     int answerQuestion(Answer answer);
 
-    List<Map<String,String>> queryAnswerByQuestionId(String id);
+    List<Map<String,Object>> queryAnswerByQuestionId(String id);
 
     List<Map<String,String>> findAllExpertAnswerListOms(RowBounds rowBounds);
 

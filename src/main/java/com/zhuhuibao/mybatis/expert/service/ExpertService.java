@@ -503,9 +503,9 @@ public class ExpertService {
 	public Map queryMyQuestionById(String id) {
 		try {
 			// 查詢問題信息和提問者的信息
-			Map<String, String> question = questionMapper.queryMyQuestionById(id);
+			Map<String, Object> question = questionMapper.queryMyQuestionById(id);
 			// 查詢該問題的回答信息以及回答者的信息
-			List<Map<String, String>> answerList = answerMapper.queryAnswerByQuestionId(String.valueOf(question
+			List<Map<String, Object>> answerList = answerMapper.queryAnswerByQuestionId(String.valueOf(question
 					.get("id")));
 			Map map = new HashMap();
 			map.put("question", question);

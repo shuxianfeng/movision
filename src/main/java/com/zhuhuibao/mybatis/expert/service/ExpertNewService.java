@@ -56,12 +56,12 @@ public class ExpertNewService {
 		if (createId != null) {
 			boolean isExistExpAnswer = false;
 			boolean statusFlag = false;
-			List<Map<String, String>> answerList = answerMapper.queryAnswerByQuestionId(questionId);
+			List<Map<String, Object>> answerList = answerMapper.queryAnswerByQuestionId(questionId);
 			//共两个判断条件
 			//1 专家未回答过该问题
 			if(CollectionUtils.isNotEmpty(answerList)){
-				for (Map<String, String> map : answerList) {
-					String expId = map.get("expertId");
+				for (Map<String, Object> map : answerList) {
+					Long expId = (Long)map.get("expertId");
 					if(expId.equals(createId)){
 						//该专家已经回答过
 						isExistExpAnswer = true;
@@ -75,7 +75,7 @@ public class ExpertNewService {
 			
 			//2 没有关闭、没有设采纳最佳答案
 			Map q = expertSV.queryQuestionById(questionId);
-			String status = (String) q.get("status");
+			String status =  String.valueOf(q.get("status"));
 			if(ExpertConstant.QUESTION_NOT_CLOSE.equals(status)){
 				statusFlag = true;
 				
