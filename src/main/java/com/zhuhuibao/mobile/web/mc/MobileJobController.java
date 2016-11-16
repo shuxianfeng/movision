@@ -295,7 +295,7 @@ public class MobileJobController {
             } else {
                 for (Map<String, String> aList : list) {
                     Map map1 = (Map) aList;
-                    String cId = map1.get("company_id").toString();
+                    String cId = (String) map1.get("company_id");
                     if (companyId.equals(cId)) {
                         throw new BusinessException(MsgCodeConstant.FORBID_KEYWORDS_REPEAT, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.FORBID_KEYWORDS_REPEAT)));
                     }
