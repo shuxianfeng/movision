@@ -172,4 +172,25 @@
     </set>
     where id = #{id}
   </update>
+  <select id="findAllMobileDynamicList" resultMap="BaseResultMap" >
+    SELECT d.id,date_format(d.publishTime,'%Y-%m-%d') publishTime,date_format(d.updateTime,'%Y-%m-%d') updateTime,
+    d.createId,d.title,d.wordkey,d.description,d.imgurl,d.views,d.status,d.content,d.createrType,
+    case when d.createrType = 1 then (select u.username from t_oms_user u where u.id = d.createid)
+    when d.createrType = 2 then (select m.enterpriseName from t_m_member m where m.id = d.createid) end as createName FROM t_e_dynamic d
+    WHERE d.is_deleted = 0
+    <if test="title != null">
+      and d.title like CONCAT('%',#{title},'%')
+    </if>
+    <if test="status != null">
+      and d.status = #{status}
+    </if>
+    <if test="createId != null">
+      and d.createId = #{createId}
+    </if>
+    <if test="type != null">
+      and d.status = 1
+    </if>
+    GROUP by d.updateTime desc
+  </select>
+
 </mapper>

@@ -35,5 +35,5 @@ public interface ExpertMapper {
 
     List<Map<String,Object>> findAllExpert(RowBounds rowBounds, Map<String, Object> map);
 
-    Map<String,Object> findAllMyLookedExpertListById(String id);
+    List<Map<String,String>> findAllMyLookedMobileExpertList(RowBounds rowBounds, Map<String, Object> map);
 }

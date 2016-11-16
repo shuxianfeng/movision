@@ -402,8 +402,23 @@
         <if test="viewerId != null">
             and v.viewerId = #{viewerId}
         </if>
-        group by v.viewTime desc
+        order by v.viewTime desc
     </select>
-
+    <select id="findAllMyLookedMobileExpertList" resultType="java.util.Map">
+        select e.id,e.name,e.company,e.position,
+        case when e.expertType = '1' then '协会专家'
+        when e.expertType = '2' then '行业专家' end as expertType,
+        date_format(v.viewTime,'%Y-%m-%d') viewTime,v.id as recordId
+        from t_zhb_viewGoods v
+        left join t_e_expert e on v.goodsId = e.id
+        where v.type = 'CKZJXX' and v.`status` = 0
+        <if test="companyId != null">
+            and v.companyId = #{companyId}
+        </if>
+        <if test="viewerId != null">
+            and v.viewerId = #{viewerId}
+        </if>
+        GROUP by v.viewTime desc
+    </select>
 
 </mapper>
