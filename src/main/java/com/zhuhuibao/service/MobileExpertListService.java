@@ -10,16 +10,17 @@ import java.util.Map;
  */
 public class MobileExpertListService {
 
-
     @Autowired
     private ExpertMapper expertMapper;
 
     /**
-     *
-     * @param  id  :用户的Id
-     * @return     查看过的专家信息
+     * 专家信息
+     * 
+     * @param id
+     *            用户的Id
+     * @return 专家信息
      */
     public Map<String, Object> findAllMyLookedExpertListById(String id) {
-       return expertMapper.findAllMyLookedExpertListById(id);
+        return expertMapper.findAllMyLookedExpertListById(id);
     }
 }
