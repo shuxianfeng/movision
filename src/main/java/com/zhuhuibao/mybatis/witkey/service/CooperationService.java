@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.witkey.service;
 
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.CooperationConstants;
+import com.zhuhuibao.common.constant.MessageTextConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
@@ -54,30 +55,37 @@ public class CooperationService {
 		try {
 			// 发布威客服务需要付费
 			if (ArrayUtils.contains(CooperationConstants.COOPERATION_SERVICE, cooperation.getType())) {
-				boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.FBWKFW.toString());
-				if (bool) {
-					cooperationMapper.publishCooperation(cooperation);
-					zhbService.payForGoods(Long.parseLong(cooperation.getId()), ZhbPaymentConstant.goodsType.FBWKFW.toString());
-				} else {// 支付失败稍后重试，联系客服
-					throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String
-							.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
-				}
+				//发布威客服务
+				doWitkeyActivity(cooperation, ZhbPaymentConstant.goodsType.FBWKFW.toString());
+				
 			} else if (ArrayUtils.contains(CooperationConstants.COOPERATION_QUALIFICATION, cooperation.getType())) {// 发布资质合作需要付费
-				boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.FBZZHZ.toString());
-				if (bool) {
-					cooperationMapper.publishCooperation(cooperation);
-					zhbService.payForGoods(Long.parseLong(cooperation.getId()), ZhbPaymentConstant.goodsType.FBZZHZ.toString());
-				} else {// 支付失败稍后重试，联系客服
-					throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String
-							.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
-				}
+				//发布资质合作
+				doWitkeyActivity(cooperation, ZhbPaymentConstant.goodsType.FBZZHZ.toString());
 			} else {
+				
 				cooperationMapper.publishCooperation(cooperation);
+				
 			}
 		} catch (Exception e) {
 			log.error("CooperationService::publishCooperation::"+"publisher="+ShiroUtil.getCreateID(),e);
-			//e.printStackTrace();
 			throw e;
+		}
+	}
+
+	/**
+	 * 发布威客的一些活动：威客服务，资质合作
+	 * @param cooperation
+	 * @param witkeyType
+	 * @throws Exception
+	 */
+	private void doWitkeyActivity(Cooperation cooperation, String witkeyType) throws Exception {
+		boolean bool = zhbService.canPayFor(witkeyType);
+		if (bool) {
+			cooperationMapper.publishCooperation(cooperation);
+			zhbService.payForGoods(Long.parseLong(cooperation.getId()), witkeyType);
+		} else {// 支付失败稍后重试，联系客服
+			throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String
+					.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
 		}
 	}
 
@@ -145,7 +153,10 @@ public class CooperationService {
 		try {
 			result = cooperationMapper.updateCooperation(cooperation);
 			if ("2".equals(cooperation.getStatus())) {
-				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(cooperation.getCreateId()), cooperation.getReason());
+				
+				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),
+						Long.parseLong(cooperation.getCreateId()), cooperation.getReason(),
+						MessageTextConstant.WITKEY, cooperation.getTitle(), cooperation.getId());
 			}
 		} catch (Exception e) {
 			log.error("CooperationService::updateCooperation",e);

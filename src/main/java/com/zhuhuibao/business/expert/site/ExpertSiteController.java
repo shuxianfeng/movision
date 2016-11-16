@@ -15,6 +15,7 @@ import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import com.zhuhuibao.mybatis.expert.entity.*;
+import com.zhuhuibao.mybatis.expert.service.ExpertNewService;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
@@ -26,11 +27,13 @@ import com.zhuhuibao.mybatis.tech.service.TechExpertCourseService;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.oss.ZhbOssClient;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -42,6 +45,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -56,6 +60,9 @@ public class ExpertSiteController {
     private static final Logger log = LoggerFactory
             .getLogger(ExpertSiteController.class);
 
+    @Autowired
+    ExpertNewService expertNewSV;
+    
     @Autowired
     private ExpertService expertService;
 
@@ -794,4 +801,22 @@ public class ExpertSiteController {
         }
         return response;
     }
+    
+    @ApiOperation(value = "查询专家是否能回答该问题", notes = "查询专家是否能回答该问题", response = Response.class)
+    @RequestMapping(value = "base/query_exp_can_or_not_answer", method = RequestMethod.GET)
+    @LoginAccess
+    public Response queryExpPrivilege(@ApiParam(value = "问题id") @RequestParam String questionId) {
+    	
+    	return expertNewSV.queryExpPrivilege(questionId);
+    }
+    
+    
+    @ApiOperation(value = "专家回答问题", notes = "专家回答问题", response = Response.class)
+    @RequestMapping(value = "base/exp_add_answer", method = RequestMethod.POST)
+    @LoginAccess
+    public Response acceptAnswer(@ModelAttribute Answer answer) {
+    	
+    	return expertNewSV.addExpAnswer(answer);
+    }
+    
 }

@@ -11,65 +11,65 @@ import java.util.Properties;
 
 public class PropertiesConfig extends Config {
 
-	public PropertiesConfig(InputStream in, boolean unicode) {
-		try {
-			final Properties props = new Properties();
-			if (unicode) {
-				try {
-					props.load(in);
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-			} else {
-				try {
-					FileUtil.read(in, null, new ReadLineHandler() {
-						private String concatKey = null;
-						private String concatStr = null;
+    public PropertiesConfig(InputStream in, boolean unicode) {
+        try {
+            final Properties props = new Properties();
+            if (unicode) {
+                try {
+                    props.load(in);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                try {
+                    FileUtil.read(in, null, new ReadLineHandler() {
+                        private String concatKey = null;
+                        private String concatStr = null;
 
-						public String[] getKV(String s) {
-							int offset = s.indexOf('=');
-							if (offset <= 0) {
-								throw new RuntimeException("Bad config line: "
-										+ s);
-							}
-							String key = s.substring(0, offset).trim();
-							String value = s.substring(offset + 1).trim();
-							return new String[] { key, value };
-						}
+                        public String[] getKV(String s) {
+                            int offset = s.indexOf('=');
+                            if (offset <= 0) {
+                                throw new RuntimeException("Bad config line: "
+                                        + s);
+                            }
+                            String key = s.substring(0, offset).trim();
+                            String value = s.substring(offset + 1).trim();
+                            return new String[]{key, value};
+                        }
 
-						private String replaceSpecialChars(String s) {
-							StringBuilder sb = new StringBuilder();
-							int len = s.length();
-							for (int i = 0; i < len; i++) {
-								char c = s.charAt(i);
-								if (c == '\\' && i < len - 1) {
-									boolean replace = true;
-									char next = s.charAt(i + 1);
-									switch (next) {
-									case 'n':
-										sb.append('\n');
-										break;
-									case 't':
-										sb.append('\t');
-										break;
-									case 'r':
-										sb.append('\r');
-										break;
-									case 'f':
-										sb.append('\f');
-										break;
-									default:
-										replace = false;
-									}
-									if (replace) {
-										i++;
-										continue;
-									}
-								}
-								sb.append(c);
-							}
-							return sb.toString();
-						}
+                        private String replaceSpecialChars(String s) {
+                            StringBuilder sb = new StringBuilder();
+                            int len = s.length();
+                            for (int i = 0; i < len; i++) {
+                                char c = s.charAt(i);
+                                if (c == '\\' && i < len - 1) {
+                                    boolean replace = true;
+                                    char next = s.charAt(i + 1);
+                                    switch (next) {
+                                        case 'n':
+                                            sb.append('\n');
+                                            break;
+                                        case 't':
+                                            sb.append('\t');
+                                            break;
+                                        case 'r':
+                                            sb.append('\r');
+                                            break;
+                                        case 'f':
+                                            sb.append('\f');
+                                            break;
+                                        default:
+                                            replace = false;
+                                    }
+                                    if (replace) {
+                                        i++;
+                                        continue;
+                                    }
+                                }
+                                sb.append(c);
+                            }
+                            return sb.toString();
+                        }
 
 						@Override
 						public boolean handle(String s, int line)
@@ -120,19 +120,19 @@ public class PropertiesConfig extends Config {
 		}
 	}
 
-	public PropertiesConfig(InputStream in) {
-		this(in, true);
-	}
+    public PropertiesConfig(InputStream in) {
+        this(in, true);
+    }
 
-	public PropertiesConfig(Map<?, ?> map) {
-		for (Entry<?, ?> entry : map.entrySet()) {
-			put(entry.getKey().toString(), entry.getValue(), true);
-		}
-	}
+    public PropertiesConfig(Map<?, ?> map) {
+        for (Entry<?, ?> entry : map.entrySet()) {
+            put(entry.getKey().toString(), entry.getValue(), true);
+        }
+    }
 
-	@Override
-	protected Object loadValue(String key) {
-		return null;
-	}
+    @Override
+    protected Object loadValue(String key) {
+        return null;
+    }
 
 }

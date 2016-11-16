@@ -38,7 +38,7 @@ public class MobileMessageService {
      * @param map
      * @return
      */
-    public List<Map<String, String>> getSysMsgList(Paging<Map<String, String>> pager, Map<String, Object> map) {
+    public List<Map<String, Object>> getSysMsgList(Paging<Map<String, Object>> pager, Map<String, Object> map) {
 
         return siteMailService.findAllNewsList(pager, map);
     }
@@ -49,7 +49,7 @@ public class MobileMessageService {
      * @param id
      * @return
      */
-    public Map<String, String> getSysMsgDetail(Long memberId, String id) {
+    public Map<String, Object> getSysMsgDetail(Long memberId, String id) {
         MessageLog messageLog = new MessageLog();
         messageLog.setRecID(memberId);
         messageLog.setMessageID(Long.parseLong(id));

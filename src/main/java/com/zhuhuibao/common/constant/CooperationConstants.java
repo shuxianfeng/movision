@@ -40,6 +40,13 @@ public class CooperationConstants {
         }
     }
 
+    /**
+     * 服务
+     */
     public final static String[] COOPERATION_SERVICE =  {"7","8","9","13"};
+    
+    /**
+     * 资质
+     */
     public final static String[] COOPERATION_QUALIFICATION =  {"10","11"};
 }

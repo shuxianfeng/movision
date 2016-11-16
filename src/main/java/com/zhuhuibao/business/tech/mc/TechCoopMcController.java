@@ -73,7 +73,7 @@ public class TechCoopMcController {
     }
 
     @RequestMapping(value = {"sel_tech_cooperation_detail", "cg/sel_tech_cooperation_detail", "xq/sel_tech_cooperation_detail"}, method = RequestMethod.GET)
-    @ApiOperation(value = "查询技术合作(技术成果，技术需求)", notes = "查询技术合作(技术成果，技术需求)", response = Response.class)
+    @ApiOperation(value = "查询技术合作详情(技术成果，技术需求)", notes = "查询技术合作(技术成果，技术需求)", response = Response.class)
     public Response selectTechCooperationById(@ApiParam(value = "技术合作成果、需求ID") @RequestParam String techCoopId) {
         Response response = new Response();
         Map<String, String> techCoop = techService.selectMcCoopDetail(techCoopId);

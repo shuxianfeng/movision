@@ -96,4 +96,9 @@ public class MemberConstant {
      * 个人注册时的身份
      */
     public static final int MEMBER_WORK_TYPE_217 = 217;
+    
+    /**
+     * 身份：个人
+     */
+    public static final String IDENTIFY_PERSON = "2";
 }
