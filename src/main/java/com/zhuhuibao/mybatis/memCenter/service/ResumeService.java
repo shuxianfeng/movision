@@ -1,27 +1,13 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.exception.BusinessException;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.CollectRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.DownloadRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
@@ -32,6 +18,18 @@ import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
 import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by cxx on 2016/4/19 0019.
@@ -88,7 +86,7 @@ public class ResumeService {
      * @param resume
      */
         //简历名称
-    private void checkResumeParams(Resume resume) {
+    public void checkResumeParams(Resume resume) {
         if (StringUtils.isEmpty(resume.getTitle())) {
             throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "简历名称不能为空");
         }
