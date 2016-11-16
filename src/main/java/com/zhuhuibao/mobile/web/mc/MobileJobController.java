@@ -283,7 +283,7 @@ public class MobileJobController {
         return response;
     }
 
-    @ApiOperation(value = "增加屏蔽企业", notes = "增加屏蔽企业")
+    @ApiOperation(value = "触屏端-筑慧中心-增加屏蔽企业", notes = "触屏端-筑慧中心-增加屏蔽企业")
     @RequestMapping(value = "add_forbid_keywords", method = RequestMethod.POST)
     public Response addForbidKeyWords(@ApiParam(value = "公司id") @RequestParam(required = false) String companyId) {
         Response response = new Response();
