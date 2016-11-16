@@ -1,17 +1,17 @@
 package com.zhuhuibao.business.oms.channel;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
-
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.TechConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
+import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
+import com.zhuhuibao.shiro.realm.OMSRealm;
+import com.zhuhuibao.utils.DateUtils;
+import com.zhuhuibao.utils.oss.ZhbOssClient;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -20,25 +20,15 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.TechConstant;
-import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
-import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
-import com.zhuhuibao.shiro.realm.OMSRealm;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
-import com.zhuhuibao.utils.file.FileUtil;
-import com.zhuhuibao.utils.oss.ZhbOssClient;
-import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2016/4/11 0011.
@@ -49,7 +39,7 @@ public class ChannelController {
 
     @Autowired
     ChannelNewsService newsService;
-    
+
     @Autowired
     ZhbOssClient zhbOssClient;
 
@@ -74,6 +64,7 @@ public class ChannelController {
 
         if (createID != null) {
             channelNews.setCreateid(createID);
+            channelNews.setCreateTime(DateUtils.dateTime2Str(new Date()));
             response = newsService.updateByPrimaryKeySelective(channelNews);
         } else {
 
@@ -88,7 +79,8 @@ public class ChannelController {
     /**
      * 查询栏目信息详情
      *
-     * @param id       栏目信息的ID
+     * @param id
+     *            栏目信息的ID
      * @throws JsonGenerationException
      * @throws JsonMappingException
      * @throws IOException
@@ -99,11 +91,12 @@ public class ChannelController {
         newsService.updateViews(id);
         return response;
     }
-    
+
     /**
      * 查询栏目信息详情Oms 专用
      *
-     * @param id       栏目信息的ID
+     * @param id
+     *            栏目信息的ID
      * @throws JsonGenerationException
      * @throws JsonMappingException
      * @throws IOException
@@ -111,11 +104,11 @@ public class ChannelController {
     @RequestMapping(value = "/rest/oms/queryNewsDetailsById", method = RequestMethod.GET)
     public Response queryDetailsById(Long id) throws IOException {
         Response response = newsService.selectByPrimaryKey(id);
-        //newsService.updateViews(id);
+        // newsService.updateViews(id);
         return response;
     }
 
-    @RequestMapping(value = {"/rest/contractor/site/sel_news_by_channel","/rest/oms/queryNewsByChannelInfo"}, method = RequestMethod.GET)
+    @RequestMapping(value = { "/rest/contractor/site/sel_news_by_channel", "/rest/oms/queryNewsByChannelInfo" }, method = RequestMethod.GET)
     public Response queryNewsByChannelInfo(ChannelNews channelNews) throws IOException {
         Response response = new Response();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -130,7 +123,7 @@ public class ChannelController {
             map.put("count", 2);
         } else if (channelNews.getSort() == 3) {
             map.put("count", 4);
-        }else if (channelNews.getChannelid() == 11) {//技术频道新技术播报
+        } else if (channelNews.getChannelid() == 11) {// 技术频道新技术播报
             map.put("count", 5);
         }
         List<ChannelNews> newsList = newsService.queryNewsByChannelInfo(map);
@@ -146,7 +139,7 @@ public class ChannelController {
      * @throws JsonMappingException
      * @throws IOException
      */
-    @RequestMapping(value ={ "/rest/contractor/site/sel_personvisit","/rest/oms/queryPersonVisit"}, method = RequestMethod.GET)
+    @RequestMapping(value = { "/rest/contractor/site/sel_personvisit", "/rest/oms/queryPersonVisit" }, method = RequestMethod.GET)
     public Response queryPersonVisit(ChannelNews channelNews) throws IOException {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("channelid", channelNews.getChannelid());
@@ -159,7 +152,7 @@ public class ChannelController {
     }
 
     @RequestMapping(value = "/rest/oms/queryViewsByChannel", method = RequestMethod.GET)
-    @ApiOperation(value = "查询资讯点击率排行",notes = "查询资讯点击率排行",response = Response.class)
+    @ApiOperation(value = "查询资讯点击率排行", notes = "查询资讯点击率排行", response = Response.class)
     public Response queryViewsByChannel(ChannelNews channelNews) throws IOException {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("channelid", channelNews.getChannelid());
@@ -271,13 +264,13 @@ public class ChannelController {
 
         return result;
     }
-    
+
     @ApiOperation(value = "上传工程资料", notes = "上传工程资料", response = Response.class)
-    @RequestMapping(value = "/rest/oms/upload_project_data", method = RequestMethod.POST) 
+    @RequestMapping(value = "/rest/oms/upload_project_data", method = RequestMethod.POST)
     public Response uploadTechData(@RequestParam(value = "file", required = false) MultipartFile file) {
         Map<String, Object> map = new HashMap<>();
         try {
-          String url = zhbOssClient.uploadObject(file, "doc", "project/data");
+            String url = zhbOssClient.uploadObject(file, "doc", "project/data");
             map.put(Constants.attachUrl, url);
             map.put(Constants.attachName, file.getOriginalFilename());
             if (url.lastIndexOf(".") != -1) {
@@ -294,6 +287,5 @@ public class ChannelController {
 
         return new Response(map);
     }
-    
-    
+
 }
