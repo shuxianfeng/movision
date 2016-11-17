@@ -232,9 +232,9 @@ public class MobileJobController {
         }
     }
 
-    @ApiOperation(value = "触屏端-盟友中心-查看自己简历", notes = "触屏端-盟友中心-查看自己简历", response = Response.class)
-    @RequestMapping(value = "sel_my_resume", method = RequestMethod.POST)
-    public Response selMyResume(@ApiParam(value = "简历id") @RequestParam String id) throws Exception {
+    @ApiOperation(value = "触屏端-盟友中心-查看免费简历", notes = "触屏端-盟友中心-查看免费简历", response = Response.class)
+    @RequestMapping(value = "sel_free_resume", method = RequestMethod.POST)
+    public Response selFreeResume(@ApiParam(value = "简历id") @RequestParam String id) throws Exception {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
         if (createId != null) {
