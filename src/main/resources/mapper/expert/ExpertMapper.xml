@@ -402,7 +402,7 @@
         <if test="viewerId != null">
             and v.viewerId = #{viewerId}
         </if>
-        order by v.viewTime desc
+        GROUP by v.viewTime desc
     </select>
     <select id="findAllMyLookedMobileExpertList" resultType="java.util.Map">
         select e.id,e.name,e.company,e.position,

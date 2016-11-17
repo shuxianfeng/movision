@@ -90,12 +90,12 @@ public class MobileExpertService {
     /**
      * 专家技术成果
      *
-     * @param createId
      * @param pager
+     * @param createId
      * @return
      */
 
-    public List<Map<String, String>> findAllMyLookedAchievementList(Long createId,Paging<Map<String, String>> pager ) {
+    public List<Achievement> findAllMyLookedAchievementList(Paging<Map<String, String>> pager, Long createId ) {
 
         Map<String, Object> map = new HashMap<>();
         Member member = memberService.findMemById(String.valueOf(createId));
@@ -177,11 +177,18 @@ public class MobileExpertService {
     /**
      * 我的技术成果
      *
-     * @param map 查询条件
+     * @param createId 查询条件
      * @return 技术成果
      */
-    public List<Map<String, String>> findAllAchievementList(Paging<Map<String, String>> pager, Map<String, Object> map) {
-        return achievementMapper.findAllMyLookedAchievementList(pager.getRowBounds(), map);
+    public List<Map<String, String>> findAllAchievementList(Paging<Map<String, String>> pager, Long createId) {
+        Map<String, Object> map = new HashMap<>();
+        Member member = memberService.findMemById(String.valueOf(createId));
+        if ("100".equals(member.getWorkType())) {
+            map.put("companyId", createId);
+        } else {
+            map.put("viewerId", createId);
+        }
+        return achievementMapper.findAllMobileAchievementList(pager.getRowBounds(), map);
     }
 
 

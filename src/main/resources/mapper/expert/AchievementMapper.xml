@@ -294,7 +294,7 @@
     order by v.viewTime desc
   </select>
 
-  <select id="findAllAchievementList" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.expert.entity.Achievement">
+  <select id="findAllMobileAchievementList" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.expert.entity.Achievement">
     select a.id,date_format(a.publishTime,'%Y-%m-%d') publishTime,date_format(a.updateTime,'%Y-%m-%d') updateTime,
     a.title,a.systemType,a.useArea,a.companyName,a.linkMan,a.telephone,a.email,a.province,a.city,a.area,a.address,a.cooperationType,a.status,
     a.introduce,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,

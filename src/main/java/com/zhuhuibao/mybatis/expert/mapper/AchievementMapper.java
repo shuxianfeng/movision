@@ -27,5 +27,7 @@ public interface AchievementMapper {
 
     int deleteLookedAchievement(String id);
 
-    List<Map<String,String>> findAllMyLookedMobileAchievementList(RowBounds rowBounds, Map<String, Object> map);
+    List<Achievement> findAllMyLookedMobileAchievementList(RowBounds rowBounds, Map<String, Object> map);
+
+    List<Map<String,String>> findAllMobileAchievementList(RowBounds rowBounds, Map<String, Object> map);
 }

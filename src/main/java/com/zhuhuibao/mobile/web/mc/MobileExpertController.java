@@ -7,6 +7,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.PageNotFoundException;
+import com.zhuhuibao.mybatis.expert.entity.Achievement;
 import com.zhuhuibao.mybatis.expert.entity.Dynamic;
 import com.zhuhuibao.service.MobileExpertService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -77,12 +78,47 @@ public class MobileExpertController {
     }
 
 
+
     @ApiOperation(value = "触屏端-筑慧中心-专家详情和技术成果详情是否购买", notes = "触屏端-筑慧中心-专家详情和技术成果详情是否购买", response = Response.class)
     @RequestMapping(value = "sel_payment", method = RequestMethod.GET)
     public Response viewGoodsPayInfo(@ApiParam(value = "商品ID") @RequestParam String goodsID,
                                      @ApiParam(value = "商品类型同筑慧币") @RequestParam String type) throws Exception {
         return mobileExpertService.viewGoodsRecord(goodsID, type);
     }
+
+
+
+
+    @RequestMapping(value = "sel_my_looked_achievement_list", method = RequestMethod.GET)
+    @ApiOperation(value = "触屏端-筑慧中心-查询我查看过的专家技术成果", notes = "触屏端-筑慧中心-查询我查看过的专家技术成果", response = Response.class)
+    public Response selMyLookedAchievementList(@ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                               @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        try {
+            Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo),
+                    Integer.valueOf(pageSize));
+            Long createId = ShiroUtil.getCreateID();
+            List<Achievement> achievementList = mobileExpertService.findAllMyLookedAchievementList(pager, createId);
+            List list = new ArrayList();
+            for(Achievement achievement:achievementList){
+                Map m = new HashMap();
+                m.put("id",achievement.getId());
+                m.put("title",achievement.getTitle());
+                m.put("updateTime",achievement.getUpdateTime());
+                list.add(m);
+            }
+            pager.result(list);
+            response.setData(pager);
+        } catch (Exception e) {
+            log.error("sel_my_looked_expert_list error! ", e);
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
+                    .valueOf(MsgCodeConstant.un_login)));
+
+        }
+        return response;
+    }
+
+
 
 
     @RequestMapping(value = "del_batch_my_looked_achievement", method = RequestMethod.POST)
@@ -164,7 +200,7 @@ public class MobileExpertController {
         try {
             Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
             Long createId = ShiroUtil.getCreateID();
-            List<Map<String, String>> achievementList = mobileExpertService.findAllMyLookedAchievementList(createId, pager);
+            List<Map<String, String>> achievementList = mobileExpertService.findAllAchievementList( pager,createId);
             pager.result(achievementList);
             response.setData(pager);
         } catch (Exception e) {
