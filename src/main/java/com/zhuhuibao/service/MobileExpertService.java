@@ -51,7 +51,7 @@ public class MobileExpertService {
      * @param createId
      * @return 专家信息
      */
-    public List<Map<String, String>> findAllMyLookedMobileExpertList(Paging<Map<String, String>> pager, Long createId) {
+    public List findAllMyLookedMobileExpertList(Paging<Map<String, String>> pager, Long createId) {
 
         Map<String, Object> map = new HashMap<>();
         Member member = memberService.findMemById(String.valueOf(createId));
@@ -60,7 +60,7 @@ public class MobileExpertService {
         } else {
             map.put("viewerId", createId);
         }
-        return expertMapper.findAllMyLookedMobileExpertList(pager.getRowBounds(), map);
+       return expertMapper.findAllMyLookedMobileExpertListById(pager.getRowBounds(), map);
     }
 
     /***
@@ -85,7 +85,7 @@ public class MobileExpertService {
      * @return
      */
 
-    public List<Achievement> findAllMyLookedAchievementList(Paging<Map<String, String>> pager, Long createId) {
+    public List<Map<String,String>> findAllMyLookedAchievementList(Paging<Map<String, String>> pager, Long createId) {
         Map<String, Object> map = new HashMap<>();
         Member member = memberService.findMemById(String.valueOf(createId));
         if ("100".equals(member.getWorkType())) {
@@ -162,7 +162,7 @@ public class MobileExpertService {
      * @param createId 查询条件
      * @return 技术成果
      */
-    public List<Map<String, String>> findAllAchievementList(Paging<Map<String, String>> pager, Long createId) {
+    public List<Map<String,String>> findAllAchievementList(Paging<Map<String, String>> pager, Long createId) {
         Map<String, Object> map = new HashMap<>();
         Member member = memberService.findMemById(String.valueOf(createId));
         if ("100".equals(member.getWorkType())) {
@@ -179,14 +179,14 @@ public class MobileExpertService {
      *
      * @param ids 成果的Id
      */
-    public int updateAchievement(String ids) {
+    public void updateAchievement(String ids) {
         Achievement achievement = new Achievement();
         String[] idList = ids.split(",");
         for (String id : idList) {
             achievement.setIs_deleted(ExpertConstant.EXPERT_DELETE_ONE);
             achievement.setId(id);
+            expertService.updateAchievement(achievement);
         }
-        return expertService.updateAchievement(achievement);
     }
 
     /**

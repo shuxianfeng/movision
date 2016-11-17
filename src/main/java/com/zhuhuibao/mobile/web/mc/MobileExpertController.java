@@ -7,7 +7,6 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.PageNotFoundException;
-import com.zhuhuibao.mybatis.expert.entity.Achievement;
 import com.zhuhuibao.mybatis.expert.entity.Dynamic;
 import com.zhuhuibao.service.MobileExpertService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -44,20 +43,23 @@ public class MobileExpertController {
     @RequestMapping(value = "sel_my_looked_mobile_expert_list", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-筑慧中心-我查看过的专家列表", notes = "触屏端-筑慧中心-我查看过的专家列表", response = Response.class)
     public Response selMyLookedMobileExpertList(@ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
-
                                                 @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         try {
             Long createId = ShiroUtil.getCreateID();
-            Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo),
-                    Integer.valueOf(pageSize));
-            List<Map<String, String>> expertList = mobileExpertService.findAllMyLookedMobileExpertList(pager, createId);
-            pager.result(expertList);
-            response.setData(pager);
+            if (createId != null) {
+                Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo),
+                        Integer.valueOf(pageSize));
+                List<Map<String, String>> expertList = mobileExpertService.findAllMyLookedMobileExpertList(pager, createId);
+                pager.result(expertList);
+                response.setData(pager);
+            } else {
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
+                        .valueOf(MsgCodeConstant.un_login)));
+            }
         } catch (Exception e) {
             log.error("sel_my_looked_expert_list error! ", e);
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
-                    .valueOf(MsgCodeConstant.un_login)));
+
         }
         return response;
     }
@@ -68,11 +70,15 @@ public class MobileExpertController {
     public Response delBatchMyLookedExpert(@ApiParam(value = "要删除专家的id") @RequestParam() String ids) {
         Response response = new Response();
         try {
-            mobileExpertService.deleteLookedExpert(ids);
+            Long createId = ShiroUtil.getCreateID();
+            if (createId != null) {
+                mobileExpertService.deleteLookedExpert(ids);
+            } else {
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
+                        .valueOf(MsgCodeConstant.un_login)));
+            }
         } catch (Exception e) {
             log.error("del_batch_my_looked_expert error! ", e);
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
-                    .valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -82,7 +88,13 @@ public class MobileExpertController {
     @RequestMapping(value = "sel_payment", method = RequestMethod.GET)
     public Response viewGoodsPayInfo(@ApiParam(value = "商品ID") @RequestParam String goodsID,
                                      @ApiParam(value = "商品类型同筑慧币") @RequestParam String type) throws Exception {
-        return mobileExpertService.viewGoodsRecord(goodsID, type);
+        Long createId = ShiroUtil.getCreateID();
+        if (createId != null) {
+            return mobileExpertService.viewGoodsRecord(goodsID, type);
+        } else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
+                    .valueOf(MsgCodeConstant.un_login)));
+        }
     }
 
 
@@ -92,25 +104,19 @@ public class MobileExpertController {
                                                @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         try {
-            Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo),
-                    Integer.valueOf(pageSize));
             Long createId = ShiroUtil.getCreateID();
-            List<Achievement> achievementList = mobileExpertService.findAllMyLookedAchievementList(pager, createId);
-            List list = new ArrayList();
-            for (Achievement achievement : achievementList) {
-                Map m = new HashMap();
-                m.put("id", achievement.getId());
-                m.put("title", achievement.getTitle());
-                m.put("updateTime", achievement.getUpdateTime());
-                list.add(m);
+            if (createId != null) {
+                Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo),
+                        Integer.valueOf(pageSize));
+                List<Map<String, String>> achievementList = mobileExpertService.findAllMyLookedAchievementList(pager, createId);
+                pager.result(achievementList);
+                response.setData(pager);
+            } else {
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
+                        .valueOf(MsgCodeConstant.un_login)));
             }
-            pager.result(list);
-            response.setData(pager);
         } catch (Exception e) {
             log.error("sel_my_looked_expert_list error! ", e);
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
-                    .valueOf(MsgCodeConstant.un_login)));
-
         }
         return response;
     }
@@ -120,7 +126,13 @@ public class MobileExpertController {
     @ApiOperation(value = "触屏端-筑慧中心-批量删除我查看过的专家技术成果", notes = "触屏端-筑慧中心-批量删除我查看过的专家技术成果", response = Response.class)
     public Response delBatchMyLookedAchievement(@RequestParam() String ids) {
         Response response = new Response();
-        mobileExpertService.deleteLookedAchievement(ids);
+        Long createId = ShiroUtil.getCreateID();
+        if (createId != null) {
+            mobileExpertService.deleteLookedAchievement(ids);
+        } else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
+                    .valueOf(MsgCodeConstant.un_login)));
+        }
         return response;
     }
 
@@ -133,27 +145,29 @@ public class MobileExpertController {
         Response response = new Response();
         try {
             Long createId = ShiroUtil.getCreateID();
-            Paging<Dynamic> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-            List<Dynamic> dynamicList = mobileExpertService.findAllDynamicList(pager, status, createId);
-            List list = new ArrayList();
-            for (Dynamic Dynamic : dynamicList) {
-                Map m = new HashMap();
-                m.put("id", Dynamic.getId());
-                m.put("title", Dynamic.getTitle());
-                m.put("updateTime", Dynamic.getUpdateTime());
-                m.put("status", Dynamic.getStatus());
-                list.add(m);
+            if (createId != null) {
+                Paging<Dynamic> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+                List<Dynamic> dynamicList = mobileExpertService.findAllDynamicList(pager, status, createId);
+                List list = new ArrayList();
+                for (Dynamic Dynamic : dynamicList) {
+                    Map m = new HashMap();
+                    m.put("id", Dynamic.getId());
+                    m.put("title", Dynamic.getTitle());
+                    m.put("updateTime", Dynamic.getUpdateTime());
+                    m.put("status", Dynamic.getStatus());
+                    list.add(m);
+                }
+                pager.result(list);
+                response.setData(pager);
+            } else {
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
+                        .valueOf(MsgCodeConstant.un_login)));
             }
-            pager.result(list);
-            response.setData(pager);
 
         } catch (Exception e) {
             log.error("sel_my_dynamic_list error! ", e);
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
-
         return response;
-
     }
 
 
@@ -163,10 +177,15 @@ public class MobileExpertController {
 
         Response response = new Response();
         try {
-            mobileExpertService.updateDynamic(ids);
+            Long createId = ShiroUtil.getCreateID();
+            if (createId != null) {
+                mobileExpertService.updateDynamic(ids);
+            } else {
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
+                        .valueOf(MsgCodeConstant.un_login)));
+            }
         } catch (Exception e) {
             log.error("del_dynamic error! ", e);
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -177,11 +196,16 @@ public class MobileExpertController {
     public Response queryDynamicById(@ApiParam(value = "协会动态Id") @RequestParam String id) throws Exception {
         Response response = new Response();
         try {
-            Dynamic dynamic = mobileExpertService.queryDynamicById(id);
-            response.setData(dynamic);
+            Long createId = ShiroUtil.getCreateID();
+            if (createId != null) {
+                Dynamic dynamic = mobileExpertService.queryDynamicById(id);
+                response.setData(dynamic);
+            } else {
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
+                        .valueOf(MsgCodeConstant.un_login)));
+            }
         } catch (Exception e) {
             log.error("sel_dynamic error! ", e);
-            throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
         }
         return response;
     }
@@ -193,14 +217,18 @@ public class MobileExpertController {
                                                   @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         try {
-            Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
             Long createId = ShiroUtil.getCreateID();
-            List<Map<String, String>> achievementList = mobileExpertService.findAllAchievementList(pager, createId);
-            pager.result(achievementList);
-            response.setData(pager);
+            if (createId != null) {
+                Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+                List<Map<String, String>> achievementList = mobileExpertService.findAllAchievementList(pager, createId);
+                pager.result(achievementList);
+                response.setData(pager);
+            } else {
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
+                        .valueOf(MsgCodeConstant.un_login)));
+            }
         } catch (Exception e) {
             log.error("sel_my_achievement_list error! ", e);
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -211,10 +239,15 @@ public class MobileExpertController {
     public Response deleteAchievement(@ApiParam(value = "技术成果ids,逗号隔开") @RequestParam String ids) {
         Response response = new Response();
         try {
-            mobileExpertService.updateAchievement(ids);
+            Long createId = ShiroUtil.getCreateID();
+            if (createId != null) {
+                mobileExpertService.updateAchievement(ids);
+            } else {
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
+                        .valueOf(MsgCodeConstant.un_login)));
+            }
         } catch (Exception e) {
             log.error("del_achievement error! ", e);
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
@@ -224,15 +257,20 @@ public class MobileExpertController {
     public Response queryAchievementById(@ApiParam(value = "技术成果ID") @RequestParam String id) throws Exception {
         Response response = new Response();
         try {
-            Map<String, String> map = mobileExpertService.queryAchievementById(id);
-            if (map != null) {
-                response.setData(map);
+            Long createId = ShiroUtil.getCreateID();
+            if (createId != null) {
+                Map<String, String> map = mobileExpertService.queryAchievementById(id);
+                if (map != null) {
+                    response.setData(map);
+                } else {
+                    throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
+                }
             } else {
-                throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String
+                        .valueOf(MsgCodeConstant.un_login)));
             }
         } catch (Exception e) {
             log.error("sel_achievement error! ", e);
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
     }
