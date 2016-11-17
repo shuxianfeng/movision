@@ -211,8 +211,8 @@ public class SystemController {
             CheckBrand checkBrand = checkBrandService.queryBrandById(String.valueOf(brand.getId()));
             Brand newBrand = new Brand();
             newBrand.setId(checkBrand.getId());
-            newBrand.setCNName(checkBrand.getCnname());
-            newBrand.setENName(checkBrand.getEnname());
+            newBrand.setCNName(brand.getCnname());
+            newBrand.setENName(brand.getEnname());
             newBrand.setLogourl(checkBrand.getLogourl());
             newBrand.setCreateid(checkBrand.getCreateid());
             newBrand.setDescription(checkBrand.getDescription());
