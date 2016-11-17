@@ -164,7 +164,7 @@ public class SystemController {
         }
         Map<String, Object> map = new HashMap<>();
         map.put("status", status);
-        if (!CNName.equals("undefined")) {
+        if (null != CNName && !CNName.equals("undefined")) {
             map.put("CNName", URLDecoder.decode(CNName, "utf-8"));
         }
         Paging<CheckBrand> pager = new Paging<CheckBrand>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
