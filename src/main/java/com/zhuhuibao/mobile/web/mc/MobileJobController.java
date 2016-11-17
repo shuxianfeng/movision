@@ -186,7 +186,7 @@ public class MobileJobController {
     }
 
     @ApiOperation(value = "触屏端-盟友中心-查询我的简历", notes = "触屏端-盟友中心-查询我的简历", response = Response.class)
-    @RequestMapping(value = "sel_my_resume", method = RequestMethod.POST)
+    @RequestMapping(value = "sel_my_resume", method = RequestMethod.GET)
     public Response selMyResume() throws IOException {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
