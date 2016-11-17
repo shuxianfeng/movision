@@ -44,11 +44,11 @@ public class MobileExpertController {
     @RequestMapping(value = "sel_my_looked_mobile_expert_list", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-筑慧中心-我查看过的专家列表", notes = "触屏端-筑慧中心-我查看过的专家列表", response = Response.class)
     public Response selMyLookedMobileExpertList(@ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                                @ApiParam(value = "页码") @RequestParam(required = true) Long createId,
+
                                                 @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         try {
-            //Long createId = ShiroUtil.getCreateID();
+            Long createId = ShiroUtil.getCreateID();
             Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo),
                     Integer.valueOf(pageSize));
             List<Map<String, String>> expertList = mobileExpertService.findAllMyLookedMobileExpertList(pager, createId);
