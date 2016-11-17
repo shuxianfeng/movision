@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -181,6 +183,32 @@ public class MobileJobController {
     public Response batchDelDownloadResume(@ApiParam(value = "ids,逗号隔开") @RequestParam String ids) {
         mobileResumeService.batchDelDownloadResume(ids);
         return new Response();
+    }
+
+    @ApiOperation(value = "触屏端-盟友中心-查询我的简历", notes = "触屏端-盟友中心-查询我的简历", response = Response.class)
+    @RequestMapping(value = "sel_my_resume", method = RequestMethod.GET)
+    public Response selMyResume() throws IOException {
+        Response response = new Response();
+        Long createId = ShiroUtil.getCreateID();
+        Map result = new HashMap();
+        if (createId != null) {
+            // 判断用户是否存在简历
+            List<String> ids = mobileResumeService.selectIdsByCreateId(createId);
+            if (ids != null && ids.size() >= 1) {
+                result.put("hasResume", true);
+                List<Resume> resumeList = new ArrayList<>();
+                for (String id : ids) {
+                    resumeList.add(mobileResumeService.previewResume(id));
+                }
+                result.put("resumeList", resumeList);
+            } else {
+                result.put("hasResume", false);
+            }
+            response.setData(result);
+        } else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return response;
     }
 
     @ApiOperation(value = "触屏端-盟友中心-创建简历", notes = "触屏端-盟友中心-创建简历", response = Response.class)
