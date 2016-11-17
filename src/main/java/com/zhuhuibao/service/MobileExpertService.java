@@ -1,6 +1,5 @@
 package com.zhuhuibao.service;
 
-import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.mybatis.expert.entity.Achievement;
 import com.zhuhuibao.mybatis.expert.entity.Dynamic;
@@ -52,7 +51,6 @@ public class MobileExpertService {
      * @return 专家信息
      */
     public List findAllMyLookedMobileExpertList(Paging<Map<String, String>> pager, Long createId) {
-
         Map<String, Object> map = new HashMap<>();
         Member member = memberService.findMemById(String.valueOf(createId));
         if ("100".equals(member.getWorkType())) {
@@ -60,22 +58,22 @@ public class MobileExpertService {
         } else {
             map.put("viewerId", createId);
         }
-       return expertMapper.findAllMyLookedMobileExpertListById(pager.getRowBounds(), map);
+        return expertMapper.findAllMyLookedMobileExpertListById(pager.getRowBounds(), map);
     }
 
     /***
      * 删除专家信息
      *
-     * @param ids 专家信息
+     * @param ids
+     *            专家信息
      * @return 删除记录
      */
     public void deleteLookedExpert(String ids) {
-        String idlist[] = ids.split(",");
-        for (String id : idlist) {
+        String idList[] = ids.split(",");
+        for (String id : idList) {
             expertService.deleteLookedExpert(id);
         }
     }
-
 
     /**
      * 专家技术成果
@@ -85,7 +83,7 @@ public class MobileExpertService {
      * @return
      */
 
-    public List<Map<String,String>> findAllMyLookedAchievementList(Paging<Map<String, String>> pager, Long createId) {
+    public List<Map<String, String>> findAllMyLookedAchievementList(Paging<Map<String, String>> pager, Long createId) {
         Map<String, Object> map = new HashMap<>();
         Member member = memberService.findMemById(String.valueOf(createId));
         if ("100".equals(member.getWorkType())) {
@@ -96,20 +94,19 @@ public class MobileExpertService {
         return achievementMapper.findAllMyLookedMobileAchievementList(pager.getRowBounds(), map);
     }
 
-
     /**
      * 删除查看专家成果
      *
-     * @param ids 专家成果Id
+     * @param ids
+     *            专家成果Id
      * @return 删除条数
      */
     public void deleteLookedAchievement(String ids) {
-        String idlist[] = ids.split(",");
-        for (String id : idlist) {
+        String idList[] = ids.split(",");
+        for (String id : idList) {
             expertService.deleteLookedAchievement(id);
         }
     }
-
 
     /***
      * 协会列表
@@ -119,22 +116,19 @@ public class MobileExpertService {
      * @return 协会详情
      */
     public List<Dynamic> findAllDynamicList(Paging<Dynamic> pager, String status, Long createId) {
-
         Map<String, Object> map = new HashMap<>();
-        //查询传参
         map.put("status", status);
         map.put("createId", String.valueOf(createId));
         return expertService.findAllDynamicList(pager, map);
     }
 
-
     /**
      * 删除协会动态
      *
-     * @param ids 协会ID
-     * @return 协会条数
+     * @param ids
+     *            协会ID
+     * @return
      */
-
     public void updateDynamic(String ids) {
         String[] idList = ids.split(",");
         for (String id : idList) {
@@ -155,14 +149,14 @@ public class MobileExpertService {
         return expertService.queryDynamicById(id);
     }
 
-
     /**
      * 我的技术成果
      *
-     * @param createId 查询条件
+     * @param createId
+     *            查询条件
      * @return 技术成果
      */
-    public List<Map<String,String>> findAllAchievementList(Paging<Map<String, String>> pager, Long createId) {
+    public List<Map<String, String>> findAllAchievementList(Paging<Map<String, String>> pager, Long createId) {
         Map<String, Object> map = new HashMap<>();
         Member member = memberService.findMemById(String.valueOf(createId));
         if ("100".equals(member.getWorkType())) {
@@ -173,11 +167,11 @@ public class MobileExpertService {
         return achievementMapper.findAllMobileAchievementList(pager.getRowBounds(), map);
     }
 
-
     /***
      * 删除技术成果
      *
-     * @param ids 成果的Id
+     * @param ids
+     *            成果的Id
      */
     public void updateAchievement(String ids) {
         Achievement achievement = new Achievement();
@@ -192,7 +186,8 @@ public class MobileExpertService {
     /**
      * 技术成果详情
      *
-     * @param id 技术成果id
+     * @param id
+     *            技术成果id
      * @return 成果详情
      */
     public Map<String, String> queryAchievementById(String id) {
@@ -202,11 +197,13 @@ public class MobileExpertService {
     /**
      * 专家信息详情,技术成果信息
      *
-     * @param goodsID 商品的Id
-     * @param type    筑慧币
+     * @param goodsID
+     *            商品的Id
+     * @param type
+     *            筑慧币
      * @return
      */
-    public Response viewGoodsRecord(String goodsID, String type) throws Exception {
-        return paymentService.viewGoodsRecord(Long.parseLong(goodsID), type);
+    public Map<String, Object> viewGoodsRecord(String goodsID, String type) throws Exception {
+        return paymentService.getChargeGoodsRecord(Long.parseLong(goodsID), type);
     }
 }

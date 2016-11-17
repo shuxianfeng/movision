@@ -1,6 +1,7 @@
 package com.zhuhuibao.service;
 
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
@@ -67,8 +68,12 @@ public class MobileJobService {
      *            职位id
      * @return
      */
-    public Job getPositionByPositionId(String id) {
-        return jobService.getPositionByPositionId(id);
+    public Map getPositionByPositionId(String id) {
+        Map map = new HashMap();
+        Long createId = ShiroUtil.getCreateID();
+        map.put("createid", String.valueOf(createId));
+        map.put("id", id);
+        return jobService.queryPositionInfoByID(map);
     }
 
     /**

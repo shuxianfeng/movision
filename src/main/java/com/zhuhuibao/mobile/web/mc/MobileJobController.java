@@ -87,7 +87,7 @@ public class MobileJobController {
 
     @ApiOperation(value = "触屏端-盟友中心-职位详情页", notes = "触屏端-盟友中心-职位详情页", response = Response.class)
     @RequestMapping(value = "sel_position", method = RequestMethod.GET)
-    public Response selPosition(@ApiParam(value = "职位id") String id) {
+    public Response selPosition(@ApiParam(value = "职位id") @RequestParam String id) {
         Response response = new Response();
         response.setData(mobileJobService.getPositionByPositionId(id));
         return response;
@@ -233,7 +233,7 @@ public class MobileJobController {
     }
 
     @ApiOperation(value = "触屏端-盟友中心-查看免费简历", notes = "触屏端-盟友中心-查看免费简历", response = Response.class)
-    @RequestMapping(value = "sel_free_resume", method = RequestMethod.POST)
+    @RequestMapping(value = "sel_free_resume", method = RequestMethod.GET)
     public Response selFreeResume(@ApiParam(value = "简历id") @RequestParam String id) throws Exception {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
