@@ -32,8 +32,8 @@ import java.util.Map;
  * @date 2016年11月16日
  */
 @RestController
-@RequestMapping("/rest/m/job/mc")
-@Api(value = "MobileJobController", description = "触屏端-筑慧中心-求职招聘")
+@RequestMapping("/rest/m/job/mc/")
+@Api(value = "MobileJobController", description = "触屏端-盟友中心-求职招聘")
 public class MobileJobController {
 
     private static final Logger log = LoggerFactory.getLogger(MobileJobController.class);
@@ -53,7 +53,7 @@ public class MobileJobController {
     @Autowired
     private MobileMemberService mobileMemberService;
 
-    @ApiOperation(value = "触屏端-筑慧中心-我发布的招聘列表页", notes = "触屏端-筑慧中心-我发布的招聘列表页")
+    @ApiOperation(value = "触屏端-盟友中心-我发布的招聘列表页", notes = "触屏端-盟友中心-我发布的招聘列表页")
     @RequestMapping(value = "sel_position_list", method = RequestMethod.GET)
     public Response selPositionList(@RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
@@ -73,9 +73,9 @@ public class MobileJobController {
         return response;
     }
 
-    @ApiOperation(value = "触屏端-筑慧中心-刷新已发布的职位", notes = "触屏端-筑慧中心-刷新已发布的职位", response = Response.class)
+    @ApiOperation(value = "触屏端-盟友中心-刷新已发布的职位", notes = "触屏端-盟友中心-刷新已发布的职位", response = Response.class)
     @RequestMapping(value = "refresh_position", method = RequestMethod.POST)
-    public Response refreshPosition(@RequestParam String ids) throws IOException {
+    public Response refreshPosition(@ApiParam(value = "要刷新职位的id,两个id之间用逗号隔开") @RequestParam String ids) throws IOException {
         try {
             mobileJobService.refreshPosition(ids);
         } catch (Exception e) {
@@ -85,15 +85,15 @@ public class MobileJobController {
         return new Response();
     }
 
-    @ApiOperation(value = "触屏端-筑慧中心-职位详情页", notes = "触屏端-筑慧中心-职位详情页", response = Response.class)
+    @ApiOperation(value = "触屏端-盟友中心-职位详情页", notes = "触屏端-盟友中心-职位详情页", response = Response.class)
     @RequestMapping(value = "sel_position", method = RequestMethod.GET)
-    public Response selPosition(String id) {
+    public Response selPosition(@ApiParam(value = "职位id") String id) {
         Response response = new Response();
         response.setData(mobileJobService.getPositionByPositionId(id));
         return response;
     }
 
-    @ApiOperation(value = "触屏端-筑慧中心-我收到的简历列表", notes = "触屏端-筑慧中心-我收到的简历", response = Response.class)
+    @ApiOperation(value = "触屏端-盟友中心-我收到的简历列表", notes = "触屏端-盟友中心-我收到的简历", response = Response.class)
     @RequestMapping(value = "sel_receive_resume_list", method = RequestMethod.GET)
     public Response selReceiveResumeList(@RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
@@ -108,7 +108,7 @@ public class MobileJobController {
         return response;
     }
 
-    @ApiOperation(value = "触屏端-筑慧中心-我收到的简历详情", notes = "触屏端-筑慧中心-我收到的简历详情", response = Response.class)
+    @ApiOperation(value = "触屏端-盟友中心-我收到的简历详情", notes = "触屏端-盟友中心-我收到的简历详情", response = Response.class)
     @RequestMapping(value = "sel_resume", method = RequestMethod.GET)
     public Response selResume(@ApiParam(value = "简历id") @RequestParam String id, @ApiParam(value = "该投递简历记录的id,频道页不传，会员中心查看简历记录时候传") @RequestParam(required = false) String recordId) throws Exception {
         Long memberId = ShiroUtil.getCreateID();
@@ -138,7 +138,7 @@ public class MobileJobController {
         return response;
     }
 
-    @ApiOperation(value = "触屏端-筑慧中心-我收藏的简历", notes = "触屏端-筑慧中心-我收藏的简历", response = Response.class)
+    @ApiOperation(value = "触屏端-盟友中心-我收藏的简历", notes = "触屏端-盟友中心-我收藏的简历", response = Response.class)
     @RequestMapping(value = "sel_collect_resume_list", method = RequestMethod.GET)
     public Response selCollectResumeList(@RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
         Response response = new Response();
@@ -153,7 +153,7 @@ public class MobileJobController {
         return response;
     }
 
-    @ApiOperation(value = "触屏端-筑慧中心-批量删除收藏的简历", notes = "触屏端-筑慧中心-批量删除收藏的简历", response = Response.class)
+    @ApiOperation(value = "触屏端-盟友中心-批量删除收藏的简历", notes = "触屏端-盟友中心-批量删除收藏的简历", response = Response.class)
     @RequestMapping(value = "batch_del_collect_resume", method = RequestMethod.POST)
     public Response batchDelCollectResume(@ApiParam(value = "ids,逗号隔开") @RequestParam String ids) {
         Response response = new Response();
@@ -161,7 +161,7 @@ public class MobileJobController {
         return response;
     }
 
-    @ApiOperation(value = "触屏端-筑慧中心-我下载的简历", notes = "触屏端-筑慧中心-我下载的简历", response = Response.class)
+    @ApiOperation(value = "触屏端-盟友中心-我下载的简历", notes = "触屏端-盟友中心-我下载的简历", response = Response.class)
     @RequestMapping(value = "sel_download_resume", method = RequestMethod.GET)
     public Response sel_download_resume(@RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
@@ -176,14 +176,14 @@ public class MobileJobController {
         return response;
     }
 
-    @ApiOperation(value = "触屏端-筑慧中心-批量删除下载的简历", notes = "触屏端-筑慧中心-批量删除下载的简历", response = Response.class)
+    @ApiOperation(value = "触屏端-盟友中心-批量删除下载的简历", notes = "触屏端-盟友中心-批量删除下载的简历", response = Response.class)
     @RequestMapping(value = "batch_del_download_resume", method = RequestMethod.POST)
     public Response batchDelDownloadResume(@ApiParam(value = "ids,逗号隔开") @RequestParam String ids) {
         mobileResumeService.batchDelDownloadResume(ids);
         return new Response();
     }
 
-    @ApiOperation(value = "触屏端-筑慧中心-创建简历", notes = "触屏端-筑慧中心-创建简历", response = Response.class)
+    @ApiOperation(value = "触屏端-盟友中心-创建简历", notes = "触屏端-盟友中心-创建简历", response = Response.class)
     @RequestMapping(value = "add_resume", method = RequestMethod.POST)
     public Response setUpResume(@ModelAttribute Resume resume) throws IOException {
         Response response = new Response();
@@ -218,7 +218,7 @@ public class MobileJobController {
         return response;
     }
 
-    @ApiOperation(value = "触屏端-筑慧中心-更新简历", notes = "触屏端-筑慧中心-更新简历", response = Response.class)
+    @ApiOperation(value = "触屏端-盟友中心-更新简历", notes = "触屏端-盟友中心-更新简历", response = Response.class)
     @RequestMapping(value = "upd_resume", method = RequestMethod.POST)
     public Response updateResume(@ModelAttribute Resume resume) throws IOException {
         Response response = new Response();
@@ -232,9 +232,23 @@ public class MobileJobController {
         }
     }
 
-    @ApiOperation(value = "触屏端-筑慧中心-我申请的职位", notes = "触屏端-筑慧中心-我申请的职位", response = Response.class)
-    @RequestMapping(value = "sel_my_position", method = RequestMethod.GET)
-    public Response myApplyPosition(@RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
+    @ApiOperation(value = "触屏端-盟友中心-查看免费简历", notes = "触屏端-盟友中心-查看免费简历", response = Response.class)
+    @RequestMapping(value = "sel_free_resume", method = RequestMethod.POST)
+    public Response selFreeResume(@ApiParam(value = "简历id") @RequestParam String id) throws Exception {
+        Response response = new Response();
+        Long createId = ShiroUtil.getCreateID();
+        if (createId != null) {
+            Resume resume = mobileResumeService.previewResume(id);
+            response.setData(resume);
+            return response;
+        } else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+    }
+
+    @ApiOperation(value = "触屏端-盟友中心-我申请的职位", notes = "触屏端-盟友中心-我申请的职位", response = Response.class)
+    @RequestMapping(value = "sel_my_position_list", method = RequestMethod.GET)
+    public Response myApplyPositionList(@RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
         if (createId != null) {
@@ -247,7 +261,7 @@ public class MobileJobController {
         return response;
     }
 
-    @ApiOperation(value = "触屏端-筑慧中心-查询屏蔽企业列表", notes = "触屏端-筑慧中心-查询屏蔽企业列表")
+    @ApiOperation(value = "触屏端-盟友中心-查询屏蔽企业列表", notes = "触屏端-盟友中心-查询屏蔽企业列表")
     @RequestMapping(value = "sel_forbid_keywords_list", method = RequestMethod.GET)
     public Response selForbidKeyWordsList() {
         Response response = new Response();
@@ -261,7 +275,7 @@ public class MobileJobController {
         return response;
     }
 
-    @ApiOperation(value = "触屏端-筑慧中心-根据关键字获取企业", notes = "触屏端-筑慧中心-根据关键字获取企业")
+    @ApiOperation(value = "触屏端-盟友中心-根据关键字获取企业", notes = "触屏端-盟友中心-根据关键字获取企业")
     @RequestMapping(value = "sel_company_by_keywords_list", method = RequestMethod.GET)
     public Response selCompanyByKeywordsList(@RequestParam(required = false) String keywords) {
         Response response = new Response();
@@ -270,9 +284,9 @@ public class MobileJobController {
         return response;
     }
 
-    @ApiOperation(value = "触屏端-筑慧中心-删除屏蔽企业", notes = "触屏端-筑慧中心-删除屏蔽企业")
+    @ApiOperation(value = "触屏端-盟友中心-删除屏蔽企业", notes = "触屏端-盟友中心-删除屏蔽企业")
     @RequestMapping(value = "del_forbid_keywords", method = RequestMethod.POST)
-    public Response delForbidKeyWords(@RequestParam String id) {
+    public Response delForbidKeyWords(@ApiParam(value = "公司id") @RequestParam String id) {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
         if (createId != null) {
@@ -283,7 +297,7 @@ public class MobileJobController {
         return response;
     }
 
-    @ApiOperation(value = "触屏端-筑慧中心-增加屏蔽企业", notes = "触屏端-筑慧中心-增加屏蔽企业")
+    @ApiOperation(value = "触屏端-盟友中心-增加屏蔽企业", notes = "触屏端-盟友中心-增加屏蔽企业")
     @RequestMapping(value = "add_forbid_keywords", method = RequestMethod.POST)
     public Response addForbidKeyWords(@ApiParam(value = "公司id") @RequestParam(required = false) String companyId) {
         Response response = new Response();
