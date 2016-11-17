@@ -200,6 +200,7 @@ public class MobileJobController {
                 for (String id : ids) {
                     resumeList.add(mobileResumeService.previewResume(id));
                 }
+                result.put("resumeList", resumeList);
             } else {
                 result.put("hasResume", false);
             }
