@@ -42,7 +42,7 @@ public class MobileExpertController {
     @RequestMapping(value = "sel_my_looked_mobile_expert_list", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-筑慧中心-我查看过的专家列表", notes = "触屏端-筑慧中心-我查看过的专家列表", response = Response.class)
     public Response selMyLookedMobileExpertList(@ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
-            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                                                @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         try {
             Long createId = ShiroUtil.getCreateID();
@@ -79,7 +79,8 @@ public class MobileExpertController {
 
     @ApiOperation(value = "触屏端-筑慧中心-专家详情和技术成果详情是否购买", notes = "触屏端-筑慧中心-专家详情和技术成果详情是否购买", response = Response.class)
     @RequestMapping(value = "sel_payment", method = RequestMethod.GET)
-    public Response viewGoodsPayInfo(@ApiParam(value = "商品ID") @RequestParam String goodsID, @ApiParam(value = "商品类型同筑慧币") @RequestParam String type) throws Exception {
+    public Response viewGoodsPayInfo(@ApiParam(value = "商品ID") @RequestParam String goodsID,
+                                     @ApiParam(value = "商品类型同筑慧币") @RequestParam String type) throws Exception {
         Response response = new Response();
         Long createId = ShiroUtil.getCreateID();
         if (createId != null) {
@@ -93,7 +94,7 @@ public class MobileExpertController {
     @RequestMapping(value = "sel_my_looked_achievement_list", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-筑慧中心-查询我查看过的专家技术成果", notes = "触屏端-筑慧中心-查询我查看过的专家技术成果", response = Response.class)
     public Response selMyLookedAchievementList(@ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
-            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                                               @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         try {
             Long createId = ShiroUtil.getCreateID();
@@ -126,8 +127,9 @@ public class MobileExpertController {
 
     @ApiOperation(value = "触屏端-筑慧中心-我的协会动态", notes = "触屏端-筑慧中心-我的协会动态", response = Response.class)
     @RequestMapping(value = "sel_my_dynamic_list", method = RequestMethod.GET)
-    public Response myDynamicList(@ApiParam(value = "状态") @RequestParam(required = false) String status, @RequestParam(required = false, defaultValue = "1") String pageNo,
-            @RequestParam(required = false, defaultValue = "10") String pageSize) {
+    public Response myDynamicList(@ApiParam(value = "状态") @RequestParam(required = false) String status,
+                                  @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                  @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         try {
             Long createId = ShiroUtil.getCreateID();
@@ -138,7 +140,7 @@ public class MobileExpertController {
                 for (Dynamic dynamic : dynamicList) {
                     Map map = new HashMap();
                     map.put("id", dynamic.getId());
-                    map.put("title", dynamic.getTitle());
+                    map.put("title", "");
                     map.put("updateTime", dynamic.getUpdateTime());
                     map.put("status", dynamic.getStatus());
                     list.add(map);
@@ -189,14 +191,16 @@ public class MobileExpertController {
 
     @RequestMapping(value = "sel_my_achievement_list", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-筑慧中心-我的技术成果", notes = "触屏端-筑慧中心-我的技术成果", response = Response.class)
-    public Response selMyAchievementList(@ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
-            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+    public Response selMyAchievementList(@ApiParam(value = "状态") @RequestParam(required = false) String status,
+                                         @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                         @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         try {
             Long createId = ShiroUtil.getCreateID();
             if (createId != null) {
+                System.out.println(createId);
                 Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-                pager.result(mobileExpertService.findAllAchievementList(pager, createId));
+                pager.result(mobileExpertService.findAllAchievementList(pager, createId,status));
                 response.setData(pager);
             } else {
                 throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

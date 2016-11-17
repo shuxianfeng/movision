@@ -156,9 +156,12 @@ public class MobileExpertService {
      *            查询条件
      * @return 技术成果
      */
-    public List<Map<String, String>> findAllAchievementList(Paging<Map<String, String>> pager, Long createId) {
+    public List<Map<String, String>> findAllAchievementList(Paging<Map<String, String>> pager, Long createId,String status) {
         Map<String, Object> map = new HashMap<>();
         Member member = memberService.findMemById(String.valueOf(createId));
+        if(null != status){
+            map.put("status",status);
+        }
         if ("100".equals(member.getWorkType())) {
             map.put("companyId", createId);
         } else {
