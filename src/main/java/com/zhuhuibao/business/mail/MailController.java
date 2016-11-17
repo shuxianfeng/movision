@@ -89,6 +89,7 @@ public class MailController {
 			m.put("shdx", shdx);	//审核对象
 			
 			String sid = (String)m.get("sid");
+            m.put("sid",sid);
 			if(source.equals(MessageTextConstant.ZLSH) || source.equals(MessageTextConstant.SMRZ)
 					|| source.equals(MessageTextConstant.CERTIFICATERECORD)){
 				//区分身份是个人还是企业
