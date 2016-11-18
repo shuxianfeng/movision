@@ -64,8 +64,7 @@ public class MobileExpertService {
     /***
      * 删除专家信息
      *
-     * @param ids
-     *            专家信息
+     * @param ids 专家信息
      * @return 删除记录
      */
     public void deleteLookedExpert(String ids) {
@@ -97,8 +96,7 @@ public class MobileExpertService {
     /**
      * 删除查看专家成果
      *
-     * @param ids
-     *            专家成果Id
+     * @param ids 专家成果Id
      * @return 删除条数
      */
     public void deleteLookedAchievement(String ids) {
@@ -125,8 +123,7 @@ public class MobileExpertService {
     /**
      * 删除协会动态
      *
-     * @param ids
-     *            协会ID
+     * @param ids 协会ID
      * @return
      */
     public void updateDynamic(String ids) {
@@ -152,15 +149,14 @@ public class MobileExpertService {
     /**
      * 我的技术成果
      *
-     * @param createId
-     *            查询条件
+     * @param createId 查询条件
      * @return 技术成果
      */
-    public List<Map<String, String>> findAllAchievementList(Paging<Map<String, String>> pager, Long createId,String status) {
+    public List<Map<String, String>> findAllAchievementList(Paging<Map<String, String>> pager, Long createId, String status) {
         Map<String, Object> map = new HashMap<>();
         Member member = memberService.findMemById(String.valueOf(createId));
-        if(null != status){
-            map.put("status",status);
+        if (null != status) {
+            map.put("status", status);
         }
         if ("100".equals(member.getWorkType())) {
             map.put("companyId", createId);
@@ -173,8 +169,7 @@ public class MobileExpertService {
     /***
      * 删除技术成果
      *
-     * @param ids
-     *            成果的Id
+     * @param ids 成果的Id
      */
     public void updateAchievement(String ids) {
         Achievement achievement = new Achievement();
@@ -189,8 +184,7 @@ public class MobileExpertService {
     /**
      * 技术成果详情
      *
-     * @param id
-     *            技术成果id
+     * @param id 技术成果id
      * @return 成果详情
      */
     public Map<String, String> queryAchievementById(String id) {
@@ -200,13 +194,26 @@ public class MobileExpertService {
     /**
      * 专家信息详情,技术成果信息
      *
-     * @param goodsID
-     *            商品的Id
-     * @param type
-     *            筑慧币
+     * @param goodsID 商品的Id
+     * @param type    筑慧币
      * @return
      */
     public Map<String, Object> viewGoodsRecord(String goodsID, String type) throws Exception {
-        return paymentService.getChargeGoodsRecord(Long.parseLong(goodsID), type);
+        Map<String, Object> map = paymentService.getChargeGoodsRecord(Long.parseLong(goodsID), type);
+        if (null != map.get("province") && null != map.get("city")) {
+            if (null != map.get("city")) {
+                String string = (String) map.get("province") + map.get("city");
+                map.put("mobileAddress", string);
+            } else {
+                map.put("mobileAddress", map.get("province"));
+            }
+        } else {
+            if (null != map.get("city")) {
+                map.put("mobileAddress", map.get("city"));
+            } else {
+                map.put("mobileAddress", "");
+            }
+        }
+        return map;
     }
 }

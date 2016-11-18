@@ -98,6 +98,7 @@ public class MobileJobService {
             map.put("is_deleted", result.get("is_deleted"));
             map.put("companyId", result.get("companyId"));
             map.put("positionType", result.get("positionType"));
+            map.put("education", result.get("education"));
             list.add(map);
         }
         return list;

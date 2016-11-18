@@ -714,6 +714,6 @@ public class MobileMemberService {
      * @return
      */
     public List<Map<String, String>> queryCompanyByKeywords(String keywords) {
-        return oldMemberService.queryCompanyByKeywords(keywords);
+        return oldMemberService.queryCompanyByKeywords(keywords).subList(0, 10);
     }
 }

@@ -405,7 +405,7 @@
         GROUP by v.viewTime desc
     </select>
     <select id="findAllMyLookedMobileExpertListById" resultType="java.util.Map">
-        select e.id,e.name,e.company,e.position,
+        select e.id,e.name,e.company,e.position,v.type,
         case when e.expertType = '1' then '协会专家'
         when e.expertType = '2' then '行业专家' end as expertType,
         date_format(v.viewTime,'%Y-%m-%d') viewTime,v.id as recordId
