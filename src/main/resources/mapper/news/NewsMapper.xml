@@ -338,7 +338,7 @@
     <select id="findAllMobileNews" resultMap="BaseResultMap" parameterType="java.util.Map">
         select
         id,
-        title,views,source,photo,
+        title,views,source,photo,jump_url,
         date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
         FROM t_n_news
         where status = 1
@@ -349,7 +349,7 @@
     <select id="findAllHotMobileNews" resultMap="BaseResultMap" parameterType="java.util.Map">
         select
         id,
-        title,views,source,photo,
+        title,views,source,photo,jump_url,
         date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
         FROM t_n_news
          where status = 1
@@ -363,7 +363,7 @@
     <select id="findAllMobileNewsByType" resultMap="BaseResultMap" parameterType="java.util.Map">
         select
         id,
-        title,views,source,photo,
+        title,views,source,photo,jump_url,
         date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
         FROM t_n_news
         where 1=1 AND status = 1
@@ -380,7 +380,7 @@
     <select id="selectRecommendNews" resultMap="BaseResultMap" parameterType="java.util.Map">
         select
         id,
-        title,views,source,photo,
+        title,views,source,photo,jump_url,
         date_format(publish_time,'%Y-%m-%d %H:%i:%s') as publish_time_str
         FROM t_n_news
         where 1=1 AND status = 1
