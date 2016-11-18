@@ -262,6 +262,23 @@ public class MobileJobController {
         }
     }
 
+    @ApiOperation(value = "触屏端-盟友中心-更新简历时间", notes = "触屏端-盟友中心-更新简历时间", response = Response.class)
+    @RequestMapping(value = "refresh_resume_time", method = RequestMethod.POST)
+    public Response refreshResumeTime(@ApiParam(value = "简历id") @RequestParam String id) throws IOException {
+        Response response = new Response();
+        Long createId = ShiroUtil.getCreateID();
+        if (createId != null) {
+            Resume resume = new Resume();
+            resume.setType("2");
+            resume.setId(id);
+            mobileResumeService.updateResume(resume);
+            response.setData(resume.getId());
+            return response;
+        } else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+    }
+
     @ApiOperation(value = "触屏端-盟友中心-查看免费简历", notes = "触屏端-盟友中心-查看免费简历", response = Response.class)
     @RequestMapping(value = "sel_free_resume", method = RequestMethod.GET)
     public Response selFreeResume(@ApiParam(value = "简历id") @RequestParam String id) throws Exception {
