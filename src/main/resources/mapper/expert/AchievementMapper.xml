@@ -307,29 +307,18 @@
     LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
     LEFT JOIN t_m_member m on a.createId = m.id
     where a.is_deleted = 0
-    <if test="title != null and title != ''">
-      and a.title like CONCAT('%',#{title},'%')
-    </if>
     <if test="status != null and status != ''">
       and a.status = #{status}
     </if>
     <if test="createId != null and createId != ''">
       and a.createId = #{createId}
     </if>
-    <if test="systemType != null and systemType != ''">
-      and a.systemType = #{systemType}
-    </if>
-    <if test="useArea != null and useArea != ''">
-      and a.useArea = #{useArea}
-    </if>
-    <if test="type != null and type != ''">
-      and a.status = 1
-    </if>
-     GROUP BY a.updateTime desc
+     GROUP BY a.updateTime
   </select>
+
   <select id="findAllMyLookedMobileAchievementList" resultType="java.util.Map" >
-    select c.id,c.title,date_format(v.viewTime,'%Y-%m-%d') viewTime,
-    v.id as recordId,co.name as systemName,con.name as areaName
+    select c.id,c.title,date_format(v.viewTime,'%Y-%m-%d') viewTime,v.type,
+    v.id as recordId,co.name as systemName,con.name as areaName,v.goodsId
     from t_zhb_viewGoods v
     left join t_e_achievement c on v.goodsId = c.id
     left join t_dictionary_constant co on c.systemType = co.code and co.`type` = 19
@@ -341,7 +330,10 @@
     <if test="viewerId != null">
       and v.viewerId = #{viewerId}
     </if>
-    GROUP by v.viewTime desc
+    <if test="status != null and status != ''">
+      and a.status = #{status}
+    </if>
+    GROUP by v.viewTime
   </select>
 
 </mapper>

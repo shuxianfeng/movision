@@ -418,7 +418,7 @@
         <if test="viewerId != null">
             and v.viewerId = #{viewerId}
         </if>
-        GROUP by v.viewTime desc
+        GROUP by v.viewTime
     </select>
 
 </mapper>
