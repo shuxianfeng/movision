@@ -81,10 +81,10 @@ public class MobileWitkeyMcController {
 	@RequestMapping(value = "sel_witkey_task", method = RequestMethod.GET)
 	public Response sel_witkey_task(@RequestParam(required = false) String pageNo,
 			@RequestParam(required = false) String pageSize,
-			@ApiParam(value = "合作标题") @RequestParam(required = false) String title,
+//			@ApiParam(value = "合作标题") @RequestParam(required = false) String title,
 			@ApiParam(value = "合作类型") @RequestParam(required = false) String type) {
 		
-		return mWitkeySV.sel_witkey_task(pageNo, pageSize, title, type);
+		return mWitkeySV.sel_witkey_task(pageNo, pageSize, type);
 	}
 	
 	@ApiOperation(value = "批量删除我查看的威客任务", notes = "批量删除我查看的威客任务", response = Response.class)
