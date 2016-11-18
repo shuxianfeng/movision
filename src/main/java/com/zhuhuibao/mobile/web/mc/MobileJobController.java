@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -305,8 +307,11 @@ public class MobileJobController {
 
     @ApiOperation(value = "触屏端-盟友中心-根据关键字获取企业", notes = "触屏端-盟友中心-根据关键字获取企业")
     @RequestMapping(value = "sel_company_by_keywords_list", method = RequestMethod.GET)
-    public Response selCompanyByKeywordsList(@RequestParam(required = false) String keywords) {
+    public Response selCompanyByKeywordsList(@RequestParam(required = false) String keywords) throws UnsupportedEncodingException {
         Response response = new Response();
+        if (null != keywords) {
+            keywords = URLDecoder.decode(keywords, "utf-8");
+        }
         List<Map<String, String>> list = mobileMemberService.queryCompanyByKeywords(keywords);
         response.setData(list);
         return response;
