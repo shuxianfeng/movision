@@ -188,7 +188,13 @@ public class MobileExpertService {
      * @return 成果详情
      */
     public Map<String, String> queryAchievementById(String id) {
-        return expertService.queryAchievementById(id);
+        Map<String, String> map = expertService.queryAchievementById(id);
+        if (map.get("cityName").equals((map.get("provinceName") + "市"))) {
+            map.put("mobileAdress", map.get("cityName") + map.get("areaName") + map.get("address"));
+        } else {
+            map.put("mobileAdress", map.get("cityName") + "省" + map.get("cityName") + map.get("areaName") + map.get("address"));
+        }
+        return map;
     }
 
     /**
@@ -200,18 +206,25 @@ public class MobileExpertService {
      */
     public Map<String, Object> viewGoodsRecord(String goodsID, String type) throws Exception {
         Map<String, Object> map = paymentService.getChargeGoodsRecord(Long.parseLong(goodsID), type);
-        if (null != map.get("province") && null != map.get("city")) {
-            if (null != map.get("city")) {
-                String string = (String) map.get("province") + map.get("city");
-                map.put("mobileAddress", string);
-            } else {
-                map.put("mobileAddress", map.get("province"));
-            }
+
+        Map map1 = (Map) map.get("info");
+        String str1 = (String) map1.get("city");
+        String str2 = (String) map1.get("province");
+        if (str1.equals((str2 + "市"))) {
+            map.put("mobileAddress", str1);
         } else {
-            if (null != map.get("city")) {
-                map.put("mobileAddress", map.get("city"));
+            if (null != str2) {
+                if (null != str1) {
+                    map.put("mobileAddress", (str2 + "省" + str1));
+                } else {
+                    map.put("mobileAddress", (str2 + "省"));
+                }
             } else {
-                map.put("mobileAddress", "");
+                if (null != str1) {
+                    map.put("mobileAddress", str1);
+                } else {
+                    map.put("mobileAddress", "");
+                }
             }
         }
         return map;
