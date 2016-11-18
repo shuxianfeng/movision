@@ -19,5 +19,5 @@ public interface MessageTextMapper {
 
     int updateByPrimaryKey(MessageText record);
 
-    List<Map<String,String>> findAllNewsList(RowBounds rowBounds,Map<String, Object> map);
+    List<Map<String,Object>> findAllNewsList(RowBounds rowBounds,Map<String, Object> map);
 }

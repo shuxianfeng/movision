@@ -50,7 +50,7 @@ public class LoginController {
 
         String pwd = new String(EncodeUtil.decodeBase64(password));
         member.setPassword(pwd);
-
+        //得到Subject及创建用户名/密码身份验证Token（即用户身份/凭证）
         UsernamePasswordToken token = new UsernamePasswordToken(account, pwd);
 
         Subject currentUser = SecurityUtils.getSubject();
@@ -60,20 +60,22 @@ public class LoginController {
             if (rememberMe != null && rememberMe.equals("1")) {
                 token.setRememberMe(true);
             }
+            //登录，即身份验证  
             currentUser.login(token);
             response.setData(account);
         } catch (UnknownAccountException e) {
+        	//用户名不存在
             response.setCode(400);
             response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
             response.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
 
         } catch (LockedAccountException e) {
-
+        	//帐户状态异常
             response.setCode(400);
             response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_status_exception)));
             response.setMsgCode(MsgCodeConstant.member_mcode_account_status_exception);
         } catch (AuthenticationException e) {
-
+        	//用户名或密码错误
             response.setCode(400);
             response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_usernameorpwd_error)));
             response.setMsgCode(MsgCodeConstant.member_mcode_usernameorpwd_error);

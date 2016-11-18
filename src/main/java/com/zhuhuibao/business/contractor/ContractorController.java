@@ -47,7 +47,7 @@ public class ContractorController {
 
     @Autowired
     private SuccessCaseService successCaseService;
-    
+
     @Autowired
     ChannelNewsService newsService;
     @Autowired
@@ -61,17 +61,18 @@ public class ContractorController {
 
     @Autowired
     private JobPositionService jobPositionService;
-    
+
     @Autowired
     FileUtil fileUtil;
 
     /**
-     *最新工程商(个数后台控制)
+     * 最新工程商(个数后台控制)
+     *
      * @return
      */
-    @ApiOperation(value = "最新工程商",notes = "最新工程商")
+    @ApiOperation(value = "最新工程商", notes = "最新工程商")
     @RequestMapping(value = "sel_new_engineer", method = RequestMethod.GET)
-    public Response newEngineer()  {
+    public Response newEngineer() {
         String type = "4";
         Response response = new Response();
         List list = memberService.findNewEngineerOrSupplier(type);
@@ -80,49 +81,52 @@ public class ContractorController {
     }
 
     /**
-     *工程商简版介绍
+     * 工程商简版介绍
+     *
      * @return
      */
     @ApiOperation(value = "工程商简版介绍", notes = "工程商简版介绍")
     @RequestMapping(value = "sel_simple_introduce", method = RequestMethod.GET)
     public Response introduce(@ApiParam("id") @RequestParam String id) {
         Response response = new Response();
-        Map map = memberService.introduce(id,"2"); //资质类型：1：供应商资质；2：工程商资质；3：个人资质
+        Map map = memberService.introduce(id, "2"); //资质类型：1：供应商资质；2：工程商资质；3：个人资质
         response.setData(map);
         return response;
     }
 
     /**
-     *工程商简版介绍
+     * 工程商简版介绍
+     *
      * @return
      */
     @ApiOperation(value = "Vip工程商简版介绍", notes = "Vip工程商简版介绍")
     @RequestMapping(value = "sel_vip_simple_introduce", method = RequestMethod.GET)
     public Response vipIntroduce(@ApiParam("id") @RequestParam String id) {
         Response response = new Response();
-        Map map = memberService.vipIntroduce(id,"2"); //资质类型：1：供应商资质；2：工程商资质；3：个人资质
-        if(map==null){
-        	response.setCode(400);
-        	response.setMessage("非vip用户不能查询vip工程商信息");
-        }else{
-        	response.setData(map);
+        Map map = memberService.vipIntroduce(id, "2"); //资质类型：1：供应商资质；2：工程商资质；3：个人资质
+        if (map == null) {
+            response.setCode(400);
+            response.setMessage("非vip用户不能查询vip工程商信息");
+        } else {
+            response.setData(map);
         }
         return response;
     }
+
     @ApiOperation(value = "公司成功案例（分页）", notes = "公司成功案例（分页）")
     @RequestMapping(value = "sel_company_success_caseList", method = RequestMethod.GET)
-    public Response sel_company_success_caseList(@ApiParam(value = "公司id")@RequestParam String id,
-                                                 @RequestParam(required = false,defaultValue = "1") String pageNo,
-                                                 @RequestParam(required = false,defaultValue = "10") String pageSize)  {
+    public Response sel_company_success_caseList(@ApiParam(value = "公司id") @RequestParam String id,
+                                                 @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                 @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
 
-        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 
         //查询公司优秀案例
-        Map<String,Object> queryMap = new HashMap<>();
+        Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("status", "1");
-        queryMap.put("createid",id);
-        List<Map<String,String>> caseList = successCaseService.findAllSuccessCaseList(pager,queryMap);
+        queryMap.put("createid", id);
+        List<Map<String, String>> caseList = successCaseService.findAllSuccessCaseList(pager, queryMap);
         pager.result(caseList);
 
         response.setData(pager);
@@ -130,11 +134,12 @@ public class ContractorController {
     }
 
     /**
-     *名企展示
+     * 名企展示
+     *
      * @return
      */
     @Deprecated
-    @ApiOperation(value="优秀工程商",notes="优秀工程商",response = Response.class)
+    @ApiOperation(value = "优秀工程商", notes = "优秀工程商", response = Response.class)
     @RequestMapping(value = {"sel_great_company"}, method = RequestMethod.GET)
     public Response greatCompany() {
         Response response = new Response();
@@ -144,33 +149,35 @@ public class ContractorController {
     }
 
     /**
-     *最新认证工程商(个数后台控制)
+     * 最新认证工程商(个数后台控制)
+     *
      * @return
      */
-    @ApiOperation(value="最新认证工程商",notes="最新认证工程商",response = Response.class)
+    @ApiOperation(value = "最新认证工程商", notes = "最新认证工程商", response = Response.class)
     @RequestMapping(value = {"sel_new_identify_engineer"}, method = RequestMethod.GET)
-    public Response newIdentifyEngineer()  {
+    public Response newIdentifyEngineer() {
         Response response = new Response();
         List list = memberService.findnewIdentifyEngineer("2");   //2:工程商
         response.setData(list);
         return response;
     }
 
-    @ApiOperation(value = "工程商信息广告位",notes = "工程商信息广告位")
+    @ApiOperation(value = "工程商信息广告位", notes = "工程商信息广告位")
     @RequestMapping(value = "sel_adv_engineer", method = RequestMethod.GET)
-    public Response sel_adv_engineer(@ApiParam(value="频道类型 2:工程商")@RequestParam String chanType,
-                                     @ApiParam(value="频道下子页面.index:首页;") @RequestParam String page,
-                                     @ApiParam(value="广告所在区域:F2:工程商信息") @RequestParam String advArea)  {
+    public Response sel_adv_engineer(@ApiParam(value = "频道类型 2:工程商") @RequestParam String chanType,
+                                     @ApiParam(value = "频道下子页面.index:首页;") @RequestParam String page,
+                                     @ApiParam(value = "广告所在区域:F2:工程商信息") @RequestParam String advArea) {
         Response response = new Response();
         Map<String, Object> map = new HashMap<>();
-        map.put("chanType",chanType);
-        map.put("page",page);
-        map.put("advArea",advArea);
-        List<Map<String,String>> companyList = memberService.queryEngineerList(map);
+        map.put("chanType", chanType);
+        map.put("page", page);
+        map.put("advArea", advArea);
+        List<Map<String, String>> companyList = memberService.queryEngineerList(map);
 
         response.setData(companyList);
         return response;
     }
+
     /**
      * 查询资讯内容列表
      *
@@ -184,10 +191,10 @@ public class ContractorController {
     @ApiOperation(value = "查询行业咨询", notes = "查询行业咨询")
     @RequestMapping(value = "sel_channel_news", method = RequestMethod.GET)
     public Response queryChannelNewsList(
-    		@ApiParam(value = "类型：1 行业资讯，2 人物专访 3：行业风云人物 4：工程商风采 5：工程资料")@RequestParam String type,
-    		@ApiParam(value = "是否是热门资料")@RequestParam(required = false,defaultValue = "false") boolean isHot,
-            @RequestParam(required = false,defaultValue = "1") String pageNo,
-            @RequestParam(required = false,defaultValue = "10") String pageSize) throws IOException {
+            @ApiParam(value = "类型：1 行业资讯，2 人物专访 3：行业风云人物 4：工程商风采 5：工程资料") @RequestParam String type,
+            @ApiParam(value = "是否是热门资料") @RequestParam(required = false, defaultValue = "false") boolean isHot,
+            @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -197,7 +204,7 @@ public class ContractorController {
         }
         Paging<Map> pager = new Paging<Map>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<String, Object>();
-        
+
         map.put("channelid", "1");
         map.put("sort", type);
         map.put("status", "1");
@@ -207,90 +214,89 @@ public class ContractorController {
         response.setData(pager);
         return response;
     }
-    
+
     /**
-     * 
      * @param id 栏目信息的ID
      * @throws IOException
-     */ 
+     */
     @ApiOperation(value = "查询行业咨询详情", notes = "查询行业咨询详情")
     @RequestMapping(value = "sel_news_details", method = RequestMethod.GET)
-    public Response queryDetailsById(@ApiParam(value="咨询id")@RequestParam Long id) throws IOException {
-    	Response response = new Response(); 
-    	List<Map> chanMap= newsService.queryDetailsById(id);
+    public Response queryDetailsById(@ApiParam(value = "咨询id") @RequestParam Long id) throws IOException {
+        Response response = new Response();
+        List<Map> chanMap = newsService.queryDetailsById(id);
         response.setData(chanMap);
         return response;
     }
-    
-    @ApiOperation(value = "vip工程商信息活动",notes = "vip工程商信息活动")
+
+    @ApiOperation(value = "vip工程商信息活动", notes = "vip工程商信息活动")
     @RequestMapping(value = "sel_contractor_activity", method = RequestMethod.GET)
-    public Response sel_contractor_activity(@ApiParam(value = "公司id")@RequestParam String id,
-                                            @RequestParam(required = false,defaultValue = "1") String pageNo,
-                                            @RequestParam(required = false,defaultValue = "10") String pageSize)  {
+    public Response sel_contractor_activity(@ApiParam(value = "公司id") @RequestParam String id,
+                                            @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                            @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        Map<String,Object> map = new HashMap<>();
-        map.put("createid",id);
-        List<Map<String,String>> resultList = expoService.findAllExpoListByCompanyId(pager,map);
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String, Object> map = new HashMap<>();
+        map.put("createid", id);
+        List<Map<String, String>> resultList = expoService.findAllExpoListByCompanyId(pager, map);
         pager.result(resultList);
         response.setData(pager);
         return response;
     }
 
-    @ApiOperation(value = "vip工程商信息威客",notes = "vip工程商信息威客")
+    @ApiOperation(value = "vip工程商信息威客", notes = "vip工程商信息威客")
     @RequestMapping(value = "sel_contractor_witkey", method = RequestMethod.GET)
-    public Response sel_contractor_witkey(@ApiParam(value = "公司id")@RequestParam String id,
-                                            @RequestParam(required = false,defaultValue = "1") String pageNo,
-                                            @RequestParam(required = false,defaultValue = "10") String pageSize)  {
+    public Response sel_contractor_witkey(@ApiParam(value = "公司id") @RequestParam String id,
+                                          @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                          @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        Map<String,Object> map = new HashMap<>();
-        map.put("createid",id);
-        List<Map<String,String>> resultList = cooperationService.findAllWitkeyByCompanyId(pager,map);
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String, Object> map = new HashMap<>();
+        map.put("createid", id);
+        List<Map<String, String>> resultList = cooperationService.findAllWitkeyByCompanyId(pager, map);
         pager.result(resultList);
         response.setData(pager);
         return response;
     }
 
-    @ApiOperation(value = "vip工程商信息技术",notes = "vip工程商信息技术")
+    @ApiOperation(value = "vip工程商信息技术", notes = "vip工程商信息技术")
     @RequestMapping(value = "sel_contractor_tech", method = RequestMethod.GET)
-    public Response sel_contractor_tech(@ApiParam(value = "公司id")@RequestParam String id,
-                                          @RequestParam(required = false,defaultValue = "1") String pageNo,
-                                          @RequestParam(required = false,defaultValue = "10") String pageSize)  {
+    public Response sel_contractor_tech(@ApiParam(value = "公司id") @RequestParam String id,
+                                        @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                        @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        Map<String,Object> map = new HashMap<>();
-        map.put("createid",id);
-        List<Map<String,String>> resultList = techCooperationService.findAllTechByCompanyId(pager,map);
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String, Object> map = new HashMap<>();
+        map.put("createid", id);
+        List<Map<String, String>> resultList = techCooperationService.findAllTechByCompanyId(pager, map);
         pager.result(resultList);
         response.setData(pager);
         return response;
     }
 
-    @ApiOperation(value = "vip工程商信息人才",notes = "vip工程商信息人才")
+    @ApiOperation(value = "vip工程商信息人才", notes = "vip工程商信息人才")
     @RequestMapping(value = "sel_contractor_job", method = RequestMethod.GET)
-    public Response sel_contractor_job(@ApiParam(value = "公司id")@RequestParam String id,
-                                        @RequestParam(required = false,defaultValue = "1") String pageNo,
-                                        @RequestParam(required = false,defaultValue = "10") String pageSize,
-                                       @RequestParam(required = false)String days,
-                                       @RequestParam(required = false)String salary)  {
+    public Response sel_contractor_job(@ApiParam(value = "公司id") @RequestParam String id,
+                                       @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                       @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                       @RequestParam(required = false) String days,
+                                       @RequestParam(required = false) String salary) {
         Response response = new Response();
-        Paging<Map<String,String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        Map<String,Object> map = new HashMap<>();
-        map.put("createid",id);
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String, Object> map = new HashMap<>();
+        map.put("createid", id);
         if (days != null && !"".equals(days)) {
             Date date = DateUtils.date2Sub(new Date(), 5, -Integer.parseInt(days));
             String publishTime = DateUtils.date2Str(date, "yyyy-MM-dd");
             map.put("publishTime", publishTime);
         }
-        map.put("salary",salary);
-        List<Map<String,String>> resultList = jobPositionService.findAllJobByCompanyId(pager,map);
+        map.put("salary", salary);
+        List<Map<String, String>> resultList = jobPositionService.findAllJobByCompanyId(pager, map);
         pager.result(resultList);
         response.setData(pager);
         return response;
     }
-    
-  //vip减 项目条数减
+
+    //vip减 项目条数减
     @ApiOperation(value = "下载工程资料", notes = "下载工程资料资料", response = Response.class)
     @RequestMapping(value = "downLoadProjectData ", method = RequestMethod.GET)
     public Response downloadBill(HttpServletResponse response,
@@ -298,17 +304,17 @@ public class ContractorController {
         Response jsonResult = new Response();
         log.debug("download project data");
         try {
-           
-                String attachName = newsService.queryattachName(id);
-                response.setDateHeader("Expires", 0);
-                response.setHeader("Cache-Control",
-                        "no-store, no-cache, must-revalidate");
-                response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-                response.setHeader("Content-disposition", "attachment;filename=" + attachName);
-                response.setContentType("application/octet-stream");
+
+            String attachName = newsService.queryattachName(id);
+            response.setDateHeader("Expires", 0);
+            response.setHeader("Cache-Control",
+                    "no-store, no-cache, must-revalidate");
+            response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+            response.setHeader("Content-disposition", "attachment;filename=" + attachName);
+            response.setContentType("application/octet-stream");
 //                attachName = ApiConstants.getUploadDoc() + TechConstant.UPLOAD_TECH_DOC_URL + "/" + attachName;
-                jsonResult = fileUtil.downloadObject(response, attachName, "doc", "project/data");
-          
+            jsonResult = fileUtil.downloadObject(response, attachName, "doc", "project/data");
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error("download project data error! ", e);

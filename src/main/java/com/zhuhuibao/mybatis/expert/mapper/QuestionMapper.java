@@ -10,7 +10,7 @@ public interface QuestionMapper {
 
     int askExpert(Question question);
 
-    Map<String,String> queryMyQuestionById(String id);
+    Map<String,Object> queryMyQuestionById(String id);
 
     List<Map<String,String>> findAllExpertQuestion(RowBounds rowBounds, Map<String, Object> map);
 

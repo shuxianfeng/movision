@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MemberConstant;
+import com.zhuhuibao.common.constant.MessageTextConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.AccountBean;
@@ -20,6 +21,7 @@ import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.convert.BeanUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -154,10 +156,16 @@ public class MemberService {
 
             memberMapper.updateMemInfo(member);
             memberMapper.updateSubMemInfo(member);
-            // 资料审核已拒绝 or 实名认证已拒绝
-            if ("7".equals(member.getStatus()) || "11".equals(member.getStatus())) {
-                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(member.getId()), member.getReason());
+            //资料审核已拒绝 or 实名认证已拒绝
+            if ("7".equals(member.getStatus()) ) {
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(member.getId()),
+                        member.getReason(), MessageTextConstant.ZLSH, member.getAccount(), member.getId());
             }
+            if ("11".equals(member.getStatus())) {
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(member.getId()),
+                        member.getReason(), MessageTextConstant.SMRZ, member.getAccount(), member.getId());
+            }
+
         } catch (Exception e) {
             log.error("updateMemInfo error >>>", e);
             e.printStackTrace();
@@ -365,7 +373,9 @@ public class MemberService {
         try {
             certificateRecordMapper.updateCertificate(record);
             if ("2".equals(record.getStatus())) {
-                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(record.getMem_id()), record.getReason());
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(record.getMem_id()),
+                        record.getReason(), MessageTextConstant.CERTIFICATERECORD,
+                        record.getCertificate_name(), record.getId());
             }
         } catch (Exception e) {
             log.error("updateCertificate error >>>", e);
@@ -704,6 +714,7 @@ public class MemberService {
                 }
             }
 
+
         } catch (Exception e) {
             log.error("updateMemData error >>>", e);
             throw e;
@@ -825,7 +836,7 @@ public class MemberService {
 
     /**
      * VIP 工程商简介
-     * 
+     *
      * @param id
      * @param type
      * @return

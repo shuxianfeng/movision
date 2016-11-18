@@ -16,6 +16,7 @@ import com.zhuhuibao.mybatis.sitemail.mapper.MessageLogMapper;
 import com.zhuhuibao.mybatis.sitemail.mapper.MessageTextMapper;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,13 +80,18 @@ public class SiteMailService {
      * @param reason 拒绝理由
      * @return
      */
-    public Response addRefuseReasonMail(Long sendId, Long recId, String reason) {
+    public Response addRefuseReasonMail(Long sendId, Long recId, String reason, String source, String title, String sid) {
         Response response = new Response();
         try {
             MessageText msgText = new MessageText();
-            msgText.setType(Constants.SITE_MAIL_TYPE_THREE);
+            msgText.setType(Constants.SITE_MAIL_TYPE_THREE);	//站内信类型：3
             msgText.setMessageText(reason);
-            msgText.setTitle(reason);
+            //审核对象
+            msgText.setSource(source);
+            //来源ID
+            msgText.setSid(sid);
+            
+            msgText.setTitle(title);
             msgText.setSendID(sendId);
             msgText.setRecID(recId);
             this.addSiteMail(msgText);
@@ -107,7 +113,7 @@ public class SiteMailService {
         return count;
     }
 
-    public List<Map<String, String>> findAllNewsList(Paging<Map<String, String>> pager, Map<String, Object> map) {
+    public List<Map<String, Object>> findAllNewsList(Paging<Map<String, Object>> pager, Map<String, Object> map) {
         try {
             return msgTextMapper.findAllNewsList(pager.getRowBounds(), map);
         } catch (Exception e) {
@@ -179,7 +185,7 @@ public class SiteMailService {
         }
     }
 
-    public Map<String, String> queryNewsById(String id) {
+    public Map<String, Object> queryNewsById(String id) {
         try {
             return msgLogMapper.queryNewsById(id);
         } catch (Exception e) {

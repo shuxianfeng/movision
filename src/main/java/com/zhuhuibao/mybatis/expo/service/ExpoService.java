@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.expo.service;
 
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MessageTextConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.expo.entity.DistributedOrder;
 import com.zhuhuibao.mybatis.expo.entity.Exhibition;
@@ -44,7 +45,7 @@ public class ExpoService {
 
     /**
      * 发布一站式会展定制
-     * 
+     *
      * @param meetingOrder
      */
     public String publishMeetingOrder(MeetingOrder meetingOrder) {
@@ -61,7 +62,7 @@ public class ExpoService {
 
     /**
      * 一站式会展定制申请处理
-     * 
+     *
      * @param meetingOrder
      */
     public void updateMeetingOrderStatus(MeetingOrder meetingOrder) {
@@ -76,7 +77,7 @@ public class ExpoService {
 
     /**
      * 一站式会展定制查看
-     * 
+     *
      * @param id
      */
     public MeetingOrder queryMeetingOrderInfoById(String id) {
@@ -104,7 +105,7 @@ public class ExpoService {
 
     /**
      * 发布会展信息
-     * 
+     *
      * @param exhibition
      */
     public void publishExhibition(Exhibition exhibition) {
@@ -119,7 +120,7 @@ public class ExpoService {
 
     /**
      * 会展信息列表
-     * 
+     *
      * @param pager,map
      */
     public List<Map<String, String>> findAllExhibition(Paging<Map<String, String>> pager, Map<String, Object> map) {
@@ -136,7 +137,7 @@ public class ExpoService {
 
     /**
      * 会展详情查看
-     * 
+     *
      * @param id
      */
     public Exhibition queryExhibitionInfoById(String id) {
@@ -151,14 +152,17 @@ public class ExpoService {
 
     /**
      * 会展信息编辑更新
-     * 
+     *
      * @param exhibition
      */
-    public void updateExhibitionInfoById(Exhibition exhibition) {
+    public void updateExhibitionInfoById(Exhibition exhibition){
         try {
             exhibitionMapper.updateExhibitionInfoById(exhibition);
-            if ("2".equals(exhibition.getStatus())) {
-                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(exhibition.getCreateid()), exhibition.getReason());
+            if("2".equals(exhibition.getStatus()))
+            {
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),
+                		Long.parseLong(exhibition.getCreateid()),exhibition.getReason(),
+                		MessageTextConstant.EXHIBITION, exhibition.getTitle(), exhibition.getId());
             }
         } catch (Exception e) {
             log.error("ExpoService::updateExhibitionInfoById", e);
@@ -169,7 +173,7 @@ public class ExpoService {
 
     /**
      * 会展信息点击率更新
-     * 
+     *
      * @param exhibition
      */
     public void updateExhibitionViews(Exhibition exhibition) {
@@ -184,7 +188,7 @@ public class ExpoService {
 
     /**
      * 最新会展信息
-     * 
+     *
      * @param map
      */
     public List<Map<String, String>> findNewExhibition(Map<String, Object> map) {
@@ -199,7 +203,7 @@ public class ExpoService {
 
     /**
      * 发布分布式会展定制
-     * 
+     *
      * @param distributedOrder
      */
     public int publishDistributedOrder(DistributedOrder distributedOrder) {
@@ -214,7 +218,7 @@ public class ExpoService {
 
     /**
      * 分布式会展定制列表(运营)
-     * 
+     *
      * @param pager,map
      */
     public List<Map<String, String>> findAllDistributedOrder(Paging<Map<String, String>> pager, Map<String, Object> map) {
@@ -229,7 +233,7 @@ public class ExpoService {
 
     /**
      * 分布式会展定制查看
-     * 
+     *
      * @param id
      */
     public DistributedOrder queryDistributedOrderInfoById(String id) {
@@ -244,7 +248,7 @@ public class ExpoService {
 
     /**
      * 分布式会展定制申请处理
-     * 
+     *
      * @param distributedOrder
      */
     public void updateDistributedStatus(DistributedOrder distributedOrder) {
@@ -279,7 +283,7 @@ public class ExpoService {
 
     /**
      * 查询活动名称
-     * 
+     *
      * @param pager
      * @param map
      * @return

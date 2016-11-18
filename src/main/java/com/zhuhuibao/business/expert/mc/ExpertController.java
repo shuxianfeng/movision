@@ -1,5 +1,19 @@
 package com.zhuhuibao.business.expert.mc;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -9,22 +23,17 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.PageNotFoundException;
-import com.zhuhuibao.mybatis.expert.entity.*;
+import com.zhuhuibao.mybatis.expert.entity.Achievement;
+import com.zhuhuibao.mybatis.expert.entity.Answer;
+import com.zhuhuibao.mybatis.expert.entity.Dynamic;
+import com.zhuhuibao.mybatis.expert.entity.Expert;
+import com.zhuhuibao.mybatis.expert.entity.Question;
+import com.zhuhuibao.mybatis.expert.service.ExpertNewService;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 专家会员中心接口管理
@@ -36,6 +45,9 @@ import java.util.Map;
 public class ExpertController {
     private static final Logger log = LoggerFactory.getLogger(ExpertController.class);
 
+    @Autowired
+    ExpertNewService expertNewSV;
+    
     @Autowired
     private ExpertService expertService;
 
@@ -252,16 +264,8 @@ public class ExpertController {
     @ApiOperation(value = "立刻回答", notes = "立刻回答", response = Response.class)
     @RequestMapping(value = "base/add_answer", method = RequestMethod.POST)
     public Response answerQuestion(@ModelAttribute Answer answer) {
-        Response response = new Response();
-        Long createId = ShiroUtil.getCreateID();
-        if (createId != null) {
-            answer.setCreateid(String.valueOf(createId));
-            answer.setStatus("0");
-            expertService.answerQuestion(answer);
-        } else {
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
-        return response;
+    	
+        return expertNewSV.addExpAnswer(answer);
     }
 
     @ApiOperation(value = "查询我(專家)已經回答的問題列表", notes = "查询我(專家)已經回答的問題列表", response = Response.class)

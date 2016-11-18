@@ -17,7 +17,6 @@ import java.util.Map;
  */
 public class Test /*extends BaseSpringContext*/ {
 
-
     public static void main(String[] args) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
 //        MemberShop shop = new MemberShop();
 //        shop.setCompanyAccount("18652093798");
@@ -35,5 +34,8 @@ public class Test /*extends BaseSpringContext*/ {
 
         System.out.println(map);
     }
+
+
+
 
 }

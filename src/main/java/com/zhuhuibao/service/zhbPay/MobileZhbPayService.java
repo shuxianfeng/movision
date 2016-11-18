@@ -53,7 +53,7 @@ public class MobileZhbPayService {
 	private static final Logger log = LoggerFactory.getLogger(MobileZhbPayService.class);
 	
 	private static final String PARTNER = AlipayPropertiesLoader.getPropertyValue("partner");
-	
+
 	@Autowired
     ZhpayService zhpayService;
 
@@ -65,13 +65,13 @@ public class MobileZhbPayService {
 
     @Autowired
     ZhbService zhbService;
-	
+
     /**
      * 提交ZHB订单
      * @param order
      */
 	public String doZHBOrder(ZHBOrderReqBean order){
-		
+
 		Gson gson = new Gson();
         String json = gson.toJson(order);
 
@@ -103,10 +103,10 @@ public class MobileZhbPayService {
         paramMap.put("orderNo", orderNo);
         //生成订单 (事务管理)
         zhOrderService.createOrder(paramMap);
-        
+
         return orderNo;
 	}
-	
+
 	/**
      * 判断用户是否具有改VIP套餐
      *
@@ -114,14 +114,14 @@ public class MobileZhbPayService {
      * @param value     viplevel
      */
     private void checkVip(String goodsType, String value) {
-    	
+
         if (goodsType.equals(OrderConstants.GoodsType.VIP.toString())) {
-        	
+
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             ShiroRealm.ShiroUser user = (ShiroRealm.ShiroUser) session.getAttribute("member");
             String identify = user.getIdentify();
-            
+
             if (identify.equals("2")) {     //个人
                 boolean suc1 = value.equals(VipConstant.VipLevel.PERSON_GOLD.toString());
                 boolean suc2 = value.equals(VipConstant.VipLevel.PERSON_PLATINUM.toString());
@@ -138,10 +138,10 @@ public class MobileZhbPayService {
                     throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "企业用户无此VIP套餐");
                 }
             }
-            
+
         }
     }
-	
+
 	/**
      * 检查购买用户是否登录
      *
@@ -160,19 +160,19 @@ public class MobileZhbPayService {
             }
         }
     }
-    
+
     /**
      * 生成订单
      * @param order
      * @return
      */
     public String createOrder(CourseOrderReqBean order){
-    	
+
     	Gson gson = new Gson();
         String json = gson.toJson(order);
 
         log.info("培训下单页面,请求参数:{}", json);
-        
+
         @SuppressWarnings("unchecked")
 		Map<String, String> paramMap = gson.fromJson(json, Map.class);
 
@@ -185,10 +185,10 @@ public class MobileZhbPayService {
         paramMap.put("orderNo", orderNo);
 
         courseService.createOrder(paramMap);
-        
-        return orderNo; 
+
+        return orderNo;
     }
-    
+
     /**
      * 立即支付
      * @param request
@@ -197,7 +197,7 @@ public class MobileZhbPayService {
      * @throws Exception
      */
     public void doPay(HttpServletRequest request, HttpServletResponse response, PayReqBean pay) throws Exception  {
-    	
+
     	Gson gson = new Gson();
         String json = gson.toJson(pay);
 
@@ -227,7 +227,7 @@ public class MobileZhbPayService {
             default:
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "是否使用筑慧币,传参错误");
         }
-		
+
 	}
-    
+
 }

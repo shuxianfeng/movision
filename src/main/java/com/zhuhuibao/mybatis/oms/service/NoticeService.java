@@ -1,12 +1,14 @@
 package com.zhuhuibao.mybatis.oms.service;
 
 import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.MessageTextConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.oms.entity.Notice;
 import com.zhuhuibao.mybatis.oms.mapper.NoticeMapper;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.utils.pagination.model.Paging;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +45,9 @@ public class NoticeService {
 			noticeMapper.updateByPrimaryKeySelective(notice);
 			if("3".equals(notice.getStatus()))
 			{
-				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),notice.getCreateId(),notice.getReason());
+				siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(),notice.getCreateId(),
+						notice.getReason(), MessageTextConstant.NOTICE, notice.getTitle(), 
+						String.valueOf(notice.getId()));
 			}
 		} catch (Exception e) {
 

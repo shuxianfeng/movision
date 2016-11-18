@@ -11,6 +11,7 @@ import java.util.concurrent.CountDownLatch;
 
 /**
  * 以一个DistributedClient对象模拟一个进程的形式, 演示zookeeper分布式锁的实现.
+ *
  * @author jianglz
  * @since 16/6/2.
  */

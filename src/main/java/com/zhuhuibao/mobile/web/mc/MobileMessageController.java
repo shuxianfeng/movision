@@ -43,13 +43,13 @@ public class MobileMessageController {
             @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
         Response response = new Response();
 
-        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String, Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> map = new HashMap<>();
         map.put("status", status);
         Long memberId = ShiroUtil.getCreateID();
         if (memberId != null) {
             map.put("recID", String.valueOf(memberId));
-            List<Map<String, String>> list = messageService.getSysMsgList(pager, map);
+            List<Map<String, Object>> list = messageService.getSysMsgList(pager, map);
             pager.result(list);
             response.setData(pager);
         } else {
@@ -64,7 +64,7 @@ public class MobileMessageController {
         Response response = new Response();
         Long memberId = ShiroUtil.getCreateID();
         if (memberId != null) {
-            Map<String, String> map = messageService.getSysMsgDetail(memberId, id);
+            Map<String, Object> map = messageService.getSysMsgDetail(memberId, id);
             response.setData(map);
         } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

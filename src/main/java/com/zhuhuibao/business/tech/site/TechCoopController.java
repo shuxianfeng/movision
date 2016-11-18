@@ -16,7 +16,6 @@ import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

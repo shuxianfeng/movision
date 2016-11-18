@@ -34,6 +34,8 @@ public class OmsJobController {
     JobPositionService positionService;
     @Autowired
     private ResumeService resumeService;
+    @Autowired
+    private JobPositionService jobService;
 
     @ApiOperation(value = "设置为热门职位", notes = "设置为热门职位", response = Response.class)
     @RequestMapping(value = "upd_setup_hot", method = RequestMethod.POST)
@@ -68,6 +70,12 @@ public class OmsJobController {
     @RequestMapping(value = "upd_position", method = RequestMethod.POST)
     public Response updatePosition(@ModelAttribute() Job job) throws IOException {
         return positionService.updatePosition(job);
+    }
+
+    @ApiOperation(value = "批量更新编辑已发布的职位", notes = "批量更新编辑已发布的职位", response = Response.class)
+    @RequestMapping(value = "batch_upd_position", method = RequestMethod.POST)
+    public Response batchUpdatePosition(@ApiParam(value = "要更新的id字符串") @RequestParam(required = false) String ids) throws IOException {
+        return jobService.refreshPosition(ids);
     }
 
     @ApiOperation(value = "更新简历", notes = "更新简历", response = Response.class)
