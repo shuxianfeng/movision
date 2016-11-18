@@ -128,25 +128,20 @@ public class MobileWitkeyService {
 	 * 我查看的威客任务
 	 * @param pageNo
 	 * @param pageSize
-	 * @param title
 	 * @param type
 	 * @return
 	 */
-	public Response sel_witkey_task(String pageNo, String pageSize, String title, String type){
-		
-		Long createId = ShiroUtil.getCreateID();
-		if (StringUtils.isEmpty(pageNo)) {
-			pageNo = "1";
-		}
-		if (StringUtils.isEmpty(pageSize)) {
-			pageSize = "10";
-		}
-		Response response = new Response();
-		Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo),
-				Integer.valueOf(pageSize));
+	public Response sel_witkey_task(String pageNo, String pageSize, String type){
+        Response response = new Response();
+        Paging<Map<String, String>> pager = getMapPaging(pageNo, pageSize);
+
 		Map<String, Object> map = new HashMap<>();
-		map.put("title", title);
-		map.put("type", type);
+		if(type == null || type.length() <= 0){
+			map.put("type", null);
+		}else{
+			map.put("type", type);
+		}
+        Long createId = ShiroUtil.getCreateID();
 		if (createId != null) {
 			Member member = memberService.findMemById(String.valueOf(createId));
 			if ("100".equals(member.getWorkType())) {
@@ -163,8 +158,25 @@ public class MobileWitkeyService {
 		}
 		return response;
 	}
-	
-	/**
+
+    /**
+     * 获取分页map
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    private Paging<Map<String, String>> getMapPaging(String pageNo, String pageSize) {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        return new Paging<Map<String, String>>(Integer.valueOf(pageNo),
+                Integer.valueOf(pageSize));
+    }
+
+    /**
 	 * 批量删除我查看的威客任务
 	 * @param ids
 	 * @return
