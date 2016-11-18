@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -260,6 +262,23 @@ public class MobileJobController {
         }
     }
 
+    @ApiOperation(value = "触屏端-盟友中心-更新简历时间", notes = "触屏端-盟友中心-更新简历时间", response = Response.class)
+    @RequestMapping(value = "refresh_resume_time", method = RequestMethod.POST)
+    public Response refreshResumeTime(@ApiParam(value = "简历id") @RequestParam String id) throws IOException {
+        Response response = new Response();
+        Long createId = ShiroUtil.getCreateID();
+        if (createId != null) {
+            Resume resume = new Resume();
+            resume.setType("2");
+            resume.setId(id);
+            mobileResumeService.updateResume(resume);
+            response.setData(resume.getId());
+            return response;
+        } else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+    }
+
     @ApiOperation(value = "触屏端-盟友中心-查看免费简历", notes = "触屏端-盟友中心-查看免费简历", response = Response.class)
     @RequestMapping(value = "sel_free_resume", method = RequestMethod.GET)
     public Response selFreeResume(@ApiParam(value = "简历id") @RequestParam String id) throws Exception {
@@ -305,8 +324,11 @@ public class MobileJobController {
 
     @ApiOperation(value = "触屏端-盟友中心-根据关键字获取企业", notes = "触屏端-盟友中心-根据关键字获取企业")
     @RequestMapping(value = "sel_company_by_keywords_list", method = RequestMethod.GET)
-    public Response selCompanyByKeywordsList(@RequestParam(required = false) String keywords) {
+    public Response selCompanyByKeywordsList(@RequestParam(required = false) String keywords) throws UnsupportedEncodingException {
         Response response = new Response();
+        if (null != keywords) {
+            keywords = URLDecoder.decode(keywords, "utf-8");
+        }
         List<Map<String, String>> list = mobileMemberService.queryCompanyByKeywords(keywords);
         response.setData(list);
         return response;
