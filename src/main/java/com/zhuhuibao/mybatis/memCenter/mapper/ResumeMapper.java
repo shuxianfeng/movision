@@ -67,4 +67,7 @@ public interface ResumeMapper {
     List<String> selectIdsByCreateId(@Param("createid") Long createid);
     //获取简历收藏最大值
 	int getMaxCollCount(Long memberId);
+
+    //更新简历,刷新简历
+    int updateResumeIsPublic(Resume resume);
 }
