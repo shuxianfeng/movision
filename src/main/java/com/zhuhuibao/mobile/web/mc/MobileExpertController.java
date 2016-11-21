@@ -140,7 +140,7 @@ public class MobileExpertController {
                 for (Dynamic dynamic : dynamicList) {
                     Map map = new HashMap();
                     map.put("id", dynamic.getId());
-                    map.put("title", "");
+                    map.put("title", dynamic.getTitle());
                     map.put("updateTime", dynamic.getUpdateTime());
                     map.put("status", dynamic.getStatus());
                     list.add(map);
@@ -200,7 +200,7 @@ public class MobileExpertController {
             if (createId != null) {
                 System.out.println(createId);
                 Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-                pager.result(mobileExpertService.findAllAchievementList(pager, createId, status));
+                pager.result(mobileExpertService.findAllMyAchievementList(pager, createId, status));
                 response.setData(pager);
             } else {
                 throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));

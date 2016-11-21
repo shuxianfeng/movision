@@ -4,6 +4,7 @@ import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.mybatis.expert.entity.Achievement;
 import com.zhuhuibao.mybatis.expert.entity.Dynamic;
 import com.zhuhuibao.mybatis.expert.mapper.AchievementMapper;
+import com.zhuhuibao.mybatis.expert.mapper.DynamicMapper;
 import com.zhuhuibao.mybatis.expert.mapper.ExpertMapper;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
@@ -42,6 +43,11 @@ public class MobileExpertService {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private DynamicMapper dynamicMapper;
+
+
 
     /**
      * 专家信息
@@ -117,7 +123,7 @@ public class MobileExpertService {
         Map<String, Object> map = new HashMap<>();
         map.put("status", status);
         map.put("createId", String.valueOf(createId));
-        return expertService.findAllDynamicList(pager, map);
+        return dynamicMapper.findAllDynamicList1(pager.getRowBounds(),map);
     }
 
     /**
@@ -152,7 +158,7 @@ public class MobileExpertService {
      * @param createId 查询条件
      * @return 技术成果
      */
-    public List<Map<String, String>> findAllAchievementList(Paging<Map<String, String>> pager, Long createId, String status) {
+    public List<Map<String, String>> findAllMyAchievementList(Paging<Map<String, String>> pager, Long createId, String status) {
         Map<String, Object> map = new HashMap<>();
         Member member = memberService.findMemById(String.valueOf(createId));
         if (null != status) {
@@ -163,7 +169,7 @@ public class MobileExpertService {
         } else {
             map.put("viewerId", createId);
         }
-        return achievementMapper.findAllMobileAchievementList(pager.getRowBounds(), map);
+        return achievementMapper.findAllMobileMyAchievementList(pager.getRowBounds(), map);
     }
 
     /***
