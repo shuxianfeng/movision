@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.expert.mapper.AchievementMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.expert.entity.Achievement" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="createId" property="createId" jdbcType="VARCHAR" />
-    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
-    <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="systemType" property="systemType" jdbcType="VARCHAR" />
-    <result column="useArea" property="useArea" jdbcType="VARCHAR" />
-    <result column="companyName" property="companyName" jdbcType="VARCHAR" />
-    <result column="linkMan" property="linkMan" jdbcType="VARCHAR" />
-    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
-    <result column="email" property="email" jdbcType="VARCHAR" />
-    <result column="province" property="province" jdbcType="VARCHAR" />
-    <result column="city" property="city" jdbcType="VARCHAR" />
-    <result column="area" property="area" jdbcType="VARCHAR" />
-    <result column="address" property="address" jdbcType="VARCHAR" />
-    <result column="cooperationType" property="cooperationType" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="is_deleted" property="is_deleted" jdbcType="VARCHAR" />
-    <result column="introduce" property="introduce" jdbcType="VARCHAR" />
-    <result column="provinceName" property="provinceName" jdbcType="VARCHAR" />
-    <result column="cityName" property="cityName" jdbcType="VARCHAR" />
-    <result column="areaName" property="areaName" jdbcType="VARCHAR" />
-    <result column="systemName" property="systemName" jdbcType="VARCHAR" />
-    <result column="useAreaName" property="useAreaName" jdbcType="VARCHAR" />
-    <result column="createName" property="createName" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.zhuhuibao.mybatis.expert.mapper.AchievementMapper">
+    <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.expert.entity.Achievement">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="createId" property="createId" jdbcType="VARCHAR"/>
+        <result column="publishTime" property="publishTime" jdbcType="VARCHAR"/>
+        <result column="updateTime" property="updateTime" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="systemType" property="systemType" jdbcType="VARCHAR"/>
+        <result column="useArea" property="useArea" jdbcType="VARCHAR"/>
+        <result column="companyName" property="companyName" jdbcType="VARCHAR"/>
+        <result column="linkMan" property="linkMan" jdbcType="VARCHAR"/>
+        <result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="area" property="area" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="cooperationType" property="cooperationType" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="is_deleted" jdbcType="VARCHAR"/>
+        <result column="introduce" property="introduce" jdbcType="VARCHAR"/>
+        <result column="provinceName" property="provinceName" jdbcType="VARCHAR"/>
+        <result column="cityName" property="cityName" jdbcType="VARCHAR"/>
+        <result column="areaName" property="areaName" jdbcType="VARCHAR"/>
+        <result column="systemName" property="systemName" jdbcType="VARCHAR"/>
+        <result column="useAreaName" property="useAreaName" jdbcType="VARCHAR"/>
+        <result column="createName" property="createName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, createId, publishTime, updateTime, title, systemType, useArea, companyName, linkMan, 
     telephone, email, province, city, area, address, cooperationType, status, is_deleted,introduce
   </sql>
-  <select id="queryAchievementById" parameterType="java.lang.String" resultType="java.util.Map">
+    <select id="queryAchievementById" parameterType="java.lang.String" resultType="java.util.Map">
     select a.id,date_format(a.publishTime,'%Y-%m-%d') publishTime,date_format(a.updateTime,'%Y-%m-%d') updateTime,
     a.title,a.systemType,a.useArea,a.companyName,a.linkMan,a.telephone,a.email,a.province,a.city,a.area,a.address,a.cooperationType,a.status,
     a.introduce,a.createId,a.reason,
@@ -45,7 +45,7 @@
     LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
     where a.id = #{id} and a.is_deleted = 0
   </select>
-  <select id="queryUnLoginAchievementById" parameterType="java.lang.String" resultType="java.util.Map">
+    <select id="queryUnLoginAchievementById" parameterType="java.lang.String" resultType="java.util.Map">
      select a.id,a.title,a.introduce,con.name as systemName,co.name as useAreaName,a.cooperationType,
      case when a.companyName is null or a.companyName = '' THEN a.companyName when a.companyName
      is not null and a.companyName != '' then '********'  end as companyName,
@@ -63,277 +63,281 @@
     LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
     where a.id = #{id}    and a.status = 1
   </select>
-  <select id="findAchievementListByCount" resultType="java.util.Map">
+    <select id="findAchievementListByCount" resultType="java.util.Map">
     select a.id,a.title,date_format(a.updateTime,'%Y-%m-%d') updateTime
     from t_e_achievement a
     WHERE a.is_deleted = 0 and a.status = 1
     ORDER by a.updateTime DESC limit 0,#{count}
   </select>
-  <select id="findAllAchievementList" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.expert.entity.Achievement">
-    select a.id,date_format(a.publishTime,'%Y-%m-%d') publishTime,date_format(a.updateTime,'%Y-%m-%d') updateTime,
-    a.title,a.systemType,a.useArea,a.companyName,a.linkMan,a.telephone,a.email,a.province,a.city,a.area,a.address,a.cooperationType,a.status,
-    a.introduce,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,
-    co.name as useAreaName,m.personRealName as createName
-    from t_e_achievement a
-    LEFT JOIN t_dictionary_province p on a.province = p.code
-    LEFT JOIN t_dictionary_city c on a.city = c.code
-    LEFT JOIN t_dictionary_area ar on a.area = ar.code
-    LEFT JOIN t_dictionary_constant con on con.code = a.systemType and con.type = 19
-    LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
-    LEFT JOIN t_m_member m on a.createId = m.id
-    where a.is_deleted = 0
-    <if test="title != null and title != ''">
-      and a.title like CONCAT('%',#{title},'%')
-    </if>
-    <if test="status != null and status != ''">
-      and a.status = #{status}
-    </if>
-    <if test="createId != null and createId != ''">
-      and a.createId = #{createId}
-    </if>
-    <if test="systemType != null and systemType != ''">
-      and a.systemType = #{systemType}
-    </if>
-    <if test="useArea != null and useArea != ''">
-      and a.useArea = #{useArea}
-    </if>
-    <if test="type != null and type != ''">
-      and a.status = 1
-    </if>
-    order by a.updateTime desc
-  </select>
-  <insert id="publishAchievement" parameterType="com.zhuhuibao.mybatis.expert.entity.Achievement" >
-    insert into t_e_achievement
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="createId != null" >
-        createId,
-      </if>
-        publishTime,
-        updateTime,
-      <if test="title != null" >
-        title,
-      </if>
-      <if test="systemType != null" >
-        systemType,
-      </if>
-      <if test="useArea != null" >
-        useArea,
-      </if>
-      <if test="companyName != null" >
-        companyName,
-      </if>
-      <if test="linkMan != null" >
-        linkMan,
-      </if>
-      <if test="telephone != null" >
-        telephone,
-      </if>
-      <if test="email != null" >
-        email,
-      </if>
-      <if test="province != null" >
-        province,
-      </if>
-      <if test="city != null" >
-        city,
-      </if>
-      <if test="area != null" >
-        area,
-      </if>
-      <if test="address != null" >
-        address,
-      </if>
-      <if test="cooperationType != null" >
-        cooperationType,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="is_deleted != null" >
-        is_deleted,
-      </if>
-      <if test="introduce != null" >
-        introduce,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id},
-      </if>
-      <if test="createId != null" >
-        #{createId},
-      </if>
-      now(),
-      now(),
-      <if test="title != null" >
-        #{title},
-      </if>
-      <if test="systemType != null" >
-        #{systemType},
-      </if>
-      <if test="useArea != null" >
-        #{useArea},
-      </if>
-      <if test="companyName != null" >
-        #{companyName},
-      </if>
-      <if test="linkMan != null" >
-        #{linkMan},
-      </if>
-      <if test="telephone != null" >
-        #{telephone},
-      </if>
-      <if test="email != null" >
-        #{email},
-      </if>
-      <if test="province != null" >
-        #{province},
-      </if>
-      <if test="city != null" >
-        #{city},
-      </if>
-      <if test="area != null" >
-        #{area},
-      </if>
-      <if test="address != null" >
-        #{address},
-      </if>
-      <if test="cooperationType != null" >
-        #{cooperationType},
-      </if>
-      <if test="status != null" >
-        #{status},
-      </if>
-      <if test="is_deleted != null" >
-        #{is_deleted},
-      </if>
-      <if test="introduce != null" >
-        #{introduce},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateAchievement" parameterType="com.zhuhuibao.mybatis.expert.entity.Achievement" >
-    update t_e_achievement
-    <set >
-        updateTime = now(),
-      <if test="title != null" >
-        title = #{title},
-      </if>
-      <if test="systemType != null" >
-        systemType = #{systemType},
-      </if>
-      <if test="useArea != null" >
-        useArea = #{useArea},
-      </if>
-      <if test="companyName != null" >
-        companyName = #{companyName},
-      </if>
-      <if test="linkMan != null" >
-        linkMan = #{linkMan},
-      </if>
-      <if test="telephone != null" >
-        telephone = #{telephone},
-      </if>
-      <if test="email != null" >
-        email = #{email},
-      </if>
-      <if test="province != null" >
-        province = #{province},
-      </if>
-      <if test="city != null" >
-        city = #{city},
-      </if>
-      <if test="area != null" >
-        area = #{area},
-      </if>
-      <if test="address != null" >
-        address = #{address},
-      </if>
-      <if test="cooperationType != null" >
-        cooperationType = #{cooperationType},
-      </if>
-      <if test="status != null" >
-        status = #{status},
-      </if>
-      <if test="is_deleted != null" >
-        is_deleted = #{is_deleted},
-      </if>
-      <if test="introduce != null" >
-        introduce = #{introduce},
-      </if>
-      <if test="reason != null">
-        reason = #{reason}
-      </if>
-    </set>
-    where id = #{id}
-  </update>
+    <select id="findAllAchievementList" parameterType="java.util.Map"
+            resultType="com.zhuhuibao.mybatis.expert.entity.Achievement">
+        select a.id,date_format(a.publishTime,'%Y-%m-%d') publishTime,date_format(a.updateTime,'%Y-%m-%d') updateTime,
+        a.title,a.systemType,a.useArea,a.companyName,a.linkMan,a.telephone,a.email,a.province,a.city,a.area,a.address,a.cooperationType,a.status,
+        a.introduce,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,
+        co.name as useAreaName,m.personRealName as createName
+        from t_e_achievement a
+        LEFT JOIN t_dictionary_province p on a.province = p.code
+        LEFT JOIN t_dictionary_city c on a.city = c.code
+        LEFT JOIN t_dictionary_area ar on a.area = ar.code
+        LEFT JOIN t_dictionary_constant con on con.code = a.systemType and con.type = 19
+        LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
+        LEFT JOIN t_m_member m on a.createId = m.id
+        where a.is_deleted = 0
+        <if test="title != null and title != ''">
+            and a.title like CONCAT('%',#{title},'%')
+        </if>
+        <if test="status != null and status != ''">
+            and a.status = #{status}
+        </if>
+        <if test="createId != null and createId != ''">
+            and a.createId = #{createId}
+        </if>
+        <if test="systemType != null and systemType != ''">
+            and a.systemType = #{systemType}
+        </if>
+        <if test="useArea != null and useArea != ''">
+            and a.useArea = #{useArea}
+        </if>
+        <if test="type != null and type != ''">
+            and a.status = 1
+        </if>
+        order by a.updateTime desc
+    </select>
+    <insert id="publishAchievement" parameterType="com.zhuhuibao.mybatis.expert.entity.Achievement">
+        insert into t_e_achievement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createId != null">
+                createId,
+            </if>
+            publishTime,
+            updateTime,
+            <if test="title != null">
+                title,
+            </if>
+            <if test="systemType != null">
+                systemType,
+            </if>
+            <if test="useArea != null">
+                useArea,
+            </if>
+            <if test="companyName != null">
+                companyName,
+            </if>
+            <if test="linkMan != null">
+                linkMan,
+            </if>
+            <if test="telephone != null">
+                telephone,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="cooperationType != null">
+                cooperationType,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="is_deleted != null">
+                is_deleted,
+            </if>
+            <if test="introduce != null">
+                introduce,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="createId != null">
+                #{createId},
+            </if>
+            now(),
+            now(),
+            <if test="title != null">
+                #{title},
+            </if>
+            <if test="systemType != null">
+                #{systemType},
+            </if>
+            <if test="useArea != null">
+                #{useArea},
+            </if>
+            <if test="companyName != null">
+                #{companyName},
+            </if>
+            <if test="linkMan != null">
+                #{linkMan},
+            </if>
+            <if test="telephone != null">
+                #{telephone},
+            </if>
+            <if test="email != null">
+                #{email},
+            </if>
+            <if test="province != null">
+                #{province},
+            </if>
+            <if test="city != null">
+                #{city},
+            </if>
+            <if test="area != null">
+                #{area},
+            </if>
+            <if test="address != null">
+                #{address},
+            </if>
+            <if test="cooperationType != null">
+                #{cooperationType},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="is_deleted != null">
+                #{is_deleted},
+            </if>
+            <if test="introduce != null">
+                #{introduce},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateAchievement" parameterType="com.zhuhuibao.mybatis.expert.entity.Achievement">
+        update t_e_achievement
+        <set>
+            updateTime = now(),
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="systemType != null">
+                systemType = #{systemType},
+            </if>
+            <if test="useArea != null">
+                useArea = #{useArea},
+            </if>
+            <if test="companyName != null">
+                companyName = #{companyName},
+            </if>
+            <if test="linkMan != null">
+                linkMan = #{linkMan},
+            </if>
+            <if test="telephone != null">
+                telephone = #{telephone},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="province != null">
+                province = #{province},
+            </if>
+            <if test="city != null">
+                city = #{city},
+            </if>
+            <if test="area != null">
+                area = #{area},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="cooperationType != null">
+                cooperationType = #{cooperationType},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="is_deleted != null">
+                is_deleted = #{is_deleted},
+            </if>
+            <if test="introduce != null">
+                introduce = #{introduce},
+            </if>
+            <if test="reason != null">
+                reason = #{reason}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 
-  <update id="deleteLookedAchievement" parameterType="java.lang.String" >
+    <update id="deleteLookedAchievement" parameterType="java.lang.String">
     update t_zhb_viewGoods
     set status = 1
     where id = #{id}
   </update>
 
-  <select id="findAllMyLookedAchievementList" resultType="java.util.Map" >
-    select c.id,c.title,date_format(v.viewTime,'%Y-%m-%d') viewTime,
-    v.id as recordId,co.name as systemName,con.name as areaName
-    from t_zhb_viewGoods v
-    left join t_e_achievement c on v.goodsId = c.id
-    left join t_dictionary_constant co on c.systemType = co.code and co.`type` = 19
-    left join t_dictionary_constant con on c.useArea = con.code and con.`type` = 18
-    where v.type = 'CKZJJSCG' and v.`status` = 0
-    <if test="companyId != null">
-      and v.companyId = #{companyId}
-    </if>
-    <if test="viewerId != null">
-      and v.viewerId = #{viewerId}
-    </if>
-    order by v.viewTime desc
-  </select>
+    <select id="findAllMyLookedAchievementList" resultType="java.util.Map">
+        select c.id,c.title,date_format(v.viewTime,'%Y-%m-%d') viewTime,
+        v.id as recordId,co.name as systemName,con.name as areaName
+        from t_zhb_viewGoods v
+        left join t_e_achievement c on v.goodsId = c.id
+        left join t_dictionary_constant co on c.systemType = co.code and co.`type` = 19
+        left join t_dictionary_constant con on c.useArea = con.code and con.`type` = 18
+        where v.type = 'CKZJJSCG' and v.`status` = 0
+        <if test="companyId != null">
+            and v.companyId = #{companyId}
+        </if>
+        <if test="viewerId != null">
+            and v.viewerId = #{viewerId}
+        </if>
+        order by v.viewTime desc
+    </select>
 
-  <select id="findAllMobileAchievementList" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.expert.entity.Achievement">
-    select a.id,date_format(a.publishTime,'%Y-%m-%d') publishTime,date_format(a.updateTime,'%Y-%m-%d') updateTime,
-    a.title,a.systemType,a.useArea,a.companyName,a.linkMan,a.telephone,a.email,a.province,a.city,a.area,a.address,a.cooperationType,a.status,
-    a.introduce,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,
-    co.name as useAreaName,m.personRealName as createName
-    from t_e_achievement a
-    LEFT JOIN t_dictionary_province p on a.province = p.code
-    LEFT JOIN t_dictionary_city c on a.city = c.code
-    LEFT JOIN t_dictionary_area ar on a.area = ar.code
-    LEFT JOIN t_dictionary_constant con on con.code = a.systemType and con.type = 19
-    LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
-    LEFT JOIN t_m_member m on a.createId = m.id
-    where a.is_deleted = 0
-    <if test="status != null and status != ''">
-      and a.status = #{status}
-    </if>
-    <if test="createId != null and createId != ''">
-      and a.createId = #{createId}
-    </if>
-     GROUP BY a.updateTime
-  </select>
+    <select id="findAllMobileMyAchievementList" parameterType="java.util.Map"
+            resultType="com.zhuhuibao.mybatis.expert.entity.Achievement">
+        select a.id,date_format(a.publishTime,'%Y-%m-%d') publishTime,date_format(a.updateTime,'%Y-%m-%d') updateTime,
+        a.title,a.systemType,a.useArea,a.companyName,a.linkMan,a.telephone,a.email,a.province,a.city,a.area,a.address,a.cooperationType,a.status,
+        a.introduce,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,
+        co.name as useAreaName,m.personRealName as createName
+        from t_e_achievement a
+        LEFT JOIN t_dictionary_province p on a.province = p.code
+        LEFT JOIN t_dictionary_city c on a.city = c.code
+        LEFT JOIN t_dictionary_area ar on a.area = ar.code
+        LEFT JOIN t_dictionary_constant con on con.code = a.systemType and con.type = 19
+        LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
+        LEFT JOIN t_m_member m on a.createId = m.id
+        where a.is_deleted = 0
+        <if test="status != null and status != ''">
+            and a.status = #{status}
+        </if>
+        <if test="createId != null and createId != ''">
+            and a.createId = #{createId}
+        </if>
+        GROUP by a.updateTime
+        order by a.updateTime DESC
+    </select>
 
-  <select id="findAllMyLookedMobileAchievementList" resultType="java.util.Map" >
-    select c.id,c.title,date_format(v.viewTime,'%Y-%m-%d') viewTime,v.type,
-    v.id as recordId,co.name as systemName,con.name as areaName,v.goodsId
-    from t_zhb_viewGoods v
-    left join t_e_achievement c on v.goodsId = c.id
-    left join t_dictionary_constant co on c.systemType = co.code and co.`type` = 19
-    left join t_dictionary_constant con on c.useArea = con.code and con.`type` = 18
-    where v.type = 'CKZJJSCG' and v.`status` = 0
-    <if test="companyId != null">
-      and v.companyId = #{companyId}
-    </if>
-    <if test="viewerId != null">
-      and v.viewerId = #{viewerId}
-    </if>
-    <if test="status != null and status != ''">
-      and a.status = #{status}
-    </if>
-    GROUP by v.viewTime
-  </select>
+    <select id="findAllMyLookedMobileAchievementList" resultType="java.util.Map">
+        select c.id,c.title,date_format(v.viewTime,'%Y-%m-%d') viewTime,v.type,
+        v.id as recordId,co.name as systemName,con.name as areaName,v.goodsId
+        from t_zhb_viewGoods v
+        left join t_e_achievement c on v.goodsId = c.id
+        left join t_dictionary_constant co on c.systemType = co.code and co.`type` = 19
+        left join t_dictionary_constant con on c.useArea = con.code and con.`type` = 18
+        where v.type = 'CKZJJSCG' and v.`status` = 0
+        <if test="companyId != null">
+            and v.companyId = #{companyId}
+        </if>
+        <if test="viewerId != null">
+            and v.viewerId = #{viewerId}
+        </if>
+        <if test="status != null and status != ''">
+            and a.status = #{status}
+        </if>
+        GROUP by v.viewTime
+        order by v.viewTime DESC
+    </select>
 
 </mapper>
