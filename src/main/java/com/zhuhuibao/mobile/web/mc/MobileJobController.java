@@ -371,4 +371,18 @@ public class MobileJobController {
         }
         return response;
     }
+
+    @ApiOperation(value = "触屏端-盟友中心-更新简历是否公开设置", notes = "触屏端-盟友中心-更新简历是否公开设置", response = Response.class)
+    @RequestMapping(value = "upd_resume_is_public", method = RequestMethod.POST)
+    public Response updateResumeIsPublic(@ModelAttribute Resume resume) throws IOException {
+        Response response = new Response();
+        Long createId = ShiroUtil.getCreateID();
+        if (createId != null) {
+            mobileResumeService.updateResumeIsPublic(resume);
+            response.setData(resume.getId());
+            return response;
+        } else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+    }
 }

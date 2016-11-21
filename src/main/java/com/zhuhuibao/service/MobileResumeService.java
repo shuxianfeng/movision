@@ -196,4 +196,12 @@ public class MobileResumeService {
         resumeMapper.updateResume(resume);
     }
 
+    /**
+     * 更新简历是否公开接口
+     *
+     * @param resume
+     */
+    public void updateResumeIsPublic(Resume resume) {
+        resumeMapper.updateResumeIsPublic(resume);
+    }
 }

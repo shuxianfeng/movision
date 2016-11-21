@@ -437,4 +437,15 @@
       </if>
     </trim>
   </insert>
+
+  <update id="updateResumeIsPublic" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
+    update t_i_resume
+    <set>
+      <if test="isPublic != null and isPublic !=''" >
+        isPublic = #{isPublic},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
 </mapper>
