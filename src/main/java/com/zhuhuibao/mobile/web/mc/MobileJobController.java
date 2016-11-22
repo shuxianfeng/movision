@@ -385,4 +385,11 @@ public class MobileJobController {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
     }
+
+    @ApiOperation(value = "获取职位类别", notes = "获取职位类别", response = Response.class)
+    @RequestMapping(value = "sel_position_type", method = RequestMethod.GET)
+    public Response positionType() {
+        List<Map<String,Object>> list = mobileJobService.getPositionTypes();
+        return new Response(list);
+    }
 }
