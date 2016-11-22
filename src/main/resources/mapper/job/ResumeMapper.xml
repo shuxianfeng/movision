@@ -162,16 +162,9 @@
       <if test="eduExperience != null and eduExperience !=''" >
         eduExperience = #{eduExperience},
       </if>
-      
-      
-      
-      	<if test="attach != null and attach !=''" >
+      <if test="attach != null and attach !=''" >
         attach = #{attach},
-        </if>
-        <if test="attach == null or attach == ''">
-		attach = "",
-		</if>    
-		  
+      </if>
       <if test="isPublic != null and isPublic !=''" >
         isPublic = #{isPublic},
       </if>
@@ -205,7 +198,7 @@
     where r.createid = #{id}
   </select>
   <select id="previewResume" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select r.id,r.createid,r.title,r.realName,r.birthYear,dc.name education,r.photo,r.updateTime,r.attach,
+    select r.id,r.createid,r.title,r.realName,r.birthYear,dc.name education,r.photo,r.updateTime,r.attach,r.isPublic,
     case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,
     case WHEN r.marriage =0 then '未婚' WHEN r.marriage =1 THEN '已婚' WHEN r.marriage =2 THEN '保密' END AS marriage,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
@@ -437,4 +430,15 @@
       </if>
     </trim>
   </insert>
+
+  <update id="updateResumeIsPublic" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
+    update t_i_resume
+    <set>
+      <if test="isPublic != null and isPublic !=''" >
+        isPublic = #{isPublic},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
 </mapper>

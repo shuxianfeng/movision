@@ -359,7 +359,7 @@ public class MobileJobController {
             } else {
                 for (Map<String, String> aList : list) {
                     Map map1 = (Map) aList;
-                    String cId = (String) map1.get("company_id");
+                    String cId = map1.get("company_id").toString();
                     if (companyId.equals(cId)) {
                         throw new BusinessException(MsgCodeConstant.FORBID_KEYWORDS_REPEAT, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.FORBID_KEYWORDS_REPEAT)));
                     }
@@ -370,5 +370,19 @@ public class MobileJobController {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
+    }
+
+    @ApiOperation(value = "触屏端-盟友中心-更新简历是否公开设置", notes = "触屏端-盟友中心-更新简历是否公开设置", response = Response.class)
+    @RequestMapping(value = "upd_resume_is_public", method = RequestMethod.POST)
+    public Response updateResumeIsPublic(@ModelAttribute Resume resume) throws IOException {
+        Response response = new Response();
+        Long createId = ShiroUtil.getCreateID();
+        if (createId != null) {
+            mobileResumeService.updateResumeIsPublic(resume);
+            response.setData(resume.getId());
+            return response;
+        } else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
     }
 }
