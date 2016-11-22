@@ -198,9 +198,9 @@ public class MobileJobController {
             List<String> ids = mobileResumeService.selectIdsByCreateId(createId);
             if (ids != null && ids.size() >= 1) {
                 result.put("hasResume", true);
-                List<Resume> resumeList = new ArrayList<>();
+                List<Map<String, Object>> resumeList = new ArrayList<>();
                 for (String id : ids) {
-                    resumeList.add(mobileResumeService.previewResume(id));
+                    resumeList.add(mobileResumeService.previewMyResume(id));
                 }
                 result.put("resumeList", resumeList);
             } else {
@@ -389,7 +389,7 @@ public class MobileJobController {
     @ApiOperation(value = "获取职位类别", notes = "获取职位类别", response = Response.class)
     @RequestMapping(value = "sel_position_type", method = RequestMethod.GET)
     public Response positionType() {
-        List<Map<String,Object>> list = mobileJobService.getPositionTypes();
+        List<Map<String, Object>> list = mobileJobService.getPositionTypes();
         return new Response(list);
     }
 }

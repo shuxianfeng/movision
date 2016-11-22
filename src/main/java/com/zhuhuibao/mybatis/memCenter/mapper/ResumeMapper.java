@@ -70,4 +70,7 @@ public interface ResumeMapper {
 
     //更新简历,刷新简历
     int updateResumeIsPublic(Resume resume);
+
+    //预览简历
+    Map<String,Object> previewMyResume(Map<String,Object> map);
 }

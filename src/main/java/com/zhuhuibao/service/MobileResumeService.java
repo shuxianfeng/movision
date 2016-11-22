@@ -204,4 +204,16 @@ public class MobileResumeService {
     public void updateResumeIsPublic(Resume resume) {
         resumeMapper.updateResumeIsPublic(resume);
     }
+
+    /**
+     * 查看自己简历详情信息
+     *
+     * @param id
+     * @return
+     */
+    public Map<String, Object> previewMyResume(String id) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        return resumeMapper.previewMyResume(map);
+    }
 }
