@@ -18,6 +18,10 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
+    <context:component-scan base-package="com.external">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
     <!--properties-->
     <context:property-placeholder
             ignore-unresolvable="true" location="classpath*:/spring/application.properties,
