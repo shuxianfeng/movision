@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -176,4 +177,31 @@ public class MobileTechService {
         response.setData(techCoop);
         return response;
 	}
+
+
+    /**
+     * 批量删除我的技术合作
+     * @param idStr
+     */
+    public void batchDeleteTechCoop(String idStr)
+    {
+        String ids[] = idStr.split(",");
+        if(null != ids && ids.length>0 ){
+            Map<String, Object> condition = new HashMap<>();
+            condition.put("status", TechConstant.TechCooperationnStatus.DELETE.toString());
+            int len = ids.length;
+            for (int i = 0; i < len; i++) {
+                condition.put("id", ids[i]);
+                int result = techService.deleteTechCooperation(condition);
+                if (result != 1) {
+                    throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "删除失败");
+                }
+            }
+        }else{
+            throw new BusinessException(MsgCodeConstant.TECH_COOP_IS_EMPTY, "技术合作id的数组为空");
+        }
+    }
+
+
+
 }

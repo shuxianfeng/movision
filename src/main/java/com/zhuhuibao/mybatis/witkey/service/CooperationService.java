@@ -76,7 +76,6 @@ public class CooperationService {
 			}
 		} catch (Exception e) {
 			log.error("CooperationService::publishCooperation::"+"publisher="+ShiroUtil.getCreateID(),e);
-			//e.printStackTrace();
 			throw e;
 		}
 	}
@@ -110,7 +109,6 @@ public class CooperationService {
 			return list1;
 		} catch (Exception e) {
 			log.error("CooperationService::cooperationType",e);
-			//e.printStackTrace();
 			throw e;
 		}
 	}
@@ -132,7 +130,6 @@ public class CooperationService {
 			return list;
 		} catch (Exception e) {
 			log.error("CooperationService::subCooperationType",e);
-			//e.printStackTrace();
 			throw e;
 		}
 	}
@@ -149,7 +146,6 @@ public class CooperationService {
 			}
 		} catch (Exception e) {
 			log.error("CooperationService::updateCooperation",e);
-			//e.printStackTrace();
 			throw e;
 		}
 		return result;
@@ -163,7 +159,6 @@ public class CooperationService {
 			return cooperationMapper.updateCooperationViews(cooperation);
 		} catch (Exception e) {
 			log.error("CooperationService::updateCooperationViews",e);
-			//e.printStackTrace();
 			throw e;
 		}
 	}
@@ -171,15 +166,15 @@ public class CooperationService {
 	/**
 	 * 批量删除任务
 	 */
-	public void deleteCooperation(String ids[]) {
+	public void deleteCooperation(String ids) {
 		try {
-			for (int i = 0; i < ids.length; i++) {
-				String id = ids[i];
+			String[] arr = ids.split(",");
+			for (int i = 0; i < arr.length; i++) {
+				String id = arr[i];
 				cooperationMapper.deleteCooperation(id);
 			}
 		} catch (Exception e) {
 			log.error("CooperationService::deleteCooperation",e);
-			//e.printStackTrace();
 			throw e;
 		}
 	}
