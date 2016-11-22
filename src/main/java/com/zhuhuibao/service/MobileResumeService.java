@@ -1,6 +1,8 @@
 package com.zhuhuibao.service;
 
 import com.zhuhuibao.common.constant.JobConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.CollectRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.DownloadRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
@@ -8,6 +10,7 @@ import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
 import com.zhuhuibao.mybatis.memCenter.service.JobRelResumeService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -182,7 +185,7 @@ public class MobileResumeService {
      * @param resume
      */
     public String setUpResume(Resume resume) {
-        resumeService.checkResumeParams(resume);
+        checkResumeParams(resume);
         resumeMapper.setUpResume(resume);
         return resume.getId();
     }
@@ -215,5 +218,44 @@ public class MobileResumeService {
         Map<String, Object> map = new HashMap<>();
         map.put("id", id);
         return resumeMapper.previewMyResume(map);
+    }
+
+    /**
+     * 创建简历字段校验
+     *
+     * @param resume
+     */
+    public void checkResumeParams(Resume resume) {
+        if (StringUtils.isEmpty(resume.getTitle())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "简历名称不能为空");
+        }
+        // 姓名
+        if (StringUtils.isEmpty(resume.getRealName())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "姓名不能为空");
+        }
+        // 性别
+        if (StringUtils.isEmpty(resume.getSex())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "性别不能为空");
+        }
+        // 最高学历
+        if (StringUtils.isEmpty(resume.getEducation())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "最高学历不能为空");
+        }
+        // 工作经验
+        if (StringUtils.isEmpty(resume.getExperienceYear())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "工作经验不能为空");
+        }
+        // 出生年份
+        if (StringUtils.isEmpty(resume.getBirthYear())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "出生年份不能为空");
+        }
+        // 手机
+        if (StringUtils.isEmpty(resume.getMobile())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "手机不能为空");
+        }
+        // 邮箱
+        if (StringUtils.isEmpty(resume.getEmail())) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "邮箱不能为空");
+        }
     }
 }

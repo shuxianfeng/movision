@@ -442,7 +442,8 @@
   </update>
 
   <select id="previewMyResume" parameterType="java.util.Map" resultType="java.util.Map">
-    select r.id,r.createid,r.title,r.realName,r.birthYear,dc.name educationName,r.education,r.photo,r.updateTime,r.attach,r.isPublic,r.experienceYear,
+    select r.id,r.createid,r.title,r.realName,r.birthYear,dc.name educationName,r.education,r.photo,r.attach,r.isPublic,r.experienceYear,
+    date_format(r.updateTime,'%Y-%m-%d %H:%i:%s') as updateTime,
     case when r.sex=1 then '男' when r.sex=0 then '女' end as sexName,r.mobile,r.email,r.sex,
     case WHEN r.marriage =0 then '未婚' WHEN r.marriage =1 THEN '已婚' WHEN r.marriage =2 THEN '保密' END AS marriage,r.evaluation,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
