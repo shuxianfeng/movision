@@ -1,31 +1,21 @@
 package com.zhuhuibao.mobile.web.mc;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.aop.LoginAccess;
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.TechConstant;
+import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
+import com.zhuhuibao.mybatis.tech.service.TechDataService;
+import com.zhuhuibao.service.MobileTechService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.aop.LoginAccess;
-import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.TechConstant;
-import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.fsearch.utils.StringUtil;
-import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
-import com.zhuhuibao.mybatis.tech.service.TechDataService;
-import com.zhuhuibao.service.MobileTechService;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
-import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/rest/m/tech/mc/")
@@ -98,13 +88,8 @@ public class MobileTechMcController {
     @RequestMapping(value = {"del_tech_cooperation", "cg/del_tech_cooperation", "xq/del_tech_cooperation"}, method = RequestMethod.POST)
     @ApiOperation(value = "删除技术合作(技术成果，技术需求)", notes = "删除技术合作(技术成果，技术需求)", response = Response.class)
     public Response deleteTechCooperation(@ApiParam(value = "技术合作ID") @RequestParam() String techId) {
-        Map<String, Object> condition = new HashMap<>();
-        condition.put("id", techId);
-        condition.put("status", TechConstant.TechCooperationnStatus.DELETE.toString());
-        int result = techService.deleteTechCooperation(condition);
-        if (result != 1) {
-            throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "删除失败");
-        }
+
+        mTechSV.batchDeleteTechCoop(techId);
         return new Response();
     }
 	
@@ -133,6 +118,18 @@ public class MobileTechMcController {
     public Response previewSiteTechCooperation(@ApiParam(value = "技术需求ID") @RequestParam String techCoopId) {
         
 		return mTechSV.previewSiteTechCooperation(techCoopId);
+    }
+
+    @LoginAccess
+    @RequestMapping(value = "cg/del_batch_my_looked_achievement", method = RequestMethod.POST)
+    @ApiOperation(value = "批量删除我查看过的技术成果", notes = "批量删除我查看过的技术成果", response = Response.class)
+    public Response del_batch_my_looked_achievement(@RequestParam String ids) {
+        Response response = new Response();
+        String idlist[] = ids.split(",");
+        for (String id : idlist) {
+            techService.deleteLookedAchievement(id);
+        }
+        return response;
     }
 
 }

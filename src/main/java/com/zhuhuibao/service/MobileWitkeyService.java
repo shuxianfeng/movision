@@ -21,17 +21,18 @@ import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 
+
 @Service
 @Transactional
 public class MobileWitkeyService {
 
 	@Autowired
 	private CooperationService cooperationService;
-	
+
 	@Autowired
 	private MemberService memberService;
 
-	
+
 	/**
 	 * 查询我发布的任务
 	 * @param pageNo
@@ -43,7 +44,7 @@ public class MobileWitkeyService {
 	 */
 	public Response findAllMyCooperationByPager(String pageNo, String pageSize,
 			String title, String type, String status){
-		
+
 		Long createId = ShiroUtil.getCreateID();
 		if (StringUtils.isEmpty(pageNo)) {
 			pageNo = "1";
@@ -54,7 +55,7 @@ public class MobileWitkeyService {
 		Response response = new Response();
 		Paging<Map<String, String>> pager = new Paging<Map<String, String>>(Integer.valueOf(pageNo),
 				Integer.valueOf(pageSize));
-		
+
 		Cooperation cooperation = genCooperation(title, type, status, createId);
 		if (createId != null) {
 			List<Map<String, String>> cooperationList = cooperationService
@@ -85,7 +86,7 @@ public class MobileWitkeyService {
 		cooperation.setStatus(status);
 		return cooperation;
 	}
-	
+
 	/**
 	 * 发布任务,/发布威客服务，/发布威客资质合作
 	 * @param cooperation
@@ -103,7 +104,7 @@ public class MobileWitkeyService {
         }
         return response;
 	}
-	
+
 	/**
 	 * 查询威客信息詳情
 	 * @param id
@@ -123,7 +124,7 @@ public class MobileWitkeyService {
         }
         return response;
 	}
-	
+
 	/**
 	 * 我查看的威客任务
 	 * @param pageNo
@@ -189,7 +190,7 @@ public class MobileWitkeyService {
 		}
 		return response;
 	}
-	
+
 	/**
 	 * 发布任务时，自动获取发布者的联系方式
 	 * @return
@@ -216,5 +217,52 @@ public class MobileWitkeyService {
         }
         return response;
 	}
-	
+
+    /**
+     * 查询任务列表（前台分页）
+     * @param pageNo
+     * @param pageSize
+     * @param type
+     * @param category
+     * @param systemType
+     * @param province
+     * @param smart
+     * @param parentId
+     * @return
+     */
+    public Paging<Map<String, String>> getPager(String pageNo, String pageSize, String type, String category,
+                                                String systemType, String province, String smart, String parentId)
+    {
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Cooperation cooperation = getCooperation(type, category, systemType, province, smart, parentId);
+
+        List<Map<String, String>> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
+        pager.result(cooperationList);
+        return pager;
+    }
+
+    /**
+     * 获取合作实体bean
+     * @param type
+     * @param category
+     * @param systemType
+     * @param province
+     * @param smart
+     * @param parentId
+     * @return
+     */
+    private Cooperation getCooperation(String type, String category, String systemType, String province, String smart, String parentId) {
+        Cooperation cooperation = new Cooperation();
+        cooperation.setSmart(smart);
+        cooperation.setType(type);
+        //区分前台跟后台
+        cooperation.setDistinction("1");
+        cooperation.setCategory(category);
+        cooperation.setProvince(province);
+        cooperation.setParentId(parentId);
+        cooperation.setSystemType(systemType);
+        return cooperation;
+    }
+
+
 }

@@ -71,9 +71,10 @@ public class MobileWitkeyMcController {
 	
 	@ApiOperation(value = "批量删除任务", notes = "批量删除任务", response = Response.class)
 	@RequestMapping(value = "del_witkey", method = RequestMethod.POST)
-	public Response deleteCooperation(@RequestParam String ids[]) {
-		Response response = new Response();
+	public Response deleteCooperation(@RequestParam String ids) {
+
 		cooperationService.deleteCooperation(ids);
+		Response response = new Response();
 		return response;
 	}
 	
@@ -86,11 +87,11 @@ public class MobileWitkeyMcController {
 		
 		return mWitkeySV.sel_witkey_task(pageNo, pageSize, type);
 	}
-	
+
 	@ApiOperation(value = "批量删除我查看的威客任务", notes = "批量删除我查看的威客任务", response = Response.class)
 	@RequestMapping(value = "del_witkey_task", method = RequestMethod.POST)
 	public Response del_witkey_task(@RequestParam String ids) {
-		
+
 		return mWitkeySV.del_witkey_task(ids);
 	}
 	
@@ -124,8 +125,5 @@ public class MobileWitkeyMcController {
         
 		return mWitkeySV.sel_connection();
     }
-	
-	
-	
-	
+
 }
