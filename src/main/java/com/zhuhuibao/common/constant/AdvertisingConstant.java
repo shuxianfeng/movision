@@ -130,8 +130,10 @@ public class AdvertisingConstant {
          */
         M_Witkey_Banner(new String[] {"243","M_Witkey","M_Witkey_Banner"}),
 
-
-
+        /**
+         * 移动端技术&培训-首页-banner
+         */
+        M_Tech_Banner(new String[] {"246", "M_TechAndTrain", "M_TechAndTrain_Banner"}),
 
 
         /**
