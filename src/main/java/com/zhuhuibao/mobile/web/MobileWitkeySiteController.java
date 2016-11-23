@@ -3,15 +3,22 @@ package com.zhuhuibao.mobile.web;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.AdvertisingConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.PageNotFoundException;
+import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
+import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
+import com.zhuhuibao.service.MobileSysAdvertisingService;
 import com.zhuhuibao.service.MobileWitkeyService;
+import com.zhuhuibao.service.payment.PaymentService;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +35,11 @@ public class MobileWitkeySiteController {
 
     @Autowired
     private MobileWitkeyService mWitkeySV;
+
+    @Autowired
+    PaymentService paymentService;
+
+
 
     @ApiOperation(value = "查询任务列表（前台分页）", notes = "查询任务列表（前台分页）", response = Response.class)
     @RequestMapping(value = "sel_witkeyList", method = RequestMethod.GET)
@@ -46,6 +58,30 @@ public class MobileWitkeySiteController {
         return Response;
     }
 
+    @ApiOperation(value="留言",notes="留言",response = Response.class)
+    @RequestMapping(value = "add_message", method = RequestMethod.POST)
+    public Response message(@ModelAttribute Message message) {
+        Response response = new Response();
+        mWitkeySV.addMessage(message);
+        return response;
+    }
+
+    @ApiOperation(value = "威客信息詳情", notes = "威客信息詳情", response = Cooperation.class)
+    @RequestMapping(value = "getCoopDetail", method = RequestMethod.GET)
+    public Response cooperationInfo(@RequestParam String id) {
+        Response response = new Response();
+        response.setData(mWitkeySV.getCoopDetail(id));
+        return response;
+    }
+
+    @ApiOperation(value = "威客首页", notes = "威客首页", response = Cooperation.class)
+    @RequestMapping(value = "getWitkeyIndexInfo", method = RequestMethod.GET)
+    public Response getWitkeyIndexInfo() {
+        Response response = new Response();
+        //获取任务。服务。资质合作数据
+        response.setData(mWitkeySV.getWitkeyAllInfo());
+        return response;
+    }
 
 
 }

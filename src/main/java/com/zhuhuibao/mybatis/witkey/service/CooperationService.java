@@ -215,7 +215,6 @@ public class CooperationService {
 			return cooperationMapper.findAllCooperationByPager(pager.getRowBounds(), cooperation);
 		} catch (Exception e) {
 			log.error("CooperationService::findAllCooperationByPager",e);
-			//e.printStackTrace();
 			throw e;
 		}
 	}
