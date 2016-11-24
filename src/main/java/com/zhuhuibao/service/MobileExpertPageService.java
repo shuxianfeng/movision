@@ -2,6 +2,7 @@ package com.zhuhuibao.service;
 
 import com.taobao.api.ApiException;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
@@ -12,7 +13,10 @@ import com.zhuhuibao.mybatis.expert.entity.Dynamic;
 import com.zhuhuibao.mybatis.expert.entity.Expert;
 import com.zhuhuibao.mybatis.expert.entity.ExpertSupport;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
+import com.zhuhuibao.mybatis.memCenter.entity.Message;
+import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.tech.service.PublishTCourseService;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -44,13 +48,16 @@ public class MobileExpertPageService {
     ExpertService expertService;
 
     @Autowired
-    MobileExpertPageService mobileExpertPageService;
-
-    @Autowired
     PaymentService paymentService;
 
     @Autowired
     PublishTCourseService ptCourseService;
+
+    @Autowired
+    MemberService memberService;
+
+    @Autowired
+    ZhbService zhbService;
 
 
     /**
@@ -78,12 +85,12 @@ public class MobileExpertPageService {
 
 
     /**
-     * 专家培训
+     * 首页专家培训
      *
      * @return 专家培训信息
      */
     public List findExpertTrainList(int count) {
-        return null;
+        return null ;
     }
 
 
@@ -228,21 +235,11 @@ public class MobileExpertPageService {
     public Expert queryExpertByCreateid(String s, Expert expert) {
         Expert expert1 = expertService.queryExpertByCreateid(s);
         if (expert1 == null) {
-            mobileExpertPageService.applyExpert(expert);
+            expertService.applyExpert(expert);
         } else {
             throw new BusinessException(MsgCodeConstant.EXPERT_ISEXIST, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.EXPERT_ISEXIST)));
         }
         return expertService.queryExpertByCreateid(s);
-    }
-
-
-    /**
-     * 专家入驻
-     *
-     * @param expert
-     */
-    public void applyExpert(Expert expert) {
-        expertService.applyExpert(expert);
     }
 
 
@@ -321,5 +318,21 @@ public class MobileExpertPageService {
             throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR,"页面不存在");
         }
         return dynamic;
+    }
+
+
+    /**
+     *
+     * 给专家留言
+     *
+     * @param message
+     */
+    public void addMessage(Message message) {
+          boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.GZJLY.toString());
+            if(bool) {
+                memberService.saveMessage(message);
+            }else{//支付失败稍后重试，联系客服
+                throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+            }
     }
 }

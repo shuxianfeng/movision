@@ -1,5 +1,6 @@
 package com.zhuhuibao.mobile.web;
 
+import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
@@ -14,6 +15,7 @@ import com.zhuhuibao.mybatis.expert.entity.Achievement;
 import com.zhuhuibao.mybatis.expert.entity.Dynamic;
 import com.zhuhuibao.mybatis.expert.entity.Expert;
 import com.zhuhuibao.mybatis.expert.entity.ExpertSupport;
+import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.service.MobileExpertPageService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
@@ -41,6 +43,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/rest/m/expert/site/")
+@Api(value = "mobileExpert", description = "专家频道")
 public class MobileExpertPageController {
 
     private static final Logger log = LoggerFactory.getLogger(MobileExpertController.class);
@@ -107,8 +110,8 @@ public class MobileExpertPageController {
 
     @RequestMapping(value = "sel_expert_details_list", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-专家首页-专家和技术成果详情", notes = "触屏端-专家首页-专家和技术成果详情", response = Response.class)
-    public Response selExpertDetailsList(@ApiParam(value = "商品ID") @RequestParam String goodsID,
-                                         @ApiParam(value = "商品类型同筑慧币") @RequestParam String type) {
+    public Response selExpertDetailsList(@ApiParam(value = "商品ID") @RequestParam(required = true) String goodsID,
+                                         @ApiParam(value = "商品类型同筑慧币") @RequestParam(required = true) String type) {
         Response response = new Response();
         try {
             response.setData(mobileExpertPageService.viewGoodsRecord(goodsID, type));
@@ -143,7 +146,7 @@ public class MobileExpertPageController {
 
     @RequestMapping(value = "sel_publish_course_detail", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-专家首页-预览课程详情", notes = "触屏端-专家首页-预览课程详情", response = Response.class)
-    public Response selPublishCourseDetail(@ApiParam(value = "培训课程ID") @RequestParam Long courseId) {
+    public Response selPublishCourseDetail(@ApiParam(value = "培训课程ID") @RequestParam(required = false) Long courseId) {
         Response response = new Response();
         try {
             Map<String, Object> condition = new HashMap<>();
@@ -181,7 +184,7 @@ public class MobileExpertPageController {
     }
 
 
-    @ApiOperation(value = "触屏端-专家首页-申请专家", notes = "触屏端-专家首页-申请专家", response = Response.class)
+    @ApiOperation(value = "触屏端-专家首页-申请专家入驻", notes = "触屏端-专家首页-申请专家入驻", response = Response.class)
     @RequestMapping(value = "add_apply_expert", method = RequestMethod.POST)
     public Response addApplyExpert(@ModelAttribute Expert expert) {
         Response response = new Response();
@@ -203,9 +206,9 @@ public class MobileExpertPageController {
     @ApiOperation(value = "触屏端-专家首页-申请专家支持", notes = "触屏端-专家首页-申请专家支持", response = Response.class)
     @RequestMapping(value = "add_expert_support", method = RequestMethod.POST)
     public Response addExpertSupport(@ApiParam(value = "联系人名称") @RequestParam String linkName,
-                                       @ApiParam(value = "手机") @RequestParam String mobile,
-                                       @ApiParam(value = "验证码") @RequestParam String code,
-                                       @ApiParam(value = "申请原因") @RequestParam(required = false) String reason) {
+                                     @ApiParam(value = "手机") @RequestParam(required = true) String mobile,
+                                     @ApiParam(value = "验证码") @RequestParam(required = true)  String code,
+                                     @ApiParam(value = "申请原因") @RequestParam(required = false) String reason) {
         Response response = new Response();
         try {
             ExpertSupport expertSupport = new ExpertSupport();
@@ -222,8 +225,8 @@ public class MobileExpertPageController {
 
     @ApiOperation(value = "触屏端-专家首页-申请专家支持-手机验证码", notes = "触屏端-专家首页-申请专家支持-手机验证码", response = Response.class)
     @RequestMapping(value = "get_expert_support", method = RequestMethod.GET)
-    public Response getExpertSupport(@ApiParam(value = "手机号码") @RequestParam String mobile,
-                                     @ApiParam(value = "图形验证码") @RequestParam String imgCode) {
+    public Response getExpertSupport(@ApiParam(value = "手机号码") @RequestParam(required = true)  String mobile,
+                                     @ApiParam(value = "图形验证码") @RequestParam(required = true)  String imgCode) {
         Response response = new Response();
         try {
             Subject currentUser = SecurityUtils.getSubject();
@@ -280,7 +283,7 @@ public class MobileExpertPageController {
      */
     @ApiOperation(value = "触屏端-专家首页-协会动态详情", notes = "触屏端-专家首页-协会动态详情", response = Response.class)
     @RequestMapping(value = "sel_dynamic_details", method = RequestMethod.GET)
-    public Response selDynamicDetails(@ApiParam(value = "协会动态Id") @RequestParam String id) {
+    public Response selDynamicDetails(@ApiParam(value = "协会动态Id") @RequestParam(required = true)  String id) {
         Response response = new Response();
         try {
             Dynamic dynamic = mobileExpertPageService.queryDynamicById(id);
@@ -292,25 +295,25 @@ public class MobileExpertPageController {
     }
 
 
-
-/*    @ApiOperation(value="给专家留言",notes="给专家留言",response = Response.class)
-    @RequestMapping(value = "base/add_message", method = RequestMethod.POST)
-    public Response message(@ModelAttribute Message message) throws Exception {
+    @ApiOperation(value = "触屏端-专家首页-给专家留言", notes = "触屏端-专家首页-给专家留言", response = Response.class)
+    @RequestMapping(value = "add_message", method = RequestMethod.POST)
+    public Response addMessage(@ModelAttribute Message message) throws Exception {
         Response response = new Response();
-        Long createid = ShiroUtil.getCreateID();
-        if(createid!=null){
-            message.setCreateid(String.valueOf(createid));
-            boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.GZJLY.toString());
-            if(bool) {
-                memberService.saveMessage(message);
-            }else{//支付失败稍后重试，联系客服
-                throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+        try {
+            Long createid = ShiroUtil.getCreateID();
+            if (createid != null) {
+                message.setCreateid(String.valueOf(createid));
+                mobileExpertPageService.addMessage(message);
+            } else {
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
-        }else {
-            throw new AuthException(MsgCodeConstant.un_login,MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        } catch (Exception e) {
+            log.error("add_message error! ", e);
         }
         return response;
-    }*/
+    }
+
+
 
 
 }
