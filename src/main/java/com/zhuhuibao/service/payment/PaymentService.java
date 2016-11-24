@@ -217,7 +217,7 @@ public class PaymentService {
             Map<String, Object> map = new HashMap<>();
             map.put("id", String.valueOf(goodsID));
             Resume resumeInfo = resume.previewResume(map);
-            resumeInfo.setUserName(resumeInfo.getUserName().substring(0, 1).concat("********"));
+            resumeInfo.setRealName(resumeInfo.getRealName().substring(0, 1).concat("********"));
             resumeInfo.setMobile("********");
             resumeInfo.setEmail("********");
             dataMap.put("info", resumeInfo);

@@ -89,8 +89,8 @@ public class MobileExpertPageService {
      *
      * @return 专家培训信息
      */
-    public List findExpertTrainList(int count) {
-        return null ;
+    public List<Map<String, Object>> findExpertTrainList(int count) {
+        return  null;
     }
 
 
@@ -144,41 +144,6 @@ public class MobileExpertPageService {
             }
         }
         return expertList;
-    }
-
-    /**
-     * 查看详情
-     *
-     * @param goodsID
-     * @param type
-     * @return
-     * @throws Exception
-     */
-
-    public Map<String, Object> viewGoodsRecord(String goodsID, String type) throws Exception {
-
-        Map<String, Object> map = (Map<String, Object>) paymentService.viewGoodsRecord(Long.parseLong(goodsID), type);
-        Map map1 = (Map) map.get("info");
-        String str1 = (String) map1.get("city");
-        String str2 = (String) map1.get("province");
-        if (str1.equals((str2 + "市"))) {
-            map.put("mobileAddress", str1);
-        } else {
-            if (null != str2) {
-                if (null != str1) {
-                    map.put("mobileAddress", (str2 + "省" + str1));
-                } else {
-                    map.put("mobileAddress", (str2 + "省"));
-                }
-            } else {
-                if (null != str1) {
-                    map.put("mobileAddress", str1);
-                } else {
-                    map.put("mobileAddress", "");
-                }
-            }
-        }
-        return map;
     }
 
 

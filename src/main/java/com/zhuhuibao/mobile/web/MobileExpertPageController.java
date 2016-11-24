@@ -4,10 +4,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.constant.ExpertConstant;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.TechConstant;
+import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mobile.web.mc.MobileExpertController;
@@ -44,7 +41,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/rest/m/expert/site/")
 @Api(value = "mobileExpert", description = "专家频道")
-public class MobileExpertPageController {
+public class MobileExpertPageController extends BaseController {
 
     private static final Logger log = LoggerFactory.getLogger(MobileExpertController.class);
 
@@ -54,10 +51,10 @@ public class MobileExpertPageController {
 
     @RequestMapping(value = "sel_expert_home_page", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-专家首页-专家频道首页详情", notes = "触屏端-专家首页-专家频道首页详情", response = Response.class)
-    public Response selExpertHomePage(@ApiParam(value = "当前登陆人id") @RequestParam(required = false) String createId,
-                                      @ApiParam(value = "条数") @RequestParam(required = false) int count) {
+    public Response selExpertHomePage(@ApiParam(value = "条数") @RequestParam(required = false) int count) {
         Map<String, List> map = new HashMap<>();
         try {
+            // TODO: 2016/11/24 0024
             // banner位广告图片区域
             List bannerList = new ArrayList();
             map.put("bannerList", bannerList);
@@ -67,7 +64,7 @@ public class MobileExpertPageController {
             map.put("expertsList", expertsList);
 
             //专家培训区域
-            List trainList = mobileExpertPageService.findExpertTrainList(count);
+            List<Map<String, Object>> trainList = mobileExpertPageService.findExpertTrainList(count);
             map.put("trainList", trainList);
 
             //最新技术成果
@@ -108,17 +105,29 @@ public class MobileExpertPageController {
     }
 
 
+    @RequestMapping(value = "sel_resume_details", method = RequestMethod.GET)
+    @ApiOperation(value = "触屏端-专家首页-专家详情", notes = "触屏端-专家首页-专家详情", response = Response.class)
+    public Response selResumeDetails(@ApiParam(value = "专家的id") @RequestParam(required = true) String id) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            getPrivilegeGoodsDetails(resultMap, Long.parseLong(id), ZhbConstant.ZhbGoodsType.CKZJXX);
+        } catch (Exception e) {
+            log.error("sel_resume_details error! ", e);
+        }
+        return new Response(resultMap);
+    }
+
+
     @RequestMapping(value = "sel_expert_details_list", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-专家首页-专家和技术成果详情", notes = "触屏端-专家首页-专家和技术成果详情", response = Response.class)
-    public Response selExpertDetailsList(@ApiParam(value = "商品ID") @RequestParam(required = true) String goodsID,
-                                         @ApiParam(value = "商品类型同筑慧币") @RequestParam(required = true) String type) {
-        Response response = new Response();
+    public Response selExpertDetailsList(@ApiParam(value = "商品ID") @RequestParam(required = true) String id) {
+        Map<String, Object> resultMap = new HashMap<>();
         try {
-            response.setData(mobileExpertPageService.viewGoodsRecord(goodsID, type));
+            getPrivilegeGoodsDetails(resultMap, Long.parseLong(id), ZhbConstant.ZhbGoodsType.CKZJXX);
         } catch (Exception e) {
             log.error("sel_expert_details_list error! ", e);
         }
-        return response;
+        return new Response(resultMap);
     }
 
 
@@ -207,7 +216,7 @@ public class MobileExpertPageController {
     @RequestMapping(value = "add_expert_support", method = RequestMethod.POST)
     public Response addExpertSupport(@ApiParam(value = "联系人名称") @RequestParam String linkName,
                                      @ApiParam(value = "手机") @RequestParam(required = true) String mobile,
-                                     @ApiParam(value = "验证码") @RequestParam(required = true)  String code,
+                                     @ApiParam(value = "验证码") @RequestParam(required = true) String code,
                                      @ApiParam(value = "申请原因") @RequestParam(required = false) String reason) {
         Response response = new Response();
         try {
@@ -225,8 +234,8 @@ public class MobileExpertPageController {
 
     @ApiOperation(value = "触屏端-专家首页-申请专家支持-手机验证码", notes = "触屏端-专家首页-申请专家支持-手机验证码", response = Response.class)
     @RequestMapping(value = "get_expert_support", method = RequestMethod.GET)
-    public Response getExpertSupport(@ApiParam(value = "手机号码") @RequestParam(required = true)  String mobile,
-                                     @ApiParam(value = "图形验证码") @RequestParam(required = true)  String imgCode) {
+    public Response getExpertSupport(@ApiParam(value = "手机号码") @RequestParam(required = true) String mobile,
+                                     @ApiParam(value = "图形验证码") @RequestParam(required = true) String imgCode) {
         Response response = new Response();
         try {
             Subject currentUser = SecurityUtils.getSubject();
@@ -274,16 +283,9 @@ public class MobileExpertPageController {
     }
 
 
-    /**
-     * 协会动态详情
-     *
-     * @param id
-     * @return
-     * @throws Exception
-     */
     @ApiOperation(value = "触屏端-专家首页-协会动态详情", notes = "触屏端-专家首页-协会动态详情", response = Response.class)
     @RequestMapping(value = "sel_dynamic_details", method = RequestMethod.GET)
-    public Response selDynamicDetails(@ApiParam(value = "协会动态Id") @RequestParam(required = true)  String id) {
+    public Response selDynamicDetails(@ApiParam(value = "协会动态Id") @RequestParam(required = true) String id) {
         Response response = new Response();
         try {
             Dynamic dynamic = mobileExpertPageService.queryDynamicById(id);
@@ -312,8 +314,6 @@ public class MobileExpertPageController {
         }
         return response;
     }
-
-
 
 
 }
