@@ -5,7 +5,6 @@ import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.MemberDetails;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
@@ -58,11 +57,11 @@ public class MobileTalentNetworkService {
     /**
      * 职位详情
      *
-     * @param id
+     * @param map
      * @return
      */
-    public Job getPositionByPositionId(String id) {
-        return jobPositionService.getPositionByPositionId(id);
+    public Map<String, Object> getPositionByPositionId(Map<String, Object> map) {
+        return jobPositionService.queryPositionInfoByID(map);
     }
 
 
@@ -115,5 +114,23 @@ public class MobileTalentNetworkService {
         }
 
         return response;
+    }
+
+
+    /**
+     * 判断简历是否被收藏
+     *
+     * @param id
+     * @return
+     */
+    public boolean collectionResume(String id) {
+        Long createId = ShiroUtil.getCreateID();
+        boolean infor=false;
+        if (null != createId) {
+            infor=jobMapper.findcollectionResumeById(Integer.parseInt(id),Integer.parseInt(String.valueOf(createId)));
+        } else {
+            return false;
+        }
+        return infor;
     }
 }

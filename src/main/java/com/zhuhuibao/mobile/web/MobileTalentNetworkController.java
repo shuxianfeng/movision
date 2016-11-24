@@ -6,7 +6,6 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.mobile.web.mc.MobileExpertController;
-import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.MemberDetails;
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.service.MobileTalentNetworkService;
@@ -49,6 +48,8 @@ public class MobileTalentNetworkController extends BaseController {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             getPrivilegeGoodsDetails(resultMap, Long.parseLong(id), ZhbConstant.ZhbGoodsType.CXXZJL);
+            boolean isCollect=mobileTalentNetworkService.collectionResume(id);
+            resultMap.put("'esumeDetails",isCollect);
         } catch (Exception e) {
             log.error("sel_resume_details error! ", e);
         }
@@ -85,8 +86,10 @@ public class MobileTalentNetworkController extends BaseController {
     public Response selPositionDetails(@ApiParam(value = "简历Id") @RequestParam(required = true) String id) {
         Response response = new Response();
         try {
-            Job job = mobileTalentNetworkService.getPositionByPositionId(id);
-            response.setData(job);
+            Map<String, Object> map = new HashMap<>();
+            map.put("id",id);
+            map = mobileTalentNetworkService.getPositionByPositionId(map);
+            response.setData(map);
         } catch (Exception e) {
             log.error("sel_resume_details error! ", e);
         }

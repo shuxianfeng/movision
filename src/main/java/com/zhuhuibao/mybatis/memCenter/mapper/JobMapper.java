@@ -71,6 +71,9 @@ public interface JobMapper {
     //查询名企热门职位
     List<Job> queryEnterpriseHotPosition(Map<String,Object> map);
 
+    //是否收藏该简历
+
+
     Map<String,Object> findJobByID(String id);
 
     List<Map<String,String>> queryPublishJobCity(Map<String,Object> map);
@@ -82,4 +85,6 @@ public interface JobMapper {
     List<Map<String,String>> findAllJobByCompanyId(RowBounds rowBounds, Map<String, Object> map);
 
     List<Map<String,Object>> findAllOtherPositionById(String id);
+
+    boolean findcollectionResumeById(int id,int createId);
 }

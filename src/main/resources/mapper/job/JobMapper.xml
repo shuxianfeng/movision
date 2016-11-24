@@ -373,4 +373,8 @@
         and t.createid = #{id}
         order by t.updateTime desc,t.id desc
     </select>
+    
+    <select id="findcollectionResumeById" parameterType="java.lang.Long">
+        SELECT * from t_i_resume_collect_record t where t.resumeID=#{id}  AND t.companyID=#{createId}
+    </select>
 </mapper>
