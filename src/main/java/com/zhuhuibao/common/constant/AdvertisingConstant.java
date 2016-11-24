@@ -126,6 +126,17 @@ public class AdvertisingConstant {
         M_Brands_Lighting(new String[] { "192", "M_Brands", "M_Brands_Lighting" }),
 
         /**
+         * 移动端威客-首页-banner
+         */
+        M_Witkey_Banner(new String[] {"243","M_Witkey","M_Witkey_Banner"}),
+
+        /**
+         * 移动端技术&培训-首页-banner
+         */
+        M_Tech_Banner(new String[] {"246", "M_TechAndTrain", "M_TechAndTrain_Banner"}),
+
+
+        /**
          * 移动端供应链品牌馆-行业软件品牌
          */
         M_Brands_Software(new String[] { "192", "M_Brands", "M_Brands_Software" }),;

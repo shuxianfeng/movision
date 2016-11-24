@@ -38,6 +38,7 @@
     <result column="eduExperience" property="eduExperience" jdbcType="VARCHAR" />
     <result column="attach" property="attach" jdbcType="VARCHAR" />
     <result column="isPublic" property="isPublic" jdbcType="VARCHAR" />
+    <result column="evaluation" property="evaluation" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.ResultBean" >
     <id column="code" property="code" jdbcType="VARCHAR" />
@@ -47,20 +48,20 @@
     id, title, createid, publishTime, updateTime, jobNature, post, jobProvince, jobCity,
     jobArea, hopeSalary, curSalary, status, realName, userName, sex, workYear, education,
     experienceYear, company, positionName, birthYear, marriage, mobile, email, liveProvince,
-    liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach,isPublic
+    liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach,isPublic,evaluation
   </sql>
   <insert id="setUpResume" useGeneratedKeys="true" keyProperty="id" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
     insert into t_i_resume (id, title, createid, publishTime, updateTime, jobNature,
     post, jobProvince, jobCity, jobArea, hopeSalary, curSalary, status, realName, userName,
     sex, workYear, education, experienceYear, company, positionName, birthYear, marriage, mobile,
-    email, liveProvince, liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach,isPublic
+    email, liveProvince, liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach,isPublic,evaluation
     )
     values (#{id}, #{title}, #{createid},
     now(), now(), #{jobNature},#{post}, #{jobProvince}, #{jobCity},#{jobArea},
     #{hopeSalary}, #{curSalary},#{status}, #{realName}, #{userName},#{sex}, #{workYear}, #{education},
     #{experienceYear}, #{company}, #{positionName}, #{birthYear}, #{marriage}, #{mobile},
     #{email}, #{liveProvince}, #{liveCity}, #{liveArea}, #{photo}, #{jobExperience},
-    #{projectExperience}, #{eduExperience}, #{attach},1
+    #{projectExperience}, #{eduExperience}, #{attach},1, #{evaluation}
     )
   </insert>
 
@@ -87,12 +88,8 @@
       <if test="post != null and post !=''" >
         post = #{post},
       </if>
-      <if test="jobProvince != null and jobProvince !=''" >
         jobProvince = #{jobProvince},
-      </if>
-      <if test="jobCity != null and jobCity !=''" >
         jobCity = #{jobCity},
-      </if>
       <if test="jobArea != null and jobArea !=''" >
         jobArea = #{jobArea},
       </if>
@@ -169,7 +166,10 @@
         isPublic = #{isPublic},
       </if>
       <if test="views != null and views !=''">
-        views = views + 1,
+      views = views + 1,
+    </if>
+      <if test="evaluation != null and evaluation !=''">
+        evaluation = #{evaluation},
       </if>
       <if test="download != null and download !=''" >
         downloadCount = downloadCount+#{download},
@@ -198,8 +198,8 @@
     where r.createid = #{id}
   </select>
   <select id="previewResume" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select r.id,r.createid,r.title,r.realName,r.birthYear,dc.name education,r.photo,r.updateTime,r.attach,r.isPublic,
-    case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,
+    select r.id,r.createid,r.title,r.realName,r.birthYear,dc.name education,r.photo,r.updateTime,r.attach,r.isPublic,r.experienceYear,
+    case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,r.evaluation,
     case WHEN r.marriage =0 then '未婚' WHEN r.marriage =1 THEN '已婚' WHEN r.marriage =2 THEN '保密' END AS marriage,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
     concat(p.name,c.name,a.name)AS liveArea,
@@ -226,7 +226,7 @@
   <select id="previewResumeNew" parameterType="java.lang.String" resultMap="BaseResultMap">
     select r.id,r.createid,r.title, 
     concat(substr(r.realName,1,1),'**') realName,r.birthYear,dc.name education, 
-    null photo,
+    null photo,r.evaluation,
     case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,
     
     (case when !isnull(r.mobile) then concat(substr(r.mobile,1,3),'********') else  '' end ) mobile,
@@ -297,8 +297,8 @@
     order by t.updateTime desc
   </select>
   <select id="findAllReceiveResume" parameterType="java.lang.String" resultType="java.util.Map">
-    select re.id as recordId,re.jobID,j.createID as companyId,r.id,j.name,j.positionType,j.is_deleted,
-    r.realName,re.publishDate as publishTime,re.status,(DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear)  as experienceYear
+    select re.id as recordId,re.jobID,j.createID as companyId,r.id,j.name,j.positionType,j.is_deleted,r.experienceYear,
+    r.realName,re.publishDate as publishTime,re.status,(DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear)  as workYear
     from t_i_resume r
     left join t_i_jobRelresume re on re.resumeID = r.id
     left join t_i_job j on j.id = re.jobID
@@ -341,7 +341,7 @@
   </select>
 
   <select id="findAllDownloadResume" parameterType="java.lang.String" resultType="java.util.Map">
-    select r.id,rd.id as recordId,r.realName,
+    select r.id,rd.id as recordId,r.realName,r.experienceYear,
     (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
     date_format(rd.publishDate,'%Y-%m-%d') publishDate
@@ -379,7 +379,7 @@
 
 
   <select id="findAllCollectResume" parameterType="java.lang.String" resultType="java.util.Map">
-    select r.id,rd.id as recordId,concat(substring(r.realName,1,1),'**') realName,
+    select r.id,rd.id as recordId,concat(substring(r.realName,1,1),'**') realName,r.experienceYear,
     (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
     date_format(rd.publishDate,'%Y-%m-%d') publishDate
@@ -441,4 +441,30 @@
     where id = #{id}
   </update>
 
+  <select id="previewMyResume" parameterType="java.util.Map" resultType="java.util.Map">
+    select r.id,r.createid,r.title,r.realName,r.birthYear,dc.name educationName,r.education,r.photo,r.attach,r.isPublic,r.experienceYear,
+    date_format(r.updateTime,'%Y-%m-%d %H:%i:%s') as updateTime,
+    case when r.sex=1 then '男' when r.sex=0 then '女' end as sexName,r.mobile,r.email,r.sex,
+    case WHEN r.marriage =0 then '未婚' WHEN r.marriage =1 THEN '已婚' WHEN r.marriage =2 THEN '保密' END AS marriage,r.evaluation,
+    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
+    concat(p.name,c.name,a.name)AS liveArea,
+    (select Group_concat(name) from t_dictionary_city where find_in_set(code,r.jobCity))AS jobCityName,r.jobCity,
+    (select Group_concat(name) from t_dictionary_province where find_in_set(code,r.jobProvince))AS jobProvinceName,r.jobProvince,
+    co.name as hopeSalaryName,cons.name as curSalary,r.positionName,r.company,r.hopeSalary,
+    r.jobExperience,r.projectExperience,r.eduExperience,r.attach,con.name AS status,
+    (select Group_concat(name) from t_dictionary_constant where find_in_set(code,r.jobNature) and type=7)AS jobNatureName,r.jobNature,
+    (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS postName,r.post
+    from t_i_resume r
+    LEFT JOIN t_dictionary_province p on r.liveProvince = p.code
+    left join t_dictionary_city c on r.liveCity = c.code
+    left join t_dictionary_area a on r.liveArea = a.code
+    left join t_dictionary_constant co on co.code = r.hopeSalary and co.type =1
+    left join t_dictionary_constant cons on cons.code = r.curSalary and cons.type =23
+    left join t_dictionary_constant con on con.code = r.status and con.type = 6
+    left join t_dictionary_constant dc on dc.code = r.education and dc.type = 2
+    where r.id = #{id}
+    <if test="createid !=null">
+      and r.createid = #{createid}
+    </if>
+  </select>
 </mapper>

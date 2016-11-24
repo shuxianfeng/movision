@@ -33,12 +33,9 @@ public class MobileJobService {
 
     /**
      * 查询公司发布的职位信息
-     * 
-     * @param pager
-     *            分页信息
-     * @param id
-     *            公司id
-     * 
+     *
+     * @param pager 分页信息
+     * @param id    公司id
      * @return
      */
     public List<Map<String, Object>> findAllPositionByMemId(Paging<Map<String, Object>> pager, String id) {
@@ -47,9 +44,8 @@ public class MobileJobService {
 
     /**
      * 刷新职位
-     * 
-     * @param ids
-     *            职位id集合
+     *
+     * @param ids 职位id集合
      * @throws Exception
      */
     public void refreshPosition(String ids) throws Exception {
@@ -63,9 +59,8 @@ public class MobileJobService {
 
     /**
      * 获取职位详情信息
-     * 
-     * @param id
-     *            职位id
+     *
+     * @param id 职位id
      * @return
      */
     public Map getPositionByPositionId(String id) {
@@ -78,7 +73,7 @@ public class MobileJobService {
 
     /**
      * 我申请的职位列表
-     * 
+     *
      * @param pager
      * @param id
      * @return
@@ -102,5 +97,14 @@ public class MobileJobService {
             list.add(map);
         }
         return list;
+    }
+
+    /**
+     * 获取职位信息
+     *
+     * @return
+     */
+    public List<Map<String, Object>> getPositionTypes() {
+        return jobService.getPositionTypes();
     }
 }

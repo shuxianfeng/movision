@@ -46,4 +46,6 @@ public interface TechDataMapper {
     List<Map<String,Object>> queryDataUploadDownloadCount(Long createId);
 
     List<Map<String,String>> findAllTechDataOnlyPager(RowBounds rowBounds, Map<String, Object> condition);
+
+    List<Map<String,String>> findAllTechData(Map<String,Object> map);
 }
