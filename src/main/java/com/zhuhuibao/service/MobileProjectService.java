@@ -1,21 +1,20 @@
 package com.zhuhuibao.service;
 
-import java.util.List;
-import java.util.Map;
-
+import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.mybatis.oms.entity.TenderToned;
 import com.zhuhuibao.mybatis.oms.service.TenderTonedService;
+import com.zhuhuibao.mybatis.project.service.ProjectService;
 import com.zhuhuibao.service.payment.PaymentService;
+import com.zhuhuibao.utils.MapUtil;
+import com.zhuhuibao.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zhuhuibao.common.constant.ZhbConstant;
-import com.zhuhuibao.mybatis.project.service.ProjectService;
-import com.zhuhuibao.utils.MapUtil;
-import com.zhuhuibao.utils.pagination.model.Paging;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author tongxinglong
@@ -100,8 +99,8 @@ public class MobileProjectService {
      * @return
      * @throws Exception
      */
-    public Map<String, Object> getProjectDetail(Long projectId) throws Exception {
-        return paymentService.getChargeGoodsRecord(projectId, ZhbConstant.ZhbGoodsType.CKXMXX.toString());
+    public Map<String, Object> getProjectDetail(Long projectId,ZhbConstant.ZhbGoodsType zhbGoodsType) throws Exception {
+        return paymentService.getChargeGoodsRecord(projectId, zhbGoodsType.toString());
     }
 
     /**
