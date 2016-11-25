@@ -63,7 +63,7 @@ public class MobileExpertController {
 
     @RequestMapping(value = "batch_del_my_looked_expert", method = RequestMethod.POST)
     @ApiOperation(value = "触屏端-筑慧中心-删除我查看过的专家", notes = "触屏端-筑慧中心-删除我查看过的专家", response = Response.class)
-    public Response delBatchMyLookedExpert(@ApiParam(value = "要删除专家的id") @RequestParam() String ids) {
+    public Response batchDelMyLookedExpert(@ApiParam(value = "要删除专家的id") @RequestParam() String ids) {
         try {
             Long createId = ShiroUtil.getCreateID();
             if (createId != null) {
@@ -72,7 +72,7 @@ public class MobileExpertController {
                 throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
             }
         } catch (Exception e) {
-            log.error("del_batch_my_looked_expert error! ", e);
+            log.error("batch_del_my_looked_expert error! ", e);
         }
         return new Response();
     }

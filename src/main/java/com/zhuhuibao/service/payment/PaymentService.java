@@ -1,21 +1,5 @@
 package com.zhuhuibao.service.payment;
 
-import static com.zhuhuibao.common.constant.ZhbPaymentConstant.goodsType.CKJSCG;
-import static com.zhuhuibao.common.constant.ZhbPaymentConstant.goodsType.CKWKRW;
-import static com.zhuhuibao.common.constant.ZhbPaymentConstant.goodsType.CKXMXX;
-import static com.zhuhuibao.common.constant.ZhbPaymentConstant.goodsType.CKZJJSCG;
-import static com.zhuhuibao.common.constant.ZhbPaymentConstant.goodsType.CKZJXX;
-import static com.zhuhuibao.common.constant.ZhbPaymentConstant.goodsType.CXXZJL;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
@@ -35,6 +19,16 @@ import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.zhuhuibao.common.constant.ZhbPaymentConstant.goodsType.*;
 
 /**
  * 平台服务使用筑慧币支付
@@ -219,6 +213,14 @@ public class PaymentService {
         {
             Map<String, Object> cooperation = cooperationService.queryUnloginCooperationInfoById(String.valueOf(goodsID));
             dataMap.put("info", cooperation);
+        } else if (CXXZJL.toString().equals(type)) { // 查看/下载简历
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", String.valueOf(goodsID));
+            Resume resumeInfo = resume.previewResume(map);
+            resumeInfo.setRealName(resumeInfo.getRealName().substring(0, 1).concat("********"));
+            resumeInfo.setMobile("********");
+            resumeInfo.setEmail("********");
+            dataMap.put("info", resumeInfo);
         }
 
         return dataMap;
