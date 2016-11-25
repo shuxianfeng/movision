@@ -81,10 +81,6 @@ public class PriceService {
         } else {// 支付失败稍后重试，联系客服
             throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
         }
-        // else {
-        // askPriceMapper.saveAskPrice(askPrice);
-        // result.setCode(200);
-        // }
         return result;
     }
 

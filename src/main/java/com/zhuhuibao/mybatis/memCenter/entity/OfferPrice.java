@@ -1,8 +1,11 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
+import com.wordnik.swagger.annotations.ApiModel;
+
 import java.io.Serializable;
 import java.util.Date;
 
+@ApiModel(value = "报价单", description = "报价单")
 public class OfferPrice implements Serializable{
     /**
 	 * 

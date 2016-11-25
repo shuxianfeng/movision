@@ -36,7 +36,6 @@ import com.zhuhuibao.utils.pagination.util.StringUtils;
  * date : 2016
  */
 @RestController
-//@RequestMapping("/rest/price")
 @Api(value="OfferPrice", description="报价")
 public class OfferPriceController {
 	
@@ -53,7 +52,7 @@ public class OfferPriceController {
 
 	@ApiOperation(value="我要报价(清单和单一产品)",notes="我要报价(清单和单一产品)",response = Response.class)
 	@RequestMapping(value={"rest/price/addOfferPrice","rest/system/mc/quote/add_offerPrice"}, method = RequestMethod.POST)
-	public Response addOfferPrice(OfferPrice price) throws IOException
+	public Response addOfferPrice(@ApiParam @ModelAttribute OfferPrice price) throws IOException
 	{
 		log.info("add offer price");
 		Response response = new Response();
@@ -70,7 +69,7 @@ public class OfferPriceController {
 
 	@ApiOperation(value="询价需求功能：查询所有正在询价中的信息（分页）",notes="询价需求功能：查询所有正在询价中的信息（分页）",response = Response.class)
 	@RequestMapping(value={"rest/price/queryAskingPriceInfo","rest/system/mc/quote/sel_askingPriceInfo"},method = RequestMethod.GET)
-	public Response queryAskingPriceInfo(AskPrice price,
+	public Response queryAskingPriceInfo(@ApiParam @ModelAttribute AskPrice price,
 										 @RequestParam(required = false) String pageNo,
 										 @RequestParam(required = false) String pageSize) throws IOException
 	{
