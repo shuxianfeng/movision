@@ -47,9 +47,12 @@ public class MobileMemberShopService {
             if (StringUtils.isNotBlank(memberShop.getMobileBannerUrlT())) {
                 bannerList.add(memberShop.getMobileBannerUrlT());
             }
+            memberShop.setBannerList(bannerList);
+        } else {
+            memberShop = new MemberShop();
+            bannerList.add("//static.zhuhui8.com/images/mobile/banner/banner1.jpg");
+            memberShop.setBannerList(bannerList);
         }
-        memberShop.setBannerList(bannerList);
-
         return memberShop;
     }
 
