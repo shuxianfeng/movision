@@ -467,4 +467,11 @@
       and r.createid = #{createid}
     </if>
   </select>
+  <select id="queryResumeIdById" parameterType="java.lang.Long" resultType="java.lang.Long">
+  SELECT  i.id
+   from  t_i_resume  i
+   LEFT JOIN t_m_member t ON t.id=i.createID
+   where t.id=#{createID}
+  </select>
+
 </mapper>

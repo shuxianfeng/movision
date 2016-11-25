@@ -39,7 +39,7 @@ import java.util.Map;
  */
 
 @RestController
-@RequestMapping("/rest/m/expert/site/")
+@RequestMapping("/rest/m/expert/site")
 @Api(value = "mobileExpert", description = "专家频道")
 public class MobileExpertPageController extends BaseController {
 
@@ -47,6 +47,28 @@ public class MobileExpertPageController extends BaseController {
 
     @Autowired
     private MobileExpertPageService mobileExpertPageService;
+
+
+
+    @ApiOperation(value="系統分類常量",notes="系統分類常量",response = Response.class)
+    @RequestMapping(value = "sel_systemList", method = RequestMethod.GET)
+    public Response SystemList()  {
+        Response response = new Response();
+        List<Map<String,String>> list = mobileExpertPageService.findByType(ExpertConstant.EXPERT_SYSTEM_TYPE);
+        response.setData(list);
+        return response;
+    }
+
+
+    @ApiOperation(value="應用領域常量",notes="應用領域常量",response = Response.class)
+    @RequestMapping(value = "sel_useAreaList", method = RequestMethod.GET)
+    public Response useAreaList()  {
+        Response response = new Response();
+        List<Map<String,String>> list = mobileExpertPageService.findByType(ExpertConstant.EXPERT_USEAREA_TYPE);
+        response.setData(list);
+        return response;
+    }
+
 
 
     @RequestMapping(value = "sel_expert_home_page", method = RequestMethod.GET)

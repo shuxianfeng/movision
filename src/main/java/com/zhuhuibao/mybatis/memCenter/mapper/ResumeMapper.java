@@ -73,4 +73,6 @@ public interface ResumeMapper {
 
     //预览简历
     Map<String,Object> previewMyResume(Map<String,Object> map);
+
+    Long queryResumeIdById(Long createID);
 }

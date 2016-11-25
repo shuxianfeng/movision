@@ -1,6 +1,7 @@
 package com.zhuhuibao.service;
 
 import com.taobao.api.ApiException;
+import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
@@ -8,6 +9,7 @@ import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.exception.PageNotFoundException;
+import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import com.zhuhuibao.mybatis.expert.entity.Achievement;
 import com.zhuhuibao.mybatis.expert.entity.Dynamic;
 import com.zhuhuibao.mybatis.expert.entity.Expert;
@@ -58,6 +60,9 @@ public class MobileExpertPageService {
 
     @Autowired
     ZhbService zhbService;
+
+    @Autowired
+    private ConstantService constantService;
 
 
     /**
@@ -300,4 +305,16 @@ public class MobileExpertPageService {
                 throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
             }
     }
+
+    /**]
+     *
+     * 系統分類常量
+     * @param expertSystemType
+     * @return
+     */
+
+    public List<Map<String,String>> findByType(String expertSystemType) {
+        return constantService.findByType(ExpertConstant.EXPERT_SYSTEM_TYPE);
+    }
+
 }

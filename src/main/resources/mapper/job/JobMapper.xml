@@ -346,7 +346,8 @@
     </select>
 
     <select id="findAllJobByCompanyId" resultType="java.util.Map" parameterType="java.util.Map">
-        select j.id,j.name,c.name as salary,DATE_FORMAT(j.updateTime,'%Y-%m-%d') as updateTime,j.createid,j.positionType,
+        select j.id,j.name,c.name as salary,DATE_FORMAT(j.updateTime,'%Y-%m-%d') as
+        updateTime,j.createid,j.positionType,
         (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare,
         case WHEN ct.name is null or ct.name ='' then p.name
         when ct.name is not null and ct.name != '' then ct.name end as city
@@ -373,8 +374,52 @@
         and t.createid = #{id}
         order by t.updateTime desc,t.id desc
     </select>
-    
-    <select id="findcollectionResumeById" parameterType="java.lang.Long">
-        SELECT * from t_i_resume_collect_record t where t.resumeID=#{id}  AND t.companyID=#{createId}
+
+    <select id="findcollectionResumeById" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) from t_i_resume_collect_record  t where
+        t.resumeID=#{id}
+        AND t.companyID=#{createId}
+    </select>
+
+    <select id="queryCompanyById" parameterType="java.lang.Long"  resultType="com.zhuhuibao.mybatis.memCenter.entity.MemberDetails">
+        select t.id,t.enterpriseName,t.enterpriseLogo,t.enterpriseDesc,t.enterpriseWebSite,t.enterpriseWebSite,
+        (select group_concat(name) from t_dictionary_constant where type=5 ) as welfare,
+        concat(ifnull(pv.name,''),ifnull(ct.name,''),ifnull(ar.name,''),ifnull(t.address,'')) address,
+        ep.name enterpriseTypeName,es.name employeeNumber from t_m_member t
+        left join t_dictionary_province pv on pv.code = t.province
+        left join t_dictionary_city ct on ct.code = t.city
+        left join t_dictionary_area ar on ar.code = t.area
+        left join t_dictionary_enterpriseType ep on ep.id = t.enterpriseType
+        left join t_dictionary_employeeSize es on es.id = t.employeeNumber
+        left join t_i_job jb on jb.createid = t.id
+        where t.id = #{id} limit 1
+    </select>
+
+
+    <select id="findAllOthersPositionByMemId" parameterType="java.lang.Long" resultType="java.util.Map">
+        SELECT j.id,j.name,co.name as salaryName,concat(p.name,c.name,a.name)as workArea,
+        date_format(j.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,j.positionType,j.createID,
+        (select cs.name from t_dictionary_constant cs where cs.code =j.education and cs.type=2) as educationName,
+        concat(ifnull(p.name,''),ifnull(c.name,''),ifnull(a.name,'')) address,
+        (select t.enterpriseName from t_m_member t where t.id=j.createid) AS enterpriseName,
+        date_format(j.publishTime,'%Y-%m-%d') publishTime FROM t_i_job j
+        LEFT JOIN t_dictionary_constant co on j.salary = co.code
+        LEFT JOIN t_dictionary_province p on j.province = p.code
+        LEFT JOIN t_dictionary_city c on j.city = c.code
+        LEFT JOIN t_dictionary_area a on j.area = a.code
+        WHERE j.createid = #{id} and j.is_deleted = 0 and co.type = 1 order by j.updateTime desc
+    </select>
+
+    <select id="querycompanyByJobId" parameterType="java.lang.Long" resultType="java.lang.Long">
+      SELECT  t.id
+      from  t_m_member t
+      LEFT JOIN t_i_job j ON t.id=j.createID
+      where j.id=#{jobID}
+    </select>
+
+    <select id="queryJobNameByJobId" parameterType="java.lang.Long" resultType="java.lang.String">
+      SELECT  t.name
+      from  t_i_job t
+      where t.id=#{createID}
     </select>
 </mapper>
