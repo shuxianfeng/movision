@@ -110,7 +110,7 @@ public class MobileExpertPageController extends BaseController {
     public Response selResumeDetails(@ApiParam(value = "专家的id") @RequestParam(required = true) String id) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            getPrivilegeGoodsDetails(resultMap, Long.parseLong(id), ZhbConstant.ZhbGoodsType.CKZJXX);
+            getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.CKZJXX);
         } catch (Exception e) {
             log.error("sel_resume_details error! ", e);
         }
@@ -123,7 +123,7 @@ public class MobileExpertPageController extends BaseController {
     public Response selExpertDetailsList(@ApiParam(value = "商品ID") @RequestParam(required = true) String id) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            getPrivilegeGoodsDetails(resultMap, Long.parseLong(id), ZhbConstant.ZhbGoodsType.CKZJXX);
+            getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.CKZJXX);
         } catch (Exception e) {
             log.error("sel_expert_details_list error! ", e);
         }

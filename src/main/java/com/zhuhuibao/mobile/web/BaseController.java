@@ -7,6 +7,7 @@ import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
 import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.MobileProjectService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
@@ -36,7 +37,7 @@ public class BaseController {
      * @param zhbGoodsType
      * @throws Exception
      */
-    public void getPrivilegeGoodsDetails(Map<String, Object> resultMap, Long goodsId, ZhbConstant.ZhbGoodsType zhbGoodsType) throws Exception {
+    public void getPrivilegeGoodsDetails(Map<String, Object> resultMap, String goodsId, ZhbConstant.ZhbGoodsType zhbGoodsType) throws Exception {
         // 判断是否登录
         if (null != ShiroUtil.getCreateID()) {
             // 剩余特权数量
@@ -52,9 +53,12 @@ public class BaseController {
         // 筑慧币单价
         DictionaryZhbgoods goodsConfig = zhbService.getZhbGoodsByPinyin(zhbGoodsType.toString());
         resultMap.put("zhbPrice", null != goodsConfig ? String.valueOf(goodsConfig.getPriceDoubleValue()) : "999");
-        // 获取商品详情
-        Map<String, Object> goodsDetail = mobileProjectService.getProjectDetail(goodsId, zhbGoodsType);
-        resultMap.putAll(goodsDetail);
+        //此处排除公开询价这种场景
+        if(StringUtils.isNotEmpty(goodsId)){
+            // 获取商品详情
+            Map<String, Object> goodsDetail = mobileProjectService.getProjectDetail(Long.parseLong(goodsId), zhbGoodsType);
+            resultMap.putAll(goodsDetail);
+        }
     }
 
 }

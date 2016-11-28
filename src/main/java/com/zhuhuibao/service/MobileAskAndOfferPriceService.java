@@ -1,6 +1,7 @@
 package com.zhuhuibao.service;
 
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.PriceConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.AskPriceResultBean;
 import com.zhuhuibao.common.pojo.AskPriceSearchBean;
@@ -106,19 +107,31 @@ public class MobileAskAndOfferPriceService {
      * @param manu
      * @return
      */
-    public Map<String,Object> isExistSupOrManu(String supps, String manu){
-        //处理向厂商询价和向经销商询价，二者有一必选
+    public Map<String,Object> isExistSupOrManu(String supps, String manu, String type){
         Map result = new HashMap();
-        if(StringUtils.isEmpty(supps) && StringUtils.isEmpty(manu)){
-            result.put("flag", false);
-            result.put("msg", "询价中，向厂商询价和向代理商询价，两者都不存在");
-            return result;
+        //如果是其他询价，并且处理向厂商询价和向经销商询价，二者有一必选
+        if(!type.equals(PriceConstant.GKXJ)) {
+            if(StringUtils.isEmpty(supps) && StringUtils.isEmpty(manu)){
+                result.put("flag", false);
+                result.put("msg", "询价中，向厂商询价和向代理商询价，两者都不存在");
+                return result;
+            }else{
+                result.put("flag", true);
+                result.put("msg", "可以进行询价");
+                return  result;
+            }
+        }else{
+            //公开询价
+            result.put("flag", true);
+            result.put("msg", "可以进行询价");
+            return  result;
         }
-        result.put("flag", true);
-        result.put("msg", "可以进行询价");
-        return  result;
     }
 
+    /**
+     * 获取我的联系方式
+     * @return
+     */
     public Map getMyLink(){
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);

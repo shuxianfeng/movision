@@ -7,6 +7,8 @@ import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.PriceConstant;
+import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.common.pojo.AskPriceBean;
 import com.zhuhuibao.common.pojo.AskPriceSearchBean;
 import com.zhuhuibao.common.util.ShiroUtil;
@@ -43,7 +45,7 @@ import java.util.Map;
  */
 @RestController
 @Api(value="Price",description = "询报价")
-public class MobileAskAndOfferPriceController {
+public class MobileAskAndOfferPriceController extends BaseController {
 
     private static final Logger log = LoggerFactory.getLogger(MobileAskAndOfferPriceController.class);
 
@@ -83,12 +85,19 @@ public class MobileAskAndOfferPriceController {
     }
 
 
-    @ApiOperation(value = "判读是否存在向供应商或厂商询价", notes = "判读是否存在向供应商或厂商询价", response = Response.class)
-    @RequestMapping(value = "/rest/m/askprice/site/is_exist_supplier_or_manufacturer", method = RequestMethod.GET)
-    public Response isExistSupplierOrManuf(@ApiParam(value = "供应商（字符串的形式，以逗号分隔）") @RequestParam String suppliers,
-                                           @ApiParam(value = "厂商") @RequestParam String manuf){
+    @ApiOperation(value = "向他询价（询价前的准备）", notes = "向他询价（询价前的准备）", response = Response.class)
+    @RequestMapping(value = "/rest/m/askprice/site/prepareAskPrice", method = RequestMethod.GET)
+    public Response isExistSupplierOrManuf(@ApiParam(value = "供应商（字符串的形式，以逗号分隔；当询价类型不是GKXJ,即公开询价时，必填）") @RequestParam(required = false) String suppliers,
+                                           @ApiParam(value = "厂商(当询价类型不是GKXJ,即公开询价时，必填)") @RequestParam(required = false) String manuf,
+                                           @ApiParam(value = "产品ID(当询价类型不是GKXJ,即公开询价时，必填)") @RequestParam(required = false) String id,
+                                           @ApiParam(value = "询价类型") @RequestParam String type) throws Exception{
         Response response = new Response();
-        response.setData(mAskPriceSV.isExistSupOrManu(suppliers,manuf));
+        Map<String, Object> result = new HashMap();
+
+        result.put("isExistSupOrManu",mAskPriceSV.isExistSupOrManu(suppliers,manuf,type));
+        getPrivilegeGoodsDetails(result, id, ZhbConstant.ZhbGoodsType.XJFB);
+        response.setData(result);
+
         return response;
     }
 
