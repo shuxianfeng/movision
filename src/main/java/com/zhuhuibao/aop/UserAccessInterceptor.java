@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 用户登录检验拦截器
  * @author jianglz
  * @since 16/7/5.
  */

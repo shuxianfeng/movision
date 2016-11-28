@@ -462,6 +462,7 @@ public class JobPositionService {
     public List queryLatestJob(int count) throws Exception {
         List list = new ArrayList();
         try {
+            //获取研发类的职位
             List<Position> positionList = positionMapper.findPosition(6);
             for (Position position : positionList) {
                 Map map = new HashMap();
@@ -469,24 +470,7 @@ public class JobPositionService {
                 List<Map<String, Object>> jobList = jobMapper.queryLatestJob(position.getId(), count);
                 List list1 = new ArrayList();
                 for (Map<String, Object> job : jobList) {
-                    Map map1 = new HashMap();
-                    map1.put(Constants.id, job.get("id"));
-                    map1.put(Constants.name, job.get("name"));
-                    map1.put(Constants.createid, job.get("createid"));
-                    if (job.get("salary") != null) {
-                        job = ConvertUtil.execute(job, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(job.get("salary"))});
-                        map1.put(Constants.salary, job.get("salaryName"));
-                    } else {
-                        map1.put(Constants.salary, "");
-                    }
-                    job = ConvertUtil.execute(job, "city", "dictionaryService", "findCityByCode", new Object[]{job.get("city")});
-                    job = ConvertUtil.execute(job, "province", "dictionaryService", "findProvinceByCode", new Object[]{job.get("province")});
-                    if (!"".equals(job.get("cityName"))) {
-                        map1.put(Constants.area, job.get("cityName"));
-                    } else {
-                        map1.put(Constants.area, job.get("provinceName"));
-                    }
-                    map1.put(JobConstant.JOB_KEY_POSITIONTYPE, job.get("positionType"));
+                    Map map1 = getDisplayMap(job);
                     list1.add(map1);
                 }
                 map.put("jobList", list1);
@@ -498,6 +482,33 @@ public class JobPositionService {
             throw e;
         }
         return list;
+    }
+
+    /**
+     * 获取展示的职位map
+     * @param job
+     * @return
+     */
+    private Map getDisplayMap(Map<String, Object> job) {
+        Map map1 = new HashMap();
+        map1.put(Constants.id, job.get("id"));
+        map1.put(Constants.name, job.get("name"));
+        map1.put(Constants.createid, job.get("createid"));
+        if (job.get("salary") != null) {
+            job = ConvertUtil.execute(job, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(job.get("salary"))});
+            map1.put(Constants.salary, job.get("salaryName"));
+        } else {
+            map1.put(Constants.salary, "");
+        }
+        job = ConvertUtil.execute(job, "city", "dictionaryService", "findCityByCode", new Object[]{job.get("city")});
+        job = ConvertUtil.execute(job, "province", "dictionaryService", "findProvinceByCode", new Object[]{job.get("province")});
+        if (!"".equals(job.get("cityName"))) {
+            map1.put(Constants.area, job.get("cityName"));
+        } else {
+            map1.put(Constants.area, job.get("provinceName"));
+        }
+        map1.put(JobConstant.JOB_KEY_POSITIONTYPE, job.get("positionType"));
+        return map1;
     }
 
     /**

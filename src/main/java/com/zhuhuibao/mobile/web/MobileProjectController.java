@@ -72,7 +72,7 @@ public class MobileProjectController extends BaseController {
     @RequestMapping(value = "/sel_project_detail", method = RequestMethod.GET)
     public Response selProjectDetail(@ApiParam(value = "项目信息ID") @RequestParam Long projectId) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
-        getPrivilegeGoodsDetails(resultMap, projectId, ZhbConstant.ZhbGoodsType.CKXMXX);
+        getPrivilegeGoodsDetails(resultMap, String.valueOf(projectId), ZhbConstant.ZhbGoodsType.CKXMXX);
         return new Response(resultMap);
     }
 

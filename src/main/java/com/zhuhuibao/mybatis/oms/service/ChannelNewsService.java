@@ -278,6 +278,18 @@ public class ChannelNewsService {
         return list;
     }
 
+    public List<Map<String, String>> findIndexNews(Map<String, Object> params) {
+        List<Map<String, String>> list;
+        try {
+            list = channel.findIndexNews(params);
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
+        }
+        return list;
+    }
+
+
     public List<Map<String, String>> selectHotViews(String type, Integer count) {
         List<Map<String, String>> list;
         try {

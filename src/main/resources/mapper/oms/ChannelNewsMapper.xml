@@ -387,6 +387,23 @@
     order by a.sort   asc
   </select>
 
+  <select id="findIndexNews" resultType="java.util.Map">
+    select id,title,date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,description  from t_oms_channel_news
+    <where>
+      <if test="channelid != null and channelid !='' ">
+        and channelid = #{channelid}
+      </if>
+      <if test="status != null and status !='' ">
+        and status = #{status}
+      </if>
+      and sort in ("1","2")
+    </where>
+    order by createTime desc
+    <if test="count != null and count!='' ">
+      limit 0,#{count}
+    </if>
+  </select>
+
   <select id="findAllPassNewsByType" resultType="java.util.Map">
     select id,title,date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,description  from t_oms_channel_news
     <where>

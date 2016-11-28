@@ -78,4 +78,5 @@ public interface JobConstant {
      * 简历最大收藏值
      */
 	int MAX_COLL_COUNT = 50;
+
 }

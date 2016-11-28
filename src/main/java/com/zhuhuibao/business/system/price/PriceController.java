@@ -4,31 +4,25 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.pojo.AskPriceBean;
 import com.zhuhuibao.common.pojo.AskPriceResultBean;
 import com.zhuhuibao.common.pojo.AskPriceSearchBean;
-import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.service.PriceService;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.oss.ZhbOssClient;
 import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -43,6 +37,7 @@ import java.util.Map;
 @RestController
 @Api(value = "Price", description = "询价")
 public class PriceController {
+
     private static final Logger log = LoggerFactory.getLogger(PriceController.class);
 
     @Autowired
@@ -51,14 +46,10 @@ public class PriceController {
     @Autowired
     ZhbOssClient zhbOssClient;
 
-    /**
-     * 询价保存
-     */
     @LoginAccess
     @ApiOperation(value = "询价保存", notes = "询价保存", response = Response.class)
     @RequestMapping(value = {"/rest/price/saveAskPrice", "/rest/system/mc/enquiry/add_enquiry"}, method = RequestMethod.POST)
-    public Response saveAskPrice(AskPrice askPrice) throws Exception {
-        log.debug("并不知道为什么,就写了个注释");
+    public Response saveAskPrice(@ModelAttribute AskPrice askPrice) throws Exception {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         askPrice.setEndTime(askPrice.getEndTime() + " 23:59:59");
@@ -69,9 +60,6 @@ public class PriceController {
         return priceService.saveAskPrice(askPrice);
     }
 
-    /**
-     * 上传询价单（定向，公开），上传报价单
-     */
     @LoginAccess
     @ApiOperation(value = "上传询价单（定向，公开），上传报价单", notes = "上传询价单（定向，公开），上传报价单", response = Response.class)
     @RequestMapping(value = {"/rest/price/uploadAskList", "/rest/system/mc/enquiry/upload_enquiryList"}, method = RequestMethod.POST)
@@ -83,9 +71,6 @@ public class PriceController {
         return new Response(map);
     }
 
-    /**
-     * 获得我的联系方式（询报价者联系方式）
-     */
     @LoginAccess
     @ApiOperation(value = "获得我的联系方式（询报价者联系方式）", notes = "获得我的联系方式（询报价者联系方式）", response = Response.class)
     @RequestMapping(value = {"/rest/price/getLinkInfo", "/rest/system/mc/enquiry/sel_linkMan_info"}, method = RequestMethod.GET)
@@ -100,9 +85,6 @@ public class PriceController {
         return new Response(map);
     }
 
-    /**
-     * 查看具体某条询价信息
-     */
     @ApiOperation(value = "查看具体某条询价信息", notes = "查看具体某条询价信息", response = Response.class)
     @RequestMapping(value = {"/rest/price/queryAskPriceByID", "/rest/system/mc/enquiry/sel_enquiry"}, method = RequestMethod.GET)
     public Response queryAskPriceByID(@RequestParam String id) {
@@ -117,9 +99,6 @@ public class PriceController {
         return response;
     }
 
-    /**
-     * 根据条件查询询价信息（分页）
-     */
     @LoginAccess
     @ApiOperation(value = "根据条件查询询价信息（分页）", notes = "根据条件查询询价信息（分页）", response = Response.class)
     @RequestMapping(value = {"/rest/price/queryAskPriceInfo", "/rest/system/mc/enquiry/sel_enquiryList"}, method = RequestMethod.GET)
@@ -146,9 +125,6 @@ public class PriceController {
         return response;
     }
 
-    /**
-     * 最新公开询价(限六条)
-     */
     @ApiOperation(value = "最新公开询价(限六条)", notes = "最新公开询价(限六条)", response = Response.class)
     @RequestMapping(value = {"/rest/price/queryNewPriceInfo", "/rest/system/site/enquiry/sel_new_open_enquiryList_count"}, method = RequestMethod.GET)
     public Response queryNewPriceInfo() throws IOException {
@@ -164,9 +140,6 @@ public class PriceController {
         return priceService.queryNewPriceInfo(6, createid);
     }
 
-    /**
-     * 最新公开询价(分页)
-     */
     @ApiOperation(value = "最新公开询价(分页)", notes = "最新公开询价(分页)", response = Response.class)
     @RequestMapping(value = {"/rest/price/queryNewPriceInfoList", "/rest/system/mc/enquiry/sel_new_open_enquiryList"}, method = RequestMethod.GET)
     public Response queryNewPriceInfoList(@RequestParam(required = false, defaultValue = "1") String pageNo,

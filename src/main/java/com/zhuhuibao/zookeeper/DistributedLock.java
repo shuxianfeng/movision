@@ -48,7 +48,7 @@ public class DistributedLock implements Lock, Watcher {
         // 创建一个与服务器的连接
         try {
         	//调用exist之前需要先判断链接是否成功，否则会报错：KeeperErrorCode = ConnectionLoss for /locks
-        	/*CountDownLatch connectedLatch = new CountDownLatch(1); 
+        	CountDownLatch connectedLatch = new CountDownLatch(1);
             Watcher watcher = new ConnectedWatcher(connectedLatch); 
             zk = new ZooKeeper(PropertiesUtils.getValue("zookeeper_hosts"),
                     Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")), 
@@ -62,16 +62,16 @@ public class DistributedLock implements Lock, Watcher {
                     // 创建根节点
                     zk.create(root, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
                 }
-            }*/
+            }
             
-            zk = new ZooKeeper(PropertiesUtils.getValue("zookeeper_hosts"),
+            /*zk = new ZooKeeper(PropertiesUtils.getValue("zookeeper_hosts"),
                     Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")), 
                     this);
             Stat stat = zk.exists(root, false);
             if (stat == null) {
                 // 创建根节点
                 zk.create(root, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
-            }
+            }*/
             
         } catch (IOException | InterruptedException | KeeperException e) {
             exception.add(e);
@@ -85,8 +85,13 @@ public class DistributedLock implements Lock, Watcher {
      */
     public static void waitUntilConnected(ZooKeeper zooKeeper, CountDownLatch connectedLatch) {  
         if (States.CONNECTING == zooKeeper.getState()) {  
-            try {  
-                connectedLatch.await();  
+            try {
+                /**
+                 *  TODO 目前问题：由于States == CONNECTING， 而不是CONNECTED，
+                 *  所以程序会一直停留在这一步，进行等待
+                 *
+                 */
+                connectedLatch.await(Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")), TimeUnit.MILLISECONDS);
                 
             } catch (InterruptedException e) {  
                 throw new IllegalStateException(e);  

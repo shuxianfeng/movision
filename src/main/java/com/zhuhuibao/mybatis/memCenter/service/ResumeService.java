@@ -185,24 +185,7 @@ public class ResumeService {
     public Map<String,Object> searchMyResumeAllInfo(String id) {
         Map<String,Object> resume =  resumeMapper.searchMyResumeAllInfo(id);
         String jobCity = (String) resume.get("jobCity");
-        String jobCityName = "";
-        if (!StringUtils.isEmpty(jobCity)) {
-            String[] jobCitys = jobCity.split(",");
-            StringBuilder sb = new StringBuilder();
-            for (String jc : jobCitys) {
-                Map<String, Object> tmp = new HashMap<>();
-                tmp.put("jobCity", jc);
-                tmp = ConvertUtil.execute(tmp, "jobCity", "dictionaryService", "findCityByCode", new Object[]{String.valueOf(tmp.get("jobCity"))});
-                String jcName = (String) tmp.get("jobCityName");
-                if (!"".equals(jcName)) {
-                    sb.append(jcName).append(",");
-                }
-            }
-            jobCityName = sb.toString();
-            if (jobCityName.length() != 0) {
-                jobCityName = jobCityName.substring(0, jobCityName.length() - 1);
-            }
-        }
+        String jobCityName = getJobCityName(jobCity);
         resume.put("jobCityName", jobCityName);
 
         String jobProvince = (String) resume.get("jobProvince");
@@ -241,24 +224,7 @@ public class ResumeService {
         }
 
         String post = (String) resume.get("post");
-        String postName = "";
-        if (!StringUtils.isEmpty(post)) {
-            String[] posts = post.split(",");
-            StringBuilder sb = new StringBuilder();
-            for (String p : posts) {
-                Map<String, Object> tmp = new HashMap<>();
-                tmp.put("post", p);
-                tmp = ConvertUtil.execute(tmp, "post", "constantService", "findPositionById", new Object[]{String.valueOf(tmp.get("post"))});
-                String pName = (String) tmp.get("postName");
-                if (!"".equals(pName)) {
-                    sb.append(pName).append(",");
-                }
-            }
-            postName = sb.toString();
-            if (postName.length() != 0) {
-                postName = postName.substring(0, postName.length() - 1);
-            }
-        }
+        String postName = getPostName(post);
         resume.put("postName", postName);
         return resume;
     }
@@ -309,60 +275,7 @@ public class ResumeService {
         try {
             List<Map<String, Object>> resumeList = resumeMapper.findAllResume(pager.getRowBounds(), map);
             for (Map<String, Object> resume : resumeList) {
-                Map<String, Object> result = new HashMap<>();
-                result.put("id", resume.get("id"));
-                result.put("createid", resume.get("createid"));
-                result.put("title", resume.get("title"));
-                result.put("realName", resume.get("realName"));
-                result.put("photo", resume.get("photo"));
-                result.put("publishTime", resume.get("publishTime"));
-                result.put("updateTime", resume.get("updateTime"));
-                result.put("experienceYear", resume.get("experienceYear"));
-                result.put("education", resume.get("education"));
-                result.put("isPublic", resume.get("isPublic"));
-                result.put("birthYear", resume.get("birthYear"));
-                result.put("workYear", resume.get("workYear"));
-                if (resume.get("jobNature") != null) {
-                    resume = ConvertUtil.execute(resume, "jobNature", "constantService", "findByTypeCode", new Object[]{"7", String.valueOf(resume.get("jobNature"))});
-                    result.put("jobNature", resume.get("jobNatureName"));
-                } else {
-                    result.put("jobNature", "");
-                }
-
-                if (resume.get("hopeSalary") != null) {
-                    resume = ConvertUtil.execute(resume, "hopeSalary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(resume.get("hopeSalary"))});
-                    result.put("hopeSalary", resume.get("hopeSalaryName"));
-                } else {
-                    result.put("hopeSalary", "");
-                }
-
-                if (resume.get("education") != null) {
-                    resume = ConvertUtil.execute(resume, "education", "constantService", "findByTypeCode", new Object[]{"2", String.valueOf(resume.get("education"))});
-                    result.put("name", resume.get("educationName"));
-                } else {
-                    result.put("name", "");
-                }
-
-                String post = (String) resume.get("post");
-                String postName = "";
-                if (!StringUtils.isEmpty(post)) {
-                    String[] posts = post.split(",");
-                    StringBuilder sb = new StringBuilder();
-                    for (String p : posts) {
-                        Map<String, Object> tmp = new HashMap<>();
-                        tmp.put("post", p);
-                        tmp = ConvertUtil.execute(tmp, "post", "constantService", "findPositionById", new Object[]{String.valueOf(tmp.get("post"))});
-                        String pName = (String) tmp.get("postName");
-                        if (!"".equals(pName)) {
-                            sb.append(pName).append(",");
-                        }
-                    }
-                    postName = sb.toString();
-                    if (postName.length() != 0) {
-                        postName = postName.substring(0, postName.length() - 1);
-                    }
-                }
-                result.put("post", postName);
+                Map<String, Object> result = genResultMap(resume);
                 list.add(result);
             }
             pager.result(list);
@@ -371,6 +284,94 @@ public class ResumeService {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return pager;
+    }
+
+    /**
+     * 获取手机端人才首页简历
+     * @param map
+     * @return
+     */
+    public List<Map<String, Object>> findMIndexResume(Map<String, Object> map) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        try {
+            List<Map<String, Object>> resumeList = resumeMapper.findAllResume(map);
+            for (Map<String, Object> resume : resumeList) {
+                Map<String, Object> result = genResultMap(resume);
+                list.add(result);
+            }
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
+        }
+        return list;
+    }
+
+    /**
+     * 二次处理简历数据
+     * @param resume
+     * @return
+     */
+    private Map<String, Object> genResultMap(Map<String, Object> resume) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", resume.get("id"));
+        result.put("createid", resume.get("createid"));
+        result.put("title", resume.get("title"));
+        result.put("realName", resume.get("realName"));
+        result.put("photo", resume.get("photo"));
+        result.put("publishTime", resume.get("publishTime"));
+        result.put("updateTime", resume.get("updateTime"));
+        result.put("experienceYear", resume.get("experienceYear"));
+        result.put("education", resume.get("education"));
+        result.put("isPublic", resume.get("isPublic"));
+        result.put("birthYear", resume.get("birthYear"));
+        result.put("workYear", resume.get("workYear"));
+        if (resume.get("jobNature") != null) {
+            resume = ConvertUtil.execute(resume, "jobNature", "constantService", "findByTypeCode", new Object[]{"7", String.valueOf(resume.get("jobNature"))});
+            result.put("jobNature", resume.get("jobNatureName"));
+        } else {
+            result.put("jobNature", "");
+        }
+
+        if (resume.get("hopeSalary") != null) {
+            resume = ConvertUtil.execute(resume, "hopeSalary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(resume.get("hopeSalary"))});
+            result.put("hopeSalary", resume.get("hopeSalaryName"));
+        } else {
+            result.put("hopeSalary", "");
+        }
+
+        if (resume.get("education") != null) {
+            resume = ConvertUtil.execute(resume, "education", "constantService", "findByTypeCode", new Object[]{"2", String.valueOf(resume.get("education"))});
+            result.put("name", resume.get("educationName"));
+        } else {
+            result.put("name", "");
+        }
+
+        String post = (String) resume.get("post");
+        String postName = getPostName(post);
+        result.put("post", postName);
+        return result;
+    }
+
+    private String getPostName(String post) {
+        String postName = "";
+        if (!StringUtils.isEmpty(post)) {
+            String[] posts = post.split(",");
+            StringBuilder sb = new StringBuilder();
+            for (String p : posts) {
+                Map<String, Object> tmp = new HashMap<>();
+                tmp.put("post", p);
+                tmp = ConvertUtil.execute(tmp, "post", "constantService", "findPositionById", new Object[]{String.valueOf(tmp.get("post"))});
+                String pName = (String) tmp.get("postName");
+                if (!"".equals(pName)) {
+                    sb.append(pName).append(",");
+                }
+            }
+            postName = sb.toString();
+            if (postName.length() != 0) {
+                postName = postName.substring(0, postName.length() - 1);
+            }
+        }
+        return postName;
     }
 
     /**
@@ -592,45 +593,11 @@ public class ResumeService {
                 }
 
                 String post = (String) resume.get("post");
-                String postName = "";
-                if (!StringUtils.isEmpty(post)) {
-                    String[] posts = post.split(",");
-                    StringBuilder sb = new StringBuilder();
-                    for (String p : posts) {
-                        Map<String, Object> tmp = new HashMap<>();
-                        tmp.put("post", p);
-                        tmp = ConvertUtil.execute(tmp, "post", "constantService", "findPositionById", new Object[]{String.valueOf(tmp.get("post"))});
-                        String pName = (String) tmp.get("postName");
-                        if (!"".equals(pName)) {
-                            sb.append(pName).append(",");
-                        }
-                    }
-                    postName = sb.toString();
-                    if (postName.length() != 0) {
-                        postName = postName.substring(0, postName.length() - 1);
-                    }
-                }
+                String postName = getPostName(post);
 
                 String area = "";
                 String jobCity = (String) resume.get("jobCity");
-                String jobCityName = "";
-                if (!StringUtils.isEmpty(jobCity)) {
-                    String[] jobCitys = jobCity.split(",");
-                    StringBuilder sb = new StringBuilder();
-                    for (String jc : jobCitys) {
-                        Map<String, Object> tmp = new HashMap<>();
-                        tmp.put("jobCity", jc);
-                        tmp = ConvertUtil.execute(tmp, "jobCity", "dictionaryService", "findCityByCode", new Object[]{String.valueOf(tmp.get("jobCity"))});
-                        String jcName = (String) tmp.get("jobCityName");
-                        if (!"".equals(jcName)) {
-                            sb.append(jcName).append(",");
-                        }
-                    }
-                    jobCityName = sb.toString();
-                    if (jobCityName.length() != 0) {
-                        jobCityName = jobCityName.substring(0, jobCityName.length() - 1);
-                    }
-                }
+                String jobCityName = getJobCityName(jobCity);
 
                 String jobProvince = (String) resume.get("jobProvince");
                 String jobProvinceName = "";
@@ -681,6 +648,28 @@ public class ResumeService {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"查询失败");
         }
         return list;
+    }
+
+    private String getJobCityName(String jobCity) {
+        String jobCityName = "";
+        if (!StringUtils.isEmpty(jobCity)) {
+            String[] jobCitys = jobCity.split(",");
+            StringBuilder sb = new StringBuilder();
+            for (String jc : jobCitys) {
+                Map<String, Object> tmp = new HashMap<>();
+                tmp.put("jobCity", jc);
+                tmp = ConvertUtil.execute(tmp, "jobCity", "dictionaryService", "findCityByCode", new Object[]{String.valueOf(tmp.get("jobCity"))});
+                String jcName = (String) tmp.get("jobCityName");
+                if (!"".equals(jcName)) {
+                    sb.append(jcName).append(",");
+                }
+            }
+            jobCityName = sb.toString();
+            if (jobCityName.length() != 0) {
+                jobCityName = jobCityName.substring(0, jobCityName.length() - 1);
+            }
+        }
+        return jobCityName;
     }
 
     /**

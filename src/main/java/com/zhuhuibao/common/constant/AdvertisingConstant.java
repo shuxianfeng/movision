@@ -135,7 +135,20 @@ public class AdvertisingConstant {
          */
         M_Tech_Banner(new String[] {"246", "M_TechAndTrain", "M_TechAndTrain_Banner"}),
 
+        /**
+         * 移动端人才-首页-banner
+         */
+        M_Rencai_Banner(new String[] {"249", "M_Rencai", "M_Rencai_Banner"}),
 
+        /**
+         * 移动端人才-名企招聘-广告
+         */
+        M_Rencai_Mqzp(new String[] {"249", "M_Rencai", "M_Rencai_Mqzp"}),
+
+        /**
+         * 移动端人才-热门招聘-广告
+         */
+        M_Rencai_Rmzp(new String[] {"249", "M_Rencai", "M_Rencai_Rmzp"}),
         /**
          * 移动端供应链品牌馆-行业软件品牌
          */
