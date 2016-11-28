@@ -12,6 +12,7 @@ import com.zhuhuibao.mybatis.expert.entity.Achievement;
 import com.zhuhuibao.mybatis.expert.entity.Dynamic;
 import com.zhuhuibao.mybatis.expert.entity.Expert;
 import com.zhuhuibao.mybatis.expert.entity.ExpertSupport;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.service.MobileExpertPageService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -49,26 +50,24 @@ public class MobileExpertPageController extends BaseController {
     private MobileExpertPageService mobileExpertPageService;
 
 
-
-    @ApiOperation(value="系統分類常量",notes="系統分類常量",response = Response.class)
+    @ApiOperation(value = "触屏端-专家首页-专家技术成果-系統分類常量", notes = "触屏端-专家首页-专家技术成果-系統分類常量", response = Response.class)
     @RequestMapping(value = "sel_systemList", method = RequestMethod.GET)
-    public Response SystemList()  {
+    public Response SystemList() {
         Response response = new Response();
-        List<Map<String,String>> list = mobileExpertPageService.findByType(ExpertConstant.EXPERT_SYSTEM_TYPE);
+        List<Map<String, String>> list = mobileExpertPageService.findByType(ExpertConstant.EXPERT_SYSTEM_TYPE);
         response.setData(list);
         return response;
     }
 
 
-    @ApiOperation(value="應用領域常量",notes="應用領域常量",response = Response.class)
+    @ApiOperation(value = "触屏端-专家首页-专家技术成果-应用领域常量", notes = "触屏端-专家首页-专家技术成果-应用领域常量", response = Response.class)
     @RequestMapping(value = "sel_useAreaList", method = RequestMethod.GET)
-    public Response useAreaList()  {
+    public Response useAreaList() {
         Response response = new Response();
-        List<Map<String,String>> list = mobileExpertPageService.findByType(ExpertConstant.EXPERT_USEAREA_TYPE);
+        List<Map<String, String>> list = mobileExpertPageService.findByType(ExpertConstant.EXPERT_USEAREA_TYPE);
         response.setData(list);
         return response;
     }
-
 
 
     @RequestMapping(value = "sel_expert_home_page", method = RequestMethod.GET)
@@ -86,7 +85,11 @@ public class MobileExpertPageController extends BaseController {
             map.put("expertsList", expertsList);
 
             //专家培训区域
-            List<Map<String, Object>> trainList = mobileExpertPageService.findExpertTrainList(count);
+            Map<String, Object> condition = new HashMap<>();
+            condition.put("status", TechConstant.PublishCourseStatus.SALING.toString());
+            condition.put("courseType", ExpertConstant.COURSE_TYPE_EXPERT);
+            condition.put("count", count);
+            List<Map<String, String>> trainList = mobileExpertPageService.findExpertTrainList(condition);
             map.put("trainList", trainList);
 
             //最新技术成果
@@ -131,25 +134,39 @@ public class MobileExpertPageController extends BaseController {
     @ApiOperation(value = "触屏端-专家首页-专家详情", notes = "触屏端-专家首页-专家详情", response = Response.class)
     public Response selResumeDetails(@ApiParam(value = "专家的id") @RequestParam(required = true) String id) {
         Map<String, Object> resultMap = new HashMap<>();
+        Response response = new Response();
         try {
             getPrivilegeGoodsDetails(resultMap, Long.parseLong(id), ZhbConstant.ZhbGoodsType.CKZJXX);
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", id);
+            map.put("type", "CKZJXX");
+            boolean count = mobileExpertPageService.findDetails(map);
+            resultMap.put("count", count);
+            response.setData(resultMap);
         } catch (Exception e) {
             log.error("sel_resume_details error! ", e);
         }
-        return new Response(resultMap);
+        return response;
     }
 
 
     @RequestMapping(value = "sel_expert_details_list", method = RequestMethod.GET)
-    @ApiOperation(value = "触屏端-专家首页-专家和技术成果详情", notes = "触屏端-专家首页-专家和技术成果详情", response = Response.class)
+    @ApiOperation(value = "触屏端-专家首页-专家的技术成果详情", notes = "触屏端-专家首页-专家的技术成果详情", response = Response.class)
     public Response selExpertDetailsList(@ApiParam(value = "商品ID") @RequestParam(required = true) String id) {
+        Response response = new Response();
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            getPrivilegeGoodsDetails(resultMap, Long.parseLong(id), ZhbConstant.ZhbGoodsType.CKZJXX);
+            getPrivilegeGoodsDetails(resultMap, Long.parseLong(id), ZhbConstant.ZhbGoodsType.CKZJJSCG);
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", id);
+            map.put("type", "CKZJJSCG");
+            boolean count = mobileExpertPageService.findDetails(map);
+            resultMap.put("count", count);
+            response.setData(resultMap);
         } catch (Exception e) {
             log.error("sel_expert_details_list error! ", e);
         }
-        return new Response(resultMap);
+        return response;
     }
 
 
@@ -254,7 +271,7 @@ public class MobileExpertPageController extends BaseController {
     }
 
 
-    @ApiOperation(value = "触屏端-专家首页-申请专家支持-手机验证码", notes = "触屏端-专家首页-申请专家支持-手机验证码", response = Response.class)
+    @ApiOperation(value = "触屏端-专家首页-申请专家支持-手机验证码获取", notes = "触屏端-专家首页-申请专家支持-手机验证码获取", response = Response.class)
     @RequestMapping(value = "get_expert_support", method = RequestMethod.GET)
     public Response getExpertSupport(@ApiParam(value = "手机号码") @RequestParam(required = true) String mobile,
                                      @ApiParam(value = "图形验证码") @RequestParam(required = true) String imgCode) {
@@ -263,7 +280,8 @@ public class MobileExpertPageController extends BaseController {
             Subject currentUser = SecurityUtils.getSubject();
             Session sess = currentUser.getSession(true);
             String sessImgCode = (String) sess.getAttribute(ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
-            mobileExpertPageService.getTrainMobileCode(mobile, ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT, imgCode, sessImgCode);
+            boolean b = mobileExpertPageService.getTrainMobileCode(mobile, ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT, imgCode, sessImgCode);
+            response.setData(b);
         } catch (Exception e) {
             log.error("get_expert_support error! ", e);
         }
@@ -319,23 +337,36 @@ public class MobileExpertPageController extends BaseController {
     }
 
 
-    @ApiOperation(value = "触屏端-专家首页-给专家留言", notes = "触屏端-专家首页-给专家留言", response = Response.class)
+    @ApiOperation(value = "触屏端-专家首页-提交留言", notes = "触屏端-专家首页-提交留言", response = Response.class)
     @RequestMapping(value = "add_message", method = RequestMethod.POST)
     public Response addMessage(@ModelAttribute Message message) throws Exception {
         Response response = new Response();
-        try {
-            Long createid = ShiroUtil.getCreateID();
-            if (createid != null) {
-                message.setCreateid(String.valueOf(createid));
-                mobileExpertPageService.addMessage(message);
-            } else {
-                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
-        } catch (Exception e) {
-            log.error("add_message error! ", e);
-        }
+        Map<String, Object> resultMap = new HashMap<>();
+      //  getPrivilegeGoodsDetails(resultMap, Long.parseLong(id), ZhbConstant.ZhbGoodsType.GZJLY);
+        mobileExpertPageService.addMessage(message);
         return response;
     }
 
+    @ApiOperation(value = "触屏端-专家首页-专家留言页面", notes = "触屏端-专家首页-给专家留言页面", response = Response.class)
+    @RequestMapping(value = "add_message_page", method = RequestMethod.GET)
+    public Response selMessagePage(@ApiParam(value = "专家的id") @RequestParam(required = true) String id) throws Exception {
+        Response response = new Response();
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            getPrivilegeGoodsDetails(resultMap, Long.parseLong(id), ZhbConstant.ZhbGoodsType.GZJLY);
 
+            Expert expert = mobileExpertPageService.findExpertById(id);
+            resultMap.put("expert", expert);
+            if (null != ShiroUtil.getCreateID()){
+                Long createId = ShiroUtil.getCreateID();
+                Member member= mobileExpertPageService.findDetailsById(createId);
+                resultMap.put("member", member);
+            }
+            response.setData(resultMap);
+        } catch (Exception e) {
+            log.error("add_message_page error! ", e);
+        }
+
+        return response;
+    }
 }

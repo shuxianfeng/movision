@@ -339,5 +339,11 @@
         GROUP by v.viewTime
         order by v.viewTime DESC
     </select>
-
+    <select id="findExpertResultById"  parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) from t_zhb_viewGoods t where
+        t.goodsId=#{id}
+        AND t.type=#{type}
+        AND t.companyId=#{createId}
+        AND  t.status=0
+    </select>
 </mapper>

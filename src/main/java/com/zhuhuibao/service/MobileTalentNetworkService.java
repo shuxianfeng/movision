@@ -103,6 +103,9 @@ public class MobileTalentNetworkService {
             tmpMap.put(Constants.position, map.get("name"));
             tmpMap.put(Constants.salary, map.get("salaryName"));
             tmpMap.put(Constants.area, map.get("workArea"));
+            tmpMap.put("province", map.get("province"));
+            tmpMap.put("city", map.get("city"));
+            tmpMap.put("area", map.get("area"));
             tmpMap.put("companyId", map.get("createID"));
             tmpMap.put("positionType", map.get("positionType"));
             tmpMap.put(Constants.publishTime, map.get("publishTime"));
@@ -153,10 +156,8 @@ public class MobileTalentNetworkService {
      */
     public boolean collectionResume(Map<String, Object> map) {
         Long createId = ShiroUtil.getCreateID();
-        int count = 0;
         boolean b = false;
         if (null != createId) {
-            map.put("id", createId);
             map.put("createId", Integer.parseInt(String.valueOf(createId)));
             if (jobMapper.findcollectionResumeById(map) > 0) {
                 b = true;

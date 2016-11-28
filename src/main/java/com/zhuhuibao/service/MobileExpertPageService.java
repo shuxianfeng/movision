@@ -3,7 +3,6 @@ package com.zhuhuibao.service;
 import com.taobao.api.ApiException;
 import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
@@ -14,9 +13,13 @@ import com.zhuhuibao.mybatis.expert.entity.Achievement;
 import com.zhuhuibao.mybatis.expert.entity.Dynamic;
 import com.zhuhuibao.mybatis.expert.entity.Expert;
 import com.zhuhuibao.mybatis.expert.entity.ExpertSupport;
+import com.zhuhuibao.mybatis.expert.mapper.AchievementMapper;
+import com.zhuhuibao.mybatis.expert.mapper.DynamicMapper;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
+import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.mybatis.tech.mapper.PublishTCourseMapper;
 import com.zhuhuibao.mybatis.tech.service.PublishTCourseService;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.payment.PaymentService;
@@ -64,6 +67,15 @@ public class MobileExpertPageService {
     @Autowired
     private ConstantService constantService;
 
+    @Autowired
+    private DynamicMapper dynamicMapper;
+
+    @Autowired
+    private PublishTCourseMapper publishTCourseMapper;
+
+    @Autowired
+    private AchievementMapper achievementMapper;
+
 
     /**
      * 最新入驻的专家
@@ -94,8 +106,9 @@ public class MobileExpertPageService {
      *
      * @return 专家培训信息
      */
-    public List<Map<String, Object>> findExpertTrainList(int count) {
-        return  null;
+    public List<Map<String, String>> findExpertTrainList(Map<String, Object> condition) {
+        List<Map<String, String>> courseList = publishTCourseMapper.findPublishCourse(condition);
+        return courseList;
     }
 
 
@@ -190,6 +203,11 @@ public class MobileExpertPageService {
             m.put("id", achievement.getId());
             m.put("title", achievement.getTitle());
             m.put("updateTime", achievement.getUpdateTime());
+            m.put("provinceName", achievement.getProvinceName());
+            m.put("cityName", achievement.getCityName());
+            m.put("useAreaName", achievement.getUseAreaName());
+            m.put("systemName", achievement.getSystemName());
+            m.put("cooperationType", achievement.getCooperationType());
             list.add(m);
         }
         return list;
@@ -202,14 +220,13 @@ public class MobileExpertPageService {
      * @param s
      * @return
      */
-    public Expert queryExpertByCreateid(String s, Expert expert) {
+    public void queryExpertByCreateid(String s, Expert expert) {
         Expert expert1 = expertService.queryExpertByCreateid(s);
         if (expert1 == null) {
             expertService.applyExpert(expert);
         } else {
             throw new BusinessException(MsgCodeConstant.EXPERT_ISEXIST, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.EXPERT_ISEXIST)));
         }
-        return expertService.queryExpertByCreateid(s);
     }
 
 
@@ -220,14 +237,16 @@ public class MobileExpertPageService {
      * @param mobileCodeSessionTypeSupport
      * @return
      */
-    public String getTrainMobileCode(String mobile, String mobileCodeSessionTypeSupport, String imgCode, String sessImgCode) throws IOException, ApiException {
+    public boolean getTrainMobileCode(String mobile, String mobileCodeSessionTypeSupport, String imgCode, String sessImgCode) throws IOException, ApiException {
 
+        boolean b = false;
         if (imgCode.equalsIgnoreCase(sessImgCode)) {
-            String verifyCode = expertService.getTrainMobileCode(mobile,mobileCodeSessionTypeSupport);
+            expertService.getTrainMobileCode(mobile, mobileCodeSessionTypeSupport);
+            b = true;
         } else {
-            throw new BusinessException(MsgCodeConstant.validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.validate_error)));
+            return b;
         }
-        return null;
+        return b;
     }
 
 
@@ -250,7 +269,6 @@ public class MobileExpertPageService {
     }
 
     /**
-     *
      * 协会动态列表
      *
      * @param pager
@@ -260,7 +278,7 @@ public class MobileExpertPageService {
 
     public List<Dynamic> findAllDynamicList(Paging<Dynamic> pager, Map<String, Object> map) {
 
-        List<Dynamic> dynamicList=expertService.findAllDynamicList(pager,map);
+        List<Dynamic> dynamicList = expertService.findAllDynamicList(pager, map);
         List list = new ArrayList();
         for (Dynamic dynamic : dynamicList) {
             Map m = new HashMap();
@@ -281,40 +299,94 @@ public class MobileExpertPageService {
      */
     public Dynamic queryDynamicById(String id) {
         Dynamic dynamic = expertService.queryDynamicById(id);
-        if(dynamic!=null){
-            dynamic.setViews(String.valueOf(Integer.parseInt(dynamic.getViews())+1));
-            expertService.updateDynamicViews(dynamic);
-        }else {
-            throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR,"页面不存在");
+        if (dynamic != null) {
+            dynamic.setViews(String.valueOf(Integer.parseInt(dynamic.getViews()) + 1));
+            dynamic = dynamicMapper.selDynamicById(id);
+        } else {
+            throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
         }
         return dynamic;
     }
 
 
     /**
-     *
      * 给专家留言
      *
      * @param message
      */
     public void addMessage(Message message) {
-          boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.GZJLY.toString());
-            if(bool) {
-                memberService.saveMessage(message);
-            }else{//支付失败稍后重试，联系客服
-                throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+        Long createid = ShiroUtil.getCreateID();
+        if (createid != null) {
+            message.setCreateid(String.valueOf(createid));
+            Member member = memberService.findMemById(String.valueOf(createid));
+            if (null == member) {
+                throw new BusinessException(MsgCodeConstant.NOT_EXIST_MEMBER, "不存在该会员信息");
             }
+            String identify = member.getIdentify();
+            //个人取昵称，企业取企业名
+            String name = identify.equals("2") ? member.getNickname() : member.getEnterpriseName();
+            if (org.apache.commons.lang3.StringUtils.isEmpty(name)) {
+                name = "匿名用户";
+            }
+            String title = "来自" + name + "的留言";
+            message.setTitle(title);
+            memberService.saveMessage(message);
+        }
     }
 
-    /**]
-     *
+    /**
+     * ]
+     * <p/>
      * 系統分類常量
+     *
      * @param expertSystemType
      * @return
      */
 
-    public List<Map<String,String>> findByType(String expertSystemType) {
+    public List<Map<String, String>> findByType(String expertSystemType) {
         return constantService.findByType(ExpertConstant.EXPERT_SYSTEM_TYPE);
     }
 
+
+    /**
+     * 查看详情是否查看过
+     *
+     * @param map
+     * @return
+     */
+    public boolean findDetails(Map<String, Object> map) {
+        Long createId = ShiroUtil.getCreateID();
+        boolean b = false;
+        if (null != createId) {
+            map.put("createId", Integer.parseInt(String.valueOf(createId)));
+            if (achievementMapper.findExpertResultById(map) > 0) {
+                b = true;
+            } else {
+                b = false;
+            }
+        } else {
+            return b;
+        }
+        return b;
+    }
+
+
+    /**
+     * 留言页面专家信息
+     *
+     * @param id
+     * @return
+     */
+    public Expert findExpertById(String id) {
+        return expertService.queryExpertById(id);
+    }
+
+
+    /**
+     * @param createId
+     * @return
+     */
+    public Member findDetailsById(Long createId) {
+        return memberService.findMemById(Long.toString(createId));
+    }
 }

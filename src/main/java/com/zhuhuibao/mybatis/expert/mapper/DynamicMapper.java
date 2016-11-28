@@ -20,4 +20,8 @@ public interface DynamicMapper {
 
     int updateDynamicViews(Dynamic dynamic);
     List<Dynamic> findAllDynamicList1(RowBounds rowBounds, Map<String, Object> map);
+
+    Dynamic selDynamicById(String id);
+
+
 }
