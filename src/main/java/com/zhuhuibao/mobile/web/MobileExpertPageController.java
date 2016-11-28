@@ -136,7 +136,7 @@ public class MobileExpertPageController extends BaseController {
         Map<String, Object> resultMap = new HashMap<>();
         Response response = new Response();
         try {
-            getPrivilegeGoodsDetails(resultMap, Long.parseLong(id), ZhbConstant.ZhbGoodsType.CKZJXX);
+            getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.CKZJXX);
             Map<String, Object> map = new HashMap<>();
             map.put("id", id);
             map.put("type", "CKZJXX");
@@ -156,7 +156,7 @@ public class MobileExpertPageController extends BaseController {
         Response response = new Response();
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            getPrivilegeGoodsDetails(resultMap, Long.parseLong(id), ZhbConstant.ZhbGoodsType.CKZJJSCG);
+            getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.CKZJJSCG);
             Map<String, Object> map = new HashMap<>();
             map.put("id", id);
             map.put("type", "CKZJJSCG");
@@ -342,7 +342,7 @@ public class MobileExpertPageController extends BaseController {
     public Response addMessage(@ModelAttribute Message message) throws Exception {
         Response response = new Response();
         Map<String, Object> resultMap = new HashMap<>();
-      //  getPrivilegeGoodsDetails(resultMap, Long.parseLong(id), ZhbConstant.ZhbGoodsType.GZJLY);
+        getPrivilegeGoodsDetails(resultMap, null, ZhbConstant.ZhbGoodsType.GZJLY);
         mobileExpertPageService.addMessage(message);
         return response;
     }
@@ -353,13 +353,13 @@ public class MobileExpertPageController extends BaseController {
         Response response = new Response();
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            getPrivilegeGoodsDetails(resultMap, Long.parseLong(id), ZhbConstant.ZhbGoodsType.GZJLY);
+            getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.GZJLY);
 
             Expert expert = mobileExpertPageService.findExpertById(id);
             resultMap.put("expert", expert);
-            if (null != ShiroUtil.getCreateID()){
+            if (null != ShiroUtil.getCreateID()) {
                 Long createId = ShiroUtil.getCreateID();
-                Member member= mobileExpertPageService.findDetailsById(createId);
+                Member member = mobileExpertPageService.findDetailsById(createId);
                 resultMap.put("member", member);
             }
             response.setData(resultMap);
