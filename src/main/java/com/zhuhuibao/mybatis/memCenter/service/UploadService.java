@@ -45,7 +45,6 @@ public class UploadService {
      */
     public Map<String, String> upload(MultipartFile file, String type, String chann) {
         Map<String, String> result = new HashMap<>();
-
         try {
         	/**
         	 * saveDirectory = /home/app/upload/$chan/img
@@ -54,7 +53,6 @@ public class UploadService {
             int maxPostSize;
             String imgDomain = PropertiesUtils.getValue("img.domain");
 //            String docDomain = PropertiesUtils.getValue("doc.domain");
-
             String fileName = FileUtil.renameFile(file.getOriginalFilename());
             String data;
             switch (type) {

@@ -39,6 +39,8 @@ public interface ChannelNewsMapper {
 
     List<Map<String,String>> findAllPassNewsByType(RowBounds rowBounds, Map<String, Object> params);
 
+    List<Map<String,String>> findJobNews4Mobile(RowBounds rowBounds, Map<String, Object> params);
+
     List<Map<String,String>> selectHotViews(@Param("type") String type, @Param("count") Integer count);
 
     List<Map<String,String>> selectNewViews(@Param("type") String type, @Param("count") Integer count);

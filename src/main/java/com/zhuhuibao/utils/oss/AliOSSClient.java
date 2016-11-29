@@ -203,11 +203,8 @@ public class AliOSSClient {
 
         log.info("阿里云OSS上传Started");
         OSSClient ossClient = init();
-
         try {
-
             long size = file.getSize();
-
             // 上传文件流
             String domain;
             InputStream in = file.getInputStream();

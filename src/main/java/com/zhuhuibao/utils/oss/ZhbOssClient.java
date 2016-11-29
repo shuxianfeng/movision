@@ -37,9 +37,8 @@ public class ZhbOssClient {
      * @return     url | filename
      */
     public String uploadObject(MultipartFile file, String type, String chann) {
-    	
-        String uploadMode = PropertiesUtils.getValue("upload.mode");
 
+        String uploadMode = PropertiesUtils.getValue("upload.mode");
         //判断是否为允许的上传文件后缀
         boolean allowed =  FileUtil.isAllowed(file.getOriginalFilename(), type);
         if(!allowed){
