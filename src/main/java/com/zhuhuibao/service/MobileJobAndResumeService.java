@@ -295,7 +295,7 @@ public class MobileJobAndResumeService {
     public Paging<Map<String, String>> getJobNewsList( String type,String count, String pageNo,String pageSize){
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> params = getJobNewsListMap(type, count);
-        List<Map<String, String>> list = newsService.findAllPassNewsByType(pager, params);
+        List<Map<String, String>> list = newsService.findJobNews4Mobile(pager, params);
         pager.result(list);
         return pager;
     }
@@ -317,11 +317,9 @@ public class MobileJobAndResumeService {
      */
     private Map<String, Object> getJobNewsListMap(String type, String count) {
         Map<String, Object> params = new HashMap<>();
-        String sort = "0";
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(type)){
-            sort = getSortByType(type, sort);
+            params.put("sort",getSortByType(type));
         }
-        params.put("sort",sort);
         params.put("channelid", "13");     //人才网
         params.put("status", "1");   //已审核
         if (!StringUtils.isEmpty(count)) {
@@ -333,10 +331,10 @@ public class MobileJobAndResumeService {
     /**
      * 根据类型排序
      * @param type
-     * @param sort
      * @return
      */
-    public String getSortByType(String type, String sort) {
+    public String getSortByType(String type) {
+        String sort = "";
         switch (type) {
             case "14":
                 sort = "1";    //面试技巧
@@ -389,7 +387,20 @@ public class MobileJobAndResumeService {
         return result;
     }
 
-
+    public String getSortByType(String type, String sort) {
+        switch (type) {
+            case "14":
+                sort = "1";    //面试技巧
+                break;
+            case "15":
+                sort = "2";     //职场动态
+                break;
+            case "16":
+                sort = "3";   //行业资讯
+                break;
+        }
+        return sort;
+    }
 
 
 

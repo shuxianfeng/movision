@@ -105,9 +105,9 @@ public class MobileAskAndOfferPriceController extends BaseController {
     @ApiOperation(value = "上传询价单，上传报价单", notes = "上传询价单，上传报价单", response = Response.class)
     @RequestMapping(value = {"/rest/m/askprice/site/uploadAskList","/rest/m/askprice/mc/uploadAskList"}, method = RequestMethod.POST)
     public Response uploadAskList(@RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
-        String url = zhbOssClient.uploadObject(file, "doc", "price");
+        String url = zhbOssClient.uploadObject(file, "img", "price");
         Map<String, String> map = new HashMap<>();
-        map.put(Constants.name, url);
+        map.put("url", url);
         return new Response(map);
     }
 
