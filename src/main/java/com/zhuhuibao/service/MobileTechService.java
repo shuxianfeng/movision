@@ -307,12 +307,10 @@ public class MobileTechService {
         if (StringUtils.isEmpty(scateId)) {
             conditionMap.put("sCategory", scateId);
         }
-
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<Map<String, String>> techList = techDataService.findAllTechDataOnlyPager(pager, conditionMap);
          pager.result(techList);
         return pager;
-
     }
 
     /**
@@ -333,7 +331,6 @@ public class MobileTechService {
 
     /**
      * 获取培训课程列表
-     * 默认展示6条
      * @return
      */
     public List<Map<String, String>> getTechCourseList(Integer count){
@@ -343,6 +340,27 @@ public class MobileTechService {
         condition.put("count", count);
         return ptCourseService.findLatestPublishCourse(condition);
     }
+
+
+    public Paging<Map<String, String>> getTechCoursePageList(String pageNo, String pageSize,String province){
+        Map<String, Object> condition = new HashMap<>();
+        condition.put("status", TechConstant.PublishCourseStatus.SALING.toString());
+        condition.put("courseType", TechConstant.COURSE_TYPE_TECH);
+        condition.put("province", province);    //地区筛选
+
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Map<String, String>> list = ptCourseService.findAllPublishCoursePager(pager,condition);
+        pager.result(list);
+        return pager;
+    }
+
+
+
+
+
+
+
+
 
     /**
      * 获取培训课程详情
