@@ -93,9 +93,11 @@ public class MobileAskAndOfferPriceService {
      * @param askPrice
      */
     private void validateFileExist(AskPrice askPrice) {
-        if (askPrice.getBillurl() != null && !askPrice.getBillurl().equals("")) {
+        if (StringUtils.isNotEmpty(askPrice.getBillurl())) {
             String fileUrl = askPrice.getBillurl();
+            log.info("询价单的图片url:"+fileUrl);
             if (!fileUtil.isExistFile(fileUrl, "img", "price")) {
+                log.warn("询价单图片不存在");
                 throw new BusinessException(MsgCodeConstant.file_not_exist, "询价单图片不存在");
             }
         }

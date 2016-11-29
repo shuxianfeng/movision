@@ -47,8 +47,8 @@ public class MobileTechSiteController {
 
     @RequestMapping(value = "sel_all_news", method = RequestMethod.GET)
     @ApiOperation(value = "查询新技术列表", notes = "查询新技术列表", response = Response.class)
-    public Response findAllTechNewsList(@ApiParam(value = "页码") @RequestParam(required = false) String pageNo,
-                                        @ApiParam(value = "每页显示的数目") @RequestParam(required = false) String pageSize) throws IOException {
+    public Response findAllTechNewsList(@ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                        @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
         response.setData(mTechSV.getNewTechList(pageNo,pageSize));
         return response;
