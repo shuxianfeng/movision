@@ -77,7 +77,6 @@ public class MobileExpertPageController extends BaseController {
         try {
             // TODO: 2016/11/24 0024
             // banner位广告图片区域
-
             map.put("bannerList", mobileExpertPageService.findBannerList());
 
             // 筑慧专家库区域
