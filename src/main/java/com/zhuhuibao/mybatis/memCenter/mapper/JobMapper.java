@@ -97,4 +97,6 @@ public interface JobMapper {
     Long querycompanyByJobId(Long jobID);
 
     String queryJobNameByJobId(Long jobID);
+
+    List<Map<String,Object>> findAllOtherPositionById(String id);
 }
