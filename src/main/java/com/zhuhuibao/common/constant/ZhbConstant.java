@@ -90,6 +90,9 @@ public class ZhbConstant {
 		}
 	}
 
+	/**
+	 * 筑慧币商品类型
+	*/
 	public enum ZhbGoodsType {
 		/**
 		 * 员工账号

@@ -28,4 +28,5 @@ public interface PublishTCourseMapper {
 
     Map<String,String> previewTrainCourseDetail(Map<String,Object> condition);
 
+    List<Map<String,String>> findPublishCourse(Map<String, Object> condition);
 }

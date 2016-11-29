@@ -50,6 +50,7 @@ public class ZhbPaymentController {
 
     @Autowired
     ResumeService resume;
+
     @ApiOperation(value = "商品是否已经购买", notes = "商品是否已经购买", response = Response.class)
     @RequestMapping(value = "sel_payment", method = RequestMethod.GET)
     public Response previewResume(@ApiParam(value = "商品ID") @RequestParam String GoodsID,

@@ -94,7 +94,8 @@ public class ActivityService {
             lock = new DistributedLock(LOCK_NAME);
             lock.lock();
 
-            return doApply(activityApply, mobileCode);
+//            return doApply(activityApply, mobileCode);
+            return activityApply.toString();
 
         } catch (Exception e) {
             log.error("执行异常>>>", e);

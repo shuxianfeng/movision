@@ -379,5 +379,14 @@ public interface MsgCodeConstant {
 	 * 该订单不存在购买的商品
 	 */
 	int NOT_EXIST_ORDER_GOODS = 3011;
-	
+
+	/**
+	 * 技术合作id的数组为空
+	 */
+	int TECH_COOP_IS_EMPTY= 3012;
+
+	/**
+	 * 询价中，向厂商询价和向代理商询价，两者都不存在
+	 */
+	int ASK_PRICE_SUPPLIERS_AND_MANUFACTURER_NOT_EXIST = 3013;
 }

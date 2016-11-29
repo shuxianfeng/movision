@@ -295,7 +295,7 @@
     </where>
       order by t.updateTime desc
   </select>
-  <select id="findLatestPublishCourse" parameterType="java.util.Map" resultType="java.util.Map">
+  <select id=" findLatestPublishCourse" parameterType="java.util.Map" resultType="java.util.Map">
     select t.courseid,t.title,t.notes,
     case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl) = 0 then imgUrl end as imgUrl
     from t_p_group_publishCourse t
@@ -332,5 +332,20 @@
         and courseType = #{courseType}
       </if>
     </where>
+  </select>
+
+  <select id="findPublishCourse" parameterType="java.util.Map" resultType="java.util.Map">
+    select t.courseid,t.title,t.price,
+    ( select sum(number) from t_o_order_goods
+    where goodsId = #{courseid} and  orderNo in (select orderNo from t_o_order where status in (1,2) and goodsType =2)),
+
+    case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl) = 0 then imgUrl end as imgUrl
+    from t_p_group_publishCourse t
+    and courseType = #{courseType}
+    and status = #{status}
+    order by ( select sum(number) from t_o_order_goods
+    where goodsId = #{courseid} and  orderNo
+    in (select orderNo from t_o_order where status in (1,2) and goodsType =2) ) desc
+    limit #{count}
   </select>
 </mapper>

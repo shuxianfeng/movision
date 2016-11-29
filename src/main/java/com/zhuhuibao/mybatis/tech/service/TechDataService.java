@@ -115,6 +115,23 @@ public class TechDataService {
     }
 
     /**
+     * 手机端技术首页-查询技术资料
+     * @return
+     */
+    public List<Map<String,String>> findAllTechData4Mobile(Integer num) {
+        List<Map<String,String>> techList;
+        try {
+            Map map = new HashMap();
+            map.put("num",num);
+            techList = techDataMapper.findAllTechData(map);
+        } catch (Exception e) {
+            log.error("查询异常>>>", e);
+            throw e;
+        }
+        return techList;
+    }
+
+    /**
      * 技术频道搜索行业类别
      *
      * @param condition 搜索条件

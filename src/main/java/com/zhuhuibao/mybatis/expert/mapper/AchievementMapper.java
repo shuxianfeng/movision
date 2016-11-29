@@ -26,4 +26,11 @@ public interface AchievementMapper {
     List<Map<String,String>> findAllMyLookedAchievementList(RowBounds rowBounds, Map<String, Object> map);
 
     int deleteLookedAchievement(String id);
+
+    List<Map<String,String>> findAllMyLookedMobileAchievementList(RowBounds rowBounds, Map<String, Object> map);
+
+    List<Map<String,String>> findAllMobileMyAchievementList(RowBounds rowBounds, Map<String, Object> map);
+
+
+    int findExpertResultById(Map<String, Object> map);
 }

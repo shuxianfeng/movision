@@ -27,6 +27,8 @@ public interface ResumeMapper {
 
     List<Map<String,Object>> findAllResume(RowBounds rowBounds, Map<String,Object> map);
 
+    List<Map<String,Object>> findAllResume4Mobile(Map<String,Object> map);
+
     //我收到的简历
     List<Map<String,String>> findAllReceiveResume(RowBounds rowBounds,@Param("id")String id);
 
@@ -67,4 +69,12 @@ public interface ResumeMapper {
     List<String> selectIdsByCreateId(@Param("createid") Long createid);
     //获取简历收藏最大值
 	int getMaxCollCount(Long memberId);
+
+    //更新简历,刷新简历
+    int updateResumeIsPublic(Resume resume);
+
+    //预览简历
+    Map<String,Object> previewMyResume(Map<String,Object> map);
+
+    Long queryResumeIdById(Long createID);
 }

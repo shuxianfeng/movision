@@ -20,6 +20,7 @@ import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
+import com.zhuhuibao.service.MobileJobAndResumeService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
@@ -65,6 +66,9 @@ public class JobCommonController {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    MobileJobAndResumeService mJobSV;
+
     @RequestMapping(value = "sel_unRead_msg_count", method = RequestMethod.GET)
     @ApiOperation(value = "未读消息数目", notes = "人才网未读消息数目", response = Response.class)
     public Response queryUnreadMsgCount() {
@@ -107,17 +111,7 @@ public class JobCommonController {
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> params = new HashMap<>();
         String sort = "0";
-        switch (type) {
-            case "14":
-                sort = "1";    //面试技巧
-                break;
-            case "15":
-                sort = "2";     //职场动态
-                break;
-            case "16":
-                sort = "3";   //行业资讯
-                break;
-        }
+        sort = mJobSV.getSortByType(type, sort);
         params.put("channelid", "13");     //人才网
         params.put("sort",sort);
         params.put("status", "1");   //已审核

@@ -22,7 +22,7 @@ public class DistributedClient {
     // 超时时间
     private static final int SESSION_TIMEOUT = 5000;
     // zookeeper server列表
-    private final static String hosts = "localhost:2181,localhost:2182,localhost:2183";
+    private final static String hosts = "localhost:2181,localhost:2182,localhost:2183"; //localhost:2181,localhost:2182,localhost:2183
     private final static String groupNode = "locks";
     private final static String subNode = "sub";
 
@@ -32,6 +32,9 @@ public class DistributedClient {
     // 当前client等待的子节点
     private String waitPath;
 
+    /**
+     * 你可以向CountDownLatch对象设置一个初始的数字作为计数值，任何调用这个对象上的await()方法都会阻塞，直到这个计数器的计数值被其他的线程减为0为止。
+     */
     private CountDownLatch latch = new CountDownLatch(1);
 
 
@@ -48,6 +51,14 @@ public class DistributedClient {
                     }
 
                     // 发生了waitPath的删除事件
+                    /**
+                     * 存在的问题：
+                     * 现在有subs5 sub6  subs7  subs8几个子节点，当前subs5正获得锁，如果subs6对应的client6挂掉，
+                     * 则subs6被删除--触发了client7那边的监听，导致client7也拿到了锁，导致5和7的客户端同时得到锁。
+                     *
+                     * 为了避免上述问题：
+                     * 可以在接到waitPath的删除通知的时候, 进行一次确认, 确认当前的thisPath是否真的是列表中最小的节点.
+                     */
                     if (event.getType() == Event.EventType.NodeDeleted && event.getPath().equals(waitPath)) {
                         // 确认thisPath是否真的是列表中的最小节点
                         List<String> childrenNodes = zk.getChildren("/" + groupNode, false);

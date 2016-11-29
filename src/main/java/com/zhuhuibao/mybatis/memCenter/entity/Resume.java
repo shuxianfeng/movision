@@ -74,16 +74,18 @@ public class Resume {
     private String attach;
 
     private String isPublic;
-    
+
     private String download;
-   
+
     private String type;
 
     private String views;
-    //0 已收藏  1 未收藏
+    // 0 已收藏 1 未收藏
     private String isCollect;
-    //0 已下载  1 未下载
+    // 0 已下载 1 未下载
     private String isDownload;
+    // 自我评价
+    private String evaluation;
 
     public String getId() {
         return id;
@@ -381,13 +383,13 @@ public class Resume {
         this.parentName = parentName;
     }
 
-	public String getDownload() {
-		return download;
-	}
+    public String getDownload() {
+        return download;
+    }
 
-	public void setDownload(String download) {
-		this.download = download;
-	}
+    public void setDownload(String download) {
+        this.download = download;
+    }
 
     public String getViews() {
         return views;
@@ -397,29 +399,35 @@ public class Resume {
         this.views = views;
     }
 
-	public String getIsCollect() {
-		return isCollect;
-	}
+    public String getIsCollect() {
+        return isCollect;
+    }
 
-	public void setIsCollect(String isCollect) {
-		this.isCollect = isCollect;
-	}
+    public void setIsCollect(String isCollect) {
+        this.isCollect = isCollect;
+    }
 
-	public String getIsDownload() {
-		return isDownload;
-	}
+    public String getIsDownload() {
+        return isDownload;
+    }
 
-	public void setIsDownload(String isDownload) {
-		this.isDownload = isDownload;
-	}
+    public void setIsDownload(String isDownload) {
+        this.isDownload = isDownload;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
-    
-    
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(String evaluation) {
+        this.evaluation = evaluation;
+    }
 }

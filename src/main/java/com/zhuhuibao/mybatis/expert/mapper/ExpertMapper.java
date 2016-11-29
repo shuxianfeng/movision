@@ -34,4 +34,6 @@ public interface ExpertMapper {
     int deleteLookedExpert(String id);
 
     List<Map<String,Object>> findAllExpert(RowBounds rowBounds, Map<String, Object> map);
+
+    List<Map<String, String>> findAllMyLookedMobileExpertListById(RowBounds rowBounds, Map<String, Object> map);
 }

@@ -137,7 +137,11 @@ public class AgentService {
         }
     }
 
-
+    /**
+     * 根据产品id查询代理商跟厂商（区域分组）
+     * @param id
+     * @return
+     */
     public Map getAgentByProId(String id){
         try {
             List<ResultBean> provinceList = provinceMapper.findProvince();
