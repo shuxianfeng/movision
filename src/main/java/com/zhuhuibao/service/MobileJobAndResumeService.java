@@ -403,6 +403,7 @@ public class MobileJobAndResumeService {
     }
 
 
-
-
+    public List<SysAdvertising> getHuntingCompany() {
+        return advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Rencai_Hunting.value);
+    }
 }

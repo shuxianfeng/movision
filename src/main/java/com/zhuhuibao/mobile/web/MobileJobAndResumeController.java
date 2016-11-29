@@ -59,7 +59,7 @@ public class MobileJobAndResumeController extends BaseController {
             getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.CXXZJL);
             Map<String, Object> map = new HashMap<>();
             map.put("id", id);
-            boolean count = mJobSV.collectionResume(map);
+            boolean count = mobileTalentNetworkService.collectionResume(map);
             resultMap.put("count", count);
             response.setData(resultMap);
         } catch (Exception e) {
@@ -95,7 +95,7 @@ public class MobileJobAndResumeController extends BaseController {
         try {
             Map<String, Object> map = new HashMap<>();
             map.put("id", id);
-            map = mJobSV.getPositionsByPositionId(map);
+            map = mobileTalentNetworkService.getPositionByPositionId(map);
             response.setData(map);
         } catch (Exception e) {
             log.error("sel_resume_details error! ", e);
