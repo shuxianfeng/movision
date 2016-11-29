@@ -5,6 +5,7 @@ import java.util.*;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
+import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.witkey.mapper.CooperationMapper;
 import com.zhuhuibao.utils.ListUtil;
@@ -38,6 +39,9 @@ public class MobileWitkeyService {
 
 	@Autowired
 	private CooperationMapper cooperationMapper;
+
+	@Autowired
+	ConstantService service;
 
 	@Autowired
 	private MobileSysAdvertisingService advertisingService;
@@ -374,6 +378,20 @@ public class MobileWitkeyService {
 			throw new PageNotFoundException(MsgCodeConstant.SYSTEM_ERROR, "页面不存在");
 		}
 		return cooperation;
+	}
+
+	/**
+	 * 获取系统类型和项目类别
+	 * @return
+     */
+	public Map getTypeList(){
+
+		List<Map<String,String>> list1 = service.findByType("9");	//项目类别
+		List<Map<String,String>> list2 = service.findByType("25");	//系统类型
+		Map map = new HashMap();
+		map.put("system", list2);	//系统类型
+		map.put("project", list1);	//项目类别
+		return map;
 	}
 
 

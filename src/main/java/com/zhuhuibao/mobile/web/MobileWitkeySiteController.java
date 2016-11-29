@@ -9,6 +9,7 @@ import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
+import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
@@ -17,6 +18,8 @@ import com.zhuhuibao.service.MobileWitkeyService;
 import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +36,10 @@ import java.util.Map;
 @RequestMapping("/rest/m/witkey/site/")
 public class MobileWitkeySiteController {
 
+    private static final Logger log = LoggerFactory.getLogger(MobileWitkeySiteController.class);
+
+    @Autowired
+    ConstantService service;
     @Autowired
     private MobileWitkeyService mWitkeySV;
 
@@ -82,6 +89,18 @@ public class MobileWitkeySiteController {
         response.setData(mWitkeySV.getWitkeyAllInfo());
         return response;
     }
+
+    @RequestMapping(value = "findProjectAndSystem", method = RequestMethod.GET)
+    @ApiOperation(value = "获取系统类型和项目类别", notes = "获取系统类型和项目类别", response = Response.class)
+    public Response findByType() {
+
+        return new Response(mWitkeySV.getTypeList());
+    }
+
+
+
+
+
 
 
 }

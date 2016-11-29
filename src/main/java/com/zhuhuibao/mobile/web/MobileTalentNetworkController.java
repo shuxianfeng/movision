@@ -49,7 +49,7 @@ public class MobileTalentNetworkController extends BaseController {
         Map<String, Object> resultMap = new HashMap<>();
         Response response=new Response();
         try {
-            getPrivilegeGoodsDetails(resultMap, Long.parseLong(id), ZhbConstant.ZhbGoodsType.CXXZJL);
+            getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.CXXZJL);
             Map<String, Object> map = new HashMap<>();
             map.put("id", id);
             boolean count = mobileTalentNetworkService.collectionResume(map);

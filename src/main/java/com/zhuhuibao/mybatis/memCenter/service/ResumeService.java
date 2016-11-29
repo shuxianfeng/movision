@@ -294,7 +294,7 @@ public class ResumeService {
     public List<Map<String, Object>> findMIndexResume(Map<String, Object> map) {
         List<Map<String, Object>> list = new ArrayList<>();
         try {
-            List<Map<String, Object>> resumeList = resumeMapper.findAllResume(map);
+            List<Map<String, Object>> resumeList = resumeMapper.findAllResume4Mobile(map);
             for (Map<String, Object> resume : resumeList) {
                 Map<String, Object> result = genResultMap(resume);
                 list.add(result);

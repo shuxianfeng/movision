@@ -295,8 +295,59 @@
       </if>
     </where>
     order by t.updateTime desc
+  </select>
+
+  <select id="findAllResume4Mobile" parameterType="java.util.Map" resultType="java.util.Map">
+    select t.id,t.createid,t.title,concat(substring(t.realName,1,1),'**') realName,
+    t.hopeSalary,m.headShot as photo,t.education,
+    date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,
+    date_format(t.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,
+    t.experienceYear,t.isPublic,t.jobNature,t.post,
+    (DATE_FORMAT( current_date(),'%Y' )-t.birthYear) birthYear,
+    (DATE_FORMAT( current_date(),'%Y' )-t.workYear) workYear
+    from t_i_resume t
+    LEFT JOIN t_m_member m on t.createid = m.id
+    <where>
+      <if test="status != null and status != ''">
+        and m.status != #{status}
+      </if>
+      <if test="title != null and title != ''">
+        and (select Group_concat(name) from t_dictionary_position where find_in_set(id,t.post)) like concat('%',#{title},'%')
+      </if>
+      <if test="jobCity != null and jobCity != ''">
+        <!-- and (#{jobCity} in(t.jobCity) or (select provincecode from t_dictionary_city where code = #{jobCity}) in(t.jobProvince)) -->
+        and t.jobCity = #{jobCity}
+      </if>
+      <if test="expYearBefore != null and expYearBefore != '' and expYearBehind != null and expYearBehind != ''">
+        and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore} and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &lt;= #{expYearBehind}
+      </if>
+      <if test="expYearBefore != null and expYearBefore != '' and expYearBehind == null and expYearBehind = ''">
+        and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore}
+      </if>
+      <if test="expYearBefore == null and expYearBefore = ''  and expYearBehind != null and expYearBehind != ''">
+        and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &lt;= #{expYearBehind}
+      </if>
+      <if test="education != null and education != ''">
+        and t.education = #{education}
+      </if>
+      <if test="isPublic != null and isPublic != ''">
+        and t.isPublic = #{isPublic}
+      </if>
+      <if test="positionList != null">
+        <foreach collection="positionList" item="item" index="index" open="and (" separator="or" close=")" >
+          find_in_set(#{item},t.post)
+        </foreach>
+      </if>
+      <if test="company_id != null">
+        and t.createid not in (select t.create_id from t_i_forbid_key_words t where t.company_id = #{company_id} and t.is_deleted = 0)
+      </if>
+    </where>
+    order by t.updateTime desc
     limit 3
   </select>
+
+
+
   <select id="findAllReceiveResume" parameterType="java.lang.String" resultType="java.util.Map">
     select re.id as recordId,re.jobID,j.createID as companyId,r.id,j.name,j.positionType,j.is_deleted,r.experienceYear,
     r.realName,re.publishDate as publishTime,re.status,(DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear)  as workYear
