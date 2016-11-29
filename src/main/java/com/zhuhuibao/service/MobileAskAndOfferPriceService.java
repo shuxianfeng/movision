@@ -89,14 +89,14 @@ public class MobileAskAndOfferPriceService {
     }
 
     /**
-     * 校验询价单是否存在
+     * 校验询价单(图片)是否存在
      * @param askPrice
      */
     private void validateFileExist(AskPrice askPrice) {
         if (askPrice.getBillurl() != null && !askPrice.getBillurl().equals("")) {
             String fileUrl = askPrice.getBillurl();
-            if (!fileUtil.isExistFile(fileUrl, "doc", "price")) {
-                throw new BusinessException(MsgCodeConstant.file_not_exist, "文件不存在");
+            if (!fileUtil.isExistFile(fileUrl, "img", "price")) {
+                throw new BusinessException(MsgCodeConstant.file_not_exist, "询价单图片不存在");
             }
         }
     }

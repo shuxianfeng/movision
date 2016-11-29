@@ -64,7 +64,7 @@ public class MobileTechSiteController {
 
     @ApiOperation(value = "技术资料列表", notes = "技术资料列表", response = Response.class)
     @RequestMapping(value = "list_tech_data", method = RequestMethod.GET)
-    public Response listTechDataPage(@ApiParam(value = "类别ID:1:解决方案 2:技术资料 3:培训资料") @RequestParam String fcateId,
+    public Response listTechDataPage(@ApiParam(value = "类别ID:1:解决方案 2:技术资料 3:培训资料") @RequestParam(required = false) String fcateId,
                                      @ApiParam(value = "子类别ID") @RequestParam(required = false) String scateId,
                                      @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                      @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
@@ -88,10 +88,12 @@ public class MobileTechSiteController {
     }
 
     @RequestMapping(value = "sel_tech_course_list", method = RequestMethod.GET)
-    @ApiOperation(value = "查询最新发布的课程(默认6条)", notes = "查询最新发布的课程(默认5条)", response = Response.class)
-    public Response findLatestPublishCourse() {
+    @ApiOperation(value = "查询最新发布的课程(默认10条)", notes = "查询最新发布的课程(默认10条)", response = Response.class)
+    public Response findLatestPublishCourse(@ApiParam(value = "地区（省）") @RequestParam(required = false) String province,
+                                            @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        response.setData(mTechSV.getTechCourseList(TechConstant.MOBILE_TECH_COURSE_DISPLAY_NUM_SIX));
+        response.setData(mTechSV.getTechCoursePageList(pageNo, pageSize, province));
         return response;
     }
 
