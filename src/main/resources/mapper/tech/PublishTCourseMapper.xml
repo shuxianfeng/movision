@@ -352,7 +352,7 @@
     and status = #{status}
     order by ( select sum(number) from t_o_order_goods
     where goodsId = t.courseid and  orderNo
-    in (select orderNo from t_o_order where status in (1,2) and goodsType =2) ) desc
+    in (select orderNo from t_o_order where status in (1,2) and goodsType =2)) desc
     limit 0,4
   </select>
 
