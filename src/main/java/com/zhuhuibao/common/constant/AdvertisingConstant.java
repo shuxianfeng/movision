@@ -149,10 +149,20 @@ public class AdvertisingConstant {
          * 移动端人才-热门招聘-广告
          */
         M_Rencai_Rmzp(new String[] {"249", "M_Rencai", "M_Rencai_Rmzp"}),
+
+        /**
+         * 移动端人才-筑慧猎头-banner
+         */
+        M_Rencai_Hunting(new String[] {"249", "M_Hunting", "M_Hunting_Company"}),
+
         /**
          * 移动端供应链品牌馆-行业软件品牌
          */
-        M_Brands_Software(new String[] { "192", "M_Brands", "M_Brands_Software" }),;
+        M_Brands_Software(new String[] { "192", "M_Brands", "M_Brands_Software" }),
+        /**
+         * 移动端专家页广告
+         */
+        M_Expert_Banner(new String[] { "257", "M_Expert", "M_Expert_Banner" }),;
 
         /**
          * chanType,page,advArea

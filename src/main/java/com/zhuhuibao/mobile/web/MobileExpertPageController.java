@@ -27,7 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,13 +71,14 @@ public class MobileExpertPageController extends BaseController {
 
     @RequestMapping(value = "sel_expert_home_page", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-专家首页-专家频道首页详情", notes = "触屏端-专家首页-专家频道首页详情", response = Response.class)
-    public Response selExpertHomePage(@ApiParam(value = "条数") @RequestParam(required = false) int count) {
+    public Response selExpertHomePage() {
         Map<String, List> map = new HashMap<>();
+        int count=4;
         try {
             // TODO: 2016/11/24 0024
             // banner位广告图片区域
-            List bannerList = new ArrayList();
-            map.put("bannerList", bannerList);
+
+            map.put("bannerList", mobileExpertPageService.findBannerList());
 
             // 筑慧专家库区域
             List<Expert> expertsList = mobileExpertPageService.findNewSettledExpertList(count);
@@ -88,7 +88,7 @@ public class MobileExpertPageController extends BaseController {
             Map<String, Object> condition = new HashMap<>();
             condition.put("status", TechConstant.PublishCourseStatus.SALING.toString());
             condition.put("courseType", ExpertConstant.COURSE_TYPE_EXPERT);
-            condition.put("count", count);
+            condition.put("count",count);
             List<Map<String, String>> trainList = mobileExpertPageService.findExpertTrainList(condition);
             map.put("trainList", trainList);
 
@@ -199,6 +199,7 @@ public class MobileExpertPageController extends BaseController {
         try {
             Map<String, Object> condition = new HashMap<>();
             condition.put("courseid", courseId);
+            condition.put("courseType",ExpertConstant.COURSE_TYPE_EXPERT);
             Map<String, String> course = mobileExpertPageService.previewTrainCourseDetail(condition);
             response.setData(course);
         } catch (Exception e) {

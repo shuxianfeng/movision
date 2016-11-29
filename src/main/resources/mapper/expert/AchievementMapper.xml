@@ -346,4 +346,20 @@
         AND t.companyId=#{createId}
         AND  t.status=0
     </select>
+
+    <select id="findAchievementByCount" resultType="java.util.Map">
+        select a.id,date_format(a.publishTime,'%Y-%m-%d') publishTime,date_format(a.updateTime,'%Y-%m-%d') updateTime,
+        a.title,a.systemType,a.useArea,a.companyName,a.linkMan,a.telephone,a.email,a.province,a.city,a.area,a.address,a.cooperationType,a.status,
+        a.introduce,p.name as provinceName,c.name as cityName,ar.name as areaName,con.name as systemName,
+        co.name as useAreaName,m.personRealName as createName
+        from t_e_achievement a
+        LEFT JOIN t_dictionary_province p on a.province = p.code
+        LEFT JOIN t_dictionary_city c on a.city = c.code
+        LEFT JOIN t_dictionary_area ar on a.area = ar.code
+        LEFT JOIN t_dictionary_constant con on con.code = a.systemType and con.type = 19
+        LEFT JOIN t_dictionary_constant co on co.code = a.useArea and co.type = 18
+        LEFT JOIN t_m_member m on a.createId = m.id
+       WHERE a.is_deleted = 0 and a.status = 1
+       ORDER by a.updateTime DESC limit 0,#{count}
+    </select>
 </mapper>

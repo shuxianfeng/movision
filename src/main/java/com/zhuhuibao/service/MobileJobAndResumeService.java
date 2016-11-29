@@ -69,6 +69,10 @@ public class MobileJobAndResumeService {
     @Autowired
     private MobileSysAdvertisingService advertisingService;
 
+
+    @Autowired
+    private MobileTalentNetworkService mobileTalentNetworkService;
+
     /**
      * 公司详情
      *
@@ -143,6 +147,7 @@ public class MobileJobAndResumeService {
 
     /**
      * 获取职位搜索Pager
+     *
      * @param name
      * @param province
      * @param city
@@ -156,13 +161,13 @@ public class MobileJobAndResumeService {
      * @param pageSize
      * @return
      */
-    public Paging<Map<String,Object>>  getJobSearchResultPager(String name,String province,String city,String area, String employeeNumber,
-                                    String enterpriseType,String days,String salary,String positionType,String pageNo,
-                                    String pageSize){
+    public Paging<Map<String, Object>> getJobSearchResultPager(String name, String province, String city, String area, String employeeNumber,
+                                                               String enterpriseType, String days, String salary, String positionType, String pageNo,
+                                                               String pageSize) {
         log.info("query position info by id");
         Map<String, Object> map = getStringObjectMap(name, city, employeeNumber, enterpriseType, days, salary, positionType);
 
-        Paging<Map<String,Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Map<String, Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 
         pager.result(job.findAllOtherPosition(pager, map));
         return pager;
@@ -170,6 +175,7 @@ public class MobileJobAndResumeService {
 
     /**
      * 职位搜索-准备参数
+     *
      * @param name
      * @param city
      * @param employeeNumber
@@ -200,6 +206,7 @@ public class MobileJobAndResumeService {
 
     /**
      * 获取简历搜索pager
+     *
      * @param title
      * @param jobCity
      * @param expYearBefore
@@ -211,9 +218,9 @@ public class MobileJobAndResumeService {
      * @param pageSize
      * @return
      */
-    public Paging<Map<String, Object>> getResumePager(String title,String jobCity,String expYearBefore,String expYearBehind,
-                                                     String education, String positionType,String isPublic, String pageNo,
-                                                     String pageSize){
+    public Paging<Map<String, Object>> getResumePager(String title, String jobCity, String expYearBefore, String expYearBehind,
+                                                      String education, String positionType, String isPublic, String pageNo,
+                                                      String pageSize) {
         log.info("find all resume!!");
         Paging<Map<String, Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 
@@ -225,6 +232,7 @@ public class MobileJobAndResumeService {
 
     /**
      * 手机端-人才-首页-获取最新简历
+     *
      * @param title
      * @param jobCity
      * @param expYearBefore
@@ -234,8 +242,8 @@ public class MobileJobAndResumeService {
      * @param isPublic
      * @return
      */
-    public List<Map<String, Object>>  getMLatestResume(String title,String jobCity,String expYearBefore,String expYearBehind,
-                                                      String education, String positionType,String isPublic){
+    public List<Map<String, Object>> getMLatestResume(String title, String jobCity, String expYearBefore, String expYearBehind,
+                                                      String education, String positionType, String isPublic) {
         log.info("find all resume!!");
         Map<String, Object> map = getResumeParamsMap(title, jobCity, expYearBefore, expYearBehind, education, positionType, isPublic);
 
@@ -244,6 +252,7 @@ public class MobileJobAndResumeService {
 
     /**
      * 获取简历搜索准备参数map
+     *
      * @param title
      * @param jobCity
      * @param expYearBefore
@@ -269,7 +278,7 @@ public class MobileJobAndResumeService {
         map.put("expYearBehind", expYearBehind);
         map.put("education", education);
         if (isPublic == null) {
-            map.put("isPublic", "1");	//默认公开
+            map.put("isPublic", "1");    //默认公开
         } else {
             if (!"2".equals(isPublic)) {
                 map.put("isPublic", isPublic);
@@ -286,13 +295,14 @@ public class MobileJobAndResumeService {
 
     /**
      * 职场资讯列表
+     *
      * @param type
      * @param count
      * @param pageNo
      * @param pageSize
      * @return
      */
-    public Paging<Map<String, String>> getJobNewsList( String type,String count, String pageNo,String pageSize){
+    public Paging<Map<String, String>> getJobNewsList(String type, String count, String pageNo, String pageSize) {
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, Object> params = getJobNewsListMap(type, count);
         List<Map<String, String>> list = newsService.findAllPassNewsByType(pager, params);
@@ -302,15 +312,17 @@ public class MobileJobAndResumeService {
 
     /**
      * 手机端-人才-首页-获取筑慧资讯
+     *
      * @return
      */
-    public List<Map<String, String>> getJobNews(){
+    public List<Map<String, String>> getJobNews() {
         return newsService.findIndexNews(getJobNewsListMap(null, "4"));
     }
 
 
     /**
      * 获取职位资讯列表的准备参数
+     *
      * @param type
      * @param count
      * @return
@@ -318,10 +330,10 @@ public class MobileJobAndResumeService {
     private Map<String, Object> getJobNewsListMap(String type, String count) {
         Map<String, Object> params = new HashMap<>();
         String sort = "0";
-        if(org.apache.commons.lang3.StringUtils.isNotEmpty(type)){
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(type)) {
             sort = getSortByType(type, sort);
         }
-        params.put("sort",sort);
+        params.put("sort", sort);
         params.put("channelid", "13");     //人才网
         params.put("status", "1");   //已审核
         if (!StringUtils.isEmpty(count)) {
@@ -332,6 +344,7 @@ public class MobileJobAndResumeService {
 
     /**
      * 根据类型排序
+     *
      * @param type
      * @param sort
      * @return
@@ -353,45 +366,76 @@ public class MobileJobAndResumeService {
 
     /**
      * 获取最热招聘广告
+     *
      * @return
      */
-    public List<Map<String, Object>> getHotZpAdv(){
+    public List<Map<String, Object>> getHotZpAdv() {
         String[] arr = AdvertisingConstant.AdvertisingPosition.M_Rencai_Banner.value;
         List<SysAdvertising> advertisings = advService.findHottestPosition(arr[0], arr[1], arr[2]);
         List<Map<String, Object>> list = new ArrayList<>();
         for (SysAdvertising item : advertisings) {
             String jobID = item.getConnectedId();
             Map<String, Object> map = job.findJobByID(jobID);
-            map.put("logo",item.getImgUrl());
+            map.put("logo", item.getImgUrl());
             list.add(map);
         }
         return list;
     }
+
     /**
      * 获取人才网首页数据
+     *
      * @return
      */
-    public Map getIndexInfo() throws Exception{
+    public Map getIndexInfo() throws Exception {
         Map result = new HashMap();
         //banner广告
         result.put("banner_advs", advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Rencai_Banner.value));
         //热门招聘
-        result.put("rmzp_advs",getHotZpAdv());
+        result.put("rmzp_advs", getHotZpAdv());
         //名企招聘（广告）
-        result.put("mqzp_advs",advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Rencai_Banner.value));
+        result.put("mqzp_advs", advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Rencai_Banner.value));
         //最新招聘
-        result.put("zxzp",job.searchNewPosition(3));
+        result.put("zxzp", job.searchNewPosition(3));
         //最新求职
-        result.put("zxqz",getMLatestResume(null,null,null,null,null,null,null));
+        result.put("zxqz", getMLatestResume(null, null, null, null, null, null, null));
         //筑慧职场
-        result.put("zhzc",getJobNews());
+        result.put("zhzc", getJobNews());
 
         return result;
     }
 
 
+    /**
+     * 职位详情
+     *
+     * @param map
+     * @return
+     */
+    public Map<String, Object> getPositionsByPositionId(Map<String, Object> map) {
+        return jobPositionService.queryPositionInfoByID(map);
+    }
 
 
+    /**
+     * 猎头广告位
+     *
+     * @return
+     */
+    public Map getHuntingCompany() {
+        Map result = new HashMap();
+        result.put("hunting_advs", advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Rencai_Hunting.value));
+        return result;
+    }
 
 
+    /**
+     * 判断简历是否被收藏
+     *
+     * @param map
+     * @return
+     */
+    public boolean collectionResume(Map<String, Object> map) {
+        return mobileTalentNetworkService.collectionResume(map);
+    }
 }

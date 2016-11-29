@@ -1,6 +1,7 @@
 package com.zhuhuibao.service;
 
 import com.taobao.api.ApiException;
+import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
@@ -76,6 +77,9 @@ public class MobileExpertPageService {
     @Autowired
     private AchievementMapper achievementMapper;
 
+    @Autowired
+    private MobileSysAdvertisingService advertisingService;
+
 
     /**
      * 最新入驻的专家
@@ -118,7 +122,7 @@ public class MobileExpertPageService {
      * @return 最新技术成果信息
      */
     public List<Map<String, String>> findNewAchievementList(int count) {
-        return expertService.findAchievementListByCount(count);
+        return achievementMapper.findAchievementByCount(count);
     }
 
 
@@ -128,6 +132,7 @@ public class MobileExpertPageService {
      * @return 最新技术成果信息
      */
     public List<Map<String, String>> findNewDynamicList(int count) {
+        count = 3;
         return expertService.findDynamicListByCount(count);
     }
 
@@ -173,7 +178,7 @@ public class MobileExpertPageService {
      * @return
      */
     public List<Map<String, String>> findAllPublishCoursePager(Paging<Map<String, String>> pager, Map<String, Object> condition) {
-        return ptCourseService.findAllPublishCoursePager(pager, condition);
+        return  publishTCourseMapper.findAllPublishsCoursePager(pager.getRowBounds(), condition);
     }
 
 
@@ -388,5 +393,14 @@ public class MobileExpertPageService {
      */
     public Member findDetailsById(Long createId) {
         return memberService.findMemById(Long.toString(createId));
+    }
+
+    /**
+     * 专家首页广告位
+     *
+     * @return
+     */
+    public List findBannerList() {
+        return advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Expert_Banner.value);
     }
 }

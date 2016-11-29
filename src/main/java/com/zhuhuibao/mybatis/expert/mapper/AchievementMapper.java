@@ -33,4 +33,6 @@ public interface AchievementMapper {
 
 
     int findExpertResultById(Map<String, Object> map);
+
+    List<Map<String,String>> findAchievementByCount(int count);
 }

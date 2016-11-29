@@ -27,7 +27,7 @@
     FROM t_e_dynamic d WHERE d.id = #{id} and d.is_deleted = 0
   </select>
   <select id="findDynamicListByCount" resultType="java.util.Map" >
-    SELECT id,title
+    SELECT id,title,date_format(updateTime,'%Y-%m-%d') updateTime,date_format(publishTime,'%Y-%m-%d') publishTime
     FROM t_e_dynamic
     WHERE is_deleted = 0 and status = 1
     ORDER by updateTime DESC limit 0,#{count}
