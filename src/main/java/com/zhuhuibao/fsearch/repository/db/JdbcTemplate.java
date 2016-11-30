@@ -343,16 +343,14 @@ public final class JdbcTemplate {
 				try {
 					con.close();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					LOGGER.error("JdbcTemplate SQLException",e);
 				}
 			}
 			if(cstmt != null){
 				try {
 					cstmt.close();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					LOGGER.error("JdbcTemplate SQLException",e);
 				}
 			}
 			long take = System.currentTimeMillis() - t1;

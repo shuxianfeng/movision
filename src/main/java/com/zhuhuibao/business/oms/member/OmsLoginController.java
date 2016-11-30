@@ -156,14 +156,12 @@ public class OmsLoginController {
 			VerifyCodeUtils.outputImage1(imgWidth, imgheight, out, verifyCode);
 			out.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("生成图片验证码错误",e);
 		} finally {
 			try {
 				out.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("生成图片验证码关流错误",e);
 			}
 		}
 	}
