@@ -1,7 +1,9 @@
 package com.zhuhuibao.mybatis.witkey.entity;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
+@ApiModel(value = "发布任务，发布服务，发布资质合作")
 public class Cooperation {
     private String id;
 
@@ -15,10 +17,10 @@ public class Cooperation {
     @ApiModelProperty(value="关键字")
     private String smart;
 
-    @ApiModelProperty(value="合作标题")
+    @ApiModelProperty(value="合作标题", required = true)
     private String title;
 
-    @ApiModelProperty(value="合作类型")
+    @ApiModelProperty(value="合作类型", required = true)
     private String type;
 
     @ApiModelProperty(value="系统分类")
@@ -36,7 +38,7 @@ public class Cooperation {
     @ApiModelProperty(value="区")
     private String area;
 
-    @ApiModelProperty(value="合作价格")
+    @ApiModelProperty(value="合作价格",required = true)
     private Double price;
 
     @ApiModelProperty(value="截止日期")
