@@ -1,22 +1,13 @@
 package com.zhuhuibao.web;
 
-import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.MessageLogConstant;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.pojo.AuthcMember;
-import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.exception.AuthException;
-import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
-import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
-import com.zhuhuibao.mybatis.memberReg.entity.Member;
-import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
-import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
-import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
-import com.zhuhuibao.mybatis.zhb.service.ZhbService;
-import com.zhuhuibao.security.resubmit.AvoidDuplicateSubmission;
-import com.zhuhuibao.security.resubmit.TokenHelper;
-import com.zhuhuibao.shiro.realm.ShiroRealm;
-import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -28,14 +19,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MessageLogConstant;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.pojo.AuthcMember;
+import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.memCenter.service.MemShopService;
+import com.zhuhuibao.mybatis.memberReg.entity.Member;
+import com.zhuhuibao.mybatis.memberReg.service.MemberRegService;
+import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
+import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.security.resubmit.TokenHelper;
+import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
 
 /**
  * 登录
@@ -114,6 +111,9 @@ public class AuthenticationController {
                 authcMember.setRegisterTime(member.getRegisterTime());
                 authcMember.setWorkType(member.getWorkType());
                 authcMember.setHeadShot(member.getHeadShot());
+                authcMember.setEnterpriseLinkman(member.getEnterpriseLinkman());
+                authcMember.setFixedTelephone(member.getFixedTelephone());
+                authcMember.setEmail(member.getEmail());
 
                 Map<String, Object> nMap = new HashMap<>();
                 nMap.put("recID", String.valueOf(member.getId()));

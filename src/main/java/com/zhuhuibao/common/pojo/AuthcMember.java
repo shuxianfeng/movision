@@ -28,6 +28,43 @@ public class AuthcMember {
 
     private BigDecimal zhbAmount;
 
+    /**
+     * 联系人
+     */
+    private String enterpriseLinkman;
+    /**
+     * 固定电话
+     */
+    private String fixedTelephone;
+    /**
+     * 邮箱
+     */
+    private String email;
+
+    public String getEnterpriseLinkman() {
+        return enterpriseLinkman;
+    }
+
+    public void setEnterpriseLinkman(String enterpriseLinkman) {
+        this.enterpriseLinkman = enterpriseLinkman;
+    }
+
+    public String getFixedTelephone() {
+        return fixedTelephone;
+    }
+
+    public void setFixedTelephone(String fixedTelephone) {
+        this.fixedTelephone = fixedTelephone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public BigDecimal getZhbAmount() {
         return zhbAmount;
     }
