@@ -1,13 +1,18 @@
 package com.zhuhuibao.mobile.web;
 
+import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
+import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
 import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
+import com.zhuhuibao.mybatis.tech.service.DictionaryTechDataService;
+import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.service.MobileTechService;
 import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -29,7 +34,9 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/m/tech/site/")
-public class MobileTechSiteController {
+public class MobileTechSiteController extends BaseController {
+    @Autowired
+    DictionaryTechDataService dicTDService;
 
     @Autowired
     MobileTechService mTechSV;
@@ -37,12 +44,14 @@ public class MobileTechSiteController {
     @Autowired
     PaymentService paymentService;
 
+    @Autowired
+    TechCooperationService techCooSV;
+
     @RequestMapping(value = "sel_tech_cooperation", method = RequestMethod.GET)
     @ApiOperation(value = "查看技术成果，技术需求信息", notes = "查看技术成果，技术需求信息", response = Response.class)
-    public Response queryByChannelInfo(@ApiParam(value = "1:技术成果，2：技术需求") @RequestParam Integer type) {
-        Response response = new Response();
-        response.setData(mTechSV.getTechCoop(type, 6));
-        return response;
+    public Response queryByChannelInfo(@ApiParam(value = "1:技术成果，2：技术需求") @RequestParam(required = false) Integer type) {
+
+        return new Response(mTechSV.getTechCoop(type, 6));
     }
 
     @RequestMapping(value = "sel_all_news", method = RequestMethod.GET)
@@ -82,9 +91,21 @@ public class MobileTechSiteController {
 
     @ApiOperation(value = "查询技术合作详情", notes = "查询技术合作详情", response = Response.class)
     @RequestMapping(value = "sel_tech_coop_detail", method = RequestMethod.GET)
-    public Response selTechCoopDetail(@ApiParam(value = "商品ID") @RequestParam String GoodsID,
-                                  @ApiParam(value = "商品类型同筑慧币") @RequestParam String type) throws Exception {
-        return paymentService.viewGoodsRecord(Long.parseLong(GoodsID),type);
+    public Response selTechCoopDetail(@ApiParam(value = "商品ID") @RequestParam Long GoodsID) throws Exception {
+        Map map = new HashMap();
+        TechCooperation techCoo = techCooSV.selectTechCooperationById(String.valueOf(GoodsID));
+        Integer techType = techCoo.getType();   //1:技术成果，2：技术需求
+        if(techType == 1){
+            getPrivilegeGoodsDetails(map,String.valueOf(GoodsID), ZhbConstant.ZhbGoodsType.CXXZJL);
+            map.put("tech_detail", paymentService.getChargeGoodsRecord(GoodsID, ZhbConstant.ZhbGoodsType.CXXZJL.toString()));
+        }else{
+            Map<String, Object> m = new HashMap<>();
+            m.put("id", GoodsID);
+            m.put("type", 2);
+            map = techCooSV.previewTechCooperationDetail(m);
+            techCooSV.updateTechCooperationViews(String.valueOf(GoodsID));
+        }
+        return new Response(map);
     }
 
     @RequestMapping(value = "sel_tech_course_list", method = RequestMethod.GET)
@@ -122,5 +143,15 @@ public class MobileTechSiteController {
         response.setData(mTechSV.getTechIndexInfo());
         return response;
     }
+
+    @RequestMapping(value = "sel_second_category", method = RequestMethod.GET)
+    @ApiOperation(value = "查询解决方案、技术资料，培训资料行业类别", notes = "查询解决方案、技术资料，培训资料行业类别", response = Response.class)
+    public Response selectSecondCategoryByFirstId() {
+        Response response = new Response();
+        List<Map<String, Object>> categoryList = dicTDService.selectCategoryInfo(0);
+        response.setData(categoryList);
+        return response;
+    }
+
 
 }

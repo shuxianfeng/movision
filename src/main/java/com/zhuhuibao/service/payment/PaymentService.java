@@ -82,6 +82,7 @@ public class PaymentService {
         return response;
     }
 
+
     /**
      * 获取收费商品信息
      * 
@@ -115,9 +116,7 @@ public class PaymentService {
         } else {
             // 未登录，查看加密信息
             dataMap.putAll(getEncryptedGoodsRecord(goodsID, type));
-
         }
-
         return dataMap;
     }
 
