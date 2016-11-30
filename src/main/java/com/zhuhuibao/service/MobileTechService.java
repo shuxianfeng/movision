@@ -289,6 +289,7 @@ public class MobileTechService {
         newsService.updateViews(Long.valueOf(newsId));
 
         return newsService.previewNewsInfo(map);
+
     }
 
     /**
@@ -404,7 +405,6 @@ public class MobileTechService {
         result.put("bannerAdvList",advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Tech_Banner.value) );
         return result;
     }
-
 
 
 }
