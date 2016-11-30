@@ -387,6 +387,10 @@ public class MobileJobAndResumeService {
         return result;
     }
 
+
+
+
+
     public String getSortByType(String type, String sort) {
         switch (type) {
             case "14":
@@ -406,4 +410,7 @@ public class MobileJobAndResumeService {
     public List<SysAdvertising> getHuntingCompany() {
         return advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Rencai_Hunting.value);
     }
+
+
+
 }

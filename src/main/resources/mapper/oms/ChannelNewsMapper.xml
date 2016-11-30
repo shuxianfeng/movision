@@ -388,7 +388,9 @@
   </select>
 
   <select id="findIndexNews" resultType="java.util.Map">
-    select id,title,date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,description  from t_oms_channel_news
+    select id,title,date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,description,
+    sort
+    from t_oms_channel_news
     <where>
       <if test="channelid != null and channelid !='' ">
         and channelid = #{channelid}
@@ -425,7 +427,7 @@
 
 
   <select id="findJobNews4Mobile" resultType="java.util.Map">
-    select id,title,date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,description
+    select id,title,date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,description,sort
     from t_oms_channel_news
     <where>
       <if test="channelid != null and channelid !='' ">

@@ -224,6 +224,7 @@ public class FileUtil {
 			return status.equals("success");
 		case "zhb":
 			String fileUrl = apiConstants.getUploadDir() + "/" + chann + "/" + type + "/" + fileName;
+			log.info("测试环境查看询价单路径，fileUrl="+fileUrl);
 			File file = new File(fileUrl);
 			return file.exists();
 		default:
@@ -275,6 +276,11 @@ public class FileUtil {
 
 	}
 
+	public static String getFileNameByUrl(String url){
+		log.info("开始");
+		return url.substring(url.lastIndexOf("/")+1);
+	}
+
 	public static void main(String[] args) {
 		// FileUtil fileUtil = new FileUtil();
 		// boolean bool = fileUtil.isExistFile("111","doc","tech");
@@ -282,6 +288,8 @@ public class FileUtil {
 		// String name = file.getName();
 		// String a = FileUtil.renameFile(name);
 		// System.out.println(a);
-		System.out.println(getSuffix("xxxx.xlsx"));
+//		System.out.println(getSuffix("xxxx.xlsx"));
+		System.out.println("1111");
+//		System.out.println(getFileNameByUrl("//image.zhuhui8.com/upload/price/img/DBgRcpns1480490323747.png"));
 	}
 }

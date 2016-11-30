@@ -108,6 +108,7 @@ public class MobileAskAndOfferPriceController extends BaseController {
         String url = zhbOssClient.uploadObject(file, "img", "price");
         Map<String, String> map = new HashMap<>();
         map.put("url", url);
+        map.put("name", FileUtil.getFileNameByUrl(url));
         return new Response(map);
     }
 

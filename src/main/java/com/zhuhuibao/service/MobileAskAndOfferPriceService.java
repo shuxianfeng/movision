@@ -75,11 +75,11 @@ public class MobileAskAndOfferPriceService {
      */
     public void saveAskPrice(AskPrice askPrice) throws Exception {
         log.debug("询价保存业务处理");
+
         validateFileExist(askPrice);
 
         boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.XJFB.toString());
         if (bool) {
-
             askPriceMapper.saveAskPrice(askPrice);
             zhbService.payForGoods(askPrice.getId(), ZhbPaymentConstant.goodsType.XJFB.toString());
         } else {
