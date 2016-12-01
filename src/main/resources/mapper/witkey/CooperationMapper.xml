@@ -407,7 +407,7 @@
     </if>
     <if test="identify!=null and identify!= ''">
       <choose>
-        <when test="identify = '0'   ">
+        <when test="identify == '0'   ">
           and m.identify = 2
         </when>
         <otherwise>
