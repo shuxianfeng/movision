@@ -371,10 +371,12 @@
     </select>
 
     <select id="findAllTechDataOnlyPager" resultType="java.util.Map">
-        select t.id,case when ur.mobile != '' or ur.mobile != null then ur.mobile when ur.email!= '' or ur.email != null
+        select t.id,
+        case when ur.mobile != '' or ur.mobile != null then ur.mobile when ur.email!= '' or ur.email != null
         then ur.email  end as username,
         date_format(t.publishTime,'%Y-%m-%d') publishTime, date_format(t.updateTime,'%Y-%m-%d') updateTime,
-        t.title,t.sCategory scate, td.name scateName, t.type, t.price,t.notes from t_tech_data t
+        t.title,t.sCategory scate, td.name scateName, t.type, t.price,t.notes, t.fCategory
+        from t_tech_data t
         left join t_m_member ur on ur.id = t.createid
         left join t_dictionary_techDataCategory tc on tc.code = t.fCategory
         left join t_dictionary_techDataCategory td on td.code = t.sCategory

@@ -17,8 +17,8 @@ import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.PositionMapper;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
-import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.SalaryUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -86,15 +86,7 @@ public class JobPositionService {
             List<Map<String, Object>> jobList = jobMapper.findAllByPager(pager.getRowBounds(), id);
 
             for (Map<String, Object> map : jobList) {
-                Map<String, Object> tmpMap = new HashMap<>();
-                tmpMap.put("id", map.get("id"));
-                tmpMap.put(Constants.position, map.get("name"));
-                tmpMap.put(Constants.salary, map.get("salaryName"));
-                tmpMap.put(Constants.area, map.get("workArea"));
-                tmpMap.put("companyId", map.get("createID"));
-                tmpMap.put("positionType", map.get("positionType"));
-                tmpMap.put(Constants.publishTime, map.get("publishTime"));
-                tmpMap.put(Constants.updateTime, map.get("updateTime"));
+                Map<String, Object> tmpMap = genPosiMap("id", map.get("id"), Constants.position, map.get("name"), Constants.salary, map.get("salaryName"), Constants.area, map.get("workArea"), "companyId", map.get("createID"), "positionType", map.get("positionType"), Constants.publishTime, map.get("publishTime"), Constants.updateTime, map.get("updateTime"));
                 list.add(tmpMap);
             }
         } catch (Exception e) {
@@ -102,6 +94,19 @@ public class JobPositionService {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "查询失败");
         }
         return list;
+    }
+
+    private Map<String, Object> genPosiMap(String id, Object id2, String position, Object name, String salary, Object salaryName, String area, Object workArea, String companyId, Object createID, String positionType, Object positionType2, String publishTime, Object publishTime2, String updateTime, Object updateTime2) {
+        Map<String, Object> tmpMap = new HashMap<>();
+        tmpMap.put(id, id2);
+        tmpMap.put(position, name);
+        tmpMap.put(salary, salaryName);
+        tmpMap.put(area, workArea);
+        tmpMap.put(companyId, createID);
+        tmpMap.put(positionType, positionType2);
+        tmpMap.put(publishTime, publishTime2);
+        tmpMap.put(updateTime, updateTime2);
+        return tmpMap;
     }
 
     /**
@@ -174,30 +179,22 @@ public class JobPositionService {
         try {
             jobList = jobMapper.searchNewPosition(count);
             for (Map<String, Object> job : jobList) {
-                job = ConvertUtil.execute(job, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(job.get("salary"))});
-                job.put("salary", job.get("salaryName"));
-
-                String cityCode = (String) job.get("city");
-                if (!StringUtils.isEmpty(cityCode)) {
-                    job = ConvertUtil.execute(job, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
-                    job.put("city", job.get("cityName"));
-                } else {
-                    String provinceCode = (String) job.get("province");
-                    if (!StringUtils.isEmpty(provinceCode)) {
-                        job = ConvertUtil.execute(job, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
-                        job.put("city", job.get("provinceName"));
-                    } else {
-                        job.put("city", "");
-                    }
-                }
+                handleSalary(job);
+                handleCity(job);
             }
-
         } catch (Exception e) {
             log.error("查询异常>>>",e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败'");
         }
 
         return jobList;
+    }
+
+    private void handleSalary(Map<String, Object> job) {
+        job = ConvertUtil.execute(job, "salary", "constantService", "findByTypeCode", new Object[]{"1",
+                String.valueOf(job.get("salary"))});
+        job.put("salary", job.get("salaryName"));
+        job.put("m_salary", SalaryUtil.convertSalary((String) job.get("salaryName")));
     }
 
     /**
@@ -350,38 +347,15 @@ public class JobPositionService {
             List<Map<String, Object>> jobList = jobMapper.findAllOtherPosition(pager.getRowBounds(), map);
             for (Map<String, Object> job : jobList) {
                 Map<String, Object> result = new HashMap<>();
-                String welfare = (String) job.get("welfare");
-                String welfarename = "";
-                genWelfaceName(result, welfare, welfarename);
 
-                job = ConvertUtil.execute(job, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(job.get("salary"))});
-                result.put("salaryName", job.get("salaryName"));
+                handleWelfare2(job, result);
 
-                String cityCode = (String) job.get("city");
-                if (!StringUtils.isEmpty(cityCode)) {
-                    job = ConvertUtil.execute(job, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
-                    result.put("workArea", job.get("cityName"));
-                } else {
-                    String provinceCode = (String) job.get("province");
-                    if (!StringUtils.isEmpty(provinceCode)) {
-                        job = ConvertUtil.execute(job, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
-                        result.put("workArea", job.get("provinceName"));
-                    } else {
-                        result.put("workArea", "");
-                    }
-                }
+                job = handleSalary(job, result);
 
-                job = ConvertUtil.execute(job, "education", "constantService", "findByTypeCode", new Object[]{"2", String.valueOf(job.get("education"))});
-                result.put("educationName", job.get("educationName"));
-                job = ConvertUtil.execute(job, "experience", "constantService", "findByTypeCode", new Object[]{"3", String.valueOf(job.get("experience"))});
-                result.put("experienceName", job.get("experienceName"));
-                result.put("id", job.get("id"));
-                result.put("createid", job.get("createid"));
-                result.put("name", job.get("name"));
-                result.put("positionType", job.get("positionType"));
-                result.put("publishTime", job.get("publishTime"));
-                result.put("updateTime", job.get("updateTime"));
-                result.put("enterpriseName", job.get("enterpriseName"));
+                job = addWorlArea(job, result);
+
+                handleOtherJobInfo(job, result);
+
                 list.add(result);
             }
         } catch (Exception e) {
@@ -389,6 +363,50 @@ public class JobPositionService {
             throw e;
         }
         return list;
+    }
+
+    private void handleWelfare2(Map<String, Object> job, Map<String, Object> result) {
+        String welfare = (String) job.get("welfare");
+        String welfarename = "";
+        genWelfaceName(result, welfare, welfarename);
+    }
+
+    private void handleOtherJobInfo(Map<String, Object> job, Map<String, Object> result) {
+        job = ConvertUtil.execute(job, "education", "constantService", "findByTypeCode", new Object[]{"2", String.valueOf(job.get("education"))});
+        result.put("educationName", job.get("educationName"));
+        job = ConvertUtil.execute(job, "experience", "constantService", "findByTypeCode", new Object[]{"3", String.valueOf(job.get("experience"))});
+        result.put("experienceName", job.get("experienceName"));
+        result.put("id", job.get("id"));
+        result.put("createid", job.get("createid"));
+        result.put("name", job.get("name"));
+        result.put("positionType", job.get("positionType"));
+        result.put("publishTime", job.get("publishTime"));
+        result.put("updateTime", job.get("updateTime"));
+        result.put("enterpriseName", job.get("enterpriseName"));
+    }
+
+    private Map<String, Object> handleSalary(Map<String, Object> job, Map<String, Object> result) {
+        job = ConvertUtil.execute(job, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(job.get("salary"))});
+        result.put("salaryName", job.get("salaryName"));
+        result.put("m_salary", SalaryUtil.convertSalary((String) job.get("salaryName")));
+        return job;
+    }
+
+    private Map<String, Object> addWorlArea(Map<String, Object> job, Map<String, Object> result) {
+        String cityCode = (String) job.get("city");
+        if (!StringUtils.isEmpty(cityCode)) {
+            job = ConvertUtil.execute(job, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
+            result.put("workArea", job.get("cityName"));
+        } else {
+            String provinceCode = (String) job.get("province");
+            if (!StringUtils.isEmpty(provinceCode)) {
+                job = ConvertUtil.execute(job, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
+                result.put("workArea", job.get("provinceName"));
+            } else {
+                result.put("workArea", "");
+            }
+        }
+        return job;
     }
 
     /**
@@ -653,26 +671,9 @@ public class JobPositionService {
         try {
             map = jobMapper.findJobByJobID(jobID);
             if (map != null) {
-                String welfarename = "";
-                String welfare = (String) map.get("welfare");
-                genWelfaceName(map, welfare, welfarename);
-
-                map = ConvertUtil.execute(map, "salary", "constantService", "findByTypeCode", new Object[]{"1", String.valueOf(map.get("salary"))});
-                map.put("salary", map.get("salaryName"));
-
-                String cityCode = (String) map.get("city");
-                if (!StringUtils.isEmpty(cityCode)) {
-                    map = ConvertUtil.execute(map, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
-                    map.put("city", map.get("cityName"));
-                } else {
-                    String provinceCode = (String) map.get("province");
-                    if (!StringUtils.isEmpty(provinceCode)) {
-                        map = ConvertUtil.execute(map, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
-                        map.put("city", map.get("provinceName"));
-                    } else {
-                        map.put("city", "");
-                    }
-                }
+                handleWelfare(map);
+                handleSalary(map);
+                handleCity(map);
             } else {
                 map = new HashMap<>();
             }
@@ -683,6 +684,28 @@ public class JobPositionService {
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
         }
         return map;
+    }
+
+    private void handleWelfare(Map<String, Object> map) {
+        String welfarename = "";
+        String welfare = (String) map.get("welfare");
+        genWelfaceName(map, welfare, welfarename);
+    }
+
+    private void handleCity(Map<String, Object> map) {
+        String cityCode = (String) map.get("city");
+        if (!StringUtils.isEmpty(cityCode)) {
+            map = ConvertUtil.execute(map, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
+            map.put("city", map.get("cityName"));
+        } else {
+            String provinceCode = (String) map.get("province");
+            if (!StringUtils.isEmpty(provinceCode)) {
+                map = ConvertUtil.execute(map, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
+                map.put("city", map.get("provinceName"));
+            } else {
+                map.put("city", "");
+            }
+        }
     }
 
     public List<Map<String, Object>> findNewPositions(int count) {
@@ -709,9 +732,7 @@ public class JobPositionService {
                 } else {
                     map.put("salaryName", "");
                 }
-                String welfare = (String) map.get("welfare");
-                String welfarename = "";
-                genWelfaceName(map, welfare, welfarename);
+                handleWelfare2(map, map);
 
                 String cityCode = String.valueOf(map.get("city"));
                 if (!StringUtils.isEmpty(cityCode)) {

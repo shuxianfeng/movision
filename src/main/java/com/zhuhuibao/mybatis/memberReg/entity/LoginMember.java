@@ -1,166 +1,203 @@
 package com.zhuhuibao.mybatis.memberReg.entity;
 
 public class LoginMember {
-	private Long id;
-	private String account;
-	/**
-	 * 密码
-	 */
-	private String password;
-	/**
-	 * 会员状态 0：未激活(只针对邮件)，1：注册成功，2：注销，3：完善资料，4：待认证会员，5：已认证会员
-	 */
-	private int status;
-	private String identify;
-	private String role;
-	private String isexpert;
-	private int ordercount;
-	private int msgcount;
-	private Long companyId;
-	private int vipLevel;
+    private Long id;
+    private String account;
+    /**
+     * 密码
+     */
+    private String password;
+    /**
+     * 会员状态 0：未激活(只针对邮件)，1：注册成功，2：注销，3：完善资料，4：待认证会员，5：已认证会员
+     */
+    private int status;
+    private String identify;
+    private String role;
+    private String isexpert;
+    private int ordercount;
+    private int msgcount;
+    private Long companyId;
+    private int vipLevel;
 
-	private int parentVipLevel;
+    private int parentVipLevel;
 
-	private String registerTime;
-	private int workType;
-	private String headShot;
-	private String nickname;
-	private String companyName;
+    private String registerTime;
+    private int workType;
+    private String headShot;
+    private String nickname;
+    private String companyName;
 
-	public String getCompanyName() {
-		return companyName;
-	}
+    /**
+     * 联系人
+     */
+    private String enterpriseLinkman;
+    /**
+     * 固定电话
+     */
+    private String fixedTelephone;
+    /**
+     * 邮箱
+     */
+    private String email;
 
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
+    public String getEnterpriseLinkman() {
+        return enterpriseLinkman;
+    }
 
-	public String getNickname() {
-		return nickname;
-	}
+    public void setEnterpriseLinkman(String enterpriseLinkman) {
+        this.enterpriseLinkman = enterpriseLinkman;
+    }
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
+    public String getFixedTelephone() {
+        return fixedTelephone;
+    }
 
-	public String getRegisterTime() {
-		return registerTime;
-	}
+    public void setFixedTelephone(String fixedTelephone) {
+        this.fixedTelephone = fixedTelephone;
+    }
 
-	public void setRegisterTime(String registerTime) {
-		this.registerTime = registerTime;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public int getWorkType() {
-		return workType;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setWorkType(int workType) {
-		this.workType = workType;
-	}
+    public String getCompanyName() {
+        return companyName;
+    }
 
-	public String getHeadShot() {
-		return headShot;
-	}
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
 
-	public void setHeadShot(String headShot) {
-		this.headShot = headShot;
-	}
+    public String getNickname() {
+        return nickname;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public String getRegisterTime() {
+        return registerTime;
+    }
 
-	public String getAccount() {
-		return account;
-	}
+    public void setRegisterTime(String registerTime) {
+        this.registerTime = registerTime;
+    }
 
-	public void setAccount(String account) {
-		this.account = account;
-	}
+    public int getWorkType() {
+        return workType;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public void setWorkType(int workType) {
+        this.workType = workType;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getHeadShot() {
+        return headShot;
+    }
 
-	public int getStatus() {
-		return status;
-	}
+    public void setHeadShot(String headShot) {
+        this.headShot = headShot;
+    }
 
-	public void setStatus(int status) {
-		this.status = status;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getIdentify() {
-		return identify;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setIdentify(String identify) {
-		this.identify = identify;
-	}
+    public String getAccount() {
+        return account;
+    }
 
-	public String getRole() {
-		return role;
-	}
+    public void setAccount(String account) {
+        this.account = account;
+    }
 
-	public void setRole(String role) {
-		this.role = role;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public String getIsexpert() {
-		return isexpert;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public void setIsexpert(String isexpert) {
-		this.isexpert = isexpert;
-	}
+    public int getStatus() {
+        return status;
+    }
 
-	public int getOrdercount() {
-		return ordercount;
-	}
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
-	public void setOrdercount(int ordercount) {
-		this.ordercount = ordercount;
-	}
+    public String getIdentify() {
+        return identify;
+    }
 
-	public int getMsgcount() {
-		return msgcount;
-	}
+    public void setIdentify(String identify) {
+        this.identify = identify;
+    }
 
-	public void setMsgcount(int msgcount) {
-		this.msgcount = msgcount;
-	}
+    public String getRole() {
+        return role;
+    }
 
-	public Long getCompanyId() {
-		return companyId;
-	}
+    public void setRole(String role) {
+        this.role = role;
+    }
 
-	public void setCompanyId(Long companyId) {
-		this.companyId = companyId;
-	}
+    public String getIsexpert() {
+        return isexpert;
+    }
 
-	public int getVipLevel() {
-		return vipLevel;
-	}
+    public void setIsexpert(String isexpert) {
+        this.isexpert = isexpert;
+    }
 
-	public void setVipLevel(int vipLevel) {
-		this.vipLevel = vipLevel;
-	}
+    public int getOrdercount() {
+        return ordercount;
+    }
 
-	public int getParentVipLevel() {
-		return parentVipLevel;
-	}
+    public void setOrdercount(int ordercount) {
+        this.ordercount = ordercount;
+    }
 
-	public void setParentVipLevel(int parentVipLevel) {
-		this.parentVipLevel = parentVipLevel;
-	}
+    public int getMsgcount() {
+        return msgcount;
+    }
+
+    public void setMsgcount(int msgcount) {
+        this.msgcount = msgcount;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public int getVipLevel() {
+        return vipLevel;
+    }
+
+    public void setVipLevel(int vipLevel) {
+        this.vipLevel = vipLevel;
+    }
+
+    public int getParentVipLevel() {
+        return parentVipLevel;
+    }
+
+    public void setParentVipLevel(int parentVipLevel) {
+        this.parentVipLevel = parentVipLevel;
+    }
 
 }

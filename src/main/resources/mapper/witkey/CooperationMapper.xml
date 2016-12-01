@@ -76,7 +76,7 @@
       <if test="price != null" >
         price,
       </if>
-      <if test="endTime != null" >
+      <if test="endTime != null and endTime != ''" >
         endTime,
       </if>
       <if test="isShow != null" >
@@ -140,7 +140,7 @@
       <if test="price != null" >
         #{price},
       </if>
-      <if test="endTime != null" >
+      <if test="endTime != null and endTime != '' " >
         #{endTime},
       </if>
       <if test="isShow != null" >
