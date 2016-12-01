@@ -1,6 +1,7 @@
 package com.zhuhuibao.service;
 
 import com.taobao.api.ApiException;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
@@ -251,18 +252,18 @@ public class MobileExpertPageService {
      * @param mobileCodeSessionTypeSupport
      * @return
      */
-    public boolean getTrainMobileCode(String mobile, String mobileCodeSessionTypeSupport, String imgCode, String sessImgCode) throws IOException, ApiException {
-
-        boolean b = false;
+    public Response getTrainMobileCode(String mobile, String mobileCodeSessionTypeSupport, String imgCode, String sessImgCode) throws IOException, ApiException {
+        Response response=new Response();
         if (imgCode.equalsIgnoreCase(sessImgCode)) {
             expertService.getTrainMobileCode(mobile, mobileCodeSessionTypeSupport);
-            b = true;
+            response.setCode(200);
+            response.setMessage("验证码输入正确！");
         } else {
-            return b;
+            response.setCode(400);
+            response.setMessage("验证码输入错误！");
         }
-        return b;
+        return response;
     }
-
 
     /**
      * 申请专家支持
@@ -331,6 +332,7 @@ public class MobileExpertPageService {
     public void addMessage(Messages message) {
         Long createid = ShiroUtil.getCreateID();
         if (createid != null) {
+            message.setCreateid(String.valueOf(createid));
             Member member = memberService.findMemById(String.valueOf(createid));
             if (null == member) {
                 throw new BusinessException(MsgCodeConstant.NOT_EXIST_MEMBER, "不存在该会员信息");
@@ -342,7 +344,6 @@ public class MobileExpertPageService {
                 name = "匿名用户";
             }
             String title = "来自" + name + "的留言";
-            message.setCreateid(String.valueOf(createid));
             message.setTitle(title);
             message.setType("2");
             message.setIsShow(true);

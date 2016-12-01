@@ -266,6 +266,7 @@ public class MobileExpertPageController extends BaseController {
             mobileExpertPageService.checkMobileCode(code, mobile, ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT, expertSupport);
         } catch (Exception e) {
             log.error("add_expert_support error! ", e);
+            response.setMessage(e.getMessage());
         }
         return response;
     }
@@ -280,8 +281,7 @@ public class MobileExpertPageController extends BaseController {
             Subject currentUser = SecurityUtils.getSubject();
             Session sess = currentUser.getSession(true);
             String sessImgCode = (String) sess.getAttribute(ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
-            boolean b = mobileExpertPageService.getTrainMobileCode(mobile, ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT, imgCode, sessImgCode);
-            response.setData(b);
+            response = mobileExpertPageService.getTrainMobileCode(mobile, ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT, imgCode, sessImgCode);
         } catch (Exception e) {
             log.error("get_expert_support error! ", e);
         }
@@ -301,6 +301,7 @@ public class MobileExpertPageController extends BaseController {
             log.error("sel_support_img_code error! ", e);
         }
     }
+
 
 
     @ApiOperation(value = "触屏端-专家首页-协会动态列表", notes = "触屏端-专家首页-协会动态列表", response = Response.class)
