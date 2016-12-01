@@ -13,7 +13,7 @@ import com.zhuhuibao.mybatis.expert.entity.Dynamic;
 import com.zhuhuibao.mybatis.expert.entity.Expert;
 import com.zhuhuibao.mybatis.expert.entity.ExpertSupport;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
-import com.zhuhuibao.mybatis.memCenter.entity.Message;
+import com.zhuhuibao.mybatis.memCenter.entity.Messages;
 import com.zhuhuibao.service.MobileExpertPageService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
@@ -339,7 +339,7 @@ public class MobileExpertPageController extends BaseController {
 
     @ApiOperation(value = "触屏端-专家首页-提交留言", notes = "触屏端-专家首页-提交留言", response = Response.class)
     @RequestMapping(value = "add_message", method = RequestMethod.POST)
-    public Response addMessage(@ModelAttribute Message message) throws Exception {
+    public Response addMessage(@ModelAttribute Messages message) throws Exception {
         Response response = new Response();
         Map<String, Object> resultMap = new HashMap<>();
         getPrivilegeGoodsDetails(resultMap, null, ZhbConstant.ZhbGoodsType.GZJLY);

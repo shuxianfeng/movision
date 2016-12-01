@@ -343,17 +343,14 @@
   </select>
 
   <select id="findPublishCourse" parameterType="java.util.Map" resultType="java.util.Map">
-    select t.courseid,t.title,t.price,
-    ( select sum(number) from t_o_order_goods
-    where goodsId = t.courseid and  orderNo in (select orderNo from t_o_order where status in (1,2) and goodsType =2)) AS applyNum,
-    case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl) = 0 then imgUrl end as imgUrl
-    from t_p_group_publishCourse t
-    where  courseType = #{courseType}
-    and status = #{status}
-    order by ( select sum(number) from t_o_order_goods
-    where goodsId = t.courseid and  orderNo
-    in (select orderNo from t_o_order where status in (1,2) and goodsType =2)) desc
-    limit 0,4
+    SELECT t.courseid,t.title,t.price,
+	(SELECT sum(number) FROM t_o_order_goods WHERE goodsId = t.courseid AND orderNo IN
+	( SELECT orderNo FROM t_o_order WHERE STATUS IN (1, 2) AND goodsType = 2 ) ) AS applyNum,
+	CASE WHEN (locate(';', t.imgUrl) > 0) THEN substring( t.imgUrl, 1, locate(';', t.imgUrl) - 1 ) WHEN locate(';', t.imgUrl) = 0 THEN imgUrl
+    END AS imgUrl
+    FROM t_p_group_publishCourse t WHERE
+    t.courseid in (SELECT r.courseid FROM t_p_group_publishCourse r WHERE r.courseType ='2' AND r.status IN (2,3) )
+   ORDER BY applyNum desc
   </select>
 
   <select id="findAllPublishsCoursePager" parameterType="java.util.Map" resultType="java.util.Map">

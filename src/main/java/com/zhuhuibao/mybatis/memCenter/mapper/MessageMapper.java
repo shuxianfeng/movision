@@ -1,6 +1,7 @@
 package com.zhuhuibao.mybatis.memCenter.mapper;
 
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
+import com.zhuhuibao.mybatis.memCenter.entity.Messages;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface MessageMapper {
     Map<String,String> queryMySendMsgById(String id);
 
     Map<String,String> queryMyReceiveMsgById(String id);
+
+    int saveMessages(Messages message);
 }
