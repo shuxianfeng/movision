@@ -395,7 +395,7 @@ public class MobileTechService {
         jscg.addAll(getTechCoop(2, 2));
         result.put("jscglist", jscg);
         result.put("pxkclist", getTechCourseList(3));   //培训课程
-        result.put("yzzllist", techDataService.findAllTechData4Mobile(3));  //优质资料
+        result.put("yzzllist", techDataService.findAllTechData4Mobile(3));  //技术资料
         result.put("xjslist",getNewTechList4Mobile(3)); //新技术
         //首页广告banner
         result.put("bannerAdvList",advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Tech_Banner.value) );
