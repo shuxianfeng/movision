@@ -305,7 +305,7 @@ public class MobileTechService {
     ){
         Map<String, Object> conditionMap = new HashMap<>();
         conditionMap.put("fCategory", fcateId);
-        if (StringUtils.isEmpty(scateId)) {
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(scateId)) {
             conditionMap.put("sCategory", scateId);
         }
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));

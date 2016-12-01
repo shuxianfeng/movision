@@ -1,13 +1,15 @@
 package com.zhuhuibao.service;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 import com.zhuhuibao.common.constant.AdvertisingConstant;
+import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.witkey.mapper.CooperationMapper;
+import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,9 @@ public class MobileWitkeyService {
 
 	@Autowired
 	private MobileSysAdvertisingService advertisingService;
+
+	@Autowired
+	PaymentService paymentService;
 	/**
 	 * 查询我发布的任务
 	 * @param pageNo
@@ -243,12 +248,12 @@ public class MobileWitkeyService {
      * @return
      */
     public Paging<Map<String, String>> getPager(String pageNo, String pageSize, String type, String category,
-                                                String systemType, String province, String smart, String parentId)
+                                                String systemType, String province, String smart, String parentId,String publisher)
     {
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        Cooperation cooperation = getCooperation(type, category, systemType, province, smart, parentId);
+        Map map = getCooperation(type, category, systemType, province, smart, parentId, publisher);
 
-        List<Map<String, String>> cooperationList = cooperationService.findAllCooperationByPager(pager, cooperation);
+        List<Map<String, String>> cooperationList = cooperationService.findAllCooperationByPager(pager, map);
         pager.result(cooperationList);
         return pager;
     }
@@ -275,15 +280,13 @@ public class MobileWitkeyService {
 		//资质合作-提供资质
 		getSelectedWitkeyData(tgzzlist, cooperation, "3", "11", 2);
 
-		//首页广告banner
-		List<SysAdvertising> bannerAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Witkey_Banner.value);
-
 		Map<String, Object> result = new HashMap<>();
 		result.put("rwList", rwlist);
 		result.put("fwList", fwlist);
 		result.put("xyzzlist", xyzzlist);
 		result.put("tgzzlist",tgzzlist );
-		result.put("bannerAdvList",bannerAdvList );
+		//首页广告banner
+		result.put("bannerList",advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Witkey_Banner.value) );
 		return result;
 	}
 
@@ -321,17 +324,18 @@ public class MobileWitkeyService {
      * @param parentId
      * @return
      */
-    private Cooperation getCooperation(String type, String category, String systemType, String province, String smart, String parentId) {
-        Cooperation cooperation = new Cooperation();
-        cooperation.setSmart(smart);
-        cooperation.setType(type);
-        //区分前台跟后台
-        cooperation.setDistinction("1");
-        cooperation.setCategory(category);
-        cooperation.setProvince(province);
-        cooperation.setParentId(parentId);
-        cooperation.setSystemType(systemType);
-        return cooperation;
+    private Map getCooperation(String type, String category, String systemType, String province,
+							   String smart, String parentId,String memberTypeCode) {
+		Map map=new HashMap();
+		map.put("smart",smart);
+		map.put("type",type);
+		map.put("distinction",1);
+		map.put("category",category);
+		map.put("province",province);
+		map.put("parentId",parentId);
+		map.put("systemType",systemType);
+		map.put("memberTypeCode",memberTypeCode);
+        return map;
     }
 
 
@@ -368,7 +372,7 @@ public class MobileWitkeyService {
      */
 	public Map<String, Object> getCoopDetail(String id){
 		Map<String, Object> cooperation = cooperationService.queryCooperationInfoById(id);
-		if (!"1".equals(cooperation.get("parentId").toString())) {
+		if (!"0".equals(cooperation.get("parentId").toString())) {
 			//点击率+1
 			Cooperation result = new Cooperation();
 			result.setId(cooperation.get("id").toString());
@@ -395,4 +399,15 @@ public class MobileWitkeyService {
 	}
 
 
+	public Map getWitkeyDetail(Long id, String type) throws Exception {
+		Map map = new HashMap();
+		if(type.equals("1")){
+			//任务
+			map.put("coop_detail",paymentService.getChargeGoodsRecord(id, ZhbConstant.ZhbGoodsType.CKWKRW.toString()));
+		}else{
+			//其他
+			map.putAll(getCoopDetail(String.valueOf(id)));
+		}
+		return map;
+	}
 }

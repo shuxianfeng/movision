@@ -53,8 +53,8 @@ public class DistributedLock implements Lock, Watcher {
             zk = new ZooKeeper(PropertiesUtils.getValue("zookeeper_hosts"),
                     Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")), 
                     watcher);
-            waitUntilConnected(zk, connectedLatch); 
-            
+            waitUntilConnected(zk, connectedLatch);
+
             //若连接上，则进行下面的exists和create操作
             if(States.CONNECTED == zk.getState()){
             	Stat stat = zk.exists(root, false);

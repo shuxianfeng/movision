@@ -5,6 +5,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.PageNotFoundException;
@@ -13,6 +14,7 @@ import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.MobileSysAdvertisingService;
 import com.zhuhuibao.service.MobileWitkeyService;
 import com.zhuhuibao.service.payment.PaymentService;
@@ -23,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,10 +37,11 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rest/m/witkey/site/")
-public class MobileWitkeySiteController {
+public class MobileWitkeySiteController extends BaseController{
 
     private static final Logger log = LoggerFactory.getLogger(MobileWitkeySiteController.class);
-
+    @Autowired
+    private ZhbService zhbService;
     @Autowired
     ConstantService service;
     @Autowired
@@ -58,10 +62,11 @@ public class MobileWitkeySiteController {
              @ApiParam(value = "系统分类") @RequestParam(required = false) String systemType,
              @ApiParam(value = "省") @RequestParam(required = false) String province,
              @ApiParam(value = "关键字") @RequestParam(required = false) String smart,
-             @ApiParam(value = "发布类型，1：接任务，2：接服务，3：资质合作") @RequestParam String parentId) {
+             @ApiParam(value = "发布类型，1：接任务，2：接服务，3：资质合作") @RequestParam String parentId,
+             @ApiParam(value = "发布人，0：个人，1：公司") @RequestParam String publisher) {
 
         Response Response = new Response();
-        Response.setData(mWitkeySV.getPager(pageNo, pageSize, type, category, systemType, province, smart, parentId));
+        Response.setData(mWitkeySV.getPager(pageNo, pageSize, type, category, systemType, province, smart, parentId,publisher));
         return Response;
     }
 
@@ -75,10 +80,12 @@ public class MobileWitkeySiteController {
 
     @ApiOperation(value = "威客信息詳情", notes = "威客信息詳情", response = Cooperation.class)
     @RequestMapping(value = "getCoopDetail", method = RequestMethod.GET)
-    public Response cooperationInfo(@RequestParam String id) {
-        Response response = new Response();
-        response.setData(mWitkeySV.getCoopDetail(id));
-        return response;
+    public Response cooperationInfo(@ApiParam @RequestParam(value = "威客id") Long id,
+                                    @ApiParam @RequestParam(value = "威客大类，1：任务；2：服务；3：资质合作") String type) throws Exception{
+        Map map = new HashMap();
+        mWitkeySV.getWitkeyDetail(id, type);
+        getPrivilegeGoodsDetails(map, null, ZhbConstant.ZhbGoodsType.CKWKRW);
+        return new Response(map);
     }
 
     @ApiOperation(value = "威客首页", notes = "威客首页", response = Cooperation.class)
