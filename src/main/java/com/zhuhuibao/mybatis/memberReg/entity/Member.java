@@ -70,7 +70,7 @@ public class Member implements Serializable{
 	 */
 	private String identify;
 	
-	private int workType;
+	private Integer workType;
 
 	/**
 	 * 会员头像
@@ -165,11 +165,11 @@ public class Member implements Serializable{
 		this.checkCode = checkCode;
 	}
 	
-	public int getWorkType() {
+	public Integer getWorkType() {
 		return workType;
 	}
 
-	public void setWorkType(int workType) {
+	public void setWorkType(Integer workType) {
 		this.workType = workType;
 	}
 

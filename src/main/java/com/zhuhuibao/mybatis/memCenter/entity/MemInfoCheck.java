@@ -18,7 +18,7 @@ public class MemInfoCheck {
 
     private String enterpriseName;
 
-    private String workType;
+    private Integer workType;
     private String workTypeName;
 
     private String enterpriseEmployeeParentId;
@@ -234,11 +234,11 @@ public class MemInfoCheck {
         this.enterpriseName = enterpriseName == null ? null : enterpriseName.trim();
     }
 
-    public String getWorkType() {
+    public Integer getWorkType() {
         return workType;
     }
 
-    public void setWorkType(String workType) {
+    public void setWorkType(Integer workType) {
         this.workType = workType;
     }
 
