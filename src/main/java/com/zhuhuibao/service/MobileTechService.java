@@ -1,32 +1,27 @@
 package com.zhuhuibao.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.zhuhuibao.common.constant.AdvertisingConstant;
-import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
-import com.zhuhuibao.mybatis.expert.service.ExpertService;
-import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
-import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
-import com.zhuhuibao.mybatis.tech.service.*;
-import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
-import com.zhuhuibao.utils.ListUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.fsearch.utils.StringUtil;
+import com.zhuhuibao.mybatis.expert.service.ExpertService;
+import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
+import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
+import com.zhuhuibao.mybatis.tech.service.*;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -396,8 +391,9 @@ public class MobileTechService {
     public Map<String,Object> getTechIndexInfo(){
 
         Map<String, Object> result = new HashMap<>();
-        result.put("jscglist", getTechCoop(1, 2));  //技术成果
-        result.put("jsxqlist", getTechCoop(2, 2));  //技术需求
+        List<Map<String, String>>  jscg = getTechCoop(1, 2);
+        jscg.addAll(getTechCoop(2, 2));
+        result.put("jscglist", jscg);
         result.put("pxkclist", getTechCourseList(3));   //培训课程
         result.put("yzzllist", techDataService.findAllTechData4Mobile(3));  //优质资料
         result.put("xjslist",getNewTechList4Mobile(3)); //新技术

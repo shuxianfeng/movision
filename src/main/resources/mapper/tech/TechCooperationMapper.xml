@@ -372,7 +372,8 @@
         t.id, date_format(t.publishTime,'%Y-%m-%d') publishTime, date_format(t.updateTime,'%Y-%m-%d') updateTime,
         t.title, dc.name systemCategory, dn.name applicationArea, t.linkman,
         t.companyName, t.telephone, t.email, po.name province,ct.name city,ar.name area, t.address, t.cooperation,
-        t.notes,t.type
+        t.notes,t.type,
+        CASE WHEN t.type = 1 THEN '技术成果' WHEN t.type = 2 THEN '技术需求' END AS typeName
         from t_tech_cooperation t
         left join t_dictionary_province po on po.code = t.province
         left join t_dictionary_city ct on ct.code = t.city

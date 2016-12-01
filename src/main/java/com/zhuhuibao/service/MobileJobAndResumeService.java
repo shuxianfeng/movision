@@ -378,7 +378,7 @@ public class MobileJobAndResumeService {
         //名企招聘（广告）
         result.put("mqzp_advs",advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Rencai_Banner.value));
         //最新招聘
-        result.put("zxzp",job.searchNewPosition(3));
+        result.put("zxzp",job.searchNewPosition(4));
         //最新求职
         result.put("zxqz",getMLatestResume(null,null,null,null,null,null,null));
         //筑慧职场
