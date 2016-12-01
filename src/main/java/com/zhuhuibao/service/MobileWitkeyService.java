@@ -334,7 +334,7 @@ public class MobileWitkeyService {
 		map.put("province",province);
 		map.put("parentId",parentId);
 		map.put("systemType",systemType);
-		map.put("memberTypeCode",memberTypeCode);
+		map.put("identify",memberTypeCode);
         return map;
     }
 

@@ -40,30 +40,26 @@ import java.util.Map;
 public class MobileWitkeySiteController extends BaseController{
 
     private static final Logger log = LoggerFactory.getLogger(MobileWitkeySiteController.class);
-    @Autowired
-    private ZhbService zhbService;
+
     @Autowired
     ConstantService service;
     @Autowired
     private MobileWitkeyService mWitkeySV;
-
     @Autowired
     PaymentService paymentService;
-
-
 
     @ApiOperation(value = "查询任务列表（前台分页）", notes = "查询任务列表（前台分页）", response = Response.class)
     @RequestMapping(value = "sel_witkeyList", method = RequestMethod.GET)
     public Response findAllCooperationByPager
-            (@RequestParam(required = false, defaultValue = "1") String pageNo,
-             @RequestParam(required = false, defaultValue = "10") String pageSize,
+            (@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+             @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize,
              @ApiParam(value = "合作类型") @RequestParam(required = false) String type,
              @ApiParam(value = "项目类别") @RequestParam(required = false) String category,
              @ApiParam(value = "系统分类") @RequestParam(required = false) String systemType,
              @ApiParam(value = "省") @RequestParam(required = false) String province,
              @ApiParam(value = "关键字") @RequestParam(required = false) String smart,
              @ApiParam(value = "发布类型，1：接任务，2：接服务，3：资质合作") @RequestParam String parentId,
-             @ApiParam(value = "发布人，0：个人，1：公司") @RequestParam String publisher) {
+             @ApiParam(value = "发布人，0：个人，1：公司") @RequestParam(required = false) String publisher) {
 
         Response Response = new Response();
         Response.setData(mWitkeySV.getPager(pageNo, pageSize, type, category, systemType, province, smart, parentId,publisher));
@@ -80,8 +76,8 @@ public class MobileWitkeySiteController extends BaseController{
 
     @ApiOperation(value = "威客信息詳情", notes = "威客信息詳情", response = Cooperation.class)
     @RequestMapping(value = "getCoopDetail", method = RequestMethod.GET)
-    public Response cooperationInfo(@ApiParam @RequestParam(value = "威客id") Long id,
-                                    @ApiParam @RequestParam(value = "威客大类，1：任务；2：服务；3：资质合作") String type) throws Exception{
+    public Response cooperationInfo(@ApiParam(value = "威客id") @RequestParam Long id,
+                                    @ApiParam(value = "威客大类，1：任务；2：服务；3：资质合作") @RequestParam String type) throws Exception{
         Map map = new HashMap();
         mWitkeySV.getWitkeyDetail(id, type);
         getPrivilegeGoodsDetails(map, null, ZhbConstant.ZhbGoodsType.CKWKRW);
