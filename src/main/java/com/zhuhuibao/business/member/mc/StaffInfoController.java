@@ -49,7 +49,7 @@ public class StaffInfoController {
             }
 
             map.put("companyName",member.getEnterpriseName());
-            String role = memberService.queryWorkTypeById(member.getWorkType());
+            String role = memberService.queryWorkTypeById(member.getWorkType().toString());
             map.put("role",role);
             map.put("enterpriseLinkman",member.getEnterpriseLinkman());
             map.put("enterpriseLinkman",member.getEnterpriseLinkman());

@@ -31,7 +31,7 @@ public class Member implements Serializable{
     private String enterpriseName;
 
     @ApiModelProperty(value="工作类别")
-    private String workType;
+    private Integer workType;
 
     private String workTypeName;
 
@@ -463,11 +463,11 @@ public class Member implements Serializable{
         this.personIDBackImgUrl = personIDBackImgUrl == null ? null : personIDBackImgUrl.trim();
     }
 
-    public String getWorkType() {
+    public Integer getWorkType() {
         return workType;
     }
 
-    public void setWorkType(String workType) {
+    public void setWorkType(Integer workType) {
         this.workType = workType;
     }
 

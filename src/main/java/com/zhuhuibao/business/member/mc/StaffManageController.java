@@ -42,7 +42,7 @@ public class StaffManageController {
 
 	@ApiOperation(value = "新建员工", notes = "新建员工", response = Response.class)
 	@RequestMapping(value = "add_member", method = RequestMethod.POST)
-	public Response addMember(@RequestParam String account,@RequestParam String workType,@RequestParam String enterpriseLinkman) throws Exception {
+	public Response addMember(@RequestParam String account,@RequestParam Integer workType,@RequestParam String enterpriseLinkman) throws Exception {
 		Response result = new Response();
 
 		Long memberId = ShiroUtil.getCreateID();
@@ -83,7 +83,7 @@ public class StaffManageController {
 	@ApiOperation(value = "修改员工", notes = "修改员工", response = Response.class)
 	@RequestMapping(value = "upd_member", method = RequestMethod.POST)
 	public Response updateMember(@RequestParam String account,
-								 @RequestParam String workType,
+								 @RequestParam Integer workType,
 								 @RequestParam String enterpriseLinkman,
 								 @RequestParam String id)  {
 		Member member = new Member();

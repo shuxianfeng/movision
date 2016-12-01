@@ -279,9 +279,9 @@ public class MemberOmsController {
    				member.setMobile(account); 
    			}
    			if("1".equals(identify)){
-   				member.setWorkType("100");
+   				member.setWorkType(MemberConstant.MEMBER_WORK_TYPE_100);
    			}else{
-   				member.setWorkType("217");
+   				member.setWorkType(MemberConstant.MEMBER_WORK_TYPE_217);
    			}
    			member.setIdentify(identify);;
    			 
