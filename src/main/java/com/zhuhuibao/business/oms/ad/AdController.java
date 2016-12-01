@@ -281,7 +281,7 @@ public class AdController {
 	        Subject currentUser = SecurityUtils.getSubject();
 	        Session session = currentUser.getSession(false);
 	        if (session != null) {
-	            String url = zhbOssClient.uploadObject(file,"img","adv/"+path);
+	            String url = zhbOssClient.uploadObject(file,"img","prod/"+path);
 	            result.setData(url);
 	            return result;
 	        }else {
