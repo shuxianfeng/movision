@@ -244,7 +244,7 @@
         select t.id,case when ur.mobile != '' or ur.mobile != null then ur.mobile when ur.email!= '' or ur.email != null
         then ur.email end as username,
         date_format(t.publishTime,'%Y-%m-%d') publishTime, date_format(t.updateTime,'%Y-%m-%d') updateTime,
-        t.title,t.sCategory,
+        t.title,t.sCategory,t.fCategory,
         td.name sCategoryName, t.type, t.status,t.price,t.notes from t_tech_data t
         left join t_m_member ur on ur.id = t.createid
         left join t_dictionary_techDataCategory tc on tc.code = t.fCategory
