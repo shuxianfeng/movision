@@ -12,6 +12,7 @@ public class Member implements Serializable{
 
     private String mobile;
 
+    @ApiModelProperty(value="企业身份")
     private String email;
 
     private String emailCheckCode;
