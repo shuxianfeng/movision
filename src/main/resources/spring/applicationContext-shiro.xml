@@ -35,11 +35,9 @@
         <property name="globalSessionTimeout" value="10800000"/>
         <property name="deleteInvalidSessions" value="true"/>
         <property name="sessionValidationSchedulerEnabled" value="true"/>
-        <property name="sessionDAO" ref="shiroSessionDao"/>
-        <!--<property name="cacheManager" ref="cacheManager"/>-->
+        <property name="sessionDAO" ref="redisSessionDAO"/>
+        <property name="cacheManager" ref="cacheManager"/>
     </bean>
-
-    <bean id="shiroSessionDao" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO" />
 
     <!-- shiro redisManager -->
     <bean id="redisManager" class="org.crazycake.shiro.RedisManager">
@@ -151,7 +149,7 @@
 
 
                 <!--具备“厂家+角色不限+实名认证”权限的配置 -->
-                /rest/system/mc/brand/** = orperms["role:1:2:3,wokeType:1:2:4"]
+                /rest/system/mc/brand/** = orperms["3:100:10,3:300:10"]
                 /rest/system/mc/agent/** = orperms["3:100:10,3:300:10"]
 
                 <!--具备“企业+角色不限+完善资料”权限的配置 -->
