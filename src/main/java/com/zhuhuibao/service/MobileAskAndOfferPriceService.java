@@ -5,6 +5,7 @@ import com.zhuhuibao.common.constant.PriceConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.AskPriceResultBean;
 import com.zhuhuibao.common.pojo.AskPriceSearchBean;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.mapper.AskPriceMapper;
@@ -62,8 +63,25 @@ public class MobileAskAndOfferPriceService {
         Session session = currentUser.getSession(false);
         askPrice.setEndTime(askPrice.getEndTime() + " 23:59:59");
 
-        ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-        askPrice.setCreateid(principal.getId().toString());
+
+        String title = "";
+        if (ShiroUtil.getCreateID() == null) {
+            title = "来自匿名用户的询价";
+        } else {
+            if (org.apache.commons.lang.StringUtils.isNotBlank(ShiroUtil.getMember().getNickname())) {
+                title = "来自" + ShiroUtil.getMember().getNickname() + "的询价";
+            } else {
+                if (org.apache.commons.lang.StringUtils.isNotBlank(ShiroUtil.getMember().getCompanyName())) {
+                    title = "来自" + ShiroUtil.getMember().getCompanyName() + "的询价";
+                } else {
+                    title = "来自匿名用户的询价";
+                }
+            }
+        }
+
+        askPrice.setCreateid(ShiroUtil.getCreateID().toString());
+        askPrice.setTitle(title);
+
         return askPrice;
     }
 
