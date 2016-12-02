@@ -341,11 +341,8 @@ public class MobileExpertPageController extends BaseController {
     @ApiOperation(value = "触屏端-专家首页-提交留言", notes = "触屏端-专家首页-提交留言", response = Response.class)
     @RequestMapping(value = "add_message", method = RequestMethod.POST)
     public Response addMessage(@ModelAttribute Messages message) throws Exception {
-        Response response = new Response();
-        Map<String, Object> resultMap = new HashMap<>();
-        getPrivilegeGoodsDetails(resultMap, null, ZhbConstant.ZhbGoodsType.GZJLY);
         mobileExpertPageService.addMessage(message);
-        return response;
+        return new Response();
     }
 
     @ApiOperation(value = "触屏端-专家首页-专家留言页面", notes = "触屏端-专家首页-给专家留言页面", response = Response.class)

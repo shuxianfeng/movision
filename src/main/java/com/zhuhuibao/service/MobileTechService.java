@@ -9,9 +9,11 @@ import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.fsearch.utils.StringUtil;
+import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
+import com.zhuhuibao.mybatis.tech.mapper.TechCooperationMapper;
 import com.zhuhuibao.mybatis.tech.service.*;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -20,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.rmi.server.ObjID;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +31,14 @@ import java.util.Map;
 @Service
 @Transactional
 public class MobileTechService {
-	
-	@Autowired
+
+    @Autowired
     TechDataService techDataService;
-	
-	@Autowired
+
+    @Autowired
     TechCooperationService techService;
-	
-	@Autowired
+
+    @Autowired
     TechDownloadDataService downloadService;
 
     @Autowired
@@ -52,24 +56,31 @@ public class MobileTechService {
     @Autowired
     private MobileSysAdvertisingService advertisingService;
 
-	/**
-	 * 搜索技术资料
-	 * @param fCategory
-	 * @param title
-	 * @param status
-	 * @param pageNo
-	 * @param pageSize
-	 * @return
-	 */
-	public Response findAllTechDataPager(
-			String fCategory,
-			String title,
-			String status,
-			String pageNo,
-			String pageSize
-			){
-		
-		Response response = new Response();
+    @Autowired
+    private ConstantService constantService;
+
+    @Autowired
+    TechCooperationMapper techMapper;
+
+    /**
+     * 搜索技术资料
+     *
+     * @param fCategory
+     * @param title
+     * @param status
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    public Response findAllTechDataPager(
+            String fCategory,
+            String title,
+            String status,
+            String pageNo,
+            String pageSize
+    ) {
+
+        Response response = new Response();
         Map<String, Object> condition = new HashMap<>();
         condition.put("fCategory", fCategory);
 
@@ -88,20 +99,21 @@ public class MobileTechService {
         pager.result(techList);
         response.setData(pager);
         return response;
-	}
-	
-	/**
-	 * 查询我的技术合作列表
-	 * @param title
-	 * @param type
-	 * @param status
-	 * @param pageNo
-	 * @param pageSize
-	 * @return
-	 */
-	public Response findAllTechCooperationPager(String title, String type, String status, String pageNo, String pageSize){
-		
-		Response response = new Response();
+    }
+
+    /**
+     * 查询我的技术合作列表
+     *
+     * @param title
+     * @param type
+     * @param status
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    public Response findAllTechCooperationPager(String title, String type, String status, String pageNo, String pageSize) {
+
+        Response response = new Response();
         Map<String, Object> condition = new HashMap<>();
         Long createID = ShiroUtil.getCreateID();
 
@@ -121,16 +133,17 @@ public class MobileTechService {
         pager.result(techList);
         response.setData(pager);
         return response;
-	}
-	
-	/**
-	 * 资料下载记录列表
-	 * @param pageNo
-	 * @param pageSize
-	 * @return
-	 */
-	public Response findAllDownloadTechDataPager(String pageNo, String pageSize){
-		Response response = new Response();
+    }
+
+    /**
+     * 资料下载记录列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    public Response findAllDownloadTechDataPager(String pageNo, String pageSize) {
+        Response response = new Response();
         Map<String, String> condition = new HashMap<String, String>();
         Long createId = ShiroUtil.getCreateID();
         if (createId != null) {
@@ -149,21 +162,22 @@ public class MobileTechService {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return response;
-	}
-	
-	/**
-	 * 我查看的技术成果列表
-	 * @param systemCategory
-	 * @param applicationArea
-	 * @param type
-	 * @param pageNo
-	 * @param pageSize
-	 * @return
-	 */
-	public Response findSiteAllTechCooperationPager(String systemCategory, String applicationArea, 
-			String type, String pageNo, String pageSize){
-		
-		Response response = new Response();
+    }
+
+    /**
+     * 我查看的技术成果列表
+     *
+     * @param systemCategory
+     * @param applicationArea
+     * @param type
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    public Response findSiteAllTechCooperationPager(String systemCategory, String applicationArea,
+                                                    String type, String pageNo, String pageSize) {
+
+        Response response = new Response();
         Map<String, Object> condition = new HashMap<>();
 
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
@@ -175,16 +189,17 @@ public class MobileTechService {
         pager.result(techList);
         response.setData(pager);
         return response;
-	}
-	
-	/**
-	 * 我查看的技术成果详情
-	 * @param techCoopId
-	 * @return
-	 */
-	public Response previewSiteTechCooperation(String techCoopId){
-		
-		Map<String, Object> map = new HashMap<>();
+    }
+
+    /**
+     * 我查看的技术成果详情
+     *
+     * @param techCoopId
+     * @return
+     */
+    public Response previewSiteTechCooperation(String techCoopId) {
+
+        Map<String, Object> map = new HashMap<>();
         map.put("id", techCoopId);
         map.put("type", 2);
         Map<String, Object> techCoop = techService.previewTechCooperationDetail(map);
@@ -192,17 +207,17 @@ public class MobileTechService {
         Response response = new Response();
         response.setData(techCoop);
         return response;
-	}
+    }
 
 
     /**
      * 批量删除我的技术合作
+     *
      * @param idStr
      */
-    public void batchDeleteTechCoop(String idStr)
-    {
+    public void batchDeleteTechCoop(String idStr) {
         String ids[] = idStr.split(",");
-        if(null != ids && ids.length>0 ){
+        if (null != ids && ids.length > 0) {
             Map<String, Object> condition = new HashMap<>();
             condition.put("status", TechConstant.TechCooperationnStatus.DELETE.toString());
             int len = ids.length;
@@ -213,17 +228,18 @@ public class MobileTechService {
                     throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL, "删除失败");
                 }
             }
-        }else{
+        } else {
             throw new BusinessException(MsgCodeConstant.TECH_COOP_IS_EMPTY, "技术合作id的数组为空");
         }
     }
 
     /**
      * 获取技术合作：技术成果 1，技术需求 2 数据
+     *
      * @param type 技术成果 1，技术需求 2
      * @return
      */
-    public List<Map<String, String>> getTechCoop(Integer type, Integer count){
+    public List<Map<String, String>> getTechCoop(Integer type, Integer count) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("status", TechConstant.TechCooperationnStatus.AUDITPASS.toString());
         map.put("type", type);
@@ -233,11 +249,12 @@ public class MobileTechService {
 
     /**
      * 查询新技术 数据
+     *
      * @param pageNo
      * @param pageSize
      * @return
      */
-    public Paging<Map<String, Object>> getNewTechList(String pageNo, String pageSize){
+    public Paging<Map<String, Object>> getNewTechList(String pageNo, String pageSize) {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -259,10 +276,11 @@ public class MobileTechService {
 
     /**
      * 获取手机端-技术主页-新技术数据
+     *
      * @param num 获取的数量
      * @return
      */
-    public List<Map<String, Object>> getNewTechList4Mobile(Integer num){
+    public List<Map<String, Object>> getNewTechList4Mobile(Integer num) {
 
         Map<String, Object> map = new HashMap<>();
         map.put("channelid", 11);
@@ -276,10 +294,11 @@ public class MobileTechService {
 
     /**
      * 查询新技术详情
+     *
      * @param newsId
      * @return
      */
-    public Map<String, Object> getNewTechDetail(String newsId){
+    public Map<String, Object> getNewTechDetail(String newsId) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", newsId);
         newsService.updateViews(Long.valueOf(newsId));
@@ -290,6 +309,7 @@ public class MobileTechService {
 
     /**
      * 获取技术资料列表数据
+     *
      * @param fcateId
      * @param scateId
      * @param pageNo
@@ -298,7 +318,7 @@ public class MobileTechService {
      */
     public Paging<Map<String, String>> getTechDataList(
             String fcateId, String scateId, String pageNo, String pageSize
-    ){
+    ) {
         Map<String, Object> conditionMap = new HashMap<>();
         conditionMap.put("fCategory", fcateId);
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(scateId)) {
@@ -306,16 +326,17 @@ public class MobileTechService {
         }
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<Map<String, String>> techList = techDataService.findAllTechDataOnlyPager(pager, conditionMap);
-         pager.result(techList);
+        pager.result(techList);
         return pager;
     }
 
     /**
      * 查询技术资料详情
+     *
      * @param techDataId
      * @return
      */
-    public List<Map<String, String>> getTechDataDetail(String techDataId){
+    public List<Map<String, String>> getTechDataDetail(String techDataId) {
 
         //更新热度
         Map<String, Object> map = new HashMap<>();
@@ -328,9 +349,10 @@ public class MobileTechService {
 
     /**
      * 获取培训课程列表
+     *
      * @return
      */
-    public List<Map<String, String>> getTechCourseList(Integer count){
+    public List<Map<String, String>> getTechCourseList(Integer count) {
         Map<String, Object> condition = new HashMap<>();
         condition.put("status", TechConstant.PublishCourseStatus.SALING.toString());
         condition.put("courseType", TechConstant.COURSE_TYPE_TECH);
@@ -339,32 +361,26 @@ public class MobileTechService {
     }
 
 
-    public Paging<Map<String, String>> getTechCoursePageList(String pageNo, String pageSize,String province){
+    public Paging<Map<String, String>> getTechCoursePageList(String pageNo, String pageSize, String province) {
         Map<String, Object> condition = new HashMap<>();
         condition.put("status", TechConstant.PublishCourseStatus.SALING.toString());
         condition.put("courseType", TechConstant.COURSE_TYPE_TECH);
         condition.put("province", province);    //地区筛选
 
         Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Map<String, String>> list = ptCourseService.findAllPublishCoursePager(pager,condition);
+        List<Map<String, String>> list = ptCourseService.findAllPublishCoursePager(pager, condition);
         pager.result(list);
         return pager;
     }
 
 
-
-
-
-
-
-
-
     /**
      * 获取培训课程详情
+     *
      * @param courseId
      * @return
      */
-    public Map<String, String> getTechCourseDetail(Long courseId){
+    public Map<String, String> getTechCourseDetail(Long courseId) {
         Map<String, Object> condition = new HashMap<String, Object>();
         condition.put("courseid", courseId);
         return ptCourseService.previewTrainCourseDetail(condition);
@@ -372,36 +388,69 @@ public class MobileTechService {
 
     /**
      * 开课申请
+     *
      * @param techCourse
      */
-    public void addCourse(TechExpertCourse techCourse){
-        expertService.checkMobileCode(techCourse.getCode(),techCourse.getMobile(), ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
+    public void addCourse(TechExpertCourse techCourse) {
+        expertService.checkMobileCode(techCourse.getCode(), techCourse.getMobile(), ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
         Long createId = ShiroUtil.getCreateID();
-        if(createId != null) {
+        if (createId != null) {
             techCourse.setProposerId(createId);
             techCourseService.insertTechExpertCourse(techCourse);
-        }else{
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
     }
 
     /**
      * 获取手机端技术&培训-首页-信息
+     *
      * @return
      */
-    public Map<String,Object> getTechIndexInfo(){
+    public Map<String, Object> getTechIndexInfo() {
 
         Map<String, Object> result = new HashMap<>();
-        List<Map<String, String>>  jscg = getTechCoop(1, 2);
+        List<Map<String, String>> jscg = getTechCoop(1, 2);
         jscg.addAll(getTechCoop(2, 2));
         result.put("jscglist", jscg);
         result.put("pxkclist", getTechCourseList(3));   //培训课程
         result.put("yzzllist", techDataService.findAllTechData4Mobile(3));  //技术资料
-        result.put("xjslist",getNewTechList4Mobile(3)); //新技术
+        result.put("xjslist", getNewTechList4Mobile(3)); //新技术
         //首页广告banner
-        result.put("bannerAdvList",advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Tech_Banner.value) );
+        result.put("bannerAdvList", advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Tech_Banner.value));
         return result;
     }
 
 
+    /**
+     * 常量
+     *
+     * @param expertSystemType
+     * @return
+     */
+    public List<Map<String, String>> findByType(String expertSystemType) {
+        return constantService.findByType(expertSystemType);
+    }
+
+
+    /**
+     * 技术成果列表
+     *
+     * @param pager
+     * @param map
+     * @return
+     */
+    public List<Map<String, Object>> findAllcooperationType(Paging<Map<String, Object>> pager, Map<String, Object> map) {
+        List<Map<String, Object>> cooperationTypeList = techMapper.findAllMobileTechCooperationPager(pager.getRowBounds(), map);
+        List list = new ArrayList<>();
+        for (Map<String, Object> m : cooperationTypeList) {
+            if (m.get("type").equals(1)) {
+                m.put("typeName","技术成果");
+            } else {
+                m.put("typeName","技术需求" );
+            }
+            list.add(m);
+        }
+        return list;
+    }
 }

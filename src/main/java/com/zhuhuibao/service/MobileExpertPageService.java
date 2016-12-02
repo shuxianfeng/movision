@@ -5,6 +5,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
@@ -329,27 +330,33 @@ public class MobileExpertPageService {
      *
      * @param message
      */
-    public void addMessage(Messages message) {
+    public void addMessage(Messages message) throws Exception{
         Long createid = ShiroUtil.getCreateID();
         if (createid != null) {
-            message.setCreateid(String.valueOf(createid));
-            Member member = memberService.findMemById(String.valueOf(createid));
-            if (null == member) {
-                throw new BusinessException(MsgCodeConstant.NOT_EXIST_MEMBER, "不存在该会员信息");
+            boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.GZJLY.toString());
+            if(bool) {
+                message.setCreateid(String.valueOf(createid));
+                Member member = memberService.findMemById(String.valueOf(createid));
+                if (null == member) {
+                    throw new BusinessException(MsgCodeConstant.NOT_EXIST_MEMBER, "不存在该会员信息");
+                }
+                String identify = member.getIdentify();
+                //个人取昵称，企业取企业名
+                String name = identify.equals("2") ? member.getNickname() : member.getEnterpriseName();
+                if (org.apache.commons.lang3.StringUtils.isEmpty(name)) {
+                    name = "匿名用户";
+                }
+                String title = "来自" + name + "的留言";
+                message.setTitle(title);
+                message.setType("2");
+                message.setIsShow(true);
+                message.setSendDelete("0");
+                message.setReceiveDelete("0");
+                messageMapper.saveMessages(message);
+                zhbService.payForGoods(Long.parseLong(message.getId()),ZhbPaymentConstant.goodsType.GZJLY.toString());
+            }else{//支付失败稍后重试，联系客服
+                throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
             }
-            String identify = member.getIdentify();
-            //个人取昵称，企业取企业名
-            String name = identify.equals("2") ? member.getNickname() : member.getEnterpriseName();
-            if (org.apache.commons.lang3.StringUtils.isEmpty(name)) {
-                name = "匿名用户";
-            }
-            String title = "来自" + name + "的留言";
-            message.setTitle(title);
-            message.setType("2");
-            message.setIsShow(true);
-            message.setSendDelete("0");
-            message.setReceiveDelete("0");
-            messageMapper.saveMessages(message);
         }
     }
 
@@ -363,7 +370,7 @@ public class MobileExpertPageService {
      */
 
     public List<Map<String, String>> findByType(String expertSystemType) {
-        return constantService.findByType(ExpertConstant.EXPERT_SYSTEM_TYPE);
+        return constantService.findByType(expertSystemType);
     }
 
 
