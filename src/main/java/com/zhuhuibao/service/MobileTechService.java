@@ -2,6 +2,7 @@ package com.zhuhuibao.service;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
+import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
@@ -374,7 +375,7 @@ public class MobileTechService {
      * @param techCourse
      */
     public void addCourse(TechExpertCourse techCourse){
-        expertService.checkMobileCode(techCourse.getCode(),techCourse.getMobile(), TechConstant.MOBILE_CODE_SESSION_TYPE_CLASS);
+        expertService.checkMobileCode(techCourse.getCode(),techCourse.getMobile(), ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
         Long createId = ShiroUtil.getCreateID();
         if(createId != null) {
             techCourse.setProposerId(createId);

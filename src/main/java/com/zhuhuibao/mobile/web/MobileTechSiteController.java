@@ -1,23 +1,22 @@
 package com.zhuhuibao.mobile.web;
 
-import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.TechConstant;
+import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.ZhbConstant;
-import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.mobile.web.mc.MobileExpertController;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
 import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
 import com.zhuhuibao.mybatis.tech.service.DictionaryTechDataService;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.service.MobileTechService;
 import com.zhuhuibao.service.payment.PaymentService;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
-import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +34,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/rest/m/tech/site/")
 public class MobileTechSiteController extends BaseController {
+
+    private static final Logger log = LoggerFactory.getLogger(MobileExpertController.class);
+
     @Autowired
     DictionaryTechDataService dicTDService;
 
@@ -59,7 +61,7 @@ public class MobileTechSiteController extends BaseController {
     public Response findAllTechNewsList(@ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                         @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
-        response.setData(mTechSV.getNewTechList(pageNo,pageSize));
+        response.setData(mTechSV.getNewTechList(pageNo, pageSize));
         return response;
     }
 
@@ -95,10 +97,10 @@ public class MobileTechSiteController extends BaseController {
         Map map = new HashMap();
         TechCooperation techCoo = techCooSV.selectTechCooperationById(String.valueOf(GoodsID));
         Integer techType = techCoo.getType();   //1:技术成果，2：技术需求
-        if(techType == 1){
-            getPrivilegeGoodsDetails(map,String.valueOf(GoodsID), ZhbConstant.ZhbGoodsType.CXXZJL);
+        if (techType == 1) {
+            getPrivilegeGoodsDetails(map, String.valueOf(GoodsID), ZhbConstant.ZhbGoodsType.CXXZJL);
             map.put("tech_detail", paymentService.getChargeGoodsRecord(GoodsID, ZhbConstant.ZhbGoodsType.CXXZJL.toString()));
-        }else{
+        } else {
             Map<String, Object> m = new HashMap<>();
             m.put("id", GoodsID);
             m.put("type", 2);
@@ -126,19 +128,23 @@ public class MobileTechSiteController extends BaseController {
         return response;
     }
 
-    @RequestMapping(value="add_course", method = RequestMethod.POST)
-    @ApiOperation(value="申请技术培训课程",notes = "申请技术培训课程",response = Response.class)
-    public Response insertTechTrainCourse(@ApiParam(value = "申请技术培训课程")  @ModelAttribute(value="techCourse")TechExpertCourse techCourse)
-    {
+    @RequestMapping(value = "add_course", method = RequestMethod.POST)
+    @ApiOperation(value = "申请技术培训课程", notes = "申请技术培训课程", response = Response.class)
+    public Response insertTechTrainCourse(@ApiParam(value = "申请技术培训课程") @ModelAttribute(value = "techCourse") TechExpertCourse techCourse) {
         Response response = new Response();
-        mTechSV.addCourse(techCourse);
+        try {
+            mTechSV.addCourse(techCourse);
+        } catch (Exception e) {
+            log.error("add_expert_support error! ", e);
+            response.setData(400);
+            response.setMessage(e.getMessage());
+        }
         return response;
-    }
+}
 
-    @RequestMapping(value="getTechIndexInfo", method = RequestMethod.GET)
-    @ApiOperation(value="获取手机端技术&培训-首页-信息",notes = "获取手机端技术&培训-首页-信息",response = Response.class)
-    public Response insertTechTrainCourse()
-    {
+    @RequestMapping(value = "getTechIndexInfo", method = RequestMethod.GET)
+    @ApiOperation(value = "获取手机端技术&培训-首页-信息", notes = "获取手机端技术&培训-首页-信息", response = Response.class)
+    public Response insertTechTrainCourse() {
         Response response = new Response();
         response.setData(mTechSV.getTechIndexInfo());
         return response;
@@ -150,6 +156,17 @@ public class MobileTechSiteController extends BaseController {
         Response response = new Response();
         List<Map<String, Object>> categoryList = dicTDService.selectCategoryInfo(0);
         response.setData(categoryList);
+        return response;
+    }
+
+    @ApiOperation(value = "触屏端-专家首页-申请专家支持-手机验证码获取", notes = "触屏端-专家首页-申请专家支持-手机验证码获取", response = Response.class)
+    @RequestMapping(value = "get_expert_support", method = RequestMethod.GET)
+    public Response getExpertSupport(@ApiParam(value = "手机号码") @RequestParam(required = true) String mobile,
+                                     @ApiParam(value = "图形验证码") @RequestParam(required = true) String imgCode) throws Exception {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session sess = currentUser.getSession(true);
+        String sessImgCode = (String) sess.getAttribute(ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
+        Response response = dicTDService.getTrainMobileCode(mobile, ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT, imgCode, sessImgCode);
         return response;
     }
 

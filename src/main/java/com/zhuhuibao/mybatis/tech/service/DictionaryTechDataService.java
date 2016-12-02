@@ -3,6 +3,9 @@ package com.zhuhuibao.mybatis.tech.service;/**
  * @version 2016/5/31 0031
  */
 
+import com.taobao.api.ApiException;
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.tech.entity.DictionaryTechData;
 import com.zhuhuibao.mybatis.tech.mapper.DictionaryTechDataMapper;
 import org.slf4j.Logger;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +32,9 @@ public class DictionaryTechDataService {
 
     @Autowired
     DictionaryTechDataMapper dicTDMapper;
+
+    @Autowired
+    ExpertService expertService;
 
     /**
      * 查询一级分类
@@ -109,5 +116,28 @@ public class DictionaryTechDataService {
             throw e;
         }
         return fcateList;
+    }
+
+
+    /**
+     *  开课申请中手机验证码获取
+     *
+     * @param mobile
+     * @param mobileCodeSessionTypeSupport
+     * @param imgCode
+     * @param sessImgCode
+     * @return
+     */
+    public Response getTrainMobileCode(String mobile, String mobileCodeSessionTypeSupport, String imgCode, String sessImgCode) throws IOException, ApiException {
+         Response response=new Response();
+        if (imgCode.equalsIgnoreCase(sessImgCode)) {
+            expertService.getTrainMobileCode(mobile, mobileCodeSessionTypeSupport);
+            response.setCode(200);
+            response.setMessage("验证码输入正确");
+        } else {
+            response.setCode(400);
+            response.setMessage("验证码输入错误");
+        }
+        return response;
     }
 }
