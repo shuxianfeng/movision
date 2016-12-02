@@ -296,6 +296,9 @@
       <if test="company_id != null">
         and t.createid not in (select t.create_id from t_i_forbid_key_words t where t.company_id = #{company_id} and t.is_deleted = 0)
       </if>
+      <if test="publishTime != null and publishTime != ''">
+        and date_format(#{publishTime},'%Y-%m-%d') &lt;= date_format(t.updateTime,'%Y-%m-%d')
+      </if>
     </where>
     order by t.updateTime desc
   </select>
@@ -344,6 +347,7 @@
       <if test="company_id != null">
         and t.createid not in (select t.create_id from t_i_forbid_key_words t where t.company_id = #{company_id} and t.is_deleted = 0)
       </if>
+
     </where>
     order by t.updateTime desc
     limit 3

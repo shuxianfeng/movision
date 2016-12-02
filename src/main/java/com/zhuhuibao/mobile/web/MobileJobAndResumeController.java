@@ -207,15 +207,15 @@ public class MobileJobAndResumeController extends BaseController {
     @ApiOperation(value = "人才库搜索", notes = "人才库搜索", response = Response.class)
     public Response findAllResume(@ApiParam(value = "关键字") @RequestParam(required = false) String title,
                                   @ApiParam(value = "期望工作城市") @RequestParam(required = false) String jobCity,
-                                  @ApiParam(value = "工作年限前") @RequestParam(required = false) String expYearBefore,
-                                  @ApiParam(value = "工作年限后") @RequestParam(required = false) String expYearBehind,
+                                  @ApiParam(value = "工作经验") @RequestParam(required = false) String expYear,
+                                  @ApiParam(value = "刷新时间") @RequestParam(required = false) String refreshType,
                                   @ApiParam(value = "学历") @RequestParam(required = false) String education,
                                   @ApiParam(value = "职位类别") @RequestParam(required = false) String positionType,
                                   @ApiParam(value = "是否公开") @RequestParam(required = false) String isPublic,
                                   @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                   @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
 
-        return new Response(mJobSV.getResumePager(title, jobCity, expYearBefore, expYearBehind, education,
+        return new Response(mJobSV.getResumePager(title, jobCity, expYear, refreshType, education,
                 positionType, isPublic, pageNo, pageSize));
     }
 
