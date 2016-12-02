@@ -440,8 +440,7 @@ public class AlipayService {
 
             // 1-> 记录支付宝回调信息 交易流水信息
             // 订单
-            Order order = new Order();
-            order.setOrderNo(params.get("out_trade_no"));
+            Order order = orderService.findByOrderNo(params.get("out_trade_no"));
             order.setUpdateTime(new Date());
             // 异步通知
             if (notifyType.equals(PayConstants.NotifyType.ASYNC.toString())) {
@@ -474,7 +473,7 @@ public class AlipayService {
      */
     private void callbackNotice(Map<String, String> params, String tradeType, Order order) {
         // 即时到账支付
-        if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
+        if (tradeType.equals(PayConstants.TradeType.PAY.toString()) && !order.getStatus().equals(PayConstants.OrderStatus.YZF.toString())) {
             recordPayAsyncCallbackLog(params);
             // 2-> 判断是否存在筑慧币支付方式
             OrderFlow orderFlow = orderFlowService.findByOrderNoAndTradeMode(params.get("out_trade_no"), PayConstants.PayMode.ZHBPAY.toString());
@@ -509,7 +508,7 @@ public class AlipayService {
 
         }
         // 退款
-        if (tradeType.equals(PayConstants.TradeType.REFUND.toString())) {
+        if (tradeType.equals(PayConstants.TradeType.REFUND.toString()) && !order.getStatus().equals(PayConstants.OrderStatus.YTK.toString())) {
             recordRefundAsyncCallbackLog(params);
             // 修改订单状态为已退款
             order.setStatus(PayConstants.OrderStatus.YTK.toString());
