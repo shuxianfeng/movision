@@ -187,19 +187,16 @@ public class MobileJobAndResumeController extends BaseController {
     @RequestMapping(value = "sel_all_position", method = RequestMethod.GET)
     @ApiOperation(value = "职位搜索", notes = "职位频道页搜索", response = Response.class)
     public Response queryAllPosition(@ApiParam(value = "公司名称或企业名称") @RequestParam(required = false) String name,
-                                     @ApiParam(value = "省代码") @RequestParam(required = false) String province,
-                                     @ApiParam(value = "市代码") @RequestParam(required = false) String city,
-                                     @ApiParam(value = "区代码") @RequestParam(required = false) String area,
+                                     @ApiParam(value = "地区代码") @RequestParam(required = false) String areaCode,
                                      @ApiParam(value = "企业规模") @RequestParam(required = false) String employeeNumber,
                                      @ApiParam(value = "企业性质") @RequestParam(required = false) String enterpriseType,
-                                     @ApiParam(value = "发布时间") @RequestParam(required = false) String days,
-                                     @ApiParam(value = "薪资") @RequestParam(required = false) String salary,
+                                     @ApiParam(value = "刷新时间") @RequestParam(required = false) String refreshType,
                                      @ApiParam(value = "职位类别") @RequestParam(required = false) String positionType,
                                      @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                      @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
 
-        return new Response(mJobSV.getJobSearchResultPager(name, province, city, area,
-                employeeNumber, enterpriseType, days, salary, positionType, pageNo, pageSize));
+        return new Response(mJobSV.getJobSearchResultPager(name,areaCode,
+                employeeNumber, enterpriseType, refreshType,  positionType, pageNo, pageSize));
 
     }
 

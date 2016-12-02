@@ -99,4 +99,7 @@ public interface JobMapper {
     String queryJobNameByJobId(Long jobID);
 
     List<Map<String,Object>> findAllOtherPositionById(String id);
+
+
+    List<Map<String, Object>> findAllPositionForMobile(RowBounds rowBounds, Map<String, Object> map);
 }
