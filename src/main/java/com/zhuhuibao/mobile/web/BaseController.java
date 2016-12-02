@@ -53,7 +53,7 @@ public class BaseController {
         // 筑慧币单价
         DictionaryZhbgoods goodsConfig = zhbService.getZhbGoodsByPinyin(zhbGoodsType.toString());
         resultMap.put("zhbPrice", null != goodsConfig ? String.valueOf(goodsConfig.getPriceDoubleValue()) : "999");
-        //此处排除公开询价这种场景
+        //当goodsId为空时不返回物品详情信息
         if(StringUtils.isNotEmpty(goodsId)){
             // 获取商品详情
             Map<String, Object> goodsDetail = mobileProjectService.getProjectDetail(Long.parseLong(goodsId), zhbGoodsType);

@@ -77,11 +77,11 @@
       <if test="publishTime != null and publishTime !=''" >
         publishTime = #{publishTime},
       </if>
-      
+
       <if test="type!=1" >
          updateTime = now(),
       </if>
-    
+
       <if test="jobNature != null and jobNature !=''" >
         jobNature = #{jobNature},
       </if>
@@ -222,7 +222,7 @@
       and r.createid = #{createid}
     </if>
   </select>
-  
+
   <select id="previewResumeNew" parameterType="java.lang.String" resultMap="BaseResultMap">
     select r.id,r.createid,r.title, 
     concat(substr(r.realName,1,1),'**') realName,r.birthYear,dc.name education, 
@@ -271,7 +271,7 @@
       </if>
       <if test="jobCity != null and jobCity != ''">
         <!-- and (#{jobCity} in(t.jobCity) or (select provincecode from t_dictionary_city where code = #{jobCity}) in(t.jobProvince)) -->
-		and t.jobCity = #{jobCity}
+		and (t.jobCity = #{jobCity} or t.jobProvince =  #{jobCity})
       </if>
       <if test="expYearBefore != null and expYearBefore != '' and expYearBehind != null and expYearBehind != ''">
         and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore} and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &lt;= #{expYearBehind}
@@ -389,11 +389,11 @@
   <select id="isExistResume" parameterType="java.lang.Long" resultType="java.lang.Integer">
     select count(1) from t_i_resume t where t.createid = #{createID}
   </select>
-  
+
   <select id="getMaxCollCount" parameterType="java.lang.Long" resultType="java.lang.Integer">
     select count(1) from t_i_resume_collect_record t where t.companyID = #{memberId} and t.is_deleted=0
   </select>
-  
+
   <select id="queryJobCount" parameterType="java.lang.Long" resultType="java.util.Map">
     select count(1) count from t_i_job t where t.createID = #{createId} and t.is_deleted = 0 union all
     select count(1) count from t_i_jobRelresume j where j.jobID in (select id from t_i_job where createid=#{createId})
@@ -409,7 +409,7 @@
     where rd.companyID = #{id} and rd.is_deleted = 0 order by rd.publishDate desc
   </select>
 
-  
+
    <select id="isDownOrColl" parameterType="java.util.Map" resultType="java.util.Map">
     select distinct r.id ,(case when isnull(t.id) then 1 else 0 end ) isDown, 
 	(case when isnull(c.id) then 1 else 0 end) isCollect
@@ -418,23 +418,23 @@
 	left join t_i_resume_collect_record c on r.id=c.resumeID and c.is_deleted=0 and c.companyID=#{companyId} 
  	
   </select>
-  
-  <insert id="insertDownRecord" parameterType="java.util.Map" > 
+
+  <insert id="insertDownRecord" parameterType="java.util.Map" >
     insert into t_i_resume_download_record(resumeID,companyID,createId,publishDate) 
     select #{resumeID},#{companyID},t.createid,now() from t_i_resume t where id=#{resumeID}
    </insert>
-  
-   
-   <update id="delCollRecord" parameterType="java.util.Map" > 
+
+
+   <update id="delCollRecord" parameterType="java.util.Map" >
     update t_i_resume_collect_record set is_deleted=1
     where resumeID=#{resumeID} and companyID=#{companyID} and is_deleted=0
    </update>
-   
-   <insert id="insertCollRecord" parameterType="java.util.Map" > 
+
+   <insert id="insertCollRecord" parameterType="java.util.Map" >
     insert into t_i_resume_collect_record(resumeID,companyID,createId,publishDate)      
     select #{resumeID},#{companyID},t.createid,now() from t_i_resume t where id=#{resumeID}
    </insert>
-   
+
 
 
   <select id="findAllCollectResume" parameterType="java.lang.String" resultType="java.util.Map">

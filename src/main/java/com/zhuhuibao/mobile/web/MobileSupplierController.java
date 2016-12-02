@@ -8,6 +8,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.pojo.AskPriceResultBean;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.fsearch.pojo.spec.SupplierSearchSpec;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
@@ -76,7 +77,7 @@ public class MobileSupplierController {
      */
     @ApiOperation(value = "触屏端供应链首页", notes = "触屏端供应链首页")
     @RequestMapping(value = "index", method = RequestMethod.GET)
-    public Response index(@ApiParam(value = "当前登陆人id") @RequestParam(required = false) String createId) {
+    public Response index() {
         Response response = new Response();
         // banner位广告图片
         List<SysAdvertising> bannerAdvList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Supplychain_Banner.value);
@@ -90,6 +91,7 @@ public class MobileSupplierController {
         List<SysAdvertising> canalsfaList = advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Supplychain_Canals.value);
         // 取最新6条公开询价数据
         Paging<AskPrice> pager = new Paging<>(Integer.valueOf(1), Integer.valueOf(6));
+        String createId = null != ShiroUtil.getCreateID() ? ShiroUtil.getCreateID().toString() : "";
         List askPriceList = enquiryService.queryNewestAskPrice(createId, pager);
         Map<String, List> dataList = new HashMap<>();
         dataList.put("banner", bannerAdvList);

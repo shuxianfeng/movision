@@ -142,22 +142,19 @@ public class MobileJobAndResumeService {
      * 获取职位搜索Pager
      * 
      * @param name
-     * @param province
-     * @param city
-     * @param area
+     * @param areaCode
      * @param employeeNumber
      * @param enterpriseType
-     * @param days
-     * @param salary
+     * @param refreshType
      * @param positionType
      * @param pageNo
      * @param pageSize
      * @return
      */
-    public Paging<Map<String, Object>> getJobSearchResultPager(String name, String province, String city, String area, String employeeNumber, String enterpriseType, String days, String salary,
-            String positionType, String pageNo, String pageSize) {
+    public Paging<Map<String, Object>> getJobSearchResultPager(String name, String areaCode, String employeeNumber, String enterpriseType, String refreshType, String positionType, String pageNo,
+            String pageSize) {
         log.info("query position info by id");
-        Map<String, Object> map = getStringObjectMap(name, city, employeeNumber, enterpriseType, days, salary, positionType);
+        Map<String, Object> map = getStringObjectMap(name, areaCode, employeeNumber, enterpriseType, refreshType, positionType);
 
         Paging<Map<String, Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
 
@@ -169,30 +166,35 @@ public class MobileJobAndResumeService {
      * 职位搜索-准备参数
      * 
      * @param name
-     * @param city
+     * @param areaCode
      * @param employeeNumber
      * @param enterpriseType
-     * @param days
-     * @param salary
+     * @param refreshType
      * @param positionType
      * @return
      */
-    private Map<String, Object> getStringObjectMap(String name, String city, String employeeNumber, String enterpriseType, String days, String salary, String positionType) {
+    private Map<String, Object> getStringObjectMap(String name, String areaCode, String employeeNumber, String enterpriseType, String refreshType, String positionType) {
         Map<String, Object> map = new HashMap<>();
         if (name != null && !"".equals(name)) {
             map.put("name", name.replace("_", "\\_"));
         }
         map.put("positionType", positionType);
-        map.put("city", city);
-        map.put("employeeNumber", employeeNumber);
+        map.put("areaCode", areaCode);
         map.put("enterpriseType", enterpriseType);
-        // 发布时间一周内，一天内
-        if (days != null && !"".equals(days)) {
-            Date date = DateUtils.date2Sub(new Date(), 5, -Integer.parseInt(days));
-            String publishTime = DateUtils.date2Str(date, "yyyy-MM-dd");
-            map.put("publishTime", publishTime);
+        String publishTime = getRefreshType(refreshType);
+        map.put("publishTime", publishTime);
+        // 企业规模 1 50-100 2 100-500 3 500
+        if (null != employeeNumber) {
+            if (employeeNumber.equals("1")) {
+                map.put("employeeNumberMin", 50);
+                map.put("employeeNumberMax", 100);
+            } else if (employeeNumber.equals("2")) {
+                map.put("employeeNumberMin", 100);
+                map.put("employeeNumberMax", 500);
+            } else {
+                map.put("employeeNumberMin", 500);
+            }
         }
-        map.put("salary", salary);
         return map;
     }
 
@@ -281,21 +283,7 @@ public class MobileJobAndResumeService {
             }
         }
         // refreshType 1:1天内 2:3天内 3:一周内 4:一个月内
-        String publishTime = "";
-        if (null != refreshType) {
-            if (refreshType.equals("1")) {
-                publishTime = DateUtils.date2Str(new Date(), "yyyy-MM-dd");
-            } else if (refreshType.equals("2")) {
-                Date date = DateUtils.date2Sub(new Date(), Calendar.DATE, -3);
-                publishTime = DateUtils.date2Str(date, "yyyy-MM-dd");
-            } else if (refreshType.equals("3")) {
-                Date date = DateUtils.date2Sub(new Date(), Calendar.DATE, -7);
-                publishTime = DateUtils.date2Str(date, "yyyy-MM-dd");
-            } else {
-                Date date = DateUtils.date2Sub(new Date(), Calendar.MONTH, -1);
-                publishTime = DateUtils.date2Str(date, "yyyy-MM-dd");
-            }
-        }
+        String publishTime = getRefreshType(refreshType);
         map.put("publishTime", publishTime);
         map.put("expYearBefore", expYearBefore);
         map.put("expYearBehind", expYearBehind);
@@ -314,6 +302,31 @@ public class MobileJobAndResumeService {
             map.put("positionList", positionList);
         }
         return map;
+    }
+
+    /**
+     * 获取刷新类别对应的时间区间
+     * 
+     * @param refreshType
+     * @return
+     */
+    private String getRefreshType(String refreshType) {
+        String publishTime = "";
+        if (null != refreshType) {
+            if (refreshType.equals("1")) {
+                publishTime = DateUtils.date2Str(new Date(), "yyyy-MM-dd");
+            } else if (refreshType.equals("2")) {
+                Date date = DateUtils.date2Sub(new Date(), Calendar.DATE, -3);
+                publishTime = DateUtils.date2Str(date, "yyyy-MM-dd");
+            } else if (refreshType.equals("3")) {
+                Date date = DateUtils.date2Sub(new Date(), Calendar.DATE, -7);
+                publishTime = DateUtils.date2Str(date, "yyyy-MM-dd");
+            } else {
+                Date date = DateUtils.date2Sub(new Date(), Calendar.MONTH, -1);
+                publishTime = DateUtils.date2Str(date, "yyyy-MM-dd");
+            }
+        }
+        return publishTime;
     }
 
     /**

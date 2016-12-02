@@ -104,7 +104,6 @@
             m.mobile,
             m.email,
             m.emailCheckCode,
-            m.password,
             date_format(m.registerTime, '%Y-%m-%d %H:%i:%s') registerTime,
             m.status,
             m.identify,

@@ -422,4 +422,42 @@
       from  t_i_job t
       where t.id=#{createID}
     </select>
+
+
+    <select id="findAllPositionForMobile" parameterType="java.util.Map" resultType="java.util.Map">
+        select t.id,t.createid,t.name,t.positionType,date_format(t.publishTime,'%Y-%m-%d') publishTime,
+        date_format(t.updateTime,'%Y-%m-%d') updateTime,mb.enterpriseName,t.salary,t.education,t.experience,t.welfare,
+        t.city,t.province,mb.enterpriseLogo
+        from t_i_job t
+        left join t_m_member mb on mb.id = t.createid
+        WHERE t.is_deleted = 0 and mb.status != 2
+        <if test="createID != null">
+            and t.createid = #{createID}
+        </if>
+        <if test="jobID != null">
+            and t.id != #{jobID}
+        </if>
+        <if test="name != null and name != ''">
+            and (t.name like concat('%',#{name},'%') or mb.enterpriseName like concat('%',#{name},'%'))
+        </if>
+        <if test="positionType != null and positionType != ''">
+            and t.positionType in (${positionType})
+        </if>
+        <if test="areaCode != null and areaCode != ''">
+            and (t.city = #{areaCode} or t.province = #{areaCode})
+        </if>
+        <if test="employeeNumberMin != null and employeeNumberMin != ''">
+            and mb.employeeNumber >= #{employeeNumberMin}
+        </if>
+        <if test="employeeNumberMax != null and employeeNumberMax != ''">
+            and mb.employeeNumber &lt;= #{employeeNumberMax}
+        </if>
+        <if test="enterpriseType != null and enterpriseType != ''">
+            and mb.enterpriseType = #{enterpriseType}
+        </if>
+        <if test="publishTime != null and publishTime != ''">
+            and date_format(#{publishTime},'%Y-%m-%d') &lt;= date_format(t.updateTime,'%Y-%m-%d')
+        </if>
+        order by t.updateTime desc,t.id desc
+    </select>
 </mapper>

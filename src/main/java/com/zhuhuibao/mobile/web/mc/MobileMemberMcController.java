@@ -34,7 +34,7 @@ import com.zhuhuibao.service.MobileMemberService;
  */
 @RestController
 @RequestMapping("/rest/m/member/mc")
-public class MobileMemberController {
+public class MobileMemberMcController {
 
     @Autowired
     private MobileMemberService memberService;

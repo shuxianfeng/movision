@@ -98,8 +98,7 @@ public class MobileTechSiteController extends BaseController {
         TechCooperation techCoo = techCooSV.selectTechCooperationById(String.valueOf(GoodsID));
         Integer techType = techCoo.getType();   //1:技术成果，2：技术需求
         if (techType == 1) {
-            getPrivilegeGoodsDetails(map, String.valueOf(GoodsID), ZhbConstant.ZhbGoodsType.CXXZJL);
-            map.put("tech_detail", paymentService.getChargeGoodsRecord(GoodsID, ZhbConstant.ZhbGoodsType.CXXZJL.toString()));
+            getPrivilegeGoodsDetails(map, String.valueOf(GoodsID), ZhbConstant.ZhbGoodsType.CKJSCG);
         } else {
             Map<String, Object> m = new HashMap<>();
             m.put("id", GoodsID);
