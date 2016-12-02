@@ -1,6 +1,7 @@
 package com.zhuhuibao.service;
 
 import com.taobao.api.ApiException;
+import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
@@ -16,9 +17,12 @@ import com.zhuhuibao.mybatis.expert.entity.Expert;
 import com.zhuhuibao.mybatis.expert.entity.ExpertSupport;
 import com.zhuhuibao.mybatis.expert.mapper.AchievementMapper;
 import com.zhuhuibao.mybatis.expert.mapper.DynamicMapper;
+import com.zhuhuibao.mybatis.expert.mapper.ExpertMapper;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
+import com.zhuhuibao.mybatis.memCenter.entity.Messages;
+import com.zhuhuibao.mybatis.memCenter.mapper.MessageMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.tech.mapper.PublishTCourseMapper;
 import com.zhuhuibao.mybatis.tech.service.PublishTCourseService;
@@ -79,6 +83,12 @@ public class MobileExpertPageService {
 
     @Autowired
     private MobileSysAdvertisingService advertisingService;
+
+    @Autowired
+    private ExpertMapper expertMapper;
+
+    @Autowired
+    private MessageMapper messageMapper;
 
 
     /**
@@ -242,18 +252,18 @@ public class MobileExpertPageService {
      * @param mobileCodeSessionTypeSupport
      * @return
      */
-    public boolean getTrainMobileCode(String mobile, String mobileCodeSessionTypeSupport, String imgCode, String sessImgCode) throws IOException, ApiException {
-
-        boolean b = false;
+    public Response getTrainMobileCode(String mobile, String mobileCodeSessionTypeSupport, String imgCode, String sessImgCode) throws IOException, ApiException {
+        Response response=new Response();
         if (imgCode.equalsIgnoreCase(sessImgCode)) {
             expertService.getTrainMobileCode(mobile, mobileCodeSessionTypeSupport);
-            b = true;
+            response.setCode(200);
+            response.setMessage("验证码输入正确！");
         } else {
-            return b;
+            response.setCode(400);
+            response.setMessage("验证码输入错误！");
         }
-        return b;
+        return response;
     }
-
 
     /**
      * 申请专家支持
@@ -319,7 +329,7 @@ public class MobileExpertPageService {
      *
      * @param message
      */
-    public void addMessage(Message message) {
+    public void addMessage(Messages message) {
         Long createid = ShiroUtil.getCreateID();
         if (createid != null) {
             message.setCreateid(String.valueOf(createid));
@@ -335,7 +345,11 @@ public class MobileExpertPageService {
             }
             String title = "来自" + name + "的留言";
             message.setTitle(title);
-            memberService.saveMessage(message);
+            message.setType("2");
+            message.setIsShow(true);
+            message.setSendDelete("0");
+            message.setReceiveDelete("0");
+            messageMapper.saveMessages(message);
         }
     }
 
@@ -383,7 +397,7 @@ public class MobileExpertPageService {
      * @return
      */
     public Expert findExpertById(String id) {
-        return expertService.queryExpertById(id);
+        return expertMapper.queryExpById(id);
     }
 
 

@@ -200,7 +200,6 @@ public class CooperationService {
 			return cooperation;
 		} catch (Exception e) {
 			log.error("CooperationService::queryCooperationInfoById::"+"witkeyId="+id,e);
-			//e.printStackTrace();
 			throw e;
 		}
 	}
@@ -230,6 +229,17 @@ public class CooperationService {
 			throw e;
 		}
 	}
+
+
+	public List<Map<String, String>> findAllCooperationByPager(Paging<Map<String, String>> pager, Map map) {
+		try {
+			return cooperationMapper.findAllCooperationByPager4Mobile(pager.getRowBounds(), map);
+		} catch (Exception e) {
+			log.error("CooperationService::findAllCooperationByPager",e);
+			throw e;
+		}
+	}
+
 
 	/**
 	 * 最热合作信息

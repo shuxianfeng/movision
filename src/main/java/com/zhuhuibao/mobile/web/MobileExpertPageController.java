@@ -13,7 +13,7 @@ import com.zhuhuibao.mybatis.expert.entity.Dynamic;
 import com.zhuhuibao.mybatis.expert.entity.Expert;
 import com.zhuhuibao.mybatis.expert.entity.ExpertSupport;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
-import com.zhuhuibao.mybatis.memCenter.entity.Message;
+import com.zhuhuibao.mybatis.memCenter.entity.Messages;
 import com.zhuhuibao.service.MobileExpertPageService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
@@ -77,7 +77,6 @@ public class MobileExpertPageController extends BaseController {
         try {
             // TODO: 2016/11/24 0024
             // banner位广告图片区域
-
             map.put("bannerList", mobileExpertPageService.findBannerList());
 
             // 筑慧专家库区域
@@ -267,6 +266,7 @@ public class MobileExpertPageController extends BaseController {
             mobileExpertPageService.checkMobileCode(code, mobile, ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT, expertSupport);
         } catch (Exception e) {
             log.error("add_expert_support error! ", e);
+            response.setMessage(e.getMessage());
         }
         return response;
     }
@@ -281,8 +281,7 @@ public class MobileExpertPageController extends BaseController {
             Subject currentUser = SecurityUtils.getSubject();
             Session sess = currentUser.getSession(true);
             String sessImgCode = (String) sess.getAttribute(ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
-            boolean b = mobileExpertPageService.getTrainMobileCode(mobile, ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT, imgCode, sessImgCode);
-            response.setData(b);
+            response = mobileExpertPageService.getTrainMobileCode(mobile, ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT, imgCode, sessImgCode);
         } catch (Exception e) {
             log.error("get_expert_support error! ", e);
         }
@@ -302,6 +301,7 @@ public class MobileExpertPageController extends BaseController {
             log.error("sel_support_img_code error! ", e);
         }
     }
+
 
 
     @ApiOperation(value = "触屏端-专家首页-协会动态列表", notes = "触屏端-专家首页-协会动态列表", response = Response.class)
@@ -340,7 +340,7 @@ public class MobileExpertPageController extends BaseController {
 
     @ApiOperation(value = "触屏端-专家首页-提交留言", notes = "触屏端-专家首页-提交留言", response = Response.class)
     @RequestMapping(value = "add_message", method = RequestMethod.POST)
-    public Response addMessage(@ModelAttribute Message message) throws Exception {
+    public Response addMessage(@ModelAttribute Messages message) throws Exception {
         Response response = new Response();
         Map<String, Object> resultMap = new HashMap<>();
         getPrivilegeGoodsDetails(resultMap, null, ZhbConstant.ZhbGoodsType.GZJLY);

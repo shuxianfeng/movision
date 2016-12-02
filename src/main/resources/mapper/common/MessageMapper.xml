@@ -86,4 +86,11 @@
     left join t_m_member m on m.id = msg.createid
 	where msg.id = #{id}
   </select>
+
+  <insert id="saveMessages" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Messages" useGeneratedKeys="true" keyProperty="id">
+    insert into t_sys_message (receiveid,createid, receiveName, title, content, isShow,
+    companyName, linkman, telephone, mobile,postDate,type)
+    values (#{receiveid},#{createid} ,#{receiveName}, #{title}, #{content}, #{isShow},
+    #{companyName}, #{linkman}, #{telephone}, #{mobile},now(),#{type})
+  </insert>
 </mapper>

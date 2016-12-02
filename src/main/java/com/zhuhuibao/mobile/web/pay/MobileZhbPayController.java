@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/rest/m/pay/site")
 @Api(value = "MobileZhbOrderPAY", description = "订单下单支付")
 public class MobileZhbPayController {
-
+    private static final Logger log = LoggerFactory.getLogger(MobileZhbPayController.class);
     @Autowired
     ZhpayService zhpayService;
 
@@ -102,4 +102,24 @@ public class MobileZhbPayController {
     	
     	mobileZhbPaySV.doPay(request, response, pay);
     }
+
+    @ApiOperation(value = "筑慧币业务消费支付", notes = "筑慧币业务消费支付", response = Response.class)
+    @RequestMapping(value = "upd_payforgoods", method = RequestMethod.POST)
+    public Response payForGoods(@ApiParam(value = "物品ID") @RequestParam Long goodsId,
+                                @ApiParam(value = "物品类型") @RequestParam String goodsType) throws Exception {
+        Response response = new Response();
+
+        int result = 0;
+        try {
+            result = zhbService.payForGoods(goodsId, goodsType);
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
+        }
+
+        response.setData(result);
+        response.setCode(1 == result ? 200 : 400);
+
+        return response;
+    }
+
 }
