@@ -309,6 +309,7 @@
     date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,
     date_format(t.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,
     t.experienceYear,t.isPublic,t.jobNature,t.post,
+    case when t.sex=1 then '男' when t.sex=0 then '女' end as sexName,t.sex,
     (DATE_FORMAT( current_date(),'%Y' )-t.birthYear) birthYear,
     (DATE_FORMAT( current_date(),'%Y' )-t.workYear) workYear
     from t_i_resume t

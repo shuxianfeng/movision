@@ -38,6 +38,9 @@ public class SalaryUtil {
             case "25000元/月以上":
                 s = "2.5万以上";
                 break;
+            case "面议":
+                s = "面议";
+                break;
             default:
                 break;
         }
