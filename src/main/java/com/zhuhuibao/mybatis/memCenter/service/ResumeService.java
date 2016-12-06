@@ -334,10 +334,34 @@ public class ResumeService {
 
         String post = (String) resume.get("post");
         String province = (String) resume.get("jobProvince");
+        String jobCityName = "";
         String city = (String) resume.get("jobCity");
+        if (null != city) {
+            String[] cityArr = city.split(",");
+            if (cityArr.length > 0) {
+                for (int i = 0; i < cityArr.length; i++) {
+                    if ("".equals(jobCityName)) {
+                        jobCityName = jobCityName + getJobCityName(cityArr[i]);
+                    } else {
+                        jobCityName = jobCityName + "," + getJobCityName(cityArr[i]);
+                    }
+                }
+            }
+        }
+        String jobProvinceName = "";
+        if (null != province) {
+            String[] provinceArr = province.split(",");
+            if (provinceArr.length > 0) {
+                for (int i = 0; i < provinceArr.length; i++) {
+                    if ("".equals(jobProvinceName)) {
+                        jobProvinceName = jobProvinceName + getProvinceName(provinceArr[i]);
+                    } else {
+                        jobProvinceName = jobProvinceName + "," + getProvinceName(provinceArr[i]);
+                    }
+                }
+            }
+        }
         String postName = getPostName(post);
-        String jobCityName = getJobCityName(city);
-        String jobProvinceName = getProvinceName(province);
         if (!jobProvinceName.equals("")) {
             jobCityName = jobProvinceName + "," + jobCityName;
         }
