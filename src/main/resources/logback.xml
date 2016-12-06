@@ -76,7 +76,7 @@
         <appender-ref ref="BUSI_FILE"/>
     </logger>
     <!-- 日志输出级别 DEBUG-->
-    <root level="INFO">
+    <root level="WARN">
          <appender-ref ref="STDOUT"/>
         <!--<appender-ref ref="FILE" />-->
     </root>
