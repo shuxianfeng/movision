@@ -393,7 +393,7 @@ public class MobileJobAndResumeService {
      * @return
      */
     public List<Map<String, Object>> getHotZpAdv() {
-        String[] arr = AdvertisingConstant.AdvertisingPosition.M_Rencai_Banner.value;
+        String[] arr = AdvertisingConstant.AdvertisingPosition.M_Rencai_Rmzp.value;
         List<SysAdvertising> advertisings = advService.findHottestPosition(arr[0], arr[1], arr[2]);
         List<Map<String, Object>> list = new ArrayList<>();
         for (SysAdvertising item : advertisings) {
