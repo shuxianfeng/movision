@@ -417,7 +417,7 @@ public class MobileJobAndResumeService {
         // 热门招聘
         result.put("rmzp_advs", getHotZpAdv());
         // 名企招聘（广告）
-        result.put("mqzp_advs", advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Rencai_Banner.value));
+        result.put("mqzp_advs", advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Rencai_Mqzp.value));
         // 最新招聘
         result.put("zxzp", job.searchNewPosition(4));
         // 最新求职
