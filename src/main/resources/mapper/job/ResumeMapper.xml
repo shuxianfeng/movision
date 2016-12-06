@@ -528,4 +528,7 @@
    where t.id=#{createID}
   </select>
 
+  <select id="updateCollById" parameterType="java.util.Map">
+  UPDATE t_i_resume_collect_record SET is_deleted = 1  WHERE resumeID=#{goodsId} AND companyID=#{companyId}
+  </select>
 </mapper>
