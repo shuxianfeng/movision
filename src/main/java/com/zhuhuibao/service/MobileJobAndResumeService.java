@@ -184,17 +184,7 @@ public class MobileJobAndResumeService {
         String publishTime = getRefreshType(refreshType);
         map.put("publishTime", publishTime);
         // 企业规模 1 50-100 2 100-500 3 500
-        if (null != employeeNumber) {
-            if (employeeNumber.equals("1")) {
-                map.put("employeeNumberMin", 50);
-                map.put("employeeNumberMax", 100);
-            } else if (employeeNumber.equals("2")) {
-                map.put("employeeNumberMin", 100);
-                map.put("employeeNumberMax", 500);
-            } else {
-                map.put("employeeNumberMin", 500);
-            }
-        }
+        map.put("employeeNumber", employeeNumber);
         return map;
     }
 
