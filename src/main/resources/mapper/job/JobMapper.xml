@@ -447,11 +447,8 @@
         <if test="areaCode != null and areaCode != ''">
             and (t.city = #{areaCode} or t.province = #{areaCode})
         </if>
-        <if test="employeeNumberMin != null and employeeNumberMin != ''">
-            and mb.employeeNumber >= #{employeeNumberMin}
-        </if>
-        <if test="employeeNumberMax != null and employeeNumberMax != ''">
-            and mb.employeeNumber &lt;= #{employeeNumberMax}
+        <if test="employeeNumber != null and employeeNumber != ''">
+            and mb.employeeNumber = #{employeeNumber}
         </if>
         <if test="enterpriseType != null and enterpriseType != ''">
             and mb.enterpriseType = #{enterpriseType}

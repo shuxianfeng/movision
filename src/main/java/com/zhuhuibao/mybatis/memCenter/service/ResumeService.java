@@ -257,6 +257,7 @@ public class ResumeService {
     public Paging<Map<String, Object>> findAllResume(Paging<Map<String, Object>> pager, Map<String, Object> map) {
         List<Map<String, Object>> list = new ArrayList<>();
         try {
+            log.info("传参map="+ map.toString());
             List<Map<String, Object>> resumeList = resumeMapper.findAllResume(pager.getRowBounds(), map);
             for (Map<String, Object> resume : resumeList) {
                 Map<String, Object> result = genResultMap(resume);

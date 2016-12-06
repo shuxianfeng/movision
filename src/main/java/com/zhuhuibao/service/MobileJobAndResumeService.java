@@ -184,17 +184,7 @@ public class MobileJobAndResumeService {
         String publishTime = getRefreshType(refreshType);
         map.put("publishTime", publishTime);
         // 企业规模 1 50-100 2 100-500 3 500
-        if (null != employeeNumber) {
-            if (employeeNumber.equals("1")) {
-                map.put("employeeNumberMin", 50);
-                map.put("employeeNumberMax", 100);
-            } else if (employeeNumber.equals("2")) {
-                map.put("employeeNumberMin", 100);
-                map.put("employeeNumberMax", 500);
-            } else {
-                map.put("employeeNumberMin", 500);
-            }
-        }
+        map.put("employeeNumber", employeeNumber);
         return map;
     }
 
@@ -403,7 +393,7 @@ public class MobileJobAndResumeService {
      * @return
      */
     public List<Map<String, Object>> getHotZpAdv() {
-        String[] arr = AdvertisingConstant.AdvertisingPosition.M_Rencai_Banner.value;
+        String[] arr = AdvertisingConstant.AdvertisingPosition.M_Rencai_Rmzp.value;
         List<SysAdvertising> advertisings = advService.findHottestPosition(arr[0], arr[1], arr[2]);
         List<Map<String, Object>> list = new ArrayList<>();
         for (SysAdvertising item : advertisings) {
@@ -427,7 +417,7 @@ public class MobileJobAndResumeService {
         // 热门招聘
         result.put("rmzp_advs", getHotZpAdv());
         // 名企招聘（广告）
-        result.put("mqzp_advs", advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Rencai_Banner.value));
+        result.put("mqzp_advs", advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Rencai_Mqzp.value));
         // 最新招聘
         result.put("zxzp", job.searchNewPosition(4));
         // 最新求职

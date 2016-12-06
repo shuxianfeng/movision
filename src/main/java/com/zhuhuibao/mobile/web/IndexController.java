@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.zhuhuibao.mybatis.news.form.NewsForm;
+import com.zhuhuibao.service.MobileExpertPageService;
 import com.zhuhuibao.service.NewsService;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class IndexController {
     @Autowired
     private NewsService newsService;
 
+    @Autowired
+    private MobileExpertPageService mobileExpertPageService;
+
     @ApiOperation(value = "触屏端首页", notes = "触屏端工程商首页")
     @RequestMapping(value = "/site", method = RequestMethod.GET)
     public Response index() {
@@ -47,12 +51,16 @@ public class IndexController {
         Paging<NewsForm> newsPager = new Paging<>(1, 3);
         List<NewsForm> newsList = newsService.mobileSelNewsList("1", null, null, newsPager);
 
+        //协会动态区域
+        List<Map<String, String>> dynamicList = mobileExpertPageService.findNewDynamicList(3);
+
         Map<String, List> advMap = new HashMap<>();
         advMap.put("banner", banner);
         advMap.put("headline", headline);
         advMap.put("marketing", marketing);
         advMap.put("invitation", invitation);
         advMap.put("newsList", newsList);
+        advMap.put("dynamicList", dynamicList);
         return new Response(advMap);
     }
 }
