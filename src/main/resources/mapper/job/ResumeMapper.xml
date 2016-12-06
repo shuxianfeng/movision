@@ -305,7 +305,7 @@
 
   <select id="findAllResume4Mobile" parameterType="java.util.Map" resultType="java.util.Map">
     select t.id,t.createid,t.title,concat(substring(t.realName,1,1),'**') realName,
-    t.hopeSalary,m.headShot as photo,t.education,
+    t.hopeSalary,m.headShot as photo,t.education,t.jobCity,t.jobProvince,
     date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,
     date_format(t.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,
     t.experienceYear,t.isPublic,t.jobNature,t.post,
@@ -328,10 +328,10 @@
       <if test="expYearBefore != null and expYearBefore != '' and expYearBehind != null and expYearBehind != ''">
         and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore} and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &lt;= #{expYearBehind}
       </if>
-      <if test="expYearBefore != null and expYearBefore != '' and expYearBehind == null and expYearBehind = ''">
+      <if test="expYearBefore != null and expYearBefore != '' and (expYearBehind == null or expYearBehind = '')">
         and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore}
       </if>
-      <if test="expYearBefore == null and expYearBefore = ''  and expYearBehind != null and expYearBehind != ''">
+      <if test="(expYearBefore == null or expYearBefore = '')  and expYearBehind != null and expYearBehind != ''">
         and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &lt;= #{expYearBehind}
       </if>
       <if test="education != null and education != ''">
