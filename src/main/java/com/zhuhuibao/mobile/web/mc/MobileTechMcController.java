@@ -4,14 +4,18 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
 import com.zhuhuibao.mybatis.tech.service.TechDataService;
 import com.zhuhuibao.service.MobileTechService;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,6 +42,8 @@ public class MobileTechMcController {
     @Autowired
     MemberService memberService;
 
+    private final static Logger log = LoggerFactory.getLogger(MobileTechMcController.class);
+
 	@LoginAccess
     @RequestMapping(value = "sel_tech_data", method = RequestMethod.GET)
     @ApiOperation(value = "搜索技术资料", notes = "搜索技术资料", response = Response.class)
@@ -61,14 +67,20 @@ public class MobileTechMcController {
 	
 	@RequestMapping(value = "del_tech_data", method = RequestMethod.POST)
     @ApiOperation(value = "删除技术资料(行业解决方案，技术文档，培训资料)", notes = "删除技术资料(行业解决方案，技术文档，培训资料)", response = Response.class)
-    public Response deleteTechData(@ApiParam(value = "技术资料ID") @RequestParam() String techDataId) {
+    public Response deleteTechData(@ApiParam(value = "技术资料ID字符串,以逗号分隔") @RequestParam() String techDataIds) {
 		
-        Response response = new Response();
         Map<String, Object> condition = new HashMap<>();
-        condition.put("id", techDataId);
         condition.put("status", TechConstant.TechCooperationnStatus.DELETE.toString());
-        int result = techDataService.deleteTechData(condition);
-        return response;
+        String[] arr = techDataIds.split(",");
+        for (String techDataId: arr){
+            condition.put("id", techDataId);
+            int result = techDataService.deleteTechData(condition);
+            if(result != 1){
+                log.error("id=["+techDataId+"]的技术资料删除失败");
+                throw new BusinessException(MsgCodeConstant.DELETE_TECH_DATA_FAIL,"id=["+techDataId+"]的技术资料删除失败");
+            }
+        }
+        return new Response();
     }
 	
 	@LoginAccess

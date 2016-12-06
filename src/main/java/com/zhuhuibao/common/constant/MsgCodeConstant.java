@@ -386,7 +386,10 @@ public interface MsgCodeConstant {
 	int TECH_COOP_IS_EMPTY= 3012;
 
 	/**
-	 * 询价中，向厂商询价和向代理商询价，两者都不存在
+	 * 删除技术资料失败
 	 */
-	int ASK_PRICE_SUPPLIERS_AND_MANUFACTURER_NOT_EXIST = 3013;
+	int DELETE_TECH_DATA_FAIL = 3013;
+
+
+
 }
