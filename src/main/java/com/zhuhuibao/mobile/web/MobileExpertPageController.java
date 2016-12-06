@@ -75,7 +75,6 @@ public class MobileExpertPageController extends BaseController {
         Map<String, List> map = new HashMap<>();
         int count=4;
         try {
-            // TODO: 2016/11/24 0024
             // banner位广告图片区域
             map.put("bannerList", mobileExpertPageService.findBannerList());
 
@@ -96,7 +95,7 @@ public class MobileExpertPageController extends BaseController {
             map.put("achievementList", achievementList);
 
             //协会动态区域
-            List<Map<String, String>> dynamicList = mobileExpertPageService.findNewDynamicList(count);
+            List<Map<String, String>> dynamicList = mobileExpertPageService.findNewDynamicList(3);
             map.put("dynamicList", dynamicList);
 
         } catch (Exception e) {

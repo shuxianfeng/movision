@@ -49,11 +49,9 @@ import java.util.Map;
  * @date 2016年11月22日
  */
 
-
 @Service
 @Transactional
 public class MobileExpertPageService {
-
 
     @Autowired
     ExpertService expertService;
@@ -91,7 +89,6 @@ public class MobileExpertPageService {
     @Autowired
     private MessageMapper messageMapper;
 
-
     /**
      * 最新入驻的专家
      *
@@ -115,7 +112,6 @@ public class MobileExpertPageService {
         return list;
     }
 
-
     /**
      * 首页专家培训
      *
@@ -126,7 +122,6 @@ public class MobileExpertPageService {
         return courseList;
     }
 
-
     /**
      * 最新技术成果
      *
@@ -136,23 +131,24 @@ public class MobileExpertPageService {
         return achievementMapper.findAchievementByCount(count);
     }
 
-
     /**
-     * 最新技术成果
-     *
-     * @return 最新技术成果信息
+     * 协会动态列表
+     * 
+     * @param count
+     * @return
      */
     public List<Map<String, String>> findNewDynamicList(int count) {
-        count = 3;
+
         return expertService.findDynamicListByCount(count);
     }
-
 
     /**
      * 专家列表
      *
-     * @param pager 分页
-     * @param map   查询参数
+     * @param pager
+     *            分页
+     * @param map
+     *            查询参数
      * @return
      */
     public List<Map<String, Object>> findAllExpert(Paging<Map<String, Object>> pager, Map<String, Object> map) {
@@ -160,26 +156,25 @@ public class MobileExpertPageService {
         for (Map<String, Object> expert : expertList) {
             String provinceCode = String.valueOf(expert.get("province"));
             if (!StringUtils.isEmpty(provinceCode)) {
-                ConvertUtil.execute(expert, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
+                ConvertUtil.execute(expert, "province", "dictionaryService", "findProvinceByCode", new Object[] { provinceCode });
             } else {
                 expert.put("provinceName", "");
             }
             String cityCode = String.valueOf(expert.get("city"));
             if (!StringUtils.isEmpty(cityCode)) {
-                ConvertUtil.execute(expert, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
+                ConvertUtil.execute(expert, "city", "dictionaryService", "findCityByCode", new Object[] { cityCode });
             } else {
                 expert.put("cityName", "");
             }
             String areaCode = String.valueOf(expert.get("area"));
             if (!StringUtils.isEmpty(areaCode)) {
-                ConvertUtil.execute(expert, "area", "dictionaryService", "findAreaByCode", new Object[]{areaCode});
+                ConvertUtil.execute(expert, "area", "dictionaryService", "findAreaByCode", new Object[] { areaCode });
             } else {
                 expert.put("areaName", "");
             }
         }
         return expertList;
     }
-
 
     /**
      * 培训列表
@@ -189,9 +184,8 @@ public class MobileExpertPageService {
      * @return
      */
     public List<Map<String, String>> findAllPublishCoursePager(Paging<Map<String, String>> pager, Map<String, Object> condition) {
-        return  publishTCourseMapper.findAllPublishsCoursePager(pager.getRowBounds(), condition);
+        return publishTCourseMapper.findAllPublishsCoursePager(pager.getRowBounds(), condition);
     }
-
 
     /**
      * 培训详情页
@@ -203,12 +197,13 @@ public class MobileExpertPageService {
         return ptCourseService.previewTrainCourseDetail(condition);
     }
 
-
     /**
      * 技术成果
      *
-     * @param pager 分页
-     * @param map   技术成果
+     * @param pager
+     *            分页
+     * @param map
+     *            技术成果
      * @return
      */
     public List<Achievement> findAllAchievementList(Paging<Achievement> pager, Map<String, Object> map) {
@@ -229,7 +224,6 @@ public class MobileExpertPageService {
         return list;
     }
 
-
     /**
      * 根据createid查询专家是否存在
      *
@@ -245,7 +239,6 @@ public class MobileExpertPageService {
         }
     }
 
-
     /**
      * 申请专家支持
      *
@@ -254,7 +247,7 @@ public class MobileExpertPageService {
      * @return
      */
     public Response getTrainMobileCode(String mobile, String mobileCodeSessionTypeSupport, String imgCode, String sessImgCode) throws IOException, ApiException {
-        Response response=new Response();
+        Response response = new Response();
         if (imgCode.equalsIgnoreCase(sessImgCode)) {
             expertService.getTrainMobileCode(mobile, mobileCodeSessionTypeSupport);
             response.setCode(200);
@@ -306,7 +299,6 @@ public class MobileExpertPageService {
         return dynamicList;
     }
 
-
     /**
      * 协会动态详情
      *
@@ -324,24 +316,23 @@ public class MobileExpertPageService {
         return dynamic;
     }
 
-
     /**
      * 给专家留言
      *
      * @param message
      */
-    public void addMessage(Messages message) throws Exception{
+    public void addMessage(Messages message) throws Exception {
         Long createid = ShiroUtil.getCreateID();
         if (createid != null) {
             boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.GZJLY.toString());
-            if(bool) {
+            if (bool) {
                 message.setCreateid(String.valueOf(createid));
                 Member member = memberService.findMemById(String.valueOf(createid));
                 if (null == member) {
                     throw new BusinessException(MsgCodeConstant.NOT_EXIST_MEMBER, "不存在该会员信息");
                 }
                 String identify = member.getIdentify();
-                //个人取昵称，企业取企业名
+                // 个人取昵称，企业取企业名
                 String name = identify.equals("2") ? member.getNickname() : member.getEnterpriseName();
                 if (org.apache.commons.lang3.StringUtils.isEmpty(name)) {
                     name = "匿名用户";
@@ -353,8 +344,8 @@ public class MobileExpertPageService {
                 message.setSendDelete("0");
                 message.setReceiveDelete("0");
                 messageMapper.saveMessages(message);
-                zhbService.payForGoods(Long.parseLong(message.getId()),ZhbPaymentConstant.goodsType.GZJLY.toString());
-            }else{//支付失败稍后重试，联系客服
+                zhbService.payForGoods(Long.parseLong(message.getId()), ZhbPaymentConstant.goodsType.GZJLY.toString());
+            } else {// 支付失败稍后重试，联系客服
                 throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
             }
         }
@@ -372,7 +363,6 @@ public class MobileExpertPageService {
     public List<Map<String, String>> findByType(String expertSystemType) {
         return constantService.findByType(expertSystemType);
     }
-
 
     /**
      * 查看详情是否查看过
@@ -396,7 +386,6 @@ public class MobileExpertPageService {
         return b;
     }
 
-
     /**
      * 留言页面专家信息
      *
@@ -406,7 +395,6 @@ public class MobileExpertPageService {
     public Expert findExpertById(String id) {
         return expertMapper.queryExpById(id);
     }
-
 
     /**
      * @param createId
