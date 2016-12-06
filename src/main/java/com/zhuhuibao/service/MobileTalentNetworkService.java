@@ -275,12 +275,18 @@ public class MobileTalentNetworkService {
      */
     public void resumeDownload(Map<String, String> recordMap) throws Exception {
         Long createId = ShiroUtil.getCreateID();
+        Map<String,Object> con=new HashMap<>();
         if (null != createId) {
             boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.CXXZJL.toString());
             recordMap.put("companyID", Long.toString(createId));
+            con.put("companyId", Long.toString(createId));
+            con.put("goodsId",recordMap.get("resumeID"));
             if (bool) {
                 zhbService.payForGoods(Long.parseLong(recordMap.get("resumeID")), ZhbPaymentConstant.goodsType.CXXZJL.toString());
                 resumeMapper.insertDownRecord(recordMap);
+                if (resumeMapper.isDownOrColl(con).get("isCollect").equals(0)){
+                    resumeMapper.updateCollById(con);
+                }
             } else {
                 //支付失败稍后重试，联系客服
                 throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
