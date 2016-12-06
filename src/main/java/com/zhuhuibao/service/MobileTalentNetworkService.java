@@ -20,6 +20,7 @@ import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
+import com.zhuhuibao.utils.SalaryUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,7 +80,9 @@ public class MobileTalentNetworkService {
      * @return
      */
     public Map<String, Object> getPositionByPositionId(Map<String, Object> map) {
-        return jobPositionService.queryPositionInfoByID(map);
+        Map<String,Object> m=jobPositionService.queryPositionInfoByID(map);
+        m.put("salaryName", SalaryUtil.convertSalary((String)m.get("salaryName")));
+        return m;
     }
 
 
@@ -107,7 +110,7 @@ public class MobileTalentNetworkService {
             tmpMap.put("id", map.get("id"));
             tmpMap.put("enterpriseName", map.get("enterpriseName"));
             tmpMap.put(Constants.position, map.get("name"));
-            tmpMap.put(Constants.salary, map.get("salaryName"));
+            tmpMap.put(Constants.salary, SalaryUtil.convertSalary((String)map.get("salaryName")));
             tmpMap.put(Constants.area, map.get("workArea"));
             tmpMap.put("province", map.get("province"));
             tmpMap.put("city", map.get("city"));
