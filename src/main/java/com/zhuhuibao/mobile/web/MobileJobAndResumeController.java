@@ -240,5 +240,20 @@ public class MobileJobAndResumeController extends BaseController {
     }
 
 
+    @ApiOperation(value = "简历的下载", notes = "简历的下载", response = Response.class)
+    @RequestMapping(value = "resume_download", method = RequestMethod.GET)
+    public Response resumeDownload(@ApiParam(value = "简历的id") @RequestParam(required = true) String id) {
+        Response response=new Response();
+        try {
+            Map<String, String> recordMap = new HashMap<>();
+            recordMap.put("resumeID", id);
+            mobileTalentNetworkService.resumeDownload(recordMap);
+        } catch (Exception e) {
+            log.error("resume_download error! ", e);
+            response.setMessage(e.getMessage());
+        }
+        return response;
+    }
+
 
 }

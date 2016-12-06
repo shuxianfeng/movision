@@ -341,8 +341,14 @@ public class MobileExpertPageController extends BaseController {
     @ApiOperation(value = "触屏端-专家首页-提交留言", notes = "触屏端-专家首页-提交留言", response = Response.class)
     @RequestMapping(value = "add_message", method = RequestMethod.POST)
     public Response addMessage(@ModelAttribute Messages message) throws Exception {
-        mobileExpertPageService.addMessage(message);
-        return new Response();
+        Response response = new Response();
+        try {
+            mobileExpertPageService.addMessage(message);
+        }catch (Exception e){
+            log.error("add_message error! ", e);
+            response.setMessage(e.getMessage());
+        }
+        return response;
     }
 
     @ApiOperation(value = "触屏端-专家首页-专家留言页面", notes = "触屏端-专家首页-给专家留言页面", response = Response.class)
