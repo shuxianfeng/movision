@@ -4,8 +4,10 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.MemberDetails;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
@@ -16,6 +18,7 @@ import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,6 +58,9 @@ public class MobileTalentNetworkService {
 
     @Autowired
     ResumeMapper resumeMapper;
+
+    @Autowired
+    ZhbService zhbService;
 
     /**
      * 公司详情
@@ -139,7 +145,6 @@ public class MobileTalentNetworkService {
             } else {
                 response.setCode(400);
             }
-
         } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
@@ -180,7 +185,7 @@ public class MobileTalentNetworkService {
      */
     public boolean queryResumeByCreateId(String jobID, Long recID, String messageText) {
         Long createID = ShiroUtil.getCreateID();
-        boolean b=false;
+        boolean b = false;
         if (createID != null) {
             List<Resume> resumeList = resumeMapper.queryResumeByCreateId(createID);
             if (!resumeList.isEmpty()) {
@@ -202,9 +207,9 @@ public class MobileTalentNetworkService {
                         jrrService.deleteJobRelResume(map);
                         jrrService.insert(Long.valueOf(jobID), resumeID, createID);
                     }
-                    b=true;
-                }else {
-                    b=false;
+                    b = true;
+                } else {
+                    b = false;
                 }
             } else {
                 return b;
@@ -224,7 +229,7 @@ public class MobileTalentNetworkService {
      */
     public boolean isExistApplyPosition(Map<String, Object> map) {
         Long createID = ShiroUtil.getCreateID();
-        boolean b ;
+        boolean b;
         List<Resume> resumeList = resumeMapper.queryResumeByCreateId(createID);
         if ((null != createID) && (!resumeList.isEmpty())) {
             String resumeID = Long.toString(resumeMapper.queryResumeIdById(createID));
@@ -248,17 +253,47 @@ public class MobileTalentNetworkService {
      * @return
      */
     public Long querycompanyByJobId(String jobID) {
-        //Long l = jobMapper.querycompanyByJobId(Long.parseLong(jobID));
         return jobMapper.querycompanyByJobId(Long.parseLong(jobID));
     }
 
     /**
-     *查找职位的标题
+     * 查找职位的标题
      *
      * @param jobID
      * @return
      */
     public String queryJobNameByJobId(String jobID) {
         return jobMapper.queryJobNameByJobId(Long.parseLong(jobID));
+    }
+
+
+    /**
+     * 简历的下载
+     *
+     * @param recordMap
+     * @return
+     */
+    public void resumeDownload(Map<String, String> recordMap) throws Exception {
+        Long createId = ShiroUtil.getCreateID();
+        Map<String,Object> con=new HashMap<>();
+        if (null != createId) {
+            boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.CXXZJL.toString());
+            recordMap.put("companyID", Long.toString(createId));
+            con.put("companyId", Long.toString(createId));
+            con.put("goodsId",recordMap.get("resumeID"));
+            if (bool) {
+                zhbService.payForGoods(Long.parseLong(recordMap.get("resumeID")), ZhbPaymentConstant.goodsType.CXXZJL.toString());
+                resumeMapper.insertDownRecord(recordMap);
+                if (resumeMapper.isDownOrColl(con).get("isCollect").equals(0)){
+                    resumeMapper.updateCollById(con);
+                }
+            } else {
+                //支付失败稍后重试，联系客服
+                throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+            }
+        }else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+
     }
 }

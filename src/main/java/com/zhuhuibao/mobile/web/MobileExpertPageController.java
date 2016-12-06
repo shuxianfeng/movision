@@ -75,7 +75,6 @@ public class MobileExpertPageController extends BaseController {
         Map<String, List> map = new HashMap<>();
         int count=4;
         try {
-            // TODO: 2016/11/24 0024
             // banner位广告图片区域
             map.put("bannerList", mobileExpertPageService.findBannerList());
 
@@ -96,7 +95,7 @@ public class MobileExpertPageController extends BaseController {
             map.put("achievementList", achievementList);
 
             //协会动态区域
-            List<Map<String, String>> dynamicList = mobileExpertPageService.findNewDynamicList(count);
+            List<Map<String, String>> dynamicList = mobileExpertPageService.findNewDynamicList(3);
             map.put("dynamicList", dynamicList);
 
         } catch (Exception e) {
@@ -341,8 +340,14 @@ public class MobileExpertPageController extends BaseController {
     @ApiOperation(value = "触屏端-专家首页-提交留言", notes = "触屏端-专家首页-提交留言", response = Response.class)
     @RequestMapping(value = "add_message", method = RequestMethod.POST)
     public Response addMessage(@ModelAttribute Messages message) throws Exception {
-        mobileExpertPageService.addMessage(message);
-        return new Response();
+        Response response = new Response();
+        try {
+            mobileExpertPageService.addMessage(message);
+        }catch (Exception e){
+            log.error("add_message error! ", e);
+            response.setMessage(e.getMessage());
+        }
+        return response;
     }
 
     @ApiOperation(value = "触屏端-专家首页-专家留言页面", notes = "触屏端-专家首页-给专家留言页面", response = Response.class)

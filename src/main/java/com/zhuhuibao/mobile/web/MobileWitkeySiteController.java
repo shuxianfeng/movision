@@ -30,8 +30,6 @@ import java.util.Map;
 @RequestMapping("/rest/m/witkey/site/")
 public class MobileWitkeySiteController extends BaseController {
 
-    private static final Logger log = LoggerFactory.getLogger(MobileWitkeySiteController.class);
-
     @Autowired
     ConstantService service;
     @Autowired

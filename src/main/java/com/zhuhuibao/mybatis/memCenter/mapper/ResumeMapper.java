@@ -77,4 +77,7 @@ public interface ResumeMapper {
     Map<String,Object> previewMyResume(Map<String,Object> map);
 
     Long queryResumeIdById(Long createID);
+
+    //删除收藏简历
+    void updateCollById(Map<String, Object> con);
 }

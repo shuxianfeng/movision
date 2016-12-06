@@ -10,6 +10,7 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.fsearch.utils.StringUtil;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
+import com.zhuhuibao.mybatis.expert.mapper.AchievementMapper;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;

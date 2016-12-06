@@ -42,6 +42,7 @@ public class SalaryUtil {
                 s = "面议";
                 break;
             default:
+                s = "面议";
                 break;
         }
         return s;
