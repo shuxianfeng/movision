@@ -182,6 +182,12 @@ public class JobPositionService {
             for (Map<String, Object> job : jobList) {
                 handleSalary(job);
                 handleCity(job);
+                if (job.get("education") != null) {
+                    job = ConvertUtil.execute(job, "education", "constantService", "findByTypeCode", new Object[] { "2", String.valueOf(job.get("education")) });
+                    job.put("educationName", job.get("educationName"));
+                } else {
+                    job.put("educationName", "");
+                }
             }
         } catch (Exception e) {
             log.error("查询异常>>>", e);

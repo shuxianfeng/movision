@@ -118,7 +118,7 @@
     </update>
     <select id="searchNewPosition" resultType="java.util.Map">
         select j.id,date_format(j.publishTime,'%Y-%m-%d') publishTime,j.name, j.province,j.city,j.salary,m.enterpriseName,j.createid,j.positionType,
-        date_format(j.updateTime,'%Y-%m-%d') updateTime,
+        date_format(j.updateTime,'%Y-%m-%d') updateTime,j.education,
         (select group_concat(name) from t_dictionary_constant where find_in_set(code,j.welfare) and type=5 ) as welfare
         from t_i_job j
         left join t_m_member m on m.id = j.createid
