@@ -273,13 +273,10 @@
         <!-- and (#{jobCity} in(t.jobCity) or (select provincecode from t_dictionary_city where code = #{jobCity}) in(t.jobProvince)) -->
 		and (t.jobCity = #{jobCity} or t.jobProvince =  #{jobCity})
       </if>
-      <if test="expYearBefore != null and expYearBefore != '' and expYearBehind != null and expYearBehind != ''">
-        and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore} and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &lt;= #{expYearBehind}
-      </if>
-      <if test="expYearBefore != null and expYearBefore != '' and expYearBehind == null and expYearBehind = ''">
+      <if test="expYearBefore != null and expYearBefore != ''">
         and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore}
       </if>
-      <if test="expYearBefore == null and expYearBefore = ''  and expYearBehind != null and expYearBehind != ''">
+      <if test="expYearBehind != null and expYearBehind != ''">
         and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &lt;= #{expYearBehind}
       </if>
       <if test="education != null and education != ''">
@@ -288,12 +285,12 @@
       <if test="isPublic != null and isPublic != ''">
         and t.isPublic = #{isPublic}
       </if>
-      <if test="positionList != null">
+      <if test="positionList != null and positionList != ''">
         <foreach collection="positionList" item="item" index="index" open="and (" separator="or" close=")" >
           find_in_set(#{item},t.post)
         </foreach>
       </if>
-      <if test="company_id != null">
+      <if test="company_id != null and company_id != ''">
         and t.createid not in (select t.create_id from t_i_forbid_key_words t where t.company_id = #{company_id} and t.is_deleted = 0)
       </if>
       <if test="publishTime != null and publishTime != ''">
@@ -325,13 +322,10 @@
         <!-- and (#{jobCity} in(t.jobCity) or (select provincecode from t_dictionary_city where code = #{jobCity}) in(t.jobProvince)) -->
         and t.jobCity = #{jobCity}
       </if>
-      <if test="expYearBefore != null and expYearBefore != '' and expYearBehind != null and expYearBehind != ''">
-        and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore} and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &lt;= #{expYearBehind}
-      </if>
-      <if test="expYearBefore != null and expYearBefore != '' and (expYearBehind == null or expYearBehind = '')">
+      <if test="expYearBefore != null and expYearBefore != ''">
         and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore}
       </if>
-      <if test="(expYearBefore == null or expYearBefore = '')  and expYearBehind != null and expYearBehind != ''">
+      <if test="expYearBehind != null and expYearBehind != ''">
         and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &lt;= #{expYearBehind}
       </if>
       <if test="education != null and education != ''">

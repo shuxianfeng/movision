@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zhuhuibao.common.constant.ZhbConstant;
+import com.zhuhuibao.mobile.web.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +31,7 @@ import com.zhuhuibao.utils.pagination.util.StringUtils;
 
 @RestController
 @RequestMapping("/rest/m/witkey/mc/")	
-public class MobileWitkeyMcController {
+public class MobileWitkeyMcController extends BaseController{
 	
 	@Autowired
 	private CooperationService cooperationService;
@@ -125,5 +127,18 @@ public class MobileWitkeyMcController {
         
 		return mWitkeySV.sel_connection();
     }
+
+	@ApiOperation(value = "获取发布资格", notes = "获取发布资格", response = Response.class)
+	@RequestMapping(value = "get_pub_quality", method = RequestMethod.GET)
+	public Response getPubQuality(@ApiParam(value = "发布类型，2:服务，3：资质合作") @RequestParam String type) throws Exception {
+		Map map = new HashMap();
+		if(type.equals(2)){
+			getPrivilegeGoodsDetails(map,null, ZhbConstant.ZhbGoodsType.FBWKFW );
+		}else{
+			getPrivilegeGoodsDetails(map,null, ZhbConstant.ZhbGoodsType.FBZZHZ );
+		}
+		return new Response(map);
+	}
+
 
 }
