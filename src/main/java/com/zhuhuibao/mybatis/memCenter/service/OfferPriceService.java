@@ -68,8 +68,8 @@ public class OfferPriceService {
         try {
             if (price.getBillurl() != null && !price.getBillurl().equals("")) {
                 String fileUrl = price.getBillurl();
-                File file = new File(fileUrl);
-                if (fileUtil.isExistFile(fileUrl, "doc", "price")) {
+
+                if (fileUtil.isExistFile(fileUrl, "img", "price")) {
                     boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.BJFB.toString());
                     if (bool) {
                         priceMapper.insertSelective(price);
