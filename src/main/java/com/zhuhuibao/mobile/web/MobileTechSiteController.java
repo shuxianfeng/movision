@@ -134,8 +134,8 @@ public class MobileTechSiteController extends BaseController {
         try {
             mTechSV.addCourse(techCourse);
         } catch (Exception e) {
-            log.error("add_expert_support error! ", e);
-            response.setData(400);
+            log.error("add_course error! ", e);
+            response.setCode(400);
             response.setMessage(e.getMessage());
         }
         return response;

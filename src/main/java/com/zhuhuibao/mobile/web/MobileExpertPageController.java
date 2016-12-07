@@ -265,6 +265,7 @@ public class MobileExpertPageController extends BaseController {
             mobileExpertPageService.checkMobileCode(code, mobile, ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT, expertSupport);
         } catch (Exception e) {
             log.error("add_expert_support error! ", e);
+            response.setCode(400);
             response.setMessage(e.getMessage());
         }
         return response;
