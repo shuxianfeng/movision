@@ -7,7 +7,6 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.AskPriceBean;
 import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.constants.entity.Constant;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferAskPrice;
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,24 +61,15 @@ public class OfferPriceService {
      * @param price
      * @return
      */
-    public Response addOfferPrice(OfferPrice price) {
+    public Response addOfferPrice(OfferPrice price, String mode) {
         Response response = new Response();
         try {
             if (price.getBillurl() != null && !price.getBillurl().equals("")) {
                 String fileUrl = price.getBillurl();
-
-                if (fileUtil.isExistFile(fileUrl, "img", "price")) {
-                    boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.BJFB.toString());
-                    if (bool) {
-                        priceMapper.insertSelective(price);
-                        zhbService.payForGoods(price.getId(), ZhbPaymentConstant.goodsType.BJFB.toString());
-                    } else {// 支付失败稍后重试，联系客服
-                        throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
-                    }
-                } else {
-                    response.setCode(400);
-                    response.setMessage("文件不存在");
-                    response.setMsgCode(MsgCodeConstant.file_not_exist);
+                if(mode.equals("PC")){
+                    handleDocOrImg(price, response, fileUrl, "doc", "文件不存在");
+                }else{
+                    handleDocOrImg(price, response, fileUrl, "img", "图片不存在");
                 }
             } else if (price.getContent() != null && !price.getContent().equals("")) {
                 priceMapper.insertSelective(price);
@@ -90,6 +79,22 @@ public class OfferPriceService {
             throw new BusinessException(MsgCodeConstant.mcode_common_failure, (MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
         }
         return response;
+    }
+
+    private void handleDocOrImg(OfferPrice price, Response response, String fileUrl, String doc, String 文件不存在) throws Exception {
+        if (fileUtil.isExistFile(fileUrl, doc, "price")) {
+            boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.BJFB.toString());
+            if (bool) {
+                priceMapper.insertSelective(price);
+                zhbService.payForGoods(price.getId(), ZhbPaymentConstant.goodsType.BJFB.toString());
+            } else {// 支付失败稍后重试，联系客服
+                throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+            }
+        } else {
+            response.setCode(400);
+            response.setMessage(文件不存在);
+            response.setMsgCode(MsgCodeConstant.file_not_exist);
+        }
     }
 
     /**

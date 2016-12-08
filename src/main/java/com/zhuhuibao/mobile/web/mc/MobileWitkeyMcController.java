@@ -130,9 +130,9 @@ public class MobileWitkeyMcController extends BaseController{
 
 	@ApiOperation(value = "获取发布资格", notes = "获取发布资格", response = Response.class)
 	@RequestMapping(value = "get_pub_quality", method = RequestMethod.GET)
-	public Response getPubQuality(@ApiParam(value = "发布类型，2:服务，3：资质合作") @RequestParam String type) throws Exception {
+	public Response getPubQuality(@ApiParam(value = "发布类型，2:服务，3：资质合作") @RequestParam Integer type) throws Exception {
 		Map map = new HashMap();
-		if(type.equals(2)){
+		if(type == 2){
 			getPrivilegeGoodsDetails(map,null, ZhbConstant.ZhbGoodsType.FBWKFW );
 		}else{
 			getPrivilegeGoodsDetails(map,null, ZhbConstant.ZhbGoodsType.FBZZHZ );

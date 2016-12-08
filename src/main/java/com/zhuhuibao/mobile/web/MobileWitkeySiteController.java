@@ -62,7 +62,8 @@ public class MobileWitkeySiteController extends BaseController {
 
     @ApiOperation(value = "威客信息詳情", notes = "威客信息詳情", response = Cooperation.class)
     @RequestMapping(value = "getCoopDetail", method = RequestMethod.GET)
-    public Response cooperationInfo(@ApiParam(value = "威客id") @RequestParam Long id, @ApiParam(value = "威客大类，1：任务；2：服务；3：资质合作") @RequestParam String type) throws Exception {
+    public Response cooperationInfo(@ApiParam(value = "威客id") @RequestParam Long id,
+                                    @ApiParam(value = "威客大类，1：任务；2：服务；3：资质合作") @RequestParam String type) throws Exception {
         Map map = mWitkeySV.getWitkeyDetail(id, type);
         getPrivilegeGoodsDetails(map, null, ZhbConstant.ZhbGoodsType.CKWKRW);
         if (null != ShiroUtil.getCreateID() && type.equals("1")) {
@@ -74,7 +75,6 @@ public class MobileWitkeySiteController extends BaseController {
             int viewNumber = goodsService.checkIsViewGoods(con);
             if (viewNumber == 0) {
                 map.put("payment", ZhbPaymentConstant.PAY_ZHB_NON_PURCHASE);
-
             } else {
                 map.put("payment", ZhbPaymentConstant.PAY_ZHB_PURCHASE);
             }
