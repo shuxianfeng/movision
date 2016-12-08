@@ -154,7 +154,7 @@ public class MobileAskAndOfferPriceController extends BaseController {
         if (session != null) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
             price.setCreateid(new Long(principal.getId()));
-          //  response = offerService.addOfferPrice(price);
+            response = offerService.addOfferPrice(price);
         }
         return response;
     }
