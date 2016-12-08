@@ -7,6 +7,7 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.util.ConvertUtil;
+import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
@@ -808,13 +809,13 @@ public class JobPositionService {
      * @param filePath
      * @throws IOException
      */
-    public void selDecompression(String filePath) throws IOException {
+    public boolean selDecompression(String filePath,String chann) throws Exception {
+        boolean isSucc = false;
+        filePath="/home/app/upload/"+chann+"/"+filePath;
         File source = new File(filePath);
         if (source.exists()) {
-            ZipInputStream zis = null;
-            BufferedOutputStream bos = null;
             try {
-                zis = new ZipInputStream(new FileInputStream(source));
+                ZipInputStream  zis = new ZipInputStream(new FileInputStream(source));
                 ZipEntry entry = null;
                 while ((entry = zis.getNextEntry()) != null
                         && !entry.isDirectory()) {
@@ -824,7 +825,7 @@ public class JobPositionService {
                         target.getParentFile().mkdirs();
                     }
                     // 写入文件
-                    bos = new BufferedOutputStream(new FileOutputStream(target));
+                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(target));
                     int read = 0;
                     byte[] buffer = new byte[1024 * 10];
                     while ((read = zis.read(buffer, 0, buffer.length)) != -1) {
@@ -834,9 +835,11 @@ public class JobPositionService {
                 }
                 zis.close();
                 source.delete();
+                isSucc = true;
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                log.error("解压异常",e);
             }
         }
+        return isSucc;
     }
 }

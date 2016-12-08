@@ -370,6 +370,6 @@
       <if test="province != null and province != ''">
         and t.province = #{province}
       </if>
-    order by t.updateTime desc
+    order by t.expiryDate desc
   </select>
 </mapper>

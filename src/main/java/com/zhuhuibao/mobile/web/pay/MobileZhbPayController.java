@@ -81,6 +81,7 @@ public class MobileZhbPayController {
         Response response = new Response();
         try {
             expertService.checkMobileCode(code,mobiles,ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
+            order.setMobile(mobiles);
             String orderNo = mobileZhbPaySV.createOrder(order);
             response.setData(orderNo);
         } catch (Exception e) {
