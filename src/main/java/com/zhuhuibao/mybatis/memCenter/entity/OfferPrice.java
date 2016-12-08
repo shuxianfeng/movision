@@ -46,6 +46,16 @@ public class OfferPrice implements Serializable{
     @ApiModelProperty(value = "电子邮箱")
     private String email;
 
+    private String  mode;
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
     public Long getId() {
         return id;
     }

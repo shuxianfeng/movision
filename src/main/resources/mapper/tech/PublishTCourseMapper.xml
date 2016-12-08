@@ -352,7 +352,8 @@
 	CASE WHEN (locate(';', t.imgUrl) > 0) THEN substring( t.imgUrl, 1, locate(';', t.imgUrl) - 1 ) WHEN locate(';', t.imgUrl) = 0 THEN imgUrl
     END AS imgUrl
     FROM t_p_group_publishCourse t WHERE
-    t.courseid in (SELECT r.courseid FROM t_p_group_publishCourse r WHERE r.courseType ='2' AND r.status IN (2,3) )
+    t.courseid in (SELECT r.courseid FROM t_p_group_publishCourse r WHERE r.courseType ='2' AND r.status = 2 )
+    AND t.expiryDate > now()
    ORDER BY applyNum desc
   </select>
 
