@@ -12,6 +12,7 @@ import com.zhuhuibao.mybatis.order.service.OrderFlowService;
 import com.zhuhuibao.mybatis.order.service.OrderGoodsService;
 import com.zhuhuibao.mybatis.order.service.ZhbAccountService;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.service.course.CourseService;
 import com.zhuhuibao.service.order.ZHOrderService;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -52,6 +53,9 @@ public class ZhpayService {
 
     @Autowired
     ZhbService zhbService;
+
+    @Autowired
+    private CourseService courseService;
 
     /**
      * 单一方式支付(1.支付宝)
@@ -285,30 +289,11 @@ public class ZhpayService {
         if (StringUtils.isEmpty(goodsId)) {
             throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "商品ID不能为空");
         }
-        // String goodsName = msgParam.get("goodsName");//商品名称
-        // if (StringUtils.isEmpty(goodsName)) {
-        // throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,
-        // "商品名称不能为空");
-        // }
-        // String goodsPrice = msgParam.get("goodsPrice");//商品单价
-        // if (StringUtils.isEmpty(goodsPrice)) {
-        // throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,
-        // "商品单价不能为空");
-        // }
-        // String buyersid = String.valueOf(msgParam.get("buyerId"));//创建订单的会员ID
-        // if (StringUtils.isEmpty(buyersid)) {
-        // throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,
-        // "创建订单会员ID不能为空");
-        // }
         String number = msgParam.get("number");// 订单商品数量
         if (StringUtils.isEmpty(number)) {
             throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "订单商品数量不能为空");
         }
-        // String goodsType = msgParam.get("goodsType");//商品类型
-        // if (StringUtils.isEmpty(goodsType)) {
-        // throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,
-        // "商品类型不能为空");
-        // }
-
+        // 如果是培训课程类的支付 校验库存是否满足当前支付条件
+        courseService.checkRepertory(msgParam);
     }
 }

@@ -50,6 +50,9 @@ public class PublishCourse {
 
     private String notes;
 
+    /** 库存 用来判断当前课程包括已经下订单但没有支付的消耗的库存剩余值 **/
+    private Integer inventory;
+
     public Long getCourseid() {
         return courseid;
     }
@@ -232,5 +235,13 @@ public class PublishCourse {
 
     public void setNotes(String notes) {
         this.notes = notes == null ? null : notes.trim();
+    }
+
+    public Integer getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Integer inventory) {
+        this.inventory = inventory;
     }
 }
