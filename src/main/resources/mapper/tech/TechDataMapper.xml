@@ -290,7 +290,23 @@
     </select>
 
     <select id="previewTechDataDetail" parameterType="java.util.Map" resultType="java.util.Map">
-    select t.id,case when ur.mobile != '' or ur.mobile != null then ur.mobile when ur.email!= '' or ur.email != null then ur.email end as  username,
+    select t.id,
+    case
+    when ur.mobile != '' or ur.mobile != null
+      then replace(ur.mobile, substr(ur.mobile, 4), '********')
+    when ur.email!= '' or ur.email != null
+      then replace(ur.email, substr(ur.email, 4), '********')
+    END
+    as  username,
+
+    case
+    when ur.mobile != '' or ur.mobile != null
+      then ur.mobile
+    when ur.email!= '' or ur.email != null
+      then ur.email
+    END
+    as  real_username,
+
     date_format(t.publishTime,'%Y-%m-%d') publishTime, date_format(t.updateTime,'%Y-%m-%d') updateTime, t.title,t.views,t.download,t.fileSize,t.fileFormat,
     t.type, t.notes,t.reason,
         td.name sCategoryName,
