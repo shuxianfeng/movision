@@ -296,7 +296,7 @@ public class MobileJobAndResumeService {
 
     /**
      * 获取刷新类别对应的时间区间
-     * 
+     *
      * @param refreshType
      * @return
      */
@@ -306,10 +306,10 @@ public class MobileJobAndResumeService {
             if (refreshType.equals("1")) {
                 publishTime = DateUtils.date2Str(new Date(), "yyyy-MM-dd");
             } else if (refreshType.equals("2")) {
-                Date date = DateUtils.date2Sub(new Date(), Calendar.DATE, -3);
+                Date date = DateUtils.date2Sub(new Date(), Calendar.DATE, -2);
                 publishTime = DateUtils.date2Str(date, "yyyy-MM-dd");
             } else if (refreshType.equals("3")) {
-                Date date = DateUtils.date2Sub(new Date(), Calendar.DATE, -7);
+                Date date = DateUtils.date2Sub(new Date(), Calendar.DATE, -6);
                 publishTime = DateUtils.date2Str(date, "yyyy-MM-dd");
             } else {
                 Date date = DateUtils.date2Sub(new Date(), Calendar.MONTH, -1);
