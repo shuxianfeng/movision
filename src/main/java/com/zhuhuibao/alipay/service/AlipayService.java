@@ -9,7 +9,6 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.activity.service.ActivityService;
 import com.zhuhuibao.mybatis.order.entity.*;
 import com.zhuhuibao.mybatis.order.service.*;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
@@ -67,10 +66,13 @@ public class AlipayService {
     private OrderFlowService orderFlowService;
 
     @Autowired
-    ZhbService zhbService;
+    private ZhbService zhbService;
 
     @Autowired
-    ActivityService activityService;
+    private PublishCourseService courseService;
+
+    @Autowired
+    private OrderGoodsService orderGoodsService;
 
     /**
      * 支付宝退款请求
@@ -498,6 +500,14 @@ public class AlipayService {
             // 2. 修改订单状态
             boolean suc = orderService.update(order);
             log.error("update t_o_order status :>>>>" + suc);
+
+            // 如果是培训课程支付的回调 需要扣除当前课程的库存
+            OrderGoods orderGoods = orderGoodsService.findByOrderNo(order.getOrderNo());
+            PublishCourse publishCourse = courseService.getCourseById(orderGoods.getGoodsId());
+            if (null != publishCourse) {
+                courseService.updateAddStockNum(publishCourse.getCourseid(), orderGoods.getNumber());
+            }
+
             // 购买筑慧币,VIP 需要回调
             if (suc) {
                 String orderNo = params.get("out_trade_no");

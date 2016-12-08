@@ -121,7 +121,7 @@ public class CourseService {
             zhOrderService.genSNcode(msgParam, msgParam.get("goodsType"));
 
             // 修改课程库存数量
-            updateSubRepertory(msgParam);
+            // updateSubRepertory(msgParam);
 
         }
 
@@ -167,7 +167,8 @@ public class CourseService {
             msgParam.put("goodsPrice", course.getPrice().toString());
             msgParam.put("goodsName", course.getTitle());
 
-            int stockNum = course.getStorageNumber();
+            // 当前库存量减去当前时间30分钟内 下号订单尚未支付的订单消耗数量
+            int stockNum = course.getStorageNumber()-course.getInventory();
 
             if (number > stockNum) { // 购买数量大于库存数量
                 log.error("库存不足.购买数量[{}]大于库存数量[{}]", number, stockNum);
