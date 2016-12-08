@@ -61,7 +61,7 @@ public class OfferPriceController {
         {
         	ShiroUser principal = (ShiroUser)session.getAttribute("member");
         	price.setCreateid(new Long(principal.getId()));
-		//	response = offerService.addOfferPrice(price);
+			response = offerService.addOfferPrice(price);
         }
 		return response;
 	}

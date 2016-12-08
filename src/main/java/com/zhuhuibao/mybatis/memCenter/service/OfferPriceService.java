@@ -61,15 +61,15 @@ public class OfferPriceService {
      * @param price
      * @return
      */
-    public Response addOfferPrice(OfferPrice price, String mode) {
+    public Response addOfferPrice(OfferPrice price) {
         Response response = new Response();
         try {
             if (price.getBillurl() != null && !price.getBillurl().equals("")) {
                 String fileUrl = price.getBillurl();
-                if(mode.equals("PC")){
-                    handleDocOrImg(price, response, fileUrl, "doc", "文件不存在");
-                }else{
+                if (StringUtils.isNotBlank(price.getMode()) && price.getMode().equalsIgnoreCase("img")) {
                     handleDocOrImg(price, response, fileUrl, "img", "图片不存在");
+                } else {
+                    handleDocOrImg(price, response, fileUrl, "doc", "文件不存在");
                 }
             } else if (price.getContent() != null && !price.getContent().equals("")) {
                 priceMapper.insertSelective(price);
