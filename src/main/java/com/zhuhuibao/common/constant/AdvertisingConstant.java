@@ -146,6 +146,11 @@ public class AdvertisingConstant {
         M_Rencai_Mqzp(new String[] {"249", "M_Rencai", "M_Rencai_Mqzp"}),
 
         /**
+         * 移动端人才-最新招聘-广告
+         */
+        M_Rencai_Zxzp(new String[]{"249", "M_Rencai", "M_Rencai_Zxzp"}),
+
+        /**
          * 移动端人才-热门招聘-广告
          */
         M_Rencai_Rmzp(new String[] {"249", "M_Rencai", "M_Rencai_Rmzp"}),

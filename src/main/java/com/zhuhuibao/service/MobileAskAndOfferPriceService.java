@@ -98,6 +98,7 @@ public class MobileAskAndOfferPriceService {
 
         boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.XJFB.toString());
         if (bool) {
+            log.warn("askPrice:"+askPrice.toString());
             askPriceMapper.saveAskPrice(askPrice);
             zhbService.payForGoods(askPrice.getId(), ZhbPaymentConstant.goodsType.XJFB.toString());
         } else {
