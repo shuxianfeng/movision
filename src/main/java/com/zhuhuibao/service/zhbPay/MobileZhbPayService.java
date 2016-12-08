@@ -168,15 +168,9 @@ public class MobileZhbPayService {
      * 生成订单
      *
      * @param order
-     * @param code
-     * @param mobile
-     * @param type
      * @return
      */
-    public String createOrder(CourseOrderReqBean order, String code, String mobile, String type) {
-
-        expertService.checkMobileCode(code, mobile, type);
-
+    public String createOrder(CourseOrderReqBean order) {
         Gson gson = new Gson();
         String json = gson.toJson(order);
 

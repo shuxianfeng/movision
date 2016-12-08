@@ -158,7 +158,7 @@ public class MobileTechSiteController extends BaseController {
         return response;
     }
 
-    @ApiOperation(value = "触屏端-专家首页-申请专家支持-手机验证码获取", notes = "触屏端-专家首页-申请专家支持-手机验证码获取", response = Response.class)
+    @ApiOperation(value = "触屏端-手机验证码获取", notes = "触屏端-手机验证码获取", response = Response.class)
     @RequestMapping(value = "get_expert_support", method = RequestMethod.GET)
     public Response getExpertSupport(@ApiParam(value = "手机号码") @RequestParam(required = true) String mobile,
                                      @ApiParam(value = "图形验证码") @RequestParam(required = true) String imgCode) throws Exception {

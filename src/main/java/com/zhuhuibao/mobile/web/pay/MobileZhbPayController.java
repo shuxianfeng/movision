@@ -10,6 +10,7 @@ import com.zhuhuibao.common.pojo.CourseOrderReqBean;
 import com.zhuhuibao.common.pojo.PayReqBean;
 import com.zhuhuibao.common.pojo.ZHBOrderReqBean;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.course.CourseService;
 import com.zhuhuibao.service.order.ZHOrderService;
@@ -53,6 +54,9 @@ public class MobileZhbPayController {
     MobileZhbPayService mobileZhbPaySV;
 
 
+    @Autowired
+    ExpertService expertService;
+
     @ApiOperation(value = "筑慧币|VIP购买提交订单", notes = "筑慧币|VIP购买提交订单", response = Response.class)
     @RequestMapping(value = "do_zhb_order", method = RequestMethod.POST)
     public Response doZHBOrder(@ApiParam @ModelAttribute ZHBOrderReqBean order) {
@@ -76,7 +80,8 @@ public class MobileZhbPayController {
                                 @ApiParam(value = "验证码") @RequestParam(required = true) String code) {
         Response response = new Response();
         try {
-            String orderNo = mobileZhbPaySV.createOrder(order,code,mobiles,ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
+            expertService.checkMobileCode(code,mobiles,ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
+            String orderNo = mobileZhbPaySV.createOrder(order);
             response.setData(orderNo);
         } catch (Exception e) {
             log.error("sel_support_img_code error! ", e);
