@@ -363,17 +363,13 @@
     where goodsId = t.courseid  and  orderNo in (select orderNo from t_o_order where status in (1,2) and goodsType =2)) AS applyNum ,
     case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl) = 0 then imgUrl end as imgUrl
     from t_p_group_publishCourse t
-    <where>
-      <if test="courseType != null">
-        and courseType = #{courseType}
-      </if>
-      <if test="status != null">
-        and status = #{status}
+    where t.courseType= 2
+      <if test="status != null and status != ''">
+        and t.status = #{status}
       </if>
       <if test="province != null and province != ''">
-        and province = #{province}
+        and t.province = #{province}
       </if>
-    </where>
     order by t.updateTime desc
   </select>
 </mapper>
