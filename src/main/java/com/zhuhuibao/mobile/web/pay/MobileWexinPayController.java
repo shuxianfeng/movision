@@ -81,8 +81,7 @@ public class MobileWexinPayController {
     @RequestMapping(value = "wxOrderQuery", method = RequestMethod.POST)
     @LoginAccess
     public Response wxOrderQuery(
-    		@ApiParam(value = "订单编号") @RequestParam(required = true) String orderid,
-            HttpServletRequest request) throws JDOMException, IOException {
+    		@ApiParam(value = "订单编号") @RequestParam String orderid) throws JDOMException, IOException {
 
     	Map result = mobileWxPaySV.getWxpayResult(orderid);
         Response response = new Response();
