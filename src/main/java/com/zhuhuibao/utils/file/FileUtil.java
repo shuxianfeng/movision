@@ -2,7 +2,6 @@ package com.zhuhuibao.utils.file;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ApiConstants;
-import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -13,14 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
@@ -255,6 +252,9 @@ public class FileUtil {
 			String allowImgSuffix = PropertiesUtils.getValue("allowed.img.suffix");
 			return allowImgSuffix.split(",");
 		} else if ("doc".equals(type)) {
+			String allowFileSuffix = PropertiesUtils.getValue("allowed.file.suffix");
+			return allowFileSuffix.split(",");
+		}else if ("zip".equals(type)) {
 			String allowFileSuffix = PropertiesUtils.getValue("allowed.file.suffix");
 			return allowFileSuffix.split(",");
 		}

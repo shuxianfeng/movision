@@ -84,6 +84,28 @@ public class UploadService {
                     }
                     data = fileName;
                     break;
+                //简历压缩包上传
+                case "zip":
+                    if (chann != null && chann.equals("51job")){
+                        saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/zip";
+                        maxPostSize = apiConstants.getUploadTechMaxPostSize();
+                    }else if (chann != null && chann.equals("zhilian")){
+                        saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/zip";
+                        maxPostSize = apiConstants.getUploadTechMaxPostSize();
+                    }else if (chann != null && chann.equals("rencai")){
+                        saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/zip";
+                        maxPostSize = apiConstants.getUploadTechMaxPostSize();
+                    }else if (chann != null && chann.equals("liepin")){
+                        saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/zip";
+                        maxPostSize = apiConstants.getUploadTechMaxPostSize();
+                    }
+                    else {
+                        saveDirectory = apiConstants.getUploadDir();
+                        maxPostSize = apiConstants.getUploadDocMaxPostSize();
+                    }
+                    data = fileName;
+                    break;
+
                 default:
                     log.error("上传类型不支持");
                     throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传类型不支持");
