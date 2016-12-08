@@ -5,9 +5,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.aop.LoginAccess;
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.PriceConstant;
 import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.common.pojo.AskPriceBean;
 import com.zhuhuibao.common.pojo.AskPriceSearchBean;
@@ -156,7 +154,7 @@ public class MobileAskAndOfferPriceController extends BaseController {
         if (session != null) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
             price.setCreateid(new Long(principal.getId()));
-            response = offerService.addOfferPrice(price);
+          //  response = offerService.addOfferPrice(price);
         }
         return response;
     }

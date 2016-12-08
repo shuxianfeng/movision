@@ -1,17 +1,19 @@
 package com.zhuhuibao.business.system.price;
 
-import java.io.IOException;
-import java.util.*;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
+import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
+import com.zhuhuibao.mybatis.memCenter.entity.OfferPrice;
+import com.zhuhuibao.mybatis.memCenter.service.OfferPriceService;
+import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
 import com.zhuhuibao.utils.file.FileUtil;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -20,15 +22,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.zhuhuibao.common.constant.ApiConstants;
-import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
-import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
-import com.zhuhuibao.mybatis.memCenter.entity.OfferPrice;
-import com.zhuhuibao.mybatis.memCenter.service.OfferPriceService;
-import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
-import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 报价
@@ -62,7 +61,7 @@ public class OfferPriceController {
         {
         	ShiroUser principal = (ShiroUser)session.getAttribute("member");
         	price.setCreateid(new Long(principal.getId()));
-			response = offerService.addOfferPrice(price);
+		//	response = offerService.addOfferPrice(price);
         }
 		return response;
 	}
