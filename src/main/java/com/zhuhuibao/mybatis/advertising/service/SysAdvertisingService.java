@@ -58,4 +58,16 @@ public class SysAdvertisingService {
         return list;
     }
 
+    public List<SysAdvertising> findNewPosition(String chanType, String page, String advArea) {
+        List<SysAdvertising> list;
+        try{
+            list = mapper.findNewPosition(chanType,page,advArea);
+        }catch (Exception  e){
+            log.error("数据库操作失败>>>{}",e);
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
+        }
+
+        return list;
+    }
+
 }
