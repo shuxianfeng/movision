@@ -405,6 +405,20 @@ public class MobileJobAndResumeService {
         return list;
     }
 
+    public List<Map<String, Object>> getZxZpAdv() {
+        String[] arr = AdvertisingConstant.AdvertisingPosition.M_Rencai_Zxzp.value;
+        List<SysAdvertising> advertisings = advService.findNewPosition(arr[0], arr[1], arr[2]);
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (SysAdvertising item : advertisings) {
+            String jobID = item.getConnectedId();
+            Map<String, Object> map = job.findJobByID(jobID);
+            map.put("logo", item.getImgUrl());
+            list.add(map);
+        }
+        return list;
+    }
+
+
     /**
      * 获取人才网首页数据
      * 
@@ -419,7 +433,7 @@ public class MobileJobAndResumeService {
         // 名企招聘（广告）
         result.put("mqzp_advs", advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Rencai_Mqzp.value));
         // 最新招聘
-        result.put("zxzp", job.searchNewPosition(4));
+        result.put("zxzp", getZxZpAdv());
         // 最新求职
         result.put("zxqz", getMLatestResume(null, null, null, null, null, null, null));
         // 筑慧职场

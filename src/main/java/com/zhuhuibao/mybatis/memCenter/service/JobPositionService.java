@@ -1,11 +1,8 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.ZhbPaymentConstant;
+import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.common.pojo.ResultBean;
-import com.zhuhuibao.common.constant.JobConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.exception.PageNotFoundException;
@@ -17,6 +14,7 @@ import com.zhuhuibao.mybatis.memCenter.mapper.JobMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.PositionMapper;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.service.MobileSysAdvertisingService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.SalaryUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -57,6 +55,9 @@ public class JobPositionService {
 
     @Autowired
     DictionaryService dictionaryService;
+
+    @Autowired
+    private MobileSysAdvertisingService advertisingService;
 
     /**
      * 发布职位
@@ -172,6 +173,22 @@ public class JobPositionService {
         return result;
     }
 
+    /*public Map<String, Object> searchNewPosition4Mobile(int count) {
+        Map result = new HashMap();
+        List<Map<String, Object>> jobList;
+        try {
+            jobList = jobMapper.searchNewPosition(count);
+            handleJobList(jobList);
+            result.put("joblist", jobList);
+            result.put("guanggaolist", );
+        } catch (Exception e) {
+            log.error("查询异常>>>", e);
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败'");
+        }
+        return result;
+    }*/
+
+
     /**
      * 查询最新招聘职位
      */
@@ -179,22 +196,25 @@ public class JobPositionService {
         List<Map<String, Object>> jobList;
         try {
             jobList = jobMapper.searchNewPosition(count);
-            for (Map<String, Object> job : jobList) {
-                handleSalary(job);
-                handleCity(job);
-                if (job.get("education") != null) {
-                    job = ConvertUtil.execute(job, "education", "constantService", "findByTypeCode", new Object[] { "2", String.valueOf(job.get("education")) });
-                    job.put("educationName", job.get("educationName"));
-                } else {
-                    job.put("educationName", "");
-                }
-            }
+            handleJobList(jobList);
         } catch (Exception e) {
             log.error("查询异常>>>", e);
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败'");
         }
-
         return jobList;
+    }
+
+    private void handleJobList(List<Map<String, Object>> jobList) {
+        for (Map<String, Object> job : jobList) {
+            handleSalary(job);
+            handleCity(job);
+            if (job.get("education") != null) {
+                job = ConvertUtil.execute(job, "education", "constantService", "findByTypeCode", new Object[] { "2", String.valueOf(job.get("education")) });
+                job.put("educationName", job.get("educationName"));
+            } else {
+                job.put("educationName", "");
+            }
+        }
     }
 
     private void handleSalary(Map<String, Object> job) {

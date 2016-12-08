@@ -326,6 +326,12 @@ public class TechDataService {
                     fileSize = CommonUtils.bytes2kb(Long.valueOf(fileSize));
                     map.put("fileSize",fileSize);
                 }
+                String realUsername = String.valueOf(map.get("real_username"));
+                String username = "";
+                if(org.apache.commons.lang3.StringUtils.isNotEmpty(realUsername) ){
+                    username = realUsername.substring(0, 4)+"********";
+                }
+                map.put("username", username);
             }
         } catch (Exception e) {
             log.error("执行异常>>>", e);
