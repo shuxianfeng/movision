@@ -421,7 +421,7 @@
         GROUP by v.viewTime
     </select>
     <select id="queryExpById" resultMap="BaseResultMap" parameterType="java.lang.String">
-        SELECT e.photoUrl,e.name FROM t_e_expert e
+        SELECT e.photoUrl,e.name,e.createId FROM t_e_expert e
         WHERE e.id = #{id}
     </select>
 </mapper>

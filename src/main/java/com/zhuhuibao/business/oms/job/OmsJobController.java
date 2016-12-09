@@ -94,8 +94,8 @@ public class OmsJobController {
 
 
     @ApiOperation(value = "解析简历", notes = "解析简历", response = Response.class)
-    @RequestMapping(value = "analysis_resume", method = RequestMethod.POST)
-    public Response analysisResume(@ApiParam(value = "上传文件") @RequestParam MultipartFile file,
+    @RequestMapping(value = "oms_analysis_resume", method = RequestMethod.POST)
+    public Response omsAnalysisResume(@ApiParam(value = "上传文件") @RequestParam MultipartFile file,
                                    @ApiParam(value = "51job:51job,智联:zhilian,人才:rencai,猎聘:liepin") @RequestParam String chann) throws Exception {
         Response result = new Response();
         try {
@@ -106,11 +106,13 @@ public class OmsJobController {
             Map<String, String> map = uploadService.upload(file, "zip", chann);
             map.put("url",map.get("data"));
             map.put("name", FileUtil.getFileNameByUrl(map.get("data")));
-            positionService.selDecompression(map.get("name"),chann);
-
-            //result.setData(map);
+            boolean bool= positionService.selDecompression(map.get("name"),chann);
+            map.put("bool",(bool+""));
+            positionService.analysisResume(map.get("name"),chann);
+            result.setData(map);
         } catch (Exception e) {
             log.error("analysis_resume error! ", e);
+            result.setCode(400);
         }
         return result;
     }
