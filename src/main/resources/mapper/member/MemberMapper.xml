@@ -876,7 +876,7 @@
         FROM t_m_member
         WHERE status !=2 and identify !=2
         <if test="keywords !=null and keywords != ''">
-            and enterpriseName LIKE CONCAT('%',#{keywords},'%')
+            and enterpriseName LIKE CONCAT('%',#{_keywords},'%')
         </if>
     </select>
 
