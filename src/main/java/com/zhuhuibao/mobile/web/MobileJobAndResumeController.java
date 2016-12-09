@@ -60,10 +60,13 @@ public class MobileJobAndResumeController extends BaseController {
             Map<String, Object> map = new HashMap<>();
             map.put("id", id);
             boolean count = mobileTalentNetworkService.collectionResume(map);
+            resultMap.put("identify", mobileTalentNetworkService.findIdentifyById());
             resultMap.put("count", count);
             response.setData(resultMap);
         } catch (Exception e) {
             log.error("sel_resume_details error! ", e);
+            response.setCode(400);
+            response.setMessage(e.getMessage());
         }
         return response;
     }
@@ -84,6 +87,8 @@ public class MobileJobAndResumeController extends BaseController {
             response.setData(map);
         } catch (Exception e) {
             log.error("sel_company_details error! ", e);
+            response.setCode(400);
+            response.setMessage(e.getMessage());
         }
         return response;
     }
@@ -99,6 +104,8 @@ public class MobileJobAndResumeController extends BaseController {
             response.setData(map);
         } catch (Exception e) {
             log.error("sel_resume_details error! ", e);
+            response.setCode(400);
+            response.setMessage(e.getMessage());
         }
         return response;
     }
@@ -113,6 +120,8 @@ public class MobileJobAndResumeController extends BaseController {
             response.setData(job);
         } catch (Exception e) {
             log.error("sel_resume_details error! ", e);
+            response.setCode(400);
+            response.setMessage(e.getMessage());
         }
         return response;
     }
@@ -127,6 +136,8 @@ public class MobileJobAndResumeController extends BaseController {
             response.setData(news);
         } catch (Exception e) {
             log.error("sel_resume_details error! ", e);
+            response.setCode(400);
+            response.setMessage(e.getMessage());
         }
         return response;
     }
@@ -139,6 +150,8 @@ public class MobileJobAndResumeController extends BaseController {
             response = mobileTalentNetworkService.selCollectionResume(id);
         } catch (Exception e) {
             log.error("update_collection_resume error! ", e);
+            response.setCode(400);
+            response.setMessage(e.getMessage());
         }
         return response;
     }
@@ -164,10 +177,16 @@ public class MobileJobAndResumeController extends BaseController {
     @ApiOperation(value = "查看此职位是否已被同一个人申请，10天后可以再次申请", notes = "1:已申请，0：未申请", response = Response.class)
     public Response isExistApplyPosition(@ApiParam(value = "职位ID") @RequestParam String JobID) throws Exception {
         Response response = new Response();
-        Map<String, Object> map = new HashMap<>();
-        map.put("jobID", JobID);
-        boolean b = mobileTalentNetworkService.isExistApplyPosition(map);
-        response.setData(b);
+        try {
+            Map<String, Object> map = new HashMap<>();
+            map.put("jobID", JobID);
+            boolean b = mobileTalentNetworkService.isExistApplyPosition(map);
+            response.setData(b);
+        } catch (Exception e) {
+            log.error("is_exist_apply_position error! ", e);
+            response.setCode(400);
+            response.setMessage(e.getMessage());
+        }
         return response;
     }
 
@@ -250,6 +269,7 @@ public class MobileJobAndResumeController extends BaseController {
             mobileTalentNetworkService.resumeDownload(recordMap);
         } catch (Exception e) {
             log.error("resume_download error! ", e);
+            response.setCode(400);
             response.setMessage(e.getMessage());
         }
         return response;
