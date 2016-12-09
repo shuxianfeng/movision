@@ -7,7 +7,6 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.util.ConvertUtil;
-import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.exception.PageNotFoundException;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
@@ -25,10 +24,11 @@ import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.SalaryUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
-import org.apache.xmlbeans.impl.common.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,6 +65,8 @@ public class JobPositionService {
 
     @Autowired
     DictionaryService dictionaryService;
+
+
 
     /**
      * 发布职位
@@ -809,13 +811,13 @@ public class JobPositionService {
      * @param filePath
      * @throws IOException
      */
-    public boolean selDecompression(String filePath,String chann) throws Exception {
+    public boolean selDecompression(String filePath, String chann) throws Exception {
         boolean isSucc = false;
-        filePath="/home/app/upload/"+chann+"/"+filePath;
+        filePath = "/home/app/upload/" + chann + "/" + filePath;
         File source = new File(filePath);
         if (source.exists()) {
             try {
-                ZipInputStream  zis = new ZipInputStream(new FileInputStream(source));
+                ZipInputStream zis = new ZipInputStream(new FileInputStream(source));
                 ZipEntry entry = null;
                 while ((entry = zis.getNextEntry()) != null
                         && !entry.isDirectory()) {
@@ -837,9 +839,64 @@ public class JobPositionService {
                 source.delete();
                 isSucc = true;
             } catch (IOException e) {
-                log.error("解压异常",e);
+                log.error("解压异常", e);
             }
         }
         return isSucc;
+    }
+
+    /**
+     * 简历的解析
+     *
+     * @param name
+     * @param chann
+     */
+    public void analysisResume(String name, String chann) {
+        File fileDir = new File("/home/app/upload/" + chann + "/" + name);
+        //读Spring配置文
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+        if (chann.equals("51job")) {
+
+         //   AnalysisJobService analysisJobService = (AnalysisJobService)context.getBean("analysisJobService");
+            List<File> files = getFiles(fileDir, "htm");
+        //    Map map =analysisJobServic.
+
+        } else if (chann.equals("zhilian")) {
+
+        } else if (chann.equals("rencai")) {
+        } else if (chann.equals("liepin")) {
+        }
+
+    }
+
+
+    /**
+     * 文件的递归
+     *
+     * @param fileDir
+     * @param type
+     * @return
+     */
+    public List<File> getFiles(File fileDir, String type) {
+        List<File> list = new ArrayList<>();
+        File[] files = fileDir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    String name = file.getName();
+                    int index = name.lastIndexOf(".");
+                    String suffix = name.substring(index + 1, name.length());
+                    if (type.equals(suffix)) {
+                        list.add(file);
+                    }
+                } else {
+                    System.out.println("不是文件");
+                    //递归扫描
+                    List<File> list2 = getFiles(file, type);
+                    list.addAll(list2);
+                }
+            }
+        }
+        return list;
     }
 }
