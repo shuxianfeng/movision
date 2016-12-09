@@ -869,14 +869,14 @@
         SET status = #{status} where enterpriseEmployeeParentId = #{id}
     </update>
 
-    <select id="queryCompanyByKeywords" resultType="java.util.Map" parameterType="java.lang.String">
+    <select id="queryCompanyByKeywords" resultType="java.util.Map" parameterType="java.util.HashMap">
         SELECT
         id,
         enterpriseName
         FROM t_m_member
         WHERE status !=2 and identify !=2
-        <if test="_keywords !=null and _keywords != ''">
-            and enterpriseName LIKE CONCAT('%',#{_keywords},'%')
+        <if test="keywords !=null and keywords != ''">
+            and enterpriseName LIKE CONCAT('%',#{keywords},'%')
         </if>
     </select>
 
