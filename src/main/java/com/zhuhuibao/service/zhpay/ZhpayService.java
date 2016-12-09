@@ -70,10 +70,10 @@ public class ZhpayService {
      * @throws Exception
      */
     public void doPay(HttpServletResponse resp, Map<String, String> msgParam) throws Exception {
-        // 参数校验
-        checkParams(msgParam);
         // 记录支付流水
         prePayParam(msgParam);
+        // 参数校验
+        checkParams(msgParam);
         // 确认支付
         confirmPay(resp, msgParam);
 
@@ -117,11 +117,11 @@ public class ZhpayService {
      * @param msgParam
      */
     public void doPayMultiple(HttpServletResponse resp, Map<String, String> msgParam) throws Exception {
-        // 校验参数
-        checkParams(msgParam);
         // 根据支付方式选择不同的支付
         // 判断支付方式
         judgePayMode(msgParam);
+        // 校验参数
+        checkParams(msgParam);
         // 确认支付
         confirmPay(resp, msgParam);
 
