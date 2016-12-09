@@ -199,13 +199,6 @@ public class ResumeService {
             resume.put("hopeSalaryName", "");
         }
 
-        if (resume.get("curSalary") != null) {
-            resume = ConvertUtil.execute(resume, "curSalary", "constantService", "findByTypeCode", new Object[] { "1", String.valueOf(resume.get("curSalary")) });
-            resume.put("curSalaryName", resume.get("curSalaryName"));
-        } else {
-            resume.put("curSalaryName", "");
-        }
-
         String post = (String) resume.get("post");
         String postName = getPostName(post);
         resume.put("postName", postName);
