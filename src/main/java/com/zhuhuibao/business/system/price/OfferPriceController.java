@@ -53,17 +53,7 @@ public class OfferPriceController {
 	@RequestMapping(value={"rest/price/addOfferPrice","rest/system/mc/quote/add_offerPrice"}, method = RequestMethod.POST)
 	public Response addOfferPrice(@ApiParam @ModelAttribute OfferPrice price) throws IOException
 	{
-		log.info("add offer price");
-		Response response = new Response();
-		Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(session != null)
-        {
-        	ShiroUser principal = (ShiroUser)session.getAttribute("member");
-        	price.setCreateid(new Long(principal.getId()));
-			response = offerService.addOfferPrice(price);
-        }
-		return response;
+		return new Response(offerService.addOfferPrice(price));
 	}
 
 	@ApiOperation(value="询价需求功能：查询所有正在询价中的信息（分页）",notes="询价需求功能：查询所有正在询价中的信息（分页）",response = Response.class)

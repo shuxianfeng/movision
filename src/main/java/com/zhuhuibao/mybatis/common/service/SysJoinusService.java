@@ -49,7 +49,6 @@ public class SysJoinusService {
         try{
             list  = joinusMapper.findAllPager(pager.getRowBounds(),condition);
         }catch (Exception e){
-            e.printStackTrace();
             log.error("分页查询[{}]失败","t_sys_joinus");
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
         }
@@ -62,7 +61,6 @@ public class SysJoinusService {
             joinus = joinusMapper.selectByPrimaryKey(Integer.valueOf(id));
 
         } catch (Exception e){
-            e.printStackTrace();
             log.error("查询[{}]失败","t_sys_joinus");
             throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL,"查询失败");
         }
@@ -77,7 +75,6 @@ public class SysJoinusService {
                 throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL,"更新失败");
             }
         }catch (Exception e){
-            e.printStackTrace();
             log.error("更新[{}]失败","t_sys_joinus");
             throw new BusinessException(MsgCodeConstant.DB_UPDATE_FAIL,"更新失败");
         }
