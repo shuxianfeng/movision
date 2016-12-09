@@ -88,8 +88,12 @@
       <if test="post != null and post !=''" >
         post = #{post},
       </if>
+      <if test="jobProvince != null and jobProvince !=''" >
         jobProvince = #{jobProvince},
+      </if>
+      <if test="jobCity != null and jobCity !=''" >
         jobCity = #{jobCity},
+      </if>
       <if test="jobArea != null and jobArea !=''" >
         jobArea = #{jobArea},
       </if>
@@ -193,8 +197,9 @@
     (select po.name from t_dictionary_position p
     left join t_dictionary_position po on p.parentId = po.id
     where find_in_set(p.id,r.post)group by p.parentId)as parentName,
-    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as jobYear
+    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as jobYear,cons.name as curSalaryName
     FROM t_i_resume r
+    left join t_dictionary_constant cons on cons.code = r.curSalary and cons.type =23
     where r.createid = #{id}
   </select>
   <select id="previewResume" parameterType="java.util.Map" resultMap="BaseResultMap">

@@ -68,15 +68,8 @@ public class MobileJobAndResumeService {
     @Autowired
     private MobileSysAdvertisingService advertisingService;
 
-    /**
-     * 公司详情
-     *
-     * @param id
-     * @return
-     */
-    public MemberDetails queryCompanyInfo(long id) {
-        return jobMapper.queryCompanyInfo(id);
-    }
+    @Autowired
+    ResumeService resumeSV;
 
     /**
      * 职位详情
@@ -98,45 +91,6 @@ public class MobileJobAndResumeService {
         return channelNewsService.selectByID(aLong);
     }
 
-    /**
-     * 公司招聘的其他职位
-     *
-     * @param id
-     * @return
-     */
-    public List<Map<String, Object>> queryJobByCompany(String id) {
-        return jobMapper.findAllOtherPositionById(id);
-    }
-
-    /**
-     * 收藏简历
-     *
-     * @param id
-     * @return
-     */
-    public Response selCollectionResume(String id) {
-        Response response = new Response();
-        Long memberId = ShiroUtil.getCreateID();
-        if (memberId != null) {
-            int collCount = resumeService.getMaxCollCount(memberId);
-            if (collCount >= JobConstant.MAX_COLL_COUNT) {
-                response.setCode(400);
-                response.setMessage("您的简历收藏夹已满" + JobConstant.MAX_COLL_COUNT + "，请先清空收藏夹，然后再进行简历收藏！");
-                return response;
-            }
-            int result = resumeService.insertCollRecord(id);
-            if (result > 0) {
-                response.setCode(200);
-            } else {
-                response.setCode(400);
-            }
-
-        } else {
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
-
-        return response;
-    }
 
     /**
      * 获取职位搜索Pager
@@ -296,7 +250,7 @@ public class MobileJobAndResumeService {
 
     /**
      * 获取刷新类别对应的时间区间
-     * 
+     *
      * @param refreshType
      * @return
      */
@@ -306,10 +260,10 @@ public class MobileJobAndResumeService {
             if (refreshType.equals("1")) {
                 publishTime = DateUtils.date2Str(new Date(), "yyyy-MM-dd");
             } else if (refreshType.equals("2")) {
-                Date date = DateUtils.date2Sub(new Date(), Calendar.DATE, -3);
+                Date date = DateUtils.date2Sub(new Date(), Calendar.DATE, -2);
                 publishTime = DateUtils.date2Str(date, "yyyy-MM-dd");
             } else if (refreshType.equals("3")) {
-                Date date = DateUtils.date2Sub(new Date(), Calendar.DATE, -7);
+                Date date = DateUtils.date2Sub(new Date(), Calendar.DATE, -6);
                 publishTime = DateUtils.date2Str(date, "yyyy-MM-dd");
             } else {
                 Date date = DateUtils.date2Sub(new Date(), Calendar.MONTH, -1);
@@ -405,17 +359,13 @@ public class MobileJobAndResumeService {
         return list;
     }
 
-    public List<Map<String, Object>> getZxZpAdv() {
-        String[] arr = AdvertisingConstant.AdvertisingPosition.M_Rencai_Zxzp.value;
-        List<SysAdvertising> advertisings = advService.findNewPosition(arr[0], arr[1], arr[2]);
-        List<Map<String, Object>> list = new ArrayList<>();
-        for (SysAdvertising item : advertisings) {
-            String jobID = item.getConnectedId();
-            Map<String, Object> map = job.findJobByID(jobID);
-            map.put("logo", item.getImgUrl());
-            list.add(map);
-        }
-        return list;
+    public List<Map<String, Object>> getZxZpAdv() throws Exception {
+        Map<String, Object> condition = new HashMap<>();
+        condition.put("count", Integer.valueOf(3));
+        condition.put("public", JobConstant.JOB_RESUME_STATUS_PUBLIC);
+        condition.put("status", JobConstant.JOB_MEMBER_STATUS_LOGOUT);
+        List resumeList = resumeSV.queryLatestResume(condition);
+        return resumeList;
     }
 
 
@@ -433,7 +383,8 @@ public class MobileJobAndResumeService {
         // 名企招聘（广告）
         result.put("mqzp_advs", advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Rencai_Mqzp.value));
         // 最新招聘
-        result.put("zxzp", getZxZpAdv());
+        result.put("zxzp", getJobSearchResultPager(null,null,null,null,
+                null,null,"1","3"));
         // 最新求职
         result.put("zxqz", getMLatestResume(null, null, null, null, null, null, null));
         // 筑慧职场
