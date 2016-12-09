@@ -233,6 +233,7 @@ public class CooperationService {
 
 	public List<Map<String, String>> findAllCooperationByPager(Paging<Map<String, String>> pager, Map map) {
 		try {
+			log.info("map="+map.toString());
 			return cooperationMapper.findAllCooperationByPager4Mobile(pager.getRowBounds(), map);
 		} catch (Exception e) {
 			log.error("CooperationService::findAllCooperationByPager",e);

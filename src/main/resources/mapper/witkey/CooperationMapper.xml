@@ -312,12 +312,14 @@
             and c.title like CONCAT('%',#{title},'%')
         </if>
         <if test="smart != null and smart != '' ">
-            <if test = "parentId != null and parentId != '' and parentId == '1'">
-                and c.title like CONCAT('%',#{smart},'%')
-            </if>
-            <if test="parentId != null and parentId != '' and parentId != '1'">
-                and (c.title like CONCAT('%',#{smart},'%') or c.content like CONCAT('%',#{smart},'%'))
-            </if>
+            <choose>
+                <when test="parentId == 1">
+                    and c.title like CONCAT('%',#{smart},'%')
+                </when>
+                <otherwise>
+                    and (c.title like CONCAT('%',#{smart},'%') or c.content like CONCAT('%',#{smart},'%'))
+                </otherwise>
+            </choose>
         </if>
         <if test="type != null and type != ''">
             and c.type = #{type}
@@ -385,12 +387,14 @@
             and c.title like CONCAT('%',#{title},'%')
         </if>
         <if test="smart != null and smart != ''">
-            <if test = "parentId != null and parentId != '' and parentId == '1'">
-                and c.title like CONCAT('%',#{smart},'%')
-            </if>
-            <if test="parentId != null and parentId != '' and parentId != '1'">
-                and (c.title like CONCAT('%',#{smart},'%') or c.content like CONCAT('%',#{smart},'%'))
-            </if>
+            <choose>
+                <when test="parentId == 1">
+                    and c.title like CONCAT('%',#{smart},'%')
+                </when>
+                <otherwise>
+                    and (c.title like CONCAT('%',#{smart},'%') or c.content like CONCAT('%',#{smart},'%'))
+                </otherwise>
+            </choose>
         </if>
         <if test="type != null and type != ''">
             and c.type = #{type}
