@@ -4,9 +4,11 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.*;
+import com.zhuhuibao.common.constant.Constants;
+import com.zhuhuibao.common.constant.ExpertConstant;
+import com.zhuhuibao.common.constant.TechConstant;
+import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mobile.web.mc.MobileExpertController;
 import com.zhuhuibao.mybatis.expert.entity.Achievement;
 import com.zhuhuibao.mybatis.expert.entity.Dynamic;
@@ -15,7 +17,6 @@ import com.zhuhuibao.mybatis.expert.entity.ExpertSupport;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.Messages;
 import com.zhuhuibao.service.MobileExpertPageService;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.apache.shiro.SecurityUtils;
@@ -73,7 +74,7 @@ public class MobileExpertPageController extends BaseController {
     @ApiOperation(value = "触屏端-专家首页-专家频道首页详情", notes = "触屏端-专家首页-专家频道首页详情", response = Response.class)
     public Response selExpertHomePage() {
         Map<String, List> map = new HashMap<>();
-        int count=4;
+        int count = 4;
         try {
             // banner位广告图片区域
             map.put("bannerList", mobileExpertPageService.findBannerList());
@@ -86,7 +87,7 @@ public class MobileExpertPageController extends BaseController {
             Map<String, Object> condition = new HashMap<>();
             condition.put("status", TechConstant.PublishCourseStatus.SALING.toString());
             condition.put("courseType", ExpertConstant.COURSE_TYPE_EXPERT);
-            condition.put("count",count);
+            condition.put("count", count);
             List<Map<String, String>> trainList = mobileExpertPageService.findExpertTrainList(condition);
             map.put("trainList", trainList);
 
@@ -197,7 +198,7 @@ public class MobileExpertPageController extends BaseController {
         try {
             Map<String, Object> condition = new HashMap<>();
             condition.put("courseid", courseId);
-            condition.put("courseType",ExpertConstant.COURSE_TYPE_EXPERT);
+            condition.put("courseType", ExpertConstant.COURSE_TYPE_EXPERT);
             Map<String, String> course = mobileExpertPageService.previewTrainCourseDetail(condition);
             response.setData(course);
         } catch (Exception e) {
@@ -236,15 +237,11 @@ public class MobileExpertPageController extends BaseController {
     public Response addApplyExpert(@ModelAttribute Expert expert) {
         Response response = new Response();
         try {
-            Long createId = ShiroUtil.getCreateID();
-            if (createId != null) {
-                expert.setCreateId(String.valueOf(createId));
-                mobileExpertPageService.queryExpertByCreateid(createId.toString(), expert);
-            } else {
-                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-            }
+            mobileExpertPageService.queryExpertByCreateid(expert);
         } catch (Exception e) {
             log.error("add_apply_expert error! ", e);
+            response.setCode(400);
+            response.setMessage(e.getMessage());
         }
         return response;
     }
@@ -264,7 +261,7 @@ public class MobileExpertPageController extends BaseController {
             expertSupport.setReason(reason);
             mobileExpertPageService.checkMobileCode(code, mobile, ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT, expertSupport);
         } catch (Exception e) {
-            log.error("add_expert_support error! ", e)  ;
+            log.error("add_expert_support error! ", e);
             response.setCode(400);
             response.setMessage(e.getMessage());
         }
@@ -301,7 +298,6 @@ public class MobileExpertPageController extends BaseController {
             log.error("sel_support_img_code error! ", e);
         }
     }
-
 
 
     @ApiOperation(value = "触屏端-专家首页-协会动态列表", notes = "触屏端-专家首页-协会动态列表", response = Response.class)
@@ -344,8 +340,9 @@ public class MobileExpertPageController extends BaseController {
         Response response = new Response();
         try {
             mobileExpertPageService.addMessage(message);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("add_message error! ", e);
+            response.setCode(400);
             response.setMessage(e.getMessage());
         }
         return response;
@@ -357,8 +354,8 @@ public class MobileExpertPageController extends BaseController {
         Response response = new Response();
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.GZJLY);
 
+            getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.GZJLY);
             Expert expert = mobileExpertPageService.findExpertById(id);
             resultMap.put("expert", expert);
             if (null != ShiroUtil.getCreateID()) {
@@ -369,6 +366,8 @@ public class MobileExpertPageController extends BaseController {
             response.setData(resultMap);
         } catch (Exception e) {
             log.error("add_message_page error! ", e);
+            response.setCode(400);
+            response.setMessage(e.getMessage());
         }
 
         return response;
