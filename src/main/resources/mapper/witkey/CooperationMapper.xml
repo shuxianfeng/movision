@@ -311,8 +311,13 @@
         <if test="title != null and title != ''">
             and c.title like CONCAT('%',#{title},'%')
         </if>
-        <if test="smart != null and smart != ''">
-            and (c.title like CONCAT('%',#{smart},'%') or c.content like CONCAT('%',#{smart},'%'))
+        <if test="smart != null and smart != '' ">
+            <if test = "parentId != null and parentId != '' and parentId == '2'">
+                and c.title like CONCAT('%',#{smart},'%')
+            </if>
+            <if test="parentId != null and parentId != '' and parentId != '2'">
+                and (c.title like CONCAT('%',#{smart},'%') or c.content like CONCAT('%',#{smart},'%'))
+            </if>
         </if>
         <if test="type != null and type != ''">
             and c.type = #{type}
@@ -380,7 +385,12 @@
             and c.title like CONCAT('%',#{title},'%')
         </if>
         <if test="smart != null and smart != ''">
-            and (c.title like CONCAT('%',#{smart},'%') or c.content like CONCAT('%',#{smart},'%'))
+            <if test = "parentId != null and parentId != '' and parentId == '2'">
+                and c.title like CONCAT('%',#{smart},'%')
+            </if>
+            <if test="parentId != null and parentId != '' and parentId != '2'">
+                and (c.title like CONCAT('%',#{smart},'%') or c.content like CONCAT('%',#{smart},'%'))
+            </if>
         </if>
         <if test="type != null and type != ''">
             and c.type = #{type}

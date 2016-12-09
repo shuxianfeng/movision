@@ -112,6 +112,8 @@ public class ZhpayService {
      * @param msgParam
      */
     public void doPayMultiple(HttpServletResponse resp, Map<String, String> msgParam) throws Exception {
+        // 校验参数
+        checkParams(msgParam);
         // 根据支付方式选择不同的支付
         // 判断支付方式
         judgePayMode(msgParam);
@@ -128,9 +130,6 @@ public class ZhpayService {
      * @throws Exception
      */
     public void confirmPay(HttpServletResponse resp, Map<String, String> msgParam) throws Exception {
-
-        // 校验参数
-        checkParams(msgParam);
 
         // 根据t_o_order_flow表进行支付
         List<OrderFlow> orderFlows = orderFlowService.findUniqueOrderFlow(msgParam.get("orderNo"));
