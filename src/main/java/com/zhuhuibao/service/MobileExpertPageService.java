@@ -133,7 +133,7 @@ public class MobileExpertPageService {
 
     /**
      * 协会动态列表
-     * 
+     *
      * @param count
      * @return
      */
@@ -145,10 +145,8 @@ public class MobileExpertPageService {
     /**
      * 专家列表
      *
-     * @param pager
-     *            分页
-     * @param map
-     *            查询参数
+     * @param pager 分页
+     * @param map   查询参数
      * @return
      */
     public List<Map<String, Object>> findAllExpert(Paging<Map<String, Object>> pager, Map<String, Object> map) {
@@ -156,19 +154,19 @@ public class MobileExpertPageService {
         for (Map<String, Object> expert : expertList) {
             String provinceCode = String.valueOf(expert.get("province"));
             if (!StringUtils.isEmpty(provinceCode)) {
-                ConvertUtil.execute(expert, "province", "dictionaryService", "findProvinceByCode", new Object[] { provinceCode });
+                ConvertUtil.execute(expert, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
             } else {
                 expert.put("provinceName", "");
             }
             String cityCode = String.valueOf(expert.get("city"));
             if (!StringUtils.isEmpty(cityCode)) {
-                ConvertUtil.execute(expert, "city", "dictionaryService", "findCityByCode", new Object[] { cityCode });
+                ConvertUtil.execute(expert, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
             } else {
                 expert.put("cityName", "");
             }
             String areaCode = String.valueOf(expert.get("area"));
             if (!StringUtils.isEmpty(areaCode)) {
-                ConvertUtil.execute(expert, "area", "dictionaryService", "findAreaByCode", new Object[] { areaCode });
+                ConvertUtil.execute(expert, "area", "dictionaryService", "findAreaByCode", new Object[]{areaCode});
             } else {
                 expert.put("areaName", "");
             }
@@ -200,10 +198,8 @@ public class MobileExpertPageService {
     /**
      * 技术成果
      *
-     * @param pager
-     *            分页
-     * @param map
-     *            技术成果
+     * @param pager 分页
+     * @param map   技术成果
      * @return
      */
     public List<Achievement> findAllAchievementList(Paging<Achievement> pager, Map<String, Object> map) {
@@ -227,15 +223,20 @@ public class MobileExpertPageService {
     /**
      * 根据createid查询专家是否存在
      *
-     * @param s
      * @return
      */
-    public void queryExpertByCreateid(String s, Expert expert) {
-        Expert expert1 = expertService.queryExpertByCreateid(s);
-        if (expert1 == null) {
-            expertService.applyExpert(expert);
+    public void queryExpertByCreateid(Expert expert) {
+        Long createId = ShiroUtil.getCreateID();
+        if (createId != null) {
+            expert.setCreateId(String.valueOf(createId));
+            Expert expert1 = expertService.queryExpertByCreateid(createId.toString());
+            if (expert1 == null) {
+                expertService.applyExpert(expert);
+            } else {
+                throw new BusinessException(MsgCodeConstant.EXPERT_ISEXIST, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.EXPERT_ISEXIST)));
+            }
         } else {
-            throw new BusinessException(MsgCodeConstant.EXPERT_ISEXIST, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.EXPERT_ISEXIST)));
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
     }
 
@@ -345,9 +346,11 @@ public class MobileExpertPageService {
                 message.setReceiveDelete("0");
                 messageMapper.saveMessages(message);
                 zhbService.payForGoods(Long.parseLong(message.getId()), ZhbPaymentConstant.goodsType.GZJLY.toString());
-            } else {// 支付失败稍后重试，联系客服
-                throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+            } else {
+                throw new BusinessException(MsgCodeConstant.ZHB_AUTOPAYFOR_FAILED, "筑慧币余额不足");
             }
+        } else {
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
     }
 

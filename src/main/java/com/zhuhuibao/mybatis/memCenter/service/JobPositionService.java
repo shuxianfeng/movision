@@ -857,7 +857,7 @@ public class JobPositionService {
         ApplicationContext context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
         if (chann.equals("51job")) {
 
-         //   AnalysisJobService analysisJobService = (AnalysisJobService)context.getBean("analysisJobService");
+         //  AnalysisJobService analysisJobService = (AnalysisJobService)context.getBean("analysisJobService");
             List<File> files = getFiles(fileDir, "htm");
         //    Map map =analysisJobServic.
 
