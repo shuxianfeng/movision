@@ -277,8 +277,9 @@ public class FileUtil {
 	}
 
 	public static String getFileNameByUrl(String url){
-		log.info("开始");
-		return url.substring(url.lastIndexOf("/")+1);
+		String fileName = url.substring(url.lastIndexOf("/")+1);
+		log.info("fileName="+fileName);
+		return fileName;
 	}
 
 	public static void main(String[] args) {

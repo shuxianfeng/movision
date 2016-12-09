@@ -5,11 +5,13 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.order.entity.Order;
 import com.zhuhuibao.mybatis.order.entity.OrderFlow;
 import com.zhuhuibao.mybatis.order.entity.OrderGoods;
 import com.zhuhuibao.mybatis.order.entity.ZhbAccount;
 import com.zhuhuibao.mybatis.order.service.OrderFlowService;
 import com.zhuhuibao.mybatis.order.service.OrderGoodsService;
+import com.zhuhuibao.mybatis.order.service.OrderService;
 import com.zhuhuibao.mybatis.order.service.ZhbAccountService;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.course.CourseService;
@@ -57,6 +59,9 @@ public class ZhpayService {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private OrderService orderService;
+
     /**
      * 单一方式支付(1.支付宝)
      *
@@ -65,10 +70,10 @@ public class ZhpayService {
      * @throws Exception
      */
     public void doPay(HttpServletResponse resp, Map<String, String> msgParam) throws Exception {
-
         // 记录支付流水
         prePayParam(msgParam);
-
+        // 参数校验
+        checkParams(msgParam);
         // 确认支付
         confirmPay(resp, msgParam);
 
@@ -112,11 +117,11 @@ public class ZhpayService {
      * @param msgParam
      */
     public void doPayMultiple(HttpServletResponse resp, Map<String, String> msgParam) throws Exception {
-        // 校验参数
-        checkParams(msgParam);
         // 根据支付方式选择不同的支付
         // 判断支付方式
         judgePayMode(msgParam);
+        // 校验参数
+        checkParams(msgParam);
         // 确认支付
         confirmPay(resp, msgParam);
 
@@ -292,7 +297,10 @@ public class ZhpayService {
         if (StringUtils.isEmpty(number)) {
             throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "订单商品数量不能为空");
         }
+
         // 如果是培训课程类的支付 校验库存是否满足当前支付条件
+        Order order = orderService.findByOrderNo(msgParam.get("orderNo"));
+        msgParam.put("goodsType", order.getGoodsType());
         courseService.checkRepertory(msgParam);
     }
 }

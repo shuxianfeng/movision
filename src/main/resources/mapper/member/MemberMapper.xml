@@ -869,7 +869,7 @@
         SET status = #{status} where enterpriseEmployeeParentId = #{id}
     </update>
 
-    <select id="queryCompanyByKeywords" resultType="java.util.Map" parameterType="java.lang.String">
+    <select id="queryCompanyByKeywords" resultType="java.util.Map" parameterType="java.util.Map">
         SELECT
         id,
         enterpriseName

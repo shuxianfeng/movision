@@ -6,7 +6,9 @@ import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.pojo.AskPriceBean;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.common.entity.SysJoinus;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
 import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
 import com.zhuhuibao.mybatis.memCenter.entity.OfferAskPrice;
@@ -14,6 +16,7 @@ import com.zhuhuibao.mybatis.memCenter.entity.OfferPrice;
 import com.zhuhuibao.mybatis.memCenter.mapper.AskPriceMapper;
 import com.zhuhuibao.mybatis.memCenter.mapper.OfferPriceMapper;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.file.FileUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -26,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +44,7 @@ import java.util.Map;
 public class OfferPriceService {
     private static final Logger log = LoggerFactory.getLogger(OfferPriceService.class);
 
-    @Resource
+    @Autowired
     OfferPriceMapper priceMapper;
 
     @Autowired
@@ -61,47 +65,64 @@ public class OfferPriceService {
      * @param price
      * @return
      */
-    public Response addOfferPrice(OfferPrice price) {
-        Response response = new Response();
+    public Map addOfferPrice(OfferPrice price) {
+        log.info("add offer price");
+        price.setCreateid(ShiroUtil.getCreateID());
+        Map result = new HashMap();
         try {
             if (price.getBillurl() != null && !price.getBillurl().equals("")) {
                 String fileUrl = price.getBillurl();
                 if (StringUtils.isNotBlank(price.getMode()) && price.getMode().equalsIgnoreCase("img")) {
-                    handleDocOrImg(price, response, fileUrl, "img", "图片不存在");
+                    handleDocOrImg(price, result, fileUrl, "img", "图片不存在");
                 } else {
-                    handleDocOrImg(price, response, fileUrl, "doc", "文件不存在");
+                    handleDocOrImg(price, result, fileUrl, "doc", "文件不存在");
                 }
             } else if (price.getContent() != null && !price.getContent().equals("")) {
-                priceMapper.insertSelective(price);
+                this.addprice(price);
+                result.put("code", "200");
             }
         } catch (Exception e) {
             log.error("add offer price error!", e);
             throw new BusinessException(MsgCodeConstant.mcode_common_failure, (MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure))));
         }
-        return response;
+        return result;
     }
 
-    private void handleDocOrImg(OfferPrice price, Response response, String fileUrl, String doc, String 文件不存在) throws Exception {
-        if (fileUtil.isExistFile(fileUrl, doc, "price")) {
+    private void addprice(OfferPrice offerPrice) {
+        int count;
+        try {
+            count = priceMapper.insertSelective(offerPrice);
+            if (count != 1) {
+                throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "发布报价失败");
+            }
+        } catch (Exception e) {
+            log.error("插入{}失败", "t_p_offer_price");
+            throw new BusinessException(MsgCodeConstant.DB_INSERT_FAIL, "发布报价失败");
+        }
+    }
+
+    private void handleDocOrImg(OfferPrice price, Map map, String fileUrl, String type, String errorMessage) throws Exception {
+        if (fileUtil.isExistFile(fileUrl, type, "price")) {
             boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.BJFB.toString());
             if (bool) {
-                priceMapper.insertSelective(price);
+                this.addprice(price);
                 zhbService.payForGoods(price.getId(), ZhbPaymentConstant.goodsType.BJFB.toString());
-            } else {// 支付失败稍后重试，联系客服
+                map.put("code", "200");
+            } else {
+                // 支付失败稍后重试，联系客服
                 throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
             }
         } else {
-            response.setCode(400);
-            response.setMessage(文件不存在);
-            response.setMsgCode(MsgCodeConstant.file_not_exist);
+            map.put("code", "400");
+            map.put("message", errorMessage);
+            map.put("msgCode", MsgCodeConstant.file_not_exist);
         }
     }
 
     /**
      * 查询我的报价中的询价信息
      *
-     * @param pager
-     *            分页属性
+     * @param pager 分页属性
      * @return product 报价信息
      */
     public List<AskPriceSimpleBean> findAllAskingPriceInfo(Paging<AskPriceSimpleBean> pager, AskPrice price) {
@@ -122,7 +143,7 @@ public class OfferPriceService {
 
     /**
      * 根据询价ID查询该询价对应的报价信息
-     * 
+     *
      * @param pager
      * @param askId
      * @return
@@ -135,8 +156,7 @@ public class OfferPriceService {
     /**
      * 查询我的报价中的询价信息
      *
-     * @param pager
-     *            分页属性
+     * @param pager 分页属性
      * @return product 报价信息
      */
     public List<AskPriceSimpleBean> findAllOfferedPriceInfo(Paging<AskPriceSimpleBean> pager, Map<String, String> priceMap) {
@@ -229,7 +249,7 @@ public class OfferPriceService {
 
     /**
      * 根据ID查询报价详情
-     * 
+     *
      * @param id
      * @return
      */

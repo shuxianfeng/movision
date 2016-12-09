@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -73,7 +74,6 @@ public class MobileMemberService {
     @Autowired
     private MemberRegService memberRegService;
 
-
     /**
      * 获取当前用户绑定的手机号
      *
@@ -109,7 +109,6 @@ public class MobileMemberService {
         sess.setAttribute("first_bind_mobile_imgVerifyCode", verifyCode);
     }
 
-
     /**
      * 校验旧手机号的短信验证码
      *
@@ -128,24 +127,24 @@ public class MobileMemberService {
 
         Validateinfo info = getValidationInfo(mobile, code);
         if (null == info) {
-            //手机验证码不正确
+            // 手机验证码不正确
             smsException(mobile, code, result);
             return result;
         }
-        Date currentTime = new Date();    //当前时间
-        //短信验证码有效期十分钟
+        Date currentTime = new Date(); // 当前时间
+        // 短信验证码有效期十分钟
         Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(), "yyyy-MM-dd HH:mm:ss"), 12, 10);
 
         if (currentTime.before(sendSMStime)) {
             if (sessionCode.equals(code)) {
-                //前端：进入到绑定新的手机号页面。
+                // 前端：进入到绑定新的手机号页面。
                 result.setData(genSuccessReturnMap(SUCCESS, "校验手机短信验证码成功！"));
             } else {
-                //手机验证码不正确
+                // 手机验证码不正确
                 smsException(mobile, code, result);
             }
         } else {
-            //验证码超时
+            // 验证码超时
             smsTimeOutException(result, info);
         }
         return result;
@@ -183,7 +182,8 @@ public class MobileMemberService {
      * 绑定手机号
      *
      * @param mobile
-     * @param code   短信验证码
+     * @param code
+     *            短信验证码
      */
     public Response bindMobile(String mobile, String code) {
         Response result = new Response();
@@ -199,27 +199,27 @@ public class MobileMemberService {
 
         Validateinfo info = getValidationInfo(mobile, code);
         if (null == info) {
-            //手机验证码不正确
+            // 手机验证码不正确
             smsException(mobile, code, result);
             return result;
         }
-        Date currentTime = new Date();    //当前时间
-        //短信验证码有效期十分钟
+        Date currentTime = new Date(); // 当前时间
+        // 短信验证码有效期十分钟
         Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(info.getCreateTime(), "yyyy-MM-dd HH:mm:ss"), 12, 10);
 
         if (currentTime.before(sendSMStime)) {
             if (sessionCode.equals(code)) {
 
                 updateMemberMobile(mobile, member, memberId);
-//                ShiroUser m = (ShiroUser) sess.getAttribute("member");
-//                m.setAccount(account);
+                // ShiroUser m = (ShiroUser) sess.getAttribute("member");
+                // m.setAccount(account);
                 result.setData(genSuccessReturnMap(SUCCESS, "绑定手机号成功！"));
             } else {
-                //手机验证码不正确
+                // 手机验证码不正确
                 smsException(mobile, mobile, result);
             }
         } else {
-            //验证码超时
+            // 验证码超时
             smsTimeOutException(result, info);
         }
         return result;
@@ -277,7 +277,7 @@ public class MobileMemberService {
      */
     private void validationParams(String mobile, String code, Long memberId) {
         if (null == memberId) {
-            //抛出未登陆异常
+            // 抛出未登陆异常
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         if (StringUtils.isEmpty(mobile)) {
@@ -297,9 +297,9 @@ public class MobileMemberService {
      */
     private Validateinfo getValidationInfo(String mobile, String code) {
         Validateinfo info = new Validateinfo();
-        info.setAccount(mobile);    //会员账号
-        info.setValid(0);    //有效
-        info.setCheckCode(code);    //验证码
+        info.setAccount(mobile); // 会员账号
+        info.setValid(0); // 有效
+        info.setCheckCode(code); // 验证码
         info = memberRegService.findMemberValidateInfo(info);
 
         return info;
@@ -320,7 +320,6 @@ public class MobileMemberService {
 
     }
 
-
     /**
      * 生成手机验证码并发送
      *
@@ -334,11 +333,11 @@ public class MobileMemberService {
         // 生成随机字串
         String verifyCode = VerifyCodeUtils.generateVerifyCode(4, VerifyCodeUtils.VERIFY_CODES_DIGIT);
         log.debug("verifyCode == " + verifyCode);
-        //发送验证码到手机
+        // 发送验证码到手机
         String json = convertVerifyMap2Json(verifyCode);
         SDKSendSms.sendSMS(mobile, json, PropertiesUtils.getValue("modify_mobile_sms_template_code"));
         addValidationInfo(mobile, verifyCode);
-        //把生成的手机验证码缓存到session
+        // 把生成的手机验证码缓存到session
         sess.setAttribute("mobile_verifycode_" + mobile, verifyCode);
 
         Response result = new Response();
@@ -360,7 +359,6 @@ public class MobileMemberService {
         String json = gson.toJson(map);
         return json;
     }
-
 
     /**
      * 增加一条验证信息
@@ -394,23 +392,24 @@ public class MobileMemberService {
         return flag;
     }
 
-
     /**
      * 生成图片验证码
      *
      * @param req
      * @param response
-     * @param imgWidth   图片的宽度
-     * @param imgheight  图片的高度
-     * @param verifySize 验证码的长度
-     * @param key        session存储的关键字
+     * @param imgWidth
+     *            图片的宽度
+     * @param imgheight
+     *            图片的高度
+     * @param verifySize
+     *            验证码的长度
+     * @param key
+     *            session存储的关键字
      */
-    public void getImageVerifyCode(HttpServletRequest req,
-                                   HttpServletResponse response, int imgWidth, int imgheight, int verifySize, String key) {
+    public void getImageVerifyCode(HttpServletRequest req, HttpServletResponse response, int imgWidth, int imgheight, int verifySize, String key) {
         log.debug("获取验证码，开始");
         response.setDateHeader("Expires", 0);
-        response.setHeader("Cache-Control",
-                "no-store, no-cache, must-revalidate");
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
         response.addHeader("Cache-Control", "post-check=0, pre-check=0");
         response.setHeader("Pragma", "no-cache");
         response.setContentType("image/jpeg");
@@ -422,7 +421,7 @@ public class MobileMemberService {
         ServletOutputStream out = null;
         try {
             out = response.getOutputStream();
-            //输出指定验证码图片流
+            // 输出指定验证码图片流
             VerifyCodeUtils.outputImage1(imgWidth, imgheight, out, verifyCode);
             out.flush();
         } catch (IOException e) {
@@ -450,7 +449,7 @@ public class MobileMemberService {
             mobilePatternException(mobile, result);
             return result;
         }
-        //判断拥有该手机号的会员是否存在
+        // 判断拥有该手机号的会员是否存在
         Member member = new Member();
         member.setMobile(mobile);
         Member member1 = oldMemberService.findMember(member);
@@ -478,7 +477,7 @@ public class MobileMemberService {
             mobilePatternException(mobile, result);
             return result;
         }
-        //判断拥有该手机号的会员是否存在
+        // 判断拥有该手机号的会员是否存在
         Member member = new Member();
         member.setMobile(mobile);
         Member member1 = oldMemberService.findMember(member);
@@ -492,9 +491,7 @@ public class MobileMemberService {
 
         return result;
 
-
     }
-
 
     /**
      * 生成成功返回结果的map
@@ -560,7 +557,8 @@ public class MobileMemberService {
     /**
      * 搜索工程商
      *
-     * @param spec 查询条件
+     * @param spec
+     *            查询条件
      * @return map
      * @throws ServiceException
      */
@@ -661,7 +659,8 @@ public class MobileMemberService {
     /**
      * 搜索供应商
      *
-     * @param spec 查询条件
+     * @param spec
+     *            查询条件
      * @return map
      * @throws ServiceException
      */
@@ -706,14 +705,21 @@ public class MobileMemberService {
         oldMemberService.saveMessage(message);
     }
 
-
     /**
      * 根据关键子获取企业信息
      *
-     * @param keywords 关键字
+     * @param keywords
+     *            关键字
      * @return
      */
     public List<Map<String, String>> queryCompanyByKeywords(String keywords) {
-        return oldMemberService.queryCompanyByKeywords(keywords).subList(0, 10);
+        List<Map<String, String>> list = oldMemberService.queryCompanyByKeywords(keywords);
+        if (!CollectionUtils.isEmpty(list)) {
+            if (list.size() > 10) {
+                return list.subList(0, 10);
+            }
+            return list;
+        }
+        return new ArrayList<>();
     }
 }

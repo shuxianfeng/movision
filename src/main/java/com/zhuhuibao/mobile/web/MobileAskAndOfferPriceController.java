@@ -93,8 +93,8 @@ public class MobileAskAndOfferPriceController extends BaseController {
     }
 
     @LoginAccess
-    @ApiOperation(value = "上传询价单，上传报价单", notes = "上传询价单，上传报价单", response = Response.class)
-    @RequestMapping(value = { "/rest/m/askprice/site/uploadAskList", "/rest/m/askprice/mc/uploadAskList" }, method = RequestMethod.POST)
+    @ApiOperation(value = "上传询价单图片", notes = "上传询价单图片", response = Response.class)
+    @RequestMapping(value = {"/rest/m/askprice/site/uploadAskList", "/rest/m/askprice/mc/uploadAskList"}, method = RequestMethod.POST)
     public Response uploadAskList(@RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         String url = zhbOssClient.uploadObject(file, "img", "price");
         Map<String, String> map = new HashMap<>();
@@ -105,7 +105,7 @@ public class MobileAskAndOfferPriceController extends BaseController {
 
     @LoginAccess
     @ApiOperation(value = "获得我的联系方式（询报价者联系方式）", notes = "获得我的联系方式（询报价者联系方式）", response = Response.class)
-    @RequestMapping(value = { "/rest/m/askprice/getLinkInfo" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/m/askprice/getLinkInfo"}, method = RequestMethod.GET)
     public Response getLinkInfo() throws IOException {
 
         return new Response(mAskPriceSV.getMyLink());
@@ -145,22 +145,14 @@ public class MobileAskAndOfferPriceController extends BaseController {
     }
 
     @ApiOperation(value = "提交报价", notes = "提交报价", response = Response.class)
-    @RequestMapping(value = { "/rest/m/askprice/mc/addOfferPrice" }, method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/m/askprice/mc/addOfferPrice"}, method = RequestMethod.POST)
     public Response addOfferPrice(@ApiParam @ModelAttribute OfferPrice price) throws IOException {
-        log.info("add offer price");
-        Response response = new Response();
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if (session != null) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-            price.setCreateid(new Long(principal.getId()));
-            response = offerService.addOfferPrice(price);
-        }
-        return response;
+
+        return new Response(offerService.addOfferPrice(price));
     }
 
     @ApiOperation(value = "公开，定向，单一产品报价查询", notes = "公开，定向，单一产品报价查询", response = Response.class)
-    @RequestMapping(value = { "/rest/m/price/mc/sel_offerPriceInfoByID" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/m/price/mc/sel_offerPriceInfoByID"}, method = RequestMethod.GET)
     public Response queryOfferPriceInfoByID(@RequestParam Long id) throws IOException {
         log.debug("query offer priece info by id ");
         Response response = offerService.queryOfferPriceInfoByID(id);
@@ -172,16 +164,16 @@ public class MobileAskAndOfferPriceController extends BaseController {
      */
     @LoginAccess
     @ApiOperation(value = "查看我的询价单中的别人回复的报价列表（分页）", notes = "查看我的询价单中的别人回复的报价列表（分页）", response = Response.class)
-    @RequestMapping(value = { "/rest/m/price/mc/queryAskPriceInfoList" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/m/price/mc/queryAskPriceInfoList"}, method = RequestMethod.GET)
     public Response queryAskPriceInfo(AskPriceSearchBean askPriceSearch, @RequestParam(required = false, defaultValue = "1") String pageNo,
-            @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
+                                      @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
         response.setData(mAskPriceSV.getPager4ViewOtherOfferPrice(askPriceSearch, pageNo, pageSize));
         return response;
     }
 
     @ApiOperation(value = "查看我的询价单中的别人回复的报价详情", notes = "查看我的询价单中的别人回复的报价详情", response = Response.class)
-    @RequestMapping(value = { "/rest/m/price/mc/queryOfferPriceByID" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/m/price/mc/queryOfferPriceByID"}, method = RequestMethod.GET)
     public Response queryOfferPriceByID(@RequestParam Long id) throws IOException {
         log.debug("query offer priece info by id ");
         return offerService.queryOfferPriceByID(id);
