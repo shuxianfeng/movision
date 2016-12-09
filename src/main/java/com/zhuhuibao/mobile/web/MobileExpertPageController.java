@@ -144,6 +144,8 @@ public class MobileExpertPageController extends BaseController {
             response.setData(resultMap);
         } catch (Exception e) {
             log.error("sel_resume_details error! ", e);
+            response.setCode(400);
+            response.setMessage(e.getMessage());
         }
         return response;
     }
@@ -164,6 +166,9 @@ public class MobileExpertPageController extends BaseController {
             response.setData(resultMap);
         } catch (Exception e) {
             log.error("sel_expert_details_list error! ", e);
+            response.setCode(400);
+            response.setMessage(e.getMessage());
+
         }
         return response;
     }
@@ -187,6 +192,8 @@ public class MobileExpertPageController extends BaseController {
             response.setData(pager);
         } catch (Exception e) {
             log.error("sel_expert_train_list error! ", e);
+            response.setCode(400);
+            response.setMessage(e.getMessage());
         }
         return response;
     }
@@ -203,6 +210,8 @@ public class MobileExpertPageController extends BaseController {
             response.setData(course);
         } catch (Exception e) {
             log.error("sel_publish_course_detail error! ", e);
+            response.setCode(400);
+            response.setMessage(e.getMessage());
         }
         return response;
     }
@@ -227,6 +236,8 @@ public class MobileExpertPageController extends BaseController {
             response.setData(pager);
         } catch (Exception e) {
             log.error("sel_achievement_list error! ", e);
+            response.setCode(400);
+            response.setMessage(e.getMessage());
         }
         return response;
     }
@@ -281,6 +292,9 @@ public class MobileExpertPageController extends BaseController {
             response = mobileExpertPageService.getTrainMobileCode(mobile, ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT, imgCode, sessImgCode);
         } catch (Exception e) {
             log.error("get_expert_support error! ", e);
+            response.setCode(400);
+            response.setMessage(e.getMessage());
+
         }
         return response;
     }

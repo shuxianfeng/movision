@@ -80,8 +80,8 @@ public class MobileTalentNetworkService {
      * @return
      */
     public Map<String, Object> getPositionByPositionId(Map<String, Object> map) {
-        Map<String,Object> m=jobPositionService.queryPositionInfoByID(map);
-        m.put("salaryName", SalaryUtil.convertSalary((String)m.get("salaryName")));
+        Map<String, Object> m = jobPositionService.queryPositionInfoByID(map);
+        m.put("salaryName", SalaryUtil.convertSalary((String) m.get("salaryName")));
         return m;
     }
 
@@ -110,7 +110,7 @@ public class MobileTalentNetworkService {
             tmpMap.put("id", map.get("id"));
             tmpMap.put("enterpriseName", map.get("enterpriseName"));
             tmpMap.put(Constants.position, map.get("name"));
-            tmpMap.put(Constants.salary, SalaryUtil.convertSalary((String)map.get("salaryName")));
+            tmpMap.put(Constants.salary, SalaryUtil.convertSalary((String) map.get("salaryName")));
             tmpMap.put(Constants.area, map.get("workArea"));
             tmpMap.put("province", map.get("province"));
             tmpMap.put("city", map.get("city"));
@@ -278,25 +278,31 @@ public class MobileTalentNetworkService {
      */
     public void resumeDownload(Map<String, String> recordMap) throws Exception {
         Long createId = ShiroUtil.getCreateID();
-        Map<String,Object> con=new HashMap<>();
+        Map<String, Object> con = new HashMap<>();
         if (null != createId) {
             boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.CXXZJL.toString());
             recordMap.put("companyID", Long.toString(createId));
             con.put("companyId", Long.toString(createId));
-            con.put("goodsId",recordMap.get("resumeID"));
+            con.put("goodsId", recordMap.get("resumeID"));
             if (bool) {
                 zhbService.payForGoods(Long.parseLong(recordMap.get("resumeID")), ZhbPaymentConstant.goodsType.CXXZJL.toString());
                 resumeMapper.insertDownRecord(recordMap);
-                if (resumeMapper.isDownOrColl(con).get("isCollect").equals(0)){
+                if (resumeMapper.isDownOrColl(con).get("isCollect").equals(0)) {
                     resumeMapper.updateCollById(con);
                 }
             } else {
                 //支付失败稍后重试，联系客服
                 throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
             }
-        }else {
+        } else {
             throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
 
+    }
+
+
+    public Object findIdentifyById() {
+        Long createId = ShiroUtil.getCreateID();
+        return jobMapper.findIdentifyById(createId);
     }
 }
