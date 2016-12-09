@@ -20,9 +20,6 @@ public class PayReqBean {
     @ApiModelProperty(value = "支付类型 pc:电脑端|h5：触屏端", required = false)
     private String payType;
 
-    @ApiModelProperty(value = "支付商品类型 1：技术培训，2：专家培训", required = false)
-    private String goodsType;
-
     public String getOrderNo() {
         return orderNo;
     }
@@ -53,13 +50,5 @@ public class PayReqBean {
 
     public void setPayType(String payType) {
         this.payType = payType;
-    }
-
-    public String getGoodsType() {
-        return goodsType;
-    }
-
-    public void setGoodsType(String goodsType) {
-        this.goodsType = goodsType;
     }
 }
