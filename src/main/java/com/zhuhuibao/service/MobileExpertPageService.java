@@ -344,8 +344,8 @@ public class MobileExpertPageService {
                 message.setIsShow(true);
                 message.setSendDelete("0");
                 message.setReceiveDelete("0");
-                messageMapper.saveMessages(message);
                 zhbService.payForGoods(Long.parseLong(message.getId()), ZhbPaymentConstant.goodsType.GZJLY.toString());
+                messageMapper.saveMessages(message);
             } else {
                 throw new BusinessException(MsgCodeConstant.ZHB_AUTOPAYFOR_FAILED, "筑慧币余额不足");
             }
