@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.memCenter.entity;
 
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -143,5 +144,14 @@ public class OfferPrice implements Serializable{
 
     public void setEmail(String email) {
         this.email = email == null ? null : email.trim();
+    }
+
+    public String getImgUrl() {
+        String imgUrl = "";
+        if(StringUtils.isNotEmpty(billurl) &&
+                !this.billurl.contains("xlsx") && !this.billurl.contains("xls") && !this.billurl.contains("doc")){
+            imgUrl = "//image.zhuhui8.com/upload/price/img/"+billurl;
+        }
+        return imgUrl;
     }
 }

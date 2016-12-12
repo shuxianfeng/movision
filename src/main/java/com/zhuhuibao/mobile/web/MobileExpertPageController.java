@@ -4,11 +4,10 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.constant.ExpertConstant;
-import com.zhuhuibao.common.constant.TechConstant;
-import com.zhuhuibao.common.constant.ZhbConstant;
+import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.exception.AuthException;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mobile.web.mc.MobileExpertController;
 import com.zhuhuibao.mybatis.expert.entity.Achievement;
 import com.zhuhuibao.mybatis.expert.entity.Dynamic;
@@ -16,7 +15,9 @@ import com.zhuhuibao.mybatis.expert.entity.Expert;
 import com.zhuhuibao.mybatis.expert.entity.ExpertSupport;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.Messages;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.MobileExpertPageService;
+import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import org.apache.shiro.SecurityUtils;
@@ -48,6 +49,9 @@ public class MobileExpertPageController extends BaseController {
 
     @Autowired
     private MobileExpertPageService mobileExpertPageService;
+
+    @Autowired
+    ZhbService zhbService;
 
 
     @ApiOperation(value = "触屏端-专家首页-专家技术成果-系統分類常量", notes = "触屏端-专家首页-专家技术成果-系統分類常量", response = Response.class)
@@ -353,7 +357,19 @@ public class MobileExpertPageController extends BaseController {
     public Response addMessage(@ModelAttribute Messages message) throws Exception {
         Response response = new Response();
         try {
-            mobileExpertPageService.addMessage(message);
+            Long createid = ShiroUtil.getCreateID();
+            if (createid != null) {
+                message.setCreateid(String.valueOf(createid));
+                boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.GZJLY.toString());
+                if (bool) {
+                    mobileExpertPageService.addMessage(message);
+                    zhbService.payForGoods(Long.parseLong(message.getId()), ZhbPaymentConstant.goodsType.GZJLY.toString());
+                } else {//支付失败稍后重试，联系客服
+                    throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
+                }
+            } else {
+                throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            }
         } catch (Exception e) {
             log.error("add_message error! ", e);
             response.setCode(400);
@@ -368,7 +384,6 @@ public class MobileExpertPageController extends BaseController {
         Response response = new Response();
         Map<String, Object> resultMap = new HashMap<>();
         try {
-
             getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.GZJLY);
             Expert expert = mobileExpertPageService.findExpertById(id);
             resultMap.put("expert", expert);

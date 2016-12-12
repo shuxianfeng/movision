@@ -60,7 +60,7 @@ public class MobileJobAndResumeController extends BaseController {
             Map<String, Object> map = new HashMap<>();
             map.put("id", id);
             boolean count = mobileTalentNetworkService.collectionResume(map);
-            resultMap.put("identify", mobileTalentNetworkService.findIdentifyById());
+            resultMap.put("vipLevel", mobileTalentNetworkService.findVIPById());
             resultMap.put("count", count);
             response.setData(resultMap);
         } catch (Exception e) {

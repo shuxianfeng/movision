@@ -284,7 +284,7 @@ public class TechCooperationService {
      * @return
      */
     public List<Map<String, String>> findIndexTechCooperation(Map<String, Object> map) {
-        log.info("find home page tech cooperation " + StringUtils.mapToString(map));
+        log.info("tech cooperation " + StringUtils.mapToString(map));
         List<Map<String, String>> coopList;
         try {
             coopList = techMapper.findIndexTechCooperation(map);

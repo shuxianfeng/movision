@@ -103,5 +103,5 @@ public interface JobMapper {
 
     List<Map<String, Object>> findAllPositionForMobile(RowBounds rowBounds, Map<String, Object> map);
 
-    String findIdentifyById(Long createId);
+    String findVIPById(Long createId);
 }
