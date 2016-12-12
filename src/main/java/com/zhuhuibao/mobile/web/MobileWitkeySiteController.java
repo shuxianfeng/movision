@@ -69,7 +69,7 @@ public class MobileWitkeySiteController extends BaseController {
     public Response cooperationInfo(@ApiParam(value = "威客id") @RequestParam Long id,
                                     @ApiParam(value = "威客大类，1：任务；2：服务；3：资质合作") @RequestParam String type) throws Exception {
         Map map = mWitkeySV.getWitkeyDetail(id, type);
-        getPrivilegeGoodsDetails(map, null, ZhbConstant.ZhbGoodsType.CKWKRW);
+        getPrivilegeGoodsDetails(map, String.valueOf(id), ZhbConstant.ZhbGoodsType.CKWKRW);
         if (null != ShiroUtil.getCreateID() && type.equals("1")) {
             Map<String, Object> con = new HashMap<>();
             con.put("goodsId", id);

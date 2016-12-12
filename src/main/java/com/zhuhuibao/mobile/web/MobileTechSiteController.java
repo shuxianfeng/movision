@@ -4,6 +4,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ExpertConstant;
+import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.mobile.web.mc.MobileExpertController;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
@@ -52,8 +53,10 @@ public class MobileTechSiteController extends BaseController {
 
     @RequestMapping(value = "sel_tech_cooperation", method = RequestMethod.GET)
     @ApiOperation(value = "查看技术成果，技术需求信息", notes = "查看技术成果，技术需求信息", response = Response.class)
-    public Response queryByChannelInfo(@ApiParam(value = "1:技术成果，2：技术需求") @RequestParam(required = false) Integer type) {
-        return new Response(mTechSV.getTechCoop(type, 6));
+    public Response queryByChannelInfo(@ApiParam(value = "1:技术成果，2：技术需求") @RequestParam(required = false) Integer type,
+                                       @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                       @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        return new Response(mTechSV.getTechCoop(pageNo, pageSize, type));
     }
 
     @RequestMapping(value = "sel_all_news", method = RequestMethod.GET)
@@ -185,6 +188,7 @@ public class MobileTechSiteController extends BaseController {
             map.put("useArea", useArea);
             map.put("system", system);
             map.put("cooperationType", cooperationType);
+            map.put("status", TechConstant.TechCooperationnStatus.AUDITPASS.toString());
             List<Map<String, Object>> cooperationTypeList = mTechSV.findAllcooperationType(pager, map);
             pager.result(cooperationTypeList);
             response.setData(pager);

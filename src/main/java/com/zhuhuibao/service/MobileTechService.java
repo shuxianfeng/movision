@@ -10,7 +10,6 @@ import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.fsearch.utils.StringUtil;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
-import com.zhuhuibao.mybatis.expert.mapper.AchievementMapper;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.oms.service.ChannelNewsService;
 import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
@@ -19,11 +18,12 @@ import com.zhuhuibao.mybatis.tech.service.*;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.rmi.server.ObjID;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +32,8 @@ import java.util.Map;
 @Service
 @Transactional
 public class MobileTechService {
+
+    private final static Logger log = LoggerFactory.getLogger("MobileTechService");
 
     @Autowired
     TechDataService techDataService;
@@ -249,6 +251,32 @@ public class MobileTechService {
     }
 
     /**
+     * 技术合作列表页
+     * @param pageNo
+     * @param pageSize
+     * @param type
+     * @return
+     */
+    public Paging<Map<String, Object>> getTechCoop(String pageNo, String pageSize, Integer type) {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Map<String, Object>> pager = new Paging<Map<String, Object>>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("status", TechConstant.TechCooperationnStatus.AUDITPASS.toString());
+        map.put("type", type);
+        List<Map<String, Object>> list =  techService.findIndexTechCooperation(pager, map);
+        pager.result(list);
+
+        return pager;
+    }
+
+
+    /**
      * 查询新技术 数据
      *
      * @param pageNo
@@ -442,6 +470,7 @@ public class MobileTechService {
      * @return
      */
     public List<Map<String, Object>> findAllcooperationType(Paging<Map<String, Object>> pager, Map<String, Object> map) {
+        log.info("map:"+map.toString());
         List<Map<String, Object>> cooperationTypeList = techMapper.findAllMobileTechCooperationPager(pager.getRowBounds(), map);
         List list = new ArrayList<>();
         for (Map<String, Object> m : cooperationTypeList) {

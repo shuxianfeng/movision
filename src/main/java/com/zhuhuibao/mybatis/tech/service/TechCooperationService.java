@@ -295,6 +295,17 @@ public class TechCooperationService {
         return coopList;
     }
 
+    public List<Map<String, Object>> findIndexTechCooperation(Paging<Map<String, Object>> pager, Map<String, Object> map) {
+        log.info("tech cooperation " + StringUtils.mapToString(map));
+        try {
+           return techMapper.findIndexTechCooperationPager(pager.getRowBounds(),map);
+        } catch (Exception e) {
+            log.error("查询异常>>>",e);
+            throw e;
+        }
+    }
+
+
     public List<Map<String,String>> findAllMyLookedAchievementList(Paging<Map<String, String>> pager, Map<String, Object> map) {
         try {
             return techMapper.findAllMyLookedAchievementList(pager.getRowBounds(),map);
