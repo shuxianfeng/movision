@@ -4,7 +4,6 @@ import com.taobao.api.ApiException;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
@@ -35,7 +34,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 专家频道相关业务处理
@@ -196,7 +198,8 @@ public class MobileExpertPageService {
         // 当库存不为零的是时候 页面上展示的库存 = 数据库的库存 - 当前下订单30分钟未支付的订单数量
         if (null != storageNumber && !"0".equals(storageNumber)) {
             if (null != notBuyNumber) {
-                storageNumber = String.valueOf(Integer.valueOf(storageNumber) - Integer.valueOf(notBuyNumber));
+                Integer num = Integer.valueOf(storageNumber) - Integer.valueOf(notBuyNumber);
+                storageNumber = num.toString();
                 resultMap.put("storageNumber", storageNumber);
             }
         }
@@ -334,24 +337,24 @@ public class MobileExpertPageService {
      */
     public void addMessage(Messages message) throws Exception {
         String createid = String.valueOf(message.getCreateid());
-                Member member = memberService.findMemById(String.valueOf(createid));
-                if (null == member) {
-                    throw new BusinessException(MsgCodeConstant.NOT_EXIST_MEMBER, "不存在该会员信息");
-                }
-                String identify = member.getIdentify();
-                // 个人取昵称，企业取企业名
-                String name = identify.equals("2") ? member.getNickname() : member.getEnterpriseName();
-                if (org.apache.commons.lang3.StringUtils.isEmpty(name)) {
-                    name = "匿名用户";
-                }
-                String title = "来自" + name + "的留言";
-                message.setTitle(title);
-                message.setType("2");
-                message.setIsShow(true);
-                message.setSendDelete("0");
-                message.setReceiveDelete("0");
+        Member member = memberService.findMemById(String.valueOf(createid));
+        if (null == member) {
+            throw new BusinessException(MsgCodeConstant.NOT_EXIST_MEMBER, "不存在该会员信息");
+        }
+        String identify = member.getIdentify();
+        // 个人取昵称，企业取企业名
+        String name = identify.equals("2") ? member.getNickname() : member.getEnterpriseName();
+        if (org.apache.commons.lang3.StringUtils.isEmpty(name)) {
+            name = "匿名用户";
+        }
+        String title = "来自" + name + "的留言";
+        message.setTitle(title);
+        message.setType("2");
+        message.setIsShow(true);
+        message.setSendDelete("0");
+        message.setReceiveDelete("0");
         message.setStatus("1");
-                messageMapper.saveMessages(message);
+        messageMapper.saveMessages(message);
     }
 
     /**
