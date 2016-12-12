@@ -301,8 +301,8 @@ public class MobileTalentNetworkService {
     }
 
 
-    public Object findIdentifyById() {
+    public Object findVIPById() {
         Long createId = ShiroUtil.getCreateID();
-        return jobMapper.findIdentifyById(createId);
+        return jobMapper.findVIPById(createId);
     }
 }

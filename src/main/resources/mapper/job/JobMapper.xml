@@ -458,7 +458,7 @@
         </if>
         order by t.updateTime desc,t.id desc
     </select>
-    <select id="findIdentifyById" parameterType="java.lang.Long" resultType="java.lang.String">
-        SELECT t.identify from t_m_member t where t.id = #{createId}
+    <select id="findVIPById" parameterType="java.lang.Long" resultType="java.lang.String">
+        SELECT t.vip_level from t_vip_member_info t where t.member_id = #{createId}
     </select>
 </mapper>

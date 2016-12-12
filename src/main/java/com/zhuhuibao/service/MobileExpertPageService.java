@@ -37,10 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 专家频道相关业务处理
@@ -323,11 +320,7 @@ public class MobileExpertPageService {
      * @param message
      */
     public void addMessage(Messages message) throws Exception {
-        Long createid = ShiroUtil.getCreateID();
-        if (createid != null) {
-            boolean bool = zhbService.canPayFor(ZhbPaymentConstant.goodsType.GZJLY.toString());
-            if (bool) {
-                message.setCreateid(String.valueOf(createid));
+        String createid = String.valueOf(message.getCreateid());
                 Member member = memberService.findMemById(String.valueOf(createid));
                 if (null == member) {
                     throw new BusinessException(MsgCodeConstant.NOT_EXIST_MEMBER, "不存在该会员信息");
@@ -344,14 +337,8 @@ public class MobileExpertPageService {
                 message.setIsShow(true);
                 message.setSendDelete("0");
                 message.setReceiveDelete("0");
-                zhbService.payForGoods(Long.parseLong(message.getId()), ZhbPaymentConstant.goodsType.GZJLY.toString());
+        message.setStatus("1");
                 messageMapper.saveMessages(message);
-            } else {
-                throw new BusinessException(MsgCodeConstant.ZHB_AUTOPAYFOR_FAILED, "筑慧币余额不足");
-            }
-        } else {
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
     }
 
     /**
