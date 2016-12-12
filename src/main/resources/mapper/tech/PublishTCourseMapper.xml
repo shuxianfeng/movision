@@ -325,11 +325,13 @@
   <select id="previewTrainCourseDetail" parameterType="java.util.Map" resultType="java.util.Map">
     select
     courseid, publisherid, title, teacher, date_format(startTime,'%Y-%m-%d %H:%i:%s') startTime,
-    date_format(endTime,'%Y-%m-%d %H:%i:%s') endTime, concat(pv.name,ct.name,ar.name,address) address, price, storageNumber, minBuyNumber, maxBuyNumber,
+    date_format(endTime,'%Y-%m-%d %H:%i:%s') endTime, concat(pv.name,ct.name,ar.name,address) address, price, minBuyNumber, maxBuyNumber,storageNumber,
     date_format(expiryDate,'%Y-%m-%d') expiryDate, imgUrl, notice, courseType, t.status,notes,
+    (select sum(number) from t_o_order_goods
+    where goodsId = #{courseid} and  orderNo in (select orderNo from t_o_order where status = 1 and goodsType =#{courseType} and dealTime > date_add(now(),interval -30 minute))) as notBuyNumber,
     (
     select sum(number) from t_o_order_goods
-    where goodsId = #{courseid} and  orderNo in (select orderNo from t_o_order where status in 2 and goodsType =#{courseType})
+    where goodsId = #{courseid} and  orderNo in (select orderNo from t_o_order where status = 2 and goodsType =#{courseType})
     ) as number
     from t_p_group_publishCourse t
     left join t_dictionary_province pv on pv.code = t.province

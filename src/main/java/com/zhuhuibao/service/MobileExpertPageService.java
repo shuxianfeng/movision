@@ -3,7 +3,6 @@ package com.zhuhuibao.service;
 import com.taobao.api.ApiException;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
-import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
@@ -21,7 +20,6 @@ import com.zhuhuibao.mybatis.expert.mapper.DynamicMapper;
 import com.zhuhuibao.mybatis.expert.mapper.ExpertMapper;
 import com.zhuhuibao.mybatis.expert.service.ExpertService;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
-import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.entity.Messages;
 import com.zhuhuibao.mybatis.memCenter.mapper.MessageMapper;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
@@ -145,8 +143,10 @@ public class MobileExpertPageService {
     /**
      * 专家列表
      *
-     * @param pager 分页
-     * @param map   查询参数
+     * @param pager
+     *            分页
+     * @param map
+     *            查询参数
      * @return
      */
     public List<Map<String, Object>> findAllExpert(Paging<Map<String, Object>> pager, Map<String, Object> map) {
@@ -154,19 +154,19 @@ public class MobileExpertPageService {
         for (Map<String, Object> expert : expertList) {
             String provinceCode = String.valueOf(expert.get("province"));
             if (!StringUtils.isEmpty(provinceCode)) {
-                ConvertUtil.execute(expert, "province", "dictionaryService", "findProvinceByCode", new Object[]{provinceCode});
+                ConvertUtil.execute(expert, "province", "dictionaryService", "findProvinceByCode", new Object[] { provinceCode });
             } else {
                 expert.put("provinceName", "");
             }
             String cityCode = String.valueOf(expert.get("city"));
             if (!StringUtils.isEmpty(cityCode)) {
-                ConvertUtil.execute(expert, "city", "dictionaryService", "findCityByCode", new Object[]{cityCode});
+                ConvertUtil.execute(expert, "city", "dictionaryService", "findCityByCode", new Object[] { cityCode });
             } else {
                 expert.put("cityName", "");
             }
             String areaCode = String.valueOf(expert.get("area"));
             if (!StringUtils.isEmpty(areaCode)) {
-                ConvertUtil.execute(expert, "area", "dictionaryService", "findAreaByCode", new Object[]{areaCode});
+                ConvertUtil.execute(expert, "area", "dictionaryService", "findAreaByCode", new Object[] { areaCode });
             } else {
                 expert.put("areaName", "");
             }
@@ -192,14 +192,27 @@ public class MobileExpertPageService {
      * @return
      */
     public Map<String, String> previewTrainCourseDetail(Map<String, Object> condition) {
-        return ptCourseService.previewTrainCourseDetail(condition);
+        Map<String, String> resultMap = ptCourseService.previewTrainCourseDetail(condition);
+        // 当前下订单30分钟未支付的订单数量
+        String notBuyNumber = resultMap.get("notBuyNumber");
+        String storageNumber = resultMap.get("storageNumber");
+        // 当库存不为零的是时候 页面上展示的库存 = 数据库的库存 - 当前下订单30分钟未支付的订单数量
+        if (null != storageNumber && !"0".equals(storageNumber)) {
+            if (null != notBuyNumber) {
+                storageNumber = String.valueOf(Integer.valueOf(storageNumber) - Integer.valueOf(notBuyNumber));
+                resultMap.put("storageNumber", storageNumber);
+            }
+        }
+        return resultMap;
     }
 
     /**
      * 技术成果
      *
-     * @param pager 分页
-     * @param map   技术成果
+     * @param pager
+     *            分页
+     * @param map
+     *            技术成果
      * @return
      */
     public List<Achievement> findAllAchievementList(Paging<Achievement> pager, Map<String, Object> map) {
