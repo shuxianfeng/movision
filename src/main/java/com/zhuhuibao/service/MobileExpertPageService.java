@@ -192,12 +192,15 @@ public class MobileExpertPageService {
      */
     public Map<String, String> previewTrainCourseDetail(Map<String, Object> condition) {
         Map<String, String> resultMap = ptCourseService.previewTrainCourseDetail(condition);
+        if (null == resultMap) {
+            return resultMap;
+        }
         // 当前下订单30分钟未支付的订单数量
-        String notBuyNumber = resultMap.get("notBuyNumber");
-        String storageNumber = resultMap.get("storageNumber");
+        String notBuyNumber = String.valueOf(resultMap.get("notBuyNumber"));
+        String storageNumber = String.valueOf(resultMap.get("storageNumber"));
         // 当库存不为零的是时候 页面上展示的库存 = 数据库的库存 - 当前下订单30分钟未支付的订单数量
-        if (null != storageNumber && !"0".equals(storageNumber)) {
-            if (null != notBuyNumber) {
+        if (!"null".equals(storageNumber) && !"0".equals(storageNumber)) {
+            if (!"null".equals(notBuyNumber)) {
                 Integer num = Integer.valueOf(storageNumber) - Integer.valueOf(notBuyNumber);
                 storageNumber = num.toString();
                 resultMap.put("storageNumber", storageNumber);
