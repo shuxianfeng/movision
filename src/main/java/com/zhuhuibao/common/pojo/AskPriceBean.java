@@ -264,4 +264,8 @@ public class AskPriceBean {
         return getProvinceName() + getCityName() + getAreaName();
     }
 
+    public String getPath(){
+        return "//image.zhuhui8.com/upload/price/img/";
+    }
+
 }

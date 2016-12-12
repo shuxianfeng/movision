@@ -4,6 +4,7 @@
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
         <setting name="callSettersOnNulls" value="true"/>
+        <setting name="logImpl" value="SLF4J"/>
     </settings>
     <typeAliases>
         <typeAlias type="com.zhuhuibao.mybatis.memberReg.entity.Member" alias="memberReg"/>

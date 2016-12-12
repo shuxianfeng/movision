@@ -17,7 +17,8 @@
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, askid, createid,content,billurl,if(isShow=1,companyName,'') companyName, if(isShow=1,linkMan,'') linkMan,
-    if(isShow=1,telephone,'') telephone, if(isShow=1,email,'') email,isShow
+    if(isShow=1,telephone,'') telephone, if(isShow=1,email,'') email,isShow,
+    '//image.zhuhui8.com/upload/price/img/' as path
     from t_p_offer_price
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -25,7 +26,8 @@
   <select id="findAllOfferPriceByAskId" resultType="java.util.Map" parameterType="java.lang.Long">
     SELECT
       t.id,t.askid, t.createid ,t.offerTime,t.content,t.billurl,t.isShow,t.companyName,t.linkMan,t.telephone,t.email,
-      CONCAT(pp.name, ct.name) address
+      CONCAT(pp.name, ct.name) address,
+      '//image.zhuhui8.com/upload/price/img/' as path
     FROM
       t_p_offer_price t
       LEFT JOIN t_m_member m

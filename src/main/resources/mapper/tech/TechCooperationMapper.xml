@@ -382,10 +382,10 @@
         left join t_dictionary_constant dn on dn.code = t.applicationArea and dn.type =18
         where t.status != 4
 
-        <if test="status != null">
+        <if test="status != null and status != '' ">
             and t.status = #{status}
         </if>
-        <if test="type != null">
+        <if test="type != null and type != ''">
             and t.type = #{type}
         </if>
         order by t.type,t.updateTime desc
