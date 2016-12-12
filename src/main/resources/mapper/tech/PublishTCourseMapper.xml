@@ -329,13 +329,13 @@
     date_format(expiryDate,'%Y-%m-%d') expiryDate, imgUrl, notice, courseType, t.status,notes,
     (
     select sum(number) from t_o_order_goods
-    where goodsId = #{courseid} and  orderNo in (select orderNo from t_o_order where status in (1,2) and goodsType =#{courseType})
+    where goodsId = #{courseid} and  orderNo in (select orderNo from t_o_order where status in 2 and goodsType =#{courseType})
     ) as number
     from t_p_group_publishCourse t
     left join t_dictionary_province pv on pv.code = t.province
     left join t_dictionary_city ct on ct.code = t.city
     left join t_dictionary_area ar on ar.code = t.area
-    <where>
+    <where> 1=1
       <if test="courseid != null">
         and courseid = #{courseid,jdbcType=BIGINT}
       </if>
