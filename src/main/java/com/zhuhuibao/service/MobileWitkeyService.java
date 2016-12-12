@@ -384,7 +384,7 @@ public class MobileWitkeyService {
     public Map getWitkeyDetail(Long id, String type) throws Exception {
         Map map = new HashMap();
         if (type.equals("1")) {
-            // 任务
+            // 任务，需要查看付费资格
             map.put("coop_detail", paymentService.getChargeGoodsRecord(id, ZhbConstant.ZhbGoodsType.CKWKRW.toString()));
         } else {
             // 其他
