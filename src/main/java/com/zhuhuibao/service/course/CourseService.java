@@ -1,9 +1,14 @@
 package com.zhuhuibao.service.course;
 
-import com.zhuhuibao.common.constant.*;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.OrderConstants;
+import com.zhuhuibao.common.constant.PayConstants;
+import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.order.entity.*;
+import com.zhuhuibao.mybatis.order.entity.Order;
+import com.zhuhuibao.mybatis.order.entity.OrderSms;
+import com.zhuhuibao.mybatis.order.entity.PublishCourse;
 import com.zhuhuibao.mybatis.order.service.*;
 import com.zhuhuibao.service.order.ZHOrderService;
 import com.zhuhuibao.shiro.realm.OMSRealm;
@@ -76,10 +81,10 @@ public class CourseService {
      */
     public void createOrder(Map<String, String> msgParam) {
         log.debug("立即支付请求参数:{}", msgParam.toString());
-        DistributedLock lock = null;
+         DistributedLock lock = null;
         try {
-            lock = new DistributedLock(LOCK_NAME);
-            lock.lock();
+             lock = new DistributedLock(LOCK_NAME);
+             lock.lock();
 
             createOrderLock(msgParam);
 
@@ -87,9 +92,9 @@ public class CourseService {
             log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, e.getMessage());
         } finally {
-            if (lock != null) {
-                lock.unlock();
-            }
+             if (lock != null) {
+             lock.unlock();
+             }
         }
     }
 
@@ -168,11 +173,12 @@ public class CourseService {
             msgParam.put("goodsName", course.getTitle());
 
             // 当前库存量减去当前时间30分钟内 下号订单尚未支付的订单消耗数量
-            int stockNum = course.getStorageNumber()-course.getInventory();
+            int inventory = null == course.getInventory() ? 0 : course.getInventory();
+            int stockNum = course.getStorageNumber() - inventory;
 
             if (number > stockNum) { // 购买数量大于库存数量
                 log.error("库存不足.购买数量[{}]大于库存数量[{}]", number, stockNum);
-                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "剩余名额只有"+stockNum+"，请修改报名人数再进行提交");
+                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "剩余名额只有" + stockNum + "，请修改报名人数再进行提交");
             }
         }
 
