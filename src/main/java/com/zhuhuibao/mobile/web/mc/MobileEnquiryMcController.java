@@ -95,6 +95,7 @@ public class MobileEnquiryMcController {
     public Response selSentOfferList(@ApiParam(value = "标题") @RequestParam(required = false) String title, @ApiParam(value = "开始时间") @RequestParam(required = false) String startDate,
             @ApiParam(value = "结束时间") @RequestParam(required = false) String endDate, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
             @ApiParam(value = "每页显示的条数") @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
+
         Paging<AskPriceSimpleBean> offerPager = mobileEnquiryService.getSentOfferList(ShiroUtil.getCreateID(), title, startDate, endDate, pageNo, pageSize);
 
         return new Response(offerPager);

@@ -73,8 +73,6 @@ public interface JobMapper {
 
     //是否收藏该简历
 
-    Map<String, Object> findJobByID(String id);
-
     List<Map<String, String>> queryPublishJobCity(Map<String, Object> map);
 
     Map<String, Object> findJobByJobID(@Param("jobID") String jobID);
@@ -82,8 +80,6 @@ public interface JobMapper {
     List<Map<String, Object>> findNewPositions(@Param("count") int count);
 
     List<Map<String, String>> findAllJobByCompanyId(RowBounds rowBounds, Map<String, Object> map);
-
-    List<Map<String, Object>> tmpMap(String id);
 
     //触屏端是否收藏该简历
     Integer findcollectionResumeById(Map<String, Object> map);
@@ -97,9 +93,6 @@ public interface JobMapper {
     Long querycompanyByJobId(Long jobID);
 
     String queryJobNameByJobId(Long jobID);
-
-    List<Map<String,Object>> findAllOtherPositionById(String id);
-
 
     List<Map<String, Object>> findAllPositionForMobile(RowBounds rowBounds, Map<String, Object> map);
 
