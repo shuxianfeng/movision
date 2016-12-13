@@ -295,7 +295,7 @@ public class ZhpayService {
         }
         // 当前订单(专家培训，技术培训)下单时间和当前时间超过30分钟 订单状态置为已关闭
         if (order.getGoodsType().equals(OrderConstants.GoodsType.JSPX.toString()) || order.getGoodsType().equals(OrderConstants.GoodsType.ZJPX.toString())) {
-            if (order.getDealTime().before(DateUtils.date2Sub(new Date(), Calendar.MINUTE, 30))) {
+            if (order.getDealTime().before(DateUtils.date2Sub(new Date(), Calendar.MINUTE, -30))) {
                 // 订单状态改为关闭
                 order.setStatus(PayConstants.OrderStatus.CLOSED.toString());
                 orderService.update(order);
