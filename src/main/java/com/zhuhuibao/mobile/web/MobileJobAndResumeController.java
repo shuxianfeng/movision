@@ -59,6 +59,7 @@ public class MobileJobAndResumeController extends BaseController {
             getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.CXXZJL);
             Map<String, Object> map = new HashMap<>();
             map.put("id", id);
+            mobileTalentNetworkService.shieldEnterpriseById(map);
             boolean count = mobileTalentNetworkService.collectionResume(map);
             resultMap.put("vipLevel", mobileTalentNetworkService.findVIPById());
             resultMap.put("count", count);

@@ -80,4 +80,8 @@ public interface ResumeMapper {
 
     //删除收藏简历
     void updateCollById(Map<String, Object> con);
+
+    //简历是否被屏蔽
+    int findShieldEnterpriseById(Map<String, Object> map);
+
 }

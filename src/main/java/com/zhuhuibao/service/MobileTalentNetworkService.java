@@ -305,4 +305,20 @@ public class MobileTalentNetworkService {
         Long createId = ShiroUtil.getCreateID();
         return jobMapper.findVIPById(createId);
     }
+
+    /**
+     * 查询企业是否被屏蔽
+     *
+     * @param map
+     */
+    public void shieldEnterpriseById(Map<String, Object> map) throws Exception {
+        Long createId = ShiroUtil.getCreateID();
+        map.put("create_id", String.valueOf(createId));
+        map.put("is_deleted", Constants.DeleteMark.NODELETE.toString());
+        int i = resumeMapper.findShieldEnterpriseById(map);
+        if (1 == i) {
+            //抱歉，当前人才不允许您查看其简历.
+            throw new Exception("抱歉，当前人才不允许您查看其简历。");
+        }
+    }
 }
