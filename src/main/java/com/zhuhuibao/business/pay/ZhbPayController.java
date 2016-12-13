@@ -238,9 +238,12 @@ public class ZhbPayController {
 
     @ApiOperation(value = "支付前校验", notes = "支付前校验")
     @RequestMapping(value = "check_params_before_pay", method = RequestMethod.POST)
-    public void checkParamsBeforePay(@ApiParam("订单号") @RequestParam String orderNo) throws Exception {
+    public Response checkParamsBeforePay(@ApiParam("订单号") @RequestParam String orderNo) throws Exception {
+        Response response = new Response();
         Map<String, String> msgParam = new HashMap<>();
         msgParam.put("orderNo", orderNo);
         zhpayService.checkParams(msgParam);
+        response.setCode(200);
+        return response;
     }
 }
