@@ -301,7 +301,13 @@ public class ZhpayService {
                 orderService.update(order);
                 throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "订单已经失效");
             }
+            OrderGoods goods = orderGoodsService.findByOrderNo(msgParam.get("orderNo"));
+            if (null == goods) {
+                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "订单商品信息不存在");
+            }
             msgParam.put("goodsType", order.getGoodsType());
+            msgParam.put("number", goods.getNumber().toString());
+            msgParam.put("goodsId", goods.getGoodsId().toString());
             courseService.checkRepertory(msgParam);
         }
     }
