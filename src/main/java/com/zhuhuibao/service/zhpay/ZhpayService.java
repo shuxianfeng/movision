@@ -2,6 +2,7 @@ package com.zhuhuibao.service.zhpay;
 
 import com.zhuhuibao.alipay.service.direct.AlipayDirectService;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
@@ -16,7 +17,7 @@ import com.zhuhuibao.mybatis.order.service.ZhbAccountService;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.course.CourseService;
 import com.zhuhuibao.service.order.ZHOrderService;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
+import com.zhuhuibao.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 支付服务
@@ -288,19 +287,22 @@ public class ZhpayService {
      *
      * @param msgParam
      */
-    private void checkParams(Map<String, String> msgParam) {
-        String goodsId = msgParam.get("goodsId");// 商品ID
-        if (StringUtils.isEmpty(goodsId)) {
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "商品ID不能为空");
-        }
-        String number = msgParam.get("number");// 订单商品数量
-        if (StringUtils.isEmpty(number)) {
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "订单商品数量不能为空");
-        }
-
+    public void checkParams(Map<String, String> msgParam) {
         // 如果是培训课程类的支付 校验库存是否满足当前支付条件
         Order order = orderService.findByOrderNo(msgParam.get("orderNo"));
-        msgParam.put("goodsType", order.getGoodsType());
-        courseService.checkRepertory(msgParam);
+        if (null == order) {
+            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "订单不存在");
+        }
+        // 当前订单(专家培训，技术培训)下单时间和当前时间超过30分钟 订单状态置为已关闭
+        if (order.getGoodsType().equals(OrderConstants.GoodsType.JSPX.toString()) || order.getGoodsType().equals(OrderConstants.GoodsType.ZJPX.toString())) {
+            if (order.getDealTime().before(DateUtils.date2Sub(new Date(), Calendar.MINUTE, 30))) {
+                // 订单状态改为关闭
+                order.setStatus(PayConstants.OrderStatus.CLOSED.toString());
+                orderService.update(order);
+                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "订单已经失效");
+            }
+            msgParam.put("goodsType", order.getGoodsType());
+            courseService.checkRepertory(msgParam);
+        }
     }
 }
