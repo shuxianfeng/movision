@@ -116,8 +116,25 @@ public class MobileExpertPageService {
      * @return 专家培训信息
      */
     public List<Map<String, String>> findExpertTrainList(Map<String, Object> condition) {
-        List<Map<String, String>> courseList = publishTCourseMapper.findPublishCourse(condition);
-        return courseList;
+        List<Map<String, String>> result = new ArrayList<>();
+        List<Map<String, String>> courseList = publishTCourseMapper.findLatestPublishCourse(condition);
+        if (!CollectionUtils.isEmpty(courseList)) {
+            for (Map<String, String> resultMap : courseList) {
+                // 当前下订单30分钟未支付的订单数量
+                String notBuyNumber = String.valueOf(resultMap.get("notBuyNumber"));
+                String storageNumber = String.valueOf(resultMap.get("storageNumber"));
+                // 当库存不为零的是时候 页面上展示的库存 = 数据库的库存 - 当前下订单30分钟未支付的订单数量
+                if (!"null".equals(storageNumber) && !"0".equals(storageNumber)) {
+                    if (!"null".equals(notBuyNumber)) {
+                        Integer num = Integer.valueOf(storageNumber) - Integer.valueOf(notBuyNumber);
+                        storageNumber = num.toString();
+                        resultMap.put("storageNumber", storageNumber);
+                    }
+                }
+                result.add(resultMap);
+            }
+        }
+        return result;
     }
 
     /**

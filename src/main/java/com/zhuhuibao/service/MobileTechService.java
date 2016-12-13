@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -376,7 +377,25 @@ public class MobileTechService {
         condition.put("status", TechConstant.PublishCourseStatus.SALING.toString());
         condition.put("courseType", TechConstant.COURSE_TYPE_TECH);
         condition.put("count", count);
-        return ptCourseService.findLatestPublishCourse(condition);
+        List<Map<String, String>> result = new ArrayList<>();
+        List<Map<String, String>> list = ptCourseService.findLatestPublishCourse(condition);
+        if (!CollectionUtils.isEmpty(list)) {
+            for (Map<String, String> resultMap : list) {
+                // 当前下订单30分钟未支付的订单数量
+                String notBuyNumber = String.valueOf(resultMap.get("notBuyNumber"));
+                String storageNumber = String.valueOf(resultMap.get("storageNumber"));
+                // 当库存不为零的是时候 页面上展示的库存 = 数据库的库存 - 当前下订单30分钟未支付的订单数量
+                if (!"null".equals(storageNumber) && !"0".equals(storageNumber)) {
+                    if (!"null".equals(notBuyNumber)) {
+                        Integer num = Integer.valueOf(storageNumber) - Integer.valueOf(notBuyNumber);
+                        storageNumber = num.toString();
+                        resultMap.put("storageNumber", storageNumber);
+                    }
+                }
+                result.add(resultMap);
+            }
+        }
+        return result;
     }
 
     /**

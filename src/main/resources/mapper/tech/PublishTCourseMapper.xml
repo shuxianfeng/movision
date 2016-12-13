@@ -305,12 +305,17 @@
         </where>
         order by t.updateTime desc
     </select>
+
     <select id="findLatestPublishCourse" parameterType="java.util.Map" resultType="java.util.Map">
         select t.courseid,t.title,t.notes,(
         select sum(number) from t_o_order_goods
-        where goodsId = t.courseid and orderNo in (select orderNo from t_o_order where status in (1,2) and goodsType =
+        where goodsId = t.courseid and orderNo in (select orderNo from t_o_order where status =2 and goodsType =
         t.courseType)
-        ) as applynumber, t.storageNumber,t.price,date_format(t.endTime,'%Y-%m-%d %H:%i:%s') endTime,
+        ) as applynumber,
+        (select sum(number) from t_o_order_goods
+        where goodsId = t.courseid and orderNo in (select orderNo from t_o_order where status = 1 and goodsType
+        = t.courseType and dealTime > date_add(now(),interval -30 minute))) as notBuyNumber,
+        t.storageNumber,t.price,date_format(t.endTime,'%Y-%m-%d %H:%i:%s') endTime,
         case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl)
         = 0 then imgUrl end as imgUrl
         from t_p_group_publishCourse t
@@ -324,8 +329,9 @@
             <if test="province != null">
                 and province = #{province}
             </if>
+            AND t.expiryDate > now()
         </where>
-        order by t.updateTime desc
+        order by applynumber desc
         limit #{count}
     </select>
 
