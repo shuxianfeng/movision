@@ -377,8 +377,8 @@
         )) AS
         applyNum ,
         (select sum(number) from t_o_order_goods
-        where goodsId = #{courseid} and orderNo in (select orderNo from t_o_order where status = 1 and goodsType
-        =#{courseType} and dealTime > date_add(now(),interval -30 minute))) as notBuyNumber,
+        where goodsId = t.courseid and orderNo in (select orderNo from t_o_order where status = 1 and goodsType
+        = t.courseType and dealTime > date_add(now(),interval -30 minute))) as notBuyNumber,
         case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl)
         = 0 then imgUrl end as imgUrl
         from t_p_group_publishCourse t
@@ -390,6 +390,7 @@
         <if test="province != null and province != ''">
             and t.province = #{province}
         </if>
-        order by t.expiryDate desc
+           and t.storageNumber !=0
+        order by applyNum desc
     </select>
 </mapper>
