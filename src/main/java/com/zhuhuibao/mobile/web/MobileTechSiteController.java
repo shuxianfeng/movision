@@ -11,6 +11,7 @@ import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
 import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
 import com.zhuhuibao.mybatis.tech.service.DictionaryTechDataService;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
+import com.zhuhuibao.service.MobileExpertPageService;
 import com.zhuhuibao.service.MobileTechService;
 import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -50,6 +51,9 @@ public class MobileTechSiteController extends BaseController {
 
     @Autowired
     TechCooperationService techCooSV;
+
+    @Autowired
+    private MobileExpertPageService mobileExpertPageService;
 
     @RequestMapping(value = "sel_tech_cooperation", method = RequestMethod.GET)
     @ApiOperation(value = "查看技术成果，技术需求信息", notes = "查看技术成果，技术需求信息", response = Response.class)
@@ -126,7 +130,11 @@ public class MobileTechSiteController extends BaseController {
     @ApiOperation(value = "查看培训课程详情", notes = "查看培训课程详情", response = Response.class)
     public Response previewPublishCourseDetail(@ApiParam(value = "培训课程ID") @RequestParam Long courseId) {
         Response response = new Response();
-        response.setData(mTechSV.getTechCourseDetail(courseId));
+        Map<String, Object> condition = new HashMap<>();
+        condition.put("courseid", courseId);
+        condition.put("courseType", ExpertConstant.COURSE_TYPE_ACHIEVEMENT);
+        Map<String, String> course = mobileExpertPageService.previewTrainCourseDetail(condition);
+        response.setData(course);
         return response;
     }
 

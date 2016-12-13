@@ -15,7 +15,6 @@ import com.zhuhuibao.shiro.realm.OMSRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.PropertiesUtils;
 import com.zhuhuibao.utils.sms.SDKSendSms;
-import com.zhuhuibao.zookeeper.DistributedLock;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -81,10 +80,10 @@ public class CourseService {
      */
     public void createOrder(Map<String, String> msgParam) {
         log.debug("立即支付请求参数:{}", msgParam.toString());
-         DistributedLock lock = null;
+        // DistributedLock lock = null;
         try {
-             lock = new DistributedLock(LOCK_NAME);
-             lock.lock();
+            // lock = new DistributedLock(LOCK_NAME);
+            // lock.lock();
 
             createOrderLock(msgParam);
 
@@ -92,9 +91,9 @@ public class CourseService {
             log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, e.getMessage());
         } finally {
-             if (lock != null) {
-             lock.unlock();
-             }
+            // if (lock != null) {
+            // lock.unlock();
+            // }
         }
     }
 
