@@ -372,12 +372,17 @@
     <select id="findAllPublishsCoursePager" parameterType="java.util.Map" resultType="java.util.Map">
         select t.courseid,t.title,t.notes,t.expiryDate AS endTime,t.price,t.storageNumber,
         ( select sum(number) from t_o_order_goods
-        where goodsId = t.courseid and orderNo in (select orderNo from t_o_order where status = 2 and goodsType =2)) AS
+        where goodsId = t.courseid and orderNo in (select orderNo from t_o_order where status = 2
+        and goodsType= t.courseType
+        )) AS
         applyNum ,
         case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl)
         = 0 then imgUrl end as imgUrl
         from t_p_group_publishCourse t
-        where t.courseType= 2
+        where 1=1
+        <if test="courseType != null and courseType != ''">
+            and t.courseType= #{courseType}
+        </if>
         and t.status in(2,3)
         <if test="province != null and province != ''">
             and t.province = #{province}
