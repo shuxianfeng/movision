@@ -193,7 +193,8 @@
   </select>
   <select id="findAllOfferedPriceInfo" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean">
   	 select t.id,t.offerTime dateTime,concat(p.name,c.name) deliveryAddress,if(t.type = 1,'公开询价','定向询价') typeName,t.title,t.createid 
-	 from (select op.id,op.createid,op.askid,date_format(op.offerTime,'%Y-%m-%d') offerTime,ap.provinceCode,ap.cityCode,ap.type,ap.title from t_p_offer_price op
+	 from (select op.id,op.createid,op.askid,date_format(op.offerTime,'%Y-%m-%d') offerTime,ap.provinceCode,ap.cityCode,ap.type,ap.title
+    from t_p_offer_price op
 	 left join t_p_ask_price ap on ap.id = op.askid
 	 <where>
 	 <if test="title != null and title != ''">
@@ -209,6 +210,7 @@
 	 ) t 
 	 left join t_dictionary_province p on t.provinceCode = p.code 
 	 left join t_dictionary_city c on t.cityCode = c.code
+     order by op.offerTime DESC
   </select>
   <select id="queryAllOfferPriceByAskID" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean">
   	select n.id,n.createid,date_format(n.offerTime,'%Y-%m-%d') dateTime,concat(p.name,c.name) deliveryAddress,n.companyName from 
