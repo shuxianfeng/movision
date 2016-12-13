@@ -358,6 +358,7 @@ public class JobPositionService {
     public List<Map<String, Object>> findAllOtherPosition(Paging<Map<String, Object>> pager, Map<String, Object> map) {
         List<Map<String, Object>> list = new ArrayList<>();
         try {
+            log.info("map:"+map.toString());
             List<Map<String, Object>> jobList = jobMapper.findAllPositionForMobile(pager.getRowBounds(), map);
             for (Map<String, Object> job : jobList) {
                 Map<String, Object> result = job;

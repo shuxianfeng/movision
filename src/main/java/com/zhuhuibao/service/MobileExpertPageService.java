@@ -32,6 +32,7 @@ import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -115,8 +116,25 @@ public class MobileExpertPageService {
      * @return 专家培训信息
      */
     public List<Map<String, String>> findExpertTrainList(Map<String, Object> condition) {
-        List<Map<String, String>> courseList = publishTCourseMapper.findPublishCourse(condition);
-        return courseList;
+        List<Map<String, String>> result = new ArrayList<>();
+        List<Map<String, String>> courseList = publishTCourseMapper.findLatestPublishCourse(condition);
+        if (!CollectionUtils.isEmpty(courseList)) {
+            for (Map<String, String> resultMap : courseList) {
+                // 当前下订单30分钟未支付的订单数量
+                String notBuyNumber = String.valueOf(resultMap.get("notBuyNumber"));
+                String storageNumber = String.valueOf(resultMap.get("storageNumber"));
+                // 当库存不为零的是时候 页面上展示的库存 = 数据库的库存 - 当前下订单30分钟未支付的订单数量
+                if (!"null".equals(storageNumber) && !"0".equals(storageNumber)) {
+                    if (!"null".equals(notBuyNumber)) {
+                        Integer num = Integer.valueOf(storageNumber) - Integer.valueOf(notBuyNumber);
+                        storageNumber = num.toString();
+                        resultMap.put("storageNumber", storageNumber);
+                    }
+                }
+                result.add(resultMap);
+            }
+        }
+        return result;
     }
 
     /**
@@ -181,7 +199,15 @@ public class MobileExpertPageService {
      * @return
      */
     public List<Map<String, String>> findAllPublishCoursePager(Paging<Map<String, String>> pager, Map<String, Object> condition) {
-        return publishTCourseMapper.findAllPublishsCoursePager(pager.getRowBounds(), condition);
+        List<Map<String, String>> result = new ArrayList<>();
+        List<Map<String, String>> list = publishTCourseMapper.findAllPublishsCoursePager(pager.getRowBounds(), condition);
+        if (!CollectionUtils.isEmpty(list)) {
+            for (Map<String, String> resultMap : list) {
+                setStorageNumber(resultMap);
+                result.add(resultMap);
+            }
+        }
+        return result;
     }
 
     /**
@@ -195,6 +221,16 @@ public class MobileExpertPageService {
         if (null == resultMap) {
             return resultMap;
         }
+        setStorageNumber(resultMap);
+        return resultMap;
+    }
+
+    /**
+     * 封装库存参数
+     * 
+     * @param resultMap
+     */
+    private void setStorageNumber(Map<String, String> resultMap) {
         // 当前下订单30分钟未支付的订单数量
         String notBuyNumber = String.valueOf(resultMap.get("notBuyNumber"));
         String storageNumber = String.valueOf(resultMap.get("storageNumber"));
@@ -206,7 +242,6 @@ public class MobileExpertPageService {
                 resultMap.put("storageNumber", storageNumber);
             }
         }
-        return resultMap;
     }
 
     /**
