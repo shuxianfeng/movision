@@ -4,12 +4,14 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ExpertConstant;
+import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.mobile.web.mc.MobileExpertController;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
 import com.zhuhuibao.mybatis.tech.entity.TechExpertCourse;
 import com.zhuhuibao.mybatis.tech.service.DictionaryTechDataService;
 import com.zhuhuibao.mybatis.tech.service.TechCooperationService;
+import com.zhuhuibao.service.MobileExpertPageService;
 import com.zhuhuibao.service.MobileTechService;
 import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -27,10 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created with IDEA
- * User: zhuangyuhao
- * Date: 2016/11/23
- * Time: 14:09
+ * Created with IDEA User: zhuangyuhao Date: 2016/11/23 Time: 14:09
  */
 @RestController
 @RequestMapping("/rest/m/tech/site/")
@@ -50,16 +49,21 @@ public class MobileTechSiteController extends BaseController {
     @Autowired
     TechCooperationService techCooSV;
 
+    @Autowired
+    private MobileExpertPageService mobileExpertPageService;
+
     @RequestMapping(value = "sel_tech_cooperation", method = RequestMethod.GET)
     @ApiOperation(value = "查看技术成果，技术需求信息", notes = "查看技术成果，技术需求信息", response = Response.class)
-    public Response queryByChannelInfo(@ApiParam(value = "1:技术成果，2：技术需求") @RequestParam(required = false) Integer type) {
-        return new Response(mTechSV.getTechCoop(type, 6));
+    public Response queryByChannelInfo(@ApiParam(value = "1:技术成果，2：技术需求") @RequestParam(required = false) Integer type,
+            @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        return new Response(mTechSV.getTechCoop(pageNo, pageSize, type));
     }
 
     @RequestMapping(value = "sel_all_news", method = RequestMethod.GET)
     @ApiOperation(value = "查询新技术列表", notes = "查询新技术列表", response = Response.class)
     public Response findAllTechNewsList(@ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                        @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
+            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
         Response response = new Response();
         response.setData(mTechSV.getNewTechList(pageNo, pageSize));
         return response;
@@ -76,9 +80,8 @@ public class MobileTechSiteController extends BaseController {
     @ApiOperation(value = "技术资料列表", notes = "技术资料列表", response = Response.class)
     @RequestMapping(value = "list_tech_data", method = RequestMethod.GET)
     public Response listTechDataPage(@ApiParam(value = "类别ID:1:解决方案 2:技术资料 3:培训资料") @RequestParam(required = false) String fcateId,
-                                     @ApiParam(value = "子类别ID") @RequestParam(required = false) String scateId,
-                                     @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                     @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+            @ApiParam(value = "子类别ID") @RequestParam(required = false) String scateId, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
 
         return new Response(mTechSV.getTechDataList(fcateId, scateId, pageNo, pageSize));
     }
@@ -96,7 +99,7 @@ public class MobileTechSiteController extends BaseController {
     public Response selTechCoopDetail(@ApiParam(value = "商品ID") @RequestParam Long GoodsID) throws Exception {
         Map map = new HashMap();
         TechCooperation techCoo = techCooSV.selectTechCooperationById(String.valueOf(GoodsID));
-        Integer techType = techCoo.getType();   //1:技术成果，2：技术需求
+        Integer techType = techCoo.getType(); // 1:技术成果，2：技术需求
         if (techType == 1) {
             getPrivilegeGoodsDetails(map, String.valueOf(GoodsID), ZhbConstant.ZhbGoodsType.CKJSCG);
         } else {
@@ -112,10 +115,16 @@ public class MobileTechSiteController extends BaseController {
     @RequestMapping(value = "sel_tech_course_list", method = RequestMethod.GET)
     @ApiOperation(value = "查询最新发布的课程(默认10条)", notes = "查询最新发布的课程(默认10条)", response = Response.class)
     public Response findLatestPublishCourse(@ApiParam(value = "地区（省）") @RequestParam(required = false) String province,
-                                            @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+            @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        response.setData(mTechSV.getTechCoursePageList(pageNo, pageSize, province));
+        Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map<String, Object> condition = new HashMap<>();
+        condition.put("province", province);
+        condition.put("courseType", ExpertConstant.COURSE_TYPE_ACHIEVEMENT);
+        List<Map<String, String>> techList = mobileExpertPageService.findAllPublishCoursePager(pager, condition);
+        pager.result(techList);
+        response.setData(pager);
         return response;
     }
 
@@ -123,7 +132,11 @@ public class MobileTechSiteController extends BaseController {
     @ApiOperation(value = "查看培训课程详情", notes = "查看培训课程详情", response = Response.class)
     public Response previewPublishCourseDetail(@ApiParam(value = "培训课程ID") @RequestParam Long courseId) {
         Response response = new Response();
-        response.setData(mTechSV.getTechCourseDetail(courseId));
+        Map<String, Object> condition = new HashMap<>();
+        condition.put("courseid", courseId);
+        condition.put("courseType", ExpertConstant.COURSE_TYPE_ACHIEVEMENT);
+        Map<String, String> course = mobileExpertPageService.previewTrainCourseDetail(condition);
+        response.setData(course);
         return response;
     }
 
@@ -160,8 +173,8 @@ public class MobileTechSiteController extends BaseController {
 
     @ApiOperation(value = "触屏端-手机验证码获取", notes = "触屏端-手机验证码获取", response = Response.class)
     @RequestMapping(value = "get_expert_support", method = RequestMethod.GET)
-    public Response getExpertSupport(@ApiParam(value = "手机号码") @RequestParam(required = true) String mobile,
-                                     @ApiParam(value = "图形验证码") @RequestParam(required = true) String imgCode) throws Exception {
+    public Response getExpertSupport(@ApiParam(value = "手机号码") @RequestParam(required = true) String mobile, @ApiParam(value = "图形验证码") @RequestParam(required = true) String imgCode)
+            throws Exception {
         Subject currentUser = SecurityUtils.getSubject();
         Session sess = currentUser.getSession(true);
         String sessImgCode = (String) sess.getAttribute(ExpertConstant.MOBILE_CODE_SESSION_TYPE_SUPPORT);
@@ -169,22 +182,20 @@ public class MobileTechSiteController extends BaseController {
         return response;
     }
 
-
     @RequestMapping(value = "sel_technical_cooperation", method = RequestMethod.GET)
     @ApiOperation(value = "查看技术合作", notes = "查看技术合作", response = Response.class)
-    public Response selTechnicalCooperation(@ApiParam(value = "应用领域常量") @RequestParam(required = false) String useArea,
-                                            @ApiParam(value = "系统分类常量") @RequestParam(required = false) String system,
-                                            @ApiParam(value = "合作类型") @RequestParam(required = false) String cooperationType,
-                                            @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+    public Response selTechnicalCooperation(@ApiParam(value = "应用领域常量") @RequestParam(required = false) String useArea, @ApiParam(value = "系统分类常量") @RequestParam(required = false) String system,
+            @ApiParam(value = "合作类型") @RequestParam(required = false) String cooperationType, @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         try {
             Paging<Map<String, Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
             Map<String, Object> map = new HashMap<>();
-            //查询传参
+            // 查询传参
             map.put("useArea", useArea);
             map.put("system", system);
             map.put("cooperationType", cooperationType);
+            map.put("status", TechConstant.TechCooperationnStatus.AUDITPASS.toString());
             List<Map<String, Object>> cooperationTypeList = mTechSV.findAllcooperationType(pager, map);
             pager.result(cooperationTypeList);
             response.setData(pager);
@@ -194,7 +205,6 @@ public class MobileTechSiteController extends BaseController {
         return response;
     }
 
-
     @ApiOperation(value = "系統分類常量", notes = "系統分類常量", response = Response.class)
     @RequestMapping(value = "sel_system_list", method = RequestMethod.GET)
     public Response SystemList() {
@@ -203,7 +213,6 @@ public class MobileTechSiteController extends BaseController {
         response.setData(list);
         return response;
     }
-
 
     @ApiOperation(value = "应用领域常量", notes = "应用领域常量", response = Response.class)
     @RequestMapping(value = "sel_useArea_list", method = RequestMethod.GET)

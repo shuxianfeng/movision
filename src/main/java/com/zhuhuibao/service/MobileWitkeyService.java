@@ -4,21 +4,29 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.AdvertisingConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.exception.PageNotFoundException;
+import com.zhuhuibao.fsearch.utils.CollectionUtil;
 import com.zhuhuibao.mybatis.constants.service.ConstantService;
 import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.Message;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
+import com.zhuhuibao.mybatis.vip.service.VipInfoService;
 import com.zhuhuibao.mybatis.witkey.entity.Cooperation;
 import com.zhuhuibao.mybatis.witkey.mapper.CooperationMapper;
 import com.zhuhuibao.mybatis.witkey.service.CooperationService;
+import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
+import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
+import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.payment.PaymentService;
+import com.zhuhuibao.utils.CommonUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +38,8 @@ import java.util.Map;
 @Service
 @Transactional
 public class MobileWitkeyService {
+    @Autowired
+    private ZhbService zhbService;
 
     @Autowired
     private CooperationService cooperationService;
@@ -48,6 +58,9 @@ public class MobileWitkeyService {
 
     @Autowired
     PaymentService paymentService;
+
+    @Autowired
+    private VipInfoService vipInfoService;
 
     /**
      * 查询我发布的任务
@@ -383,13 +396,56 @@ public class MobileWitkeyService {
 
     public Map getWitkeyDetail(Long id, String type) throws Exception {
         Map map = new HashMap();
-        if (type.equals("1")) {
-            // 任务
-            map.put("coop_detail", paymentService.getChargeGoodsRecord(id, ZhbConstant.ZhbGoodsType.CKWKRW.toString()));
+
+        Map<String, Object> cooperation = cooperationService.queryCooperationInfoById(String.valueOf(id));
+        if(null == cooperation || cooperation.isEmpty()){
+            throw new BusinessException(MsgCodeConstant.NOT_EXIST_COOPERATION,"找不到威客信息");
+        }
+
+        if (type.equals("1")) { //任务
+            if(String.valueOf(cooperation.get("createId")).equals(String.valueOf(ShiroUtil.getCreateID()))){
+                //自己查看自己的信息，不需要加密
+                map.putAll(getWitkeyInfo(id));
+                map.put("payment", ZhbPaymentConstant.PAY_ZHB_PURCHASE);
+            }else{
+                // 需要查看付费资格
+                map.put("coop_detail", paymentService.getChargeGoodsRecord(id, ZhbConstant.ZhbGoodsType.CKWKRW.toString()));
+            }
+
         } else {
             // 其他
             map.putAll(getCoopDetail(String.valueOf(id)));
         }
         return map;
     }
+
+    public Map getWitkeyInfo(Long goodsID){
+        Map dataMap = new HashMap();
+        Map<String, Object> cooperation = cooperationService.queryCooperationInfoById(String.valueOf(goodsID));
+        dataMap.put("info", cooperation);
+        Cooperation result = new Cooperation();
+        result.setId(cooperation.get("id").toString());
+        result.setViews(String.valueOf(Integer.parseInt(cooperation.get("views").toString()) + 1));
+        cooperationService.updateCooperationViews(result);
+        return dataMap;
+    }
+
+    public Map getWitkeyPriviligeInfo(Map<String, Object> resultMap, ZhbConstant.ZhbGoodsType zhbGoodsType) throws Exception{
+        if (null != ShiroUtil.getCreateID()) {
+            // 剩余特权数量
+            long privilegeNum = vipInfoService.getExtraPrivilegeNum(ShiroUtil.getCompanyID(), zhbGoodsType.toString());
+            resultMap.put("privilegeNum", String.valueOf(privilegeNum));
+            // 筑慧币余额
+            ZhbAccount account = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
+            resultMap.put("zhbAmount", null != account ? account.getAmount().toString() : "0");
+        } else {
+            resultMap.put("privilegeNum", "0");
+            resultMap.put("zhbAmount", "0");
+        }
+        // 筑慧币单价
+        DictionaryZhbgoods goodsConfig = zhbService.getZhbGoodsByPinyin(zhbGoodsType.toString());
+        resultMap.put("zhbPrice", null != goodsConfig ? String.valueOf(goodsConfig.getPriceDoubleValue()) : "999");
+        return resultMap;
+    }
+
 }

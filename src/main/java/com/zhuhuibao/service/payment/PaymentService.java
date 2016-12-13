@@ -96,7 +96,7 @@ public class PaymentService {
         Long createId = ShiroUtil.getCreateID();
         Long companyId = ShiroUtil.getCompanyID();
         Map<String, Object> dataMap = new HashMap<>();
-        if (createId != null) {
+        if (createId != null ) {
             Map<String, Object> con = new HashMap<>();
             con.put("goodsId", goodsID);
             con.put("companyId", companyId);

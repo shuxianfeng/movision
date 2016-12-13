@@ -8,14 +8,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 @ApiModel(value = "报价单", description = "报价单")
-public class OfferPrice implements Serializable{
+public class OfferPrice implements Serializable {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "报价ID")
-	private Long id;
+    private Long id;
 
     @ApiModelProperty(value = "询价ID")
     private Long askid;
@@ -48,7 +48,7 @@ public class OfferPrice implements Serializable{
     private String email;
 
     @ApiModelProperty(value = "手机端上传询价单图片，传img")
-    private String  mode;
+    private String mode;
 
     public String getMode() {
         return mode;
@@ -67,14 +67,14 @@ public class OfferPrice implements Serializable{
     }
 
     public Long getAskid() {
-		return askid;
-	}
+        return askid;
+    }
 
-	public void setAskid(Long askid) {
-		this.askid = askid;
-	}
+    public void setAskid(Long askid) {
+        this.askid = askid;
+    }
 
-	public Long getCreateid() {
+    public Long getCreateid() {
         return createid;
     }
 
@@ -99,14 +99,14 @@ public class OfferPrice implements Serializable{
     }
 
     public String getBillurl() {
-		return billurl;
-	}
+        return billurl;
+    }
 
-	public void setBillurl(String billurl) {
-		this.billurl = billurl;
-	}
+    public void setBillurl(String billurl) {
+        this.billurl = billurl;
+    }
 
-	public Boolean getIsShow() {
+    public Boolean getIsShow() {
         return isShow;
     }
 
@@ -146,12 +146,7 @@ public class OfferPrice implements Serializable{
         this.email = email == null ? null : email.trim();
     }
 
-    public String getImgUrl() {
-        String imgUrl = "";
-        if(StringUtils.isNotEmpty(billurl) &&
-                !this.billurl.contains("xlsx") && !this.billurl.contains("xls") && !this.billurl.contains("doc")){
-            imgUrl = "//image.zhuhui8.com/upload/price/img/"+billurl;
-        }
-        return imgUrl;
+    public String getPath() {
+        return "//image.zhuhui8.com/upload/price/img/";
     }
 }

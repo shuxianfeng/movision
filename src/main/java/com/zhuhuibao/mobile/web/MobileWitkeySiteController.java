@@ -69,20 +69,9 @@ public class MobileWitkeySiteController extends BaseController {
     public Response cooperationInfo(@ApiParam(value = "威客id") @RequestParam Long id,
                                     @ApiParam(value = "威客大类，1：任务；2：服务；3：资质合作") @RequestParam String type) throws Exception {
         Map map = mWitkeySV.getWitkeyDetail(id, type);
-        getPrivilegeGoodsDetails(map, null, ZhbConstant.ZhbGoodsType.CKWKRW);
-        if (null != ShiroUtil.getCreateID() && type.equals("1")) {
-            Map<String, Object> con = new HashMap<>();
-            con.put("goodsId", id);
-            con.put("companyId", ShiroUtil.getCreateID());
-            con.put("type", ZhbConstant.ZhbGoodsType.CKWKRW);
-            // 判断信息是否已经购买成功
-            int viewNumber = goodsService.checkIsViewGoods(con);
-            if (viewNumber == 0) {
-                map.put("payment", ZhbPaymentConstant.PAY_ZHB_NON_PURCHASE);
-            } else {
-                map.put("payment", ZhbPaymentConstant.PAY_ZHB_PURCHASE);
-            }
-        }
+
+        mWitkeySV.getWitkeyPriviligeInfo(map, ZhbConstant.ZhbGoodsType.CKWKRW);
+
         return new Response(map);
     }
 

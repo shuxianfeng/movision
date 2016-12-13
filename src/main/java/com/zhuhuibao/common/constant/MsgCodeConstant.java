@@ -390,6 +390,11 @@ public interface MsgCodeConstant {
 	 */
 	int DELETE_TECH_DATA_FAIL = 3013;
 
+	/**
+	 * 不存在威客信息
+	 */
+	int NOT_EXIST_COOPERATION = 3014;
+
 
 
 }
