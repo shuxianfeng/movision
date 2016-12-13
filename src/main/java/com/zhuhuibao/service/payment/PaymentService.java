@@ -116,6 +116,7 @@ public class PaymentService {
         } else {
             // 未登录，查看加密信息
             dataMap.putAll(getEncryptedGoodsRecord(goodsID, type));
+            dataMap.put("payment", ZhbPaymentConstant.PAY_ZHB_NON_PURCHASE);
         }
         return dataMap;
     }
