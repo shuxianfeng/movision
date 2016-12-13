@@ -280,7 +280,7 @@
             </if>
             <if test="jobCity != null and jobCity != ''">
                 <!-- and (#{jobCity} in(t.jobCity) or (select provincecode from t_dictionary_city where code = #{jobCity}) in(t.jobProvince)) -->
-                and (t.jobCity = #{jobCity} or t.jobProvince = #{jobCity})
+                and (find_in_set(#{jobCity}, t.jobCity) or find_in_set(#{jobCity}, t.jobProvince))
             </if>
             <if test="expYearBefore != null and expYearBefore != ''">
                 and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore}
