@@ -270,6 +270,7 @@
         t.jobProvince
         from t_i_resume t
         LEFT JOIN t_m_member m on t.createid = m.id
+        LEFT JOIN t_dictionary_city c on t.jobProvince = c.provincecode
         <where>
             <if test="status != null and status != ''">
                 and m.status != #{status}
@@ -280,7 +281,7 @@
             </if>
             <if test="jobCity != null and jobCity != ''">
                 <!-- and (#{jobCity} in(t.jobCity) or (select provincecode from t_dictionary_city where code = #{jobCity}) in(t.jobProvince)) -->
-                and (find_in_set(#{jobCity}, t.jobCity) or find_in_set(#{jobCity}, t.jobProvince))
+                and (find_in_set(#{jobCity}, t.jobCity) or (find_in_set(c.code, t.jobCity) and c.provincecode = #{jobCity} ))
             </if>
             <if test="expYearBefore != null and expYearBefore != ''">
                 and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore}
