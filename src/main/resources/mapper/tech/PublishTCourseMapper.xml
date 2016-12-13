@@ -386,11 +386,10 @@
         <if test="courseType != null and courseType != ''">
             and t.courseType= #{courseType}
         </if>
-        and t.status in(2,3)
+        and t.status != 1
         <if test="province != null and province != ''">
             and t.province = #{province}
         </if>
-           and t.storageNumber !=0
-        order by applyNum desc
+        order by t.expiryDate desc
     </select>
 </mapper>
