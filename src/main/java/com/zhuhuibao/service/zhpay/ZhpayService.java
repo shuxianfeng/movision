@@ -6,16 +6,9 @@ import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.order.entity.Order;
-import com.zhuhuibao.mybatis.order.entity.OrderFlow;
-import com.zhuhuibao.mybatis.order.entity.OrderGoods;
-import com.zhuhuibao.mybatis.order.entity.ZhbAccount;
-import com.zhuhuibao.mybatis.order.service.OrderFlowService;
-import com.zhuhuibao.mybatis.order.service.OrderGoodsService;
-import com.zhuhuibao.mybatis.order.service.OrderService;
-import com.zhuhuibao.mybatis.order.service.ZhbAccountService;
+import com.zhuhuibao.mybatis.order.entity.*;
+import com.zhuhuibao.mybatis.order.service.*;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
-import com.zhuhuibao.service.course.CourseService;
 import com.zhuhuibao.service.order.ZHOrderService;
 import com.zhuhuibao.utils.DateUtils;
 import org.slf4j.Logger;
@@ -56,10 +49,10 @@ public class ZhpayService {
     ZhbService zhbService;
 
     @Autowired
-    private CourseService courseService;
+    private OrderService orderService;
 
     @Autowired
-    private OrderService orderService;
+    private PublishCourseService publishCourseService;
 
     /**
      * 单一方式支付(1.支付宝)
@@ -305,10 +298,13 @@ public class ZhpayService {
             if (null == goods) {
                 throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "订单商品信息不存在");
             }
-            msgParam.put("goodsType", order.getGoodsType());
-            msgParam.put("number", goods.getNumber().toString());
-            msgParam.put("goodsId", goods.getGoodsId().toString());
-            courseService.checkRepertory(msgParam);
+            PublishCourse course = publishCourseService.getCourseById(goods.getGoodsId());
+            int number = goods.getNumber();
+            int stockNum = course.getStorageNumber();
+            if (goods.getNumber() > stockNum) { // 购买数量大于库存数量
+                log.error("库存不足.购买数量[{}]大于库存数量[{}]", number, stockNum);
+                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "剩余名额只有" + stockNum + "，请修改报名人数再进行提交");
+            }
         }
     }
 }
