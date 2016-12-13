@@ -280,11 +280,13 @@ public class ZhpayService {
      *
      * @param msgParam
      */
-    public void checkParams(Map<String, String> msgParam) {
+    public String checkParams(Map<String, String> msgParam) {
+        String msg = "";
         // 如果是培训课程类的支付 校验库存是否满足当前支付条件
         Order order = orderService.findByOrderNo(msgParam.get("orderNo"));
         if (null == order) {
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "订单不存在");
+            msg = "订单不存在";
+            return msg;
         }
         // 当前订单(专家培训，技术培训)下单时间和当前时间超过30分钟 订单状态置为已关闭
         if (order.getGoodsType().equals(OrderConstants.GoodsType.JSPX.toString()) || order.getGoodsType().equals(OrderConstants.GoodsType.ZJPX.toString())) {
@@ -292,19 +294,21 @@ public class ZhpayService {
                 // 订单状态改为关闭
                 order.setStatus(PayConstants.OrderStatus.CLOSED.toString());
                 orderService.update(order);
-                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "订单已经失效");
+                msg = "订单已经失效";
+                return msg;
             }
             OrderGoods goods = orderGoodsService.findByOrderNo(msgParam.get("orderNo"));
             if (null == goods) {
-                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "订单商品信息不存在");
+                msg = "订单商品信息不存在";
+                return msg;
             }
             PublishCourse course = publishCourseService.getCourseById(goods.getGoodsId());
-            int number = goods.getNumber();
             int stockNum = course.getStorageNumber();
             if (goods.getNumber() > stockNum) { // 购买数量大于库存数量
-                log.error("库存不足.购买数量[{}]大于库存数量[{}]", number, stockNum);
-                throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "剩余名额只有" + stockNum + "，请修改报名人数再进行提交");
+                msg = "剩余名额只有" + stockNum + "，请修改报名人数再进行提交";
+                return msg;
             }
         }
+        return msg;
     }
 }

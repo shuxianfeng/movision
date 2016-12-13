@@ -242,7 +242,15 @@ public class ZhbPayController {
         Response response = new Response();
         Map<String, String> msgParam = new HashMap<>();
         msgParam.put("orderNo", orderNo);
-        zhpayService.checkParams(msgParam);
+        String msg = zhpayService.checkParams(msgParam);
+        msgParam = new HashMap<>();
+        if ("".equals(msg)) {
+            msgParam.put("ifSuc", "1");
+        } else {
+            msgParam.put("ifSuc", "2");
+        }
+        msgParam.put("msg", msg);
+        response.setData(msgParam);
         response.setCode(200);
         return response;
     }
