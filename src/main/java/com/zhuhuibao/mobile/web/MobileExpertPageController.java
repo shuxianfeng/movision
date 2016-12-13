@@ -53,7 +53,6 @@ public class MobileExpertPageController extends BaseController {
     @Autowired
     ZhbService zhbService;
 
-
     @ApiOperation(value = "触屏端-专家首页-专家技术成果-系統分類常量", notes = "触屏端-专家首页-专家技术成果-系統分類常量", response = Response.class)
     @RequestMapping(value = "sel_systemList", method = RequestMethod.GET)
     public Response SystemList() {
@@ -63,7 +62,6 @@ public class MobileExpertPageController extends BaseController {
         return response;
     }
 
-
     @ApiOperation(value = "触屏端-专家首页-专家技术成果-应用领域常量", notes = "触屏端-专家首页-专家技术成果-应用领域常量", response = Response.class)
     @RequestMapping(value = "sel_useAreaList", method = RequestMethod.GET)
     public Response useAreaList() {
@@ -72,7 +70,6 @@ public class MobileExpertPageController extends BaseController {
         response.setData(list);
         return response;
     }
-
 
     @RequestMapping(value = "sel_expert_home_page", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-专家首页-专家频道首页详情", notes = "触屏端-专家首页-专家频道首页详情", response = Response.class)
@@ -87,7 +84,7 @@ public class MobileExpertPageController extends BaseController {
             List<Expert> expertsList = mobileExpertPageService.findNewSettledExpertList(count);
             map.put("expertsList", expertsList);
 
-            //专家培训区域
+            // 专家培训区域
             Map<String, Object> condition = new HashMap<>();
             condition.put("status", TechConstant.PublishCourseStatus.SALING.toString());
             condition.put("courseType", ExpertConstant.COURSE_TYPE_EXPERT);
@@ -95,11 +92,11 @@ public class MobileExpertPageController extends BaseController {
             List<Map<String, String>> trainList = mobileExpertPageService.findExpertTrainList(condition);
             map.put("trainList", trainList);
 
-            //最新技术成果
+            // 最新技术成果
             List<Map<String, String>> achievementList = mobileExpertPageService.findNewAchievementList(count);
             map.put("achievementList", achievementList);
 
-            //协会动态区域
+            // 协会动态区域
             List<Map<String, String>> dynamicList = mobileExpertPageService.findNewDynamicList(3);
             map.put("dynamicList", dynamicList);
 
@@ -111,15 +108,13 @@ public class MobileExpertPageController extends BaseController {
 
     @RequestMapping(value = "sel_expert_list", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-专家首页-专家库更多列表", notes = "触屏端-专家首页-专家库更多列表", response = Response.class)
-    public Response selExpertList(@ApiParam(value = "省") @RequestParam(required = false) String province,
-                                  @ApiParam(value = "专家类型") @RequestParam(required = false) String expertType,
-                                  @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                  @RequestParam(required = false, defaultValue = "10") String pageSize) {
+    public Response selExpertList(@ApiParam(value = "省") @RequestParam(required = false) String province, @ApiParam(value = "专家类型") @RequestParam(required = false) String expertType,
+            @RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         try {
             Paging<Map<String, Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
             Map<String, Object> map = new HashMap<>();
-            //查询传参
+            // 查询传参
             map.put("province", province);
             map.put("expertType", expertType);
             map.put("type", ExpertConstant.EXPERT_TYPE_ONE);
@@ -131,7 +126,6 @@ public class MobileExpertPageController extends BaseController {
         }
         return response;
     }
-
 
     @RequestMapping(value = "sel_resume_details", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-专家首页-专家详情", notes = "触屏端-专家首页-专家详情", response = Response.class)
@@ -153,7 +147,6 @@ public class MobileExpertPageController extends BaseController {
         }
         return response;
     }
-
 
     @RequestMapping(value = "sel_expert_details_list", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-专家首页-专家的技术成果详情", notes = "触屏端-专家首页-专家的技术成果详情", response = Response.class)
@@ -177,20 +170,16 @@ public class MobileExpertPageController extends BaseController {
         return response;
     }
 
-
     @RequestMapping(value = "sel_expert_train_list", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-专家首页-专家培训列表", notes = "触屏端-专家首页-专家培训列表", response = Response.class)
-    public Response selExpertTrainList(@ApiParam(value = "省") @RequestParam(required = false) String province,
-                                       @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                       @RequestParam(required = false, defaultValue = "10") String pageSize) {
+    public Response selExpertTrainList(@ApiParam(value = "省") @RequestParam(required = false) String province, @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         try {
             Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
             Map<String, Object> condition = new HashMap<>();
             condition.put("province", province);
             condition.put("courseType", ExpertConstant.COURSE_TYPE_EXPERT);
-            //销售中
-            condition.put("status", TechConstant.PublishCourseStatus.SALING.toString());
             List<Map<String, String>> techList = mobileExpertPageService.findAllPublishCoursePager(pager, condition);
             pager.result(techList);
             response.setData(pager);
@@ -220,18 +209,15 @@ public class MobileExpertPageController extends BaseController {
         return response;
     }
 
-
     @ApiOperation(value = "触屏端-专家首页-技术成果列表", notes = "触屏端-专家首页-技术成果列表", response = Response.class)
     @RequestMapping(value = "sel_achievement_list", method = RequestMethod.GET)
-    public Response selAchievementList(@ApiParam(value = "系统分类") @RequestParam(required = false) String systemType,
-                                       @ApiParam(value = "应用领域") @RequestParam(required = false) String useArea,
-                                       @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                       @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
+    public Response selAchievementList(@ApiParam(value = "系统分类") @RequestParam(required = false) String systemType, @ApiParam(value = "应用领域") @RequestParam(required = false) String useArea,
+            @RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
         Response response = new Response();
         try {
             Paging<Achievement> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
             Map<String, Object> map = new HashMap<>();
-            //查询传参
+            // 查询传参
             map.put("systemType", systemType);
             map.put("useArea", useArea);
             map.put("type", ExpertConstant.EXPERT_TYPE_ONE);
@@ -245,7 +231,6 @@ public class MobileExpertPageController extends BaseController {
         }
         return response;
     }
-
 
     @ApiOperation(value = "触屏端-专家首页-申请专家入驻", notes = "触屏端-专家首页-申请专家入驻", response = Response.class)
     @RequestMapping(value = "add_apply_expert", method = RequestMethod.POST)
@@ -261,13 +246,10 @@ public class MobileExpertPageController extends BaseController {
         return response;
     }
 
-
     @ApiOperation(value = "触屏端-专家首页-申请专家支持", notes = "触屏端-专家首页-申请专家支持", response = Response.class)
     @RequestMapping(value = "add_expert_support", method = RequestMethod.POST)
-    public Response addExpertSupport(@ApiParam(value = "联系人名称") @RequestParam String linkName,
-                                     @ApiParam(value = "手机") @RequestParam(required = true) String mobile,
-                                     @ApiParam(value = "验证码") @RequestParam(required = true) String code,
-                                     @ApiParam(value = "申请原因") @RequestParam(required = false) String reason) {
+    public Response addExpertSupport(@ApiParam(value = "联系人名称") @RequestParam String linkName, @ApiParam(value = "手机") @RequestParam(required = true) String mobile,
+            @ApiParam(value = "验证码") @RequestParam(required = true) String code, @ApiParam(value = "申请原因") @RequestParam(required = false) String reason) {
         Response response = new Response();
         try {
             ExpertSupport expertSupport = new ExpertSupport();
@@ -283,11 +265,9 @@ public class MobileExpertPageController extends BaseController {
         return response;
     }
 
-
     @ApiOperation(value = "触屏端-专家首页-申请专家支持-手机验证码获取", notes = "触屏端-专家首页-申请专家支持-手机验证码获取", response = Response.class)
     @RequestMapping(value = "get_expert_support", method = RequestMethod.GET)
-    public Response getExpertSupport(@ApiParam(value = "手机号码") @RequestParam(required = true) String mobile,
-                                     @ApiParam(value = "图形验证码") @RequestParam(required = true) String imgCode) {
+    public Response getExpertSupport(@ApiParam(value = "手机号码") @RequestParam(required = true) String mobile, @ApiParam(value = "图形验证码") @RequestParam(required = true) String imgCode) {
         Response response = new Response();
         try {
             Subject currentUser = SecurityUtils.getSubject();
@@ -303,7 +283,6 @@ public class MobileExpertPageController extends BaseController {
         return response;
     }
 
-
     @ApiOperation(value = "触屏端-专家首页-申请专家支持-图形验证码", notes = "触屏端-专家首页-申请专家支持-图形验证码", response = Response.class)
     @RequestMapping(value = "sel_support_img_code", method = RequestMethod.GET)
     public void selSupportImgCode(HttpServletResponse response) {
@@ -317,16 +296,14 @@ public class MobileExpertPageController extends BaseController {
         }
     }
 
-
     @ApiOperation(value = "触屏端-专家首页-协会动态列表", notes = "触屏端-专家首页-协会动态列表", response = Response.class)
     @RequestMapping(value = "sel_dynamic_list", method = RequestMethod.GET)
-    public Response dynamicList(@RequestParam(required = false, defaultValue = "1") String pageNo,
-                                @RequestParam(required = false, defaultValue = "10") String pageSize) {
+    public Response dynamicList(@RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         try {
             Paging<Dynamic> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
             Map<String, Object> map = new HashMap<>();
-            //查询传参
+            // 查询传参
             map.put("type", ExpertConstant.EXPERT_TYPE_ONE);
             List<Dynamic> dynamicList = mobileExpertPageService.findAllDynamicList(pager, map);
             pager.result(dynamicList);
@@ -336,7 +313,6 @@ public class MobileExpertPageController extends BaseController {
         }
         return response;
     }
-
 
     @ApiOperation(value = "触屏端-专家首页-协会动态详情", notes = "触屏端-专家首页-协会动态详情", response = Response.class)
     @RequestMapping(value = "sel_dynamic_details", method = RequestMethod.GET)
@@ -351,7 +327,6 @@ public class MobileExpertPageController extends BaseController {
         return response;
     }
 
-
     @ApiOperation(value = "触屏端-专家首页-提交留言", notes = "触屏端-专家首页-提交留言", response = Response.class)
     @RequestMapping(value = "add_message", method = RequestMethod.POST)
     public Response addMessage(@ModelAttribute Messages message) throws Exception {
@@ -364,7 +339,7 @@ public class MobileExpertPageController extends BaseController {
                 if (bool) {
                     mobileExpertPageService.addMessage(message);
                     zhbService.payForGoods(Long.parseLong(message.getId()), ZhbPaymentConstant.goodsType.GZJLY.toString());
-                } else {//支付失败稍后重试，联系客服
+                } else {// 支付失败稍后重试，联系客服
                     throw new BusinessException(MsgCodeConstant.ZHB_PAYMENT_FAILURE, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.ZHB_PAYMENT_FAILURE)));
                 }
             } else {

@@ -505,7 +505,7 @@ public class AlipayService {
             OrderGoods orderGoods = orderGoodsService.findByOrderNo(order.getOrderNo());
             PublishCourse publishCourse = courseService.getCourseById(orderGoods.getGoodsId());
             if (null != publishCourse) {
-                courseService.updateAddStockNum(publishCourse.getCourseid(), orderGoods.getNumber());
+                courseService.updateAddStockNum(publishCourse.getCourseid(), -orderGoods.getNumber());
             }
 
             // 购买筑慧币,VIP 需要回调

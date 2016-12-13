@@ -5,7 +5,7 @@ package com.zhuhuibao.common.constant;
  */
 
 /**
- *专家常量类
+ * 专家常量类
  **/
 
 public interface ExpertConstant {
@@ -57,7 +57,7 @@ public interface ExpertConstant {
      * 问题未关闭
      */
     String QUESTION_NOT_CLOSE = "1";
-    
+
     /**
      * 专家频道问题状态标识 3：已屏蔽
      */
@@ -78,6 +78,10 @@ public interface ExpertConstant {
      */
     Integer COURSE_TYPE_EXPERT = 2;
 
+    /**
+     * 课程类型：1：技术培训，2专家培训
+     */
+    Integer COURSE_TYPE_ACHIEVEMENT = 1;
     /**
      * 发送验证码时存在session的参数type
      */
