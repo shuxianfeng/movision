@@ -409,7 +409,8 @@ public class MobileWitkeyService {
                 map.put("payment", ZhbPaymentConstant.PAY_ZHB_PURCHASE);
             }else{
                 // 需要查看付费资格
-                map.put("coop_detail", paymentService.getChargeGoodsRecord(id, ZhbConstant.ZhbGoodsType.CKWKRW.toString()));
+//                map.put("coop_detail", paymentService.getChargeGoodsRecord(id, ZhbConstant.ZhbGoodsType.CKWKRW.toString()));
+                map.putAll(paymentService.getChargeGoodsRecord(id, ZhbConstant.ZhbGoodsType.CKWKRW.toString()));
             }
 
         } else {
@@ -423,6 +424,7 @@ public class MobileWitkeyService {
         Map dataMap = new HashMap();
         Map<String, Object> cooperation = cooperationService.queryCooperationInfoById(String.valueOf(goodsID));
         dataMap.put("info", cooperation);
+
         Cooperation result = new Cooperation();
         result.setId(cooperation.get("id").toString());
         result.setViews(String.valueOf(Integer.parseInt(cooperation.get("views").toString()) + 1));
