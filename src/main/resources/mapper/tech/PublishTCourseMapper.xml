@@ -321,11 +321,11 @@
         from t_p_group_publishCourse t
         <where>
             <if test="courseType != null">
-                and courseType = #{courseType}
+                and t.courseType = #{courseType}
             </if>
-                and status in(2,3)
+                and t.status in(2,3)
             <if test="province != null">
-                and province = #{province}
+                and t.province = #{province}
             </if>
             AND t.expiryDate > now()
         </where>
