@@ -860,7 +860,7 @@ public class MobileWxPayService {
         }
 
         Map<String, String> msgParam = new HashMap<>();
-        msgParam.put("orderNo", order.getOrderNo());
+        msgParam.put("orderNo", orderid);
         zhpayService.checkParams(msgParam);
 
         BigDecimal payAmount = order.getPayAmount();
