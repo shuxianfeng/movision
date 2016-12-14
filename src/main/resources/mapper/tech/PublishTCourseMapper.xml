@@ -323,7 +323,7 @@
             <if test="courseType != null">
                 and t.courseType = #{courseType}
             </if>
-                and t.status in(2,3)
+                and t.status in(2,3,4)
             <if test="province != null">
                 and t.province = #{province}
             </if>
