@@ -402,7 +402,8 @@
         <if test="viewerId != null">
             and v.viewerId = #{viewerId}
         </if>
-        GROUP by v.viewTime desc
+        GROUP by v.viewTime
+        order by v.viewTime desc
     </select>
     <select id="findAllMyLookedMobileExpertListById" resultType="java.util.Map">
         select e.id,e.name,e.company,e.position,v.type,
@@ -418,7 +419,7 @@
         <if test="viewerId != null">
             and v.viewerId = #{viewerId}
         </if>
-        GROUP by v.viewTime
+        GROUP by v.viewTime DESC
     </select>
     <select id="queryExpById" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT e.photoUrl,e.name,e.createId FROM t_e_expert e
