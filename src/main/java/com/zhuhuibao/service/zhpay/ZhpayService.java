@@ -2,21 +2,15 @@ package com.zhuhuibao.service.zhpay;
 
 import com.zhuhuibao.alipay.service.direct.AlipayDirectService;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.order.entity.Order;
-import com.zhuhuibao.mybatis.order.entity.OrderFlow;
-import com.zhuhuibao.mybatis.order.entity.OrderGoods;
-import com.zhuhuibao.mybatis.order.entity.ZhbAccount;
-import com.zhuhuibao.mybatis.order.service.OrderFlowService;
-import com.zhuhuibao.mybatis.order.service.OrderGoodsService;
-import com.zhuhuibao.mybatis.order.service.OrderService;
-import com.zhuhuibao.mybatis.order.service.ZhbAccountService;
+import com.zhuhuibao.mybatis.order.entity.*;
+import com.zhuhuibao.mybatis.order.service.*;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
-import com.zhuhuibao.service.course.CourseService;
 import com.zhuhuibao.service.order.ZHOrderService;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
+import com.zhuhuibao.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 支付服务
@@ -57,10 +49,10 @@ public class ZhpayService {
     ZhbService zhbService;
 
     @Autowired
-    private CourseService courseService;
+    private OrderService orderService;
 
     @Autowired
-    private OrderService orderService;
+    private PublishCourseService publishCourseService;
 
     /**
      * 单一方式支付(1.支付宝)
@@ -288,19 +280,35 @@ public class ZhpayService {
      *
      * @param msgParam
      */
-    private void checkParams(Map<String, String> msgParam) {
-        String goodsId = msgParam.get("goodsId");// 商品ID
-        if (StringUtils.isEmpty(goodsId)) {
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "商品ID不能为空");
-        }
-        String number = msgParam.get("number");// 订单商品数量
-        if (StringUtils.isEmpty(number)) {
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "订单商品数量不能为空");
-        }
-
+    public String checkParams(Map<String, String> msgParam) {
+        String msg = "";
         // 如果是培训课程类的支付 校验库存是否满足当前支付条件
         Order order = orderService.findByOrderNo(msgParam.get("orderNo"));
-        msgParam.put("goodsType", order.getGoodsType());
-        courseService.checkRepertory(msgParam);
+        if (null == order) {
+            msg = "订单不存在";
+            return msg;
+        }
+        // 当前订单(专家培训，技术培训)下单时间和当前时间超过30分钟 订单状态置为已关闭
+        if (order.getGoodsType().equals(OrderConstants.GoodsType.JSPX.toString()) || order.getGoodsType().equals(OrderConstants.GoodsType.ZJPX.toString())) {
+            if (order.getDealTime().before(DateUtils.date2Sub(new Date(), Calendar.MINUTE, -30))) {
+                // 订单状态改为关闭
+                order.setStatus(PayConstants.OrderStatus.CLOSED.toString());
+                orderService.update(order);
+                msg = "订单已经失效";
+                return msg;
+            }
+            OrderGoods goods = orderGoodsService.findByOrderNo(msgParam.get("orderNo"));
+            if (null == goods) {
+                msg = "订单商品信息不存在";
+                return msg;
+            }
+            PublishCourse course = publishCourseService.getCourseById(goods.getGoodsId());
+            int stockNum = course.getStorageNumber();
+            if (goods.getNumber() > stockNum) { // 购买数量大于库存数量
+                msg = "剩余名额只有" + stockNum + "，请修改报名人数再进行提交";
+                return msg;
+            }
+        }
+        return msg;
     }
 }

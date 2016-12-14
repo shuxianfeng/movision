@@ -4,16 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.zhuhuibao.mybatis.order.entity.PublishCourse;
-import com.zhuhuibao.mybatis.order.service.PublishCourseService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -35,12 +29,15 @@ import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.order.entity.Order;
 import com.zhuhuibao.mybatis.order.entity.OrderFlow;
 import com.zhuhuibao.mybatis.order.entity.OrderGoods;
+import com.zhuhuibao.mybatis.order.entity.PublishCourse;
 import com.zhuhuibao.mybatis.order.service.OrderFlowService;
 import com.zhuhuibao.mybatis.order.service.OrderGoodsService;
 import com.zhuhuibao.mybatis.order.service.OrderService;
+import com.zhuhuibao.mybatis.order.service.PublishCourseService;
 import com.zhuhuibao.mybatis.wxpayLog.entity.WxPayNotifyLog;
 import com.zhuhuibao.mybatis.wxpayLog.mapper.WxPayNotifyLogMapper;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
+import com.zhuhuibao.service.zhpay.ZhpayService;
 import com.zhuhuibao.utils.CommonUtils;
 import com.zhuhuibao.utils.HttpClientUtils;
 import com.zhuhuibao.utils.SignUtil;
@@ -77,6 +74,9 @@ public class MobileWxPayService {
 
     @Autowired
     private PublishCourseService courseService;
+
+    @Autowired
+    private ZhpayService zhpayService;
 
     private static final Logger log = LoggerFactory.getLogger(MobileWxPayService.class);
 
@@ -858,6 +858,11 @@ public class MobileWxPayService {
         if (null == order.getPayAmount()) {
             throw new BusinessException(MsgCodeConstant.NOT_EXIST_ORDER_PAYAMOUNT, "不存在该订单的【实付金额】字段");
         }
+
+        Map<String, String> msgParam = new HashMap<>();
+        msgParam.put("orderNo", orderid);
+        zhpayService.checkParams(msgParam);
+
         BigDecimal payAmount = order.getPayAmount();
         String total_fee = String.valueOf(payAmount.multiply(new BigDecimal(100)).longValue());
 
