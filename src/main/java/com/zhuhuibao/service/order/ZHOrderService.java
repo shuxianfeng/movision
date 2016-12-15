@@ -223,18 +223,18 @@ public class ZHOrderService {
         if (StringUtils.isEmpty(invoiceReceiveName)) {
             throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "发票收件人不能为空");
         }
-        String invoiceProvince = msgParam.get("invoiceProvince");
-        if (StringUtils.isEmpty(invoiceProvince)) {
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "发票收件地址(省编码)不能为空");
-        }
-        String invoiceCity = msgParam.get("invoiceCity");
-        if (StringUtils.isEmpty(invoiceCity)) {
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "发票收件地址(市编码)不能为空");
-        }
-        String invoiceArea = msgParam.get("invoiceArea");
-        if (StringUtils.isEmpty(invoiceArea)) {
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "发票收件地址(区域编码)不能为空");
-        }
+//        String invoiceProvince = msgParam.get("invoiceProvince");
+//        if (StringUtils.isEmpty(invoiceProvince)) {
+//            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "发票收件地址(省编码)不能为空");
+//        }
+//        String invoiceCity = msgParam.get("invoiceCity");
+//        if (StringUtils.isEmpty(invoiceCity)) {
+//            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "发票收件地址(市编码)不能为空");
+//        }
+//        String invoiceArea = msgParam.get("invoiceArea");
+//        if (StringUtils.isEmpty(invoiceArea)) {
+//            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "发票收件地址(区域编码)不能为空");
+//        }
         String invoiceAddress = msgParam.get("invoiceAddress");
         if (StringUtils.isEmpty(invoiceAddress)) {
             throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "发票收件地址不能为空");

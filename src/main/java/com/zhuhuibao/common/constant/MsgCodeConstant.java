@@ -379,5 +379,22 @@ public interface MsgCodeConstant {
 	 * 该订单不存在购买的商品
 	 */
 	int NOT_EXIST_ORDER_GOODS = 3011;
-	
+
+	/**
+	 * 技术合作id的数组为空
+	 */
+	int TECH_COOP_IS_EMPTY= 3012;
+
+	/**
+	 * 删除技术资料失败
+	 */
+	int DELETE_TECH_DATA_FAIL = 3013;
+
+	/**
+	 * 不存在威客信息
+	 */
+	int NOT_EXIST_COOPERATION = 3014;
+
+
+
 }

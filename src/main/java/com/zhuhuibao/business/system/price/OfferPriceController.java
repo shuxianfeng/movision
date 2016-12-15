@@ -1,17 +1,19 @@
 package com.zhuhuibao.business.system.price;
 
-import java.io.IOException;
-import java.util.*;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.common.util.ShiroUtil;
+import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
+import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
+import com.zhuhuibao.mybatis.memCenter.entity.OfferPrice;
+import com.zhuhuibao.mybatis.memCenter.service.OfferPriceService;
+import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
 import com.zhuhuibao.utils.file.FileUtil;
+import com.zhuhuibao.utils.pagination.model.Paging;
+import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -20,15 +22,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.zhuhuibao.common.constant.ApiConstants;
-import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.mybatis.memCenter.entity.AskPrice;
-import com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean;
-import com.zhuhuibao.mybatis.memCenter.entity.OfferPrice;
-import com.zhuhuibao.mybatis.memCenter.service.OfferPriceService;
-import com.zhuhuibao.shiro.realm.ShiroRealm.ShiroUser;
-import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 报价
@@ -36,7 +35,6 @@ import com.zhuhuibao.utils.pagination.util.StringUtils;
  * date : 2016
  */
 @RestController
-//@RequestMapping("/rest/price")
 @Api(value="OfferPrice", description="报价")
 public class OfferPriceController {
 	
@@ -53,24 +51,14 @@ public class OfferPriceController {
 
 	@ApiOperation(value="我要报价(清单和单一产品)",notes="我要报价(清单和单一产品)",response = Response.class)
 	@RequestMapping(value={"rest/price/addOfferPrice","rest/system/mc/quote/add_offerPrice"}, method = RequestMethod.POST)
-	public Response addOfferPrice(OfferPrice price) throws IOException
+	public Response addOfferPrice(@ApiParam @ModelAttribute OfferPrice price) throws IOException
 	{
-		log.info("add offer price");
-		Response response = new Response();
-		Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(false);
-        if(session != null)
-        {
-        	ShiroUser principal = (ShiroUser)session.getAttribute("member");
-        	price.setCreateid(new Long(principal.getId()));
-			response = offerService.addOfferPrice(price);
-        }
-		return response;
+		return new Response(offerService.addOfferPrice(price));
 	}
 
 	@ApiOperation(value="询价需求功能：查询所有正在询价中的信息（分页）",notes="询价需求功能：查询所有正在询价中的信息（分页）",response = Response.class)
 	@RequestMapping(value={"rest/price/queryAskingPriceInfo","rest/system/mc/quote/sel_askingPriceInfo"},method = RequestMethod.GET)
-	public Response queryAskingPriceInfo(AskPrice price,
+	public Response queryAskingPriceInfo(@ApiParam @ModelAttribute AskPrice price,
 										 @RequestParam(required = false) String pageNo,
 										 @RequestParam(required = false) String pageSize) throws IOException
 	{

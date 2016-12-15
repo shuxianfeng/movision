@@ -184,6 +184,22 @@ public class ChannelNewsService {
     }
 
     /**
+     * 查询手机端技术主页 - 所有的新技术
+     * @param channelMap
+     * @return
+     */
+    public List<Map<String, Object>> findAllTechNewsList4Mobile(Map<String, Object> channelMap) {
+        List<Map<String, Object>> newsList;
+        try {
+            newsList = channel.findAllTechNewsList4Mobile(channelMap);
+        } catch (Exception e) {
+            log.error("find all news List pager error!", e);
+            throw e;
+        }
+        return newsList;
+    }
+
+    /**
      * 预览技术频道的新技术播报
      *
      * @param channelMap 频道资讯页条件
@@ -265,6 +281,30 @@ public class ChannelNewsService {
         }
         return list;
     }
+
+
+    public List<Map<String, String>> findJobNews4Mobile(Paging<Map<String, String>> pager, Map<String, Object> params) {
+        List<Map<String, String>> list;
+        try {
+            list = channel.findJobNews4Mobile(pager.getRowBounds(), params);
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
+        }
+        return list;
+    }
+
+    public List<Map<String, String>> findIndexNews(Map<String, Object> params) {
+        List<Map<String, String>> list;
+        try {
+            list = channel.findIndexNews(params);
+        } catch (Exception e) {
+            log.error("执行异常>>>",e);
+            throw new BusinessException(MsgCodeConstant.DB_SELECT_FAIL, "查询失败");
+        }
+        return list;
+    }
+
 
     public List<Map<String, String>> selectHotViews(String type, Integer count) {
         List<Map<String, String>> list;

@@ -781,7 +781,6 @@ public class UploadFileController {
 				fax = fax.replace(temp, "").trim();
 				linkma.setFax(fax);
 			}
-			// TODO
 			Matcher matcher = numStartPattern.matcher(linkma.getFax());
 			if (!matcher.matches()) {
 				linkma.setFax("");

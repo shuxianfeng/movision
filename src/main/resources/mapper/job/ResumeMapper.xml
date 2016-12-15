@@ -1,190 +1,188 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="createid" property="createid" jdbcType="VARCHAR" />
-    <result column="publishTime" property="publishTime" jdbcType="VARCHAR" />
-    <result column="updateTime" property="updateTime" jdbcType="VARCHAR" />
-    <result column="jobNature" property="jobNature" jdbcType="VARCHAR" />
-    <result column="post" property="post" jdbcType="VARCHAR" />
-    <result column="parentId" property="parentId" jdbcType="VARCHAR" />
-    <result column="parentName" property="parentName" jdbcType="VARCHAR" />
-    <result column="jobProvince" property="jobProvince" jdbcType="VARCHAR" />
-    <result column="jobCity" property="jobCity" jdbcType="VARCHAR" />
-    <result column="jobArea" property="jobArea" jdbcType="VARCHAR" />
-    <result column="hopeSalary" property="hopeSalary" jdbcType="VARCHAR" />
-    <result column="curSalary" property="curSalary" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="realName" property="realName" jdbcType="VARCHAR" />
-    <result column="userName" property="userName" jdbcType="VARCHAR" />
-    <result column="sex" property="sex" jdbcType="VARCHAR" />
-    <result column="workYear" property="workYear" jdbcType="VARCHAR" />
-    <result column="education" property="education" jdbcType="VARCHAR" />
-    <result column="experienceYear" property="experienceYear" jdbcType="VARCHAR" />
-    <result column="company" property="company" jdbcType="VARCHAR" />
-    <result column="positionName" property="positionName" jdbcType="VARCHAR" />
-    <result column="birthYear" property="birthYear" jdbcType="VARCHAR" />
-    <result column="marriage" property="marriage" jdbcType="VARCHAR" />
-    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
-    <result column="email" property="email" jdbcType="VARCHAR" />
-    <result column="liveProvince" property="liveProvince" jdbcType="VARCHAR" />
-    <result column="liveCity" property="liveCity" jdbcType="VARCHAR" />
-    <result column="liveArea" property="liveArea" jdbcType="VARCHAR" />
-    <result column="photo" property="photo" jdbcType="VARCHAR" />
-    <result column="jobExperience" property="jobExperience" jdbcType="VARCHAR" />
-    <result column="projectExperience" property="projectExperience" jdbcType="VARCHAR" />
-    <result column="eduExperience" property="eduExperience" jdbcType="VARCHAR" />
-    <result column="attach" property="attach" jdbcType="VARCHAR" />
-    <result column="isPublic" property="isPublic" jdbcType="VARCHAR" />
-  </resultMap>
-  <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.ResultBean" >
-    <id column="code" property="code" jdbcType="VARCHAR" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper">
+    <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.memCenter.entity.Resume">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="createid" property="createid" jdbcType="VARCHAR"/>
+        <result column="publishTime" property="publishTime" jdbcType="VARCHAR"/>
+        <result column="updateTime" property="updateTime" jdbcType="VARCHAR"/>
+        <result column="jobNature" property="jobNature" jdbcType="VARCHAR"/>
+        <result column="post" property="post" jdbcType="VARCHAR"/>
+        <result column="parentId" property="parentId" jdbcType="VARCHAR"/>
+        <result column="parentName" property="parentName" jdbcType="VARCHAR"/>
+        <result column="jobProvince" property="jobProvince" jdbcType="VARCHAR"/>
+        <result column="jobCity" property="jobCity" jdbcType="VARCHAR"/>
+        <result column="jobArea" property="jobArea" jdbcType="VARCHAR"/>
+        <result column="hopeSalary" property="hopeSalary" jdbcType="VARCHAR"/>
+        <result column="curSalary" property="curSalary" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="realName" property="realName" jdbcType="VARCHAR"/>
+        <result column="userName" property="userName" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="VARCHAR"/>
+        <result column="workYear" property="workYear" jdbcType="VARCHAR"/>
+        <result column="education" property="education" jdbcType="VARCHAR"/>
+        <result column="experienceYear" property="experienceYear" jdbcType="VARCHAR"/>
+        <result column="company" property="company" jdbcType="VARCHAR"/>
+        <result column="positionName" property="positionName" jdbcType="VARCHAR"/>
+        <result column="birthYear" property="birthYear" jdbcType="VARCHAR"/>
+        <result column="marriage" property="marriage" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="liveProvince" property="liveProvince" jdbcType="VARCHAR"/>
+        <result column="liveCity" property="liveCity" jdbcType="VARCHAR"/>
+        <result column="liveArea" property="liveArea" jdbcType="VARCHAR"/>
+        <result column="photo" property="photo" jdbcType="VARCHAR"/>
+        <result column="jobExperience" property="jobExperience" jdbcType="VARCHAR"/>
+        <result column="projectExperience" property="projectExperience" jdbcType="VARCHAR"/>
+        <result column="eduExperience" property="eduExperience" jdbcType="VARCHAR"/>
+        <result column="attach" property="attach" jdbcType="VARCHAR"/>
+        <result column="isPublic" property="isPublic" jdbcType="VARCHAR"/>
+        <result column="evaluation" property="evaluation" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="ResultMap" type="com.zhuhuibao.common.pojo.ResultBean">
+        <id column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, title, createid, publishTime, updateTime, jobNature, post, jobProvince, jobCity,
     jobArea, hopeSalary, curSalary, status, realName, userName, sex, workYear, education,
     experienceYear, company, positionName, birthYear, marriage, mobile, email, liveProvince,
-    liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach,isPublic
+    liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach,isPublic,evaluation
   </sql>
-  <insert id="setUpResume" useGeneratedKeys="true" keyProperty="id" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
+    <insert id="setUpResume" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume">
     insert into t_i_resume (id, title, createid, publishTime, updateTime, jobNature,
     post, jobProvince, jobCity, jobArea, hopeSalary, curSalary, status, realName, userName,
     sex, workYear, education, experienceYear, company, positionName, birthYear, marriage, mobile,
-    email, liveProvince, liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach,isPublic
+    email, liveProvince, liveCity, liveArea, photo, jobExperience, projectExperience, eduExperience, attach,isPublic,evaluation
     )
     values (#{id}, #{title}, #{createid},
     now(), now(), #{jobNature},#{post}, #{jobProvince}, #{jobCity},#{jobArea},
     #{hopeSalary}, #{curSalary},#{status}, #{realName}, #{userName},#{sex}, #{workYear}, #{education},
     #{experienceYear}, #{company}, #{positionName}, #{birthYear}, #{marriage}, #{mobile},
     #{email}, #{liveProvince}, #{liveCity}, #{liveArea}, #{photo}, #{jobExperience},
-    #{projectExperience}, #{eduExperience}, #{attach},1
+    #{projectExperience}, #{eduExperience}, #{attach},1, #{evaluation}
     )
   </insert>
 
-  <update id="updateResume" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume" >
-    update t_i_resume
-    <set>
-      <if test="title != null and title !=''" >
-        title = #{title},
-      </if>
-      <if test="createid != null" >
-        createid = #{createid},
-      </if>
-      <if test="publishTime != null and publishTime !=''" >
-        publishTime = #{publishTime},
-      </if>
-      
-      <if test="type!=1" >
-         updateTime = now(),
-      </if>
-    
-      <if test="jobNature != null and jobNature !=''" >
-        jobNature = #{jobNature},
-      </if>
-      <if test="post != null and post !=''" >
-        post = #{post},
-      </if>
-      <if test="jobProvince != null and jobProvince !=''" >
-        jobProvince = #{jobProvince},
-      </if>
-      <if test="jobCity != null and jobCity !=''" >
-        jobCity = #{jobCity},
-      </if>
-      <if test="jobArea != null and jobArea !=''" >
-        jobArea = #{jobArea},
-      </if>
-      <if test="hopeSalary != null and hopeSalary !=''" >
-        hopeSalary = #{hopeSalary},
-      </if>
-      <if test="curSalary != null and curSalary !=''" >
-        curSalary = #{curSalary},
-      </if>
-      <if test="status != null and status !=''" >
-        status = #{status},
-      </if>
-      <if test="realName != null and realName !=''" >
-        realName = #{realName},
-      </if>
-      <if test="userName != null and userName !=''" >
-        userName = #{userName},
-      </if>
-      <if test="sex != null and sex !=''" >
-        sex = #{sex},
-      </if>
-      <if test="workYear != null and workYear !=''" >
-        workYear = #{workYear},
-      </if>
-      <if test="education != null and education !=''" >
-        education = #{education},
-      </if>
-      <if test="experienceYear != null and experienceYear !=''" >
-        experienceYear = #{experienceYear},
-      </if>
-      <if test="company != null and company !=''" >
-        company = #{company},
-      </if>
-      <if test="positionName != null and positionName !=''" >
-        positionName = #{positionName},
-      </if>
-      <if test="birthYear != null and birthYear !=''" >
-        birthYear = #{birthYear},
-      </if>
-      <if test="marriage != null and marriage !=''" >
-        marriage = #{marriage},
-      </if>
-      <if test="mobile != null and mobile !=''" >
-        mobile = #{mobile},
-      </if>
-      <if test="email != null and email !=''" >
-        email = #{email},
-      </if>
-      <if test="liveProvince != null and liveProvince !=''" >
-        liveProvince = #{liveProvince},
-      </if>
-      <if test="liveCity != null and liveCity !=''" >
-        liveCity = #{liveCity},
-      </if>
-      <if test="liveArea != null and liveArea !=''" >
-        liveArea = #{liveArea},
-      </if>
-      <if test="photo != null and photo !=''" >
-        photo = #{photo},
-      </if>
-      <if test="jobExperience != null and jobExperience !=''" >
-        jobExperience = #{jobExperience},
-      </if>
-      <if test="projectExperience != null and projectExperience !=''" >
-        projectExperience = #{projectExperience},
-      </if>
-      <if test="eduExperience != null and eduExperience !=''" >
-        eduExperience = #{eduExperience},
-      </if>
-      
-      
-      
-      	<if test="attach != null and attach !=''" >
-        attach = #{attach},
-        </if>
-        <if test="attach == null or attach == ''">
-		attach = "",
-		</if>    
-		  
-      <if test="isPublic != null and isPublic !=''" >
-        isPublic = #{isPublic},
-      </if>
-      <if test="views != null and views !=''">
-        views = views + 1,
-      </if>
-      <if test="download != null and download !=''" >
-        downloadCount = downloadCount+#{download},
-      </if>
-    </set>
-    where id = #{id}
-  </update>
-  <select id="searchMyResume" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <update id="updateResume" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume">
+        update t_i_resume
+        <set>
+            <if test="title != null and title !=''">
+                title = #{title},
+            </if>
+            <if test="createid != null">
+                createid = #{createid},
+            </if>
+            <if test="publishTime != null and publishTime !=''">
+                publishTime = #{publishTime},
+            </if>
+
+            <if test="type!=1">
+                updateTime = now(),
+            </if>
+
+            <if test="jobNature != null and jobNature !=''">
+                jobNature = #{jobNature},
+            </if>
+            <if test="post != null and post !=''">
+                post = #{post},
+            </if>
+            <if test="jobProvince != null">
+                jobProvince = #{jobProvince},
+            </if>
+            <if test="jobCity != null">
+                jobCity = #{jobCity},
+            </if>
+            <if test="jobArea != null and jobArea !=''">
+                jobArea = #{jobArea},
+            </if>
+            <if test="hopeSalary != null and hopeSalary !=''">
+                hopeSalary = #{hopeSalary},
+            </if>
+            <if test="curSalary != null and curSalary !=''">
+                curSalary = #{curSalary},
+            </if>
+            <if test="status != null and status !=''">
+                status = #{status},
+            </if>
+            <if test="realName != null and realName !=''">
+                realName = #{realName},
+            </if>
+            <if test="userName != null and userName !=''">
+                userName = #{userName},
+            </if>
+            <if test="sex != null and sex !=''">
+                sex = #{sex},
+            </if>
+            <if test="workYear != null and workYear !=''">
+                workYear = #{workYear},
+            </if>
+            <if test="education != null and education !=''">
+                education = #{education},
+            </if>
+            <if test="experienceYear != null and experienceYear !=''">
+                experienceYear = #{experienceYear},
+            </if>
+            <if test="company != null and company !=''">
+                company = #{company},
+            </if>
+            <if test="positionName != null and positionName !=''">
+                positionName = #{positionName},
+            </if>
+            <if test="birthYear != null and birthYear !=''">
+                birthYear = #{birthYear},
+            </if>
+            <if test="marriage != null and marriage !=''">
+                marriage = #{marriage},
+            </if>
+            <if test="mobile != null and mobile !=''">
+                mobile = #{mobile},
+            </if>
+            <if test="email != null and email !=''">
+                email = #{email},
+            </if>
+            <if test="liveProvince != null and liveProvince !=''">
+                liveProvince = #{liveProvince},
+            </if>
+            <if test="liveCity != null and liveCity !=''">
+                liveCity = #{liveCity},
+            </if>
+            <if test="liveArea != null and liveArea !=''">
+                liveArea = #{liveArea},
+            </if>
+            <if test="photo != null and photo !=''">
+                photo = #{photo},
+            </if>
+            <if test="jobExperience != null and jobExperience !=''">
+                jobExperience = #{jobExperience},
+            </if>
+            <if test="projectExperience != null and projectExperience !=''">
+                projectExperience = #{projectExperience},
+            </if>
+            <if test="eduExperience != null and eduExperience !=''">
+                eduExperience = #{eduExperience},
+            </if>
+            <if test="attach != null and attach !=''">
+                attach = #{attach},
+            </if>
+            <if test="isPublic != null and isPublic !=''">
+                isPublic = #{isPublic},
+            </if>
+            <if test="views != null and views !=''">
+                views = views + 1,
+            </if>
+            <if test="evaluation != null and evaluation !=''">
+                evaluation = #{evaluation},
+            </if>
+            <if test="download != null and download !=''">
+                downloadCount = downloadCount+#{download},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="searchMyResume" parameterType="java.lang.String" resultMap="BaseResultMap">
     select r.id,r.title,r.realName,(DATE_FORMAT( current_timestamp(),'%Y' )-r.birthYear)as birthYear,
     case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,r.updateTime,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,concat(c.name,a.name)AS liveArea,r.photo,r.isPublic
@@ -193,47 +191,50 @@
     left join t_dictionary_area a on r.liveArea = a.code
     where r.createid = #{id}
   </select>
-  <select id="searchMyResumeAllInfo" parameterType="java.lang.String" resultType="java.util.Map">
+    <select id="searchMyResumeAllInfo" parameterType="java.lang.String" resultType="java.util.Map">
     select r.*,(select po.id from t_dictionary_position p
     left join t_dictionary_position po on p.parentId = po.id
     where find_in_set(p.id,r.post)group by p.parentId)as parentId,
     (select po.name from t_dictionary_position p
     left join t_dictionary_position po on p.parentId = po.id
     where find_in_set(p.id,r.post)group by p.parentId)as parentName,
-    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as jobYear
+    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as jobYear,cons.name as curSalaryName
     FROM t_i_resume r
+    left join t_dictionary_constant cons on cons.code = r.curSalary and cons.type =23
     where r.createid = #{id}
   </select>
-  <select id="previewResume" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select r.id,r.createid,r.title,r.realName,r.birthYear,dc.name education,r.photo,
-    case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,
-    case WHEN r.marriage =0 then '未婚' WHEN r.marriage =1 THEN '已婚' WHEN r.marriage =2 THEN '保密' END AS marriage,
-    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
-    concat(p.name,c.name,a.name)AS liveArea,
-    (select Group_concat(name) from t_dictionary_city where find_in_set(code,r.jobCity))AS jobCity,
-    (select Group_concat(name) from t_dictionary_province where find_in_set(code,r.jobProvince))AS jobProvince,
-    co.name as hopeSalary,cons.name as curSalary,r.positionName,r.company,
-    r.jobExperience,r.projectExperience,r.eduExperience,r.attach,con.name AS status,
-    (select Group_concat(name) from t_dictionary_constant where find_in_set(code,r.jobNature) and type=7)AS jobNature,
-    (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post
-    from t_i_resume r
-    LEFT JOIN t_dictionary_province p on r.liveProvince = p.code
-    left join t_dictionary_city c on r.liveCity = c.code
-    left join t_dictionary_area a on r.liveArea = a.code
-    left join t_dictionary_constant co on co.code = r.hopeSalary and co.type =1
-    left join t_dictionary_constant cons on cons.code = r.curSalary and cons.type =23
-    left join t_dictionary_constant con on con.code = r.status and con.type = 6
-    left join t_dictionary_constant dc on dc.code = r.education and dc.type = 2
-    where r.id = #{id}
-    <if test="createid !=null">
-      and r.createid = #{createid}
-    </if>
-  </select>
-  
-  <select id="previewResumeNew" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="previewResume" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select r.id,r.createid,r.title,r.realName,r.birthYear,dc.name
+        education,r.photo,r.updateTime,r.attach,r.isPublic,r.experienceYear,
+        case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,r.mobile,r.email,r.evaluation,
+        case WHEN r.marriage =0 then '未婚' WHEN r.marriage =1 THEN '已婚' WHEN r.marriage =2 THEN '保密' END AS marriage,
+        (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
+        concat(p.name,c.name,a.name)AS liveArea,
+        (select Group_concat(name) from t_dictionary_city where find_in_set(code,r.jobCity))AS jobCity,
+        (select Group_concat(name) from t_dictionary_province where find_in_set(code,r.jobProvince))AS jobProvince,
+        co.name as hopeSalary,cons.name as curSalary,r.positionName,r.company,
+        r.jobExperience,r.projectExperience,r.eduExperience,r.attach,con.name AS status,
+        (select Group_concat(name) from t_dictionary_constant where find_in_set(code,r.jobNature) and type=7)AS
+        jobNature,
+        (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post
+        from t_i_resume r
+        LEFT JOIN t_dictionary_province p on r.liveProvince = p.code
+        left join t_dictionary_city c on r.liveCity = c.code
+        left join t_dictionary_area a on r.liveArea = a.code
+        left join t_dictionary_constant co on co.code = r.hopeSalary and co.type =1
+        left join t_dictionary_constant cons on cons.code = r.curSalary and cons.type =23
+        left join t_dictionary_constant con on con.code = r.status and con.type = 6
+        left join t_dictionary_constant dc on dc.code = r.education and dc.type = 2
+        where r.id = #{id}
+        <if test="createid !=null">
+            and r.createid = #{createid}
+        </if>
+    </select>
+
+    <select id="previewResumeNew" parameterType="java.lang.String" resultMap="BaseResultMap">
     select r.id,r.createid,r.title, 
     concat(substr(r.realName,1,1),'**') realName,r.birthYear,dc.name education, 
-    null photo,
+    null photo,r.evaluation,
     case when r.sex=1 then '男' when r.sex=0 then '女' end as sex,
     
     (case when !isnull(r.mobile) then concat(substr(r.mobile,1,3),'********') else  '' end ) mobile,
@@ -256,99 +257,157 @@
     where r.id = #{id}
 
   </select>
-  <select id="findAllResume" parameterType="java.util.Map" resultType="java.util.Map">
-    select t.id,t.createid,t.title,concat(substring(t.realName,1,1),'**') realName,
-    t.hopeSalary,m.headShot as photo,t.education,
-    date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,
-    date_format(t.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,
-    t.experienceYear,t.isPublic,t.jobNature,t.post,
-    (DATE_FORMAT( current_date(),'%Y' )-t.birthYear) birthYear,
-    (DATE_FORMAT( current_date(),'%Y' )-t.workYear) workYear
-    from t_i_resume t
-    LEFT JOIN t_m_member m on t.createid = m.id
-    <where>
-      <if test="status != null and status != ''">
-        and m.status != #{status}
-      </if>
-      <if test="title != null and title != ''">
-        and (select Group_concat(name) from t_dictionary_position where find_in_set(id,t.post)) like concat('%',#{title},'%')
-      </if>
-      <if test="jobCity != null and jobCity != ''">
-        <!-- and (#{jobCity} in(t.jobCity) or (select provincecode from t_dictionary_city where code = #{jobCity}) in(t.jobProvince)) -->
-		and t.jobCity = #{jobCity}
-      </if>
-      <if test="expYearBefore != null and expYearBefore != '' and expYearBehind != null and expYearBehind != ''">
-        and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore} and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &lt;= #{expYearBehind}
-      </if>
-      <if test="expYearBefore != null and expYearBefore != '' and expYearBehind == null and expYearBehind = ''">
-        and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore}
-      </if>
-      <if test="expYearBefore == null and expYearBefore = ''  and expYearBehind != null and expYearBehind != ''">
-        and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &lt;= #{expYearBehind}
-      </if>
-      <if test="education != null and education != ''">
-        and t.education = #{education}
-      </if>
-      <if test="isPublic != null and isPublic != ''">
-        and t.isPublic = #{isPublic}
-      </if>
-      <if test="positionList != null">
-        <foreach collection="positionList" item="item" index="index" open="and (" separator="or" close=")" >
-          find_in_set(#{item},t.post)
-        </foreach>
-      </if>
-      <if test="company_id != null">
-        and t.createid not in (select t.create_id from t_i_forbid_key_words t where t.company_id = #{company_id} and t.is_deleted = 0)
-      </if>
-    </where>
-    order by t.updateTime desc
-  </select>
-  <select id="findAllReceiveResume" parameterType="java.lang.String" resultType="java.util.Map">
-    select re.id as recordId,re.jobID,j.createID as companyId,r.id,j.name,j.positionType,j.is_deleted,
-    r.realName,re.publishDate as publishTime,re.status,(DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear)  as experienceYear
+    <select id="findAllResume" parameterType="java.util.Map" resultType="java.util.Map">
+        select t.id,t.createid,t.title,concat(substring(t.realName,1,1),'**') realName,
+        t.hopeSalary,m.headShot as photo,t.education,
+        date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,
+        date_format(t.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,
+        t.experienceYear,t.isPublic,t.jobNature,t.post,
+        (DATE_FORMAT( current_date(),'%Y' )-t.birthYear) birthYear,
+        (DATE_FORMAT( current_date(),'%Y' )-t.workYear) workYear,
+        case when t.sex=1 then '男' when t.sex=0 then '女' end as sexName,t.sex,
+        t.jobCity,
+        t.jobProvince
+        from t_i_resume t
+        LEFT JOIN t_m_member m on t.createid = m.id
+        LEFT JOIN t_dictionary_city c on t.jobProvince = c.provincecode
+        <where>
+            <if test="status != null and status != ''">
+                and m.status != #{status}
+            </if>
+            <if test="title != null and title != ''">
+                and (select Group_concat(name) from t_dictionary_position where find_in_set(id,t.post)) like
+                concat('%',#{title},'%')
+            </if>
+            <if test="jobCity != null and jobCity != ''">
+                <!-- and (#{jobCity} in(t.jobCity) or (select provincecode from t_dictionary_city where code = #{jobCity}) in(t.jobProvince)) -->
+                and (find_in_set(#{jobCity}, t.jobCity) or (find_in_set(c.code, t.jobCity) and c.provincecode = #{jobCity} ))
+            </if>
+            <if test="expYearBefore != null and expYearBefore != ''">
+                and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore}
+            </if>
+            <if test="expYearBehind != null and expYearBehind != ''">
+                and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &lt;= #{expYearBehind}
+            </if>
+            <if test="education != null and education != ''">
+                and t.education = #{education}
+            </if>
+            <if test="isPublic != null and isPublic != ''">
+                and t.isPublic = #{isPublic}
+            </if>
+            <if test="positionList != null and positionList != ''">
+                <foreach collection="positionList" item="item" index="index" open="and (" separator="or" close=")">
+                    find_in_set(#{item},t.post)
+                </foreach>
+            </if>
+            <if test="company_id != null and company_id != ''">
+                and t.createid not in (select t.create_id from t_i_forbid_key_words t where t.company_id = #{company_id}
+                and t.is_deleted = 0)
+            </if>
+            <if test="publishTime != null and publishTime != ''">
+                and date_format(#{publishTime},'%Y-%m-%d') &lt;= date_format(t.updateTime,'%Y-%m-%d')
+            </if>
+        </where>
+        order by t.updateTime desc
+    </select>
+
+    <select id="findAllResume4Mobile" parameterType="java.util.Map" resultType="java.util.Map">
+        select t.id,t.createid,t.title,concat(substring(t.realName,1,1),'**') realName,
+        t.hopeSalary,m.headShot as photo,t.education,t.jobCity,t.jobProvince,
+        date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,
+        date_format(t.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,
+        t.experienceYear,t.isPublic,t.jobNature,t.post,
+        case when t.sex=1 then '男' when t.sex=0 then '女' end as sexName,t.sex,
+        (DATE_FORMAT( current_date(),'%Y' )-t.birthYear) birthYear,
+        (DATE_FORMAT( current_date(),'%Y' )-t.workYear) workYear
+        from t_i_resume t
+        LEFT JOIN t_m_member m on t.createid = m.id
+        <where>
+            <if test="status != null and status != ''">
+                and m.status != #{status}
+            </if>
+            <if test="title != null and title != ''">
+                and (select Group_concat(name) from t_dictionary_position where find_in_set(id,t.post)) like
+                concat('%',#{title},'%')
+            </if>
+            <if test="jobCity != null and jobCity != ''">
+                <!-- and (#{jobCity} in(t.jobCity) or (select provincecode from t_dictionary_city where code = #{jobCity}) in(t.jobProvince)) -->
+                and t.jobCity = #{jobCity}
+            </if>
+            <if test="expYearBefore != null and expYearBefore != ''">
+                and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore}
+            </if>
+            <if test="expYearBehind != null and expYearBehind != ''">
+                and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &lt;= #{expYearBehind}
+            </if>
+            <if test="education != null and education != ''">
+                and t.education = #{education}
+            </if>
+            <if test="isPublic != null and isPublic != ''">
+                and t.isPublic = #{isPublic}
+            </if>
+            <if test="positionList != null">
+                <foreach collection="positionList" item="item" index="index" open="and (" separator="or" close=")">
+                    find_in_set(#{item},t.post)
+                </foreach>
+            </if>
+            <if test="company_id != null">
+                and t.createid not in (select t.create_id from t_i_forbid_key_words t where t.company_id = #{company_id}
+                and t.is_deleted = 0)
+            </if>
+
+        </where>
+        order by t.updateTime desc
+        limit 3
+    </select>
+
+
+    <select id="findAllReceiveResume" parameterType="java.lang.String" resultType="java.util.Map">
+    select re.id as recordId,re.jobID,j.createID as companyId,r.id,j.name,j.positionType,j.is_deleted,r.experienceYear,
+    r.realName,re.publishDate as publishTime,re.status,(DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear)  as workYear
     from t_i_resume r
     left join t_i_jobRelresume re on re.resumeID = r.id
     left join t_i_job j on j.id = re.jobID
     where re.jobID in (select id from t_i_job where createid=#{id}) and re.status != 3 order by re.status asc,re.publishDate desc
   </select>
-  <select id="searchResumeById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="searchResumeById" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT * from t_i_resume WHERE id = #{id}
   </select>
-  <select id="queryResumeByCreateId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="queryResumeByCreateId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     SELECT * from t_i_resume WHERE createid = #{id}
   </select>
-  <select id="queryLatestResume" parameterType="java.util.Map" resultType="java.util.Map">
-    select r.id,r.realName,(DATE_FORMAT( current_timestamp(),'%Y' )-r.birthYear)as birthYear,
-    (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,r.jobCity,r.jobProvince,r.post,r.hopeSalary,
-    m.headShot as photo,
-    CASE WHEN r.status=1 or r.status=2 or r.status=3 THEN '在职' WHEN r.status=4 THEN '离职' END AS status
-    from t_i_resume r
-    left join t_m_member m on r.createid = m.id
-    <where>
-      <if test="public != null">
-        and r.isPublic = #{public}
-      </if>
-      <if test="status != null">
-        and m.status != #{status}
-      </if>
-    </where>
-    ORDER by r.updateTime desc limit 0,#{count}
-  </select>
-  <select id="isExistResume" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    <select id="queryLatestResume" parameterType="java.util.Map" resultType="java.util.Map">
+        select r.id,r.realName,(DATE_FORMAT( current_timestamp(),'%Y' )-r.birthYear)as birthYear,
+        (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,r.jobCity,r.jobProvince,r.post,r.hopeSalary,
+        m.headShot as photo,
+        CASE WHEN r.status=1 or r.status=2 or r.status=3 THEN '在职' WHEN r.status=4 THEN '离职' END AS status
+        from t_i_resume r
+        left join t_m_member m on r.createid = m.id
+        <where>
+            <if test="public != null">
+                and r.isPublic = #{public}
+            </if>
+            <if test="status != null">
+                and m.status != #{status}
+            </if>
+        </where>
+        ORDER by r.updateTime desc limit 0,#{count}
+    </select>
+    <select id="isExistResume" parameterType="java.lang.Long" resultType="java.lang.Integer">
     select count(1) from t_i_resume t where t.createid = #{createID}
   </select>
-  
-  <select id="getMaxCollCount" parameterType="java.lang.Long" resultType="java.lang.Integer">
+
+    <select id="getMaxCollCount" parameterType="java.lang.Long" resultType="java.lang.Integer">
     select count(1) from t_i_resume_collect_record t where t.companyID = #{memberId} and t.is_deleted=0
   </select>
-  
-  <select id="queryJobCount" parameterType="java.lang.Long" resultType="java.util.Map">
+
+    <select id="queryJobCount" parameterType="java.lang.Long" resultType="java.util.Map">
     select count(1) count from t_i_job t where t.createID = #{createId} and t.is_deleted = 0 union all
     select count(1) count from t_i_jobRelresume j where j.jobID in (select id from t_i_job where createid=#{createId})
   </select>
 
-  <select id="findAllDownloadResume" parameterType="java.lang.String" resultType="java.util.Map">
-    select r.id,rd.id as recordId,r.realName,
+    <select id="findAllDownloadResume" parameterType="java.lang.String" resultType="java.util.Map">
+    select r.id,rd.id as recordId,r.realName,r.experienceYear,
     (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
     date_format(rd.publishDate,'%Y-%m-%d') publishDate
@@ -357,8 +416,8 @@
     where rd.companyID = #{id} and rd.is_deleted = 0 order by rd.publishDate desc
   </select>
 
-  
-   <select id="isDownOrColl" parameterType="java.util.Map" resultType="java.util.Map">
+
+    <select id="isDownOrColl" parameterType="java.util.Map" resultType="java.util.Map">
     select distinct r.id ,(case when isnull(t.id) then 1 else 0 end ) isDown, 
 	(case when isnull(c.id) then 1 else 0 end) isCollect
 	 from (select id from t_i_resume  where id=#{goodsId}) r 
@@ -366,27 +425,26 @@
 	left join t_i_resume_collect_record c on r.id=c.resumeID and c.is_deleted=0 and c.companyID=#{companyId} 
  	
   </select>
-  
-  <insert id="insertDownRecord" parameterType="java.util.Map" > 
+
+    <insert id="insertDownRecord" parameterType="java.util.Map">
     insert into t_i_resume_download_record(resumeID,companyID,createId,publishDate) 
     select #{resumeID},#{companyID},t.createid,now() from t_i_resume t where id=#{resumeID}
    </insert>
-  
-   
-   <update id="delCollRecord" parameterType="java.util.Map" > 
+
+
+    <update id="delCollRecord" parameterType="java.util.Map">
     update t_i_resume_collect_record set is_deleted=1
     where resumeID=#{resumeID} and companyID=#{companyID} and is_deleted=0
    </update>
-   
-   <insert id="insertCollRecord" parameterType="java.util.Map" > 
+
+    <insert id="insertCollRecord" parameterType="java.util.Map">
     insert into t_i_resume_collect_record(resumeID,companyID,createId,publishDate)      
     select #{resumeID},#{companyID},t.createid,now() from t_i_resume t where id=#{resumeID}
    </insert>
-   
 
 
-  <select id="findAllCollectResume" parameterType="java.lang.String" resultType="java.util.Map">
-    select r.id,rd.id as recordId,concat(substring(r.realName,1,1),'**') realName,
+    <select id="findAllCollectResume" parameterType="java.lang.String" resultType="java.util.Map">
+    select r.id,rd.id as recordId,concat(substring(r.realName,1,1),'**') realName,r.experienceYear,
     (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS post,
     (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
     date_format(rd.publishDate,'%Y-%m-%d') publishDate
@@ -394,47 +452,106 @@
     left join t_i_resume r on r.id = rd.resumeID
     where rd.companyID = #{id} and rd.is_deleted = 0 order by rd.publishDate desc
   </select>
-  <select id="selectIdsByCreateId" resultType="java.lang.String">
+    <select id="selectIdsByCreateId" resultType="java.lang.String">
     select id from t_i_resume where createid= #{createid}
   </select>
 
-  <insert id="insertViewGoods" parameterType="java.util.Map" >
-    insert into t_zhb_viewGoods
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="viewerId != null" >
-        viewerId,
-      </if>
-      <if test="goodsId != null" >
-        goodsId,
-      </if>
-        viewTime,
-      <if test="companyId != null" >
-        companyId,
-      </if>
-      <if test="type != null" >
-        type,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="viewerId != null" >
-        #{viewerId,jdbcType=BIGINT},
-      </if>
-      <if test="goodsId != null" >
-        #{goodsId,jdbcType=BIGINT},
-      </if>
-        now(),
-      <if test="companyId != null" >
-        #{companyId,jdbcType=BIGINT},
-      </if>
-      <if test="type != null" >
-        #{type,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+    <insert id="insertViewGoods" parameterType="java.util.Map">
+        insert into t_zhb_viewGoods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="viewerId != null">
+                viewerId,
+            </if>
+            <if test="goodsId != null">
+                goodsId,
+            </if>
+            viewTime,
+            <if test="companyId != null">
+                companyId,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="viewerId != null">
+                #{viewerId,jdbcType=BIGINT},
+            </if>
+            <if test="goodsId != null">
+                #{goodsId,jdbcType=BIGINT},
+            </if>
+            now(),
+            <if test="companyId != null">
+                #{companyId,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateResumeIsPublic" parameterType="com.zhuhuibao.mybatis.memCenter.entity.Resume">
+        update t_i_resume
+        <set>
+            <if test="isPublic != null and isPublic !=''">
+                isPublic = #{isPublic},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="previewMyResume" parameterType="java.util.Map" resultType="java.util.Map">
+        select r.id,r.createid,r.title,r.realName,r.birthYear,dc.name
+        educationName,r.education,r.photo,r.attach,r.isPublic,r.experienceYear,
+        date_format(r.updateTime,'%Y-%m-%d %H:%i:%s') as updateTime,
+        case when r.sex=1 then '男' when r.sex=0 then '女' end as sexName,r.mobile,r.email,r.sex,
+        case WHEN r.marriage =0 then '未婚' WHEN r.marriage =1 THEN '已婚' WHEN r.marriage =2 THEN '保密' END AS
+        marriage,r.evaluation,
+        (DATE_FORMAT( current_timestamp(),'%Y' )-r.workYear) as workYear,
+        concat(p.name,c.name,a.name)AS liveArea,
+        (select Group_concat(name) from t_dictionary_city where find_in_set(code,r.jobCity))AS jobCityName,r.jobCity,
+        (select Group_concat(name) from t_dictionary_province where find_in_set(code,r.jobProvince))AS
+        jobProvinceName,r.jobProvince,
+        co.name as hopeSalaryName,cons.name as curSalary,r.positionName,r.company,r.hopeSalary,
+        r.jobExperience,r.projectExperience,r.eduExperience,r.attach,con.name AS status,
+        (select Group_concat(name) from t_dictionary_constant where find_in_set(code,r.jobNature) and type=7)AS
+        jobNatureName,r.jobNature,
+        (select Group_concat(name) from t_dictionary_position where find_in_set(id,r.post))AS postName,r.post
+        from t_i_resume r
+        LEFT JOIN t_dictionary_province p on r.liveProvince = p.code
+        left join t_dictionary_city c on r.liveCity = c.code
+        left join t_dictionary_area a on r.liveArea = a.code
+        left join t_dictionary_constant co on co.code = r.hopeSalary and co.type =1
+        left join t_dictionary_constant cons on cons.code = r.curSalary and cons.type =23
+        left join t_dictionary_constant con on con.code = r.status and con.type = 6
+        left join t_dictionary_constant dc on dc.code = r.education and dc.type = 2
+        where r.id = #{id}
+        <if test="createid !=null">
+            and r.createid = #{createid}
+        </if>
+    </select>
+    <select id="queryResumeIdById" parameterType="java.lang.Long" resultType="java.lang.Long">
+  SELECT  i.id
+   from  t_i_resume  i
+   LEFT JOIN t_m_member t ON t.id=i.createID
+   where t.id=#{createID}
+  </select>
+
+    <select id="updateCollById" parameterType="java.util.Map">
+  UPDATE t_i_resume_collect_record SET is_deleted = 1  WHERE resumeID=#{goodsId} AND companyID=#{companyId}
+  </select>
+
+
+    <select id="findShieldEnterpriseById" parameterType="java.util.Map" resultType="java.lang.Integer">
+    SELECT count(1) FROM t_i_forbid_key_words t WHERE
+	t.create_id = (SELECT e.createId FROM t_i_resume e WHERE e.id = #{id})
+    AND t.company_id = #{create_id}
+    AND t.is_deleted =#{is_deleted}
+    </select>
 </mapper>

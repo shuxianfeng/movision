@@ -1,16 +1,14 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
-import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.constant.MemberConstant;
-import com.zhuhuibao.common.constant.MessageTextConstant;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.ZhbPaymentConstant;
+import com.zhuhuibao.common.constant.*;
 import com.zhuhuibao.common.pojo.AccountBean;
 import com.zhuhuibao.common.pojo.ResultBean;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.*;
 import com.zhuhuibao.mybatis.memCenter.mapper.*;
+import com.zhuhuibao.mybatis.oms.entity.MemberSucCase;
+import com.zhuhuibao.mybatis.oms.service.MemberSucCaseService;
 import com.zhuhuibao.mybatis.product.service.ProductService;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
@@ -21,13 +19,6 @@ import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.convert.BeanUtil;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -36,50 +27,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zhuhuibao.common.constant.Constants;
-import com.zhuhuibao.common.constant.MemberConstant;
-import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.ZhbPaymentConstant;
-import com.zhuhuibao.common.pojo.AccountBean;
-import com.zhuhuibao.common.pojo.ResultBean;
-import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.memCenter.entity.Area;
-import com.zhuhuibao.mybatis.memCenter.entity.Certificate;
-import com.zhuhuibao.mybatis.memCenter.entity.CertificateRecord;
-import com.zhuhuibao.mybatis.memCenter.entity.City;
-import com.zhuhuibao.mybatis.memCenter.entity.EmployeeSize;
-import com.zhuhuibao.mybatis.memCenter.entity.EnterpriseType;
-import com.zhuhuibao.mybatis.memCenter.entity.Identity;
-import com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck;
-import com.zhuhuibao.mybatis.memCenter.entity.MemRealCheck;
-import com.zhuhuibao.mybatis.memCenter.entity.Member;
-import com.zhuhuibao.mybatis.memCenter.entity.MemberShop;
-import com.zhuhuibao.mybatis.memCenter.entity.Message;
-import com.zhuhuibao.mybatis.memCenter.entity.Province;
-import com.zhuhuibao.mybatis.memCenter.entity.WorkType;
-import com.zhuhuibao.mybatis.memCenter.mapper.AreaMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.CertificateMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.CertificateRecordMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.CityMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.EmployeeSizeMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.EnterpriseTypeMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.IdentityMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.MemberMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.MessageMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.ProvinceMapper;
-import com.zhuhuibao.mybatis.memCenter.mapper.WorkTypeMapper;
-import com.zhuhuibao.mybatis.oms.entity.MemberSucCase;
-import com.zhuhuibao.mybatis.oms.service.MemberSucCaseService;
-import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
-import com.zhuhuibao.mybatis.vip.entity.VipMemberInfo;
-import com.zhuhuibao.mybatis.vip.service.VipInfoService;
-import com.zhuhuibao.mybatis.zhb.service.ZhbService;
-import com.zhuhuibao.utils.DateUtils;
-import com.zhuhuibao.utils.MsgPropertiesUtils;
-import com.zhuhuibao.utils.convert.BeanUtil;
-import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
+import java.util.*;
 
 /**
  * 会员中心业务处理
@@ -156,14 +104,12 @@ public class MemberService {
 
             memberMapper.updateMemInfo(member);
             memberMapper.updateSubMemInfo(member);
-            //资料审核已拒绝 or 实名认证已拒绝
-            if ("7".equals(member.getStatus()) ) {
-                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(member.getId()),
-                        member.getReason(), MessageTextConstant.ZLSH, member.getAccount(), member.getId());
+            // 资料审核已拒绝 or 实名认证已拒绝
+            if ("7".equals(member.getStatus())) {
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(member.getId()), member.getReason(), MessageTextConstant.ZLSH, member.getAccount(), member.getId());
             }
             if ("11".equals(member.getStatus())) {
-                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(member.getId()),
-                        member.getReason(), MessageTextConstant.SMRZ, member.getAccount(), member.getId());
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(member.getId()), member.getReason(), MessageTextConstant.SMRZ, member.getAccount(), member.getId());
             }
 
         } catch (Exception e) {
@@ -373,8 +319,7 @@ public class MemberService {
         try {
             certificateRecordMapper.updateCertificate(record);
             if ("2".equals(record.getStatus())) {
-                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(record.getMem_id()),
-                        record.getReason(), MessageTextConstant.CERTIFICATERECORD,
+                siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), Long.parseLong(record.getMem_id()), record.getReason(), MessageTextConstant.CERTIFICATERECORD,
                         record.getCertificate_name(), record.getId());
             }
         } catch (Exception e) {
@@ -641,7 +586,9 @@ public class MemberService {
 
     public List<Map<String, String>> queryCompanyByKeywords(String keywords) {
         try {
-            return memberMapper.queryCompanyByKeywords(keywords);
+            Map<String, String> query = new HashMap<>();
+            query.put("keywords", keywords);
+            return memberMapper.queryCompanyByKeywords(query);
         } catch (Exception e) {
             log.error("queryCompanyByKeywords error,keywords=" + keywords + " >>>", e);
             e.printStackTrace();
@@ -713,7 +660,6 @@ public class MemberService {
                     shopService.update(shop);
                 }
             }
-
 
         } catch (Exception e) {
             log.error("updateMemData error >>>", e);

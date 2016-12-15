@@ -1,10 +1,16 @@
 package com.zhuhuibao.mobile.web;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.AdvertisingConstant;
+import com.zhuhuibao.common.constant.ZhbConstant;
+import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
+import com.zhuhuibao.mybatis.oms.entity.TenderToned;
+import com.zhuhuibao.service.MobileProjectService;
+import com.zhuhuibao.service.MobileSysAdvertisingService;
+import com.zhuhuibao.utils.MapUtil;
+import com.zhuhuibao.utils.pagination.model.Paging;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,22 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.AdvertisingConstant;
-import com.zhuhuibao.common.constant.ZhbConstant;
-import com.zhuhuibao.common.util.ShiroUtil;
-import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
-import com.zhuhuibao.mybatis.oms.entity.TenderToned;
-import com.zhuhuibao.mybatis.vip.service.VipInfoService;
-import com.zhuhuibao.mybatis.zhb.entity.DictionaryZhbgoods;
-import com.zhuhuibao.mybatis.zhb.entity.ZhbAccount;
-import com.zhuhuibao.mybatis.zhb.service.ZhbService;
-import com.zhuhuibao.service.MobileProjectService;
-import com.zhuhuibao.service.MobileSysAdvertisingService;
-import com.zhuhuibao.utils.MapUtil;
-import com.zhuhuibao.utils.pagination.model.Paging;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 项目信息controller
@@ -38,14 +32,10 @@ import com.zhuhuibao.utils.pagination.model.Paging;
  */
 @RestController
 @RequestMapping("/rest/m/project/site")
-public class MobileProjectController {
+public class MobileProjectController extends BaseController {
 
     @Autowired
     private MobileProjectService mobileProjectService;
-    @Autowired
-    private ZhbService zhbService;
-    @Autowired
-    private VipInfoService vipInfoService;
     @Autowired
     private MobileSysAdvertisingService advertisingService;
 
@@ -82,27 +72,7 @@ public class MobileProjectController {
     @RequestMapping(value = "/sel_project_detail", method = RequestMethod.GET)
     public Response selProjectDetail(@ApiParam(value = "项目信息ID") @RequestParam Long projectId) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
-
-        // 判断是否登录
-        if (null != ShiroUtil.getCreateID()) {
-            // 剩余特权数量
-            long privilegeNum = vipInfoService.getExtraPrivilegeNum(ShiroUtil.getCompanyID(), ZhbConstant.ZhbGoodsType.CKXMXX.toString());
-            resultMap.put("privilegeNum", String.valueOf(privilegeNum));
-            // 筑慧币余额
-            ZhbAccount account = zhbService.getZhbAccount(ShiroUtil.getCompanyID());
-            resultMap.put("zhbAmount", null != account ? account.getAmount().toString() : "0");
-        } else {
-            resultMap.put("privilegeNum", "0");
-            resultMap.put("zhbAmount", "0");
-        }
-        // 筑慧币单价
-        DictionaryZhbgoods goodsConfig = zhbService.getZhbGoodsByPinyin(ZhbConstant.ZhbGoodsType.CKXMXX.toString());
-        resultMap.put("zhbPrice", null != goodsConfig ? String.valueOf(goodsConfig.getPriceDoubleValue()) : "999");
-
-        // 获取项目信息详情
-        Map<String, Object> projectDetail = mobileProjectService.getProjectDetail(projectId);
-        resultMap.putAll(projectDetail);
-
+        getPrivilegeGoodsDetails(resultMap, String.valueOf(projectId), ZhbConstant.ZhbGoodsType.CKXMXX);
         return new Response(resultMap);
     }
 

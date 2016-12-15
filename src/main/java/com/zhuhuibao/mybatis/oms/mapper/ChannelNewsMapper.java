@@ -31,11 +31,15 @@ public interface ChannelNewsMapper {
 
     List<Map<String,Object>> findAllTechNewsList(RowBounds rowBounds, Map<String,Object> channelMap);
 
+    List<Map<String,Object>> findAllTechNewsList4Mobile(Map<String,Object> channelMap);
+
     Map<String,Object> previewNewsInfo(Map<String,Object> channelMap);
 
     List<Map<String,String>> queryHomepageTechnologyList(Map<String, Object> map);
 
     List<Map<String,String>> findAllPassNewsByType(RowBounds rowBounds, Map<String, Object> params);
+
+    List<Map<String,String>> findJobNews4Mobile(RowBounds rowBounds, Map<String, Object> params);
 
     List<Map<String,String>> selectHotViews(@Param("type") String type, @Param("count") Integer count);
 
@@ -52,4 +56,7 @@ public interface ChannelNewsMapper {
 	String queryattachName(String id);
 
     List<Map> findChanNewsListByTitle(RowBounds rowBounds,Map<String, Object> map);
+
+    List<Map<String,String>> findIndexNews(Map<String, Object> params);
+
 }

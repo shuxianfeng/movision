@@ -154,6 +154,7 @@ public class MobileEnquiryService {
      * @return
      */
     public Paging<AskPriceSimpleBean> getSentOfferList(Long memberId, String title, String startDate, String endDate, String pageNo, String pageSize) {
+
         Paging<AskPriceSimpleBean> offerPager = new Paging<AskPriceSimpleBean>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         Map<String, String> priceMap = MapUtil.convert2HashMap("startDate", startDate, "endDate", endDate, "createid", String.valueOf(memberId));
         if (title != null && !title.equals("")) {

@@ -546,7 +546,7 @@ public class MemberRegService {
                 loginMember.setVipLevel(VipConstant.VipLevel.ENTERPRISE_FREE.value);
             }
         } catch (Exception e) {
-            log.error("find login memeber by account error>>>{}", e);
+            log.error("find login memeber by account error>>>{"+memberAccount+"}", e);
             throw e;
         }
         return loginMember;

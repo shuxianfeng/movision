@@ -106,7 +106,7 @@ public class WitkeyController {
 	 */
 	@ApiOperation(value = "批量删除任务", notes = "批量删除任务", response = Response.class)
 	@RequestMapping(value = "del_witkey", method = RequestMethod.POST)
-	public Response deleteCooperation(@RequestParam String ids[]) {
+	public Response deleteCooperation(@RequestParam String ids) {
 		Response response = new Response();
 		cooperationService.deleteCooperation(ids);
 		return response;

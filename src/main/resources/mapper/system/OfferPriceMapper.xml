@@ -17,7 +17,8 @@
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, askid, createid,content,billurl,if(isShow=1,companyName,'') companyName, if(isShow=1,linkMan,'') linkMan,
-    if(isShow=1,telephone,'') telephone, if(isShow=1,email,'') email,isShow
+    if(isShow=1,telephone,'') telephone, if(isShow=1,email,'') email,isShow,
+    '//image.zhuhui8.com/upload/price/img/' as path
     from t_p_offer_price
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -25,7 +26,8 @@
   <select id="findAllOfferPriceByAskId" resultType="java.util.Map" parameterType="java.lang.Long">
     SELECT
       t.id,t.askid, t.createid ,t.offerTime,t.content,t.billurl,t.isShow,t.companyName,t.linkMan,t.telephone,t.email,
-      CONCAT(pp.name, ct.name) address
+      CONCAT(pp.name, ct.name) address,
+      '//image.zhuhui8.com/upload/price/img/' as path
     FROM
       t_p_offer_price t
       LEFT JOIN t_m_member m
@@ -191,7 +193,8 @@
   </select>
   <select id="findAllOfferedPriceInfo" parameterType="java.util.Map" resultType="com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean">
   	 select t.id,t.offerTime dateTime,concat(p.name,c.name) deliveryAddress,if(t.type = 1,'公开询价','定向询价') typeName,t.title,t.createid 
-	 from (select op.id,op.createid,op.askid,date_format(op.offerTime,'%Y-%m-%d') offerTime,ap.provinceCode,ap.cityCode,ap.type,ap.title from t_p_offer_price op
+	 from (select op.id,op.createid,op.askid,date_format(op.offerTime,'%Y-%m-%d') offerTime,ap.provinceCode,ap.cityCode,ap.type,ap.title
+    from t_p_offer_price op
 	 left join t_p_ask_price ap on ap.id = op.askid
 	 <where>
 	 <if test="title != null and title != ''">
@@ -207,6 +210,7 @@
 	 ) t 
 	 left join t_dictionary_province p on t.provinceCode = p.code 
 	 left join t_dictionary_city c on t.cityCode = c.code
+     order by t.offerTime DESC
   </select>
   <select id="queryAllOfferPriceByAskID" parameterType="java.lang.Long" resultType="com.zhuhuibao.mybatis.memCenter.entity.AskPriceSimpleBean">
   	select n.id,n.createid,date_format(n.offerTime,'%Y-%m-%d') dateTime,concat(p.name,c.name) deliveryAddress,n.companyName from 

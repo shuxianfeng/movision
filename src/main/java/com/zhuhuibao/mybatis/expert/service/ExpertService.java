@@ -670,7 +670,6 @@ public class ExpertService {
 			return expertSupportMapper.queryExpertSupportInfoById(id);
 		} catch (Exception e) {
 			log.error("ExpertService::queryExpertSupportInfoById::id=" + id, e);
-			// e.printStackTrace();
 			throw e;
 		}
 	}

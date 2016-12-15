@@ -34,11 +34,11 @@ public class ShiroRealm extends AuthorizingRealm {
      * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
      */
     @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(
-            PrincipalCollection principals) {
-//        ShiroUser member = (ShiroUser) principals.fromRealm(getName()).iterator().next();
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        // ShiroUser member = (ShiroUser)
+        // principals.fromRealm(getName()).iterator().next();
         Subject subject = SecurityUtils.getSubject();
-        ShiroUser member  = (ShiroUser) subject.getSession(false).getAttribute("member");
+        ShiroUser member = (ShiroUser) subject.getSession(false).getAttribute("member");
         if (null != member) {
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
@@ -86,8 +86,7 @@ public class ShiroRealm extends AuthorizingRealm {
      * 认证回调函数,登录时调用.
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(
-            AuthenticationToken token) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         log.info("登录认证");
         String loginname = (String) token.getPrincipal();
         LoginMember loginMember = memberRegService.getLoginMemberByAccount(loginname);
@@ -96,23 +95,20 @@ public class ShiroRealm extends AuthorizingRealm {
                 throw new LockedAccountException(); // 帐号不正常状态
             }
         } else {
-            throw new UnknownAccountException();//  用户名不存在
+            throw new UnknownAccountException();// 用户名不存在
         }
 
-        ShiroUser shiroUser = new ShiroUser(loginMember.getId(), loginMember.getAccount(), loginMember.getStatus(),
-                loginMember.getIdentify(), loginMember.getRole(), loginMember.getIsexpert(), loginMember.getCompanyId(),
-                loginMember.getRegisterTime(), loginMember.getWorkType(), loginMember.getHeadShot(),
-                loginMember.getNickname(), loginMember.getCompanyName(), loginMember.getVipLevel());
+        ShiroUser shiroUser = new ShiroUser(loginMember.getId(), loginMember.getAccount(), loginMember.getStatus(), loginMember.getIdentify(), loginMember.getRole(), loginMember.getIsexpert(),
+                loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(), loginMember.getHeadShot(), loginMember.getNickname(), loginMember.getCompanyName(),
+                loginMember.getVipLevel(), loginMember.getEnterpriseLinkman(), loginMember.getFixedTelephone(), loginMember.getEmail());
 
         // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
-        return new SimpleAuthenticationInfo(
-                shiroUser, // 用户
+        return new SimpleAuthenticationInfo(shiroUser, // 用户
                 loginMember.getPassword(), // 密码
-//                ByteSource.Util.bytes("123"),
+                // ByteSource.Util.bytes("123"),
                 getName() // realm name
         );
     }
-
 
     /**
      * 更新用户授权信息缓存.
@@ -122,10 +118,11 @@ public class ShiroRealm extends AuthorizingRealm {
         clearCachedAuthorizationInfo(principals);
     }
 
-    //登陆成功后强制加载shiro权限缓存 避免懒加载 先清除
+    // 登陆成功后强制加载shiro权限缓存 避免懒加载 先清除
     public void forceShiroToReloadUserAuthorityCache() {
         this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipal());
-//        this.isPermitted(SecurityUtils.getSubject().getPrincipals(), "强制加载缓存，避免懒加载" + System.currentTimeMillis());
+        // this.isPermitted(SecurityUtils.getSubject().getPrincipals(),
+        // "强制加载缓存，避免懒加载" + System.currentTimeMillis());
     }
 
     /**
@@ -159,9 +156,21 @@ public class ShiroRealm extends AuthorizingRealm {
         private String nickname;
 
         private int vipLevel;
+        /**
+         * 联系人
+         */
+        private String enterpriseLinkman;
+        /**
+         * 固定电话
+         */
+        private String fixedTelephone;
+        /**
+         * 邮箱
+         */
+        private String email;
 
-        public ShiroUser(Long id, String account, int status, String identify, String role, String isexpert, Long companyId,
-                         String registerTime, int workType, String headShot, String nickname, String companyName, int vipLevel) {
+        public ShiroUser(Long id, String account, int status, String identify, String role, String isexpert, Long companyId, String registerTime, int workType, String headShot, String nickname,
+                String companyName, int vipLevel, String enterpriseLinkman, String fixedTelephone, String email) {
 
             this.id = id;
             this.account = account;
@@ -176,8 +185,34 @@ public class ShiroRealm extends AuthorizingRealm {
             this.nickname = nickname;
             this.companyName = companyName;
             this.vipLevel = vipLevel;
+            this.enterpriseLinkman = enterpriseLinkman;
+            this.fixedTelephone = fixedTelephone;
+            this.email = email;
         }
 
+        public String getEnterpriseLinkman() {
+            return enterpriseLinkman;
+        }
+
+        public void setEnterpriseLinkman(String enterpriseLinkman) {
+            this.enterpriseLinkman = enterpriseLinkman;
+        }
+
+        public String getFixedTelephone() {
+            return fixedTelephone;
+        }
+
+        public void setFixedTelephone(String fixedTelephone) {
+            this.fixedTelephone = fixedTelephone;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
 
         public Long getId() {
             return id;
@@ -298,8 +333,7 @@ public class ShiroRealm extends AuthorizingRealm {
 
             if (id == null || account == null) {
                 return false;
-            } else if (id.equals(other.id)
-                    && account.equals(other.account))
+            } else if (id.equals(other.id) && account.equals(other.account))
                 return true;
             return false;
         }

@@ -19,4 +19,9 @@ public interface DynamicMapper {
     List<Map<String,String>> findDynamicListByCount(int count);
 
     int updateDynamicViews(Dynamic dynamic);
+    List<Dynamic> findAllDynamicList1(RowBounds rowBounds, Map<String, Object> map);
+
+    Dynamic selDynamicById(String id);
+
+
 }

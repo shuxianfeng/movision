@@ -41,6 +41,9 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
+    ,
+    (select sum(g.number) from t_p_group_publishCourse p LEFT JOIN t_o_order_goods g on p.courseid = g.goodsId LEFT JOIN t_o_order o on g.orderNo = o.orderNo
+    where  courseid = #{courseid,jdbcType=BIGINT} AND o.status = 1 and  o.dealTime > date_add(now(),interval -30 minute)) as inventory
     from t_p_group_publishCourse
     where courseid = #{courseid,jdbcType=BIGINT}
   </select>

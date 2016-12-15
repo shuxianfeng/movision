@@ -2,18 +2,15 @@ package com.zhuhuibao.service.zhpay;
 
 import com.zhuhuibao.alipay.service.direct.AlipayDirectService;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.order.entity.OrderFlow;
-import com.zhuhuibao.mybatis.order.entity.OrderGoods;
-import com.zhuhuibao.mybatis.order.entity.ZhbAccount;
-import com.zhuhuibao.mybatis.order.service.OrderFlowService;
-import com.zhuhuibao.mybatis.order.service.OrderGoodsService;
-import com.zhuhuibao.mybatis.order.service.ZhbAccountService;
+import com.zhuhuibao.mybatis.order.entity.*;
+import com.zhuhuibao.mybatis.order.service.*;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.order.ZHOrderService;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
+import com.zhuhuibao.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 支付服务
@@ -53,6 +48,12 @@ public class ZhpayService {
     @Autowired
     ZhbService zhbService;
 
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private PublishCourseService publishCourseService;
+
     /**
      * 单一方式支付(1.支付宝)
      *
@@ -61,10 +62,10 @@ public class ZhpayService {
      * @throws Exception
      */
     public void doPay(HttpServletResponse resp, Map<String, String> msgParam) throws Exception {
-
         // 记录支付流水
         prePayParam(msgParam);
-
+        // 参数校验
+        checkParams(msgParam);
         // 确认支付
         confirmPay(resp, msgParam);
 
@@ -111,6 +112,8 @@ public class ZhpayService {
         // 根据支付方式选择不同的支付
         // 判断支付方式
         judgePayMode(msgParam);
+        // 校验参数
+        checkParams(msgParam);
         // 确认支付
         confirmPay(resp, msgParam);
 
@@ -124,9 +127,6 @@ public class ZhpayService {
      * @throws Exception
      */
     public void confirmPay(HttpServletResponse resp, Map<String, String> msgParam) throws Exception {
-
-        // 校验参数
-        checkParams(msgParam);
 
         // 根据t_o_order_flow表进行支付
         List<OrderFlow> orderFlows = orderFlowService.findUniqueOrderFlow(msgParam.get("orderNo"));
@@ -280,35 +280,35 @@ public class ZhpayService {
      *
      * @param msgParam
      */
-    private void checkParams(Map<String, String> msgParam) {
-        String goodsId = msgParam.get("goodsId");// 商品ID
-        if (StringUtils.isEmpty(goodsId)) {
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "商品ID不能为空");
+    public String checkParams(Map<String, String> msgParam) {
+        String msg = "";
+        // 如果是培训课程类的支付 校验库存是否满足当前支付条件
+        Order order = orderService.findByOrderNo(msgParam.get("orderNo"));
+        if (null == order) {
+            msg = "订单不存在";
+            return msg;
         }
-        // String goodsName = msgParam.get("goodsName");//商品名称
-        // if (StringUtils.isEmpty(goodsName)) {
-        // throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,
-        // "商品名称不能为空");
-        // }
-        // String goodsPrice = msgParam.get("goodsPrice");//商品单价
-        // if (StringUtils.isEmpty(goodsPrice)) {
-        // throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,
-        // "商品单价不能为空");
-        // }
-        // String buyersid = String.valueOf(msgParam.get("buyerId"));//创建订单的会员ID
-        // if (StringUtils.isEmpty(buyersid)) {
-        // throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,
-        // "创建订单会员ID不能为空");
-        // }
-        String number = msgParam.get("number");// 订单商品数量
-        if (StringUtils.isEmpty(number)) {
-            throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR, "订单商品数量不能为空");
+        // 当前订单(专家培训，技术培训)下单时间和当前时间超过30分钟 订单状态置为已关闭
+        if (order.getGoodsType().equals(OrderConstants.GoodsType.JSPX.toString()) || order.getGoodsType().equals(OrderConstants.GoodsType.ZJPX.toString())) {
+            if (order.getDealTime().before(DateUtils.date2Sub(new Date(), Calendar.MINUTE, -30))) {
+                // 订单状态改为关闭
+                order.setStatus(PayConstants.OrderStatus.CLOSED.toString());
+                orderService.update(order);
+                msg = "订单已经失效";
+                return msg;
+            }
+            OrderGoods goods = orderGoodsService.findByOrderNo(msgParam.get("orderNo"));
+            if (null == goods) {
+                msg = "订单商品信息不存在";
+                return msg;
+            }
+            PublishCourse course = publishCourseService.getCourseById(goods.getGoodsId());
+            int stockNum = course.getStorageNumber();
+            if (goods.getNumber() > stockNum) { // 购买数量大于库存数量
+                msg = "剩余名额只有" + stockNum + "，请修改报名人数再进行提交";
+                return msg;
+            }
         }
-        // String goodsType = msgParam.get("goodsType");//商品类型
-        // if (StringUtils.isEmpty(goodsType)) {
-        // throw new BusinessException(MsgCodeConstant.PARAMS_VALIDATE_ERROR,
-        // "商品类型不能为空");
-        // }
-
+        return msg;
     }
 }

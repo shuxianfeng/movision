@@ -1,7 +1,9 @@
 package com.zhuhuibao.mybatis.memCenter.entity;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
+@ApiModel(value = "询价",description = "询价")
 public class AskPrice {
     private Long id;
 
@@ -53,7 +55,7 @@ public class AskPrice {
     @ApiModelProperty(value = "产品/服务名称")
     private String productName;
 
-    @ApiModelProperty(value = "供应商ID。多个用逗号隔开。")
+    @ApiModelProperty(value = "供应商ID,厂商ID。多个用逗号隔开。")
     private String supplierid;
 
     @ApiModelProperty(value = "是否含税 0:不含税，1：含税")

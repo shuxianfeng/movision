@@ -4,16 +4,22 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
+import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
 import com.zhuhuibao.mybatis.memCenter.service.JobPositionService;
 import com.zhuhuibao.mybatis.memCenter.service.ResumeService;
+import com.zhuhuibao.mybatis.memCenter.service.UploadService;
+import com.zhuhuibao.utils.file.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * 运营系统 - 人才网
@@ -36,6 +42,8 @@ public class OmsJobController {
     private ResumeService resumeService;
     @Autowired
     private JobPositionService jobService;
+    @Autowired
+    private UploadService uploadService;
 
     @ApiOperation(value = "设置为热门职位", notes = "设置为热门职位", response = Response.class)
     @RequestMapping(value = "upd_setup_hot", method = RequestMethod.POST)
@@ -84,5 +92,29 @@ public class OmsJobController {
         return resumeService.updateResume(resume);
     }
 
+
+    @ApiOperation(value = "解析简历", notes = "解析简历", response = Response.class)
+    @RequestMapping(value = "oms_analysis_resume", method = RequestMethod.POST)
+    public Response omsAnalysisResume(@ApiParam(value = "上传文件") @RequestParam MultipartFile file,
+                                   @ApiParam(value = "51job:51job,智联:zhilian,人才:rencai,猎聘:liepin") @RequestParam String chann) throws Exception {
+        Response result = new Response();
+        try {
+            //判断是否为允许的上传文件后缀
+           if(FileUtil.isAllowed(file.getOriginalFilename(),"zip")){
+               throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR,"不允许的上传类型");
+           }
+            Map<String, String> map = uploadService.upload(file, "zip", chann);
+            map.put("url",map.get("data"));
+            map.put("name", FileUtil.getFileNameByUrl(map.get("data")));
+            boolean bool= positionService.selDecompression(map.get("name"),chann);
+            map.put("bool",(bool+""));
+            positionService.analysisResume(map.get("name"),chann);
+            result.setData(map);
+        } catch (Exception e) {
+            log.error("analysis_resume error! ", e);
+            result.setCode(400);
+        }
+        return result;
+    }
 
 }

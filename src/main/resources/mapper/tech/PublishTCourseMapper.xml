@@ -1,336 +1,400 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhuhuibao.mybatis.tech.mapper.PublishTCourseMapper" >
-  <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse" >
-    <id column="courseid" property="courseid" jdbcType="BIGINT" />
-    <result column="publisherid" property="publisherid" jdbcType="BIGINT" />
-    <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP" />
-    <result column="saleTime" property="saleTime" jdbcType="TIMESTAMP" />
-    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="teacher" property="teacher" jdbcType="VARCHAR" />
-    <result column="startTime" property="startTime" jdbcType="TIMESTAMP" />
-    <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
-    <result column="province" property="province" jdbcType="VARCHAR" />
-    <result column="area" property="area" jdbcType="VARCHAR" />
-    <result column="address" property="address" jdbcType="VARCHAR" />
-    <result column="city" property="city" jdbcType="VARCHAR" />
-    <result column="price" property="price" jdbcType="DECIMAL" />
-    <result column="storageNumber" property="storageNumber" jdbcType="INTEGER" />
-    <result column="minBuyNumber" property="minBuyNumber" jdbcType="VARCHAR" />
-    <result column="maxBuyNumber" property="maxBuyNumber" jdbcType="VARCHAR" />
-    <result column="expiryDate" property="expiryDate" jdbcType="DATE" />
-    <result column="imgUrl" property="imgUrl" jdbcType="VARCHAR" />
-    <result column="notice" property="notice" jdbcType="VARCHAR" />
-    <result column="courseType" property="courseType" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse" extends="BaseResultMap" >
-    <result column="notes" property="notes" jdbcType="LONGVARCHAR" />
-  </resultMap>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
-    select
-    courseid, publisherid, title, teacher, date_format(startTime,'%Y-%m-%d %H:%i:%s') startTime,
-    date_format(endTime,'%Y-%m-%d %H:%i:%s') endTime, province, area, address, city, price, storageNumber, minBuyNumber, maxBuyNumber,
-    date_format(expiryDate,'%Y-%m-%d') expiryDate, imgUrl, notice, courseType, status,notes
-    from t_p_group_publishCourse
-    <where>
-      <if test="courseid != null">
-        and courseid = #{courseid,jdbcType=BIGINT}
-      </if>
-      <if test="courseType != null">
-        and courseType = #{courseType}
-      </if>
-    </where> 
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+<mapper namespace="com.zhuhuibao.mybatis.tech.mapper.PublishTCourseMapper">
+    <resultMap id="BaseResultMap" type="com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse">
+        <id column="courseid" property="courseid" jdbcType="BIGINT"/>
+        <result column="publisherid" property="publisherid" jdbcType="BIGINT"/>
+        <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="saleTime" property="saleTime" jdbcType="TIMESTAMP"/>
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="teacher" property="teacher" jdbcType="VARCHAR"/>
+        <result column="startTime" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="area" property="area" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="storageNumber" property="storageNumber" jdbcType="INTEGER"/>
+        <result column="minBuyNumber" property="minBuyNumber" jdbcType="VARCHAR"/>
+        <result column="maxBuyNumber" property="maxBuyNumber" jdbcType="VARCHAR"/>
+        <result column="expiryDate" property="expiryDate" jdbcType="DATE"/>
+        <result column="imgUrl" property="imgUrl" jdbcType="VARCHAR"/>
+        <result column="notice" property="notice" jdbcType="VARCHAR"/>
+        <result column="courseType" property="courseType" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse"
+               extends="BaseResultMap">
+        <result column="notes" property="notes" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map">
+        select
+        courseid, publisherid, title, teacher, date_format(startTime,'%Y-%m-%d %H:%i:%s') startTime,
+        date_format(endTime,'%Y-%m-%d %H:%i:%s') endTime, province, area, address, city, price, storageNumber,
+        minBuyNumber, maxBuyNumber,
+        date_format(expiryDate,'%Y-%m-%d') expiryDate, imgUrl, notice, courseType, status,notes
+        from t_p_group_publishCourse
+        <where>
+            <if test="courseid != null">
+                and courseid = #{courseid,jdbcType=BIGINT}
+            </if>
+            <if test="courseType != null">
+                and courseType = #{courseType}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_p_group_publishCourse
     where courseid = #{courseid,jdbcType=BIGINT}
   </delete>
-  <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse" >
-    insert into t_p_group_publishCourse
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="courseid != null" >
-        courseid,
-      </if>
-      <if test="publisherid != null" >
-        publisherid,
-      </if>
-      publishTime,
-      saleTime,
-      updateTime,
-      <if test="title != null" >
-        title,
-      </if>
-      <if test="teacher != null" >
-        teacher,
-      </if>
-      <if test="startTime != null" >
-        startTime,
-      </if>
-      <if test="endTime != null" >
-        endTime,
-      </if>
-      <if test="province != null" >
-        province,
-      </if>
-      <if test="area != null" >
-        area,
-      </if>
-      <if test="address != null" >
-        address,
-      </if>
-      <if test="city != null" >
-        city,
-      </if>
-      <if test="price != null" >
-        price,
-      </if>
-      <if test="storageNumber != null" >
-        storageNumber,
-      </if>
-      <if test="minBuyNumber != null" >
-        minBuyNumber,
-      </if>
-      <if test="maxBuyNumber != null" >
-        maxBuyNumber,
-      </if>
-      <if test="expiryDate != null" >
-        expiryDate,
-      </if>
-      <if test="imgUrl != null" >
-        imgUrl,
-      </if>
-      <if test="notice != null" >
-        notice,
-      </if>
-      <if test="courseType != null" >
-        courseType,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="notes != null" >
-        notes,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="courseid != null" >
-        #{courseid,jdbcType=BIGINT},
-      </if>
-      <if test="publisherid != null" >
-        #{publisherid,jdbcType=BIGINT},
-      </if>
-      now(),
-      now(),
-      now(),
-      <if test="title != null" >
-        #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="teacher != null" >
-        #{teacher,jdbcType=VARCHAR},
-      </if>
-      <if test="startTime != null" >
-        #{startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null" >
-        #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="province != null" >
-        #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="area != null" >
-        #{area,jdbcType=VARCHAR},
-      </if>
-      <if test="address != null" >
-        #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null" >
-        #{city,jdbcType=VARCHAR},
-      </if>
-      <if test="price != null" >
-        #{price,jdbcType=DECIMAL},
-      </if>
-      <if test="storageNumber != null" >
-        #{storageNumber,jdbcType=INTEGER},
-      </if>
-      <if test="minBuyNumber != null" >
-        #{minBuyNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="maxBuyNumber != null" >
-        #{maxBuyNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="expiryDate != null" >
-        #{expiryDate,jdbcType=DATE},
-      </if>
-      <if test="imgUrl != null" >
-        #{imgUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="notice != null" >
-        #{notice,jdbcType=VARCHAR},
-      </if>
-      <if test="courseType != null" >
-        #{courseType,jdbcType=INTEGER},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="notes != null" >
-        #{notes,jdbcType=LONGVARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse" >
-    update t_p_group_publishCourse
-    <set >
-      <if test="publisherid != null" >
-        publisherid = #{publisherid,jdbcType=BIGINT},
-      </if>
-      <if test="publishTime != null" >
-        publishTime = now(),
-      </if>
-      <if test="saleTime != null" >
-        saleTime = now(),
-      </if>
-      <if test="updateTime != null" >
-        updateTime = now(),
-      </if>
-      <if test="title != null" >
-        title = #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="teacher != null" >
-        teacher = #{teacher,jdbcType=VARCHAR},
-      </if>
-      <if test="startTime != null" >
-        startTime = #{startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null" >
-        endTime = #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="province != null" >
-        province = #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="area != null" >
-        area = #{area,jdbcType=VARCHAR},
-      </if>
-      <if test="address != null" >
-        address = #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null" >
-        city = #{city,jdbcType=VARCHAR},
-      </if>
-      <if test="price != null" >
-        price = #{price,jdbcType=DECIMAL},
-      </if>
-      <if test="storageNumber != null" >
-        storageNumber = #{storageNumber,jdbcType=INTEGER},
-      </if>
-      <if test="minBuyNumber != null" >
-        minBuyNumber = #{minBuyNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="maxBuyNumber != null" >
-        maxBuyNumber = #{maxBuyNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="expiryDate != null" >
-        expiryDate = #{expiryDate,jdbcType=DATE},
-      </if>
-      <if test="imgUrl != null" >
-        imgUrl = #{imgUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="notice != null" >
-        notice = #{notice,jdbcType=VARCHAR},
-      </if>
-      <if test="courseType != null" >
-        courseType = #{courseType,jdbcType=INTEGER},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="notes != null" >
-        notes = #{notes,jdbcType=LONGVARCHAR},
-      </if>
-    </set>
-    where courseid = #{courseid,jdbcType=BIGINT}
-  </update>
-  <select id="findAllTrainCoursePager" parameterType="java.util.Map" resultType="java.util.Map">
-    select t.courseid, t.publisherid, date_format(t.saleTime,'%Y-%m-%d') saleTime, t.title, t.teacher, date_format(t.startTime,'%Y-%m-%d') startTime,
-    concat(pv.name,'-',ct.name) provinceCity, t.price, t.minBuyNumber,
-    date_format(t.expiryDate,'%Y-%m-%d') expiryDate, t.status from t_p_group_publishCourse t
-    left join t_dictionary_province pv on pv.code = t.province
-    left join t_dictionary_city ct on ct.code = t.city
-    <where>
-      <if test="courseType != null">
-        and courseType = #{courseType}
-      </if>
-      <if test="status != null">
-        and status = #{status}
-      </if>
-      <if test="title != null and title != ''">
-        and title like concat('%',#{title},'%')
-      </if>
-      <if test="province != null">
-        and province = #{province}
-      </if>
-      <if test="city != null">
-        and city = #{city}
-      </if>
-    </where>
-    order by t.updateTime desc
+    <insert id="insertSelective" parameterType="com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse">
+        insert into t_p_group_publishCourse
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseid != null">
+                courseid,
+            </if>
+            <if test="publisherid != null">
+                publisherid,
+            </if>
+            publishTime,
+            saleTime,
+            updateTime,
+            <if test="title != null">
+                title,
+            </if>
+            <if test="teacher != null">
+                teacher,
+            </if>
+            <if test="startTime != null">
+                startTime,
+            </if>
+            <if test="endTime != null">
+                endTime,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="storageNumber != null">
+                storageNumber,
+            </if>
+            <if test="minBuyNumber != null">
+                minBuyNumber,
+            </if>
+            <if test="maxBuyNumber != null">
+                maxBuyNumber,
+            </if>
+            <if test="expiryDate != null">
+                expiryDate,
+            </if>
+            <if test="imgUrl != null">
+                imgUrl,
+            </if>
+            <if test="notice != null">
+                notice,
+            </if>
+            <if test="courseType != null">
+                courseType,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="notes != null">
+                notes,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseid != null">
+                #{courseid,jdbcType=BIGINT},
+            </if>
+            <if test="publisherid != null">
+                #{publisherid,jdbcType=BIGINT},
+            </if>
+            now(),
+            now(),
+            now(),
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="teacher != null">
+                #{teacher,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null">
+                #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="storageNumber != null">
+                #{storageNumber,jdbcType=INTEGER},
+            </if>
+            <if test="minBuyNumber != null">
+                #{minBuyNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="maxBuyNumber != null">
+                #{maxBuyNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="expiryDate != null">
+                #{expiryDate,jdbcType=DATE},
+            </if>
+            <if test="imgUrl != null">
+                #{imgUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="notice != null">
+                #{notice,jdbcType=VARCHAR},
+            </if>
+            <if test="courseType != null">
+                #{courseType,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="notes != null">
+                #{notes,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse">
+        update t_p_group_publishCourse
+        <set>
+            <if test="publisherid != null">
+                publisherid = #{publisherid,jdbcType=BIGINT},
+            </if>
+            <if test="publishTime != null">
+                publishTime = now(),
+            </if>
+            <if test="saleTime != null">
+                saleTime = now(),
+            </if>
+            <if test="updateTime != null">
+                updateTime = now(),
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="teacher != null">
+                teacher = #{teacher,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null">
+                startTime = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                endTime = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="province != null">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null">
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="storageNumber != null">
+                storageNumber = #{storageNumber,jdbcType=INTEGER},
+            </if>
+            <if test="minBuyNumber != null">
+                minBuyNumber = #{minBuyNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="maxBuyNumber != null">
+                maxBuyNumber = #{maxBuyNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="expiryDate != null">
+                expiryDate = #{expiryDate,jdbcType=DATE},
+            </if>
+            <if test="imgUrl != null">
+                imgUrl = #{imgUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="notice != null">
+                notice = #{notice,jdbcType=VARCHAR},
+            </if>
+            <if test="courseType != null">
+                courseType = #{courseType,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="notes != null">
+                notes = #{notes,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where courseid = #{courseid,jdbcType=BIGINT}
+    </update>
+    <select id="findAllTrainCoursePager" parameterType="java.util.Map" resultType="java.util.Map">
+        select t.courseid, t.publisherid, date_format(t.saleTime,'%Y-%m-%d') saleTime, t.title, t.teacher,
+        date_format(t.startTime,'%Y-%m-%d') startTime,
+        concat(pv.name,'-',ct.name) provinceCity, t.price, t.minBuyNumber,
+        date_format(t.expiryDate,'%Y-%m-%d') expiryDate, t.status from t_p_group_publishCourse t
+        left join t_dictionary_province pv on pv.code = t.province
+        left join t_dictionary_city ct on ct.code = t.city
+        <where>
+            <if test="courseType != null">
+                and courseType = #{courseType}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="title != null and title != ''">
+                and title like concat('%',#{title},'%')
+            </if>
+            <if test="province != null">
+                and province = #{province}
+            </if>
+            <if test="city != null">
+                and city = #{city}
+            </if>
+        </where>
+        order by t.updateTime desc
+    </select>
+
+    <select id="findAllPublishCoursePager" parameterType="java.util.Map" resultType="java.util.Map">
+        select t.courseid,t.title,t.notes,date_format(t.endTime,'%Y-%m-%d %H:%i:%s') endTime, t.price,t.courseType,
+        t.storageNumber, t.minBuyNumber, t.maxBuyNumber,
+        (
+        select sum(number) from t_o_order_goods
+        where goodsId = t.courseid and orderNo in (select orderNo from t_o_order where status in (1,2) and goodsType =
+        t.courseType)
+        ) as applynumber,
+        case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl)
+        = 0 then imgUrl end as imgUrl
+        from t_p_group_publishCourse t
+        <where>
+            <if test="courseType != null">
+                and courseType = #{courseType}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="province != null and province != ''">
+                and province = #{province}
+            </if>
+        </where>
+        order by t.updateTime desc
+    </select>
+
+    <select id="findLatestPublishCourse" parameterType="java.util.Map" resultType="java.util.Map">
+        select t.courseid,t.title,t.notes,(
+        select sum(number) from t_o_order_goods
+        where goodsId = t.courseid and orderNo in (select orderNo from t_o_order where status =2 and goodsType =
+        t.courseType)
+        ) as applynumber,t.status,
+        (select sum(number) from t_o_order_goods
+        where goodsId = t.courseid and orderNo in (select orderNo from t_o_order where status = 1 and goodsType
+        = t.courseType and dealTime > date_add(now(),interval -30 minute))) as notBuyNumber,
+        t.storageNumber,t.price,date_format(t.endTime,'%Y-%m-%d %H:%i:%s') endTime,
+        case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl)
+        = 0 then imgUrl end as imgUrl
+        from t_p_group_publishCourse t
+        <where> 1=1
+            <if test="courseType != null">
+                and t.courseType = #{courseType}
+            </if>
+                and t.status in(2,3,4)
+            <if test="province != null">
+                and t.province = #{province}
+            </if>
+            AND t.expiryDate > now()
+            AND t.storageNumber !=0
+        </where>
+        order by applynumber desc
+        limit #{count}
+    </select>
+
+    <select id="previewTrainCourseDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        select
+        courseid, publisherid, title, teacher, date_format(startTime,'%Y-%m-%d %H:%i:%s') startTime,
+        date_format(endTime,'%Y-%m-%d %H:%i:%s') endTime, concat(pv.name,ct.name,ar.name,address) address, price,
+        minBuyNumber, maxBuyNumber,storageNumber,
+        date_format(expiryDate,'%Y-%m-%d') expiryDate, imgUrl, notice, courseType, t.status,notes,
+        (select sum(number) from t_o_order_goods
+        where goodsId = #{courseid} and orderNo in (select orderNo from t_o_order where status = 1 and goodsType
+        =#{courseType} and dealTime > date_add(now(),interval -30 minute))) as notBuyNumber,
+        (
+        select sum(number) from t_o_order_goods
+        where goodsId = #{courseid} and orderNo in (select orderNo from t_o_order where status = 2 and goodsType
+        =#{courseType})
+        ) as number
+        from t_p_group_publishCourse t
+        left join t_dictionary_province pv on pv.code = t.province
+        left join t_dictionary_city ct on ct.code = t.city
+        left join t_dictionary_area ar on ar.code = t.area
+        <where>1=1
+            <if test="courseid != null">
+                and courseid = #{courseid,jdbcType=BIGINT}
+            </if>
+            <if test="courseType != null">
+                and courseType = #{courseType}
+            </if>
+        </where>
+    </select>
+
+    <select id="findPublishCourse" parameterType="java.util.Map" resultType="java.util.Map">
+    SELECT t.courseid,t.title,t.price,
+	(SELECT sum(number) FROM t_o_order_goods WHERE goodsId = t.courseid AND orderNo IN
+	( SELECT orderNo FROM t_o_order WHERE STATUS = 2 AND goodsType = 2 ) ) AS applyNum,
+	CASE WHEN (locate(';', t.imgUrl) > 0) THEN substring( t.imgUrl, 1, locate(';', t.imgUrl) - 1 ) WHEN locate(';', t.imgUrl) = 0 THEN imgUrl
+    END AS imgUrl
+    FROM t_p_group_publishCourse t WHERE
+    t.courseid in (SELECT r.courseid FROM t_p_group_publishCourse r WHERE r.courseType ='2' AND r.status = 2 )
+    AND t.expiryDate > now()
+   ORDER BY applyNum desc
   </select>
 
-  <select id="findAllPublishCoursePager" parameterType="java.util.Map" resultType="java.util.Map">
-    select t.courseid,t.title,t.notes,
-    case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl) = 0 then imgUrl end as imgUrl
-    from t_p_group_publishCourse t
-    <where>
-      <if test="courseType != null">
-        and courseType = #{courseType}
-      </if>
-      <if test="status != null">
-        and status = #{status}
-      </if>
-      <if test="province != null and province != ''">
-        and province = #{province}
-      </if>
-    </where>
-      order by t.updateTime desc
-  </select>
-  <select id="findLatestPublishCourse" parameterType="java.util.Map" resultType="java.util.Map">
-    select t.courseid,t.title,t.notes,
-    case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl) = 0 then imgUrl end as imgUrl
-    from t_p_group_publishCourse t
-    <where>
-      <if test="courseType != null">
-        and courseType = #{courseType}
-      </if>
-      <if test="status != null">
-        and status = #{status}
-      </if>
-    </where>
-    order by t.updateTime desc
-    limit #{count}
-  </select>
-
-  <select id="previewTrainCourseDetail" parameterType="java.util.Map" resultType="java.util.Map">
-    select
-    courseid, publisherid, title, teacher, date_format(startTime,'%Y-%m-%d %H:%i:%s') startTime,
-    date_format(endTime,'%Y-%m-%d %H:%i:%s') endTime, concat(pv.name,ct.name,ar.name,address) address, price, storageNumber, minBuyNumber, maxBuyNumber,
-    date_format(expiryDate,'%Y-%m-%d') expiryDate, imgUrl, notice, courseType, t.status,notes,
-    (
-    select sum(number) from t_o_order_goods
-    where goodsId = #{courseid} and  orderNo in (select orderNo from t_o_order where status in (1,2) and goodsType =#{courseType})
-    ) as number
-    from t_p_group_publishCourse t
-    left join t_dictionary_province pv on pv.code = t.province
-    left join t_dictionary_city ct on ct.code = t.city
-    left join t_dictionary_area ar on ar.code = t.area
-    <where>
-      <if test="courseid != null">
-        and courseid = #{courseid,jdbcType=BIGINT}
-      </if>
-      <if test="courseType != null">
-        and courseType = #{courseType}
-      </if>
-    </where>
-  </select>
+    <select id="findAllPublishsCoursePager" parameterType="java.util.Map" resultType="java.util.Map">
+        select t.courseid,t.title,t.notes,t.expiryDate AS endTime,t.price,t.storageNumber,t.status,
+        ( select sum(number) from t_o_order_goods
+        where goodsId = t.courseid and orderNo in (select orderNo from t_o_order where status = 2
+        and goodsType= t.courseType
+        )) AS
+        applyNum ,
+        (select sum(number) from t_o_order_goods
+        where goodsId = t.courseid and orderNo in (select orderNo from t_o_order where status = 1 and goodsType
+        = t.courseType and dealTime > date_add(now(),interval -30 minute))) as notBuyNumber,
+        case when (locate(';',t.imgUrl) > 0) then substring(t.imgUrl,1,locate(';',t.imgUrl)-1) when locate(';',t.imgUrl)
+        = 0 then imgUrl end as imgUrl
+        from t_p_group_publishCourse t
+        where 1=1
+        <if test="courseType != null and courseType != ''">
+            and t.courseType= #{courseType}
+        </if>
+        and t.status != 1
+        <if test="province != null and province != ''">
+            and t.province = #{province}
+        </if>
+        order by t.expiryDate desc
+    </select>
 </mapper>

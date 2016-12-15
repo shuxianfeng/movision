@@ -8,7 +8,8 @@ import java.util.Map;
 
 /**
  * 技术合作：技术成果，技术需求 DAO层
- * @author  penglong
+ *
+ * @author penglong
  * @create 2016-05-27
  */
 public interface TechCooperationMapper {
@@ -17,29 +18,35 @@ public interface TechCooperationMapper {
 
     TechCooperation selectByPrimaryKey(Long id);
 
-    Map<String,String> selectMcCoopDetail(Long id);
+    Map<String, String> selectMcCoopDetail(Long id);
 
-    Map<String,Object> previewTechCooperationDetail(Map<String,Object> condition);
+    Map<String, Object> previewTechCooperationDetail(Map<String, Object> condition);
 
-    Map<String,Object> previewUnloginTechCoopDetail(Long id);
+    Map<String, Object> previewUnloginTechCoopDetail(Long id);
 
     int updateByPrimaryKeySelective(TechCooperation record);
 
-    List<Map<String,String>> findAllTechCooperationPager(RowBounds rowBounds,Map<String, Object> condition);
+    List<Map<String, String>> findAllTechCooperationPager(RowBounds rowBounds, Map<String, Object> condition);
 
-    List<Map<String,String>> findAllOMSTechCooperationPager(RowBounds rowBounds,Map<String,Object> condition);
+    List<Map<String, String>> findAllOMSTechCooperationPager(RowBounds rowBounds, Map<String, Object> condition);
 
     int deleteTechCooperation(Map<String, Object> condition);
 
     int updateTechCooperationViews(Long id);
 
-    List<Map<String,String>> findCoopViewsOrder(Map<String,Object> condition);
+    List<Map<String, String>> findCoopViewsOrder(Map<String, Object> condition);
 
-    List<Map<String,String>> findIndexTechCooperation(Map<String,Object> condition);
+    List<Map<String, String>> findIndexTechCooperation(Map<String, Object> condition);
 
-    List<Map<String,String>> findAllMyLookedAchievementList(RowBounds rowBounds, Map<String, Object> map);
+    List<Map<String, Object>> findIndexTechCooperationPager(RowBounds rowBounds, Map<String, Object> condition);
+
+    List<Map<String, String>> findAllMyLookedAchievementList(RowBounds rowBounds, Map<String, Object> map);
 
     int deleteLookedAchievement(String id);
 
-    List<Map<String,String>> findAllTechByCompanyId(RowBounds rowBounds, Map<String, Object> map);
+    List<Map<String, String>> findAllTechByCompanyId(RowBounds rowBounds, Map<String, Object> map);
+
+    List<Map<String, Object>> findAllMobileTechCooperationPager(RowBounds rowBounds, Map<String, Object> condition);
+
+    Long findCreateIdById(String s);
 }

@@ -9,7 +9,6 @@ import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.OrderConstants;
 import com.zhuhuibao.common.constant.PayConstants;
 import com.zhuhuibao.exception.BusinessException;
-import com.zhuhuibao.mybatis.activity.service.ActivityService;
 import com.zhuhuibao.mybatis.order.entity.*;
 import com.zhuhuibao.mybatis.order.service.*;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
@@ -67,10 +66,13 @@ public class AlipayService {
     private OrderFlowService orderFlowService;
 
     @Autowired
-    ZhbService zhbService;
+    private ZhbService zhbService;
 
     @Autowired
-    ActivityService activityService;
+    private PublishCourseService courseService;
+
+    @Autowired
+    private OrderGoodsService orderGoodsService;
 
     /**
      * 支付宝退款请求
@@ -440,8 +442,7 @@ public class AlipayService {
 
             // 1-> 记录支付宝回调信息 交易流水信息
             // 订单
-            Order order = new Order();
-            order.setOrderNo(params.get("out_trade_no"));
+            Order order = orderService.findByOrderNo(params.get("out_trade_no"));
             order.setUpdateTime(new Date());
             // 异步通知
             if (notifyType.equals(PayConstants.NotifyType.ASYNC.toString())) {
@@ -474,7 +475,7 @@ public class AlipayService {
      */
     private void callbackNotice(Map<String, String> params, String tradeType, Order order) {
         // 即时到账支付
-        if (tradeType.equals(PayConstants.TradeType.PAY.toString())) {
+        if (tradeType.equals(PayConstants.TradeType.PAY.toString()) && !order.getStatus().equals(PayConstants.OrderStatus.YZF.toString())) {
             recordPayAsyncCallbackLog(params);
             // 2-> 判断是否存在筑慧币支付方式
             OrderFlow orderFlow = orderFlowService.findByOrderNoAndTradeMode(params.get("out_trade_no"), PayConstants.PayMode.ZHBPAY.toString());
@@ -499,6 +500,14 @@ public class AlipayService {
             // 2. 修改订单状态
             boolean suc = orderService.update(order);
             log.error("update t_o_order status :>>>>" + suc);
+
+            // 如果是培训课程支付的回调 需要扣除当前课程的库存
+            OrderGoods orderGoods = orderGoodsService.findByOrderNo(order.getOrderNo());
+            PublishCourse publishCourse = courseService.getCourseById(orderGoods.getGoodsId());
+            if (null != publishCourse) {
+                courseService.updateAddStockNum(publishCourse.getCourseid(), -orderGoods.getNumber());
+            }
+
             // 购买筑慧币,VIP 需要回调
             if (suc) {
                 String orderNo = params.get("out_trade_no");
@@ -509,7 +518,7 @@ public class AlipayService {
 
         }
         // 退款
-        if (tradeType.equals(PayConstants.TradeType.REFUND.toString())) {
+        if (tradeType.equals(PayConstants.TradeType.REFUND.toString()) && !order.getStatus().equals(PayConstants.OrderStatus.YTK.toString())) {
             recordRefundAsyncCallbackLog(params);
             // 修改订单状态为已退款
             order.setStatus(PayConstants.OrderStatus.YTK.toString());

@@ -2,7 +2,6 @@ package com.zhuhuibao.utils.file;
 
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ApiConstants;
-import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.BusinessException;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
@@ -13,14 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
@@ -224,6 +221,7 @@ public class FileUtil {
 			return status.equals("success");
 		case "zhb":
 			String fileUrl = apiConstants.getUploadDir() + "/" + chann + "/" + type + "/" + fileName;
+			log.info("测试环境查看询价单路径，fileUrl="+fileUrl);
 			File file = new File(fileUrl);
 			return file.exists();
 		default:
@@ -256,6 +254,9 @@ public class FileUtil {
 		} else if ("doc".equals(type)) {
 			String allowFileSuffix = PropertiesUtils.getValue("allowed.file.suffix");
 			return allowFileSuffix.split(",");
+		}else if ("zip".equals(type)) {
+			String allowFileSuffix = PropertiesUtils.getValue("allowed.file.suffix");
+			return allowFileSuffix.split(",");
 		}
 		return null;
 	}
@@ -275,6 +276,12 @@ public class FileUtil {
 
 	}
 
+	public static String getFileNameByUrl(String url){
+		String fileName = url.substring(url.lastIndexOf("/")+1);
+		log.info("fileName="+fileName);
+		return fileName;
+	}
+
 	public static void main(String[] args) {
 		// FileUtil fileUtil = new FileUtil();
 		// boolean bool = fileUtil.isExistFile("111","doc","tech");
@@ -282,6 +289,8 @@ public class FileUtil {
 		// String name = file.getName();
 		// String a = FileUtil.renameFile(name);
 		// System.out.println(a);
-		System.out.println(getSuffix("xxxx.xlsx"));
+//		System.out.println(getSuffix("xxxx.xlsx"));
+		System.out.println("1111");
+//		System.out.println(getFileNameByUrl("//image.zhuhui8.com/upload/price/img/DBgRcpns1480490323747.png"));
 	}
 }

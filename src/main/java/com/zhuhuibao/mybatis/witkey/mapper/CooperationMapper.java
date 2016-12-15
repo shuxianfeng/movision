@@ -27,6 +27,12 @@ public interface CooperationMapper {
     //根据条件查询任务信息列表（分页）
     List<Map<String,String>> findAllCooperationByPager(RowBounds rowBounds, Cooperation cooperation);
 
+    //根据条件查询任务信息列表（分页）
+    List<Map<String,String>> findAllCooperationByPager4Mobile(RowBounds rowBounds, Map cooperation);
+
+    //手机端威客首页查询威客数据
+    List<Map<String,String>> findAllCooperation4Mobile(Map<String, Object> query);
+
     //最热合作信息
     List<Map<String,String>> queryHotCooperation(Map<String, Object> map);
 

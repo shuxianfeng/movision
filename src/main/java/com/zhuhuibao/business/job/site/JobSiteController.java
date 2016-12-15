@@ -3,9 +3,7 @@ package com.zhuhuibao.business.job.site;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.JobConstant;
-import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.advertising.entity.SysAdvertising;
 import com.zhuhuibao.mybatis.advertising.service.SysAdvertisingService;
@@ -21,7 +19,6 @@ import com.zhuhuibao.mybatis.sitemail.entity.MessageText;
 import com.zhuhuibao.mybatis.sitemail.service.SiteMailService;
 import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
-import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -192,7 +189,7 @@ public class JobSiteController {
             map.put("name", name.replace("_", "\\_"));
         }
         map.put("positionType", positionType);
-        map.put("city", city);
+        map.put("areaCode", city);
         map.put("employeeNumber", employeeNumber);
         map.put("enterpriseType", enterpriseType);
         //发布时间一周内，一天内

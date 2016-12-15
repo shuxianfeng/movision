@@ -24,6 +24,16 @@
     </select>
 
     <select id="findListByCondition" resultType="com.zhuhuibao.mybatis.advertising.entity.SysAdvertising">
+    select * from t_sys_advertising adv
+    where adv.advAttrId in (
+    select a.id from t_sys_adv_attr a
+    where a.chanType = #{chanType}
+    and a.page = #{page}
+    and a.advArea = #{advArea}
+    ) order by adv.sort asc
+</select>
+
+    <select id="findHottestPosition" resultType="com.zhuhuibao.mybatis.advertising.entity.SysAdvertising">
         select * from t_sys_advertising adv
         where adv.advAttrId in (
         select a.id from t_sys_adv_attr a
@@ -31,7 +41,22 @@
         and a.page = #{page}
         and a.advArea = #{advArea}
         ) order by adv.sort asc
+        limit 3
     </select>
+
+    <select id="findNewPosition" resultType="com.zhuhuibao.mybatis.advertising.entity.SysAdvertising">
+        select * from t_sys_advertising adv
+        where
+        adv.advAttrId in (
+        select a.id from t_sys_adv_attr a
+        where a.chanType = #{chanType}
+        and a.page = #{page}
+        and a.advArea = #{advArea}
+        )
+        order by adv.createTime DESC
+        limit 3
+    </select>
+
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_sys_advertising

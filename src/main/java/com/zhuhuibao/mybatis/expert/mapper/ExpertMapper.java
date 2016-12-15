@@ -11,6 +11,8 @@ public interface ExpertMapper {
 
     Expert queryExpertById(String id);
 
+    Expert queryExpById(String id);
+
     Expert queryExpertByCreateId(String id);
 
     Expert queryExpertByCreateid(String createid);
@@ -34,4 +36,6 @@ public interface ExpertMapper {
     int deleteLookedExpert(String id);
 
     List<Map<String,Object>> findAllExpert(RowBounds rowBounds, Map<String, Object> map);
+
+    List<Map<String, String>> findAllMyLookedMobileExpertListById(RowBounds rowBounds, Map<String, Object> map);
 }

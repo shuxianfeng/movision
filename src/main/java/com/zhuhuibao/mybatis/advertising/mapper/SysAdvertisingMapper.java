@@ -18,4 +18,8 @@ public interface SysAdvertisingMapper {
     int updateByPrimaryKey(SysAdvertising record);
 
     List<SysAdvertising> findListByCondition(@Param("chanType") String chanType, @Param("page") String page, @Param("advArea") String advArea);
+
+    List<SysAdvertising> findHottestPosition(@Param("chanType") String chanType, @Param("page") String page, @Param("advArea") String advArea);
+
+    List<SysAdvertising> findNewPosition(@Param("chanType") String chanType, @Param("page") String page, @Param("advArea") String advArea);
 }

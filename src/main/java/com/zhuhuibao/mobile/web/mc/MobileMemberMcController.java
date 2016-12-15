@@ -2,22 +2,16 @@ package com.zhuhuibao.mobile.web.mc;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.wordnik.swagger.annotations.ApiParam;
-import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.exception.AuthException;
 import com.zhuhuibao.mybatis.memCenter.entity.MemInfoCheck;
 import com.zhuhuibao.shiro.realm.ShiroRealm;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
-import com.zhuhuibao.utils.VerifyCodeUtils;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +28,7 @@ import com.zhuhuibao.service.MobileMemberService;
  */
 @RestController
 @RequestMapping("/rest/m/member/mc")
-public class MobileMemberController {
+public class MobileMemberMcController {
 
     @Autowired
     private MobileMemberService memberService;

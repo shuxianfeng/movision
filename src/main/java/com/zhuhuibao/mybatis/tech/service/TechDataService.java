@@ -115,6 +115,23 @@ public class TechDataService {
     }
 
     /**
+     * 手机端技术首页-查询技术资料
+     * @return
+     */
+    public List<Map<String,String>> findAllTechData4Mobile(Integer num) {
+        List<Map<String,String>> techList;
+        try {
+            Map map = new HashMap();
+            map.put("num",num);
+            techList = techDataMapper.findAllTechData(map);
+        } catch (Exception e) {
+            log.error("查询异常>>>", e);
+            throw e;
+        }
+        return techList;
+    }
+
+    /**
      * 技术频道搜索行业类别
      *
      * @param condition 搜索条件
@@ -309,6 +326,12 @@ public class TechDataService {
                     fileSize = CommonUtils.bytes2kb(Long.valueOf(fileSize));
                     map.put("fileSize",fileSize);
                 }
+                String realUsername = String.valueOf(map.get("real_username"));
+                String username = "";
+                if(org.apache.commons.lang3.StringUtils.isNotEmpty(realUsername) ){
+                    username = realUsername.substring(0, 4)+"********";
+                }
+                map.put("username", username);
             }
         } catch (Exception e) {
             log.error("执行异常>>>", e);

@@ -98,16 +98,15 @@
 
     <select id="getLoginMemberByAccount" parameterType="memberReg"
             resultType="com.zhuhuibao.mybatis.memberReg.entity.LoginMember">
-        SELECT a.id,CASE WHEN chk.mobile != '' OR chk.mobile != NULL THEN chk.mobile WHEN chk.email!= '' OR chk.email != NULL THEN chk.email END AS account,
-        a.password,a.status,chk.identify,chk.workType role,IF(b.status=1,'1','0') isexpert,
-        CASE WHEN chk.workType = 100 AND chk.identify !=2 THEN chk.id
-        WHEN chk.workType !=100 AND chk.identify !=2 THEN chk.enterpriseEmployeeParentId
-        WHEN chk.identify = 2 THEN a.id
-        END AS companyId ,a.registerTime ,chk.workType,chk.headShot,chk.nickname,chk.enterpriseName AS companyName ,vip.vip_level,pvip.vip_level parentVipLevel
+        SELECT a.id,CASE WHEN a.mobile != '' OR a.mobile != NULL THEN a.mobile WHEN a.email!= '' OR a.email != NULL THEN a.email END AS account,
+        a.password,a.status,a.identify,a.workType role,IF(b.status=1,'1','0') isexpert,a.enterpriseLinkman,a.fixedTelephone,a.email,
+        CASE WHEN a.workType = 100 AND a.identify !=2 THEN a.id
+        WHEN a.workType !=100 AND a.identify !=2 THEN a.enterpriseEmployeeParentId
+        WHEN a.identify = 2 THEN a.id
+        END AS companyId ,a.registerTime ,a.workType,a.headShot,a.nickname,a.enterpriseName AS companyName ,vip.vip_level,pvip.vip_level parentVipLevel
         FROM t_m_member a LEFT OUTER JOIN t_e_expert b ON a.id=b.createId AND b.status=1 AND b.is_deleted=0
         LEFT JOIN t_vip_member_info vip ON a.id = vip.member_id
         LEFT JOIN t_vip_member_info pvip ON a.enterpriseEmployeeParentId = pvip.member_id
-        LEFT JOIN t_m_member_info_check chk ON a.id = chk.id
         WHERE a.status != 0 AND a.status != 2
         <if test="mobile != null and mobile != '' ">
             AND  a.mobile = #{mobile}
