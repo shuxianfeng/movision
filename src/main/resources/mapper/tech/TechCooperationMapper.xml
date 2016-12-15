@@ -46,7 +46,7 @@
         left join t_dictionary_area ar on ar.code = t.area
         left join t_dictionary_constant dc on dc.code = t.systemCategory and dc.type =19
         left join t_dictionary_constant dn on dn.code = t.applicationArea and dn.type =18
-        where t.id = #{id,jdbcType=BIGINT}      and t.status = 2
+        where t.id = #{id,jdbcType=BIGINT} and t.status = 2
         <if test="type != null">
             and t.type = #{type}
         </if>
@@ -299,7 +299,8 @@
   </update>
     <select id="findAllTechCooperationPager" parameterType="java.util.Map" resultType="java.util.Map">
         select t.id, t.createID, t.title,dc.name systemCategory, dn.name applicationAreaName,t.applicationArea,
-        concat(po.name,'-',ct.name) provincecity,t.cooperation ,t.type,date_format(t.updateTime,'%Y-%m-%d') updateTime,t.status
+        concat(po.name,'-',ct.name) provincecity,t.cooperation ,t.type,date_format(t.updateTime,'%Y-%m-%d')
+        updateTime,t.status
         from t_tech_cooperation t
         left join t_dictionary_province po on po.code = t.province
         left join t_dictionary_city ct on ct.code = t.city
@@ -393,12 +394,7 @@
     </select>
 
 
-
-
-
-
-
-    <select id="findAllMyLookedAchievementList" resultType="java.util.Map" >
+    <select id="findAllMyLookedAchievementList" resultType="java.util.Map">
         select c.id,c.title,date_format(v.viewTime,'%Y-%m-%d') viewTime,
         v.id as recordId,co.name as systemName,con.name as areaName
         from t_zhb_viewGoods v
@@ -415,7 +411,7 @@
         order by v.viewTime desc
     </select>
 
-    <update id="deleteLookedAchievement" parameterType="java.lang.String" >
+    <update id="deleteLookedAchievement" parameterType="java.lang.String">
         update t_zhb_viewGoods
         set status = 1
         where id = #{id}
@@ -431,7 +427,8 @@
     <select id="findAllMobileTechCooperationPager" parameterType="java.util.Map" resultType="java.util.Map">
         select
         t.id, t.createID, t.title,dc.name systemCategory, dn.name applicationAreaName,t.applicationArea,
-        concat(po.name,'-',ct.name) provincecity,t.cooperation ,t.type,date_format(t.updateTime,'%Y-%m-%d') updateTime,t.status
+        concat(po.name,'-',ct.name) provincecity,t.cooperation ,t.type,date_format(t.updateTime,'%Y-%m-%d')
+        updateTime,t.status
         from t_tech_cooperation t
         left join t_dictionary_province po on po.code = t.province
         left join t_dictionary_city ct on ct.code = t.city
@@ -476,5 +473,14 @@
             and t.type = #{type}
         </if>
         order by t.type,t.updateTime desc
+    </select>
+    <select id="findCreateIdById" parameterType="java.lang.String" resultType="java.lang.Long">
+       SELECT t.createID FROM t_tech_cooperation t
+       where t.id=#{s}
+    </select>
+
+    <select id="findAchievementsById" parameterType="java.lang.Long" resultType="java.util.Map">
+       SELECT * FROM t_tech_cooperation t
+       where t.id=#{goodsID}
     </select>
 </mapper>

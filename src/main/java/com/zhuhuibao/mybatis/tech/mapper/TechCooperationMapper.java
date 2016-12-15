@@ -46,4 +46,8 @@ public interface TechCooperationMapper {
     List<Map<String,String>> findAllTechByCompanyId(RowBounds rowBounds, Map<String, Object> map);
 
     List<Map<String,Object>> findAllMobileTechCooperationPager(RowBounds rowBounds,Map<String, Object> condition);
+
+    Long findCreateIdById(String s);
+
+    Map findAchievementsById(Long goodsID);
 }
