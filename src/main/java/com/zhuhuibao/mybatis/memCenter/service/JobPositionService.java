@@ -855,50 +855,50 @@ public class JobPositionService {
         File fileDir = new File("/home/app/upload/" + chann + "/" + name);
         //读Spring配置文
         ApplicationContext context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-        if (chann.equals("51job")) {
-            AnalysisJobService analysisJobService = (AnalysisJobService) context.getBean("analysisJobService");
-            List<File> files = getFiles(fileDir, "htm");
-            List<Map<String, String>> list = new ArrayList<>();
-            for (File file : files) {
-                String fileName = file.getName();
-                //输出文件名
-                System.out.println(fileName);
-                Map<String, String> map = analysisJobService.parseHtmlFile(file);
-                System.out.println(map);
-                list.add(map);
-            }
-        } else if (chann.equals("zhilian")) {
-            AnalysisZhiLianService analysisZhiLianService = (AnalysisZhiLianService) context.getBean("analysisZhiLianService");
-            List<File> files = getFiles(fileDir, "html");
-            List<Map<String, String>> list = new ArrayList<>();
-            for (File file : files) {
-                String fileName = file.getName();
-                System.out.println(fileName);
-                if (fileName.contains("中文")) {
-                    Map<String, String> map = analysisZhiLianService.parseHtmlFile(file);
-                    System.out.println(map);
-                    list.add(map);
-                }
-            }
-        } else if (chann.equals("rencai")) {
-            AnalysisRenCaiService analysisRenCaiService = (AnalysisRenCaiService) context.getBean("analysisRenCaiService");
-            List<File> files = getFiles(fileDir, "html");
-            List<Map<String, String>> list = new ArrayList<>();
-            for (File file : files) {
-                System.out.println(file.getName());
-                Map<String, String> map = analysisRenCaiService.parseHtmlFile(file);
-                list.add(map);
-            }
-        } else if (chann.equals("liepin")) {
-            AnalysisLiePinService analysisLiePinService = (AnalysisLiePinService) context.getBean("analysisLiePinService");
-            List<File> files = getFiles(fileDir, "html");
-            List<Map<String, String>> list = new ArrayList<>();
-            for (File file : files) {
-                System.out.println(file.getName());
-                Map<String, String> map = analysisLiePinService.parseHtmlFile(file);
-                list.add(map);
-            }
-        }
+//        if (chann.equals("51job")) {
+//            AnalysisJobService analysisJobService = (AnalysisJobService) context.getBean("analysisJobService");
+//            List<File> files = getFiles(fileDir, "htm");
+//            List<Map<String, String>> list = new ArrayList<>();
+//            for (File file : files) {
+//                String fileName = file.getName();
+//                //输出文件名
+//                System.out.println(fileName);
+//                Map<String, String> map = analysisJobService.parseHtmlFile(file);
+//                System.out.println(map);
+//                list.add(map);
+//            }
+//        } else if (chann.equals("zhilian")) {
+//            AnalysisZhiLianService analysisZhiLianService = (AnalysisZhiLianService) context.getBean("analysisZhiLianService");
+//            List<File> files = getFiles(fileDir, "html");
+//            List<Map<String, String>> list = new ArrayList<>();
+//            for (File file : files) {
+//                String fileName = file.getName();
+//                System.out.println(fileName);
+//                if (fileName.contains("中文")) {
+//                    Map<String, String> map = analysisZhiLianService.parseHtmlFile(file);
+//                    System.out.println(map);
+//                    list.add(map);
+//                }
+//            }
+//        } else if (chann.equals("rencai")) {
+//            AnalysisRenCaiService analysisRenCaiService = (AnalysisRenCaiService) context.getBean("analysisRenCaiService");
+//            List<File> files = getFiles(fileDir, "html");
+//            List<Map<String, String>> list = new ArrayList<>();
+//            for (File file : files) {
+//                System.out.println(file.getName());
+//                Map<String, String> map = analysisRenCaiService.parseHtmlFile(file);
+//                list.add(map);
+//            }
+//        } else if (chann.equals("liepin")) {
+//            AnalysisLiePinService analysisLiePinService = (AnalysisLiePinService) context.getBean("analysisLiePinService");
+//            List<File> files = getFiles(fileDir, "html");
+//            List<Map<String, String>> list = new ArrayList<>();
+//            for (File file : files) {
+//                System.out.println(file.getName());
+//                Map<String, String> map = analysisLiePinService.parseHtmlFile(file);
+//                list.add(map);
+//            }
+//        }
     }
 
 

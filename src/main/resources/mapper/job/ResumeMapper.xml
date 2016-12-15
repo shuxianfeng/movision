@@ -89,10 +89,10 @@
             <if test="post != null and post !=''">
                 post = #{post},
             </if>
-            <if test="jobProvince != null and jobProvince !=''">
+            <if test="jobProvince != null">
                 jobProvince = #{jobProvince},
             </if>
-            <if test="jobCity != null and jobCity !=''">
+            <if test="jobCity != null">
                 jobCity = #{jobCity},
             </if>
             <if test="jobArea != null and jobArea !=''">
