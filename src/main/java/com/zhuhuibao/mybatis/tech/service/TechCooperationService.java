@@ -345,14 +345,17 @@ public class TechCooperationService {
         return techMapper.findCreateIdById(s);
     }
 
+
     /**
-     * 查询技术成果
+     * 查询未加密技术成果
      *
      * @param goodsID
      * @return
      */
-
-    public Map findAchievementsById(Long goodsID) {
-        return techMapper.findAchievementsById(goodsID);
+    public Map findAchievementsById(Long goodsID, Integer techType) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", goodsID);
+        map.put("type", techType);
+        return techMapper.previewTechCooperationDetail(map);
     }
 }

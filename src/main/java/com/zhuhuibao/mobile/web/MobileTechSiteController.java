@@ -98,14 +98,14 @@ public class MobileTechSiteController extends BaseController {
     @ApiOperation(value = "查询技术合作详情", notes = "查询技术合作详情", response = Response.class)
     @RequestMapping(value = "sel_tech_coop_detail", method = RequestMethod.GET)
     public Response selTechCoopDetail(@ApiParam(value = "商品ID") @RequestParam Long GoodsID) throws Exception {
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap();
         Long cread = ShiroUtil.getCreateID();
         TechCooperation techCoo = techCooSV.selectTechCooperationById(String.valueOf(GoodsID));
         Integer techType = techCoo.getType(); // 1:技术成果，2：技术需求
         if (techType == 1) {
             Long cdreadId = techCooSV.findCreateIdById(String.valueOf(GoodsID));
             if (null != cread && (String.valueOf(cread).equals(String.valueOf(cdreadId)))) {
-                map = techCooSV.findAchievementsById(GoodsID);
+                map = techCooSV.findAchievementsById(GoodsID, techType);
             } else {
                 getPrivilegeGoodsDetails(map, String.valueOf(GoodsID), ZhbConstant.ZhbGoodsType.CKJSCG);
             }
