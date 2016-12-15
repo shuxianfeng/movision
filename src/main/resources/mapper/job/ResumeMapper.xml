@@ -269,8 +269,8 @@
         t.jobCity,
         t.jobProvince
         from t_i_resume t
-        LEFT JOIN t_m_member m on t.createid = m.id
-        LEFT JOIN t_dictionary_city c on t.jobProvince = c.provincecode
+        LEFT JOIN t_m_member m on t.createid = m.id,
+        t_dictionary_city c
         <where>
             <if test="status != null and status != ''">
                 and m.status != #{status}
