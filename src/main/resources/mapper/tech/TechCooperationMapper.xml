@@ -478,9 +478,4 @@
        SELECT t.createID FROM t_tech_cooperation t
        where t.id=#{s}
     </select>
-
-    <select id="findAchievementsById" parameterType="java.lang.Long" resultType="java.util.Map">
-       SELECT * FROM t_tech_cooperation t
-       where t.id=#{goodsID}
-    </select>
 </mapper>
