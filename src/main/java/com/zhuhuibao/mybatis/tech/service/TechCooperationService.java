@@ -2,6 +2,7 @@ package com.zhuhuibao.mybatis.tech.service;
 
 import com.zhuhuibao.common.constant.MessageTextConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
+import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,7 +82,7 @@ public class TechCooperationService {
                 result = techMapper.insertSelective(tech);
             }
         } catch (Exception e) {
-            log.error("执行异常>>>",e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return result;
@@ -98,7 +100,7 @@ public class TechCooperationService {
         try {
             techList = techMapper.findAllTechCooperationPager(pager.getRowBounds(), condition);
         } catch (Exception e) {
-            log.error("查询异常>>>",e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return techList;
@@ -116,7 +118,7 @@ public class TechCooperationService {
         try {
             techList = techMapper.findAllOMSTechCooperationPager(pager.getRowBounds(), condition);
         } catch (Exception e) {
-            log.error("查询异常>>>",e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return techList;
@@ -133,19 +135,19 @@ public class TechCooperationService {
         log.info("update oms tech cooperation " + StringUtils.beanToString(tech));
         try {
             String cooperation = tech.getCooperation();
-            if(StringUtils.isEmpty(cooperation)){
-               tech.setCooperation("面议");
+            if (StringUtils.isEmpty(cooperation)) {
+                tech.setCooperation("面议");
             }
-            tech.setUpdateTime(DateUtils.date2Str(new Date(),"yyyy-MM-dd HH:mm:ss"));
+            tech.setUpdateTime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
             result = techMapper.updateByPrimaryKeySelective(tech);
             if ("3".equals(String.valueOf(tech.getStatus()))) {
-            	
-            	String source = tech.getType() == 1 ? MessageTextConstant.ACHIEVEMENT : MessageTextConstant.JSXQ;
+
+                String source = tech.getType() == 1 ? MessageTextConstant.ACHIEVEMENT : MessageTextConstant.JSXQ;
                 siteMailService.addRefuseReasonMail(ShiroUtil.getOmsCreateID(), tech.getCreateID(),
-                		tech.getReason(), source, tech.getTitle(), String.valueOf(tech.getId()));
+                        tech.getReason(), source, tech.getTitle(), String.valueOf(tech.getId()));
             }
         } catch (Exception e) {
-            log.error("执行异常>>>",e);
+            log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.mcode_common_failure, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.mcode_common_failure)));
         }
         return result;
@@ -163,7 +165,7 @@ public class TechCooperationService {
         try {
             result = techMapper.deleteTechCooperation(condition);
         } catch (Exception e) {
-            log.error("执行异常>>>",e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return result;
@@ -181,7 +183,7 @@ public class TechCooperationService {
         try {
             result = techMapper.updateTechCooperationViews(Long.valueOf(techCoopId));
         } catch (Exception e) {
-            log.error("执行异常>>>",e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return result;
@@ -199,7 +201,7 @@ public class TechCooperationService {
         try {
             techCoop = techMapper.selectByPrimaryKey(Long.valueOf(id));
         } catch (Exception e) {
-            log.error("查询异常>>>",e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return techCoop;
@@ -217,7 +219,7 @@ public class TechCooperationService {
         try {
             techCoop = techMapper.previewTechCooperationDetail(condition);
         } catch (Exception e) {
-            log.error("执行异常>>>",e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return techCoop;
@@ -235,7 +237,7 @@ public class TechCooperationService {
         try {
             techCoop = techMapper.previewUnloginTechCoopDetail(Long.valueOf(id));
         } catch (Exception e) {
-            log.error("执行异常>>>",e);
+            log.error("执行异常>>>", e);
             throw e;
         }
         return techCoop;
@@ -253,7 +255,7 @@ public class TechCooperationService {
         try {
             techCoop = techMapper.selectMcCoopDetail(Long.valueOf(id));
         } catch (Exception e) {
-            log.error("查询异常>>>",e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return techCoop;
@@ -271,7 +273,7 @@ public class TechCooperationService {
         try {
             dataList = techMapper.findCoopViewsOrder(map);
         } catch (Exception e) {
-            log.error("查询异常>>>",e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return dataList;
@@ -289,7 +291,7 @@ public class TechCooperationService {
         try {
             coopList = techMapper.findIndexTechCooperation(map);
         } catch (Exception e) {
-            log.error("查询异常>>>",e);
+            log.error("查询异常>>>", e);
             throw e;
         }
         return coopList;
@@ -298,19 +300,19 @@ public class TechCooperationService {
     public List<Map<String, Object>> findIndexTechCooperation(Paging<Map<String, Object>> pager, Map<String, Object> map) {
         log.info("tech cooperation " + StringUtils.mapToString(map));
         try {
-           return techMapper.findIndexTechCooperationPager(pager.getRowBounds(),map);
+            return techMapper.findIndexTechCooperationPager(pager.getRowBounds(), map);
         } catch (Exception e) {
-            log.error("查询异常>>>",e);
+            log.error("查询异常>>>", e);
             throw e;
         }
     }
 
 
-    public List<Map<String,String>> findAllMyLookedAchievementList(Paging<Map<String, String>> pager, Map<String, Object> map) {
+    public List<Map<String, String>> findAllMyLookedAchievementList(Paging<Map<String, String>> pager, Map<String, Object> map) {
         try {
-            return techMapper.findAllMyLookedAchievementList(pager.getRowBounds(),map);
+            return techMapper.findAllMyLookedAchievementList(pager.getRowBounds(), map);
         } catch (Exception e) {
-            log.error("TechCooperationService::findAllMyLookedAchievementList",e);
+            log.error("TechCooperationService::findAllMyLookedAchievementList", e);
             throw e;
         }
     }
@@ -319,17 +321,38 @@ public class TechCooperationService {
         try {
             return techMapper.deleteLookedAchievement(id);
         } catch (Exception e) {
-            log.error("TechCooperationService::deleteLookedAchievement::id=="+id,e);
+            log.error("TechCooperationService::deleteLookedAchievement::id==" + id, e);
             throw e;
         }
     }
 
-    public List<Map<String,String>> findAllTechByCompanyId(Paging<Map<String, String>> pager, Map<String, Object> map) {
+    public List<Map<String, String>> findAllTechByCompanyId(Paging<Map<String, String>> pager, Map<String, Object> map) {
         try {
-            return techMapper.findAllTechByCompanyId(pager.getRowBounds(),map);
+            return techMapper.findAllTechByCompanyId(pager.getRowBounds(), map);
         } catch (Exception e) {
-            log.error("TechCooperationService::findAllTechByCompanyId",e);
+            log.error("TechCooperationService::findAllTechByCompanyId", e);
             throw e;
         }
+    }
+
+    /**
+     * 查询技术成果的发布人
+     *
+     * @param s
+     * @return
+     */
+    public Long findCreateIdById(String s) {
+        return techMapper.findCreateIdById(s);
+    }
+
+    /**
+     * 查询技术成果
+     *
+     * @param goodsID
+     * @return
+     */
+
+    public Map findAchievementsById(Long goodsID) {
+        return techMapper.findAchievementsById(goodsID);
     }
 }
