@@ -419,7 +419,8 @@
         <if test="viewerId != null">
             and v.viewerId = #{viewerId}
         </if>
-        GROUP by v.viewTime DESC
+        GROUP by v.viewTime
+        order by v.viewTime desc
     </select>
     <select id="queryExpById" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT e.photoUrl,e.name,e.createId FROM t_e_expert e
