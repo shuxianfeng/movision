@@ -1,7 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
@@ -19,7 +18,6 @@ import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
 import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.pagination.model.Paging;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -295,7 +293,6 @@ public class ResumeService {
         return list;
     }
 
-
     /**
      * 二次处理简历数据
      * 
@@ -367,8 +364,10 @@ public class ResumeService {
             }
         }
         String postName = getPostName(post);
-        if (!jobProvinceName.equals("")) {
+        if (!jobProvinceName.equals("") && !jobCityName.equals("")) {
             jobCityName = jobProvinceName + "," + jobCityName;
+        } else if (jobCityName.equals("")) {
+            jobCityName = jobProvinceName;
         }
         result.put("post", postName);
         result.put("jobCityName", jobCityName);
