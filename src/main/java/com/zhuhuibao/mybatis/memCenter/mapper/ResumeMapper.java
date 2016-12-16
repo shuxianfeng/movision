@@ -27,9 +27,6 @@ public interface ResumeMapper {
 
     List<Map<String,Object>> findAllResume(RowBounds rowBounds, Map<String,Object> map);
 
-    //TODO
-    List<Map<String,Object>> findAllResume4Mobile(Map<String,Object> map);
-
     //我收到的简历
     List<Map<String,String>> findAllReceiveResume(RowBounds rowBounds,@Param("id")String id);
 
