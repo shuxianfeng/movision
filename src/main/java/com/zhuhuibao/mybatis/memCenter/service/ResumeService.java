@@ -1,7 +1,6 @@
 package com.zhuhuibao.mybatis.memCenter.service;
 
 import com.zhuhuibao.common.Response;
-import com.zhuhuibao.common.constant.ApiConstants;
 import com.zhuhuibao.common.constant.Constants;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
@@ -19,7 +18,6 @@ import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
 import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.pagination.model.Paging;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -275,7 +273,8 @@ public class ResumeService {
             log.info("传参map=" + map.toString());
             String jobCity = (String) map.get("jobCity");
             if (StringUtils.isNotBlank(jobCity)) {
-                if (!MapUtils.isEmpty(dictionaryService.findProvinceByCode(jobCity))) {
+                // 以4个0结尾的表示是省份
+                if (StringUtils.endsWith(jobCity, "0000")) {
                     map.put("jobProvince", jobCity.substring(0, 2));
                     map.put("jobCity", "");
                 } else {
@@ -283,27 +282,6 @@ public class ResumeService {
                 }
             }
             List<Map<String, Object>> resumeList = resumeMapper.findAllResume(pager.getRowBounds(), map);
-            for (Map<String, Object> resume : resumeList) {
-                Map<String, Object> result = genResultMap(resume);
-                list.add(result);
-            }
-        } catch (Exception e) {
-            log.error("执行异常>>>", e);
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
-        }
-        return list;
-    }
-
-    /**
-     * 获取手机端人才首页简历
-     * 
-     * @param map
-     * @return
-     */
-    public List<Map<String, Object>> findMIndexResume(Map<String, Object> map) {
-        List<Map<String, Object>> list = new ArrayList<>();
-        try {
-            List<Map<String, Object>> resumeList = resumeMapper.findAllResume4Mobile(map);
             for (Map<String, Object> resume : resumeList) {
                 Map<String, Object> result = genResultMap(resume);
                 list.add(result);
@@ -386,8 +364,10 @@ public class ResumeService {
             }
         }
         String postName = getPostName(post);
-        if (!jobProvinceName.equals("")) {
+        if (!jobProvinceName.equals("") && !jobCityName.equals("")) {
             jobCityName = jobProvinceName + "," + jobCityName;
+        } else if (jobCityName.equals("")) {
+            jobCityName = jobProvinceName;
         }
         result.put("post", postName);
         result.put("jobCityName", jobCityName);

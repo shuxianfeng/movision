@@ -7,7 +7,6 @@ import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
 import com.zhuhuibao.mybatis.tech.mapper.PublishTCourseMapper;
 import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
-//import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -184,6 +183,39 @@ public class PublishTCourseService {
     }
 
     /**
+     * 根据课程详情情况处理返回的status，便于显示
+     * 
+     * @param courseDetail
+     * @return
+     */
+    public String getCourseStatus(Map<String, String> courseDetail) {
+        String status = String.valueOf(courseDetail.get("status"));
+        if (MapUtils.isNotEmpty(courseDetail) && !"5".equals(courseDetail.get("status")) || !"6".equals(courseDetail.get("status"))) {
+
+            // 判断是否已经达到报名截止时间
+            Date expDate = DateUtils.str2Date(org.apache.commons.lang.StringUtils.trimToEmpty(courseDetail.get("expiryDate")), "yyyy-MM-dd");
+            Calendar calendar = Calendar.getInstance();
+            if (null != expDate && calendar.before(expDate)) {
+                // 若已经过了报名截止时间，则返回8（报名截止）
+                status = "8";
+            } else {
+                // 判断课程报名是否已满
+                String notBuyNumber = String.valueOf(courseDetail.get("notBuyNumber"));
+                String storageNumber = String.valueOf(courseDetail.get("storageNumber"));
+                int notBuyNumber1 = StringUtils.isNumeric(notBuyNumber) ? Integer.parseInt(notBuyNumber) : 0;
+                int storageNumber1 = StringUtils.isNumeric(storageNumber) ? Integer.parseInt(storageNumber) : 0;
+                if (storageNumber1 == 0 || (0 != storageNumber1 && (storageNumber1 - notBuyNumber1) <= 0)) {
+                    // 课程报名已满
+                    status = "7";
+                }
+            }
+
+        }
+
+        return status;
+    }
+
+    /**
      * 查看培训课程详情
      *
      * @param condition
@@ -193,25 +225,7 @@ public class PublishTCourseService {
         try {
             Map<String, String> courseDetail = pCourseMapper.previewTrainCourseDetail(condition);
             // 根据课程详情情况处理返回的status，便于显示
-            if (MapUtils.isNotEmpty(courseDetail) && !"5".equals(courseDetail.get("status")) || !"6".equals(courseDetail.get("status"))) {
-
-                // 判断是否已经达到报名截止时间
-                Date expDate = DateUtils.str2Date(org.apache.commons.lang.StringUtils.trimToEmpty(courseDetail.get("expiryDate")), "yyyy-MM-dd");
-                Calendar calendar = Calendar.getInstance();
-                if (null != expDate && calendar.before(expDate)) {
-                    // 若已经过了报名截止时间，则返回8（报名截止）
-                    courseDetail.put("status", "8");
-                } else {
-                    // 判断课程报名是否已满
-                    int notBuyNumber = StringUtils.isNumeric(courseDetail.get("notBuyNumber")) ? Integer.parseInt(courseDetail.get("notBuyNumber")) : 0;
-                    int storageNumber = StringUtils.isNumeric(courseDetail.get("storageNumber")) ? Integer.parseInt(courseDetail.get("storageNumber")) : 0;
-                    if (0 != storageNumber && (storageNumber - notBuyNumber) <= 0) {
-                        courseDetail.put("status", "7");
-                    }
-                }
-
-            }
-
+            courseDetail.put("status", getCourseStatus(courseDetail));
             return courseDetail;
         } catch (Exception e) {
             log.error("查询异常>>>", e);
