@@ -164,9 +164,9 @@ public class MobileExpertPageController extends BaseController {
             boolean count = mobileExpertPageService.findDetails(map);
             resultMap.put("count", count);
             Long cread = ShiroUtil.getCreateID();
-            Long cdreadId = mobileExpertPageService.findExpertIdById(id);
-            if (null != cread && (String.valueOf(cread).equals(String.valueOf(cdreadId)))) {
-                resultMap.putAll(paymentService.getPurchasedGoodsRecord(Long.parseLong(id), ZhbConstant.ZhbGoodsType.CKZJJSCG.toString(), cdreadId, 1));
+            Long creadId = mobileExpertPageService.findExpertIdById(id);
+            if (null != cread && (String.valueOf(cread).equals(String.valueOf(creadId)))) {
+                resultMap.putAll(paymentService.getPurchasedGoodsRecord(Long.parseLong(id), ZhbConstant.ZhbGoodsType.CKZJJSCG.toString(), creadId, 1));
                 resultMap.put("payment", ZhbPaymentConstant.PAY_ZHB_PURCHASE);
                 resultMap.put("count", true);
             } else {
