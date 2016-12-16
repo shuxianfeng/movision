@@ -379,7 +379,6 @@
     LEFT JOIN t_m_member m on c.createId = m.id
     where c.is_deleted = 0
     ]]>
-
         <if test="createId != null and createId != ''">
             and c.createId = #{createId}
         </if>
