@@ -38,4 +38,6 @@ public interface ExpertMapper {
     List<Map<String,Object>> findAllExpert(RowBounds rowBounds, Map<String, Object> map);
 
     List<Map<String, String>> findAllMyLookedMobileExpertListById(RowBounds rowBounds, Map<String, Object> map);
+
+    Long findExpertIdById(long l);
 }

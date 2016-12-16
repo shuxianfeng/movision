@@ -227,7 +227,7 @@ public class MobileExpertPageService {
 
     /**
      * 封装库存参数
-     * 
+     *
      * @param resultMap
      */
     private void setStorageNumber(Map<String, String> resultMap) {
@@ -456,4 +456,13 @@ public class MobileExpertPageService {
     public List findBannerList() {
         return advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Expert_Banner.value);
     }
+
+    /**
+     * @param id
+     * @return
+     */
+    public Long findExpertIdById(String id) {
+        return expertMapper.findExpertIdById(Long.parseLong(id));
+    }
+
 }

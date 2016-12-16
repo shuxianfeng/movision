@@ -17,6 +17,7 @@ import com.zhuhuibao.mybatis.memCenter.entity.Member;
 import com.zhuhuibao.mybatis.memCenter.entity.Messages;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.service.MobileExpertPageService;
+import com.zhuhuibao.service.payment.PaymentService;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.VerifyCodeUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
@@ -52,6 +53,9 @@ public class MobileExpertPageController extends BaseController {
 
     @Autowired
     ZhbService zhbService;
+
+    @Autowired
+    private PaymentService paymentService;
 
     @ApiOperation(value = "触屏端-专家首页-专家技术成果-系統分類常量", notes = "触屏端-专家首页-专家技术成果-系統分類常量", response = Response.class)
     @RequestMapping(value = "sel_systemList", method = RequestMethod.GET)
@@ -109,7 +113,7 @@ public class MobileExpertPageController extends BaseController {
     @RequestMapping(value = "sel_expert_list", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-专家首页-专家库更多列表", notes = "触屏端-专家首页-专家库更多列表", response = Response.class)
     public Response selExpertList(@ApiParam(value = "省") @RequestParam(required = false) String province, @ApiParam(value = "专家类型") @RequestParam(required = false) String expertType,
-            @RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                                  @RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         try {
             Paging<Map<String, Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
@@ -133,12 +137,12 @@ public class MobileExpertPageController extends BaseController {
         Map<String, Object> resultMap = new HashMap<>();
         Response response = new Response();
         try {
-            getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.CKZJXX);
             Map<String, Object> map = new HashMap<>();
             map.put("id", id);
             map.put("type", "CKZJXX");
             boolean count = mobileExpertPageService.findDetails(map);
             resultMap.put("count", count);
+            getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.CKZJXX);
             response.setData(resultMap);
         } catch (Exception e) {
             log.error("sel_resume_details error! ", e);
@@ -154,12 +158,20 @@ public class MobileExpertPageController extends BaseController {
         Response response = new Response();
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.CKZJJSCG);
             Map<String, Object> map = new HashMap<>();
             map.put("id", id);
             map.put("type", "CKZJJSCG");
             boolean count = mobileExpertPageService.findDetails(map);
             resultMap.put("count", count);
+            Long cread = ShiroUtil.getCreateID();
+            Long cdreadId = mobileExpertPageService.findExpertIdById(id);
+            if (null != cread && (String.valueOf(cread).equals(String.valueOf(cdreadId)))) {
+                resultMap.putAll(paymentService.getPurchasedGoodsRecord(Long.parseLong(id), ZhbConstant.ZhbGoodsType.CKZJJSCG.toString(), cdreadId, 1));
+                resultMap.put("payment", ZhbPaymentConstant.PAY_ZHB_PURCHASE);
+                resultMap.put("count", true);
+            } else {
+                getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.CKZJJSCG);
+            }
             response.setData(resultMap);
         } catch (Exception e) {
             log.error("sel_expert_details_list error! ", e);
@@ -173,7 +185,7 @@ public class MobileExpertPageController extends BaseController {
     @RequestMapping(value = "sel_expert_train_list", method = RequestMethod.GET)
     @ApiOperation(value = "触屏端-专家首页-专家培训列表", notes = "触屏端-专家首页-专家培训列表", response = Response.class)
     public Response selExpertTrainList(@ApiParam(value = "省") @RequestParam(required = false) String province, @RequestParam(required = false, defaultValue = "1") String pageNo,
-            @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                                       @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         try {
             Paging<Map<String, String>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
@@ -212,7 +224,7 @@ public class MobileExpertPageController extends BaseController {
     @ApiOperation(value = "触屏端-专家首页-技术成果列表", notes = "触屏端-专家首页-技术成果列表", response = Response.class)
     @RequestMapping(value = "sel_achievement_list", method = RequestMethod.GET)
     public Response selAchievementList(@ApiParam(value = "系统分类") @RequestParam(required = false) String systemType, @ApiParam(value = "应用领域") @RequestParam(required = false) String useArea,
-            @RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
+                                       @RequestParam(required = false, defaultValue = "1") String pageNo, @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
         Response response = new Response();
         try {
             Paging<Achievement> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
@@ -249,7 +261,7 @@ public class MobileExpertPageController extends BaseController {
     @ApiOperation(value = "触屏端-专家首页-申请专家支持", notes = "触屏端-专家首页-申请专家支持", response = Response.class)
     @RequestMapping(value = "add_expert_support", method = RequestMethod.POST)
     public Response addExpertSupport(@ApiParam(value = "联系人名称") @RequestParam String linkName, @ApiParam(value = "手机") @RequestParam(required = true) String mobile,
-            @ApiParam(value = "验证码") @RequestParam(required = true) String code, @ApiParam(value = "申请原因") @RequestParam(required = false) String reason) {
+                                     @ApiParam(value = "验证码") @RequestParam(required = true) String code, @ApiParam(value = "申请原因") @RequestParam(required = false) String reason) {
         Response response = new Response();
         try {
             ExpertSupport expertSupport = new ExpertSupport();

@@ -5,12 +5,15 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ZhbConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
+import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mybatis.memCenter.entity.Job;
 import com.zhuhuibao.mybatis.memCenter.entity.MemberDetails;
 import com.zhuhuibao.mybatis.memCenter.service.MemberService;
 import com.zhuhuibao.mybatis.oms.entity.ChannelNews;
 import com.zhuhuibao.service.MobileJobAndResumeService;
 import com.zhuhuibao.service.MobileTalentNetworkService;
+import com.zhuhuibao.service.payment.PaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +49,9 @@ public class MobileJobAndResumeController extends BaseController {
     @Autowired
     private MobileTalentNetworkService mobileTalentNetworkService;
 
+    @Autowired
+    private PaymentService paymentService;
+
 
     /***
      * 简历详情页
@@ -56,13 +62,21 @@ public class MobileJobAndResumeController extends BaseController {
         Map<String, Object> resultMap = new HashMap<>();
         Response response = new Response();
         try {
-            getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.CXXZJL);
             Map<String, Object> map = new HashMap<>();
             map.put("id", id);
             mobileTalentNetworkService.shieldEnterpriseById(map);
             boolean count = mobileTalentNetworkService.collectionResume(map);
             resultMap.put("vipLevel", mobileTalentNetworkService.findVIPById());
             resultMap.put("count", count);
+            Long cread = ShiroUtil.getCreateID();
+            Long creadId = mobileTalentNetworkService.findCreadIdById(id);
+            if (null != cread && (String.valueOf(cread).equals(String.valueOf(creadId)))) {
+                resultMap.putAll(paymentService.getPurchasedGoodsRecord(Long.parseLong(id), ZhbConstant.ZhbGoodsType.CXXZJL.toString(), creadId, 1));
+                resultMap.put("payment", ZhbPaymentConstant.PAY_ZHB_PURCHASE);
+                resultMap.put("count", true);
+            } else {
+                getPrivilegeGoodsDetails(resultMap, id, ZhbConstant.ZhbGoodsType.CXXZJL);
+            }
             response.setData(resultMap);
         } catch (Exception e) {
             log.error("sel_resume_details error! ", e);
@@ -164,12 +178,12 @@ public class MobileJobAndResumeController extends BaseController {
         Response response = new Response();
         // Integer count = mobileTalentNetworkService.isExistApplyPosition(map);
         //根据职业的ID查找发布企业ID
-        Long recID =mobileTalentNetworkService.querycompanyByJobId(jobID);
+        Long recID = mobileTalentNetworkService.querycompanyByJobId(jobID);
         //职位标题
-        String messageText =mobileTalentNetworkService.queryJobNameByJobId(jobID);
+        String messageText = mobileTalentNetworkService.queryJobNameByJobId(jobID);
 
         //投递简历
-        boolean b=mobileTalentNetworkService.queryResumeByCreateId(jobID,recID,messageText);
+        boolean b = mobileTalentNetworkService.queryResumeByCreateId(jobID, recID, messageText);
         response.setData(b);
         return response;
     }
@@ -215,8 +229,8 @@ public class MobileJobAndResumeController extends BaseController {
                                      @ApiParam(value = "页码") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                      @ApiParam(value = "每页显示的数目") @RequestParam(required = false, defaultValue = "10") String pageSize) throws IOException {
 
-        return new Response(mJobSV.getJobSearchResultPager(name,areaCode,
-                employeeNumber, enterpriseType, refreshType,  positionType, pageNo, pageSize));
+        return new Response(mJobSV.getJobSearchResultPager(name, areaCode,
+                employeeNumber, enterpriseType, refreshType, positionType, pageNo, pageSize));
 
     }
 
@@ -263,7 +277,7 @@ public class MobileJobAndResumeController extends BaseController {
     @ApiOperation(value = "简历的下载", notes = "简历的下载", response = Response.class)
     @RequestMapping(value = "resume_download", method = RequestMethod.GET)
     public Response resumeDownload(@ApiParam(value = "简历的id") @RequestParam(required = true) String id) {
-        Response response=new Response();
+        Response response = new Response();
         try {
             Map<String, String> recordMap = new HashMap<>();
             recordMap.put("resumeID", id);
