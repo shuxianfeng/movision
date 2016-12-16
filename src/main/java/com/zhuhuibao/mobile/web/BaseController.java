@@ -31,7 +31,7 @@ public class BaseController {
 
     /**
      * 获取权限商品详情
-     * 
+     *
      * @param resultMap
      * @param goodsId
      * @param zhbGoodsType
@@ -54,7 +54,7 @@ public class BaseController {
         DictionaryZhbgoods goodsConfig = zhbService.getZhbGoodsByPinyin(zhbGoodsType.toString());
         resultMap.put("zhbPrice", null != goodsConfig ? String.valueOf(goodsConfig.getPriceDoubleValue()) : "999");
         //当goodsId为空时不返回物品详情信息
-        if(StringUtils.isNotEmpty(goodsId)){
+        if (StringUtils.isNotEmpty(goodsId)) {
             // 获取商品详情
             Map<String, Object> goodsDetail = mobileProjectService.getProjectDetail(Long.parseLong(goodsId), zhbGoodsType);
             resultMap.putAll(goodsDetail);
