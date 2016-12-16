@@ -416,7 +416,7 @@ public class MobileWxPayService {
                 OrderGoods orderGoods = orderGoodSV.findByOrderNo(order.getOrderNo());
                 PublishCourse publishCourse = courseService.getCourseById(orderGoods.getGoodsId());
                 if (null != publishCourse) {
-                    courseService.updateAddStockNum(publishCourse.getCourseid(), orderGoods.getNumber());
+                    courseService.updateAddStockNum(publishCourse.getCourseid(), -orderGoods.getNumber());
                 }
 
                 // 购买筑慧币,VIP 的业务处理
