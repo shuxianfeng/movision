@@ -50,25 +50,25 @@ public interface ResumeMapper {
 
     //预览简历
     Resume previewResumeNew(@Param("id")String id);
-    
+
     //简历是否被收藏或下载
-	Map isDownOrColl(Map<String, Object> con);
-	
+    Map isDownOrColl(Map<String, Object> con);
+
     //记录下载记录
-	void insertDownRecord(Map<String, String> recordMap);
-	
+    void insertDownRecord(Map<String, String> recordMap);
+
     //删除收藏夹简历
-	void delCollRecord(Map<String, String> recordMap);
+    void delCollRecord(Map<String, String> recordMap);
     //添加收藏
-	int insertCollRecord(Map<String, Object> con);
+    int insertCollRecord(Map<String, Object> con);
     //我收藏的简历
     List<Map<String,String>> findAllCollectResume(RowBounds rowBounds,@Param("id")String id);
     //记录预览
-	void insertViewGoods(Map<String, String> recordMap);
+    void insertViewGoods(Map<String, String> recordMap);
 
     List<String> selectIdsByCreateId(@Param("createid") Long createid);
     //获取简历收藏最大值
-	int getMaxCollCount(Long memberId);
+    int getMaxCollCount(Long memberId);
 
     //更新简历,刷新简历
     int updateResumeIsPublic(Resume resume);
@@ -84,4 +84,5 @@ public interface ResumeMapper {
     //简历是否被屏蔽
     int findShieldEnterpriseById(Map<String, Object> map);
 
+    Long findCreadIdById(long id);
 }

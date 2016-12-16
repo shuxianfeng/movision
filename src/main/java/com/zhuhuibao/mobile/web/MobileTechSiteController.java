@@ -6,6 +6,7 @@ import com.zhuhuibao.common.Response;
 import com.zhuhuibao.common.constant.ExpertConstant;
 import com.zhuhuibao.common.constant.TechConstant;
 import com.zhuhuibao.common.constant.ZhbConstant;
+import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.mobile.web.mc.MobileExpertController;
 import com.zhuhuibao.mybatis.tech.entity.TechCooperation;
@@ -105,7 +106,8 @@ public class MobileTechSiteController extends BaseController {
         if (techType == 1) {
             Long cdreadId = techCooSV.findCreateIdById(String.valueOf(GoodsID));
             if (null != cread && (String.valueOf(cread).equals(String.valueOf(cdreadId)))) {
-                map = techCooSV.findAchievementsById(GoodsID, techType);
+                map.putAll(paymentService.getPurchasedGoodsRecord(GoodsID, ZhbConstant.ZhbGoodsType.CKJSCG.toString(), cdreadId, 1));
+                map.put("payment", ZhbPaymentConstant.PAY_ZHB_PURCHASE);
             } else {
                 getPrivilegeGoodsDetails(map, String.valueOf(GoodsID), ZhbConstant.ZhbGoodsType.CKJSCG);
             }

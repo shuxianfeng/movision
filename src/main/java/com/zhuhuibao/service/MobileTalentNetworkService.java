@@ -321,4 +321,14 @@ public class MobileTalentNetworkService {
             throw new Exception("抱歉，当前人才不允许您查看其简历。");
         }
     }
+
+
+    /**
+     * 查询用户Id
+     * @param id
+     * @return
+     */
+    public Long findCreadIdById(String id) {
+        return resumeMapper.findCreadIdById(Long.parseLong(id));
+    }
 }

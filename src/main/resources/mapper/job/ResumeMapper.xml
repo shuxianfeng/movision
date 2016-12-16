@@ -554,4 +554,8 @@
     AND t.company_id = #{create_id}
     AND t.is_deleted =#{is_deleted}
     </select>
+
+    <select id="findCreadIdById" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT t.createID from t_i_resume t where t.id=#{id}
+    </select>
 </mapper>

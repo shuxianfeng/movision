@@ -426,4 +426,10 @@
         SELECT e.photoUrl,e.name,e.createId FROM t_e_expert e
         WHERE e.id = #{id}
     </select>
+    <select id="findExpertIdById" resultMap="java.lang.Long" parameterType="java.lang.Long">
+        SELECT t.createId from t_e_achievement t where t.id=#{l}
+    </select>
+    <select id="findExpertById" resultMap="java.lang.Long" parameterType="java.lang.Long">
+        SELECT t.createId FROM  t_e_expert t where t.id =#{l}
+    </select>
 </mapper>

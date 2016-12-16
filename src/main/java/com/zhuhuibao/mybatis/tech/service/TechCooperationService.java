@@ -2,7 +2,6 @@ package com.zhuhuibao.mybatis.tech.service;
 
 import com.zhuhuibao.common.constant.MessageTextConstant;
 import com.zhuhuibao.common.constant.MsgCodeConstant;
-import com.zhuhuibao.common.constant.ZhbConstant;
 import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
@@ -15,7 +14,6 @@ import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.MsgPropertiesUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
 import com.zhuhuibao.utils.pagination.util.StringUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -345,17 +342,4 @@ public class TechCooperationService {
         return techMapper.findCreateIdById(s);
     }
 
-
-    /**
-     * 查询未加密技术成果
-     *
-     * @param goodsID
-     * @return
-     */
-    public Map findAchievementsById(Long goodsID, Integer techType) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", goodsID);
-        map.put("type", techType);
-        return techMapper.previewTechCooperationDetail(map);
-    }
 }
