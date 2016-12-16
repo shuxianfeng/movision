@@ -184,25 +184,6 @@ public class PublishTCourseService {
     }
 
     /**
-     * 培训课程库存数量处理
-     * 
-     * @param resultMap
-     */
-    private void setStorageNumber(Map<String, String> resultMap) {
-        // 当前下订单30分钟未支付的订单数量
-        String notBuyNumber = String.valueOf(resultMap.get("notBuyNumber"));
-        String storageNumber = String.valueOf(resultMap.get("storageNumber"));
-        // 当库存不为零的是时候 页面上展示的库存 = 数据库的库存 - 当前下订单30分钟未支付的订单数量
-        if (!"null".equals(storageNumber) && !"0".equals(storageNumber)) {
-            if (!"null".equals(notBuyNumber)) {
-                Integer num = Integer.valueOf(storageNumber) - Integer.valueOf(notBuyNumber);
-                storageNumber = num.toString();
-                resultMap.put("storageNumber", storageNumber);
-            }
-        }
-    }
-
-    /**
      * 查看培训课程详情
      *
      * @param condition
