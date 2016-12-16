@@ -375,7 +375,7 @@
   </select>
 
     <select id="findAllPublishsCoursePager" parameterType="java.util.Map" resultType="java.util.Map">
-        select t.courseid,t.title,t.notes,t.expiryDate AS endTime,t.price,t.storageNumber,t.status,
+        select t.courseid,t.title,t.notes,t.expiryDate AS endTime,date_format(expiryDate,'%Y-%m-%d') expiryDate,t.price,t.storageNumber,t.status,
         ( select sum(number) from t_o_order_goods
         where goodsId = t.courseid and orderNo in (select orderNo from t_o_order where status = 2
         and goodsType= t.courseType

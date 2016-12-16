@@ -204,6 +204,8 @@ public class MobileExpertPageService {
         if (!CollectionUtils.isEmpty(list)) {
             for (Map<String, String> resultMap : list) {
                 setStorageNumber(resultMap);
+                resultMap.put("status", ptCourseService.getCourseStatus(resultMap));
+
                 result.add(resultMap);
             }
         }
