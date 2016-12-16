@@ -19,7 +19,7 @@
         <result column="storageNumber" property="storageNumber" jdbcType="INTEGER"/>
         <result column="minBuyNumber" property="minBuyNumber" jdbcType="VARCHAR"/>
         <result column="maxBuyNumber" property="maxBuyNumber" jdbcType="VARCHAR"/>
-        <result column="expiryDate" property="expiryDate" jdbcType="DATE"/>
+        <result column="expiryDate" property="expiryDate" jdbcType="TIMESTAMP"/>
         <result column="imgUrl" property="imgUrl" jdbcType="VARCHAR"/>
         <result column="notice" property="notice" jdbcType="VARCHAR"/>
         <result column="courseType" property="courseType" jdbcType="INTEGER"/>
@@ -163,7 +163,7 @@
                 #{maxBuyNumber,jdbcType=VARCHAR},
             </if>
             <if test="expiryDate != null">
-                #{expiryDate,jdbcType=DATE},
+                #{expiryDate,jdbcType=TIMESTAMP},
             </if>
             <if test="imgUrl != null">
                 #{imgUrl,jdbcType=VARCHAR},
@@ -234,7 +234,7 @@
                 maxBuyNumber = #{maxBuyNumber,jdbcType=VARCHAR},
             </if>
             <if test="expiryDate != null">
-                expiryDate = #{expiryDate,jdbcType=DATE},
+                expiryDate = #{expiryDate,jdbcType=TIMESTAMP},
             </if>
             <if test="imgUrl != null">
                 imgUrl = #{imgUrl,jdbcType=VARCHAR},
