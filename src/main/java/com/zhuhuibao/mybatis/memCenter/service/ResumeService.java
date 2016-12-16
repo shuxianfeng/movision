@@ -251,16 +251,35 @@ public class ResumeService {
      * @return 分页结果
      */
     public Paging<Map<String, Object>> findAllResume(Paging<Map<String, Object>> pager, Map<String, Object> map) {
+        try {
+            log.info("传参map=" + map.toString());
+            List<Map<String, Object>> list = findAllResumeList(pager, map);
+            pager.result(list);
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
+        }
+        return pager;
+    }
+
+    /**
+     * 人才库搜索
+     * 
+     * @param pager
+     * @param map
+     * @return
+     */
+    public List<Map<String, Object>> findAllResumeList(Paging<Map<String, Object>> pager, Map<String, Object> map) {
         List<Map<String, Object>> list = new ArrayList<>();
         try {
             log.info("传参map=" + map.toString());
             String jobCity = (String) map.get("jobCity");
             if (StringUtils.isNotBlank(jobCity)) {
                 if (!MapUtils.isEmpty(dictionaryService.findProvinceByCode(jobCity))) {
-                    map.put("jobProvince", jobCity.substring(0,2));
+                    map.put("jobProvince", jobCity.substring(0, 2));
                     map.put("jobCity", "");
                 } else {
-                    map.put("jobCity", jobCity.substring(0,4));
+                    map.put("jobCity", jobCity.substring(0, 4));
                 }
             }
             List<Map<String, Object>> resumeList = resumeMapper.findAllResume(pager.getRowBounds(), map);
@@ -268,12 +287,11 @@ public class ResumeService {
                 Map<String, Object> result = genResultMap(resume);
                 list.add(result);
             }
-            pager.result(list);
         } catch (Exception e) {
             log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
-        return pager;
+        return list;
     }
 
     /**

@@ -147,13 +147,7 @@ public class ResumeSiteController {
         map.put("expYearBefore", expYearBefore);
         map.put("expYearBehind", expYearBehind);
         map.put("education", education);
-        if (isPublic == null) {
-            map.put("isPublic", "1");	//默认公开
-        } else {
-            if (!"2".equals(isPublic)) {
-                map.put("isPublic", isPublic);
-            }
-        }
+        map.put("isPublic", "1");	//默认公开
         map.put("status", JobConstant.JOB_MEMBER_STATUS_LOGOUT);
         if (positionType != null && positionType.length() > 0) {
             String[] positionTypes = positionType.split(",");
