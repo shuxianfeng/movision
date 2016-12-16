@@ -7,7 +7,6 @@ import com.zhuhuibao.mybatis.tech.entity.TrainPublishCourse;
 import com.zhuhuibao.mybatis.tech.mapper.PublishTCourseMapper;
 import com.zhuhuibao.utils.DateUtils;
 import com.zhuhuibao.utils.pagination.model.Paging;
-//import com.zhuhuibao.utils.pagination.util.StringUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -190,7 +189,7 @@ public class PublishTCourseService {
      * @return
      */
     public String getCourseStatus(Map<String, String> courseDetail) {
-        String status = courseDetail.get("status");
+        String status = String.valueOf(courseDetail.get("status"));
         if (MapUtils.isNotEmpty(courseDetail) && !"5".equals(courseDetail.get("status")) || !"6".equals(courseDetail.get("status"))) {
 
             // 判断是否已经达到报名截止时间
