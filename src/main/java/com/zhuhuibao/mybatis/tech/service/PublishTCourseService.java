@@ -203,9 +203,11 @@ public class PublishTCourseService {
                     courseDetail.put("status", "8");
                 } else {
                     // 判断课程报名是否已满
-                    int notBuyNumber = StringUtils.isNumeric(courseDetail.get("notBuyNumber")) ? Integer.parseInt(courseDetail.get("notBuyNumber")) : 0;
-                    int storageNumber = StringUtils.isNumeric(courseDetail.get("storageNumber")) ? Integer.parseInt(courseDetail.get("storageNumber")) : 0;
-                    if (0 != storageNumber && (storageNumber - notBuyNumber) <= 0) {
+                    String notBuyNumber = String.valueOf(courseDetail.get("notBuyNumber"));
+                    String storageNumber = String.valueOf(courseDetail.get("storageNumber"));
+                    int notBuyNumber1 = StringUtils.isNumeric(notBuyNumber) ? Integer.parseInt(notBuyNumber) : 0;
+                    int storageNumber1 = StringUtils.isNumeric(storageNumber) ? Integer.parseInt(storageNumber) : 0;
+                    if (0 != storageNumber1 && (storageNumber1 - notBuyNumber1) <= 0) {
                         courseDetail.put("status", "7");
                     }
                 }
