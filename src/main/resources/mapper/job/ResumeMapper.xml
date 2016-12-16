@@ -258,7 +258,7 @@
 
   </select>
     <select id="findAllResume" parameterType="java.util.Map" resultType="java.util.Map">
-        select DISTINCT(t.id),t.createid,t.title,concat(substring(t.realName,1,1),'**') realName,
+        select t.id,t.createid,t.title,concat(substring(t.realName,1,1),'**') realName,
         t.hopeSalary,m.headShot as photo,t.education,
         date_format(t.publishTime,'%Y-%m-%d %H:%i:%s') publishTime,
         date_format(t.updateTime,'%Y-%m-%d %H:%i:%s') updateTime,
@@ -269,8 +269,7 @@
         t.jobCity,
         t.jobProvince
         from t_i_resume t
-        LEFT JOIN t_m_member m on t.createid = m.id,
-        t_dictionary_city c
+        LEFT JOIN t_m_member m on t.createid = m.id
         <where>
             <if test="status != null and status != ''">
                 and m.status != #{status}
@@ -280,8 +279,12 @@
                 concat('%',#{title},'%')
             </if>
             <if test="jobCity != null and jobCity != ''">
-                <!-- and (#{jobCity} in(t.jobCity) or (select provincecode from t_dictionary_city where code = #{jobCity}) in(t.jobProvince)) -->
-                and (find_in_set(#{jobCity}, t.jobCity) or (find_in_set(c.code, t.jobCity) and c.provincecode = #{jobCity} ))
+                and ( t.jobCity LIKE concat(#{jobCity},'%')  or  t.jobCity LIKE concat(',',#{jobCity},'%'))
+            </if>
+            <if test="jobProvince != null and jobProvince != ''">
+                and ( t.jobProvince LIKE concat(#{jobProvince},'%')  or  t.jobProvince LIKE concat(',',#{jobProvince},'%')
+                  or  t.jobCity LIKE concat(#{jobProvince},'%')  or  t.jobCity LIKE concat(',',#{jobProvince},'%')
+                )
             </if>
             <if test="expYearBefore != null and expYearBefore != ''">
                 and (DATE_FORMAT( current_date(),'%Y' )-t.workYear) &gt;= #{expYearBefore}

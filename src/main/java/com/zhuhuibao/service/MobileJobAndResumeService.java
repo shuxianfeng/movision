@@ -86,7 +86,6 @@ public class MobileJobAndResumeService {
         return channelNewsService.selectByID(aLong);
     }
 
-
     /**
      * 获取职位搜索Pager
      * 
@@ -163,20 +162,13 @@ public class MobileJobAndResumeService {
 
     /**
      * 手机端-人才-首页-获取最新简历
-     * 
-     * @param title
-     * @param jobCity
-     * @param expYearBefore
-     * @param expYearBehind
-     * @param education
-     * @param positionType
-     * @param isPublic
-     * @return
      */
-    public List<Map<String, Object>> getMLatestResume(String title, String jobCity, String expYearBefore, String expYearBehind, String education, String positionType, String isPublic) {
+    public List<Map<String, Object>> getMLatestResume() {
         log.info("find all resume!!");
-        Map<String, Object> map = getResumeParamsMap(title, jobCity, expYearBefore, expYearBehind, education, positionType, isPublic);
-        return resume.findMIndexResume(map);
+        Paging<Map<String, Object>> pager = new Paging<>(Integer.valueOf(1), Integer.valueOf(3));
+
+        Map<String, Object> map = getResumeParamsMap(null, null, null, null, null, null, "1");
+        return resume.findAllResumeList(pager, map);
     }
 
     /**
@@ -227,13 +219,7 @@ public class MobileJobAndResumeService {
         map.put("expYearBefore", expYearBefore);
         map.put("expYearBehind", expYearBehind);
         map.put("education", education);
-        if (isPublic == null) {
-            map.put("isPublic", "1"); // 默认公开
-        } else {
-            if (!"2".equals(isPublic)) {
-                map.put("isPublic", isPublic);
-            }
-        }
+        map.put("isPublic",  StringUtils.isBlank(isPublic) ? "1" : isPublic);
         map.put("status", JobConstant.JOB_MEMBER_STATUS_LOGOUT);
         if (positionType != null && positionType.length() > 0) {
             String[] positionTypes = positionType.split(",");
@@ -363,7 +349,6 @@ public class MobileJobAndResumeService {
         return resumeList;
     }
 
-
     /**
      * 获取人才网首页数据
      * 
@@ -378,10 +363,9 @@ public class MobileJobAndResumeService {
         // 名企招聘（广告）
         result.put("mqzp_advs", advertisingService.queryAdvertising(AdvertisingConstant.AdvertisingPosition.M_Rencai_Mqzp.value));
         // 最新招聘
-        result.put("zxzp", getJobSearchResultPager(null,null,null,null,
-                null,null,"1","3"));
+        result.put("zxzp", getJobSearchResultPager(null, null, null, null, null, null, "1", "3"));
         // 最新求职
-        result.put("zxqz", getMLatestResume(null, null, null, null, null, null, null));
+        result.put("zxqz", getMLatestResume());
         // 筑慧职场
         result.put("zhzc", getJobNews());
 

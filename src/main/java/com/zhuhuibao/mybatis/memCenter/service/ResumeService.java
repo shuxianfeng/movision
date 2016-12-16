@@ -8,6 +8,7 @@ import com.zhuhuibao.common.constant.ZhbPaymentConstant;
 import com.zhuhuibao.common.util.ConvertUtil;
 import com.zhuhuibao.common.util.ShiroUtil;
 import com.zhuhuibao.exception.BusinessException;
+import com.zhuhuibao.mybatis.dictionary.service.DictionaryService;
 import com.zhuhuibao.mybatis.memCenter.entity.CollectRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.DownloadRecord;
 import com.zhuhuibao.mybatis.memCenter.entity.Resume;
@@ -18,6 +19,7 @@ import com.zhuhuibao.mybatis.memCenter.mapper.ResumeMapper;
 import com.zhuhuibao.mybatis.payment.service.PaymentGoodsService;
 import com.zhuhuibao.mybatis.zhb.service.ZhbService;
 import com.zhuhuibao.utils.pagination.model.Paging;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,9 +45,7 @@ public class ResumeService {
     private ResumeMapper resumeMapper;
 
     @Autowired
-    ApiConstants apiConstants;
-    @Autowired
-    ZhbService zhbService;
+    private ZhbService zhbService;
 
     @Autowired
     private ResumeLookRecordMapper resumeLookRecordMapper;
@@ -57,7 +57,10 @@ public class ResumeService {
     private CollectRecordMapper collectRecordMapper;
 
     @Autowired
-    PaymentGoodsService goodsService;
+    private PaymentGoodsService goodsService;
+
+    @Autowired
+    private DictionaryService dictionaryService;
 
     /**
      * 发布简历
@@ -248,20 +251,47 @@ public class ResumeService {
      * @return 分页结果
      */
     public Paging<Map<String, Object>> findAllResume(Paging<Map<String, Object>> pager, Map<String, Object> map) {
-        List<Map<String, Object>> list = new ArrayList<>();
         try {
-            log.info("传参map="+ map.toString());
-            List<Map<String, Object>> resumeList = resumeMapper.findAllResume(pager.getRowBounds(), map);
-            for (Map<String, Object> resume : resumeList) {
-                Map<String, Object> result = genResultMap(resume);
-                list.add(result);
-            }
+            log.info("传参map=" + map.toString());
+            List<Map<String, Object>> list = findAllResumeList(pager, map);
             pager.result(list);
         } catch (Exception e) {
             log.error("执行异常>>>", e);
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
         }
         return pager;
+    }
+
+    /**
+     * 人才库搜索
+     * 
+     * @param pager
+     * @param map
+     * @return
+     */
+    public List<Map<String, Object>> findAllResumeList(Paging<Map<String, Object>> pager, Map<String, Object> map) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        try {
+            log.info("传参map=" + map.toString());
+            String jobCity = (String) map.get("jobCity");
+            if (StringUtils.isNotBlank(jobCity)) {
+                if (!MapUtils.isEmpty(dictionaryService.findProvinceByCode(jobCity))) {
+                    map.put("jobProvince", jobCity.substring(0, 2));
+                    map.put("jobCity", "");
+                } else {
+                    map.put("jobCity", jobCity.substring(0, 4));
+                }
+            }
+            List<Map<String, Object>> resumeList = resumeMapper.findAllResume(pager.getRowBounds(), map);
+            for (Map<String, Object> resume : resumeList) {
+                Map<String, Object> result = genResultMap(resume);
+                list.add(result);
+            }
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "操作失败");
+        }
+        return list;
     }
 
     /**
