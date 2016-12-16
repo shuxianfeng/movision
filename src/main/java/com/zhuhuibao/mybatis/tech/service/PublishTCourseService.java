@@ -207,7 +207,8 @@ public class PublishTCourseService {
                     String storageNumber = String.valueOf(courseDetail.get("storageNumber"));
                     int notBuyNumber1 = StringUtils.isNumeric(notBuyNumber) ? Integer.parseInt(notBuyNumber) : 0;
                     int storageNumber1 = StringUtils.isNumeric(storageNumber) ? Integer.parseInt(storageNumber) : 0;
-                    if (0 != storageNumber1 && (storageNumber1 - notBuyNumber1) <= 0) {
+                    if (storageNumber1 == 0 || ( 0 != storageNumber1 && (storageNumber1 - notBuyNumber1) <= 0)) {
+                        //课程报名已满
                         courseDetail.put("status", "7");
                     }
                 }
