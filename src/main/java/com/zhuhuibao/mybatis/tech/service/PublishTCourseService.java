@@ -195,7 +195,7 @@ public class PublishTCourseService {
             // 判断是否已经达到报名截止时间
             Date expDate = DateUtils.str2Date(org.apache.commons.lang.StringUtils.trimToEmpty(courseDetail.get("expiryDate")), "yyyy-MM-dd");
             Calendar calendar = Calendar.getInstance();
-            if (null != expDate && calendar.before(expDate)) {
+            if (null != expDate && calendar.after(expDate)) {
                 // 若已经过了报名截止时间，则返回8（报名截止）
                 status = "8";
             } else {
