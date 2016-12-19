@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +37,7 @@ public class PublishTCourseService {
     /**
      * 插入专家培训，技术培训发布的课程
      *
-     * @param course
-     *            专家或者技术发布的课程
+     * @param course 专家或者技术发布的课程
      * @return
      */
     public int insertPublishCourse(TrainPublishCourse course) {
@@ -64,8 +62,7 @@ public class PublishTCourseService {
     /**
      * 查看已发布课程的详情
      *
-     * @param condition
-     *            搜索条件
+     * @param condition 搜索条件
      * @return
      */
     public TrainPublishCourse selectTrainCourseInfo(Map<String, Object> condition) {
@@ -82,8 +79,7 @@ public class PublishTCourseService {
     /**
      * 更新发布的课程信息
      *
-     * @param course
-     *            课程信息
+     * @param course 课程信息
      * @return
      */
     public int updatePublishCourse(TrainPublishCourse course) {
@@ -109,8 +105,7 @@ public class PublishTCourseService {
     /**
      * 课程上架
      *
-     * @param courseId
-     *            课程ID
+     * @param courseId 课程ID
      * @return
      */
     public int publishCourse(String courseId, Long omsOperateId) {
@@ -184,7 +179,7 @@ public class PublishTCourseService {
 
     /**
      * 根据课程详情情况处理返回的status，便于显示
-     * 
+     *
      * @param courseDetail
      * @return
      */
@@ -194,8 +189,8 @@ public class PublishTCourseService {
 
             // 判断是否已经达到报名截止时间
             Date expDate = DateUtils.str2Date(org.apache.commons.lang.StringUtils.trimToEmpty(courseDetail.get("expiryDate")), "yyyy-MM-dd");
-            Calendar calendar = Calendar.getInstance();
-            if (null != expDate && calendar.after(expDate)) {
+            Date currentDate = new Date();
+            if (null != expDate && currentDate.after(expDate)) {
                 // 若已经过了报名截止时间，则返回8（报名截止）
                 status = "8";
             } else {
