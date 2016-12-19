@@ -160,15 +160,8 @@ public class MobileExpertService {
      */
     public List<Map<String, String>> findAllMyAchievementList(Paging<Map<String, String>> pager, Long createId, String status) {
         Map<String, Object> map = new HashMap<>();
-        Member member = memberService.findMemById(String.valueOf(createId));
-        if (null != status) {
-            map.put("status", status);
-        }
-        if ("100".equals(member.getWorkType())) {
-            map.put("companyId", createId);
-        } else {
-            map.put("viewerId", createId);
-        }
+        map.put("createId",createId);
+        map.put("status",status);
         return achievementMapper.findAllMobileMyAchievementList(pager.getRowBounds(), map);
     }
 
