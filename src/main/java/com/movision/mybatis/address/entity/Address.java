@@ -2,6 +2,12 @@ package com.movision.mybatis.address.entity;
 
 import java.util.Date;
 
+/**
+ * 地址
+ *
+ * @Author zhuangyuhao
+ * @Date 2017/1/16 20:32
+ */
 public class Address {
     private Integer id;
 

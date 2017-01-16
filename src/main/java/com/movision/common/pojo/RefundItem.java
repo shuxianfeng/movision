@@ -1,10 +1,12 @@
 package com.movision.common.pojo;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
 /**
  * 退款信息
  */
+@ApiModel(value = "3333", description = "333")
 public class RefundItem {
 
     /**

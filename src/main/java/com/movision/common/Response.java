@@ -6,7 +6,7 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * 返回前台的json数据
+ * controller返回的实体：封装了返回前台的json数据
  * 
  * @author pl
  */

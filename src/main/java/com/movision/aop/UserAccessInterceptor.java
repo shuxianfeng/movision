@@ -33,12 +33,12 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
 
         LoginAccess loginAnno;
 
-        OmsLoginAccess omsLoginAnno;
+        BossLoginAccess omsLoginAnno;
 
         if (handler instanceof HandlerMethod) {
             annotation = ((HandlerMethod) handler).getMethodAnnotation(UserAccess.class);
             loginAnno = ((HandlerMethod) handler).getMethodAnnotation(LoginAccess.class);
-            omsLoginAnno = ((HandlerMethod) handler).getMethodAnnotation(OmsLoginAccess.class);
+            omsLoginAnno = ((HandlerMethod) handler).getMethodAnnotation(BossLoginAccess.class);
 
         } else {
             return true;
@@ -128,7 +128,7 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
      *
      * @param omsLoginAnno
      */
-    private void checkOmsLogin(OmsLoginAccess omsLoginAnno) {
+    private void checkOmsLogin(BossLoginAccess omsLoginAnno) {
         if (omsLoginAnno != null) {
             boolean require = omsLoginAnno.required();
             if (require) {
