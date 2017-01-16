@@ -3,10 +3,11 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
 <generatorConfiguration>
     <!-- 引入配置文件 -->
-    <properties resource="mybatis/init.properties"/>
+    <properties url="file:///E:/maven/movision-1.0.0/src/main/resources/mybatis/init.properties" />
+    <!--<properties resource="mybatis/init.properties" />-->
 
     <!-- 指定数据连接驱动jar地址 -->
-    <classPathEntry location="D:\repositor\maven\mysql\mysql-connector-java\5.1.24\mysql-connector-java-5.1.24.jar"/>
+    <classPathEntry location="D:\repository\mysql\mysql-connector-java\5.1.24\mysql-connector-java-5.1.24.jar"/>
 
     <!-- 一个数据库一个context -->
     <context id="infoGuardian">
@@ -19,11 +20,11 @@
         </commentGenerator>
 
         <!-- jdbc连接 -->
-        <!--<jdbcConnection driverClass="${jdbc_driver}"-->
-        <!--connectionURL="${jdbc_url}" userId="${jdbc_user}" password="${jdbc_password}" />-->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://139.196.189.100:3306/zhb_dev2?useUnicode=true&amp;characterEncoding=utf-8"
-                        userId="root" password="zhb!216OK"/>
+        <jdbcConnection driverClass="${jdbc_driver}"
+        connectionURL="${jdbc_url}" userId="${jdbc_user}" password="${jdbc_password}" />
+        <!--<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://120.77.214.187:3306/zhb_dev2?useUnicode=true&amp;characterEncoding=utf-8"
+                        userId="root" password="zhb!216OK"/>-->
 
         <!-- 类型转换 -->
         <javaTypeResolver>
@@ -33,7 +34,7 @@
 
         <!-- 生成实体类地址 -->
 
-        <javaModelGenerator targetPackage="com.zhuhuibao.mybatis.wxpayLog.entity"
+        <javaModelGenerator targetPackage="com.movision.mybatis.wxpayLog.entity"
                             targetProject="${project}">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
@@ -49,7 +50,7 @@
         </sqlMapGenerator>
 
         <!-- 生成mapxml对应client，也就是接口dao -->
-        <javaClientGenerator targetPackage="com.zhuhuibao.mybatis.wxpayLog.mapper"
+        <javaClientGenerator targetPackage="com.movision.mybatis.wxpayLog.mapper"
                              targetProject="${project}" type="XMLMAPPER">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>

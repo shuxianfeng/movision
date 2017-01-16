@@ -14,13 +14,13 @@
         <property name="hashIterations" value="${password.hashIterations}"/>
     </bean>
     <!-- Realm实现 -->
-    <bean id="userRealm" class="com.zhuhuibao.shiro.realm.ShiroRealm">
+    <bean id="userRealm" class="com.movision.shiro.realm.ShiroRealm">
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
         <property name="cachingEnabled" value="true"/>
     </bean>
 
     <!-- Realm实现运营管理系统 -->
-    <bean id="omsRealm" class="com.zhuhuibao.shiro.realm.OMSRealm">
+    <bean id="omsRealm" class="com.movision.shiro.realm.OMSRealm">
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
         <property name="cachingEnabled" value="true"/>
     </bean>
@@ -56,7 +56,7 @@
         <property name="redisManager" ref="redisManager"/>
     </bean>
 
-    <!--<bean id="cacheManager" class="com.zhuhuibao.shiro.cache.SpringCacheManagerWrapper">-->
+    <!--<bean id="cacheManager" class="com.movisionshiro.cache.SpringCacheManagerWrapper">-->
         <!--<property name="cacheManager" ref="redisCacheManager"/>-->
     <!--</bean>-->
 
@@ -89,10 +89,10 @@
         <property name="loginUrl" value="/auth/login.html"/>
     </bean>
     <bean id="orRolesAuthorizationFilter"
-          class="com.zhuhuibao.shiro.filter.OrRolesAuthorizationFilter">
+          class="com.movision.shiro.filter.OrRolesAuthorizationFilter">
     </bean>
     <bean id="orPermissionsAuthorizationFilter"
-          class="com.zhuhuibao.shiro.filter.OrPermissionsAuthorizationFilter">
+          class="com.movision.shiro.filter.OrPermissionsAuthorizationFilter">
     </bean>
     <!-- shiro定义 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">

@@ -3,7 +3,7 @@
          xmlns="http://java.sun.com/xml/ns/javaee"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
-    <display-name>zhuhuibao</display-name>
+    <display-name>movision</display-name>
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
@@ -56,7 +56,7 @@
     <!--XSS攻击过滤器
     <filter>
         <filter-name>XSSFilter</filter-name>
-        <filter-class>com.zhuhuibao.security.xss.XSSFilter</filter-class>
+        <filter-class>com.movisionsecurity.xss.XSSFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>XSSFilter</filter-name>
@@ -83,7 +83,7 @@
     <!--防盗链
     <filter>
         <filter-name>refererFilter</filter-name>
-        <filter-class>com.zhuhuibao.security.filter.RefererFilter</filter-class>
+        <filter-class>com.movisionsecurity.filter.RefererFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>refererFilter</filter-name>

@@ -7,8 +7,8 @@
         <setting name="logImpl" value="SLF4J"/>
     </settings>
     <typeAliases>
-        <typeAlias type="com.zhuhuibao.mybatis.memberReg.entity.Member" alias="memberReg"/>
-        <typeAlias type="com.zhuhuibao.mybatis.memberReg.entity.Validateinfo" alias="validateInfo"/>
+        <!--<typeAlias type="com.movision.mybatis.memberReg.entity.Member" alias="memberReg"/>
+        <typeAlias type="com.movision.mybatis.memberReg.entity.Validateinfo" alias="validateInfo"/>-->
     </typeAliases>
     <typeHandlers>
         <typeHandler jdbcType="CLOB" javaType="java.lang.String"

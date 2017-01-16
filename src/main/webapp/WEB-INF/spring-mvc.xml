@@ -11,15 +11,7 @@
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
     <!-- 开启controller注解支持 -->
-    <context:component-scan base-package="com.zhuhuibao"
-                            use-default-filters="false">
-        <context:include-filter type="annotation"
-                                expression="org.springframework.stereotype.Controller"/>
-        <context:include-filter type="annotation"
-                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
-    </context:component-scan>
-    <context:component-scan base-package="com.external"
+    <context:component-scan base-package="com.movision"
                             use-default-filters="false">
         <context:include-filter type="annotation"
                                 expression="org.springframework.stereotype.Controller"/>
@@ -66,9 +58,9 @@
 
     <mvc:default-servlet-handler/>
     <!-- CSRF
-    <bean name="requestDataValueProcessor" class="com.zhuhuibao.security.csrf.CSRFRequestDataValueProcessor"/>
+    <bean name="requestDataValueProcessor" class="com.movisionsecurity.csrf.CSRFRequestDataValueProcessor"/>
     <mvc:interceptors>
-        <bean class="com.zhuhuibao.security.csrf.CSRFHandlerInterceptor"/>
+        <bean class="com.movisionsecurity.csrf.CSRFHandlerInterceptor"/>
     </mvc:interceptors>-->
 
     <context:property-placeholder
@@ -149,9 +141,9 @@
     <bean id="mappingJacksonJsonView"
           class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
 
-    <bean id="xlsExcelView" class="com.zhuhuibao.common.view.XlsExcelView">
+    <bean id="xlsExcelView" class="com.movision.common.view.XlsExcelView">
     </bean>
-    <bean id="xlsxExcelView" class="com.zhuhuibao.common.view.XlsxExcelView">
+    <bean id="xlsxExcelView" class="com.movision.common.view.XlsxExcelView">
     </bean>
 
     <bean
@@ -166,14 +158,14 @@
 
     <!-- resubmit token拦截器
     <mvc:interceptors>
-       <bean class="com.zhuhuibao.security.resubmit.TokenInterceptor"/>
-        <bean class="com.zhuhuibao.security.resubmit.AvoidDuplicateSubmissionInterceptor"/>
+       <bean class="com.movisionsecurity.resubmit.TokenInterceptor"/>
+        <bean class="com.movisionsecurity.resubmit.AvoidDuplicateSubmissionInterceptor"/>
     </mvc:interceptors>-->
 
     <mvc:interceptors>
-        <!--<bean class="com.zhuhuibao.aop.TimeoutInterceptor"/>-->
-        <bean class="com.zhuhuibao.aop.InitLogonMemberInterceptor"/>
-        <bean class="com.zhuhuibao.aop.UserAccessInterceptor"/>
+        <!--<bean class="com.movisionaop.TimeoutInterceptor"/>-->
+        <bean class="com.movision.aop.InitLogonMemberInterceptor"/>
+        <bean class="com.movision.aop.UserAccessInterceptor"/>
     </mvc:interceptors>
 
 
@@ -181,5 +173,5 @@
     <aop:config proxy-target-class="true"/>
 
     <!--swagger-->
-    <bean id="apiConfig" class="com.zhuhuibao.common.util.SwaggerConfig"/>
+    <bean id="apiConfig" class="com.movision.common.util.SwaggerConfig"/>
 </beans>

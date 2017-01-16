@@ -14,13 +14,10 @@
     <description>Spring公共配置</description>
 
     <!-- 扫描注解Bean -->
-    <context:component-scan base-package="com.zhuhuibao">
+    <context:component-scan base-package="com.movision">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
-    <context:component-scan base-package="com.external">
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-    </context:component-scan>
 
     <!--properties-->
     <context:property-placeholder
@@ -41,7 +38,7 @@
         </property>
     </bean>
 
-    <bean id="pageConfig" class="com.zhuhuibao.utils.pagination.PaginationInterceptor">
+    <bean id="pageConfig" class="com.movision.utils.pagination.PaginationInterceptor">
         <property name="properties">
             <props>
                 <prop key="dbms">MYSQL</prop>
@@ -56,7 +53,7 @@
 
 
     <!-- mybatis -->
-    <mybatis:scan base-package="com.zhuhuibao.mybatis"/>
+    <mybatis:scan base-package="com.movision.mybatis"/>
 
     <!-- 使用annotation定义事务 -->
     <tx:annotation-driven transaction-manager="transactionManager"
@@ -101,9 +98,6 @@
     <bean id="transactionAwareDataSource"
           class="org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy">
         <constructor-arg ref="dataSource"/>
-    </bean>
-    <bean id="jdbcTemplate" class="com.zhuhuibao.fsearch.repository.db.JdbcTemplate">
-        <constructor-arg ref="transactionAwareDataSource"/>
     </bean>
 
     <bean id="jdbcTM"
