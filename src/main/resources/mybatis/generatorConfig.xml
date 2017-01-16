@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<!--官网：http://www.mybatis.org/generator/configreference/properties.html-->
 <generatorConfiguration>
     <!-- 引入配置文件 -->
     <properties url="file:///E:/maven/movision-1.0.0/src/main/resources/mybatis/init.properties" />
