@@ -3,8 +3,8 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
 <!--官网：http://www.mybatis.org/generator/configreference/properties.html-->
 <generatorConfiguration>
-    <!-- 引入配置文件 ，下面两种加载方式选一个：url使用全路径，resource使用classpath路径-->
-    <properties url="file:///E:/maven/movision-1.0.0/src/main/resources/mybatis/init.properties" />
+    <!-- 引入配置文件(失效) ，下面两种加载方式选一个：url使用全路径，resource使用classpath路径-->
+    <!--<properties url="file:///E:/maven/movision-1.0.0/src/main/resources/mybatis/init.properties" />-->
     <!--<properties resource="mybatis/init.properties" />-->
 
     <!-- 指定数据连接驱动jar地址 -->
@@ -21,11 +21,12 @@
         </commentGenerator>
 
         <!-- jdbc连接 -->
-        <jdbcConnection driverClass="${jdbc_driver}"
-        connectionURL="${jdbc_url}" userId="${jdbc_user}" password="${jdbc_password}" />
-        <!--<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://120.77.214.187:3306/zhb_dev2?useUnicode=true&amp;characterEncoding=utf-8"
-                        userId="root" password="zhb!216OK"/>-->
+        <!--<jdbcConnection driverClass="${jdbc_driver}"
+        connectionURL="${jdbc_url}" userId="${jdbc_user}" password="${jdbc_password}" />-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://120.77.214.187:3306/movision?useUnicode=true&amp;characterEncoding=utf-8"
+                        userId="root"
+                        password="test123456"/>
 
         <!-- 类型转换 -->
         <javaTypeResolver>
@@ -35,8 +36,8 @@
 
         <!-- 生成实体类地址 -->
 
-        <javaModelGenerator targetPackage="com.movision.mybatis.wxpayLog.entity"
-                            targetProject="${project}">
+        <javaModelGenerator targetPackage="com.movision.mybatis.adminMenu.entity"
+                            targetProject="E:/maven/movision-1.0.0/src/main/java">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
             <!-- 是否针对string类型的字段在set的时候进行trim调用 -->
@@ -44,22 +45,22 @@
         </javaModelGenerator>
 
         <!-- 生成mapxml文件 -->
-        <sqlMapGenerator targetPackage="mapper/wxpayLog"
-                         targetProject="${resources}">
+        <sqlMapGenerator targetPackage="mapper/adminMenu"
+                         targetProject="E:/maven/movision-1.0.0/src/main/resources">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
         <!-- 生成mapxml对应client，也就是接口dao -->
-        <javaClientGenerator targetPackage="com.movision.mybatis.wxpayLog.mapper"
-                             targetProject="${project}" type="XMLMAPPER">
+        <javaClientGenerator targetPackage="com.movision.mybatis.adminMenu.mapper"
+                             targetProject="E:/maven/movision-1.0.0/src/main/java" type="XMLMAPPER">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <table tableName="t_o_wxpay_log"
-               domainObjectName="WxpayLog"
+        <table tableName="yw_admin_menu"
+               domainObjectName="AdminMenu"
                enableCountByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"

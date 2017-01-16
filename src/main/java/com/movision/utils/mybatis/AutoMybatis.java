@@ -15,10 +15,10 @@ import org.mybatis.generator.exception.XMLParserException;
 import org.mybatis.generator.internal.DefaultShellCallback;
 
 /**
- * 目前无法使用
- * @author zhuangyuhao
- * @time   2016年10月18日 下午8:09:15
+ * 自动生成dao层接口和实体
  *
+ * @Author zhuangyuhao
+ * @Date 2017/1/16 20:27
  */
 public class AutoMybatis {
 	public static final String cp = "src/main/resources/mybatis/generatorConfig.xml";
