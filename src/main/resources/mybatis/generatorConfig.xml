@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
 <!--官网：http://www.mybatis.org/generator/configreference/properties.html-->
 <generatorConfiguration>
-    <!-- 引入配置文件 -->
+    <!-- 引入配置文件 ，下面两种加载方式选一个：url使用全路径，resource使用classpath路径-->
     <properties url="file:///E:/maven/movision-1.0.0/src/main/resources/mybatis/init.properties" />
     <!--<properties resource="mybatis/init.properties" />-->
 
