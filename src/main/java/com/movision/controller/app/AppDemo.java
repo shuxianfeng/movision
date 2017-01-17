@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/rest/home/site/")
-public class NewController {
+public class AppDemo {
 
     @ApiOperation(value = "dddd", notes = "ddddd", response = Response.class)
     @RequestMapping(value = "sel_three_serviceList", method = RequestMethod.GET)
