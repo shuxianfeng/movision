@@ -23,8 +23,6 @@ import org.slf4j.LoggerFactory;
 public class ShiroRealm extends AuthorizingRealm {
     private static final Logger log = LoggerFactory.getLogger(ShiroRealm.class);
 
-
-
     /**
      * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
      */
@@ -177,18 +175,11 @@ public class ShiroRealm extends AuthorizingRealm {
             this.id = id;
             this.account = account;
             this.status = status;
-            this.identify = identify;
-            this.role = role;
-            this.isexpert = isexpert;
-            this.companyId = companyId;
+            this.identify = identify;   //身份
+            this.role = role;   //
             this.registerTime = registerTime;
-            this.workType = workType;
-            this.headShot = headShot;
             this.nickname = nickname;
-            this.companyName = companyName;
             this.vipLevel = vipLevel;
-            this.enterpriseLinkman = enterpriseLinkman;
-            this.fixedTelephone = fixedTelephone;
             this.email = email;
         }
 
