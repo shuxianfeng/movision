@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movision.mybatis.post.mapper.PostMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.post.entity.Post">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="circleid" jdbcType="INTEGER" property="circleid"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="subtitle" jdbcType="VARCHAR" property="subtitle"/>
+        <result column="postcontent" jdbcType="VARCHAR" property="postcontent"/>
+        <result column="zansum" jdbcType="INTEGER" property="zansum"/>
+        <result column="commentsum" jdbcType="INTEGER" property="commentsum"/>
+        <result column="forwardsum" jdbcType="INTEGER" property="forwardsum"/>
+        <result column="collectsum" jdbcType="INTEGER" property="collectsum"/>
+        <result column="isactive" jdbcType="INTEGER" property="isactive"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="ishot" jdbcType="INTEGER" property="ishot"/>
+        <result column="orderid" jdbcType="INTEGER" property="orderid"/>
+        <result column="isessence" jdbcType="INTEGER" property="isessence"/>
+        <result column="coverimg" jdbcType="VARCHAR" property="coverimg"/>
+        <result column="goodurl" jdbcType="VARCHAR" property="goodurl"/>
+        <result column="intime" jdbcType="TIMESTAMP" property="intime"/>
+        <result column="totalpoint" jdbcType="INTEGER" property="totalpoint"/>
+        <result column="isdel" jdbcType="INTEGER" property="isdel"/>
+    </resultMap>
+    <!--BaseColumn-->
+    <sql id="Base_Column_List">
+    id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum, 
+    isactive, type, ishot, orderid, isessence, coverimg, goodurl, intime, totalpoint, isdel
+  </sql>
+
+    <!--基础查询语句-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_post
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!--查询首页帖子数据-->
+    <select id="queryIndexData" resultType="com.movision.mybatis.post.entity.PostVo">
+    select
+    t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t2.category AS category,t2.code AS code
+    from yw_post t1
+    LEFT JOIN yw_circle t2 ON
+    t1.ishot = '1'
+    and t1.isdel = '0'
+    AND t1.circleid = t2.id
+    order by orderid
+  </select>
+
+    <!--基础删除语句-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_post
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    <!--基础插入语句（无判断全量）-->
+    <insert id="insert" parameterType="com.movision.mybatis.post.entity.Post">
+    insert into yw_post (id, circleid, title, 
+      subtitle, postcontent, zansum, 
+      commentsum, forwardsum, collectsum, 
+      isactive, type, ishot, orderid,
+      isessence, coverimg, goodurl, 
+      intime, totalpoint, isdel
+      )
+    values (#{id,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{subtitle,jdbcType=VARCHAR}, #{postcontent,jdbcType=VARCHAR}, #{zansum,jdbcType=INTEGER}, 
+      #{commentsum,jdbcType=INTEGER}, #{forwardsum,jdbcType=INTEGER}, #{collectsum,jdbcType=INTEGER}, 
+      #{isactive,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{ishot,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER},
+      #{isessence,jdbcType=INTEGER}, #{coverimg,jdbcType=VARCHAR}, #{goodurl,jdbcType=VARCHAR}, 
+      #{intime,jdbcType=TIMESTAMP}, #{totalpoint,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER}
+      )
+  </insert>
+
+    <!--基础插入语句（选择性插入）-->
+    <insert id="insertSelective" parameterType="com.movision.mybatis.post.entity.Post">
+        insert into yw_post
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="circleid != null">
+                circleid,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="subtitle != null">
+                subtitle,
+            </if>
+            <if test="postcontent != null">
+                postcontent,
+            </if>
+            <if test="zansum != null">
+                zansum,
+            </if>
+            <if test="commentsum != null">
+                commentsum,
+            </if>
+            <if test="forwardsum != null">
+                forwardsum,
+            </if>
+            <if test="collectsum != null">
+                collectsum,
+            </if>
+            <if test="isactive != null">
+                isactive,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="ishot != null">
+                ishot,
+            </if>
+            <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="isessence != null">
+                isessence,
+            </if>
+            <if test="coverimg != null">
+                coverimg,
+            </if>
+            <if test="goodurl != null">
+                goodurl,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="totalpoint != null">
+                totalpoint,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="circleid != null">
+                #{circleid,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null">
+                #{subtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="postcontent != null">
+                #{postcontent,jdbcType=VARCHAR},
+            </if>
+            <if test="zansum != null">
+                #{zansum,jdbcType=INTEGER},
+            </if>
+            <if test="commentsum != null">
+                #{commentsum,jdbcType=INTEGER},
+            </if>
+            <if test="forwardsum != null">
+                #{forwardsum,jdbcType=INTEGER},
+            </if>
+            <if test="collectsum != null">
+                #{collectsum,jdbcType=INTEGER},
+            </if>
+            <if test="isactive != null">
+                #{isactive,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="ishot != null">
+                #{ishot,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="isessence != null">
+                #{isessence,jdbcType=INTEGER},
+            </if>
+            <if test="coverimg != null">
+                #{coverimg,jdbcType=VARCHAR},
+            </if>
+            <if test="goodurl != null">
+                #{goodurl,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="totalpoint != null">
+                #{totalpoint,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <!--基础update语句（有判断）-->
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.post.entity.Post">
+        update yw_post
+        <set>
+            <if test="circleid != null">
+                circleid = #{circleid,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null">
+                subtitle = #{subtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="postcontent != null">
+                postcontent = #{postcontent,jdbcType=VARCHAR},
+            </if>
+            <if test="zansum != null">
+                zansum = #{zansum,jdbcType=INTEGER},
+            </if>
+            <if test="commentsum != null">
+                commentsum = #{commentsum,jdbcType=INTEGER},
+            </if>
+            <if test="forwardsum != null">
+                forwardsum = #{forwardsum,jdbcType=INTEGER},
+            </if>
+            <if test="collectsum != null">
+                collectsum = #{collectsum,jdbcType=INTEGER},
+            </if>
+            <if test="isactive != null">
+                isactive = #{isactive,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="ishot != null">
+                ishot = #{ishot,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="isessence != null">
+                isessence = #{isessence,jdbcType=INTEGER},
+            </if>
+            <if test="coverimg != null">
+                coverimg = #{coverimg,jdbcType=VARCHAR},
+            </if>
+            <if test="goodurl != null">
+                goodurl = #{goodurl,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="totalpoint != null">
+                totalpoint = #{totalpoint,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!--基础update语句（无判断全量修改）-->
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.post.entity.Post">
+    update yw_post
+    set circleid = #{circleid,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      subtitle = #{subtitle,jdbcType=VARCHAR},
+      postcontent = #{postcontent,jdbcType=VARCHAR},
+      zansum = #{zansum,jdbcType=INTEGER},
+      commentsum = #{commentsum,jdbcType=INTEGER},
+      forwardsum = #{forwardsum,jdbcType=INTEGER},
+      collectsum = #{collectsum,jdbcType=INTEGER},
+      isactive = #{isactive,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      ishot = #{ishot,jdbcType=INTEGER},
+      orderid = #{orderid,jdbcType=INTEGER},
+      isessence = #{isessence,jdbcType=INTEGER},
+      coverimg = #{coverimg,jdbcType=VARCHAR},
+      goodurl = #{goodurl,jdbcType=VARCHAR},
+      intime = #{intime,jdbcType=TIMESTAMP},
+      totalpoint = #{totalpoint,jdbcType=INTEGER},
+      isdel = #{isdel,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>
