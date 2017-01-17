@@ -3,7 +3,7 @@ package com.movision.aop;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.AuthException;
 import com.movision.exception.BusinessException;
-import com.movision.shiro.realm.OMSRealm;
+import com.movision.shiro.realm.BossRealm;
 import com.movision.shiro.realm.ShiroRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -62,7 +62,9 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
             if (session != null) {
                 member = (ShiroRealm.ShiroUser) session.getAttribute("member");
                 if (member != null) {
-                    int workType = member.getWorkType();
+                    // TODO: 2017/1/17
+//                    int workType = member.getWorkType();
+                    int workType = 100;
                     String identify = member.getIdentify();
                     switch (value) {
                         case "ADMIN":
@@ -112,7 +114,7 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
         if (vipList.isEmpty()) {   //无需vip权限
             return true;
         } else { //需要不同的vip权限
-            int vipLevel = member.getVipLevel();
+            int vipLevel = member.getLevel();
             if (!vipList.contains(String.valueOf(vipLevel))) {
                 log.error("用户无权限");
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "用户无权限");
@@ -135,7 +137,7 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
                 Subject subject = SecurityUtils.getSubject();
                 Session session = subject.getSession(false);
                 if (session != null) {
-                    OMSRealm.ShiroOmsUser member = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
+                    BossRealm.ShiroOmsUser member = (BossRealm.ShiroOmsUser) session.getAttribute("oms");
                     if (member == null) {
                         throw new AuthException(MsgCodeConstant.un_login, "请先登录");
                     }

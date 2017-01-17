@@ -10,7 +10,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.movision.shiro.realm.OMSRealm;
+import com.movision.shiro.realm.BossRealm;
 import com.movision.shiro.realm.ShiroRealm;
 
 public class ShiroUtil {
@@ -52,23 +52,6 @@ public class ShiroUtil {
         return createID;
     }
 
-    public static Long getCompanyID() {
-        Long companyId = null;
-        try {
-            Subject currentUser = SecurityUtils.getSubject();
-            Session session = currentUser.getSession(false);
-            if (session != null) {
-                ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
-                if (principal != null) {
-                    companyId = principal.getCompanyId();
-                }
-            }
-            return companyId;
-        } catch (Exception e) {
-            log.error("get seesion user info error!", e);
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
-    }
 
     /**
      * 获取oms用户登陆ID
@@ -81,7 +64,7 @@ public class ShiroUtil {
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             if (session != null) {
-                OMSRealm.ShiroOmsUser principal = (OMSRealm.ShiroOmsUser) session.getAttribute("oms");
+                BossRealm.ShiroOmsUser principal = (BossRealm.ShiroOmsUser) session.getAttribute("oms");
                 if (principal != null) {
                     createID = Long.valueOf(principal.getId() + "");
                 }
@@ -101,7 +84,7 @@ public class ShiroUtil {
             if (session != null) {
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
                 if (principal != null) {
-                    viplevel = principal.getVipLevel();
+                    viplevel = principal.getLevel();
                 }
             }
         } catch (Exception e) {

@@ -3,9 +3,6 @@ package com.movision.aop;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +39,7 @@ public class InitLogonMemberInterceptor extends HandlerInterceptorAdapter {
                         // 初始化登录信息
                         ShiroRealm.ShiroUser loginInfo = new ShiroUser(loginMember.getId(), loginMember.getAccount(), loginMember.getStatus(), loginMember.getIdentify(), loginMember.getRole(),
                                 loginMember.getIsexpert(), loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(), loginMember.getHeadShot(), loginMember.getNickname(),
-                                loginMember.getCompanyName(), loginMember.getVipLevel(), loginMember.getEnterpriseLinkman(), loginMember.getFixedTelephone(), loginMember.getEmail());
+                                loginMember.getCompanyName(), loginMember.getLevel(), loginMember.getEnterpriseLinkman(), loginMember.getFixedTelephone(), loginMember.getEmail());
 
                         if (loginMemberInfoIsChange(member, loginInfo)) {
                             session.setAttribute("member", loginInfo);
@@ -68,7 +65,7 @@ public class InitLogonMemberInterceptor extends HandlerInterceptorAdapter {
      * @return
      */
     private boolean loginMemberInfoIsChange(ShiroUser member, ShiroRealm.ShiroUser loginInfo) {
-        boolean isChange = member == null || loginInfo == null || loginInfo.getWorkType() != member.getWorkType() || loginInfo.getVipLevel() != member.getVipLevel()
+        boolean isChange = member == null || loginInfo == null || loginInfo.getLevel() != member.getLevel()
                 || loginInfo.getStatus() != member.getStatus() || !loginInfo.getIdentify().equals(member.getIdentify()) || !loginInfo.getRole().equals(member.getRole())
                 || !loginInfo.getIsexpert().equals(member.getIsexpert());
         return isChange;

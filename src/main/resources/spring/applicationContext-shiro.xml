@@ -20,7 +20,7 @@
     </bean>
 
     <!-- Realm实现运营管理系统 -->
-    <bean id="omsRealm" class="com.movision.shiro.realm.OMSRealm">
+    <bean id="omsRealm" class="com.movision.shiro.realm.BossRealm">
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
         <property name="cachingEnabled" value="true"/>
     </bean>
