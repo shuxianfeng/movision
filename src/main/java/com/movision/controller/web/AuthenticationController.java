@@ -15,15 +15,19 @@ import com.movision.common.Response;
 
 
 /**
- * 登录
- *
- * @author zhuangyuhao@20160303
+ * @Author shuxf
+ * @Date 2017/1/17 10:23
  */
 @RestController
 public class AuthenticationController {
 
     private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
 
+    /**
+     * @param id
+     * @return
+     * @throws IOException
+     */
     @ApiOperation(value = "111", notes = "111", response = Response.class)
     @RequestMapping(value = "/rest/web/authc", method = RequestMethod.GET)
     public Response isLogin(@ApiParam(value = "手机号码", required = true) @RequestParam String id) throws IOException {
