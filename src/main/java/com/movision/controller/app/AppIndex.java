@@ -2,6 +2,8 @@ package com.movision.controller.app;
 
 import com.movision.common.Response;
 import com.movision.facade.index.FacadeIndex;
+import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.post.entity.PostVo;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -28,13 +32,15 @@ public class AppIndex {
 
     @ApiOperation(value = "首页数据返回接口", notes = "首页数据返回接口", response = Response.class)
     @RequestMapping(value = "index", method = RequestMethod.POST)
-    public Response queryIndexData(@ApiParam(value = "条数") @RequestParam int count) {
+    public Response queryIndexData(@ApiParam(value = "用户id") @RequestParam(required = false) String userid) {
         Response response = new Response();
-        List<PostVo> postlist = facadeIndex.queryIndexData();
+
+        Map<String, Object> map = facadeIndex.queryIndexData(userid);
+
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(postlist);
+        response.setData(map);
         return response;
     }
 

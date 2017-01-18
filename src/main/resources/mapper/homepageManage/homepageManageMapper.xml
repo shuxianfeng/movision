@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movision.mybatis.homepageManage.mapper.HomepageManageMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.homepageManage.entity.HomepageManage">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="topictype" jdbcType="INTEGER" property="topictype"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="subcontent" jdbcType="VARCHAR" property="subcontent"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="transurl" jdbcType="VARCHAR" property="transurl"/>
+        <result column="intime" jdbcType="TIMESTAMP" property="intime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, topictype, content, subcontent, url, transurl, intime
+  </sql>
+
+    <!--基础查询语句-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_homepage_manage
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryMayLikeBanner" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
+    SELECT * FROM yw_homepage_manage WHERE topictype = '0'
+  </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_homepage_manage
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.homepageManage.entity.HomepageManage">
+    insert into yw_homepage_manage (id, topictype, content, 
+      subcontent, url, transurl, 
+      intime)
+    values (#{id,jdbcType=INTEGER}, #{topictype,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
+      #{subcontent,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{transurl,jdbcType=VARCHAR}, 
+      #{intime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.homepageManage.entity.HomepageManage">
+        insert into yw_homepage_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="topictype != null">
+                topictype,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="subcontent != null">
+                subcontent,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="transurl != null">
+                transurl,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="topictype != null">
+                #{topictype,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="subcontent != null">
+                #{subcontent,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="transurl != null">
+                #{transurl,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.homepageManage.entity.HomepageManage">
+        update yw_homepage_manage
+        <set>
+            <if test="topictype != null">
+                topictype = #{topictype,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="subcontent != null">
+                subcontent = #{subcontent,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="transurl != null">
+                transurl = #{transurl,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.homepageManage.entity.HomepageManage">
+    update yw_homepage_manage
+    set topictype = #{topictype,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      subcontent = #{subcontent,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      transurl = #{transurl,jdbcType=VARCHAR},
+      intime = #{intime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

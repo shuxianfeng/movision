@@ -36,17 +36,46 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
-    <!--查询首页帖子数据-->
-    <select id="queryIndexData" resultType="com.movision.mybatis.post.entity.PostVo">
-    select
-    t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t2.category AS category,t2.code AS code
-    from yw_post t1
-    LEFT JOIN yw_circle t2 ON
-    t1.ishot = '1'
-    and t1.isdel = '0'
-    AND t1.circleid = t2.id
-    order by orderid
-  </select>
+    <!--查询首页今日精选的帖子数据-->
+    <select id="queryTodayEssence" resultType="com.movision.mybatis.post.entity.PostVo">
+        select * from (select
+                        t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t2.category AS category,t2.code AS code
+                        from yw_post t1
+                        LEFT JOIN yw_circle t2 ON
+                                t1.ishot = '1'
+                        and t1.isdel = '0'
+                        AND t1.circleid = t2.id) t
+        where DATE_FORMAT(t.intime,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
+        order by t.orderid
+    </select>
+
+    <!--查询首页dayago天前精选的帖子数据-->
+    <select id="queryDayAgoEssence" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        select * from (select
+                        t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t2.category AS category,t2.code AS code
+                        from yw_post t1
+                        LEFT JOIN yw_circle t2 ON
+                                t1.ishot = '1'
+                        and t1.isdel = '0'
+                        AND t1.circleid = t2.id) t
+        where TO_DAYS(NOW())-TO_DAYS(t.intime) = #{dayago,jdbcType=INTEGER}
+        order by t.orderid
+    </select>
+
+    <!--登录时查询用户可能喜欢的圈子-->
+    <select id="queryMayLikeCircle" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.circle.entity.Circle">
+        SELECT t1.id,t1.category,t1.code,t1.maylikeimg FROM yw_circle t1
+         WHERE id NOT IN(
+            SELECT circleid FROM yw_follow_circle WHERE userid = #{userid,jdbcType=INTEGER})
+    </select>
+
+    <!--未登录时查询我们推荐的圈子-->
+    <select id="queryRecommendCircle" resultType="com.movision.mybatis.circle.entity.Circle">
+        SELECT t1.id,t1.category,t1.code,t1.maylikeimg FROM yw_circle t1
+        WHERE t1.isrecommend = '1'
+    </select>
 
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

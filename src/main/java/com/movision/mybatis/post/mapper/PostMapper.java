@@ -1,5 +1,6 @@
 package com.movision.mybatis.post.mapper;
 
+import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 
@@ -18,5 +19,11 @@ public interface PostMapper {
 
     int updateByPrimaryKey(Post record);
 
-    List<PostVo> queryIndexData();
+    List<PostVo> queryTodayEssence();
+
+    List<PostVo> queryDayAgoEssence(int dayago);
+
+    List<Circle> queryMayLikeCircle(int userid);
+
+    List<Circle> queryRecommendCircle();
 }
