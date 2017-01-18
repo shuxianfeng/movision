@@ -15,6 +15,8 @@ public class HomepageManage {
 
     private String transurl;
 
+    private Integer orderid;
+
     private Date intime;
 
     public Integer getId() {
@@ -71,5 +73,13 @@ public class HomepageManage {
 
     public void setIntime(Date intime) {
         this.intime = intime;
+    }
+
+    public Integer getOrderid() {
+        return orderid;
+    }
+
+    public void setOrderid(Integer orderid) {
+        this.orderid = orderid;
     }
 }
