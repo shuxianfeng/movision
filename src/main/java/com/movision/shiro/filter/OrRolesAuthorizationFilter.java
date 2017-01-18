@@ -11,6 +11,7 @@ import org.apache.shiro.util.CollectionUtils;
 import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 
 /**
+ * 角色授权过滤器
  * @author zhuangyuhao@20160606
  */
 public class OrRolesAuthorizationFilter extends AuthorizationFilter {
@@ -27,7 +28,8 @@ public class OrRolesAuthorizationFilter extends AuthorizationFilter {
 			return true;
 		}
 
-		Set<String> roles = CollectionUtils.asSet(rolesArray);
+        //判断该请求对象是否有该角色
+        Set<String> roles = CollectionUtils.asSet(rolesArray);
 		for (String role : roles) {
 			if (subject.hasRole(role)) {
 				return true;

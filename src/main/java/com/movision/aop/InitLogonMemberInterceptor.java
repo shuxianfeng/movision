@@ -38,7 +38,7 @@ public class InitLogonMemberInterceptor extends HandlerInterceptorAdapter {
                     if (null != loginMember) {
                         // 初始化登录信息
                         ShiroRealm.ShiroUser loginInfo = new ShiroUser(loginMember.getId(), loginMember.getAccount(), loginMember.getStatus(), loginMember.getIdentify(), loginMember.getRole(),
-                                loginMember.getIsexpert(), loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(), loginMember.getHeadShot(), loginMember.getNickname(),
+                                loginMember.getIsexpert(), loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(), loginMember.getPhoto(), loginMember.getNickname(),
                                 loginMember.getCompanyName(), loginMember.getLevel(), loginMember.getEnterpriseLinkman(), loginMember.getFixedTelephone(), loginMember.getEmail());
 
                         if (loginMemberInfoIsChange(member, loginInfo)) {
@@ -66,8 +66,7 @@ public class InitLogonMemberInterceptor extends HandlerInterceptorAdapter {
      */
     private boolean loginMemberInfoIsChange(ShiroUser member, ShiroRealm.ShiroUser loginInfo) {
         boolean isChange = member == null || loginInfo == null || loginInfo.getLevel() != member.getLevel()
-                || loginInfo.getStatus() != member.getStatus() || !loginInfo.getIdentify().equals(member.getIdentify()) || !loginInfo.getRole().equals(member.getRole())
-                || !loginInfo.getIsexpert().equals(member.getIsexpert());
+                || loginInfo.getStatus() != member.getStatus() || !loginInfo.getRole().equals(member.getRole());
         return isChange;
     }
 }

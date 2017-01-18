@@ -33,8 +33,8 @@ public class ShiroUtil {
 
     }
 
-    public static Long getCreateID() {
-        Long createID = null;
+    public static int getCreateID() {
+        int createID = 0;
         try {
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
@@ -99,17 +99,17 @@ public class ShiroUtil {
      * 实时更新登录者在session中的信息
      * 
      * @param status
-     * @param identify
+     * @param role
      */
-    public static void updateShiroUser(int status, String identify, String headShot) {
+    public static void updateShiroUser(int status, String role, String headShot) {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (session != null) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute("member");
             principal.setStatus(status);
-            principal.setIdentify(identify);
+            principal.setRole(role);
             if (StringUtils.isNotBlank(headShot)) {
-                principal.setHeadShot(headShot);
+                principal.setPhoto(headShot);
             }
             session.setAttribute("member", principal);
         }

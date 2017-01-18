@@ -101,7 +101,9 @@
         <property name="successUrl" value="/index.html"/>
         <property name="filters">
             <util:map>
+                <!--需要登录-->
                 <entry key="authc" value-ref="formAuthenticationFilter"/>
+
                 <entry key="orroles" value-ref="orRolesAuthorizationFilter"/>
                 <entry key="orperms" value-ref="orPermissionsAuthorizationFilter"/>
             </util:map>
@@ -109,83 +111,14 @@
         <property name="filterChainDefinitions">
             <value>
                 <!--url = orroles[status]
-                status:会员状态 0：未激活(只针对邮件)，1：注册成功，2：注销，5：完善资料待审核 6：完善资料已审核，
-                                7：资料审核已拒绝，9：实名认证待审核，10：实名认证已认证  11：实名认证已拒绝-->
-                <!--url = orperms[identity:role:status]
-                identity:1-企业 2-个人 3-厂家;
-                role:100-管理员 200-专家 300-员工;
-                status:6-完善资料已审核   9-实名认证待审核 10-实名认证已认证-->
+                status:会员状态 0：正常 1：异常封号-->
 
-                <!--orroles["100"] 企业管理员,其他不限 orroles["200"]专家身份,其他不限  orroles["300"]企业员工,其他不限  -->
+                <!--url = orperms[role:status]
+                role:100 管理员(yw_user表和yw_admin_user表中共同的用户) 200 普通用户（yw_user表中的用户）
+                status:0：正常 1：异常封号
+                -->
 
-                <!--特殊处理-->
-                /rest/tech/mc/data/sel_download_data = authc
-                /rest/system/mc/brand/sel_brand_by_scateid = anon
-                /rest/job/mc/resume/download_resume = anon
-                /rest/expert/mc/base/sel_myQuestionList = authc
-                /rest/expert/mc/sel_my_looked_expertList = authc
-                /rest/expert/mc/del_batch_my_looked_expert = authc
-                <!--企业+不限+不限-->
-                /rest/tech/mc/coop/cg/sel_my_looked_achievementList =  orperms["1:100:1,1:100:5,1:100:6,1:100:7,1:100:9,1:100:10,1:100:11,1:300:1,1:300:5,1:300:6,1:300:7,1:300:9,1:300:10,1:300:11,3:100:1,3:100:5,3:100:6,3:100:7,3:100:9,3:100:10,3:100:11,3:300:1,3:300:5,3:300:6,3:300:7,3:300:9,3:300:10,3:300:11"]
-                /rest/expert/mc/sel_my_looked_achievementList = orperms["1:100:1,1:100:5,1:100:6,1:100:7,1:100:9,1:100:10,1:100:11,1:300:1,1:300:5,1:300:6,1:300:7,1:300:9,1:300:10,1:300:11,3:100:1,3:100:5,3:100:6,3:100:7,3:100:9,3:100:10,3:100:11,3:300:1,3:300:5,3:300:6,3:300:7,3:300:9,3:300:10,3:300:11"]
-                /rest/expert/mc/del_batch_my_looked_achievement  = orperms["1:100:1,1:100:5,1:100:6,1:100:7,1:100:9,1:100:10,1:100:11,1:300:1,1:300:5,1:300:6,1:300:7,1:300:9,1:300:10,1:300:11,3:100:1,3:100:5,3:100:6,3:100:7,3:100:9,3:100:10,3:100:11,3:300:1,3:300:5,3:300:6,3:300:7,3:300:9,3:300:10,3:300:11"]
-                /rest/tech/mc/coop/cg/del_batch_my_looked_achievement = orperms["1:100:1,1:100:5,1:100:6,1:100:7,1:100:9,1:100:10,1:100:11,1:300:1,1:300:5,1:300:6,1:300:7,1:300:9,1:300:10,1:300:11,3:100:1,3:100:5,3:100:6,3:100:7,3:100:9,3:100:10,3:100:11,3:300:1,3:300:5,3:300:6,3:300:7,3:300:9,3:300:10,3:300:11"]
-                <!--前端调整为新接口之后删除以下配置-->
-                /rest/job/mc/recruit/sel_recommend_position = anon
-                /rest/job/mc/recruit/sel_latest_position = anon
-                /rest/job/mc/resume/upd_jobRelresume = anon
-
-
-                <!-- 具备“不限+不限+完善资料”权限的配置 -->
-                /rest/system/mc/enquiry/** = orroles["6,9,10,11"]
-                <!--产品管理去掉完善资料限制
-                /rest/system/mc/product/** = orroles["6,9,10,11"]  -->
-                /rest/system/mc/quote/** =  orroles["6,9,10,11"]
-                <!-- /rest/tech/mc/data/**  =   orroles["6,9,10,11"] -->
-                /rest/tech/mc/coop/cg/**  =   orroles["6,9,10,11"]
-
-                <!--具备"企业+不限+不限"的权限的配置 -->
-                /rest/member/mc/user = orperms["1:100:1,1:100:5,1:100:6,1:100:7,1:100:9,1:100:10,1:100:11,1:300:1,1:300:5,1:300:6,1:300:7,1:300:9,1:300:10,1:300:11,3:100:1,3:100:5,3:100:6,3:100:7,3:100:9,3:100:10,3:100:11,3:300:1,3:300:5,3:300:6,3:300:7,3:300:9,3:300:10,3:300:11"]
-
-
-                <!--具备“厂家+角色不限+实名认证”权限的配置 -->
-                /rest/system/mc/brand/** = orperms["3:100:10,3:300:10"]
-                /rest/system/mc/agent/** = orperms["3:100:10,3:300:10"]
-
-                <!--具备“企业+角色不限+完善资料”权限的配置 -->
-                /rest/expo/mc/** =  orperms["1:100:6,1:100:9,1:100:10,1:100:11,1:300:6,1:300:9,1:300:10,1:300:11,3:100:6,3:100:9,3:100:10,3:100:11,3:300:6,3:300:9,3:300:10,3:300:11"]
-                /rest/tech/mc/coop/xq/** =  orperms["1:100:6,1:100:9,1:100:10,1:100:11,1:300:6,1:300:9,1:300:10,1:300:11,3:100:6,3:100:9,3:100:10,3:100:11,3:300:6,3:300:9,3:300:10,3:300:11"]
-
-                <!--具备"企业+管理员+完善资料"的权限的配置   -->
-                /rest/member/mc/company/sel_successCase =  orperms["1:100:6,1:100:9,1:100:10,1:100:11,3:100:6,3:100:9,3:100:10,3:100:11"]
-                /rest/member/mc/company/upd_successCase =    orperms["1:100:6,1:100:9,1:100:10,1:100:11,3:100:6,3:100:9,3:100:10,3:100:11"]
-                /rest/member/mc/company/del_successCase =  orperms["1:100:6,1:100:9,1:100:10,1:100:11,3:100:6,3:100:9,3:100:10,3:100:11"]
-
-                <!--具备"企业+管理员+实名认证"的权限的配置   -->
-                /rest/member/mc/company/add_certificate  = orperms["1:100:10,3:100:10"]
-                /rest/member/mc/shop/** = orperms["1:100:10,3:100:10"]
-
-                <!--具备"企业+管理员+不限"的权限配置-->
-                /rest/member/mc/company/** =  orperms["1:100:1,1:100:5,1:100:6,1:100:7,1:100:9,1:100:10,1:100:11,3:100:1,3:100:5,3:100:6,3:100:7,3:100:9,3:100:10,3:100:11"]
-
-
-                <!-- 具备“企业+角色不限+实名认证”权限的配置  -->
-                /rest/job/mc/recruit/** = orperms["1:100:10,1:300:10,3:100:10,3:300:10"]
-
-                <!-- 具备“个人+角色不限+状态不限”权限的配置     -->
-                /rest/job/mc/resume/** = orperms["2:100:1,2:100:5,2:100:6,2:100:7,2:100:9,2:100:10,2:100:11,2:200:1,2:200:5,2:200:6,2:200:7,2:200:9,2:200:10,2:200:11"]
-                /rest/member/mc/individual/base/** =  orperms["2:100:1,2:100:5,2:100:6,2:100:7,2:100:9,2:100:10,2:100:11,2:200:1,2:200:5,2:200:6,2:200:7,2:200:9,2:200:10,2:200:11"]
-                /rest/member/mc/individual/real/** =   orperms["2:100:1,2:100:5,2:100:6,2:100:7,2:100:9,2:100:10,2:100:11,2:200:1,2:200:5,2:200:6,2:200:7,2:200:9,2:200:10,2:200:11"]
-
-                <!--具备"个人+角色不限+完善资料"权限的配置 -->
-
-
-                <!--具备"个人+角色不限+实名认证"权限的配置 -->
-                /rest/member/mc/individual/cert/** = orperms["2:100:10,2:200:10"]
-
-                <!-- 具备“个人+专家+状态不限”权限的配置 -->
-                /rest/expert/mc/** = orperms["2:200:1,2:200:5,2:200:6,2:200:7,2:200:9,2:200:10,2:200:11"]
-
+                /rest/** = anon
 
                 /logout = logout
                 /swagger/** = anon

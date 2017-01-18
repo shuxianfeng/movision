@@ -1,8 +1,11 @@
 package com.movision.shiro.realm;
 
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.Date;
 
+import com.movision.common.constant.UserConstants;
+import com.movision.facade.user.UserFacade;
+import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -15,60 +18,40 @@ import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
+ *
  * @author zhuangyuhao
  */
 public class ShiroRealm extends AuthorizingRealm {
     private static final Logger log = LoggerFactory.getLogger(ShiroRealm.class);
 
+    @Autowired
+    private UserFacade userFacade;
+
     /**
+     * 权限认证
      * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        // ShiroUser member = (ShiroUser)
-        // principals.fromRealm(getName()).iterator().next();
+
+        //  获取当前登录对象
         Subject subject = SecurityUtils.getSubject();
         ShiroUser member = (ShiroUser) subject.getSession(false).getAttribute("member");
         if (null != member) {
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
             String status = String.valueOf(member.getStatus());
-            String identity = member.getIdentify();
-            String role = member.getRole();
-            String isexpert = member.getIsexpert();
 
-            if (StringUtils.isEmpty(status) || null == identity || null == role || null == isexpert) {
+            if (StringUtils.isEmpty(status) || UserConstants.USER_STATUS.disable.toString().equals(status)) {
                 return null;
             }
-
-            if (identity.equals("2")) {
-                role = "100";
-                if (isexpert.equals("1")) {
-                    role = "200";
-                }
-            } else {
-                if (identity.length() > 1) {
-                    String[] strs = identity.split(",");
-                    if (Arrays.asList(strs).contains("3")) {
-                        identity = "3,1";
-                    } else {
-                        identity = "1";
-                    }
-                } else if (!identity.equals("3")) {
-                    identity = "1";
-                }
-
-                if (!role.equals("100")) {
-                    role = "300";
-                }
-            }
-
-            String perm = identity + ":" + role + ":" + status;
-            info.addRole(status);
-            info.addStringPermission(perm);
+            //用户的角色集合
+            String role = "100";    //管理员
+            info.addRole(role);
 
             return info;
         }
@@ -76,38 +59,34 @@ public class ShiroRealm extends AuthorizingRealm {
     }
 
     /**
+     * 登录认证
      * 认证回调函数,登录时调用.
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         log.info("登录认证");
-        /*String loginname = (String) token.getPrincipal();
-        LoginMember loginMember = memberRegService.getLoginMemberByAccount(loginname);
-        if (loginMember != null) {
-            if (0 == loginMember.getStatus() || 2 == loginMember.getStatus()) {
-                throw new LockedAccountException(); // 帐号不正常状态
+        String loginPhone = (String) token.getPrincipal();
+        // 1 获取当前登录的用户
+        LoginUser loginUser = userFacade.getLoginUserByPhone(loginPhone);
+
+        if (loginUser != null) {
+            if (1 == loginUser.getStatus()) {
+                throw new LockedAccountException(); // 帐号异常封号
             }
         } else {
-            throw new UnknownAccountException();// 用户名不存在
+            throw new UnknownAccountException();// 用户手机号不存在
         }
 
-        ShiroUser shiroUser = new ShiroUser(loginMember.getId(), loginMember.getAccount(), loginMember.getStatus(), loginMember.getIdentify(), loginMember.getRole(), loginMember.getIsexpert(),
-                loginMember.getCompanyId(), loginMember.getRegisterTime(), loginMember.getWorkType(), loginMember.getHeadShot(), loginMember.getNickname(), loginMember.getCompanyName(),
-                loginMember.getLevel(), loginMember.getEnterpriseLinkman(), loginMember.getFixedTelephone(), loginMember.getEmail());
+        // 2 根据登录用户信息生成ShiroUser用户
+        ShiroUser shiroUser = new ShiroUser(loginUser.getId(), loginUser.getPhone(), loginUser.getStatus(), loginUser.getRole(),
+                loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(), loginUser.getPhone());
 
-        // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
+        // 3 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(shiroUser, // 用户
-                loginMember.getPassword(), // 密码
-                // ByteSource.Util.bytes("123"),
-                getName() // realm name
-        );*/
-        // TODO: 2017/1/16
-        return new SimpleAuthenticationInfo(
-                new Object(), // 用户
-                new Object(), // 密码
-                // ByteSource.Util.bytes("123"),
+                loginUser.getPhone(),
                 getName() // realm name
         );
+
     }
 
     /**
@@ -142,148 +121,106 @@ public class ShiroRealm extends AuthorizingRealm {
      */
     public static class ShiroUser implements Serializable {
         private static final long serialVersionUID = -1373760761780840081L;
-        private Long id;
-        private String account; //账号
+        private int id;
+        private String account; //账号(使用手机号)
         private int status; //账号状态：默认 0 正常  1 异常封号
-        private String identify;    
-        private String role;
-        private String isexpert;
-        private String registerTime;
-        private String headShot;
-        private String nickname;
+        private String role;       //角色
+        private Date registerTime;    //注册时间
+        private String photo;    //头像url
+        private String nickname;    //昵称
         private int level;   //用户等级：0 普通用户  1 青铜  2 白银 3 黄金 4 白金 5 钻石 6 金钻石 7皇冠 8金皇冠
-        /**
-         * 联系人
-         */
-        private String enterpriseLinkman;
-        /**
-         * 固定电话
-         */
-        private String fixedTelephone;
-        /**
-         * 邮箱
-         */
-        private String email;
+        private String phone;   //手机号
 
-        public ShiroUser(Long id, String account, int status, String identify, String role, String isexpert, Long companyId, String registerTime, int workType, String headShot, String nickname,
-                         String companyName, int level, String enterpriseLinkman, String fixedTelephone, String email) {
-
+        public ShiroUser(int id, String account, int status, String role, Date registerTime, String photo, String nickname, int level, String phone) {
             this.id = id;
             this.account = account;
             this.status = status;
-            this.identify = identify;   //身份
-            this.role = role;   //
+            this.role = role;
             this.registerTime = registerTime;
+            this.photo = photo;
             this.nickname = nickname;
             this.level = level;
-            this.email = email;
+            this.phone = phone;
         }
 
-        public String getEnterpriseLinkman() {
-            return enterpriseLinkman;
-        }
-
-        public void setEnterpriseLinkman(String enterpriseLinkman) {
-            this.enterpriseLinkman = enterpriseLinkman;
-        }
-
-        public String getFixedTelephone() {
-            return fixedTelephone;
-        }
-
-        public void setFixedTelephone(String fixedTelephone) {
-            this.fixedTelephone = fixedTelephone;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public Long getId() {
-            return id;
-        }
-
-        public void setId(Long id) {
+        public void setId(int id) {
             this.id = id;
         }
 
-        public String getAccount() {
-            return account;
+        public void setRegisterTime(Date registerTime) {
+            this.registerTime = registerTime;
+        }
+
+        public int getId() {
+
+            return id;
+        }
+
+        public Date getRegisterTime() {
+            return registerTime;
         }
 
         public void setAccount(String account) {
             this.account = account;
         }
 
-        public int getStatus() {
-            return status;
-        }
-
         public void setStatus(int status) {
             this.status = status;
-        }
-
-        public String getIdentify() {
-            return identify;
-        }
-
-        public void setIdentify(String identify) {
-            this.identify = identify;
-        }
-
-        public String getRole() {
-            return role;
         }
 
         public void setRole(String role) {
             this.role = role;
         }
 
-        public String getIsexpert() {
-            return isexpert;
-        }
 
-        public void setIsexpert(String isexpert) {
-            this.isexpert = isexpert;
-        }
-
-
-
-        public String getRegisterTime() {
-            return registerTime;
-        }
-
-        public void setRegisterTime(String registerTime) {
-            this.registerTime = registerTime;
-        }
-
-
-        public String getHeadShot() {
-            return headShot;
-        }
-
-        public void setHeadShot(String headShot) {
-            this.headShot = headShot;
-        }
-
-        public String getNickname() {
-            return nickname;
+        public void setPhoto(String photo) {
+            this.photo = photo;
         }
 
         public void setNickname(String nickname) {
             this.nickname = nickname;
         }
 
+        public void setLevel(int level) {
+            this.level = level;
+        }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
+
+        public static long getSerialVersionUID() {
+            return serialVersionUID;
+        }
+
+
+        public String getAccount() {
+            return account;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public String getRole() {
+            return role;
+        }
+
+
+        public String getPhoto() {
+            return photo;
+        }
+
+        public String getNickname() {
+            return nickname;
+        }
+
         public int getLevel() {
             return level;
         }
 
-        public void setLevel(int level) {
-            this.level = level;
+        public String getPhone() {
+            return phone;
         }
 
         /**
@@ -299,9 +236,9 @@ public class ShiroRealm extends AuthorizingRealm {
                 return false;
             ShiroUser other = (ShiroUser) obj;
 
-            if (id == null || account == null) {
+            if (id == 0 || account == null) {
                 return false;
-            } else if (id.equals(other.id) && account.equals(other.account))
+            } else if (id == other.id && account.equals(other.account))
                 return true;
             return false;
         }

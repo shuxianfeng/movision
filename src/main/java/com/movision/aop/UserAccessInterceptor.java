@@ -62,14 +62,11 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
             if (session != null) {
                 member = (ShiroRealm.ShiroUser) session.getAttribute("member");
                 if (member != null) {
-                    // TODO: 2017/1/17
-//                    int workType = member.getWorkType();
-                    int workType = 100;
-                    String identify = member.getIdentify();
+                    String role = member.getRole();
                     switch (value) {
                         case "ADMIN":
                             log.debug("需要管理员权限操作");
-                            if (!identify.equals("2") && workType == 100) { //企业用户 && 管理员
+                            if (!role.equals("100")) { // 管理员
 
                                 return checkViplevel(annotation, member);
 
@@ -99,23 +96,25 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
     }
 
     /**
-     * 验证用户的VIP等级
-     *  30:个人黄金 60:个人铂金 130:企业黄金 160:企业铂金
+     * 验证用户的等级
+     *  用户等级：0 普通用户  1 青铜  2 白银 3 黄金 4 白金 5 钻石 6 金钻石 7皇冠 8金皇冠
      * @param annotation
      * @param member
      * @return
      */
     private boolean checkViplevel(UserAccess annotation, ShiroRealm.ShiroUser member) {
 
-        String viplevel = annotation.viplevel();
-        String[] viplevels = viplevel.split(",");
+        String level = annotation.level();
+        String[] viplevels = level.split(",");
         List<String> vipList = Arrays.asList(viplevels);
 
         if (vipList.isEmpty()) {   //无需vip权限
             return true;
+
         } else { //需要不同的vip权限
             int vipLevel = member.getLevel();
             if (!vipList.contains(String.valueOf(vipLevel))) {
+
                 log.error("用户无权限");
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "用户无权限");
             } else {

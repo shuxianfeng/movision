@@ -16,6 +16,6 @@ public @interface UserAccess {
     //ADMIN: 管理员       ALL:所有用户
     String value() default "ADMIN";
 
-    //30:个人黄金 60:个人铂金 130:企业黄金 160:企业铂金
-    String viplevel();// default "30,60,130,160";
+    //用户等级：0 普通用户  1 青铜  2 白银 3 黄金 4 白金 5 钻石 6 金钻石 7皇冠 8金皇冠
+    String level();
 }
