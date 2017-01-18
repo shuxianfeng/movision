@@ -1,41 +1,34 @@
 package com.movision.controller.app;
 
 import com.movision.common.Response;
-import com.movision.facade.index.FacadeIndex;
-import com.movision.mybatis.circle.entity.Circle;
-import com.movision.mybatis.homepageManage.entity.HomepageManage;
-import com.movision.mybatis.post.entity.PostVo;
+import com.movision.facade.index.FacadeDiscover;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
 
 /**
  * @Author shuxf
- * @Date 2017/1/17 15:25
+ * @Date 2017/1/18 17:47
  */
 @RestController
-@RequestMapping("/index/")
-public class AppIndex {
+@RequestMapping("/discover/")
+public class AppDiscover {
 
     @Autowired
-    private FacadeIndex facadeIndex;
+    private FacadeDiscover facadeDiscover;
 
-    @ApiOperation(value = "首页数据返回接口", notes = "用户返回首页整版数据", response = Response.class)
+    @ApiOperation(value = "发现页数据返回接口", notes = "用于返回发现页首页的全版数据", response = Response.class)
     @RequestMapping(value = "index", method = RequestMethod.POST)
     public Response queryIndexData(@ApiParam(value = "用户id") @RequestParam(required = false) String userid) {
         Response response = new Response();
 
-        Map<String, Object> map = facadeIndex.queryIndexData(userid);
+        Map<String, Object> map = facadeDiscover.queryDiscoverIndexData();
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
@@ -43,6 +36,4 @@ public class AppIndex {
         response.setData(map);
         return response;
     }
-
-
 }

@@ -37,7 +37,7 @@ public class PostVo {
 
     private String coverimg;
 
-    private String goodurl;
+    private String hotimgurl;
 
     private Date intime;
 
@@ -161,14 +161,6 @@ public class PostVo {
         this.coverimg = coverimg == null ? null : coverimg.trim();
     }
 
-    public String getGoodurl() {
-        return goodurl;
-    }
-
-    public void setGoodurl(String goodurl) {
-        this.goodurl = goodurl == null ? null : goodurl.trim();
-    }
-
     public Date getIntime() {
         return intime;
     }
@@ -215,5 +207,13 @@ public class PostVo {
 
     public void setCode(Integer code) {
         this.code = code;
+    }
+
+    public String getHotimgurl() {
+        return hotimgurl;
+    }
+
+    public void setHotimgurl(String hotimgurl) {
+        this.hotimgurl = hotimgurl;
     }
 }

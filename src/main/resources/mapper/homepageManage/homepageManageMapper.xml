@@ -24,21 +24,25 @@
     </select>
 
     <select id="queryMayLikeBanner" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
-    SELECT * FROM yw_homepage_manage WHERE topictype = '0'
-  </select>
+        SELECT * FROM yw_homepage_manage WHERE topictype = '0'
+    </select>
+
+    <select id="queryDiscoverBanner" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
+        SELECT * FROM yw_homepage_manage WHERE topictype = '1' ORDER BY orderid
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from yw_homepage_manage
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
+        delete from yw_homepage_manage
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
     <insert id="insert" parameterType="com.movision.mybatis.homepageManage.entity.HomepageManage">
-    insert into yw_homepage_manage (id, topictype, content,
+        insert into yw_homepage_manage (id, topictype, content,
         subcontent, url, transurl, orderid,
-      intime)
-    values (#{id,jdbcType=INTEGER}, #{topictype,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
-      #{subcontent,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{transurl,jdbcType=VARCHAR},
+        intime)
+        values (#{id,jdbcType=INTEGER}, #{topictype,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},
+        #{subcontent,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{transurl,jdbcType=VARCHAR},
         #{orderid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP})
-  </insert>
+    </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.homepageManage.entity.HomepageManage">
         insert into yw_homepage_manage
         <trim prefix="(" suffix=")" suffixOverrides=",">

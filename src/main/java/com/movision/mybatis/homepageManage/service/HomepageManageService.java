@@ -5,6 +5,8 @@ import com.movision.mybatis.homepageManage.mapper.HomepageManageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @Author shuxf
  * @Date 2017/1/18 14:32
@@ -16,5 +18,9 @@ public class HomepageManageService {
 
     public HomepageManage queryMayLikeBanner() {
         return homepageManageMapper.queryMayLikeBanner();
+    }
+
+    public List<HomepageManage> queryDiscoverBanner() {
+        return homepageManageMapper.queryDiscoverBanner();
     }
 }

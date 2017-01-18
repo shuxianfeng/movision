@@ -33,7 +33,7 @@ public class Post {
 
     private String coverimg;
 
-    private String goodurl;
+    private String hotimgurl;
 
     private Date intime;
 
@@ -153,14 +153,6 @@ public class Post {
         this.coverimg = coverimg == null ? null : coverimg.trim();
     }
 
-    public String getGoodurl() {
-        return goodurl;
-    }
-
-    public void setGoodurl(String goodurl) {
-        this.goodurl = goodurl == null ? null : goodurl.trim();
-    }
-
     public Date getIntime() {
         return intime;
     }
@@ -191,5 +183,13 @@ public class Post {
 
     public void setOrderid(Integer orderid) {
         this.orderid = orderid;
+    }
+
+    public String getHotimgurl() {
+        return hotimgurl;
+    }
+
+    public void setHotimgurl(String hotimgurl) {
+        this.hotimgurl = hotimgurl;
     }
 }

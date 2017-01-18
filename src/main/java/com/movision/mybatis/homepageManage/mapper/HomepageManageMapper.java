@@ -2,6 +2,8 @@ package com.movision.mybatis.homepageManage.mapper;
 
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
 
+import java.util.List;
+
 public interface HomepageManageMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -12,6 +14,8 @@ public interface HomepageManageMapper {
     HomepageManage selectByPrimaryKey(Integer id);
 
     HomepageManage queryMayLikeBanner();
+
+    List<HomepageManage> queryDiscoverBanner();
 
     int updateByPrimaryKeySelective(HomepageManage record);
 
