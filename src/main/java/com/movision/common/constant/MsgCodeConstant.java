@@ -112,10 +112,6 @@ public interface MsgCodeConstant {
 	 */
 	int validate_error = 10213;
 
-	/**
-	 * 筑慧币余额不足
-	 */
-	int ZHB_AUTOPAYFOR_FAILED = 10302;
 
 	/**
 	 * 充值失败
@@ -193,10 +189,6 @@ public interface MsgCodeConstant {
 	 */
 	int ZHB_PAYMENT_TRUE = 10070;
 
-	/**
-	 * 筑慧币支付失败稍后重试或联系客服
-	 */
-	int ZHB_PAYMENT_FAILURE = 10080;
 
 	/**
 	 * 简历增加屏蔽企业关键字超限
@@ -279,10 +271,10 @@ public interface MsgCodeConstant {
 	/**
 	 * 统一下单接口错误码
 	 */
-	public enum WXPAY_ERROR_CODE {
-		
-		NOAUTH(8002), 
-		NOTENOUGH(8003),
+    enum WXPAY_ERROR_CODE {
+
+        NOAUTH(8002),
+        NOTENOUGH(8003),
 		ORDERPAID(8004),
 		ORDERCLOSED(8005), 
 		SYSTEMERROR(8006), 
@@ -319,9 +311,9 @@ public interface MsgCodeConstant {
 	 * @time   2016年10月25日 下午4:47:29
 	 *
 	 */
-	public enum WXPAY_QUERY_ORDER_ERROR {
-		ORDERNOTEXIST(8018),
-		SYSTEMERROR(8019);
+    enum WXPAY_QUERY_ORDER_ERROR {
+        ORDERNOTEXIST(8018),
+        SYSTEMERROR(8019);
 		
 		public final int code;
 
@@ -385,15 +377,7 @@ public interface MsgCodeConstant {
 	 */
 	int TECH_COOP_IS_EMPTY= 3012;
 
-	/**
-	 * 删除技术资料失败
-	 */
-	int DELETE_TECH_DATA_FAIL = 3013;
 
-	/**
-	 * 不存在威客信息
-	 */
-	int NOT_EXIST_COOPERATION = 3014;
 
 
 
