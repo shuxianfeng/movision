@@ -24,8 +24,8 @@ import java.util.Map;
  * @Date 2017/1/17 15:25
  */
 @RestController
-@RequestMapping("/index/")
-public class AppIndex {
+@RequestMapping("/app/index/")
+public class AppIndexController {
 
     @Autowired
     private FacadeIndex facadeIndex;

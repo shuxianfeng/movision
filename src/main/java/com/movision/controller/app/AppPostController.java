@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date 2017/1/19 15:42
  */
 @RestController
-@RequestMapping("/post/")
-public class AppPost {
+@RequestMapping("/app/post/")
+public class AppPostController {
 
     @Autowired
     private FacadePost facadePost;

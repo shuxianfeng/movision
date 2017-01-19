@@ -15,8 +15,8 @@ import java.util.Map;
  * @Date 2017/1/18 17:47
  */
 @RestController
-@RequestMapping("/discover/")
-public class AppDiscover {
+@RequestMapping("/app/discover/")
+public class AppDiscoverController {
 
     @Autowired
     private FacadeDiscover facadeDiscover;
