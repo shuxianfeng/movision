@@ -13,7 +13,7 @@
     </resultMap>
     <sql id="Base_Column_List">
         id, topictype, content, subcontent, url, transurl, orderid, intime
-  </sql>
+    </sql>
 
     <!--基础查询语句-->
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
