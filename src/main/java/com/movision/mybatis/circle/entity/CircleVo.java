@@ -38,6 +38,8 @@ public class CircleVo {
 
     private Date createtime;
 
+    private Integer status;
+
     private Integer supportnum;
 
     private Integer isdiscover;
@@ -188,5 +190,13 @@ public class CircleVo {
 
     public void setHotPostList(List<Post> hotPostList) {
         this.hotPostList = hotPostList;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

@@ -31,6 +31,8 @@ public class Circle {
 
     private Date createtime;
 
+    private Integer status;
+
     private Integer supportnum;
 
     private Integer isdiscover;
@@ -171,5 +173,13 @@ public class Circle {
 
     public void setMaylikeimg(String maylikeimg) {
         this.maylikeimg = maylikeimg;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

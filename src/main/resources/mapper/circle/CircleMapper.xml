@@ -16,14 +16,15 @@
         <result column="isrecommend" property="isrecommend" jdbcType="INTEGER"/>
         <result column="maylikeimg" property="maylikeimg" jdbcType="TIMESTAMP"/>
         <result column="createtime" property="createtime" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="supportnum" property="supportnum" jdbcType="INTEGER"/>
         <result column="isdiscover" property="isdiscover" jdbcType="INTEGER"/>
         <result column="orderid" property="orderid" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, isofficial, scope, phone, photo, category, code, name, introduction, notice, 
-    permission, isrecommend, maylikeimg, createtime, supportnum, isdiscover, orderid
-  </sql>
+        id, isofficial, scope, phone, photo, category, code, name, introduction, notice,
+        permission, isrecommend, maylikeimg, createtime, status, supportnum, isdiscover, orderid
+    </sql>
 
     <!--基础查询语句-->
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -36,7 +37,7 @@
     <!--查询发现页中列出的圈子-->
     <select id="queryHotCircleList" resultType="com.movision.mybatis.circle.entity.CircleVo">
         SELECT t1.id,t1.photo,t1.category,t1.code,t1.name,t1.introduction,t1.isdiscover
-        FROM yw_circle t1 WHERE t1.isdiscover = '1'
+        FROM yw_circle t1 WHERE t1.isdiscover = '1' AND t1.status = '1'
         ORDER BY orderid
     </select>
 
@@ -49,13 +50,14 @@
       phone, photo, category, 
       code, name, introduction, 
       notice, permission, isrecommend, maylikeimg,
-      createtime, supportnum, isdiscover, 
+        createtime, status, supportnum, isdiscover,
       orderid)
     values (#{id,jdbcType=INTEGER}, #{isofficial,jdbcType=INTEGER}, #{scope,jdbcType=INTEGER}, 
       #{phone,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{category,jdbcType=INTEGER}, 
       #{code,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}, 
       #{notice,jdbcType=VARCHAR}, #{permission,jdbcType=INTEGER}, #{isrecommend,jdbcType=INTEGER}, #{maylikeimg,jdbcType=INTEGER},
-      #{createtime,jdbcType=TIMESTAMP}, #{supportnum,jdbcType=INTEGER}, #{isdiscover,jdbcType=INTEGER}, 
+        #{createtime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{supportnum,jdbcType=INTEGER},
+        #{isdiscover,jdbcType=INTEGER},
       #{orderid,jdbcType=INTEGER})
   </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.circle.entity.Circle">
@@ -102,6 +104,9 @@
             </if>
             <if test="createtime != null">
                 createtime,
+            </if>
+            <if test="status != null">
+                status,
             </if>
             <if test="supportnum != null">
                 supportnum,
@@ -156,6 +161,9 @@
             <if test="createtime != null">
                 #{createtime,jdbcType=TIMESTAMP},
             </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
             <if test="supportnum != null">
                 #{supportnum,jdbcType=INTEGER},
             </if>
@@ -209,6 +217,9 @@
             <if test="createtime != null">
                 createtime = #{createtime,jdbcType=TIMESTAMP},
             </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
             <if test="supportnum != null">
                 supportnum = #{supportnum,jdbcType=INTEGER},
             </if>
@@ -236,6 +247,7 @@
       isrecommend = #{isrecommend,jdbcType=INTEGER},
       maylikeimg = #{maylikeimg,jdbcType=INTEGER},
       createtime = #{createtime,jdbcType=TIMESTAMP},
+        status = #{status,jdbcType=INTEGER},
       supportnum = #{supportnum,jdbcType=INTEGER},
       isdiscover = #{isdiscover,jdbcType=INTEGER},
       orderid = #{orderid,jdbcType=INTEGER}
