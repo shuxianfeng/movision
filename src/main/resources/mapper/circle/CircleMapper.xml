@@ -24,12 +24,22 @@
     id, isofficial, scope, phone, photo, category, code, name, introduction, notice, 
     permission, isrecommend, maylikeimg, createtime, supportnum, isdiscover, orderid
   </sql>
+
+    <!--基础查询语句-->
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
         from yw_circle
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <!--查询发现页中列出的圈子-->
+    <select id="queryHotCircleList" resultType="com.movision.mybatis.circle.entity.CircleVo">
+        SELECT t1.id,t1.photo,t1.category,t1.code,t1.name,t1.introduction,t1.isdiscover
+        FROM yw_circle t1 WHERE t1.isdiscover = '1'
+        ORDER BY orderid
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_circle
     where id = #{id,jdbcType=INTEGER}

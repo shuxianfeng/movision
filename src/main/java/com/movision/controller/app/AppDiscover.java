@@ -25,7 +25,7 @@ public class AppDiscover {
 
     @ApiOperation(value = "发现页数据返回接口", notes = "用于返回发现页首页的全版数据", response = Response.class)
     @RequestMapping(value = "index", method = RequestMethod.POST)
-    public Response queryIndexData(@ApiParam(value = "用户id") @RequestParam(required = false) String userid) {
+    public Response queryIndexData() {
         Response response = new Response();
 
         Map<String, Object> map = facadeDiscover.queryDiscoverIndexData();

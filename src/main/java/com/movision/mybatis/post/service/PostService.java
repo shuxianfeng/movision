@@ -1,6 +1,7 @@
 package com.movision.mybatis.post.service;
 
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.mapper.PostMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,13 @@ public class PostService {
 
     public List<Circle> queryRecommendCircle() {
         return postMapper.queryRecommendCircle();
+    }
+
+    public List<Post> queryHotActiveList() {
+        return postMapper.queryHotActiveList();
+    }
+
+    public List<Post> queryCircleSubPost(int circleid) {
+        return postMapper.queryCircleSubPost(circleid);
     }
 }

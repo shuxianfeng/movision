@@ -81,6 +81,23 @@
         WHERE t1.isrecommend = '1'
     </select>
 
+    <!--查询yw_post表中所有热门活动列表-->
+    <select id="queryHotActiveList" resultType="com.movision.mybatis.post.entity.Post">
+        SELECT t1.id,t1.title,t1.subtitle,t1.postcontent,t1.isactive,t1.ishot,t1.hotimgurl,t1.intime
+        FROM yw_post t1 WHERE t1.isactive = '1' AND t1.ishot = '1' AND t1.isdel = '0'
+        ORDER BY intime DESC
+    </select>
+
+    <select id="queryCircleSubPost" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.Post">
+        SELECT t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.ishot,t1.coverimg,t1.isdel
+        FROM yw_post t1
+        WHERE t1.circleid = #{circleid,jdbcType=INTEGER}
+          AND t1.isdel = '0'
+          AND t1.ishot = '1'
+          AND t1.isactive = '0'
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_post

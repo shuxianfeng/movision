@@ -26,4 +26,8 @@ public interface PostMapper {
     List<Circle> queryMayLikeCircle(int userid);
 
     List<Circle> queryRecommendCircle();
+
+    List<Post> queryHotActiveList();
+
+    List<Post> queryCircleSubPost(int circleid);
 }
