@@ -98,6 +98,15 @@
           AND t1.isactive = '0'
     </select>
 
+    <!--查询帖子详情-->
+    <select id="queryPostDetail" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT t1.*,t2.category AS category,t2.code AS code
+        FROM yw_post t1,yw_circle t2
+        WHERE t1.id = #{postid,jdbcType=INTEGER}
+          AND t1.circleid = t2.id
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_post

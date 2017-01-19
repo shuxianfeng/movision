@@ -42,4 +42,8 @@ public class PostService {
     public List<Post> queryCircleSubPost(int circleid) {
         return postMapper.queryCircleSubPost(circleid);
     }
+
+    public PostVo queryPostDetail(int postid) {
+        return postMapper.queryPostDetail(postid);
+    }
 }

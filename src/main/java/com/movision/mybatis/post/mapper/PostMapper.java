@@ -30,4 +30,6 @@ public interface PostMapper {
     List<Post> queryHotActiveList();
 
     List<Post> queryCircleSubPost(int circleid);
+
+    PostVo queryPostDetail(int postid);
 }
