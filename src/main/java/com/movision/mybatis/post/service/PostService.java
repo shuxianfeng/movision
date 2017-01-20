@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author shuxf
@@ -45,5 +46,9 @@ public class PostService {
 
     public PostVo queryPostDetail(int postid) {
         return postMapper.queryPostDetail(postid);
+    }
+
+    public List<PostVo> queryPastPostList(Map<String, Object> parammap) {
+        return postMapper.queryPastPostList(parammap);
     }
 }

@@ -13,9 +13,9 @@ public interface HomepageManageMapper {
 
     HomepageManage selectByPrimaryKey(Integer id);
 
-    HomepageManage queryMayLikeBanner();
+    HomepageManage queryBanner(int type);
 
-    List<HomepageManage> queryDiscoverBanner();
+    List<HomepageManage> queryBannerList(int type);
 
     int updateByPrimaryKeySelective(HomepageManage record);
 

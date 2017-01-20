@@ -23,12 +23,12 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
-    <select id="queryMayLikeBanner" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
-        SELECT * FROM yw_homepage_manage WHERE topictype = '0'
+    <select id="queryBanner" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
+        SELECT * FROM yw_homepage_manage WHERE topictype = #{type,jdbcType=INTEGER}
     </select>
 
-    <select id="queryDiscoverBanner" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
-        SELECT * FROM yw_homepage_manage WHERE topictype = '1' ORDER BY orderid
+    <select id="queryBannerList" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
+        SELECT * FROM yw_homepage_manage WHERE topictype = #{type,jdbcType=INTEGER} ORDER BY orderid
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

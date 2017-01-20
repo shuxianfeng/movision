@@ -37,7 +37,7 @@ public class FacadeDiscover {
     public Map<String, Object> queryDiscoverIndexData() {
 
         HashMap<String, Object> map = new HashMap();
-        List<HomepageManage> homepageManageList = homepageManageService.queryDiscoverBanner();//查询发现页顶部banner轮播图
+        List<HomepageManage> homepageManageList = homepageManageService.queryBannerList(1);//查询发现页顶部banner轮播图 type=1
         List<CircleCategory> circleCategoryList = circleCategoryService.queryCircleCategoryList();//查询发现页次banner所有圈子类别轮播图
         List<Post> hotActiveList = postService.queryHotActiveList();//查询发现页热门活动列表
         List<CircleVo> hotCircleList = circleService.queryHotCircleList();//查询发现页被设置为发现页展示的圈子

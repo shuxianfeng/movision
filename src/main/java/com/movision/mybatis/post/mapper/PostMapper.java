@@ -5,6 +5,7 @@ import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PostMapper {
     int deleteByPrimaryKey(Integer id);
@@ -32,4 +33,6 @@ public interface PostMapper {
     List<Post> queryCircleSubPost(int circleid);
 
     PostVo queryPostDetail(int postid);
+
+    List<PostVo> queryPastPostList(Map<String, Object> parammap);
 }

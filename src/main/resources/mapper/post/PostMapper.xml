@@ -108,6 +108,18 @@
           AND t1.circleid = t2.id
     </select>
 
+    <!--查询往期3天的精选帖子列表-->
+    <select id="queryPastPostList" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT *,t2.category AS category,t2.code AS code
+        FROM yw_post t1,yw_circle t2
+        WHERE DATE(t1.intime) <![CDATA[ = ]]> DATE_ADD(#{date},INTERVAL-#{days} DAY)
+          AND t1.circleid = t2.id
+          AND t1.isdel = '0'
+          AND t1.isessence = '1'
+          AND t2.status = '1'
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_post

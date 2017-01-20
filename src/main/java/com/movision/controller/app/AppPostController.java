@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @Author shuxf
  * @Date 2017/1/19 15:42
@@ -33,6 +36,21 @@ public class AppPostController {
             response.setMessage("查询成功");
         }
         response.setData(post);
+        return response;
+    }
+
+    @ApiOperation(value = "查询往期3天的精选帖子列表", notes = "用于返回往期3天的精选帖子列表的接口", response = Response.class)
+    @RequestMapping(value = "pastPost", method = RequestMethod.POST)
+    public Response queryPastPostDetail(@ApiParam(value = "查询日期") @RequestParam(required = false) String date) {
+        Response response = new Response();
+
+
+        Map<String, Object> postmap = facadePost.queryPastPostDetail(date);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(postmap);
         return response;
     }
 }

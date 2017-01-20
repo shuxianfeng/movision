@@ -16,11 +16,11 @@ public class HomepageManageService {
     @Autowired
     private HomepageManageMapper homepageManageMapper;
 
-    public HomepageManage queryMayLikeBanner() {
-        return homepageManageMapper.queryMayLikeBanner();
+    public HomepageManage queryBanner(int type) {
+        return homepageManageMapper.queryBanner(type);
     }
 
-    public List<HomepageManage> queryDiscoverBanner() {
-        return homepageManageMapper.queryDiscoverBanner();
+    public List<HomepageManage> queryBannerList(int type) {
+        return homepageManageMapper.queryBannerList(type);
     }
 }
