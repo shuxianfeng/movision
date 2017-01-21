@@ -33,6 +33,8 @@ public interface PostMapper {
 
     List<Post> queryCircleSubPost(int circleid);
 
+    int queryPostNumByCircleid(int circleid);
+
     PostVo queryPostDetail(int postid);
 
     List<PostVo> queryPastPostList(Map<String, Object> parammap);

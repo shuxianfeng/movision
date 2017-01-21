@@ -48,6 +48,8 @@ public class CircleVo {
 
     private List<Post> hotPostList;
 
+    private Integer postnum;
+
     public Integer getId() {
         return id;
     }
@@ -198,5 +200,13 @@ public class CircleVo {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getPostnum() {
+        return postnum;
+    }
+
+    public void setPostnum(Integer postnum) {
+        this.postnum = postnum;
     }
 }

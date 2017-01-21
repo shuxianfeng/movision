@@ -48,6 +48,20 @@
         FROM yw_circle WHERE id = #{circleid,jdbcType=INTEGER}
     </select>
 
+    <!--按照分类id查询圈子列表-->
+    <select id="queryCircleByCategory" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.circle.entity.CircleVo">
+        SELECT id,name,photo FROM yw_circle
+        WHERE category = #{categoryid,jdbcType=INTEGER}
+          AND status = '1'
+    </select>
+
+    <!--查询所有待审核的圈子-->
+    <select id="queryAuditCircle" resultType="com.movision.mybatis.circle.entity.CircleVo">
+        SELECT id,name,photo,supportnum FROM yw_circle
+        WHERE status = '0'
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_circle
     where id = #{id,jdbcType=INTEGER}

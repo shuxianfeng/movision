@@ -131,6 +131,13 @@
           ORDER BY intime DESC
     </select>
 
+    <!--根据圈子id查询当前圈子里所更新的帖子总数-->
+    <select id="queryPostNumByCircleid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT count(1) FROM yw_post
+        WHERE circleid = #{circleid,jdbcType=INTEGER}
+          AND isdel = '0'
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_post

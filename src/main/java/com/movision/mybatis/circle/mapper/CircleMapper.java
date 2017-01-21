@@ -18,6 +18,10 @@ public interface CircleMapper {
 
     CircleVo queryCircleIndex1(int circleid);
 
+    List<CircleVo> queryCircleByCategory(int categoryid);
+
+    List<CircleVo> queryAuditCircle();
+
     int updateByPrimaryKeySelective(Circle record);
 
     int updateByPrimaryKey(Circle record);

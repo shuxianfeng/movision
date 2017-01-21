@@ -2,6 +2,8 @@ package com.movision.mybatis.homepageManage.service;
 
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.mapper.HomepageManageMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,14 +15,28 @@ import java.util.List;
  */
 @Service
 public class HomepageManageService {
+    private static Logger log = LoggerFactory.getLogger(HomepageManageService.class);
+
     @Autowired
     private HomepageManageMapper homepageManageMapper;
 
     public HomepageManage queryBanner(int type) {
-        return homepageManageMapper.queryBanner(type);
+        try {
+            log.info("根据类型查询banner图");
+            return homepageManageMapper.queryBanner(type);
+        } catch (Exception e) {
+            log.error("根据类型查询banner图失败");
+            throw e;
+        }
     }
 
     public List<HomepageManage> queryBannerList(int type) {
-        return homepageManageMapper.queryBannerList(type);
+        try {
+            log.info("根据类型查询banner图列表");
+            return homepageManageMapper.queryBannerList(type);
+        } catch (Exception e) {
+            log.error("根据类型查询banner图列表失败");
+            throw e;
+        }
     }
 }

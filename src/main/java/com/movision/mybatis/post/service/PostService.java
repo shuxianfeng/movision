@@ -1,6 +1,5 @@
 package com.movision.mybatis.post.service;
 
-import com.movision.mybatis.adminMenu.service.MenuService;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
@@ -20,7 +19,7 @@ import java.util.Map;
  */
 @Service
 public class PostService {
-    private static Logger log = LoggerFactory.getLogger(MenuService.class);
+    private static Logger log = LoggerFactory.getLogger(PostService.class);
 
     @Autowired
     private PostMapper postMapper;
@@ -47,6 +46,16 @@ public class PostService {
 
     public List<Post> queryCircleSubPost(int circleid) {
         return postMapper.queryCircleSubPost(circleid);
+    }
+
+    public int queryPostNumByCircleid(int circleid) {
+        try {
+            log.info("查询圈子中更新的帖子数");
+            return postMapper.queryPostNumByCircleid(circleid);
+        } catch (Exception e) {
+            log.error("查询圈子中更新的帖子数失败");
+            throw e;
+        }
     }
 
     public PostVo queryPostDetail(int postid) {

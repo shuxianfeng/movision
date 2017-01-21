@@ -4,6 +4,8 @@ import com.movision.common.Response;
 import com.movision.facade.index.FacadeCircle;
 import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.circle.entity.CircleVo;
+import com.movision.mybatis.circleCategory.entity.CircleCategory;
+import com.movision.mybatis.circleCategory.entity.CircleCategoryVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -56,6 +58,20 @@ public class AppCircleController {
             response.setMessage("查询成功");
         }
         response.setData(postlist);
+        return response;
+    }
+
+    @ApiOperation(value = "圈子分类", notes = "用户返回所有圈子（按类别分类）", response = Response.class)
+    @RequestMapping(value = "circlelist", method = RequestMethod.POST)
+    public Response queryCircleList() {
+        Response response = new Response();
+
+        List<CircleCategoryVo> circleCategoryList = facadeCircle.queryCircleCategoryList();
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(circleCategoryList);
         return response;
     }
 }

@@ -24,6 +24,11 @@
         SELECT * FROM yw_circle_category
     </select>
 
+    <!--查询所有圈子的分类-->
+    <select id="queryCircleByCategory" resultType="com.movision.mybatis.circleCategory.entity.CircleCategoryVo">
+        SELECT id,categoryname FROM yw_circle_category
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_circle_category
     where id = #{id,jdbcType=INTEGER}
