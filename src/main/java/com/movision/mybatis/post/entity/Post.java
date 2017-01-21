@@ -29,6 +29,8 @@ public class Post {
 
     private Integer isessence;
 
+    private Integer isessencepool;
+
     private Integer orderid;
 
     private String coverimg;
@@ -191,5 +193,13 @@ public class Post {
 
     public void setHotimgurl(String hotimgurl) {
         this.hotimgurl = hotimgurl;
+    }
+
+    public Integer getIsessencepool() {
+        return isessencepool;
+    }
+
+    public void setIsessencepool(Integer isessencepool) {
+        this.isessencepool = isessencepool;
     }
 }

@@ -41,6 +41,13 @@
         ORDER BY orderid
     </select>
 
+    <!--根据圈子id查询圈子详情-->
+    <select id="queryCircleIndex1" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.circle.entity.CircleVo">
+        SELECT id,isofficial,scope,phone,photo,category,code,name,introduction,notice,permission,createtime,status,supportnum
+        FROM yw_circle WHERE id = #{circleid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_circle
     where id = #{id,jdbcType=INTEGER}

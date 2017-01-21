@@ -3,6 +3,7 @@ package com.movision.mybatis.post.mapper;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 import java.util.Map;
@@ -35,4 +36,6 @@ public interface PostMapper {
     PostVo queryPostDetail(int postid);
 
     List<PostVo> queryPastPostList(Map<String, Object> parammap);
+
+    List<PostVo> queryPostList(RowBounds rowBounds, int circleid);
 }

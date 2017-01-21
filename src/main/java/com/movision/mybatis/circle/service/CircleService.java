@@ -21,4 +21,8 @@ public class CircleService {
         return circleMapper.queryHotCircleList();
     }
 
+    public CircleVo queryCircleIndex1(int circleid) {
+        return circleMapper.queryCircleIndex1(circleid);
+    }
+
 }

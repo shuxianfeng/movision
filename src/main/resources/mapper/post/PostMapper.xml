@@ -16,6 +16,7 @@
         <result column="ishot" jdbcType="INTEGER" property="ishot"/>
         <result column="orderid" jdbcType="INTEGER" property="orderid"/>
         <result column="isessence" jdbcType="INTEGER" property="isessence"/>
+        <result column="isessencepool" jdbcType="INTEGER" property="isessencepool"/>
         <result column="coverimg" jdbcType="VARCHAR" property="coverimg"/>
         <result column="hotimgurl" jdbcType="VARCHAR" property="hotimgurl"/>
         <result column="intime" jdbcType="TIMESTAMP" property="intime"/>
@@ -25,7 +26,7 @@
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
-        isactive, type, ishot, orderid, isessence, coverimg, hotimgurl, intime, totalpoint, isdel
+        isactive, type, ishot, orderid, isessence, isessencepool, coverimg, hotimgurl, intime, totalpoint, isdel
   </sql>
 
     <!--基础查询语句-->
@@ -39,7 +40,7 @@
     <!--查询首页今日精选的帖子数据-->
     <select id="queryTodayEssence" resultType="com.movision.mybatis.post.entity.PostVo">
         select * from (select
-        t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isdel,t2.category
+        t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isessencepool,t1.isdel,t2.category
         AS
         category,t2.code AS code
                         from yw_post t1
@@ -55,7 +56,7 @@
     <select id="queryDayAgoEssence" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
         select * from (select
-        t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isdel,t2.category
+        t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isessencepool,t1.isdel,t2.category
         AS
         category,t2.code AS code
                         from yw_post t1
@@ -120,6 +121,16 @@
           AND t2.status = '1'
     </select>
 
+    <select id="queryPostList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT *,t2.category AS category, t2.code AS code FROM yw_post t1
+        LEFT JOIN yw_circle t2 ON
+            t1.circleid = t2.id
+        WHERE circleid = #{circleid,jdbcType=INTEGER}
+          AND isdel = '0'
+          ORDER BY intime DESC
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_post
@@ -132,14 +143,15 @@
       subtitle, postcontent, zansum, 
       commentsum, forwardsum, collectsum, 
       isactive, type, ishot, orderid,
-        isessence, coverimg, hotimgurl,
+        isessence, isessencepool, coverimg, hotimgurl,
       intime, totalpoint, isdel
       )
     values (#{id,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
       #{subtitle,jdbcType=VARCHAR}, #{postcontent,jdbcType=VARCHAR}, #{zansum,jdbcType=INTEGER}, 
       #{commentsum,jdbcType=INTEGER}, #{forwardsum,jdbcType=INTEGER}, #{collectsum,jdbcType=INTEGER}, 
       #{isactive,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{ishot,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER},
-        #{isessence,jdbcType=INTEGER}, #{coverimg,jdbcType=VARCHAR}, #{hotimgurl,jdbcType=VARCHAR},
+        #{isessence,jdbcType=INTEGER}, #{isessencepool,jdbcType=INTEGER}, #{coverimg,jdbcType=VARCHAR},
+        #{hotimgurl,jdbcType=VARCHAR},
       #{intime,jdbcType=TIMESTAMP}, #{totalpoint,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER}
       )
   </insert>
@@ -189,6 +201,9 @@
             </if>
             <if test="isessence != null">
                 isessence,
+            </if>
+            <if test="isessencepool != null">
+                isessencepool,
             </if>
             <if test="coverimg != null">
                 coverimg,
@@ -248,6 +263,9 @@
             </if>
             <if test="isessence != null">
                 #{isessence,jdbcType=INTEGER},
+            </if>
+            <if test="isessencepool != null">
+                #{isessencepool,jdbcType=INTEGER},
             </if>
             <if test="coverimg != null">
                 #{coverimg,jdbcType=VARCHAR},
@@ -310,6 +328,9 @@
             <if test="isessence != null">
                 isessence = #{isessence,jdbcType=INTEGER},
             </if>
+            <if test="isessencepool != null">
+                isessencepool = #{isessencepool,jdbcType=INTEGER},
+            </if>
             <if test="coverimg != null">
                 coverimg = #{coverimg,jdbcType=VARCHAR},
             </if>
@@ -345,6 +366,7 @@
       ishot = #{ishot,jdbcType=INTEGER},
       orderid = #{orderid,jdbcType=INTEGER},
       isessence = #{isessence,jdbcType=INTEGER},
+        isessencepool = #{isessencepool,jdbcType=INTEGER},
       coverimg = #{coverimg,jdbcType=VARCHAR},
         hotimgurl = #{hotimgurl,jdbcType=VARCHAR},
       intime = #{intime,jdbcType=TIMESTAMP},

@@ -16,6 +16,8 @@ public interface CircleMapper {
 
     List<CircleVo> queryHotCircleList();
 
+    CircleVo queryCircleIndex1(int circleid);
+
     int updateByPrimaryKeySelective(Circle record);
 
     int updateByPrimaryKey(Circle record);

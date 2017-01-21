@@ -33,6 +33,8 @@ public class PostVo {
 
     private Integer isessence;
 
+    private Integer isessencepool;
+
     private Integer orderid;
 
     private String coverimg;
@@ -215,5 +217,13 @@ public class PostVo {
 
     public void setHotimgurl(String hotimgurl) {
         this.hotimgurl = hotimgurl;
+    }
+
+    public Integer getIsessencepool() {
+        return isessencepool;
+    }
+
+    public void setIsessencepool(Integer isessencepool) {
+        this.isessencepool = isessencepool;
     }
 }

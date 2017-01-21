@@ -1,9 +1,13 @@
 package com.movision.mybatis.post.service;
 
+import com.movision.mybatis.adminMenu.service.MenuService;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.mapper.PostMapper;
+import com.movision.utils.pagination.model.Paging;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +20,7 @@ import java.util.Map;
  */
 @Service
 public class PostService {
+    private static Logger log = LoggerFactory.getLogger(MenuService.class);
 
     @Autowired
     private PostMapper postMapper;
@@ -50,5 +55,15 @@ public class PostService {
 
     public List<PostVo> queryPastPostList(Map<String, Object> parammap) {
         return postMapper.queryPastPostList(parammap);
+    }
+
+    public List<PostVo> queryPostList(Paging<Post> pager, String circleid) {
+        try {
+            log.info("查询某个圈子发出的所有帖子列表");
+            return postMapper.queryPostList(pager.getRowBounds(), Integer.parseInt(circleid));
+        } catch (Exception e) {
+            log.error("查询帖子列表失败");
+            throw e;
+        }
     }
 }
