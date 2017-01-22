@@ -48,7 +48,9 @@ public class CircleVo {
 
     private List<Post> hotPostList;
 
-    private Integer postnum;
+    private Integer postnum;//该圈子总共更新的帖子总数
+
+    private Integer isfollow;//该圈子是否被关注 0 可关注  1 已关注
 
     public Integer getId() {
         return id;
@@ -208,5 +210,13 @@ public class CircleVo {
 
     public void setPostnum(Integer postnum) {
         this.postnum = postnum;
+    }
+
+    public Integer getIsfollow() {
+        return isfollow;
+    }
+
+    public void setIsfollow(Integer isfollow) {
+        this.isfollow = isfollow;
     }
 }
