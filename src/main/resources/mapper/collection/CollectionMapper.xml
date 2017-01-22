@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.collection.mapper.CollectionMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.collection.entity.Collection">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="postid" property="postid" jdbcType="INTEGER"/>
+        <result column="goodsid" property="goodsid" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, userid, postid, goodsid, type
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_collection
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_collection
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    <!--基础插入语句-->
+    <insert id="insert" parameterType="com.movision.mybatis.collection.entity.Collection">
+    insert into yw_collection (id, userid, postid, 
+      goodsid, type)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER}, 
+      #{goodsid,jdbcType=INTEGER}, #{type,jdbcType=INTEGER})
+  </insert>
+
+    <!--收藏帖子sql-->
+    <insert id="collectionPost" parameterType="com.movision.mybatis.collection.entity.Collection">
+    INSERT INTO yw_collection (userid, postid,
+      goodsid, type)
+    VALUES (#{userid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER},
+      #{goodsid,jdbcType=INTEGER}, #{type,jdbcType=INTEGER})
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.movision.mybatis.collection.entity.Collection">
+        insert into yw_collection
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="postid != null">
+                postid,
+            </if>
+            <if test="goodsid != null">
+                goodsid,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="postid != null">
+                #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.collection.entity.Collection">
+        update yw_collection
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="postid != null">
+                postid = #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsid != null">
+                goodsid = #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.collection.entity.Collection">
+    update yw_collection
+    set userid = #{userid,jdbcType=INTEGER},
+      postid = #{postid,jdbcType=INTEGER},
+      goodsid = #{goodsid,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
