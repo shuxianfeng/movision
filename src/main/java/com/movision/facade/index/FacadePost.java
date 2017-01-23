@@ -25,8 +25,13 @@ public class FacadePost {
     @Autowired
     private PostService postService;
 
-    public PostVo queryPostDetail(String postid) {
-        return postService.queryPostDetail(Integer.parseInt(postid));
+    public PostVo queryPostDetail(String postid, String type) {
+        PostVo vo = postService.queryPostDetail(Integer.parseInt(postid));
+        if (type.equals("1")) {
+            String url = postService.queryVideoUrl(Integer.parseInt(postid));
+            vo.setVideourl(url);
+        }
+        return vo;
     }
 
     public Map<String, Object> queryPastPostDetail(String date) {

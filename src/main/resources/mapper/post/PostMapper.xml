@@ -138,11 +138,16 @@
           AND isdel = '0'
     </select>
 
+    <!--根据圈子id查询该原生视频帖子的视频url-->
+    <select id="queryVideoUrl" parameterType="java.lang.Integer" resultType="String">
+        SELECT videourl FROM yw_video WHERE postid = #{postid,jdbcType=INTEGER}
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from yw_post
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
+        delete from yw_post
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
 
     <!--基础插入语句（无判断全量）-->
     <insert id="insert" parameterType="com.movision.mybatis.post.entity.Post">

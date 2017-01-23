@@ -68,6 +68,16 @@ public class PostService {
         }
     }
 
+    public String queryVideoUrl(int postid) {
+        try {
+            log.info("查询原生帖子详情");
+            return postMapper.queryVideoUrl(postid);
+        } catch (Exception e) {
+            log.error("查询原生帖子详情失败");
+            throw e;
+        }
+    }
+
     public List<PostVo> queryPastPostList(Map<String, Object> parammap) {
         return postMapper.queryPastPostList(parammap);
     }
