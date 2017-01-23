@@ -1,0 +1,46 @@
+package com.movision.mybatis.comment.service;
+
+import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.mybatis.comment.mapper.CommentMapper;
+import com.movision.utils.pagination.model.Paging;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * @Author zhurui
+ * @Date 2017/1/22 15:35
+ */
+@Service
+public class CommentService {
+
+    private static Logger log = LoggerFactory.getLogger(CommentService.class);
+
+    @Autowired
+    public CommentMapper commentMapper;
+
+    public List<CommentVo> queryCommentsByLsit(String postid, Paging<CommentVo> pager){
+
+        try {
+            log.info("查询某个帖子的评论列表");
+            return commentMapper.queryCommentsByLsit(Integer.parseInt(postid),pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询帖子评论列表失败");
+            throw e;
+        }
+    }
+
+    public CommentVo queryChildrenComment(int id){
+        try {
+            log.info("查询子评论");
+            return commentMapper.queryChildrenComment(id);
+        } catch (Exception e) {
+            log.error("查询子评论失败");
+            throw e;
+        }
+    }
+
+}
