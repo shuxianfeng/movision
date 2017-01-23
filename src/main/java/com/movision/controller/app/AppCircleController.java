@@ -33,10 +33,11 @@ public class AppCircleController {
 
     @ApiOperation(value = "圈子详情页1", notes = "用户返回圈子详情页上半版数据，圈子首页上半部分内容", response = Response.class)
     @RequestMapping(value = "index1", method = RequestMethod.POST)
-    public Response queryCircleIndex1(@ApiParam(value = "圈子id") @RequestParam String circleid) {
+    public Response queryCircleIndex1(@ApiParam(value = "圈子id") @RequestParam String circleid,
+                                      @ApiParam(value = "用户id（登录状态下不可为空）") @RequestParam(required = false) String userid) {
         Response response = new Response();
 
-        CircleVo circleVo = facadeCircle.queryCircleIndex1(Integer.parseInt(circleid));
+        CircleVo circleVo = facadeCircle.queryCircleIndex1(circleid, userid);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");

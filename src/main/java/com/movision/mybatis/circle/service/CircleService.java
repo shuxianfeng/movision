@@ -2,12 +2,14 @@ package com.movision.mybatis.circle.service;
 
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.mapper.CircleMapper;
+import com.movision.mybatis.followCircle.mapper.FollowCircleMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author shuxf
@@ -20,6 +22,9 @@ public class CircleService {
 
     @Autowired
     private CircleMapper circleMapper;
+
+    @Autowired
+    private FollowCircleMapper followCircleMapper;
 
     public List<CircleVo> queryHotCircleList() {
         try {
@@ -57,6 +62,16 @@ public class CircleService {
             return circleMapper.queryAuditCircle();
         } catch (Exception e) {
             log.error("查询待审核圈子列表失败");
+            throw e;
+        }
+    }
+
+    public int queryCountByFollow(Map<String, Object> parammap) {
+        try {
+            log.info("查询该用户对当前圈子关注的次数");
+            return followCircleMapper.queryCountByFollow(parammap);
+        } catch (Exception e) {
+            log.info("查询该用户对当前圈子关注的次数失败");
             throw e;
         }
     }

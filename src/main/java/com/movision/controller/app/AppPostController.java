@@ -29,7 +29,7 @@ public class AppPostController {
     public Response queryPostDetail(@ApiParam(value = "帖子id") @RequestParam String postid) {
         Response response = new Response();
 
-        PostVo post = facadePost.queryPostDetail(Integer.parseInt(postid));
+        PostVo post = facadePost.queryPostDetail(postid);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
