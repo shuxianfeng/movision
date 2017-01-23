@@ -4,12 +4,18 @@ import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.circleCategory.entity.CircleCategoryVo;
 import com.movision.mybatis.circleCategory.service.CircleCategoryService;
+import com.movision.mybatis.followCircle.service.FollowCircleService;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.service.PostService;
+import org.apache.commons.collections.iterators.ObjectArrayIterator;
+import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author shuxf
@@ -27,13 +33,30 @@ public class FacadeCircle {
     @Autowired
     private PostService postService;
 
-    public CircleVo queryCircleIndex1(int circleid) {
+    @Autowired
+    private FollowCircleService followCircleService;
 
-        CircleVo circleVo = circleService.queryCircleIndex1(circleid);//查询圈子详情基础数据
+    public CircleVo queryCircleIndex1(String circleid, String userid) {
 
-        List<Post> postList = postService.queryCircleSubPost(circleid);//查询这个圈子中被设为热帖的5个帖子
+        CircleVo circleVo = circleService.queryCircleIndex1(Integer.parseInt(circleid));//查询圈子详情基础数据
+
+        List<Post> postList = postService.queryCircleSubPost(Integer.parseInt(circleid));//查询这个圈子中被设为热帖的5个帖子
 
         circleVo.setHotPostList(postList);
+
+        if (StringUtils.isEmpty(userid)) {
+            circleVo.setIsfollow(0);
+        } else {
+            Map<String, Object> parammap = new HashMap<>();
+            parammap.put("circleid", Integer.parseInt(circleid));
+            parammap.put("userid", Integer.parseInt(userid));
+            int count = followCircleService.isFollow(parammap);
+            if (count == 0) {
+                circleVo.setIsfollow(0);//可关注
+            } else {
+                circleVo.setIsfollow(1);//已关注
+            }
+        }
 
         return circleVo;
 

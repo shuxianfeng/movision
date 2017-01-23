@@ -18,4 +18,5 @@ public interface FollowCircleMapper {
     int updateByPrimaryKey(FollowCircle record);
 
     int queryCountByFollow(Map<String, Object> parammap);
+
 }

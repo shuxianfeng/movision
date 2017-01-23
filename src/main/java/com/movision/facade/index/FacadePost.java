@@ -4,6 +4,7 @@ import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,8 @@ public class FacadePost {
     @Autowired
     private PostService postService;
 
-    public PostVo queryPostDetail(int postid) {
-        return postService.queryPostDetail(postid);
+    public PostVo queryPostDetail(String postid) {
+        return postService.queryPostDetail(Integer.parseInt(postid));
     }
 
     public Map<String, Object> queryPastPostDetail(String date) {
