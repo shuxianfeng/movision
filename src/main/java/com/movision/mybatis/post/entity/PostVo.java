@@ -51,6 +51,8 @@ public class PostVo {
 
     private Integer code;
 
+    private String videourl;//存放原生视频链接
+
     public Integer getId() {
         return id;
     }
@@ -225,5 +227,13 @@ public class PostVo {
 
     public void setIsessencepool(Integer isessencepool) {
         this.isessencepool = isessencepool;
+    }
+
+    public String getVideourl() {
+        return videourl;
+    }
+
+    public void setVideourl(String videourl) {
+        this.videourl = videourl;
     }
 }
