@@ -20,4 +20,6 @@ public interface MenuMapper {
     int updateByPrimaryKey(Menu record);
 
     List<Menu> selectMenuList(RowBounds rowBounds, Map<String, Object> map);
+
+    // TODO: 2017/1/22 删除菜单
 }

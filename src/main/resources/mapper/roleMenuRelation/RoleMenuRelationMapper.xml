@@ -1,71 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.movision.mybatis.adminUserRole.mapper.UserRoleMapper">
-    <resultMap id="BaseResultMap" type="com.movision.mybatis.adminUserRole.entity.UserRole">
+<mapper namespace="com.movision.mybatis.roleMenuRelation.mapper.RoleMenuRelationMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.roleMenuRelation.entity.RoleMenuRelation">
         <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="userid" property="userid" jdbcType="INTEGER"/>
         <result column="roleid" property="roleid" jdbcType="INTEGER"/>
+        <result column="menuid" property="menuid" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, userid, roleid
+        id, roleid, menuid
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from yw_admin_user_role
+        from yw_admin_role_menu
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from yw_admin_user_role
+        delete from yw_admin_role_menu
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.movision.mybatis.adminUserRole.entity.UserRole">
-        insert into yw_admin_user_role (id, userid, roleid
+    <insert id="insert" parameterType="com.movision.mybatis.roleMenuRelation.entity.RoleMenuRelation">
+        insert into yw_admin_role_menu (id, roleid, menuid
         )
-        values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{roleid,jdbcType=INTEGER}
+        values (#{id,jdbcType=INTEGER}, #{roleid,jdbcType=INTEGER}, #{menuid,jdbcType=INTEGER}
         )
     </insert>
-    <insert id="insertSelective" parameterType="com.movision.mybatis.adminUserRole.entity.UserRole">
-        insert into yw_admin_user_role
+    <insert id="insertSelective" parameterType="com.movision.mybatis.roleMenuRelation.entity.RoleMenuRelation">
+        insert into yw_admin_role_menu
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
             </if>
-            <if test="userid != null">
-                userid,
-            </if>
             <if test="roleid != null">
                 roleid,
+            </if>
+            <if test="menuid != null">
+                menuid,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 #{id,jdbcType=INTEGER},
             </if>
-            <if test="userid != null">
-                #{userid,jdbcType=INTEGER},
-            </if>
             <if test="roleid != null">
                 #{roleid,jdbcType=INTEGER},
             </if>
+            <if test="menuid != null">
+                #{menuid,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.adminUserRole.entity.UserRole">
-        update yw_admin_user_role
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.movision.mybatis.roleMenuRelation.entity.RoleMenuRelation">
+        update yw_admin_role_menu
         <set>
-            <if test="userid != null">
-                userid = #{userid,jdbcType=INTEGER},
-            </if>
             <if test="roleid != null">
                 roleid = #{roleid,jdbcType=INTEGER},
+            </if>
+            <if test="menuid != null">
+                menuid = #{menuid,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.adminUserRole.entity.UserRole">
-        update yw_admin_user_role
-        set userid = #{userid,jdbcType=INTEGER},
-        roleid = #{roleid,jdbcType=INTEGER}
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.roleMenuRelation.entity.RoleMenuRelation">
+        update yw_admin_role_menu
+        set roleid = #{roleid,jdbcType=INTEGER},
+        menuid = #{menuid,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

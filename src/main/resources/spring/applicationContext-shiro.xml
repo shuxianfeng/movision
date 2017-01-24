@@ -119,6 +119,8 @@
                 -->
 
                 /rest/** = anon
+                /app/** = anon
+                /boss/** = anon
 
                 /logout = logout
                 /swagger/** = anon
