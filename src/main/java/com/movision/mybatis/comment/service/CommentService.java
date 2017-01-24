@@ -43,4 +43,24 @@ public class CommentService {
         }
     }
 
+    public int updateCommentZanSum(int id) {
+        try {
+            log.info("更新评论点赞次数");
+            return commentMapper.updateCommentZanSum(id);
+        } catch (Exception e) {
+            log.error("评论点赞次数更新异常");
+            throw e;
+        }
+    }
+
+    public int queryCommentZanSum(int id) {
+        try {
+            log.info("查看评论次数");
+            return commentMapper.queryCommentZanSum(id);
+        } catch (Exception e) {
+            log.error("查询评论次数失败");
+            throw e;
+        }
+    }
+
 }

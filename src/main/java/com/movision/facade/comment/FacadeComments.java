@@ -20,6 +20,14 @@ public class FacadeComments {
     @Autowired
     public CommentService CommentService;
 
+    /**
+     * 帖子评论列表（二级）
+     *
+     * @param pageNo
+     * @param pageSize
+     * @param postid
+     * @return
+     */
     public List<CommentVo> queryCommentsByLsit(String pageNo, String pageSize, String postid){
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
@@ -43,5 +51,11 @@ public class FacadeComments {
             }
         }
         return vo;
+    }
+
+    public int updateCommentZanSum(String id) {
+        CommentService.updateCommentZanSum(Integer.parseInt(id));//更新评论点赞次数
+        int sum = CommentService.queryCommentZanSum(Integer.parseInt(id));//查询点赞次数
+        return sum;
     }
 }

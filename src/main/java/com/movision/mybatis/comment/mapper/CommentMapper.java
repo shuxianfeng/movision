@@ -22,4 +22,8 @@ public interface CommentMapper {
     List<CommentVo> queryCommentsByLsit(int postid,RowBounds rowBounds);
 
     CommentVo queryChildrenComment(int id);
+
+    int updateCommentZanSum(int id);
+
+    int queryCommentZanSum(int id);
 }

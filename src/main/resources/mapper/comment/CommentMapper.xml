@@ -123,4 +123,16 @@
     WHERE c.postid= #{postid,jdbcType=INTEGER}
     ORDER BY c.intime DESC
   </select>
+
+  <update id="updateCommentZanSum" parameterType="java.lang.Integer">
+    UPDATE yw_post_comment
+    SET zansum = zansum+1
+    WHERE id=#{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="queryCommentZanSum" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    SELECT c.zansum
+    FROM yw_post_comment c
+    WHERE c.id=#{id,jdbcType=INTEGER}
+  </select>
 </mapper>
