@@ -53,4 +53,22 @@ public class AppPostController {
         response.setData(postmap);
         return response;
     }
+
+    /**
+     * 帖子点赞接口
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "更新帖子点赞次数", notes = "用于帖子点赞接口", response = Response.class)
+    @RequestMapping(value = "updateZan", method = RequestMethod.POST)
+    public Response updatePostByZanSum(@ApiParam(value = "帖子id") @RequestParam String id) {
+        Response response = new Response();
+        int sum = facadePost.updatePostByZanSum(id);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(sum);
+        return response;
+    }
 }

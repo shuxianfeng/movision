@@ -70,4 +70,12 @@ public class FacadePost {
 
         return postService.queryPostList(pager, circleid);
     }
+
+    public int updatePostByZanSum(String id) {
+        int type = postService.updatePostByZanSum(Integer.parseInt(id));
+        if (type == 1) {
+            return postService.queryPostByZanSum(Integer.parseInt(id));
+        }
+        return -1;
+    }
 }

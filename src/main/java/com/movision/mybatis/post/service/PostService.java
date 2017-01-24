@@ -102,4 +102,25 @@ public class PostService {
             throw e;
         }
     }
+
+    //跟新帖子点赞次数
+    public int updatePostByZanSum(int id) {
+        try {
+            log.info("更新帖子点赞次数");
+            return postMapper.updatePostByZanSum(id);
+        } catch (Exception e) {
+            log.error("帖子点赞次数更新异常");
+            throw e;
+        }
+    }
+
+    public int queryPostByZanSum(int id) {
+        try {
+            log.info("查询帖子点赞次数");
+            return postMapper.queryPostByZanSum(id);
+        } catch (Exception e) {
+            log.info("查看帖子点赞次数异常");
+            throw e;
+        }
+    }
 }

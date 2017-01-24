@@ -44,4 +44,8 @@ public interface PostMapper {
     List<PostVo> queryPostList(RowBounds rowBounds, int circleid);
 
     int queryPostByCircleid(int id);
+
+    int updatePostByZanSum(int id);
+
+    int queryPostByZanSum(int id);
 }

@@ -393,5 +393,16 @@
       isdel = #{isdel,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <update id="updatePostByZanSum" parameterType="java.lang.Integer">
+        UPDATE yw_post
+        SET zansum = zansum+1
+        WHERE id=#{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="queryPostByZanSum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT p.zansum
+        FROM yw_post p
+        WHERE id=#{id,jdbcType=INTEGER}
+    </select>
 
 </mapper>
