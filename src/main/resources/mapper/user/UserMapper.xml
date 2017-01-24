@@ -306,4 +306,10 @@
         where id = #{userid,jdbcType=INTEGER}
     </update>
 
+    <select id="queryUserByPoints" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT u.points
+        FROM yw_user u
+        WHERE u.id=#{id,jdbcType=INTEGER}
+    </select>
+
 </mapper>

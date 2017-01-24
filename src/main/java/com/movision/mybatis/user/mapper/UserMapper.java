@@ -25,4 +25,6 @@ public interface UserMapper {
     int updateUserPointsAdd(Map mapadd);
 
     int updateUserPointsMinus(Map map);
+
+    int queryUserByPoints(int id);
 }

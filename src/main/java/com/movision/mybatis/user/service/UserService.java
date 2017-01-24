@@ -61,4 +61,14 @@ public class UserService {
         }
     }
 
+    public int queryUserByPoints(String userid) {
+        try {
+            log.info("查询用户积分是否充足");
+            return userMapper.queryUserByPoints(Integer.parseInt(userid));
+        } catch (Exception e) {
+            log.error("用户积分查询异常");
+            throw e;
+        }
+    }
+
 }
