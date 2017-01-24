@@ -45,6 +45,8 @@ public interface PostMapper {
 
     int queryPostByCircleid(int id);
 
+    int releasePost(Post post);
+
     int updatePostByZanSum(int id);
 
     int queryPostByZanSum(int id);

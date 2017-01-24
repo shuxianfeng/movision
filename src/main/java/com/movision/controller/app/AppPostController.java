@@ -54,6 +54,24 @@ public class AppPostController {
         return response;
     }
 
+
+    @ApiOperation(value = "APP端发布普通帖子", notes = "用于APP端发布普通帖子的接口", response = Response.class)
+    @RequestMapping(value = "releasePost", method = RequestMethod.POST)
+    public Response releasePost(@ApiParam(value = "所属圈子id") @RequestParam String circleid,
+                                @ApiParam(value = "帖子主标题") @RequestParam String title,
+                                @ApiParam(value = "帖子内容") @RequestParam String postcontent,
+                                @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive) {
+        Response response = new Response();
+
+        int count = facadePost.releasePost(circleid, title, postcontent, isactive);
+
+        if (response.getCode() == 200 && count == 1) {
+            response.setMessage("发布成功");
+        }
+        return response;
+    }
+
+
     /**
      * 帖子点赞接口
      *

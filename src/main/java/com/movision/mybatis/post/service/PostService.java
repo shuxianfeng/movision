@@ -103,6 +103,17 @@ public class PostService {
         }
     }
 
+    //APP端发布普通帖
+    public int releasePost(Post post) {
+        try {
+            log.info("APP端普通帖发布成功");
+            return postMapper.releasePost(post);
+        } catch (Exception e) {
+            log.error("APP端普通帖发布失败");
+            throw e;
+        }
+    }
+
     //跟新帖子点赞次数
     public int updatePostByZanSum(int id) {
         try {
