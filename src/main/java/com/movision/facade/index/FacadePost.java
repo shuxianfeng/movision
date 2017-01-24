@@ -70,4 +70,25 @@ public class FacadePost {
 
         return postService.queryPostList(pager, circleid);
     }
+
+    public int releasePost(String circleid, String title, String postcontent, String isactive) {
+        Post post = new Post();
+        post.setCircleid(Integer.parseInt(circleid));
+        post.setTitle(title);
+        post.setPostcontent(postcontent);
+        post.setZansum(0);//新发帖全部默认为0次
+        post.setCommentsum(0);//被评论次数
+        post.setForwardsum(0);//被转发次数
+        post.setCollectsum(0);//被收藏次数
+        post.setIsactive(Integer.parseInt(isactive));//是否为活动 0 帖子 1 活动
+        post.setType(0);//帖子类型 0 普通帖 1 原生优质帖
+        post.setIshot(0);//是否设为热门：默认0否
+        post.setIsessence(0);//是否设为精选：默认0否
+        post.setIsessencepool(0);//是否设为精选池中的帖子
+        post.setIntime(new Date());//帖子发布时间
+        post.setTotalpoint(0);//帖子综合评分
+        post.setIsdel(0);//上架
+
+        return postService.releasePost(post);
+    }
 }

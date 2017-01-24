@@ -175,6 +175,22 @@
       )
   </insert>
 
+    <!--APP端发布普通帖-->
+    <insert id="releasePost" parameterType="com.movision.mybatis.post.entity.Post">
+        INSERT INTO yw_post (circleid, title,
+          postcontent, zansum, commentsum, forwardsum,
+          collectsum, isactive, type, ishot,
+            isessence, isessencepool, intime, totalpoint, isdel
+        )
+        VALUES (
+          #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=VARCHAR},
+          #{zansum,jdbcType=INTEGER},#{commentsum,jdbcType=INTEGER},#{forwardsum,jdbcType=INTEGER},
+          #{collectsum,jdbcType=INTEGER},#{isactive,jdbcType=INTEGER},#{type,jdbcType=INTEGER},
+          #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
+          #{intime,jdbcType=TIMESTAMP},#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER}
+        )
+    </insert>
+
     <!--基础插入语句（选择性插入）-->
     <insert id="insertSelective" parameterType="com.movision.mybatis.post.entity.Post">
         insert into yw_post
