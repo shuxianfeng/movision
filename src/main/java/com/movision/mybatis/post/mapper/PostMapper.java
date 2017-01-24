@@ -42,4 +42,6 @@ public interface PostMapper {
     List<PostVo> queryPastPostList(Map<String, Object> parammap);
 
     List<PostVo> queryPostList(RowBounds rowBounds, int circleid);
+
+    int queryPostByCircleid(int id);
 }

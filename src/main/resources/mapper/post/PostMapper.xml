@@ -109,6 +109,13 @@
           AND t1.circleid = t2.id
     </select>
 
+    <!-- 查询指定帖子所属圈子的id -->
+    <select id="queryPostByCircleid" parameterType="java.lang.Integer" resultType="Integer">
+        SELECT p.circleid
+        FROM yw_post p
+        WHERE p.id=#{id,jdbcType=INTEGER}
+    </select>
+
     <!--查询往期3天的精选帖子列表-->
     <select id="queryPastPostList" parameterType="java.util.Map"
             resultType="com.movision.mybatis.post.entity.PostVo">

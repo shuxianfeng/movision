@@ -34,6 +34,13 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
+    <!-- 根据圈子id查询手机号 -->
+    <select id="queryCircleByPhone" parameterType="java.lang.Integer" resultType="String">
+        SELECT c.phone
+        FROM yw_circle c
+        WHERE c.id=#{id,jdbcType=INTEGER}
+    </select>
+
     <!--查询发现页中列出的圈子-->
     <select id="queryHotCircleList" resultType="com.movision.mybatis.circle.entity.CircleVo">
         SELECT t1.id,t1.photo,t1.category,t1.code,t1.name,t1.introduction,t1.isdiscover

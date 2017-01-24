@@ -76,4 +76,14 @@ public class CircleService {
         }
     }
 
+    public String queryCircleByPhone(int circleid) {
+        try {
+            log.info("查询贴主手机号");
+            return circleMapper.queryCircleByPhone(circleid);
+        } catch (Exception e) {
+            log.error("查询手机号失败");
+            throw e;
+        }
+    }
+
 }

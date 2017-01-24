@@ -292,4 +292,18 @@
 
     </select>
 
+    <update id="updateUserPointsAdd" parameterType="java.util.Map">
+        update yw_user
+        set
+        points =points+#{integral,jdbcType=INTEGER}
+        where phone = #{phone,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateUserPointsMinus" parameterType="java.util.Map">
+        update yw_user
+        set
+        points =points-#{integral,jdbcType=INTEGER}
+        where id = #{userid,jdbcType=INTEGER}
+    </update>
+
 </mapper>

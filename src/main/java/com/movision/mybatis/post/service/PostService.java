@@ -91,4 +91,15 @@ public class PostService {
             throw e;
         }
     }
+
+    //查询某个帖子所属圈子
+    public int queryPostByCircleid(String postid) {
+        try {
+            log.info("查询某个帖子所属圈子");
+            return postMapper.queryPostByCircleid(Integer.parseInt(postid));
+        } catch (Exception e) {
+            log.error("查询某个帖子所属圈子失败");
+            throw e;
+        }
+    }
 }
