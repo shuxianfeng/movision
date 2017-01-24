@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -59,6 +60,16 @@ public class CommentService {
             return commentMapper.queryCommentZanSum(id);
         } catch (Exception e) {
             log.error("查询评论次数失败");
+            throw e;
+        }
+    }
+
+    public int insertComment(CommentVo vo) {
+        try {
+            log.info("插入帖子评论");
+            return commentMapper.insertSelective(vo);
+        } catch (Exception e) {
+            log.error("帖子评论失败");
             throw e;
         }
     }

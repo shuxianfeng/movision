@@ -93,7 +93,6 @@ public class FacadePost {
         return postService.releasePost(post);
     }
 
-
     public int updatePostByZanSum(String id) {
         int type = postService.updatePostByZanSum(Integer.parseInt(id));
         if (type == 1) {
@@ -101,4 +100,5 @@ public class FacadePost {
         }
         return -1;
     }
+
 }

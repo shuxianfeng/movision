@@ -50,4 +50,6 @@ public interface PostMapper {
     int updatePostByZanSum(int id);
 
     int queryPostByZanSum(int id);
+
+    int updatePostBycommentsum(int postid);
 }

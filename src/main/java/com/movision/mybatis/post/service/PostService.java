@@ -134,4 +134,14 @@ public class PostService {
             throw e;
         }
     }
+
+    public int updatePostBycommentsum(int postid) {
+        try {
+            log.info("更新帖子的评论数量");
+            return postMapper.updatePostBycommentsum(postid);
+        } catch (Exception e) {
+            log.error("帖子更新评论数量异常");
+            throw e;
+        }
+    }
 }
