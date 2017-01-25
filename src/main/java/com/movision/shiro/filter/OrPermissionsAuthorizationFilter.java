@@ -15,6 +15,7 @@ public class OrPermissionsAuthorizationFilter extends AuthorizationFilter {
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws IOException  {
         Subject subject = getSubject(request, response);
+        // 获取所有权限
         String[] perms = (String[]) mappedValue;
 
         for (String perm : perms) {

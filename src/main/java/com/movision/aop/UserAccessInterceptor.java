@@ -3,7 +3,7 @@ package com.movision.aop;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.AuthException;
 import com.movision.exception.BusinessException;
-import com.movision.shiro.realm.BossRealm;
+import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.shiro.realm.ShiroRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -33,12 +33,12 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
 
         LoginAccess loginAnno;
 
-        BossLoginAccess omsLoginAnno;
+        BossLoginAccess bossLoginAccess;
 
         if (handler instanceof HandlerMethod) {
             annotation = ((HandlerMethod) handler).getMethodAnnotation(UserAccess.class);
             loginAnno = ((HandlerMethod) handler).getMethodAnnotation(LoginAccess.class);
-            omsLoginAnno = ((HandlerMethod) handler).getMethodAnnotation(BossLoginAccess.class);
+            bossLoginAccess = ((HandlerMethod) handler).getMethodAnnotation(BossLoginAccess.class);
 
         } else {
             return true;
@@ -46,7 +46,7 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
         //登录校验
         checkLogin(loginAnno);
         //运营系统登录校验
-        checkOmsLogin(omsLoginAnno);
+        checkBossLogin(bossLoginAccess);
         //管理员权限校验
         if (checkAdmin(annotation)) return true;
 
@@ -66,7 +66,7 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
                     switch (value) {
                         case "ADMIN":
                             log.debug("需要管理员权限操作");
-                            if (!role.equals("100")) { // 管理员
+                            if (!role.equals("1")) { // 管理员
 
                                 return checkViplevel(annotation, member);
 
@@ -127,16 +127,16 @@ public class UserAccessInterceptor extends HandlerInterceptorAdapter {
     /**
      * 运营系统用户登录验证
      *
-     * @param omsLoginAnno
+     * @param bossLoginAccess
      */
-    private void checkOmsLogin(BossLoginAccess omsLoginAnno) {
-        if (omsLoginAnno != null) {
-            boolean require = omsLoginAnno.required();
+    private void checkBossLogin(BossLoginAccess bossLoginAccess) {
+        if (bossLoginAccess != null) {
+            boolean require = bossLoginAccess.required();
             if (require) {
                 Subject subject = SecurityUtils.getSubject();
                 Session session = subject.getSession(false);
                 if (session != null) {
-                    BossRealm.ShiroOmsUser member = (BossRealm.ShiroOmsUser) session.getAttribute("oms");
+                    BossUser member = (BossUser) session.getAttribute("bossuser");
                     if (member == null) {
                         throw new AuthException(MsgCodeConstant.un_login, "请先登录");
                     }

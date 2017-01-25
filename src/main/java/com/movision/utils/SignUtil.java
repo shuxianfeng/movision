@@ -59,8 +59,11 @@ public class SignUtil {
     
     
     public static void main(String[] args) {
-    	System.out.println(generateString(32));
-	}
+//    	System.out.println(generateString(32));
+        String password = MD5Util.MD5Encode("123", "UTF-8");
+        System.out.println(password);
+    }
+
     
     
 }

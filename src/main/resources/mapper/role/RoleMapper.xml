@@ -39,9 +39,7 @@
             <if test="remark != null">
                 remark,
             </if>
-            <if test="intime != null">
                 intime,
-            </if>
             <if test="isdel != null">
                 isdel,
             </if>
@@ -56,9 +54,7 @@
             <if test="remark != null">
                 #{remark,jdbcType=VARCHAR},
             </if>
-            <if test="intime != null">
                 now(),
-            </if>
             <if test="isdel != null">
                 #{isdel,jdbcType=INTEGER},
             </if>

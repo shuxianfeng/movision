@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.movision.mybatis.adminMenu.mapper.MenuMapper">
-    <resultMap id="BaseResultMap" type="com.movision.mybatis.adminMenu.entity.Menu">
+<mapper namespace="com.movision.mybatis.bossMenu.mapper.MenuMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.bossMenu.entity.Menu">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="menuname" property="menuname" jdbcType="VARCHAR"/>
         <result column="pid" property="pid" jdbcType="INTEGER"/>
@@ -22,7 +22,7 @@
         delete from yw_admin_menu
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.movision.mybatis.adminMenu.entity.Menu">
+    <insert id="insert" parameterType="com.movision.mybatis.bossMenu.entity.Menu">
         insert into yw_admin_menu (id, menuname, pid,
         orderid, isdel, remark
         )
@@ -30,7 +30,7 @@
         #{orderid,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}
         )
     </insert>
-    <insert id="insertSelective" parameterType="com.movision.mybatis.adminMenu.entity.Menu">
+    <insert id="insertSelective" parameterType="com.movision.mybatis.bossMenu.entity.Menu">
         insert into yw_admin_menu
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -73,7 +73,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.adminMenu.entity.Menu">
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.bossMenu.entity.Menu">
         update yw_admin_menu
         <set>
             <if test="menuname != null">
@@ -94,7 +94,7 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.adminMenu.entity.Menu">
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.bossMenu.entity.Menu">
         update yw_admin_menu
         set menuname = #{menuname,jdbcType=VARCHAR},
         pid = #{pid,jdbcType=INTEGER},

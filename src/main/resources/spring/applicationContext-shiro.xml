@@ -7,7 +7,8 @@
        default-lazy-init="true">
     <description>安全配置</description>
 
-    <!-- 凭证匹配器 -->
+    <!-- 凭证匹配器
+        实现密码验证服务    -->
     <bean id="credentialsMatcher"
           class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
         <property name="hashAlgorithmName" value="${password.algorithmName}"/>
@@ -63,14 +64,30 @@
     <!-- 安全管理器 配置权限管理器 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <!--<property name="realm" ref="userRealm"/>-->
+        <property name="authenticator" ref="authenticator"/>
         <property name="realms">
             <list>
-                <ref bean="userRealm"/>
+                <!--<ref bean="userRealm"/>-->
                 <ref bean="omsRealm"/>
             </list>
         </property>
         <property name="sessionManager" ref="sessionManager"/>
         <property name="cacheManager" ref="cacheManager"/>
+    </bean>
+
+    <!--所有的realm依然都会被调用。
+    只不过是第一个认证成功的AuthenticationInfo作为最后的结果返回-->
+    <bean id="authenticator"
+          class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
+        <!--<property name="definedRealms">
+            <map>
+                <entry key="userRealm" value-ref="userRealm" />
+                <entry key="omsRealm" value-ref="omsRealm" />
+            </map>
+        </property>-->
+        <property name="authenticationStrategy">
+            <bean class="org.apache.shiro.authc.pam.FirstSuccessfulStrategy"/>
+        </property>
     </bean>
 
     <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
@@ -110,8 +127,8 @@
         </property>
         <property name="filterChainDefinitions">
             <value>
-                <!--url = orroles[status]
-                status:会员状态 0：正常 1：异常封号-->
+                <!--url = orroles[role]
+                role:角色 1：管理员 2：普通用户-->
 
                 <!--url = orperms[role:status]
                 role:100 管理员(yw_user表和yw_admin_user表中共同的用户) 200 普通用户（yw_user表中的用户）
@@ -120,6 +137,8 @@
 
                 /rest/** = anon
                 /app/** = anon
+                /boss/menu/** = orroles["1"]
+                /boss/role/** = orroles["2"]
                 /boss/** = anon
 
                 /logout = logout

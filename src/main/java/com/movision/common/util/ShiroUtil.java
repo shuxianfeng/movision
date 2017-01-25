@@ -2,6 +2,7 @@ package com.movision.common.util;
 
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.AuthException;
+import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.utils.MsgPropertiesUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -64,7 +65,7 @@ public class ShiroUtil {
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             if (session != null) {
-                BossRealm.ShiroOmsUser principal = (BossRealm.ShiroOmsUser) session.getAttribute("oms");
+                BossUser principal = (BossUser) session.getAttribute("oms");
                 if (principal != null) {
                     createID = Long.valueOf(principal.getId() + "");
                 }

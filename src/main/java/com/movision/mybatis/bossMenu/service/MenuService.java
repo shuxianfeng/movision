@@ -1,7 +1,7 @@
-package com.movision.mybatis.adminMenu.service;
+package com.movision.mybatis.bossMenu.service;
 
-import com.movision.mybatis.adminMenu.entity.Menu;
-import com.movision.mybatis.adminMenu.mapper.MenuMapper;
+import com.movision.mybatis.bossMenu.entity.Menu;
+import com.movision.mybatis.bossMenu.mapper.MenuMapper;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

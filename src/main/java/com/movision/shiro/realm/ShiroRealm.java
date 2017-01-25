@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.movision.common.constant.UserConstants;
-import com.movision.facade.user.UserFacade;
+import com.movision.facade.user.BossUserFacade;
 import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -22,18 +22,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
- *
+ * App用户安全数据源
  * @author zhuangyuhao
  */
 public class ShiroRealm extends AuthorizingRealm {
     private static final Logger log = LoggerFactory.getLogger(ShiroRealm.class);
 
     @Autowired
-    private UserFacade userFacade;
+    private BossUserFacade bossUserFacade;
 
     /**
-     * 权限认证
-     * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
+     * 表示根据用户身份获取授权信息
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
@@ -50,7 +49,7 @@ public class ShiroRealm extends AuthorizingRealm {
                 return null;
             }
             //用户的角色集合
-            String role = "100";    //管理员
+            String role = "1";    //管理员
             info.addRole(role);
 
             return info;
@@ -59,15 +58,14 @@ public class ShiroRealm extends AuthorizingRealm {
     }
 
     /**
-     * 登录认证
-     * 认证回调函数,登录时调用.
+     * 表示获取身份验证信息
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         log.info("登录认证");
         String loginPhone = (String) token.getPrincipal();
         // 1 获取当前登录的用户
-        LoginUser loginUser = userFacade.getLoginUserByPhone(loginPhone);
+        LoginUser loginUser = bossUserFacade.getLoginUserByPhone(loginPhone);
 
         if (loginUser != null) {
             if (1 == loginUser.getStatus()) {

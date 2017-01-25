@@ -1,28 +1,33 @@
-package com.movision.mybatis.adminUser.entity;
+package com.movision.mybatis.bossUser.entity;
+
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
-public class AdminUser {
+@ApiModel(value = "boss用户", description = "boss用户")
+public class BossUser {
     private Integer id;
 
+    @ApiModelProperty(value = "真实姓名")
     private String name;
 
     private String phone;
-
+    @ApiModelProperty(value = "用户名")
     private String username;
-
+    @ApiModelProperty(value = "密码")
     private String password;
-
+    @ApiModelProperty(value = "是否是超级管理员：0 否 1 是")
     private Integer issuper;
-
+    @ApiModelProperty(value = "账号状态: 0 正常 1 冻结")
     private Integer status;
-
+    @ApiModelProperty(value = "是否被删除：0 未删除 1 已删除")
     private Integer isdel;
-
+    @ApiModelProperty(value = "账号创建时间")
     private Date createtime;
-
+    @ApiModelProperty(value = "上次登录时间")
     private Date afterlogintime;
-
+    @ApiModelProperty(value = "本次登录时间")
     private Date beforelogintime;
 
     public Integer getId() {

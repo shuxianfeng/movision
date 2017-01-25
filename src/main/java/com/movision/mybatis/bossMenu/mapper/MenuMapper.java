@@ -1,6 +1,6 @@
-package com.movision.mybatis.adminMenu.mapper;
+package com.movision.mybatis.bossMenu.mapper;
 
-import com.movision.mybatis.adminMenu.entity.Menu;
+import com.movision.mybatis.bossMenu.entity.Menu;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;

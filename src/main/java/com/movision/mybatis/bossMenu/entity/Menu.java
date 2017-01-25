@@ -1,4 +1,4 @@
-package com.movision.mybatis.adminMenu.entity;
+package com.movision.mybatis.bossMenu.entity;
 
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;

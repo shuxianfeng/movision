@@ -1,7 +1,7 @@
 package com.movision.facade.user;
 
-import com.movision.mybatis.adminMenu.entity.Menu;
-import com.movision.mybatis.adminMenu.service.MenuService;
+import com.movision.mybatis.bossMenu.entity.Menu;
+import com.movision.mybatis.bossMenu.service.MenuService;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
 import org.apache.commons.collections.map.HashedMap;

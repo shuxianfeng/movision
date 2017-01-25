@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.movision.mybatis.adminUser.mapper.AdminUserMapper">
-    <resultMap id="BaseResultMap" type="com.movision.mybatis.adminUser.entity.AdminUser">
+<mapper namespace="com.movision.mybatis.bossUser.mapper.BossUserMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.bossUser.entity.BossUser">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
@@ -28,7 +28,7 @@
         delete from yw_admin_user
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.movision.mybatis.adminUser.entity.AdminUser">
+    <insert id="insert" parameterType="com.movision.mybatis.bossUser.entity.BossUser">
         insert into yw_admin_user (id, name, phone,
         username, password, issuper,
         status, isdel, createtime,
@@ -38,7 +38,7 @@
         #{status,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP},
         #{afterlogintime,jdbcType=TIMESTAMP}, #{beforelogintime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.movision.mybatis.adminUser.entity.AdminUser">
+    <insert id="insertSelective" parameterType="com.movision.mybatis.bossUser.entity.BossUser">
         insert into yw_admin_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -65,9 +65,7 @@
             <if test="isdel != null">
                 isdel,
             </if>
-            <if test="createtime != null">
-                createtime,
-            </if>
+            createtime,
             <if test="afterlogintime != null">
                 afterlogintime,
             </if>
@@ -100,9 +98,7 @@
             <if test="isdel != null">
                 #{isdel,jdbcType=INTEGER},
             </if>
-            <if test="createtime != null">
-                #{createtime,jdbcType=TIMESTAMP},
-            </if>
+            now(),
             <if test="afterlogintime != null">
                 #{afterlogintime,jdbcType=TIMESTAMP},
             </if>
@@ -111,7 +107,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.adminUser.entity.AdminUser">
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.bossUser.entity.BossUser">
         update yw_admin_user
         <set>
             <if test="name != null">
@@ -147,7 +143,7 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.adminUser.entity.AdminUser">
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.bossUser.entity.BossUser">
         update yw_admin_user
         set name = #{name,jdbcType=VARCHAR},
         phone = #{phone,jdbcType=VARCHAR},
@@ -162,9 +158,10 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="selectByPhone" parameterType="com.movision.mybatis.adminUser.entity.AdminUser"
-            resultType="com.movision.mybatis.adminUser.entity.AdminUser">
-        select *
+    <select id="selectByPhone" parameterType="com.movision.mybatis.bossUser.entity.BossUser"
+            resultType="com.movision.mybatis.bossUser.entity.BossUser">
+        select
+        <include refid="Base_Column_List"/>
         from yw_admin_user
         <where>
             <if test="phone != null || phone != ''">
@@ -172,4 +169,19 @@
             </if>
         </where>
     </select>
+
+    <select id="selectByUsername" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.bossUser.entity.BossUser">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_admin_user
+        where username = #{username}
+    </select>
+
+    <update id="updateBossUserLoginInfo" parameterType="com.movision.mybatis.bossUser.entity.BossUser">
+        update yw_admin_user
+        SET afterlogintime = beforelogintime,
+        beforelogintime = now(),
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

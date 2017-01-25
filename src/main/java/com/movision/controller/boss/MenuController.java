@@ -2,11 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.user.MenuFacade;
-import com.movision.facade.user.RoleFacade;
-import com.movision.facade.user.RoleMenuRelationFacade;
-import com.movision.mybatis.adminMenu.entity.Menu;
-import com.movision.mybatis.role.entity.Role;
-import com.movision.mybatis.roleMenuRelation.entity.RoleMenuRelation;
+import com.movision.mybatis.bossMenu.entity.Menu;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
