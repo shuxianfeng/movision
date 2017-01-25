@@ -33,6 +33,8 @@ public class FacadePost {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private AccusationService accusationService;
 
     @Autowired
     private CircleService circleService;
@@ -171,6 +173,35 @@ public class FacadePost {
             return postService.queryPostByZanSum(Integer.parseInt(id));
         }
         return -1;
+    }
+
+    /**
+     * 帖子举报
+     *
+     * @param userid
+     * @param postid
+     * @return
+     */
+    public int insertPostByAccusation(String userid, String postid) {
+        Accusation acc = new Accusation();
+        Map<String, Integer> map = new HashedMap();
+        map.put("userid", Integer.parseInt(userid));
+        map.put("postid", Integer.parseInt(postid));
+        //先去举报表中查询用户是否已经被举报过改帖子
+        List<Accusation> sum = accusationService.queryAccusationByUserSum(map);
+       /* System.out.print(sum);*/
+        if (sum.size() == 0) {//用户没有被举报过该帖子,在表中插入数据
+            int circleid = postService.queryPostByCircleid(postid);//查询该帖子所属圈子
+            acc.setPostid(Integer.parseInt(postid));
+            acc.setUserid(Integer.parseInt(userid));
+            acc.setCircleid(circleid);
+            acc.setNum(1);
+            acc.setIntime(new Date());
+            acc.setType(1);
+            return accusationService.insertPostByAccusation(acc);//插入数据
+        } else {//用户已经被举报过该帖子，举报成功返回状态200
+            return 200;
+        }
     }
 
 }
