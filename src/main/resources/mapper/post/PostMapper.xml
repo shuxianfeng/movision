@@ -421,4 +421,9 @@
         WHERE id=#{id,jdbcType=INTEGER}
     </select>
 
+    <update id="updatePostBycommentsum" parameterType="java.lang.Integer">
+        UPDATE yw_post
+        SET commentsum=commentsum+1
+        WHERE id=#{postid,jdbcType=INTEGER}
+    </update>
 </mapper>
