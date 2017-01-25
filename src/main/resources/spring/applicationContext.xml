@@ -146,4 +146,13 @@
         <property name="maxUploadSize" value="1054000"/>
     </bean>
 
+    <!--配置配置文件信息（包括图片上传的服务器地址等信息）-->
+    <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath:web/config.properties</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>

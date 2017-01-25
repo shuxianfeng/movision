@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +27,9 @@ import java.util.*;
 public class FacadePost {
 
     private static Logger log = LoggerFactory.getLogger(FacadePost.class);
+
+    @Value("#{configProperties['img.domain']}")
+    private String imgdomain;
 
     @Autowired
     private PostService postService;
@@ -123,7 +127,7 @@ public class FacadePost {
 //                    String savedDir = request.getSession().getServletContext().getRealPath("/images/post/coverimg");
                     String savedDir = request.getSession().getServletContext().getRealPath("");
 
-                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision-0.1.0后缀movision-0.1.0去除
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision-1.0.0后缀movision-1.0.0去除
                     //不保存到项目中,防止部包把图片覆盖掉了
                     String path = savedDir.substring(0, savedDir.length() - 15);
 
@@ -138,8 +142,8 @@ public class FacadePost {
                     }
                 }
 
-                //暂定为tomcat本地tomcat服务器上的路径
-                String imgurl = "http://120.77.214.187:8100/images/post/coverimg/" + savedFileName;
+                //暂定为tomcat本地tomcat服务器上的路径 imgdomain==>"http://120.77.214.187:8100/images/post/coverimg/"
+                String imgurl = imgdomain + savedFileName;
 
                 post.setCoverimg(imgurl);
 
