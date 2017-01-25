@@ -86,4 +86,24 @@ public class CircleService {
         }
     }
 
+    public int queryCircleScope(int circleid) {
+        try {
+            log.info("查询圈子的开放范围scope");
+            return circleMapper.queryCircleScope(circleid);
+        } catch (Exception e) {
+            log.error("查询圈子的开放范围scope失败");
+            throw e;
+        }
+    }
+
+    public int queryCircleOwner(int circleid) {
+        try {
+            log.info("查询圈子的所有者userid");
+            return circleMapper.queryCircleOwner(circleid);
+        } catch (Exception e) {
+            log.error("查询圈子的所有者userid失败");
+            throw e;
+        }
+    }
+
 }

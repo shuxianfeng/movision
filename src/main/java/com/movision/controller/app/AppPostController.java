@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -57,16 +59,26 @@ public class AppPostController {
 
     @ApiOperation(value = "APP端发布普通帖子", notes = "用于APP端发布普通帖子的接口", response = Response.class)
     @RequestMapping(value = "releasePost", method = RequestMethod.POST)
-    public Response releasePost(@ApiParam(value = "所属圈子id") @RequestParam String circleid,
-                                @ApiParam(value = "帖子主标题") @RequestParam String title,
+    public Response releasePost(HttpServletRequest request, @ApiParam(value = "用户id") @RequestParam String userid,
+                                @ApiParam(value = "用户等级(根据该字段判断是否为大V)") @RequestParam String level,
+                                @ApiParam(value = "所属圈子id") @RequestParam String circleid,
+                                @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
                                 @ApiParam(value = "帖子内容") @RequestParam String postcontent,
-                                @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive) {
+                                @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
+                                @ApiParam(value = "上传的帖子封面图片截图") @RequestParam("file") MultipartFile file) {
         Response response = new Response();
 
-        int count = facadePost.releasePost(circleid, title, postcontent, isactive);
+        int count = facadePost.releasePost(request, userid, level, circleid, title, postcontent, isactive, file);
 
-        if (response.getCode() == 200 && count == 1) {
+        if (count == 1) {
+            response.setCode(200);
             response.setMessage("发布成功");
+        } else if (count == 0) {
+            response.setCode(300);
+            response.setMessage("系统异常，APP普通帖发布失败");
+        } else if (count == -1) {
+            response.setCode(201);
+            response.setMessage("用户不具备发帖权限");
         }
         return response;
     }

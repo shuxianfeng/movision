@@ -140,4 +140,10 @@
         <constructor-arg ref="redisTemplate"/>
     </bean>
 
+    <!-- 文件上传表单的视图解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 这里的value要配置的比上传文件的大小要大一些(封面图片暂定为1M) -->
+        <property name="maxUploadSize" value="1054000"/>
+    </bean>
+
 </beans>

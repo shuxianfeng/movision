@@ -27,4 +27,8 @@ public interface CircleMapper {
     int updateByPrimaryKey(Circle record);
 
     String queryCircleByPhone(int circleid);
+
+    int queryCircleScope(int circleid);
+
+    int queryCircleOwner(int circleid);
 }

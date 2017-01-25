@@ -69,6 +69,18 @@
         WHERE status = '0'
     </select>
 
+    <!--查询当前圈子的开放范围scope-->
+    <select id="queryCircleScope" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT scope FROM yw_circle WHERE id = #{circleid,jdbcType=INTEGER}
+    </select>
+
+    <!--查询当前圈子所有者userid-->
+    <select id="queryCircleOwner" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT id FROM yw_user WHERE phone = (
+        SELECT phone FROM yw_circle WHERE id = #{circleid,jdbcType=INTEGER}
+        )
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_circle
     where id = #{id,jdbcType=INTEGER}
