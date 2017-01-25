@@ -1,10 +1,13 @@
 package com.movision.facade.index;
 
+import com.movision.mybatis.accusation.entity.Accusation;
+import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -33,6 +35,8 @@ public class FacadePost {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private AccusationService accusationService;
 
     @Autowired
     private CircleService circleService;
@@ -171,6 +175,35 @@ public class FacadePost {
             return postService.queryPostByZanSum(Integer.parseInt(id));
         }
         return -1;
+    }
+
+    /**
+     * 帖子举报
+     *
+     * @param userid
+     * @param postid
+     * @return
+     */
+    public int insertPostByAccusation(String userid, String postid) {
+        Accusation acc = new Accusation();
+        Map<String, Integer> map = new HashedMap();
+        map.put("userid", Integer.parseInt(userid));
+        map.put("postid", Integer.parseInt(postid));
+        //先去举报表中查询用户是否已经被举报过改帖子
+        List<Accusation> sum = accusationService.queryAccusationByUserSum(map);
+       /* System.out.print(sum);*/
+        if (sum.size() == 0) {//用户没有被举报过该帖子,在表中插入数据
+            int circleid = postService.queryPostByCircleid(postid);//查询该帖子所属圈子
+            acc.setPostid(Integer.parseInt(postid));
+            acc.setUserid(Integer.parseInt(userid));
+            acc.setCircleid(circleid);
+            acc.setNum(1);
+            acc.setIntime(new Date());
+            acc.setType(1);
+            return accusationService.insertPostByAccusation(acc);//插入数据
+        } else {//用户已经被举报过该帖子，举报成功返回状态200
+            return 200;
+        }
     }
 
 }

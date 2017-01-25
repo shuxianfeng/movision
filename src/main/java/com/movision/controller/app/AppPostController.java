@@ -2,6 +2,7 @@ package com.movision.controller.app;
 
 import com.movision.common.Response;
 import com.movision.facade.index.FacadePost;
+import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.post.entity.PostVo;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -100,6 +101,26 @@ public class AppPostController {
             response.setMessage("操作成功");
         }
         response.setData(sum);
+        return response;
+    }
+
+    /**
+     * 帖子举报接口
+     *
+     * @param userid
+     * @param postid
+     * @return
+     */
+    @ApiOperation(value = "帖子举报", notes = "用于举报帖子接口", response = Response.class)
+    @RequestMapping(value = "inAccusation", method = RequestMethod.POST)
+    public Response insertPostByAccusation(@ApiParam(value = "用户id") @RequestParam String userid,
+                                           @ApiParam(value = "帖子id") @RequestParam String postid) {
+        Response response = new Response();
+        int type = facadePost.insertPostByAccusation(userid, postid);
+
+        if (response.getCode() == 200 || type == 200) {
+            response.setMessage("操作成功");
+        }
         return response;
     }
 }
