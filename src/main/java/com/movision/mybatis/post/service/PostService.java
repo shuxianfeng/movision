@@ -58,10 +58,10 @@ public class PostService {
         }
     }
 
-    public PostVo queryPostDetail(int postid) {
+    public PostVo queryPostDetail(Map<String, Object> parammap) {
         try {
             log.info("查询帖子详情");
-            return postMapper.queryPostDetail(postid);
+            return postMapper.queryPostDetail(parammap);
         } catch (Exception e) {
             log.error("查询帖子详情失败");
             throw e;

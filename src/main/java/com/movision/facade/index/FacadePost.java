@@ -37,8 +37,13 @@ public class FacadePost {
     @Autowired
     private CircleService circleService;
 
-    public PostVo queryPostDetail(String postid, String type) {
-        PostVo vo = postService.queryPostDetail(Integer.parseInt(postid));
+    public PostVo queryPostDetail(String postid, String userid, String type) {
+
+        //通过userid、postid查询该用户有没有关注该圈子的权限
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("postid", Integer.parseInt(postid));
+        parammap.put("userid", Integer.parseInt(userid));
+        PostVo vo = postService.queryPostDetail(parammap);
         if (type.equals("1")) {
             String url = postService.queryVideoUrl(Integer.parseInt(postid));
             vo.setVideourl(url);

@@ -101,9 +101,12 @@
     </select>
 
     <!--查询帖子详情-->
-    <select id="queryPostDetail" parameterType="java.lang.Integer"
+    <select id="queryPostDetail" parameterType="java.util.Map"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT t1.*,t2.category AS category,t2.code AS code
+        SELECT t1.*,t2.category AS category,t2.code AS code,
+        (SELECT count(1) FROM yw_follow_circle
+        WHERE userid = #{userid,jdbcType=INTEGER}
+        AND circleid = #{circleid,jdbcType=INTEGER}) AS isfollow
         FROM yw_post t1,yw_circle t2
         WHERE t1.id = #{postid,jdbcType=INTEGER}
           AND t1.circleid = t2.id

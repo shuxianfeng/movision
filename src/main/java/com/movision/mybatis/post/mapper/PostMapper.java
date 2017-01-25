@@ -35,7 +35,7 @@ public interface PostMapper {
 
     int queryPostNumByCircleid(int circleid);
 
-    PostVo queryPostDetail(int postid);
+    PostVo queryPostDetail(Map<String, Object> parammap);
 
     String queryVideoUrl(int postid);
 

@@ -53,6 +53,8 @@ public class PostVo {
 
     private String videourl;//存放原生视频链接
 
+    private String isfollow;//该帖子所属的圈子是否被关注 0 可关注  1 已关注（用于判断帖子详情中的关注按钮是否可用）
+
     public Integer getId() {
         return id;
     }
@@ -235,5 +237,13 @@ public class PostVo {
 
     public void setVideourl(String videourl) {
         this.videourl = videourl;
+    }
+
+    public String getIsfollow() {
+        return isfollow;
+    }
+
+    public void setIsfollow(String isfollow) {
+        this.isfollow = isfollow;
     }
 }
