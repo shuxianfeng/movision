@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created with IDEA
- * User: zhuangyuhao
- * Date: 2016/11/22
- * Time: 20:51
+ * @Author zhuangyuhao
+ * @Date 2017/1/25 16:38
  */
 public class ListUtil {
 
@@ -17,10 +15,7 @@ public class ListUtil {
      * @return
      */
     public static boolean isEmpty(List list){
-        if(null == list || list.size() <= 0 ){
-            return true;
-        }
-        return false;
+        return null == list || list.size() <= 0;
     }
 
     /**
@@ -29,10 +24,7 @@ public class ListUtil {
      * @return
      */
     public static boolean isNotEmpty(List list){
-        if(null != list && list.size() >= 1){
-            return true;
-        }
-        return false;
+        return null != list && list.size() >= 1;
     }
 
     public static void main(String[] args) {
