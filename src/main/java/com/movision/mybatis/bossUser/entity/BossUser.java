@@ -3,10 +3,11 @@ package com.movision.mybatis.bossUser.entity;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @ApiModel(value = "boss用户", description = "boss用户")
-public class BossUser {
+public class BossUser implements Serializable {
     private Integer id;
 
     @ApiModelProperty(value = "真实姓名")

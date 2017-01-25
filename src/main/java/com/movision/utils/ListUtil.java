@@ -3,7 +3,12 @@ package com.movision.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * 集合工具类
+ *
+ * @Author zhuangyuhao
+ * @Date 2017/1/25 16:53
+ */
 public class ListUtil {
 
     /**

@@ -181,7 +181,7 @@
     <update id="updateBossUserLoginInfo" parameterType="com.movision.mybatis.bossUser.entity.BossUser">
         update yw_admin_user
         SET afterlogintime = beforelogintime,
-        beforelogintime = now(),
+        beforelogintime = now()
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>
