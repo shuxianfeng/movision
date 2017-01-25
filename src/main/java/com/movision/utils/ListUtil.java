@@ -3,10 +3,7 @@ package com.movision.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @Author zhuangyuhao
- * @Date 2017/1/25 16:38
- */
+
 public class ListUtil {
 
     /**
