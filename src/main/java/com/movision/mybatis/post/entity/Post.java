@@ -23,6 +23,8 @@ public class Post {
 
     private Integer isactive;
 
+    private Integer activetype;
+
     private Integer type;
 
     private Integer ishot;
@@ -201,5 +203,13 @@ public class Post {
 
     public void setIsessencepool(Integer isessencepool) {
         this.isessencepool = isessencepool;
+    }
+
+    public Integer getActivetype() {
+        return activetype;
+    }
+
+    public void setActivetype(Integer activetype) {
+        this.activetype = activetype;
     }
 }

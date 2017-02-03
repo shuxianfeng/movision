@@ -30,6 +30,8 @@ public class PostVo {
 
     private Integer isactive;
 
+    private Integer activetype;
+
     private Integer type;
 
     private Integer ishot;
@@ -288,5 +290,13 @@ public class PostVo {
 
     public void setEndtime(Date endtime) {
         this.endtime = endtime;
+    }
+
+    public Integer getActivetype() {
+        return activetype;
+    }
+
+    public void setActivetype(Integer activetype) {
+        this.activetype = activetype;
     }
 }
