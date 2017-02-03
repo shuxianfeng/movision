@@ -51,7 +51,7 @@ public class RegisterController {
      * @throws ApiException
      */
     @ApiOperation(value = "手机注册账号时发送的验证码", notes = "手机注册账号时发送的验证码", response = Response.class)
-    @RequestMapping(value = {"/mobileCode"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/getMobileCode"}, method = RequestMethod.GET)
     public Response getMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile) throws IOException, ApiException {
         log.debug("获得手机验证码  mobile==" + mobile);
         Subject currentUser = SecurityUtils.getSubject();
@@ -79,7 +79,7 @@ public class RegisterController {
     }
 
     @ApiOperation(value = "会员注册", notes = "会员注册", response = Response.class)
-    @RequestMapping(value = {"/rest/register", "rest/user/site/base/add_register"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/register"}, method = RequestMethod.POST)
     public Response register(@ApiParam(value = "会员信息") @ModelAttribute RegisterUser user) throws Exception {
         log.debug("注册  mobile==" + user.getPhone() + "mobileCheckCode = " + user.getMobileCheckCode());
         Response result = new Response();
