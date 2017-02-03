@@ -69,5 +69,15 @@ public class BossUserService {
         }
     }
 
+    public void batchDelBossUser(int[] ids) {
+        try {
+            log.info("删除用户 " + ids);
+            bossUserMapper.delBossUser(ids);
+        } catch (Exception e) {
+            log.error("删除用户失败");
+            throw e;
+        }
+    }
+
 
 }

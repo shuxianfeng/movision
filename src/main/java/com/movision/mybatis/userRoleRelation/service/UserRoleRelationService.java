@@ -41,4 +41,8 @@ public class UserRoleRelationService {
         }
     }
 
+    public void deleteRelations(int[] ids) {
+        userRoleRelationMapper.deleteRelations(ids);
+    }
+
 }

@@ -59,4 +59,8 @@ public class BossUserFacade {
         return bossUserService.updateUserLoginInfo(bossUser);
     }
 
+    public void delUser(int[] ids) {
+        bossUserService.batchDelBossUser(ids);
+    }
+
 }

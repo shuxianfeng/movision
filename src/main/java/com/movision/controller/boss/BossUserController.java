@@ -2,6 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.user.BossUserFacade;
+import com.movision.facade.user.UserRoleRelationFacade;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.security.EncodeUtil;
 import com.movision.utils.MD5Util;
@@ -24,6 +25,9 @@ public class BossUserController {
 
     @Autowired
     private BossUserFacade bossUserFacade;
+
+    @Autowired
+    private UserRoleRelationFacade userRoleRelationFacade;
 
     @RequestMapping(value = "add_boss_user", method = RequestMethod.POST)
     @ApiOperation(value = "新增boss用户", notes = "新增boss用户", response = Response.class)
@@ -62,6 +66,25 @@ public class BossUserController {
             response.setCode(400);
         }
         return response;
+    }
+
+    @RequestMapping(value = "del_boss_user", method = RequestMethod.POST)
+    @ApiOperation(value = "删除boss用户", notes = "删除boss用户", response = Response.class)
+    public Response delBossUser(@ApiParam(value = "用户的id，以逗号分隔") @RequestParam String userids) {
+        Response response = new Response();
+        String[] arr = userids.split(",");
+        int[] useridArray = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            useridArray[i] = Integer.valueOf(arr[i]);
+        }
+        //1 删除用户角色关系
+        userRoleRelationFacade.deleteRelations(useridArray);
+
+        //2 删除用户
+        bossUserFacade.delUser(useridArray);
+        response.setCode(200);
+        return response;
+
     }
 
 }

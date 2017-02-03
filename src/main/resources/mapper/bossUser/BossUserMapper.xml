@@ -184,4 +184,11 @@
         beforelogintime = now()
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <update id="delBossUser" parameterType="int">
+        UPDATE yw_admin_user SET isdel = 1 WHERE id in
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

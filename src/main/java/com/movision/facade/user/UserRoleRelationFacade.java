@@ -21,4 +21,8 @@ public class UserRoleRelationFacade {
     public int getRoleidByUserid(int userid) {
         return userRoleRelationService.getRoleidByUserid(userid);
     }
+
+    public void deleteRelations(int[] ids) {
+        userRoleRelationService.deleteRelations(ids);
+    }
 }

@@ -21,4 +21,6 @@ public interface BossUserMapper {
     BossUser selectByUsername(String username);
 
     int updateBossUserLoginInfo(BossUser bossUser);
+
+    int delBossUser(int[] ids);
 }
