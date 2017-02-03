@@ -31,7 +31,7 @@
         <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache.xml"/>
     </bean>  -->
 
-    <!--(12h)43200000 | (6h)21600000 | *(3h)10800000* | (10m)600000-->
+    <!--  session失效时间： (12h)43200000 | (6h)21600000 | *(3h)10800000* | (10m)600000-->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
         <property name="globalSessionTimeout" value="10800000"/>
         <property name="deleteInvalidSessions" value="true"/>

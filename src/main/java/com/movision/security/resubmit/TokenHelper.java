@@ -19,7 +19,7 @@ public class TokenHelper {
     /**
      * 保存token值的默认命名空间
      */
-    public static final String TOKEN_NAMESPACE = "zhb.tokens";
+    public static final String TOKEN_NAMESPACE = "movision.tokens";
 
     /**
      * 持有token名称的字段名
@@ -158,7 +158,7 @@ public class TokenHelper {
         String cacheToken = (String) redisCacheClient.get(tokenCacheName);
 
         if (!token.equals(cacheToken)) {
-            log.warn("zhb.token Form token " + token + " does not match the session token " + cacheToken + ".");
+            log.warn("movision.token Form token " + token + " does not match the session token " + cacheToken + ".");
             return false;
         }
         // remove the token so it won't be used again
