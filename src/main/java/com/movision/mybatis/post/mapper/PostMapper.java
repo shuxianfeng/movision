@@ -1,6 +1,7 @@
 package com.movision.mybatis.post.mapper;
 
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import org.apache.ibatis.session.RowBounds;
@@ -44,6 +45,8 @@ public interface PostMapper {
     List<PostVo> queryPostList(RowBounds rowBounds, int circleid);
 
     List<PostVo> queryAllActive(RowBounds rowBounds);
+
+    ActiveVo queryNoticeActive(int postid);
 
     int queryPostByCircleid(int id);
 

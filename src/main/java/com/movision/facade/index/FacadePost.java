@@ -4,6 +4,9 @@ import com.movision.mybatis.accusation.entity.Accusation;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.service.CircleService;
+import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.goods.service.GoodsService;
+import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
@@ -36,8 +39,12 @@ public class FacadePost {
 
     @Autowired
     private PostService postService;
+
     @Autowired
     private AccusationService accusationService;
+
+    @Autowired
+    private GoodsService goodsService;
 
     @Autowired
     private CircleService circleService;
@@ -59,6 +66,56 @@ public class FacadePost {
         List<Circle> hotcirclelist = circleService.queryHotCircle();
         vo.setHotcirclelist(hotcirclelist);
         return vo;
+    }
+
+    public ActiveVo queryActiveDetail(String postid, String activetype, String pageNo, String pageSize) {
+
+        //告知类活动
+        ActiveVo active = postService.queryNoticeActive(postid);
+
+        //计算距离结束时间
+        Date begin = active.getBegintime();
+        Date end = active.getEndtime();
+        Date now = new Date();
+        if (now.before(begin)) {
+            active.setEnddays(-1);//活动还未开始
+        } else if (end.before(now)) {
+            active.setEnddays(0);//活动已结束
+        } else if (begin.before(now) && now.before(end)) {
+            try {
+                log.error("计算活动剩余结束天数");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date a = sdf.parse(sdf.format(now));
+                Date b = sdf.parse(sdf.format(end));
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(a);
+                long time1 = cal.getTimeInMillis();
+                cal.setTime(b);
+                long time2 = cal.getTimeInMillis();
+                long between_days = (time2 - time1) / (1000 * 3600 * 24);
+                active.setEnddays(Integer.parseInt(String.valueOf(between_days)));
+            } catch (Exception e) {
+                log.error("计算活动剩余结束天数失败");
+                e.printStackTrace();
+            }
+        }
+
+        //如果为商城促销类活动，需要在此基础上增加促销类商品列表
+        if (activetype.equals("1")) {
+
+            if (StringUtils.isEmpty(pageNo)) {
+                pageNo = "1";
+            }
+            if (StringUtils.isEmpty(pageSize)) {
+                pageSize = "10";
+            }
+            Paging<Goods> pager = new Paging<Goods>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+
+            List<Goods> goodsList = goodsService.queryActiveGoods(pager, postid);
+            active.setPromotionGoodsList(goodsList);
+
+        }
+        return active;
     }
 
     public Map<String, Object> queryPastPostDetail(String date) {

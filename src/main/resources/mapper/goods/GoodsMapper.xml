@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.goods.mapper.GoodsMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.goods.entity.Goods">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="subname" property="subname" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DOUBLE"/>
+        <result column="origprice" property="origprice" jdbcType="DOUBLE"/>
+        <result column="attribute" property="attribute" jdbcType="INTEGER"/>
+        <result column="provincecode" property="provincecode" jdbcType="VARCHAR"/>
+        <result column="citycode" property="citycode" jdbcType="VARCHAR"/>
+        <result column="isself" property="isself" jdbcType="INTEGER"/>
+        <result column="isdamage" property="isdamage" jdbcType="INTEGER"/>
+        <result column="isquality" property="isquality" jdbcType="INTEGER"/>
+        <result column="promotions" property="promotions" jdbcType="VARCHAR"/>
+        <result column="protype" property="protype" jdbcType="INTEGER"/>
+        <result column="brandid" property="brandid" jdbcType="VARCHAR"/>
+        <result column="brandsupple" property="brandsupple" jdbcType="VARCHAR"/>
+        <result column="power" property="power" jdbcType="VARCHAR"/>
+        <result column="model" property="model" jdbcType="VARCHAR"/>
+        <result column="port" property="port" jdbcType="VARCHAR"/>
+        <result column="lenstype" property="lenstype" jdbcType="VARCHAR"/>
+        <result column="sales" property="sales" jdbcType="INTEGER"/>
+        <result column="stock" property="stock" jdbcType="INTEGER"/>
+        <result column="goodsposition" property="goodsposition" jdbcType="INTEGER"/>
+        <result column="iscombo" property="iscombo" jdbcType="INTEGER"/>
+        <result column="isspecial" property="isspecial" jdbcType="INTEGER"/>
+        <result column="isseckill" property="isseckill" jdbcType="INTEGER"/>
+        <result column="ishomepage" property="ishomepage" jdbcType="INTEGER"/>
+        <result column="onlinetime" property="onlinetime" jdbcType="TIMESTAMP"/>
+        <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, name, subname, price, origprice, attribute, provincecode, citycode, isself, isdamage, 
+    isquality, promotions, protype, brandid, brandsupple, power, model, port, lenstype,
+    sales, stock, goodsposition, iscombo, isspecial, isseckill, ishomepage, onlinetime, 
+    isdel
+  </sql>
+
+    <!--基础查询语句-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_goods
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!--查询商城促销活动中促销的所有商品列表-->
+    <select id="queryActiveGoods" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.goods.entity.Goods">
+    SELECT t.* FROM (
+      SELECT t1.postid,t2.id,t2.name,t2.subname,t2.price,t2.origprice,t2.img_url
+      FROM yw_active_goods t1
+      LEFT JOIN (SELECT a.id,a.name,a.subname,a.price,a.origprice,b.img_url
+                  FROM yw_goods a,yw_goods_img b
+                  WHERE a.id = b.goodsid AND b.type = '2') t2
+      ON t1.goodid = t2.id
+    ) t WHERE t.postid = #{postid,jdbcType=INTEGER}
+  </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from yw_goods
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.goods.entity.Goods">
+    insert into yw_goods (id, name, subname, 
+      price, origprice, attribute, 
+      provincecode, citycode, isself, 
+      isdamage, isquality, promotions, 
+      protype, brandid, brandsupple, 
+      power, model, port,
+      lenstype, sales, stock, 
+      goodsposition, iscombo, isspecial, 
+      isseckill, ishomepage, onlinetime, 
+      isdel)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{subname,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DOUBLE}, #{origprice,jdbcType=DOUBLE}, #{attribute,jdbcType=INTEGER}, 
+      #{provincecode,jdbcType=VARCHAR}, #{citycode,jdbcType=VARCHAR}, #{isself,jdbcType=INTEGER}, 
+      #{isdamage,jdbcType=INTEGER}, #{isquality,jdbcType=INTEGER}, #{promotions,jdbcType=VARCHAR}, 
+      #{protype,jdbcType=INTEGER}, #{brandid,jdbcType=VARCHAR}, #{brandsupple,jdbcType=VARCHAR}, 
+      #{power,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{port,jdbcType=VARCHAR},
+      #{lenstype,jdbcType=VARCHAR}, #{sales,jdbcType=INTEGER}, #{stock,jdbcType=INTEGER}, 
+      #{goodsposition,jdbcType=INTEGER}, #{iscombo,jdbcType=INTEGER}, #{isspecial,jdbcType=INTEGER}, 
+      #{isseckill,jdbcType=INTEGER}, #{ishomepage,jdbcType=INTEGER}, #{onlinetime,jdbcType=TIMESTAMP}, 
+      #{isdel,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.goods.entity.Goods">
+        insert into yw_goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="subname != null">
+                subname,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="origprice != null">
+                origprice,
+            </if>
+            <if test="attribute != null">
+                attribute,
+            </if>
+            <if test="provincecode != null">
+                provincecode,
+            </if>
+            <if test="citycode != null">
+                citycode,
+            </if>
+            <if test="isself != null">
+                isself,
+            </if>
+            <if test="isdamage != null">
+                isdamage,
+            </if>
+            <if test="isquality != null">
+                isquality,
+            </if>
+            <if test="promotions != null">
+                promotions,
+            </if>
+            <if test="protype != null">
+                protype,
+            </if>
+            <if test="brandid != null">
+                brandid,
+            </if>
+            <if test="brandsupple != null">
+                brandsupple,
+            </if>
+            <if test="power != null">
+                power,
+            </if>
+            <if test="model != null">
+                model,
+            </if>
+            <if test="port != null">
+                port,
+            </if>
+            <if test="lenstype != null">
+                lenstype,
+            </if>
+            <if test="sales != null">
+                sales,
+            </if>
+            <if test="stock != null">
+                stock,
+            </if>
+            <if test="goodsposition != null">
+                goodsposition,
+            </if>
+            <if test="iscombo != null">
+                iscombo,
+            </if>
+            <if test="isspecial != null">
+                isspecial,
+            </if>
+            <if test="isseckill != null">
+                isseckill,
+            </if>
+            <if test="ishomepage != null">
+                ishomepage,
+            </if>
+            <if test="onlinetime != null">
+                onlinetime,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="subname != null">
+                #{subname,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="origprice != null">
+                #{origprice,jdbcType=DOUBLE},
+            </if>
+            <if test="attribute != null">
+                #{attribute,jdbcType=INTEGER},
+            </if>
+            <if test="provincecode != null">
+                #{provincecode,jdbcType=VARCHAR},
+            </if>
+            <if test="citycode != null">
+                #{citycode,jdbcType=VARCHAR},
+            </if>
+            <if test="isself != null">
+                #{isself,jdbcType=INTEGER},
+            </if>
+            <if test="isdamage != null">
+                #{isdamage,jdbcType=INTEGER},
+            </if>
+            <if test="isquality != null">
+                #{isquality,jdbcType=INTEGER},
+            </if>
+            <if test="promotions != null">
+                #{promotions,jdbcType=VARCHAR},
+            </if>
+            <if test="protype != null">
+                #{protype,jdbcType=INTEGER},
+            </if>
+            <if test="brandid != null">
+                #{brandid,jdbcType=VARCHAR},
+            </if>
+            <if test="brandsupple != null">
+                #{brandsupple,jdbcType=VARCHAR},
+            </if>
+            <if test="power != null">
+                #{power,jdbcType=VARCHAR},
+            </if>
+            <if test="model != null">
+                #{model,jdbcType=VARCHAR},
+            </if>
+            <if test="port != null">
+                #{port,jdbcType=VARCHAR},
+            </if>
+            <if test="lenstype != null">
+                #{lenstype,jdbcType=VARCHAR},
+            </if>
+            <if test="sales != null">
+                #{sales,jdbcType=INTEGER},
+            </if>
+            <if test="stock != null">
+                #{stock,jdbcType=INTEGER},
+            </if>
+            <if test="goodsposition != null">
+                #{goodsposition,jdbcType=INTEGER},
+            </if>
+            <if test="iscombo != null">
+                #{iscombo,jdbcType=INTEGER},
+            </if>
+            <if test="isspecial != null">
+                #{isspecial,jdbcType=INTEGER},
+            </if>
+            <if test="isseckill != null">
+                #{isseckill,jdbcType=INTEGER},
+            </if>
+            <if test="ishomepage != null">
+                #{ishomepage,jdbcType=INTEGER},
+            </if>
+            <if test="onlinetime != null">
+                #{onlinetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.goods.entity.Goods">
+        update yw_goods
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="subname != null">
+                subname = #{subname,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="origprice != null">
+                origprice = #{origprice,jdbcType=DOUBLE},
+            </if>
+            <if test="attribute != null">
+                attribute = #{attribute,jdbcType=INTEGER},
+            </if>
+            <if test="provincecode != null">
+                provincecode = #{provincecode,jdbcType=VARCHAR},
+            </if>
+            <if test="citycode != null">
+                citycode = #{citycode,jdbcType=VARCHAR},
+            </if>
+            <if test="isself != null">
+                isself = #{isself,jdbcType=INTEGER},
+            </if>
+            <if test="isdamage != null">
+                isdamage = #{isdamage,jdbcType=INTEGER},
+            </if>
+            <if test="isquality != null">
+                isquality = #{isquality,jdbcType=INTEGER},
+            </if>
+            <if test="promotions != null">
+                promotions = #{promotions,jdbcType=VARCHAR},
+            </if>
+            <if test="protype != null">
+                protype = #{protype,jdbcType=INTEGER},
+            </if>
+            <if test="brandid != null">
+                brandid = #{brandid,jdbcType=VARCHAR},
+            </if>
+            <if test="brandsupple != null">
+                brandsupple = #{brandsupple,jdbcType=VARCHAR},
+            </if>
+            <if test="power != null">
+                power = #{power,jdbcType=VARCHAR},
+            </if>
+            <if test="model != null">
+                model = #{model,jdbcType=VARCHAR},
+            </if>
+            <if test="port != null">
+                port = #{port,jdbcType=VARCHAR},
+            </if>
+            <if test="lenstype != null">
+                lenstype = #{lenstype,jdbcType=VARCHAR},
+            </if>
+            <if test="sales != null">
+                sales = #{sales,jdbcType=INTEGER},
+            </if>
+            <if test="stock != null">
+                stock = #{stock,jdbcType=INTEGER},
+            </if>
+            <if test="goodsposition != null">
+                goodsposition = #{goodsposition,jdbcType=INTEGER},
+            </if>
+            <if test="iscombo != null">
+                iscombo = #{iscombo,jdbcType=INTEGER},
+            </if>
+            <if test="isspecial != null">
+                isspecial = #{isspecial,jdbcType=INTEGER},
+            </if>
+            <if test="isseckill != null">
+                isseckill = #{isseckill,jdbcType=INTEGER},
+            </if>
+            <if test="ishomepage != null">
+                ishomepage = #{ishomepage,jdbcType=INTEGER},
+            </if>
+            <if test="onlinetime != null">
+                onlinetime = #{onlinetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.goods.entity.Goods">
+    update yw_goods
+    set name = #{name,jdbcType=VARCHAR},
+      subname = #{subname,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE},
+      origprice = #{origprice,jdbcType=DOUBLE},
+      attribute = #{attribute,jdbcType=INTEGER},
+      provincecode = #{provincecode,jdbcType=VARCHAR},
+      citycode = #{citycode,jdbcType=VARCHAR},
+      isself = #{isself,jdbcType=INTEGER},
+      isdamage = #{isdamage,jdbcType=INTEGER},
+      isquality = #{isquality,jdbcType=INTEGER},
+      promotions = #{promotions,jdbcType=VARCHAR},
+      protype = #{protype,jdbcType=INTEGER},
+      brandid = #{brandid,jdbcType=VARCHAR},
+      brandsupple = #{brandsupple,jdbcType=VARCHAR},
+      power = #{power,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      port = #{port,jdbcType=VARCHAR},
+      lenstype = #{lenstype,jdbcType=VARCHAR},
+      sales = #{sales,jdbcType=INTEGER},
+      stock = #{stock,jdbcType=INTEGER},
+      goodsposition = #{goodsposition,jdbcType=INTEGER},
+      iscombo = #{iscombo,jdbcType=INTEGER},
+      isspecial = #{isspecial,jdbcType=INTEGER},
+      isseckill = #{isseckill,jdbcType=INTEGER},
+      ishomepage = #{ishomepage,jdbcType=INTEGER},
+      onlinetime = #{onlinetime,jdbcType=TIMESTAMP},
+      isdel = #{isdel,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

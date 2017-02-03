@@ -1,6 +1,7 @@
 package com.movision.mybatis.post.service;
 
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.mapper.PostMapper;
@@ -100,6 +101,17 @@ public class PostService {
             log.error("查询所有活动列表失败");
             throw e;
         }
+    }
+
+    public ActiveVo queryNoticeActive(String postid) {
+        try {
+            log.info("查询告知类活动详情");
+            return postMapper.queryNoticeActive(Integer.parseInt(postid));
+        } catch (Exception e) {
+            log.error("查询告知类活动详情失败");
+            throw e;
+        }
+
     }
 
     //查询某个帖子所属圈子

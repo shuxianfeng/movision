@@ -173,6 +173,18 @@
         ORDER BY t.intime DESC
     </select>
 
+    <!--查询告知类活动详情-->
+    <select id="queryNoticeActive" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.ActiveVo">
+        SELECT t.* FROM (
+        SELECT t1.*,t2.begintime,t2.endtime
+        FROM yw_post t1
+        LEFT JOIN yw_active_period t2
+        ON t1.id = t2.postid
+        ) t
+        WHERE t.id = #{postid,jdbcType=INTEGER}
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_post

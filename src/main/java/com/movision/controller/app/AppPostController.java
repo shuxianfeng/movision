@@ -3,6 +3,7 @@ package com.movision.controller.app;
 import com.movision.common.Response;
 import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.accusation.service.AccusationService;
+import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -41,6 +42,24 @@ public class AppPostController {
             response.setMessage("查询成功");
         }
         response.setData(post);
+        return response;
+    }
+
+    @ApiOperation(value = "活动详情数据返回接口", notes = "用于返回请求活动详情内容", response = Response.class)
+    @RequestMapping(value = "activeDetail", method = RequestMethod.POST)
+    public Response queryActiveDetail(@ApiParam(value = "活动id") @RequestParam String postid,
+                                      @ApiParam(value = "活动类型:0 告知类活动 1 商城促销类活动") @RequestParam String activetype,
+                                      @ApiParam(value = "第几页（为商城促销类）") @RequestParam(required = false) String pageNo,
+                                      @ApiParam(value = "每页条数") @RequestParam(required = false) String pageSize) {
+
+        Response response = new Response();
+
+        ActiveVo active = facadePost.queryActiveDetail(postid, activetype, pageNo, pageSize);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(active);
         return response;
     }
 
