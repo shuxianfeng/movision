@@ -21,4 +21,8 @@ public class RoleFacade {
     public Boolean addUserRole(Role role) {
         return roleService.addUserRole(role);
     }
+
+    public void delRoles(int[] ids) {
+        roleService.delRoles(ids);
+    }
 }

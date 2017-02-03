@@ -14,4 +14,6 @@ public interface RoleMenuRelationMapper {
     int updateByPrimaryKeySelective(RoleMenuRelation record);
 
     int updateByPrimaryKey(RoleMenuRelation record);
+
+    void delRelationByRoleid(int[] roleid);
 }

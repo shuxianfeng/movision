@@ -87,4 +87,10 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
+    <update id="delRoles" parameterType="int">
+        UPDATE yw_admin_role SET isdel = 1 where id in
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

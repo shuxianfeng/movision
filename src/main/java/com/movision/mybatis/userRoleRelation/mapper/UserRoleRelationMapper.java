@@ -17,5 +17,8 @@ public interface UserRoleRelationMapper {
 
     int selectRoleidByUserid(Integer userid);
 
-    void deleteRelations(int[] id);
+    void deleteRelationsbyUserid(int[] userids);
+
+    void deleteRelationsbyRoleid(int[] roleids);
+
 }

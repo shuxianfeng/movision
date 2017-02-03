@@ -31,5 +31,15 @@ public class RoleService {
         }
     }
 
+    public void delRoles(int[] ids) {
+        try {
+            log.info("删除角色，ids =" + ids);
+            roleMapper.delRoles(ids);
+        } catch (Exception e) {
+            log.error("删除角色失败，ids = " + ids);
+            throw e;
+        }
+    }
+
 
 }

@@ -76,10 +76,17 @@
         where userid = #{userid,jdbcType=INTEGER}
     </select>
 
-    <delete id="deleteRelations" parameterType="int">
+    <delete id="deleteRelationsbyUserid" parameterType="int">
         delete from yw_admin_user_role where userid in
         <foreach item="userids" collection="array" open="(" separator="," close=")">
             #{userids}
+        </foreach>
+    </delete>
+
+    <delete id="deleteRelationsbyRoleid" parameterType="int">
+        delete from yw_admin_user_role where roleid in
+        <foreach item="roleids" collection="array" open="(" separator="," close=")">
+            #{roleids}
         </foreach>
     </delete>
 </mapper>

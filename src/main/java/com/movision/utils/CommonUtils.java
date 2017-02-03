@@ -81,6 +81,22 @@ public class CommonUtils {
     }
 
 
+    /**
+     * 把字符串形式的id转换为int数组形式
+     *
+     * @param ids
+     * @return
+     */
+    public static int[] idsStringToIntArray(String ids) {
+        String[] arr = ids.split(",");
+        int[] useridArray = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            useridArray[i] = Integer.valueOf(arr[i]);
+        }
+        return useridArray;
+    }
+
+
     public static void main(String[] args) {
 //        List<String> list = new ArrayList<>();
 //        list.add("aaa");

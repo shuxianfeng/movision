@@ -2,14 +2,14 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.user.RoleFacade;
+import com.movision.facade.user.RoleMenuRelationFacade;
+import com.movision.facade.user.UserRoleRelationFacade;
 import com.movision.mybatis.role.entity.Role;
+import com.movision.utils.CommonUtils;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author zhuangyuhao
@@ -21,6 +21,12 @@ public class RoleController {
 
     @Autowired
     private RoleFacade roleFacade;
+
+    @Autowired
+    private UserRoleRelationFacade userRoleRelationFacade;
+
+    @Autowired
+    private RoleMenuRelationFacade roleMenuRelationFacade;
 
 
     @ApiOperation(value = "新增角色", notes = "新增角色", response = Response.class)
@@ -35,4 +41,23 @@ public class RoleController {
         }
         return response;
     }
+
+    @ApiOperation(value = "删除角色", notes = "删除角色", response = Response.class)
+    @RequestMapping(value = "del_role", method = RequestMethod.POST)
+    public Response delRole(@ApiParam(value = "角色id,以逗号分隔") @RequestParam String roleids) {
+        Response response = new Response();
+        int[] roleidArray = CommonUtils.idsStringToIntArray(roleids);
+        //1 删除该角色用户关系
+        userRoleRelationFacade.deleteRelationsByRoleid(roleidArray);
+
+        //2 删除该角色菜单关系
+        roleMenuRelationFacade.delRelationByRoleid(roleidArray);
+
+        //3 删除该角色
+        roleFacade.delRoles(roleidArray);
+
+        response.setCode(200);
+        return response;
+    }
+
 }

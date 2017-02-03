@@ -69,4 +69,11 @@
         menuid = #{menuid,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <delete id="delRelationByRoleid" parameterType="int">
+        DELETE from yw_admin_role_menu where roleid IN
+        <foreach collection="array" item="roleid" open="(" separator="," close=")">
+            #{roleid}
+        </foreach>
+    </delete>
 </mapper>

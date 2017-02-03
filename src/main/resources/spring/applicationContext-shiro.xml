@@ -137,8 +137,8 @@
 
                 /rest/** = anon
                 /app/** = anon
-                /boss/menu/** = orroles["1"]
-                /boss/role/** = orroles["2"]
+                /boss/menu/** = authc,orroles["1"]
+                /boss/role/** = authc,orroles["2"]
                 /boss/** = anon
 
                 /logout = logout

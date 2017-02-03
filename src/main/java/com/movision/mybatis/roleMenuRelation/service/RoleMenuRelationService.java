@@ -60,5 +60,9 @@ public class RoleMenuRelationService {
         return errorDeleteIdList;
     }
 
+    public void delRelationByRoleid(int[] roleid) {
+        roleMenuRelationMapper.delRelationByRoleid(roleid);
+    }
+
 
 }

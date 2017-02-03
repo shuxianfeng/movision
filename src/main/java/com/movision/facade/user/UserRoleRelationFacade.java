@@ -22,7 +22,11 @@ public class UserRoleRelationFacade {
         return userRoleRelationService.getRoleidByUserid(userid);
     }
 
-    public void deleteRelations(int[] ids) {
-        userRoleRelationService.deleteRelations(ids);
+    public void deleteRelationsByUserid(int[] userid) {
+        userRoleRelationService.deleteRelationsByUserid(userid);
+    }
+
+    public void deleteRelationsByRoleid(int[] roleid) {
+        userRoleRelationService.deleteRelationsByRoleid(roleid);
     }
 }

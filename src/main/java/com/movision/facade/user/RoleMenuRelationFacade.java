@@ -24,4 +24,8 @@ public class RoleMenuRelationFacade {
     public List<String> batchDelete(String[] ids) {
         return roleMenuRelationService.batchDelete(ids);
     }
+
+    public void delRelationByRoleid(int[] roleid) {
+        roleMenuRelationService.delRelationByRoleid(roleid);
+    }
 }
