@@ -1,5 +1,8 @@
 package com.movision.mybatis.user.entity;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -7,12 +10,22 @@ import java.util.Date;
  * @Author zhuangyuhao
  * @Date 2017/2/3 17:45
  */
+@ApiModel(value = "app注册用户", description = "app注册用户")
 public class RegisterUser implements Serializable {
     private Integer id;
+
+    @ApiModelProperty(value = "手机号", required = true)
     private String phone;
+
     private String account;
+
+    @ApiModelProperty(value = "手机短信验证码", required = true)
     private String mobileCheckCode;
+
+    @ApiModelProperty(value = "注册时间")
     private Date intime;
+
+    @ApiModelProperty(value = "账号状态：默认 0 正常 1 异常封号")
     private Integer status;
 
     public Integer getId() {
