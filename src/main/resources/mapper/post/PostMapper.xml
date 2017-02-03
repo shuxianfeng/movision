@@ -105,9 +105,9 @@
             resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT t1.*,t2.category AS category,t2.code AS code,
         <if test="userid != null">
-            (SELECT count(1) FROM yw_follow_circle
+            (SELECT count(*) FROM yw_follow_circle
             WHERE userid = #{userid,jdbcType=INTEGER}
-            AND circleid = #{circleid,jdbcType=INTEGER}) AS isfollow
+            AND circleid = (SELECT circleid FROM yw_post WHERE id = #{postid,jdbcType=INTEGER})) AS isfollow
         </if>
         <if test="userid == null">
             0 AS isfollow
