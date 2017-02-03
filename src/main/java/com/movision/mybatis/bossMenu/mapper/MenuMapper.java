@@ -21,5 +21,5 @@ public interface MenuMapper {
 
     List<Menu> selectMenuList(RowBounds rowBounds, Map<String, Object> map);
 
-    // TODO: 2017/1/22 删除菜单
+    void delMenu(int[] ids);
 }

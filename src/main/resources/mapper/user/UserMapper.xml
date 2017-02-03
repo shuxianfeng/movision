@@ -312,4 +312,19 @@
         WHERE u.id=#{id,jdbcType=INTEGER}
     </select>
 
+    <select id="isExistAccount" parameterType="string" resultType="int">
+        SELECT COUNT(1) FROM yw_user
+        <where>
+            <if test="phone != null and phone != ''">
+                phone = #{phone}
+            </if>
+        </where>
+    </select>
+
+    <insert id="registerAccount" parameterType="com.movision.mybatis.user.entity.RegisterUser" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO yw_user (phone, intime, status)
+        VALUES (#{phone}, #{intime}, #{status})
+    </insert>
+
 </mapper>

@@ -1,6 +1,7 @@
 package com.movision.mybatis.user.mapper;
 
 import com.movision.mybatis.user.entity.LoginUser;
+import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 
 import java.util.Map;
@@ -27,4 +28,8 @@ public interface UserMapper {
     int updateUserPointsMinus(Map map);
 
     int queryUserByPoints(int id);
+
+    int isExistAccount(String phone);
+
+    int registerAccount(RegisterUser registerUser);
 }

@@ -1,6 +1,7 @@
 package com.movision.mybatis.user.service;
 
 import com.movision.mybatis.user.entity.LoginUser;
+import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.mapper.UserMapper;
 import org.slf4j.Logger;
@@ -69,6 +70,20 @@ public class UserService {
             log.error("用户积分查询异常");
             throw e;
         }
+    }
+
+    public int isExistAccount(String phone) {
+        int result = 0;
+        try {
+            result = userMapper.isExistAccount(phone);
+        } catch (Exception e) {
+            log.error("is exist account ", e);
+        }
+        return result;
+    }
+
+    public int registerAccount(RegisterUser registerUser) {
+        return userMapper.registerAccount(registerUser);
     }
 
 }
