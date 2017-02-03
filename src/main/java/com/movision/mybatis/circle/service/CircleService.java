@@ -1,5 +1,6 @@
 package com.movision.mybatis.circle.service;
 
+import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.mapper.CircleMapper;
 import com.movision.mybatis.followCircle.mapper.FollowCircleMapper;
@@ -82,6 +83,16 @@ public class CircleService {
             return circleMapper.queryCircleByPhone(circleid);
         } catch (Exception e) {
             log.error("查询手机号失败");
+            throw e;
+        }
+    }
+
+    public List<Circle> queryHotCircle() {
+        try {
+            log.info("查询帖子详情最下方推荐的4个热门圈子");
+            return circleMapper.queryHotCircle();
+        } catch (Exception e) {
+            log.error("查询帖子详情最下方推荐的4个热门圈子失败");
             throw e;
         }
     }

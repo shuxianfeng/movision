@@ -81,6 +81,14 @@
         )
     </select>
 
+    <!--查询帖子详情最下方推荐的4个热门圈子-->
+    <select id="queryHotCircle" resultType="com.movision.mybatis.circle.entity.Circle">
+        SELECT t1.id,t1.name,t1.maylikeimg
+        FROM yw_circle t1 WHERE t1.isdiscover = '1' AND t1.status = '1'
+        ORDER BY orderid
+        LIMIT 4;
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_circle
     where id = #{id,jdbcType=INTEGER}

@@ -1,6 +1,9 @@
 package com.movision.mybatis.post.entity;
 
+import com.movision.mybatis.circle.entity.Circle;
+
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author shuxf
@@ -54,6 +57,8 @@ public class PostVo {
     private String videourl;//存放原生视频链接
 
     private String isfollow;//该帖子所属的圈子是否被关注 0 可关注  1 已关注（用于判断帖子详情中的关注按钮是否可用）
+
+    private List<Circle> hotcirclelist;//用于存放帖子详情最下方的4个热门推荐圈子
 
     public Integer getId() {
         return id;
@@ -245,5 +250,13 @@ public class PostVo {
 
     public void setIsfollow(String isfollow) {
         this.isfollow = isfollow;
+    }
+
+    public List<Circle> getHotcirclelist() {
+        return hotcirclelist;
+    }
+
+    public void setHotcirclelist(List<Circle> hotcirclelist) {
+        this.hotcirclelist = hotcirclelist;
     }
 }

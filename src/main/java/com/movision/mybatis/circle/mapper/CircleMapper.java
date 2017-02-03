@@ -28,6 +28,8 @@ public interface CircleMapper {
 
     String queryCircleByPhone(int circleid);
 
+    List<Circle> queryHotCircle();
+
     int queryCircleScope(int circleid);
 
     int queryCircleOwner(int circleid);

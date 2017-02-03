@@ -2,6 +2,7 @@ package com.movision.facade.index;
 
 import com.movision.mybatis.accusation.entity.Accusation;
 import com.movision.mybatis.accusation.service.AccusationService;
+import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
@@ -46,12 +47,17 @@ public class FacadePost {
         //通过userid、postid查询该用户有没有关注该圈子的权限
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("postid", Integer.parseInt(postid));
-        parammap.put("userid", Integer.parseInt(userid));
+        if (!StringUtils.isEmpty(userid)) {
+            parammap.put("userid", Integer.parseInt(userid));
+        }
         PostVo vo = postService.queryPostDetail(parammap);
         if (type.equals("1")) {
             String url = postService.queryVideoUrl(Integer.parseInt(postid));
             vo.setVideourl(url);
         }
+        //查询帖子详情最下方推荐的4个热门圈子
+        List<Circle> hotcirclelist = circleService.queryHotCircle();
+        vo.setHotcirclelist(hotcirclelist);
         return vo;
     }
 
