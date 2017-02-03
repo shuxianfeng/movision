@@ -92,6 +92,16 @@ public class PostService {
         }
     }
 
+    public List<PostVo> queryAllActive(Paging<Post> pager) {
+        try {
+            log.info("查询所有活动列表");
+            return postMapper.queryAllActive(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询所有活动列表失败");
+            throw e;
+        }
+    }
+
     //查询某个帖子所属圈子
     public int queryPostByCircleid(String postid) {
         try {

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -121,6 +122,28 @@ public class AppPostController {
         if (response.getCode() == 200 || type == 200) {
             response.setMessage("操作成功");
         }
+        return response;
+    }
+
+    /**
+     * 发现页热门活动————查看全部活动接口
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return Response
+     */
+    @ApiOperation(value = "查看全部活动", notes = "用于返回发现页热门活动————查看全部活动接口(enddays为-1活动还未开始 为0活动已结束 为其他时为距离结束的剩余天数)", response = Response.class)
+    @RequestMapping(value = "queryAllActive", method = RequestMethod.POST)
+    public Response queryAllActive(@ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
+                                   @ApiParam(value = "每页多少条") @RequestParam(required = false) String pageSize) {
+        Response response = new Response();
+        List<PostVo> activeList = facadePost.queryAllActive(pageNo, pageSize);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(activeList);
+
         return response;
     }
 }

@@ -158,6 +158,19 @@
         SELECT videourl FROM yw_video WHERE postid = #{postid,jdbcType=INTEGER}
     </select>
 
+    <!--查询所有活动列表-->
+    <select id="queryAllActive" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT t.* FROM (
+        SELECT t1.id, t1.title, t1.subtitle, t1.postcontent, t1.zansum, t1.commentsum, t1.forwardsum, t1.collectsum,
+        t1.isactive, t1.ishot, t1.isessence, t1.isessencepool, t1.orderid, t1.coverimg, t1.intime, t1.totalpoint,
+        t1.isdel, t2.begintime, t2.endtime
+        FROM yw_post t1
+        LEFT JOIN yw_active_period t2
+        ON t1.id = t2.postid
+        ) t WHERE t.isactive = '1'
+        ORDER BY t.intime DESC
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_post

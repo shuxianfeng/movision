@@ -43,6 +43,8 @@ public interface PostMapper {
 
     List<PostVo> queryPostList(RowBounds rowBounds, int circleid);
 
+    List<PostVo> queryAllActive(RowBounds rowBounds);
+
     int queryPostByCircleid(int id);
 
     int releasePost(Post post);

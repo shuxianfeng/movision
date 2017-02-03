@@ -60,6 +60,12 @@ public class PostVo {
 
     private List<Circle> hotcirclelist;//用于存放帖子详情最下方的4个热门推荐圈子
 
+    private Date begintime;//活动开始时间（为活动时使用）
+
+    private Date endtime;//活动结束时间（为活动时使用）
+
+    private Integer enddays;//距离活动结束剩余天数（查询活动时该字段不为空）
+
     public Integer getId() {
         return id;
     }
@@ -258,5 +264,29 @@ public class PostVo {
 
     public void setHotcirclelist(List<Circle> hotcirclelist) {
         this.hotcirclelist = hotcirclelist;
+    }
+
+    public Integer getEnddays() {
+        return enddays;
+    }
+
+    public void setEnddays(Integer enddays) {
+        this.enddays = enddays;
+    }
+
+    public Date getBegintime() {
+        return begintime;
+    }
+
+    public void setBegintime(Date begintime) {
+        this.begintime = begintime;
+    }
+
+    public Date getEndtime() {
+        return endtime;
+    }
+
+    public void setEndtime(Date endtime) {
+        this.endtime = endtime;
     }
 }

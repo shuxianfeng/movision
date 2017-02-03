@@ -212,4 +212,45 @@ public class FacadePost {
         }
     }
 
+    public List<PostVo> queryAllActive(String pageNo, String pageSize) {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<Post> pager = new Paging<Post>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+
+        List<PostVo> activeList = postService.queryAllActive(pager);
+
+        //遍历所有的活动开始时间和结束时间，计算活动距离结束的剩余天数
+        for (int i = 0; i < activeList.size(); i++) {
+            Date begin = activeList.get(i).getBegintime();//活动开始时间
+            Date end = activeList.get(i).getEndtime();//活动结束时间
+            Date now = new Date();//活动当前时间
+            if (now.before(begin)) {
+                activeList.get(i).setEnddays(-1);//活动还未开始
+            } else if (end.before(now)) {
+                activeList.get(i).setEnddays(0);//活动已结束
+            } else if (begin.before(now) && now.before(end)) {
+                try {
+                    log.error("计算活动剩余结束天数");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date a = sdf.parse(sdf.format(now));
+                    Date b = sdf.parse(sdf.format(end));
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(a);
+                    long time1 = cal.getTimeInMillis();
+                    cal.setTime(b);
+                    long time2 = cal.getTimeInMillis();
+                    long between_days = (time2 - time1) / (1000 * 3600 * 24);
+                    activeList.get(i).setEnddays(Integer.parseInt(String.valueOf(between_days)));
+                } catch (Exception e) {
+                    log.error("计算活动剩余结束天数失败");
+                    e.printStackTrace();
+                }
+            }
+        }
+        return activeList;
+    }
 }
