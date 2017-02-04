@@ -192,6 +192,12 @@
           AND userid = #{userid,jdbcType=INTEGER}
     </select>
 
+    <!--查询该活动的参与总人数-->
+    <select id="queryActivePartSum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_active_part
+        WHERE postid = #{postid,jdbcType=INTEGER}
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_post

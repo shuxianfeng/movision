@@ -281,8 +281,9 @@ public class FacadePost {
 
         List<PostVo> activeList = postService.queryAllActive(pager);
 
-        //遍历所有的活动开始时间和结束时间，计算活动距离结束的剩余天数
         for (int i = 0; i < activeList.size(); i++) {
+
+            //遍历所有的活动开始时间和结束时间，计算活动距离结束的剩余天数
             Date begin = activeList.get(i).getBegintime();//活动开始时间
             Date end = activeList.get(i).getEndtime();//活动结束时间
             Date now = new Date();//活动当前时间
@@ -308,6 +309,11 @@ public class FacadePost {
                     e.printStackTrace();
                 }
             }
+
+            //计算已投稿总数
+            int postid = activeList.get(i).getId();//获取活动id
+            int partsum = postService.queryActivePartSum(postid);
+            activeList.get(i).setPartsum(partsum);
         }
         return activeList;
     }

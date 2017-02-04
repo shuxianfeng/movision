@@ -46,6 +46,8 @@ public interface PostMapper {
 
     List<PostVo> queryAllActive(RowBounds rowBounds);
 
+    int queryActivePartSum(int postid);
+
     int queryUserPartSum(Map<String, Object> parammap);
 
     int saveActiveRecord(Map<String, Object> parammap);

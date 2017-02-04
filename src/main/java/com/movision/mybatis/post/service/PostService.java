@@ -103,6 +103,16 @@ public class PostService {
         }
     }
 
+    public int queryActivePartSum(int postid) {
+        try {
+            log.info("查询该活动的参与总人数");
+            return postMapper.queryActivePartSum(postid);
+        } catch (Exception e) {
+            log.error("查询该活动的参与总人数失败");
+            throw e;
+        }
+    }
+
     public int queryUserPartSum(Map<String, Object> parammap) {
         try {
             log.info("查询该用户有没有参与过该活动");

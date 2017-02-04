@@ -68,6 +68,8 @@ public class PostVo {
 
     private Integer enddays;//距离活动结束剩余天数（查询活动时该字段不为空）
 
+    private Integer partsum;//已参与活动总人数
+
     public Integer getId() {
         return id;
     }
@@ -298,5 +300,13 @@ public class PostVo {
 
     public void setActivetype(Integer activetype) {
         this.activetype = activetype;
+    }
+
+    public Integer getPartsum() {
+        return partsum;
+    }
+
+    public void setPartsum(Integer partsum) {
+        this.partsum = partsum;
     }
 }
