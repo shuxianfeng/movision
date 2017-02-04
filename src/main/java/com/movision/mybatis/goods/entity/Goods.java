@@ -59,6 +59,8 @@ public class Goods {
 
     private Integer isdel;
 
+    private String imgurl;
+
     public Integer getId() {
         return id;
     }
@@ -281,5 +283,13 @@ public class Goods {
 
     public void setPort(String port) {
         this.port = port;
+    }
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
     }
 }

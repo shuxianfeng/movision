@@ -50,7 +50,7 @@
     <select id="queryActiveGoods" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goods.entity.Goods">
     SELECT t.* FROM (
-      SELECT t1.postid,t2.id,t2.name,t2.subname,t2.price,t2.origprice,t2.img_url
+        SELECT t1.postid,t2.id,t2.name,t2.subname,t2.price,t2.origprice,t2.img_url AS imgurl
       FROM yw_active_goods t1
       LEFT JOIN (SELECT a.id,a.name,a.subname,a.price,a.origprice,b.img_url
                   FROM yw_goods a,yw_goods_img b
