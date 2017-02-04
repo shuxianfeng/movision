@@ -103,6 +103,26 @@ public class PostService {
         }
     }
 
+    public int queryUserPartSum(Map<String, Object> parammap) {
+        try {
+            log.info("查询该用户有没有参与过该活动");
+            return postMapper.queryUserPartSum(parammap);
+        } catch (Exception e) {
+            log.error("查询该用户有没有参与过该活动失败");
+            throw e;
+        }
+    }
+
+    public int saveActiveRecord(Map<String, Object> parammap) {
+        try {
+            log.info("保存用户参与告知类活动的记录");
+            return postMapper.saveActiveRecord(parammap);
+        } catch (Exception e) {
+            log.error("保存用户参与告知类活动的记录失败");
+            throw e;
+        }
+    }
+
     public ActiveVo queryNoticeActive(String postid) {
         try {
             log.info("查询告知类活动详情");

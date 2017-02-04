@@ -165,4 +165,29 @@ public class AppPostController {
 
         return response;
     }
+
+    /**
+     * 告知类活动————点击参与活动接口
+     *
+     * @param postid
+     * @param userid
+     * @return Response
+     */
+    @ApiOperation(value = "点击参与活动接口（告知类）", notes = "用于告知类活动点击参与活动", response = Response.class)
+    @RequestMapping(value = "partActive", method = RequestMethod.POST)
+    public Response partActive(@ApiParam(value = "活动id") @RequestParam String postid,
+                               @ApiParam(value = "参与用户id") @RequestParam String userid) {
+        Response response = new Response();
+        int flag = facadePost.partActive(postid, userid);
+
+        if (flag == 1) {
+            response.setCode(200);
+            response.setMessage("活动参与成功");
+        } else if (flag == -1) {
+            response.setCode(201);
+            response.setMessage("已参与过该活动");
+        }
+
+        return response;
+    }
 }

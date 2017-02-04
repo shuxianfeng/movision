@@ -11,6 +11,7 @@ import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.commons.beanutils.converters.IntegerConverter;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -309,5 +310,22 @@ public class FacadePost {
             }
         }
         return activeList;
+    }
+
+    public int partActive(String postid, String userid) {
+
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("postid", Integer.parseInt(postid));
+        parammap.put("userid", Integer.parseInt(userid));
+
+        //先校验该用户有没有参与该活动
+        int sum = postService.queryUserPartSum(parammap);
+
+        if (sum == 0) {
+            //插入一条参与记录
+            return postService.saveActiveRecord(parammap);
+        } else {
+            return -1;
+        }
     }
 }

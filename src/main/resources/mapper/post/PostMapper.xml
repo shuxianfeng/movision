@@ -185,6 +185,13 @@
         WHERE t.id = #{postid,jdbcType=INTEGER}
     </select>
 
+    <!--查询该用户有没有参与该活动-->
+    <select id="queryUserPartSum" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_active_part
+        WHERE postid = #{postid,jdbcType=INTEGER}
+          AND userid = #{userid,jdbcType=INTEGER}
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_post
@@ -224,6 +231,16 @@
           #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
         #{coverimg,jdbcType=VARCHAR},#{intime,jdbcType=TIMESTAMP},#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER}
         )
+    </insert>
+
+    <!--插入一条用户参与活动的记录-->
+    <insert id="saveActiveRecord" parameterType="java.util.Map">
+      INSERT INTO yw_active_part (
+        postid, userid
+      )
+      VALUES (
+        #{postid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}
+      )
     </insert>
 
     <!--基础插入语句（选择性插入）-->
