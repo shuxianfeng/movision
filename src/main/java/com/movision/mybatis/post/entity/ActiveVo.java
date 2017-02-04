@@ -58,7 +58,9 @@ public class ActiveVo {
 
     private Integer enddays;//距离活动结束剩余天数（查询活动时该字段不为空）
 
-    private List<Goods> promotionGoodsList;
+    private List<Goods> promotionGoodsList;//活动促销商品列表
+
+    private Integer partsum;//活动参与总人数
 
     public Integer getId() {
         return id;
@@ -258,5 +260,13 @@ public class ActiveVo {
 
     public void setPromotionGoodsList(List<Goods> promotionGoodsList) {
         this.promotionGoodsList = promotionGoodsList;
+    }
+
+    public Integer getPartsum() {
+        return partsum;
+    }
+
+    public void setPartsum(Integer partsum) {
+        this.partsum = partsum;
     }
 }

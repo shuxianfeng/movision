@@ -101,6 +101,10 @@ public class FacadePost {
             }
         }
 
+        //查询活动参与总人数
+        int partsum = postService.queryActivePartSum(Integer.parseInt(postid));
+        active.setPartsum(partsum);
+
         //如果为商城促销类活动，需要在此基础上增加促销类商品列表
         if (activetype.equals("1")) {
 
