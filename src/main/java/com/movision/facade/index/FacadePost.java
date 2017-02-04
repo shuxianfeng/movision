@@ -269,7 +269,8 @@ public class FacadePost {
             acc.setIntime(new Date());
             acc.setType(1);
             return accusationService.insertPostByAccusation(acc);//插入数据
-        } else {//用户已经被举报过该帖子，举报成功返回状态200
+        } else {
+            //用户已经被举报过该帖子，举报成功返回状态200
             return 200;
         }
     }
