@@ -1,10 +1,14 @@
 package com.movision.mybatis.user.service;
 
+import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.post.mapper.PostMapper;
 import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.mapper.UserMapper;
+import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,9 @@ public class UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private PostMapper postMapper;
 
     public LoginUser queryLoginUserByPhone(String phone) {
         User user = new User();
@@ -94,6 +101,16 @@ public class UserService {
             return userMapper.queryUserInfo(userid);
         } catch (Exception e) {
             log.error("查询用户个人主页--个人信息失败");
+            throw e;
+        }
+    }
+
+    public List<PostVo> personPost(Paging<PostVo> pager, int userid) {
+        try {
+            log.info("查询个人主页中用户发布的历史帖子和用户分享的历史帖子");
+            return postMapper.personPost(pager.getRowBounds(), userid);
+        } catch (Exception e) {
+            log.error("查询个人主页中用户发布的历史帖子和用户分享的历史帖子失败");
             throw e;
         }
     }

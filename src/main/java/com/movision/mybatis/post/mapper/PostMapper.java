@@ -4,6 +4,7 @@ import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -33,6 +34,8 @@ public interface PostMapper {
     List<Post> queryHotActiveList();
 
     List<Post> queryCircleSubPost(int circleid);
+
+    List<PostVo> personPost(RowBounds rowBounds, int userid);
 
     int queryPostNumByCircleid(int circleid);
 

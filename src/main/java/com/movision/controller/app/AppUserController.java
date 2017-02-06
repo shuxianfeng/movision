@@ -2,6 +2,8 @@ package com.movision.controller.app;
 
 import com.movision.common.Response;
 import com.movision.facade.user.UserFacade;
+import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.user.entity.UserVo;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @Author shuxf
@@ -34,6 +38,22 @@ public class AppUserController {
             response.setMessage("查询成功");
         }
         response.setData(userVo);
+        return response;
+    }
+
+    @ApiOperation(value = "个人主页--帖子（发布的帖子和分享的帖子）", notes = "用于返回个人主页中帖子页签中个人发布的历史帖子和分享过的历史帖子", response = Response.class)
+    @RequestMapping(value = "personPost", method = RequestMethod.POST)
+    public Response personPost(@ApiParam(value = "用户id") @RequestParam String userid,
+                               @ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
+                               @ApiParam(value = "每页多少条") @RequestParam(required = false) String pageSize) {
+        Response response = new Response();
+
+        List<PostVo> personPostList = userFacade.personPost(userid, pageNo, pageSize);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(personPostList);
         return response;
     }
 }

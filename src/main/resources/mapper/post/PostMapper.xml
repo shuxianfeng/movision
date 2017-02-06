@@ -202,6 +202,35 @@
         WHERE postid = #{postid,jdbcType=INTEGER}
     </select>
 
+    <!--查询用户发布的历史帖子和用户分享出去的历史帖子(这里取的是分享时间)-->
+    <select id="personPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT a.*,b.name AS circlename FROM (
+            (
+                SELECT id, circleid, title, subtitle, coverimg, intime
+                FROM yw_post
+                WHERE circleid IN (
+                  SELECT id FROM yw_circle WHERE phone = (
+                    SELECT phone FROM yw_user WHERE id = #{userid,jdbcType=INTEGER}
+                  )
+                )
+                AND isactive = '0'
+                AND isdel = '0'
+            )
+          UNION
+            (
+                SELECT t.id, t.circleid, t.title, t.subtitle, t.coverimg, t1.intime  FROM (
+                    SELECT id, circleid, title, subtitle, coverimg, intime
+                    FROM yw_post
+                    WHERE id IN (
+                      SELECT postid FROM yw_post_share WHERE userid = #{userid,jdbcType=INTEGER}
+                    )
+                    AND isactive = '0'
+                    AND isdel = '0'
+                ) t LEFT JOIN yw_post_share t1 ON t.id = t1.postid
+            )
+        ) a LEFT JOIN yw_circle b ON a.circleid = b.id
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_post

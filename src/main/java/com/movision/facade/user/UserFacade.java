@@ -1,10 +1,13 @@
 package com.movision.facade.user;
 
 import com.movision.aop.UserSaveCache;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.utils.pagination.model.Paging;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +42,17 @@ public class UserFacade {
 
     public UserVo queryUserInfo(String userid) {
         return userService.queryUserInfo(Integer.parseInt(userid));
+    }
+
+    public List<PostVo> personPost(String userid, String pageNo, String pageSize) {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        return userService.personPost(pager, Integer.parseInt(userid));
     }
 
     /**

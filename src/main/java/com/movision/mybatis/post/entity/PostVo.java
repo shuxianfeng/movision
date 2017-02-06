@@ -72,6 +72,8 @@ public class PostVo {
 
     private Integer partsum;//已参与活动总人数
 
+    private String circlename;//所属圈子名称
+
     public Integer getId() {
         return id;
     }
@@ -318,5 +320,13 @@ public class PostVo {
 
     public void setActivefee(Double activefee) {
         this.activefee = activefee;
+    }
+
+    public String getCirclename() {
+        return circlename;
+    }
+
+    public void setCirclename(String circlename) {
+        this.circlename = circlename;
     }
 }
