@@ -5,7 +5,7 @@
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="openid" property="openid" jdbcType="VARCHAR"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
-        <result column="uuid" property="uuid" jdbcType="VARCHAR"/>
+        <result column="token" property="token" jdbcType="VARCHAR"/>
         <result column="invitecode" property="invitecode" jdbcType="VARCHAR"/>
         <result column="referrals" property="referrals" jdbcType="VARCHAR"/>
         <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
@@ -24,7 +24,7 @@
         <result column="status" property="status" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, openid, phone, uuid, invitecode, referrals, nickname, sign, attention, fans,
+        id, openid, phone, token, invitecode, referrals, nickname, sign, attention, fans,
         points, photo, sex, birthday, province, city, intime, growth, level, status
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -39,14 +39,14 @@
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.user.entity.User">
         insert into yw_user (id, openid, phone,
-        uuid, invitecode, referrals,
+        token, invitecode, referrals,
         nickname, sign, attention,
         fans, points, photo,
         sex, birthday, province,
         city, intime, growth,
         level, status)
         values (#{id,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
-        #{uuid,jdbcType=VARCHAR}, #{invitecode,jdbcType=VARCHAR}, #{referrals,jdbcType=VARCHAR},
+        #{token,jdbcType=VARCHAR}, #{invitecode,jdbcType=VARCHAR}, #{referrals,jdbcType=VARCHAR},
         #{nickname,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, #{attention,jdbcType=INTEGER},
         #{fans,jdbcType=INTEGER}, #{points,jdbcType=INTEGER}, #{photo,jdbcType=VARCHAR},
         #{sex,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}, #{province,jdbcType=VARCHAR},
@@ -65,8 +65,8 @@
             <if test="phone != null">
                 phone,
             </if>
-            <if test="uuid != null">
-                uuid,
+            <if test="token != null">
+                token,
             </if>
             <if test="invitecode != null">
                 invitecode,
@@ -127,8 +127,8 @@
             <if test="phone != null">
                 #{phone,jdbcType=VARCHAR},
             </if>
-            <if test="uuid != null">
-                #{uuid,jdbcType=VARCHAR},
+            <if test="token != null">
+                #{token,jdbcType=VARCHAR},
             </if>
             <if test="invitecode != null">
                 #{invitecode,jdbcType=VARCHAR},
@@ -189,8 +189,8 @@
             <if test="phone != null">
                 phone = #{phone,jdbcType=VARCHAR},
             </if>
-            <if test="uuid != null">
-                uuid = #{uuid,jdbcType=VARCHAR},
+            <if test="token != null">
+                token = #{token,jdbcType=VARCHAR},
             </if>
             <if test="invitecode != null">
                 invitecode = #{invitecode,jdbcType=VARCHAR},
@@ -247,7 +247,7 @@
         update yw_user
         set openid = #{openid,jdbcType=VARCHAR},
         phone = #{phone,jdbcType=VARCHAR},
-        uuid = #{uuid,jdbcType=VARCHAR},
+        token = #{token,jdbcType=VARCHAR},
         invitecode = #{invitecode,jdbcType=VARCHAR},
         referrals = #{referrals,jdbcType=VARCHAR},
         nickname = #{nickname,jdbcType=VARCHAR},
@@ -323,8 +323,8 @@
 
     <insert id="registerAccount" parameterType="com.movision.mybatis.user.entity.RegisterUser" useGeneratedKeys="true"
             keyProperty="id">
-        INSERT INTO yw_user (phone, intime, status)
-        VALUES (#{phone}, #{intime}, #{status})
+        INSERT INTO yw_user (phone, intime, status, token)
+        VALUES (#{phone}, #{intime}, #{status}, #{token})
     </insert>
 
     <select id="selectAllUser" resultType="com.movision.mybatis.user.entity.User">

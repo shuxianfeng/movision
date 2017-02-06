@@ -28,6 +28,18 @@ public class RegisterUser implements Serializable {
     @ApiModelProperty(value = "账号状态：默认 0 正常 1 异常封号")
     private Integer status;
 
+    @ApiModelProperty(value = "用户身份令牌")
+    private String token;
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+
+        return token;
+    }
+
     public Integer getId() {
         return id;
     }

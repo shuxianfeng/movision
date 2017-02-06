@@ -11,7 +11,7 @@ public class User implements Serializable {
 
     private String phone;
 
-    private String uuid;
+    private String token;
 
     private String invitecode;
 
@@ -69,12 +69,12 @@ public class User implements Serializable {
         this.phone = phone == null ? null : phone.trim();
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getToken() {
+        return token;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid == null ? null : uuid.trim();
+    public void setToken(String token) {
+        this.token = token == null ? null : token.trim();
     }
 
     public String getInvitecode() {

@@ -27,6 +27,7 @@ public class UserFacade {
     @Autowired
     private UserService userService;
 
+    @Cacheable(value = "is_exist_account", key = "'login_'+#phone")
     public int isExistAccount(String phone) {
         return userService.isExistAccount(phone);
     }

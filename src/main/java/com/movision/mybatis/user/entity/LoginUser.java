@@ -14,7 +14,7 @@ public class LoginUser {
 
     private String phone;
 
-    private String uuid;
+    private String token;
 
     private String invitecode;
 
@@ -62,8 +62,8 @@ public class LoginUser {
         this.phone = phone;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public void setInvitecode(String invitecode) {
@@ -146,8 +146,8 @@ public class LoginUser {
         return phone;
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getToken() {
+        return token;
     }
 
     public String getInvitecode() {
@@ -218,11 +218,11 @@ public class LoginUser {
         return role;
     }
 
-    public LoginUser(Integer id, String openid, String phone, String uuid, String invitecode, String referrals, String nickname, String sign, Integer attention, Integer fans, Integer points, String photo, Integer sex, Date birthday, String province, String city, Date intime, Integer growth, Integer level, Integer status, String role) {
+    public LoginUser(Integer id, String openid, String phone, String token, String invitecode, String referrals, String nickname, String sign, Integer attention, Integer fans, Integer points, String photo, Integer sex, Date birthday, String province, String city, Date intime, Integer growth, Integer level, Integer status, String role) {
         this.id = id;
         this.openid = openid;
         this.phone = phone;
-        this.uuid = uuid;
+        this.token = token;
         this.invitecode = invitecode;
         this.referrals = referrals;
         this.nickname = nickname;
