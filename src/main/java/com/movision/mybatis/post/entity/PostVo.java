@@ -32,6 +32,8 @@ public class PostVo {
 
     private Integer activetype;
 
+    private Double activefee;
+
     private Integer type;
 
     private Integer ishot;
@@ -308,5 +310,13 @@ public class PostVo {
 
     public void setPartsum(Integer partsum) {
         this.partsum = partsum;
+    }
+
+    public Double getActivefee() {
+        return activefee;
+    }
+
+    public void setActivefee(Double activefee) {
+        this.activefee = activefee;
     }
 }

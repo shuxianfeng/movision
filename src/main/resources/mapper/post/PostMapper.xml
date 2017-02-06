@@ -13,6 +13,7 @@
         <result column="collectsum" jdbcType="INTEGER" property="collectsum"/>
         <result column="isactive" jdbcType="INTEGER" property="isactive"/>
         <result column="activetype" jdbcType="INTEGER" property="activetype"/>
+        <result column="activefee" jdbcType="DOUBLE" property="activefee"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
         <result column="ishot" jdbcType="INTEGER" property="ishot"/>
         <result column="orderid" jdbcType="INTEGER" property="orderid"/>
@@ -27,7 +28,8 @@
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
-        isactive, activetype, type, ishot, orderid, isessence, isessencepool, coverimg, hotimgurl, intime, totalpoint,
+        isactive, activetype, activefee, type, ishot, orderid, isessence, isessencepool, coverimg, hotimgurl, intime,
+        totalpoint,
         isdel
   </sql>
 
@@ -87,7 +89,8 @@
 
     <!--查询yw_post表中所有热门活动列表-->
     <select id="queryHotActiveList" resultType="com.movision.mybatis.post.entity.Post">
-        SELECT t1.id,t1.title,t1.subtitle,t1.postcontent,t1.isactive,t1.activetype,t1.ishot,t1.hotimgurl,t1.intime
+        SELECT
+        t1.id,t1.title,t1.subtitle,t1.postcontent,t1.isactive,t1.activetype,t1.activefee,t1.ishot,t1.hotimgurl,t1.intime
         FROM yw_post t1 WHERE t1.isactive = '1' AND t1.ishot = '1' AND t1.isdel = '0'
         ORDER BY intime DESC
     </select>
@@ -164,7 +167,8 @@
     <select id="queryAllActive" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT t.* FROM (
         SELECT t1.id, t1.title, t1.subtitle, t1.postcontent, t1.zansum, t1.commentsum, t1.forwardsum, t1.collectsum,
-        t1.isactive, t1.activetype, t1.ishot, t1.isessence, t1.isessencepool, t1.orderid, t1.coverimg, t1.intime,
+        t1.isactive, t1.activetype, t1.activefee, t1.ishot, t1.isessence, t1.isessencepool, t1.orderid, t1.coverimg,
+        t1.intime,
         t1.totalpoint, t1.isdel, t2.begintime, t2.endtime
         FROM yw_post t1
         LEFT JOIN yw_active_period t2
@@ -209,14 +213,15 @@
     insert into yw_post (id, circleid, title, 
       subtitle, postcontent, zansum,
         commentsum, forwardsum, collectsum,
-        isactive, activetype, type, ishot, orderid,
+        isactive, activetype, activefee, type, ishot, orderid,
         isessence, isessencepool, coverimg, hotimgurl,
       intime, totalpoint, isdel
       )
     values (#{id,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
       #{subtitle,jdbcType=VARCHAR}, #{postcontent,jdbcType=VARCHAR}, #{zansum,jdbcType=INTEGER},
         #{commentsum,jdbcType=INTEGER}, #{forwardsum,jdbcType=INTEGER}, #{collectsum,jdbcType=INTEGER},
-        #{isactive,jdbcType=INTEGER}, #{activetype,jdbcType=INTEGER}, #{type,jdbcType=INTEGER},
+        #{isactive,jdbcType=INTEGER}, #{activetype,jdbcType=INTEGER}, #{activefee,jdbcType=DOUBLE},
+        #{type,jdbcType=INTEGER},
         #{ishot,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},
         #{isessencepool,jdbcType=INTEGER}, #{coverimg,jdbcType=VARCHAR},#{hotimgurl,jdbcType=VARCHAR},
       #{intime,jdbcType=TIMESTAMP}, #{totalpoint,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER}
@@ -286,6 +291,9 @@
             <if test="activetype != null">
                 activetype,
             </if>
+            <if test="activefee != null">
+                activefee,
+            </if>
             <if test="type != null">
                 type,
             </if>
@@ -350,6 +358,9 @@
             </if>
             <if test="activetype != null">
                 #{activetype,jdbcType=INTEGER},
+            </if>
+            <if test="activefee != null">
+                #{activefee,jdbcType=DOUBLE},
             </if>
             <if test="type != null">
                 #{type,jdbcType=INTEGER},
@@ -418,6 +429,9 @@
             <if test="activetype != null">
                 activetype = #{activetype,jdbcType=INTEGER},
             </if>
+            <if test="activefee != null">
+                activefee = #{activefee,jdbcType=DOUBLE},
+            </if>
             <if test="type != null">
                 type = #{type,jdbcType=INTEGER},
             </if>
@@ -465,6 +479,7 @@
       collectsum = #{collectsum,jdbcType=INTEGER},
       isactive = #{isactive,jdbcType=INTEGER},
         activetype = #{activetype,jdbcType=INTEGER},
+        activefee = #{activefee,jdbcType=DOUBLE},
       type = #{type,jdbcType=INTEGER},
       ishot = #{ishot,jdbcType=INTEGER},
       orderid = #{orderid,jdbcType=INTEGER},

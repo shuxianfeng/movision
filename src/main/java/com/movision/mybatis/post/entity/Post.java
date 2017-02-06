@@ -25,6 +25,8 @@ public class Post {
 
     private Integer activetype;
 
+    private Double activefee;
+
     private Integer type;
 
     private Integer ishot;
@@ -211,5 +213,13 @@ public class Post {
 
     public void setActivetype(Integer activetype) {
         this.activetype = activetype;
+    }
+
+    public Double getActivefee() {
+        return activefee;
+    }
+
+    public void setActivefee(Double activefee) {
+        this.activefee = activefee;
     }
 }
