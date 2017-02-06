@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.bossOrders.mapper.BossOrdersMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.bossOrders.entity.BossOrders">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="ordernumber" property="ordernumber" jdbcType="VARCHAR"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="addressid" property="addressid" jdbcType="INTEGER"/>
+        <result column="takeway" property="takeway" jdbcType="INTEGER"/>
+        <result column="position" property="position" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="bill" property="bill" jdbcType="VARCHAR"/>
+        <result column="money" property="money" jdbcType="DOUBLE"/>
+        <result column="sendmoney" property="sendmoney" jdbcType="DOUBLE"/>
+        <result column="isdiscount" property="isdiscount" jdbcType="INTEGER"/>
+        <result column="couponsid" property="couponsid" jdbcType="VARCHAR"/>
+        <result column="discouponmoney" property="discouponmoney" jdbcType="DOUBLE"/>
+        <result column="dispointmoney" property="dispointmoney" jdbcType="DOUBLE"/>
+        <result column="realmoney" property="realmoney" jdbcType="DOUBLE"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="paytype" property="paytype" jdbcType="INTEGER"/>
+        <result column="paytime" property="paytime" jdbcType="TIMESTAMP"/>
+        <result column="paycode" property="paycode" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, ordernumber, userid, addressid, takeway, position, status, bill, money, sendmoney, 
+    isdiscount, couponsid, discouponmoney, dispointmoney, realmoney, intime, paytype, 
+    paytime, paycode, remark, isdel
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_orders
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_orders
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.bossOrders.entity.BossOrders">
+    insert into yw_orders (id, ordernumber, userid, 
+      addressid, takeway, position, 
+      status, bill, money, 
+      sendmoney, isdiscount, couponsid, 
+      discouponmoney, dispointmoney, realmoney, 
+      intime, paytype, paytime, 
+      paycode, remark, isdel
+      )
+    values (#{id,jdbcType=INTEGER}, #{ordernumber,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, 
+      #{addressid,jdbcType=INTEGER}, #{takeway,jdbcType=INTEGER}, #{position,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{bill,jdbcType=VARCHAR}, #{money,jdbcType=DOUBLE}, 
+      #{sendmoney,jdbcType=DOUBLE}, #{isdiscount,jdbcType=INTEGER}, #{couponsid,jdbcType=VARCHAR}, 
+      #{discouponmoney,jdbcType=DOUBLE}, #{dispointmoney,jdbcType=DOUBLE}, #{realmoney,jdbcType=DOUBLE}, 
+      #{intime,jdbcType=TIMESTAMP}, #{paytype,jdbcType=INTEGER}, #{paytime,jdbcType=TIMESTAMP}, 
+      #{paycode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{isdel,jdbcType=INTEGER}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.bossOrders.entity.BossOrders">
+        insert into yw_orders
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="ordernumber != null">
+                ordernumber,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="addressid != null">
+                addressid,
+            </if>
+            <if test="takeway != null">
+                takeway,
+            </if>
+            <if test="position != null">
+                position,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="bill != null">
+                bill,
+            </if>
+            <if test="money != null">
+                money,
+            </if>
+            <if test="sendmoney != null">
+                sendmoney,
+            </if>
+            <if test="isdiscount != null">
+                isdiscount,
+            </if>
+            <if test="couponsid != null">
+                couponsid,
+            </if>
+            <if test="discouponmoney != null">
+                discouponmoney,
+            </if>
+            <if test="dispointmoney != null">
+                dispointmoney,
+            </if>
+            <if test="realmoney != null">
+                realmoney,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="paytype != null">
+                paytype,
+            </if>
+            <if test="paytime != null">
+                paytime,
+            </if>
+            <if test="paycode != null">
+                paycode,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="ordernumber != null">
+                #{ordernumber,jdbcType=VARCHAR},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="addressid != null">
+                #{addressid,jdbcType=INTEGER},
+            </if>
+            <if test="takeway != null">
+                #{takeway,jdbcType=INTEGER},
+            </if>
+            <if test="position != null">
+                #{position,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="bill != null">
+                #{bill,jdbcType=VARCHAR},
+            </if>
+            <if test="money != null">
+                #{money,jdbcType=DOUBLE},
+            </if>
+            <if test="sendmoney != null">
+                #{sendmoney,jdbcType=DOUBLE},
+            </if>
+            <if test="isdiscount != null">
+                #{isdiscount,jdbcType=INTEGER},
+            </if>
+            <if test="couponsid != null">
+                #{couponsid,jdbcType=VARCHAR},
+            </if>
+            <if test="discouponmoney != null">
+                #{discouponmoney,jdbcType=DOUBLE},
+            </if>
+            <if test="dispointmoney != null">
+                #{dispointmoney,jdbcType=DOUBLE},
+            </if>
+            <if test="realmoney != null">
+                #{realmoney,jdbcType=DOUBLE},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="paytype != null">
+                #{paytype,jdbcType=INTEGER},
+            </if>
+            <if test="paytime != null">
+                #{paytime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="paycode != null">
+                #{paycode,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.bossOrders.entity.BossOrders">
+        update yw_orders
+        <set>
+            <if test="ordernumber != null">
+                ordernumber = #{ordernumber,jdbcType=VARCHAR},
+            </if>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="addressid != null">
+                addressid = #{addressid,jdbcType=INTEGER},
+            </if>
+            <if test="takeway != null">
+                takeway = #{takeway,jdbcType=INTEGER},
+            </if>
+            <if test="position != null">
+                position = #{position,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="bill != null">
+                bill = #{bill,jdbcType=VARCHAR},
+            </if>
+            <if test="money != null">
+                money = #{money,jdbcType=DOUBLE},
+            </if>
+            <if test="sendmoney != null">
+                sendmoney = #{sendmoney,jdbcType=DOUBLE},
+            </if>
+            <if test="isdiscount != null">
+                isdiscount = #{isdiscount,jdbcType=INTEGER},
+            </if>
+            <if test="couponsid != null">
+                couponsid = #{couponsid,jdbcType=VARCHAR},
+            </if>
+            <if test="discouponmoney != null">
+                discouponmoney = #{discouponmoney,jdbcType=DOUBLE},
+            </if>
+            <if test="dispointmoney != null">
+                dispointmoney = #{dispointmoney,jdbcType=DOUBLE},
+            </if>
+            <if test="realmoney != null">
+                realmoney = #{realmoney,jdbcType=DOUBLE},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="paytype != null">
+                paytype = #{paytype,jdbcType=INTEGER},
+            </if>
+            <if test="paytime != null">
+                paytime = #{paytime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="paycode != null">
+                paycode = #{paycode,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.bossOrders.entity.BossOrders">
+    update yw_orders
+    set ordernumber = #{ordernumber,jdbcType=VARCHAR},
+      userid = #{userid,jdbcType=INTEGER},
+      addressid = #{addressid,jdbcType=INTEGER},
+      takeway = #{takeway,jdbcType=INTEGER},
+      position = #{position,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      bill = #{bill,jdbcType=VARCHAR},
+      money = #{money,jdbcType=DOUBLE},
+      sendmoney = #{sendmoney,jdbcType=DOUBLE},
+      isdiscount = #{isdiscount,jdbcType=INTEGER},
+      couponsid = #{couponsid,jdbcType=VARCHAR},
+      discouponmoney = #{discouponmoney,jdbcType=DOUBLE},
+      dispointmoney = #{dispointmoney,jdbcType=DOUBLE},
+      realmoney = #{realmoney,jdbcType=DOUBLE},
+      intime = #{intime,jdbcType=TIMESTAMP},
+      paytype = #{paytype,jdbcType=INTEGER},
+      paytime = #{paytime,jdbcType=TIMESTAMP},
+      paycode = #{paycode,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      isdel = #{isdel,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="queryOrdersByList" resultType="com.movision.mybatis.bossOrders.entity.BossOrdersVo">
+    SELECT
+      o.id,
+      o.ordernumber,
+      o.userid,
+      o.addressid,
+      o.intime,
+      o.money,
+      o.realmoney,
+      o.status,
+      a.name,
+      a.phone,
+      a.province,
+      a.city,
+      a.district,
+      a.street
+    FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id
+  </select>
+
+    <select id="queryOrderByCondition" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.bossOrders.entity.BossOrdersVo">
+        SELECT
+        o.id,
+        o.ordernumber,
+        o.userid,
+        o.addressid,
+        o.intime,
+        o.money,
+        o.realmoney,
+        o.status,
+        a.name,
+        a.phone,
+        a.province,
+        a.city,
+        a.district,
+        a.street
+        FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id
+        WHERE 1
+        <if test="ordernumber!=null and ordernumber!=''">
+            AND o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
+        </if>
+        <if test="status!=null and status!=''">
+            AND o.`status`=#{status,jdbcType=VARCHAR}
+        </if>
+        <if test="name!=null and name!=''">
+            AND a.`name`=#{name,jdbcType=VARCHAR}
+        </if>
+        <if test="takeway!=null and takeway!=''">
+            AND o.takeway=#{takeway,jdbcType=VARCHAR}
+        </if>
+    </select>
+</mapper>
