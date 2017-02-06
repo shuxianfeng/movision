@@ -327,4 +327,10 @@
         VALUES (#{phone}, #{intime}, #{status})
     </insert>
 
+    <select id="selectAllUser" resultType="com.movision.mybatis.user.entity.User">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM yw_user
+    </select>
+
 </mapper>

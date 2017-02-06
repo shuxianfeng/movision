@@ -49,13 +49,8 @@ public class BossLoginController {
         Subject currentUser = SecurityUtils.getSubject();
         UsernamePasswordToken token = null;
         try {
+            //核心代码
             token = new UsernamePasswordToken(username, password.toCharArray());
-
-            String rememberMe = req.getParameter("rememberMe");
-            if (rememberMe != null && rememberMe.equals("1")) {
-                token.setRememberMe(true);
-            }
-
             currentUser.login(token);
             jsonResult.setData(username);
         } catch (UnknownAccountException e) {

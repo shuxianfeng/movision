@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -84,6 +85,10 @@ public class UserService {
 
     public int registerAccount(RegisterUser registerUser) {
         return userMapper.registerAccount(registerUser);
+    }
+
+    public List<User> selectAllUser() {
+        return userMapper.selectAllUser();
     }
 
 }

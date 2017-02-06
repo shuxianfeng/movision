@@ -53,13 +53,13 @@
     </bean>
 
     <!-- cacheManager -->
-    <bean id="cacheManager" class="org.crazycake.shiro.RedisCacheManager">
+    <!--<bean id="cacheManager" class="org.crazycake.shiro.RedisCacheManager">
         <property name="redisManager" ref="redisManager"/>
-    </bean>
+    </bean>-->
 
-    <!--<bean id="cacheManager" class="com.movisionshiro.cache.SpringCacheManagerWrapper">-->
-        <!--<property name="cacheManager" ref="redisCacheManager"/>-->
-    <!--</bean>-->
+    <bean id="cacheManager" class="com.movision.shiro.cache.SpringCacheManagerWrapper">
+        <property name="cacheManager" ref="redisCacheManager"/>
+    </bean>
 
     <!-- 安全管理器 配置权限管理器 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
@@ -128,7 +128,7 @@
         <property name="filterChainDefinitions">
             <value>
                 <!--url = orroles[role]
-                role:角色 1：管理员 2：普通用户-->
+                role:角色 1：Boss管理员 2：Boss普通用户 3:App管理员 4:App普通用户-->
 
                 <!--url = orperms[role:status]
                 role:100 管理员(yw_user表和yw_admin_user表中共同的用户) 200 普通用户（yw_user表中的用户）

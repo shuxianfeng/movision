@@ -36,9 +36,9 @@ public class BossUserFacade {
         }
         BossUser bossUser = bossUserService.queryAdminUserByPhone(phone);
         if (null == bossUser) {
-            loginUser.setRole("200");   //普通用户
+            loginUser.setRole("4");   //App普通用户
         } else {
-            loginUser.setRole("100");   //管理员
+            loginUser.setRole("3");   //App管理员
         }
         return loginUser;
     }

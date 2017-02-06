@@ -4,9 +4,11 @@ import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 
+import java.util.List;
 import java.util.Map;
 
 public interface UserMapper {
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(User record);
@@ -32,4 +34,6 @@ public interface UserMapper {
     int isExistAccount(String phone);
 
     int registerAccount(RegisterUser registerUser);
+
+    List<User> selectAllUser();
 }

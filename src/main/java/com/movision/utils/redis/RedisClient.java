@@ -1,17 +1,25 @@
 package com.movision.utils.redis;
 
+import org.apache.shiro.cache.Cache;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import java.io.Serializable;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 废弃、
  * redis client
+ *
  * @author zhuangyuhao
  * @since 16/6/27.
  */
@@ -120,8 +128,24 @@ public class RedisClient {
         return result;
     }
 
-    public void setRedisTemplate(
-            RedisTemplate<Serializable, Object> redisTemplate) {
+    public void setRedisTemplate(RedisTemplate<Serializable, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
+
+    /**
+     * 获取 RedisSerializer
+     * <br>------------------------------<br>
+     */
+    protected RedisSerializer<String> getRedisSerializer() {
+        return redisTemplate.getStringSerializer();
+    }
+
+    public static void main(String[] args) {
+        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        Cache cache = redisCacheManager.getCache("user");
+        cache.put("test", "qqq");
+        System.out.println(cache.get("test"));
+    }
+
+
 }

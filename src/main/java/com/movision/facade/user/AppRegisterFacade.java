@@ -2,17 +2,15 @@ package com.movision.facade.user;
 
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.UserConstants;
-import com.movision.controller.app.RegisterController;
 import com.movision.exception.BusinessException;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.utils.DateUtils;
 import com.movision.utils.MsgPropertiesUtils;
-import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,22 +28,31 @@ public class AppRegisterFacade {
     @Autowired
     private UserFacade userFacade;
 
-    public Boolean registerMobileMember(RegisterUser member, Validateinfo validateinfo, Session session) {
+    public Boolean validateLoginUser(RegisterUser member, Validateinfo validateinfo, Session session) {
+        String phone = member.getPhone();
         String verifyCode = validateinfo.getCheckCode();
+        String mobileCheckCode = member.getMobileCheckCode();
         if (verifyCode != null) {
 
             Date currentTime = new Date();
             Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(validateinfo.getCreateTime(), "yyyy-MM-dd HH:mm:ss"), 12, 10);
+            //校验是否在短信验证码有效期内
             if (currentTime.before(sendSMStime)) {
 
-                log.debug("mobile verifyCode == " + member.getMobileCheckCode());
-                if (validateinfo.getCheckCode().equalsIgnoreCase(member.getMobileCheckCode())) {
-                    int isExist = userFacade.isExistAccount(member.getPhone());
+                log.debug("mobile verifyCode == " + mobileCheckCode);
+                //比较服务器端session中的验证码和App端输入的验证码
+                if (validateinfo.getCheckCode().equalsIgnoreCase(mobileCheckCode)) {
+                    //校验是否手机号存在（缓存）
+
+                    //校验是否手机号存在（查库）
+                    int isExist = userFacade.isExistAccount(phone);
                     if (isExist == 0) {
-                        //注册用户，入库
+                        //1 注册用户，入库
                         this.registerMember(member);
-                        //清除session信息
-                        session.removeAttribute("r" + validateinfo.getAccount());
+                        //2 生成token，并且加密返回
+                        UsernamePasswordToken token = new UsernamePasswordToken(phone, verifyCode);
+                        //3 token入库
+
                         return true;
 
                     } else {
@@ -56,6 +63,7 @@ public class AppRegisterFacade {
                 }
 
             } else {
+                //超过短信验证码有效期则清除session信息
                 session.removeAttribute("r" + validateinfo.getAccount());
                 throw new BusinessException(MsgCodeConstant.member_mcode_sms_timeout, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_sms_timeout)));
             }

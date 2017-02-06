@@ -7,6 +7,12 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+/**
+ * 废弃
+ *
+ * @Author zhuangyuhao
+ * @Date 2017/2/6 15:37
+ */
 public class RedisUtil {
 	
 	

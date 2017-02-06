@@ -3,11 +3,13 @@ package com.movision.controller.app;
 import com.google.gson.Gson;
 import com.movision.common.Response;
 import com.movision.common.constant.Constants;
+import com.movision.common.constant.MsgCodeConstant;
 import com.movision.facade.user.AppRegisterFacade;
+import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.user.entity.RegisterUser;
-import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.utils.DateUtils;
+import com.movision.utils.MsgPropertiesUtils;
 import com.movision.utils.PropertiesUtils;
 import com.movision.utils.VerifyCodeUtils;
 import com.movision.utils.sms.SDKSendSms;
@@ -15,6 +17,10 @@ import com.taobao.api.ApiException;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.JsonGenerationException;
@@ -22,8 +28,10 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -31,16 +39,20 @@ import java.util.Map;
 
 /**
  * @Author zhuangyuhao
- * @Date 2017/2/3 16:39
+ * @Date 2017/2/4 13:58
  */
 @RestController
-@RequestMapping("app/register")
-public class RegisterController {
+@RequestMapping("app/login")
+@Cacheable
+public class AppLoginController {
 
-    private static Logger log = LoggerFactory.getLogger(RegisterController.class);
+    private static Logger log = LoggerFactory.getLogger(AppLoginController.class);
 
     @Autowired
     private AppRegisterFacade appRegisterFacade;
+
+    @Autowired
+    private UserFacade userFacade;
 
     /**
      * 手机注册账号时发送的验证码
@@ -65,7 +77,7 @@ public class RegisterController {
         map.put("time", Constants.sms_time);
         Gson gson = new Gson();
         String json = gson.toJson(map);
-        // TODO: 2017/2/3 短信平台未开通 
+        // TODO: 2017/2/3 短信平台未开通
         SDKSendSms.sendSMS(mobile, json, PropertiesUtils.getValue("register_code_sms_template_code"));
         //验证信息放入session保存
         Validateinfo info = new Validateinfo();
@@ -78,9 +90,10 @@ public class RegisterController {
         return response;
     }
 
-    @ApiOperation(value = "会员注册", notes = "会员注册", response = Response.class)
-    @RequestMapping(value = {"/register"}, method = RequestMethod.POST)
+    @ApiOperation(value = "第一次登陆", notes = "第一次登陆", response = Response.class)
+    @RequestMapping(value = {"/firstLogin"}, method = RequestMethod.POST)
     public Response register(@ApiParam(value = "会员信息") @ModelAttribute RegisterUser user) throws Exception {
+
         log.debug("注册  mobile==" + user.getPhone() + "mobileCheckCode = " + user.getMobileCheckCode());
         Response result = new Response();
         try {
@@ -90,7 +103,7 @@ public class RegisterController {
             if (user.getMobileCheckCode() != null) {
                 Validateinfo validateinfo = (Validateinfo) session.getAttribute("r" + user.getPhone());
                 //业务操作
-                boolean flag = appRegisterFacade.registerMobileMember(user, validateinfo, session);
+                boolean flag = appRegisterFacade.validateLoginUser(user, validateinfo, session);
                 if (flag) {
                     result.setCode(200);
                 } else {
@@ -104,4 +117,55 @@ public class RegisterController {
 
         return result;
     }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @ApiOperation(value = "登录", notes = "登录", response = Response.class)
+    public Response login(HttpServletRequest req,
+                          @ApiParam(value = "手机号") @RequestParam String phone,
+                          @ApiParam(value = "手机短信验证码") @RequestParam String code) throws IOException {
+        log.debug("login post 登录校验");
+        Response response = new Response();
+        //
+
+
+        //得到Subject及创建用户名/密码身份验证Token（即用户身份/凭证）
+        UsernamePasswordToken token = new UsernamePasswordToken(phone, code);
+
+        Subject currentUser = SecurityUtils.getSubject();
+        try {
+
+            //登录，即身份验证 , 开始进入shiro的认证流程
+            currentUser.login(token);
+            response.setData(phone);
+        } catch (UnknownAccountException e) {
+            //用户名不存在
+            response.setCode(400);
+            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_username_not_exist)));
+            response.setMsgCode(MsgCodeConstant.member_mcode_username_not_exist);
+
+        } catch (LockedAccountException e) {
+            //帐户状态异常
+            response.setCode(400);
+            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_status_exception)));
+            response.setMsgCode(MsgCodeConstant.member_mcode_account_status_exception);
+        } catch (AuthenticationException e) {
+            //用户名或密码错误
+            response.setCode(400);
+            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_usernameorpwd_error)));
+            response.setMsgCode(MsgCodeConstant.member_mcode_usernameorpwd_error);
+        }
+        //更新登陆时间
+//        memberService.updateLoginTime(member.getAccount());
+
+        if (currentUser.isAuthenticated()) {
+            Session session = currentUser.getSession();
+            session.setAttribute("member", currentUser.getPrincipal());
+        } else {
+            token.clear();
+        }
+
+        return response;
+    }
+
+
 }
