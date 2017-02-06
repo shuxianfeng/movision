@@ -23,4 +23,8 @@ public interface BossOrdersMapper {
     List<BossOrdersVo> queryOrdersByList(RowBounds rowBounds);
 
     List<BossOrdersVo> queryOrderByCondition(Map map);
+
+    List<BossOrdersVo> queryAccuracyConditionByOrder(Map map);
+
+    BossOrdersVo queryOrderParticulars(Integer ordernumber);
 }

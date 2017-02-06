@@ -39,4 +39,6 @@ public interface UserMapper {
     UserVo queryUserInfo(int userid);
 
     List<User> selectAllUser();
+
+    String queryUserByOpenid(Integer userid);
 }

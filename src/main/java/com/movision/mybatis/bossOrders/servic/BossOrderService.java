@@ -1,5 +1,6 @@
 package com.movision.mybatis.bossOrders.servic;
 
+import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.bossOrders.mapper.BossOrdersMapper;
 import com.movision.mybatis.post.entity.Post;
@@ -52,10 +53,39 @@ public class BossOrderService {
             if (loger.isDebugEnabled()) {
                 loger.debug("根据条件查询订单");
             }
-            System.out.print(map.get("name"));
             return bossOrdersMapper.queryOrderByCondition(map);
         } catch (Exception e) {
             loger.error("根据条件查询订单");
+            throw e;
+        }
+    }
+
+    /**
+     * 精确查询订单
+     *
+     * @param map
+     * @return
+     */
+    public List<BossOrdersVo> queryAccuracyConditionByOrder(Map map) {
+        try {
+            if (loger.isDebugEnabled()) {
+                loger.debug("精确查找订单");
+            }
+            return bossOrdersMapper.queryAccuracyConditionByOrder(map);
+        } catch (Exception e) {
+            loger.error("精确查询订单异常");
+            throw e;
+        }
+    }
+
+    public BossOrdersVo queryOrderParticulars(Integer ordernumber) {
+        try {
+            if (loger.isDebugEnabled()) {
+                loger.debug("查询订单基本信息");
+            }
+            return bossOrdersMapper.queryOrderParticulars(ordernumber);
+        } catch (Exception e) {
+            loger.error("订单基本信息查询异常");
             throw e;
         }
     }

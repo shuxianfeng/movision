@@ -332,6 +332,9 @@
         INSERT INTO yw_user (phone, intime, status, token)
         VALUES (#{phone}, #{intime}, #{status}, #{token})
     </insert>
+    <select id="queryUserByOpenid" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT u.openid FROM yw_user u WHERE id=#{userid,jdbcType=INTEGER}
+    </select>
 
     <select id="selectAllUser" resultType="com.movision.mybatis.user.entity.User">
         SELECT

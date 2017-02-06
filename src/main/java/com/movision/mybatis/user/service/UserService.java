@@ -119,4 +119,19 @@ public class UserService {
         return userMapper.selectAllUser();
     }
 
+    /**
+     * 查询用户微信id
+     *
+     * @param userid
+     * @return
+     */
+    public String queryUserByOpenid(Integer userid) {
+        try {
+            log.info("查询用户微信id");
+            return userMapper.queryUserByOpenid(userid);
+        } catch (Exception e) {
+            log.error("用户微信id查询异常");
+            throw e;
+        }
+    }
 }

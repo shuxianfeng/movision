@@ -4,6 +4,7 @@ import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.bossOrders.servic.BossOrderService;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
 import org.apache.commons.collections.map.HashedMap;
@@ -21,6 +22,9 @@ import java.util.Map;
 public class OrderFacade {
     @Autowired
     BossOrderService bossOrderService = new BossOrderService();
+
+    @Autowired
+    UserService userService = new UserService();
 
     /**
      * 查询订单列表
@@ -57,5 +61,51 @@ public class OrderFacade {
         map.put("status", status);
         map.put("takeway", takeway);
         return bossOrderService.queryOrderByCondition(map);
+    }
+
+    /**
+     * 订单查询
+     *
+     * @param ordernumber
+     * @param name
+     * @param street
+     * @param province
+     * @param city
+     * @param district
+     * @param takeway
+     * @param mintime
+     * @param maxtime
+     * @param email
+     * @param cnee
+     * @param phone
+     * @param paytype
+     * @return
+     */
+    public List<BossOrdersVo> queryAccuracyConditionByOrder(String ordernumber, String name,
+                                                            String street, String province, String city, String district, String takeway, String mintime,
+                                                            String maxtime, String email, String cnee, String phone, String paytype) {
+        Map<String, String> map = new HashedMap();
+        map.put("ordernumber", ordernumber);
+        map.put("name", name);
+        map.put("street", street);
+        map.put("province", province);
+        map.put("city", city);
+        map.put("district", district);
+        map.put("takeway", takeway);
+        map.put("mintime", mintime);
+        map.put("maxtime", maxtime);
+        map.put("email", email);
+        map.put("cnee", cnee);
+        map.put("phone", phone);
+        map.put("paytype", paytype);
+        return bossOrderService.queryAccuracyConditionByOrder(map);
+    }
+
+    public BossOrdersVo queryOrderParticulars(String ordernumber) {
+        BossOrdersVo bo = bossOrderService.queryOrderParticulars(Integer.parseInt(ordernumber));
+        Integer userid = bo.getUserid();
+        String wxid = userService.queryUserByOpenid(userid);
+        bo.setOpenid(wxid);
+        return bo;
     }
 }

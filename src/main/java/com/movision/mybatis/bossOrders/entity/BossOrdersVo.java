@@ -31,6 +31,36 @@ public class BossOrdersVo {
 
     private String street;
 
+    private String openid;
+
+    private String paytype;
+
+    private Date paytime;
+
+    public String getPaytype() {
+        return paytype;
+    }
+
+    public void setPaytype(String paytype) {
+        this.paytype = paytype;
+    }
+
+    public Date getPaytime() {
+        return paytime;
+    }
+
+    public void setPaytime(Date paytime) {
+        this.paytime = paytime;
+    }
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
+
     public Integer getId() {
         return id;
     }

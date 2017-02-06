@@ -45,7 +45,7 @@ public class OrdersListController {
     }
 
     /**
-     * 根据条件查询订单
+     * 根据条件快速查询订单
      *
      * @param ordernumber
      * @param name
@@ -53,18 +53,81 @@ public class OrdersListController {
      * @param takeway
      * @return
      */
-    @ApiOperation(value = "按条件查询订单", notes = "按条件查询订单", response = Response.class)
+    @ApiOperation(value = "按条件查询订单(不填写搜索全部)", notes = "按条件查询订单", response = Response.class)
     @RequestMapping(value = "/query_order_condition", method = RequestMethod.POST)
-    public Response QueryConditionByOrder(@ApiParam(value = "订单编号") @RequestParam(required = false) String ordernumber,
-                                          @ApiParam(value = "收货人姓名") @RequestParam(required = false) String name,
-                                          @ApiParam(value = "订单状态（0待付款1待发货2待收货4待评价）") @RequestParam(required = false) String status,
-                                          @ApiParam(value = "订单类型（取货方式0自取1送货上门）") @RequestParam(required = false) String takeway) {
+    public Response QueryuickConditionByOrder(@ApiParam(value = "订单编号") @RequestParam(required = false) String ordernumber,
+                                              @ApiParam(value = "收货人姓名") @RequestParam(required = false) String name,
+                                              @ApiParam(value = "订单状态（0待付款1待发货2待收货4待评价）") @RequestParam(required = false) String status,
+                                              @ApiParam(value = "订单类型（取货方式0自取1送货上门）") @RequestParam(required = false) String takeway) {
         Response response = new Response();
         List<BossOrdersVo> list = orderFacade.queryOrderByCondition(ordernumber, name, status, takeway);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
         response.setData(list);
+        return response;
+    }
+
+    /**
+     * 精确查询订单
+     *
+     * @param ordernumber
+     * @param name
+     * @param street
+     * @param province
+     * @param city
+     * @param district
+     * @param takeway
+     * @param mintime
+     * @param maxtime
+     * @param email
+     * @param cnee
+     * @param phone
+     * @param paytype
+     * @return
+     */
+    @ApiOperation(value = "精准搜索订单（暂时不做）", notes = "精准搜索订单", response = Response.class)
+    @RequestMapping(value = "/query_order_accuracy", method = RequestMethod.POST)
+    public Response queryAccuracyConditionByOrder(@ApiParam(value = "订单编号") @RequestParam(required = false) String ordernumber,//订单号
+                                                  @ApiParam(value = "购买人") @RequestParam(required = false) String name,//购买人
+                                                  @ApiParam(value = "地址") @RequestParam(required = false) String street,//地址
+                                                  @ApiParam(value = "省") @RequestParam(required = false) String province,//省
+                                                  @ApiParam(value = "市") @RequestParam(required = false) String city,//市
+                                                  @ApiParam(value = "县") @RequestParam(required = false) String district,//县
+                                                  @ApiParam(value = "配送方式") @RequestParam(required = false) String takeway,//配送方式
+                                                  @ApiParam(value = "区间最小时间") @RequestParam String mintime,//区间最小时间
+                                                  @ApiParam(value = "区间最大时间") @RequestParam String maxtime,//区间最大时间
+                                                  @ApiParam(value = "邮箱") @RequestParam(required = false) String email,//
+                                                  @ApiParam(value = "收货人") @RequestParam(required = false) String cnee,//收货人
+                                                  @ApiParam(value = "手机号") @RequestParam(required = false) String phone,//手机号
+                                                  @ApiParam(value = "支付方式") @RequestParam(required = false) String paytype//支付方式
+    ) {
+        Response response = new Response();
+        List<BossOrdersVo> list = orderFacade.queryAccuracyConditionByOrder(ordernumber, name,
+                street, province, city, district, takeway, mintime,
+                maxtime, email, cnee, phone, paytype);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return response;
+    }
+
+    /**
+     * 订单基本信息
+     *
+     * @param ordernumber
+     * @return
+     */
+    @ApiOperation(value = "订单基本信息", notes = "订单基本信息", response = Response.class)
+    @RequestMapping(value = "/query_order_essential_information", method = RequestMethod.POST)
+    public Response queryOrderParticulars(@ApiParam(value = "订单编号") @RequestParam String ordernumber) {
+        Response response = new Response();
+        BossOrdersVo bossOrders = orderFacade.queryOrderParticulars(ordernumber);
+        if (response.getCode() == 200) {
+            response.setMessage("查询查询成功");
+        }
+        response.setData(bossOrders);
         return response;
     }
 }

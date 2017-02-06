@@ -332,4 +332,37 @@
             AND o.takeway=#{takeway,jdbcType=VARCHAR}
         </if>
     </select>
+    <!-- 暂时不做-->
+    <!--
+        <select id="queryAccuracyConditionByOrder" parameterType="java.util.Map"
+                resultType="com.movision.mybatis.bossOrders.entity.BossOrdersVo">
+         SELECT
+            o.id,
+            o.ordernumber,
+            o.userid,
+            o.addressid,
+            o.intime,
+            o.money,
+            o.realmoney,
+            o.status,
+            a.name,
+            a.phone,
+            a.province,
+            a.city,
+            a.district,
+            a.street
+          FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id
+        </select>-->
+    <select id="queryOrderParticulars" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.bossOrders.entity.BossOrdersVo">
+        SELECT o.id,
+        o.ordernumber,
+        o.userid,
+        o.addressid,
+        o.intime,
+        o.status,
+        o.paytime,
+        o.paytype
+        FROM yw_orders o WHERE ordernumber=#{ordernumber,jdbcType=INTEGER}
+    </select>
 </mapper>
