@@ -33,6 +33,12 @@
         from yw_user
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <!--查询个人主页中的个人信息-->
+    <select id="queryUserInfo" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT t.photo, t.level, t.nickname, t.sign FROM yw_user t WHERE t.id = #{userid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_user
         where id = #{id,jdbcType=INTEGER}

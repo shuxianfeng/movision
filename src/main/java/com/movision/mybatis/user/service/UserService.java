@@ -3,6 +3,7 @@ package com.movision.mybatis.user.service;
 import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,6 +86,16 @@ public class UserService {
 
     public int registerAccount(RegisterUser registerUser) {
         return userMapper.registerAccount(registerUser);
+    }
+
+    public UserVo queryUserInfo(int userid) {
+        try {
+            log.info("查询用户个人主页--个人信息");
+            return userMapper.queryUserInfo(userid);
+        } catch (Exception e) {
+            log.error("查询用户个人主页--个人信息失败");
+            throw e;
+        }
     }
 
     public List<User> selectAllUser() {

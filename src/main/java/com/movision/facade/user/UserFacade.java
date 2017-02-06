@@ -3,6 +3,7 @@ package com.movision.facade.user;
 import com.movision.aop.UserSaveCache;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,10 @@ public class UserFacade {
 
     public int registerAccount(RegisterUser registerUser) {
         return userService.registerAccount(registerUser);
+    }
+
+    public UserVo queryUserInfo(String userid) {
+        return userService.queryUserInfo(Integer.parseInt(userid));
     }
 
     /**
