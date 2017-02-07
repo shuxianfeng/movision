@@ -62,23 +62,27 @@ public class PostFacade {
         List<Post> list = postService.queryPostByList(pager);
         List<Object> rewardeds = new ArrayList<Object>();
         for (int i = 0; i < list.size(); i++) {
-            PostList postList = new PostList();
-            Integer circleid = list.get(i).getCircleid();//获取到圈子id
-            String phone = circleService.queryCircleByPhone(circleid);//获取圈子中的用户手机号
-            String nickname = userService.queryUserByNickname(phone);//获取发帖人
-            Integer share = sharesService.querysum(list.get(i).getId());//获取分享数
-            Integer rewarded = rewardedService.queryRewardedBySum(list.get(i).getId());//获取打赏积分
-            Integer accusation = accusationService.queryAccusationBySum(list.get(i).getId());//查询帖子举报次数
-            postList.setTitle(list.get(i).getTitle());
-            postList.setNickname(nickname);
-            postList.setCollectsum(list.get(i).getCollectsum());
-            postList.setShare(share);
-            postList.setCommentsum(list.get(i).getCommentsum());
-            postList.setZansum(list.get(i).getZansum());
-            postList.setRewarded(rewarded);
-            postList.setAccusation(accusation);
-            postList.setIsessence(list.get(i).getIsessence());
-            rewardeds.add(postList);
+            if (list.get(i).getIsdel() != 0) {//用于判断已删除的帖子
+                break;
+            } else {
+                PostList postList = new PostList();
+                Integer circleid = list.get(i).getCircleid();//获取到圈子id
+                String phone = circleService.queryCircleByPhone(circleid);//获取圈子中的用户手机号
+                String nickname = userService.queryUserByNickname(phone);//获取发帖人
+                Integer share = sharesService.querysum(list.get(i).getId());//获取分享数
+                Integer rewarded = rewardedService.queryRewardedBySum(list.get(i).getId());//获取打赏积分
+                Integer accusation = accusationService.queryAccusationBySum(list.get(i).getId());//查询帖子举报次数
+                postList.setTitle(list.get(i).getTitle());
+                postList.setNickname(nickname);
+                postList.setCollectsum(list.get(i).getCollectsum());
+                postList.setShare(share);
+                postList.setCommentsum(list.get(i).getCommentsum());
+                postList.setZansum(list.get(i).getZansum());
+                postList.setRewarded(rewarded);
+                postList.setAccusation(accusation);
+                postList.setIsessence(list.get(i).getIsessence());
+                rewardeds.add(postList);
+            }
         }
         return rewardeds;
     }
