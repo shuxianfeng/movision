@@ -39,6 +39,21 @@
         SELECT t.photo, t.level, t.nickname, t.sign FROM yw_user t WHERE t.id = #{userid,jdbcType=INTEGER}
     </select>
 
+    <!--查询圈子的所属圈主-->
+    <select id="queryCircleMasterByPhone" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.user.entity.User">
+        SELECT id, photo, nickname, phone, sign
+        FROM yw_user WHERE phone = #{phone,jdbcType=VARCHAR}
+    </select>
+
+    <!--查询圈子的所有管理员列表-->
+    <select id="queryCircleManagerList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.user.entity.User">
+        SELECT id, photo, nickname, phone FROM yw_user WHERE id IN (
+        SELECT userid FROM yw_circle_manager WHERE circleid = #{circleid,jdbcType=INTEGER}
+        )
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_user
         where id = #{id,jdbcType=INTEGER}

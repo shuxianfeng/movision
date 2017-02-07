@@ -89,6 +89,18 @@
         LIMIT 4;
     </select>
 
+    <!--查询圈子的信息（包括公告和简介等）-->
+    <select id="queryCircleInfo" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.circle.entity.CircleVo">
+        SELECT * FROM (
+        SELECT t1.id, t1.phone, t1.category, t1.code, t1.introduction, t1.notice, t1.createtime, t1.status,
+        t1.supportnum, t2.categoryname
+        FROM yw_circle t1
+        LEFT JOIN yw_circle_category t2
+        ON t1.category = t2.id) t
+        WHERE t.id = #{circleid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_circle
     where id = #{id,jdbcType=INTEGER}

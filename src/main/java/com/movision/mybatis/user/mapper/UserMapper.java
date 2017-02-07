@@ -38,6 +38,10 @@ public interface UserMapper {
 
     UserVo queryUserInfo(int userid);
 
+    User queryCircleMasterByPhone(String phone);
+
+    List<User> queryCircleManagerList(int circleid);
+
     List<User> selectAllUser();
 
     String queryUserByOpenid(Integer userid);

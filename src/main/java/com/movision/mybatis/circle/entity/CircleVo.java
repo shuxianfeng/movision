@@ -1,6 +1,7 @@
 package com.movision.mybatis.circle.entity;
 
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.user.entity.User;
 
 import java.util.Date;
 import java.util.List;
@@ -21,6 +22,8 @@ public class CircleVo {
     private String photo;
 
     private Integer category;
+
+    private String categoryname;
 
     private Integer code;
 
@@ -51,6 +54,10 @@ public class CircleVo {
     private Integer postnum;//该圈子总共更新的帖子总数
 
     private Integer isfollow;//该圈子是否被关注 0 可关注  1 已关注
+
+    private User circlemaster;//圈主
+
+    private List<User> circlemanagerlist;//圈子管理员列表
 
     public Integer getId() {
         return id;
@@ -218,5 +225,29 @@ public class CircleVo {
 
     public void setIsfollow(Integer isfollow) {
         this.isfollow = isfollow;
+    }
+
+    public String getCategoryname() {
+        return categoryname;
+    }
+
+    public void setCategoryname(String categoryname) {
+        this.categoryname = categoryname;
+    }
+
+    public User getCirclemaster() {
+        return circlemaster;
+    }
+
+    public void setCirclemaster(User circlemaster) {
+        this.circlemaster = circlemaster;
+    }
+
+    public List<User> getCirclemanagerlist() {
+        return circlemanagerlist;
+    }
+
+    public void setCirclemanagerlist(List<User> circlemanagerlist) {
+        this.circlemanagerlist = circlemanagerlist;
     }
 }

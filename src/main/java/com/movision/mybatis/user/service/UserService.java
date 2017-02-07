@@ -126,6 +126,26 @@ public class UserService {
         }
     }
 
+    public User queryCircleMasterByPhone(String phone) {
+        try {
+            log.info("查询圈子所属圈主");
+            return userMapper.queryCircleMasterByPhone(phone);
+        } catch (Exception e) {
+            log.error("查询圈子所属圈主失败");
+            throw e;
+        }
+    }
+
+    public List<User> queryCircleManagerList(int circleid) {
+        try {
+            log.info("查询圈子的所有管理员列表");
+            return userMapper.queryCircleManagerList(circleid);
+        } catch (Exception e) {
+            log.error("查询圈子的所有管理员列表失败");
+            throw e;
+        }
+    }
+
     public List<User> selectAllUser() {
         return userMapper.selectAllUser();
     }

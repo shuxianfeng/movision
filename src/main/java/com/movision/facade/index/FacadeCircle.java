@@ -7,6 +7,9 @@ import com.movision.mybatis.circleCategory.service.CircleCategoryService;
 import com.movision.mybatis.followCircle.service.FollowCircleService;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserVo;
+import com.movision.mybatis.user.service.UserService;
 import org.apache.commons.collections.iterators.ObjectArrayIterator;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +38,9 @@ public class FacadeCircle {
 
     @Autowired
     private FollowCircleService followCircleService;
+
+    @Autowired
+    private UserService userService;
 
     public CircleVo queryCircleIndex1(String circleid, String userid) {
 
@@ -96,5 +102,20 @@ public class FacadeCircle {
 
         return categoryList;
 
+    }
+
+    public CircleVo queryCircleInfo(String circleid) {
+        //查询基本信息实体
+        CircleVo circleVo = circleService.queryCircleInfo(Integer.parseInt(circleid));
+
+        //查询圈子的圈主
+        User circlemaster = userService.queryCircleMasterByPhone(circleVo.getPhone());
+        circleVo.setCirclemaster(circlemaster);
+
+        //查询圈子的所有管理员
+        List<User> circlemanagerList = userService.queryCircleManagerList(Integer.parseInt(circleid));
+        circleVo.setCirclemanagerlist(circlemanagerList);
+
+        return circleVo;
     }
 }

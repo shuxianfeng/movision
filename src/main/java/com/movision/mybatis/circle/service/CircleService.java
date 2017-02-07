@@ -67,6 +67,16 @@ public class CircleService {
         }
     }
 
+    public CircleVo queryCircleInfo(int circleid) {
+        try {
+            log.info("查询圈子信息（包括公告和简介等）");
+            return circleMapper.queryCircleInfo(circleid);
+        } catch (Exception e) {
+            log.error("查询圈子信息（包括公告和简介等）失败");
+            throw e;
+        }
+    }
+
     public int queryCountByFollow(Map<String, Object> parammap) {
         try {
             log.info("查询该用户对当前圈子关注的次数");

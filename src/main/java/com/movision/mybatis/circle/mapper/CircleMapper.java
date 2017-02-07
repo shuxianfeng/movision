@@ -22,6 +22,8 @@ public interface CircleMapper {
 
     List<CircleVo> queryAuditCircle();
 
+    CircleVo queryCircleInfo(int circleid);
+
     int updateByPrimaryKeySelective(Circle record);
 
     int updateByPrimaryKey(Circle record);
