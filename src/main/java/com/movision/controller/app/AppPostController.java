@@ -176,9 +176,13 @@ public class AppPostController {
     @ApiOperation(value = "点击参与活动接口（告知类）", notes = "用于告知类活动点击参与活动", response = Response.class)
     @RequestMapping(value = "partActive", method = RequestMethod.POST)
     public Response partActive(@ApiParam(value = "活动id") @RequestParam String postid,
-                               @ApiParam(value = "参与用户id") @RequestParam String userid) {
+                               @ApiParam(value = "参与用户id") @RequestParam String userid,
+                               @ApiParam(value = "参与活动的主题") @RequestParam(required = false) String title,
+                               @ApiParam(value = "邮箱") @RequestParam String email,
+                               @ApiParam(value = "视频链接地址") @RequestParam String videourl,
+                               @ApiParam(value = "作品简介") @RequestParam(required = false) String introduction) {
         Response response = new Response();
-        int flag = facadePost.partActive(postid, userid);
+        int flag = facadePost.partActive(postid, userid, title, email, videourl, introduction);
 
         if (flag == 1) {
             response.setCode(200);

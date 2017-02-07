@@ -304,11 +304,15 @@ public class FacadePost {
         return activeList;
     }
 
-    public int partActive(String postid, String userid) {
+    public int partActive(String postid, String userid, String title, String email, String videourl, String introduction) {
 
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("postid", Integer.parseInt(postid));
         parammap.put("userid", Integer.parseInt(userid));
+        parammap.put("title", title);
+        parammap.put("email", email);
+        parammap.put("videourl", videourl);
+        parammap.put("introduction", introduction);
 
         //先校验该用户有没有参与该活动
         int sum = postService.queryUserPartSum(parammap);
