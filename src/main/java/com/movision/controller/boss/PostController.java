@@ -2,8 +2,9 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.PostFacade;
-import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.user.entity.User;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,6 +40,18 @@ public class PostController {
             response.setMessage("查询成");
         }
         response.setData(list);
+        return response;
+    }
+
+    @ApiOperation(value = "查询发帖人信息", notes = "查询发帖人信息", response = Response.class)
+    @RequestMapping(value = "/query_posted_man", method = RequestMethod.POST)
+    public Response queryPostByPosted(@ApiParam(value = "帖子id") @RequestParam String postid) {
+        Response response = new Response();
+        User user = postFacade.queryPostByPosted(postid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(user);
         return response;
     }
 }

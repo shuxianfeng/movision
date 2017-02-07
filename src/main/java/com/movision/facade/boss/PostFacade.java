@@ -7,6 +7,7 @@ import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.rewarded.service.RewardedService;
 import com.movision.mybatis.share.service.SharesService;
+import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
@@ -80,5 +81,12 @@ public class PostFacade {
             rewardeds.add(postList);
         }
         return rewardeds;
+    }
+
+    public User queryPostByPosted(String postid) {
+        Integer circleid = postService.queryPostByCircleid(postid);
+        String phone = circleService.queryCircleByPhone(circleid);//获取圈子中的用户手机号
+        User user = userService.queryUser(phone);
+        return user;
     }
 }

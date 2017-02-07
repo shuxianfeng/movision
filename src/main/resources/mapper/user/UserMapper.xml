@@ -346,4 +346,8 @@
         SELECT u.nickname FROM yw_user u WHERE u.phone=#{phone,jdbcType=VARCHAR}
     </select>
 
+    <select id="queryUser" resultType="com.movision.mybatis.user.entity.User" parameterType="java.lang.String">
+        SELECT * FROM yw_user WHERE phone=#{phone,jdbcType=VARCHAR}
+    </select>
+
 </mapper>

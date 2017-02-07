@@ -161,4 +161,15 @@ public class UserService {
             throw e;
         }
     }
+
+    public User queryUser(String phone) {
+
+        try {
+            log.info("查询用户信息");
+            return userMapper.queryUser(phone);
+        } catch (Exception e) {
+            log.error("查询用户信息异常");
+            throw e;
+        }
+    }
 }

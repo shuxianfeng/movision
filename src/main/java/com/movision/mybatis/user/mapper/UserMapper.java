@@ -43,4 +43,6 @@ public interface UserMapper {
     String queryUserByOpenid(Integer userid);
 
     String queryUserByNickname(String phone);
+
+    User queryUser(String phone);
 }
