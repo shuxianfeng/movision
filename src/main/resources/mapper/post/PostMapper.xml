@@ -551,4 +551,9 @@
         SET commentsum=commentsum+1
         WHERE id=#{postid,jdbcType=INTEGER}
     </update>
+
+    <!-- 查询帖子列表 -->
+    <select id="queryPostByList" resultType="com.movision.mybatis.post.entity.Post">
+        SELECT * FROM yw_post
+    </select>
 </mapper>

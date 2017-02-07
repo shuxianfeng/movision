@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movision.mybatis.share.mapper.SharesMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.share.entity.Shares">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="userid" jdbcType="INTEGER" property="userid"/>
+        <result column="postid" jdbcType="INTEGER" property="postid"/>
+        <result column="intime" jdbcType="TIMESTAMP" property="intime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, userid, postid, intime
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_post_share
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_post_share
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.share.entity.Shares">
+    insert into yw_post_share (id, userid, postid, 
+      intime)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER}, 
+      #{intime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.share.entity.Shares">
+        insert into yw_post_share
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="postid != null">
+                postid,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="postid != null">
+                #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.share.entity.Shares">
+        update yw_post_share
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="postid != null">
+                postid = #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="querysum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT COUNT(1) FROM yw_post_share WHERE postid=#{postid,jdbcType=INTEGER}
+  </select>
+</mapper>

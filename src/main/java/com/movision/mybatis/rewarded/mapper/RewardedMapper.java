@@ -17,4 +17,6 @@ public interface RewardedMapper {
 
     int updateByPrimaryKey(Rewarded record);
 
+    Integer queryRewardedBySum(Integer postid);
+
 }

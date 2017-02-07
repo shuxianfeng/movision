@@ -126,4 +126,8 @@
     FROM yw_post_accusation a
     WHERE a.userid=#{userid,jdbcType=INTEGER} AND a.postid=#{postid,jdbcType=INTEGER}
   </select>
+
+    <select id="queryAccusationBySum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT SUM(num) FROM yw_post_accusation WHERE postid =#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>

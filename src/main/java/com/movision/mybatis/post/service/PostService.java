@@ -196,4 +196,20 @@ public class PostService {
             throw e;
         }
     }
+
+    /**
+     * 后台管理-查询帖子列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<Post> queryPostByList(Paging<Post> pager) {
+        try {
+            log.info("查询帖子列表");
+            return postMapper.queryPostByList(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询帖子列表异常");
+            throw e;
+        }
+    }
 }

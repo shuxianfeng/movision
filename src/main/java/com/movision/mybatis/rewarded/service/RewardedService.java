@@ -29,4 +29,20 @@ public class RewardedService {
         }
     }
 
+    /**
+     * 获取帖子总打赏积分
+     *
+     * @param postid
+     * @return
+     */
+    public Integer queryRewardedBySum(Integer postid) {
+        try {
+            log.info("获取打赏积分");
+            return rewardedMapper.queryRewardedBySum(postid);
+        } catch (Exception e) {
+            log.error("获取打赏积分失败");
+            throw e;
+        }
+    }
+
 }

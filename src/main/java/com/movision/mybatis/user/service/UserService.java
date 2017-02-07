@@ -145,4 +145,20 @@ public class UserService {
             throw e;
         }
     }
+
+    /**
+     * 查询用户昵称
+     *
+     * @param phone
+     * @return
+     */
+    public String queryUserByNickname(String phone) {
+        try {
+            log.info("查询用户昵称");
+            return userMapper.queryUserByNickname(phone);
+        } catch (Exception e) {
+            log.error("查询用户昵称异常");
+            throw e;
+        }
+    }
 }

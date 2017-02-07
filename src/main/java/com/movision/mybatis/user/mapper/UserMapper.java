@@ -41,4 +41,6 @@ public interface UserMapper {
     List<User> selectAllUser();
 
     String queryUserByOpenid(Integer userid);
+
+    String queryUserByNickname(String phone);
 }

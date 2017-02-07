@@ -21,4 +21,6 @@ public interface AccusationMapper {
     int insertAccusation(Accusation acc);
 
     List<Accusation> queryAccusationByUserSum(Map map);
+
+    Integer queryAccusationBySum(Integer postid);
 }

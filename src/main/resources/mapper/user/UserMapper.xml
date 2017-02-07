@@ -342,4 +342,8 @@
         FROM yw_user
     </select>
 
+    <select id="queryUserByNickname" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT u.nickname FROM yw_user u WHERE u.phone=#{phone,jdbcType=VARCHAR}
+    </select>
+
 </mapper>

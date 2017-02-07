@@ -68,4 +68,6 @@ public interface PostMapper {
     int queryPostByZanSum(int id);
 
     int updatePostBycommentsum(int postid);
+
+    List<Post> queryPostByList(RowBounds rowBounds);
 }

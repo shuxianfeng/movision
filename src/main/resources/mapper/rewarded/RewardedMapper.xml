@@ -93,4 +93,8 @@
     <insert id="insertRewarded">
 
     </insert>
+
+    <select id="queryRewardedBySum" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT SUM(points) FROM yw_post_rewarded WHERE postid=#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>
