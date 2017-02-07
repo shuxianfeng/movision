@@ -2,6 +2,7 @@ package com.movision.controller.app;
 
 import com.movision.common.Response;
 import com.movision.facade.user.UserFacade;
+import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.user.entity.UserVo;
@@ -54,6 +55,22 @@ public class AppUserController {
             response.setMessage("查询成功");
         }
         response.setData(personPostList);
+        return response;
+    }
+
+    @ApiOperation(value = "个人主页--活动（用户曾经参与过的活动）", notes = "用于返回个人主页中活动页签中个人曾经参与过的历史活动记录", response = Response.class)
+    @RequestMapping(value = "personActive", method = RequestMethod.POST)
+    public Response personActive(@ApiParam(value = "用户id") @RequestParam String userid,
+                                 @ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
+                                 @ApiParam(value = "每页多少条") @RequestParam(required = false) String pageSize) {
+        Response response = new Response();
+
+        List<ActiveVo> personActiveList = userFacade.personActive(userid, pageNo, pageSize);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(personActiveList);
         return response;
     }
 }

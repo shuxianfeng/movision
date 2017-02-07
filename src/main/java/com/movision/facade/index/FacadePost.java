@@ -10,6 +10,7 @@ import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.beanutils.converters.IntegerConverter;
 import org.apache.commons.collections.map.HashedMap;
@@ -78,28 +79,8 @@ public class FacadePost {
         Date begin = active.getBegintime();
         Date end = active.getEndtime();
         Date now = new Date();
-        if (now.before(begin)) {
-            active.setEnddays(-1);//活动还未开始
-        } else if (end.before(now)) {
-            active.setEnddays(0);//活动已结束
-        } else if (begin.before(now) && now.before(end)) {
-            try {
-                log.error("计算活动剩余结束天数");
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date a = sdf.parse(sdf.format(now));
-                Date b = sdf.parse(sdf.format(end));
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(a);
-                long time1 = cal.getTimeInMillis();
-                cal.setTime(b);
-                long time2 = cal.getTimeInMillis();
-                long between_days = (time2 - time1) / (1000 * 3600 * 24);
-                active.setEnddays(Integer.parseInt(String.valueOf(between_days)));
-            } catch (Exception e) {
-                log.error("计算活动剩余结束天数失败");
-                e.printStackTrace();
-            }
-        }
+        int enddays = DateUtils.activeEndDays(now, begin, end);
+        active.setEnddays(enddays);
 
         //查询活动参与总人数
         int partsum = postService.queryActivePartSum(Integer.parseInt(postid));

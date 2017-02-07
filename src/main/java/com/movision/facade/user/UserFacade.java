@@ -1,13 +1,16 @@
 package com.movision.facade.user;
 
 import com.movision.aop.UserSaveCache;
+import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.lang3.StringUtils;
+import com.movision.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +18,10 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +36,9 @@ public class UserFacade {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PostService postService;
 
     @Cacheable(value = "is_exist_account", key = "'login_'+#phone")
     public int isExistAccount(String phone) {
@@ -53,6 +62,31 @@ public class UserFacade {
         }
         Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         return userService.personPost(pager, Integer.parseInt(userid));
+    }
+
+    public List<ActiveVo> personActive(String userid, String pageNo, String pageSize) {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<ActiveVo> pager = new Paging<ActiveVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<ActiveVo> activeVoList = userService.personActive(pager, Integer.parseInt(userid));
+
+        for (int i = 0; i < activeVoList.size(); i++) {
+            //遍历计算活动累计参与总人数
+            int postid = activeVoList.get(i).getId();//取出活动id
+            int partsum = postService.queryActivePartSum(postid);
+            activeVoList.get(i).setPartsum(partsum);
+            //遍历计算活动距结束天数
+            Date begin = activeVoList.get(i).getBegintime();//活动开始时间
+            Date end = activeVoList.get(i).getEndtime();//活动结束时间
+            Date now = new Date();//当前时间
+            int enddays = DateUtils.activeEndDays(now, begin, end);
+            activeVoList.get(i).setEnddays(enddays);
+        }
+        return activeVoList;
     }
 
     /**
