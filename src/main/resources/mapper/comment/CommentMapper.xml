@@ -120,7 +120,7 @@
     FROM yw_post_comment c
     LEFT JOIN yw_user u
     ON c.userid=u.id
-    WHERE c.postid= #{postid,jdbcType=INTEGER}
+    WHERE c.postid= #{postid,jdbcType=INTEGER} AND isdel=0
     ORDER BY c.intime DESC
   </select>
 
