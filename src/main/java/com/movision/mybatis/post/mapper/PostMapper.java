@@ -70,4 +70,8 @@ public interface PostMapper {
     int updatePostBycommentsum(int postid);
 
     List<Post> queryPostByList(RowBounds rowBounds);
+
+    int deletePost(Integer postid);
+
+    /*List postSearch(Map map);*/
 }

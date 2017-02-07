@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -212,5 +213,36 @@ public class PostService {
             throw e;
         }
     }
+
+    /**
+     * 删除帖子
+     *
+     * @param postid
+     * @return
+     */
+    public int deletePost(Integer postid) {
+        try {
+            log.info("逻辑删除帖子");
+            return postMapper.deletePost(postid);
+        } catch (Exception e) {
+            log.error("逻辑删除帖子失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 帖子按条件查询
+     * @param map
+     * @return
+     *//*
+    public List<Object> postSearch(Map<String,Object> map){
+        try {
+            log.info("帖子条件查询");
+            return postMapper.postSearch(map);
+        } catch (Exception e) {
+            log.error("帖子条件查询异常");
+            throw e;
+        }
+    }*/
 
 }

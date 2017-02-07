@@ -2,6 +2,8 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.PostFacade;
+import com.movision.mybatis.comment.entity.Comment;
+import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.user.entity.User;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,6 +46,12 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 查询发帖人信息
+     *
+     * @param postid
+     * @return
+     */
     @ApiOperation(value = "查询发帖人信息", notes = "查询发帖人信息", response = Response.class)
     @RequestMapping(value = "/query_posted_man", method = RequestMethod.POST)
     public Response queryPostByPosted(@ApiParam(value = "帖子id") @RequestParam String postid) {
@@ -54,4 +63,72 @@ public class PostController {
         response.setData(user);
         return response;
     }
+
+    /**
+     * 删除帖子
+     *
+     * @param postid
+     * @return
+     */
+    @ApiOperation(value = "逻辑删除帖子", notes = "逻辑删除帖子", response = Response.class)
+    @RequestMapping(value = "/delete_post", method = RequestMethod.POST)
+    public Response deletePost(@ApiParam(value = "帖子id") @RequestParam String postid) {
+        Response response = new Response();
+        postFacade.deletePost(postid);
+        if (response.getCode() == 200) {
+            response.setMessage("删除成功");
+        }
+        return response;
+    }
+
+    /**
+     * 后台管理-帖子列表-查看评论
+     *
+     * @param postid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查看帖子评论", notes = "查看帖子评论", response = Response.class)
+    @RequestMapping(value = "/query_post_appraise", method = RequestMethod.POST)
+    public Response queryPostAppraise(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                      @RequestParam(required = false) String pageNo,
+                                      @RequestParam(required = false) String pageSize) {
+        Response response = new Response();
+        List<CommentVo> list = postFacade.queryPostAppraise(postid, pageNo, pageSize);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return response;
+    }
+
+
+/*
+    *//**
+     * 帖子按条件查询
+     * @param title
+     * @param circleid
+     * @param name
+     * @param date
+     * @return
+     *//*
+    @ApiOperation(value = "帖子搜索",notes = "帖子搜索",response = Response.class)
+    @RequestMapping(value = "/post_search",method = RequestMethod.POST)
+    public Response postSearch(@RequestParam(required = false) String pageNo,
+                               @RequestParam(required = false) String pageSize,
+                               @ApiParam(value = "帖子标题")@RequestParam(required = false) String title,
+                               @ApiParam(value = "圈子id")@RequestParam(required = false) String circleid,
+                               @ApiParam(value = "发帖人")@RequestParam(required = false) String name,
+                               @ApiParam(value = "精选日期")@RequestParam(required = false) Date date){
+        Response response=new Response();
+        List<Object> list=postFacade.postSearch(title,circleid,name,date,pageNo,pageSize);
+        if (response.getCode()==200){
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return response;
+    }*/
+
+
 }

@@ -1,5 +1,6 @@
 package com.movision.mybatis.comment.service;
 
+import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.mapper.CommentMapper;
 import com.movision.utils.pagination.model.Paging;
@@ -70,6 +71,16 @@ public class CommentService {
             return commentMapper.insertSelective(vo);
         } catch (Exception e) {
             log.error("帖子评论失败");
+            throw e;
+        }
+    }
+
+    public List<CommentVo> queryComments(String postid, Paging<CommentVo> pager) {
+        try {
+            log.info("查询评论");
+            return commentMapper.queryCommentsByLsit(Integer.parseInt(postid), pager.getRowBounds());
+        } catch (NumberFormatException e) {
+            log.error("查询评论异常");
             throw e;
         }
     }

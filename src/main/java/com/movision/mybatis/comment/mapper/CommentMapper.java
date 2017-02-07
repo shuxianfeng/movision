@@ -26,4 +26,5 @@ public interface CommentMapper {
     int updateCommentZanSum(int id);
 
     int queryCommentZanSum(int id);
+
 }
