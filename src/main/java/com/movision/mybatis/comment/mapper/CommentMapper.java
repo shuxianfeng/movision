@@ -27,4 +27,6 @@ public interface CommentMapper {
 
     int queryCommentZanSum(int id);
 
+    int deletePostAppraise(int id);
+
 }

@@ -85,4 +85,20 @@ public class CommentService {
         }
     }
 
+    /**
+     * 删除帖子评论
+     *
+     * @param id
+     * @return
+     */
+    public int deletePostAppraise(Integer id) {
+        try {
+            log.info("删除帖子评论");
+            return commentMapper.deletePostAppraise(id);
+        } catch (Exception e) {
+            log.error("帖子评论删除异常");
+            throw e;
+        }
+    }
+
 }

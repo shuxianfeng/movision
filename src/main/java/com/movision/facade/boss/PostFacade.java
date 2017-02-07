@@ -134,6 +134,16 @@ public class PostFacade {
         return list;
     }
 
+    /**
+     * 删除帖子评论
+     *
+     * @param id
+     * @return
+     */
+    public int deletePostAppraise(String id) {
+        return commentService.deletePostAppraise(Integer.parseInt(id));
+    }
+
 /*    *//**
      * 帖子按条件查询
      * @param title
