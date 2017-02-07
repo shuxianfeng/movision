@@ -37,6 +37,8 @@ public interface PostMapper {
 
     List<PostVo> personPost(RowBounds rowBounds, int userid);
 
+    List<ActiveVo> personActive(RowBounds rowBounds, int userid);
+
     int queryPostNumByCircleid(int circleid);
 
     PostVo queryPostDetail(Map<String, Object> parammap);
