@@ -167,15 +167,14 @@ public class UserService {
     }
 
     /**
-     * 查询用户昵称
-     *
-     * @param phone
+     * 根据圈子id查询用户昵称
+     * @param circleid
      * @return
      */
-    public String queryUserByNickname(String phone) {
+    public String queryUserByNickname(Integer circleid) {
         try {
             log.info("查询用户昵称");
-            return userMapper.queryUserByNickname(phone);
+            return userMapper.queryUserByNickname(circleid);
         } catch (Exception e) {
             log.error("查询用户昵称异常");
             throw e;

@@ -555,9 +555,10 @@
 
     <!-- 查询帖子列表 -->
     <select id="queryPostByList" resultType="com.movision.mybatis.post.entity.Post">
-        SELECT * FROM yw_post ORDER BY intime DESC
+        SELECT * FROM yw_post WHERE isdel=0 ORDER BY intime DESC
     </select>
 
+    <!-- 逻辑删除帖子 -->
     <update id="deletePost" parameterType="java.lang.Integer">
         UPDATE yw_post
         SET isdel=1

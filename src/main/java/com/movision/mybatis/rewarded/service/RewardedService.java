@@ -1,11 +1,15 @@
 package com.movision.mybatis.rewarded.service;
 
 import com.movision.mybatis.rewarded.entity.Rewarded;
+import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.rewarded.mapper.RewardedMapper;
+import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Author zhurui
@@ -41,6 +45,23 @@ public class RewardedService {
             return rewardedMapper.queryRewardedBySum(postid);
         } catch (Exception e) {
             log.error("获取打赏积分失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 帖子打赏
+     *
+     * @param postid
+     * @param pager
+     * @return
+     */
+    public List<RewardedVo> queryPostAward(Integer postid, Paging<RewardedVo> pager) {
+        try {
+            log.info("查看帖子打赏列表");
+            return rewardedMapper.queryPostAward(postid, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("帖子打赏列表加载失败");
             throw e;
         }
     }

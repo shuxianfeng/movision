@@ -8,6 +8,8 @@ import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.rewarded.entity.Rewarded;
+import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.rewarded.service.RewardedService;
 import com.movision.mybatis.share.service.SharesService;
 import com.movision.mybatis.user.entity.User;
@@ -66,16 +68,13 @@ public class PostFacade {
         List<Post> list = postService.queryPostByList(pager);
         List<Object> rewardeds = new ArrayList<Object>();
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getIsdel() != 0) {//用于判断已删除的帖子
-                continue;
-            } else {
                 PostList postList = new PostList();
+            Integer id = list.get(i).getId();
                 Integer circleid = list.get(i).getCircleid();//获取到圈子id
-                String phone = circleService.queryCircleByPhone(circleid);//获取圈子中的用户手机号
-                String nickname = userService.queryUserByNickname(phone);//获取发帖人
-                Integer share = sharesService.querysum(list.get(i).getId());//获取分享数
-                Integer rewarded = rewardedService.queryRewardedBySum(list.get(i).getId());//获取打赏积分
-                Integer accusation = accusationService.queryAccusationBySum(list.get(i).getId());//查询帖子举报次数
+            String nickname = userService.queryUserByNickname(circleid);//获取发帖人
+            Integer share = sharesService.querysum(id);//获取分享数
+            Integer rewarded = rewardedService.queryRewardedBySum(id);//获取打赏积分
+            Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举报次数
                 postList.setTitle(list.get(i).getTitle());
                 postList.setNickname(nickname);
                 postList.setCollectsum(list.get(i).getCollectsum());
@@ -86,7 +85,7 @@ public class PostFacade {
                 postList.setAccusation(accusation);
                 postList.setIsessence(list.get(i).getIsessence());
                 rewardeds.add(postList);
-            }
+
         }
         return rewardeds;
     }
@@ -144,6 +143,25 @@ public class PostFacade {
         return commentService.deletePostAppraise(Integer.parseInt(id));
     }
 
+
+    /**
+     * 帖子打赏列表
+     *
+     * @param postid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    public List<RewardedVo> queryPostAward(String postid, String pageNo, String pageSize) {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<RewardedVo> pager = new Paging<RewardedVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        return rewardedService.queryPostAward(Integer.parseInt(postid), pager);//分页返回帖子打赏列表
+    }
 /*    *//**
      * 帖子按条件查询
      * @param title

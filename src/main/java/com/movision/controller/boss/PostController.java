@@ -4,6 +4,8 @@ import com.movision.common.Response;
 import com.movision.facade.boss.PostFacade;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.mybatis.rewarded.entity.Rewarded;
+import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.user.entity.User;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -117,6 +119,28 @@ public class PostController {
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
+        return response;
+    }
+
+    /**
+     * 后台管理-帖子列表-帖子打赏
+     *
+     * @param postid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查看帖子打赏列表", notes = "查看帖子打赏列表", response = Response.class)
+    @RequestMapping(value = "/post_award", method = RequestMethod.POST)
+    public Response queryPostAward(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                   @RequestParam(required = false) String pageNo,
+                                   @RequestParam(required = false) String pageSize) {
+        Response response = new Response();
+        List<RewardedVo> list = postFacade.queryPostAward(postid, pageNo, pageSize);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
         return response;
     }
 

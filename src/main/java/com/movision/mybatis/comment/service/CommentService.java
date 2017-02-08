@@ -3,6 +3,7 @@ package com.movision.mybatis.comment.service;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.mapper.CommentMapper;
+import com.movision.mybatis.rewarded.entity.Rewarded;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,5 +101,4 @@ public class CommentService {
             throw e;
         }
     }
-
 }

@@ -1,7 +1,10 @@
 package com.movision.mybatis.rewarded.mapper;
 
 import com.movision.mybatis.rewarded.entity.Rewarded;
+import com.movision.mybatis.rewarded.entity.RewardedVo;
+import org.apache.ibatis.session.RowBounds;
 
+import java.util.List;
 import java.util.Map;
 
 public interface RewardedMapper {
@@ -18,5 +21,7 @@ public interface RewardedMapper {
     int updateByPrimaryKey(Rewarded record);
 
     Integer queryRewardedBySum(Integer postid);
+
+    List<RewardedVo> queryPostAward(int postid, RowBounds rowBounds);
 
 }
