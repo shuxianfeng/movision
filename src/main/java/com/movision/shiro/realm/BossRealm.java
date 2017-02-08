@@ -50,8 +50,9 @@ public class BossRealm extends AuthorizingRealm {
                 return null;
             }
 
-            // 获取用户的角色集合
+            // 获取用户的角色
             int roleid = userRoleRelationFacade.getRoleidByUserid(bossUser.getId());
+            log.debug("当前用户的角色：role=" + roleid);
             // 添加用户角色到授权信息
             info.addRole(String.valueOf(roleid));
 

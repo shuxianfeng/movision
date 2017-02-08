@@ -1,16 +1,21 @@
 package com.movision.facade.user;
 
 import com.movision.aop.UserSaveCache;
+import com.movision.common.constant.MsgCodeConstant;
+import com.movision.exception.AuthException;
+import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
-import com.movision.utils.pagination.model.Paging;
-import org.apache.commons.lang3.StringUtils;
 import com.movision.utils.DateUtils;
+import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +23,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -38,12 +41,17 @@ public class UserFacade {
     private UserService userService;
 
     @Autowired
+    private BossUserService bossUserService;
+
+    @Autowired
     private PostService postService;
+
 
     @Cacheable(value = "is_exist_account", key = "'login_'+#phone")
     public int isExistAccount(String phone) {
         return userService.isExistAccount(phone);
     }
+
 
     public int registerAccount(RegisterUser registerUser) {
         return userService.registerAccount(registerUser);
@@ -87,6 +95,35 @@ public class UserFacade {
             activeVoList.get(i).setEnddays(enddays);
         }
         return activeVoList;
+    }
+
+    @Cacheable(value = "app_account", key = "'login_'+#phone")
+    public User queryUserByPhone(String phone) {
+        return userService.queryUserByPhone(phone);
+    }
+
+    /**
+     * 根据手机获取该用户信息，以及判断是什么角色
+     *
+     * @param phone
+     * @return
+     */
+    @Cacheable(value = "app_login_user", key = "'login_user_'+#phone")
+    public LoginUser getLoginUserByPhone(String phone) {
+
+        LoginUser loginUser = userService.queryLoginUserByPhone(phone);
+        if (null == loginUser) {
+            throw new AuthException(MsgCodeConstant.app_user_not_exist, "该手机号的用户不存在");
+        }
+        //若app用户同时是boss系统用户，则判断该用户是app管理员（可以管理自己的圈子）
+        BossUser bossUser = bossUserService.queryAdminUserByPhone(phone);
+        if (null == bossUser) {
+            loginUser.setRole("4");   //App普通用户
+        } else {
+            loginUser.setRole("3");   //App管理员
+        }
+
+        return loginUser;
     }
 
     /**

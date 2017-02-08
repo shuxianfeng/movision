@@ -11,6 +11,8 @@ import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @Author zhuangyuhao
  * @Date 2017/1/24 14:08
@@ -57,6 +59,17 @@ public class RoleController {
         roleFacade.delRoles(roleidArray);
 
         response.setCode(200);
+        return response;
+    }
+
+    @ApiOperation(value = "角色列表", notes = "角色列表", response = Response.class)
+    @RequestMapping(value = "role_list", method = RequestMethod.GET)
+    public Response roleList(@RequestParam(required = false) String pageNo,
+                             @RequestParam(required = false) String pageSize,
+                             @ApiParam(value = "角色名称") @RequestParam(required = false) String rolename) {
+        Response response = new Response();
+        List<Role> list = roleFacade.queryRoleList(pageNo, pageSize, rolename);
+        response.setData(list);
         return response;
     }
 

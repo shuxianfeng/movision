@@ -34,9 +34,27 @@ public class UserService {
     private PostMapper postMapper;
 
     public LoginUser queryLoginUserByPhone(String phone) {
-        User user = new User();
-        user.setPhone(phone);
-        return userMapper.selectLoginUserByPhone(user);
+        try {
+            log.info("根据手机号查询LoginUser用户, phone=" + phone);
+            User user = new User();
+            user.setPhone(phone);
+            return userMapper.selectLoginUserByPhone(user);
+        } catch (Exception e) {
+            log.error("根据手机号查询LoginUser用户失败, phone=" + phone, e);
+            throw e;
+        }
+    }
+
+    public User queryUserByPhone(String phone) {
+        try {
+            log.info("根据手机号查询User用户, phone=" + phone);
+            User user = new User();
+            user.setPhone(phone);
+            return userMapper.selectByPhone(user);
+        } catch (Exception e) {
+            log.error("根据手机号查询User用户失败,phone=" + phone, e);
+            throw e;
+        }
     }
 
     public boolean insertUser(User user) {

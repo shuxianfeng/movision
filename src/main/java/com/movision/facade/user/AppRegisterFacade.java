@@ -1,5 +1,6 @@
 package com.movision.facade.user;
 
+import com.google.gson.Gson;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.UserConstants;
 import com.movision.exception.BusinessException;
@@ -28,7 +29,7 @@ public class AppRegisterFacade {
     @Autowired
     private UserFacade userFacade;
 
-    public Boolean validateLoginUser(RegisterUser member, Validateinfo validateinfo, Session session) {
+    public UsernamePasswordToken validateLoginUser(RegisterUser member, Validateinfo validateinfo, Session session) {
         String phone = member.getPhone();
         String verifyCode = validateinfo.getCheckCode();
         String mobileCheckCode = member.getMobileCheckCode();
@@ -42,20 +43,24 @@ public class AppRegisterFacade {
                 log.debug("mobile verifyCode == " + mobileCheckCode);
                 //比较服务器端session中的验证码和App端输入的验证码
                 if (validateinfo.getCheckCode().equalsIgnoreCase(mobileCheckCode)) {
-                    //校验是否手机号存在（缓存）
-
-                    //校验是否手机号存在（查库）
+                    //1 生成token
+                    UsernamePasswordToken newToken = new UsernamePasswordToken(phone, verifyCode.toCharArray());
+                    //校验是否手机号存在
                     int isExist = userFacade.isExistAccount(phone);
-                    if (isExist == 0) {
-                        //1 注册用户，入库
-                        this.registerMember(member);
-                        //2 生成token，并且加密返回
-                        UsernamePasswordToken token = new UsernamePasswordToken(phone, verifyCode);
-                        //3 token入库
+                    if (isExist == 0) { //手机号不存在
 
-                        return true;
+                        //2 注册用户，并把token入库, 放入缓存
+                        Gson gson = new Gson();
+                        String json = gson.toJson(newToken);
+                        member.setToken(json);
+                        this.registerMember(member);
+                        //3 清除session中验证码的信息
+                        session.removeAttribute("r" + validateinfo.getAccount());
+                        //4 返回token（后期可加密）
+                        return newToken;
 
                     } else {
+                        //存在该用户
                         throw new BusinessException(MsgCodeConstant.member_mcode_account_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
                     }
                 } else {
@@ -67,6 +72,7 @@ public class AppRegisterFacade {
                 session.removeAttribute("r" + validateinfo.getAccount());
                 throw new BusinessException(MsgCodeConstant.member_mcode_sms_timeout, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_sms_timeout)));
             }
+
         } else {
             throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
         }
@@ -80,6 +86,7 @@ public class AppRegisterFacade {
         int memberId = 0;
         try {
             if (member != null) {
+
                 if (member.getPhone() != null) {
                     // 手机默认注册成功
                     member.setStatus(Integer.parseInt(UserConstants.USER_STATUS.normal.toString()));

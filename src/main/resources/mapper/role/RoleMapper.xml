@@ -93,4 +93,16 @@
             #{item}
         </foreach>
     </update>
+
+    <select id="selectRoleList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM yw_admin_role
+        WHERE isdel = 0
+        <if test="rolename != null and rolename != ''">
+            rolename like CONCAT('%',#{rolename},'%')
+        </if>
+        ORDER BY id
+    </select>
+
 </mapper>

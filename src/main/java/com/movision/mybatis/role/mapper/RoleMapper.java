@@ -1,6 +1,10 @@
 package com.movision.mybatis.role.mapper;
 
 import com.movision.mybatis.role.entity.Role;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
+import java.util.Map;
 
 
 public interface RoleMapper {
@@ -17,4 +21,6 @@ public interface RoleMapper {
     int updateByPrimaryKey(Role record);
 
     int delRoles(int[] ids);
+
+    List<Role> selectRoleList(RowBounds rowBounds, Map<String, Object> map);
 }

@@ -3,8 +3,10 @@ package com.movision.shiro.realm;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.google.gson.Gson;
 import com.movision.common.constant.UserConstants;
 import com.movision.facade.user.BossUserFacade;
+import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -12,6 +14,7 @@ import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.Cache;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
@@ -29,7 +32,7 @@ public class ShiroRealm extends AuthorizingRealm {
     private static final Logger log = LoggerFactory.getLogger(ShiroRealm.class);
 
     @Autowired
-    private BossUserFacade bossUserFacade;
+    private UserFacade userFacade;
 
     /**
      * 表示根据用户身份获取授权信息
@@ -39,17 +42,18 @@ public class ShiroRealm extends AuthorizingRealm {
 
         //  获取当前登录对象
         Subject subject = SecurityUtils.getSubject();
-        ShiroUser member = (ShiroUser) subject.getSession(false).getAttribute("member");
+        ShiroUser member = (ShiroUser) subject.getSession(false).getAttribute("appuser");
         if (null != member) {
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
             String status = String.valueOf(member.getStatus());
-
             if (StringUtils.isEmpty(status) || UserConstants.USER_STATUS.disable.toString().equals(status)) {
                 return null;
             }
-            //用户的角色集合
-            String role = "1";    //管理员
+            //获取用户的角色
+            LoginUser loginUser = userFacade.getLoginUserByPhone(member.getPhone());
+            String role = loginUser.getRole();
+            log.debug("当前登录对象的角色,role=" + role);
             info.addRole(role);
 
             return info;
@@ -64,8 +68,9 @@ public class ShiroRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         log.info("登录认证");
         String loginPhone = (String) token.getPrincipal();
-        // 1 获取当前登录的用户
-        LoginUser loginUser = bossUserFacade.getLoginUserByPhone(loginPhone);
+        // 1 获取当前登录的用户信息
+        LoginUser loginUser = userFacade.getLoginUserByPhone(loginPhone);
+        log.debug("当前登录的用户信息，LoginUser = " + loginUser.toString());
 
         if (loginUser != null) {
             if (1 == loginUser.getStatus()) {
@@ -75,13 +80,26 @@ public class ShiroRealm extends AuthorizingRealm {
             throw new UnknownAccountException();// 用户手机号不存在
         }
 
+        //登录的pwd
+        String loginPwd = String.valueOf(((UsernamePasswordToken) token).getPassword());
+        log.debug("登录的pwd，" + loginPwd);
+
+        //获取服务端的密码，并MD5二次加密
+        String mytokenStr = loginUser.getToken();
+        Gson gson = new Gson();
+        UsernamePasswordToken mytoken = gson.fromJson(mytokenStr, UsernamePasswordToken.class);
+        String password = String.valueOf(mytoken.getPassword());
+        String pwd = new Md5Hash(password, null, 2).toString();
+        log.debug("服务端的pwd," + password);
+
         // 2 根据登录用户信息生成ShiroUser用户
         ShiroUser shiroUser = new ShiroUser(loginUser.getId(), loginUser.getPhone(), loginUser.getStatus(), loginUser.getRole(),
-                loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(), loginUser.getPhone());
+                loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(), loginUser.getPhone(),
+                loginUser.getToken());
 
         // 3 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(shiroUser, // 用户
-                loginUser.getPhone(),
+                pwd,
                 getName() // realm name
         );
 
@@ -128,8 +146,9 @@ public class ShiroRealm extends AuthorizingRealm {
         private String nickname;    //昵称
         private int level;   //用户等级：0 普通用户  1 青铜  2 白银 3 黄金 4 白金 5 钻石 6 金钻石 7皇冠 8金皇冠
         private String phone;   //手机号
+        private String token;
 
-        public ShiroUser(int id, String account, int status, String role, Date registerTime, String photo, String nickname, int level, String phone) {
+        public ShiroUser(int id, String account, int status, String role, Date registerTime, String photo, String nickname, int level, String phone, String token) {
             this.id = id;
             this.account = account;
             this.status = status;
@@ -139,7 +158,19 @@ public class ShiroRealm extends AuthorizingRealm {
             this.nickname = nickname;
             this.level = level;
             this.phone = phone;
+            this.token = token;
         }
+
+        public void setToken(String token) {
+            this.token = token;
+        }
+
+        public String getToken() {
+
+            return token;
+        }
+
+
 
         public void setId(int id) {
             this.id = id;

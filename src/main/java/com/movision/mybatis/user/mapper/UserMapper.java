@@ -4,6 +4,7 @@ import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public interface UserMapper {
 
     int queryUserByPoints(int id);
 
-    int isExistAccount(String phone);
+    int isExistAccount(@Param("phone") String phone);
 
     int registerAccount(RegisterUser registerUser);
 
@@ -42,7 +43,10 @@ public interface UserMapper {
 
     List<User> queryCircleManagerList(int circleid);
 
+
     List<User> selectAllUser();
+
+    int isAppAdminUser(@Param("phone") String phone);
 
     String queryUserByOpenid(Integer userid);
 

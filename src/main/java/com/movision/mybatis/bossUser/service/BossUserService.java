@@ -2,10 +2,15 @@ package com.movision.mybatis.bossUser.service;
 
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.mapper.BossUserMapper;
+import com.movision.mybatis.role.entity.Role;
+import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhuangyuhao
@@ -75,6 +80,16 @@ public class BossUserService {
             bossUserMapper.delBossUser(ids);
         } catch (Exception e) {
             log.error("删除用户失败");
+            throw e;
+        }
+    }
+
+    public List<BossUser> queryBossUserList(Paging<BossUser> pager, Map<String, Object> map) {
+        try {
+            log.info("查询boss用户列表");
+            return bossUserMapper.selectBossUserList(pager.getRowBounds(), map);
+        } catch (Exception e) {
+            log.error("查询boss用户列表异常", e);
             throw e;
         }
     }

@@ -15,7 +15,9 @@
         <result column="beforelogintime" property="beforelogintime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, name, phone, username, password, issuper, status, isdel, createtime, afterlogintime,
+        id, name, phone, username, password, issuper, status, isdel,
+        createtime,
+        afterlogintime,
         beforelogintime
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -191,4 +193,21 @@
             #{item}
         </foreach>
     </update>
+
+    <select id="selectBossUserList" resultType="java.util.HashMap">
+        SELECT
+        id, name, phone, username, issuper, status, isdel,
+        date_format(createtime,'%Y-%m-%d %H:%i:%s') createtime,
+        date_format(afterlogintime,'%Y-%m-%d %H:%i:%s') afterlogintime,
+        date_format(beforelogintime,'%Y-%m-%d %H:%i:%s') beforelogintime
+        FROM
+        yw_admin_user
+        where status = 0 and isdel = 0
+        <if test="phone != null and phone != ''">
+            phone = #{phone}
+        </if>
+        <if test="username != null and username != ''">
+            username = #{username}
+        </if>
+    </select>
 </mapper>

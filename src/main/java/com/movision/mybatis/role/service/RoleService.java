@@ -1,12 +1,17 @@
 package com.movision.mybatis.role.service;
 
 
+import com.movision.mybatis.bossMenu.entity.Menu;
 import com.movision.mybatis.role.entity.Role;
 import com.movision.mybatis.role.mapper.RoleMapper;
+import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhuangyuhao
@@ -37,6 +42,16 @@ public class RoleService {
             roleMapper.delRoles(ids);
         } catch (Exception e) {
             log.error("删除角色失败，ids = " + ids);
+            throw e;
+        }
+    }
+
+    public List<Role> queryRoleList(Paging<Role> pager, Map<String, Object> map) {
+        try {
+            log.info("查询角色列表");
+            return roleMapper.selectRoleList(pager.getRowBounds(), map);
+        } catch (Exception e) {
+            log.error("查询角色列表异常", e);
             throw e;
         }
     }

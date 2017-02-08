@@ -1,12 +1,18 @@
 package com.movision.mybatis.user.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * 用于shiroRealm
+ * 比User多出一个role字段
+ *
  * @Author zhuangyuhao
  * @Date 2017/1/18 16:26
  */
-public class LoginUser {
+public class LoginUser implements Serializable {
+
+    private static final long serialVersionUID = 3748849614356147652L;
 
     private Integer id;
 
@@ -48,7 +54,7 @@ public class LoginUser {
 
     private Integer status;
 
-    private String role;
+    private String role;    //角色
 
     public void setId(Integer id) {
         this.id = id;
@@ -207,7 +213,7 @@ public class LoginUser {
     }
 
     public Integer getLevel() {
-        return level;
+        return level == null ? 0 : level;
     }
 
     public Integer getStatus() {
@@ -218,29 +224,30 @@ public class LoginUser {
         return role;
     }
 
-    public LoginUser(Integer id, String openid, String phone, String token, String invitecode, String referrals, String nickname, String sign, Integer attention, Integer fans, Integer points, String photo, Integer sex, Date birthday, String province, String city, Date intime, Integer growth, Integer level, Integer status, String role) {
-        this.id = id;
-        this.openid = openid;
-        this.phone = phone;
-        this.token = token;
-        this.invitecode = invitecode;
-        this.referrals = referrals;
-        this.nickname = nickname;
-        this.sign = sign;
-        this.attention = attention;
-        this.fans = fans;
-        this.points = points;
-        this.photo = photo;
-        this.sex = sex;
-        this.birthday = birthday;
-        this.province = province;
-        this.city = city;
-        this.intime = intime;
-        this.growth = growth;
-        this.level = level;
-        this.status = status;
-        this.role = role;
+    @Override
+    public String toString() {
+        return "LoginUser{" +
+                "id=" + id +
+                ", openid='" + openid + '\'' +
+                ", phone='" + phone + '\'' +
+                ", token='" + token + '\'' +
+                ", invitecode='" + invitecode + '\'' +
+                ", referrals='" + referrals + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", sign='" + sign + '\'' +
+                ", attention=" + attention +
+                ", fans=" + fans +
+                ", points=" + points +
+                ", photo='" + photo + '\'' +
+                ", sex=" + sex +
+                ", birthday=" + birthday +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", intime=" + intime +
+                ", growth=" + growth +
+                ", level=" + level +
+                ", status=" + status +
+                ", role='" + role + '\'' +
+                '}';
     }
-
-
 }

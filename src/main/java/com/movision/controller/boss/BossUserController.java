@@ -4,6 +4,7 @@ import com.movision.common.Response;
 import com.movision.facade.user.BossUserFacade;
 import com.movision.facade.user.UserRoleRelationFacade;
 import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.role.entity.Role;
 import com.movision.utils.CommonUtils;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 /**
  * @Author zhuangyuhao
@@ -82,5 +84,18 @@ public class BossUserController {
         return response;
 
     }
+
+    @RequestMapping(value = "get_boss_user_list", method = RequestMethod.GET)
+    @ApiOperation(value = "用户列表", notes = "用户列表", response = Response.class)
+    public Response getBossUserList(@RequestParam(required = false) String pageNo,
+                                    @RequestParam(required = false) String pageSize,
+                                    @ApiParam(value = "用户名") @RequestParam(required = false) String username,
+                                    @ApiParam(value = "手机号") @RequestParam(required = false) String phone) {
+        Response response = new Response();
+        List<BossUser> list = bossUserFacade.queryBossUserList(pageNo, pageSize, username, phone);
+        response.setData(list);
+        return response;
+    }
+
 
 }
