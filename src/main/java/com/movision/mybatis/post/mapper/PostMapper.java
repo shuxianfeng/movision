@@ -4,6 +4,7 @@ import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
 
@@ -62,6 +63,8 @@ public interface PostMapper {
     int queryPostByCircleid(int id);
 
     int releasePost(Post post);
+
+    void insertPostShareGoods(List<PostShareGoods> postShareGoodsList);
 
     int updatePostByZanSum(int id);
 

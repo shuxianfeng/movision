@@ -5,11 +5,13 @@ import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.mapper.PostMapper;
+import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -157,6 +159,7 @@ public class PostService {
     }
 
     //APP端发布普通帖
+    @Transactional
     public int releasePost(Post post) {
         try {
             log.info("APP端普通帖发布成功");
@@ -164,6 +167,16 @@ public class PostService {
         } catch (Exception e) {
             log.error("APP端普通帖发布失败");
             throw e;
+        }
+    }
+
+    //保存发布的帖子中分享的所有商品
+    public void insertPostShareGoods(List<PostShareGoods> postShareGoodsList) {
+        try {
+            log.info("保存发布的帖子中的商品");
+            postMapper.insertPostShareGoods(postShareGoodsList);
+        } catch (Exception e) {
+            log.error("保存发布的帖子中的商品失败");
         }
     }
 

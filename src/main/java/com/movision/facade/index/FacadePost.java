@@ -10,6 +10,7 @@ import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.beanutils.converters.IntegerConverter;
@@ -143,7 +144,7 @@ public class FacadePost {
 
 
     public int releasePost(HttpServletRequest request, String userid, String level, String circleid, String title,
-                           String postcontent, String isactive, MultipartFile file) {
+                           String postcontent, String isactive, MultipartFile file, String proids) {
 
         //这里需要根据userid判断当前登录的用户是否有发帖权限
         //查询当前圈子的开放范围
@@ -157,6 +158,7 @@ public class FacadePost {
 
             try {
                 log.info("APP前端用户开始请求发普通帖");
+
                 Post post = new Post();
                 post.setCircleid(Integer.parseInt(circleid));
                 post.setTitle(title);
@@ -205,7 +207,26 @@ public class FacadePost {
 
                 post.setCoverimg(imgurl);
 
-                return postService.releasePost(post);
+                postService.releasePost(post);
+
+                int flag = post.getId();
+
+                //再保存帖子中分享的商品列表(如何商品id字段不为空)
+                if (!StringUtils.isEmpty(proids)) {
+                    String[] proidstr = proids.split(",");
+                    List<PostShareGoods> postShareGoodsList = new ArrayList<>();
+                    for (int i = 0; i < proidstr.length; i++) {
+                        PostShareGoods postShareGoods = new PostShareGoods();
+                        int postid = flag;
+                        int goodsid = Integer.parseInt(proidstr[i]);
+                        postShareGoods.setPostid(postid);
+                        postShareGoods.setGoodsid(goodsid);
+                        postShareGoodsList.add(postShareGoods);
+                    }
+                    postService.insertPostShareGoods(postShareGoodsList);
+                }
+
+                return flag;
 
             } catch (Exception e) {
                 log.error("系统异常，APP普通帖发布失败");

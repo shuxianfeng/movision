@@ -87,20 +87,22 @@ public class AppPostController {
                                 @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
                                 @ApiParam(value = "帖子内容") @RequestParam String postcontent,
                                 @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
-                                @ApiParam(value = "上传的帖子封面图片截图") @RequestParam("file") MultipartFile file) {
+                                @ApiParam(value = "上传的帖子封面图片截图") @RequestParam("file") MultipartFile file,
+                                @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids
+    ) {
         Response response = new Response();
 
-        int count = facadePost.releasePost(request, userid, level, circleid, title, postcontent, isactive, file);
+        int count = facadePost.releasePost(request, userid, level, circleid, title, postcontent, isactive, file, proids);
 
-        if (count == 1) {
-            response.setCode(200);
-            response.setMessage("发布成功");
-        } else if (count == 0) {
+        if (count == 0) {
             response.setCode(300);
             response.setMessage("系统异常，APP普通帖发布失败");
         } else if (count == -1) {
             response.setCode(201);
             response.setMessage("用户不具备发帖权限");
+        } else {
+            response.setCode(200);
+            response.setMessage("发布成功");
         }
         return response;
     }

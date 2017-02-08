@@ -272,6 +272,9 @@
 
     <!--APP端发布普通帖-->
     <insert id="releasePost" parameterType="com.movision.mybatis.post.entity.Post">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
         INSERT INTO yw_post (circleid, title,
           postcontent, zansum, commentsum, forwardsum,
         collectsum, isactive, type, ishot, isessence,
@@ -295,6 +298,17 @@
         #{postid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{videourl,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}
       )
+    </insert>
+
+    <!--批量插入发布帖子时分享的所有商品-->
+    <insert id="insertPostShareGoods" parameterType="java.util.List">
+        INSERT INTO yw_post_share_goods (
+        postid, goodsid
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.postid,jdbcType=INTEGER},#{item.goodsid,jdbcType=INTEGER})
+        </foreach>
     </insert>
 
     <!--基础插入语句（选择性插入）-->
