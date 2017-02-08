@@ -76,5 +76,9 @@ public interface PostMapper {
 
     int deletePost(Integer postid);
 
+    Post queryPostParticulars(Integer postid);
+
+    int addPost(Map map);
+
     /*List postSearch(Map map);*/
 }

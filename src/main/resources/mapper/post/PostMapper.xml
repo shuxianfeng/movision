@@ -311,8 +311,72 @@
         </foreach>
     </insert>
 
+    <insert id="addPost" parameterType="java.util.Map">
+        INSERT INTO yw_post(
+        <if test="title != null">
+            title,
+        </if>
+        <if test="type != null">
+            type,
+        </if>
+        <if test="circleid != null">
+            circleid,
+        </if>
+        <if test="coverimg != null">
+            coverimg,
+        </if>
+        <if test="man != null">
+            man,
+        </if>
+        <if test="postcontent != null">
+            postcontent,
+        </if>
+        <if test="isessence != null">
+            isessence,
+        </if>
+        <if test="time != null">
+            time,
+        </if>
+        <if test="intime != null">
+            intime
+        </if>
+        )
+        VALUES (
+        <if test="title != null">
+            #{title,jdbcType=VARCHAR},
+        </if>
+        <if test="ype != null">
+            #{ype,jdbcType=INTEGER},
+        </if>
+        <if test="circleid != null">
+            #{circleid,jdbcType=INTEGER},
+        </if>
+        <if test="coverimg != null">
+            #{coverimg,jdbcType=VARCHAR},
+        </if>
+        <if test="man != null">
+            #{man,jdbcType=VARCHAR},
+        </if>
+        <if test="postcontent != null">
+            #{postcontent,jdbcType=VARCHAR},
+        </if>
+        <if test="isessence != null">
+            #{isessence,jdbcType=INTEGER},
+        </if>
+        <if test="time != null">
+            #{time,jdbcType=TIMESTAMP},
+        </if>
+        <if test="intime != null">
+            #{intime,jdbcType=TIMESTAMP}
+        </if>
+        )
+    </insert>
+
     <!--基础插入语句（选择性插入）-->
     <insert id="insertSelective" parameterType="com.movision.mybatis.post.entity.Post">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
         insert into yw_post
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -578,4 +642,10 @@
         SET isdel=1
         WHERE id=#{postid,jdbcType=INTEGER}
     </update>
+
+    <select id="queryPostParticulars" resultType="com.movision.mybatis.post.entity.Post"
+            parameterType="java.lang.Integer">
+        SELECT * FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
+
 </mapper>

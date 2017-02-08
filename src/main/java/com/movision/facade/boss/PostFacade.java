@@ -5,6 +5,8 @@ import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
+import com.movision.mybatis.period.entity.Period;
+import com.movision.mybatis.period.service.PeriodService;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.post.service.PostService;
@@ -16,11 +18,13 @@ import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @Author zhurui
@@ -48,6 +52,9 @@ public class PostFacade {
 
     @Autowired
     CommentService commentService;
+
+    @Autowired
+    PeriodService periodService;
 
 
     /**
@@ -162,6 +169,51 @@ public class PostFacade {
         Paging<RewardedVo> pager = new Paging<RewardedVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         return rewardedService.queryPostAward(Integer.parseInt(postid), pager);//分页返回帖子打赏列表
     }
+
+    /**
+     * 帖子预览
+     *
+     * @param postid
+     * @return
+     */
+    public Post queryPostParticulars(String postid) {
+        return postService.queryPostParticulars(Integer.parseInt(postid));
+    }
+
+    public int addPost(String title, String type, String circleid,
+                       String coverimg, String postcontent, String isessence, String time, String begintime, String endtime) {
+        Post post = new Post();
+        Period period = new Period();
+        post.setTitle(title);
+        post.setType(Integer.parseInt(type));
+        post.setCircleid(Integer.parseInt(circleid));
+        if (coverimg != null) {//判断传入的值是否为空
+            post.setCoverimg(coverimg);
+        }
+        post.setPostcontent(postcontent);
+        if (isessence != null) {
+            post.setIsessence(Integer.parseInt(isessence));
+        }
+        post.setIntime(new Date());
+        Calendar c = Calendar.getInstance();//将字符串数据转换为毫秒值
+        Date be = null;
+        Date en = null;
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+            be = format.parse(begintime);
+            en = format.parse(endtime);
+        } catch (ParseException e) {
+        }
+        int p = postService.addPost(post);//添加帖子/活动
+        Integer postid = post.getId();//获取帖子id
+        period.setPostid(postid);
+        period.setBegintime(be);
+        period.setEndtime(en);
+        int per = periodService.insertPostRecord(period);//设置活动时间
+        return per;
+
+    }
+
 /*    *//**
      * 帖子按条件查询
      * @param title

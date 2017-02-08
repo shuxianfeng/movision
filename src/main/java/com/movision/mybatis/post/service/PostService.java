@@ -244,6 +244,37 @@ public class PostService {
     }
 
     /**
+     * 帖子预览
+     * @param postid
+     * @return
+     */
+    public Post queryPostParticulars(Integer postid) {
+        try {
+            log.info("帖子预览");
+            return postMapper.queryPostParticulars(postid);
+        } catch (Exception e) {
+            log.error("帖子预览异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 添加帖子
+     *
+     * @param map
+     * @return
+     */
+    public int addPost(Post map) {
+        try {
+            log.info("添加帖子");
+            return postMapper.insertSelective(map);
+        } catch (Exception e) {
+            log.error("添加帖子异常");
+            throw e;
+        }
+    }
+
+    /**
      * 帖子按条件查询
      * @param map
      * @return

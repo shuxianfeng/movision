@@ -4,6 +4,7 @@ import com.movision.common.Response;
 import com.movision.facade.boss.PostFacade;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.rewarded.entity.Rewarded;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.user.entity.User;
@@ -131,7 +132,7 @@ public class PostController {
      * @return
      */
     @ApiOperation(value = "查看帖子打赏列表", notes = "查看帖子打赏列表", response = Response.class)
-    @RequestMapping(value = "/post_award", method = RequestMethod.POST)
+    @RequestMapping(value = "/query_post_award", method = RequestMethod.POST)
     public Response queryPostAward(@ApiParam(value = "帖子id") @RequestParam String postid,
                                    @RequestParam(required = false) String pageNo,
                                    @RequestParam(required = false) String pageSize) {
@@ -141,6 +142,55 @@ public class PostController {
             response.setMessage("查询成功");
         }
         response.setData(list);
+        return response;
+    }
+
+    /**
+     * 帖子预览
+     *
+     * @param postid
+     * @return
+     */
+    @ApiOperation(value = "帖子预览", notes = "帖子预览", response = Response.class)
+    @RequestMapping(value = "/query_post_particulars", method = RequestMethod.POST)
+    public Response queryPostParticulars(@ApiParam(value = "帖子id") @RequestParam String postid) {
+        Response response = new Response();
+        Post list = postFacade.queryPostParticulars(postid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return response;
+    }
+
+    /**
+     * 添加帖子
+     *
+     * @param title
+     * @param type
+     * @param circleid
+     * @param coverimg
+     * @param postcontent
+     * @param isessence
+     * @param time
+     * @return
+     */
+    @ApiOperation(value = "添加帖子", notes = "添加帖子", response = Response.class)
+    @RequestMapping(value = "/add_post", method = RequestMethod.POST)
+    public Response addPost(@ApiParam(value = "帖子标题") @RequestParam String title,//帖子标题
+                            @ApiParam(value = "帖子类型") @RequestParam String type,//帖子类型
+                            @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
+                            @ApiParam(value = "帖子封面") @RequestParam(required = false) String coverimg,//帖子封面
+                            @ApiParam(value = "帖子内容") @RequestParam String postcontent,//帖子内容
+                            @ApiParam(value = "精选") @RequestParam(required = false) String isessence,//精选
+                            @ApiParam(value = "精选日期") @RequestParam(required = false) String time,//精选日期
+                            @ApiParam(value = "活动开始时间") @RequestParam(required = false) String begintime,//活动开始时间
+                            @ApiParam(value = "活动结束时间") @RequestParam(required = false) String endtime) {//活动结束时间
+        Response response = new Response();
+        postFacade.addPost(title, type, circleid, coverimg, postcontent, isessence, time, begintime, endtime);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
         return response;
     }
 
