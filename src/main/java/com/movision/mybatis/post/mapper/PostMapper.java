@@ -1,6 +1,7 @@
 package com.movision.mybatis.post.mapper;
 
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
@@ -65,6 +66,10 @@ public interface PostMapper {
     int releasePost(Post post);
 
     void insertPostShareGoods(List<PostShareGoods> postShareGoodsList);
+
+    List<Goods> queryCollectGoodsList(RowBounds rowBounds, int userid);
+
+    List<Goods> queryAllGoodsList(RowBounds rowBounds);
 
     int updatePostByZanSum(int id);
 

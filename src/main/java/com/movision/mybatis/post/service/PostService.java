@@ -1,6 +1,7 @@
 package com.movision.mybatis.post.service;
 
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
@@ -177,6 +178,28 @@ public class PostService {
             postMapper.insertPostShareGoods(postShareGoodsList);
         } catch (Exception e) {
             log.error("保存发布的帖子中的商品失败");
+        }
+    }
+
+    //根据userid查询用户收藏的所有商品列表
+    public List<Goods> queryCollectGoodsList(Paging<Goods> pager, int userid) {
+        try {
+            log.info("根据userid查询用户所有收藏的商品列表");
+            return postMapper.queryCollectGoodsList(pager.getRowBounds(), userid);
+        } catch (Exception e) {
+            log.error("根据userid查询用户所有收藏的商品列表失败");
+            throw e;
+        }
+    }
+
+    //userid为空时查询所有商品列表
+    public List<Goods> queryAllGoodsList(Paging<Goods> pager) {
+        try {
+            log.info("userid为空时查询所有商品列表");
+            return postMapper.queryAllGoodsList(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("userid为空时查询所有商品列表失败");
+            throw e;
         }
     }
 

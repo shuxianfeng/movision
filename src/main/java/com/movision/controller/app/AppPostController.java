@@ -3,6 +3,7 @@ package com.movision.controller.app;
 import com.movision.common.Response;
 import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.accusation.service.AccusationService;
+import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -107,6 +108,21 @@ public class AppPostController {
         return response;
     }
 
+    @ApiOperation(value = "发帖选择推荐商品接口", notes = "APP发布普通帖选择推荐商品时调用此接口，选择收藏的商品列表和全部商品列表", response = Response.class)
+    @RequestMapping(value = "recommendGoodsList", method = RequestMethod.POST)
+    public Response recommendGoodsList(@ApiParam(value = "用户id(为空时默认查询所有商品,不为空时查询该用户收藏的商品)") @RequestParam(required = false) String userid,
+                                       @ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
+                                       @ApiParam(value = "每页条数") @RequestParam(required = false) String pageSize) {
+        Response response = new Response();
+
+        List<Goods> shareGoodsList = facadePost.queryRecommendGoodsList(userid, pageNo, pageSize);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(shareGoodsList);
+        return response;
+    }
 
     /**
      * 帖子点赞接口
