@@ -25,4 +25,10 @@ public interface MenuMapper {
     void delMenu(int[] ids);
 
     List<Menu> selectByRoleid(@Param("roleid") Integer roleid);
+
+    List<Menu> selectAllMenu();
+
+    List<Menu> selectAllParentMenu();
+
+    List<Menu> selectAllChildrenMenu();
 }

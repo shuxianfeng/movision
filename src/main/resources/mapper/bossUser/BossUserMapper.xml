@@ -184,7 +184,7 @@
         </foreach>
     </update>
 
-    <select id="selectBossUserList" resultType="java.util.HashMap">
+    <select id="selectBossUserList" resultType="java.util.HashMap" parameterType="java.util.HashMap">
         SELECT
         id, name, phone, username, issuper, status, isdel,
         date_format(createtime,'%Y-%m-%d %H:%i:%s') createtime,

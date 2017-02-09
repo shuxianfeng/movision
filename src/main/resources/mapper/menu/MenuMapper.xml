@@ -125,4 +125,27 @@
         where rm.roleid = #{roleid}
     </select>
 
+    <select id="selectAllMenu" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_admin_menu
+        where isdel = 1
+    </select>
+
+    <select id="selectAllParentMenu" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_admin_menu
+        where isdel = 1 AND pid = 0
+    </select>
+
+    <select id="selectAllChildrenMenu" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_admin_menu
+        <![CDATA[
+        where isdel = 1 AND pid <> 0
+        ]]>
+    </select>
+
 </mapper>

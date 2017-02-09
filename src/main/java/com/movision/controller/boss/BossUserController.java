@@ -11,6 +11,7 @@ import com.movision.mybatis.role.entity.Role;
 import com.movision.mybatis.userRoleRelation.entity.UserRoleRelation;
 import com.movision.utils.CommonUtils;
 import com.movision.utils.MsgPropertiesUtils;
+import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
@@ -93,13 +94,16 @@ public class BossUserController {
 
     @RequestMapping(value = "get_boss_user_list", method = RequestMethod.GET)
     @ApiOperation(value = "用户列表", notes = "用户列表", response = Response.class)
-    public Response getBossUserList(@RequestParam(required = false) String pageNo,
-                                    @RequestParam(required = false) String pageSize,
+    public Response getBossUserList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                    @RequestParam(required = false, defaultValue = "10") String pageSize,
                                     @ApiParam(value = "用户名") @RequestParam(required = false) String username,
                                     @ApiParam(value = "手机号") @RequestParam(required = false) String phone) {
         Response response = new Response();
-        List<Map<String, Object>> list = bossUserFacade.queryBossUserList(pageNo, pageSize, username, phone);
-        response.setData(list);
+        Paging<Map<String, Object>> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+
+        List<Map<String, Object>> list = bossUserFacade.queryBossUserList(pager, username, phone);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 

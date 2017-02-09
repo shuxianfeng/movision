@@ -51,4 +51,17 @@ public class MenuFacade {
         }
         return menuService.queryMenuList(pager, map);
     }
+
+    public List<Map<String, Object>> getAllMenu() {
+        List<Menu> menuList = menuService.getAllMenu();
+        for (Menu menu : menuList) {
+            int pid = menu.getPid();
+            if (pid == 0) {
+                //是一个父菜单
+                int id = menu.getId();
+
+            }
+        }
+        return null;
+    }
 }

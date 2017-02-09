@@ -90,7 +90,7 @@ public class BossUserService {
         }
     }
 
-    public List<Map<String, Object>> queryBossUserList(Paging<BossUser> pager, Map<String, Object> map) {
+    public List<Map<String, Object>> queryBossUserList(Paging<Map<String, Object>> pager, Map<String, Object> map) {
         try {
             log.info("查询boss用户列表");
             return bossUserMapper.selectBossUserList(pager.getRowBounds(), map);

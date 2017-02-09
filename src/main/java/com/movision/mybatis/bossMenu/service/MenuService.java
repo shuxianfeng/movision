@@ -76,4 +76,35 @@ public class MenuService {
     }
 
 
+    public List<Menu> getAllMenu() {
+        try {
+            log.info("查询所有菜单");
+            return menuMapper.selectAllMenu();
+        } catch (Exception e) {
+            log.error("查询所有菜单失败", e);
+            throw e;
+        }
+    }
+
+    public List<Menu> getAllParentMenu() {
+        try {
+            log.info("查询所有父级菜单");
+            return menuMapper.selectAllParentMenu();
+        } catch (Exception e) {
+            log.error("查询所有父级菜单失败", e);
+            throw e;
+        }
+    }
+
+    public List<Menu> selectAllChildrenMenu() {
+        try {
+            log.info("查询所有子级菜单");
+            return menuMapper.selectAllChildrenMenu();
+        } catch (Exception e) {
+            log.error("查询所有子级菜单失败", e);
+            throw e;
+        }
+    }
+
+
 }

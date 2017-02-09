@@ -30,14 +30,8 @@ public class BossUserFacade {
     @Autowired
     private BossUserService bossUserService;
 
-    public List<Map<String, Object>> queryBossUserList(String pageNo, String pageSize, String username, String phone) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<BossUser> pager = new Paging<BossUser>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+    public List<Map<String, Object>> queryBossUserList(Paging<Map<String, Object>> pager, String username, String phone) {
+
         Map<String, Object> map = new HashedMap();
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(username)) {
             map.put("username", username);
