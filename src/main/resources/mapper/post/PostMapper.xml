@@ -44,14 +44,15 @@
 
     <!--查询首页今日精选的帖子数据-->
     <select id="queryTodayEssence" resultType="com.movision.mybatis.post.entity.PostVo">
-        select * from (select
-        t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isessencepool,t1.isdel,t2.category
-        AS
-        category,t2.code AS code
-                        from yw_post t1
-                        LEFT JOIN yw_circle t2 ON
-        t1.circleid = t2.id) t
-        where DATE_FORMAT(t.intime,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
+        select * from (
+        select
+        t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isessencepool,t1.isdel,t1.essencedate,
+        t2.category AS category,t2.code AS code
+        from yw_post t1
+        LEFT JOIN yw_circle t2 ON
+        t1.circleid = t2.id
+        ) t
+        where t.essencedate = DATE_FORMAT(NOW(),'%Y-%m-%d')
         AND t.isessence = '1'
         AND t.isdel = '0'
         order by t.orderid
@@ -60,14 +61,15 @@
     <!--查询首页dayago天前精选的帖子数据-->
     <select id="queryDayAgoEssence" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        select * from (select
-        t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isessencepool,t1.isdel,t2.category
-        AS
-        category,t2.code AS code
-                        from yw_post t1
-                        LEFT JOIN yw_circle t2 ON
-        t1.circleid = t2.id) t
-        where TO_DAYS(NOW())-TO_DAYS(t.intime) = #{dayago,jdbcType=INTEGER}
+        select * from (
+        select
+        t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isessencepool,t1.isdel,t1.essencedate,
+        t2.category AS category,t2.code AS code
+        from yw_post t1
+        LEFT JOIN yw_circle t2 ON
+        t1.circleid = t2.id
+        ) t
+        where TO_DAYS(NOW())-TO_DAYS(t.essencedate) = #{dayago,jdbcType=INTEGER}
         and t.isessence = '1'
         AND t.isdel = '0'
         order by t.orderid
@@ -133,9 +135,9 @@
     <!--查询往期3天的精选帖子列表-->
     <select id="queryPastPostList" parameterType="java.util.Map"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT *,t2.category AS category,t2.code AS code
+        SELECT t1.*,t2.category AS category,t2.code AS code
         FROM yw_post t1,yw_circle t2
-        WHERE DATE(t1.intime) <![CDATA[ = ]]> DATE_ADD(#{date},INTERVAL-#{days} DAY)
+        WHERE t1.essencedate <![CDATA[ = ]]> DATE_ADD(#{date},INTERVAL-#{days} DAY)
           AND t1.circleid = t2.id
           AND t1.isdel = '0'
           AND t1.isessence = '1'
@@ -148,7 +150,7 @@
         LEFT JOIN yw_circle t2 ON
             t1.circleid = t2.id
         WHERE circleid = #{circleid,jdbcType=INTEGER}
-          AND isdel = '0'
+        AND t1.isdel = '0'
           ORDER BY intime DESC
     </select>
 
