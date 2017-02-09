@@ -2,12 +2,12 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.PostFacade;
-import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.post.entity.Post;
-import com.movision.mybatis.rewarded.entity.Rewarded;
+import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.user.entity.User;
+import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -39,14 +38,16 @@ public class PostController {
      */
     @ApiOperation(value = "查询帖子列表", notes = "查询帖子列表", response = Response.class)
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public Response queryPostByList(@RequestParam(required = false) String pageNo,
-                                    @RequestParam(required = false) String pageSize) {
+    public Response queryPostByList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                    @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Map<String, Object> list = postFacade.queryPostByList(pageNo, pageSize);
+        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostList> list = postFacade.queryPostByList(pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成");
         }
-        response.setData(list);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 
@@ -97,14 +98,16 @@ public class PostController {
     @ApiOperation(value = "查看帖子评论", notes = "查看帖子评论", response = Response.class)
     @RequestMapping(value = "/query_post_appraise", method = RequestMethod.POST)
     public Response queryPostAppraise(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                      @RequestParam(required = false) String pageNo,
-                                      @RequestParam(required = false) String pageSize) {
+                                      @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                      @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        List<CommentVo> list = postFacade.queryPostAppraise(postid, pageNo, pageSize);
+        Paging<CommentVo> pager = new Paging<CommentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<CommentVo> list = postFacade.queryPostAppraise(postid, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(list);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 

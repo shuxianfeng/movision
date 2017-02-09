@@ -3,6 +3,7 @@ package com.movision.utils.pagination.model;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Date Created 2014-2-26

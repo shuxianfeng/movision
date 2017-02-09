@@ -59,24 +59,15 @@ public class PostFacade {
 
     /**
      * 后台管理-查询帖子列表
-     *
-     * @param pageNo
-     * @param pageSize
+     * @param pager
      * @return
      */
-    public Map<String, Object> queryPostByList(String pageNo, String pageSize) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Post> pager = new Paging<Post>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List<Post> list = postService.queryPostByList(pager);
+    public List<PostList> queryPostByList(Paging<PostList> pager) {
+        List<PostList> list = postService.queryPostByList(pager);
         Map<String, Object> map = new HashedMap();
         Integer num = postService.queryPostNum();//查询帖子总数
         map.put("total", num);
-        List<Object> rewardeds = new ArrayList<Object>();
+        List<PostList> rewardeds = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
                 PostList postList = new PostList();
             Integer id = list.get(i).getId();
@@ -96,10 +87,8 @@ public class PostFacade {
                 postList.setAccusation(accusation);
                 postList.setIsessence(list.get(i).getIsessence());
                 rewardeds.add(postList);
-
         }
-        map.put("list", rewardeds);
-        return map;
+        return rewardeds;
     }
 
     /**
@@ -128,23 +117,15 @@ public class PostFacade {
         return map;
     }
 
+
     /**
      * 后台管理-帖子列表-查看评论
-     *
-     * @param pageNo
-     * @param pageSize
      * @param postid
+     * @param pager
      * @return
      */
-    public List<CommentVo> queryPostAppraise(String postid, String pageNo, String pageSize) {
-        if (org.apache.commons.lang3.StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (org.apache.commons.lang3.StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<CommentVo> pager = new Paging<CommentVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List<CommentVo> list = commentService.queryComments(postid, pager);
+    public List<CommentVo> queryPostAppraise(String postid, Paging<CommentVo> pager) {
+        List<CommentVo> list = commentService.queryCommentsByLsit(postid, pager);
         return list;
     }
 

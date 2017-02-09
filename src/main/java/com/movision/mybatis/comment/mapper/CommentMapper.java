@@ -19,7 +19,7 @@ public interface CommentMapper {
 
     int updateByPrimaryKey(Comment record);
 
-    List<CommentVo> queryCommentsByLsit(int postid,RowBounds rowBounds);
+    List<CommentVo> findAllqueryCommentsByLsit(Integer postid, RowBounds rowBounds);
 
     CommentVo queryChildrenComment(int id);
 

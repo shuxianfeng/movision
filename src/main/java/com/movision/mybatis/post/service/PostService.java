@@ -2,10 +2,7 @@ package com.movision.mybatis.post.service;
 
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.goods.entity.Goods;
-import com.movision.mybatis.post.entity.ActiveVo;
-import com.movision.mybatis.post.entity.Post;
-import com.movision.mybatis.post.entity.PostNum;
-import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.mapper.PostMapper;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.utils.pagination.model.Paging;
@@ -241,10 +238,10 @@ public class PostService {
      * @param pager
      * @return
      */
-    public List<Post> queryPostByList(Paging<Post> pager) {
+    public List<PostList> queryPostByList(Paging<PostList> pager) {
         try {
             log.info("查询帖子列表");
-            return postMapper.queryPostByList(pager.getRowBounds());
+            return postMapper.findAllqueryPostByList(pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询帖子列表异常");
             throw e;

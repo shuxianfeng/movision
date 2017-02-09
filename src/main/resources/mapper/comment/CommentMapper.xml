@@ -12,7 +12,7 @@
     <result column="isdel" property="isdel" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, userid, pid, content, intime, zansum, isdel
+    id, userid, pid, content, intime, zansum,isdel
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -116,7 +116,8 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="queryCommentsByLsit" parameterType="int" resultType="com.movision.mybatis.comment.entity.CommentVo">
+  <select id="findAllqueryCommentsByLsit" parameterType="java.lang.Integer"
+          resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.phone,u.photo,u.nickname
     FROM yw_post_comment c
     LEFT JOIN yw_user u

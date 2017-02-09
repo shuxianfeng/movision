@@ -29,7 +29,7 @@ public class CommentService {
 
         try {
             log.info("查询某个帖子的评论列表");
-            return commentMapper.queryCommentsByLsit(Integer.parseInt(postid),pager.getRowBounds());
+            return commentMapper.findAllqueryCommentsByLsit(Integer.parseInt(postid), pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询帖子评论列表失败");
             throw e;
@@ -75,16 +75,16 @@ public class CommentService {
             throw e;
         }
     }
-
+/*
     public List<CommentVo> queryComments(String postid, Paging<CommentVo> pager) {
         try {
             log.info("查询评论");
-            return commentMapper.queryCommentsByLsit(Integer.parseInt(postid), pager.getRowBounds());
+            return commentMapper.findAllqueryCommentsByLsit(Integer.parseInt(postid), pager.getRowBounds());
         } catch (NumberFormatException e) {
             log.error("查询评论异常");
             throw e;
         }
-    }
+    }*/
 
     /**
      * 删除帖子评论

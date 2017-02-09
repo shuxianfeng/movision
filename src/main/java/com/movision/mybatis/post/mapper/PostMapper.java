@@ -2,10 +2,7 @@ package com.movision.mybatis.post.mapper;
 
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.goods.entity.Goods;
-import com.movision.mybatis.post.entity.ActiveVo;
-import com.movision.mybatis.post.entity.Post;
-import com.movision.mybatis.post.entity.PostNum;
-import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import org.apache.ibatis.session.RowBounds;
 
@@ -77,7 +74,7 @@ public interface PostMapper {
 
     int updatePostBycommentsum(int postid);
 
-    List<Post> queryPostByList(RowBounds rowBounds);
+    List<PostList> findAllqueryPostByList(RowBounds rowBounds);
 
     int queryPostNum();
 

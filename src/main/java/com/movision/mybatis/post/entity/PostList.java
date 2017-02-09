@@ -34,6 +34,41 @@ public class PostList {
 
     private Integer sum;//帖子总数
 
+    private Integer circleid;
+
+    private String subtitle;
+
+    private String postcontent;
+
+    private Integer forwardsum;
+
+    private Integer isactive;
+
+    private Integer activetype;
+
+    private Double activefee;
+
+    private Integer type;
+
+    private Integer ishot;
+
+    private Integer isessencepool;
+
+    private Integer orderid;
+
+    private String coverimg;
+
+    private String hotimgurl;
+
+    private Date intime;
+
+    private Integer totalpoint;
+
+    private Integer isdel;
+
+    private Date essencedate;//精选日期
+
+
     public Integer getId() {
         return id;
     }
@@ -128,5 +163,141 @@ public class PostList {
 
     public void setIstime(Date istime) {
         this.istime = istime;
+    }
+
+    public Integer getCircleid() {
+        return circleid;
+    }
+
+    public void setCircleid(Integer circleid) {
+        this.circleid = circleid;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    public String getPostcontent() {
+        return postcontent;
+    }
+
+    public void setPostcontent(String postcontent) {
+        this.postcontent = postcontent;
+    }
+
+    public Integer getForwardsum() {
+        return forwardsum;
+    }
+
+    public void setForwardsum(Integer forwardsum) {
+        this.forwardsum = forwardsum;
+    }
+
+    public Integer getIsactive() {
+        return isactive;
+    }
+
+    public void setIsactive(Integer isactive) {
+        this.isactive = isactive;
+    }
+
+    public Integer getActivetype() {
+        return activetype;
+    }
+
+    public void setActivetype(Integer activetype) {
+        this.activetype = activetype;
+    }
+
+    public Double getActivefee() {
+        return activefee;
+    }
+
+    public void setActivefee(Double activefee) {
+        this.activefee = activefee;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getIshot() {
+        return ishot;
+    }
+
+    public void setIshot(Integer ishot) {
+        this.ishot = ishot;
+    }
+
+    public Integer getIsessencepool() {
+        return isessencepool;
+    }
+
+    public void setIsessencepool(Integer isessencepool) {
+        this.isessencepool = isessencepool;
+    }
+
+    public Integer getOrderid() {
+        return orderid;
+    }
+
+    public void setOrderid(Integer orderid) {
+        this.orderid = orderid;
+    }
+
+    public String getCoverimg() {
+        return coverimg;
+    }
+
+    public void setCoverimg(String coverimg) {
+        this.coverimg = coverimg;
+    }
+
+    public String getHotimgurl() {
+        return hotimgurl;
+    }
+
+    public void setHotimgurl(String hotimgurl) {
+        this.hotimgurl = hotimgurl;
+    }
+
+    public Date getIntime() {
+        return intime;
+    }
+
+    public void setIntime(Date intime) {
+        this.intime = intime;
+    }
+
+    public Integer getTotalpoint() {
+        return totalpoint;
+    }
+
+    public void setTotalpoint(Integer totalpoint) {
+        this.totalpoint = totalpoint;
+    }
+
+    public Integer getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(Integer isdel) {
+        this.isdel = isdel;
+    }
+
+    public Date getEssencedate() {
+        return essencedate;
+    }
+
+    public void setEssencedate(Date essencedate) {
+        this.essencedate = essencedate;
     }
 }
