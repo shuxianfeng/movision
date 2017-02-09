@@ -93,7 +93,7 @@ public class BossUserController {
     }
 
     @RequestMapping(value = "get_boss_user_list", method = RequestMethod.GET)
-    @ApiOperation(value = "用户列表", notes = "用户列表", response = Response.class)
+    @ApiOperation(value = "用户列表（分页）", notes = "用户列表（分页）", response = Response.class)
     public Response getBossUserList(@RequestParam(required = false, defaultValue = "1") String pageNo,
                                     @RequestParam(required = false, defaultValue = "10") String pageSize,
                                     @ApiParam(value = "用户名") @RequestParam(required = false) String username,

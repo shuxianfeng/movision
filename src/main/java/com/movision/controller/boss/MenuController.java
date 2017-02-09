@@ -64,7 +64,7 @@ public class MenuController {
                                   @RequestParam(required = false, defaultValue = "10") String pageSize,
                                   @ApiParam(value = "菜单名称") @RequestParam(required = false) String menuname) {
         Response response = new Response();
-        Paging<Menu> pager = new Paging<Menu>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<Menu> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<Menu> list = menuFacade.queryMenuList(pager, menuname);
         pager.result(list);
         response.setData(pager);
