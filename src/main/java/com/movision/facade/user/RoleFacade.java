@@ -47,4 +47,8 @@ public class RoleFacade {
         }
         return roleService.queryRoleList(pager, map);
     }
+
+    public List<Role> queryRoleComboList() {
+        return roleService.queryRoleComboList();
+    }
 }

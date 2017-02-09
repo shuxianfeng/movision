@@ -49,4 +49,15 @@ public class UserRoleRelationService {
         userRoleRelationMapper.deleteRelationsbyRoleid(roleids);
     }
 
+    public Boolean updateByUserid(UserRoleRelation userRoleRelation) {
+        try {
+            log.info("修改用户角色关系， userid = " + userRoleRelation.getUserid().toString());
+            int n = userRoleRelationMapper.updateByUserid(userRoleRelation);
+            return n == 1;
+        } catch (Exception e) {
+            log.error("修改用户角色关系失败, userid = " + userRoleRelation.getUserid().toString(), e);
+            throw e;
+        }
+    }
+
 }

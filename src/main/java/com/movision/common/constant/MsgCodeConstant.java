@@ -73,6 +73,7 @@ public interface MsgCodeConstant {
 	 */
 	int server_token_missing = 10015;
 
+
 	/**
 	 * 文件不存在
 	 */
@@ -279,6 +280,10 @@ public interface MsgCodeConstant {
 	int NOT_EXIST_ORDER_GOODS = 3011;
 
 
+	/**
+	 * boss用户不存在
+	 */
+	int boss_user_not_exist = 10300;
 
 
 }

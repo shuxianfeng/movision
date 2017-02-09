@@ -29,4 +29,8 @@ public class UserRoleRelationFacade {
     public void deleteRelationsByRoleid(int[] roleid) {
         userRoleRelationService.deleteRelationsByRoleid(roleid);
     }
+
+    public Boolean updateByUserid(UserRoleRelation userRoleRelation) {
+        return userRoleRelationService.updateByUserid(userRoleRelation);
+    }
 }

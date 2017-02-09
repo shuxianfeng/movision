@@ -64,12 +64,22 @@ public class RoleController {
 
     @ApiOperation(value = "角色列表", notes = "角色列表", response = Response.class)
     @RequestMapping(value = "role_list", method = RequestMethod.GET)
-    public Response roleList(@RequestParam(required = false) String pageNo,
-                             @RequestParam(required = false) String pageSize,
-                             @ApiParam(value = "角色名称") @RequestParam(required = false) String rolename) {
+    public Response getRoleList(@RequestParam(required = false) String pageNo,
+                                @RequestParam(required = false) String pageSize,
+                                @ApiParam(value = "角色名称") @RequestParam(required = false) String rolename) {
         Response response = new Response();
         List<Role> list = roleFacade.queryRoleList(pageNo, pageSize, rolename);
         response.setData(list);
+        return response;
+    }
+
+    @ApiOperation(value = "角色下拉列表", notes = "角色下拉列表", response = Response.class)
+    @RequestMapping(value = "role_combo_list", method = RequestMethod.GET)
+    public Response getRoleComboList() {
+
+        Response response = new Response();
+        List<Role> comboList = roleFacade.queryRoleComboList();
+        response.setData(comboList);
         return response;
     }
 

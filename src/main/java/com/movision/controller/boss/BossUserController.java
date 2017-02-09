@@ -1,11 +1,16 @@
 package com.movision.controller.boss;
 
 import com.movision.common.Response;
+import com.movision.common.constant.MsgCodeConstant;
+import com.movision.exception.BusinessException;
 import com.movision.facade.user.BossUserFacade;
 import com.movision.facade.user.UserRoleRelationFacade;
 import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.bossUser.entity.BossUserVo;
 import com.movision.mybatis.role.entity.Role;
+import com.movision.mybatis.userRoleRelation.entity.UserRoleRelation;
 import com.movision.utils.CommonUtils;
+import com.movision.utils.MsgPropertiesUtils;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhuangyuhao
@@ -32,40 +38,40 @@ public class BossUserController {
 
     @RequestMapping(value = "add_boss_user", method = RequestMethod.POST)
     @ApiOperation(value = "新增boss用户", notes = "新增boss用户", response = Response.class)
-    public Response addBossUser(@ApiParam @ModelAttribute BossUser bossUser) throws UnsupportedEncodingException {
+    public Response addBossUser(@ApiParam @ModelAttribute BossUserVo bossUserVo) throws UnsupportedEncodingException {
         Response response = new Response();
-        //密码加密
-        String pwd = new Md5Hash(bossUser.getPassword(), null, 2).toString();
 
-        bossUser.setPassword(pwd);
-
-        boolean flag = bossUserFacade.addUser(bossUser);
-        if (flag) {
-            response.setCode(200);
-        } else {
-            response.setCode(400);
+        //1 新增用户信息
+        bossUserFacade.addBySelectiveInfo(bossUserVo);
+        //2 新增用户角色
+        String roleid = bossUserVo.getRoleid();
+        BossUser newBossUser = bossUserFacade.getUserByPhone(bossUserVo.getPhone());    //查出新增的用户信息
+        if (StringUtils.isNotEmpty(roleid)) {
+            UserRoleRelation userRoleRelation = new UserRoleRelation();
+            userRoleRelation.setUserid(Integer.valueOf(newBossUser.getId()));
+            userRoleRelation.setRoleid(Integer.valueOf(roleid));
+            userRoleRelationFacade.addRelation(userRoleRelation);
         }
         return response;
     }
 
     @RequestMapping(value = "update_boss_user", method = RequestMethod.POST)
     @ApiOperation(value = "修改boss用户", notes = "修改boss用户", response = Response.class)
-    public Response updateBossUser(@ApiParam @ModelAttribute BossUser bossUser) throws UnsupportedEncodingException {
+    public Response updateBossUser(@ApiParam @ModelAttribute BossUserVo bossUserVo) throws UnsupportedEncodingException {
         Response response = new Response();
-        //修改密码
-        String password = bossUser.getPassword();
-        if (StringUtils.isNotEmpty(password)) {
-            String pwd = new Md5Hash(password, null, 2).toString();
 
-            bossUser.setPassword(pwd);
+        //1 更新用户信息
+        bossUserFacade.updateBySelectiveInfo(bossUserVo);
+
+        String roleid = bossUserVo.getRoleid();
+        if (StringUtils.isNotEmpty(roleid)) {
+            //2 更新用户的角色
+            UserRoleRelation userRoleRelation = new UserRoleRelation();
+            userRoleRelation.setUserid(Integer.valueOf(bossUserVo.getId()));
+            userRoleRelation.setRoleid(Integer.valueOf(roleid));
+            userRoleRelationFacade.updateByUserid(userRoleRelation);
         }
 
-        boolean flag = bossUserFacade.updateUser(bossUser);
-        if (flag) {
-            response.setCode(200);
-        } else {
-            response.setCode(400);
-        }
         return response;
     }
 
@@ -92,10 +98,22 @@ public class BossUserController {
                                     @ApiParam(value = "用户名") @RequestParam(required = false) String username,
                                     @ApiParam(value = "手机号") @RequestParam(required = false) String phone) {
         Response response = new Response();
-        List<BossUser> list = bossUserFacade.queryBossUserList(pageNo, pageSize, username, phone);
+        List<Map<String, Object>> list = bossUserFacade.queryBossUserList(pageNo, pageSize, username, phone);
         response.setData(list);
         return response;
     }
+
+    @RequestMapping(value = "get_boss_user_detail", method = RequestMethod.GET)
+    @ApiOperation(value = "用户详情", notes = "用户详情", response = Response.class)
+    public Response getBossUserDetail(@ApiParam(value = "用户id") @RequestParam() Integer id) {
+        Response response = new Response();
+        Map<String, Object> result = bossUserFacade.getBossUserDetail(id);
+        response.setData(result);
+        return response;
+    }
+
+
+
 
 
 }

@@ -105,4 +105,12 @@
         ORDER BY id
     </select>
 
+    <select id="selectRoleComboList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM yw_admin_role
+        WHERE isdel=0
+        ORDER BY id
+    </select>
+
 </mapper>

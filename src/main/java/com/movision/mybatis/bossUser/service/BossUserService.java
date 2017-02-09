@@ -84,12 +84,32 @@ public class BossUserService {
         }
     }
 
-    public List<BossUser> queryBossUserList(Paging<BossUser> pager, Map<String, Object> map) {
+    public List<Map<String, Object>> queryBossUserList(Paging<BossUser> pager, Map<String, Object> map) {
         try {
             log.info("查询boss用户列表");
             return bossUserMapper.selectBossUserList(pager.getRowBounds(), map);
         } catch (Exception e) {
             log.error("查询boss用户列表异常", e);
+            throw e;
+        }
+    }
+
+    public Map<String, Object> queryBossUserDetial(Integer userid) {
+        try {
+            log.info("查询boss用户详情");
+            return bossUserMapper.selectBossUserDetail(userid);
+        } catch (Exception e) {
+            log.info("查询boss用户详情失败", e);
+            throw e;
+        }
+    }
+
+    public BossUser selectByPrimaryKey(Integer id) {
+        try {
+            log.info("查询boss用户");
+            return bossUserMapper.selectByPrimaryKey(id);
+        } catch (Exception e) {
+            log.info("查询boss用户失败", e);
             throw e;
         }
     }

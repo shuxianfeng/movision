@@ -56,5 +56,15 @@ public class RoleService {
         }
     }
 
+    public List<Role> queryRoleComboList() {
+        try {
+            log.info("查询角色下拉列表");
+            return roleMapper.selectRoleComboList();
+        } catch (Exception e) {
+            log.error("查询角色下拉列表异常", e);
+            throw e;
+        }
+    }
+
 
 }

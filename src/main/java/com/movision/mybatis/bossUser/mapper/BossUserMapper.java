@@ -1,6 +1,7 @@
 package com.movision.mybatis.bossUser.mapper;
 
 import com.movision.mybatis.bossUser.entity.BossUser;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -28,7 +29,8 @@ public interface BossUserMapper {
 
     int delBossUser(int[] ids);
 
-    List<BossUser> selectBossUserList(RowBounds rowBounds, Map<String, Object> map);
+    List<Map<String, Object>> selectBossUserList(RowBounds rowBounds, Map<String, Object> map);
 
+    Map<String, Object> selectBossUserDetail(@Param("userid") Integer userid);
 
 }

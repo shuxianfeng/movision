@@ -21,4 +21,6 @@ public interface UserRoleRelationMapper {
 
     void deleteRelationsbyRoleid(int[] roleids);
 
+    int updateByUserid(UserRoleRelation relation);
+
 }

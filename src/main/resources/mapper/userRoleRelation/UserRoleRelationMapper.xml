@@ -89,4 +89,10 @@
             #{roleids}
         </foreach>
     </delete>
+
+    <update id="updateByUserid" parameterType="com.movision.mybatis.userRoleRelation.entity.UserRoleRelation">
+        UPDATE yw_admin_user_role
+        set roleid = #{roleid}
+        where userid = #{userid}
+    </update>
 </mapper>
