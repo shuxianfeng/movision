@@ -21,12 +21,12 @@ public class MenuService {
     private static Logger log = LoggerFactory.getLogger(MenuService.class);
 
     @Autowired
-    private MenuMapper adminMenuMapper;
+    private MenuMapper menuMapper;
 
     public Boolean addAdminMenu(Menu menu) {
         try {
             log.info("新增菜单，menu=" + menu.toString());
-            int n = adminMenuMapper.insertSelective(menu);
+            int n = menuMapper.insertSelective(menu);
             return n == 1;
         } catch (Exception e) {
             log.error("新增菜单异常，menu=" + menu.toString(), e);
@@ -37,7 +37,7 @@ public class MenuService {
     public Boolean updateMenu(Menu menu) {
         try {
             log.info("修改菜单，menu=" + menu.toString());
-            int n = adminMenuMapper.updateByPrimaryKeySelective(menu);
+            int n = menuMapper.updateByPrimaryKeySelective(menu);
             return n == 1;
         } catch (Exception e) {
             log.error("修改菜单异常，menu=" + menu.toString(), e);
@@ -48,7 +48,7 @@ public class MenuService {
     public Menu queryMenu(int id) {
         try {
             log.info("查询菜单详情，id=" + id);
-            return adminMenuMapper.selectByPrimaryKey(id);
+            return menuMapper.selectByPrimaryKey(id);
         } catch (Exception e) {
             log.error("查询菜单详情，id=" + id, e);
             throw e;
@@ -58,9 +58,19 @@ public class MenuService {
     public List<Menu> queryMenuList(Paging<Menu> pager, Map<String, Object> map) {
         try {
             log.info("查询菜单列表");
-            return adminMenuMapper.selectMenuList(pager.getRowBounds(), map);
+            return menuMapper.selectMenuList(pager.getRowBounds(), map);
         } catch (Exception e) {
             log.error("查询菜单列表异常", e);
+            throw e;
+        }
+    }
+
+    public List<Menu> queryMenuListByRoleid(Integer id) {
+        try {
+            log.info("根据角色id查询菜单，id=" + id);
+            return menuMapper.selectByRoleid(id);
+        } catch (Exception e) {
+            log.error("根据角色id查询菜单失败，id=" + id, e);
             throw e;
         }
     }

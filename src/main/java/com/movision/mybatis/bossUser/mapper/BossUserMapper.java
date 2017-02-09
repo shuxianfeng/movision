@@ -33,4 +33,6 @@ public interface BossUserMapper {
 
     Map<String, Object> selectBossUserDetail(@Param("userid") Integer userid);
 
+    List<BossUser> selectByRoleid(@Param("roleid") Integer roleid);
+
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhuangyuhao
@@ -43,6 +44,17 @@ public class RoleController {
         }
         return response;
     }
+
+    @ApiOperation(value = "删除角色前的检查,获取角色的关联用户和菜单信息", notes = "删除角色前的检查,获取角色的关联用户和菜单信息", response = Response.class)
+    @RequestMapping(value = "get_role_relative_info", method = RequestMethod.POST)
+    public Response delRoleCheck(@ApiParam(value = "角色id,以逗号分隔") @RequestParam String roleids) {
+        Response response = new Response();
+        int[] roleidArray = CommonUtils.idsStringToIntArray(roleids);
+        List<Map<String, Object>> list = roleFacade.getAllRelativeInfo(roleidArray);
+        response.setData(list);
+        return response;
+    }
+
 
     @ApiOperation(value = "删除角色", notes = "删除角色", response = Response.class)
     @RequestMapping(value = "del_role", method = RequestMethod.POST)

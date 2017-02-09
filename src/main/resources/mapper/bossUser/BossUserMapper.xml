@@ -61,8 +61,8 @@
             <if test="issuper != null">
                 issuper,
             </if>
-                status,
-                isdel,
+            status,
+            isdel,
             createtime,
             <if test="afterlogintime != null">
                 afterlogintime,
@@ -213,5 +213,14 @@
                 u.id = #{userid}
             </if>
         </where>
+    </select>
+
+    <select id="selectByRoleid" resultType="com.movision.mybatis.bossUser.entity.BossUser"
+            parameterType="java.lang.Integer">
+        SELECT
+        u.*
+        FROM yw_admin_user u
+        LEFT JOIN yw_admin_user_role ur ON u.id = ur.userid
+        WHERE ur.roleid = #{roleid}
     </select>
 </mapper>

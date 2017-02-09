@@ -27,7 +27,13 @@ public class BossUserService {
     public BossUser queryAdminUserByPhone(String phone) {
         BossUser bossUser = new BossUser();
         bossUser.setPhone(phone);
-        return bossUserMapper.selectByPhone(bossUser);
+        try {
+            log.info("根据手机号查询boss用户,phone=" + phone);
+            return bossUserMapper.selectByPhone(bossUser);
+        } catch (Exception e) {
+            log.error("根据手机号查询boss用户失败,phone=" + phone, e);
+            throw e;
+        }
     }
 
     public Boolean addUser(BossUser bossUser) {
@@ -99,7 +105,7 @@ public class BossUserService {
             log.info("查询boss用户详情");
             return bossUserMapper.selectBossUserDetail(userid);
         } catch (Exception e) {
-            log.info("查询boss用户详情失败", e);
+            log.error("查询boss用户详情失败", e);
             throw e;
         }
     }
@@ -109,7 +115,17 @@ public class BossUserService {
             log.info("查询boss用户");
             return bossUserMapper.selectByPrimaryKey(id);
         } catch (Exception e) {
-            log.info("查询boss用户失败", e);
+            log.error("查询boss用户失败", e);
+            throw e;
+        }
+    }
+
+    public List<BossUser> selectBossUserListByRoleId(Integer id) {
+        try {
+            log.info("根据角色id查询boss用户,roleid=" + id);
+            return bossUserMapper.selectByRoleid(id);
+        } catch (Exception e) {
+            log.error("根据角色id查询boss用户失败,roleid=" + id, e);
             throw e;
         }
     }

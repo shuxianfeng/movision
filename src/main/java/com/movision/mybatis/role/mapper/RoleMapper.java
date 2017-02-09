@@ -25,4 +25,5 @@ public interface RoleMapper {
     List<Role> selectRoleList(RowBounds rowBounds, Map<String, Object> map);
 
     List<Role> selectRoleComboList();
+
 }

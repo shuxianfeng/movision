@@ -1,6 +1,7 @@
 package com.movision.mybatis.bossMenu.mapper;
 
 import com.movision.mybatis.bossMenu.entity.Menu;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface MenuMapper {
     List<Menu> selectMenuList(RowBounds rowBounds, Map<String, Object> map);
 
     void delMenu(int[] ids);
+
+    List<Menu> selectByRoleid(@Param("roleid") Integer roleid);
 }

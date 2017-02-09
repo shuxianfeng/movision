@@ -66,5 +66,15 @@ public class RoleService {
         }
     }
 
+    public Role selectByPrimaryKey(Integer id) {
+        try {
+            log.info("根据id查询角色信息, id=" + id);
+            return roleMapper.selectByPrimaryKey(id);
+        } catch (Exception e) {
+            log.error("根据id查询角色信息失败，id=" + id);
+            throw e;
+        }
+    }
+
 
 }
