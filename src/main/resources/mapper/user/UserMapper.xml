@@ -4,7 +4,10 @@
     <resultMap id="BaseResultMap" type="com.movision.mybatis.user.entity.User">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="openid" property="openid" jdbcType="VARCHAR"/>
+        <result column="qq" property="qq" jdbcType="VARCHAR"/>
+        <result column="sina" property="sina" jdbcType="VARCHAR"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
         <result column="token" property="token" jdbcType="VARCHAR"/>
         <result column="invitecode" property="invitecode" jdbcType="VARCHAR"/>
         <result column="referrals" property="referrals" jdbcType="VARCHAR"/>
@@ -27,7 +30,10 @@
     <resultMap id="loginUserMap" type="com.movision.mybatis.user.entity.LoginUser">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="openid" property="openid" jdbcType="VARCHAR"/>
+        <result column="qq" property="qq" jdbcType="VARCHAR"/>
+        <result column="sina" property="sina" jdbcType="VARCHAR"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
         <result column="token" property="token" jdbcType="VARCHAR"/>
         <result column="invitecode" property="invitecode" jdbcType="VARCHAR"/>
         <result column="referrals" property="referrals" jdbcType="VARCHAR"/>
@@ -49,7 +55,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, openid, phone, token, invitecode, referrals, nickname, sign, attention, fans,
+        id, openid, qq, sina, phone, email, token, invitecode, referrals, nickname, sign, attention, fans,
         points, photo, sex, birthday, province, city, intime, growth, level, status
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -84,14 +90,15 @@
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.user.entity.User">
-        insert into yw_user (id, openid, phone,
+        insert into yw_user (id, openid, qq, sina, phone, email,
         token, invitecode, referrals,
         nickname, sign, attention,
         fans, points, photo,
         sex, birthday, province,
         city, intime, growth,
         level, status)
-        values (#{id,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+        values (#{id,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR},
+        #{sina,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},
         #{token,jdbcType=VARCHAR}, #{invitecode,jdbcType=VARCHAR}, #{referrals,jdbcType=VARCHAR},
         #{nickname,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, #{attention,jdbcType=INTEGER},
         #{fans,jdbcType=INTEGER}, #{points,jdbcType=INTEGER}, #{photo,jdbcType=VARCHAR},
@@ -108,8 +115,17 @@
             <if test="openid != null">
                 openid,
             </if>
+            <if test="qq != null">
+                qq,
+            </if>
+            <if test="sina != null">
+                sina,
+            </if>
             <if test="phone != null">
                 phone,
+            </if>
+            <if test="email != null">
+                email,
             </if>
             <if test="token != null">
                 token,
@@ -170,8 +186,17 @@
             <if test="openid != null">
                 #{openid,jdbcType=VARCHAR},
             </if>
+            <if test="qq != null">
+                #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="sina != null">
+                #{sina,jdbcType=VARCHAR},
+            </if>
             <if test="phone != null">
                 #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
             </if>
             <if test="token != null">
                 #{token,jdbcType=VARCHAR},
@@ -232,8 +257,17 @@
             <if test="openid != null">
                 openid = #{openid,jdbcType=VARCHAR},
             </if>
+            <if test="qq != null">
+                qq = #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="sina != null">
+                sina = #{sina,jdbcType=VARCHAR},
+            </if>
             <if test="phone != null">
                 phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
             </if>
             <if test="token != null">
                 token = #{token,jdbcType=VARCHAR},
@@ -292,7 +326,10 @@
     <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.user.entity.User">
         update yw_user
         set openid = #{openid,jdbcType=VARCHAR},
+        qq = #{qq,jdbcType=VARCHAR},
+        sina = #{sina,jdbcType=VARCHAR},
         phone = #{phone,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR},
         token = #{token,jdbcType=VARCHAR},
         invitecode = #{invitecode,jdbcType=VARCHAR},
         referrals = #{referrals,jdbcType=VARCHAR},
