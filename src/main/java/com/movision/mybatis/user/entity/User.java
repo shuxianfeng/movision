@@ -9,6 +9,12 @@ public class User implements Serializable {
 
     private String openid;
 
+    private String qq;
+
+    private String sina;
+
+    private String email;
+
     private String phone;
 
     private String token;
@@ -59,6 +65,30 @@ public class User implements Serializable {
 
     public void setOpenid(String openid) {
         this.openid = openid == null ? null : openid.trim();
+    }
+
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
+
+    public String getSina() {
+        return sina;
+    }
+
+    public void setSina(String sina) {
+        this.sina = sina;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhone() {
