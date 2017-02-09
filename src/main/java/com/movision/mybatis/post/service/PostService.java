@@ -251,6 +251,20 @@ public class PostService {
     }
 
     /**
+     * 后台管理-查询帖子总数
+     * @return
+     */
+    public Integer queryPostNum() {
+        try {
+            log.info("查询帖子总数");
+            return postMapper.queryPostNum();
+        } catch (Exception e) {
+            log.error("查询帖子总数失败");
+            throw e;
+        }
+    }
+
+    /**
      * 删除帖子
      *
      * @param postid

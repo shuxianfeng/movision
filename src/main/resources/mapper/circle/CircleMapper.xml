@@ -313,4 +313,16 @@
       orderid = #{orderid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <select id="queryCircleByList" resultType="com.movision.mybatis.circle.entity.CircleVo">
+      SELECT c.id,c.name,c.category,c.supportnum,c.phone,c.status,c.createtime FROM yw_circle c
+    </select>
+
+    <select id="queryCircleBycirclemaster" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT u.nickname FROM yw_user u WHERE u.phone=#{phone,jdbcType=VARCHAR}
+    </select>
+
+    <!--    <select id="querycirclemanagerlist" resultType="" parameterType="java.lang.String">
+
+        </select>-->
 </mapper>

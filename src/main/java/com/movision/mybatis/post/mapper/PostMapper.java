@@ -79,6 +79,8 @@ public interface PostMapper {
 
     List<Post> queryPostByList(RowBounds rowBounds);
 
+    int queryPostNum();
+
     int deletePost(Integer postid);
 
     Post queryPostParticulars(Integer postid);

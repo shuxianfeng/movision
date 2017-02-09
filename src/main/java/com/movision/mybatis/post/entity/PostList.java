@@ -30,6 +30,16 @@ public class PostList {
 
     private Date istime;//精选时间
 
+    private Integer sum;//帖子总数
+
+    public Integer getSum() {
+        return sum;
+    }
+
+    public void setSum(Integer sum) {
+        this.sum = sum;
+    }
+
     public String getTitle() {
         return title;
     }

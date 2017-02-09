@@ -73,7 +73,11 @@ public class PostFacade {
         }
         Paging<Post> pager = new Paging<Post>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List<Post> list = postService.queryPostByList(pager);
+        Map<String, Integer> map = new HashedMap();
+        Integer num = postService.queryPostNum();//查询帖子总数
+        map.put("sum", num);
         List<Object> rewardeds = new ArrayList<Object>();
+        rewardeds.add(map);
         for (int i = 0; i < list.size(); i++) {
                 PostList postList = new PostList();
             Integer id = list.get(i).getId();

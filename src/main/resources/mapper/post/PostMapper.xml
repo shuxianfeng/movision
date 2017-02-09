@@ -655,6 +655,10 @@
         SELECT * FROM yw_post WHERE isdel=0 ORDER BY intime DESC
     </select>
 
+    <select id="queryPostNum" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post
+    </select>
+
     <!-- 逻辑删除帖子 -->
     <update id="deletePost" parameterType="java.lang.Integer">
         UPDATE yw_post

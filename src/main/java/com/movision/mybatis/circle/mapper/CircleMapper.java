@@ -2,6 +2,8 @@ package com.movision.mybatis.circle.mapper;
 
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleVo;
+import com.movision.mybatis.user.entity.User;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 
@@ -35,4 +37,10 @@ public interface CircleMapper {
     int queryCircleScope(int circleid);
 
     int queryCircleOwner(int circleid);
+
+    List<CircleVo> queryCircleByList(RowBounds rowBounds);
+
+    String queryCircleBycirclemaster(String phone);
+
+    List<User> querycirclemanagerlist(Integer circleid);
 }

@@ -4,6 +4,8 @@ import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.mapper.CircleMapper;
 import com.movision.mybatis.followCircle.mapper.FollowCircleMapper;
+import com.movision.mybatis.user.entity.User;
+import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,6 +125,54 @@ public class CircleService {
             return circleMapper.queryCircleOwner(circleid);
         } catch (Exception e) {
             log.error("查询圈子的所有者userid失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询圈子列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<CircleVo> queryCircleByList(Paging<CircleVo> pager) {
+        try {
+            log.info("查询圈子列表");
+            return circleMapper.queryCircleByList(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询圈子列表异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询圈主
+     *
+     * @param circleid
+     * @return
+     */
+    public String queryCircleBycirclemaster(String phone) {
+        try {
+            log.info("根据圈子id查询圈主");
+            return circleMapper.queryCircleBycirclemaster(phone);
+        } catch (Exception e) {
+            log.error("根据圈子id查询圈主失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询圈子管理员列表
+     *
+     * @param circleid
+     * @return
+     */
+    public List<User> querycirclemanagerlist(Integer circleid) {
+        try {
+            log.info("查询圈子管理员");
+            return circleMapper.querycirclemanagerlist(circleid);
+        } catch (Exception e) {
+            log.error("圈子管理员查询异常");
             throw e;
         }
     }
