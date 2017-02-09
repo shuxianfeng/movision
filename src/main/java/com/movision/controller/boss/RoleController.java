@@ -46,7 +46,7 @@ public class RoleController {
     }
 
     @ApiOperation(value = "删除角色前的检查,获取角色的关联用户和菜单信息", notes = "删除角色前的检查,获取角色的关联用户和菜单信息", response = Response.class)
-    @RequestMapping(value = "get_role_relative_info", method = RequestMethod.POST)
+    @RequestMapping(value = "get_role_relative_info", method = RequestMethod.GET)
     public Response delRoleCheck(@ApiParam(value = "角色id,以逗号分隔") @RequestParam String roleids) {
         Response response = new Response();
         int[] roleidArray = CommonUtils.idsStringToIntArray(roleids);
