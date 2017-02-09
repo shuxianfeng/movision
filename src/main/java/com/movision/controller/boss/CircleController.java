@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -28,7 +29,7 @@ public class CircleController {
     public Response circleByList(@RequestParam(required = false) String pageNo,
                                  @RequestParam(required = false) String pageSize) {
         Response response = new Response();
-        List<CircleVo> list = circleFacade.queryCircleByList(pageNo, pageSize);
+        Map<String, Object> list = circleFacade.queryCircleByList(pageNo, pageSize);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

@@ -24,13 +24,14 @@
         <result column="intime" jdbcType="TIMESTAMP" property="intime"/>
         <result column="totalpoint" jdbcType="INTEGER" property="totalpoint"/>
         <result column="isdel" jdbcType="INTEGER" property="isdel"/>
+        <result column="essencedate" jdbcType="DATE" property="essencedate"/>
     </resultMap>
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
         isactive, activetype, activefee, type, ishot, orderid, isessence, isessencepool, coverimg, hotimgurl, intime,
         totalpoint,
-        isdel
+        isdel,essencedate
   </sql>
 
     <!--基础查询语句-->
@@ -276,7 +277,7 @@
         commentsum, forwardsum, collectsum,
         isactive, activetype, activefee, type, ishot, orderid,
         isessence, isessencepool, coverimg, hotimgurl,
-      intime, totalpoint, isdel
+        intime, totalpoint, isdel, essencedate
       )
     values (#{id,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
       #{subtitle,jdbcType=VARCHAR}, #{postcontent,jdbcType=VARCHAR}, #{zansum,jdbcType=INTEGER},
@@ -285,7 +286,8 @@
         #{type,jdbcType=INTEGER},
         #{ishot,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},
         #{isessencepool,jdbcType=INTEGER}, #{coverimg,jdbcType=VARCHAR},#{hotimgurl,jdbcType=VARCHAR},
-      #{intime,jdbcType=TIMESTAMP}, #{totalpoint,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER}
+        #{intime,jdbcType=TIMESTAMP}, #{totalpoint,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER},
+        #{essencedate,jdbcType=DATE}
       )
   </insert>
 
@@ -297,14 +299,14 @@
         INSERT INTO yw_post (circleid, title,
           postcontent, zansum, commentsum, forwardsum,
         collectsum, isactive, type, ishot, isessence,
-        isessencepool, coverimg, intime, totalpoint, isdel
+        isessencepool, coverimg, intime, totalpoint, isdel, essencedate
         )
         VALUES (
           #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=VARCHAR},
           #{zansum,jdbcType=INTEGER},#{commentsum,jdbcType=INTEGER},#{forwardsum,jdbcType=INTEGER},
           #{collectsum,jdbcType=INTEGER},#{isactive,jdbcType=INTEGER},#{type,jdbcType=INTEGER},
           #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
-        #{coverimg,jdbcType=VARCHAR},#{intime,jdbcType=TIMESTAMP},#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER}
+        #{coverimg,jdbcType=VARCHAR},#{intime,jdbcType=TIMESTAMP},#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},#{essencedate,jdbcType=DATE}
         )
     </insert>
 
@@ -464,6 +466,9 @@
             <if test="isdel != null">
                 isdel,
             </if>
+            <if test="essencedate != null">
+                essencedate,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -531,6 +536,9 @@
             </if>
             <if test="isdel != null">
                 #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="essencedate != null">
+                #{essencedate,jdbcType=DATE},
             </if>
         </trim>
     </insert>
@@ -602,6 +610,9 @@
             <if test="isdel != null">
                 isdel = #{isdel,jdbcType=INTEGER},
             </if>
+            <if test="essencedate != null">
+                essencedate = #{essencedate,jdbcType=DATE},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -629,7 +640,8 @@
         hotimgurl = #{hotimgurl,jdbcType=VARCHAR},
       intime = #{intime,jdbcType=TIMESTAMP},
       totalpoint = #{totalpoint,jdbcType=INTEGER},
-      isdel = #{isdel,jdbcType=INTEGER}
+        isdel = #{isdel,jdbcType=INTEGER},
+        essencedate = #{essencedate,jdbcType=DATE}
     where id = #{id,jdbcType=INTEGER}
   </update>
     <update id="updatePostByZanSum" parameterType="java.lang.Integer">
@@ -671,7 +683,10 @@
         SELECT * FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
 
-    <select id="queryPostNumByCircleidAndisessence" parameterType="java.lang.Integer" resultType="java.util.Map">
-
+    <select id="queryPostNumAndisessenceByCircleid" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostNum">
+        SELECT COUNT(1) postnum,
+        (SELECT COUNT(1) FROM yw_post WHERE circleid=1 AND isessence=1) as isessence
+        FROM yw_post WHERE circleid=#{circleid,jdbcType=INTEGER}
     </select>
 </mapper>

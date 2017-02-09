@@ -47,6 +47,8 @@ public class Post {
 
     private Integer isdel;
 
+    private Date essencedate;//精选日期
+
     public Integer getId() {
         return id;
     }
@@ -221,5 +223,13 @@ public class Post {
 
     public void setActivefee(Double activefee) {
         this.activefee = activefee;
+    }
+
+    public Date getEssencedate() {
+        return essencedate;
+    }
+
+    public void setEssencedate(Date essencedate) {
+        this.essencedate = essencedate;
     }
 }
