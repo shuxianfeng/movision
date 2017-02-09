@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -77,10 +78,11 @@ public class PostController {
     @RequestMapping(value = "/delete_post", method = RequestMethod.POST)
     public Response deletePost(@ApiParam(value = "帖子id") @RequestParam String postid) {
         Response response = new Response();
-        postFacade.deletePost(postid);
+        Map<String, Integer> map = postFacade.deletePost(postid);
         if (response.getCode() == 200) {
             response.setMessage("删除成功");
         }
+        response.setData(map);
         return response;
     }
 

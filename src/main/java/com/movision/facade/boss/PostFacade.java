@@ -120,8 +120,11 @@ public class PostFacade {
      * @param postid
      * @return
      */
-    public int deletePost(String postid) {
-        return postService.deletePost(Integer.parseInt(postid));
+    public Map<String, Integer> deletePost(String postid) {
+        int resault = postService.deletePost(Integer.parseInt(postid));
+        Map<String, Integer> map = new HashedMap();
+        map.put("resault", resault);
+        return map;
     }
 
     /**
