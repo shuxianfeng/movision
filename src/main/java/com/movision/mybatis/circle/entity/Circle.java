@@ -39,6 +39,16 @@ public class Circle {
 
     private Integer orderid;
 
+    private Integer isdel;
+
+    public Integer getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(Integer isdel) {
+        this.isdel = isdel;
+    }
+
     public Integer getId() {
         return id;
     }

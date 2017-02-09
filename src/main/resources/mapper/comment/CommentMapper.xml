@@ -9,9 +9,10 @@
     <result column="intime" property="intime" jdbcType="TIMESTAMP" />
     <result column="zansum" property="zansum" jdbcType="INTEGER" />
     <result column="postid" property="postid" jdbcType="INTEGER"/>
+    <result column="isdel" property="isdel" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, userid, pid, content, intime, zansum
+    id, userid, pid, content, intime, zansum, isdel
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 

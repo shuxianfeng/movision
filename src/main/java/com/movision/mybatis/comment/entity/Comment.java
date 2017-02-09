@@ -17,6 +17,16 @@ public class Comment {
 
     private Integer zansum;
 
+    private String isdel;
+
+    public String getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(String isdel) {
+        this.isdel = isdel;
+    }
+
     public Integer getId() {
         return id;
     }

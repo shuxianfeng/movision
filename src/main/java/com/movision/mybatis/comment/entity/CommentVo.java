@@ -24,6 +24,16 @@ public class CommentVo {
 
     private String photo;
 
+    private String isdel;
+
+    public String getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(String isdel) {
+        this.isdel = isdel;
+    }
+
     private List<CommentVo> vo;
 
     public Integer getId() {

@@ -20,10 +20,11 @@
         <result column="supportnum" property="supportnum" jdbcType="INTEGER"/>
         <result column="isdiscover" property="isdiscover" jdbcType="INTEGER"/>
         <result column="orderid" property="orderid" jdbcType="INTEGER"/>
+        <result column="isdel" property="isdel" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, isofficial, scope, phone, photo, category, code, name, introduction, notice,
-        permission, isrecommend, maylikeimg, createtime, status, supportnum, isdiscover, orderid
+        permission, isrecommend, maylikeimg, createtime, status, supportnum, isdiscover, orderid, isdel
     </sql>
 
     <!--基础查询语句-->
@@ -315,7 +316,7 @@
   </update>
 
     <select id="queryCircleByList" resultType="com.movision.mybatis.circle.entity.CircleVo">
-      SELECT c.id,c.name,c.category,c.supportnum,c.phone,c.status,c.createtime FROM yw_circle c
+        SELECT c.id,c.name,c.category,c.supportnum,c.phone,c.status,c.createtime FROM yw_circle c WHERE c.isdel=0
     </select>
 
     <select id="queryCircleBycirclemaster" resultType="java.lang.String" parameterType="java.lang.String">

@@ -61,6 +61,16 @@ public class CircleVo {
 
     private Integer isessencenum;//圈子中精贴总数
 
+    private Integer isdel;
+
+    public Integer getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(Integer isdel) {
+        this.isdel = isdel;
+    }
+
     public Integer getIsessencenum() {
         return isessencenum;
     }
