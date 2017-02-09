@@ -4,9 +4,9 @@ import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostNum;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
-import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -87,7 +87,7 @@ public interface PostMapper {
 
     int addPost(Map map);
 
-    Map<String, Integer> queryPostNumAndisessenceByCircleid(Integer circleid);
+    PostNum queryPostNumAndisessenceByCircleid(Integer circleid);
 
     /*List postSearch(Map map);*/
 }

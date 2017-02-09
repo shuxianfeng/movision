@@ -4,6 +4,7 @@ import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostNum;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.mapper.PostMapper;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
@@ -311,7 +312,7 @@ public class PostService {
         }
     }
 
-    public Map<String, Integer> queryPostNumAndisessenceByCircleid(Integer circleid) {
+    public PostNum queryPostNumAndisessenceByCircleid(Integer circleid) {
         try {
             log.info("查询帖子的总数和精贴数量");
             return postMapper.queryPostNumAndisessenceByCircleid(circleid);

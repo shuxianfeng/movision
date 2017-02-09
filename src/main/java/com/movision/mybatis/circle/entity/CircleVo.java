@@ -59,6 +59,16 @@ public class CircleVo {
 
     private List<User> circlemanagerlist;//圈子管理员列表
 
+    private Integer isessencenum;//圈子中精贴总数
+
+    public Integer getIsessencenum() {
+        return isessencenum;
+    }
+
+    public void setIsessencenum(Integer isessencenum) {
+        this.isessencenum = isessencenum;
+    }
+
     public Integer getId() {
         return id;
     }

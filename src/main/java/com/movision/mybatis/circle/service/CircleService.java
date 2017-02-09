@@ -147,8 +147,7 @@ public class CircleService {
 
     /**
      * 查询圈主
-     *
-     * @param circleid
+     * @param phone
      * @return
      */
     public String queryCircleBycirclemaster(String phone) {
@@ -167,12 +166,43 @@ public class CircleService {
      * @param circleid
      * @return
      */
-    public List<User> querycirclemanagerlist(Integer circleid) {
+    public List<Integer> querycirclemanagerlist(Integer circleid) {
         try {
             log.info("查询圈子管理员");
             return circleMapper.querycirclemanagerlist(circleid);
         } catch (Exception e) {
             log.error("圈子管理员查询异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询圈子关注数量
+     *
+     * @param circleid
+     * @return
+     */
+    public Integer queryFollowSum(Integer circleid) {
+        try {
+            log.info("查询圈子关注数量");
+            return circleMapper.queryFollowSum(circleid);
+        } catch (Exception e) {
+            log.error("查询圈子关注数量失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询圈子总数量
+     *
+     * @return
+     */
+    public Integer queryCircleByNum() {
+        try {
+            log.info("查询圈子总数量");
+            return circleMapper.queryCircleByNum();
+        } catch (Exception e) {
+            log.error("查询圈子数量异常");
             throw e;
         }
     }

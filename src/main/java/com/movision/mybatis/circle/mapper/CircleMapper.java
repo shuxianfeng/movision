@@ -42,5 +42,9 @@ public interface CircleMapper {
 
     String queryCircleBycirclemaster(String phone);
 
-    List<User> querycirclemanagerlist(Integer circleid);
+    List<Integer> querycirclemanagerlist(Integer circleid);
+
+    Integer queryFollowSum(Integer circleid);
+
+    Integer queryCircleByNum();
 }

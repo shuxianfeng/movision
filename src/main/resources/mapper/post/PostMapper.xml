@@ -671,7 +671,10 @@
         SELECT * FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
 
-    <select id="queryPostNumByCircleidAndisessence" parameterType="java.lang.Integer" resultType="java.util.Map">
-
+    <select id="queryPostNumAndisessenceByCircleid" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostNum">
+        SELECT COUNT(1) postnum,
+        (SELECT COUNT(1) FROM yw_post WHERE circleid=1 AND isessence=1) as isessence
+        FROM yw_post WHERE circleid=#{circleid,jdbcType=INTEGER}
     </select>
 </mapper>
