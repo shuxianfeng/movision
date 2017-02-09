@@ -22,7 +22,7 @@ public interface RoleMapper {
 
     int delRoles(int[] ids);
 
-    List<Role> selectRoleList(RowBounds rowBounds, Map<String, Object> map);
+    List<Role> findAllRole(RowBounds rowBounds, Map<String, Object> map);
 
     List<Role> selectRoleComboList();
 

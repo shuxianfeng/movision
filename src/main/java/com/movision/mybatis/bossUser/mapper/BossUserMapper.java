@@ -29,7 +29,7 @@ public interface BossUserMapper {
 
     int delBossUser(int[] ids);
 
-    List<Map<String, Object>> selectBossUserList(RowBounds rowBounds, Map<String, Object> map);
+    List<Map<String, Object>> findAllBossUser(RowBounds rowBounds, Map<String, Object> map);
 
     Map<String, Object> selectBossUserDetail(@Param("userid") Integer userid);
 

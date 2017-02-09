@@ -44,14 +44,8 @@ public class RoleFacade {
         roleService.delRoles(ids);
     }
 
-    public List<Role> queryRoleList(String pageNo, String pageSize, String rolename) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Role> pager = new Paging<Role>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+    public List<Role> queryRoleList(Paging<Role> pager, String rolename) {
+
         Map<String, Object> map = new HashedMap();
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(rolename)) {
             map.put("rolename", rolename);

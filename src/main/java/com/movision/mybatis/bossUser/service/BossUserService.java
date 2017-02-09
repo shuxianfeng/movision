@@ -2,7 +2,6 @@ package com.movision.mybatis.bossUser.service;
 
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.mapper.BossUserMapper;
-import com.movision.mybatis.role.entity.Role;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,7 +92,7 @@ public class BossUserService {
     public List<Map<String, Object>> queryBossUserList(Paging<Map<String, Object>> pager, Map<String, Object> map) {
         try {
             log.info("查询boss用户列表");
-            return bossUserMapper.selectBossUserList(pager.getRowBounds(), map);
+            return bossUserMapper.findAllBossUser(pager.getRowBounds(), map);
         } catch (Exception e) {
             log.error("查询boss用户列表异常", e);
             throw e;

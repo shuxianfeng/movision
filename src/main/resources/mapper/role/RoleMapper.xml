@@ -94,7 +94,7 @@
         </foreach>
     </update>
 
-    <select id="selectRoleList" resultMap="BaseResultMap">
+    <select id="findAllRole" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM yw_admin_role

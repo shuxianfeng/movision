@@ -6,6 +6,7 @@ import com.movision.facade.user.RoleMenuRelationFacade;
 import com.movision.facade.user.UserRoleRelationFacade;
 import com.movision.mybatis.role.entity.Role;
 import com.movision.utils.CommonUtils;
+import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,14 +75,16 @@ public class RoleController {
         return response;
     }
 
-    @ApiOperation(value = "角色列表", notes = "角色列表", response = Response.class)
+    @ApiOperation(value = "角色列表(分页)", notes = "角色列表(分页)", response = Response.class)
     @RequestMapping(value = "role_list", method = RequestMethod.GET)
     public Response getRoleList(@RequestParam(required = false, defaultValue = "1") String pageNo,
-                                @RequestParam(required = false) String pageSize,
+                                @RequestParam(required = false, defaultValue = "10") String pageSize,
                                 @ApiParam(value = "角色名称") @RequestParam(required = false) String rolename) {
         Response response = new Response();
-        List<Role> list = roleFacade.queryRoleList(pageNo, pageSize, rolename);
-        response.setData(list);
+        Paging<Role> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Role> list = roleFacade.queryRoleList(pager, rolename);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 

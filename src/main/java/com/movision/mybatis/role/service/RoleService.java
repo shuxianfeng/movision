@@ -1,7 +1,6 @@
 package com.movision.mybatis.role.service;
 
 
-import com.movision.mybatis.bossMenu.entity.Menu;
 import com.movision.mybatis.role.entity.Role;
 import com.movision.mybatis.role.mapper.RoleMapper;
 import com.movision.utils.pagination.model.Paging;
@@ -49,7 +48,7 @@ public class RoleService {
     public List<Role> queryRoleList(Paging<Role> pager, Map<String, Object> map) {
         try {
             log.info("查询角色列表");
-            return roleMapper.selectRoleList(pager.getRowBounds(), map);
+            return roleMapper.findAllRole(pager.getRowBounds(), map);
         } catch (Exception e) {
             log.error("查询角色列表异常", e);
             throw e;
