@@ -105,7 +105,7 @@
     </update>
 
     <!--排序规则-->
-    <select id="selectMenuList" resultMap="BaseResultMap">
+    <select id="findAllMenuList" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from yw_admin_menu

@@ -37,14 +37,8 @@ public class MenuFacade {
         return menuService.queryMenu(id);
     }
 
-    public List<Menu> queryMenuList(String pageNo, String pageSize, String menuname) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Menu> pager = new Paging<Menu>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+    public List<Menu> queryMenuList(Paging<Menu> pager, String menuname) {
+
         Map<String, Object> map = new HashedMap();
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(menuname)) {
             map.put("menuname", menuname);

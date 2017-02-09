@@ -3,6 +3,7 @@ package com.movision.controller.boss;
 import com.movision.common.Response;
 import com.movision.facade.user.MenuFacade;
 import com.movision.mybatis.bossMenu.entity.Menu;
+import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,12 +60,14 @@ public class MenuController {
 
     @ApiOperation(value = "查询菜单列表（分页）", notes = "查询菜单列表（分页）", response = Response.class)
     @RequestMapping(value = "query_menu_list", method = RequestMethod.GET)
-    public Response queryMenuList(@RequestParam(required = false) String pageNo,
-                                  @RequestParam(required = false) String pageSize,
+    public Response queryMenuList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                  @RequestParam(required = false, defaultValue = "10") String pageSize,
                                   @ApiParam(value = "菜单名称") @RequestParam(required = false) String menuname) {
         Response response = new Response();
-        List<Menu> list = menuFacade.queryMenuList(pageNo, pageSize, menuname);
-        response.setData(list);
+        Paging<Menu> pager = new Paging<Menu>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Menu> list = menuFacade.queryMenuList(pager, menuname);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 

@@ -18,6 +18,16 @@ import java.sql.*;
 public abstract class SqlHelper {
     private static Logger logger = LoggerFactory.getLogger(SqlHelper.class);
 
+    /**
+     * 获取分页的总数
+     *
+     * @param ms
+     * @param connection
+     * @param parameterObject
+     * @param dialect
+     * @return
+     * @throws SQLException
+     */
     public static int getCount(final MappedStatement ms, final Connection connection,
                                final Object parameterObject, Dialect dialect) throws SQLException {
         BoundSql boundSql = ms.getBoundSql(parameterObject);

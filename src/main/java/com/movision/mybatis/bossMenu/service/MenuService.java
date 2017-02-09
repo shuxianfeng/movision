@@ -57,8 +57,8 @@ public class MenuService {
 
     public List<Menu> queryMenuList(Paging<Menu> pager, Map<String, Object> map) {
         try {
-            log.info("查询菜单列表");
-            return menuMapper.selectMenuList(pager.getRowBounds(), map);
+            log.info("查询菜单列表,传参：" + map.toString());
+            return menuMapper.findAllMenuList(pager.getRowBounds(), map);
         } catch (Exception e) {
             log.error("查询菜单列表异常", e);
             throw e;

@@ -76,7 +76,7 @@ public class RoleController {
 
     @ApiOperation(value = "角色列表", notes = "角色列表", response = Response.class)
     @RequestMapping(value = "role_list", method = RequestMethod.GET)
-    public Response getRoleList(@RequestParam(required = false) String pageNo,
+    public Response getRoleList(@RequestParam(required = false, defaultValue = "1") String pageNo,
                                 @RequestParam(required = false) String pageSize,
                                 @ApiParam(value = "角色名称") @RequestParam(required = false) String rolename) {
         Response response = new Response();

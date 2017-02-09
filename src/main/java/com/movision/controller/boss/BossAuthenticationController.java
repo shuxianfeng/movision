@@ -74,25 +74,6 @@ public class BossAuthenticationController {
         result.setData(token);
         return result;
     }
-    
-    /*@RequestMapping(value="/rest/boss/findMemberInfoById",method = RequestMethod.GET)
-    public Response findMemberInfoById() throws IOException
-	{
-		Response response = new Response();
-		Subject subject = SecurityUtils.getSubject();
-        Session session = subject.getSession(false);
-        if(null == session){
-            response.setMessage("you are not login!");
-        }
-        else {
-            BossUser bossUser = (BossUser) session.getAttribute("boss");
-            if (null != bossUser) {
-                response = userService.selectByPrimaryKey(bossUser.getId());
-            }
-        }
-
-        return response;
-	}*/
 
     public static class LoginUser {
         private String account;

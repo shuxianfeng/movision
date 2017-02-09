@@ -20,7 +20,7 @@ public interface MenuMapper {
 
     int updateByPrimaryKey(Menu record);
 
-    List<Menu> selectMenuList(RowBounds rowBounds, Map<String, Object> map);
+    List<Menu> findAllMenuList(RowBounds rowBounds, Map<String, Object> map);
 
     void delMenu(int[] ids);
 

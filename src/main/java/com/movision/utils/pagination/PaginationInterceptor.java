@@ -39,12 +39,13 @@ public class PaginationInterceptor implements Interceptor {
 
 
     private Dialect dialect;
-    private String mappedStatementIdRegex;
+    private String mappedStatementIdRegex;  //匹配的接口方法名，比如 .*findAll.*
 
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         final Object[] queryArgs = invocation.getArgs();
+        //当前环境 MappedStatement
         final MappedStatement ms = (MappedStatement) queryArgs[MAPPED_STATEMENT_INDEX];
         final Object parameter = queryArgs[PARAMETER_INDEX];
         final RowBounds rowBounds = (RowBounds) queryArgs[ROWBOUNDS_INDEX];
@@ -55,14 +56,18 @@ public class PaginationInterceptor implements Interceptor {
         boolean intercept = ms.getId().matches(mappedStatementIdRegex);//PatternMatchUtils.simpleMatch(mappedStatementIdRegex, ms.getId());
 
         if (intercept && dialect.supportsLimit() && (offset != RowBounds.NO_ROW_OFFSET || limit != RowBounds.NO_ROW_LIMIT)) {
+            //获取BoundSql，及sql取得
             final BoundSql boundSql = ms.getBoundSql(parameter);
             String sql = boundSql.getSql().trim();
             logger.info("sql: {}", boundSql.getSql().trim());
+
+            //Page对象存在的场合，开始分页处理
             final Executor executor = (Executor) invocation.getTarget();
             Connection connection = executor.getTransaction().getConnection();
+            //获取分页总数
             int count = SqlHelper.getCount(ms, connection, parameter, dialect);
             Paging.setPaginationTotal(count);
-
+            //对原始sql追加limit
             String limitSql = dialect.getLimitString(sql, offset, limit);
             MappedStatement newMs = newMappedStatement(ms, boundSql, limitSql);
 
