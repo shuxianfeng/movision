@@ -54,6 +54,8 @@ public class ActiveVo {
 
     private Integer isdel;
 
+    private Date essencedate;//精选日期
+
     private Date begintime;//活动开始时间（为活动时使用）
 
     private Date endtime;//活动结束时间（为活动时使用）
@@ -278,5 +280,13 @@ public class ActiveVo {
 
     public void setActivefee(Double activefee) {
         this.activefee = activefee;
+    }
+
+    public Date getEssencedate() {
+        return essencedate;
+    }
+
+    public void setEssencedate(Date essencedate) {
+        this.essencedate = essencedate;
     }
 }

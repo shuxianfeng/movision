@@ -54,6 +54,8 @@ public class PostVo {
 
     private Integer isdel;
 
+    private Date essencedate;//精选日期
+
     private Integer category;
 
     private Integer code;
@@ -328,5 +330,13 @@ public class PostVo {
 
     public void setCirclename(String circlename) {
         this.circlename = circlename;
+    }
+
+    public Date getEssencedate() {
+        return essencedate;
+    }
+
+    public void setEssencedate(Date essencedate) {
+        this.essencedate = essencedate;
     }
 }
