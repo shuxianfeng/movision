@@ -311,6 +311,16 @@ public class PostService {
         }
     }
 
+    public Map<String, Integer> queryPostNumAndisessenceByCircleid(Integer circleid) {
+        try {
+            log.info("查询帖子的总数和精贴数量");
+            return postMapper.queryPostNumAndisessenceByCircleid(circleid);
+        } catch (Exception e) {
+            log.error("查询帖子的总数和精贴数量异常");
+            throw e;
+        }
+    }
+
     /**
      * 帖子按条件查询
      * @param map

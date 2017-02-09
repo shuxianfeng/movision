@@ -4,6 +4,7 @@ import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -21,6 +23,8 @@ import java.util.List;
 public class CircleFacade {
     @Autowired
     CircleService circleService;
+    @Autowired
+    PostService postService;
 
     public List<CircleVo> queryCircleByList(String pageNo, String pageSize) {
         if (StringUtils.isEmpty(pageNo)) {
@@ -37,7 +41,7 @@ public class CircleFacade {
             Integer circleid = list.get(i).getId();
             String circlemaster = circleService.queryCircleBycirclemaster(list.get(i).getPhone());//查询圈主
             List<User> circlemanagerlist = circleService.querycirclemanagerlist(circleid);//查询圈子管理员
-            /*Integer follow*/
+            Map<String, Integer> postnum = postService.queryPostNumAndisessenceByCircleid(circleid);//查询圈子下的所有帖子数
             circleVoslist.add(vo);
         }
         return circleVoslist;

@@ -42,7 +42,7 @@ public class PostController {
     public Response queryPostByList(@RequestParam(required = false) String pageNo,
                                     @RequestParam(required = false) String pageSize) {
         Response response = new Response();
-        List<Object> list = postFacade.queryPostByList(pageNo, pageSize);
+        Map<String, Object> list = postFacade.queryPostByList(pageNo, pageSize);
         if (response.getCode() == 200) {
             response.setMessage("查询成");
         }

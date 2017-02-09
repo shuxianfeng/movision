@@ -87,5 +87,7 @@ public interface PostMapper {
 
     int addPost(Map map);
 
+    Map<String, Integer> queryPostNumAndisessenceByCircleid(Integer circleid);
+
     /*List postSearch(Map map);*/
 }

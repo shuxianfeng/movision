@@ -671,4 +671,7 @@
         SELECT * FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
 
+    <select id="queryPostNumByCircleidAndisessence" parameterType="java.lang.Integer" resultType="java.util.Map">
+
+    </select>
 </mapper>

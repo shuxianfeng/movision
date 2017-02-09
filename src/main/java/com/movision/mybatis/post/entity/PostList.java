@@ -10,6 +10,8 @@ import java.util.Date;
  */
 public class PostList {
 
+    private Integer id;//帖子id
+
     private String title;//标题
 
     private String nickname;//发帖人
@@ -31,6 +33,14 @@ public class PostList {
     private Date istime;//精选时间
 
     private Integer sum;//帖子总数
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getSum() {
         return sum;

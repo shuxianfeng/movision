@@ -64,7 +64,7 @@ public class PostFacade {
      * @param pageSize
      * @return
      */
-    public List<Object> queryPostByList(String pageNo, String pageSize) {
+    public Map<String, Object> queryPostByList(String pageNo, String pageSize) {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -73,11 +73,10 @@ public class PostFacade {
         }
         Paging<Post> pager = new Paging<Post>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List<Post> list = postService.queryPostByList(pager);
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Object> map = new HashedMap();
         Integer num = postService.queryPostNum();//查询帖子总数
-        map.put("sum", num);
+        map.put("total", num);
         List<Object> rewardeds = new ArrayList<Object>();
-        rewardeds.add(map);
         for (int i = 0; i < list.size(); i++) {
                 PostList postList = new PostList();
             Integer id = list.get(i).getId();
@@ -86,6 +85,7 @@ public class PostFacade {
             Integer share = sharesService.querysum(id);//获取分享数
             Integer rewarded = rewardedService.queryRewardedBySum(id);//获取打赏积分
             Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举报次数
+            postList.setId(list.get(i).getId());
                 postList.setTitle(list.get(i).getTitle());
                 postList.setNickname(nickname);
                 postList.setCollectsum(list.get(i).getCollectsum());
@@ -98,7 +98,8 @@ public class PostFacade {
                 rewardeds.add(postList);
 
         }
-        return rewardeds;
+        map.put("list", rewardeds);
+        return map;
     }
 
     /**

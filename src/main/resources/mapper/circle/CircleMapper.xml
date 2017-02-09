@@ -322,7 +322,7 @@
         SELECT u.nickname FROM yw_user u WHERE u.phone=#{phone,jdbcType=VARCHAR}
     </select>
 
-    <!--    <select id="querycirclemanagerlist" resultType="" parameterType="java.lang.String">
+    <!-- <select id="querycirclemanagerlist" resultType="" parameterType="java.lang.String">
 
-        </select>-->
+     </select>-->
 </mapper>
