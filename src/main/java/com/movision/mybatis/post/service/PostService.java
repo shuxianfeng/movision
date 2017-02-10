@@ -159,11 +159,12 @@ public class PostService {
     }
 
     //APP端发布普通帖
-    @Transactional
     public int releasePost(Post post) {
         try {
             log.info("APP端普通帖发布成功");
+
             return postMapper.releasePost(post);
+
         } catch (Exception e) {
             log.error("APP端普通帖发布失败");
             throw e;
