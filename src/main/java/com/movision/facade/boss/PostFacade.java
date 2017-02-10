@@ -83,6 +83,7 @@ public class PostFacade {
                 postList.setRewarded(rewarded);
                 postList.setAccusation(accusation);
                 postList.setIsessence(list.get(i).getIsessence());
+            postList.setEssencedate(list.get(i).getEssencedate());//获取精选日期
                 rewardeds.add(postList);
         }
         return rewardeds;
@@ -157,11 +158,13 @@ public class PostFacade {
         return postService.queryPostParticulars(Integer.parseInt(postid));
     }
 
-    public int addPost(String title, String type, String circleid,
+
+    public int addPost(String title, String subtitle, String type, String circleid,
                        String coverimg, String postcontent, String isessence, String time, String begintime, String endtime) {
         Post post = new Post();
         Period period = new Period();
-        post.setTitle(title);
+        post.setTitle(title);//帖子标题
+        post.setSubtitle(subtitle);//帖子副标题
         post.setType(Integer.parseInt(type));
         post.setCircleid(Integer.parseInt(circleid));
         if (coverimg != null) {//判断传入的值是否为空

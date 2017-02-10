@@ -170,21 +170,26 @@ public class PostController {
         return response;
     }
 
+
     /**
      * 添加帖子
      *
      * @param title
+     * @param subtitle
      * @param type
      * @param circleid
      * @param coverimg
      * @param postcontent
      * @param isessence
      * @param time
+     * @param begintime
+     * @param endtime
      * @return
      */
     @ApiOperation(value = "添加帖子", notes = "添加帖子", response = Response.class)
     @RequestMapping(value = "/add_post", method = RequestMethod.POST)
     public Response addPost(@ApiParam(value = "帖子标题") @RequestParam String title,//帖子标题
+                            @ApiParam(value = "帖子副标题") @RequestParam String subtitle,//帖子副标题
                             @ApiParam(value = "帖子类型") @RequestParam String type,//帖子类型
                             @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
                             @ApiParam(value = "帖子封面") @RequestParam(required = false) String coverimg,//帖子封面
@@ -194,7 +199,7 @@ public class PostController {
                             @ApiParam(value = "活动开始时间") @RequestParam(required = false) String begintime,//活动开始时间
                             @ApiParam(value = "活动结束时间") @RequestParam(required = false) String endtime) {//活动结束时间
         Response response = new Response();
-        postFacade.addPost(title, type, circleid, coverimg, postcontent, isessence, time, begintime, endtime);
+        postFacade.addPost(title, subtitle, type, circleid, coverimg, postcontent, isessence, time, begintime, endtime);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
