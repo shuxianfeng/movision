@@ -200,7 +200,7 @@
 
     <select id="selectBossUserDetail" resultType="java.util.HashMap" parameterType="java.lang.Integer">
         select
-        u.id as userid, u.name, u.phone, r.id as roleid, r.rolename
+        u.id as userid, u.name, u.phone, r.id as roleid, r.rolename, u.issuper,u.username
         FROM yw_admin_user u
         LEFT JOIN yw_admin_user_role ur ON ur.userid = u.id
         LEFT JOIN yw_admin_role r ON r.id = ur.roleid

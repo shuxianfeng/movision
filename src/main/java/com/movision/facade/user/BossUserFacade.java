@@ -87,7 +87,6 @@ public class BossUserFacade {
         BossUser newBossUser = new BossUser();
         newBossUser.setId(userid);
         newBossUser.setAfterlogintime(bossUser.getBeforelogintime());//更新上次登录时间
-
         newBossUser.setUsername(bossUserVo.getUsername());
         newBossUser.setName(bossUserVo.getName());
         newBossUser.setIssuper(bossUserVo.getIssuper());
