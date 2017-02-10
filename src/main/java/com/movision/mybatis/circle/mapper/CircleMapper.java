@@ -38,7 +38,7 @@ public interface CircleMapper {
 
     int queryCircleOwner(int circleid);
 
-    List<CircleVo> queryCircleByList(RowBounds rowBounds);
+    List<CircleVo> findAllqueryCircleByList(RowBounds rowBounds);
 
     String queryCircleBycirclemaster(String phone);
 

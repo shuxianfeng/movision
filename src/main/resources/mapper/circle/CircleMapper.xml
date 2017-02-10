@@ -315,7 +315,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-    <select id="queryCircleByList" resultType="com.movision.mybatis.circle.entity.CircleVo">
+    <select id="findAllqueryCircleByList" resultType="com.movision.mybatis.circle.entity.CircleVo">
         SELECT c.id,c.name,c.category,c.supportnum,c.phone,c.status,c.createtime FROM yw_circle c WHERE c.isdel=0
     </select>
 

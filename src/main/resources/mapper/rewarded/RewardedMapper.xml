@@ -99,7 +99,7 @@
     </select>
 
     <!-- 根据打赏时间倒序展示列表 -->
-    <select id="queryPostAward" parameterType="java.lang.Integer"
+    <select id="findAllqueryPostAward" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.rewarded.entity.RewardedVo">
       SELECT r.*,u.nickname
       FROM yw_post_rewarded r

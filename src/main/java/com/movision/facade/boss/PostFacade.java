@@ -64,9 +64,6 @@ public class PostFacade {
      */
     public List<PostList> queryPostByList(Paging<PostList> pager) {
         List<PostList> list = postService.queryPostByList(pager);
-        Map<String, Object> map = new HashedMap();
-        Integer num = postService.queryPostNum();//查询帖子总数
-        map.put("total", num);
         List<PostList> rewardeds = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
                 PostList postList = new PostList();
@@ -139,23 +136,14 @@ public class PostFacade {
         return commentService.deletePostAppraise(Integer.parseInt(id));
     }
 
-
     /**
      * 帖子打赏列表
      *
      * @param postid
-     * @param pageNo
-     * @param pageSize
+     * @param pager
      * @return
      */
-    public List<RewardedVo> queryPostAward(String postid, String pageNo, String pageSize) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<RewardedVo> pager = new Paging<RewardedVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+    public List<RewardedVo> queryPostAward(String postid, Paging<RewardedVo> pager) {
         return rewardedService.queryPostAward(Integer.parseInt(postid), pager);//分页返回帖子打赏列表
     }
 

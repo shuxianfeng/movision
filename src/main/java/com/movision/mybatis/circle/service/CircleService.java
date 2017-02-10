@@ -138,7 +138,7 @@ public class CircleService {
     public List<CircleVo> queryCircleByList(Paging<CircleVo> pager) {
         try {
             log.info("查询圈子列表");
-            return circleMapper.queryCircleByList(pager.getRowBounds());
+            return circleMapper.findAllqueryCircleByList(pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询圈子列表异常");
             throw e;

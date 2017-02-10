@@ -22,6 +22,6 @@ public interface RewardedMapper {
 
     Integer queryRewardedBySum(Integer postid);
 
-    List<RewardedVo> queryPostAward(int postid, RowBounds rowBounds);
+    List<RewardedVo> findAllqueryPostAward(int postid, RowBounds rowBounds);
 
 }

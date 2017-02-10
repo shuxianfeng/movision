@@ -4,6 +4,7 @@ import com.movision.common.Response;
 import com.movision.facade.boss.CircleFacade;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleVo;
+import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,14 +28,16 @@ public class CircleController {
 
     @ApiOperation(value = "查询圈子列表", notes = "用于查询圈子列表接口", response = Response.class)
     @RequestMapping(value = "/circle_list", method = RequestMethod.POST)
-    public Response circleByList(@RequestParam(required = false) String pageNo,
-                                 @RequestParam(required = false) String pageSize) {
+    public Response circleByList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                 @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Map<String, Object> list = circleFacade.queryCircleByList(pageNo, pageSize);
+        Paging<CircleVo> pager = new Paging<CircleVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<CircleVo> list = circleFacade.queryCircleByList(pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(list);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 

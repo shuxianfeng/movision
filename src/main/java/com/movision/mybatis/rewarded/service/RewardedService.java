@@ -59,7 +59,7 @@ public class RewardedService {
     public List<RewardedVo> queryPostAward(Integer postid, Paging<RewardedVo> pager) {
         try {
             log.info("查看帖子打赏列表");
-            return rewardedMapper.queryPostAward(postid, pager.getRowBounds());
+            return rewardedMapper.findAllqueryPostAward(postid, pager.getRowBounds());
         } catch (Exception e) {
             log.error("帖子打赏列表加载失败");
             throw e;

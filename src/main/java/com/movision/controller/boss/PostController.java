@@ -139,14 +139,16 @@ public class PostController {
     @ApiOperation(value = "查看帖子打赏列表", notes = "查看帖子打赏列表", response = Response.class)
     @RequestMapping(value = "/query_post_award", method = RequestMethod.POST)
     public Response queryPostAward(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                   @RequestParam(required = false) String pageNo,
-                                   @RequestParam(required = false) String pageSize) {
+                                   @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                   @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        List<RewardedVo> list = postFacade.queryPostAward(postid, pageNo, pageSize);
+        Paging<RewardedVo> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<RewardedVo> list = postFacade.queryPostAward(postid, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(list);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 

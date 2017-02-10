@@ -34,22 +34,11 @@ public class CircleFacade {
     /**
      * 后台管理-圈子列表
      *
-     * @param pageNo
-     * @param pageSize
+     * @param pager
      * @return
      */
-    public Map<String, Object> queryCircleByList(String pageNo, String pageSize) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<CircleVo> pager = new Paging<CircleVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+    public List<CircleVo> queryCircleByList(Paging<CircleVo> pager) {
         List<CircleVo> list = circleService.queryCircleByList(pager);//获取圈子列表的部分数据
-        Map<String, Object> map = new HashedMap();
-        Integer num = circleService.queryCircleByNum();
-        map.put("total",num);
         List<CircleVo> circleVoslist = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             CircleVo vo = new CircleVo();
@@ -98,7 +87,6 @@ public class CircleFacade {
             vo.setCreatetime(list.get(i).getCreatetime());//圈子创建时间
             circleVoslist.add(vo);
         }
-        map.put("list", circleVoslist);
-        return map;
+        return circleVoslist;
     }
 }
