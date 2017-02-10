@@ -155,11 +155,7 @@
         select
         <include refid="Base_Column_List"/>
         from yw_admin_user
-        <where>
-            <if test="phone != null || phone != ''">
-                phone = #{phone}
-            </if>
-        </where>
+        WHERE phone = #{phone}
     </select>
 
     <select id="selectByUsername" parameterType="java.lang.String"
