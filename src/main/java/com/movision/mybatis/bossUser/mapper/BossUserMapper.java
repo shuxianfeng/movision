@@ -35,4 +35,6 @@ public interface BossUserMapper {
 
     List<BossUser> selectByRoleid(@Param("roleid") Integer roleid);
 
+    int isExistPhone(@Param("phone") String phone);
+
 }

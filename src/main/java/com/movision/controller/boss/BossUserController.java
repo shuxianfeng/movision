@@ -56,6 +56,13 @@ public class BossUserController {
         return response;
     }
 
+    /**
+     * 不能修改手机号
+     *
+     * @param bossUserVo
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     @RequestMapping(value = "update_boss_user", method = RequestMethod.POST)
     @ApiOperation(value = "修改boss用户", notes = "修改boss用户", response = Response.class)
     public Response updateBossUser(@ApiParam @ModelAttribute BossUserVo bossUserVo) throws UnsupportedEncodingException {

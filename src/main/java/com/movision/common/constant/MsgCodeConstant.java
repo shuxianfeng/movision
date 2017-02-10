@@ -285,5 +285,10 @@ public interface MsgCodeConstant {
 	 */
 	int boss_user_not_exist = 10300;
 
+	/**
+	 * 手机号已经存在
+	 */
+	int phone_is_exist = 10301;
+
 
 }

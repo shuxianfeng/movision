@@ -24,6 +24,6 @@ public interface RoleMapper {
 
     List<Role> findAllRole(RowBounds rowBounds, Map<String, Object> map);
 
-    List<Role> selectRoleComboList();
+    List<Role> queryNotSuperAdminRoleComboList();
 
 }

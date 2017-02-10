@@ -6,9 +6,7 @@ import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.role.entity.Role;
 import com.movision.mybatis.role.service.RoleService;
-import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
-import com.movision.utils.pagination.util.StringUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,8 +51,8 @@ public class RoleFacade {
         return roleService.queryRoleList(pager, map);
     }
 
-    public List<Role> queryRoleComboList() {
-        return roleService.queryRoleComboList();
+    public List<Role> queryNotSuperAdminRoleComboList() {
+        return roleService.queryNotSuperAdminRoleComboList();
     }
 
     /**

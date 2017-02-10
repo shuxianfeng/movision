@@ -3,6 +3,7 @@ package com.movision.mybatis.bossUser.service;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.mapper.BossUserMapper;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,20 @@ public class BossUserService {
             throw e;
         }
     }
+
+    public Boolean isExistPhone(String phone) {
+        try {
+            log.info("判断boss系统是否存在该手机号， phone = " + phone);
+            int n = bossUserMapper.isExistPhone(phone);
+            return n != 0;
+        } catch (Exception e) {
+            log.error("判断boss系统是否存在该手机号查询失败, phone = " + phone, e);
+            throw e;
+        }
+    }
+
+
+
 
     public Boolean addUser(BossUser bossUser) {
         try {

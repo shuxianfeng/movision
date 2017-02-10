@@ -57,10 +57,10 @@ public class RoleService {
         }
     }
 
-    public List<Role> queryRoleComboList() {
+    public List<Role> queryNotSuperAdminRoleComboList() {
         try {
             log.info("查询角色下拉列表");
-            return roleMapper.selectRoleComboList();
+            return roleMapper.queryNotSuperAdminRoleComboList();
         } catch (Exception e) {
             log.error("查询角色下拉列表异常", e);
             throw e;

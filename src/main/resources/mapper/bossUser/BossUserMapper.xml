@@ -215,4 +215,8 @@
         LEFT JOIN yw_admin_user_role ur ON u.id = ur.userid
         WHERE ur.roleid = #{roleid}
     </select>
+
+    <select id="isExistPhone" parameterType="java.lang.String" resultType="int">
+        SELECT COUNT(1) FROM yw_admin_user WHERE phone = #{phone}
+    </select>
 </mapper>

@@ -77,6 +77,7 @@ public class BossUserFacade {
      * @param bossUserVo
      */
     public void updateBySelectiveInfo(BossUserVo bossUserVo) {
+        //判断用户是否存在
         Integer userid = bossUserVo.getId();
         BossUser bossUser = this.selectByPrimaryKey(userid);
         if (null == bossUser) {
@@ -86,7 +87,7 @@ public class BossUserFacade {
         BossUser newBossUser = new BossUser();
         newBossUser.setId(userid);
         newBossUser.setAfterlogintime(bossUser.getBeforelogintime());//更新上次登录时间
-        newBossUser.setPhone(bossUserVo.getPhone());
+
         newBossUser.setUsername(bossUserVo.getUsername());
         newBossUser.setName(bossUserVo.getName());
         newBossUser.setIssuper(bossUserVo.getIssuper());
@@ -107,12 +108,19 @@ public class BossUserFacade {
      */
     public void addBySelectiveInfo(BossUserVo bossUserVo) {
 
+        String phone = bossUserVo.getPhone();
+        //校验新增管理员的手机号是否已经存在
+        Boolean isExistPhone = bossUserService.isExistPhone(phone);
+        if (isExistPhone) {
+            throw new BusinessException(MsgCodeConstant.phone_is_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.phone_is_exist)));
+        }
+        //新增信息
         BossUser newBossUser = new BossUser();
         newBossUser.setName(bossUserVo.getName());
-        newBossUser.setPhone(bossUserVo.getPhone());
+        newBossUser.setPhone(phone);
         newBossUser.setUsername(bossUserVo.getUsername());
         newBossUser.setIssuper(bossUserVo.getIssuper());
-
+        //新增密码
         String password = bossUserVo.getNewPassword();
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(password)) {
             String newPwd = new Md5Hash(password, null, 2).toString();

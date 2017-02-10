@@ -88,12 +88,12 @@ public class RoleController {
         return response;
     }
 
-    @ApiOperation(value = "角色下拉列表", notes = "角色下拉列表", response = Response.class)
+    @ApiOperation(value = "非超级管理员的角色下拉列表", notes = "非超级管理员的角色下拉列表", response = Response.class)
     @RequestMapping(value = "role_combo_list", method = RequestMethod.GET)
     public Response getRoleComboList() {
 
         Response response = new Response();
-        List<Role> comboList = roleFacade.queryRoleComboList();
+        List<Role> comboList = roleFacade.queryNotSuperAdminRoleComboList();
         response.setData(comboList);
         return response;
     }

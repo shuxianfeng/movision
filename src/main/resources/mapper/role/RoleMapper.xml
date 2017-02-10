@@ -105,11 +105,14 @@
         ORDER BY id
     </select>
 
-    <select id="selectRoleComboList" resultMap="BaseResultMap">
+    <select id="queryNotSuperAdminRoleComboList" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM yw_admin_role
-        WHERE isdel=0
+        WHERE isdel=0 AND
+        <![CDATA[
+        id <> 1
+        ]]>
         ORDER BY id
     </select>
 
