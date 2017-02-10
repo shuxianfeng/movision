@@ -109,7 +109,7 @@ public class BossUserController {
 
     @RequestMapping(value = "get_boss_user_detail", method = RequestMethod.GET)
     @ApiOperation(value = "用户详情", notes = "用户详情", response = Response.class)
-    public Response getBossUserDetail(@ApiParam(value = "用户id") @RequestParam() Integer id) {
+    public Response getBossUserDetail(@ApiParam(value = "用户id") @RequestParam(required = true) Integer id) {
         Response response = new Response();
         Map<String, Object> result = bossUserFacade.getBossUserDetail(id);
         response.setData(result);

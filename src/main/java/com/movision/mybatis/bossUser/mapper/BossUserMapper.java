@@ -31,7 +31,7 @@ public interface BossUserMapper {
 
     List<Map<String, Object>> findAllBossUser(RowBounds rowBounds, Map<String, Object> map);
 
-    Map<String, Object> selectBossUserDetail(@Param("userid") Integer userid);
+    Map<String, Object> selectBossUserDetail(@Param("uid") Integer userid);
 
     List<BossUser> selectByRoleid(@Param("roleid") Integer roleid);
 

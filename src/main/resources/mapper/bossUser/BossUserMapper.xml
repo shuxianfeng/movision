@@ -208,11 +208,7 @@
         FROM yw_admin_user u
         LEFT JOIN yw_admin_user_role ur ON ur.userid = u.id
         LEFT JOIN yw_admin_role r ON r.id = ur.roleid
-        <where>
-            <if test="userid != null and userid != ''">
-                u.id = #{userid}
-            </if>
-        </where>
+        WHERE u.id = #{uid}
     </select>
 
     <select id="selectByRoleid" resultType="com.movision.mybatis.bossUser.entity.BossUser"
