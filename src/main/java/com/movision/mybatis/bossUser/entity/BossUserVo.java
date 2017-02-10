@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "编辑用户的接口对象", description = "编辑用户的接口对象")
 public class BossUserVo implements Serializable {
-    @ApiModelProperty(value = "用户id", required = true)
+    @ApiModelProperty(value = "用户id")
     private Integer id;
 
     @ApiModelProperty(value = "真实姓名")
@@ -21,6 +21,7 @@ public class BossUserVo implements Serializable {
     @ApiModelProperty(value = "用户名")
     private String username;
 
+    @ApiModelProperty(value = "手机号")
     private String phone;
 
     @ApiModelProperty(value = "是否是超级管理员：0 否 1 是")
