@@ -5,12 +5,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Author zhurui
  * @Date 2017/2/7 10:50
  */
 @Service
+@Transactional
 public class SharesService {
     Logger log = LoggerFactory.getLogger(SharesService.class);
     @Autowired

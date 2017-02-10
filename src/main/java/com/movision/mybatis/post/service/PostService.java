@@ -21,6 +21,7 @@ import java.util.Map;
  * @Date 2017/1/18 14:27
  */
 @Service
+@Transactional
 public class PostService {
     private static Logger log = LoggerFactory.getLogger(PostService.class);
 
