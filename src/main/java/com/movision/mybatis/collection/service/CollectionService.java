@@ -6,12 +6,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Author shuxf
  * @Date 2017/1/22 15:59
  */
 @Service
+@Transactional
 public class CollectionService {
 
     private static Logger log = LoggerFactory.getLogger(CollectionService.class);
