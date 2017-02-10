@@ -334,4 +334,8 @@
     <select id="queryCircleByNum" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM yw_circle
     </select>
+
+    <select id="queryCircleByName" resultType="java.lang.String" parameterType="java.lang.Integer">
+        SELECT name FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER}
+    </select>
 </mapper>

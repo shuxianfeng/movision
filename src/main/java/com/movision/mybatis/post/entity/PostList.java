@@ -34,6 +34,8 @@ public class PostList {
 
     private Integer sum;//帖子总数
 
+    private String circlename;//所属圈子name
+
     private Integer circleid;
 
     private String subtitle;
@@ -54,7 +56,7 @@ public class PostList {
 
     private Integer isessencepool;
 
-    private Integer orderid;
+    private Integer orderid;//排序id
 
     private String coverimg;
 
@@ -68,6 +70,14 @@ public class PostList {
 
     private Date essencedate;//精选日期
 
+
+    public String getCirclename() {
+        return circlename;
+    }
+
+    public void setCirclename(String circlename) {
+        this.circlename = circlename;
+    }
 
     public Integer getId() {
         return id;

@@ -73,6 +73,7 @@ public class PostFacade {
             Integer share = sharesService.querysum(id);//获取分享数
             Integer rewarded = rewardedService.queryRewardedBySum(id);//获取打赏积分
             Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举报次数
+            String circlename = circleService.queryCircleByName(circleid);//获取圈子名称
             postList.setId(list.get(i).getId());
                 postList.setTitle(list.get(i).getTitle());
                 postList.setNickname(nickname);
@@ -83,6 +84,8 @@ public class PostFacade {
                 postList.setRewarded(rewarded);
                 postList.setAccusation(accusation);
                 postList.setIsessence(list.get(i).getIsessence());
+            postList.setCirclename(circlename);//帖子所属圈子
+            postList.setOrderid(list.get(i).getOrderid());//获取排序
             postList.setEssencedate(list.get(i).getEssencedate());//获取精选日期
                 rewardeds.add(postList);
         }
@@ -159,6 +162,21 @@ public class PostFacade {
     }
 
 
+    /**
+     * 添加帖子
+     *
+     * @param title
+     * @param subtitle
+     * @param type
+     * @param circleid
+     * @param coverimg
+     * @param postcontent
+     * @param isessence
+     * @param time
+     * @param begintime
+     * @param endtime
+     * @return
+     */
     public int addPost(String title, String subtitle, String type, String circleid,
                        String coverimg, String postcontent, String isessence, String time, String begintime, String endtime) {
         Post post = new Post();

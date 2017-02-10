@@ -209,4 +209,20 @@ public class CircleService {
         }
     }
 
+    /**
+     * 查询帖子所属圈子的名称
+     *
+     * @param circleid
+     * @return
+     */
+    public String queryCircleByName(Integer circleid) {
+        try {
+            log.info("查询所属圈子名称");
+            return circleMapper.queryCircleByName(circleid);
+        } catch (Exception e) {
+            log.error("查询所属圈子名称异常");
+            throw e;
+        }
+    }
+
 }

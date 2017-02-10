@@ -47,4 +47,6 @@ public interface CircleMapper {
     Integer queryFollowSum(Integer circleid);
 
     Integer queryCircleByNum();
+
+    String queryCircleByName(Integer circleid);
 }

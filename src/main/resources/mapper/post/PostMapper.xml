@@ -666,7 +666,7 @@
 
     <!-- 查询帖子列表 -->
     <select id="findAllqueryPostByList" resultType="com.movision.mybatis.post.entity.PostList">
-        SELECT * FROM yw_post WHERE isdel=0 ORDER BY intime DESC
+        SELECT * FROM yw_post WHERE isdel=0 AND isactive=0 ORDER BY intime DESC
     </select>
 
     <select id="queryPostNum" resultType="java.lang.Integer">
