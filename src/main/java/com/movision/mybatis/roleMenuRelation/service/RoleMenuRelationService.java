@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
  * @Date 2017/1/22 10:18
  */
 @Service
+@Transactional
 public class RoleMenuRelationService {
     private static Logger log = LoggerFactory.getLogger(RoleMenuRelationService.class);
 

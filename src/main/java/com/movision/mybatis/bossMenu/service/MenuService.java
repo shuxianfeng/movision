@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ import java.util.Map;
  * @Date 2017/1/19 16:54
  */
 @Service
+@Transactional
 public class MenuService {
 
     private static Logger log = LoggerFactory.getLogger(MenuService.class);
@@ -45,6 +48,7 @@ public class MenuService {
         }
     }
 
+    //    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Menu queryMenu(int id) {
         try {
             log.info("查询菜单详情，id=" + id);
@@ -54,6 +58,7 @@ public class MenuService {
             throw e;
         }
     }
+
 
     public List<Menu> queryMenuList(Paging<Menu> pager, Map<String, Object> map) {
         try {

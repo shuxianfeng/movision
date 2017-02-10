@@ -6,12 +6,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Author zhuangyuhao
  * @Date 2017/1/24 19:30
  */
 @Service
+@Transactional
 public class UserRoleRelationService {
     private static Logger log = LoggerFactory.getLogger(UserRoleRelationService.class);
 
