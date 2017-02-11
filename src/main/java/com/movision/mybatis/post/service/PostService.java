@@ -96,6 +96,16 @@ public class PostService {
         }
     }
 
+    public List<PostVo> pastHotPostList(Paging<PostVo> pager, int circleid) {
+        try {
+            log.info("查询圈子中最新的10个热帖");
+            return postMapper.pastHotPostList(pager.getRowBounds(), circleid);
+        } catch (Exception e) {
+            log.error("查询圈子中最新的10个热帖失败");
+            throw e;
+        }
+    }
+
     public List<PostVo> queryAllActive(Paging<Post> pager) {
         try {
             log.info("查询所有活动列表");

@@ -149,11 +149,23 @@
 
     <select id="queryPostList" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT *,t2.category AS category, t2.code AS code FROM yw_post t1
+        SELECT t1.*,t2.category AS category, t2.code AS code FROM yw_post t1
         LEFT JOIN yw_circle t2 ON
             t1.circleid = t2.id
         WHERE circleid = #{circleid,jdbcType=INTEGER}
         AND t1.isdel = '0'
+        ORDER BY intime DESC
+    </select>
+
+    <!--查询圈子中推荐的往期所有热帖列表-->
+    <select id="pastHotPostList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT t1.*,t2.category AS category, t2.code AS code FROM yw_post t1
+        LEFT JOIN yw_circle t2 ON
+        t1.circleid = t2.id
+        WHERE circleid = #{circleid,jdbcType=INTEGER}
+        AND t1.isdel = '0'
+        AND t1.ishot = '1'
           ORDER BY intime DESC
     </select>
 

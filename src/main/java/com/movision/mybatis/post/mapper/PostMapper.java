@@ -48,6 +48,8 @@ public interface PostMapper {
 
     List<PostVo> queryPostList(RowBounds rowBounds, int circleid);
 
+    List<PostVo> pastHotPostList(RowBounds rowBounds, int circleid);
+
     List<PostVo> queryAllActive(RowBounds rowBounds);
 
     int queryActivePartSum(int postid);

@@ -5,6 +5,7 @@ import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.post.entity.ActiveVo;
+import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -76,6 +77,22 @@ public class AppPostController {
             response.setMessage("查询成功");
         }
         response.setData(postmap);
+        return response;
+    }
+
+    @ApiOperation(value = "查询某个圈子往期所有热帖列表", notes = "从圈子中点击“最受欢迎的内容”查询该圈子往期所有的热门帖子列表")
+    @RequestMapping(value = "pastHotPostList", method = RequestMethod.POST)
+    public Response pastHotPostList(@ApiParam(value = "圈子id") @RequestParam String circleid,
+                                    @ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
+                                    @ApiParam(value = "每页多少条") @RequestParam(required = false) String pageSize) {
+        Response response = new Response();
+
+        List<PostVo> postlist = facadePost.pastHotPostList(circleid, pageNo, pageSize);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(postlist);
         return response;
     }
 

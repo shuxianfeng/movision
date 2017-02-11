@@ -130,6 +130,18 @@ public class FacadePost {
         return map;
     }
 
+    public List<PostVo> pastHotPostList(String circleid, String pageNo, String pageSize) {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+
+        return postService.pastHotPostList(pager, Integer.parseInt(circleid));
+    }
+
     public List<PostVo> queryCircleIndex2(String pageNo, String pageSize, String circleid) {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
