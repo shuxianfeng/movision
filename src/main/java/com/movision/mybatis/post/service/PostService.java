@@ -48,8 +48,8 @@ public class PostService {
         return postMapper.queryHotActiveList();
     }
 
-    public List<Post> queryCircleSubPost(int circleid) {
-        return postMapper.queryCircleSubPost(circleid);
+    public List<Post> queryCircleSubPost(Map<String, Object> map) {
+        return postMapper.queryCircleSubPost(map);
     }
 
     public int queryPostNumByCircleid(int circleid) {

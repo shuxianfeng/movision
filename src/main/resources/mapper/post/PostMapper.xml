@@ -98,14 +98,17 @@
         ORDER BY intime DESC
     </select>
 
+    <!--查询发现页下方推荐的十个圈子中推荐的5个最新热门帖-->
     <select id="queryCircleSubPost" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.Post">
-        SELECT t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.ishot,t1.coverimg,t1.isdel
+        SELECT t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.ishot,t1.coverimg,t1.isdel,t1.intime
         FROM yw_post t1
         WHERE t1.circleid = #{circleid,jdbcType=INTEGER}
           AND t1.isdel = '0'
           AND t1.ishot = '1'
           AND t1.isactive = '0'
+        ORDER BY intime DESC
+        LIMIT #{sum,jdbcType=INTEGER}
     </select>
 
     <!--查询帖子详情-->

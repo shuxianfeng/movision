@@ -46,7 +46,10 @@ public class FacadeCircle {
 
         CircleVo circleVo = circleService.queryCircleIndex1(Integer.parseInt(circleid));//查询圈子详情基础数据
 
-        List<Post> postList = postService.queryCircleSubPost(Integer.parseInt(circleid));//查询这个圈子中被设为热帖的5个帖子
+        Map<String, Object> map = new HashMap<>();
+        map.put("circleid", Integer.parseInt(circleid));
+        map.put("sum", 10);//设置为10条
+        List<Post> postList = postService.queryCircleSubPost(map);//查询这个圈子中最新的被设为热帖的10个帖子
 
         circleVo.setHotPostList(postList);
 

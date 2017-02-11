@@ -28,12 +28,12 @@ public class AppDiscoverController {
     public Response queryIndexData(@ApiParam(value = "用户id") @RequestParam(required = false) String userid) {
         Response response = new Response();
 
-        Map<String, Object> map = facadeDiscover.queryDiscoverIndexData(userid);
+        Map<String, Object> pmap = facadeDiscover.queryDiscoverIndexData(userid);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(map);
+        response.setData(pmap);
         return response;
     }
 }

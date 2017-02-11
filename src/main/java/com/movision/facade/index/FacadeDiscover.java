@@ -37,7 +37,7 @@ public class FacadeDiscover {
 
     public Map<String, Object> queryDiscoverIndexData(String userid) {
 
-        HashMap<String, Object> map = new HashMap();
+        HashMap<String, Object> pmap = new HashMap();
         List<HomepageManage> homepageManageList = homepageManageService.queryBannerList(1);//查询发现页顶部banner轮播图 type=1
         List<CircleCategory> circleCategoryList = circleCategoryService.queryCircleCategoryList();//查询发现页次banner所有圈子类别轮播图
         List<Post> hotActiveList = postService.queryHotActiveList();//查询发现页热门活动列表
@@ -46,8 +46,12 @@ public class FacadeDiscover {
         hotCircleList = circleService.queryHotCircleList();//查询发现页被设置为发现页展示的圈子
 
         for (int i = 0; i < hotCircleList.size(); i++) {
+            //设置发现页最下面推荐的10个圈子下只推荐最新的5个热帖
+            Map<String, Object> map = new HashMap<>();
             int circleid = hotCircleList.get(i).getId();
-            List<Post> postlist = postService.queryCircleSubPost(circleid);
+            map.put("circleid", circleid);
+            map.put("sum", 5);//设置为5
+            List<Post> postlist = postService.queryCircleSubPost(map);
             hotCircleList.get(i).setHotPostList(postlist);
 
             //这里需要判断这个圈子是否可以已被当前用户关注
@@ -68,11 +72,11 @@ public class FacadeDiscover {
             }
         }
 
-        map.put("homepageManageList", homepageManageList);
-        map.put("circleCategoryList", circleCategoryList);
-        map.put("hotActiveList", hotActiveList);
-        map.put("hotCircleList", hotCircleList);
-        return map;
+        pmap.put("homepageManageList", homepageManageList);
+        pmap.put("circleCategoryList", circleCategoryList);
+        pmap.put("hotActiveList", hotActiveList);
+        pmap.put("hotCircleList", hotCircleList);
+        return pmap;
     }
 
 }

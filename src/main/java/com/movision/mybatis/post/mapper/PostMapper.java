@@ -32,7 +32,7 @@ public interface PostMapper {
 
     List<Post> queryHotActiveList();
 
-    List<Post> queryCircleSubPost(int circleid);
+    List<Post> queryCircleSubPost(Map<String, Object> map);
 
     List<PostVo> personPost(RowBounds rowBounds, int userid);
 
