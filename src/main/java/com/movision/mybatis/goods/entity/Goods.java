@@ -33,14 +33,6 @@ public class Goods {
 
     private String brandsupple;
 
-    private String power;
-
-    private String model;
-
-    private String port;
-
-    private String lenstype;
-
     private Integer sales;
 
     private Integer stock;
@@ -181,30 +173,6 @@ public class Goods {
         this.brandsupple = brandsupple == null ? null : brandsupple.trim();
     }
 
-    public String getPower() {
-        return power;
-    }
-
-    public void setPower(String power) {
-        this.power = power == null ? null : power.trim();
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model == null ? null : model.trim();
-    }
-
-    public String getLenstype() {
-        return lenstype;
-    }
-
-    public void setLenstype(String lenstype) {
-        this.lenstype = lenstype == null ? null : lenstype.trim();
-    }
-
     public Integer getSales() {
         return sales;
     }
@@ -275,14 +243,6 @@ public class Goods {
 
     public void setIsdel(Integer isdel) {
         this.isdel = isdel;
-    }
-
-    public String getPort() {
-        return port;
-    }
-
-    public void setPort(String port) {
-        this.port = port;
     }
 
     public String getImgurl() {

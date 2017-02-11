@@ -17,10 +17,6 @@
         <result column="protype" property="protype" jdbcType="INTEGER"/>
         <result column="brandid" property="brandid" jdbcType="VARCHAR"/>
         <result column="brandsupple" property="brandsupple" jdbcType="VARCHAR"/>
-        <result column="power" property="power" jdbcType="VARCHAR"/>
-        <result column="model" property="model" jdbcType="VARCHAR"/>
-        <result column="port" property="port" jdbcType="VARCHAR"/>
-        <result column="lenstype" property="lenstype" jdbcType="VARCHAR"/>
         <result column="sales" property="sales" jdbcType="INTEGER"/>
         <result column="stock" property="stock" jdbcType="INTEGER"/>
         <result column="goodsposition" property="goodsposition" jdbcType="INTEGER"/>
@@ -32,10 +28,9 @@
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, name, subname, price, origprice, attribute, provincecode, citycode, isself, isdamage, 
-    isquality, promotions, protype, brandid, brandsupple, power, model, port, lenstype,
-    sales, stock, goodsposition, iscombo, isspecial, isseckill, ishomepage, onlinetime, 
-    isdel
+    id, name, subname, price, origprice, attribute, provincecode, citycode, isself, isdamage,
+        isquality, promotions, protype, brandid, brandsupple, sales, stock, goodsposition, iscombo,
+        isspecial, isseckill, ishomepage, onlinetime, isdel
   </sql>
 
     <!--基础查询语句-->
@@ -68,22 +63,18 @@
       price, origprice, attribute, 
       provincecode, citycode, isself, 
       isdamage, isquality, promotions, 
-      protype, brandid, brandsupple, 
-      power, model, port,
-      lenstype, sales, stock, 
-      goodsposition, iscombo, isspecial, 
-      isseckill, ishomepage, onlinetime, 
-      isdel)
+      protype, brandid, brandsupple,
+        sales, stock, goodsposition,
+        iscombo, isspecial, isseckill,
+        ishomepage, onlinetime, isdel)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{subname,jdbcType=VARCHAR}, 
       #{price,jdbcType=DOUBLE}, #{origprice,jdbcType=DOUBLE}, #{attribute,jdbcType=INTEGER}, 
       #{provincecode,jdbcType=VARCHAR}, #{citycode,jdbcType=VARCHAR}, #{isself,jdbcType=INTEGER}, 
       #{isdamage,jdbcType=INTEGER}, #{isquality,jdbcType=INTEGER}, #{promotions,jdbcType=VARCHAR}, 
-      #{protype,jdbcType=INTEGER}, #{brandid,jdbcType=VARCHAR}, #{brandsupple,jdbcType=VARCHAR}, 
-      #{power,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{port,jdbcType=VARCHAR},
-      #{lenstype,jdbcType=VARCHAR}, #{sales,jdbcType=INTEGER}, #{stock,jdbcType=INTEGER}, 
-      #{goodsposition,jdbcType=INTEGER}, #{iscombo,jdbcType=INTEGER}, #{isspecial,jdbcType=INTEGER}, 
-      #{isseckill,jdbcType=INTEGER}, #{ishomepage,jdbcType=INTEGER}, #{onlinetime,jdbcType=TIMESTAMP}, 
-      #{isdel,jdbcType=INTEGER})
+      #{protype,jdbcType=INTEGER}, #{brandid,jdbcType=VARCHAR}, #{brandsupple,jdbcType=VARCHAR},
+        #{sales,jdbcType=INTEGER}, #{stock,jdbcType=INTEGER}, #{goodsposition,jdbcType=INTEGER},
+        #{iscombo,jdbcType=INTEGER}, #{isspecial,jdbcType=INTEGER}, #{isseckill,jdbcType=INTEGER},
+        #{ishomepage,jdbcType=INTEGER}, #{onlinetime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
   </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.goods.entity.Goods">
         insert into yw_goods
@@ -132,18 +123,6 @@
             </if>
             <if test="brandsupple != null">
                 brandsupple,
-            </if>
-            <if test="power != null">
-                power,
-            </if>
-            <if test="model != null">
-                model,
-            </if>
-            <if test="port != null">
-                port,
-            </if>
-            <if test="lenstype != null">
-                lenstype,
             </if>
             <if test="sales != null">
                 sales,
@@ -219,18 +198,6 @@
             <if test="brandsupple != null">
                 #{brandsupple,jdbcType=VARCHAR},
             </if>
-            <if test="power != null">
-                #{power,jdbcType=VARCHAR},
-            </if>
-            <if test="model != null">
-                #{model,jdbcType=VARCHAR},
-            </if>
-            <if test="port != null">
-                #{port,jdbcType=VARCHAR},
-            </if>
-            <if test="lenstype != null">
-                #{lenstype,jdbcType=VARCHAR},
-            </if>
             <if test="sales != null">
                 #{sales,jdbcType=INTEGER},
             </if>
@@ -305,18 +272,6 @@
             <if test="brandsupple != null">
                 brandsupple = #{brandsupple,jdbcType=VARCHAR},
             </if>
-            <if test="power != null">
-                power = #{power,jdbcType=VARCHAR},
-            </if>
-            <if test="model != null">
-                model = #{model,jdbcType=VARCHAR},
-            </if>
-            <if test="port != null">
-                port = #{port,jdbcType=VARCHAR},
-            </if>
-            <if test="lenstype != null">
-                lenstype = #{lenstype,jdbcType=VARCHAR},
-            </if>
             <if test="sales != null">
                 sales = #{sales,jdbcType=INTEGER},
             </if>
@@ -363,10 +318,6 @@
       protype = #{protype,jdbcType=INTEGER},
       brandid = #{brandid,jdbcType=VARCHAR},
       brandsupple = #{brandsupple,jdbcType=VARCHAR},
-      power = #{power,jdbcType=VARCHAR},
-      model = #{model,jdbcType=VARCHAR},
-      port = #{port,jdbcType=VARCHAR},
-      lenstype = #{lenstype,jdbcType=VARCHAR},
       sales = #{sales,jdbcType=INTEGER},
       stock = #{stock,jdbcType=INTEGER},
       goodsposition = #{goodsposition,jdbcType=INTEGER},
