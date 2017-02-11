@@ -21,6 +21,8 @@ public interface CommentMapper {
 
     List<CommentVo> findAllqueryCommentsByLsit(Integer postid, RowBounds rowBounds);
 
+    List<CommentVo> findAllQueryPostByCommentParticulars(Integer ommentid, RowBounds rowBounds);
+
     CommentVo queryChildrenComment(int id);
 
     int updateCommentZanSum(int id);

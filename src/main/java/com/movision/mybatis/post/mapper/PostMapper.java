@@ -80,11 +80,13 @@ public interface PostMapper {
 
     int deletePost(Integer postid);
 
-    Post queryPostParticulars(Integer postid);
+    PostList queryPostParticulars(Integer postid);
 
     int addPost(Map map);
 
     PostNum queryPostNumAndisessenceByCircleid(Integer circleid);
+
+    int addPostChoiceness(Integer postid);
 
     /*List postSearch(Map map);*/
 }

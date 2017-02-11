@@ -680,7 +680,7 @@
         WHERE id=#{postid,jdbcType=INTEGER}
     </update>
 
-    <select id="queryPostParticulars" resultType="com.movision.mybatis.post.entity.Post"
+    <select id="queryPostParticulars" resultType="com.movision.mybatis.post.entity.PostList"
             parameterType="java.lang.Integer">
         SELECT * FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
@@ -691,4 +691,8 @@
         (SELECT COUNT(1) FROM yw_post WHERE circleid=#{circleid,jdbcType=INTEGER} AND isessence=1) as isessence
         FROM yw_post WHERE circleid=#{circleid,jdbcType=INTEGER}
     </select>
+
+    <update id="addPostChoiceness" parameterType="java.lang.Integer">
+        UPDATE yw_post SET isessence=1 WHERE id=#{postid,jdbcType=INTEGER}
+    </update>
 </mapper>

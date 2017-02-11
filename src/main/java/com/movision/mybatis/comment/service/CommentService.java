@@ -38,6 +38,23 @@ public class CommentService {
         }
     }
 
+    /**
+     * 查询评论详情
+     *
+     * @param postid
+     * @param pager
+     * @return
+     */
+    public List<CommentVo> queryPostByCommentParticulars(Integer ommentid, Paging<CommentVo> pager) {
+        try {
+            log.info("查询评论详情");
+            return commentMapper.findAllQueryPostByCommentParticulars(ommentid, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询评论详情异常");
+            throw e;
+        }
+    }
+
     public CommentVo queryChildrenComment(int id){
         try {
             log.info("查询子评论");

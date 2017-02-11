@@ -2,11 +2,13 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.PostFacade;
+import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -112,6 +114,30 @@ public class PostController {
     }
 
     /**
+     * 后台管理-帖子列表-查看评论-评论详情列表
+     *
+     * @param commentid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查询帖子评论详情", notes = "用于查询帖子评论详情接口", response = Response.class)
+    @RequestMapping(value = "/query_post_comment_particulars", method = RequestMethod.POST)
+    public Response queryPostByCommentParticulars(@ApiParam(value = "评论id") @RequestParam String commentid,
+                                                  @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                  @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<CommentVo> pager = new Paging<CommentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<CommentVo> list = postFacade.queryPostByCommentParticulars(commentid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+    /**
      * 后台管理-帖子列表-查看评论-删除帖子评论
      *
      * @param id
@@ -153,7 +179,7 @@ public class PostController {
     }
 
     /**
-     * 帖子预览
+     * 后台管理-帖子列表-帖子预览
      *
      * @param postid
      * @return
@@ -162,7 +188,7 @@ public class PostController {
     @RequestMapping(value = "/query_post_particulars", method = RequestMethod.POST)
     public Response queryPostParticulars(@ApiParam(value = "帖子id") @RequestParam String postid) {
         Response response = new Response();
-        Post list = postFacade.queryPostParticulars(postid);
+        PostList list = postFacade.queryPostParticulars(postid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -172,7 +198,7 @@ public class PostController {
 
 
     /**
-     * 添加帖子
+     * 后台管理-添加帖子
      *
      * @param title
      * @param subtitle
@@ -203,6 +229,25 @@ public class PostController {
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
+        return response;
+    }
+
+
+    /**
+     * 后台管理-帖子列表-帖子加精
+     *
+     * @param postid
+     * @return
+     */
+    @ApiOperation(value = "帖子加精", notes = "用于帖子加精接口", response = Response.class)
+    @RequestMapping(value = "/add_post_choiceness", method = RequestMethod.POST)
+    public Response addPostChoiceness(@ApiParam(value = "帖子id") @RequestParam String postid) {
+        Response response = new Response();
+        Map<String, Integer> result = postFacade.addPostChoiceness(postid);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(result);
         return response;
     }
 

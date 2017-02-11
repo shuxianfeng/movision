@@ -1,5 +1,6 @@
 package com.movision.facade.boss;
 
+import com.movision.common.Response;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.comment.entity.Comment;
@@ -18,9 +19,12 @@ import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
+import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -131,7 +135,19 @@ public class PostFacade {
     }
 
     /**
-     * 删除帖子评论
+     * 后台管理-帖子列表-帖子评论列表-帖子详情
+     *
+     * @param commentid
+     * @param pager
+     * @return
+     */
+    public List<CommentVo> queryPostByCommentParticulars(String commentid, Paging<CommentVo> pager) {
+        List<CommentVo> list = commentService.queryPostByCommentParticulars(Integer.parseInt(commentid), pager);
+        return list;
+    }
+
+    /**
+     * 后台管理-帖子列表-删除帖子评论
      *
      * @param id
      * @return
@@ -141,7 +157,7 @@ public class PostFacade {
     }
 
     /**
-     * 帖子打赏列表
+     * 后台管理-帖子列表-帖子打赏列表
      *
      * @param postid
      * @param pager
@@ -152,13 +168,26 @@ public class PostFacade {
     }
 
     /**
-     * 帖子预览
+     * 后台管理-帖子列表-帖子预览
      *
      * @param postid
      * @return
      */
-    public Post queryPostParticulars(String postid) {
-        return postService.queryPostParticulars(Integer.parseInt(postid));
+    public PostList queryPostParticulars(String postid) {
+        PostList postList = postService.queryPostParticulars(Integer.parseInt(postid));
+        Integer circleid = postList.getCircleid();//获取到圈子id
+        Integer id = postList.getId();//获取帖子id
+        Integer share = sharesService.querysum(id);//获取分享数
+        Integer rewarded = rewardedService.queryRewardedBySum(id);//获取打赏积分
+        Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举报次数
+        String nickname = userService.queryUserByNickname(circleid);//获取发帖人
+        String circlename = circleService.queryCircleByName(circleid);//获取圈子名称
+        postList.setNickname(nickname);
+        postList.setShare(share);//分享次数
+        postList.setRewarded(rewarded);//打赏积分
+        postList.setAccusation(accusation);//举报次数
+        postList.setCirclename(circlename);//帖子所属圈子
+        return postList;
     }
 
 
@@ -211,6 +240,20 @@ public class PostFacade {
         return per;
 
     }
+
+    /**
+     * 帖子加精
+     *
+     * @param postid
+     * @return
+     */
+    public Map<String, Integer> addPostChoiceness(String postid) {
+        Map<String, Integer> map = new HashedMap();
+        Integer result = postService.addPostChoiceness(Integer.parseInt(postid));
+        map.put("result", result);
+        return map;
+    }
+
 
 /*    *//**
      * 帖子按条件查询

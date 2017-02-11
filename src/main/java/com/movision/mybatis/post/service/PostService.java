@@ -285,7 +285,7 @@ public class PostService {
      * @param postid
      * @return
      */
-    public Post queryPostParticulars(Integer postid) {
+    public PostList queryPostParticulars(Integer postid) {
         try {
             log.info("帖子预览");
             return postMapper.queryPostParticulars(postid);
@@ -311,12 +311,34 @@ public class PostService {
         }
     }
 
+    /**
+     * 查询帖子的总和和精贴数量
+     *
+     * @param circleid
+     * @return
+     */
     public PostNum queryPostNumAndisessenceByCircleid(Integer circleid) {
         try {
             log.info("查询帖子的总数和精贴数量");
             return postMapper.queryPostNumAndisessenceByCircleid(circleid);
         } catch (Exception e) {
             log.error("查询帖子的总数和精贴数量异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 帖子添加精选
+     *
+     * @param postid
+     * @return
+     */
+    public int addPostChoiceness(Integer postid) {
+        try {
+            log.info("帖子添加精选");
+            return postMapper.addPostChoiceness(postid);
+        } catch (Exception e) {
+            log.error("帖子添加精选异常");
             throw e;
         }
     }
