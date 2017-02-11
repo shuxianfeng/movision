@@ -227,8 +227,12 @@ public class PostFacade {
         Date en = null;
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-            be = format.parse(begintime);
-            en = format.parse(endtime);
+            if (begintime != null) {
+                be = format.parse(begintime);
+            }
+            if (endtime != null) {
+                en = format.parse(endtime);
+            }
         } catch (ParseException e) {
         }
         int p = postService.addPost(post);//添加帖子/活动
