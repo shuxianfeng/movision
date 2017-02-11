@@ -335,7 +335,8 @@
         SELECT COUNT(1) FROM yw_circle
     </select>
 
-    <select id="queryCircleByName" resultType="java.lang.String" parameterType="java.lang.Integer">
-        SELECT name FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER}
+    <select id="queryCircleByName" resultType="com.movision.mybatis.circle.entity.Circle"
+            parameterType="java.lang.Integer">
+        SELECT name,category FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER}
     </select>
 </mapper>

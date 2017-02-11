@@ -215,7 +215,7 @@ public class CircleService {
      * @param circleid
      * @return
      */
-    public String queryCircleByName(Integer circleid) {
+    public Circle queryCircleByName(Integer circleid) {
         try {
             log.info("查询所属圈子名称");
             return circleMapper.queryCircleByName(circleid);

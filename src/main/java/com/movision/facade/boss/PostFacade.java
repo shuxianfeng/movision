@@ -2,6 +2,7 @@ package com.movision.facade.boss;
 
 import com.movision.common.Response;
 import com.movision.mybatis.accusation.service.AccusationService;
+import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
@@ -77,7 +78,7 @@ public class PostFacade {
             Integer share = sharesService.querysum(id);//获取分享数
             Integer rewarded = rewardedService.queryRewardedBySum(id);//获取打赏积分
             Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举报次数
-            String circlename = circleService.queryCircleByName(circleid);//获取圈子名称
+            Circle circlename = circleService.queryCircleByName(circleid);//获取圈子名称
             postList.setId(list.get(i).getId());
                 postList.setTitle(list.get(i).getTitle());
                 postList.setNickname(nickname);
@@ -88,7 +89,7 @@ public class PostFacade {
                 postList.setRewarded(rewarded);
                 postList.setAccusation(accusation);
                 postList.setIsessence(list.get(i).getIsessence());
-            postList.setCirclename(circlename);//帖子所属圈子
+            postList.setCirclename(circlename.getName());//帖子所属圈子
             postList.setOrderid(list.get(i).getOrderid());//获取排序
             postList.setEssencedate(list.get(i).getEssencedate());//获取精选日期
                 rewardeds.add(postList);
@@ -181,12 +182,13 @@ public class PostFacade {
         Integer rewarded = rewardedService.queryRewardedBySum(id);//获取打赏积分
         Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举报次数
         String nickname = userService.queryUserByNickname(circleid);//获取发帖人
-        String circlename = circleService.queryCircleByName(circleid);//获取圈子名称
+        Circle circle = circleService.queryCircleByName(circleid);//获取圈子名称
         postList.setNickname(nickname);
         postList.setShare(share);//分享次数
         postList.setRewarded(rewarded);//打赏积分
         postList.setAccusation(accusation);//举报次数
-        postList.setCirclename(circlename);//帖子所属圈子
+        postList.setCirclename(circle.getName());//帖子所属圈子
+        postList.setCategory(circle.getCategory());//
         return postList;
     }
 

@@ -70,6 +70,15 @@ public class PostList {
 
     private Date essencedate;//精选日期
 
+    private Integer category;//圈子分类
+
+    public Integer getCategory() {
+        return category;
+    }
+
+    public void setCategory(Integer category) {
+        this.category = category;
+    }
 
     public String getCirclename() {
         return circlename;
