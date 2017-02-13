@@ -2,7 +2,7 @@ package com.movision.mybatis.share.entity;
 
 import java.util.Date;
 
-public class Shares {
+public class SharesVo {
     private Integer id;
 
     private Integer userid;
@@ -10,6 +10,8 @@ public class Shares {
     private Integer postid;
 
     private Date intime;
+
+    private String nickname;
 
     private String source;
 
@@ -19,6 +21,14 @@ public class Shares {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public Integer getId() {

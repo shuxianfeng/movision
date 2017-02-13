@@ -7,6 +7,7 @@ import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
+import com.movision.mybatis.share.entity.SharesVo;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.utils.pagination.model.Paging;
@@ -249,6 +250,29 @@ public class PostController {
             response.setMessage("操作成功");
         }
         response.setData(result);
+        return response;
+    }
+
+
+    /**
+     * 后台管理-帖子列表-帖子分享列表
+     *
+     * @param postid
+     * @return
+     */
+    @ApiOperation(value = "帖子分享列表", notes = "用于帖子分享列表展示接口", response = Response.class)
+    @RequestMapping(value = "/query_post_share_list", method = RequestMethod.POST)
+    public Response queryPostShareList(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                       @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                       @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<SharesVo> pager = new Paging<SharesVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<SharesVo> list = postFacade.queryPostShareList(postid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 

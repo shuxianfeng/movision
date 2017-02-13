@@ -6,9 +6,10 @@
         <result column="userid" jdbcType="INTEGER" property="userid"/>
         <result column="postid" jdbcType="INTEGER" property="postid"/>
         <result column="intime" jdbcType="TIMESTAMP" property="intime"/>
+        <result column="source" jdbcType="VARCHAR" property="source"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, userid, postid, intime
+        id, userid, postid, intime,source
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -21,10 +22,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.share.entity.Shares">
-    insert into yw_post_share (id, userid, postid, 
-      intime)
-    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER}, 
-      #{intime,jdbcType=TIMESTAMP})
+    insert into yw_post_share (id, userid, postid,
+        intime,source)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER},
+        #{intime,jdbcType=TIMESTAMP},${source,jdbcType=VARCHAR})
   </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.share.entity.Shares">
         insert into yw_post_share
@@ -41,6 +42,9 @@
             <if test="intime != null">
                 intime,
             </if>
+            <if test="source !=null">
+                source,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -54,6 +58,9 @@
             </if>
             <if test="intime != null">
                 #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="source!=null">
+                #{source.jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -69,6 +76,9 @@
             <if test="intime != null">
                 intime = #{intime,jdbcType=TIMESTAMP},
             </if>
+            <if test="source!=null">
+                source=#{source,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -76,4 +86,9 @@
     <select id="querysum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     SELECT COUNT(1) FROM yw_post_share WHERE postid=#{postid,jdbcType=INTEGER}
   </select>
+
+    <select id="findAllQueryPostShareList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.share.entity.SharesVo">
+        SELECT s.*,u.nickname FROM yw_post_share s LEFT JOIN yw_user u ON s.userid=u.id WHERE s.postid=#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>

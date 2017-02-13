@@ -15,6 +15,7 @@ import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.rewarded.entity.Rewarded;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.rewarded.service.RewardedService;
+import com.movision.mybatis.share.entity.SharesVo;
 import com.movision.mybatis.share.service.SharesService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
@@ -271,6 +272,17 @@ public class PostFacade {
             map.put("result", 2);
             return map;
         }
+    }
+
+    /**
+     * 查询帖子分享列表
+     *
+     * @param postid
+     * @param pager
+     * @return
+     */
+    public List<SharesVo> queryPostShareList(String postid, Paging<SharesVo> pager) {
+        return sharesService.queryPostShareList(pager, Integer.parseInt(postid));
     }
 
 
