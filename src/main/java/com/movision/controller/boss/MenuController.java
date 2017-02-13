@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -68,6 +69,15 @@ public class MenuController {
         List<Menu> list = menuFacade.queryMenuList(pager, menuname);
         pager.result(list);
         response.setData(pager);
+        return response;
+    }
+
+    @ApiOperation(value = "查询所有菜单", notes = "查询所有菜单", response = Response.class)
+    @RequestMapping(value = "query_all_menu", method = RequestMethod.GET)
+    public Response queryAllMenu() {
+        Response response = new Response();
+        List<Map<String, Object>> list = menuFacade.getAllMenu();
+        response.setData(list);
         return response;
     }
 

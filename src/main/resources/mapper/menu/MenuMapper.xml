@@ -137,6 +137,7 @@
         <include refid="Base_Column_List"/>
         from yw_admin_menu
         where isdel = 1 AND pid = 0
+        ORDER BY orderid
     </select>
 
     <select id="selectAllChildrenMenu" resultMap="BaseResultMap">
@@ -146,6 +147,7 @@
         <![CDATA[
         where isdel = 1 AND pid <> 0
         ]]>
+        ORDER BY orderid
     </select>
 
 </mapper>

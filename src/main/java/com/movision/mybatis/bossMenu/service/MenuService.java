@@ -101,7 +101,7 @@ public class MenuService {
         }
     }
 
-    public List<Menu> selectAllChildrenMenu() {
+    public List<Menu> getAllChildrenMenu() {
         try {
             log.info("查询所有子级菜单");
             return menuMapper.selectAllChildrenMenu();

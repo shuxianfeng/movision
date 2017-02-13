@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,17 +48,29 @@ public class MenuFacade {
         return menuService.queryMenuList(pager, map);
     }
 
-    // TODO: 2017/2/9
-    public List<Map<String, Object>> getAllMenu() {
-        List<Menu> menuList = menuService.getAllMenu();
-        for (Menu menu : menuList) {
-            int pid = menu.getPid();
-            if (pid == 0) {
-                //是一个父菜单
-                int id = menu.getId();
 
+    public List<Map<String, Object>> getAllMenu() {
+        List<Menu> allParentMenuList = menuService.getAllParentMenu();
+        List<Menu> allChildrenMenuList = menuService.getAllChildrenMenu();
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        Map map = new HashedMap();
+
+        for (Menu pmenu : allParentMenuList) {
+            int parid = pmenu.getId();
+
+            List<Menu> sameParentMenus = new ArrayList<>();
+            for (Menu cmenu : allChildrenMenuList) {
+                int pid = cmenu.getPid();
+                if (pid == parid) {
+                    //若是属于该父菜单的字菜单，则放入同一个list
+                    sameParentMenus.add(cmenu);
+                }
             }
+            map.put("parent_menu", pmenu);
+            map.put("child_menu", sameParentMenus);
+            result.add(map);
         }
-        return null;
+        return result;
     }
 }
