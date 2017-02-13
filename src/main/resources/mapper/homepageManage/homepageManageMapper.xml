@@ -15,7 +15,7 @@
         id, topictype, content, subcontent, url, transurl, orderid, intime
     </sql>
 
-    <!--基础查询语句-->
+    <!--基础查询语句啦啦啦啦-->
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
