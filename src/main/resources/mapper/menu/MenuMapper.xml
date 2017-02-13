@@ -132,22 +132,59 @@
         where isdel = 1
     </select>
 
-    <select id="selectAllParentMenu" resultMap="BaseResultMap">
+    <select id="selectAllParentMenu" resultType="com.movision.mybatis.bossMenu.entity.AuthMenu">
         select
-        <include refid="Base_Column_List"/>
+        yw_admin_menu.*
         from yw_admin_menu
         where isdel = 1 AND pid = 0
         ORDER BY orderid
     </select>
 
-    <select id="selectAllChildrenMenu" resultMap="BaseResultMap">
+    <select id="selectAllChildrenMenu" resultType="com.movision.mybatis.bossMenu.entity.AuthMenu">
         select
-        <include refid="Base_Column_List"/>
+        yw_admin_menu.*
         from yw_admin_menu
         <![CDATA[
         where isdel = 1 AND pid <> 0
         ]]>
         ORDER BY orderid
     </select>
+
+    <select id="selectAuthroizeParentMenu" resultType="com.movision.mybatis.bossMenu.entity.AuthMenu"
+            parameterType="java.lang.Integer">
+        select
+        m.*
+        from yw_admin_menu m
+        LEFT JOIN yw_admin_role_menu rm ON m.id = rm.menuid
+        where m.isdel = 1 AND m.pid = 0
+        and rm.roleid = #{roleid}
+        ORDER BY m.orderid
+    </select>
+
+    <select id="selectAuthroizeChildrenMenu" resultType="com.movision.mybatis.bossMenu.entity.AuthMenu"
+            parameterType="java.lang.Integer">
+        SELECT
+        m.*
+        FROM yw_admin_menu m
+        LEFT JOIN yw_admin_role_menu rm ON m.id = rm.menuid
+        <![CDATA[
+        WHERE m.isdel = 1 AND m.pid <> 0
+        AND rm.roleid = #{roleid}
+        ORDER BY m.orderid
+         ]]>
+    </select>
+
+    <select id="xxxx" resultType="com.movision.mybatis.bossMenu.entity.AuthMenu" parameterType="java.util.HashMap">
+        SELECT
+        m.*
+        FROM yw_admin_menu m
+        LEFT JOIN yw_admin_role_menu rm ON m.id = rm.menuid
+        <![CDATA[
+        WHERE m.isdel = 1 AND m.pid <> 0
+        AND rm.roleid = #{roleid}
+        ORDER BY m.orderid
+         ]]>
+    </select>
+
 
 </mapper>

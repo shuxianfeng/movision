@@ -81,5 +81,13 @@ public class MenuController {
         return response;
     }
 
+    @ApiOperation(value = "查询当前角色的所有菜单", notes = "查询当前角色的所有菜单", response = Response.class)
+    @RequestMapping(value = "query_all_menu_by_current_role", method = RequestMethod.GET)
+    public Response queryAllMenuByCurrentRole(@ApiParam(value = "角色id") @RequestParam(required = true) Integer roleid) {
+        Response response = new Response();
+        List<Map<String, Object>> list = menuFacade.getAuthroizeMenu(roleid);
+        response.setData(list);
+        return response;
+    }
 
 }

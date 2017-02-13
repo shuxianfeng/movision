@@ -1,5 +1,6 @@
 package com.movision.mybatis.bossMenu.service;
 
+import com.movision.mybatis.bossMenu.entity.AuthMenu;
 import com.movision.mybatis.bossMenu.entity.Menu;
 import com.movision.mybatis.bossMenu.mapper.MenuMapper;
 import com.movision.utils.pagination.model.Paging;
@@ -91,7 +92,7 @@ public class MenuService {
         }
     }
 
-    public List<Menu> getAllParentMenu() {
+    public List<AuthMenu> getAllParentMenu() {
         try {
             log.info("查询所有父级菜单");
             return menuMapper.selectAllParentMenu();
@@ -101,7 +102,7 @@ public class MenuService {
         }
     }
 
-    public List<Menu> getAllChildrenMenu() {
+    public List<AuthMenu> getAllChildrenMenu() {
         try {
             log.info("查询所有子级菜单");
             return menuMapper.selectAllChildrenMenu();
@@ -110,6 +111,27 @@ public class MenuService {
             throw e;
         }
     }
+
+    public List<AuthMenu> selectAuthroizeParentMenu(Integer roleid) {
+        try {
+            log.info("根据角色查询所有授权的父级菜单, roleid=" + roleid);
+            return menuMapper.selectAuthroizeParentMenu(roleid);
+        } catch (Exception e) {
+            log.error("根据角色查询所有授权的父级菜单失败", e);
+            throw e;
+        }
+    }
+
+    public List<AuthMenu> selectAuthroizeChildrenMenu(Integer roleid) {
+        try {
+            log.info("根据角色查询所有授权的子级菜单, roleid=" + roleid);
+            return menuMapper.selectAuthroizeChildrenMenu(roleid);
+        } catch (Exception e) {
+            log.error("根据角色查询所有授权的子级菜单失败", e);
+            throw e;
+        }
+    }
+
 
 
 }

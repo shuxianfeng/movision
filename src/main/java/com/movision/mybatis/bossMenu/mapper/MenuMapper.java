@@ -1,5 +1,6 @@
 package com.movision.mybatis.bossMenu.mapper;
 
+import com.movision.mybatis.bossMenu.entity.AuthMenu;
 import com.movision.mybatis.bossMenu.entity.Menu;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
@@ -28,7 +29,11 @@ public interface MenuMapper {
 
     List<Menu> selectAllMenu();
 
-    List<Menu> selectAllParentMenu();
+    List<AuthMenu> selectAllParentMenu();
 
-    List<Menu> selectAllChildrenMenu();
+    List<AuthMenu> selectAllChildrenMenu();
+
+    List<AuthMenu> selectAuthroizeParentMenu(@Param("roleid") Integer roleid);
+
+    List<AuthMenu> selectAuthroizeChildrenMenu(@Param("roleid") Integer roleid);
 }
