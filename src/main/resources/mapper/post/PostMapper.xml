@@ -718,6 +718,14 @@
 
     <update id="addPostChoiceness" parameterType="com.movision.mybatis.post.entity.Post">
         UPDATE yw_post SET isessence=1,essencedate=#{essencedate,jdbcType=DATE},orderid=#{orderid,jdbcType=INTEGER}
-        WHERE id=#{id,jdbcType=INTEGER}
+        WHERE id=#{id,jdbcType=INTEGER} AND isessence=0
     </update>
+
+    <select id="queryPostChoiceness" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT isessence FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
+
+    <select id="deletePostChoiceness" parameterType="java.lang.Integer">
+        UPDATE yw_post SET isessence=0,essencedate=null,orderid=null WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>

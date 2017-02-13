@@ -249,21 +249,28 @@ public class PostFacade {
     public Map<String, Integer> addPostChoiceness(String postid, String essencedate, String orderid) {
         Map<String, Integer> map = new HashedMap();
         Post p = new Post();
-        p.setId(Integer.parseInt(postid));
-        Date date = null;
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-        if (essencedate != null) {
-            try {
-                date = format.parse(essencedate);
-            } catch (Exception e) {
-                e.printStackTrace();
+        Integer typ = postService.queryPostChoiceness(Integer.parseInt(postid));
+        if (typ == 0) {
+            p.setId(Integer.parseInt(postid));
+            Date date = null;
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+            if (essencedate != null) {
+                try {
+                    date = format.parse(essencedate);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+            p.setEssencedate(date);//精选日期
+            p.setOrderid(Integer.parseInt(orderid));
+            Integer result = postService.addPostChoiceness(p);
+            map.put("result", result);
+            return map;
+        } else {
+            postService.deletePostChoiceness(Integer.parseInt(postid));
+            map.put("result", 2);
+            return map;
         }
-        p.setEssencedate(date);//精选日期
-        p.setOrderid(Integer.parseInt(orderid));
-        Integer result = postService.addPostChoiceness(p);
-        map.put("result", result);
-        return map;
     }
 
 

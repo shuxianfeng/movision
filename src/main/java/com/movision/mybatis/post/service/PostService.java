@@ -353,6 +353,32 @@ public class PostService {
         }
     }
 
+    public int deletePostChoiceness(Integer postid) {
+        try {
+            log.info("帖子");
+            return postMapper.deletePostChoiceness(postid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 查询帖子是否加精
+     *
+     * @param postid
+     * @return
+     */
+    public int queryPostChoiceness(Integer postid) {
+        try {
+            log.info("查询帖子是否加精");
+            return postMapper.queryPostChoiceness(postid);
+        } catch (Exception e) {
+            log.error("查询帖子是否加精异常");
+            throw e;
+        }
+    }
+
     /**
      * 帖子按条件查询
      * @param map
