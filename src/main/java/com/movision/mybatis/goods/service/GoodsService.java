@@ -1,6 +1,7 @@
 package com.movision.mybatis.goods.service;
 
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.mapper.GoodsMapper;
 import com.movision.mybatis.post.mapper.PostMapper;
 import com.movision.utils.pagination.model.Paging;
@@ -25,7 +26,7 @@ public class GoodsService {
     @Autowired
     private GoodsMapper goodsMapper;
 
-    public List<Goods> queryActiveGoods(Paging<Goods> pager, String postid) {
+    public List<GoodsVo> queryActiveGoods(Paging<Goods> pager, String postid) {
         try {
             log.info("查询商城促销类商品列表");
             return goodsMapper.queryActiveGoods(pager.getRowBounds(), Integer.parseInt(postid));

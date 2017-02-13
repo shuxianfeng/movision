@@ -2,7 +2,11 @@ package com.movision.mybatis.goods.entity;
 
 import java.util.Date;
 
-public class Goods {
+/**
+ * @Author shuxf
+ * @Date 2017/2/13 11:35
+ */
+public class GoodsVo {
     private Integer id;
 
     private String name;
@@ -56,6 +60,8 @@ public class Goods {
     private Integer ishot;//是否为热门：0 否 1 是
 
     private Integer isessence;//是否为精选：0 否 1 是
+
+    private String imgurl;//商品缩略小方图
 
     public Integer getId() {
         return id;
@@ -247,6 +253,14 @@ public class Goods {
 
     public void setIsdel(Integer isdel) {
         this.isdel = isdel;
+    }
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
     }
 
     public Date getRecommenddate() {

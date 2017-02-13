@@ -1,6 +1,6 @@
 package com.movision.mybatis.post.entity;
 
-import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.goods.entity.GoodsVo;
 
 import java.util.Date;
 import java.util.List;
@@ -62,7 +62,7 @@ public class ActiveVo {
 
     private Integer enddays;//距离活动结束剩余天数（查询活动时该字段不为空）
 
-    private List<Goods> promotionGoodsList;//活动促销商品列表
+    private List<GoodsVo> promotionGoodsList;//活动促销商品列表
 
     private Integer partsum;//活动参与总人数
 
@@ -258,11 +258,11 @@ public class ActiveVo {
         this.enddays = enddays;
     }
 
-    public List<Goods> getPromotionGoodsList() {
+    public List<GoodsVo> getPromotionGoodsList() {
         return promotionGoodsList;
     }
 
-    public void setPromotionGoodsList(List<Goods> promotionGoodsList) {
+    public void setPromotionGoodsList(List<GoodsVo> promotionGoodsList) {
         this.promotionGoodsList = promotionGoodsList;
     }
 

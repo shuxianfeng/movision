@@ -5,6 +5,7 @@ import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
@@ -98,7 +99,7 @@ public class FacadePost {
             }
             Paging<Goods> pager = new Paging<Goods>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
 
-            List<Goods> goodsList = goodsService.queryActiveGoods(pager, postid);
+            List<GoodsVo> goodsList = goodsService.queryActiveGoods(pager, postid);
             active.setPromotionGoodsList(goodsList);
 
         }

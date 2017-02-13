@@ -1,6 +1,7 @@
 package com.movision.mybatis.goods.mapper;
 
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.goods.entity.GoodsVo;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface GoodsMapper {
 
     Goods selectByPrimaryKey(Integer id);
 
-    List<Goods> queryActiveGoods(RowBounds rowBounds, int postid);
+    List<GoodsVo> queryActiveGoods(RowBounds rowBounds, int postid);
 
     int updateByPrimaryKeySelective(Goods record);
 

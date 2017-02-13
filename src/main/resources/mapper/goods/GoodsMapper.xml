@@ -24,13 +24,16 @@
         <result column="isspecial" property="isspecial" jdbcType="INTEGER"/>
         <result column="isseckill" property="isseckill" jdbcType="INTEGER"/>
         <result column="ishomepage" property="ishomepage" jdbcType="INTEGER"/>
+        <result column="recommenddate" property="recommenddate" jdbcType="DATE"/>
         <result column="onlinetime" property="onlinetime" jdbcType="TIMESTAMP"/>
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+        <result column="ishot" property="ishot" jdbcType="INTEGER"/>
+        <result column="isessence" property="isessence" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, name, subname, price, origprice, attribute, provincecode, citycode, isself, isdamage,
         isquality, promotions, protype, brandid, brandsupple, sales, stock, goodsposition, iscombo,
-        isspecial, isseckill, ishomepage, onlinetime, isdel
+        isspecial, isseckill, ishomepage, recommenddate, onlinetime, isdel, ishot, isessence
   </sql>
 
     <!--基础查询语句-->
@@ -43,7 +46,7 @@
 
     <!--查询商城促销活动中促销的所有商品列表-->
     <select id="queryActiveGoods" parameterType="java.lang.Integer"
-            resultType="com.movision.mybatis.goods.entity.Goods">
+            resultType="com.movision.mybatis.goods.entity.GoodsVo">
     SELECT t.* FROM (
         SELECT t1.postid,t2.id,t2.name,t2.subname,t2.price,t2.origprice,t2.img_url AS imgurl
       FROM yw_active_goods t1
@@ -66,7 +69,8 @@
       protype, brandid, brandsupple,
         sales, stock, goodsposition,
         iscombo, isspecial, isseckill,
-        ishomepage, onlinetime, isdel)
+        ishomepage, recommenddate, onlinetime,
+        isdel, ishot, isessence)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{subname,jdbcType=VARCHAR}, 
       #{price,jdbcType=DOUBLE}, #{origprice,jdbcType=DOUBLE}, #{attribute,jdbcType=INTEGER}, 
       #{provincecode,jdbcType=VARCHAR}, #{citycode,jdbcType=VARCHAR}, #{isself,jdbcType=INTEGER}, 
@@ -74,7 +78,8 @@
       #{protype,jdbcType=INTEGER}, #{brandid,jdbcType=VARCHAR}, #{brandsupple,jdbcType=VARCHAR},
         #{sales,jdbcType=INTEGER}, #{stock,jdbcType=INTEGER}, #{goodsposition,jdbcType=INTEGER},
         #{iscombo,jdbcType=INTEGER}, #{isspecial,jdbcType=INTEGER}, #{isseckill,jdbcType=INTEGER},
-        #{ishomepage,jdbcType=INTEGER}, #{onlinetime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
+        #{ishomepage,jdbcType=INTEGER}, #{recommenddate,jdbcType=DATE}, #{onlinetime,jdbcType=TIMESTAMP},
+        #{isdel,jdbcType=INTEGER}, #{ishot,jdbcType=INTEGER}, #{isessence,jdbcType=INTEGER})
   </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.goods.entity.Goods">
         insert into yw_goods
@@ -145,11 +150,20 @@
             <if test="ishomepage != null">
                 ishomepage,
             </if>
+            <if test="recommenddate != null">
+                recommenddate,
+            </if>
             <if test="onlinetime != null">
                 onlinetime,
             </if>
             <if test="isdel != null">
                 isdel,
+            </if>
+            <if test="ishot != null">
+                ishot,
+            </if>
+            <if test="isessence != null">
+                isessence,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -219,11 +233,20 @@
             <if test="ishomepage != null">
                 #{ishomepage,jdbcType=INTEGER},
             </if>
+            <if test="recommenddate != null">
+                #{recommenddate,jdbcType=DATE},
+            </if>
             <if test="onlinetime != null">
                 #{onlinetime,jdbcType=TIMESTAMP},
             </if>
             <if test="isdel != null">
                 #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="ishot != null">
+                #{ishot,jdbcType=INTEGER},
+            </if>
+            <if test="isessence != null">
+                #{isessence,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -293,11 +316,20 @@
             <if test="ishomepage != null">
                 ishomepage = #{ishomepage,jdbcType=INTEGER},
             </if>
+            <if test="recommenddate != null">
+                recommenddate = #{recommenddate,jdbcType=DATE},
+            </if>
             <if test="onlinetime != null">
                 onlinetime = #{onlinetime,jdbcType=TIMESTAMP},
             </if>
             <if test="isdel != null">
                 isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="ishot != null">
+                ishot = #{ishot,jdbcType=INTEGER},
+            </if>
+            <if test="isessence != null">
+                isessence = #{isessence,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -325,8 +357,11 @@
       isspecial = #{isspecial,jdbcType=INTEGER},
       isseckill = #{isseckill,jdbcType=INTEGER},
       ishomepage = #{ishomepage,jdbcType=INTEGER},
+        recommenddate = #{recommenddate,jdbcType=DATE},
       onlinetime = #{onlinetime,jdbcType=TIMESTAMP},
-      isdel = #{isdel,jdbcType=INTEGER}
+        isdel = #{isdel,jdbcType=INTEGER},
+        ishot = #{ishot,jdbcType=INTEGER},
+        isessence = #{isessence,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
