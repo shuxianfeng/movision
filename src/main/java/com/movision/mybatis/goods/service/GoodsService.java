@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author shuxf
@@ -35,5 +36,25 @@ public class GoodsService {
             throw e;
         }
 
+    }
+
+    public List<GoodsVo> queryMonthHot() {
+        try {
+            log.info("查询月度销量前十商品列表");
+            return goodsMapper.queryMonthHot();
+        } catch (Exception e) {
+            log.error("查询月度销量前十商品列表失败");
+            throw e;
+        }
+    }
+
+    public List<GoodsVo> queryDefaultGoods(Map<String, Object> parammap) {
+        try {
+            log.info("查询月度热销商品的缺省商品列表");
+            return goodsMapper.queryDefaultGoods(parammap);
+        } catch (Exception e) {
+            log.error("查询月度热销商品的缺省商品列表失败");
+            throw e;
+        }
     }
 }

@@ -47,15 +47,42 @@
     <!--查询商城促销活动中促销的所有商品列表-->
     <select id="queryActiveGoods" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goods.entity.GoodsVo">
-    SELECT t.* FROM (
+        SELECT t.* FROM (
         SELECT t1.postid,t2.id,t2.name,t2.subname,t2.price,t2.origprice,t2.img_url AS imgurl
-      FROM yw_active_goods t1
-      LEFT JOIN (SELECT a.id,a.name,a.subname,a.price,a.origprice,b.img_url
-                  FROM yw_goods a,yw_goods_img b
-                  WHERE a.id = b.goodsid AND b.type = '2') t2
-      ON t1.goodid = t2.id
-    ) t WHERE t.postid = #{postid,jdbcType=INTEGER}
-  </select>
+        FROM yw_active_goods t1
+        LEFT JOIN (SELECT a.id,a.name,a.subname,a.price,a.origprice,b.img_url
+        FROM yw_goods a,yw_goods_img b
+        WHERE a.id = b.goodsid AND b.type = '2') t2
+        ON t1.goodid = t2.id
+        ) t WHERE t.postid = #{postid,jdbcType=INTEGER}
+    </select>
+
+    <!--查询月度销量前十商品列表(根据销量倒叙排列)-->
+    <select id="queryMonthHot" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT a.*,b.img_url AS imgurl
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t2.vol
+        FROM yw_goods t1,(
+        SELECT goodsid,count(*) AS vol FROM yw_sub_order GROUP BY goodsid) t2
+        WHERE t1.id = t2.goodsid
+        LIMIT 10) a
+        LEFT JOIN yw_goods_img b
+        ON a.id = b.goodsid
+        ORDER BY vol DESC
+    </select>
+
+    <!--查询月度热销商品的缺省商品列表-->
+    <select id="queryDefaultGoods" parameterType="java.util.Map" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT a.*,b.img_url AS imgurl
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice
+        FROM yw_goods t1
+        WHERE t1.id NOT IN
+        <foreach collection="ids" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        LIMIT #{defaultcount,jdbcType=INTEGER}) a
+        LEFT JOIN yw_goods_img b
+        ON a.id = b.goodsid
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_goods

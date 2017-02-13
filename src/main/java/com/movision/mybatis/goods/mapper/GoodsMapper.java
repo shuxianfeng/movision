@@ -5,6 +5,7 @@ import com.movision.mybatis.goods.entity.GoodsVo;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface GoodsMapper {
     int deleteByPrimaryKey(Integer id);
@@ -16,6 +17,10 @@ public interface GoodsMapper {
     Goods selectByPrimaryKey(Integer id);
 
     List<GoodsVo> queryActiveGoods(RowBounds rowBounds, int postid);
+
+    List<GoodsVo> queryMonthHot();
+
+    List<GoodsVo> queryDefaultGoods(Map<String, Object> parammap);
 
     int updateByPrimaryKeySelective(Goods record);
 
