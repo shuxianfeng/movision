@@ -208,8 +208,6 @@ public class PostController {
      * @param postcontent
      * @param isessence
      * @param time
-     * @param begintime
-     * @param endtime
      * @return
      */
     @ApiOperation(value = "添加帖子", notes = "添加帖子", response = Response.class)
@@ -219,16 +217,17 @@ public class PostController {
                             @ApiParam(value = "帖子类型") @RequestParam String type,//帖子类型
                             @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
                             @ApiParam(value = "帖子封面") @RequestParam(required = false) String coverimg,//帖子封面
+                            @ApiParam(value = "视频地址") @RequestParam(required = false) String vid,//视频url
                             @ApiParam(value = "帖子内容") @RequestParam String postcontent,//帖子内容
-                            @ApiParam(value = "精选") @RequestParam(required = false) String isessence,//精选
-                            @ApiParam(value = "精选日期") @RequestParam(required = false) String time,//精选日期
-                            @ApiParam(value = "活动开始时间") @RequestParam(required = false) String begintime,//活动开始时间
-                            @ApiParam(value = "活动结束时间") @RequestParam(required = false) String endtime) {//活动结束时间
+                            @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
+                            @ApiParam(value = "圈子精选") @RequestParam(required = false) String isessencepool,//精选池中的帖子圈子精选贴
+                            @ApiParam(value = "精选日期") @RequestParam(required = false) String time) {//精选日期
         Response response = new Response();
-        postFacade.addPost(title, subtitle, type, circleid, coverimg, postcontent, isessence, time, begintime, endtime);
+        Map<String, Integer> resaut = postFacade.addPost(title, subtitle, type, circleid, vid, coverimg, postcontent, isessence, isessencepool, time);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
+        response.setData(resaut);
         return response;
     }
 
@@ -241,9 +240,11 @@ public class PostController {
      */
     @ApiOperation(value = "帖子加精", notes = "用于帖子加精接口", response = Response.class)
     @RequestMapping(value = "/add_post_choiceness", method = RequestMethod.POST)
-    public Response addPostChoiceness(@ApiParam(value = "帖子id") @RequestParam String postid) {
+    public Response addPostChoiceness(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                      @ApiParam(value = "精选日期") @RequestParam String essencedate,
+                                      @ApiParam(value = "精选排序") @RequestParam String orderid) {
         Response response = new Response();
-        Map<String, Integer> result = postFacade.addPostChoiceness(postid);
+        Map<String, Integer> result = postFacade.addPostChoiceness(postid, essencedate, orderid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

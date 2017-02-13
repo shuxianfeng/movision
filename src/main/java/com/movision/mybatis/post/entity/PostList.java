@@ -72,6 +72,16 @@ public class PostList {
 
     private Integer category;//圈子分类
 
+    private Integer userid;//用户id
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
     public Integer getCategory() {
         return category;
     }

@@ -343,7 +343,7 @@ public class PostService {
      * @param postid
      * @return
      */
-    public int addPostChoiceness(Integer postid) {
+    public int addPostChoiceness(Post postid) {
         try {
             log.info("帖子添加精选");
             return postMapper.addPostChoiceness(postid);

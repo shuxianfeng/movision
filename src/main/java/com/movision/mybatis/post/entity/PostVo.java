@@ -76,6 +76,16 @@ public class PostVo {
 
     private String circlename;//所属圈子名称
 
+    private Integer userid;//用户id
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -204,46 +204,39 @@ public class PostFacade {
      * @param postcontent
      * @param isessence
      * @param time
-     * @param begintime
-     * @param endtime
      * @return
      */
-    public int addPost(String title, String subtitle, String type, String circleid,
-                       String coverimg, String postcontent, String isessence, String time, String begintime, String endtime) {
+    public Map<String, Integer> addPost(String title, String subtitle, String type, String circleid, String vid,
+                                        String coverimg, String postcontent, String isessence, String isessencepool, String time) {
         Post post = new Post();
-        Period period = new Period();
+        Map<String, Integer> map = new HashedMap();
         post.setTitle(title);//帖子标题
         post.setSubtitle(subtitle);//帖子副标题
-        post.setType(Integer.parseInt(type));
-        post.setCircleid(Integer.parseInt(circleid));
-        if (coverimg != null) {//判断传入的值是否为空
-            post.setCoverimg(coverimg);
-        }
-        post.setPostcontent(postcontent);
+        post.setType(Integer.parseInt(type));//帖子类型
+        post.setCircleid(Integer.parseInt(circleid));//圈子id
+        String vod = vid;
+        post.setCoverimg(coverimg);//帖子封面
+        post.setPostcontent(postcontent);//帖子内容
         if (isessence != null) {
-            post.setIsessence(Integer.parseInt(isessence));
+            post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+        }
+        if (isessencepool != null) {
+            post.setIsessencepool(Integer.parseInt(isessencepool));//是否为圈子精选
         }
         post.setIntime(new Date());
-        Calendar c = Calendar.getInstance();//将字符串数据转换为毫秒值
-        Date be = null;
-        Date en = null;
-        try {
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-            if (begintime != null) {
-                be = format.parse(begintime);
+        Date isessencetime = null;//加精时间
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        if (time != null) {
+            try {
+                isessencetime = format.parse(time);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-            if (endtime != null) {
-                en = format.parse(endtime);
-            }
-        } catch (ParseException e) {
         }
-        int p = postService.addPost(post);//添加帖子/活动
-        Integer postid = post.getId();//获取帖子id
-        period.setPostid(postid);
-        period.setBegintime(be);
-        period.setEndtime(en);
-        int per = periodService.insertPostRecord(period);//设置活动时间
-        return per;
+        post.setEssencedate(isessencetime);
+        int result = postService.addPost(post);//添加帖子
+        map.put("result", result);
+        return map;
 
     }
 
@@ -253,9 +246,22 @@ public class PostFacade {
      * @param postid
      * @return
      */
-    public Map<String, Integer> addPostChoiceness(String postid) {
+    public Map<String, Integer> addPostChoiceness(String postid, String essencedate, String orderid) {
         Map<String, Integer> map = new HashedMap();
-        Integer result = postService.addPostChoiceness(Integer.parseInt(postid));
+        Post p = new Post();
+        p.setId(Integer.parseInt(postid));
+        Date date = null;
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        if (essencedate != null) {
+            try {
+                date = format.parse(essencedate);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        p.setEssencedate(date);//精选日期
+        p.setOrderid(Integer.parseInt(orderid));
+        Integer result = postService.addPostChoiceness(p);
         map.put("result", result);
         return map;
     }

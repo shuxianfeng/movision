@@ -25,13 +25,14 @@
         <result column="totalpoint" jdbcType="INTEGER" property="totalpoint"/>
         <result column="isdel" jdbcType="INTEGER" property="isdel"/>
         <result column="essencedate" jdbcType="DATE" property="essencedate"/>
+        <result column="userid" jdbcType="INTEGER" property="userid"/>
     </resultMap>
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
         isactive, activetype, activefee, type, ishot, orderid, isessence, isessencepool, coverimg, hotimgurl, intime,
         totalpoint,
-        isdel,essencedate
+        isdel,essencedate,userid
   </sql>
 
     <!--基础查询语句-->
@@ -294,7 +295,7 @@
         commentsum, forwardsum, collectsum,
         isactive, activetype, activefee, type, ishot, orderid,
         isessence, isessencepool, coverimg, hotimgurl,
-        intime, totalpoint, isdel, essencedate
+        intime, totalpoint, isdel, essencedate,userid
       )
     values (#{id,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
       #{subtitle,jdbcType=VARCHAR}, #{postcontent,jdbcType=VARCHAR}, #{zansum,jdbcType=INTEGER},
@@ -304,7 +305,7 @@
         #{ishot,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},
         #{isessencepool,jdbcType=INTEGER}, #{coverimg,jdbcType=VARCHAR},#{hotimgurl,jdbcType=VARCHAR},
         #{intime,jdbcType=TIMESTAMP}, #{totalpoint,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER},
-        #{essencedate,jdbcType=DATE}
+        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER}
       )
   </insert>
 
@@ -316,14 +317,15 @@
         INSERT INTO yw_post (circleid, title,
           postcontent, zansum, commentsum, forwardsum,
         collectsum, isactive, type, ishot, isessence,
-        isessencepool, coverimg, intime, totalpoint, isdel, essencedate
+        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid
         )
         VALUES (
           #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=VARCHAR},
           #{zansum,jdbcType=INTEGER},#{commentsum,jdbcType=INTEGER},#{forwardsum,jdbcType=INTEGER},
           #{collectsum,jdbcType=INTEGER},#{isactive,jdbcType=INTEGER},#{type,jdbcType=INTEGER},
           #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
-        #{coverimg,jdbcType=VARCHAR},#{intime,jdbcType=TIMESTAMP},#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},#{essencedate,jdbcType=DATE}
+        #{coverimg,jdbcType=VARCHAR},#{intime,jdbcType=TIMESTAMP},#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},
+        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER}
         )
     </insert>
 
@@ -486,6 +488,9 @@
             <if test="essencedate != null">
                 essencedate,
             </if>
+            <if test="userid !=null">
+                userid
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -556,6 +561,9 @@
             </if>
             <if test="essencedate != null">
                 #{essencedate,jdbcType=DATE},
+            </if>
+            <if test="userid!=null">
+                #{userid,jdbcType=INTEGER}
             </if>
         </trim>
     </insert>
@@ -658,7 +666,8 @@
       intime = #{intime,jdbcType=TIMESTAMP},
       totalpoint = #{totalpoint,jdbcType=INTEGER},
         isdel = #{isdel,jdbcType=INTEGER},
-        essencedate = #{essencedate,jdbcType=DATE}
+        essencedate = #{essencedate,jdbcType=DATE},
+        userid=#{userid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
     <update id="updatePostByZanSum" parameterType="java.lang.Integer">
@@ -707,7 +716,8 @@
         FROM yw_post WHERE circleid=#{circleid,jdbcType=INTEGER}
     </select>
 
-    <update id="addPostChoiceness" parameterType="java.lang.Integer">
-        UPDATE yw_post SET isessence=1 WHERE id=#{postid,jdbcType=INTEGER}
+    <update id="addPostChoiceness" parameterType="com.movision.mybatis.post.entity.Post">
+        UPDATE yw_post SET isessence=1,essencedate=#{essencedate,jdbcType=DATE},orderid=#{orderid,jdbcType=INTEGER}
+        WHERE id=#{id,jdbcType=INTEGER}
     </update>
 </mapper>

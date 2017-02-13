@@ -49,6 +49,16 @@ public class Post {
 
     private Date essencedate;//精选日期
 
+    private Integer userid;//用户id
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
     public Integer getId() {
         return id;
     }

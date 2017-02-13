@@ -88,7 +88,7 @@ public interface PostMapper {
 
     PostNum queryPostNumAndisessenceByCircleid(Integer circleid);
 
-    int addPostChoiceness(Integer postid);
+    int addPostChoiceness(Post postid);
 
     /*List postSearch(Map map);*/
 }
