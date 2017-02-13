@@ -138,6 +138,17 @@ public class PostController {
         return response;
     }
 
+    public Response addPostAppraise(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                    @ApiParam(value = "评论人") @RequestParam String userid,
+                                    @ApiParam(value = "评论内容") @RequestParam String content) {
+        Response response = new Response();
+        postFacade.addPostAppraise(postid, userid, content);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        return response;
+    }
+
     /**
      * 后台管理-帖子列表-查看评论-删除帖子评论
      *

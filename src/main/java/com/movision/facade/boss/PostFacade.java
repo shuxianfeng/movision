@@ -149,6 +149,27 @@ public class PostFacade {
     }
 
     /**
+     * 后台管理-帖子列表-帖子评论列表-添加评论
+     *
+     * @param postid
+     * @param userid
+     * @param content
+     * @return
+     */
+    public int addPostAppraise(String postid, String userid, String content) {
+        CommentVo comm = new CommentVo();
+        comm.setPostid(Integer.parseInt(postid));
+        comm.setUserid(Integer.parseInt(userid));
+        comm.setIntime(new Date());
+        comm.setContent(content);
+        int c = commentService.insertComment(comm);
+        if (c == 1) {
+            postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子的评论数
+        }
+        return 1;
+    }
+
+    /**
      * 后台管理-帖子列表-删除帖子评论
      *
      * @param id
