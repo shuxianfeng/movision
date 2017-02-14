@@ -4,6 +4,9 @@ import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
+import com.movision.mybatis.post.entity.PostVo;
+import com.movision.utils.pagination.model.Paging;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,5 +67,20 @@ public class MallIndexFacade {
         }
 
         return map;
+    }
+
+    public List<GoodsVo> queryAllMonthHot(String pageNo, String pageSize) {
+
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<GoodsVo> pager = new Paging<GoodsVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+
+        List<GoodsVo> allMonthHotList = goodsService.queryAllMonthHot(pager);
+
+        return allMonthHotList;
     }
 }

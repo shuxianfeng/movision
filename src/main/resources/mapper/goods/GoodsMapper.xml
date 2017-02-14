@@ -70,6 +70,19 @@
         ORDER BY vol DESC
     </select>
 
+    <!--查询月度热销-点击查看全部查询所有月度热销商品列表-->
+    <select id="queryAllMonthHot" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT a.*,b.img_url AS imgurl
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t2.vol
+                FROM yw_goods t1,(
+                SELECT goodsid,count(*) AS vol FROM yw_sub_order GROUP BY goodsid) t2
+                WHERE t1.id = t2.goodsid
+              ) a
+        LEFT JOIN yw_goods_img b
+        ON a.id = b.goodsid
+        ORDER BY vol DESC
+    </select>
+
     <!--查询月度热销商品的缺省商品列表-->
     <select id="queryDefaultGoods" parameterType="java.util.Map" resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT a.*,b.img_url AS imgurl
