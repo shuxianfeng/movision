@@ -22,6 +22,8 @@ public interface GoodsMapper {
 
     List<GoodsVo> queryDefaultGoods(Map<String, Object> parammap);
 
+    List<GoodsVo> queryWeekHot();
+
     List<GoodsVo> queryAllMonthHot(RowBounds rowBounds);
 
     int updateByPrimaryKeySelective(Goods record);

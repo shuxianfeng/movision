@@ -64,4 +64,23 @@ public class AppMallIndexController {
         response.setData(allMonthHotList);
         return response;
     }
+
+    /**
+     * 查询商城首页--一周热销榜单
+     *
+     * @Return
+     */
+    @ApiOperation(value = "商城首页一周热销榜单返回接口", notes = "用户返回首页一周热销榜单数据", response = Response.class)
+    @RequestMapping(value = "weekHot", method = RequestMethod.POST)
+    public Response queryWeekHot() {
+        Response response = new Response();
+
+        Map<String, Object> map = mallIndexFacade.queryWeekHot();
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
+    }
 }

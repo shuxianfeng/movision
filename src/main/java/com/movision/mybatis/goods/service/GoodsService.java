@@ -58,6 +58,16 @@ public class GoodsService {
         }
     }
 
+    public List<GoodsVo> queryWeekHot() {
+        try {
+            log.info("查询一周销量前十商品列表");
+            return goodsMapper.queryWeekHot();
+        } catch (Exception e) {
+            log.error("查询一周销量前十商品列表失败");
+            throw e;
+        }
+    }
+
     public List<GoodsVo> queryAllMonthHot(Paging<GoodsVo> pager) {
         try {
             log.info("月度热销商品--点击查看全部接口返回列表");

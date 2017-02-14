@@ -62,7 +62,13 @@
         SELECT a.*,b.img_url AS imgurl
         FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t2.vol
         FROM yw_goods t1,(
-        SELECT goodsid,count(*) AS vol FROM yw_sub_order GROUP BY goodsid) t2
+        SELECT d.goodsid,count(*) AS vol
+        FROM yw_sub_order d, yw_orders e
+        WHERE d.porderid = e.id
+        AND e.status IN (1,2,4,5)
+        AND month(e.paytime)=month(NOW())
+        GROUP BY d.goodsid
+        ) t2
         WHERE t1.id = t2.goodsid
         LIMIT 10) a
         LEFT JOIN yw_goods_img b
@@ -75,7 +81,13 @@
         SELECT a.*,b.img_url AS imgurl
         FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t2.vol
                 FROM yw_goods t1,(
-                SELECT goodsid,count(*) AS vol FROM yw_sub_order GROUP BY goodsid) t2
+        SELECT d.goodsid,count(*) AS vol
+        FROM yw_sub_order d, yw_orders e
+        WHERE d.porderid = e.id
+        AND e.status IN (1,2,4,5)
+        AND month(e.paytime)=month(NOW())
+        GROUP BY d.goodsid
+        ) t2
                 WHERE t1.id = t2.goodsid
               ) a
         LEFT JOIN yw_goods_img b
@@ -95,6 +107,26 @@
         LIMIT #{defaultcount,jdbcType=INTEGER}) a
         LEFT JOIN yw_goods_img b
         ON a.id = b.goodsid
+    </select>
+
+    <!--查询一周热销前十商品列表-->
+    <select id="queryWeekHot" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT a.*,b.img_url AS imgurl
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t2.vol
+        FROM yw_goods t1,(
+        SELECT d.goodsid,count(*) AS vol
+        FROM yw_sub_order d, yw_orders e
+        WHERE d.porderid = e.id
+        AND e.status IN (1,2,4,5)
+        AND YEARWEEK(date_format(e.paytime,'%Y-%m-%d')) = YEARWEEK(now())
+        AND e.paytime
+        GROUP BY d.goodsid
+        ) t2
+        WHERE t1.id = t2.goodsid
+        LIMIT 10) a
+        LEFT JOIN yw_goods_img b
+        ON a.id = b.goodsid
+        ORDER BY vol DESC
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

@@ -42,7 +42,7 @@ public class MallIndexFacade {
         HomepageManage monthHomepage = homepageManageService.queryBanner(3);//商城--月度热销banner类型topictype为3
         map.put("monthHomepage", monthHomepage);
 
-        //查询热销榜前十商品
+        //查询月热销榜前十商品
         monthHotList = goodsService.queryMonthHot();
 
         //如果热销榜商品不足10件（用其他商品随机填充）
@@ -82,5 +82,40 @@ public class MallIndexFacade {
         List<GoodsVo> allMonthHotList = goodsService.queryAllMonthHot(pager);
 
         return allMonthHotList;
+    }
+
+    public Map<String, Object> queryWeekHot() {
+        Map<String, Object> map = new HashMap<>();
+        List<GoodsVo> weekHotList;
+
+        //先查询商城首页一周热销banner
+        HomepageManage weekHomepage = homepageManageService.queryBanner(4);//商城--一周热销banner类型topictype为4
+        map.put("weekHomepage", weekHomepage);
+
+        //查询一周热销榜前十商品
+        weekHotList = goodsService.queryWeekHot();
+
+        //如果热销榜商品不足10件（用其他商品随机填充）
+        if (weekHotList.size() < 10) {
+            List<GoodsVo> defaultList;//热销缺省商品列表
+
+            int[] ids = new int[10];//已经在热销榜的商品id的数组
+            for (int i = 0; i < weekHotList.size(); i++) {
+                ids[i] = weekHotList.get(i).getId();
+            }
+
+            int defaultcount = 10 - weekHotList.size();//前十热销榜缺省数
+
+            Map<String, Object> parammap = new HashMap<>();
+            parammap.put("ids", ids);
+            parammap.put("defaultcount", defaultcount);
+            defaultList = goodsService.queryDefaultGoods(parammap);
+            for (int i = 0; i < defaultList.size(); i++) {
+                weekHotList.add(defaultList.get(i));
+            }
+            map.put("weekHotList", weekHotList);
+        }
+
+        return map;
     }
 }
