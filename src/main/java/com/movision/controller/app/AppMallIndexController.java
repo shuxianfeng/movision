@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author shuxf
@@ -32,12 +33,12 @@ public class AppMallIndexController {
     public Response queryMonthHot() {
         Response response = new Response();
 
-        List<GoodsVo> monthHotList = mallIndexFacade.queryMonthHot();
+        Map<String, Object> map = mallIndexFacade.queryMonthHot();
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(monthHotList);
+        response.setData(map);
         return response;
     }
 }
