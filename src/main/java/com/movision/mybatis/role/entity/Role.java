@@ -57,4 +57,15 @@ public class Role {
     public void setIsdel(Integer isdel) {
         this.isdel = isdel;
     }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", rolename='" + rolename + '\'' +
+                ", remark='" + remark + '\'' +
+                ", intime=" + intime +
+                ", isdel=" + isdel +
+                '}';
+    }
 }

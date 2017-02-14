@@ -59,7 +59,7 @@ public class MenuController {
         return response;
     }
 
-    @ApiOperation(value = "查询菜单列表（分页）", notes = "查询菜单列表（分页）", response = Response.class)
+    /*@ApiOperation(value = "查询菜单列表（分页）", notes = "查询菜单列表（分页）", response = Response.class)
     @RequestMapping(value = "query_menu_list", method = RequestMethod.GET)
     public Response queryMenuList(@RequestParam(required = false, defaultValue = "1") String pageNo,
                                   @RequestParam(required = false, defaultValue = "10") String pageSize,
@@ -70,7 +70,7 @@ public class MenuController {
         pager.result(list);
         response.setData(pager);
         return response;
-    }
+    }*/
 
     @ApiOperation(value = "查询所有菜单", notes = "查询所有菜单", response = Response.class)
     @RequestMapping(value = "query_all_menu", method = RequestMethod.GET)

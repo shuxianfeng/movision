@@ -33,4 +33,13 @@ public class UserRoleRelation {
     public void setRoleid(Integer roleid) {
         this.roleid = roleid;
     }
+
+    @Override
+    public String toString() {
+        return "UserRoleRelation{" +
+                "id=" + id +
+                ", userid=" + userid +
+                ", roleid=" + roleid +
+                '}';
+    }
 }

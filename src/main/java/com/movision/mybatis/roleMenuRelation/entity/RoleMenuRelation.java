@@ -33,4 +33,13 @@ public class RoleMenuRelation {
     public void setMenuid(Integer menuid) {
         this.menuid = menuid;
     }
+
+    @Override
+    public String toString() {
+        return "RoleMenuRelation{" +
+                "id=" + id +
+                ", roleid=" + roleid +
+                ", menuid=" + menuid +
+                '}';
+    }
 }

@@ -93,5 +93,16 @@ public class BossUserVo implements Serializable {
         return newPassword;
     }
 
-
+    @Override
+    public String toString() {
+        return "BossUserVo{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", phone='" + phone + '\'' +
+                ", issuper=" + issuper +
+                ", newPassword='" + newPassword + '\'' +
+                ", roleid='" + roleid + '\'' +
+                '}';
+    }
 }

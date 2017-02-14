@@ -74,4 +74,17 @@ public class AuthMenu {
     public Boolean getAuthroize() {
         return isAuthroize != null;
     }
+
+    @Override
+    public String toString() {
+        return "AuthMenu{" +
+                "id=" + id +
+                ", menuname='" + menuname + '\'' +
+                ", pid=" + pid +
+                ", orderid=" + orderid +
+                ", isdel=" + isdel +
+                ", remark='" + remark + '\'' +
+                ", isAuthroize=" + isAuthroize +
+                '}';
+    }
 }

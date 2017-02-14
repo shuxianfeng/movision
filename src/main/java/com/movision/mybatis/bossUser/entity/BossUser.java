@@ -118,4 +118,21 @@ public class BossUser implements Serializable {
     public void setBeforelogintime(Date beforelogintime) {
         this.beforelogintime = beforelogintime;
     }
+
+    @Override
+    public String toString() {
+        return "BossUser{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", issuper=" + issuper +
+                ", status=" + status +
+                ", isdel=" + isdel +
+                ", createtime=" + createtime +
+                ", afterlogintime=" + afterlogintime +
+                ", beforelogintime=" + beforelogintime +
+                '}';
+    }
 }
