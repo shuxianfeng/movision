@@ -2,7 +2,11 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.user.MenuFacade;
+import com.movision.facade.user.RoleFacade;
+import com.movision.facade.user.RoleMenuRelationFacade;
 import com.movision.mybatis.bossMenu.entity.Menu;
+import com.movision.mybatis.bossMenu.entity.MenuDetail;
+import com.movision.mybatis.role.entity.Role;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -23,6 +27,12 @@ public class MenuController {
 
     @Autowired
     private MenuFacade menuFacade;
+
+    @Autowired
+    private RoleFacade roleFacade;
+
+    @Autowired
+    private RoleMenuRelationFacade roleMenuRelationFacade;
 
     @ApiOperation(value = "新增菜单", notes = "新增菜单", response = Response.class)
     @RequestMapping(value = "add_menu", method = RequestMethod.POST)
@@ -54,7 +64,8 @@ public class MenuController {
     @RequestMapping(value = "query_menu", method = RequestMethod.GET)
     public Response queryMenu(@ApiParam(value = "菜单id") @RequestParam int id) {
         Response response = new Response();
-        Menu menu = menuFacade.queryMenu(id);
+        MenuDetail menu = menuFacade.queryMenuDetail(id);
+
         response.setData(menu);
         return response;
     }
@@ -89,5 +100,27 @@ public class MenuController {
         response.setData(list);
         return response;
     }
+
+    @ApiOperation(value = "删除菜单", notes = "删除菜单", response = Response.class)
+    @RequestMapping(value = "del_menu", method = RequestMethod.POST)
+    public Response delMenu(@ApiParam(value = "菜单id") @RequestParam(required = true) Integer menuid) {
+        Response response = new Response();
+        //1 删除菜单角色关系表
+        roleMenuRelationFacade.delRelationByMenuid(menuid);
+        //2 逻辑删除菜单本身
+        menuFacade.delMenu(menuid);
+        return response;
+    }
+
+    @ApiOperation(value = "获取指定菜单的关联角色", notes = "获取指定菜单的关联角色", response = Response.class)
+    @RequestMapping(value = "get_relative_roles", method = RequestMethod.GET)
+    public Response getMenuAndRoleRelation(@ApiParam(value = "菜单id") @RequestParam(required = true) Integer id) {
+        Response response = new Response();
+        List<Role> list = roleFacade.getRoleByMenuid(id);
+        response.setData(list);
+        return response;
+    }
+
+
 
 }

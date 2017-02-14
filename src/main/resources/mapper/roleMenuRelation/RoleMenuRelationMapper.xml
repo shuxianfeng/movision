@@ -77,6 +77,13 @@
         </foreach>
     </delete>
 
+    <delete id="delRelationByMenuid" parameterType="int">
+        DELETE from yw_admin_role_menu where menuid IN
+        <foreach collection="array" item="menuid" open="(" separator="," close=")">
+            #{menuid}
+        </foreach>
+    </delete>
+
     <insert id="batchAddByMenuid" parameterType="java.util.HashMap">
         INSERT INTO yw_admin_role_menu (roleid, menuid)
         VALUES

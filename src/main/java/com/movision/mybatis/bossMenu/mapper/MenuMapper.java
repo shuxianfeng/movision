@@ -2,6 +2,7 @@ package com.movision.mybatis.bossMenu.mapper;
 
 import com.movision.mybatis.bossMenu.entity.AuthMenu;
 import com.movision.mybatis.bossMenu.entity.Menu;
+import com.movision.mybatis.role.entity.Role;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
@@ -26,6 +27,7 @@ public interface MenuMapper {
     void delMenu(int[] ids);
 
     List<Menu> selectByRoleid(@Param("roleid") Integer roleid);
+
 
     List<Menu> selectAllMenu();
 

@@ -68,6 +68,10 @@ public class RoleMenuRelationService {
         roleMenuRelationMapper.delRelationByRoleid(roleid);
     }
 
+    public void delRelationByMenuid(int[] menuid) {
+        roleMenuRelationMapper.delRelationByMenuid(menuid);
+    }
+
 
     public void batchAddByMenuid(Map map) {
         try {

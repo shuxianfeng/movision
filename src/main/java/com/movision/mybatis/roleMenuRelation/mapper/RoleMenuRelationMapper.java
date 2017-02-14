@@ -19,5 +19,9 @@ public interface RoleMenuRelationMapper {
 
     void delRelationByRoleid(int[] roleid);
 
+    void delRelationByMenuid(int[] menuid);
+
     void batchAddByMenuid(Map<String, Object> map);
+
+
 }

@@ -2,6 +2,7 @@ package com.movision.facade.user;
 
 import com.movision.mybatis.bossMenu.entity.AuthMenu;
 import com.movision.mybatis.bossMenu.entity.Menu;
+import com.movision.mybatis.bossMenu.entity.MenuDetail;
 import com.movision.mybatis.bossMenu.service.MenuService;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
@@ -36,9 +37,29 @@ public class MenuFacade {
         return menuService.updateMenu(menu);
     }
 
-    public Menu queryMenu(int id) {
-        return menuService.queryMenu(id);
+    public Boolean delMenu(Integer id) {
+        Menu menu = new Menu();
+        menu.setId(id);
+        menu.setIsdel(0);
+        return menuService.updateMenu(menu);
     }
+
+    public MenuDetail queryMenuDetail(int id) {
+        Menu menu = menuService.queryMenu(id);
+        int pid = menu.getPid();
+        String pname = null;
+        if (pid != 0) {
+            //查询父菜单
+            Menu pmenu = menuService.queryMenu(pid);
+            pname = pmenu.getMenuname();
+        }
+        MenuDetail menuDetail = new MenuDetail(
+                menu.getId(), menu.getMenuname(), menu.getPid(), menu.getOrderid(), menu.getIsdel(), menu.getRemark(), menu.getUrl(), pname
+        );
+        return menuDetail;
+    }
+
+
 
     public List<Menu> queryMenuList(Paging<Menu> pager, String menuname) {
 

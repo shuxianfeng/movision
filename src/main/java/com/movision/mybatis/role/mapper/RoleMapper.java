@@ -1,6 +1,7 @@
 package com.movision.mybatis.role.mapper;
 
 import com.movision.mybatis.role.entity.Role;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -25,6 +26,8 @@ public interface RoleMapper {
     List<Role> findAllRole(RowBounds rowBounds, Map<String, Object> map);
 
     List<Role> queryNotSuperAdminRoleComboList();
+
+    List<Role> selectByMenuid(@Param("menuid") Integer menuid);
 
 
 }

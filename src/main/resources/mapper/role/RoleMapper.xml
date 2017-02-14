@@ -109,5 +109,13 @@
         ORDER BY id
     </select>
 
+    <select id="selectByMenuid" resultType="com.movision.mybatis.role.entity.Role"
+            parameterType="java.lang.Integer">
+        select
+        r.*
+        FROM yw_admin_role r
+        LEFT JOIN yw_admin_role_menu rm ON r.id = rm.roleid
+        where rm.menuid = #{menuid}
+    </select>
 
 </mapper>

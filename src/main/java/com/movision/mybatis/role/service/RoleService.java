@@ -1,6 +1,7 @@
 package com.movision.mybatis.role.service;
 
 
+import com.movision.mybatis.bossMenu.entity.Menu;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.role.entity.Role;
 import com.movision.mybatis.role.mapper.RoleMapper;
@@ -85,6 +86,16 @@ public class RoleService {
             return roleMapper.selectByPrimaryKey(id);
         } catch (Exception e) {
             log.error("根据id查询角色信息失败，id=" + id);
+            throw e;
+        }
+    }
+
+    public List<Role> queryRoleByMenuid(Integer id) {
+        try {
+            log.info("根据菜单id查询角色");
+            return roleMapper.selectByMenuid(id);
+        } catch (Exception e) {
+            log.error("根据菜单id查询角色失败");
             throw e;
         }
     }

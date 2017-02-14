@@ -147,4 +147,8 @@ public class RoleFacade {
         roleMenuRelationService.batchAddByMenuid(map);
     }
 
+    public List<Role> getRoleByMenuid(Integer id) {
+        return roleService.queryRoleByMenuid(id);
+    }
+
 }

@@ -47,6 +47,13 @@ public class RoleMenuRelationFacade {
         roleMenuRelationService.delRelationByRoleid(roleid);
     }
 
+    public void delRelationByMenuid(int menuid) {
+        int[] arr = new int[1];
+        arr[0] = menuid;
+        roleMenuRelationService.delRelationByMenuid(arr);
+    }
+
+
     /**
      * 获取所有关联的菜单信息
      *

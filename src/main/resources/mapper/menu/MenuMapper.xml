@@ -47,9 +47,7 @@
             <if test="orderid != null">
                 orderid,
             </if>
-            <if test="isdel != null">
                 isdel,
-            </if>
             <if test="remark != null">
                 remark,
             </if>
@@ -70,9 +68,7 @@
             <if test="orderid != null">
                 #{orderid,jdbcType=INTEGER},
             </if>
-            <if test="isdel != null">
-                #{isdel,jdbcType=INTEGER},
-            </if>
+            1,
             <if test="remark != null">
                 #{remark,jdbcType=VARCHAR},
             </if>
@@ -136,6 +132,7 @@
         LEFT JOIN yw_admin_role_menu rm ON m.id = rm.menuid
         where rm.roleid = #{roleid}
     </select>
+
 
     <select id="selectAllMenu" resultMap="BaseResultMap">
         select

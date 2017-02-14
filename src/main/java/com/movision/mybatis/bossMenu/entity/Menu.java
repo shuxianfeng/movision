@@ -6,15 +6,17 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "菜单", description = "菜单")
 public class Menu {
     private Integer id;
-    @ApiModelProperty(value = "菜单名称", required = true)
+    @ApiModelProperty(value = "菜单名称")
     private String menuname;
 
+    @ApiModelProperty(value = "父菜单id,如果是父菜单为0")
     private Integer pid;
 
     private Integer orderid;
 
     private Integer isdel;
 
+    @ApiModelProperty(value = "备注")
     private String remark;
 
     @ApiModelProperty(value = "菜单的rest接口路径")
