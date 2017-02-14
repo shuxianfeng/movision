@@ -39,8 +39,12 @@ public class RoleFacade {
     @Autowired
     private RoleMenuRelationService roleMenuRelationService;
 
-    public Boolean addUserRole(Role role) {
-        return roleService.addUserRole(role);
+    public int addUserRole(String remark, String name) {
+        Role role = new Role();
+        role.setRemark(remark);
+        role.setRolename(name);
+        roleService.addUserRole(role);
+        return role.getId();
     }
 
     public void updateRole(String remark, String name, int id) {
@@ -106,7 +110,20 @@ public class RoleFacade {
 
     }
 
+    public void addRoleMenuRealtion(String menuid, int roleid) {
+        int roleidArray[] = new int[1];
+        roleidArray[0] = roleid;
 
+        this.batchAddByMenuid(menuid, roleid);
+    }
+
+
+    /**
+     * 批量新增role和menu关系
+     *
+     * @param menuids 多个菜单id
+     * @param roleid  一个role id
+     */
     public void batchAddByMenuid(String menuids, int roleid) {
         Map map = new HashedMap();
         String[] arr = menuids.split(",");

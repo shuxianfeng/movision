@@ -27,12 +27,11 @@
         values (#{id,jdbcType=INTEGER}, #{rolename,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
         #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
     </insert>
-    <insert id="insertSelective" parameterType="com.movision.mybatis.role.entity.Role">
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.movision.mybatis.role.entity.Role">
         insert into yw_admin_role
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
+
             <if test="rolename != null">
                 rolename,
             </if>
@@ -40,14 +39,10 @@
                 remark,
             </if>
                 intime,
-            <if test="isdel != null">
                 isdel,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
-            </if>
+
             <if test="rolename != null">
                 #{rolename,jdbcType=VARCHAR},
             </if>
@@ -55,9 +50,7 @@
                 #{remark,jdbcType=VARCHAR},
             </if>
                 now(),
-            <if test="isdel != null">
-                #{isdel,jdbcType=INTEGER},
-            </if>
+            0,
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.role.entity.Role">

@@ -104,14 +104,14 @@ public class RoleController {
 
     @ApiOperation(value = "新增角色", notes = "新增角色", response = Response.class)
     @RequestMapping(value = "add_role", method = RequestMethod.POST)
-    public Response addRole(@ApiParam @ModelAttribute Role role) {
+    public Response addRole(@ApiParam(value = "菜单id字符串，以逗号分隔") @RequestParam(required = true) String menuids,
+                            @ApiParam(value = "角色名称") @RequestParam(required = false) String name,
+                            @ApiParam(value = "备注") @RequestParam(required = false) String remark) {
         Response response = new Response();
-        boolean isAdd = roleFacade.addUserRole(role);
-        if (isAdd) {
-            response.setCode(200);
-        } else {
-            response.setCode(400);
-        }
+        //新增角色
+        int roleid = roleFacade.addUserRole(remark, name);
+        //新增角色的权限
+        roleFacade.addRoleMenuRealtion(menuids, roleid);
         return response;
     }
 
