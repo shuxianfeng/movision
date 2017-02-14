@@ -8,9 +8,10 @@
         <result column="orderid" property="orderid" jdbcType="INTEGER"/>
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, menuname, pid, orderid, isdel, remark
+        id, menuname, pid, orderid, isdel, remark, url
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -24,10 +25,11 @@
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.bossMenu.entity.Menu">
         insert into yw_admin_menu (id, menuname, pid,
-        orderid, isdel, remark
+        orderid, isdel, remark, url
         )
         values (#{id,jdbcType=INTEGER}, #{menuname,jdbcType=VARCHAR}, #{pid,jdbcType=INTEGER},
-        #{orderid,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}
+        #{orderid,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR},
+        #{url,jdbcType=VARCHAR}
         )
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.bossMenu.entity.Menu">
@@ -51,6 +53,9 @@
             <if test="remark != null">
                 remark,
             </if>
+            <if test="url != null">
+                url,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -70,6 +75,9 @@
             </if>
             <if test="remark != null">
                 #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -91,6 +99,9 @@
             <if test="remark != null">
                 remark = #{remark,jdbcType=VARCHAR},
             </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -100,7 +111,8 @@
         pid = #{pid,jdbcType=INTEGER},
         orderid = #{orderid,jdbcType=INTEGER},
         isdel = #{isdel,jdbcType=INTEGER},
-        remark = #{remark,jdbcType=VARCHAR}
+        remark = #{remark,jdbcType=VARCHAR},
+        url = #{url,jdbcType=VARCHAR},
         where id = #{id,jdbcType=INTEGER}
     </update>
 

@@ -17,6 +17,18 @@ public class Menu {
 
     private String remark;
 
+    @ApiModelProperty(value = "菜单的rest接口路径")
+    private String url;
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+
+        return url;
+    }
+
     public Integer getId() {
         return id;
     }
