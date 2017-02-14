@@ -89,6 +89,12 @@ public class MenuFacade {
         }
     }
 
+    /**
+     * 获取当前角色的所有授权菜单
+     *
+     * @param roleid
+     * @return
+     */
     public List<Map<String, Object>> getAuthroizeMenu(Integer roleid) {
         List<AuthMenu> allParentMenuList = menuService.getAllParentMenu();
         List<AuthMenu> allChildrenMenuList = menuService.getAllChildrenMenu();

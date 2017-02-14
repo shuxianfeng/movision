@@ -1,6 +1,7 @@
 package com.movision.controller.boss;
 
 import com.movision.common.Response;
+import com.movision.facade.user.MenuFacade;
 import com.movision.facade.user.RoleFacade;
 import com.movision.facade.user.RoleMenuRelationFacade;
 import com.movision.facade.user.UserRoleRelationFacade;
@@ -12,6 +13,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,13 +29,13 @@ public class RoleController {
     private RoleFacade roleFacade;
 
     @Autowired
+    private MenuFacade menuFacade;
+
+    @Autowired
     private UserRoleRelationFacade userRoleRelationFacade;
 
     @Autowired
     private RoleMenuRelationFacade roleMenuRelationFacade;
-
-
-
 
     @ApiOperation(value = "删除角色前的检查,获取角色的关联用户和菜单信息", notes = "删除角色前的检查,获取角色的关联用户和菜单信息", response = Response.class)
     @RequestMapping(value = "get_role_relative_info", method = RequestMethod.GET)
@@ -44,7 +46,6 @@ public class RoleController {
         response.setData(list);
         return response;
     }
-
 
     @ApiOperation(value = "删除角色", notes = "删除角色", response = Response.class)
     @RequestMapping(value = "del_role", method = RequestMethod.POST)
@@ -88,7 +89,7 @@ public class RoleController {
     }
 
     @ApiOperation(value = "修改角色", notes = "修改角色", response = Response.class)
-    @RequestMapping(value = "update_role_info", method = RequestMethod.GET)
+    @RequestMapping(value = "update_role_info", method = RequestMethod.POST)
     public Response updateRoleInfo(@ApiParam(value = "菜单id字符串，以逗号分隔") @RequestParam(required = true) String menuids,
                                    @ApiParam(value = "角色id") @RequestParam(required = true) int roleid,
                                    @ApiParam(value = "角色名称") @RequestParam(required = false) String name,
@@ -112,6 +113,22 @@ public class RoleController {
         int roleid = roleFacade.addUserRole(remark, name);
         //新增角色的权限
         roleFacade.addRoleMenuRealtion(menuids, roleid);
+        return response;
+    }
+
+    @ApiOperation(value = "查询角色详情", notes = "查询角色详情", response = Response.class)
+    @RequestMapping(value = "get_role_detail_info", method = RequestMethod.GET)
+    public Response getRoleDetailInfo(@ApiParam(value = "角色id") @RequestParam(required = true) int roleid) {
+        Response response = new Response();
+        //查询角色基本信息
+        Role role = roleFacade.getRoleById(roleid);
+        //查询角色菜单关系
+        List<Map<String, Object>> list = menuFacade.getAuthroizeMenu(roleid);
+
+        Map map = new HashMap();
+        map.put("roleinfo", role);
+        map.put("menuinfo", list);
+        response.setData(map);
         return response;
     }
 

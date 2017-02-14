@@ -39,6 +39,16 @@ public class RoleFacade {
     @Autowired
     private RoleMenuRelationService roleMenuRelationService;
 
+    public Role getRoleById(Integer id) {
+        try {
+            log.info("根据id查询角色");
+            return roleService.selectByPrimaryKey(id);
+        } catch (Exception e) {
+            log.error("根据id查询角色");
+            throw e;
+        }
+    }
+
     public int addUserRole(String remark, String name) {
         Role role = new Role();
         role.setRemark(remark);
