@@ -1,6 +1,7 @@
 package com.movision.mybatis.role.service;
 
 
+import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.role.entity.Role;
 import com.movision.mybatis.role.mapper.RoleMapper;
 import com.movision.utils.pagination.model.Paging;
@@ -33,6 +34,17 @@ public class RoleService {
             return n == 1;
         } catch (Exception e) {
             log.error("新增角色失败，role = " + role.toString());
+            throw e;
+        }
+    }
+
+    public Boolean updateRole(Role role) {
+        try {
+            log.info("修改角色信息");
+            int n = roleMapper.updateByPrimaryKeySelective(role);
+            return n == 1;
+        } catch (Exception e) {
+            log.error("修改角色信息失败");
             throw e;
         }
     }

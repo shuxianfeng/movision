@@ -6,6 +6,7 @@ import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.role.entity.Role;
 import com.movision.mybatis.role.service.RoleService;
+import com.movision.mybatis.roleMenuRelation.service.RoleMenuRelationService;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
@@ -23,7 +24,8 @@ import java.util.Map;
  */
 @Service
 public class RoleFacade {
-    private static Logger logger = LoggerFactory.getLogger(RoleFacade.class);
+
+    private static Logger log = LoggerFactory.getLogger(RoleFacade.class);
 
     @Autowired
     private RoleService roleService;
@@ -34,8 +36,19 @@ public class RoleFacade {
     @Autowired
     private BossUserService bossUserService;
 
+    @Autowired
+    private RoleMenuRelationService roleMenuRelationService;
+
     public Boolean addUserRole(Role role) {
         return roleService.addUserRole(role);
+    }
+
+    public void updateRole(String remark, String name, int id) {
+        Role role = new Role();
+        role.setId(id);
+        role.setRemark(remark);
+        role.setRolename(name);
+        roleService.updateRole(role);
     }
 
     public void delRoles(int[] ids) {
@@ -81,6 +94,30 @@ public class RoleFacade {
         }
 
         return list;
+    }
+
+    public void updateRoleMenuRelation(String menuids, int roleid) {
+        //先删除roleid对应的菜单关系
+        int roleidArray[] = new int[1];
+        roleidArray[0] = roleid;
+        roleMenuRelationService.delRelationByRoleid(roleidArray);
+        //再添加roleid对应的菜单关系
+        this.batchAddByMenuid(menuids, roleid);
+
+    }
+
+
+    public void batchAddByMenuid(String menuids, int roleid) {
+        Map map = new HashedMap();
+        String[] arr = menuids.split(",");
+        int len = arr.length;
+        int[] intarr = new int[len];
+        for (int i = 0; i < len; i++) {
+            intarr[i] = Integer.valueOf(arr[i]);
+        }
+        map.put("roleid", roleid);
+        map.put("menuids", intarr);
+        roleMenuRelationService.batchAddByMenuid(map);
     }
 
 }

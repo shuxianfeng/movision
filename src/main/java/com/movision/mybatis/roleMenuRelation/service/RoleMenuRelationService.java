@@ -4,6 +4,7 @@ import com.movision.mybatis.roleMenuRelation.entity.RoleMenuRelation;
 
 import com.movision.mybatis.roleMenuRelation.mapper.RoleMenuRelationMapper;
 import com.movision.utils.ListUtil;
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhuangyuhao
@@ -64,6 +66,17 @@ public class RoleMenuRelationService {
 
     public void delRelationByRoleid(int[] roleid) {
         roleMenuRelationMapper.delRelationByRoleid(roleid);
+    }
+
+
+    public void batchAddByMenuid(Map map) {
+        try {
+            log.info("批量增加菜单和权限关系");
+            roleMenuRelationMapper.batchAddByMenuid(map);
+        } catch (Exception e) {
+            log.error("批量增加菜单和权限关系失败");
+            throw e;
+        }
     }
 
 

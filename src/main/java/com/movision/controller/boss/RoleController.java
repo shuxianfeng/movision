@@ -33,18 +33,7 @@ public class RoleController {
     private RoleMenuRelationFacade roleMenuRelationFacade;
 
 
-    @ApiOperation(value = "新增角色", notes = "新增角色", response = Response.class)
-    @RequestMapping(value = "add_role", method = RequestMethod.POST)
-    public Response addRole(@ApiParam @ModelAttribute Role role) {
-        Response response = new Response();
-        boolean isAdd = roleFacade.addUserRole(role);
-        if (isAdd) {
-            response.setCode(200);
-        } else {
-            response.setCode(400);
-        }
-        return response;
-    }
+
 
     @ApiOperation(value = "删除角色前的检查,获取角色的关联用户和菜单信息", notes = "删除角色前的检查,获取角色的关联用户和菜单信息", response = Response.class)
     @RequestMapping(value = "get_role_relative_info", method = RequestMethod.GET)
@@ -95,6 +84,34 @@ public class RoleController {
         Response response = new Response();
         List<Role> comboList = roleFacade.queryNotSuperAdminRoleComboList();
         response.setData(comboList);
+        return response;
+    }
+
+    @ApiOperation(value = "修改角色", notes = "修改角色", response = Response.class)
+    @RequestMapping(value = "update_role_info", method = RequestMethod.GET)
+    public Response updateRoleInfo(@ApiParam(value = "菜单id字符串，以逗号分隔") @RequestParam(required = true) String menuids,
+                                   @ApiParam(value = "角色id") @RequestParam(required = true) int roleid,
+                                   @ApiParam(value = "角色名称") @RequestParam(required = false) String name,
+                                   @ApiParam(value = "备注") @RequestParam(required = false) String remark) {
+        Response response = new Response();
+        //先修改角色
+        roleFacade.updateRole(remark, name, roleid);
+        //再修改角色的权限
+        roleFacade.updateRoleMenuRelation(menuids, roleid);
+
+        return response;
+    }
+
+    @ApiOperation(value = "新增角色", notes = "新增角色", response = Response.class)
+    @RequestMapping(value = "add_role", method = RequestMethod.POST)
+    public Response addRole(@ApiParam @ModelAttribute Role role) {
+        Response response = new Response();
+        boolean isAdd = roleFacade.addUserRole(role);
+        if (isAdd) {
+            response.setCode(200);
+        } else {
+            response.setCode(400);
+        }
         return response;
     }
 

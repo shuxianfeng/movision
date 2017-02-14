@@ -2,6 +2,8 @@ package com.movision.mybatis.roleMenuRelation.mapper;
 
 import com.movision.mybatis.roleMenuRelation.entity.RoleMenuRelation;
 
+import java.util.Map;
+
 public interface RoleMenuRelationMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -16,4 +18,6 @@ public interface RoleMenuRelationMapper {
     int updateByPrimaryKey(RoleMenuRelation record);
 
     void delRelationByRoleid(int[] roleid);
+
+    void batchAddByMenuid(Map<String, Object> map);
 }
