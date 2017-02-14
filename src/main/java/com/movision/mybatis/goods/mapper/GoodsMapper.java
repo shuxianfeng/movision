@@ -28,6 +28,8 @@ public interface GoodsMapper {
 
     List<GoodsVo> queryAllWeekHot(RowBounds rowBounds);
 
+    List<GoodsVo> queryLastDayGodList();
+
     int updateByPrimaryKeySelective(Goods record);
 
     int updateByPrimaryKey(Goods record);

@@ -148,6 +148,20 @@
         ORDER BY vol DESC
     </select>
 
+    <!--查询最近一期的推荐神器列表-->
+    <select id="queryLastDayGodList" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT a.*,b.img_url AS imgurl
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice
+             FROM yw_goods t1
+            WHERE ishomepage = '1'
+              AND recommenddate = (
+                SELECT max(recommenddate) FROM yw_goods
+              )) a
+        LEFT JOIN yw_goods_img b
+        ON a.id = b.goodsid
+        LIMIT 10;
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_goods
         where id = #{id,jdbcType=INTEGER}

@@ -103,4 +103,23 @@ public class AppMallIndexController {
         response.setData(allWeekHotList);
         return response;
     }
+
+    /**
+     * 查询商城首页--每日神器推荐
+     *
+     * @return
+     */
+    @ApiOperation(value = "商城首页--每日神器推荐", notes = "用户返回首页每日神器推荐板块数据", response = Response.class)
+    @RequestMapping(value = "dayGodRecommend", method = RequestMethod.POST)
+    public Response queryDayGodRecommend() {
+        Response response = new Response();
+
+        Map<String, Object> map = mallIndexFacade.queryDayGodRecommend();
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
+    }
 }

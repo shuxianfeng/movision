@@ -62,9 +62,8 @@ public class MallIndexFacade {
             for (int i = 0; i < defaultList.size(); i++) {
                 monthHotList.add(defaultList.get(i));
             }
-            map.put("monthHotList", monthHotList);
         }
-
+        map.put("monthHotList", monthHotList);
         return map;
     }
 
@@ -123,9 +122,8 @@ public class MallIndexFacade {
             for (int i = 0; i < defaultList.size(); i++) {
                 weekHotList.add(defaultList.get(i));
             }
-            map.put("weekHotList", weekHotList);
         }
-
+        map.put("weekHotList", weekHotList);
         return map;
     }
 
@@ -148,5 +146,23 @@ public class MallIndexFacade {
         List<GoodsVo> allWeekHotList = goodsService.queryAllWeekHot(pager);
 
         return allWeekHotList;
+    }
+
+    /**
+     * 查询每日神器推荐
+     */
+    public Map<String, Object> queryDayGodRecommend() {
+        Map<String, Object> map = new HashMap<>();
+        List<GoodsVo> dayGodRecommendList;
+
+        //先查询商城首页一周热销banner
+        HomepageManage dayGodRecommendHomepage = homepageManageService.queryBanner(5);//商城--每日神器推荐banner的topictype为5
+        map.put("dayGodRecommendHomepage", dayGodRecommendHomepage);
+
+        //查询最近的一天的推荐神器列表(目前最多显示10个商品)
+        dayGodRecommendList = goodsService.queryLastDayGodList();
+
+        map.put("dayGodRecommendList", dayGodRecommendList);
+        return map;
     }
 }

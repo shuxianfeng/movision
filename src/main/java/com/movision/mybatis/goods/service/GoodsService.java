@@ -87,4 +87,14 @@ public class GoodsService {
             throw e;
         }
     }
+
+    public List<GoodsVo> queryLastDayGodList() {
+        try {
+            log.info("查询最近一期的推荐神器列表");
+            return goodsMapper.queryLastDayGodList();
+        } catch (Exception e) {
+            log.error("查询最近一期的推荐神器列表失败");
+            throw e;
+        }
+    }
 }
