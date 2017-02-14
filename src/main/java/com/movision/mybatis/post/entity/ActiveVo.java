@@ -56,6 +56,8 @@ public class ActiveVo {
 
     private Date essencedate;//精选日期
 
+    private Integer userid;//发帖人
+
     private Date begintime;//活动开始时间（为活动时使用）
 
     private Date endtime;//活动结束时间（为活动时使用）
@@ -288,5 +290,13 @@ public class ActiveVo {
 
     public void setEssencedate(Date essencedate) {
         this.essencedate = essencedate;
+    }
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
     }
 }
