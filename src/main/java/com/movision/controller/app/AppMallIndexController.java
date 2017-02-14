@@ -122,4 +122,24 @@ public class AppMallIndexController {
         response.setData(map);
         return response;
     }
+
+    /**
+     * 查询商城首页--往期所有推荐的神器列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "商城首页--往期推荐的所有神器列表", notes = "用户点击商城首页中每日神器推荐中的“查看全部”返回的数据接口")
+    @RequestMapping(value = "allGodRecommend", method = RequestMethod.POST)
+    public Response queryAllGodRecommend(@ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
+                                         @ApiParam(value = "每页多少条") @RequestParam(required = false) String pageSize) {
+        Response response = new Response();
+
+        List<GoodsVo> allGodRecommendList = mallIndexFacade.queryAllGodRecommend(pageNo, pageSize);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(allGodRecommendList);
+        return response;
+    }
 }

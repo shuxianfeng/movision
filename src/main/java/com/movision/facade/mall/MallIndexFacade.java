@@ -165,4 +165,21 @@ public class MallIndexFacade {
         map.put("dayGodRecommendList", dayGodRecommendList);
         return map;
     }
+
+    /**
+     * 查询往期所有神器推荐列表
+     */
+    public List<GoodsVo> queryAllGodRecommend(String pageNo, String pageSize) {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<GoodsVo> pager = new Paging<GoodsVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+
+        List<GoodsVo> dayGodRecommendList = goodsService.queryAllGodRecommend(pager);
+
+        return dayGodRecommendList;
+    }
 }

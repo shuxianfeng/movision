@@ -162,6 +162,17 @@
         LIMIT 10;
     </select>
 
+    <!--查询往期每日神器推荐列表-->
+    <select id="queryAllGodRecommend" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT a.*,b.img_url AS imgurl
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice
+                FROM yw_goods t1
+                WHERE ishomepage = '1'
+				ORDER BY t1.recommenddate DESC) a
+        LEFT JOIN yw_goods_img b
+        ON a.id = b.goodsid
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_goods
         where id = #{id,jdbcType=INTEGER}

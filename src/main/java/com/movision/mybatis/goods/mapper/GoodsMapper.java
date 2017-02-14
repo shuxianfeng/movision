@@ -30,6 +30,8 @@ public interface GoodsMapper {
 
     List<GoodsVo> queryLastDayGodList();
 
+    List<GoodsVo> queryAllGodRecommend(RowBounds rowBounds);
+
     int updateByPrimaryKeySelective(Goods record);
 
     int updateByPrimaryKey(Goods record);

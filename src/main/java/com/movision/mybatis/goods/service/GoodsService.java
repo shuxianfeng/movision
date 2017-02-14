@@ -97,4 +97,14 @@ public class GoodsService {
             throw e;
         }
     }
+
+    public List<GoodsVo> queryAllGodRecommend(Paging<GoodsVo> pager) {
+        try {
+            log.info("查询往期每日神器推荐列表");
+            return goodsMapper.queryAllGodRecommend(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询往期每日神器推荐列表失败");
+            throw e;
+        }
+    }
 }
