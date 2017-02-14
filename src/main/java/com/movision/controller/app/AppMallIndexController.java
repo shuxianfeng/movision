@@ -83,4 +83,24 @@ public class AppMallIndexController {
         response.setData(map);
         return response;
     }
+
+    /**
+     * 查询商城首页--月度热销榜单“查看全部”
+     *
+     * @return
+     */
+    @ApiOperation(value = "商城首页一周热销榜单--点击“查看全部”接口", notes = "点击查看全部跳转到全部一周热销榜单分页列表", response = Response.class)
+    @RequestMapping(value = "allWeekHot", method = RequestMethod.POST)
+    public Response queryAllWeekHot(@ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
+                                    @ApiParam(value = "每页多少条") @RequestParam(required = false) String pageSize) {
+        Response response = new Response();
+
+        List<GoodsVo> allWeekHotList = mallIndexFacade.queryAllWeekHot(pageNo, pageSize);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(allWeekHotList);
+        return response;
+    }
 }

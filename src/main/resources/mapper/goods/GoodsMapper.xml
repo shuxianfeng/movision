@@ -129,6 +129,25 @@
         ORDER BY vol DESC
     </select>
 
+    <!--查询一周热销-点击查看全部查询所有一周热销商品列表-->
+    <select id="queryAllWeekHot" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT a.*,b.img_url AS imgurl
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t2.vol
+                FROM yw_goods t1,(
+        SELECT d.goodsid,count(*) AS vol
+        FROM yw_sub_order d, yw_orders e
+        WHERE d.porderid = e.id
+        AND e.status IN (1,2,4,5)
+        AND YEARWEEK(date_format(e.paytime,'%Y-%m-%d')) = YEARWEEK(now())
+        GROUP BY d.goodsid
+        ) t2
+                WHERE t1.id = t2.goodsid
+              ) a
+        LEFT JOIN yw_goods_img b
+        ON a.id = b.goodsid
+        ORDER BY vol DESC
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_goods
         where id = #{id,jdbcType=INTEGER}

@@ -77,4 +77,14 @@ public class GoodsService {
             throw e;
         }
     }
+
+    public List<GoodsVo> queryAllWeekHot(Paging<GoodsVo> pager) {
+        try {
+            log.info("一周热销商品--点击查看全部接口返回列表");
+            return goodsMapper.queryAllWeekHot(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("一周热销商品--点击查看全部接口返回列表失败");
+            throw e;
+        }
+    }
 }

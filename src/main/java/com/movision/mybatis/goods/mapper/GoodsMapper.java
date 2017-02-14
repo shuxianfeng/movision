@@ -26,6 +26,8 @@ public interface GoodsMapper {
 
     List<GoodsVo> queryAllMonthHot(RowBounds rowBounds);
 
+    List<GoodsVo> queryAllWeekHot(RowBounds rowBounds);
+
     int updateByPrimaryKeySelective(Goods record);
 
     int updateByPrimaryKey(Goods record);

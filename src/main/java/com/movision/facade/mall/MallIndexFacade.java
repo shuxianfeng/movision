@@ -30,7 +30,6 @@ public class MallIndexFacade {
 
     /**
      * 查询月度销量前十的商品列表
-     *
      * @return
      */
     public Map<String, Object> queryMonthHot() {
@@ -69,6 +68,13 @@ public class MallIndexFacade {
         return map;
     }
 
+    /**
+     * 查询所有月度热销商品列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
     public List<GoodsVo> queryAllMonthHot(String pageNo, String pageSize) {
 
         if (StringUtils.isEmpty(pageNo)) {
@@ -84,6 +90,10 @@ public class MallIndexFacade {
         return allMonthHotList;
     }
 
+    /**
+     * 查询一周销量前十的商品列表
+     * @return
+     */
     public Map<String, Object> queryWeekHot() {
         Map<String, Object> map = new HashMap<>();
         List<GoodsVo> weekHotList;
@@ -117,5 +127,26 @@ public class MallIndexFacade {
         }
 
         return map;
+    }
+
+    /**
+     * 查询所有一周热销商品列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    public List<GoodsVo> queryAllWeekHot(String pageNo, String pageSize) {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Paging<GoodsVo> pager = new Paging<GoodsVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+
+        List<GoodsVo> allWeekHotList = goodsService.queryAllWeekHot(pager);
+
+        return allWeekHotList;
     }
 }
