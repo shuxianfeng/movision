@@ -1,5 +1,7 @@
 package com.movision.mybatis.goods.service;
 
+import com.movision.mybatis.category.entity.Category;
+import com.movision.mybatis.category.mapper.CategoryMapper;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.mapper.GoodsMapper;
@@ -26,6 +28,9 @@ public class GoodsService {
 
     @Autowired
     private GoodsMapper goodsMapper;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     public List<GoodsVo> queryActiveGoods(Paging<Goods> pager, String postid) {
         try {
@@ -124,6 +129,16 @@ public class GoodsService {
             return goodsMapper.queryHotGoods();
         } catch (Exception e) {
             log.error("查询商城首页热门商品列表失败");
+            throw e;
+        }
+    }
+
+    public List<Category> queryGoodsCategory() {
+        try {
+            log.info("查询商城首页商品分类列表");
+            return categoryMapper.queryGoodsCategory();
+        } catch (Exception e) {
+            log.error("查询商城首页商品分类列表失败");
             throw e;
         }
     }

@@ -1,5 +1,6 @@
 package com.movision.facade.mall;
 
+import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
@@ -195,5 +196,12 @@ public class MallIndexFacade {
      */
     public List<GoodsVo> queryHotGoods() {
         return goodsService.queryHotGoods();
+    }
+
+    /**
+     * 查询商城首页--商品分类列表
+     */
+    public List<Category> queryGoodsCategory() {
+        return goodsService.queryGoodsCategory();
     }
 }
