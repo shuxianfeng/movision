@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movision.mybatis.category.mapper.CategoryMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.category.entity.Category">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="protype" jdbcType="INTEGER" property="protype"/>
+        <result column="typename" jdbcType="VARCHAR" property="typename"/>
+        <result column="subtitle" jdbcType="VARCHAR" property="subtitle"/>
+        <result column="intime" jdbcType="TIMESTAMP" property="intime"/>
+        <result column="imgurl" jdbcType="VARCHAR" property="imgurl"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, protype, typename, subtitle, intime, imgurl
+  </sql>
+
+    <!--基础查询语句-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_category
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!---->
+    <select id="queryGoodsCategory" resultType="com.movision.mybatis.category.entity.Category">
+    SELECT id, protype, typename, imgurl FROM yw_category
+  </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_category
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.category.entity.Category">
+    insert into yw_category (id, protype, typename, 
+      subtitle, intime, imgurl
+      )
+    values (#{id,jdbcType=INTEGER}, #{protype,jdbcType=INTEGER}, #{typename,jdbcType=VARCHAR}, 
+      #{subtitle,jdbcType=VARCHAR}, #{intime,jdbcType=TIMESTAMP}, #{imgurl,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.category.entity.Category">
+        insert into yw_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="protype != null">
+                protype,
+            </if>
+            <if test="typename != null">
+                typename,
+            </if>
+            <if test="subtitle != null">
+                subtitle,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="imgurl != null">
+                imgurl,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="protype != null">
+                #{protype,jdbcType=INTEGER},
+            </if>
+            <if test="typename != null">
+                #{typename,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null">
+                #{subtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="imgurl != null">
+                #{imgurl,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.category.entity.Category">
+        update yw_category
+        <set>
+            <if test="protype != null">
+                protype = #{protype,jdbcType=INTEGER},
+            </if>
+            <if test="typename != null">
+                typename = #{typename,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null">
+                subtitle = #{subtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="imgurl != null">
+                imgurl = #{imgurl,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.category.entity.Category">
+    update yw_category
+    set protype = #{protype,jdbcType=INTEGER},
+      typename = #{typename,jdbcType=VARCHAR},
+      subtitle = #{subtitle,jdbcType=VARCHAR},
+      intime = #{intime,jdbcType=TIMESTAMP},
+      imgurl = #{imgurl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -2,6 +2,7 @@ package com.movision.controller.app;
 
 import com.movision.common.Response;
 import com.movision.facade.mall.MallIndexFacade;
+import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -176,6 +177,23 @@ public class AppMallIndexController {
             response.setMessage("查询成功");
         }
         response.setData(hotGoodsList);
+        return response;
+    }
+
+    /**
+     * 商城首页--商品分类列表接口
+     */
+    @ApiOperation(value = "查询商城首页--商品分类列表接口", notes = "用户用于加载商城首页商品分类板块数据列表")
+    @RequestMapping(value = "goodsCategory", method = RequestMethod.POST)
+    public Response queryGoodsCategory() {
+        Response response = new Response();
+
+        List<Category> goodsCategoryList = mallIndexFacade.queryGoodsCategory();
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(goodsCategoryList);
         return response;
     }
 }
