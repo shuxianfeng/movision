@@ -403,7 +403,7 @@ public class PostFacade {
      * @param time
      * @return
      */
-    public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid, File vid,
+    public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid, MultipartFile vid,
                                         MultipartFile coverimg, String postcontent, String isessence, String isessencepool, String orderid, String time) {
         Post post = new Post();
         Map<String, Integer> map = new HashedMap();
@@ -412,10 +412,10 @@ public class PostFacade {
         post.setSubtitle(subtitle);//帖子副标题
         post.setType(Integer.parseInt(type));//帖子类型
         post.setCircleid(Integer.parseInt(circleid));//圈子id
-            File vod = vid;
             // post.setCoverimg(coverimg);//帖子封面
             //上传图片到本地服务器
             String savedFileName = "";
+            String savedVideo = "";
             if (!coverimg.isEmpty()) {
                 String fileRealName = coverimg.getOriginalFilename();
                 int pointIndex = fileRealName.indexOf(".");
@@ -432,6 +432,25 @@ public class PostFacade {
                 boolean isCreateSuccess = savedFile.createNewFile();
                 if (isCreateSuccess) {
                     coverimg.transferTo(savedFile);  //转存文件
+                }
+            }
+
+            if (!vid.isEmpty()) {
+                String fileRealName = vid.getOriginalFilename();
+                int pointIndex = fileRealName.indexOf(".");
+                String fileSuffix = fileRealName.substring(pointIndex);
+                UUID FileId = UUID.randomUUID();
+                savedVideo = FileId.toString().replace("-", "").concat(fileSuffix);
+                String savedDir = request.getSession().getServletContext().getRealPath("");
+                //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                //不保存到项目中,防止部包把图片覆盖掉了
+                String path = savedDir.substring(0, savedDir.length() - 9);
+                //这里组合出真实的图片存储路径
+                String combinpath = savedDir + "/images/post/video";
+                File savedFile = new File(savedDir, savedVideo);
+                boolean isCreateSuccess = savedFile.createNewFile();
+                if (isCreateSuccess) {
+                    vid.transferTo(savedFile);  //转存文件
                 }
             }
 
