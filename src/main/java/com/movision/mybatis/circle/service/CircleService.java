@@ -245,10 +245,10 @@ public class CircleService {
      *
      * @return
      */
-    public List<Circle> queryListByCircleList() {
+    public List<Circle> queryListByCircleList(Integer in) {
         try {
             log.info("查询圈子所有名称");
-            return circleMapper.queryListByCircleList();
+            return circleMapper.queryListByCircleList(in);
         } catch (Exception e) {
             log.error("查询圈子所有名称异常");
             throw e;

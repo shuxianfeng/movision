@@ -344,7 +344,8 @@
         SELECT DISTINCT category FROM yw_circle ORDER BY category
     </select>
 
-    <select id="queryListByCircleList" resultType="com.movision.mybatis.circle.entity.Circle">
-        SELECT id,name,category FROM yw_circle
+    <select id="queryListByCircleList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.circle.entity.Circle">
+        SELECT id,name,category FROM yw_circle WHERE category=#{in,jdbcType=INTEGER}
     </select>
 </mapper>

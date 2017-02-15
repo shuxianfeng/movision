@@ -320,14 +320,8 @@ public class PostFacade {
         List<Integer> list = circleService.queryListByCircleCategory();//查询圈子所有的所属分类
         List<List<Circle>> circlename = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {//根据圈子的所属分类添加二级菜单
-            List<Circle> circle = circleService.queryListByCircleList();//用于查询圈子名称
-            List<Circle> names = new ArrayList<>();
-            for (int j = 0; j < circle.size(); j++) {
-                if (list.get(i).equals(circle.get(j).getCategory())) {//当分类类型匹配时把匹配的数据封装在List中
-                    names.add(circle.get(i));
-                }
-            }
-            circlename.add(names);//把一同类存放在一起
+            List<Circle> circle = circleService.queryListByCircleList(list.get(i));//用于查询圈子名称
+            circlename.add(circle);
         }
         return circlename;
     }
