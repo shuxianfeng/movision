@@ -491,8 +491,10 @@ public class PostFacade {
             }
         }
         post.setEssencedate(isessencetime);
-        post.setOrderid(Integer.parseInt(orderid));//排序精选
-        post.setUserid(Integer.parseInt(userid));//发帖人
+        if(orderid!=null) {
+            post.setOrderid(Integer.parseInt(orderid));//排序精选
+        }
+         post.setUserid(Integer.parseInt(userid));//发帖人
         post.setIsactive(1);
         int result = postService.addPostActiveList(post);//添加帖子
         Period period = new Period();
