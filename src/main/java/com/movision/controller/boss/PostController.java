@@ -246,7 +246,7 @@ public class PostController {
                             @ApiParam(value = "帖子内容") @RequestParam String postcontent,//帖子内容
                             @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
                             @ApiParam(value = "圈子精选") @RequestParam(required = false) String isessencepool,//精选池中的帖子圈子精选贴
-                            @ApiParam(value = "精选排序") @RequestParam String orderid,//精选排序
+                            @ApiParam(value = "精选排序") @RequestParam(required = false) String orderid,//精选排序
                             @ApiParam(value = "精选日期") @RequestParam(required = false) String time) {//精选日期
         Response response = new Response();
         Map<String, Integer> resaut = postFacade.addPost(title, subtitle, type, circleid, vid, coverimg, postcontent, isessence, isessencepool, orderid, time);

@@ -251,7 +251,9 @@ public class PostFacade {
             post.setIsessencepool(Integer.parseInt(isessencepool));//是否为圈子精选
         }
         post.setIntime(new Date());
-        post.setOrderid(Integer.parseInt(orderid));
+        if (orderid != null) {
+            post.setOrderid(Integer.parseInt(orderid));
+        }
         Date isessencetime = null;//加精时间
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
         if (time != null) {
