@@ -339,4 +339,12 @@
             parameterType="java.lang.Integer">
         SELECT name,category FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER}
     </select>
+
+    <select id="queryListByCircleCategory" resultType="java.lang.Integer">
+        SELECT DISTINCT category FROM yw_circle ORDER BY category
+    </select>
+
+    <select id="queryListByCircleList" resultType="com.movision.mybatis.circle.entity.Circle">
+        SELECT id,name,category FROM yw_circle
+    </select>
 </mapper>

@@ -436,4 +436,9 @@
         WHERE appuser.phone = #{phone}
     </select>
 
+    <select id="likeQueryPostByNickname" resultType="com.movision.mybatis.user.entity.UserLike"
+            parameterType="java.lang.String">
+        SELECT u.nickname,u.id FROM yw_user u WHERE nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+    </select>
+
 </mapper>

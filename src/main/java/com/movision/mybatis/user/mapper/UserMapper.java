@@ -1,10 +1,8 @@
 package com.movision.mybatis.user.mapper;
 
-import com.movision.mybatis.user.entity.LoginUser;
-import com.movision.mybatis.user.entity.RegisterUser;
-import com.movision.mybatis.user.entity.User;
-import com.movision.mybatis.user.entity.UserVo;
+import com.movision.mybatis.user.entity.*;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 import java.util.Map;
@@ -53,4 +51,6 @@ public interface UserMapper {
     String queryUserByNickname(Integer circleid);
 
     User queryUser(String phone);
+
+    List<UserLike> likeQueryPostByNickname(String name, RowBounds rowBounds);
 }

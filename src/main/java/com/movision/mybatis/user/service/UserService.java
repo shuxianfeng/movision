@@ -4,10 +4,7 @@ import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.mapper.PostMapper;
-import com.movision.mybatis.user.entity.LoginUser;
-import com.movision.mybatis.user.entity.RegisterUser;
-import com.movision.mybatis.user.entity.User;
-import com.movision.mybatis.user.entity.UserVo;
+import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.mapper.UserMapper;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -208,6 +205,16 @@ public class UserService {
             return userMapper.queryUser(phone);
         } catch (Exception e) {
             log.error("查询用户信息异常");
+            throw e;
+        }
+    }
+
+    public List<UserLike> likeQueryPostByNickname(String name, Paging<UserLike> pager) {
+        try {
+            log.info("模糊查询发帖人");
+            return userMapper.likeQueryPostByNickname(name, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("模糊查询发帖人异常");
             throw e;
         }
     }

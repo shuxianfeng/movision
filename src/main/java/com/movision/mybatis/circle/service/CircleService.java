@@ -225,4 +225,34 @@ public class CircleService {
         }
     }
 
+    /**
+     * 查询圈子中所有圈子所属分类
+     *
+     * @return
+     */
+    public List<Integer> queryListByCircleCategory() {
+        try {
+            log.info("查询圈子中所有圈子所属分类");
+            return circleMapper.queryListByCircleCategory();
+        } catch (Exception e) {
+            log.error("查询圈子中所有圈子所属分类异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询圈子所有的名称和id
+     *
+     * @return
+     */
+    public List<Circle> queryListByCircleList() {
+        try {
+            log.info("查询圈子所有名称");
+            return circleMapper.queryListByCircleList();
+        } catch (Exception e) {
+            log.error("查询圈子所有名称异常");
+            throw e;
+        }
+    }
+
 }

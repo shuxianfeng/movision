@@ -18,6 +18,7 @@ import com.movision.mybatis.rewarded.service.RewardedService;
 import com.movision.mybatis.share.entity.SharesVo;
 import com.movision.mybatis.share.service.SharesService;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
@@ -156,17 +157,21 @@ public class PostFacade {
      * @param content
      * @return
      */
-    public int addPostAppraise(String postid, String userid, String content) {
+    public Map<String, Integer> addPostAppraise(String postid, String userid, String content) {
         CommentVo comm = new CommentVo();
         comm.setPostid(Integer.parseInt(postid));
         comm.setUserid(Integer.parseInt(userid));
         comm.setIntime(new Date());
         comm.setContent(content);
+        Map<String, Integer> map = new HashedMap();
+        int status;
         int c = commentService.insertComment(comm);
         if (c == 1) {
             postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子的评论数
+            status = 2;
+            map.put("status", status);
         }
-        return 1;
+        return map;
     }
 
     /**
@@ -229,7 +234,7 @@ public class PostFacade {
      * @return
      */
     public Map<String, Integer> addPost(String title, String subtitle, String type, String circleid, String vid,
-                                        String coverimg, String postcontent, String isessence, String isessencepool, String time) {
+                                        String coverimg, String postcontent, String isessence, String isessencepool, String orderid, String time) {
         Post post = new Post();
         Map<String, Integer> map = new HashedMap();
         post.setTitle(title);//帖子标题
@@ -246,6 +251,7 @@ public class PostFacade {
             post.setIsessencepool(Integer.parseInt(isessencepool));//是否为圈子精选
         }
         post.setIntime(new Date());
+        post.setOrderid(Integer.parseInt(orderid));
         Date isessencetime = null;//加精时间
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
         if (time != null) {
@@ -304,6 +310,26 @@ public class PostFacade {
      */
     public List<SharesVo> queryPostShareList(String postid, Paging<SharesVo> pager) {
         return sharesService.queryPostShareList(pager, Integer.parseInt(postid));
+    }
+
+    public List<UserLike> likeQueryPostByNickname(String name, Paging<UserLike> pager) {
+        return userService.likeQueryPostByNickname(name, pager);
+    }
+
+    public List<List<Circle>> queryListByCircleType() {
+        List<Integer> list = circleService.queryListByCircleCategory();//查询圈子所有的所属分类
+        List<List<Circle>> circlename = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {//根据圈子的所属分类添加二级菜单
+            List<Circle> circle = circleService.queryListByCircleList();//用于查询圈子名称
+            List<Circle> names = new ArrayList<>();
+            for (int j = 0; j < circle.size(); j++) {
+                if (list.get(i).equals(circle.get(j).getCategory())) {//当分类类型匹配时把匹配的数据封装在List中
+                    names.add(circle.get(i));
+                }
+            }
+            circlename.add(names);//把一同类存放在一起
+        }
+        return circlename;
     }
 
 

@@ -2,6 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.PostFacade;
+import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.post.entity.Post;
@@ -9,6 +10,7 @@ import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.share.entity.SharesVo;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -138,14 +140,25 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 添加评论接口
+     *
+     * @param postid
+     * @param userid
+     * @param content
+     * @return
+     */
+    @ApiOperation(value = "添加评论", notes = "用于添加评论接口", response = Response.class)
+    @RequestMapping(value = "add_post_comment", method = RequestMethod.POST)
     public Response addPostAppraise(@ApiParam(value = "帖子id") @RequestParam String postid,
                                     @ApiParam(value = "评论人") @RequestParam String userid,
                                     @ApiParam(value = "评论内容") @RequestParam String content) {
         Response response = new Response();
-        postFacade.addPostAppraise(postid, userid, content);
+        Map<String, Integer> status = postFacade.addPostAppraise(postid, userid, content);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
+        response.setData(status);
         return response;
     }
 
@@ -233,9 +246,10 @@ public class PostController {
                             @ApiParam(value = "帖子内容") @RequestParam String postcontent,//帖子内容
                             @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
                             @ApiParam(value = "圈子精选") @RequestParam(required = false) String isessencepool,//精选池中的帖子圈子精选贴
+                            @ApiParam(value = "精选排序") @RequestParam String orderid,//精选排序
                             @ApiParam(value = "精选日期") @RequestParam(required = false) String time) {//精选日期
         Response response = new Response();
-        Map<String, Integer> resaut = postFacade.addPost(title, subtitle, type, circleid, vid, coverimg, postcontent, isessence, isessencepool, time);
+        Map<String, Integer> resaut = postFacade.addPost(title, subtitle, type, circleid, vid, coverimg, postcontent, isessence, isessencepool, orderid, time);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -284,6 +298,46 @@ public class PostController {
         }
         pager.result(list);
         response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 模糊查询发帖人
+     *
+     * @param name
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "模糊查询发帖人", notes = "用于模糊查询发帖人接口", response = Response.class)
+    @RequestMapping(value = "/like_query_post_nickname", method = RequestMethod.POST)
+    public Response likeQueryPostByNickname(@ApiParam(value = "关键字") @RequestParam String name,
+                                            @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                            @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<UserLike> pager = new Paging<UserLike>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<UserLike> list = postFacade.likeQueryPostByNickname(name, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return response;
+    }
+
+    /**
+     * 选择圈子类型
+     *
+     * @return
+     */
+    @ApiOperation(value = "选择圈子类型", notes = "用于选择圈子类型接口", response = Response.class)
+    @RequestMapping(value = "/query_list_circle_type", method = RequestMethod.POST)
+    public Response queryListByCircleType() {
+        Response response = new Response();
+        List<List<Circle>> list = postFacade.queryListByCircleType();
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(list);
         return response;
     }
 

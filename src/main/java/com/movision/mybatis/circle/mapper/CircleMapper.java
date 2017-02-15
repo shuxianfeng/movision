@@ -49,4 +49,8 @@ public interface CircleMapper {
     Integer queryCircleByNum();
 
     Circle queryCircleByName(Integer circleid);
+
+    List<Integer> queryListByCircleCategory();
+
+    List<Circle> queryListByCircleList();
 }
