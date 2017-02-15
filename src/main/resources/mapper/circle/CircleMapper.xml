@@ -114,20 +114,27 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.circle.entity.Circle">
-    insert into yw_circle (id, isofficial, scope, 
-      phone, photo, category, 
-      code, name, introduction, 
+        insert into yw_circle (id, isofficial, scope,
+        phone, photo, category,
+        code, name, introduction,
       notice, permission, isrecommend, maylikeimg,
         createtime, status, supportnum, isdiscover,
       orderid)
-    values (#{id,jdbcType=INTEGER}, #{isofficial,jdbcType=INTEGER}, #{scope,jdbcType=INTEGER}, 
-      #{phone,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{category,jdbcType=INTEGER}, 
-      #{code,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}, 
+        values (#{id,jdbcType=INTEGER}, #{isofficial,jdbcType=INTEGER}, #{scope,jdbcType=INTEGER},
+        #{phone,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{category,jdbcType=INTEGER},
+        #{code,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR},
       #{notice,jdbcType=VARCHAR}, #{permission,jdbcType=INTEGER}, #{isrecommend,jdbcType=INTEGER}, #{maylikeimg,jdbcType=INTEGER},
         #{createtime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{supportnum,jdbcType=INTEGER},
         #{isdiscover,jdbcType=INTEGER},
       #{orderid,jdbcType=INTEGER})
   </insert>
+
+    <!--新增一条该用户支持该圈子的记录-->
+    <insert id="addSupportRecored" parameterType="java.util.Map">
+      INSERT INTO yw_circle_support_record (circleid, userid)
+      VALUES (#{circleid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER})
+    </insert>
+
     <insert id="insertSelective" parameterType="com.movision.mybatis.circle.entity.Circle">
         insert into yw_circle
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -301,26 +308,33 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.circle.entity.Circle">
-    update yw_circle
-    set isofficial = #{isofficial,jdbcType=INTEGER},
-      scope = #{scope,jdbcType=INTEGER},
-      phone = #{phone,jdbcType=VARCHAR},
-      photo = #{photo,jdbcType=VARCHAR},
-      category = #{category,jdbcType=INTEGER},
-      code = #{code,jdbcType=INTEGER},
-      name = #{name,jdbcType=VARCHAR},
-      introduction = #{introduction,jdbcType=VARCHAR},
-      notice = #{notice,jdbcType=VARCHAR},
-      permission = #{permission,jdbcType=INTEGER},
-      isrecommend = #{isrecommend,jdbcType=INTEGER},
-      maylikeimg = #{maylikeimg,jdbcType=INTEGER},
-      createtime = #{createtime,jdbcType=TIMESTAMP},
+        update yw_circle
+        set isofficial = #{isofficial,jdbcType=INTEGER},
+        scope = #{scope,jdbcType=INTEGER},
+        phone = #{phone,jdbcType=VARCHAR},
+        photo = #{photo,jdbcType=VARCHAR},
+        category = #{category,jdbcType=INTEGER},
+        code = #{code,jdbcType=INTEGER},
+        name = #{name,jdbcType=VARCHAR},
+        introduction = #{introduction,jdbcType=VARCHAR},
+        notice = #{notice,jdbcType=VARCHAR},
+        permission = #{permission,jdbcType=INTEGER},
+        isrecommend = #{isrecommend,jdbcType=INTEGER},
+        maylikeimg = #{maylikeimg,jdbcType=INTEGER},
+        createtime = #{createtime,jdbcType=TIMESTAMP},
         status = #{status,jdbcType=INTEGER},
-      supportnum = #{supportnum,jdbcType=INTEGER},
-      isdiscover = #{isdiscover,jdbcType=INTEGER},
-      orderid = #{orderid,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+        supportnum = #{supportnum,jdbcType=INTEGER},
+        isdiscover = #{isdiscover,jdbcType=INTEGER},
+        orderid = #{orderid,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!--给审核中的圈子总支持数+1-->
+    <update id="addSupportSum" parameterType="java.util.Map">
+        UPDATE yw_circle
+        SET supportnum = supportnum+1
+        WHERE id = #{circleid,jdbcType=INTEGER}
+    </update>
 
     <select id="findAllqueryCircleByList" resultType="com.movision.mybatis.circle.entity.CircleVo">
         SELECT c.id,c.name,c.category,c.supportnum,c.phone,c.status,c.createtime FROM yw_circle c WHERE c.isdel=0

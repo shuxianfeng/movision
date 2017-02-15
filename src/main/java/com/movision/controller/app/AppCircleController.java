@@ -89,4 +89,20 @@ public class AppCircleController {
         response.setData(circleinfo);
         return response;
     }
+
+    @ApiOperation(value = "待审的圈子点击支持接口", notes = "用于圈子分类列表中待审核的圈子，用户点击支持他的接口", response = Response.class)
+    @RequestMapping(value = "supportCircle", method = RequestMethod.POST)
+    public Response supportCircle(@ApiParam(value = "用户id") @RequestParam String userid,
+                                  @ApiParam(value = "圈子id") @RequestParam String circleid) {
+        Response response = new Response();
+
+        int flag = facadeCircle.supportCircle(userid, circleid);
+
+        if (flag == 0) {
+            response.setMessage("支持成功");
+        } else if (flag == 1) {
+            response.setMessage("已支持过该圈子");
+        }
+        return response;
+    }
 }

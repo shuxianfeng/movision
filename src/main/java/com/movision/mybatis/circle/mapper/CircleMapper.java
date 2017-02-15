@@ -27,6 +27,10 @@ public interface CircleMapper {
 
     int queryIsSupport(Map<String, Object> parammap);
 
+    void addSupportSum(Map<String, Object> parammap);
+
+    void addSupportRecored(Map<String, Object> parammap);
+
     CircleVo queryCircleInfo(int circleid);
 
     int updateByPrimaryKeySelective(Circle record);
