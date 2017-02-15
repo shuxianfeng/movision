@@ -45,6 +45,16 @@ public class BossOrders {
 
     private Integer isdel;
 
+    private Integer logictisid;
+
+    public Integer getLogictisid() {
+        return logictisid;
+    }
+
+    public void setLogictisid(Integer logictisid) {
+        this.logictisid = logictisid;
+    }
+
     public Integer getId() {
         return id;
     }

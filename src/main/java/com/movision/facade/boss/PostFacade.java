@@ -501,63 +501,92 @@ public class PostFacade {
      * @param userid
      * @return
      */
-    public Map<String ,Integer> addPostActive(String title, String subtitle, String type,String money,
-                                              String coverimg, String postcontent, String isessence,String orderid, String time,String begintime,String endtime,String userid ){
+    public Map<String ,Integer> addPostActive(HttpServletRequest request,String title, String subtitle, String type,String money,
+                                              MultipartFile coverimg, String postcontent, String isessence,String orderid, String time,String begintime,String endtime,String userid ){
         Post post = new Post();
         Map<String, Integer> map = new HashedMap();
-        post.setTitle(title);//帖子标题
-        post.setSubtitle(subtitle);//帖子副标题
-        Integer typee=Integer.parseInt(type);
-        post.setActivetype(typee);
-        if(typee==0){
-            post.setActivefee(Double.parseDouble(money));//金额
-        }
-        post.setCoverimg(coverimg);//帖子封面
-         post.setPostcontent(postcontent);//帖子内容
-        if (isessence != null) {
-            post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
-        }
-        post.setIntime(new Date());
-        Date isessencetime = null;//加精时间
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-        if (time != null) {
-            try {
-                isessencetime = format.parse(time);
-            } catch (ParseException e) {
-                e.printStackTrace();
+        try {
+            post.setTitle(title);//帖子标题
+            post.setSubtitle(subtitle);//帖子副标题
+            Integer typee = Integer.parseInt(type);
+            post.setActivetype(typee);
+            if (typee == 0) {
+                post.setActivefee(Double.parseDouble(money));//金额
             }
-        }
-         Date begin=null;//开始时间
-        if(begintime!=null){
-            try{
-                begin=format.parse(begintime);
-            }catch (ParseException e){
-                e.printStackTrace();
+
+            String savedFileName = "";
+            if (!coverimg.isEmpty()) {
+                String fileRealName = coverimg.getOriginalFilename();
+                int pointIndex = fileRealName.indexOf(".");
+                String fileSuffix = fileRealName.substring(pointIndex);
+                UUID FileId = UUID.randomUUID();
+                savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
+//                    String savedDir = request.getSession().getServletContext().getRealPath("/images/post/coverimg");
+                String savedDir = request.getSession().getServletContext().getRealPath("/");
+
+                //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision-1.0.0后缀movision-1.0.0去除
+                //不保存到项目中,防止部包把图片覆盖掉了
+                String path = savedDir.substring(0, savedDir.length() - 9);
+
+                //这里组合出真实的图片存储路径
+                String combinpath = path + "/images/post/coverimg";
+
+                File savedFile = new File(combinpath, savedFileName);
+                boolean isCreateSuccess = savedFile.createNewFile();
+                if (isCreateSuccess) {
+                    coverimg.transferTo(savedFile);  //转存文件
+                }
             }
-        }
-         Date end=null;
-        if(endtime!=null){
-            try{
-                end=format.parse(endtime);
-            }catch (ParseException e){
-                e.printStackTrace();
+
+            post.setCoverimg(savedFileName);
+            post.setPostcontent(postcontent);//帖子内容
+            if (isessence != null) {
+                post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
             }
+            post.setIntime(new Date());
+            Date isessencetime = null;//加精时间
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+            if (time != null) {
+                try {
+                    isessencetime = format.parse(time);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            Date begin = null;//开始时间
+            if (begintime != null) {
+                try {
+                    begin = format.parse(begintime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            Date end = null;
+            if (endtime != null) {
+                try {
+                    end = format.parse(endtime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            post.setEssencedate(isessencetime);
+            if (orderid != null) {
+                post.setOrderid(Integer.parseInt(orderid));//排序精选
+            }
+            post.setUserid(Integer.parseInt(userid));//发帖人
+            post.setIsactive(1);
+            int result = postService.addPostActiveList(post);//添加帖子
+            Period period = new Period();
+            period.setBegintime(begin);
+            period.setEndtime(end);
+            Integer id = post.getId();
+            period.setPostid(id);
+            int r = postService.addPostPeriod(period);
+            map.put("result", result);
+            map.put("result", r);
+        }catch (IOException e){
+            e.printStackTrace();
         }
-        post.setEssencedate(isessencetime);
-        if(orderid!=null) {
-            post.setOrderid(Integer.parseInt(orderid));//排序精选
-        }
-         post.setUserid(Integer.parseInt(userid));//发帖人
-        post.setIsactive(1);
-        int result = postService.addPostActiveList(post);//添加帖子
-        Period period = new Period();
-        period.setBegintime(begin);
-        period.setEndtime(end);
-        Integer id=post.getId();
-        period.setPostid(id);
-        int r=postService.addPostPeriod(period);
-        map.put("result", result);
-        map.put("result", r);
         return map;
     }
     /**

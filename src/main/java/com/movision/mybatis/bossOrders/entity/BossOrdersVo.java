@@ -25,7 +25,17 @@ public class BossOrdersVo {
 
     private String province;
 
+
     private String city;
+    private Integer position;
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
 
     private String district;
 
@@ -34,6 +44,37 @@ public class BossOrdersVo {
     private String openid;
 
     private String paytype;
+    private  Integer isdebug;//是否需要根机
+
+    public Integer getIsdebug() {
+        return isdebug;
+    }
+
+    public void setIsdebug(Integer isdebug) {
+        this.isdebug = isdebug;
+    }
+
+    private  String logistisid;//物流单号
+
+    public String getLogistisid() {
+        return logistisid;
+    }
+
+    public void setLogistisid(String logistisid) {
+        this.logistisid = logistisid;
+    }
+
+    private String coupon;//优惠券
+
+    public String getCoupon() {
+        return coupon;
+    }
+
+    public void setCoupon(String coupon) {
+        this.coupon = coupon;
+    }
+
+
 
     private Date paytime;
 

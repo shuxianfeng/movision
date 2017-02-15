@@ -23,11 +23,12 @@
         <result column="paycode" property="paycode" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+        <result column="logictisid" property="logictisid" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, ordernumber, userid, addressid, takeway, position, status, bill, money, sendmoney, 
     isdiscount, couponsid, discouponmoney, dispointmoney, realmoney, intime, paytype, 
-    paytime, paycode, remark, isdel
+    paytime, paycode, remark, isdel,logictisid
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -46,7 +47,7 @@
       sendmoney, isdiscount, couponsid, 
       discouponmoney, dispointmoney, realmoney, 
       intime, paytype, paytime, 
-      paycode, remark, isdel
+      paycode, remark, isdel,logictisid
       )
     values (#{id,jdbcType=INTEGER}, #{ordernumber,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, 
       #{addressid,jdbcType=INTEGER}, #{takeway,jdbcType=INTEGER}, #{position,jdbcType=INTEGER}, 
@@ -54,7 +55,7 @@
       #{sendmoney,jdbcType=DOUBLE}, #{isdiscount,jdbcType=INTEGER}, #{couponsid,jdbcType=VARCHAR}, 
       #{discouponmoney,jdbcType=DOUBLE}, #{dispointmoney,jdbcType=DOUBLE}, #{realmoney,jdbcType=DOUBLE}, 
       #{intime,jdbcType=TIMESTAMP}, #{paytype,jdbcType=INTEGER}, #{paytime,jdbcType=TIMESTAMP}, 
-      #{paycode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{isdel,jdbcType=INTEGER}
+      #{paycode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{isdel,jdbcType=INTEGER},#{logictisid,jdbcType=INTEGER}
       )
   </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.bossOrders.entity.BossOrders">
@@ -123,6 +124,9 @@
             <if test="isdel != null">
                 isdel,
             </if>
+            <if test="logictisid != null">
+                logictisid,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -187,6 +191,9 @@
             </if>
             <if test="isdel != null">
                 #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="logictisid != null">
+                #{logictisid,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -253,6 +260,9 @@
             <if test="isdel != null">
                 isdel = #{isdel,jdbcType=INTEGER},
             </if>
+            <if test="logictisid != null">
+                isdel = #{logictisid,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -277,7 +287,8 @@
       paytime = #{paytime,jdbcType=TIMESTAMP},
       paycode = #{paycode,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
-      isdel = #{isdel,jdbcType=INTEGER}
+      isdel = #{isdel,jdbcType=INTEGER},
+      logictisid= #{logictisid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -288,6 +299,7 @@
       o.userid,
       o.addressid,
       o.intime,
+      o.position,
       o.money,
       o.realmoney,
       o.status,
@@ -296,8 +308,11 @@
       a.province,
       a.city,
       a.district,
-      a.street
-    FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id
+      a.street,
+      c.title,
+	  s.isdebug,
+	  d.logistics
+    FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id LEFT  JOIN yw_sub_order s ON s.porderid=o.id LEFT JOIN yw_coupon c ON c.id=o.couponsid LEFT JOIN yw_order_sub_logistics d ON d.logistics=o.logictisid
   </select>
 
     <select id="queryOrderByCondition" parameterType="java.util.Map"
