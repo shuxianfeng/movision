@@ -142,4 +142,23 @@ public class AppMallIndexController {
         response.setData(allGodRecommendList);
         return response;
     }
+
+    /**
+     * 查询商城首页--精选模块接口
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询商城首页--精选模块列表接口", notes = "用户用于加载商城首页精选板块数据列表")
+    @RequestMapping(value = "essenceGoods", method = RequestMethod.POST)
+    public Response queryEssenceGoods() {
+        Response response = new Response();
+
+        List<GoodsVo> essenceGoodsList = mallIndexFacade.queryEssenceGoods();
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(essenceGoodsList);
+        return response;
+    }
 }

@@ -182,4 +182,11 @@ public class MallIndexFacade {
 
         return dayGodRecommendList;
     }
+
+    /**
+     * 查询商城首页--精华商品列表
+     */
+    public List<GoodsVo> queryEssenceGoods() {
+        return goodsService.queryEssenceGoods();
+    }
 }

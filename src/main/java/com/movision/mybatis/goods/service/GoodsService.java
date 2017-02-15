@@ -107,4 +107,14 @@ public class GoodsService {
             throw e;
         }
     }
+
+    public List<GoodsVo> queryEssenceGoods() {
+        try {
+            log.info("查询商城首页精华商品列表");
+            return goodsMapper.queryEssenceGoods();
+        } catch (Exception e) {
+            log.error("查询商城首页精华商品列表失败");
+            throw e;
+        }
+    }
 }
