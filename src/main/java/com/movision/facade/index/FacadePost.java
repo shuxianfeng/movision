@@ -206,7 +206,7 @@ public class FacadePost {
 
                     //这里组合出真实的图片存储路径
                     String combinpath = path + "/images/post/coverimg";
-
+                    System.out.println("图片存放路径" + combinpath);
 //                    File savedFile = new File(savedDir, savedFileName);
                     File savedFile = new File(combinpath, savedFileName);
                     boolean isCreateSuccess = savedFile.createNewFile();
