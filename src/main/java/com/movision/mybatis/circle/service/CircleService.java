@@ -91,6 +91,36 @@ public class CircleService {
         }
     }
 
+    public int querySupportSum(Map<String, Object> parammap) {
+        try {
+            log.info("查询当前用户是否支持过该圈子");
+            return circleMapper.queryIsSupport(parammap);
+        } catch (Exception e) {
+            log.error("查询当前用户是否支持过该圈子失败");
+            throw e;
+        }
+    }
+
+    public void addSupportSum(Map<String, Object> parammap) {
+        try {
+            log.info("增加圈子中的支持数+1成功");
+            circleMapper.addSupportSum(parammap);
+        } catch (Exception e) {
+            log.error("增加圈子中的支持数失败");
+            throw e;
+        }
+    }
+
+    public void addSupportRecored(Map<String, Object> parammap) {
+        try {
+            log.info("增加该用户支持该圈子的记录");
+            circleMapper.addSupportRecored(parammap);
+        } catch (Exception e) {
+            log.error("增加该用户支持该圈子的记录失败");
+            throw e;
+        }
+    }
+
     public int queryCountByFollow(Map<String, Object> parammap) {
         try {
             log.info("查询该用户对当前圈子关注的次数");

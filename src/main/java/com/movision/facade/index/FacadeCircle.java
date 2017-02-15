@@ -136,4 +136,19 @@ public class FacadeCircle {
 
         return circleVo;
     }
+
+    public int supportCircle(String userid, String circleid) {
+        //首先查询该用户有没有支持过该圈子
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("userid", Integer.parseInt(userid));
+        parammap.put("circleid", Integer.parseInt(circleid));
+        int count = circleService.querySupportSum(parammap);
+        if (count == 0) {
+            circleService.addSupportSum(parammap);
+            circleService.addSupportRecored(parammap);
+            return 0;//未支持过该圈子
+        } else {
+            return 1;//已支持过该圈子
+        }
+    }
 }
