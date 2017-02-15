@@ -33,7 +33,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -395,16 +399,44 @@ public class PostFacade {
      * @param time
      * @return
      */
-    public Map<String, Integer> addPost(String title, String subtitle, String type, String circleid, String vid,
-                                        String coverimg, String postcontent, String isessence, String isessencepool, String orderid, String time) {
+    public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid, File vid,
+                                        MultipartFile coverimg, String postcontent, String isessence, String isessencepool, String orderid, String time) {
         Post post = new Post();
         Map<String, Integer> map = new HashedMap();
+        try {
         post.setTitle(title);//帖子标题
         post.setSubtitle(subtitle);//帖子副标题
         post.setType(Integer.parseInt(type));//帖子类型
         post.setCircleid(Integer.parseInt(circleid));//圈子id
-        String vod = vid;
-        post.setCoverimg(coverimg);//帖子封面
+            File vod = vid;
+            // post.setCoverimg(coverimg);//帖子封面
+            //上传图片到本地服务器
+            String savedFileName = "";
+            if (!coverimg.isEmpty()) {
+                String fileRealName = coverimg.getOriginalFilename();
+                int pointIndex = fileRealName.indexOf(".");
+                String fileSuffix = fileRealName.substring(pointIndex);
+                UUID FileId = UUID.randomUUID();
+                savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
+//                    String savedDir = request.getSession().getServletContext().getRealPath("/images/post/coverimg");
+                String savedDir = request.getSession().getServletContext().getRealPath("/");
+
+                //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision-1.0.0后缀movision-1.0.0去除
+                //不保存到项目中,防止部包把图片覆盖掉了
+                String path = savedDir.substring(0, savedDir.length() - 15);
+
+                //这里组合出真实的图片存储路径
+                String combinpath = path + "/images/post/coverimg";
+
+//                    File savedFile = new File(savedDir, savedFileName);
+                File savedFile = new File(combinpath, savedFileName);
+                boolean isCreateSuccess = savedFile.createNewFile();
+                if (isCreateSuccess) {
+                    coverimg.transferTo(savedFile);  //转存文件
+                }
+            }
+
+            post.setCoverimg(savedFileName);
         post.setPostcontent(postcontent);//帖子内容
         if (isessence != null) {
             post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
@@ -428,6 +460,9 @@ public class PostFacade {
         post.setEssencedate(isessencetime);
         int result = postService.addPost(post);//添加帖子
         map.put("result", result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return map;
 
     }
@@ -551,10 +586,21 @@ public class PostFacade {
         return sharesService.queryPostShareList(pager, Integer.parseInt(postid));
     }
 
+    /**
+     * 查询名称
+     *
+     * @param name
+     * @param pager
+     * @return
+     */
     public List<UserLike> likeQueryPostByNickname(String name, Paging<UserLike> pager) {
         return userService.likeQueryPostByNickname(name, pager);
     }
 
+    /**
+     * 查询圈子名称二级菜单列表
+     * @return
+     */
     public List<List<Circle>> queryListByCircleType() {
         List<Integer> list = circleService.queryListByCircleCategory();//查询圈子所有的所属分类
         List<List<Circle>> circlename = new ArrayList<>();
