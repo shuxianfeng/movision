@@ -112,7 +112,7 @@
         LIMIT #{sum,jdbcType=INTEGER}
     </select>
 
-    <!--查询帖子详情-->
+     <!--查询帖子详情-->
     <select id="queryPostDetail" parameterType="java.util.Map"
             resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT t1.*,t2.category AS category,t2.code AS code,
@@ -696,10 +696,23 @@
         SELECT * FROM yw_post WHERE isdel=0 AND isactive=0 ORDER BY intime DESC
     </select>
 
+    <!--查询精贴列表-->
+    <select id="findAllIsessenceByList" resultType="com.movision.mybatis.post.entity.PostList">
+        SELECT * FROM yw_post WHERE isdel=0 AND isessence=1 ORDER  BY  intime DESC
+     </select>
+
     <select id="queryPostNum" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM yw_post
     </select>
 
+    <!--查询活动列表草稿箱-->
+    <select id="findAllActiveByList" resultType="com.movision.mybatis.post.entity.PostList">
+        SELECT * FROM yw_post WHERE isdel=0 AND isactive=1 ORDER  BY intime DESC
+    </select>
+    <!--查询活动列表-->
+    <select id="findAllActiveTOByList" resultType="com.movision.mybatis.post.entity.PostActiveList">
+        SELECT * FROM yw_post WHERE isdel=0 AND isactive=1 ORDER  BY intime DESC
+    </select>
     <!-- 逻辑删除帖子 -->
     <update id="deletePost" parameterType="java.lang.Integer">
         UPDATE yw_post
@@ -723,6 +736,10 @@
         UPDATE yw_post SET isessence=1,essencedate=#{essencedate,jdbcType=DATE},orderid=#{orderid,jdbcType=INTEGER}
         WHERE id=#{id,jdbcType=INTEGER} AND isessence=0
     </update>
+    <select id="findAllPerson" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT COUNT(1) persum FROM yw_active_part WHERE postid=#{postid,jdbcType=INTEGER}
+    </select>
+
 
     <select id="queryPostChoiceness" resultType="java.lang.Integer" parameterType="java.lang.Integer">
         SELECT isessence FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
@@ -731,4 +748,147 @@
     <select id="deletePostChoiceness" parameterType="java.lang.Integer">
         UPDATE yw_post SET isessence=0,essencedate=null,orderid=null WHERE id=#{postid,jdbcType=INTEGER}
     </select>
+
+
+    <select id="findAllActivefee" resultType="java.lang.Double" parameterType="java.lang.Integer">
+        SELECT t.activefee FROM yw_post t  WHERE t.id in (SELECT e.postid FROM yw_active_part e WHERE e.postid=#{postid,jdbcType=INTEGER})
+    </select>
+
+    <!--基础插入语句（选择性插入）-->
+    <insert id="insertActive" parameterType="com.movision.mybatis.post.entity.Post">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into yw_post
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="subtitle != null">
+                subtitle,
+            </if>
+            <if test="postcontent != null">
+                postcontent,
+            </if>
+
+            <if test="isactive != null">
+                isactive,
+            </if>
+            <if test="activetype != null">
+                activetype,
+            </if>
+            <if test="activefee != null">
+                activefee,
+            </if>
+              <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="isessence != null">
+                isessence,
+            </if>
+             <if test="coverimg != null">
+                coverimg,
+            </if>
+            <if test="hotimgurl != null">
+                hotimgurl,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+             <if test="essencedate != null">
+                essencedate,
+            </if>
+            <if test="userid !=null">
+                userid
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null">
+                #{subtitle,jdbcType=VARCHAR},
+            </if>
+
+            <if test="postcontent != null">
+                #{postcontent,jdbcType=VARCHAR},
+            </if>
+            <if test="isactive != null">
+                #{isactive,jdbcType=INTEGER},
+            </if>
+            <if test="activetype != null">
+                #{activetype,jdbcType=INTEGER},
+            </if>
+            <if test="activefee != null">
+                #{activefee,jdbcType=DOUBLE},
+            </if>
+              <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="isessence != null">
+                #{isessence,jdbcType=INTEGER},
+            </if>
+             <if test="coverimg != null">
+                #{coverimg,jdbcType=VARCHAR},
+            </if>
+            <if test="hotimgurl != null">
+                #{hotimgurl,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+              <if test="essencedate != null">
+                #{essencedate,jdbcType=DATE},
+            </if>
+            <if test="userid!=null">
+                #{userid,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertPerid" parameterType="com.movision.mybatis.period.entity.Period">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into yw_active_period
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+
+            <if test="postid != null">
+                postid,
+            </if>
+            <if test="begintime != null">
+                begintime,
+            </if>
+            <if test="endtime != null">
+                endtime
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+
+            <if test="postid != null">
+                #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="begintime != null">
+                #{begintime,jdbcType=DATE},
+            </if>
+
+            <if test="endtime != null">
+                #{endtime,jdbcType=DATE}
+            </if>
+
+        </trim>
+    </insert>
+
 </mapper>

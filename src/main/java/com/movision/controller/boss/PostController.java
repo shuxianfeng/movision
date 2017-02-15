@@ -2,10 +2,12 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.PostFacade;
+import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostActiveList;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.share.entity.SharesVo;
@@ -55,6 +57,7 @@ public class PostController {
         response.setData(pager);
         return response;
     }
+
 
     /**
      * 查询发帖人信息
@@ -204,6 +207,68 @@ public class PostController {
     }
 
     /**
+     * 后台管理-活动记录查询草稿箱
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "活动记录查询草稿箱",notes = "活动记录查询草稿箱",response = Response.class)
+    @RequestMapping(value = "/query_active_list",method = RequestMethod.POST)
+    public  Response queryActiveList(@RequestParam(required = false,defaultValue = "1") String pageNo,
+                                     @RequestParam(required = false,defaultValue = "10") String pageSize){
+        Response response = new Response();
+        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostList> list=postFacade.queryPostActiveByList(pager);
+        if(response.getCode()==200){
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+     /**
+     * 后台管理--活动记录查询
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "活动记录查询",notes = "活动记录查询",response = Response.class)
+    @RequestMapping(value="/query_active_to_list",method = RequestMethod.POST)
+    public Response queryActiveToList(@RequestParam(required = false,defaultValue = "1") String pageNo,
+                                      @RequestParam(required = false,defaultValue = "10") String pageSize){
+        Response response = new Response();
+        Paging<PostActiveList> pager = new Paging<PostActiveList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostActiveList> list = postFacade.queryPostActiveToByList(pager);
+        if(response.getCode()==200){
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return  response;
+    }
+
+    /**
+     * 后台管理-报名列表查询
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "报名列表查询",notes = "报名列表查询",response = Response.class)
+    @RequestMapping(value = "/query_active_call_list", method = RequestMethod.POST)
+    public Response queyPostCallActive(@RequestParam(required = false,defaultValue = "1") String pageNo,
+                                        @RequestParam(required = false,defaultValue = "10") String pageSize){
+        Response response = new Response();
+        Paging<ActivePartList> pager = new Paging<ActivePartList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<ActivePartList> list = postFacade.queyPostCallActive(pager);
+        if(response.getCode()==200){
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return  response;
+    }
+    /**
      * 后台管理-帖子列表-帖子预览
      *
      * @param postid
@@ -221,6 +286,22 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 后台管理-活动预览
+     * @param postid
+     * @return
+     */
+    @ApiOperation(value="活动帖子预览", notes="活动帖子预览", response = Response.class)
+    @RequestMapping(value = "/query_post_active", method = RequestMethod.POST)
+    public Response queryPostActiveQ(@ApiParam(value = "帖子ID") @RequestParam String postid){
+        Response response = new Response();
+        PostList list = postFacade.queryPostActiveQ(postid);
+        if(response.getCode()==200){
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return  response;
+    }
 
     /**
      * 后台管理-添加帖子
@@ -257,7 +338,45 @@ public class PostController {
         return response;
     }
 
-
+    /**
+     * 后台管理-添加活动帖子
+     * @param title
+     * @param subtitle
+     * @param type
+     * @param money
+     * @param coverimg
+     * @param postcontent
+     * @param isessence
+     * @param orderid
+     * @param time
+     * @param begintime
+     * @param endtime
+     * @param userid
+     * @return
+     */
+    @ApiOperation(value = "添加活动帖子", notes = "添加活动帖子", response = Response.class)
+    @RequestMapping(value = "/add_active_post", method = RequestMethod.POST)
+    public Response addPostActiveList(@ApiParam(value = "帖子标题") @RequestParam String title,
+                                      @ApiParam(value = "帖子副标题") @RequestParam String subtitle,
+                                      @ApiParam(value = "帖子类型") @RequestParam String type,
+                                      @ApiParam(value = "单价") @RequestParam String money,
+                                      @ApiParam(value = "帖子封面") @RequestParam String coverimg,
+                                      @ApiParam(value = "内容") @RequestParam String postcontent,
+                                      @ApiParam(value = "首页精选") @RequestParam String isessence,
+                                      @ApiParam(value = "精选排序") @RequestParam String orderid,
+                                      @ApiParam(value = "精选日期") @RequestParam String time,
+                                      @ApiParam(value = "活动开始日期") @RequestParam String begintime,
+                                      @ApiParam(value = "活动结束日期") @RequestParam String endtime,
+                                      @ApiParam(value = "发帖人") @RequestParam String userid){
+        Response response = new Response();
+        System.out.println(postcontent+"----////");
+        Map<String,Integer> result= postFacade.addPostActive(title,subtitle,type,money,coverimg,postcontent,isessence,orderid,time,begintime,endtime,userid);
+        if(response.getCode()==200){
+            response.setMessage("添加成功");
+        }
+        response.setData(result);
+        return  response;
+    }
     /**
      * 后台管理-帖子列表-帖子加精
      *
@@ -298,46 +417,6 @@ public class PostController {
         }
         pager.result(list);
         response.setData(pager);
-        return response;
-    }
-
-    /**
-     * 模糊查询发帖人
-     *
-     * @param name
-     * @param pageNo
-     * @param pageSize
-     * @return
-     */
-    @ApiOperation(value = "模糊查询发帖人", notes = "用于模糊查询发帖人接口", response = Response.class)
-    @RequestMapping(value = "/like_query_post_nickname", method = RequestMethod.POST)
-    public Response likeQueryPostByNickname(@ApiParam(value = "关键字") @RequestParam String name,
-                                            @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                            @RequestParam(required = false, defaultValue = "10") String pageSize) {
-        Response response = new Response();
-        Paging<UserLike> pager = new Paging<UserLike>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<UserLike> list = postFacade.likeQueryPostByNickname(name, pager);
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        response.setData(list);
-        return response;
-    }
-
-    /**
-     * 选择圈子类型
-     *
-     * @return
-     */
-    @ApiOperation(value = "选择圈子类型", notes = "用于选择圈子类型接口", response = Response.class)
-    @RequestMapping(value = "/query_list_circle_type", method = RequestMethod.POST)
-    public Response queryListByCircleType() {
-        Response response = new Response();
-        List<List<Circle>> list = postFacade.queryListByCircleType();
-        if (response.getCode() == 200) {
-            response.setMessage("操作成功");
-        }
-        response.setData(list);
         return response;
     }
 

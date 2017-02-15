@@ -2,6 +2,7 @@ package com.movision.mybatis.post.mapper;
 
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import org.apache.ibatis.session.RowBounds;
@@ -14,7 +15,10 @@ public interface PostMapper {
 
     int insert(Post record);
 
+    int insertActive(Post post);//新增活动
+    int insertPerid(Period period);//新增活动周期
     int insertSelective(Post record);
+
 
     Post selectByPrimaryKey(Integer id);
 
@@ -78,11 +82,14 @@ public interface PostMapper {
 
     List<PostList> findAllqueryPostByList(RowBounds rowBounds);
 
+    List<PostList> findAllIsessenceByList(RowBounds rowBounds);//查询精贴
+
     int queryPostNum();
 
     int deletePost(Integer postid);
 
     PostList queryPostParticulars(Integer postid);
+
 
     int addPost(Map map);
 
@@ -94,5 +101,13 @@ public interface PostMapper {
 
     int deletePostChoiceness(Integer postid);
 
+    List<PostList> findAllActiveByList(RowBounds rowBounds);
+
+    List<PostActiveList> findAllActiveTOByList(RowBounds rowBounds);
+
+        int findAllPerson(Integer postid);//查询报名人数
+
+
+    Double findAllActivefee(Integer postid);
     /*List postSearch(Map map);*/
 }

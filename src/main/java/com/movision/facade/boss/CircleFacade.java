@@ -1,11 +1,15 @@
 package com.movision.facade.boss;
 
+import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.post.entity.PostNum;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.rewarded.service.RewardedService;
+import com.movision.mybatis.share.service.SharesService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
@@ -28,9 +32,17 @@ public class CircleFacade {
     CircleService circleService;
     @Autowired
     PostService postService;
-    @Autowired
+     @Autowired
     UserService userService;
 
+    @Autowired
+    SharesService sharesService;
+
+    @Autowired
+    RewardedService rewardedService;
+
+    @Autowired
+    AccusationService accusationService;
     /**
      * 后台管理-圈子列表
      *
@@ -89,4 +101,37 @@ public class CircleFacade {
         }
         return circleVoslist;
     }
+    /**
+     * 后台管理--查询精贴列表
+     * @param pager
+     * @return
+     */
+    public List<PostList> queryPostIsessenceByList(Paging<PostList> pager){
+        List<PostList> list=postService.queryPostIsessenceByList(pager);
+        List<PostList> rewardeds = new ArrayList<>();
+        for (int i =0;i<list.size();i++){
+            PostList postList = new PostList();
+            Integer id= list.get(i).getId();
+            Integer circleid=list.get(i).getCircleid();
+            String nickname=userService.queryUserByNickname(circleid);
+            Integer share = sharesService.querysum(id);//获取分享数
+            Integer rewarded = rewardedService.queryRewardedBySum(id);//获取打赏积分
+            Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举报次数
+            postList.setId(list.get(i).getId());
+            postList.setTitle(list.get(i).getTitle());
+            postList.setNickname(nickname);
+            postList.setCollectsum(list.get(i).getCollectsum());
+            postList.setShare(share);
+            postList.setCommentsum(list.get(i).getCommentsum());
+            postList.setZansum(list.get(i).getZansum());
+            postList.setRewarded(rewarded);
+            postList.setAccusation(accusation);
+            postList.setIsessence(list.get(i).getIsessence());
+            postList.setEssencedate(list.get(i).getEssencedate());
+            rewardeds.add(postList);
+        }
+        return rewardeds;
+    }
+
+
 }

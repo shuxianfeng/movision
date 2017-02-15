@@ -1,5 +1,7 @@
 package com.movision.mybatis.post.entity;
 
+import com.movision.mybatis.period.entity.Period;
+
 import java.util.Date;
 
 public class Post {
@@ -48,6 +50,35 @@ public class Post {
     private Integer isdel;
 
     private Date essencedate;//精选日期
+
+    private  Date begintime;
+    private  Date endtime;
+    private String activestatue;
+
+    public String getActivestatue() {
+        return activestatue;
+    }
+
+
+    public void setActivestatue(String activestatue) {
+        this.activestatue = activestatue;
+    }
+
+    public Date getBegintime() {
+        return begintime;
+    }
+
+    public void setBegintime(Date begintime) {
+        this.begintime = begintime;
+    }
+
+    public Date getEndtime() {
+        return endtime;
+    }
+
+    public void setEndtime(Date endtime) {
+        this.endtime = endtime;
+    }
 
     private Integer userid;//用户id
 

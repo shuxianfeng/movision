@@ -1,6 +1,7 @@
 package com.movision.mybatis.post.entity;
 
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.period.entity.Period;
 
 import java.util.Date;
 import java.util.List;

@@ -2,6 +2,7 @@ package com.movision.mybatis.period.mapper;
 
 import com.movision.mybatis.period.entity.Period;
 
+import java.util.List;
 import java.util.Map;
 
 public interface PeriodMapper {
@@ -20,4 +21,7 @@ public interface PeriodMapper {
     int insertSelective(Map map);
 
     int insertSelectiveTwo(Period record);
+
+    Period findAllPeriod(Integer postid);
+
 }

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.activePart.mapper.ActivePartMapper" >
+  <resultMap id="BaseResultMap" type="com.movision.mybatis.activePart.entity.ActivePart" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="postid" property="postid" jdbcType="INTEGER" />
+    <result column="userid" property="userid" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="videourl" property="videourl" jdbcType="VARCHAR" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
+    <result column="intime" property="intime" jdbcType="TIMESTAMP" />
+    <result column="paymoney" property="paymoney" jdbcType="DOUBLE" />
+    <result column="paymoneyying" property="paymoneyying" jdbcType="DOUBLE" />
+    <result column="paystatue" property="paystatue" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, postid, userid, title, email, videourl, introduction, intime, paymoney, paymoneyying, 
+    paystatue
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yw_active_part
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yw_active_part
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.movision.mybatis.activePart.entity.ActivePart" >
+    insert into yw_active_part (id, postid, userid, 
+      title, email, videourl, 
+      introduction, intime, paymoney, 
+      paymoneyying, paystatue)
+    values (#{id,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+      #{title,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{videourl,jdbcType=VARCHAR}, 
+      #{introduction,jdbcType=VARCHAR}, #{intime,jdbcType=TIMESTAMP}, #{paymoney,jdbcType=DOUBLE}, 
+      #{paymoneyying,jdbcType=DOUBLE}, #{paystatue,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.movision.mybatis.activePart.entity.ActivePart" >
+    insert into yw_active_part
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="postid != null" >
+        postid,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="videourl != null" >
+        videourl,
+      </if>
+      <if test="introduction != null" >
+        introduction,
+      </if>
+      <if test="intime != null" >
+        intime,
+      </if>
+      <if test="paymoney != null" >
+        paymoney,
+      </if>
+      <if test="paymoneyying != null" >
+        paymoneyying,
+      </if>
+      <if test="paystatue != null" >
+        paystatue,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="postid != null" >
+        #{postid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="videourl != null" >
+        #{videourl,jdbcType=VARCHAR},
+      </if>
+      <if test="introduction != null" >
+        #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="intime != null" >
+        #{intime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymoney != null" >
+        #{paymoney,jdbcType=DOUBLE},
+      </if>
+      <if test="paymoneyying != null" >
+        #{paymoneyying,jdbcType=DOUBLE},
+      </if>
+      <if test="paystatue != null" >
+        #{paystatue,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.activePart.entity.ActivePart" >
+    update yw_active_part
+    <set >
+      <if test="postid != null" >
+        postid = #{postid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="videourl != null" >
+        videourl = #{videourl,jdbcType=VARCHAR},
+      </if>
+      <if test="introduction != null" >
+        introduction = #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="intime != null" >
+        intime = #{intime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymoney != null" >
+        paymoney = #{paymoney,jdbcType=DOUBLE},
+      </if>
+      <if test="paymoneyying != null" >
+        paymoneyying = #{paymoneyying,jdbcType=DOUBLE},
+      </if>
+      <if test="paystatue != null" >
+        paystatue = #{paystatue,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.activePart.entity.ActivePart" >
+    update yw_active_part
+    set postid = #{postid,jdbcType=INTEGER},
+      userid = #{userid,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      videourl = #{videourl,jdbcType=VARCHAR},
+      introduction = #{introduction,jdbcType=VARCHAR},
+      intime = #{intime,jdbcType=TIMESTAMP},
+      paymoney = #{paymoney,jdbcType=DOUBLE},
+      paymoneyying = #{paymoneyying,jdbcType=DOUBLE},
+      paystatue = #{paystatue,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="findAllCllActive" resultType="com.movision.mybatis.activePart.entity.ActivePartList">
+      SELECT * FROM yw_active_part  ORDER  BY intime DESC
+  </select>
+</mapper>

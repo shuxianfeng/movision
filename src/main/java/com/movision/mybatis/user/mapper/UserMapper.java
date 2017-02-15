@@ -2,6 +2,7 @@ package com.movision.mybatis.user.mapper;
 
 import com.movision.mybatis.user.entity.*;
 import org.apache.ibatis.annotations.Param;
+import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -53,4 +54,6 @@ public interface UserMapper {
     User queryUser(String phone);
 
     List<UserLike> likeQueryPostByNickname(String name, RowBounds rowBounds);
+
+    User findAllUser(int id);
 }

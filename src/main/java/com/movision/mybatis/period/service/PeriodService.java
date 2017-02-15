@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,5 +36,21 @@ public class PeriodService {
             log.error("活动周期添加失败");
             throw e;
         }
+    }
+
+    /**
+     * 查询活动周期
+     * @param postid
+     * @return
+     */
+    public Period queryPostPeriod(int postid){
+        try{
+           log.info("查询活动周期");
+            return periodMapper.findAllPeriod(postid);
+        }catch(Exception e){
+            log.error("查询活动周期失败");
+            throw e;
+        }
+
     }
 }

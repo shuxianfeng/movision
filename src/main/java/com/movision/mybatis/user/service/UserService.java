@@ -198,8 +198,22 @@ public class UserService {
         }
     }
 
-    public User queryUser(String phone) {
+    /**
+     * 后台管理 /-查询报名信息
+     * @param id
+     * @return
+     */
+    public User queryUserB(int id){
+        try{
+            log.info("查询成功");
+            return  userMapper.findAllUser(id);
+        }catch (Exception e){
+            log.error("查询失败");
+            throw  e;
+        }
+    }
 
+    public User queryUser(String phone) {
         try {
             log.info("查询用户信息");
             return userMapper.queryUser(phone);

@@ -111,4 +111,7 @@
       endtime = #{endtime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <select id="findAllPeriod" parameterType="java.lang.Integer" resultType="com.movision.mybatis.period.entity.Period" >
+        SELECT * FROM yw_active_period WHERE postid=#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>

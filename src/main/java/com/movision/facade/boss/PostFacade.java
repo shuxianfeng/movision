@@ -2,6 +2,9 @@ package com.movision.facade.boss;
 
 import com.movision.common.Response;
 import com.movision.mybatis.accusation.service.AccusationService;
+import com.movision.mybatis.activePart.entity.ActivePart;
+import com.movision.mybatis.activePart.entity.ActivePartList;
+import com.movision.mybatis.activePart.service.ActivePartService;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.comment.entity.Comment;
@@ -10,7 +13,9 @@ import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.period.service.PeriodService;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostActiveList;
 import com.movision.mybatis.post.entity.PostList;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.rewarded.entity.Rewarded;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
@@ -53,7 +58,8 @@ public class PostFacade {
 
     @Autowired
     RewardedService rewardedService;
-
+    @Autowired
+    ActivePartService activePartService;
     @Autowired
     AccusationService accusationService;
 
@@ -100,6 +106,118 @@ public class PostFacade {
     }
 
     /**
+     * 后台管理-查询活动列表（草稿箱）
+     * @param pager
+     * @return
+     */
+    public  List<PostList> queryPostActiveByList(Paging<PostList> pager){
+        List<PostList> list = postService.queryPostActiveByList(pager);
+        List<PostList> rewardeds=new ArrayList<>();
+        for (int i =0; i<list.size(); i++){
+            PostList postList = new PostList();
+            Integer circleid = list.get(i).getCircleid();//获取到圈子id
+            String nickname = userService.queryUserByNickname(circleid);//获取发帖人
+            postList.setId(list.get(i).getId());
+            postList.setTitle(list.get(i).getTitle());
+            postList.setNickname(nickname);
+            postList.setIntime(list.get(i).getIntime());
+            rewardeds.add(postList);
+        }
+        return rewardeds;
+    }
+
+    /**
+     * 后台管理-查询活动列表
+     * @param pager
+     * @return
+     */
+     public List<PostActiveList> queryPostActiveToByList(Paging<PostActiveList> pager){
+        List<PostActiveList> list = postService.queryPostActiveToByList(pager);
+         List<PostActiveList> rewardeds = new ArrayList<>();
+         Date date = new Date();
+         long str=date.getTime();
+              for(int i=0; i<list.size(); i++){
+             PostActiveList postList = new PostActiveList();
+             Integer circleid = list.get(i).getCircleid();
+             String nickname=userService.queryUserByNickname(circleid);
+             Integer postid=list.get(i).getId();//获取到帖子id
+             Integer persum=postService.queryPostPerson(postid);
+             Period periods= periodService.queryPostPeriod(postid);
+             Double activefee=list.get(i).getActivefee();
+             Double sumfree=persum*activefee;
+             Date begintime=periods.getBegintime();
+             Date endtime=periods.getEndtime();
+             postList.setTitle(list.get(i).getTitle());//主题
+             postList.setNickname(nickname);//昵称
+             postList.setActivetype(list.get(i).getActivetype());//活动类型
+             postList.setActivefee(activefee);//活动费用
+             postList.setEssencedate(list.get(i).getEssencedate());//精选日期
+             postList.setOrderid(list.get(i).getOrderid());//精选排序
+             postList.setBegintime(begintime);//开始时间
+             postList.setEndtime(endtime);//结束时间
+             postList.setPersum(persum);//报名人数
+             postList.setSumfree(sumfree);//总费用
+             long begin= begintime.getTime();
+             long end=endtime.getTime();
+             String activeStatue="";
+             if(str>begin&&str<end){
+                 activeStatue="报名中";
+             }else if(str<begin){
+                 activeStatue="未开始";
+             }else if(str>end){
+                 activeStatue="已结束";
+             }
+             postList.setActivestatue(activeStatue);//活动状态
+             rewardeds.add(postList);
+         }
+        return rewardeds;
+     }
+
+    /**
+     * 后台管理-查询报名列表记录
+     * @param pager
+     * @return
+     */
+    public List<ActivePartList> queyPostCallActive(Paging<ActivePartList> pager){
+        List<ActivePartList> list=activePartService.queryPostCallActive(pager);
+        List<ActivePartList> rewardeds = new ArrayList<>();
+        Date date = new Date();
+        long str=date.getTime();
+        for (int i=0;i<list.size();i++){
+            ActivePartList postActiveList = new ActivePartList();
+            Integer postid=list.get(i).getPostid();//获取到帖子id
+            Double activefee=postService.queryPostActiveFee(postid);
+            Period periods= periodService.queryPostPeriod(postid);
+            postActiveList.setActivefee(activefee);//活动单价
+            Integer id=list.get(i).getUserid();//用户id
+            User user = userService.queryUserB(id);
+            Date begintime=periods.getBegintime();
+            Date endtime=periods.getEndtime();
+            postActiveList.setBegintime(begintime);
+            postActiveList.setEndtime(endtime);
+            long begin= begintime.getTime();
+            long end=endtime.getTime();
+            String activeStatue="";
+            if(str>begin&&str<end){
+                activeStatue="报名中";
+            }else if(str<begin){
+                activeStatue="未开始";
+            }else if(str>end){
+                activeStatue="已结束";
+            }
+            postActiveList.setActivestatue(activeStatue);//活动状态
+            postActiveList.setIntime(list.get(i).getIntime());//报名时间
+            postActiveList.setNickname(user.getNickname());//用户名
+            postActiveList.setPhone(user.getPhone());//联系方式
+             postActiveList.setPayStatue(list.get(i).getPayStatue());//支付方式
+            postActiveList.setMoneypay(list.get(i).getMoneypay());//实付金额
+            postActiveList.setMoneyying(list.get(i).getMoneyying());//应付金额
+            rewardeds.add(postActiveList);
+        }
+        return  rewardeds;
+    }
+
+    /**
      * 后台管理-帖子列表-发帖人信息
      *
      * @param postid
@@ -124,6 +242,7 @@ public class PostFacade {
         map.put("resault", resault);
         return map;
     }
+
 
 
     /**
@@ -219,6 +338,49 @@ public class PostFacade {
         return postList;
     }
 
+    /**
+     * 后台管理*-活动预览
+     * @param postid
+     * @return
+     */
+    public PostList queryPostActiveQ(String postid){
+        PostList postList = postService.queryPostParticulars(Integer.parseInt(postid));
+        Integer circleid = postList.getCircleid();
+        Integer id= postList.getId();
+        Date date = new Date();
+        long str=date.getTime();
+        Integer share =sharesService.querysum(id);
+         String nickname = userService.queryUserByNickname(circleid);//获取发帖人
+        Period periods= periodService.queryPostPeriod(Integer.parseInt(postid));
+        postList.setNickname(nickname);
+        postList.setShare(share);//分享次数
+        postList.setTitle(postList.getTitle());//主标题
+        postList.setSubtitle(postList.getSubtitle());//副标题
+        postList.setEssencedate(postList.getEssencedate());//精选日期
+        postList.setZansum(postList.getZansum());//赞
+        postList.setCommentsum(postList.getCommentsum());//评论
+        postList.setCollectsum(postList.getCollectsum());//收藏
+        postList.setActivetype(postList.getActivetype());//活动类型
+        Date begintime=periods.getBegintime();
+        Date endtime=periods.getEndtime();
+        long begin= begintime.getTime();
+        long end=endtime.getTime();
+        String activeStatue="";
+        if(str>begin&&str<end){
+            activeStatue="报名中";
+        }else if(str<begin){
+            activeStatue="未开始";
+        }else if(str>end){
+            activeStatue="已结束";
+        }
+        postList.setActivestatue(activeStatue);//活动状态
+        postList.setActivefee(postList.getActivefee());//活动单价
+        Integer persum=postService.queryPostPerson(Integer.parseInt(postid));
+        postList.setPersum(persum);//报名人数
+        postList.setPostcontent(postList.getPostcontent());//活动内容
+        postList.setIntime(postList.getIntime());//发布时间
+        return postList;
+    }
 
     /**
      * 添加帖子
@@ -270,6 +432,79 @@ public class PostFacade {
 
     }
 
+    /**
+     * 后台管理--增加活动
+     * @param title
+     * @param subtitle
+     * @param type
+     * @param money
+     * @param coverimg
+     * @param postcontent
+     * @param isessence
+     * @param orderid
+     * @param time
+     * @param begintime
+     * @param endtime
+     * @param userid
+     * @return
+     */
+    public Map<String ,Integer> addPostActive(String title, String subtitle, String type,String money,
+                                              String coverimg, String postcontent, String isessence,String orderid, String time,String begintime,String endtime,String userid ){
+        Post post = new Post();
+        Map<String, Integer> map = new HashedMap();
+        post.setTitle(title);//帖子标题
+        post.setSubtitle(subtitle);//帖子副标题
+        Integer typee=Integer.parseInt(type);
+        post.setActivetype(typee);
+        if(typee==0){
+            post.setActivefee(Double.parseDouble(money));//金额
+        }
+        post.setCoverimg(coverimg);//帖子封面
+         post.setPostcontent(postcontent);//帖子内容
+        if (isessence != null) {
+            post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+        }
+        post.setIntime(new Date());
+        Date isessencetime = null;//加精时间
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        if (time != null) {
+            try {
+                isessencetime = format.parse(time);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+         Date begin=null;//开始时间
+        if(begintime!=null){
+            try{
+                begin=format.parse(begintime);
+            }catch (ParseException e){
+                e.printStackTrace();
+            }
+        }
+         Date end=null;
+        if(endtime!=null){
+            try{
+                end=format.parse(endtime);
+            }catch (ParseException e){
+                e.printStackTrace();
+            }
+        }
+        post.setEssencedate(isessencetime);
+        post.setOrderid(Integer.parseInt(orderid));//排序精选
+        post.setUserid(Integer.parseInt(userid));//发帖人
+        post.setIsactive(1);
+        int result = postService.addPostActiveList(post);//添加帖子
+        Period period = new Period();
+        period.setBegintime(begin);
+        period.setEndtime(end);
+        Integer id=post.getId();
+        period.setPostid(id);
+        int r=postService.addPostPeriod(period);
+        map.put("result", result);
+        map.put("result", r);
+        return map;
+    }
     /**
      * 帖子加精
      *
@@ -327,6 +562,8 @@ public class PostFacade {
         }
         return circlename;
     }
+
+
 
 
 /*    *//**

@@ -72,6 +72,17 @@ public class PostList {
 
     private Integer category;//圈子分类
 
+    private Integer persum;//报名人数
+
+
+    public Integer getPersum() {
+        return persum;
+    }
+
+    public void setPersum(Integer persum) {
+        this.persum = persum;
+    }
+
     private Integer userid;//用户id
 
     public Integer getUserid() {
@@ -90,6 +101,15 @@ public class PostList {
         this.category = category;
     }
 
+    public String getActivestatue() {
+        return activestatue;
+    }
+
+    public void setActivestatue(String activestatue) {
+        this.activestatue = activestatue;
+    }
+
+    public String activestatue;
     public String getCirclename() {
         return circlename;
     }

@@ -4,6 +4,7 @@ import com.movision.common.Response;
 import com.movision.facade.boss.CircleFacade;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleVo;
+import com.movision.mybatis.post.entity.PostList;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,26 @@ public class CircleController {
         Paging<CircleVo> pager = new Paging<CircleVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<CircleVo> list = circleFacade.queryCircleByList(pager);
         if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+    /**
+     * 后台管理-查询精贴列表
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查询精贴列表", notes = "查询精贴列表", response = Response.class)
+    @RequestMapping(value="/Isessence_list",method = RequestMethod.POST)
+    public  Response queryPostIsessenceByList(@RequestParam(required = false,defaultValue = "1") String pageNo,
+                                              @RequestParam(required = false,defaultValue = "10") String pageSize){
+        Response response= new Response();
+        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostList> list = circleFacade.queryPostIsessenceByList(pager);
+        if(response.getCode()==200){
             response.setMessage("查询成功");
         }
         pager.result(list);

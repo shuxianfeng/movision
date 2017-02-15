@@ -2,6 +2,7 @@ package com.movision.mybatis.post.service;
 
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.mapper.PostMapper;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
@@ -51,6 +52,8 @@ public class PostService {
     public List<Post> queryCircleSubPost(Map<String, Object> map) {
         return postMapper.queryCircleSubPost(map);
     }
+
+
 
     public int queryPostNumByCircleid(int circleid) {
         try {
@@ -135,6 +138,7 @@ public class PostService {
             throw e;
         }
     }
+
 
     public int saveActiveRecord(Map<String, Object> parammap) {
         try {
@@ -243,8 +247,7 @@ public class PostService {
             throw e;
         }
     }
-
-    /**
+     /**
      * 后台管理-查询帖子列表
      *
      * @param pager
@@ -261,6 +264,53 @@ public class PostService {
     }
 
     /**
+     * 后台管理-查询精贴列表
+     * @param pager
+     * @return
+     */
+    public List<PostList> queryPostIsessenceByList(Paging<PostList> pager){
+
+        try{
+            log.info("查询精贴列表");
+            return postMapper.findAllIsessenceByList(pager.getRowBounds());
+
+        }catch (Exception e){
+            log.error("查询精贴列表异常");
+            throw  e;
+        }
+    }
+
+    /**
+     * 后台管理--查询活动列表（草稿箱）
+     * @param pager
+     * @return
+     */
+    public List<PostList> queryPostActiveByList(Paging<PostList> pager){
+        try{
+            log.info("查询活动列表");
+            return postMapper.findAllActiveByList(pager.getRowBounds());
+        }catch (Exception e){
+            log.error("查询活动列表失败");
+            throw  e;
+        }
+    }
+
+    /**
+     * 后台管理*-查询活动列表
+     * @param pager
+     * @return
+     */
+    public List<PostActiveList> queryPostActiveToByList(Paging<PostActiveList> pager){
+            try{
+                log.info("查询活动列表");
+                return  postMapper.findAllActiveTOByList(pager.getRowBounds());
+            }catch (Exception e){
+                log.error("查询活动列表失败");
+                throw e;
+            }
+
+    }
+    /**
      * 后台管理-查询帖子总数
      * @return
      */
@@ -274,6 +324,68 @@ public class PostService {
         }
     }
 
+    /**
+     * 后台管理-查询单价
+     * @param postid
+     * @return
+     */
+    public Double queryPostActiveFee(Integer postid){
+        try{
+            log.info("查询单价");
+            return postMapper.findAllActivefee(postid);
+        }catch (Exception e){
+            log.error("查询单价失败");
+            throw  e;
+        }
+
+    }
+    /**
+     * 后台管理-查询报名人数
+     * @param postid
+     * @return
+     */
+    public int queryPostPerson(Integer postid){
+
+            try{
+                log.info("查询报名人数");
+                return postMapper.findAllPerson(postid);
+            }catch(Exception e){
+                log.error("查询报名人数失败");
+                throw  e;
+            }
+
+    }
+
+    /**
+     * 后台管理-增加活动
+     * @param post
+     * @return
+     */
+    public int addPostActiveList(Post post){
+        try{
+            log.info("增加活动成功");
+            return postMapper.insertActive(post);
+        }catch (Exception e){
+            log.error("增加活动失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 后台管理-增加活动周期
+     * @param period
+     * @return
+     */
+    public  int addPostPeriod(Period period){
+        try{
+            log.info("增加活动周期");
+            return postMapper.insertPerid(period);
+        }catch (Exception e){
+            log.error("增加活动失败");
+            throw e;
+        }
+
+    }
     /**
      * 删除帖子
      *
@@ -290,6 +402,8 @@ public class PostService {
         }
     }
 
+
+
     /**
      * 帖子预览
      * @param postid
@@ -304,8 +418,7 @@ public class PostService {
             throw e;
         }
     }
-
-    /**
+     /**
      * 添加帖子
      *
      * @param map
@@ -378,6 +491,8 @@ public class PostService {
             throw e;
         }
     }
+
+
 
     /**
      * 帖子按条件查询
