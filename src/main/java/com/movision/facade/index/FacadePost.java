@@ -202,7 +202,7 @@ public class FacadePost {
 
                     //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision-1.0.0后缀movision-1.0.0去除
                     //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 15);
+                    String path = savedDir.substring(0, savedDir.length() - 9);
 
                     //这里组合出真实的图片存储路径
                     String combinpath = path + "/images/post/coverimg";
