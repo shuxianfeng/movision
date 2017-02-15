@@ -102,6 +102,13 @@
         WHERE t.id = #{circleid,jdbcType=INTEGER}
     </select>
 
+    <!--查询当前用户是否已经支持该圈子-->
+    <select id="queryIsSupport" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_circle_support_record
+        WHERE circleid = #{circleid,jdbcType=INTEGER}
+          AND userid = #{userid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_circle
     where id = #{id,jdbcType=INTEGER}

@@ -71,6 +71,16 @@ public class CircleService {
         }
     }
 
+    public int queryIsSupport(Map<String, Object> parammap) {
+        try {
+            log.info("查询当前用户是否已支持该圈子");
+            return circleMapper.queryIsSupport(parammap);
+        } catch (Exception e) {
+            log.error("查询当前用户是否已支持该圈子失败");
+            throw e;
+        }
+    }
+
     public CircleVo queryCircleInfo(int circleid) {
         try {
             log.info("查询圈子信息（包括公告和简介等）");
@@ -236,6 +246,22 @@ public class CircleService {
             return circleMapper.queryListByCircleCategory();
         } catch (Exception e) {
             log.error("查询圈子中所有圈子所属分类异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 根据所属圈子查询总数据
+     *
+     * @param categoryid
+     * @return
+     */
+    public CircleVo queryCircle(Integer categoryid) {
+        try {
+            log.info("获取圈子所属数据");
+            return circleMapper.queryCircle(categoryid);
+        } catch (Exception e) {
+            log.error("获取圈子所属数据异常");
             throw e;
         }
     }
