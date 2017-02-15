@@ -195,6 +195,25 @@
         ON a.id = b.goodsid
     </select>
 
+    <!--根据商品id查询商品详情-->
+    <select id="queryGoodDetail" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.goods.entity.GoodsDetail">
+        SELECT t1.*,  (SELECT img_url FROM yw_goods_img WHERE goodsid = #{goodsid,jdbcType=INTEGER} AND type = '1') AS goodsDescribeImgurl,
+              (SELECT img_url FROM yw_goods_img WHERE goodsid = #{goodsid,jdbcType=INTEGER} AND type = '3') AS goodsParamImgurl
+        FROM yw_goods t1
+        WHERE id = #{goodsid,jdbcType=INTEGER}
+    </select>
+
+    <!--根据商品id查询商品的实物图列表-->
+    <select id="queryGoodsImgList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.goods.entity.GoodsImg">
+        SELECT t.goodsid, t.img_url AS imgurl, t.type, t.oderid
+        FROM yw_goods_img t
+        WHERE goodsid = #{goodsid,jdbcType=INTEGER}
+          AND type = '0'
+          ORDER BY oderid
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_goods
         where id = #{id,jdbcType=INTEGER}

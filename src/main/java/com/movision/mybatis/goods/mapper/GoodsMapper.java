@@ -1,6 +1,8 @@
 package com.movision.mybatis.goods.mapper;
 
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.goods.entity.GoodsDetail;
+import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import org.apache.ibatis.session.RowBounds;
 
@@ -35,6 +37,10 @@ public interface GoodsMapper {
     List<GoodsVo> queryEssenceGoods();
 
     List<GoodsVo> queryHotGoods();
+
+    GoodsDetail queryGoodDetail(int goodsid);
+
+    List<GoodsImg> queryGoodsImgList(int goodsid);
 
     int updateByPrimaryKeySelective(Goods record);
 

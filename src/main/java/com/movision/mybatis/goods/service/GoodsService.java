@@ -3,9 +3,10 @@ package com.movision.mybatis.goods.service;
 import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.category.mapper.CategoryMapper;
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.goods.entity.GoodsDetail;
+import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.mapper.GoodsMapper;
-import com.movision.mybatis.post.mapper.PostMapper;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -139,6 +140,26 @@ public class GoodsService {
             return categoryMapper.queryGoodsCategory();
         } catch (Exception e) {
             log.error("查询商城首页商品分类列表失败");
+            throw e;
+        }
+    }
+
+    public GoodsDetail queryGoodDetail(int goodsid) {
+        try {
+            log.info("根据商品id查询商品详情");
+            return goodsMapper.queryGoodDetail(goodsid);
+        } catch (Exception e) {
+            log.error("根据商品id查询商品详情失败");
+            throw e;
+        }
+    }
+
+    public List<GoodsImg> queryGoodsImgList(int goodsid) {
+        try {
+            log.info("根据商品id查询商品实物图列表");
+            return goodsMapper.queryGoodsImgList(goodsid);
+        } catch (Exception e) {
+            log.error("根据商品id查询商品实物图列表失败");
             throw e;
         }
     }
