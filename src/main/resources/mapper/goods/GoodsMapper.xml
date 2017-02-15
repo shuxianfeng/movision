@@ -184,6 +184,17 @@
         ON a.id = b.goodsid
     </select>
 
+    <!--查询商城首页热门商品列表-->
+    <select id="queryHotGoods" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT a.*,b.img_url AS imgurl
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice
+            FROM yw_goods t1
+            WHERE t1.ishot = '1'
+             LIMIT 8) a
+        LEFT JOIN yw_goods_img b
+        ON a.id = b.goodsid
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_goods
         where id = #{id,jdbcType=INTEGER}

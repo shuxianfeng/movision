@@ -117,4 +117,14 @@ public class GoodsService {
             throw e;
         }
     }
+
+    public List<GoodsVo> queryHotGoods() {
+        try {
+            log.info("查询商城首页热门商品列表");
+            return goodsMapper.queryHotGoods();
+        } catch (Exception e) {
+            log.error("查询商城首页热门商品列表失败");
+            throw e;
+        }
+    }
 }

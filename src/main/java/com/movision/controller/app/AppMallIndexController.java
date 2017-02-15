@@ -161,4 +161,21 @@ public class AppMallIndexController {
         response.setData(essenceGoodsList);
         return response;
     }
+
+    /**
+     * 查询商城首页--热门模块接口
+     */
+    @ApiOperation(value = "查询商城首页--热门模块列表接口", notes = "用户用于加载商城首页热门板块数据列表")
+    @RequestMapping(value = "hotGoods", method = RequestMethod.POST)
+    public Response queryHotGoods() {
+        Response response = new Response();
+
+        List<GoodsVo> hotGoodsList = mallIndexFacade.queryHotGoods();
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(hotGoodsList);
+        return response;
+    }
 }

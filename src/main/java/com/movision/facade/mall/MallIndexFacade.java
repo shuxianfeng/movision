@@ -189,4 +189,11 @@ public class MallIndexFacade {
     public List<GoodsVo> queryEssenceGoods() {
         return goodsService.queryEssenceGoods();
     }
+
+    /**
+     * 查询商城首页--热门商品列表
+     */
+    public List<GoodsVo> queryHotGoods() {
+        return goodsService.queryHotGoods();
+    }
 }

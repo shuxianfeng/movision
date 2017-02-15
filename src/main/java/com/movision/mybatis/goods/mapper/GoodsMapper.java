@@ -34,6 +34,8 @@ public interface GoodsMapper {
 
     List<GoodsVo> queryEssenceGoods();
 
+    List<GoodsVo> queryHotGoods();
+
     int updateByPrimaryKeySelective(Goods record);
 
     int updateByPrimaryKey(Goods record);
