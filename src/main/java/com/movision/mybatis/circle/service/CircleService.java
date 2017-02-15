@@ -1,6 +1,7 @@
 package com.movision.mybatis.circle.service;
 
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.circle.entity.CircleFollowNum;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.mapper.CircleMapper;
 import com.movision.mybatis.followCircle.mapper.FollowCircleMapper;
@@ -286,12 +287,28 @@ public class CircleService {
      * @param categoryid
      * @return
      */
-    public CircleVo queryCircle(Integer categoryid) {
+    public List<User> queryCircleUserList(Integer categoryid) {
         try {
             log.info("获取圈子所属数据");
-            return circleMapper.queryCircle(categoryid);
+            return circleMapper.queryCircleUserList(categoryid);
         } catch (Exception e) {
             log.error("获取圈子所属数据异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询关注数,今日新增关注人数
+     *
+     * @param categoryid
+     * @return
+     */
+    public CircleFollowNum queryFollowAndNewNum(Integer categoryid) {
+        try {
+            log.info("查询关注数,今日新增关注人数");
+            return circleMapper.queryFollowAndNewNum(categoryid);
+        } catch (Exception e) {
+            log.error("查询关注数,今日新增关注人数异常");
             throw e;
         }
     }

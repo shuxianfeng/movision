@@ -416,45 +416,50 @@ public class PostFacade {
             //上传图片到本地服务器
             String savedFileName = "";
             String savedVideo = "";
-            if (!coverimg.isEmpty()) {
-                String fileRealName = coverimg.getOriginalFilename();
-                int pointIndex = fileRealName.indexOf(".");
-                String fileSuffix = fileRealName.substring(pointIndex);
-                UUID FileId = UUID.randomUUID();
-                savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-                String savedDir = request.getSession().getServletContext().getRealPath("");
-                //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
-                //不保存到项目中,防止部包把图片覆盖掉了
-                String path = savedDir.substring(0, savedDir.length() - 9);
-                //这里组合出真实的图片存储路径
-                String combinpath = savedDir + "/images/post/coverimg";
-                File savedFile = new File(savedDir, savedFileName);
-                boolean isCreateSuccess = savedFile.createNewFile();
-                if (isCreateSuccess) {
-                    coverimg.transferTo(savedFile);  //转存文件
+            if (coverimg != null) {
+                if (!coverimg.isEmpty()) {
+                    String fileRealName = coverimg.getOriginalFilename();
+                    int pointIndex = fileRealName.indexOf(".");
+                    String fileSuffix = fileRealName.substring(pointIndex);
+                    UUID FileId = UUID.randomUUID();
+                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
+                    String savedDir = request.getSession().getServletContext().getRealPath("");
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                    //不保存到项目中,防止部包把图片覆盖掉了
+                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    //这里组合出真实的图片存储路径
+                    String combinpath = savedDir + "/images/post/coverimg";
+                    File savedFile = new File(savedDir, savedFileName);
+                    boolean isCreateSuccess = savedFile.createNewFile();
+                    if (isCreateSuccess) {
+                        coverimg.transferTo(savedFile);  //转存文件
+                    }
                 }
             }
 
-            if (!vid.isEmpty()) {
-                String fileRealName = vid.getOriginalFilename();
-                int pointIndex = fileRealName.indexOf(".");
-                String fileSuffix = fileRealName.substring(pointIndex);
-                UUID FileId = UUID.randomUUID();
-                savedVideo = FileId.toString().replace("-", "").concat(fileSuffix);
-                String savedDir = request.getSession().getServletContext().getRealPath("");
-                //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
-                //不保存到项目中,防止部包把图片覆盖掉了
-                String path = savedDir.substring(0, savedDir.length() - 9);
-                //这里组合出真实的图片存储路径
-                String combinpath = savedDir + "/images/post/video";
-                File savedFile = new File(savedDir, savedVideo);
-                boolean isCreateSuccess = savedFile.createNewFile();
-                if (isCreateSuccess) {
-                    vid.transferTo(savedFile);  //转存文件
+            if (vid != null) {
+                if (!vid.isEmpty()) {
+                    String fileRealName = vid.getOriginalFilename();
+                    int pointIndex = fileRealName.indexOf(".");
+                    String fileSuffix = fileRealName.substring(pointIndex);
+                    UUID FileId = UUID.randomUUID();
+                    savedVideo = FileId.toString().replace("-", "").concat(fileSuffix);
+                    String savedDir = request.getSession().getServletContext().getRealPath("");
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                    //不保存到项目中,防止部包把图片覆盖掉了
+                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    //这里组合出真实的图片存储路径
+                    String combinpath = savedDir + "/images/post/video";
+                    File savedFile = new File(savedDir, savedVideo);
+                    boolean isCreateSuccess = savedFile.createNewFile();
+                    if (isCreateSuccess) {
+                        vid.transferTo(savedFile);  //转存文件
+                    }
                 }
             }
 
-            post.setCoverimg(savedFileName);
+            post.setCoverimg(savedFileName);//添加帖子封面
+            post.setIsactive(0);//设置状态为帖子
         post.setPostcontent(postcontent);//帖子内容
         if (isessence != null) {
             post.setIsessence(Integer.parseInt(isessence));//是否为首页精选

@@ -369,4 +369,18 @@
             resultType="com.movision.mybatis.circle.entity.Circle">
         SELECT id,name,category FROM yw_circle WHERE category=#{in,jdbcType=INTEGER}
     </select>
+
+    <select id="queryCircleUserList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.circle.entity.CircleVo">
+        SELECT * FROM yw_user WHERE id IN(SELECT userid FROM yw_circle_manager WHERE circleid IN(SELECT id FROM
+        yw_circle WHERE category=1))
+    </select>
+
+    <select id="queryFollowAndNewNum" resultType="com.movision.mybatis.circle.entity.CircleFollowNum"
+            parameterType="java.lang.Integer">
+        SELECT COUNT(1) AS follownum,
+        (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN (select circleid from yw_follow_circle where
+        date(intime) = curdate())) AS newfollownum
+        FROM yw_follow_circle WHERE circleid IN (SELECT id FROM yw_circle WHERE category=4)
+    </select>
 </mapper>

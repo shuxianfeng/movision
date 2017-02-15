@@ -2,6 +2,7 @@ package com.movision.facade.boss;
 
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.circle.entity.CircleFollowNum;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.post.entity.Post;
@@ -104,9 +105,13 @@ public class CircleFacade {
 
     public List<CircleVo> queryCircleByList1(Paging<CircleVo> pager) {
         List<Integer> circlenum = circleService.queryListByCircleCategory();//查询圈子所有分类
+        CircleVo cir = new CircleVo();
         for (int i = 0; i < circlenum.size(); i++) {
             //查询，圈子分类，圈主，管理员列表，关注人数，今日关注人数，帖子数量，今日新增帖子，精贴数量，支持人数，创建日期
-            CircleVo circleVo = circleService.queryCircle(i);
+            List<User> users = circleService.queryCircleUserList(i);
+            CircleFollowNum followNum = circleService.queryFollowAndNewNum(i);//返回关注数,今日新增关注人数
+            cir.setCategory(i);//圈子分类
+            cir.setCirclemanagerlist(users);//管理员列表
         }
         return null;
     }

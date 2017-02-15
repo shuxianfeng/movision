@@ -43,7 +43,7 @@ public class CircleVo {
 
     private Integer status;
 
-    private Integer supportnum;
+    private Integer supportnum;//支持数
 
     private Integer isdiscover;
 
@@ -51,15 +51,21 @@ public class CircleVo {
 
     private List<Post> hotPostList;
 
-    private Integer postnum;//该圈子总共更新的帖子总数
+    private Integer postnum;//圈子帖子数
+
+    private Integer postnewnum;//圈子今日更新帖子数
 
     private Integer isfollow;//该圈子是否被关注 0 可关注  1 已关注
+
+    private Integer follownum;//圈子关注数
+
+    private Integer follownewnum;//圈子今日关注数
 
     private User circlemaster;//圈主
 
     private List<User> circlemanagerlist;//圈子管理员列表
 
-    private Integer isessencenum;//圈子中精贴总数
+    private Integer isessencenum;//圈子中精贴数
 
     private Integer isdel;
 
