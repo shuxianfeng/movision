@@ -10,6 +10,7 @@ import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
+import org.apache.commons.beanutils.converters.IntegerConverter;
 import org.apache.commons.collections.iterators.ObjectArrayIterator;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -71,7 +72,7 @@ public class FacadeCircle {
 
     }
 
-    public List<CircleCategoryVo> queryCircleCategoryList() {
+    public List<CircleCategoryVo> queryCircleCategoryList(String userid) {
 
         List<CircleCategoryVo> categoryList = circleCategoryService.queryCircleByCategory();//查询所有圈子的分类
 
@@ -100,6 +101,20 @@ public class FacadeCircle {
         circleCategoryVo.setId(-1);//categoryid为-1时查询待审核的圈子
         circleCategoryVo.setCategoryname("待审核");
         List<CircleVo> list = circleService.queryAuditCircle();
+        if (StringUtils.isEmpty(userid)) {
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).setIssupport(0);
+            }
+        } else {
+            for (int i = 0; i < list.size(); i++) {
+                int circleid = list.get(i).getId();
+                Map<String, Object> parammap = new HashMap<>();
+                parammap.put("userid", Integer.parseInt(userid));
+                parammap.put("circleid", circleid);
+                int issupport = circleService.queryIsSupport(parammap);
+                list.get(i).setIssupport(issupport);
+            }
+        }
         circleCategoryVo.setCircleList(list);
         categoryList.add(circleCategoryVo);
 

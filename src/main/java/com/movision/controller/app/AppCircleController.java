@@ -62,12 +62,12 @@ public class AppCircleController {
         return response;
     }
 
-    @ApiOperation(value = "圈子分类", notes = "用户返回所有圈子（按类别分类）", response = Response.class)
+    @ApiOperation(value = "圈子分类", notes = "用户返回所有圈子（按类别分类），待审核新增输出issupport 0 可支持 1 已支持", response = Response.class)
     @RequestMapping(value = "circlelist", method = RequestMethod.POST)
-    public Response queryCircleList() {
+    public Response queryCircleList(@ApiParam(value = "用户id(用户登录状态下为必填)") @RequestParam(required = false) String userid) {
         Response response = new Response();
 
-        List<CircleCategoryVo> circleCategoryList = facadeCircle.queryCircleCategoryList();
+        List<CircleCategoryVo> circleCategoryList = facadeCircle.queryCircleCategoryList(userid);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");

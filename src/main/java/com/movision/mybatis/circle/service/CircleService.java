@@ -71,6 +71,16 @@ public class CircleService {
         }
     }
 
+    public int queryIsSupport(Map<String, Object> parammap) {
+        try {
+            log.info("查询当前用户是否已支持该圈子");
+            return circleMapper.queryIsSupport(parammap);
+        } catch (Exception e) {
+            log.error("查询当前用户是否已支持该圈子失败");
+            throw e;
+        }
+    }
+
     public CircleVo queryCircleInfo(int circleid) {
         try {
             log.info("查询圈子信息（包括公告和简介等）");

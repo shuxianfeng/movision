@@ -6,6 +6,7 @@ import com.movision.mybatis.user.entity.User;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CircleMapper {
     int deleteByPrimaryKey(Integer id);
@@ -23,6 +24,8 @@ public interface CircleMapper {
     List<CircleVo> queryCircleByCategory(int categoryid);
 
     List<CircleVo> queryAuditCircle();
+
+    int queryIsSupport(Map<String, Object> parammap);
 
     CircleVo queryCircleInfo(int circleid);
 

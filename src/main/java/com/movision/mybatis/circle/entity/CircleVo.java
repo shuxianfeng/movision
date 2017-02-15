@@ -63,6 +63,8 @@ public class CircleVo {
 
     private Integer isdel;
 
+    private Integer issupport;//是否可支持 0 可支持 1 已支持
+
     public Integer getIsdel() {
         return isdel;
     }
@@ -269,5 +271,13 @@ public class CircleVo {
 
     public void setCirclemanagerlist(List<User> circlemanagerlist) {
         this.circlemanagerlist = circlemanagerlist;
+    }
+
+    public Integer getIssupport() {
+        return issupport;
+    }
+
+    public void setIssupport(Integer issupport) {
+        this.issupport = issupport;
     }
 }
