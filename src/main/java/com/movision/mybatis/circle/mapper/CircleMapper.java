@@ -56,4 +56,6 @@ public interface CircleMapper {
     List<Integer> queryListByCircleCategory();
 
     List<Circle> queryListByCircleList(Integer in);
+
+    CircleVo queryCircle(Integer categoryid);
 }

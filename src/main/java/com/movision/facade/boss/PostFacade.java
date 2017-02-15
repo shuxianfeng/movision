@@ -617,14 +617,18 @@ public class PostFacade {
      * 查询圈子名称二级菜单列表
      * @return
      */
-    public List<List<Circle>> queryListByCircleType() {
+    public Map<String, Object> queryListByCircleType() {
+        Map<String, Object> map = new HashedMap();
         List<Integer> list = circleService.queryListByCircleCategory();//查询圈子所有的所属分类
         List<List<Circle>> circlename = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {//根据圈子的所属分类添加二级菜单
             List<Circle> circle = circleService.queryListByCircleList(list.get(i));//用于查询圈子名称
             circlename.add(circle);
         }
-        return circlename;
+        Integer num = circleService.queryCircleByNum();
+        map.put("resault", circlename);
+        map.put("num", num);
+        return map;
     }
 
 

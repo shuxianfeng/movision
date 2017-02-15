@@ -337,7 +337,7 @@ public class PostController {
     @RequestMapping(value = "/query_list_circle_type", method = RequestMethod.POST)
     public Response queryListByCircleType() {
         Response response = new Response();
-        List<List<Circle>> list = postFacade.queryListByCircleType();
+        Map<String, Object> list = postFacade.queryListByCircleType();
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

@@ -101,6 +101,15 @@ public class CircleFacade {
         }
         return circleVoslist;
     }
+
+    public List<CircleVo> queryCircleByList1(Paging<CircleVo> pager) {
+        List<Integer> circlenum = circleService.queryListByCircleCategory();//查询圈子所有分类
+        for (int i = 0; i < circlenum.size(); i++) {
+            //查询，圈子分类，圈主，管理员列表，关注人数，今日关注人数，帖子数量，今日新增帖子，精贴数量，支持人数，创建日期
+            CircleVo circleVo = circleService.queryCircle(i);
+        }
+    }
+
     /**
      * 后台管理--查询精贴列表
      * @param pager

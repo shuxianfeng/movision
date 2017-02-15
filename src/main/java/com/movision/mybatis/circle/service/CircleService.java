@@ -251,6 +251,22 @@ public class CircleService {
     }
 
     /**
+     * 根据所属圈子查询总数据
+     *
+     * @param categoryid
+     * @return
+     */
+    public CircleVo queryCircle(Integer categoryid) {
+        try {
+            log.info("获取圈子所属数据");
+            return circleMapper.queryCircle(categoryid);
+        } catch (Exception e) {
+            log.error("获取圈子所属数据异常");
+            throw e;
+        }
+    }
+
+    /**
      * 查询圈子所有的名称和id
      *
      * @return
