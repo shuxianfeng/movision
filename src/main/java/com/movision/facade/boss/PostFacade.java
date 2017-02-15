@@ -29,6 +29,8 @@ import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.map.HashedMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,6 +74,8 @@ public class PostFacade {
 
     @Autowired
     PeriodService periodService;
+
+    private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
 
     /**
@@ -461,7 +465,7 @@ public class PostFacade {
         int result = postService.addPost(post);//添加帖子
         map.put("result", result);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("帖子添加异常", e);
         }
         return map;
 
