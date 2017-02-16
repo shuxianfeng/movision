@@ -42,4 +42,9 @@ public interface BossOrdersMapper {
     List<Integer> findAllArea();
     List<Area> findAllAreaName(Integer id);
     Integer findAllAreaByNum();
-}
+
+    int updateInfo();//编辑其他信息
+
+    BossOrders findAllPerInfo(Integer id);//基本信息
+
+ }

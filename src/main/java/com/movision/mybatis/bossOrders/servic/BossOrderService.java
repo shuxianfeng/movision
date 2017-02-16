@@ -1,6 +1,7 @@
 package com.movision.mybatis.bossOrders.servic;
 
 import com.movision.mybatis.area.entity.Area;
+import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.bossOrders.mapper.BossOrdersMapper;
 import com.movision.mybatis.city.entity.City;
@@ -42,6 +43,21 @@ public class BossOrderService {
             return bossOrdersMapper.findAllOrdersByList(pager.getRowBounds());
         } catch (Exception e) {
             loger.error("查询订单列表异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 订单管理-查询基本信息
+     * @param
+     * @return
+     */
+    public  BossOrders queryOrderInfo(Integer id){
+        try{
+            loger.info("查询基本信息");
+            return bossOrdersMapper.findAllPerInfo(id);
+        }catch (Exception e){
+            loger.error("查询基本信息失败");
             throw e;
         }
     }
@@ -227,4 +243,6 @@ public class BossOrderService {
             throw e;
         }
     }
+
+
 }

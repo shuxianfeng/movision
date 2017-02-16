@@ -2,6 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.OrderFacade;
+import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -42,6 +43,24 @@ public class OrdersListController {
         }
         response.setData(list);
         return response;
+    }
+
+    /**
+     * 查询基本信息
+     * @param  id
+     * @param
+     * @return
+     */
+    @ApiOperation(value ="查询基本信息",notes = "查询基本信息",response = Response.class)
+    @RequestMapping(value = "/query_info",method = RequestMethod.POST)
+    public Response queryOrderInfo(@RequestParam(required = false) Integer id){
+        Response response = new Response();
+        BossOrders list = orderFacade.queryOrderInfo(id);
+        if(response.getCode()==200){
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return  response;
     }
 
     /**

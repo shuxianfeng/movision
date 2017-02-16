@@ -27,6 +27,16 @@ public class BossOrders {
 
     private String couponsid;
 
+    private String name;//收货人
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     private Double discouponmoney;
 
     private Double dispointmoney;
@@ -46,6 +56,17 @@ public class BossOrders {
     private Integer isdel;
 
     private Integer logictisid;
+
+    public Date getFintime() {
+        return fintime;
+    }
+
+    public void setFintime(Date fintime) {
+        this.fintime = fintime;
+    }
+
+    private  Date fintime;//发货时间
+
 
     public Integer getLogictisid() {
         return logictisid;

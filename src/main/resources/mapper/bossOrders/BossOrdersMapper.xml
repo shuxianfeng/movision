@@ -314,7 +314,10 @@
 	  d.logisticsid
     FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id LEFT  JOIN yw_sub_order s ON s.porderid=o.id LEFT JOIN yw_coupon c ON c.id=o.couponsid LEFT  JOIN yw_order_sub_logistics  d ON d.logisticsid=o.logisticsid
   </select>
-
+<select id="findAllPerInfo" resultType="com.movision.mybatis.bossOrders.entity.BossOrders" parameterType="java.lang.Integer">
+SELECT o.ordernumber,o.status,o.intime as sintime,o.paytype,a.name,o.takeway,s.intime,s.logisticsid,o.paytime FROM yw_orders o
+ LEFT JOIN yw_address  a ON o.addressid=a.id LEFT JOIN yw_order_sub_logistics s ON s.logisticsid=o.logisticsid WHERE o.id=#{id,jdbcType=INTEGER}
+</select>
     <select id="queryOrderByCondition" parameterType="java.util.Map"
             resultType="com.movision.mybatis.bossOrders.entity.BossOrdersVo">
         SELECT
@@ -469,4 +472,6 @@ SELECT
     <select id="findAllAreaByNum" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM yw_area
     </select>
+
+
 </mapper>

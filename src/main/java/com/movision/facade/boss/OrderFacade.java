@@ -1,6 +1,7 @@
 package com.movision.facade.boss;
 
 import com.movision.mybatis.area.entity.Area;
+import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.bossOrders.servic.BossOrderService;
 import com.movision.mybatis.city.entity.City;
@@ -47,6 +48,16 @@ public class OrderFacade {
         return bossOrderService.queryOrderList(pager);
     }
 
+    /**
+     * 查询基本信息
+     * @param
+     * @param id
+     * @return
+     */
+    public BossOrders queryOrderInfo(Integer id){
+        BossOrders bossOrders = bossOrderService.queryOrderInfo(id);
+        return bossOrders;
+      }
 
     /**
      * 根据条件查询订单
