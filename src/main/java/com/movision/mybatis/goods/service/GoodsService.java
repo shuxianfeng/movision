@@ -7,6 +7,9 @@ import com.movision.mybatis.goods.entity.GoodsDetail;
 import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.mapper.GoodsMapper;
+import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
+import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
+import com.movision.mybatis.goodsAssessment.mapper.GoodsAssessmentMapper;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,9 @@ public class GoodsService {
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Autowired
+    private GoodsAssessmentMapper goodsAssessmentMapper;
 
     public List<GoodsVo> queryActiveGoods(Paging<Goods> pager, String postid) {
         try {
@@ -160,6 +166,26 @@ public class GoodsService {
             return goodsMapper.queryGoodsImgList(goodsid);
         } catch (Exception e) {
             log.error("根据商品id查询商品实物图列表失败");
+            throw e;
+        }
+    }
+
+    public List<GoodsAssessmentVo> queryGoodsAssessment(Paging<GoodsAssessmentVo> pager, int goodsid) {
+        try {
+            log.info("根据商品id查询所有商品评论");
+            return goodsAssessmentMapper.queryGoodsAssessment(pager.getRowBounds(), goodsid);
+        } catch (Exception e) {
+            log.error("根据商品id查询所有商品评论失败");
+            throw e;
+        }
+    }
+
+    public GoodsAssessmentVo queryPassessment(int pid) {
+        try {
+            log.info("根据父评论id查询父评论对象");
+            return goodsAssessmentMapper.queryPassessment(pid);
+        } catch (Exception e) {
+            log.error("根据父评论id查询父评论对象失败");
             throw e;
         }
     }

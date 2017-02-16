@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.goodsAssessment.mapper.GoodsAssessmentMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.goodsAssessment.entity.GoodsAssessment">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="goodid" property="goodid" jdbcType="INTEGER"/>
+        <result column="suborderid" property="suborderid" jdbcType="INTEGER"/>
+        <result column="pid" property="pid" jdbcType="INTEGER"/>
+        <result column="goodpoint" property="goodpoint" jdbcType="INTEGER"/>
+        <result column="logisticpoint" property="logisticpoint" jdbcType="INTEGER"/>
+        <result column="servicepoint" property="servicepoint" jdbcType="INTEGER"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="isimage" property="isimage" jdbcType="INTEGER"/>
+        <result column="isanonymity" property="isanonymity" jdbcType="INTEGER"/>
+        <result column="createtime" property="createtime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, userid, goodid, suborderid, pid, goodpoint, logisticpoint, servicepoint, content, 
+    isimage, isanonymity, createtime
+  </sql>
+
+    <!--基础查询语句-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_goods_assessment
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!--根据商品id查询商品的所有评论-->
+    <select id="queryGoodsAssessment" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
+    SELECT t.* FROM (
+      SELECT t1.*, t2.nickname, t2.phone
+      FROM yw_goods_assessment t1
+      LEFT JOIN yw_user t2
+      ON t1.userid = t2.id
+    ) t
+    WHERE t.goodid = #{goodid,jdbcType=INTEGER}
+  </select>
+
+    <!--根据父评论id查询评论实体-->
+    <select id="queryPassessment" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
+    SELECT t.* FROM (
+      SELECT t1.*, t2.nickname, t2.phone
+      FROM yw_goods_assessment t1
+      LEFT JOIN yw_user t2
+      ON t1.userid = t2.id
+    ) t
+    WHERE t.id = #{pid,jdbcType=INTEGER}
+  </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_goods_assessment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessment">
+    insert into yw_goods_assessment (id, userid, goodid, 
+      suborderid, pid, goodpoint, 
+      logisticpoint, servicepoint, content, 
+      isimage, isanonymity, createtime
+      )
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{goodid,jdbcType=INTEGER}, 
+      #{suborderid,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, #{goodpoint,jdbcType=INTEGER}, 
+      #{logisticpoint,jdbcType=INTEGER}, #{servicepoint,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
+      #{isimage,jdbcType=INTEGER}, #{isanonymity,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessment">
+        insert into yw_goods_assessment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="goodid != null">
+                goodid,
+            </if>
+            <if test="suborderid != null">
+                suborderid,
+            </if>
+            <if test="pid != null">
+                pid,
+            </if>
+            <if test="goodpoint != null">
+                goodpoint,
+            </if>
+            <if test="logisticpoint != null">
+                logisticpoint,
+            </if>
+            <if test="servicepoint != null">
+                servicepoint,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="isimage != null">
+                isimage,
+            </if>
+            <if test="isanonymity != null">
+                isanonymity,
+            </if>
+            <if test="createtime != null">
+                createtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="goodid != null">
+                #{goodid,jdbcType=INTEGER},
+            </if>
+            <if test="suborderid != null">
+                #{suborderid,jdbcType=INTEGER},
+            </if>
+            <if test="pid != null">
+                #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="goodpoint != null">
+                #{goodpoint,jdbcType=INTEGER},
+            </if>
+            <if test="logisticpoint != null">
+                #{logisticpoint,jdbcType=INTEGER},
+            </if>
+            <if test="servicepoint != null">
+                #{servicepoint,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="isimage != null">
+                #{isimage,jdbcType=INTEGER},
+            </if>
+            <if test="isanonymity != null">
+                #{isanonymity,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null">
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessment">
+        update yw_goods_assessment
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="goodid != null">
+                goodid = #{goodid,jdbcType=INTEGER},
+            </if>
+            <if test="suborderid != null">
+                suborderid = #{suborderid,jdbcType=INTEGER},
+            </if>
+            <if test="pid != null">
+                pid = #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="goodpoint != null">
+                goodpoint = #{goodpoint,jdbcType=INTEGER},
+            </if>
+            <if test="logisticpoint != null">
+                logisticpoint = #{logisticpoint,jdbcType=INTEGER},
+            </if>
+            <if test="servicepoint != null">
+                servicepoint = #{servicepoint,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="isimage != null">
+                isimage = #{isimage,jdbcType=INTEGER},
+            </if>
+            <if test="isanonymity != null">
+                isanonymity = #{isanonymity,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null">
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessment">
+    update yw_goods_assessment
+    set userid = #{userid,jdbcType=INTEGER},
+      goodid = #{goodid,jdbcType=INTEGER},
+      suborderid = #{suborderid,jdbcType=INTEGER},
+      pid = #{pid,jdbcType=INTEGER},
+      goodpoint = #{goodpoint,jdbcType=INTEGER},
+      logisticpoint = #{logisticpoint,jdbcType=INTEGER},
+      servicepoint = #{servicepoint,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      isimage = #{isimage,jdbcType=INTEGER},
+      isanonymity = #{isanonymity,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
