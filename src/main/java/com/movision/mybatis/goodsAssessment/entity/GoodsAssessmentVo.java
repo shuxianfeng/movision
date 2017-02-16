@@ -1,6 +1,9 @@
 package com.movision.mybatis.goodsAssessment.entity;
 
+import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
+
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author shuxf
@@ -36,6 +39,8 @@ public class GoodsAssessmentVo {
     private String phone;//评价用户的手机号
 
     private GoodsAssessmentVo goodsAssessmentVo;//用户的父评论（用于官方回复用户的评论）
+
+    private List<GoodsAssessmentImg> goodsAssessmentImgList;//评论的晒单图片列表
 
     public Integer getId() {
         return id;
@@ -155,5 +160,13 @@ public class GoodsAssessmentVo {
 
     public void setGoodsAssessmentVo(GoodsAssessmentVo goodsAssessmentVo) {
         this.goodsAssessmentVo = goodsAssessmentVo;
+    }
+
+    public List<GoodsAssessmentImg> getGoodsAssessmentImgList() {
+        return goodsAssessmentImgList;
+    }
+
+    public void setGoodsAssessmentImgList(List<GoodsAssessmentImg> goodsAssessmentImgList) {
+        this.goodsAssessmentImgList = goodsAssessmentImgList;
     }
 }

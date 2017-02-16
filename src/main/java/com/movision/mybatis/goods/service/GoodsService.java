@@ -10,6 +10,7 @@ import com.movision.mybatis.goods.mapper.GoodsMapper;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodsAssessment.mapper.GoodsAssessmentMapper;
+import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -186,6 +187,16 @@ public class GoodsService {
             return goodsAssessmentMapper.queryPassessment(pid);
         } catch (Exception e) {
             log.error("根据父评论id查询父评论对象失败");
+            throw e;
+        }
+    }
+
+    public List<GoodsAssessmentImg> queryGoodsAssessmentImg(int assessmentid) {
+        try {
+            log.info("根据评论id查询评论中的晒图列表");
+            return goodsAssessmentMapper.queryGoodsAssessmentImg(assessmentid);
+        } catch (Exception e) {
+            log.error("根据评论id查询评论中的晒图列表失败");
             throw e;
         }
     }

@@ -52,6 +52,12 @@
     WHERE t.id = #{pid,jdbcType=INTEGER}
   </select>
 
+    <!--根据评论id查询用户评论的所有晒图列表-->
+    <select id="queryGoodsAssessmentImg" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg">
+        SELECT * FROM yw_goods_assessment_img WHERE assessmentid = #{assessmentid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_goods_assessment
     where id = #{id,jdbcType=INTEGER}

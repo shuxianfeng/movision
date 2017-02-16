@@ -2,6 +2,7 @@ package com.movision.mybatis.goodsAssessment.mapper;
 
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
+import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -18,6 +19,8 @@ public interface GoodsAssessmentMapper {
     List<GoodsAssessmentVo> queryGoodsAssessment(RowBounds rowBounds, int goodsid);
 
     GoodsAssessmentVo queryPassessment(int pid);
+
+    List<GoodsAssessmentImg> queryGoodsAssessmentImg(int assessmentid);
 
     int updateByPrimaryKeySelective(GoodsAssessment record);
 
