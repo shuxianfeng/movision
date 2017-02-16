@@ -18,6 +18,16 @@ public interface GoodsAssessmentMapper {
 
     List<GoodsAssessmentVo> queryGoodsAssessment(RowBounds rowBounds, int goodsid);
 
+    List<GoodsAssessmentVo> queryImgGoodsAssessment(RowBounds rowBounds, int goodsid);
+
+    List<GoodsAssessmentVo> queryQualityGoodsAssessment(RowBounds rowBounds, int goodsid);
+
+    List<GoodsAssessmentVo> queryFastGoodsAssessment(RowBounds rowBounds, int goodsid);
+
+    List<GoodsAssessmentVo> queryAttitudeGoodsAssessment(RowBounds rowBounds, int goodsid);
+
+    List<GoodsAssessmentVo> queryQualityGeneral(RowBounds rowBounds, int goodsid);
+
     GoodsAssessmentVo queryPassessment(int pid);
 
     List<GoodsAssessmentImg> queryGoodsAssessmentImg(int assessmentid);

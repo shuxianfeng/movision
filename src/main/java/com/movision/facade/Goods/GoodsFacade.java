@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public class GoodsFacade {
         return goodsDetail;
     }
 
-    public List<GoodsAssessmentVo> queryGoodsAssessment(String pageNo, String pageSize, String goodsid) {
+    public List<GoodsAssessmentVo> queryGoodsAssessment(String pageNo, String pageSize, String goodsid, String type) {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -51,7 +52,21 @@ public class GoodsFacade {
         }
         Paging<GoodsAssessmentVo> pager = new Paging<GoodsAssessmentVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
 
-        List<GoodsAssessmentVo> goodsAssessmentList = goodsService.queryGoodsAssessment(pager, Integer.parseInt(goodsid));
+        List<GoodsAssessmentVo> goodsAssessmentList = new ArrayList<>();
+
+        if (type.equals("0")) {//查询全部评论
+            goodsAssessmentList = goodsService.queryGoodsAssessment(pager, Integer.parseInt(goodsid));
+        } else if (type.equals("1")) {//查询有图评论
+            goodsAssessmentList = goodsService.queryImgGoodsAssessment(pager, Integer.parseInt(goodsid));
+        } else if (type.equals("2")) {//查询质量好的评论
+            goodsAssessmentList = goodsService.queryQualityGoodsAssessment(pager, Integer.parseInt(goodsid));
+        } else if (type.equals("3")) {//查询送货快的评论
+            goodsAssessmentList = goodsService.queryFastGoodsAssessment(pager, Integer.parseInt(goodsid));
+        } else if (type.equals("4")) {//查询态度不错的评论
+            goodsAssessmentList = goodsService.queryAttitudeGoodsAssessment(pager, Integer.parseInt(goodsid));
+        } else if (type.equals("5")) {//查询质量一般的评论
+            goodsAssessmentList = goodsService.queryQualityGeneral(pager, Integer.parseInt(goodsid));
+        }
 
         for (int i = 0; i < goodsAssessmentList.size(); i++) {
             //如果官方评论是针对某个评论回复的，查询父评论信息

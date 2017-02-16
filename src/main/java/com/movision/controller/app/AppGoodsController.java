@@ -50,11 +50,12 @@ public class AppGoodsController {
     @ApiOperation(value = "商品评论接口", notes = "用户点击商品缩略图进入商品详情页面，详情数据返回接口", response = Response.class)
     @RequestMapping(value = "goodAssessment", method = RequestMethod.POST)
     public Response queryGoodAssessment(@ApiParam(value = "商品id") @RequestParam String goodsid,
+                                        @ApiParam(value = "评论类型(0全部 1有图 2质量好 3送货快 4态度不错 5质量一般)") @RequestParam String type,
                                         @ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
                                         @ApiParam(value = "每页几条") @RequestParam(required = false) String pageSize) {
         Response response = new Response();
 
-        List<GoodsAssessmentVo> goodsAssessmentList = goodsFacade.queryGoodsAssessment(pageNo, pageSize, goodsid);
+        List<GoodsAssessmentVo> goodsAssessmentList = goodsFacade.queryGoodsAssessment(pageNo, pageSize, goodsid, type);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
