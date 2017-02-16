@@ -104,9 +104,10 @@
         <foreach collection="ids" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
-        LIMIT #{defaultcount,jdbcType=INTEGER}) a
+        ) a
         LEFT JOIN yw_goods_img b
         ON a.id = b.goodsid
+        LIMIT #{defaultcount,jdbcType=INTEGER}
     </select>
 
     <!--查询一周热销前十商品列表-->

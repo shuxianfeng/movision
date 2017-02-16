@@ -28,16 +28,16 @@ public class AppMallIndexController {
     private MallIndexFacade mallIndexFacade;
 
     /**
-     * 查询商城首页--月度热销榜单
+     * 查询商城首页--月度一周每日（三块合并）热销榜单
      *
      * @return
      */
-    @ApiOperation(value = "商城首页月度热销榜单返回接口", notes = "用户返回首页月度热销榜单数据", response = Response.class)
-    @RequestMapping(value = "monthHot", method = RequestMethod.POST)
+    @ApiOperation(value = "商城首页月度一周每日（三块合并）热销榜单返回接口", notes = "用户返回首页月度一周每日（三块合并）热销榜单数据", response = Response.class)
+    @RequestMapping(value = "monthWeekDayHot", method = RequestMethod.POST)
     public Response queryMonthHot() {
         Response response = new Response();
 
-        Map<String, Object> map = mallIndexFacade.queryMonthHot();
+        Map<String, Object> map = mallIndexFacade.queryMonthWeekDayHot();
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
@@ -45,6 +45,44 @@ public class AppMallIndexController {
         response.setData(map);
         return response;
     }
+
+//    /**
+//     * 查询商城首页--一周热销榜单
+//     *
+//     * @Return
+//     */
+//    @ApiOperation(value = "商城首页一周热销榜单返回接口", notes = "用户返回首页一周热销榜单数据", response = Response.class)
+//    @RequestMapping(value = "weekHot", method = RequestMethod.POST)
+//    public Response queryWeekHot() {
+//        Response response = new Response();
+//
+//        Map<String, Object> map = mallIndexFacade.queryWeekHot();
+//
+//        if (response.getCode() == 200) {
+//            response.setMessage("查询成功");
+//        }
+//        response.setData(map);
+//        return response;
+//    }
+
+//    /**
+//     * 查询商城首页--每日神器推荐
+//     *
+//     * @return
+//     */
+//    @ApiOperation(value = "商城首页--每日神器推荐", notes = "用户返回首页每日神器推荐板块数据", response = Response.class)
+//    @RequestMapping(value = "dayGodRecommend", method = RequestMethod.POST)
+//    public Response queryDayGodRecommend() {
+//        Response response = new Response();
+//
+//        Map<String, Object> map = mallIndexFacade.queryDayGodRecommend();
+//
+//        if (response.getCode() == 200) {
+//            response.setMessage("查询成功");
+//        }
+//        response.setData(map);
+//        return response;
+//    }
 
     /**
      * 查询商城首页--月度热销榜单“查看全部”
@@ -67,26 +105,7 @@ public class AppMallIndexController {
     }
 
     /**
-     * 查询商城首页--一周热销榜单
-     *
-     * @Return
-     */
-    @ApiOperation(value = "商城首页一周热销榜单返回接口", notes = "用户返回首页一周热销榜单数据", response = Response.class)
-    @RequestMapping(value = "weekHot", method = RequestMethod.POST)
-    public Response queryWeekHot() {
-        Response response = new Response();
-
-        Map<String, Object> map = mallIndexFacade.queryWeekHot();
-
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        response.setData(map);
-        return response;
-    }
-
-    /**
-     * 查询商城首页--月度热销榜单“查看全部”
+     * 查询商城首页--一周热销榜单“查看全部”
      *
      * @return
      */
@@ -102,25 +121,6 @@ public class AppMallIndexController {
             response.setMessage("查询成功");
         }
         response.setData(allWeekHotList);
-        return response;
-    }
-
-    /**
-     * 查询商城首页--每日神器推荐
-     *
-     * @return
-     */
-    @ApiOperation(value = "商城首页--每日神器推荐", notes = "用户返回首页每日神器推荐板块数据", response = Response.class)
-    @RequestMapping(value = "dayGodRecommend", method = RequestMethod.POST)
-    public Response queryDayGodRecommend() {
-        Response response = new Response();
-
-        Map<String, Object> map = mallIndexFacade.queryDayGodRecommend();
-
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        response.setData(map);
         return response;
     }
 
