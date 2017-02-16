@@ -402,8 +402,8 @@ public class PostFacade {
      * @param time
      * @return
      */
-    public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid, String vid, String userid,
-                                        String coverimg, String postcontent, String isessence, String isessencepool, String orderid, String time) {
+    public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid, MultipartFile vid, String userid,
+                                        MultipartFile coverimg, String postcontent, String isessence, String ishot, String orderid, String time) {
         Post post = new Post();
         Map<String, Integer> map = new HashedMap();
         try {
@@ -415,9 +415,9 @@ public class PostFacade {
             //上传图片到本地服务器
             String savedFileName = "";
             String savedVideo = "";
-            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-           /* if (coverimg != null && isMultipart) {
+            /*boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;*/
+            if (coverimg != null) {
                 if (!coverimg.isEmpty()) {
                     String fileRealName = coverimg.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
@@ -436,9 +436,9 @@ public class PostFacade {
                         coverimg.transferTo(savedFile);  //转存文件
                     }
                 }
-            }*/
+            }
 
-            /*if (vid != null) {
+            if (vid != null) {
                 if (!vid.isEmpty()) {
                     String fileRealName = vid.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
@@ -457,7 +457,7 @@ public class PostFacade {
                         vid.transferTo(savedFile);  //转存文件
                     }
                 }
-            }*/
+            }
 
             post.setCoverimg(savedFileName);//添加帖子封面
             post.setIsactive(0);//设置状态为帖子
@@ -465,8 +465,8 @@ public class PostFacade {
             if (isessence != null) {
                 post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
             }
-            if (isessencepool != null) {
-                post.setIsessencepool(Integer.parseInt(isessencepool));//是否为圈子精选
+            if (ishot != null) {
+                post.setIshot(Integer.parseInt(ishot));//是否为圈子精选
             }
             post.setIntime(new Date());
             if (orderid != null) {
@@ -679,9 +679,26 @@ public class PostFacade {
         return postService.queryPostByIdEcho(Integer.parseInt(postid));
     }
 
+    /**
+     * 编辑帖子
+     *
+     * @param request
+     * @param title
+     * @param subtitle
+     * @param type
+     * @param userid
+     * @param circleid
+     * @param vid
+     * @param coverimg
+     * @param postcontent
+     * @param isessence
+     * @param isessencepool
+     * @param orderid
+     * @param time
+     * @return
+     */
     public Map<String, Integer> updatePostById(HttpServletRequest request, String title, String subtitle, String type, String userid, String circleid, String vid,
                                                MultipartFile coverimg, String postcontent, String isessence, String isessencepool, String orderid, String time) {
-
         Post post = new Post();
         Map<String, Integer> map = new HashedMap();
         try {

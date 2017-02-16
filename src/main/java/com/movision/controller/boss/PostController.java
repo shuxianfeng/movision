@@ -247,15 +247,15 @@ public class PostController {
                             @ApiParam(value = "帖子类型 0 普通帖 1 原生视频帖") @RequestParam String type,//帖子类型
                             @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
                             @ApiParam(value = "发帖人") @RequestParam String userid,//发帖人
-                            @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam(required = false, value = "coverimg") String coverimg,//帖子封面
-                            @ApiParam(value = "视频地址") @RequestParam(required = false, value = "vid") String vid,//视频url
+                            @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam(required = false, value = "coverimg") MultipartFile coverimg,//帖子封面
+                            @ApiParam(value = "视频地址") @RequestParam(required = false, value = "vid") MultipartFile vid,//视频url
                             @ApiParam(value = "帖子内容") @RequestParam String postcontent,//帖子内容
                             @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
-                            @ApiParam(value = "圈子精选") @RequestParam(required = false) String isessencepool,//精选池中的帖子圈子精选贴
+                            @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//精选池中的帖子圈子精选贴
                             @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,//精选排序
                             @ApiParam(value = "精选日期 yyyyMMddHHmmss") @RequestParam(required = false) String time) {//精选日期
         Response response = new Response();
-        Map<String, Integer> resaut = postFacade.addPost(request, title, subtitle, type, userid, circleid, vid, coverimg, postcontent, isessence, isessencepool, orderid, time);
+        Map<String, Integer> resaut = postFacade.addPost(request, title, subtitle, type, circleid, vid, userid, coverimg, postcontent, isessence, ishot, orderid, time);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
