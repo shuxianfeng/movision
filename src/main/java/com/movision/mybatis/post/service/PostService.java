@@ -492,6 +492,22 @@ public class PostService {
         }
     }
 
+    /**
+     * 帖子编辑数据回显
+     *
+     * @param postid
+     * @return
+     */
+    public PostCompile queryPostByIdEcho(Integer postid) {
+        try {
+            log.info("帖子编辑数据回显");
+            return postMapper.queryPostByIdEcho(postid);
+        } catch (Exception e) {
+            log.error("帖子编辑数据回显异常");
+            throw e;
+        }
+    }
+
 
 
     /**
