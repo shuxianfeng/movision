@@ -508,6 +508,10 @@ public class PostService {
         }
     }
 
+    public Integer updatePostById(Post post) {
+        return null;
+    }
+
 
 
     /**
