@@ -2,7 +2,6 @@ package com.movision.mybatis.province.entity;
 
 public class Province {
     private Integer id;
-
     private String code;
 
     private String name;

@@ -4,7 +4,6 @@ import com.movision.mybatis.province.entity.Province;
 
 public interface ProvinceMapper {
     int deleteByPrimaryKey(Integer id);
-
     int insert(Province record);
 
     int insertSelective(Province record);

@@ -2,7 +2,6 @@ package com.movision.mybatis.area.entity;
 
 public class Area {
     private Integer id;
-
     private String code;
 
     private String name;

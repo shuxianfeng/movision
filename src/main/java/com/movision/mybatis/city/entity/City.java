@@ -2,7 +2,6 @@ package com.movision.mybatis.city.entity;
 
 public class City {
     private Integer id;
-
     private String code;
 
     private String name;

@@ -4,7 +4,6 @@ import com.movision.mybatis.area.entity.Area;
 
 public interface AreaMapper {
     int deleteByPrimaryKey(Integer id);
-
     int insert(Area record);
 
     int insertSelective(Area record);
