@@ -2,7 +2,6 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.OrderFacade;
-import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -72,40 +72,36 @@ public class OrdersListController {
      * 精确查询订单
      *
      * @param ordernumber
-     * @param name
-     * @param street
-     * @param province
+      * @param province
      * @param city
      * @param district
      * @param takeway
      * @param mintime
      * @param maxtime
      * @param email
-     * @param cnee
+     * @param name
      * @param phone
      * @param paytype
      * @return
      */
-    @ApiOperation(value = "精准搜索订单（暂时不做）", notes = "精准搜索订单", response = Response.class)
+    @ApiOperation(value = "精准搜索订单", notes = "精准搜索订单", response = Response.class)
     @RequestMapping(value = "/query_order_accuracy", method = RequestMethod.POST)
     public Response queryAccuracyConditionByOrder(@ApiParam(value = "订单编号") @RequestParam(required = false) String ordernumber,//订单号
-                                                  @ApiParam(value = "购买人") @RequestParam(required = false) String name,//购买人
-                                                  @ApiParam(value = "地址") @RequestParam(required = false) String street,//地址
-                                                  @ApiParam(value = "省") @RequestParam(required = false) String province,//省
+                                                   @ApiParam(value = "省") @RequestParam(required = false) String province,//省
                                                   @ApiParam(value = "市") @RequestParam(required = false) String city,//市
                                                   @ApiParam(value = "县") @RequestParam(required = false) String district,//县
                                                   @ApiParam(value = "配送方式") @RequestParam(required = false) String takeway,//配送方式
-                                                  @ApiParam(value = "区间最小时间") @RequestParam String mintime,//区间最小时间
-                                                  @ApiParam(value = "区间最大时间") @RequestParam String maxtime,//区间最大时间
+                                                  @ApiParam(value = "区间最小时间") @RequestParam(required = false) String mintime,//区间最小时间
+                                                  @ApiParam(value = "区间最大时间") @RequestParam(required = false) String maxtime,//区间最大时间
                                                   @ApiParam(value = "邮箱") @RequestParam(required = false) String email,//
-                                                  @ApiParam(value = "收货人") @RequestParam(required = false) String cnee,//收货人
+                                                  @ApiParam(value = "收货人") @RequestParam(required = false) String name,//收货人
                                                   @ApiParam(value = "手机号") @RequestParam(required = false) String phone,//手机号
                                                   @ApiParam(value = "支付方式") @RequestParam(required = false) String paytype//支付方式
     ) {
         Response response = new Response();
-        List<BossOrdersVo> list = orderFacade.queryAccuracyConditionByOrder(ordernumber, name,
-                street, province, city, district, takeway, mintime,
-                maxtime, email, cnee, phone, paytype);
+        List<BossOrdersVo> list = orderFacade.queryAccuracyConditionByOrder(ordernumber
+                 , province, city, district, takeway, mintime,
+                maxtime, email, name, phone, paytype);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -128,6 +124,23 @@ public class OrdersListController {
             response.setMessage("查询查询成功");
         }
         response.setData(bossOrders);
+        return response;
+    }
+
+    /**
+     * 三级联动
+     *
+     * @return
+     */
+    @ApiOperation(value = "三级联动", notes = "三级联动", response = Response.class)
+    @RequestMapping(value = "/query_list_province_type", method = RequestMethod.POST)
+    public Response queryPostProvince() {
+        Response response = new Response();
+        Map<String, Object> list = orderFacade.queryPostProvince();
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(list);
         return response;
     }
 }

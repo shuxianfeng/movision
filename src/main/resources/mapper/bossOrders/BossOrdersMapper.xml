@@ -292,7 +292,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-    <select id="queryOrdersByList" resultType="com.movision.mybatis.bossOrders.entity.BossOrdersVo">
+    <select id="findAllOrdersByList" resultType="com.movision.mybatis.bossOrders.entity.BossOrdersVo">
     SELECT
       o.id,
       o.ordernumber,
@@ -311,8 +311,8 @@
       a.street,
       c.title,
 	  s.isdebug,
-	  d.logistics
-    FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id LEFT  JOIN yw_sub_order s ON s.porderid=o.id LEFT JOIN yw_coupon c ON c.id=o.couponsid LEFT JOIN yw_order_sub_logistics d ON d.logistics=o.logictisid
+	  d.logisticsid
+    FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id LEFT  JOIN yw_sub_order s ON s.porderid=o.id LEFT JOIN yw_coupon c ON c.id=o.couponsid LEFT  JOIN yw_order_sub_logistics  d ON d.logisticsid=o.logisticsid
   </select>
 
     <select id="queryOrderByCondition" parameterType="java.util.Map"
@@ -379,5 +379,94 @@
         o.paytime,
         o.paytype
         FROM yw_orders o WHERE ordernumber=#{ordernumber,jdbcType=INTEGER}
+    </select>
+
+    <select id="findAllAccuracyConditionByOrder" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.bossOrders.entity.BossOrdersVo">
+SELECT
+      o.id,
+      o.ordernumber,
+      o.userid,
+      o.addressid,
+      o.intime,
+      o.position,
+      o.money,
+      o.realmoney,
+      o.status,
+      a.name,
+      a.phone,
+      a.province,
+      a.city,
+      a.district,
+      a.street,
+      c.title,
+	  s.isdebug,
+	  d.logisticsid
+    FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id LEFT  JOIN yw_sub_order s ON s.porderid=o.id
+   LEFT JOIN yw_coupon c ON c.id=o.couponsid LEFT  JOIN yw_order_sub_logistics  d ON d.logisticsid=o.logisticsid LEFT JOIN yw_user u ON u.id=o.userid
+ WHERE 1=1
+         <if test="ordernumber!=null">
+            AND  ordernumber=#{ordernumber,jdbcType=VARCHAR}
+         </if>
+        <if test="province!=null">
+            AND  a.province=#{province,jdbcType=VARCHAR}
+        </if>
+        <if test="city!=null">
+            AND  a.city=#{city,jdbcType=VARCHAR}
+        </if>
+        <if test="district!=null">
+            AND  a.district=#{district,jdbcType=VARCHAR}
+        </if>
+        <if test="phone!=null">
+            AND  phone=#{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="email!=null">
+            AND  email=#{email,jdbcType=VARCHAR}
+        </if>
+        <if test="name!=null">
+            AND  a.name LIKE  concat(concat('%',#{name,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="paytype!=null">
+            AND  paytype=#{paytype,jdbcType=INTEGER}
+        </if>
+        <if test="takeway!=null">
+            AND  takeway=#{takeway,jdbcType=INTEGER}
+        </if>
+        <if test="intime!=null">
+            AND  intime BETWEEN #{mintime,jdbcType=DATE}  AND #{maxtime,jdbcType=DATE}
+        </if>
+
+     </select>
+    <select id="findAllProvince" resultType="java.lang.Integer">
+         SELECT DISTINCT code FROM yw_province ORDER BY code
+    </select>
+    <select id="findAllProvinceName" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.province.entity.Province">
+        SELECT code,name FROM yw_province WHERE code=#{id,jdbcType=INTEGER}
+    </select>
+    <select id="findAllProvinceByNum" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_province
+    </select>
+
+    <select id="findAllCity" resultType="java.lang.Integer">
+        SELECT DISTINCT code FROM yw_city ORDER BY code
+    </select>
+    <select id="findAllCityName" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.city.entity.City">
+       SELECT code,name,provincecode FROM yw_city  WHERE provincecode=#{id,jdbcType=INTEGER}
+    </select>
+    <select id="findAllCityByNum" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_city
+    </select>
+
+    <select id="findAllArea" resultType="java.lang.Integer">
+        SELECT DISTINCT code FROM yw_area ORDER BY code
+    </select>
+    <select id="findAllAreaName" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.area.entity.Area">
+        SELECT id,code,name,citycode FROM yw_area WHERE citycode=#{id,jdbcType=INTEGER}
+    </select>
+    <select id="findAllAreaByNum" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_area
     </select>
 </mapper>

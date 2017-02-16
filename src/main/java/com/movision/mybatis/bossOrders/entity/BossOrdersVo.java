@@ -25,7 +25,6 @@ public class BossOrdersVo {
 
     private String province;
 
-
     private String city;
     private Integer position;
 
@@ -73,7 +72,6 @@ public class BossOrdersVo {
     public void setCoupon(String coupon) {
         this.coupon = coupon;
     }
-
 
 
     private Date paytime;
