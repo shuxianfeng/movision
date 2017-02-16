@@ -1,6 +1,7 @@
 package com.movision.mybatis.goodsAssessment.mapper;
 
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
+import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentCategery;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
 import org.apache.ibatis.session.RowBounds;
@@ -31,6 +32,8 @@ public interface GoodsAssessmentMapper {
     GoodsAssessmentVo queryPassessment(int pid);
 
     List<GoodsAssessmentImg> queryGoodsAssessmentImg(int assessmentid);
+
+    GoodsAssessmentCategery queryAssessmentCategorySum(int goodsid);
 
     int updateByPrimaryKeySelective(GoodsAssessment record);
 

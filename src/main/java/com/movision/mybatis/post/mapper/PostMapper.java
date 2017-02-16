@@ -109,5 +109,7 @@ public interface PostMapper {
 
 
     Double findAllActivefee(Integer postid);
+
+    PostCompile queryPostByIdEcho(Integer postid);
     /*List postSearch(Map map);*/
 }

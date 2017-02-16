@@ -12,10 +12,7 @@ import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.period.service.PeriodService;
-import com.movision.mybatis.post.entity.Post;
-import com.movision.mybatis.post.entity.PostActiveList;
-import com.movision.mybatis.post.entity.PostList;
-import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.rewarded.entity.Rewarded;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
@@ -29,6 +26,7 @@ import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -403,7 +402,7 @@ public class PostFacade {
      * @param time
      * @return
      */
-    public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid, MultipartFile vid,
+    public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid, String vid,
                                         MultipartFile coverimg, String postcontent, String isessence, String isessencepool, String orderid, String time) {
         Post post = new Post();
         Map<String, Integer> map = new HashedMap();
@@ -416,7 +415,9 @@ public class PostFacade {
             //上传图片到本地服务器
             String savedFileName = "";
             String savedVideo = "";
-            if (coverimg != null) {
+            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+            if (coverimg != null && isMultipart) {
                 if (!coverimg.isEmpty()) {
                     String fileRealName = coverimg.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
@@ -437,7 +438,7 @@ public class PostFacade {
                 }
             }
 
-            if (vid != null) {
+            /*if (vid != null) {
                 if (!vid.isEmpty()) {
                     String fileRealName = vid.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
@@ -456,7 +457,7 @@ public class PostFacade {
                         vid.transferTo(savedFile);  //转存文件
                     }
                 }
-            }
+            }*/
 
             post.setCoverimg(savedFileName);//添加帖子封面
             post.setIsactive(0);//设置状态为帖子
@@ -665,6 +666,16 @@ public class PostFacade {
         map.put("resault", circlename);
         map.put("num", num);
         return map;
+    }
+
+    /**
+     * 帖子编辑数据回显
+     *
+     * @param postid
+     * @return
+     */
+    public PostCompile queryPostByIdEcho(String postid) {
+        return postService.queryPostByIdEcho(Integer.parseInt(postid));
     }
 
 

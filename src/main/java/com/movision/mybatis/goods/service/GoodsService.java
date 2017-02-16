@@ -8,6 +8,7 @@ import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.mapper.GoodsMapper;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
+import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentCategery;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodsAssessment.mapper.GoodsAssessmentMapper;
 import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
@@ -247,6 +248,16 @@ public class GoodsService {
             return goodsAssessmentMapper.queryGoodsAssessmentImg(assessmentid);
         } catch (Exception e) {
             log.error("根据评论id查询评论中的晒图列表失败");
+            throw e;
+        }
+    }
+
+    public GoodsAssessmentCategery queryAssessmentCategorySum(int goodsid) {
+        try {
+            log.info("查询各类商品评论的数量");
+            return goodsAssessmentMapper.queryAssessmentCategorySum(goodsid);
+        } catch (Exception e) {
+            log.error("查询各类商品评论的数量失败");
             throw e;
         }
     }

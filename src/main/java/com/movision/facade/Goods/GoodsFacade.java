@@ -5,15 +5,19 @@ import com.movision.mybatis.goods.entity.GoodsDetail;
 import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
+import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentCategery;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author shuxf
@@ -43,7 +47,7 @@ public class GoodsFacade {
         return goodsDetail;
     }
 
-    public List<GoodsAssessmentVo> queryGoodsAssessment(String pageNo, String pageSize, String goodsid, String type) {
+    public Map<String, Object> queryGoodsAssessment(String pageNo, String pageSize, String goodsid, String type) {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -51,6 +55,8 @@ public class GoodsFacade {
             pageSize = "10";
         }
         Paging<GoodsAssessmentVo> pager = new Paging<GoodsAssessmentVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+
+        Map<String, Object> map = new HashMap();
 
         List<GoodsAssessmentVo> goodsAssessmentList = new ArrayList<>();
 
@@ -80,6 +86,12 @@ public class GoodsFacade {
             }
         }
 
-        return goodsAssessmentList;
+        //查询各类评论的数量
+        GoodsAssessmentCategery goodsAssessmentCategery = goodsService.queryAssessmentCategorySum(Integer.parseInt(goodsid));
+
+        map.put("goodsAssessmentList", goodsAssessmentList);
+        map.put("goodsAssessmentCategery", goodsAssessmentCategery);
+
+        return map;
     }
 }
