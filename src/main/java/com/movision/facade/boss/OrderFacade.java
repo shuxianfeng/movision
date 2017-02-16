@@ -49,6 +49,15 @@ public class OrderFacade {
     }
 
     /**
+     * 删除订单
+     * @param id
+     * @return
+     */
+    public  int deleteOrder(Integer id){
+        return  bossOrderService.deleteOrder(id);
+    }
+
+    /**
      * 查询基本信息
      * @param
      * @param id

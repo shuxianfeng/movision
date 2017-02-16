@@ -64,6 +64,23 @@ public class OrdersListController {
     }
 
     /**
+     * 删除订单
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "删除订单",notes = "删除订单",response = Response.class)
+    @RequestMapping(value = "delete_order",method = RequestMethod.POST)
+    public  Response deleteOrder(@RequestParam(required = false) Integer id){
+        Response response = new Response();
+        int result = orderFacade.deleteOrder(id);
+        if(response.getCode()==200){
+            response.setMessage("删除成功");
+        }
+        response.setData(result);
+        return  response;
+    }
+
+    /**
      * 根据条件快速查询订单
      *
      * @param ordernumber

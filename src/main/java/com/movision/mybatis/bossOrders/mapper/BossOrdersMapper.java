@@ -47,4 +47,8 @@ public interface BossOrdersMapper {
 
     BossOrders findAllPerInfo(Integer id);//基本信息
 
+    BossOrders findAllInvoiceInfo(Integer id);//发票信息
+
+    int deleteOrder(Integer id);//删除订单
+
  }

@@ -63,6 +63,21 @@ public class BossOrderService {
     }
 
     /**
+     * 订单管理*--删除订单
+     * @param id
+     * @return
+     */
+    public  int  deleteOrder(Integer id){
+        try{
+            loger.info("删除订单");
+            return bossOrdersMapper.deleteOrder(id);
+        }catch (Exception e){
+            loger.error("删除订单失败");
+            throw e;
+        }
+
+    }
+    /**
      * 根据条件查询订单
      *
      * @param map
