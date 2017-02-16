@@ -22,6 +22,8 @@ import com.movision.mybatis.share.service.SharesService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.mybatis.video.entity.Video;
+import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -50,29 +52,34 @@ import java.util.*;
 @Service
 public class PostFacade {
     @Autowired
-    PostService postService;
+    private PostService postService;
 
     @Autowired
-    CircleService circleService;
+    private CircleService circleService;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    SharesService sharesService;
+    private SharesService sharesService;
 
     @Autowired
-    RewardedService rewardedService;
-    @Autowired
-    ActivePartService activePartService;
-    @Autowired
-    AccusationService accusationService;
+    private RewardedService rewardedService;
 
     @Autowired
-    CommentService commentService;
+    private ActivePartService activePartService;
 
     @Autowired
-    PeriodService periodService;
+    private AccusationService accusationService;
+
+    @Autowired
+    private CommentService commentService;
+
+    @Autowired
+    private PeriodService periodService;
+
+    @Autowired
+    private VideoService videoService;
 
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
@@ -457,6 +464,7 @@ public class PostFacade {
                         vid.transferTo(savedFile);  //转存文件
                     }
                 }
+
             }
 
             post.setCoverimg(savedFileName);//添加帖子封面
@@ -484,6 +492,12 @@ public class PostFacade {
             post.setEssencedate(isessencetime);
             post.setUserid(Integer.parseInt(userid));
             int result = postService.addPost(post);//添加帖子
+            Integer pid = post.getId();//获取到刚刚添加的帖子id
+            Video vide = new Video();
+            vide.setPostid(pid);
+            vide.setVideourl(savedVideo);
+            vide.setIntime(new Date());
+            Integer in = videoService.insertVideoById(vide);//添加视频表
             map.put("result", result);
         } catch (Exception e) {
             log.error("帖子添加异常", e);
@@ -692,16 +706,16 @@ public class PostFacade {
      * @param coverimg
      * @param postcontent
      * @param isessence
-     * @param isessencepool
      * @param orderid
      * @param time
      * @return
      */
-    public Map<String, Integer> updatePostById(HttpServletRequest request, String title, String subtitle, String type, String userid, String circleid, String vid,
-                                               MultipartFile coverimg, String postcontent, String isessence, String isessencepool, String orderid, String time) {
+    public Map<String, Integer> updatePostById(HttpServletRequest request, String postid, String title, String subtitle, String type, String userid, String circleid, MultipartFile vid,
+                                               MultipartFile coverimg, String postcontent, String isessence, String ishot, String orderid, String time) {
         Post post = new Post();
         Map<String, Integer> map = new HashedMap();
         try {
+            post.setId(Integer.parseInt(postid));//帖子id
             post.setTitle(title);//帖子标题
             post.setSubtitle(subtitle);//帖子副标题
             post.setType(Integer.parseInt(type));//帖子类型
@@ -733,7 +747,7 @@ public class PostFacade {
                 }
             }
 
-            /*if (vid != null) {
+            if (vid != null) {
                 if (!vid.isEmpty()) {
                     String fileRealName = vid.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
@@ -752,16 +766,20 @@ public class PostFacade {
                         vid.transferTo(savedFile);  //转存文件
                     }
                 }
-            }*/
-
+            }
+            Video vide = new Video();
+            vide.setPostid(Integer.parseInt(postid));
+            vide.setVideourl(savedVideo);
+            vide.setIntime(new Date());
+            Integer in = videoService.updateVideoById(vide);
             post.setCoverimg(savedFileName);//添加帖子封面
             post.setIsactive(0);//设置状态为帖子
             post.setPostcontent(postcontent);//帖子内容
             if (isessence != null) {
                 post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
             }
-            if (isessencepool != null) {
-                post.setIsessencepool(Integer.parseInt(isessencepool));//是否为圈子精选
+            if (ishot != null) {
+                post.setIshot(Integer.parseInt(ishot));//是否为圈子精选
             }
             post.setIntime(new Date());
             if (orderid != null) {

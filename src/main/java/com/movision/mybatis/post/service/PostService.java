@@ -509,7 +509,7 @@ public class PostService {
     }
 
     public Integer updatePostById(Post post) {
-        return null;
+        return postMapper.updateByPrimaryKeySelectiveById(post);
     }
 
 

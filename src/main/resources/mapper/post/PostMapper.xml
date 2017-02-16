@@ -612,7 +612,7 @@
                 ishot = #{ishot,jdbcType=INTEGER},
             </if>
             <if test="orderid != null">
-                #{orderid,jdbcType=INTEGER},
+                orderid=#{orderid,jdbcType=INTEGER},
             </if>
             <if test="isessence != null">
                 isessence = #{isessence,jdbcType=INTEGER},
@@ -634,6 +634,50 @@
             </if>
             <if test="isdel != null">
                 isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="essencedate != null">
+                essencedate = #{essencedate,jdbcType=DATE},
+            </if>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKeySelectiveById" parameterType="com.movision.mybatis.post.entity.Post">
+        update yw_post
+        <set>
+            <if test="circleid != null">
+                circleid = #{circleid,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null">
+                subtitle = #{subtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="postcontent != null">
+                postcontent = #{postcontent,jdbcType=VARCHAR},
+            </if>
+
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="ishot != null">
+                ishot = #{ishot,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                orderid=#{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="isessence != null">
+                isessence = #{isessence,jdbcType=INTEGER},
+            </if>
+            <if test="coverimg != null">
+                coverimg = #{coverimg,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
             </if>
             <if test="essencedate != null">
                 essencedate = #{essencedate,jdbcType=DATE},

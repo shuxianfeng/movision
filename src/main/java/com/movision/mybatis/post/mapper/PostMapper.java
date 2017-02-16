@@ -111,5 +111,7 @@ public interface PostMapper {
     Double findAllActivefee(Integer postid);
 
     PostCompile queryPostByIdEcho(Integer postid);
+
+    Integer updateByPrimaryKeySelectiveById(Post post);
     /*List postSearch(Map map);*/
 }
