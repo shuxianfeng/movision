@@ -1,9 +1,7 @@
 package com.movision.facade.boss;
 
 import com.movision.mybatis.accusation.service.AccusationService;
-import com.movision.mybatis.circle.entity.Circle;
-import com.movision.mybatis.circle.entity.CircleFollowNum;
-import com.movision.mybatis.circle.entity.CircleVo;
+import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostList;
@@ -50,7 +48,7 @@ public class CircleFacade {
      * @param pager
      * @return
      */
-    public List<CircleVo> queryCircleByList(Paging<CircleVo> pager) {
+    public List<CircleVo> queryCircleByList1(Paging<CircleVo> pager) {
         List<CircleVo> list = circleService.queryCircleByList(pager);//获取圈子列表的部分数据
         List<CircleVo> circleVoslist = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
@@ -103,17 +101,39 @@ public class CircleFacade {
         return circleVoslist;
     }
 
-    public List<CircleVo> queryCircleByList1(Paging<CircleVo> pager) {
+    /**
+     * 圈子首页列表查询
+     *
+     * @return
+     */
+    public List<CircleIndexList> queryCircleByList() {
         List<Integer> circlenum = circleService.queryListByCircleCategory();//查询圈子所有分类
-        CircleVo cir = new CircleVo();
+        List<CircleIndexList> list = new ArrayList<>();
         for (int i = 0; i < circlenum.size(); i++) {
+            CircleIndexList cir = new CircleIndexList();
             //查询，圈子分类，圈主，管理员列表，关注人数，今日关注人数，帖子数量，今日新增帖子，精贴数量，支持人数，创建日期
-            List<User> users = circleService.queryCircleUserList(i);
+            List<User> users = circleService.queryCircleUserList(i);//查询管理员列表
+            List<User> circlemaster = users;//圈主
             CircleFollowNum followNum = circleService.queryFollowAndNewNum(i);//返回关注数,今日新增关注人数
+            CirclePostNum postnum = circleService.queryCirclePostNum(i);//返回帖子数量，今日新增帖子，精贴数
+            CircleVo supportnum = circleService.queryCircleSupportnum(i);//返回圈子分类创建时间，支持人数
+            cir.setCirclemaster(circlemaster);//圈主列表和管理员相同
             cir.setCategory(i);//圈子分类
             cir.setCirclemanagerlist(users);//管理员列表
+            if (postnum != null) {
+                cir.setPostnum(postnum.getPostnum());//帖子数量
+                cir.setPostnewnum(postnum.getNewpostnum());//今日新增帖子数量
+                cir.setIsessencenum(postnum.getIsessencenum());//精贴数量
+            }
+            if (followNum != null) {
+                cir.setFollownum(followNum.getNum());//关注数
+                cir.setFollownewnum(followNum.getNewnum());//今日新增关注数
+            }
+            cir.setIntime(supportnum.getIntime());//圈子创建时间
+            cir.setSupportnum(supportnum.getSupportnum());//圈子支持人数
+            list.add(cir);
         }
-        return null;
+        return list;
     }
 
     /**

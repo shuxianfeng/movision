@@ -21,7 +21,7 @@ public class CircleVo {
 
     private String photo;
 
-    private Integer category;
+    private Integer category;//圈子分类
 
     private String categoryname;
 
@@ -70,6 +70,40 @@ public class CircleVo {
     private Integer isdel;
 
     private Integer issupport;//是否可支持 0 可支持 1 已支持
+
+    private Date intime;//时间
+
+    public Date getIntime() {
+        return intime;
+    }
+
+    public void setIntime(Date intime) {
+        this.intime = intime;
+    }
+
+    public Integer getPostnewnum() {
+        return postnewnum;
+    }
+
+    public void setPostnewnum(Integer postnewnum) {
+        this.postnewnum = postnewnum;
+    }
+
+    public Integer getFollownum() {
+        return follownum;
+    }
+
+    public void setFollownum(Integer follownum) {
+        this.follownum = follownum;
+    }
+
+    public Integer getFollownewnum() {
+        return follownewnum;
+    }
+
+    public void setFollownewnum(Integer follownewnum) {
+        this.follownewnum = follownewnum;
+    }
 
     public Integer getIsdel() {
         return isdel;

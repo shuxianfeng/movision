@@ -246,7 +246,7 @@ public class PostController {
                             @ApiParam(value = "帖子类型 0 普通帖 1 原生视频帖") @RequestParam String type,//帖子类型
                             @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
                             @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam(required = false, value = "coverimg") MultipartFile coverimg,//帖子封面
-                            @ApiParam(value = "视频地址") @RequestParam(required = false) MultipartFile vid,//视频url
+                            @ApiParam(value = "视频地址") @RequestParam(required = false, value = "vid") MultipartFile vid,//视频url
                             @ApiParam(value = "帖子内容") @RequestParam String postcontent,//帖子内容
                             @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
                             @ApiParam(value = "圈子精选") @RequestParam(required = false) String isessencepool,//精选池中的帖子圈子精选贴

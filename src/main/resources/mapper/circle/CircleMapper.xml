@@ -373,14 +373,28 @@
     <select id="queryCircleUserList" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.circle.entity.CircleVo">
         SELECT * FROM yw_user WHERE id IN(SELECT userid FROM yw_circle_manager WHERE circleid IN(SELECT id FROM
-        yw_circle WHERE category=1))
+        yw_circle WHERE category=#{categoryid,jdbcType=INTEGER}))
     </select>
 
     <select id="queryFollowAndNewNum" resultType="com.movision.mybatis.circle.entity.CircleFollowNum"
             parameterType="java.lang.Integer">
         SELECT COUNT(1) AS follownum,
-        (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN (select circleid from yw_follow_circle where
-        date(intime) = curdate())) AS newfollownum
-        FROM yw_follow_circle WHERE circleid IN (SELECT id FROM yw_circle WHERE category=4)
+        (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN
+        (select circleid from yw_follow_circle where date(intime) = curdate())) AS follownewnum
+        FROM yw_follow_circle WHERE circleid IN (SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER})
+    </select>
+
+    <select id="queryCirclePostNum" resultType="com.movision.mybatis.circle.entity.CirclePostNum"
+            parameterType="java.lang.Integer">
+        SELECT COUNT(1) AS postnum,
+        (SELECT COUNT(1) FROM yw_post WHERE circleid IN(SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER}) AND date(intime) = curdate()) AS postnewnum,
+        (SELECT COUNT(1) FROM yw_post WHERE circleid IN(SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER}) AND isessence=1) AS isessencenum
+         FROM yw_post p WHERE p.circleid IN (SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER})
+    </select>
+
+    <select id="queryCircleSupportnum" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.circle.entity.CircleVo">
+        SELECT SUM(supportnum) AS supportnum,(SELECT intime from yw_circle_category WHERE id=0) AS intime FROM yw_circle
+        WHERE category=#{categoryid,jdbcType=INTEGER}
     </select>
 </mapper>

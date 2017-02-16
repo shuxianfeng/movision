@@ -2,6 +2,7 @@ package com.movision.mybatis.circle.service;
 
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleFollowNum;
+import com.movision.mybatis.circle.entity.CirclePostNum;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.mapper.CircleMapper;
 import com.movision.mybatis.followCircle.mapper.FollowCircleMapper;
@@ -309,6 +310,38 @@ public class CircleService {
             return circleMapper.queryFollowAndNewNum(categoryid);
         } catch (Exception e) {
             log.error("查询关注数,今日新增关注人数异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询帖子数量，今日新增帖子，精贴数
+     *
+     * @param categoryid
+     * @return
+     */
+    public CirclePostNum queryCirclePostNum(Integer categoryid) {
+        try {
+            log.info("查询帖子数量，今日新增帖子，精贴数");
+            return circleMapper.queryCirclePostNum(categoryid);
+        } catch (Exception e) {
+            log.error("查询帖子数量，今日新增帖子，精贴数异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询分类创建时间及支持人数
+     *
+     * @param categoryid
+     * @return
+     */
+    public CircleVo queryCircleSupportnum(Integer categoryid) {
+        try {
+            log.info("查询分类创建时间及支持人数");
+            return circleMapper.queryCircleSupportnum(categoryid);
+        } catch (Exception e) {
+            log.error("查询分类创建时间及支持人数异常");
             throw e;
         }
     }
