@@ -6,6 +6,7 @@ import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostCompile;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.share.entity.SharesVo;
@@ -246,7 +247,7 @@ public class PostController {
                             @ApiParam(value = "帖子类型 0 普通帖 1 原生视频帖") @RequestParam String type,//帖子类型
                             @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
                             @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam(required = false, value = "coverimg") MultipartFile coverimg,//帖子封面
-                            @ApiParam(value = "视频地址") @RequestParam(required = false, value = "vid") MultipartFile vid,//视频url
+                            @ApiParam(value = "视频地址") @RequestParam(required = false, value = "vid") String vid,//视频url
                             @ApiParam(value = "帖子内容") @RequestParam String postcontent,//帖子内容
                             @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
                             @ApiParam(value = "圈子精选") @RequestParam(required = false) String isessencepool,//精选池中的帖子圈子精选贴
@@ -381,6 +382,25 @@ public class PostController {
             response.setMessage("操作成功");
         }
         response.setData(list);
+        return response;
+    }
+
+
+    /**
+     * 编辑帖子-数据回显
+     *
+     * @param postid
+     * @return
+     */
+    @ApiOperation(value = "编辑帖子数据回显", notes = "用于编辑帖子时数据回显", response = Response.class)
+    @RequestMapping(value = "query_post_echo", method = RequestMethod.POST)
+    public Response queryPostByIdEcho(@ApiParam(value = "帖子id") @RequestParam String postid) {
+        Response response = new Response();
+        PostCompile postCompile = postFacade.queryPostByIdEcho(postid);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(postCompile);
         return response;
     }
 
