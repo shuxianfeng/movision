@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author shuxf
@@ -55,12 +56,12 @@ public class AppGoodsController {
                                         @ApiParam(value = "每页几条") @RequestParam(required = false) String pageSize) {
         Response response = new Response();
 
-        List<GoodsAssessmentVo> goodsAssessmentList = goodsFacade.queryGoodsAssessment(pageNo, pageSize, goodsid, type);
+        Map<String, Object> map = goodsFacade.queryGoodsAssessment(pageNo, pageSize, goodsid, type);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(goodsAssessmentList);
+        response.setData(map);
         return response;
     }
 }
