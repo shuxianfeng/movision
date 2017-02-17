@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +58,91 @@ public class AppGoodsController {
         Response response = new Response();
 
         Map<String, Object> map = goodsFacade.queryGoodsAssessment(pageNo, pageSize, goodsid, type);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 商品租用配置和套餐选择接口
+     */
+    @ApiOperation(value = "商品租赁日期和套餐选择接口", notes = "用户租用商品时，点击加入购物车或立即租用之前选择租用日期和套餐类型等的选择数据返回", response = Response.class)
+    @RequestMapping(value = "rentChoice", method = RequestMethod.POST)
+    public Response queryRentChoice(@ApiParam(value = "商品id") @RequestParam String goodsid) {
+        Response response = new Response();
+
+        Map<String, Object> map = new HashMap<>();
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 租用的商品加入购物车接口
+     */
+    @ApiOperation(value = "租用的商品加入购物车接口", notes = "用户租用商品时，点击加入购物车或立即租用之前选择租用日期和套餐类型等的选择数据返回", response = Response.class)
+    @RequestMapping(value = "rentGoodsCart", method = RequestMethod.POST)
+    public Response rentGoodsCart(@ApiParam(value = "商品id") @RequestParam String goodsid) {
+        Response response = new Response();
+
+        Map<String, Object> map = new HashMap<>();
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 租用的商品立即租用接口
+     */
+    @ApiOperation(value = "租用的商品立即租用接口", notes = "用户租用商品时，点击加入购物车或立即租用之前选择租用日期和套餐类型等的选择数据返回", response = Response.class)
+    @RequestMapping(value = "immediateRent", method = RequestMethod.POST)
+    public Response immediateRent(@ApiParam(value = "商品id") @RequestParam String goodsid) {
+        Response response = new Response();
+
+        Map<String, Object> map = new HashMap<>();
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 购买的商品加入购物车接口
+     */
+    @ApiOperation(value = "购买的商品加入购物车接口", notes = "用户租用商品时，点击加入购物车或立即租用之前选择租用日期和套餐类型等的选择数据返回", response = Response.class)
+    @RequestMapping(value = "buyGoodsCart", method = RequestMethod.POST)
+    public Response buyGoodsCart(@ApiParam(value = "商品id") @RequestParam String goodsid) {
+        Response response = new Response();
+
+        Map<String, Object> map = new HashMap<>();
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 购买的商品立即购买接口
+     */
+    @ApiOperation(value = "购买的商品立即购买接口", notes = "用户租用商品时，点击加入购物车或立即租用之前选择租用日期和套餐类型等的选择数据返回", response = Response.class)
+    @RequestMapping(value = "immediateBuy", method = RequestMethod.POST)
+    public Response immediateBuy(@ApiParam(value = "商品id") @RequestParam String goodsid) {
+        Response response = new Response();
+
+        Map<String, Object> map = new HashMap<>();
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");

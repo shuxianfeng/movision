@@ -71,7 +71,7 @@
         ) t2
         WHERE t1.id = t2.goodsid
         LIMIT 10) a
-        LEFT JOIN yw_goods_img b
+        LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
         ORDER BY vol DESC
     </select>
@@ -90,7 +90,7 @@
         ) t2
                 WHERE t1.id = t2.goodsid
               ) a
-        LEFT JOIN yw_goods_img b
+        LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
         ORDER BY vol DESC
     </select>
@@ -105,7 +105,7 @@
             #{item}
         </foreach>
         ) a
-        LEFT JOIN yw_goods_img b
+        LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
         LIMIT #{defaultcount,jdbcType=INTEGER}
     </select>
@@ -125,7 +125,7 @@
         ) t2
         WHERE t1.id = t2.goodsid
         LIMIT 10) a
-        LEFT JOIN yw_goods_img b
+        LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
         ORDER BY vol DESC
     </select>
@@ -144,7 +144,7 @@
         ) t2
                 WHERE t1.id = t2.goodsid
               ) a
-        LEFT JOIN yw_goods_img b
+        LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
         ORDER BY vol DESC
     </select>
@@ -158,7 +158,7 @@
               AND recommenddate = (
                 SELECT max(recommenddate) FROM yw_goods
               )) a
-        LEFT JOIN yw_goods_img b
+        LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
         LIMIT 10;
     </select>
@@ -170,29 +170,29 @@
                 FROM yw_goods t1
                 WHERE ishomepage = '1'
 				ORDER BY t1.recommenddate DESC) a
-        LEFT JOIN yw_goods_img b
+        LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
     </select>
 
     <!--查询商城首页精选商品列表-->
     <select id="queryEssenceGoods" resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT a.*,b.img_url AS imgurl
-        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t1.stock, t1.goodsposition
             FROM yw_goods t1
             WHERE t1.isessence = '1'
              LIMIT 8) a
-        LEFT JOIN yw_goods_img b
+        LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
     </select>
 
     <!--查询商城首页热门商品列表-->
     <select id="queryHotGoods" resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT a.*,b.img_url AS imgurl
-        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t1.stock, t1.goodsposition
             FROM yw_goods t1
             WHERE t1.ishot = '1'
              LIMIT 8) a
-        LEFT JOIN yw_goods_img b
+        LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
     </select>
 
