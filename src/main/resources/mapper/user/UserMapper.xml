@@ -425,7 +425,10 @@
         SELECT u.nickname FROM yw_user u WHERE u.phone=(SELECT c.phone FROM yw_circle c WHERE
         id=#{circleid,jdbcType=INTEGER})
     </select>
-
+    <select id="queryUserByNicknameBy" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT u.nickname FROM yw_user u WHERE u.id=(SELECT c.userid FROM yw_post c WHERE
+        id=#{postid,jdbcType=INTEGER})
+    </select>
     <select id="queryUser" resultType="com.movision.mybatis.user.entity.User" parameterType="java.lang.String">
         SELECT * FROM yw_user WHERE phone=#{phone,jdbcType=VARCHAR}
     </select>

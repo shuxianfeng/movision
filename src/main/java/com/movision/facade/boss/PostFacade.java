@@ -152,13 +152,16 @@ public class PostFacade {
          long str=date.getTime();
               for(int i=0; i<list.size(); i++){
              PostActiveList postList = new PostActiveList();
-             Integer circleid = list.get(i).getCircleid();
-             String nickname=userService.queryUserByNickname(circleid);
              Integer postid=list.get(i).getId();//获取到帖子id
              Integer persum=postService.queryPostPerson(postid);
+                  String nickname = userService.queryUserByNicknameBy(postid);
              Period periods= periodService.queryPostPeriod(postid);
              Double activefee=list.get(i).getActivefee();
-             Double sumfree=persum*activefee;
+                  Double sumfree = 0.0;
+                  if (activefee != null) {
+                      sumfree = persum * activefee;
+                  }
+
              Date begintime=periods.getBegintime();
              Date endtime=periods.getEndtime();
              postList.setTitle(list.get(i).getTitle());//主题
@@ -171,16 +174,18 @@ public class PostFacade {
              postList.setEndtime(endtime);//结束时间
              postList.setPersum(persum);//报名人数
              postList.setSumfree(sumfree);//总费用
-             long begin= begintime.getTime();
-             long end=endtime.getTime();
-             String activeStatue="";
-             if(str>begin&&str<end){
-                 activeStatue="报名中";
-             }else if(str<begin){
-                 activeStatue="未开始";
-             }else if(str>end){
-                 activeStatue="已结束";
-             }
+                  String activeStatue = "";
+                  if (begintime != null && endtime != null) {
+                      long begin = begintime.getTime();
+                      long end = endtime.getTime();
+                      if (str > begin && str < end) {
+                          activeStatue = "报名中";
+                      } else if (str < begin) {
+                          activeStatue = "未开始";
+                      } else if (str > end) {
+                          activeStatue = "已结束";
+                      }
+                  }
              postList.setActivestatue(activeStatue);//活动状态
              rewardeds.add(postList);
          }
@@ -359,13 +364,12 @@ public class PostFacade {
      */
     public PostList queryPostActiveQ(String postid){
         PostList postList = postService.queryPostParticulars(Integer.parseInt(postid));
-        Integer circleid = postList.getCircleid();
-        Integer id= postList.getId();
+        Integer id = postList.getId();
         Date date = new Date();
         long str=date.getTime();
         Integer share =sharesService.querysum(id);
-         String nickname = userService.queryUserByNickname(circleid);//获取发帖人
         Period periods= periodService.queryPostPeriod(Integer.parseInt(postid));
+        String nickname = userService.queryUserByNicknameBy(Integer.parseInt(postid));//获取发帖人
         postList.setNickname(nickname);
         postList.setShare(share);//分享次数
         postList.setTitle(postList.getTitle());//主标题

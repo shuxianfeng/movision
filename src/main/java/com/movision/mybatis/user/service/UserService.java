@@ -199,6 +199,22 @@ public class UserService {
     }
 
     /**
+     * 根据帖子id查询用户昵称
+     *
+     * @param postid
+     * @return
+     */
+    public String queryUserByNicknameBy(Integer postid) {
+        try {
+            log.info("查询用户昵称");
+            return userMapper.queryUserByNicknameBy(postid);
+        } catch (Exception e) {
+            log.error("查询用户昵称异常");
+            throw e;
+        }
+    }
+
+    /**
      * 后台管理 /-查询报名信息
      * @param id
      * @return

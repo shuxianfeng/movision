@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.invoice.mapper.InvoiceMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.invoice.entity.Invoice">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="orderid" property="orderid" jdbcType="INTEGER"/>
+        <result column="head" property="head" jdbcType="VARCHAR"/>
+        <result column="addressid" property="addressid" jdbcType="INTEGER"/>
+        <result column="phone" property="phone" jdbcType="INTEGER"/>
+        <result column="money" property="money" jdbcType="DOUBLE"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="kind" property="kind" jdbcType="INTEGER"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, orderid, head, addressid, phone, money, name, kind
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_invoice
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from yw_invoice
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.invoice.entity.Invoice">
+        insert into yw_invoice (id, orderid, head,
+        addressid, phone, money,
+        name, kind,content)
+        values (#{id,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER}, #{head,jdbcType=VARCHAR},
+        #{addressid,jdbcType=INTEGER}, #{phone,jdbcType=INTEGER}, #{money,jdbcType=DOUBLE},
+        #{name,jdbcType=VARCHAR}, #{kind,jdbcType=INTEGER},#{content,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.invoice.entity.Invoice">
+        insert into yw_invoice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="head != null">
+                head,
+            </if>
+            <if test="addressid != null">
+                addressid,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="money != null">
+                money,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="kind != null">
+                kind,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="head != null">
+                #{head,jdbcType=VARCHAR},
+            </if>
+            <if test="addressid != null">
+                #{addressid,jdbcType=INTEGER},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=INTEGER},
+            </if>
+            <if test="money != null">
+                #{money,jdbcType=DOUBLE},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="kind != null">
+                #{kind,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.invoice.entity.Invoice">
+        update yw_invoice
+        <set>
+            <if test="orderid != null">
+                orderid = #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="head != null">
+                head = #{head,jdbcType=VARCHAR},
+            </if>
+            <if test="addressid != null">
+                addressid = #{addressid,jdbcType=INTEGER},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=INTEGER},
+            </if>
+            <if test="money != null">
+                money = #{money,jdbcType=DOUBLE},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="kind != null">
+                kind = #{kind,jdbcType=INTEGER},
+                kind = #{kind,jdbcType=INTEGER},
+            </if>
+            <if test="kind != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.invoice.entity.Invoice">
+        update yw_invoice
+        set orderid = #{orderid,jdbcType=INTEGER},
+        head = #{head,jdbcType=VARCHAR},
+        addressid = #{addressid,jdbcType=INTEGER},
+        phone = #{phone,jdbcType=INTEGER},
+        money = #{money,jdbcType=DOUBLE},
+        name = #{name,jdbcType=VARCHAR},
+        kind = #{kind,jdbcType=INTEGER},
+        content = #{content,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

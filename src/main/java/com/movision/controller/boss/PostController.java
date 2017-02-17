@@ -2,10 +2,12 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.PostFacade;
+import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostActiveList;
 import com.movision.mybatis.post.entity.PostCompile;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
@@ -60,6 +62,49 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 后台管理-查询活动列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查询活动列表", notes = "查询活动列表", response = Response.class)
+    @RequestMapping(value = "/list_active_list", method = RequestMethod.POST)
+    public Response queryPostActiveToByList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                            @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostActiveList> pager = new Paging<PostActiveList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostActiveList> list = postFacade.queryPostActiveToByList(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 后台管理-查询报名列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查询报名列表", notes = "查询报名列表", response = Response.class)
+    @RequestMapping(value = "/list_call_list", method = RequestMethod.POST)
+    public Response queyPostCallActive(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                       @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<ActivePartList> pager = new Paging<ActivePartList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<ActivePartList> list = postFacade.queyPostCallActive(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
     /**
      * 查询发帖人信息
      *
@@ -226,6 +271,23 @@ public class PostController {
     }
 
 
+    /**
+     * 后台管理-帖子列表-活动预览
+     *
+     * @param postid
+     * @return
+     */
+    @ApiOperation(value = "活动预览", notes = "活动预览", response = Response.class)
+    @RequestMapping(value = "/query_post_active", method = RequestMethod.POST)
+    public Response queryPostActiveQ(@ApiParam(value = "帖子id") @RequestParam String postid) {
+        Response response = new Response();
+        PostList list = postFacade.queryPostActiveQ(postid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return response;
+    }
     /**
      * 后台管理-添加帖子
      *

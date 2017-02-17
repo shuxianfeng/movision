@@ -51,6 +51,7 @@ public interface UserMapper {
 
     String queryUserByNickname(Integer circleid);
 
+    String queryUserByNicknameBy(Integer postid);
     User queryUser(String phone);
 
     List<UserLike> likeQueryPostByNickname(String name, RowBounds rowBounds);
