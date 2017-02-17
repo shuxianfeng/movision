@@ -393,10 +393,9 @@ public class PostController {
      */
     @ApiOperation(value = "查询是否可加精", notes = "用于查询帖子是否可加精，是，返回可加精的排序数，否，返回状态")
     @RequestMapping(value = "query_post_choiceness", method = RequestMethod.POST)
-    public Response queryPostChoiceness(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                        @ApiParam(value = "精选排序") @RequestParam String orderid) {
+    public Response queryPostChoiceness(@ApiParam(value = "帖子id") @RequestParam String postid) {
         Response response = new Response();
-        Map<String, Object> result = postFacade.queryPostChoiceness(postid, orderid);
+        Map<String, Object> result = postFacade.queryPostChoiceness(postid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

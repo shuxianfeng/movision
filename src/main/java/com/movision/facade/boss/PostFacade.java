@@ -657,14 +657,14 @@ public class PostFacade {
      * @param orderid
      * @return
      */
-    public Map<String, Object> queryPostChoiceness(String postid, String orderid) {
+    public Map<String, Object> queryPostChoiceness(String postid) {
         Map<String, Object> map = new HashedMap();
         List<Post> posts = postService.queryPostChoiceness(Integer.parseInt(postid));//返回当天有几条加精
         if (posts.size() <= 5) {//判断当天是否还可以加精
             List<Integer> lou = new ArrayList();
-            for (int i = 1; i < 6; i++) {
-                for (int j = 0; j < posts.size(); j++) {
-                    if (posts.get(j).getOrderid() != i) {
+            for (int i = 0; i < posts.size(); i++) {
+                for (int j = 1; j < 6; j++) {
+                    if (posts.get(i).getOrderid() != j) {
                         lou.add(i);
                     }
                 }

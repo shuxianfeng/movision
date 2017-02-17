@@ -942,8 +942,9 @@
         (SELECT name FROM yw_circle WHERE id=p.circleid) as circleidCN,
         (SELECT category FROM yw_circle WHERE id=p.circleid)as category,p.ishot,p.userid,
        (SELECT nickname FROM yw_user WHERE id=p.userid) as nickname,p.coverimg,
-        (SELECT videourl FROM yw_video WHERE postid=1) AS voideul,p.isessence,p.essencedate,p.orderid,p.postcontent FROM
-        yw_post as p WHERE id=1
+        (SELECT videourl FROM yw_video WHERE postid=#{postid,jdbcType=INTEGER}) AS
+        voideul,p.isessence,p.essencedate,p.orderid,p.postcontent FROM
+        yw_post as p WHERE id=#{postid,jdbcType=INTEGER}
     </select>
 
 </mapper>
