@@ -252,7 +252,7 @@ public class FacadePost {
         }
     }
 
-    public List<Goods> queryRecommendGoodsList(String userid, String pageNo, String pageSize) {
+    public Map<String, Object> queryRecommendGoodsList(String userid, String pageNo, String pageSize) {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
@@ -261,15 +261,15 @@ public class FacadePost {
         }
         Paging<Goods> pager = new Paging<Goods>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
 
-        List<Goods> goodsList = new ArrayList<>();
-        if (!StringUtils.isEmpty(userid)) {
-            //用户id不为空时，查询用户收藏的商品
-            goodsList = postService.queryCollectGoodsList(pager, Integer.parseInt(userid));
-        } else {
-            //用户id为空时，默认查询所有商品
-            goodsList = postService.queryAllGoodsList(pager);
-        }
-        return goodsList;
+        Map<String, Object> map = new HashMap<>();
+
+        //查询用户收藏的商品
+        List<Goods> collectGoodsList = postService.queryCollectGoodsList(pager, Integer.parseInt(userid));
+        //用户id为空时，默认查询所有商品
+        List<Goods> allGoodsList = postService.queryAllGoodsList(pager);
+        map.put("collectGoodsList", collectGoodsList);
+        map.put("allGoodsList", allGoodsList);
+        return map;
     }
 
     public int updatePostByZanSum(String id) {
