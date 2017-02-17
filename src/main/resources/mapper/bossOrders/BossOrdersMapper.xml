@@ -479,4 +479,31 @@ SELECT
         SET isdel=1
         WHERE id=#{id,jdbcType=INTEGER}
     </update>
+    <select id="findAllGetInfo" resultType="com.movision.mybatis.bossOrders.entity.BossOrders"
+            parameterType="java.lang.Integer">
+        SELECT a.phone,a.name,u.email,a.province,a.city,a.district,a.street FROM yw_address a LEFT JOIN yw_user u ON u.id=a.userid WHERE  id=#{id,jdbcType=INTEGER}
+
+    </select>
+    <select id="findAllInvoiceInfo" resultType="com.movision.mybatis.invoice.entity.Invoice"
+            parameterType="java.lang.Integer">
+        SELECT i.head,i.name,i.phone,i.kind,i.money,o.takeway,s.province,s.city,s.district,s.street,l.intime,l.logisticsid FROM yw_invoice i
+LEFT JOIN yw_orders o ON o.id=i.orderid LEFT JOIN yw_address s ON s.id=i.addressid LEFT JOIN yw_order_sub_logistics l ON l.logisticsid=o.logisticsid
+WHERE  o.id=#{id,jdbcType=INTEGER}
+    </select>
+
+    <update id="updateInvoice" parameterType="com.movision.mybatis.invoice.entity.Invoice">
+        update yw_invoice
+        <set>
+            <if test="head != null">
+                head = #{head,jdbcType=VARCHAR},
+            </if>
+            <if test="kind != null">
+                kind = #{kind,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where orderid = #{orderid,jdbcType=INTEGER}
+    </update>
 </mapper>
