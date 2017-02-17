@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Created by Administrator on 2016/5/5 0005.
+ * 异常控制器
+ * 对应web.xml中error-page配置的异常页面路径
  */
 @RestController
 @RequestMapping("/rest/exception")
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GlobalExceptionController {
 
     /**
-     * 请求异常 错误请求
+     * 页面请求400错误
      *
      * @return
      * @throws Exception String
@@ -33,7 +34,7 @@ public class GlobalExceptionController {
     }
 
     /**
-     * 请求异常 错误请求
+     * 请求无权限
      *
      * @return
      * @throws Exception String

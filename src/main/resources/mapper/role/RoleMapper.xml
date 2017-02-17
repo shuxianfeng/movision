@@ -118,4 +118,14 @@
         where rm.menuid = #{menuid}
     </select>
 
+    <select id="isExistSameName" parameterType="com.movision.mybatis.role.entity.Role" resultType="java.lang.Integer">
+        select COUNT(1) FROM yw_admin_role
+        WHERE rolename = #{rolename}
+        <if test="id!=null and id!=''">
+            <![CDATA[
+            AND id <> #{id}
+            ]]>
+        </if>
+    </select>
+
 </mapper>

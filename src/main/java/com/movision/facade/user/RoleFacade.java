@@ -1,5 +1,7 @@
 package com.movision.facade.user;
 
+import com.movision.common.constant.MsgCodeConstant;
+import com.movision.exception.BusinessException;
 import com.movision.mybatis.bossMenu.entity.Menu;
 import com.movision.mybatis.bossMenu.service.MenuService;
 import com.movision.mybatis.bossUser.entity.BossUser;
@@ -7,6 +9,7 @@ import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.role.entity.Role;
 import com.movision.mybatis.role.service.RoleService;
 import com.movision.mybatis.roleMenuRelation.service.RoleMenuRelationService;
+import com.movision.utils.MsgPropertiesUtils;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
@@ -53,8 +56,22 @@ public class RoleFacade {
         Role role = new Role();
         role.setRemark(remark);
         role.setRolename(name);
+        this.validateRoleNameExist(role);
         roleService.addUserRole(role);
         return role.getId();
+    }
+
+    /**
+     * 校验角色名称是否已经存在
+     *
+     * @param role
+     */
+    private void validateRoleNameExist(Role role) {
+        //检验角色名是否已经存在
+        int isExist = roleService.isExistSameName(role);
+        if (isExist >= 1) {
+            throw new BusinessException(MsgCodeConstant.boss_role_name_is_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.boss_role_name_is_exist)));
+        }
     }
 
     public void updateRole(String remark, String name, int id) {
@@ -62,6 +79,7 @@ public class RoleFacade {
         role.setId(id);
         role.setRemark(remark);
         role.setRolename(name);
+        this.validateRoleNameExist(role);
         roleService.updateRole(role);
     }
 

@@ -29,5 +29,7 @@ public interface RoleMapper {
 
     List<Role> selectByMenuid(@Param("menuid") Integer menuid);
 
+    int isExistSameName(Role role);
+
 
 }

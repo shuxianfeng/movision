@@ -4,6 +4,7 @@ import com.movision.common.Response;
 import com.movision.facade.user.BossUserFacade;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.security.EncodeUtil;
+import com.movision.shiro.realm.BossRealm;
 import com.movision.utils.JsonUtils;
 import com.movision.utils.MD5Util;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -53,6 +54,8 @@ public class BossLoginController {
             token = new UsernamePasswordToken(username, password.toCharArray());
             currentUser.login(token);
             jsonResult.setData(username);
+            jsonResult.setMessage("登录成功");
+
         } catch (UnknownAccountException e) {
             jsonResult.setCode(400);
             jsonResult.setMessage("用户名不存在");

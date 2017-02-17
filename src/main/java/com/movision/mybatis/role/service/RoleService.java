@@ -100,5 +100,15 @@ public class RoleService {
         }
     }
 
+    public int isExistSameName(Role role) {
+        try {
+            log.info("判断是否存在相同的角色名称");
+            return roleMapper.isExistSameName(role);
+        } catch (Exception e) {
+            log.error("判断是否存在相同的角色名称失败", e);
+            throw e;
+        }
+    }
+
 
 }
