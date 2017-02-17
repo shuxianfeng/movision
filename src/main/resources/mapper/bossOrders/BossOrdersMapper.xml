@@ -499,8 +499,8 @@ SELECT
     </update>
     <select id="findAllGetInfo" resultType="com.movision.mybatis.bossOrders.entity.BossOrders"
             parameterType="java.lang.Integer">
-        SELECT a.phone,a.name,u.email,a.province,a.city,a.district,a.street FROM yw_address a LEFT JOIN yw_user u ON u.id=a.userid WHERE  id=#{id,jdbcType=INTEGER}
-
+        SELECT a.phone,a.name,u.email,a.province,a.city,a.district,a.street FROM yw_address a LEFT JOIN yw_user u ON
+        u.id=a.userid WHERE a.userid=(SELECT s.userid FROM yw_orders s WHERE s.id=#{id,jdbcType=INTEGER} )
     </select>
     <select id="findAllInvoiceInfo" resultType="com.movision.mybatis.invoice.entity.Invoice"
             parameterType="java.lang.Integer">
@@ -552,5 +552,9 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
     <select id="queryAddress" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.address.entity.Address">
        SELECT s.province,s.city,s.district,s.street FROM yw_address s WHERE s.userid=(SELECT s.userid FROM yw_orders s WHERE s.id=#{orderid,jdbcType=INTEGER})
+    </select>
+    <select id="queryGoods" parameterType="java.lang.Integer" resultType="com.movision.mybatis.goods.entity.Goods">
+        SELECT  s.`name`,s.protype,s.origprice,s.price,c.num,s.id,s.attribute FROM yw_goods s LEFT JOIN yw_cart c ON c.goodsid=s.id
+        WHERE c.userid=(SELECT s.userid FROM yw_orders s WHERE s.id=#{id,jdbcType=INTEGER} )
     </select>
 </mapper>

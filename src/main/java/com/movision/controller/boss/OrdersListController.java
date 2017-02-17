@@ -232,6 +232,23 @@ public class OrdersListController {
         }
         response.setData(list);
         return response;
+    }
 
+    /**
+     * 订单管理--订单详情
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "订单详情", notes = "订单详情", response = Response.class)
+    @RequestMapping(value = "query_orderdetail", method = RequestMethod.POST)
+    public Response queryOrderGoods(@ApiParam(value = "订单id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        Map<String, Object> map = orderFacade.queryOrderDetail(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
     }
 }
