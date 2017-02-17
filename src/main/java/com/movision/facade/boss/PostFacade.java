@@ -438,10 +438,11 @@ public class PostFacade {
                     String savedDir = request.getSession().getServletContext().getRealPath("");
                     //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
                     //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    String path = savedDir.substring(0, savedDir.length() - 6);
                     //这里组合出真实的图片存储路径
                     String combinpath = path + "/images/post/coverimg";
                     File savedFile = new File(combinpath, savedFileName);
+                    System.out.println("文件url：" + combinpath + "" + savedFileName);
                     boolean isCreateSuccess = savedFile.createNewFile();
                     if (isCreateSuccess) {
                         coverimg.transferTo(savedFile);  //转存文件
@@ -459,7 +460,7 @@ public class PostFacade {
                     String savedDir = request.getSession().getServletContext().getRealPath("");
                     //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
                     //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    String path = savedDir.substring(0, savedDir.length() - 6);
                     //这里组合出真实的图片存储路径
                     String combinpath = path + "/images/post/video";
                     File savedFile = new File(combinpath, savedVideo);
