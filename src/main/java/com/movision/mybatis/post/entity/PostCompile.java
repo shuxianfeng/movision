@@ -32,7 +32,7 @@ public class PostCompile {
 
     private String coverimg;//图片
 
-    private String voideul;//视频地址
+    private String vid;//视频地址
 
     private Integer isessence;//首页加精
 
@@ -41,6 +41,14 @@ public class PostCompile {
     private Integer orderid;//精选排序
 
     private String postcontent;//帖子内容
+
+    public String getVid() {
+        return vid;
+    }
+
+    public void setVid(String vid) {
+        this.vid = vid;
+    }
 
     public Integer getIshot() {
         return ishot;
@@ -56,14 +64,6 @@ public class PostCompile {
 
     public void setCategory(Integer category) {
         this.category = category;
-    }
-
-    public String getVoideul() {
-        return voideul;
-    }
-
-    public void setVoideul(String voideul) {
-        this.voideul = voideul;
     }
 
     public Integer getId() {

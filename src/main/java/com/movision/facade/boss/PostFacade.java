@@ -440,8 +440,8 @@ public class PostFacade {
                     //不保存到项目中,防止部包把图片覆盖掉了
                     String path = savedDir.substring(0, savedDir.length() - 9);
                     //这里组合出真实的图片存储路径
-                    String combinpath = savedDir + "/images/post/coverimg";
-                    File savedFile = new File(savedDir, savedFileName);
+                    String combinpath = path + "/images/post/coverimg";
+                    File savedFile = new File(combinpath, savedFileName);
                     boolean isCreateSuccess = savedFile.createNewFile();
                     if (isCreateSuccess) {
                         coverimg.transferTo(savedFile);  //转存文件
@@ -461,8 +461,8 @@ public class PostFacade {
                     //不保存到项目中,防止部包把图片覆盖掉了
                     String path = savedDir.substring(0, savedDir.length() - 9);
                     //这里组合出真实的图片存储路径
-                    String combinpath = savedDir + "/images/post/video";
-                    File savedFile = new File(savedDir, savedVideo);
+                    String combinpath = path + "/images/post/video";
+                    File savedFile = new File(combinpath, savedVideo);
                     boolean isCreateSuccess = savedFile.createNewFile();
                     if (isCreateSuccess) {
                         vid.transferTo(savedFile);  //转存文件
@@ -654,7 +654,6 @@ public class PostFacade {
      * 查询加精排序
      *
      * @param postid
-     * @param orderid
      * @return
      */
     public Map<String, Object> queryPostChoiceness(String postid) {
@@ -676,6 +675,7 @@ public class PostFacade {
             return map;//当天加精已达上限
         }
     }
+
 
     /**
      * 查询帖子分享列表
@@ -772,8 +772,8 @@ public class PostFacade {
                     //不保存到项目中,防止部包把图片覆盖掉了
                     String path = savedDir.substring(0, savedDir.length() - 9);
                     //这里组合出真实的图片存储路径
-                    String combinpath = savedDir + "/images/post/coverimg";
-                    File savedFile = new File(savedDir, savedFileName);
+                    String combinpath = path + "/images/post/coverimg";
+                    File savedFile = new File(combinpath, savedFileName);
                     boolean isCreateSuccess = savedFile.createNewFile();
                     if (isCreateSuccess) {
                         coverimg.transferTo(savedFile);  //转存文件
@@ -793,8 +793,8 @@ public class PostFacade {
                     //不保存到项目中,防止部包把图片覆盖掉了
                     String path = savedDir.substring(0, savedDir.length() - 9);
                     //这里组合出真实的图片存储路径
-                    String combinpath = savedDir + "/images/post/video";
-                    File savedFile = new File(savedDir, savedVideo);
+                    String combinpath = path + "/images/post/video";
+                    File savedFile = new File(combinpath, savedVideo);
                     boolean isCreateSuccess = savedFile.createNewFile();
                     if (isCreateSuccess) {
                         vid.transferTo(savedFile);  //转存文件
