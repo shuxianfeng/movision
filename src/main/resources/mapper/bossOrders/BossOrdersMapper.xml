@@ -525,5 +525,8 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         </set>
         where orderid = #{orderid,jdbcType=INTEGER}
     </update>
-
+    <select id="queryInvoice" resultType="com.movision.mybatis.invoice.entity.Invoice"
+            parameterType="java.lang.Integer">
+        SELECT  head,kind,content,companyname,rigaddress,rigphone,bank,banknum,code FROM  yw_invoice WHERE  orderid=#{orderid,jdbcType=INTEGER}
+    </select>
 </mapper>

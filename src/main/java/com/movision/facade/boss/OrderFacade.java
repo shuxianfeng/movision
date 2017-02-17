@@ -239,5 +239,15 @@ public class OrderFacade {
         map.put("result", result);
         return map;
     }
+
+    /**
+     * 订单管理-返回发票
+     *
+     * @param orderid
+     * @return
+     */
+    public Invoice queryOrderInvoice(Integer orderid) {
+        return bossOrderService.queryOrderInvoice(orderid);
+    }
 }
 

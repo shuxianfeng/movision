@@ -192,4 +192,23 @@ public class OrdersListController {
         response.setData(map);
         return response;
     }
+
+    /**
+     * 订单管理--返回发票
+     *
+     * @param orderid
+     * @return
+     */
+    @ApiOperation(value = "返回发票", notes = "返回发票", response = Response.class)
+    @RequestMapping(value = "/query_invoice", method = RequestMethod.POST)
+    public Response queryOrderInvoice(@ApiParam(value = "订单id") @RequestParam(required = false) Integer orderid) {
+        Response response = new Response();
+        Invoice invoice = orderFacade.queryOrderInvoice(orderid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(invoice);
+        return response;
+
+    }
 }
