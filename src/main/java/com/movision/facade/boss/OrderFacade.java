@@ -66,15 +66,17 @@ public class OrderFacade {
      * @param ordernumber
      * @param name
      * @param status
-     * @param takeway
+     * @param
      * @return
      */
-    public List<BossOrdersVo> queryOrderByCondition(String ordernumber, String name, String status, String takeway) {
+    public List<BossOrdersVo> queryOrderByCondition(String ordernumber, String name, String status, String position, String logisticid, String intime) {
         Map<String, String> map = new HashedMap();
         map.put("ordernumber", ordernumber);
         map.put("name", name);
         map.put("status", status);
-        map.put("takeway", takeway);
+        map.put("takeway", position);
+        map.put("logisticid", logisticid);
+        map.put("intime", intime);
         return bossOrderService.queryOrderByCondition(map);
     }
 

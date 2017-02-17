@@ -71,7 +71,7 @@ public class OrdersListController {
      * @param ordernumber
      * @param name
      * @param status
-     * @param takeway
+     * @param
      * @return
      */
     @ApiOperation(value = "按条件查询订单(不填写搜索全部)", notes = "按条件查询订单", response = Response.class)
@@ -79,9 +79,11 @@ public class OrdersListController {
     public Response QueryuickConditionByOrder(@ApiParam(value = "订单编号") @RequestParam(required = false) String ordernumber,
                                               @ApiParam(value = "收货人姓名") @RequestParam(required = false) String name,
                                               @ApiParam(value = "订单状态（0待付款1待发货2待收货4待评价）") @RequestParam(required = false) String status,
-                                              @ApiParam(value = "订单类型（取货方式0自取1送货上门）") @RequestParam(required = false) String takeway) {
+                                              @ApiParam(value = "订单类型（0 租赁 1 购买）") @RequestParam(required = false) String position,
+                                              @ApiParam(value = "物流单号") @RequestParam(required = false) String logisticid,
+                                              @ApiParam(value = "订单时间") @RequestParam(required = false) String intime) {
         Response response = new Response();
-        List<BossOrdersVo> list = orderFacade.queryOrderByCondition(ordernumber, name, status, takeway);
+        List<BossOrdersVo> list = orderFacade.queryOrderByCondition(ordernumber, name, status, position, logisticid, intime);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

@@ -96,6 +96,21 @@ public class BossOrderService {
         }
     }
 
+    /**
+     * 订单管理--编辑收货地址
+     *
+     * @param bossOrders
+     * @return
+     */
+    public int updateOrderGet(BossOrders bossOrders) {
+        try {
+            loger.info("编辑收货地址成功");
+            return bossOrdersMapper.updateAddress(bossOrders);
+        } catch (Exception e) {
+            loger.error("编辑收货地址失败");
+            throw e;
+        }
+    }
 
     /**
      * 订单管理*--查询发票

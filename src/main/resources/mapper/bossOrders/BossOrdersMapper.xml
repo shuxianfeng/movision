@@ -311,8 +311,11 @@
       a.street,
       c.title,
 	  s.isdebug,
-	  d.logisticsid
-    FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id LEFT  JOIN yw_sub_order s ON s.porderid=o.id LEFT JOIN yw_coupon c ON c.id=o.couponsid LEFT  JOIN yw_order_sub_logistics  d ON d.logisticsid=o.logisticsid
+        d.logisticsid,
+        u.nickname
+        FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id LEFT JOIN yw_sub_order s ON s.porderid=o.id LEFT
+        JOIN yw_coupon c ON c.id=o.couponsid LEFT JOIN yw_order_sub_logistics d ON d.logisticsid=o.logisticsid LEFT JOIN
+        yw_user u ON u.id=o.userid
     WHERE o.isdel=0
   </select>
 <select id="findAllPerInfo" resultType="com.movision.mybatis.bossOrders.entity.BossOrders" parameterType="java.lang.Integer">
@@ -322,22 +325,29 @@
 </select>
      <select id="queryOrderByCondition" parameterType="java.util.Map"
             resultType="com.movision.mybatis.bossOrders.entity.BossOrdersVo">
-        SELECT
-        o.id,
-        o.ordernumber,
-        o.userid,
-        o.addressid,
-        o.intime,
-        o.money,
-        o.realmoney,
-        o.status,
-        a.name,
-        a.phone,
-        a.province,
-        a.city,
-        a.district,
-        a.street
-        FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id
+         SELECT
+         o.id,
+         o.ordernumber,
+         o.userid,
+         o.addressid,
+         o.intime,
+         o.position,
+         o.money,
+         o.realmoney,
+         o.status,
+         a.name,
+         a.phone,
+         a.province,
+         a.city,
+         a.district,
+         a.street,
+         c.title,
+         s.isdebug,
+         d.logisticsid,
+         u.nickname
+         FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id LEFT JOIN yw_sub_order s ON s.porderid=o.id
+         LEFT JOIN yw_coupon c ON c.id=o.couponsid LEFT JOIN yw_order_sub_logistics d ON d.logisticsid=o.logisticsid
+         LEFT JOIN yw_user u ON u.id=o.userid
         WHERE 1
         <if test="ordernumber!=null and ordernumber!=''">
             AND o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
@@ -346,11 +356,17 @@
             AND o.`status`=#{status,jdbcType=VARCHAR}
         </if>
         <if test="name!=null and name!=''">
-            AND a.`name`=#{name,jdbcType=VARCHAR}
+            AND a.`name` LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
         <if test="takeway!=null and takeway!=''">
             AND o.takeway=#{takeway,jdbcType=VARCHAR}
         </if>
+         <if test="logisticid!=null and logisticid!=''">
+             AND d.logisticsid=#{logisticid,jdbcType=VARCHAR}
+         </if>
+         <if test="intime!=null and intime!=''">
+             AND o.intime=#{intime,jdbcType=DATE}
+         </if>
     </select>
     <!-- 暂时不做-->
     <!--
@@ -406,7 +422,8 @@ SELECT
       a.street,
       c.title,
 	  s.isdebug,
-	  d.logisticsid
+        d.logisticsid,
+        u.nickname
     FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id LEFT  JOIN yw_sub_order s ON s.porderid=o.id
    LEFT JOIN yw_coupon c ON c.id=o.couponsid LEFT  JOIN yw_order_sub_logistics  d ON d.logisticsid=o.logisticsid LEFT JOIN yw_user u ON u.id=o.userid
  WHERE 1=1

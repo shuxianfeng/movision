@@ -19,6 +19,16 @@ public class BossOrdersVo {
 
     private Date intime;
 
+    private Integer logisticid;
+
+    public Integer getLogisticid() {
+        return logisticid;
+    }
+
+    public void setLogisticid(Integer logisticid) {
+        this.logisticid = logisticid;
+    }
+
     private String name;
 
     private String phone;
@@ -27,6 +37,16 @@ public class BossOrdersVo {
 
     private String city;
     private Integer position;
+
+    private String nickname;
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     public Integer getPosition() {
         return position;
