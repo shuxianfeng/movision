@@ -217,13 +217,11 @@ public class OrderFacade {
         Invoice invoice = new Invoice();
         Map<String, Integer> map = new HashedMap();
         int kinds = Integer.parseInt(kind);
-        int result = 0;
         if (kinds == 1) {
             invoice.setKind(kinds);
             invoice.setOrderid(Integer.parseInt(orderid));
             invoice.setContent(content);
             invoice.setHead(head);
-            result = bossOrderService.updateOrderInvoice(invoice);
         }
         if (kinds == 2) {
             invoice.setOrderid(Integer.parseInt(orderid));
@@ -236,8 +234,8 @@ public class OrderFacade {
             invoice.setCode(code);
             invoice.setRigaddress(rigaddress);
             invoice.setRigphone(rigphone);
-            result = bossOrderService.updateOrderInvoiceKind(invoice);
         }
+        int result = bossOrderService.updateOrderInvoice(invoice);
         map.put("result", result);
         return map;
     }

@@ -504,21 +504,6 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
             <if test="content != null">
                 content = #{content,jdbcType=VARCHAR},
             </if>
-        </set>
-        where orderid = #{orderid,jdbcType=INTEGER}
-    </update>
-    <update id="updateInvoiceKind" parameterType="com.movision.mybatis.invoice.entity.Invoice">
-        update yw_invoice
-        <set>
-            <if test="head != null">
-                head = #{head,jdbcType=VARCHAR},
-            </if>
-            <if test="kind != null">
-                kind = #{kind,jdbcType=INTEGER},
-            </if>
-            <if test="content != null">
-                content = #{content,jdbcType=VARCHAR},
-            </if>
             <if test="companyname != null">
                 companyname = #{companyname,jdbcType=VARCHAR},
             </if>
@@ -540,4 +525,5 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         </set>
         where orderid = #{orderid,jdbcType=INTEGER}
     </update>
+
 </mapper>

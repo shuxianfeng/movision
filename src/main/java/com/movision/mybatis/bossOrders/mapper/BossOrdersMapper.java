@@ -55,7 +55,6 @@ public interface BossOrdersMapper {
 
     int updateInvoice(Invoice invoice);//编辑发票
 
-    int updateInvoiceKind(Invoice invoice);//编辑发票
 
     int updateAddress();//编辑收货人信息
 
