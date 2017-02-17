@@ -1,5 +1,6 @@
 package com.movision.facade.Goods;
 
+import com.movision.mybatis.combo.entity.Combo;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsDetail;
 import com.movision.mybatis.goods.entity.GoodsImg;
@@ -92,6 +93,18 @@ public class GoodsFacade {
         map.put("goodsAssessmentList", goodsAssessmentList);
         map.put("goodsAssessmentCategery", goodsAssessmentCategery);
 
+        return map;
+    }
+
+    public Map<String, Object> queryCombo(String goodsid) {
+        Map<String, Object> map = new HashMap<>();
+        //查询该商品有无库存
+        int storenum = goodsService.queryStore(Integer.parseInt(goodsid));
+        if (storenum > 0) {
+            List<Combo> comboList = goodsService.queryCombo(Integer.parseInt(goodsid));
+            map.put("comboList", comboList);
+        }
+        map.put("storenum", storenum);
         return map;
     }
 }

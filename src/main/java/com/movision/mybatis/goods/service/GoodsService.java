@@ -2,6 +2,8 @@ package com.movision.mybatis.goods.service;
 
 import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.category.mapper.CategoryMapper;
+import com.movision.mybatis.combo.entity.Combo;
+import com.movision.mybatis.combo.mapper.ComboMapper;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsDetail;
 import com.movision.mybatis.goods.entity.GoodsImg;
@@ -40,6 +42,9 @@ public class GoodsService {
 
     @Autowired
     private GoodsAssessmentMapper goodsAssessmentMapper;
+
+    @Autowired
+    private ComboMapper comboMapper;
 
     public List<GoodsVo> queryActiveGoods(Paging<Goods> pager, String postid) {
         try {
@@ -258,6 +263,26 @@ public class GoodsService {
             return goodsAssessmentMapper.queryAssessmentCategorySum(goodsid);
         } catch (Exception e) {
             log.error("查询各类商品评论的数量失败");
+            throw e;
+        }
+    }
+
+    public int queryStore(int goodsid) {
+        try {
+            log.info("查询商品库存");
+            return goodsMapper.queryStore(goodsid);
+        } catch (Exception e) {
+            log.error("查询商品库存失败");
+            throw e;
+        }
+    }
+
+    public List<Combo> queryCombo(int goodsid) {
+        try {
+            log.info("查询套餐类别");
+            return comboMapper.queryCombo(goodsid);
+        } catch (Exception e) {
+            log.error("查询套餐类别失败");
             throw e;
         }
     }

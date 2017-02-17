@@ -42,6 +42,8 @@ public interface GoodsMapper {
 
     List<GoodsImg> queryGoodsImgList(int goodsid);
 
+    int queryStore(int goodsid);
+
     int updateByPrimaryKeySelective(Goods record);
 
     int updateByPrimaryKey(Goods record);

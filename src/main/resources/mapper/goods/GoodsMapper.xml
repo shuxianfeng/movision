@@ -215,6 +215,11 @@
           ORDER BY oderid
     </select>
 
+    <!--根据商品id查询商品库存-->
+    <select id="queryStore" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT stock FROM yw_goods WHERE id = #{goodsid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_goods
         where id = #{id,jdbcType=INTEGER}
