@@ -316,7 +316,8 @@
     WHERE o.isdel=0
   </select>
 <select id="findAllPerInfo" resultType="com.movision.mybatis.bossOrders.entity.BossOrders" parameterType="java.lang.Integer">
-SELECT o.ordernumber,o.status,o.intime as sintime,o.paytype,a.name,o.takeway,s.intime,s.logisticsid,o.paytime FROM yw_orders o
+    SELECT o.ordernumber,o.status,o.intime as
+    sintime,o.paytype,a.name,o.takeway,s.intime,s.logisticsid,o.paytime,o.remark FROM yw_orders o
  LEFT JOIN yw_address  a ON o.addressid=a.id LEFT JOIN yw_order_sub_logistics s ON s.logisticsid=o.logisticsid WHERE o.id=#{id,jdbcType=INTEGER}
 </select>
      <select id="queryOrderByCondition" parameterType="java.util.Map"
@@ -502,6 +503,39 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
             </if>
             <if test="content != null">
                 content = #{content,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where orderid = #{orderid,jdbcType=INTEGER}
+    </update>
+    <update id="updateInvoiceKind" parameterType="com.movision.mybatis.invoice.entity.Invoice">
+        update yw_invoice
+        <set>
+            <if test="head != null">
+                head = #{head,jdbcType=VARCHAR},
+            </if>
+            <if test="kind != null">
+                kind = #{kind,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="companyname != null">
+                companyname = #{companyname,jdbcType=VARCHAR},
+            </if>
+            <if test="rigaddress != null">
+                rigaddress = #{rigaddress,jdbcType=VARCHAR},
+            </if>
+            <if test="rigphone != null">
+                rigphone = #{rigphone,jdbcType=VARCHAR},
+            </if>
+            <if test="bank != null">
+                bank = #{bank,jdbcType=VARCHAR},
+            </if>
+            <if test="banknum != null">
+                banknum = #{banknum,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
             </if>
         </set>
         where orderid = #{orderid,jdbcType=INTEGER}

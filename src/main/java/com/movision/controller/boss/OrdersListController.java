@@ -177,9 +177,15 @@ public class OrdersListController {
             @ApiParam(value = "订单id") @RequestParam(required = false) String orderid,
             @ApiParam(value = "发票抬头") @RequestParam(required = false) String head,
             @ApiParam(value = "发票类型") @RequestParam(required = false) String kind,
-            @ApiParam(value = "发票内容") @RequestParam(required = false) String content) {
+            @ApiParam(value = "发票内容") @RequestParam(required = false) String content,
+            @ApiParam(value = "单位名称") @RequestParam(required = false) String companyname,
+            @ApiParam(value = "注册地址") @RequestParam(required = false) String rigaddress,
+            @ApiParam(value = "注册电话") @RequestParam(required = false) String rigphone,
+            @ApiParam(value = "开户银行") @RequestParam(required = false) String bank,
+            @ApiParam(value = "银行账户") @RequestParam(required = false) String banknum,
+            @ApiParam(value = "纳税人识别码") @RequestParam(required = false) String code) {
         Response response = new Response();
-        Map<String, Integer> map = orderFacade.updateOrderInvoice(head, kind, content, orderid);
+        Map<String, Integer> map = orderFacade.updateOrderInvoice(head, kind, content, orderid, companyname, rigaddress, rigphone, bank, banknum, code);
         if (response.getCode() == 200) {
             response.setMessage("编辑发票");
         }

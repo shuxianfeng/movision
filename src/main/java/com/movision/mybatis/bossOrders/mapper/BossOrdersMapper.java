@@ -44,7 +44,6 @@ public interface BossOrdersMapper {
     List<Area> findAllAreaName(Integer id);
     Integer findAllAreaByNum();
 
-    int updateInfo();//编辑其他信息
 
     BossOrders findAllPerInfo(Integer id);//基本信息
 
@@ -55,6 +54,10 @@ public interface BossOrdersMapper {
     int deleteOrder(Integer id);//删除订单
 
     int updateInvoice(Invoice invoice);//编辑发票
+
+    int updateInvoiceKind(Invoice invoice);//编辑发票
+
+    int updateAddress();//编辑收货人信息
 
 
 

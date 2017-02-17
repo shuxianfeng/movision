@@ -81,6 +81,21 @@ public class BossOrderService {
     }
 
     /**
+     * 订单管理-编辑发票增税
+     *
+     * @param
+     * @return
+     */
+    public int updateOrderInvoiceKind(Invoice invoice) {
+        try {
+            loger.info("修改发票");
+            return bossOrdersMapper.updateInvoiceKind(invoice);
+        } catch (Exception e) {
+            loger.error("修改发票失败");
+            throw e;
+        }
+    }
+    /**
      * 订单管理*--查询发票
      *
      * @param id

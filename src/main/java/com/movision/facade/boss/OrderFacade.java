@@ -196,7 +196,7 @@ public class OrderFacade {
     public Map<String, Object> queryOrderDetail(Integer id) {
         Map<String, Object> map = new HashedMap();
         Invoice invoice = bossOrderService.queryOrderInvoiceInfo(id);//查询发票信息
-        BossOrders bossOrders = bossOrderService.queryOrderInfo(id);//查询基本信息
+        BossOrders bossOrders = bossOrderService.queryOrderInfo(id);//查询基本信息(包含其他信息)
         BossOrders bossOrdersGet = bossOrderService.queryOrderGetInfo(id);//查询收货人信息
         map.put("invoice", invoice);
         map.put("bossOrders", bossOrders);
@@ -213,14 +213,31 @@ public class OrderFacade {
      * @param
      * @return
      */
-    public Map<String, Integer> updateOrderInvoice(String head, String kind, String content, String orderid) {
+    public Map<String, Integer> updateOrderInvoice(String head, String kind, String content, String orderid, String companyname, String rigaddress, String rigphone, String bank, String banknum, String code) {
         Invoice invoice = new Invoice();
         Map<String, Integer> map = new HashedMap();
-        invoice.setKind(Integer.parseInt(kind));
-        invoice.setOrderid(Integer.parseInt(orderid));
-        invoice.setContent(content);
-        invoice.setHead(head);
-        int result = bossOrderService.updateOrderInvoice(invoice);
+        int kinds = Integer.parseInt(kind);
+        int result = 0;
+        if (kinds == 1) {
+            invoice.setKind(kinds);
+            invoice.setOrderid(Integer.parseInt(orderid));
+            invoice.setContent(content);
+            invoice.setHead(head);
+            result = bossOrderService.updateOrderInvoice(invoice);
+        }
+        if (kinds == 2) {
+            invoice.setOrderid(Integer.parseInt(orderid));
+            invoice.setHead(head);
+            invoice.setContent(content);
+            invoice.setKind(kinds);
+            invoice.setBank(bank);
+            invoice.setBanknum(banknum);
+            invoice.setCompanyname(companyname);
+            invoice.setCode(code);
+            invoice.setRigaddress(rigaddress);
+            invoice.setRigphone(rigphone);
+            result = bossOrderService.updateOrderInvoiceKind(invoice);
+        }
         map.put("result", result);
         return map;
     }
