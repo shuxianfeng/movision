@@ -177,7 +177,7 @@
     <!--查询商城首页精选商品列表-->
     <select id="queryEssenceGoods" resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT a.*,b.img_url AS imgurl
-        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t1.stock, t1.goodsposition
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t1.sales, t1.stock, t1.goodsposition
             FROM yw_goods t1
             WHERE t1.isessence = '1'
              LIMIT 8) a
@@ -188,7 +188,7 @@
     <!--查询商城首页热门商品列表-->
     <select id="queryHotGoods" resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT a.*,b.img_url AS imgurl
-        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t1.stock, t1.goodsposition
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t1.sales, t1.stock, t1.goodsposition
             FROM yw_goods t1
             WHERE t1.ishot = '1'
              LIMIT 8) a
