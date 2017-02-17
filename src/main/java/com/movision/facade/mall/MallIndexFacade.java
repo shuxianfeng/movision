@@ -72,7 +72,7 @@ public class MallIndexFacade {
     public List<GoodsVo> addDefaultGoods(List<GoodsVo> list) {
         if (list.size() < 10) {
             List<GoodsVo> defaultList;//热销缺省商品列表
-            int[] ids = new int[list.size()];//已经在一周热销榜的商品id的数组
+            int[] ids = new int[list.size()];//已经在月度/一周热销榜的商品id的数组
             for (int i = 0; i < list.size(); i++) {
                 ids[i] = list.get(i).getId();
             }
