@@ -57,7 +57,8 @@ public class BossUserController {
     }
 
     /**
-     * 不能修改手机号
+     * 修改boss用户
+     * PS:不能修改手机号
      *
      * @param bossUserVo
      * @return

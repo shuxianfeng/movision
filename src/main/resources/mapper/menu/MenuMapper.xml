@@ -44,9 +44,7 @@
             <if test="pid != null">
                 pid,
             </if>
-            <if test="orderid != null">
                 orderid,
-            </if>
                 isdel,
             <if test="remark != null">
                 remark,
@@ -65,9 +63,16 @@
             <if test="pid != null">
                 #{pid,jdbcType=INTEGER},
             </if>
-            <if test="orderid != null">
-                #{orderid,jdbcType=INTEGER},
-            </if>
+
+            <choose>
+                <when test="orderid != null">
+                    #{orderid,jdbcType=INTEGER},
+                </when>
+                <otherwise>
+                    0,
+                </otherwise>
+            </choose>
+
             1,
             <if test="remark != null">
                 #{remark,jdbcType=VARCHAR},
@@ -146,7 +151,7 @@
         yw_admin_menu.*
         from yw_admin_menu
         where isdel = 1 AND pid = 0
-        ORDER BY orderid
+        ORDER BY orderid, id
     </select>
 
     <select id="selectAllChildrenMenu" resultType="com.movision.mybatis.bossMenu.entity.AuthMenu">
@@ -156,7 +161,7 @@
         <![CDATA[
         where isdel = 1 AND pid <> 0
         ]]>
-        ORDER BY orderid
+        ORDER BY orderid, id
     </select>
 
     <select id="selectAuthroizeParentMenu" resultType="com.movision.mybatis.bossMenu.entity.AuthMenu"
@@ -167,7 +172,7 @@
         LEFT JOIN yw_admin_role_menu rm ON m.id = rm.menuid
         where m.isdel = 1 AND m.pid = 0
         and rm.roleid = #{roleid}
-        ORDER BY m.orderid
+        ORDER BY m.orderid, m.id
     </select>
 
     <select id="selectAuthroizeChildrenMenu" resultType="com.movision.mybatis.bossMenu.entity.AuthMenu"
@@ -179,7 +184,7 @@
         <![CDATA[
         WHERE m.isdel = 1 AND m.pid <> 0
         AND rm.roleid = #{roleid}
-        ORDER BY m.orderid
+        ORDER BY m.orderid, m.id
          ]]>
     </select>
 
@@ -193,6 +198,17 @@
         AND rm.roleid = #{roleid}
         ORDER BY m.orderid
          ]]>
+    </select>
+
+    <select id="isExistSameName" parameterType="com.movision.mybatis.bossMenu.entity.Menu"
+            resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_admin_menu
+        WHERE menuname = #{menuname}
+        <if test="id!=null and id!=''">
+            <![CDATA[
+            and id <> #{id}
+            ]]>
+        </if>
     </select>
 
 

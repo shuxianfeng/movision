@@ -3,6 +3,7 @@ package com.movision.facade.user;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.AuthException;
 import com.movision.exception.BusinessException;
+import com.movision.mybatis.bossMenu.entity.Menu;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.entity.BossUserVo;
 import com.movision.mybatis.bossUser.service.BossUserService;
@@ -79,10 +80,7 @@ public class BossUserFacade {
     public void updateBySelectiveInfo(BossUserVo bossUserVo) {
         //判断用户是否存在
         Integer userid = bossUserVo.getId();
-        BossUser bossUser = this.selectByPrimaryKey(userid);
-        if (null == bossUser) {
-            throw new BusinessException(MsgCodeConstant.boss_user_not_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.boss_user_not_exist)));
-        }
+        BossUser bossUser = validateRequestBossuserIdIsExist(userid);
 
         BossUser newBossUser = new BossUser();
         newBossUser.setId(userid);
@@ -90,6 +88,8 @@ public class BossUserFacade {
         newBossUser.setUsername(bossUserVo.getUsername());
         newBossUser.setName(bossUserVo.getName());
         newBossUser.setIssuper(bossUserVo.getIssuper());
+
+        this.validateBossNameIsExist(newBossUser);
         //修改密码
         String password = bossUserVo.getNewPassword();
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(password)) {
@@ -101,6 +101,19 @@ public class BossUserFacade {
     }
 
     /**
+     * 修改用户信息时，校验该请求传入的bossuser的id是否存在
+     * @param userid
+     * @return
+     */
+    private BossUser validateRequestBossuserIdIsExist(Integer userid) {
+        BossUser bossUser = this.selectByPrimaryKey(userid);
+        if (null == bossUser) {
+            throw new BusinessException(MsgCodeConstant.boss_user_not_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.boss_user_not_exist)));
+        }
+        return bossUser;
+    }
+
+    /**
      * 增加用户
      *
      * @param bossUserVo
@@ -108,17 +121,16 @@ public class BossUserFacade {
     public void addBySelectiveInfo(BossUserVo bossUserVo) {
 
         String phone = bossUserVo.getPhone();
-        //校验新增管理员的手机号是否已经存在
-        Boolean isExistPhone = bossUserService.isExistPhone(phone);
-        if (isExistPhone) {
-            throw new BusinessException(MsgCodeConstant.phone_is_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.phone_is_exist)));
-        }
-        //新增信息
+        this.validateBossuserPhoneIsExist(phone);
+
+        //封装新增信息
         BossUser newBossUser = new BossUser();
         newBossUser.setName(bossUserVo.getName());
         newBossUser.setPhone(phone);
         newBossUser.setUsername(bossUserVo.getUsername());
         newBossUser.setIssuper(bossUserVo.getIssuper());
+
+        this.validateBossNameIsExist(newBossUser);
         //新增密码
         String password = bossUserVo.getNewPassword();
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(password)) {
@@ -128,6 +140,32 @@ public class BossUserFacade {
         this.addUser(newBossUser);
 
     }
+
+    /**
+     * 校验新增管理员的手机号是否已经存在
+     *
+     * @param phone
+     */
+    private void validateBossuserPhoneIsExist(String phone) {
+        Boolean isExistPhone = bossUserService.isExistPhone(phone);
+        if (isExistPhone) {
+            throw new BusinessException(MsgCodeConstant.phone_is_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.phone_is_exist)));
+        }
+    }
+
+    /**
+     * 校验bossuser 名称是否已经存在
+     *
+     * @param bossUser
+     */
+    private void validateBossNameIsExist(BossUser bossUser) {
+        //检验菜单名是否已经存在
+        int isExist = bossUserService.isExistSameUsername(bossUser);
+        if (isExist >= 1) {
+            throw new BusinessException(MsgCodeConstant.boss_username_is_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.boss_username_is_exist)));
+        }
+    }
+
 
     public BossUser getUserByPhone(String phone) {
         return bossUserService.queryAdminUserByPhone(phone);

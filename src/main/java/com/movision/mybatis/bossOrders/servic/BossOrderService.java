@@ -65,6 +65,22 @@ public class BossOrderService {
     }
 
     /**
+     * 订单管理--返回发票信息
+     *
+     * @param orderid
+     * @return
+     */
+    public Invoice queryOrderInvoice(Integer orderid) {
+        try {
+            loger.info("返回发票成功");
+            return bossOrdersMapper.queryInvoice(orderid);
+        } catch (Exception e) {
+            loger.error("返回发票成功");
+            throw e;
+        }
+    }
+
+    /**
      * 订单管理-编辑发票
      *
      * @param
@@ -79,6 +95,7 @@ public class BossOrderService {
             throw e;
         }
     }
+
 
     /**
      * 订单管理*--查询发票

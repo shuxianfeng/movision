@@ -38,7 +38,7 @@ public class UserRoleRelationService {
             log.info("查询结果,roleid = " + roleid);
             return roleid;
         } catch (Exception e) {
-            log.error("根据用户id查询角色id失败，userid = " + userid);
+            log.error("根据用户id查询角色id失败，userid = " + userid, e);
             throw e;
         }
     }

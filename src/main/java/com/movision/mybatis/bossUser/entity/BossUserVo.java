@@ -7,6 +7,7 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
+ * 用于封装boss用户 【新增/修改】 接口中的传参
  * @Author zhuangyuhao
  * @Date 2017/2/8 15:57
  */

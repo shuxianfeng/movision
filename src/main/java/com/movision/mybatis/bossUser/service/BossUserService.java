@@ -76,7 +76,7 @@ public class BossUserService {
 
     public BossUser getBossUserByUsername(String username) {
         try {
-            log.info("username" + username);
+            log.info("username=" + username);
             return bossUserMapper.selectByUsername(username);
 
         } catch (Exception e) {
@@ -142,6 +142,16 @@ public class BossUserService {
             return bossUserMapper.selectByRoleid(id);
         } catch (Exception e) {
             log.error("根据角色id查询boss用户失败,roleid=" + id, e);
+            throw e;
+        }
+    }
+
+    public int isExistSameUsername(BossUser bossUser) {
+        try {
+            log.info("校验是否存在相同的boss用户");
+            return bossUserMapper.isExistSameName(bossUser);
+        } catch (Exception e) {
+            log.error("校验是否存在相同的boss用户失败", e);
             throw e;
         }
     }

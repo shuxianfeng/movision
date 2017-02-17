@@ -118,9 +118,9 @@ public class UserFacade {
         //若app用户同时是boss系统用户，则判断该用户是app管理员（可以管理自己的圈子）
         BossUser bossUser = bossUserService.queryAdminUserByPhone(phone);
         if (null == bossUser) {
-            loginUser.setRole("4");   //App普通用户
+            loginUser.setRole("200");   //App普通用户
         } else {
-            loginUser.setRole("3");   //App管理员
+            loginUser.setRole("100");   //App管理员
         }
 
         return loginUser;

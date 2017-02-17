@@ -1,13 +1,13 @@
 package com.movision.controller.boss;
 
 import com.movision.common.Response;
+import com.movision.common.util.ShiroUtil;
 import com.movision.facade.user.MenuFacade;
 import com.movision.facade.user.RoleFacade;
 import com.movision.facade.user.RoleMenuRelationFacade;
 import com.movision.mybatis.bossMenu.entity.Menu;
 import com.movision.mybatis.bossMenu.entity.MenuDetail;
 import com.movision.mybatis.role.entity.Role;
-import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,14 +92,14 @@ public class MenuController {
         return response;
     }
 
-    @ApiOperation(value = "查询当前角色的所有菜单", notes = "查询当前角色的所有菜单", response = Response.class)
+    /*@ApiOperation(value = "查询当前角色的所有菜单", notes = "查询当前角色的所有菜单", response = Response.class)
     @RequestMapping(value = "query_all_menu_by_current_role", method = RequestMethod.GET)
     public Response queryAllMenuByCurrentRole(@ApiParam(value = "角色id") @RequestParam(required = true) Integer roleid) {
         Response response = new Response();
         List<Map<String, Object>> list = menuFacade.getAuthroizeMenu(roleid);
         response.setData(list);
         return response;
-    }
+    }*/
 
     @ApiOperation(value = "删除菜单", notes = "删除菜单", response = Response.class)
     @RequestMapping(value = "del_menu", method = RequestMethod.POST)
@@ -122,5 +122,12 @@ public class MenuController {
     }
 
 
+    /*@ApiOperation(value = "测试获取当前登录人信息", notes = "测试获取当前登录人信息", response = Response.class)
+    @RequestMapping(value = "test_query_current_login_user", method = RequestMethod.GET)
+    public Response testQueryCurrentLoginUser() {
+        Response response = new Response();
+        response.setData(ShiroUtil.getBossUserID());
+        return response;
+    }*/
 
 }

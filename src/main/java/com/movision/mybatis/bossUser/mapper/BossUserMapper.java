@@ -37,4 +37,6 @@ public interface BossUserMapper {
 
     int isExistPhone(@Param("phone") String phone);
 
+    int isExistSameName(BossUser bossUser);
+
 }

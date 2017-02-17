@@ -1,17 +1,18 @@
 package com.movision.facade.user;
 
+import com.movision.common.constant.MsgCodeConstant;
+import com.movision.exception.BusinessException;
 import com.movision.mybatis.bossMenu.entity.AuthMenu;
 import com.movision.mybatis.bossMenu.entity.Menu;
 import com.movision.mybatis.bossMenu.entity.MenuDetail;
 import com.movision.mybatis.bossMenu.service.MenuService;
+import com.movision.utils.MsgPropertiesUtils;
 import com.movision.utils.pagination.model.Paging;
-import com.movision.utils.pagination.util.StringUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +31,25 @@ public class MenuFacade {
     private MenuService menuService;
 
     public Boolean addMenu(Menu menu) {
+        this.validateMenuNameIsExist(menu);
         return menuService.addAdminMenu(menu);
     }
 
+    /**
+     * 校验菜单名称是否已经存在
+     *
+     * @param menu
+     */
+    private void validateMenuNameIsExist(Menu menu) {
+        //检验菜单名是否已经存在
+        int isExist = menuService.isExistSameName(menu);
+        if (isExist >= 1) {
+            throw new BusinessException(MsgCodeConstant.boss_menu_name_is_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.boss_menu_name_is_exist)));
+        }
+    }
+
     public Boolean updateMenu(Menu menu) {
+        this.validateMenuNameIsExist(menu);
         return menuService.updateMenu(menu);
     }
 

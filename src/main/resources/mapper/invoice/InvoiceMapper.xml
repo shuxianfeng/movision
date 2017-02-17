@@ -11,9 +11,15 @@
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="kind" property="kind" jdbcType="INTEGER"/>
         <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="companyname" property="companyname" jdbcType="VARCHAR"/>
+        <result column="rigaddress" property="rigaddress" jdbcType="VARCHAR"/>
+        <result column="rigphone" property="rigphone" jdbcType="VARCHAR"/>
+        <result column="bank" property="bank" jdbcType="VARCHAR"/>
+        <result column="banknum" property="banknum" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, orderid, head, addressid, phone, money, name, kind
+        id, orderid, head, addressid, phone, money, name, kind,content,companyname,rigaddress,rigphone,bank,banknum,code
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -28,10 +34,12 @@
     <insert id="insert" parameterType="com.movision.mybatis.invoice.entity.Invoice">
         insert into yw_invoice (id, orderid, head,
         addressid, phone, money,
-        name, kind,content)
+        name, kind,content,companyname,rigaddress,rigphone,bank,banknum,code)
         values (#{id,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER}, #{head,jdbcType=VARCHAR},
         #{addressid,jdbcType=INTEGER}, #{phone,jdbcType=INTEGER}, #{money,jdbcType=DOUBLE},
-        #{name,jdbcType=VARCHAR}, #{kind,jdbcType=INTEGER},#{content,jdbcType=VARCHAR})
+        #{name,jdbcType=VARCHAR},
+        #{kind,jdbcType=INTEGER},#{content,jdbcType=VARCHAR},#{companyname,jdbcType=VARCHAR},#{rigaddress,jdbcType=VARCHAR},#{rigphone,jdbcType=VARCHAR},
+        #{bank,jdbcType=VARCHAR},#{banknum,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.invoice.entity.Invoice">
         insert into yw_invoice
@@ -63,6 +71,24 @@
             <if test="content != null">
                 content,
             </if>
+            <if test="companyname != null">
+                companyname,
+            </if>
+            <if test="rigaddress != null">
+                rigaddress,
+            </if>
+            <if test="rigphone != null">
+                rigphone,
+            </if>
+            <if test="bank != null">
+                bank,
+            </if>
+            <if test="banknum != null">
+                banknum,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -92,6 +118,24 @@
             <if test="content != null">
                 #{content,jdbcType=VARCHAR},
             </if>
+            <if test="companyname != null">
+                #{companyname,jdbcType=VARCHAR},
+            </if>
+            <if test="rigaddress != null">
+                #{rigaddress,jdbcType=VARCHAR},
+            </if>
+            <if test="rigphone != null">
+                #{rigphone,jdbcType=VARCHAR},
+            </if>
+            <if test="bank != null">
+                #{bank,jdbcType=VARCHAR},
+            </if>
+            <if test="banknum != null">
+                #{banknum,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.invoice.entity.Invoice">
@@ -117,10 +161,27 @@
             </if>
             <if test="kind != null">
                 kind = #{kind,jdbcType=INTEGER},
-                kind = #{kind,jdbcType=INTEGER},
             </if>
-            <if test="kind != null">
+            <if test="content != null">
                 content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="companyname != null">
+                companyname = #{companyname,jdbcType=VARCHAR},
+            </if>
+            <if test="rigaddress != null">
+                rigaddress = #{rigaddress,jdbcType=VARCHAR},
+            </if>
+            <if test="rigphone != null">
+                rigphone = #{rigphone,jdbcType=VARCHAR},
+            </if>
+            <if test="bank != null">
+                bank = #{bank,jdbcType=VARCHAR},
+            </if>
+            <if test="banknum != null">
+                banknum = #{banknum,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -134,7 +195,13 @@
         money = #{money,jdbcType=DOUBLE},
         name = #{name,jdbcType=VARCHAR},
         kind = #{kind,jdbcType=INTEGER},
-        content = #{content,jdbcType=VARCHAR}
+        content = #{content,jdbcType=VARCHAR},
+        companyname = #{companyname,jdbcType=VARCHAR},
+        rigaddress = #{rigaddress,jdbcType=VARCHAR},
+        rigphone = #{rigphone,jdbcType=VARCHAR},
+        bank = #{bank,jdbcType=VARCHAR},
+        banknum = #{banknum,jdbcType=VARCHAR},
+        code = #{code,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

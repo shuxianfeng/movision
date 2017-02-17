@@ -29,6 +29,61 @@ public class Invoice {
     private Integer logisticid;
     private Date intime;
 
+    private String companyname;
+    private String rigaddress;
+    private String rigphone;
+
+    public String getCompanyname() {
+        return companyname;
+    }
+
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
+    }
+
+    public String getRigaddress() {
+        return rigaddress;
+    }
+
+    public void setRigaddress(String rigaddress) {
+        this.rigaddress = rigaddress;
+    }
+
+    public String getRigphone() {
+        return rigphone;
+    }
+
+    public void setRigphone(String rigphone) {
+        this.rigphone = rigphone;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getBank() {
+        return bank;
+    }
+
+    public void setBank(String bank) {
+        this.bank = bank;
+    }
+
+    public String getBanknum() {
+        return banknum;
+    }
+
+    public void setBanknum(String banknum) {
+        this.banknum = banknum;
+    }
+
+    private String code;
+    private String bank;
+    private String banknum;
     private String content;
 
     public String getContent() {

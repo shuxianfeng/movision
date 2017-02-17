@@ -219,4 +219,14 @@
     <select id="isExistPhone" parameterType="java.lang.String" resultType="int">
         SELECT COUNT(1) FROM yw_admin_user WHERE phone = #{phone}
     </select>
+
+    <select id="isExistSameName" parameterType="com.movision.mybatis.bossUser.entity.BossUser" resultType="int">
+        SELECT COUNT(1) FROM yw_admin_user
+        WHERE username = #{username}
+        <if test="id!=null and id!=''">
+            <![CDATA[
+            AND id <> #{id}
+            ]]>
+        </if>
+    </select>
 </mapper>

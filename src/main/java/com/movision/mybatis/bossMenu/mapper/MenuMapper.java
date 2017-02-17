@@ -38,4 +38,6 @@ public interface MenuMapper {
     List<AuthMenu> selectAuthroizeParentMenu(@Param("roleid") Integer roleid);
 
     List<AuthMenu> selectAuthroizeChildrenMenu(@Param("roleid") Integer roleid);
+
+    int isExistSameName(Menu menu);
 }

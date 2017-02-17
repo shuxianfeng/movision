@@ -355,12 +355,7 @@
         select
         <include refid="Base_Column_List"/>
         from yw_user
-        <where>
-            <if test="phone != null || phone != ''">
-                phone = #{phone}
-            </if>
-        </where>
-
+        where phone = #{phone}
     </select>
 
     <select id="selectLoginUserByPhone" parameterType="com.movision.mybatis.user.entity.User"

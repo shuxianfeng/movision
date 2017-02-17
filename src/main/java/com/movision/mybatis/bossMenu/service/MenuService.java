@@ -132,6 +132,15 @@ public class MenuService {
         }
     }
 
+    public int isExistSameName(Menu menu) {
+        try {
+            log.info("判断是否存在相同的菜单名称");
+            return menuMapper.isExistSameName(menu);
+        } catch (Exception e) {
+            log.error("判断是否存在相同的菜单名称失败", e);
+            throw e;
+        }
+    }
 
 
 }

@@ -290,5 +290,19 @@ public interface MsgCodeConstant {
 	 */
 	int phone_is_exist = 10301;
 
+	/**
+	 * boss菜单已经存在
+	 */
+	int boss_menu_name_is_exist = 10302;
+
+	/**
+	 * 角色名称已经存在
+	 */
+	int boss_role_name_is_exist = 10303;
+
+	/**
+	 * boss用户名已经存在
+	 */
+	int boss_username_is_exist = 10304;
 
 }
