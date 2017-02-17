@@ -348,7 +348,7 @@
          FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id LEFT JOIN yw_sub_order s ON s.porderid=o.id
          LEFT JOIN yw_coupon c ON c.id=o.couponsid LEFT JOIN yw_order_sub_logistics d ON d.logisticsid=o.logisticsid
          LEFT JOIN yw_user u ON u.id=o.userid
-        WHERE 1
+         WHERE o.isdel=0 AND 1
         <if test="ordernumber!=null and ordernumber!=''">
             AND o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
         </if>
@@ -426,7 +426,7 @@ SELECT
         u.nickname
     FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id LEFT  JOIN yw_sub_order s ON s.porderid=o.id
    LEFT JOIN yw_coupon c ON c.id=o.couponsid LEFT  JOIN yw_order_sub_logistics  d ON d.logisticsid=o.logisticsid LEFT JOIN yw_user u ON u.id=o.userid
- WHERE 1=1
+        WHERE o.isdel=0 AND 1=1
          <if test="ordernumber!=null">
             AND  ordernumber=#{ordernumber,jdbcType=VARCHAR}
          </if>
@@ -547,7 +547,7 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         SELECT  head,kind,content,companyname,rigaddress,rigphone,bank,banknum,code FROM  yw_invoice WHERE  orderid=#{orderid,jdbcType=INTEGER}
     </select>
     <select id="findAllBoss" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_orders
+        SELECT COUNT(1) FROM yw_orders WHERE isdel=0
     </select>
     <select id="queryAddress" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.address.entity.Address">
