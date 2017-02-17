@@ -4,8 +4,10 @@ import com.movision.common.Response;
 import com.movision.facade.boss.OrderFacade;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
+import com.movision.mybatis.invoice.entity.Invoice;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.apache.bcel.verifier.VerifierAppFrame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,23 +47,6 @@ public class OrdersListController {
         return response;
     }
 
-    /**
-     * 查询基本信息
-     * @param  id
-     * @param
-     * @return
-     */
-    @ApiOperation(value ="查询基本信息",notes = "查询基本信息",response = Response.class)
-    @RequestMapping(value = "/query_info",method = RequestMethod.POST)
-    public Response queryOrderInfo(@RequestParam(required = false) Integer id){
-        Response response = new Response();
-        BossOrders list = orderFacade.queryOrderInfo(id);
-        if(response.getCode()==200){
-            response.setMessage("查询成功");
-        }
-        response.setData(list);
-        return  response;
-    }
 
     /**
      * 删除订单
@@ -177,6 +162,28 @@ public class OrdersListController {
             response.setMessage("操作成功");
         }
         response.setData(list);
+        return response;
+    }
+
+    /**
+     * 订单管理--修改发票
+     *
+     * @param
+     * @return
+     */
+    @ApiOperation(value = "修改发票", notes = "修改发票", response = Response.class)
+    @RequestMapping(value = "/update_order_Invoice", method = RequestMethod.POST)
+    public Response updateOrderInvoice(
+            @ApiParam(value = "订单id") @RequestParam(required = false) String orderid,
+            @ApiParam(value = "发票抬头") @RequestParam(required = false) String head,
+            @ApiParam(value = "发票类型") @RequestParam(required = false) String kind,
+            @ApiParam(value = "发票内容") @RequestParam(required = false) String content) {
+        Response response = new Response();
+        Map<String, Integer> map = orderFacade.updateOrderInvoice(head, kind, content, orderid);
+        if (response.getCode() == 200) {
+            response.setMessage("编辑发票");
+        }
+        response.setData(map);
         return response;
     }
 }

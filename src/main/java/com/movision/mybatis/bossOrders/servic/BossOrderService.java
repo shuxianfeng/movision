@@ -5,6 +5,7 @@ import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.bossOrders.mapper.BossOrdersMapper;
 import com.movision.mybatis.city.entity.City;
+import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.province.entity.Province;
 import com.movision.utils.pagination.model.Paging;
@@ -47,6 +48,53 @@ public class BossOrderService {
         }
     }
 
+    /**
+     * 订单管理-查询收货人信息
+     *
+     * @param id
+     * @return
+     */
+    public BossOrders queryOrderGetInfo(Integer id) {
+        try {
+            loger.info("查询收货人信息");
+            return bossOrdersMapper.findAllGetInfo(id);
+        } catch (Exception e) {
+            loger.error("查询收货人信息失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 订单管理-编辑发票
+     *
+     * @param
+     * @return
+     */
+    public int updateOrderInvoice(Invoice invoice) {
+        try {
+            loger.info("修改发票");
+            return bossOrdersMapper.updateInvoice(invoice);
+        } catch (Exception e) {
+            loger.error("修改发票失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 订单管理*--查询发票
+     *
+     * @param id
+     * @return
+     */
+    public Invoice queryOrderInvoiceInfo(Integer id) {
+        try {
+            loger.info("查询发票");
+            return bossOrdersMapper.findAllInvoiceInfo(id);
+        } catch (Exception e) {
+            loger.error("查询发票失败");
+            throw e;
+        }
+    }
     /**
      * 订单管理-查询基本信息
      * @param
