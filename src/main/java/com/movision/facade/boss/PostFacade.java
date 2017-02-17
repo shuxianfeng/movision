@@ -110,7 +110,7 @@ public class PostFacade {
                 postList.setZansum(list.get(i).getZansum());
                 postList.setRewarded(rewarded);
                 postList.setAccusation(accusation);
-                postList.setIsessence(list.get(i).getIsessence());
+            postList.setIshot(list.get(i).getIshot());
             postList.setCirclename(circlename.getName());//帖子所属圈子
             postList.setOrderid(list.get(i).getOrderid());//获取排序
             postList.setEssencedate(list.get(i).getEssencedate());//获取精选日期
@@ -625,8 +625,7 @@ public class PostFacade {
     public Map<String, Integer> addPostChoiceness(String postid, String essencedate, String orderid) {
         Map<String, Integer> map = new HashedMap();
         Post p = new Post();
-        Integer typ = postService.queryPostChoiceness(Integer.parseInt(postid));
-        if (typ == 0) {
+        if (Integer.parseInt(orderid) != 0) {//加精动作
             p.setId(Integer.parseInt(postid));
             Date date = null;
             SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -636,16 +635,45 @@ public class PostFacade {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
+            } else {
+                date = new Date();//当前时间
+                }
             p.setEssencedate(date);//精选日期
             p.setOrderid(Integer.parseInt(orderid));
             Integer result = postService.addPostChoiceness(p);
             map.put("result", result);
             return map;
-        } else {
+        } else {//取消加精
             postService.deletePostChoiceness(Integer.parseInt(postid));
             map.put("result", 2);
             return map;
+        }
+    }
+
+    /**
+     * 查询加精排序
+     *
+     * @param postid
+     * @param orderid
+     * @return
+     */
+    public Map<String, Object> queryPostChoiceness(String postid, String orderid) {
+        Map<String, Object> map = new HashedMap();
+        List<Post> posts = postService.queryPostChoiceness(Integer.parseInt(postid));//返回当天有几条加精
+        if (posts.size() <= 5) {//判断当天是否还可以加精
+            List<Integer> lou = new ArrayList();
+            for (int i = 1; i < 6; i++) {
+                for (int j = 0; j < posts.size(); j++) {
+                    if (posts.get(j).getOrderid() != i) {
+                        lou.add(i);
+                    }
+                }
+            }
+            map.put("result", lou);
+            return map;
+        } else {
+            map.put("result", 0);
+            return map;//当天加精已达上限
         }
     }
 

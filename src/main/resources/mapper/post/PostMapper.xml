@@ -785,12 +785,13 @@
     </select>
 
 
-    <select id="queryPostChoiceness" resultType="java.lang.Integer" parameterType="java.lang.Integer">
-        SELECT isessence FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+    <select id="queryPostChoiceness" resultType="com.movision.mybatis.post.entity.Post"
+            parameterType="java.lang.Integer">
+        SELECT orderid,intime FROM yw_post WHERE date(intime) = curdate() AND orderid BETWEEN 1 AND 5 GROUP BY orderid
     </select>
 
     <select id="deletePostChoiceness" parameterType="java.lang.Integer">
-        UPDATE yw_post SET isessence=0,essencedate=null,orderid=null WHERE id=#{postid,jdbcType=INTEGER}
+        UPDATE yw_post SET isessence=0,essencedate=null,orderid=0 WHERE id=#{postid,jdbcType=INTEGER}
     </select>
 
 
@@ -937,10 +938,12 @@
 
     <select id="queryPostByIdEcho" resultType="com.movision.mybatis.post.entity.PostCompile"
             parameterType="java.lang.Integer">
-       SELECT p.id,p.title,p.subtitle,p.type,p.circleid,
-       (SELECT name FROM yw_circle WHERE id=p.circleid) as circleidCN,p.isessencepool,p.userid,
+        SELECT p.id,p.title,p.subtitle,p.type,p.circleid,
+        (SELECT name FROM yw_circle WHERE id=p.circleid) as circleidCN,
+        (SELECT category FROM yw_circle WHERE id=p.circleid)as category,p.isessencepool,p.userid,
        (SELECT nickname FROM yw_user WHERE id=p.userid) as nickname,p.coverimg,
-       (SELECT videourl FROM yw_video WHERE postid=#{postid,jdbcType=INTEGER}) AS voideul,p.isessence,p.essencedate,p.orderid,p.postcontent FROM yw_post as p WHERE id=#{postid,jdbcType=INTEGER};
+        (SELECT videourl FROM yw_video WHERE postid=1) AS voideul,p.isessence,p.essencedate,p.orderid,p.postcontent FROM
+        yw_post as p WHERE id=1
     </select>
 
 </mapper>

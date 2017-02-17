@@ -20,6 +20,8 @@ public class PostCompile {
 
     private Integer circleid;//圈子id
 
+    private Integer category;//圈子分类
+
     private String circleidCN;//圈子中文
 
     private Integer isessencepool;//是否加精
@@ -39,6 +41,14 @@ public class PostCompile {
     private Integer orderid;//精选排序
 
     private String postcontent;//帖子内容
+
+    public Integer getCategory() {
+        return category;
+    }
+
+    public void setCategory(Integer category) {
+        this.category = category;
+    }
 
     public String getVoideul() {
         return voideul;

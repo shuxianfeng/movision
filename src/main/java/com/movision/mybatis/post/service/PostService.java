@@ -466,12 +466,18 @@ public class PostService {
         }
     }
 
+    /**
+     * 帖子取消加精
+     *
+     * @param postid
+     * @return
+     */
     public int deletePostChoiceness(Integer postid) {
         try {
-            log.info("帖子");
+            log.info("帖子取消加精");
             return postMapper.deletePostChoiceness(postid);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("帖子取消加精异常");
             throw e;
         }
     }
@@ -482,7 +488,7 @@ public class PostService {
      * @param postid
      * @return
      */
-    public int queryPostChoiceness(Integer postid) {
+    public List<Post> queryPostChoiceness(Integer postid) {
         try {
             log.info("查询帖子是否加精");
             return postMapper.queryPostChoiceness(postid);

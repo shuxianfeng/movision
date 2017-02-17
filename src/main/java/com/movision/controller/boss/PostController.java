@@ -374,12 +374,31 @@ public class PostController {
     @ApiOperation(value = "帖子加精", notes = "用于帖子加精接口", response = Response.class)
     @RequestMapping(value = "/add_post_choiceness", method = RequestMethod.POST)
     public Response addPostChoiceness(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                      @ApiParam(value = "精选日期") @RequestParam String essencedate,
+                                      @ApiParam(value = "精选日期(默认当前时间)") @RequestParam(required = false) String essencedate,
                                       @ApiParam(value = "精选排序") @RequestParam String orderid) {
         Response response = new Response();
         Map<String, Integer> result = postFacade.addPostChoiceness(postid, essencedate, orderid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+    /**
+     * 后台管理-帖子列表-帖子加精-查询加精排序
+     *
+     * @param postid
+     * @return
+     */
+    @ApiOperation(value = "查询是否可加精", notes = "用于查询帖子是否可加精，是，返回可加精的排序数，否，返回状态")
+    @RequestMapping(value = "query_post_choiceness", method = RequestMethod.POST)
+    public Response queryPostChoiceness(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                        @ApiParam(value = "精选排序") @RequestParam String orderid) {
+        Response response = new Response();
+        Map<String, Object> result = postFacade.queryPostChoiceness(postid, orderid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
         }
         response.setData(result);
         return response;
@@ -467,6 +486,24 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 后台管理-圈子编辑
+     * @param request
+     * @param postid
+     * @param title
+     * @param subtitle
+     * @param type
+     * @param userid
+     * @param circleid
+     * @param coverimg
+     * @param vid
+     * @param postcontent
+     * @param isessence
+     * @param ishot
+     * @param orderid
+     * @param time
+     * @return
+     */
     @ApiOperation(value = "编辑帖子", notes = "用于帖子编辑接口", response = Response.class)
     @RequestMapping(value = "update_post", method = RequestMethod.POST)
     public Response updatePostById(HttpServletRequest request,
