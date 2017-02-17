@@ -487,7 +487,7 @@ public class PostController {
     }
 
     /**
-     * 后台管理-圈子编辑
+     * 后台管理-帖子编辑
      * @param request
      * @param postid
      * @param title

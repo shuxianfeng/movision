@@ -24,7 +24,7 @@ public class PostCompile {
 
     private String circleidCN;//圈子中文
 
-    private Integer isessencepool;//是否加精
+    private Integer ishot;//是否加精
 
     private Integer userid;//发帖人id
 
@@ -41,6 +41,14 @@ public class PostCompile {
     private Integer orderid;//精选排序
 
     private String postcontent;//帖子内容
+
+    public Integer getIshot() {
+        return ishot;
+    }
+
+    public void setIshot(Integer ishot) {
+        this.ishot = ishot;
+    }
 
     public Integer getCategory() {
         return category;
@@ -104,14 +112,6 @@ public class PostCompile {
 
     public void setCircleidCN(String circleidCN) {
         this.circleidCN = circleidCN;
-    }
-
-    public Integer getIsessencepool() {
-        return isessencepool;
-    }
-
-    public void setIsessencepool(Integer isessencepool) {
-        this.isessencepool = isessencepool;
     }
 
     public Integer getUserid() {
