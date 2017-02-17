@@ -1,5 +1,6 @@
 package com.movision.mybatis.bossOrders.servic;
 
+import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.area.entity.Area;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
@@ -48,6 +49,36 @@ public class BossOrderService {
         }
     }
 
+    /**
+     * 订单管理--查询历史地址
+     *
+     * @param orderid
+     * @return
+     */
+    public List<Address> queryOrders(Integer orderid) {
+        try {
+            loger.info("查询历史地址成功");
+            return bossOrdersMapper.queryAddress(orderid);
+        } catch (Exception e) {
+            loger.error("查询历史地址失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 所有订单
+     *
+     * @return
+     */
+    public int queryOrderAll() {
+        try {
+            loger.info("查询成功");
+            return bossOrdersMapper.findAllBoss();
+        } catch (Exception e) {
+            loger.error("查询失败");
+            throw e;
+        }
+    }
     /**
      * 订单管理-查询收货人信息
      *

@@ -546,4 +546,11 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
             parameterType="java.lang.Integer">
         SELECT  head,kind,content,companyname,rigaddress,rigphone,bank,banknum,code FROM  yw_invoice WHERE  orderid=#{orderid,jdbcType=INTEGER}
     </select>
+    <select id="findAllBoss" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_orders
+    </select>
+    <select id="queryAddress" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.address.entity.Address">
+       SELECT s.province,s.city,s.district,s.street FROM yw_address s WHERE s.userid=(SELECT s.userid FROM yw_orders s WHERE s.id=#{orderid,jdbcType=INTEGER})
+    </select>
 </mapper>

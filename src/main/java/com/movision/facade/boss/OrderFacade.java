@@ -1,5 +1,6 @@
 package com.movision.facade.boss;
 
+import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.area.entity.Area;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
@@ -38,15 +39,20 @@ public class OrderFacade {
      * @param pageSize
      * @return
      */
-    public List<BossOrdersVo> queryOrderList(String pageNo, String pageSize) {
+    public Map<String, Object> queryOrderList(String pageNo, String pageSize) {
         if (StringUtils.isEmpty(pageNo)) {
             pageNo = "1";
         }
         if (StringUtils.isEmpty(pageSize)) {
             pageSize = "10";
         }
+        Map<String, Object> map = new HashedMap();
         Paging<Post> pager = new Paging<Post>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        return bossOrderService.queryOrderList(pager);
+        List<BossOrdersVo> ordersVos = bossOrderService.queryOrderList(pager);
+        int total = bossOrderService.queryOrderAll();
+        map.put("ordersVos", ordersVos);
+        map.put("total", total);
+        return map;
     }
 
     /**
@@ -250,6 +256,17 @@ public class OrderFacade {
      */
     public Invoice queryOrderInvoice(Integer orderid) {
         return bossOrderService.queryOrderInvoice(orderid);
+    }
+
+    /**
+     * 查询历史地址
+     *
+     * @param orderid
+     * @return
+     */
+    public List<Address> queryOrderAddress(Integer orderid) {
+        List<Address> list = bossOrderService.queryOrders(orderid);
+        return list;
     }
 }
 

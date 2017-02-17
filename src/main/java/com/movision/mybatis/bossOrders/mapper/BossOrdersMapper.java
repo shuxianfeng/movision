@@ -1,5 +1,6 @@
 package com.movision.mybatis.bossOrders.mapper;
 
+import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.area.entity.Area;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
@@ -44,6 +45,7 @@ public interface BossOrdersMapper {
     List<Area> findAllAreaName(Integer id);
     Integer findAllAreaByNum();
 
+    Integer findAllBoss();
 
     BossOrders findAllPerInfo(Integer id);//基本信息
 
@@ -60,6 +62,11 @@ public interface BossOrdersMapper {
     int updateAddress(BossOrders bossOrders);//编辑收货人信息
 
     BossOrders queryGet(Integer orderid);//返回
+
+    List<Address> queryAddress(Integer orderid);
+
+
+
 
 
 }

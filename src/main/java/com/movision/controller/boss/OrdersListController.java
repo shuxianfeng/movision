@@ -2,6 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.OrderFacade;
+import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.invoice.entity.Invoice;
@@ -39,7 +40,7 @@ public class OrdersListController {
     public Response QueryOrderList(@RequestParam(required = false) String pageNo,//required默认是true表示必须
                                    @RequestParam(required = false) String pageSize) {
         Response response = new Response();
-        List<BossOrdersVo> list = orderFacade.queryOrderList(pageNo, pageSize);//获取订单列表
+        Map<String, Object> list = orderFacade.queryOrderList(pageNo, pageSize);//获取订单列表
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -210,6 +211,26 @@ public class OrdersListController {
             response.setMessage("返回成功");
         }
         response.setData(invoice);
+        return response;
+
+    }
+
+
+    /**
+     * 订单管理--查询地址
+     *
+     * @param orderid
+     * @return
+     */
+    @ApiOperation(value = "查询地址", notes = "查询地址", response = Response.class)
+    @RequestMapping(value = "query_address", method = RequestMethod.POST)
+    public Response queryOrderAddress(@ApiParam(value = "订单id") @RequestParam(required = false) Integer orderid) {
+        Response response = new Response();
+        List<Address> list = orderFacade.queryOrderAddress(orderid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
         return response;
 
     }
