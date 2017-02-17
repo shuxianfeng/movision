@@ -22,6 +22,15 @@ public class CircleIndexList {
     private Integer isessencenum;//圈子中精贴数
     private Integer supportnum;//支持数
     private Date intime;//时间
+    private List<CircleVo> classify;//分类列表
+
+    public List<CircleVo> getClassify() {
+        return classify;
+    }
+
+    public void setClassify(List<CircleVo> classify) {
+        this.classify = classify;
+    }
 
     public Integer getCategory() {
         return category;

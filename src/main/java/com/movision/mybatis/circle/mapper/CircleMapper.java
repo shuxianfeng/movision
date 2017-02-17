@@ -47,7 +47,7 @@ public interface CircleMapper {
 
     int queryCircleOwner(int circleid);
 
-    List<CircleVo> findAllqueryCircleByList(RowBounds rowBounds);
+    List<CircleVo> findAllqueryCircleByList(Integer category);
 
     String queryCircleBycirclemaster(String phone);
 
@@ -67,7 +67,11 @@ public interface CircleMapper {
 
     CircleFollowNum queryFollowAndNewNum(Integer categoryid);
 
+    CircleFollowNum queryFollowAndNewNumt(Integer circleid);
+
     CirclePostNum queryCirclePostNum(Integer categoryid);
+
+    CirclePostNum queryCirclePostNumt(Integer circleid);
 
     CircleVo queryCircleSupportnum(Integer categoryid);
 

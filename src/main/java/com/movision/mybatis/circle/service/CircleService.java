@@ -179,10 +179,10 @@ public class CircleService {
      * @param pager
      * @return
      */
-    public List<CircleVo> queryCircleByList(Paging<CircleVo> pager) {
+    public List<CircleVo> queryCircleByList(Integer category) {
         try {
             log.info("查询圈子列表");
-            return circleMapper.findAllqueryCircleByList(pager.getRowBounds());
+            return circleMapper.findAllqueryCircleByList(category);
         } catch (Exception e) {
             log.error("查询圈子列表异常");
             throw e;
@@ -315,6 +315,22 @@ public class CircleService {
     }
 
     /**
+     * 查询关注数,今日新增关注人数
+     * queryCirclePostNumt
+     *
+     * @return
+     */
+    public CircleFollowNum queryFollowAndNewNumt(Integer circleid) {
+        try {
+            log.info("查询关注数,今日新增关注人数");
+            return circleMapper.queryFollowAndNewNumt(circleid);
+        } catch (Exception e) {
+            log.error("查询关注数,今日新增关注人数异常");
+            throw e;
+        }
+    }
+
+    /**
      * 查询帖子数量，今日新增帖子，精贴数
      *
      * @param categoryid
@@ -324,6 +340,20 @@ public class CircleService {
         try {
             log.info("查询帖子数量，今日新增帖子，精贴数");
             return circleMapper.queryCirclePostNum(categoryid);
+        } catch (Exception e) {
+            log.error("查询帖子数量，今日新增帖子，精贴数异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询帖子数量，今日新增帖子，精贴数
+     * * @return
+     */
+    public CirclePostNum queryCirclePostNumt(Integer circleid) {
+        try {
+            log.info("查询帖子数量，今日新增帖子，精贴数");
+            return circleMapper.queryCirclePostNumt(circleid);
         } catch (Exception e) {
             log.error("查询帖子数量，今日新增帖子，精贴数异常");
             throw e;

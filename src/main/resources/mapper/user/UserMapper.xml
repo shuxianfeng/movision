@@ -422,8 +422,7 @@
     </select>
 
     <select id="queryUserByNickname" parameterType="java.lang.Integer" resultType="java.lang.String">
-        SELECT u.nickname FROM yw_user u WHERE u.phone=(SELECT c.phone FROM yw_circle c WHERE
-        id=#{circleid,jdbcType=INTEGER})
+        SELECT u.nickname FROM yw_user u WHERE u.id=#{userid,jdbcType=INTEGER}
     </select>
     <select id="queryUserByNicknameBy" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT u.nickname FROM yw_user u WHERE u.id=(SELECT c.userid FROM yw_post c WHERE

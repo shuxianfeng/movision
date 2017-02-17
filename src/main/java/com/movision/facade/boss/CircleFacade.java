@@ -48,8 +48,8 @@ public class CircleFacade {
      * @param pager
      * @return
      */
-    public List<CircleVo> queryCircleByList1(Paging<CircleVo> pager) {
-        List<CircleVo> list = circleService.queryCircleByList(pager);//获取圈子列表的部分数据
+    /*public List<CircleVo> queryCircleByList1(Paging<CircleVo> pager) {
+        //List<CircleVo> list = circleService.queryCircleByList();//获取圈子列表的部分数据
         List<CircleVo> circleVoslist = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             CircleVo vo = new CircleVo();
@@ -99,7 +99,7 @@ public class CircleFacade {
             circleVoslist.add(vo);
         }
         return circleVoslist;
-    }
+    }*/
 
     /**
      * 圈子首页列表查询
@@ -131,10 +131,50 @@ public class CircleFacade {
             }
             cir.setIntime(supportnum.getIntime());//圈子创建时间
             cir.setSupportnum(supportnum.getSupportnum());//圈子支持人数
+            /////////////////////分类列表////////////////////////
+            List<CircleVo> listt = circleService.queryCircleByList(i);//获取圈子分类列表的圈子列表
+            List<CircleVo> circleVoslist = new ArrayList<>();
+            for (int e = 0; e < listt.size(); e++) {
+                CircleVo vo = new CircleVo();
+                Integer circleid = listt.get(e).getId();
+                String circlemasterlist = circleService.queryCircleBycirclemaster(listt.get(e).getPhone());//查询圈主
+                List<User> userslist = userService.queryCircleManagerList(circleid);//查询出圈子管理员列表
+                for (int j = 0; j < userslist.size(); j++) {
+                    if (userslist.get(e).getNickname() == null) {
+                        userslist.get(e).setNickname("用户" + userslist.get(e).getPhone().substring(7));
+                    }
+                }
+                CircleFollowNum followNumt = circleService.queryFollowAndNewNumt(circleid);//返回关注数,今日新增关注人数
+                CirclePostNum postnumt = circleService.queryCirclePostNumt(circleid);//返回帖子数量，今日新增帖子，精贴数
+                if (postnumt != null) {
+                    vo.setPostnum(postnumt.getPostnum());//帖子数量
+                    vo.setPostnewnum(postnumt.getNewpostnum());//今日新增帖子数量
+                    vo.setIsessencenum(postnumt.getIsessencenum());//精贴数量
+                }
+                if (followNumt != null) {
+                    vo.setFollownum(followNumt.getNum());//关注数
+                    vo.setFollownewnum(followNumt.getNewnum());//今日新增关注数
+                }
+                Integer postsum = 0;
+                Integer isessencesum = 0;
+                vo.setId(listt.get(e).getId());//圈子id
+                vo.setName(listt.get(e).getName());//圈子名称
+                vo.setCategory(listt.get(e).getCategory());//圈子分类
+                vo.setCategoryname(circlemasterlist);//圈主
+                vo.setCirclemanagerlist(users);//圈子管理员列表
+                vo.setPostnum(postsum);
+                vo.setIsessencenum(isessencesum);
+                vo.setSupportnum(listt.get(e).getSupportnum());//支持数
+                vo.setStatus(listt.get(e).getStatus());
+                vo.setCreatetime(listt.get(e).getCreatetime());//圈子创建时间
+                circleVoslist.add(vo);
+            }
+            cir.setClassify(circleVoslist);
             list.add(cir);
         }
         return list;
     }
+
 
     /**
      * 后台管理--查询精贴列表
@@ -151,7 +191,7 @@ public class CircleFacade {
             String nickname=userService.queryUserByNickname(circleid);
             Integer share = sharesService.querysum(id);//获取分享数
             Integer rewarded = rewardedService.queryRewardedBySum(id);//获取打赏积分
-            Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举报次数
+            Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举 报次数
             postList.setId(list.get(i).getId());
             postList.setTitle(list.get(i).getTitle());
             postList.setNickname(nickname);

@@ -96,7 +96,7 @@ public class PostFacade {
                 PostList postList = new PostList();
             Integer id = list.get(i).getId();
                 Integer circleid = list.get(i).getCircleid();//获取到圈子id
-            String nickname = userService.queryUserByNickname(circleid);//获取发帖人
+            String nickname = userService.queryUserByNickname(list.get(i).getUserid());//获取发帖人
             Integer share = sharesService.querysum(id);//获取分享数
             Integer rewarded = rewardedService.queryRewardedBySum(id);//获取打赏积分
             Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举报次数
@@ -483,6 +483,8 @@ public class PostFacade {
             post.setIntime(new Date());
             if (orderid != null) {
                 post.setOrderid(Integer.parseInt(orderid));
+            } else {
+                post.setOrderid(0);
             }
             Date isessencetime = null;//加精时间
             SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");

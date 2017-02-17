@@ -49,7 +49,7 @@ public interface UserMapper {
 
     String queryUserByOpenid(Integer userid);
 
-    String queryUserByNickname(Integer circleid);
+    String queryUserByNickname(Integer userid);
 
     String queryUserByNicknameBy(Integer postid);
     User queryUser(String phone);
