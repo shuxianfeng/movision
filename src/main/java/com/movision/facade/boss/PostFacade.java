@@ -435,7 +435,7 @@ public class PostFacade {
             /*boolean isMultipart = ServletFileUpload.isMultipartContent(request);
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;*/
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if (coverimg != null) {
+            if (coverimg != null && isMultipart) {
                 if (!coverimg.isEmpty()) {
                     String fileRealName = coverimg.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
@@ -457,7 +457,7 @@ public class PostFacade {
                 }
             }
 
-            if (vid != null) {
+            if (vid != null && isMultipart) {
                 if (!vid.isEmpty()) {
                     String fileRealName = vid.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
@@ -479,7 +479,7 @@ public class PostFacade {
 
             }
 
-            if (bannerimgurl != null) {
+            if (bannerimgurl != null && isMultipart) {
                 if (!bannerimgurl.isEmpty()) {
                     String fileRealName = bannerimgurl.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
@@ -819,7 +819,7 @@ public class PostFacade {
                 }
             }
 
-            if (vid != null) {
+            if (vid != null && isMultipart) {
                 if (!vid.isEmpty()) {
                     String fileRealName = vid.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
@@ -840,7 +840,7 @@ public class PostFacade {
                 }
             }
 
-            if (bannerimgurl != null) {
+            if (bannerimgurl != null && isMultipart) {
                 if (!bannerimgurl.isEmpty()) {
                     String fileRealName = bannerimgurl.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
