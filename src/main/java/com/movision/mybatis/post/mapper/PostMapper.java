@@ -97,7 +97,9 @@ public interface PostMapper {
 
     int addPostChoiceness(Post postid);
 
-    List<Post> queryPostChoiceness();
+    List<Post> queryPostChoicenesslist();
+
+    PostChoiceness queryPostChoiceness(Integer postid);
 
     int deletePostChoiceness(Integer postid);
 

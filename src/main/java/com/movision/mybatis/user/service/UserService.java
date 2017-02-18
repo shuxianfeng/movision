@@ -239,10 +239,17 @@ public class UserService {
         }
     }
 
+    /**
+     * 模糊查询发帖人
+     *
+     * @param name
+     * @param pager
+     * @return
+     */
     public List<UserLike> likeQueryPostByNickname(String name, Paging<UserLike> pager) {
         try {
             log.info("模糊查询发帖人");
-            return userMapper.likeQueryPostByNickname(name, pager.getRowBounds());
+            return userMapper.findAlllikeQueryPostByNickname(name, pager.getRowBounds());
         } catch (Exception e) {
             log.error("模糊查询发帖人异常");
             throw e;

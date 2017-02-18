@@ -527,6 +527,8 @@ public class PostFacade {
             if (time != null) {
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 d = df.parse(time);
+            } else {
+                d = new Date();
             }
             post.setEssencedate(d);
 
@@ -690,9 +692,10 @@ public class PostFacade {
      *
      * @return
      */
-    public Map<String, Object> queryPostChoiceness() {
+    public PostChoiceness queryPostChoiceness(String postid) {
         Map<String, Object> map = new HashedMap();
-        List<Post> posts = postService.queryPostChoiceness();//返回当天有几条加精
+        PostChoiceness postChoiceness = new PostChoiceness();
+        List<Post> posts = postService.queryPostChoicenesslist();//返回当天有几条加精
         if (posts.size() <= 5) {//判断当天是否还可以加精
             List<Integer> lou = new ArrayList();
             for (int e = 1; e < 6; e++) {//赋值一个的集合，用于返回排序
@@ -706,11 +709,15 @@ public class PostFacade {
                 }
             }
             map.put("result", lou);
-            return map;
+            /*return map;*/
         } else {
-            map.put("result", 0);
-            return map;//当天加精已达上限
+            Integer ty = 0;
+            map.put("result", ty);
+            /*return map;//当天加精已达上限*/
         }
+        postChoiceness = postService.queryPostChoiceness(Integer.parseInt(postid));
+        postChoiceness.setOrderid(map);
+        return postChoiceness;
     }
 
 

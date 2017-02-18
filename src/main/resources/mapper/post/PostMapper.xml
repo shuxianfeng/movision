@@ -785,9 +785,14 @@
     </select>
 
 
-    <select id="queryPostChoiceness" resultType="com.movision.mybatis.post.entity.Post">
+    <select id="queryPostChoicenesslist" resultType="com.movision.mybatis.post.entity.Post">
         SELECT orderid,essencedate FROM yw_post WHERE date(essencedate) = curdate() AND orderid BETWEEN 1 AND 5 GROUP BY
         orderid
+    </select>
+
+    <select id="queryPostChoiceness" resultType="com.movision.mybatis.post.entity.PostChoiceness"
+            parameterType="java.lang.Integer">
+        SELECT id,subtitle,essencedate FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
 
     <select id="deletePostChoiceness" parameterType="java.lang.Integer">
@@ -943,7 +948,7 @@
         (SELECT category FROM yw_circle WHERE id=p.circleid)as category,p.ishot,p.userid,
        (SELECT nickname FROM yw_user WHERE id=p.userid) as nickname,p.coverimg,
         (SELECT videourl FROM yw_video WHERE postid=#{postid,jdbcType=INTEGER}) AS
-        voideul,p.isessence,p.essencedate,p.orderid,p.postcontent FROM
+        vid,p.isessence,p.essencedate,p.orderid,p.postcontent FROM
         yw_post as p WHERE id=#{postid,jdbcType=INTEGER}
     </select>
 

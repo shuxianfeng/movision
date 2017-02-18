@@ -487,12 +487,28 @@ public class PostService {
      *
      * @return
      */
-    public List<Post> queryPostChoiceness() {
+    public List<Post> queryPostChoicenesslist() {
         try {
-            log.info("查询帖子是否加精");
-            return postMapper.queryPostChoiceness();
+            log.info("查询当日帖子加精排序列表");
+            return postMapper.queryPostChoicenesslist();
         } catch (Exception e) {
-            log.error("查询帖子是否加精异常");
+            log.error("查询当日帖子加精排序列表异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询帖子加精回显数据
+     *
+     * @param postid
+     * @return
+     */
+    public PostChoiceness queryPostChoiceness(Integer postid) {
+        try {
+            log.info("查询帖子，返回加精回填数据");
+            return postMapper.queryPostChoiceness(postid);
+        } catch (Exception e) {
+            log.error("加精数据查询异常");
             throw e;
         }
     }

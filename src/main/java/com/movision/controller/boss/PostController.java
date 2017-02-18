@@ -6,10 +6,7 @@ import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
-import com.movision.mybatis.post.entity.Post;
-import com.movision.mybatis.post.entity.PostActiveList;
-import com.movision.mybatis.post.entity.PostCompile;
-import com.movision.mybatis.post.entity.PostList;
+import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.share.entity.SharesVo;
 import com.movision.mybatis.user.entity.User;
@@ -311,12 +308,12 @@ public class PostController {
                             @ApiParam(value = "发帖人") @RequestParam String userid,//发帖人
                             @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam(required = false, value = "coverimg") MultipartFile coverimg,//帖子封面
                             @ApiParam(value = "视频地址") @RequestParam(required = false, value = "vid") MultipartFile vid,//视频url
-                            @ApiParam(value = "视频封面") @RequestParam(required = false, value = "bannerimgurl") MultipartFile bannerimgurl,//视频图片
+                            @ApiParam(value = "视频文件") @RequestParam(required = false, value = "bannerimgurl") MultipartFile bannerimgurl,//视频图片
                             @ApiParam(value = "帖子内容") @RequestParam String postcontent,//帖子内容
                             @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
                             @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//精选池中的帖子圈子精选贴
                             @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,//精选排序
-                            @ApiParam(value = "精选日期 yyyyMMddHHmmss") @RequestParam(required = false) String time) {//精选日期
+                            @ApiParam(value = "精选日期 yyyy-MM-dd HH:mm:ss") @RequestParam(required = false) String time) {//精选日期
         Response response = new Response();
         Map<String, Integer> resaut = postFacade.addPost(request, title, subtitle, type, circleid, vid, bannerimgurl, userid, coverimg, postcontent, isessence, ishot, orderid, time);
         if (response.getCode() == 200) {
@@ -386,20 +383,15 @@ public class PostController {
         return response;
     }
 
-    /**
-     * 后台管理-帖子列表-帖子加精-查询加精排序
-     *
-     * @return
-     */
-    @ApiOperation(value = "查询是否可加精", notes = "用于查询帖子是否可加精，是，返回可加精的排序数，否，返回状态0")
-    @RequestMapping(value = "query_post_choiceness", method = RequestMethod.POST)
-    public Response queryPostChoiceness() {
+    @ApiOperation(value = "帖子加精数据回显", notes = "用于帖子加精时，数据回填接口", response = Response.class)
+    @RequestMapping(value = "/query_post_choiceness", method = RequestMethod.POST)
+    public Response queryPostChoiceness(@ApiParam(value = "帖子id") @RequestParam String postid) {
         Response response = new Response();
-        Map<String, Object> result = postFacade.queryPostChoiceness();
+        PostChoiceness list = postFacade.queryPostChoiceness(postid);
         if (response.getCode() == 200) {
-            response.setMessage("查询成功");
+            response.setMessage("操作成功");
         }
-        response.setData(result);
+        response.setData(list);
         return response;
     }
 
@@ -445,7 +437,8 @@ public class PostController {
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(list);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 
