@@ -56,5 +56,7 @@ public interface UserMapper {
 
     List<UserLike> likeQueryPostByNickname(String name, RowBounds rowBounds);
 
+    int queryUserPoint(int userid);
+
     User findAllUser(int id);
 }

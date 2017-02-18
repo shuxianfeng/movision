@@ -1,5 +1,7 @@
 package com.movision.mybatis.goods.service;
 
+import com.movision.mybatis.address.entity.Address;
+import com.movision.mybatis.address.mapper.AddressMapper;
 import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.category.mapper.CategoryMapper;
 import com.movision.mybatis.combo.entity.Combo;
@@ -45,6 +47,9 @@ public class GoodsService {
 
     @Autowired
     private ComboMapper comboMapper;
+
+    @Autowired
+    private AddressMapper addressMapper;
 
     public List<GoodsVo> queryActiveGoods(Paging<Goods> pager, String postid) {
         try {
@@ -283,6 +288,26 @@ public class GoodsService {
             return comboMapper.queryCombo(goodsid);
         } catch (Exception e) {
             log.error("查询套餐类别失败");
+            throw e;
+        }
+    }
+
+    public List<Address> queryAddressList(int userid) {
+        try {
+            log.info("查询该用户的所有收货地址列表");
+            return addressMapper.queryAddressList(userid);
+        } catch (Exception e) {
+            log.error("查询该用户的所有收货地址列表失败");
+            throw e;
+        }
+    }
+
+    public List<GoodsVo> queryComboGoodsList(int comboid) {
+        try {
+            log.info("查询该商品的该套餐中包含的所有商品列表");
+            return goodsMapper.queryComboGoodsList(comboid);
+        } catch (Exception e) {
+            log.error("查询该商品的该套餐中包含的所有商品列表失败");
             throw e;
         }
     }

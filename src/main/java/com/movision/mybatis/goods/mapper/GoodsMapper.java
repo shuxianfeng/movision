@@ -44,6 +44,8 @@ public interface GoodsMapper {
 
     int queryStore(int goodsid);
 
+    List<GoodsVo> queryComboGoodsList(int comboid);
+
     int updateByPrimaryKeySelective(Goods record);
 
     int updateByPrimaryKey(Goods record);

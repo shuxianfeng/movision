@@ -248,4 +248,14 @@ public class UserService {
             throw e;
         }
     }
+
+    public int queryUserPoint(int userid) {
+        try {
+            log.info("根据用户id查询用户积分");
+            return userMapper.queryUserPoint(userid);
+        } catch (Exception e) {
+            log.error("根据用户id查询用户积分失败");
+            throw e;
+        }
+    }
 }
