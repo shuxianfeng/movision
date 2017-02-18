@@ -2,6 +2,7 @@ package com.movision.controller.app;
 
 import com.movision.common.Response;
 import com.movision.facade.Goods.GoodsFacade;
+import com.movision.facade.coupon.CouponFacade;
 import com.movision.mybatis.goods.entity.GoodsDetail;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
@@ -28,6 +29,9 @@ public class AppGoodsController {
 
     @Autowired
     private GoodsFacade goodsFacade;
+
+    @Autowired
+    private CouponFacade couponFacade;
 
     /**
      * 商品详情接口
@@ -113,6 +117,23 @@ public class AppGoodsController {
         Response response = new Response();
 
         Map<String, Object> map = goodsFacade.immediateRent(comboid, userid);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 提交订单前，点击选择优惠券，跳转页面，返回所有优惠券列表
+     */
+    @ApiOperation(value = "提交订单时选择优惠券，返回所有优惠券列表接口", notes = "提交订单前，点击选择优惠券，页面跳转，并在该接口中返回所有该用户名下的优惠券列表", response = Response.class)
+    @RequestMapping(value = "choiceCoupon", method = RequestMethod.POST)
+    public Response choiceCoupon(@ApiParam(value = "用户id") @RequestParam String userid) {
+        Response response = new Response();
+
+        Map<String, Object> map = couponFacade.choiceCoupon(userid);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
