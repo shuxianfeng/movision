@@ -32,6 +32,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -52,6 +53,9 @@ import java.util.*;
  */
 @Service
 public class PostFacade {
+    @Value("#{configProperties['img.domain']}")
+    private String imgdomain;
+
     @Autowired
     private PostService postService;
 
@@ -476,7 +480,7 @@ public class PostFacade {
             }
 
             if (bannerimgurl != null) {
-                if (!vid.isEmpty()) {
+                if (!bannerimgurl.isEmpty()) {
                     String fileRealName = bannerimgurl.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
                     String fileSuffix = fileRealName.substring(pointIndex);
@@ -496,7 +500,10 @@ public class PostFacade {
                 }
             }
 
-            post.setCoverimg(savedFileName);//添加帖子封面
+            String voidurl = imgdomain + savedVideo;
+            String bannervoidurl = imgdomain + savedbannerimgurl;
+            String imgurl = imgdomain + savedFileName;
+            post.setCoverimg(imgurl);//添加帖子封面
             post.setIsactive(0);//设置状态为帖子
             post.setPostcontent(postcontent);//帖子内容
             if (isessence != null) {
@@ -525,8 +532,8 @@ public class PostFacade {
             Integer pid = post.getId();//获取到刚刚添加的帖子id
             Video vide = new Video();
             vide.setPostid(pid);
-            vide.setVideourl(savedVideo);
-            vide.setVideourl(savedbannerimgurl);
+            vide.setVideourl(voidurl);
+            vide.setVideourl(bannervoidurl);
             vide.setIntime(new Date());
             Integer in = videoService.insertVideoById(vide);//添加视频表
             map.put("result", result);
@@ -831,7 +838,7 @@ public class PostFacade {
             }
 
             if (bannerimgurl != null) {
-                if (!vid.isEmpty()) {
+                if (!bannerimgurl.isEmpty()) {
                     String fileRealName = bannerimgurl.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
                     String fileSuffix = fileRealName.substring(pointIndex);
@@ -850,13 +857,16 @@ public class PostFacade {
                     }
                 }
             }
+            String voidurl = imgdomain + savedVideo;
+            String bannervoidurl = imgdomain + savedbannerimgurl;
             Video vide = new Video();
             vide.setPostid(Integer.parseInt(postid));
-            vide.setVideourl(savedVideo);
-            vide.setVideourl(savedbannerimgurl);
+            vide.setVideourl(voidurl);
+            vide.setVideourl(bannervoidurl);
             vide.setIntime(new Date());
             Integer in = videoService.updateVideoById(vide);
-            post.setCoverimg(savedFileName);//添加帖子封面
+            String img = imgdomain + savedFileName;
+            post.setCoverimg(img);//添加帖子封面
             post.setIsactive(0);//设置状态为帖子
             post.setPostcontent(postcontent);//帖子内容
             if (isessence != null) {
