@@ -348,7 +348,7 @@
          FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id LEFT JOIN yw_sub_order s ON s.porderid=o.id
          LEFT JOIN yw_coupon c ON c.id=o.couponsid LEFT JOIN yw_order_sub_logistics d ON d.logisticsid=o.logisticsid
          LEFT JOIN yw_user u ON u.id=o.userid
-        WHERE 1
+         WHERE o.isdel=0 AND 1
         <if test="ordernumber!=null and ordernumber!=''">
             AND o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
         </if>
@@ -365,7 +365,7 @@
              AND d.logisticsid=#{logisticid,jdbcType=VARCHAR}
          </if>
          <if test="intime!=null and intime!=''">
-             AND o.intime=#{intime,jdbcType=DATE}
+             AND o.intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
          </if>
     </select>
     <!-- 暂时不做-->
@@ -426,7 +426,7 @@ SELECT
         u.nickname
     FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id LEFT  JOIN yw_sub_order s ON s.porderid=o.id
    LEFT JOIN yw_coupon c ON c.id=o.couponsid LEFT  JOIN yw_order_sub_logistics  d ON d.logisticsid=o.logisticsid LEFT JOIN yw_user u ON u.id=o.userid
- WHERE 1=1
+        WHERE o.isdel=0 AND 1=1
          <if test="ordernumber!=null">
             AND  ordernumber=#{ordernumber,jdbcType=VARCHAR}
          </if>
@@ -497,10 +497,10 @@ SELECT
         SET isdel=1
         WHERE id=#{id,jdbcType=INTEGER}
     </update>
-    <select id="findAllGetInfo" resultType="com.movision.mybatis.bossOrders.entity.BossOrders"
+    <select id="findAllGetInfo" resultType="com.movision.mybatis.address.entity.Address"
             parameterType="java.lang.Integer">
-        SELECT a.phone,a.name,u.email,a.province,a.city,a.district,a.street FROM yw_address a LEFT JOIN yw_user u ON u.id=a.userid WHERE  id=#{id,jdbcType=INTEGER}
-
+        SELECT a.phone,a.name,u.email,a.province,a.city,a.district,a.street FROM yw_address a LEFT JOIN yw_user u ON
+        u.id=a.userid WHERE a.userid=(SELECT s.userid FROM yw_orders s WHERE s.id=#{id,jdbcType=INTEGER} )
     </select>
     <select id="findAllInvoiceInfo" resultType="com.movision.mybatis.invoice.entity.Invoice"
             parameterType="java.lang.Integer">
@@ -547,10 +547,15 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         SELECT  head,kind,content,companyname,rigaddress,rigphone,bank,banknum,code FROM  yw_invoice WHERE  orderid=#{orderid,jdbcType=INTEGER}
     </select>
     <select id="findAllBoss" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_orders
+        SELECT COUNT(1) FROM yw_orders WHERE isdel=0
     </select>
     <select id="queryAddress" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.address.entity.Address">
        SELECT s.province,s.city,s.district,s.street FROM yw_address s WHERE s.userid=(SELECT s.userid FROM yw_orders s WHERE s.id=#{orderid,jdbcType=INTEGER})
     </select>
+    <select id="queryGoods" parameterType="java.lang.Integer" resultType="com.movision.mybatis.goods.entity.Goods">
+        SELECT  s.`name`,s.protype,s.origprice,s.price,c.num,s.id,s.attribute FROM yw_goods s LEFT JOIN yw_cart c ON c.goodsid=s.id
+        WHERE c.userid=(SELECT s.userid FROM yw_orders s WHERE s.id=#{id,jdbcType=INTEGER} )
+    </select>
+
 </mapper>

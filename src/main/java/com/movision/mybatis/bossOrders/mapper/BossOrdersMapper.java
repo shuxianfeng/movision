@@ -5,6 +5,7 @@ import com.movision.mybatis.area.entity.Area;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.city.entity.City;
+import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.province.entity.Province;
 import org.apache.ibatis.session.RowBounds;
@@ -51,7 +52,7 @@ public interface BossOrdersMapper {
 
     Invoice findAllInvoiceInfo(Integer id);//发票信息
 
-    BossOrders findAllGetInfo(Integer id);//收货人信息
+    List<Address> findAllGetInfo(Integer id);//收货人信息
 
     int deleteOrder(Integer id);//删除订单
 
@@ -63,9 +64,9 @@ public interface BossOrdersMapper {
 
     BossOrders queryGet(Integer orderid);//返回
 
-    List<Address> queryAddress(Integer orderid);
+    List<Address> queryAddress(Integer orderid);//查询历史地址
 
-
+    Goods queryGoods(Integer id);//查询商品信息
 
 
 

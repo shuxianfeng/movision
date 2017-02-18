@@ -1,14 +1,17 @@
 package com.movision.facade.Goods;
 
+import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.combo.entity.Combo;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsDetail;
 import com.movision.mybatis.goods.entity.GoodsImg;
+import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentCategery;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
+import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +32,9 @@ public class GoodsFacade {
 
     @Autowired
     private GoodsService goodsService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 根据商品id查询商品详情
@@ -105,6 +111,28 @@ public class GoodsFacade {
             map.put("comboList", comboList);
         }
         map.put("storenum", storenum);
+        return map;
+    }
+
+    public Map<String, Object> immediateRent(String comboid, String userid) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        //先根据用户id查询该用户的所有地址列表
+        List<Address> addressList = goodsService.queryAddressList(Integer.parseInt(userid));
+
+        //根据套餐id和商品id查询，该套餐包含的所有商品
+        List<GoodsVo> allRentGoodsList = goodsService.queryComboGoodsList(Integer.parseInt(comboid));
+
+        //查询所有配送方式列表(临时屏蔽)
+
+        //查询用户可用积分数
+        int userpoint = userService.queryUserPoint(Integer.parseInt(userid));
+
+        map.put("addressList", addressList);
+        map.put("allRentGoodsList", allRentGoodsList);
+        map.put("userpoint", userpoint);
+
         return map;
     }
 }

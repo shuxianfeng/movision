@@ -104,14 +104,15 @@ public class AppGoodsController {
 //    }
 
     /**
-     * 租用的商品立即租用接口
+     * 租用的商品立即租用接口(选择好商品及套餐类型后调用)
      */
-    @ApiOperation(value = "租用的商品立即租用接口", notes = "用户租用商品时，点击加入购物车或立即租用之前选择租用日期和套餐类型等的选择数据返回", response = Response.class)
+    @ApiOperation(value = "租用的商品立即租用接口(选择好商品及套餐类型后调用)", notes = "租用的商品立即租用接口，选择好商品及套餐类型后调用(返回所有地址列表、所含套餐商品列表、用户可用积分数)", response = Response.class)
     @RequestMapping(value = "immediateRent", method = RequestMethod.POST)
-    public Response immediateRent(@ApiParam(value = "商品id") @RequestParam String goodsid) {
+    public Response immediateRent(@ApiParam(value = "套餐id") @RequestParam String comboid,
+                                  @ApiParam(value = "用户id") @RequestParam String userid) {
         Response response = new Response();
 
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = goodsFacade.immediateRent(comboid, userid);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");

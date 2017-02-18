@@ -6,6 +6,7 @@ import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.bossOrders.servic.BossOrderService;
 import com.movision.mybatis.city.entity.City;
+import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.province.entity.Province;
@@ -75,14 +76,15 @@ public class OrderFacade {
      * @param
      * @return
      */
-    public List<BossOrdersVo> queryOrderByCondition(String ordernumber, String name, String status, String position, String logisticid, String intime) {
+    public List<BossOrdersVo> queryOrderByCondition(String ordernumber, String name, String status, String position, String logisticid, String mintime, String maxtime) {
         Map<String, String> map = new HashedMap();
         map.put("ordernumber", ordernumber);
         map.put("name", name);
         map.put("status", status);
         map.put("takeway", position);
         map.put("logisticid", logisticid);
-        map.put("intime", intime);
+        map.put("mintime", mintime);
+        map.put("maxtime", maxtime);
         return bossOrderService.queryOrderByCondition(map);
     }
 
@@ -205,12 +207,20 @@ public class OrderFacade {
         Map<String, Object> map = new HashedMap();
         Invoice invoice = bossOrderService.queryOrderInvoiceInfo(id);//查询发票信息
         BossOrders bossOrders = bossOrderService.queryOrderInfo(id);//查询基本信息(包含其他信息)
-        BossOrders bossOrdersGet = bossOrderService.queryOrderGetInfo(id);//查询收货人信息
+        List<Address> bossOrdersGet = bossOrderService.queryOrderGetInfo(id);//查询收货人信息
+        Goods goods = bossOrderService.queryOrderGoods(id);//查询商品信息
         map.put("invoice", invoice);
         map.put("bossOrders", bossOrders);
         map.put("bossOrdersGet", bossOrdersGet);
+        map.put("goods", goods);
         return map;
     }
+
+
+    /**public  Map<String,Integer> updateOrderAddress(String orderid,String phone,String name,String email,String province,String city,String district,String street){
+     BossOrders bossOrders = new BossOrders();
+     Map<String ,Integer> map = new HashedMap();
+     }*/
 
     /**
      * 订单管理-编辑发票
@@ -268,5 +278,6 @@ public class OrderFacade {
         List<Address> list = bossOrderService.queryOrders(orderid);
         return list;
     }
+
 }
 

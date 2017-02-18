@@ -6,6 +6,7 @@ import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.bossOrders.mapper.BossOrdersMapper;
 import com.movision.mybatis.city.entity.City;
+import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.province.entity.Province;
@@ -85,7 +86,7 @@ public class BossOrderService {
      * @param id
      * @return
      */
-    public BossOrders queryOrderGetInfo(Integer id) {
+    public List<Address> queryOrderGetInfo(Integer id) {
         try {
             loger.info("查询收货人信息");
             return bossOrdersMapper.findAllGetInfo(id);
@@ -370,5 +371,20 @@ public class BossOrderService {
         }
     }
 
+    /**
+     * 订单管理-查询商品信息
+     *
+     * @param id
+     * @return
+     */
+    public Goods queryOrderGoods(Integer id) {
+        try {
+            loger.info("查询商品信息成功");
+            return bossOrdersMapper.queryGoods(id);
+        } catch (Exception e) {
+            loger.error("查询商品信息失败");
+            throw e;
+        }
+    }
 
 }

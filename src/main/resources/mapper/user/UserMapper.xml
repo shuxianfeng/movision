@@ -85,6 +85,11 @@
         )
     </select>
 
+    <!--根据用户id查询用户积分数-->
+    <select id="queryUserPoint" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT points FROM yw_user WHERE id = #{userid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_user
         where id = #{id,jdbcType=INTEGER}
