@@ -414,8 +414,8 @@ public class PostFacade {
      * @param time
      * @return
      */
-    public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid, MultipartFile vid, String userid,
-                                        MultipartFile coverimg, String postcontent, String isessence, String ishot, String orderid, String time) {
+    public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid, MultipartFile vid, MultipartFile bannerimgurl,
+                                        String userid, MultipartFile coverimg, String postcontent, String isessence, String ishot, String orderid, String time) {
         Post post = new Post();
         Map<String, Integer> map = new HashedMap();
         try {
@@ -427,10 +427,11 @@ public class PostFacade {
             //上传图片到本地服务器
             String savedFileName = "";
             String savedVideo = "";
+            String savedbannerimgurl = "";
             /*boolean isMultipart = ServletFileUpload.isMultipartContent(request);
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;*/
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if (coverimg != null && isMultipart) {
+            if (coverimg != null) {
                 if (!coverimg.isEmpty()) {
                     String fileRealName = coverimg.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
@@ -452,7 +453,7 @@ public class PostFacade {
                 }
             }
 
-            if (vid != null && isMultipart) {
+            if (vid != null) {
                 if (!vid.isEmpty()) {
                     String fileRealName = vid.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
@@ -472,6 +473,27 @@ public class PostFacade {
                     }
                 }
 
+            }
+
+            if (bannerimgurl != null) {
+                if (!vid.isEmpty()) {
+                    String fileRealName = bannerimgurl.getOriginalFilename();
+                    int pointIndex = fileRealName.indexOf(".");
+                    String fileSuffix = fileRealName.substring(pointIndex);
+                    UUID FileId = UUID.randomUUID();
+                    savedbannerimgurl = FileId.toString().replace("-", "").concat(fileSuffix);
+                    String savedDir = request.getSession().getServletContext().getRealPath("");
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                    //不保存到项目中,防止部包把图片覆盖掉了
+                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    //这里组合出真实的图片存储路径
+                    String combinpath = path + "/images/post/vidbanner/";
+                    File savedFile = new File(combinpath, savedbannerimgurl);
+                    boolean isCreateSuccess = savedFile.createNewFile();
+                    if (isCreateSuccess) {
+                        bannerimgurl.transferTo(savedFile);  //转存文件
+                    }
+                }
             }
 
             post.setCoverimg(savedFileName);//添加帖子封面
@@ -504,6 +526,7 @@ public class PostFacade {
             Video vide = new Video();
             vide.setPostid(pid);
             vide.setVideourl(savedVideo);
+            vide.setVideourl(savedbannerimgurl);
             vide.setIntime(new Date());
             Integer in = videoService.insertVideoById(vide);//添加视频表
             map.put("result", result);
@@ -748,7 +771,7 @@ public class PostFacade {
      * @param time
      * @return
      */
-    public Map<String, Integer> updatePostById(HttpServletRequest request, String postid, String title, String subtitle, String type, String userid, String circleid, MultipartFile vid,
+    public Map<String, Integer> updatePostById(HttpServletRequest request, String postid, String title, String subtitle, String type, String userid, String circleid, MultipartFile vid, MultipartFile bannerimgurl,
                                                MultipartFile coverimg, String postcontent, String isessence, String ishot, String orderid, String time) {
         Post post = new Post();
         Map<String, Integer> map = new HashedMap();
@@ -762,6 +785,7 @@ public class PostFacade {
             //上传图片到本地服务器
             String savedFileName = "";
             String savedVideo = "";
+            String savedbannerimgurl = "";
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
             if (coverimg != null && isMultipart) {
@@ -805,9 +829,31 @@ public class PostFacade {
                     }
                 }
             }
+
+            if (bannerimgurl != null) {
+                if (!vid.isEmpty()) {
+                    String fileRealName = bannerimgurl.getOriginalFilename();
+                    int pointIndex = fileRealName.indexOf(".");
+                    String fileSuffix = fileRealName.substring(pointIndex);
+                    UUID FileId = UUID.randomUUID();
+                    savedbannerimgurl = FileId.toString().replace("-", "").concat(fileSuffix);
+                    String savedDir = request.getSession().getServletContext().getRealPath("");
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                    //不保存到项目中,防止部包把图片覆盖掉了
+                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    //这里组合出真实的图片存储路径
+                    String combinpath = path + "/images/post/vidbanner/";
+                    File savedFile = new File(combinpath, savedbannerimgurl);
+                    boolean isCreateSuccess = savedFile.createNewFile();
+                    if (isCreateSuccess) {
+                        bannerimgurl.transferTo(savedFile);  //转存文件
+                    }
+                }
+            }
             Video vide = new Video();
             vide.setPostid(Integer.parseInt(postid));
             vide.setVideourl(savedVideo);
+            vide.setVideourl(savedbannerimgurl);
             vide.setIntime(new Date());
             Integer in = videoService.updateVideoById(vide);
             post.setCoverimg(savedFileName);//添加帖子封面
