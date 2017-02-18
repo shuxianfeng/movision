@@ -52,7 +52,7 @@ public interface BossOrdersMapper {
 
     Invoice findAllInvoiceInfo(Integer id);//发票信息
 
-    BossOrders findAllGetInfo(Integer id);//收货人信息
+    List<BossOrders> findAllGetInfo(Integer id);//收货人信息
 
     int deleteOrder(Integer id);//删除订单
 
@@ -66,7 +66,7 @@ public interface BossOrdersMapper {
 
     List<Address> queryAddress(Integer orderid);
 
-    Goods queryGoods(Integer id);
+    Goods queryGoods(Integer id);//查询商品信息
 
 
 
