@@ -445,8 +445,7 @@ public class PostController {
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        pager.result(list);
-        response.setData(pager);
+        response.setData(list);
         return response;
     }
 
