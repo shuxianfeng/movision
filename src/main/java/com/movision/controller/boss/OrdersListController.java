@@ -6,6 +6,7 @@ import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.invoice.entity.Invoice;
+import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.apache.bcel.verifier.VerifierAppFrame;
@@ -83,13 +84,17 @@ public class OrdersListController {
                                               @ApiParam(value = "订单类型（0 租赁 1 购买）") @RequestParam(required = false) String position,
                                               @ApiParam(value = "物流单号") @RequestParam(required = false) String logisticid,
                                               @ApiParam(value = "订单最大时间") @RequestParam(required = false) String mintime,
-                                              @ApiParam(value = "订单最小时间") @RequestParam(required = false) String maxtime) {
+                                              @ApiParam(value = "订单最小时间") @RequestParam(required = false) String maxtime,
+                                              @RequestParam(required = false) String pageNo,
+                                              @RequestParam(required = false) String pageSize) {
         Response response = new Response();
-        List<BossOrdersVo> list = orderFacade.queryOrderByCondition(ordernumber, name, status, position, logisticid, mintime, maxtime);
+        Paging<BossOrdersVo> pager = new Paging<BossOrdersVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<BossOrdersVo> list = orderFacade.queryOrderByCondition(ordernumber, name, status, position, logisticid, mintime, maxtime, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(list);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 

@@ -212,12 +212,12 @@ public class BossOrderService {
      * @param map
      * @return
      */
-    public List<BossOrdersVo> queryOrderByCondition(Map map) {
+    public List<BossOrdersVo> queryOrderByCondition(Map map, Paging<BossOrdersVo> pager) {
         try {
             if (loger.isDebugEnabled()) {
                 loger.debug("根据条件查询订单");
             }
-            return bossOrdersMapper.queryOrderByCondition(map);
+            return bossOrdersMapper.findAllOrderByCondition(map, pager.getRowBounds());
         } catch (Exception e) {
             loger.error("根据条件查询订单");
             throw e;
@@ -394,7 +394,7 @@ public class BossOrderService {
      * @param id
      * @return
      */
-    public Goods queryOrderGoods(Integer id) {
+    public List<Goods> queryOrderGoods(Integer id) {
         try {
             loger.info("查询商品信息成功");
             return bossOrdersMapper.queryGoods(id);

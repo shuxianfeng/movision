@@ -29,7 +29,7 @@ public interface BossOrdersMapper {
 
     List<BossOrdersVo> findAllOrdersByList(RowBounds rowBounds);
 
-    List<BossOrdersVo> queryOrderByCondition(Map map);
+    List<BossOrdersVo> findAllOrderByCondition(Map map, RowBounds rowBounds);
 
     List<BossOrdersVo> findAllAccuracyConditionByOrder(Map map);
 
@@ -67,7 +67,7 @@ public interface BossOrdersMapper {
 
     List<Address> queryAddress(Integer orderid);//查询历史地址
 
-    Goods queryGoods(Integer id);//查询商品信息
+    List<Goods> queryGoods(Integer id);//查询商品信息
 
     int updateEmail(User user);//修改邮箱
 

@@ -77,16 +77,43 @@ public class OrderFacade {
      * @param
      * @return
      */
-    public List<BossOrdersVo> queryOrderByCondition(String ordernumber, String name, String status, String position, String logisticid, String mintime, String maxtime) {
-        Map<String, String> map = new HashedMap();
-        map.put("ordernumber", ordernumber);
-        map.put("name", name);
-        map.put("status", status);
-        map.put("takeway", position);
-        map.put("logisticid", logisticid);
-        map.put("mintime", mintime);
-        map.put("maxtime", maxtime);
-        return bossOrderService.queryOrderByCondition(map);
+    public List<BossOrdersVo> queryOrderByCondition(String ordernumber, String name, String status, String position, String logisticid, String mintime, String maxtime, Paging<BossOrdersVo> pager) {
+        Map<String, Object> map = new HashedMap();
+        if (ordernumber != null) {
+            map.put("ordernumber", ordernumber);
+        }
+        if (name != null) {
+            map.put("name", name);
+        }
+        if (status != null) {
+            map.put("status", status);
+        }
+        if (position != null) {
+            map.put("takeway", position);
+        }
+        if (logisticid != null) {
+            map.put("logisticid", logisticid);
+        }
+        Date isessencetime = null;//开始时间
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        if (mintime != null) {
+            try {
+                isessencetime = format.parse(mintime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("mintime", isessencetime);
+        Date max = null;//最大时间
+        if (maxtime != null) {
+            try {
+                max = format.parse(maxtime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("maxtime", max);
+        return bossOrderService.queryOrderByCondition(map, pager);
     }
 
     /**
@@ -209,11 +236,26 @@ public class OrderFacade {
         Invoice invoice = bossOrderService.queryOrderInvoiceInfo(id);//查询发票信息
         BossOrders bossOrders = bossOrderService.queryOrderInfo(id);//查询基本信息(包含其他信息)
         List<Address> bossOrdersGet = bossOrderService.queryOrderGetInfo(id);//查询收货人信息
-        Goods goods = bossOrderService.queryOrderGoods(id);//查询商品信息
+        List<Goods> goods = bossOrderService.queryOrderGoods(id);//查询商品信息
+        Double money = 0.0;//小计
+        Double summoney = 0.0;//总价
+        Goods good = new Goods();
+        for (int i = 0; i < goods.size(); i++) {
+            Double price = good.getPrice();//折后价
+            Double origprice = good.getOrigprice();//原价
+            int num = good.getNum();//数量
+            if (price != null && num != 0) {
+                money = num * price;//小计
+            }
+            summoney += money;//总价
+        }
+        good.setMoney(money);
+        good.setSummoney(summoney);
         map.put("invoice", invoice);
         map.put("bossOrders", bossOrders);
         map.put("bossOrdersGet", bossOrdersGet);
         map.put("goods", goods);
+        map.put("good", good);
         return map;
     }
 

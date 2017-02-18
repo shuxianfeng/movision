@@ -13,6 +13,16 @@ public class Goods {
 
     private Double origprice;
 
+    private Integer num;//数量
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
+
     private Integer attribute;
 
     private String provincecode;
@@ -56,6 +66,26 @@ public class Goods {
     private Integer ishot;//是否为热门：0 否 1 是
 
     private Integer isessence;//是否为精选：0 否 1 是
+
+    private Double summoney;//总价
+    private Double money;//小计
+
+    public Double getMoney() {
+        return money;
+    }
+
+    public void setMoney(Double money) {
+        this.money = money;
+    }
+
+    public Double getSummoney() {
+
+        return summoney;
+    }
+
+    public void setSummoney(Double summoney) {
+        this.summoney = summoney;
+    }
 
     public Integer getId() {
         return id;

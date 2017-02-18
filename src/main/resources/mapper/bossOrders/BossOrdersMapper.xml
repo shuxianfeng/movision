@@ -323,7 +323,7 @@
     sintime,o.paytype,a.name,o.takeway,s.intime,s.logisticsid,o.paytime,o.remark FROM yw_orders o
  LEFT JOIN yw_address  a ON o.addressid=a.id LEFT JOIN yw_order_sub_logistics s ON s.logisticsid=o.logisticsid WHERE o.id=#{id,jdbcType=INTEGER}
 </select>
-     <select id="queryOrderByCondition" parameterType="java.util.Map"
+    <select id="findAllOrderByCondition" parameterType="java.util.Map"
             resultType="com.movision.mybatis.bossOrders.entity.BossOrdersVo">
          SELECT
          o.id,
