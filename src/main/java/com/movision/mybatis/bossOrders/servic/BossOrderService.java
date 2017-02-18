@@ -10,6 +10,7 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.province.entity.Province;
+import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,15 +132,31 @@ public class BossOrderService {
     /**
      * 订单管理--编辑收货地址
      *
-     * @param bossOrders
+     * @param address
      * @return
      */
-    public int updateOrderGet(BossOrders bossOrders) {
+    public int updateOrderGet(Address address) {
         try {
             loger.info("编辑收货地址成功");
-            return bossOrdersMapper.updateAddress(bossOrders);
+            return bossOrdersMapper.updateAddress(address);
         } catch (Exception e) {
             loger.error("编辑收货地址失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 修改邮箱
+     *
+     * @param user
+     * @return
+     */
+    public int updateOrderEmail(User user) {
+        try {
+            loger.info("修改邮箱");
+            return bossOrdersMapper.updateEmail(user);
+        } catch (Exception e) {
+            loger.info("修改邮箱失败");
             throw e;
         }
     }

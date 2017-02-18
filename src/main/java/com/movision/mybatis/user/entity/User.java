@@ -17,6 +17,16 @@ public class User implements Serializable {
 
     private String phone;
 
+    private Integer orderid;
+
+    public Integer getOrderid() {
+        return orderid;
+    }
+
+    public void setOrderid(Integer orderid) {
+        this.orderid = orderid;
+    }
+
     private String token;
 
     private String invitecode;

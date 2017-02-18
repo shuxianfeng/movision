@@ -94,6 +94,38 @@ public class OrdersListController {
     }
 
     /**
+     * 编辑收货人地址
+     * @param orderid
+     * @param phone
+     * @param name
+     * @param email
+     * @param province
+     * @param city
+     * @param district
+     * @param street
+     * @return
+     */
+    @ApiOperation(value = "编辑收货人地址", notes = "编辑收货人地址", response = Response.class)
+    @RequestMapping(value = "/update_address", method = RequestMethod.POST)
+    public Response updateOrderAddress(@ApiParam(value = "订单id") @RequestParam(required = false) String orderid,
+                                       @ApiParam(value = "电话") @RequestParam(required = false) String phone,
+                                       @ApiParam(value = "收货人姓名") @RequestParam(required = false) String name,
+                                       @ApiParam(value = "邮箱") @RequestParam(required = false) String email,
+                                       @ApiParam(value = "省") @RequestParam(required = false) String province,
+                                       @ApiParam(value = "市") @RequestParam(required = false) String city,
+                                       @ApiParam(value = "区") @RequestParam(required = false) String district,
+                                       @ApiParam(value = "街道") @RequestParam(required = false) String street) {
+        Response response = new Response();
+        Map<String, Integer> map = orderFacade.updateOrderAddress(orderid, phone, name, email, province, city, district, street);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
+
+    }
+
+    /**
      * 精确查询订单
      *
      * @param ordernumber

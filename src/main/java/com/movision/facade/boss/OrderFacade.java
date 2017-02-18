@@ -10,6 +10,7 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.province.entity.Province;
+import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
@@ -217,10 +218,38 @@ public class OrderFacade {
     }
 
 
-    /**public  Map<String,Integer> updateOrderAddress(String orderid,String phone,String name,String email,String province,String city,String district,String street){
-     BossOrders bossOrders = new BossOrders();
-     Map<String ,Integer> map = new HashedMap();
-     }*/
+    /**
+     * 修改收货地址
+     *
+     * @param orderid
+     * @param phone
+     * @param name
+     * @param email
+     * @param province
+     * @param city
+     * @param district
+     * @param street
+     * @return
+     */
+    public Map<String, Integer> updateOrderAddress(String orderid, String phone, String name, String email, String province, String city, String district, String street) {
+        Address address = new Address();
+        Map<String, Integer> map = new HashedMap();
+        address.setCity(city);
+        address.setDistrict(district);
+        address.setOrderid(Integer.parseInt(orderid));
+        address.setProvince(province);
+        address.setStreet(street);
+        address.setPhone(phone);
+        address.setName(name);
+        int result = bossOrderService.updateOrderGet(address);
+        User user = new User();
+        user.setEmail(email);
+        user.setOrderid(Integer.parseInt(orderid));
+        int res = bossOrderService.updateOrderEmail(user);
+        map.put("result", result);
+        map.put("res", res);
+        return map;
+    }
 
     /**
      * 订单管理-编辑发票

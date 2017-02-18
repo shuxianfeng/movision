@@ -8,6 +8,7 @@ import com.movision.mybatis.city.entity.City;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.province.entity.Province;
+import com.movision.mybatis.user.entity.User;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -60,7 +61,7 @@ public interface BossOrdersMapper {
 
     Invoice queryInvoice(Integer orderid);//返回发票信息
 
-    int updateAddress(BossOrders bossOrders);//编辑收货人信息
+    int updateAddress(Address address);//编辑收货人信息
 
     BossOrders queryGet(Integer orderid);//返回
 
@@ -68,6 +69,7 @@ public interface BossOrdersMapper {
 
     Goods queryGoods(Integer id);//查询商品信息
 
+    int updateEmail(User user);//修改邮箱
 
 
 }

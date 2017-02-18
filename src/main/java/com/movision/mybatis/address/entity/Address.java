@@ -24,14 +24,15 @@ public class Address {
 
     private Integer isdel;
 
-    private String email;
 
-    public String getEmail() {
-        return email;
+    public Integer orderid;
+
+    public Integer getOrderid() {
+        return orderid;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setOrderid(Integer orderid) {
+        this.orderid = orderid;
     }
 
     public Integer getId() {
