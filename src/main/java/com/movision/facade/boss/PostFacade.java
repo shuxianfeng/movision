@@ -429,7 +429,8 @@ public class PostFacade {
             String savedVideo = "";
             /*boolean isMultipart = ServletFileUpload.isMultipartContent(request);
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;*/
-            if (coverimg != null) {
+            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+            if (coverimg != null && isMultipart) {
                 if (!coverimg.isEmpty()) {
                     String fileRealName = coverimg.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
@@ -451,7 +452,7 @@ public class PostFacade {
                 }
             }
 
-            if (vid != null) {
+            if (vid != null && isMultipart) {
                 if (!vid.isEmpty()) {
                     String fileRealName = vid.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
