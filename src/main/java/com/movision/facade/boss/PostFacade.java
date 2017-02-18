@@ -41,6 +41,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -487,12 +488,15 @@ public class PostFacade {
             } else {
                 post.setOrderid(0);
             }
-            Date isessencetime = null;//加精时间
+            /*Date isessencetime = null;//加精时间
             if (time != null) {
                 Long da = Long.parseLong(time);
                 isessencetime = new Date(da);
-            }
-            post.setEssencedate(isessencetime);
+            }*/
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date d = df.parse(time);
+            post.setEssencedate(d);
+
             post.setUserid(Integer.parseInt(userid));
             int result = postService.addPost(post);//添加帖子
             Integer pid = post.getId();//获取到刚刚添加的帖子id
@@ -624,14 +628,18 @@ public class PostFacade {
         Post p = new Post();
         if (Integer.parseInt(orderid) != 0) {//加精动作
             p.setId(Integer.parseInt(postid));
-            Date isessencetime = null;//加精时间
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date d = null;
             if (essencedate != null) {
-                Long da = Long.parseLong(essencedate);
-                isessencetime = new Date(da);
-            } else {
-                isessencetime = new Date();//当前时间
+                try {
+                    d = df.parse(essencedate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-            p.setEssencedate(isessencetime);//精选日期
+            } else {
+                d = new Date();
+            }
+            p.setEssencedate(d);//精选日期
             p.setOrderid(Integer.parseInt(orderid));
             Integer result = postService.addPostChoiceness(p);
             map.put("result", result);
@@ -814,12 +822,17 @@ public class PostFacade {
             if (orderid != null) {
                 post.setOrderid(Integer.parseInt(orderid));
             }
-            Date isessencetime = null;//加精时间
+            Date d = null;
             if (time != null) {
-                Long da = Long.parseLong(time);
-                isessencetime = new Date(da);
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    d = df.parse(time);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                post.setEssencedate(d);
             }
-            post.setEssencedate(isessencetime);
+            post.setEssencedate(d);
             post.setUserid(Integer.parseInt(userid));
             int result = postService.updatePostById(post);//编辑帖子
             map.put("result", result);
