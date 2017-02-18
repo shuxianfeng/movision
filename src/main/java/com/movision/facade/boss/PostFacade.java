@@ -442,7 +442,7 @@ public class PostFacade {
                     //不保存到项目中,防止部包把图片覆盖掉了
                     String path = savedDir.substring(0, savedDir.length() - 9);
                     //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/post/coverimg";
+                    String combinpath = path + "/images/post/coverimg/";
                     File savedFile = new File(combinpath, savedFileName);
                     System.out.println("文件url：" + combinpath + "" + savedFileName);
                     boolean isCreateSuccess = savedFile.createNewFile();
@@ -464,7 +464,7 @@ public class PostFacade {
                     //不保存到项目中,防止部包把图片覆盖掉了
                     String path = savedDir.substring(0, savedDir.length() - 9);
                     //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/post/video";
+                    String combinpath = path + "/images/post/video/";
                     File savedFile = new File(combinpath, savedVideo);
                     boolean isCreateSuccess = savedFile.createNewFile();
                     if (isCreateSuccess) {
@@ -776,7 +776,7 @@ public class PostFacade {
                     //不保存到项目中,防止部包把图片覆盖掉了
                     String path = savedDir.substring(0, savedDir.length() - 9);
                     //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/post/coverimg";
+                    String combinpath = path + "/images/post/coverimg/";
                     File savedFile = new File(combinpath, savedFileName);
                     boolean isCreateSuccess = savedFile.createNewFile();
                     if (isCreateSuccess) {
@@ -797,7 +797,7 @@ public class PostFacade {
                     //不保存到项目中,防止部包把图片覆盖掉了
                     String path = savedDir.substring(0, savedDir.length() - 9);
                     //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/post/video";
+                    String combinpath = path + "/images/post/video/";
                     File savedFile = new File(combinpath, savedVideo);
                     boolean isCreateSuccess = savedFile.createNewFile();
                     if (isCreateSuccess) {
